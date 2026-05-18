@@ -20,6 +20,20 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-18 — Homepage redesign (cinematic)
+- First homepage build was too flat/generic. Redesigned toward "BNP Paribas
+  Open x LIV Golf": dark `ppa-ink` base, Oswald display font, full-bleed
+  imagery, bold uppercase type.
+- Pulled real PPA Tour action photography + content from `ppatour.com` into
+  `public/ppa/` (14 interim assets — hero/action shots, destination photos,
+  3 athlete headshots, logo). These are stand-ins; swap for proper assets
+  via Sanity later.
+- Homepage now: full-bleed hero, image-backed Watch/Play fork, destination
+  event rail, editorial story grid, athlete cards, where-to-watch.
+- Restyled Header/Footer/ComingSoon + schedule + event pages dark.
+- **Note:** `ppa-red` nudged to `#d81e3c`. Brand hex still unconfirmed (§13).
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-18 — Phase 2: homepage + global components
 - Built the first real homepage on the new stack. Live (production):
   https://ppatour-website.vercel.app
