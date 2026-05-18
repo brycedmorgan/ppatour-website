@@ -20,6 +20,24 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-18 — Redesign v2 (LIV Golf direction)
+- Direction set with Bryce: lead with LIV Golf energy; light/premium
+  editorial body with dark hero + feature blocks; more distinctive type;
+  art-directed imagery; **main-tour events only (1,000+ ranking points).**
+- Type system: **Anton** (display) + **Archivo** (body) — replaced Oswald.
+- Palette: light `ppa-paper` body, near-black `ppa-ink` hero/feature blocks,
+  `ppa-red #e4002b`. (Brand hex still unconfirmed — §13.)
+- Homepage: oversized LIV-style hero, dark stat band, numbered main-tour
+  schedule cards, editorial feature grid, athlete roster (grayscale→color).
+- `placeholder-data.ts` now holds 6 main-tour events (Atlanta, Las Vegas,
+  Chicago, Virginia Beach, Nationals, Masters) with `points` field.
+- **Gotcha:** `<Image fill>` behind sibling overlays did not paint until the
+  img was promoted to its own compositing layer — fixed with
+  `will-change-transform` on all fill images. Image scrims also moved to
+  plain-rgba `.scrim-*` classes in globals.css (Tailwind oklab gradients
+  were unreliable).
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-18 — Homepage redesign (cinematic)
 - First homepage build was too flat/generic. Redesigned toward "BNP Paribas
   Open x LIV Golf": dark `ppa-ink` base, Oswald display font, full-bleed
