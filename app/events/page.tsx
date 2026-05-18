@@ -35,7 +35,7 @@ export default function EventsPage() {
                 alt={t.name}
                 fill
                 sizes="(min-width: 768px) 33vw, 100vw"
-                className="transform-gpu object-cover grayscale-[35%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                className="will-change-transform object-cover grayscale-[35%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
               />
               <div className="absolute inset-0 scrim-card" />
               <span className="absolute left-4 top-3 font-display text-6xl leading-none text-white/25">

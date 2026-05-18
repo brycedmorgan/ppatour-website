@@ -42,7 +42,7 @@ export default async function EventPage({ params }: Params) {
           fill
           priority
           sizes="100vw"
-          className="transform-gpu object-cover object-center"
+          className="will-change-transform object-cover object-center"
         />
         <div className="absolute inset-0 scrim-hero" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-12 pt-32">

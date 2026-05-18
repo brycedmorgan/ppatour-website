@@ -97,7 +97,7 @@ export default function Home() {
           fill
           priority
           sizes="100vw"
-          className="transform-gpu object-cover object-[62%_center]"
+          className="will-change-transform object-cover object-[62%_center]"
         />
         <div className="absolute inset-0 scrim-hero" />
         <div className="absolute inset-0 scrim-side" />
@@ -196,7 +196,7 @@ export default function Home() {
                   alt={t.name}
                   fill
                   sizes="(min-width: 768px) 33vw, 100vw"
-                  className="transform-gpu object-cover grayscale-[35%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                  className="will-change-transform object-cover grayscale-[35%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
                 />
                 <div className="absolute inset-0 scrim-card" />
                 <span className="absolute left-4 top-3 font-display text-6xl leading-none text-white/25">
@@ -272,7 +272,7 @@ export default function Home() {
               alt=""
               fill
               sizes="(min-width: 640px) 50vw, 100vw"
-              className="transform-gpu object-cover grayscale-[30%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+              className="will-change-transform object-cover grayscale-[30%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
             />
             <div className="absolute inset-0 scrim-hero" />
             <div className="relative w-full p-7 text-white">
@@ -306,7 +306,7 @@ export default function Home() {
                 alt=""
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
-                className="transform-gpu object-cover transition-transform duration-700 group-hover:scale-105"
+                className="will-change-transform object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 scrim-soft" />
               <span className="absolute left-5 top-5 bg-ppa-red px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
@@ -335,7 +335,7 @@ export default function Home() {
                     alt=""
                     fill
                     sizes="160px"
-                    className="transform-gpu object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="will-change-transform object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
                 <div className="flex flex-col justify-center">
@@ -377,7 +377,7 @@ export default function Home() {
                   alt={p.name}
                   fill
                   sizes="(min-width: 640px) 33vw, 33vw"
-                  className="transform-gpu object-cover object-top grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                  className="will-change-transform object-cover object-top grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
                 />
                 <div className="absolute inset-0 scrim-soft" />
                 <div className="relative p-3 sm:p-4">
@@ -419,7 +419,7 @@ export default function Home() {
           alt=""
           fill
           sizes="100vw"
-          className="transform-gpu object-cover object-center opacity-25"
+          className="will-change-transform object-cover object-center opacity-25"
         />
         <div className="relative mx-auto w-full max-w-6xl px-4 py-20">
           <LeadMagnetCapture variant="fan" />
