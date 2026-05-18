@@ -9,11 +9,11 @@ export function ScoreTicker() {
   const state = getTickerState();
 
   return (
-    <div className="flex h-9 w-full items-center overflow-x-auto bg-ppa-ink text-[11px] font-semibold uppercase tracking-wide text-white">
+    <div className="flex h-9 w-full items-center overflow-x-auto bg-ppa-navy text-[11px] font-semibold uppercase tracking-wide text-white">
       <div className="mx-auto flex w-full max-w-6xl items-center gap-3 whitespace-nowrap px-4">
         {state.mode === "LIVE" ? (
           <>
-            <span className="flex items-center gap-1.5 bg-ppa-red px-2 py-0.5 text-[10px] font-bold tracking-[0.15em]">
+            <span className="flex items-center gap-1.5 bg-ppa-blue px-2 py-0.5 text-[10px] font-bold tracking-[0.15em]">
               <span className="size-1.5 animate-pulse rounded-full bg-white" />
               Live
             </span>
@@ -33,7 +33,7 @@ export function ScoreTicker() {
           </>
         ) : (
           <>
-            <span className="bg-ppa-red px-2 py-0.5 text-[10px] font-bold tracking-[0.15em]">
+            <span className="bg-ppa-blue px-2 py-0.5 text-[10px] font-bold tracking-[0.15em]">
               Next Event
             </span>
             <span className="text-white">{state.tournamentName}</span>

@@ -63,10 +63,10 @@ function SectionHead({
   return (
     <div>
       <div className="flex items-center gap-3">
-        <span className="h-2.5 w-2.5 bg-ppa-red" />
+        <span className="h-2.5 w-2.5 bg-ppa-blue" />
         <p
           className={`text-xs font-bold uppercase tracking-[0.22em] ${
-            dark ? "text-white/60" : "text-ppa-ink/55"
+            dark ? "text-white/60" : "text-ppa-navy/55"
           }`}
         >
           {label}
@@ -74,7 +74,7 @@ function SectionHead({
       </div>
       <h2
         className={`mt-3 font-display text-5xl uppercase leading-[0.9] sm:text-7xl ${
-          dark ? "text-white" : "text-ppa-ink"
+          dark ? "text-white" : "text-ppa-navy"
         }`}
       >
         {title}
@@ -90,7 +90,7 @@ export default function Home() {
   return (
     <>
       {/* ── Hero ────────────────────────────────────────────── */}
-      <section className="relative isolate flex min-h-[92svh] flex-col justify-end overflow-hidden bg-ppa-ink text-white">
+      <section className="relative isolate flex min-h-[92svh] flex-col justify-end overflow-hidden bg-ppa-navy text-white">
         <Image
           src="/ppa/hero-action.jpg"
           alt="PPA Tour pro action"
@@ -104,7 +104,7 @@ export default function Home() {
 
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-12 pt-32">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-bold uppercase tracking-[0.18em]">
-            <span className="bg-ppa-red px-2.5 py-1">Next Event</span>
+            <span className="bg-ppa-blue px-2.5 py-1">Next Event</span>
             <span className="text-white/70">
               {next.city}, {next.state}
             </span>
@@ -136,23 +136,23 @@ export default function Home() {
               })}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-14 items-center justify-center bg-ppa-red px-9 text-sm font-bold uppercase tracking-[0.14em] transition-colors hover:bg-ppa-red-dark"
+              className="flex h-14 items-center justify-center bg-ppa-blue px-9 text-sm font-bold uppercase tracking-[0.14em] transition-colors hover:bg-ppa-blue-deep"
             >
               Buy Tickets — from ${next.ticketPriceFrom}
             </a>
             <Link
               href="/watch"
-              className="flex h-14 items-center justify-center border border-white/25 px-9 text-sm font-bold uppercase tracking-[0.14em] backdrop-blur-sm transition-colors hover:border-white hover:bg-white hover:text-ppa-ink"
+              className="flex h-14 items-center justify-center border border-white/25 px-9 text-sm font-bold uppercase tracking-[0.14em] backdrop-blur-sm transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
             >
               ▶ Watch Live
             </Link>
           </div>
         </div>
-        <div className="relative h-1 bg-ppa-red" />
+        <div className="relative h-1 bg-ppa-blue" />
       </section>
 
       {/* ── Stat band ───────────────────────────────────────── */}
-      <section className="bg-ppa-coal text-white">
+      <section className="bg-ppa-navy-deep text-white">
         <div className="mx-auto grid w-full max-w-6xl grid-cols-2 px-4 md:grid-cols-4">
           {STATS.map((s, i) => (
             <div
@@ -179,7 +179,7 @@ export default function Home() {
         <div className="mx-auto w-full max-w-6xl px-4 py-20">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <SectionHead label="2026 Season" title="The Main Tour" />
-            <p className="max-w-xs text-sm text-ppa-ink/55 sm:text-right">
+            <p className="max-w-xs text-sm text-ppa-navy/55 sm:text-right">
               Every stop carries 1,000+ ranking points. The pros chase the
               title — and the climb — at all of them.
             </p>
@@ -189,7 +189,7 @@ export default function Home() {
             {tournaments.map((t, i) => (
               <article
                 key={t.slug}
-                className="group relative isolate flex aspect-[3/4] flex-col justify-end overflow-hidden bg-ppa-ink"
+                className="group relative isolate flex aspect-[3/4] flex-col justify-end overflow-hidden bg-ppa-navy"
               >
                 <Image
                   src={t.image}
@@ -202,7 +202,7 @@ export default function Home() {
                 <span className="absolute left-4 top-3 font-display text-6xl leading-none text-white/25">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="absolute right-4 top-5 bg-ppa-yellow px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-ppa-ink">
+                <span className="absolute right-4 top-5 bg-ppa-yellow px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-ppa-navy">
                   {t.points.toLocaleString()} Pts
                 </span>
                 <div className="relative p-5">
@@ -226,7 +226,7 @@ export default function Home() {
                     })}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="relative z-10 mt-4 inline-flex h-10 items-center bg-ppa-red px-4 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-red-dark"
+                    className="relative z-10 mt-4 inline-flex h-10 items-center bg-ppa-blue px-4 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
                   >
                     Buy Tickets
                   </a>
@@ -237,7 +237,7 @@ export default function Home() {
 
           <Link
             href="/events"
-            className="mt-9 inline-flex items-center gap-2 border-b-2 border-ppa-red pb-1 text-sm font-bold uppercase tracking-[0.14em] text-ppa-ink hover:text-ppa-red"
+            className="mt-9 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-1 text-sm font-bold uppercase tracking-[0.14em] text-ppa-navy hover:text-ppa-blue"
           >
             Full 2026 Schedule →
           </Link>
@@ -265,7 +265,7 @@ export default function Home() {
           <Link
             key={card.href}
             href={card.href}
-            className="group relative isolate flex min-h-[22rem] items-end overflow-hidden bg-ppa-ink"
+            className="group relative isolate flex min-h-[22rem] items-end overflow-hidden bg-ppa-navy"
           >
             <Image
               src={card.image}
@@ -276,7 +276,7 @@ export default function Home() {
             />
             <div className="absolute inset-0 scrim-hero" />
             <div className="relative w-full p-7 text-white">
-              <p className="text-xs font-bold uppercase tracking-[0.22em] text-ppa-red">
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-ppa-blue">
                 {card.kicker}
               </p>
               <h3 className="mt-1 font-display text-6xl uppercase leading-none">
@@ -299,7 +299,7 @@ export default function Home() {
             {/* Feature */}
             <Link
               href="/watch"
-              className="group relative isolate flex aspect-[16/11] flex-col justify-end overflow-hidden bg-ppa-ink lg:row-span-2 lg:aspect-auto"
+              className="group relative isolate flex aspect-[16/11] flex-col justify-end overflow-hidden bg-ppa-navy lg:row-span-2 lg:aspect-auto"
             >
               <Image
                 src={STORIES[0].image}
@@ -309,7 +309,7 @@ export default function Home() {
                 className="will-change-transform object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 scrim-soft" />
-              <span className="absolute left-5 top-5 bg-ppa-red px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
+              <span className="absolute left-5 top-5 bg-ppa-blue px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
                 {STORIES[0].tag}
               </span>
               <div className="relative p-6 text-white">
@@ -329,7 +329,7 @@ export default function Home() {
                 href="/watch"
                 className="group flex gap-4 border border-ppa-line bg-white p-4"
               >
-                <div className="relative aspect-square w-28 shrink-0 overflow-hidden bg-ppa-ink sm:w-40">
+                <div className="relative aspect-square w-28 shrink-0 overflow-hidden bg-ppa-navy sm:w-40">
                   <Image
                     src={s.image}
                     alt=""
@@ -339,13 +339,13 @@ export default function Home() {
                   />
                 </div>
                 <div className="flex flex-col justify-center">
-                  <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-red">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-blue">
                     {s.tag}
                   </p>
-                  <h3 className="mt-1 font-display text-2xl uppercase leading-[0.95] text-ppa-ink sm:text-3xl">
+                  <h3 className="mt-1 font-display text-2xl uppercase leading-[0.95] text-ppa-navy sm:text-3xl">
                     {s.title}
                   </h3>
-                  <p className="mt-1 text-sm text-ppa-ink/55">{s.blurb}</p>
+                  <p className="mt-1 text-sm text-ppa-navy/55">{s.blurb}</p>
                 </div>
               </Link>
             ))}
@@ -354,7 +354,7 @@ export default function Home() {
       </section>
 
       {/* ── The Pros ────────────────────────────────────────── */}
-      <section className="bg-ppa-ink">
+      <section className="bg-ppa-navy">
         <div className="mx-auto w-full max-w-6xl px-4 py-20">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <SectionHead label="The Athletes" title="Meet the Pros" dark />
@@ -370,7 +370,7 @@ export default function Home() {
               <Link
                 key={p.name}
                 href="/athletes"
-                className="group relative isolate flex aspect-[4/5] flex-col justify-end overflow-hidden bg-ppa-coal"
+                className="group relative isolate flex aspect-[4/5] flex-col justify-end overflow-hidden bg-ppa-navy-deep"
               >
                 <Image
                   src={p.image}
@@ -384,7 +384,7 @@ export default function Home() {
                   <p className="font-display text-lg uppercase leading-[0.95] text-white sm:text-2xl">
                     {p.name}
                   </p>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-red sm:text-xs">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-blue sm:text-xs">
                     {p.division}
                   </p>
                 </div>
@@ -401,11 +401,11 @@ export default function Home() {
           <div className="mt-10 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-3">
             {BROADCAST.map((b) => (
               <div key={b.name} className="bg-ppa-paper p-7">
-                <span className="font-display text-xl text-ppa-red">▶</span>
-                <p className="mt-3 font-display text-2xl uppercase leading-none text-ppa-ink">
+                <span className="font-display text-xl text-ppa-blue">▶</span>
+                <p className="mt-3 font-display text-2xl uppercase leading-none text-ppa-navy">
                   {b.name}
                 </p>
-                <p className="mt-2 text-sm text-ppa-ink/55">{b.note}</p>
+                <p className="mt-2 text-sm text-ppa-navy/55">{b.note}</p>
               </div>
             ))}
           </div>
@@ -413,7 +413,7 @@ export default function Home() {
       </section>
 
       {/* ── Email capture ───────────────────────────────────── */}
-      <section className="relative isolate overflow-hidden bg-ppa-ink">
+      <section className="relative isolate overflow-hidden bg-ppa-navy">
         <Image
           src="/ppa/action-waters-bright.jpg"
           alt=""

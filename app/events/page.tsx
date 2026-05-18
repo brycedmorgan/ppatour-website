@@ -11,15 +11,15 @@ export default function EventsPage() {
     <section className="bg-ppa-paper">
       <div className="mx-auto w-full max-w-6xl px-4 py-16">
         <div className="flex items-center gap-3">
-          <span className="h-2.5 w-2.5 bg-ppa-red" />
-          <p className="text-xs font-bold uppercase tracking-[0.22em] text-ppa-ink/55">
+          <span className="h-2.5 w-2.5 bg-ppa-blue" />
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-ppa-navy/55">
             2026 Season
           </p>
         </div>
         <h1 className="mt-3 font-display text-6xl uppercase leading-[0.9] sm:text-8xl">
           The Main Tour
         </h1>
-        <p className="mt-4 max-w-xl text-ppa-ink/55">
+        <p className="mt-4 max-w-xl text-ppa-navy/55">
           Every PPA Tour main-draw stop — each worth 1,000+ ranking points.
           Search, filters, and the full schedule rebuild land in Phase 2.
         </p>
@@ -28,7 +28,7 @@ export default function EventsPage() {
           {tournaments.map((t, i) => (
             <article
               key={t.slug}
-              className="group relative isolate flex aspect-[3/4] flex-col justify-end overflow-hidden bg-ppa-ink"
+              className="group relative isolate flex aspect-[3/4] flex-col justify-end overflow-hidden bg-ppa-navy"
             >
               <Image
                 src={t.image}
@@ -41,7 +41,7 @@ export default function EventsPage() {
               <span className="absolute left-4 top-3 font-display text-6xl leading-none text-white/25">
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <span className="absolute right-4 top-5 bg-ppa-yellow px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-ppa-ink">
+              <span className="absolute right-4 top-5 bg-ppa-yellow px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-ppa-navy">
                 {t.points.toLocaleString()} Pts
               </span>
               <div className="relative p-5">
@@ -65,7 +65,7 @@ export default function EventsPage() {
                   })}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="relative z-10 mt-4 inline-flex h-10 items-center bg-ppa-red px-4 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-red-dark"
+                  className="relative z-10 mt-4 inline-flex h-10 items-center bg-ppa-blue px-4 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
                 >
                   Buy Tickets
                 </a>

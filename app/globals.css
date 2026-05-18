@@ -49,56 +49,51 @@
 }
 
 @theme {
-  --color-ppa-red: #e4002b;
-  --color-ppa-red-dark: #b3001f;
-  --color-ppa-ink: #0b0b0d;
-  --color-ppa-coal: #161618;
-  --color-ppa-paper: #f2f1ec;
-  --color-ppa-line: #d9d7cf;
-  --color-ppa-yellow: #ffcf24;
-  --color-ppa-navy: #0a1733;
-  --color-ppa-navy-light: #16264f;
-  --font-display: var(--font-anton), sans-serif;
-  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  /* Carvana PPA Tour — official brand palette (brand guide, 2026) */
+  --color-ppa-navy: #0c2b44; /* primary — dark editorial base */
+  --color-ppa-navy-deep: #07223a; /* darker navy — stat bands, dark cards */
+  --color-ppa-navy-soft: #15456c; /* lighter navy — borders on dark surfaces */
+  --color-ppa-blue: #228be6; /* primary — accent / CTA */
+  --color-ppa-blue-deep: #005d9b; /* CTA hover */
+  --color-ppa-sky: #4dc1ef; /* secondary — sky accent */
+  --color-ppa-yellow: #e7e700; /* secondary — highlight */
+  --color-ppa-paper: #f3f5f7; /* light editorial body */
+  --color-ppa-line: #d7dee4; /* light borders */
+  --font-display: var(--font-gobold), "Arial Narrow", sans-serif;
+  --font-sans: var(--font-gotham), ui-sans-serif, system-ui, sans-serif;
 }
 
-@layer base {
-  .font-display {
-    letter-spacing: -0.015em;
-  }
-}
-
-/* Image scrims — plain rgba so they render predictably across browsers. */
+/* Image scrims — navy-tinted rgba so they render predictably across browsers. */
 .scrim-hero {
   background: linear-gradient(
     to top,
-    rgba(11, 11, 13, 0.97) 0%,
-    rgba(11, 11, 13, 0.55) 42%,
-    rgba(11, 11, 13, 0.08) 100%
+    rgba(7, 34, 58, 0.97) 0%,
+    rgba(7, 34, 58, 0.55) 42%,
+    rgba(7, 34, 58, 0.08) 100%
   );
 }
 .scrim-side {
   background: linear-gradient(
     to right,
-    rgba(11, 11, 13, 0.88) 0%,
-    rgba(11, 11, 13, 0.22) 55%,
-    rgba(11, 11, 13, 0) 100%
+    rgba(7, 34, 58, 0.88) 0%,
+    rgba(7, 34, 58, 0.22) 55%,
+    rgba(7, 34, 58, 0) 100%
   );
 }
 .scrim-card {
   background: linear-gradient(
     to top,
-    rgba(11, 11, 13, 0.95) 0%,
-    rgba(11, 11, 13, 0.5) 50%,
-    rgba(11, 11, 13, 0.05) 100%
+    rgba(7, 34, 58, 0.95) 0%,
+    rgba(7, 34, 58, 0.5) 50%,
+    rgba(7, 34, 58, 0.05) 100%
   );
 }
 .scrim-soft {
   background: linear-gradient(
     to top,
-    rgba(11, 11, 13, 0.92) 0%,
-    rgba(11, 11, 13, 0.3) 55%,
-    rgba(11, 11, 13, 0) 100%
+    rgba(7, 34, 58, 0.92) 0%,
+    rgba(7, 34, 58, 0.3) 55%,
+    rgba(7, 34, 58, 0) 100%
   );
 }
 

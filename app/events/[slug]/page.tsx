@@ -35,7 +35,7 @@ export default async function EventPage({ params }: Params) {
 
   return (
     <article>
-      <section className="relative isolate flex min-h-[82svh] flex-col justify-end overflow-hidden bg-ppa-ink text-white">
+      <section className="relative isolate flex min-h-[82svh] flex-col justify-end overflow-hidden bg-ppa-navy text-white">
         <Image
           src={t.image}
           alt={t.name}
@@ -47,7 +47,7 @@ export default async function EventPage({ params }: Params) {
         <div className="absolute inset-0 scrim-hero" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-12 pt-32">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-bold uppercase tracking-[0.18em]">
-            <span className="bg-ppa-red px-2.5 py-1">{t.tier}</span>
+            <span className="bg-ppa-blue px-2.5 py-1">{t.tier}</span>
             <span className="text-ppa-yellow">
               {countdown} {countdown === 1 ? "Day" : "Days"} Out
             </span>
@@ -72,7 +72,7 @@ export default async function EventPage({ params }: Params) {
               })}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-14 items-center justify-center bg-ppa-red px-9 text-sm font-bold uppercase tracking-[0.14em] transition-colors hover:bg-ppa-red-dark"
+              className="flex h-14 items-center justify-center bg-ppa-blue px-9 text-sm font-bold uppercase tracking-[0.14em] transition-colors hover:bg-ppa-blue-deep"
             >
               Buy Tickets — from ${t.ticketPriceFrom}
             </a>
@@ -83,23 +83,23 @@ export default async function EventPage({ params }: Params) {
               })}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-14 items-center justify-center border border-white/25 px-9 text-sm font-bold uppercase tracking-[0.14em] transition-colors hover:border-white hover:bg-white hover:text-ppa-ink"
+              className="flex h-14 items-center justify-center border border-white/25 px-9 text-sm font-bold uppercase tracking-[0.14em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
             >
               Register to Play
             </a>
           </div>
         </div>
-        <div className="relative h-1 bg-ppa-red" />
+        <div className="relative h-1 bg-ppa-blue" />
       </section>
 
       <div className="mx-auto w-full max-w-6xl px-4 py-14">
-        <p className="max-w-xl text-sm text-ppa-ink/55">
+        <p className="max-w-xl text-sm text-ppa-navy/55">
           Full event experience — live brackets, division tabs, broadcast
           schedule, and the where-to-watch matrix — is the next Phase 2 build.
         </p>
         <Link
           href="/events"
-          className="mt-5 inline-flex items-center gap-2 border-b-2 border-ppa-red pb-1 text-sm font-bold uppercase tracking-[0.14em] text-ppa-ink hover:text-ppa-red"
+          className="mt-5 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-1 text-sm font-bold uppercase tracking-[0.14em] text-ppa-navy hover:text-ppa-blue"
         >
           ← All Events
         </Link>

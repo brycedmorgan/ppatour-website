@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -19,15 +20,22 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="bg-ppa-ink text-white">
+    <header className="bg-ppa-navy text-white">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4">
         <Link
           href="/"
           onClick={() => setOpen(false)}
-          className="font-display text-[1.6rem] leading-none"
+          aria-label="Carvana PPA Tour — home"
+          className="flex items-center"
         >
-          <span className="text-white">PPA</span>
-          <span className="text-ppa-red"> TOUR</span>
+          <Image
+            src="/ppa/logos/ppa-horizontal-white.svg"
+            alt="Carvana PPA Tour"
+            width={1408}
+            height={149}
+            priority
+            className="h-6 w-auto"
+          />
         </Link>
 
         <nav className="hidden items-center gap-9 md:flex">

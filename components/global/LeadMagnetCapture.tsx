@@ -50,7 +50,7 @@ export function LeadMagnetCapture({ variant = "fan" }: { variant?: Variant }) {
 
   return (
     <div>
-      <p className="text-xs font-bold uppercase tracking-[0.25em] text-ppa-red">
+      <p className="text-xs font-bold uppercase tracking-[0.25em] text-ppa-blue">
         {copy.eyebrow}
       </p>
       <h3 className="mt-3 font-display text-4xl uppercase leading-[0.95] text-white sm:text-6xl">
@@ -73,12 +73,12 @@ export function LeadMagnetCapture({ variant = "fan" }: { variant?: Variant }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@email.com"
-            className="h-13 flex-1 border border-white/15 bg-white/5 px-4 text-white placeholder:text-white/40 focus:border-ppa-red focus:outline-none"
+            className="h-13 flex-1 border border-white/15 bg-white/5 px-4 text-white placeholder:text-white/40 focus:border-ppa-blue focus:outline-none"
           />
           <button
             type="submit"
             disabled={status === "loading"}
-            className="h-13 bg-ppa-red px-7 text-sm font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-red-dark disabled:opacity-60"
+            className="h-13 bg-ppa-blue px-7 text-sm font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep disabled:opacity-60"
           >
             {status === "loading" ? "Sending…" : copy.cta}
           </button>

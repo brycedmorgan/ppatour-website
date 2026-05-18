@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const FOOTER_LINKS = [
@@ -10,12 +11,21 @@ const FOOTER_LINKS = [
 
 export function SiteFooter() {
   return (
-    <footer className="bg-ppa-ink text-white">
+    <footer className="bg-ppa-navy text-white">
       <div className="mx-auto w-full max-w-6xl px-4 py-14">
         <div className="flex flex-col gap-7 sm:flex-row sm:items-center sm:justify-between">
-          <Link href="/" className="font-display text-3xl leading-none">
-            <span className="text-white">PPA</span>
-            <span className="text-ppa-red"> TOUR</span>
+          <Link
+            href="/"
+            aria-label="Carvana PPA Tour — home"
+            className="flex items-center"
+          >
+            <Image
+              src="/ppa/logos/ppa-horizontal-white.svg"
+              alt="Carvana PPA Tour"
+              width={1408}
+              height={149}
+              className="h-8 w-auto"
+            />
           </Link>
           <nav className="flex flex-wrap gap-x-8 gap-y-2">
             {FOOTER_LINKS.map((item) => (

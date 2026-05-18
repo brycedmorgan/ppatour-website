@@ -20,6 +20,30 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-18 — Official brand applied (Carvana PPA Tour)
+- Bryce supplied the official **Carvana PPA Tour Brand Guide** + tournament
+  logo kit. Rebranded the site off the guide (images skipped — API image-size
+  limit; worked from the guide PDF text + SVGs).
+- **Palette** (replaces the guessed red system): navy `#0C2B44`, deep navy
+  `#07223A`, bright blue `#228BE6` (accent/CTA), CTA-hover `#005D9B`,
+  sky `#4DC1EF`, yellow `#E7E700`, paper `#F3F5F7`, line `#D7DEE4`.
+  §13 brand-hex open question is now **resolved**.
+- **Fonts** (replaces Anton/Archivo): **Gobold Bold** display + **Gotham**
+  body (Book/Medium/Bold/Black), self-hosted in `app/fonts/` via
+  `next/font/local`. Font files are from the official kit.
+- Token rename across all files: `ppa-ink`→`ppa-navy`, `ppa-coal`→
+  `ppa-navy-deep`, `ppa-red`→`ppa-blue`, `ppa-red-dark`→`ppa-blue-deep`.
+  Added `ppa-navy-soft`, `ppa-sky`. Scrims retinted near-black→navy.
+- Official logo: horizontal white lockup now in Header + Footer (was a text
+  wordmark). `public/ppa/logos/` holds white/blue horizontal + primary white.
+  `app/icon.svg` = holding-shape favicon (default create-next-app one removed).
+- Verified: `next build` passes (16 pages); hero renders on-brand; DOM +
+  computed styles confirm all 8 sections, navy/paper backgrounds, Gobold/
+  Gotham fonts, logo SVG. (Mid-page preview screenshots still flake — known
+  environmental issue.)
+- **Still interim:** imagery is the scraped stand-ins from the old site.
+  **Not yet deployed** — awaiting Bryce's go-ahead to push/deploy.
+
 ### 2026-05-18 — Redesign v2 (LIV Golf direction)
 - Direction set with Bryce: lead with LIV Golf energy; light/premium
   editorial body with dark hero + feature blocks; more distinctive type;

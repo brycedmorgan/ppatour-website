@@ -1,21 +1,27 @@
 import type { Metadata } from "next";
-import { Anton, Archivo } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { ScoreTicker } from "@/components/global/ScoreTicker";
 import { Header } from "@/components/global/Header";
 import { SiteFooter } from "@/components/global/SiteFooter";
 import { CookieBanner } from "@/components/global/CookieBanner";
 
-const anton = Anton({
-  variable: "--font-anton",
-  subsets: ["latin"],
-  weight: "400",
+/* Official brand fonts (Carvana PPA Tour brand guide): Gobold display, Gotham body. */
+const gobold = localFont({
+  variable: "--font-gobold",
+  display: "swap",
+  src: "./fonts/Gobold-Bold.otf",
 });
 
-const archivo = Archivo({
-  variable: "--font-archivo",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+const gotham = localFont({
+  variable: "--font-gotham",
+  display: "swap",
+  src: [
+    { path: "./fonts/Gotham-Book.otf", weight: "400", style: "normal" },
+    { path: "./fonts/Gotham-Medium.ttf", weight: "500", style: "normal" },
+    { path: "./fonts/Gotham-Bold.ttf", weight: "700", style: "normal" },
+    { path: "./fonts/Gotham-Black.ttf", weight: "900", style: "normal" },
+  ],
 });
 
 export const metadata: Metadata = {
@@ -35,9 +41,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${anton.variable} ${archivo.variable} h-full antialiased`}
+      className={`${gobold.variable} ${gotham.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-ppa-paper font-sans text-ppa-ink">
+      <body className="flex min-h-full flex-col bg-ppa-paper font-sans text-ppa-navy">
         <div className="sticky top-0 z-50">
           <ScoreTicker />
           <Header />
