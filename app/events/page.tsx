@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { formatDateRange, tournaments } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
@@ -7,46 +8,57 @@ export const metadata: Metadata = { title: "Schedule" };
 
 export default function EventsPage() {
   return (
-    <section className="mx-auto w-full max-w-6xl px-4 py-12">
-      <h1 className="text-3xl font-extrabold tracking-tight text-ppa-navy sm:text-4xl">
-        2026 Tour Schedule
+    <section className="mx-auto w-full max-w-6xl px-4 py-14">
+      <p className="text-xs font-bold uppercase tracking-[0.2em] text-ppa-yellow">
+        2026 Season
+      </p>
+      <h1 className="mt-2 font-display text-4xl font-bold uppercase tracking-tight text-white sm:text-6xl">
+        Tour Schedule
       </h1>
-      <p className="mt-2 text-zinc-500">
+      <p className="mt-3 max-w-xl text-white/55">
         Search, filters, and the $1,000+ default view land in the full Phase 2
         schedule rebuild.
       </p>
-      <div className="mt-6 space-y-3">
+
+      <div className="mt-8 grid gap-5 md:grid-cols-3">
         {tournaments.map((t) => (
           <div
             key={t.slug}
-            className="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-5 sm:flex-row sm:items-center sm:justify-between"
+            className="group relative isolate flex aspect-[4/5] flex-col justify-end overflow-hidden"
           >
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wide text-ppa-red">
+            <Image
+              src={t.image}
+              alt={t.name}
+              fill
+              sizes="(min-width: 768px) 33vw, 100vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-ppa-ink via-ppa-ink/55 to-transparent" />
+            <div className="relative p-5">
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-yellow">
                 {t.tier}
               </p>
               <Link
                 href={`/events/${t.slug}`}
-                className="text-lg font-bold text-ppa-navy hover:underline"
+                className="font-display text-2xl font-bold uppercase leading-tight tracking-tight text-white after:absolute after:inset-0"
               >
-                {t.name}
+                {t.shortName}
               </Link>
-              <p className="text-sm text-zinc-500">
-                {formatDateRange(t.startDate, t.endDate)} · {t.venue} ·{" "}
-                {t.city}, {t.state}
+              <p className="mt-1 text-sm text-white/65">
+                {formatDateRange(t.startDate, t.endDate)} · {t.venue}
               </p>
+              <a
+                href={withUtm(t.ticketsUrl, {
+                  campaign: t.slug,
+                  content: "schedule-buy-tickets",
+                })}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative z-10 mt-3 inline-flex h-10 items-center bg-ppa-red px-4 font-display text-xs font-bold uppercase tracking-wide text-white transition-colors hover:bg-ppa-red-dark"
+              >
+                Buy Tickets
+              </a>
             </div>
-            <a
-              href={withUtm(t.ticketsUrl, {
-                campaign: t.slug,
-                content: "schedule-buy-tickets",
-              })}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex h-11 shrink-0 items-center justify-center rounded-lg bg-ppa-red px-6 font-bold text-white transition-colors hover:bg-ppa-red-dark"
-            >
-              Buy Tickets
-            </a>
           </div>
         ))}
       </div>

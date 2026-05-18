@@ -1,5 +1,6 @@
 /**
  * Placeholder tournament data for the Phase 2 homepage build.
+ * Content + imagery pulled from the current ppatour.com as interim assets.
  * Replace with the Sanity CMS client + scoring API once those are wired
  * (see CLAUDE_CODE_PASSOFF_v2.md §11).
  */
@@ -19,64 +20,67 @@ export type Tournament = {
   registerUrl: string;
   status: "upcoming" | "live" | "completed";
   tier: string;
+  /** Path under /public */
+  image: string;
 };
 
 export const tournaments: Tournament[] = [
   {
-    slug: "north-carolina-open",
-    name: "PPA Tour: North Carolina Open",
-    shortName: "North Carolina Open",
-    city: "Raleigh",
-    state: "NC",
-    venue: "Life Time — Raleigh",
-    startDate: "2026-05-26",
+    slug: "macao-championships",
+    name: "PPA Tour: Macao Championships",
+    shortName: "Macao Championships",
+    city: "Macao",
+    state: "China",
+    venue: "Macao Eastern Arena",
+    startDate: "2026-05-27",
     endDate: "2026-05-31",
-    ticketPriceFrom: 29,
-    ticketsUrl: "https://www.tixr.com/",
-    registerUrl: "https://www.pickleballtournaments.com/",
-    status: "upcoming",
-    tier: "PPA Tour Open",
-  },
-  {
-    slug: "veolia-atlanta-championships",
-    name: "Veolia Atlanta Championships",
-    shortName: "Atlanta Championships",
-    city: "Atlanta",
-    state: "GA",
-    venue: "Life Time — Peachtree Corners",
-    startDate: "2026-06-09",
-    endDate: "2026-06-14",
     ticketPriceFrom: 39,
-    ticketsUrl: "https://www.tixr.com/",
+    ticketsUrl: "https://www.tixr.com/groups/ppa/events/",
     registerUrl: "https://www.pickleballtournaments.com/",
     status: "upcoming",
-    tier: "PPA Tour Championship",
+    tier: "PPA Tour International",
+    image: "/ppa/event-macao.jpg",
   },
   {
-    slug: "greater-zion-open",
-    name: "PPA Tour: Greater Zion Open",
-    shortName: "Greater Zion Open",
-    city: "St. George",
-    state: "UT",
-    venue: "Little Valley Pickleball Complex",
-    startDate: "2026-06-23",
-    endDate: "2026-06-28",
-    ticketPriceFrom: 29,
-    ticketsUrl: "https://www.tixr.com/",
+    slug: "melbourne-slam",
+    name: "PPA Tour: Melbourne Slam",
+    shortName: "Melbourne Slam",
+    city: "Melbourne",
+    state: "Australia",
+    venue: "Melbourne Park",
+    startDate: "2026-07-15",
+    endDate: "2026-07-19",
+    ticketPriceFrom: 45,
+    ticketsUrl: "https://www.tixr.com/groups/ppa/events/",
     registerUrl: "https://www.pickleballtournaments.com/",
     status: "upcoming",
-    tier: "PPA Tour Open",
+    tier: "PPA Tour Slam",
+    image: "/ppa/event-melbourne.jpg",
+  },
+  {
+    slug: "gold-coast-cup",
+    name: "PPA Tour: Gold Coast Cup",
+    shortName: "Gold Coast Cup",
+    city: "Gold Coast",
+    state: "Australia",
+    venue: "Gold Coast Sports Precinct",
+    startDate: "2026-08-13",
+    endDate: "2026-08-16",
+    ticketPriceFrom: 39,
+    ticketsUrl: "https://www.tixr.com/groups/ppa/events/",
+    registerUrl: "https://www.pickleballtournaments.com/",
+    status: "upcoming",
+    tier: "PPA Tour Cup",
+    image: "/ppa/event-gold-coast.webp",
   },
 ];
 
 /** Next non-completed tournament, chronologically. */
 export function getNextTournament(): Tournament {
-  return (
-    tournaments.find((t) => t.status !== "completed") ?? tournaments[0]
-  );
+  return tournaments.find((t) => t.status !== "completed") ?? tournaments[0];
 }
 
-/** Upcoming tournaments for the homepage "Next Stop" stack. */
+/** Upcoming tournaments for the homepage "Next Stop" rail. */
 export function getUpcomingTournaments(limit = 3): Tournament[] {
   return tournaments.filter((t) => t.status !== "completed").slice(0, limit);
 }

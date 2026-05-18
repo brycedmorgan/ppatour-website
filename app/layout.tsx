@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Geist, Oswald } from "next/font/google";
 import "./globals.css";
 import { ScoreTicker } from "@/components/global/ScoreTicker";
 import { Header } from "@/components/global/Header";
@@ -11,9 +11,15 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
+const oswald = Oswald({
+  variable: "--font-oswald",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+});
+
 export const metadata: Metadata = {
   title: {
-    default: "PPA Tour — Professional Pickleball",
+    default: "PPA Tour — The Pro Tour of Pickleball",
     template: "%s · PPA Tour",
   },
   description:
@@ -26,8 +32,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col bg-white">
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${oswald.variable} h-full antialiased`}
+    >
+      <body className="flex min-h-full flex-col bg-ppa-ink text-white">
         <div className="sticky top-0 z-50">
           <ScoreTicker />
           <Header />

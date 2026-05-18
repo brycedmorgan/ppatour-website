@@ -19,23 +19,23 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="bg-ppa-navy text-white">
+    <header className="border-b border-white/10 bg-ppa-ink/95 backdrop-blur">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4">
         <Link
           href="/"
-          className="flex items-baseline gap-1.5 font-extrabold tracking-tight"
           onClick={() => setOpen(false)}
+          className="font-display text-2xl font-bold uppercase leading-none tracking-tight"
         >
-          <span className="text-2xl text-white">PPA</span>
-          <span className="text-2xl text-ppa-red">TOUR</span>
+          <span className="text-white">PPA</span>
+          <span className="text-ppa-red"> Tour</span>
         </Link>
 
-        <nav className="hidden items-center gap-7 md:flex">
+        <nav className="hidden items-center gap-8 md:flex">
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="text-sm font-semibold uppercase tracking-wide text-white/85 transition-colors hover:text-ppa-yellow"
+              className="font-display text-sm font-semibold uppercase tracking-wide text-white/80 transition-colors hover:text-ppa-yellow"
             >
               {item.label}
             </Link>
@@ -47,7 +47,7 @@ export function Header() {
           aria-label="Toggle menu"
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="flex size-10 items-center justify-center rounded-md text-white md:hidden"
+          className="flex size-10 items-center justify-center text-white md:hidden"
         >
           <div className="space-y-1.5">
             <span
@@ -76,7 +76,7 @@ export function Header() {
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              className="block border-b border-white/5 px-4 py-3.5 text-sm font-semibold uppercase tracking-wide text-white/85 transition-colors hover:bg-ppa-navy-light hover:text-ppa-yellow"
+              className="block border-b border-white/5 px-4 py-3.5 font-display text-sm font-semibold uppercase tracking-wide text-white/80 transition-colors hover:bg-white/5 hover:text-ppa-yellow"
             >
               {item.label}
             </Link>

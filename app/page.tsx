@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import {
@@ -8,13 +9,54 @@ import {
 } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
 
-const STORYLINES = [
-  { tag: "Story of the Match", title: "Johns brothers chase a third straight doubles crown" },
-  { tag: "Rivalry Watch", title: "Can Anna Leigh Waters be stopped in Raleigh?" },
-  { tag: "On the Rise", title: "The 19-year-old turning pro heads everywhere" },
+const STORIES = [
+  {
+    image: "/ppa/action-masters.jpg",
+    tag: "Docuseries",
+    title: "PARTNERS — the first reality series inside pro pickleball",
+    blurb: "From partners to rivals, friends to foe. Streaming now on YouTube.",
+  },
+  {
+    image: "/ppa/action-mxd.jpg",
+    tag: "Highlights",
+    title: "The Top 10 plays of the Veolia Atlanta Championships",
+    blurb: "The shots that had the crowd on its feet in Peachtree Corners.",
+  },
+  {
+    image: "/ppa/action-md-final.jpg",
+    tag: "Match Report",
+    title: "Championship Sunday: standout stats from the PPA Finals",
+    blurb: "The numbers behind a record-breaking finals weekend.",
+  },
 ];
 
-const SPONSORS = ["VEOLIA", "SELKIRK", "LIFE TIME", "HYPEROX", "GUARANTEED RATE"];
+const PROS = [
+  { image: "/ppa/player-bricker.webp", name: "Austin Bricker", division: "Men's Doubles" },
+  { image: "/ppa/player-safdar.webp", name: "Mehvish Safdar", division: "Women's Doubles" },
+  { image: "/ppa/player-rau.webp", name: "Jade Rau", division: "Women's Singles" },
+];
+
+const BROADCAST = [
+  { name: "FOX & FS1", note: "Marquee finals on national television" },
+  { name: "PPA Tour on YouTube", note: "Every court, every match, streamed live" },
+  { name: "MATCHDAY App", note: "Live scores, brackets, and match alerts" },
+];
+
+function SectionHeading({ kicker, title }: { kicker: string; title: string }) {
+  return (
+    <div className="flex items-end gap-4">
+      <div className="h-9 w-1.5 shrink-0 bg-ppa-red" />
+      <div>
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-ppa-yellow">
+          {kicker}
+        </p>
+        <h2 className="font-display text-3xl font-bold uppercase tracking-tight text-white sm:text-4xl">
+          {title}
+        </h2>
+      </div>
+    </div>
+  );
+}
 
 export default function Home() {
   const next = getNextTournament();
@@ -23,23 +65,39 @@ export default function Home() {
 
   return (
     <>
-      {/* ── Next-event hero ─────────────────────────────────── */}
-      <section className="bg-ppa-navy text-white">
-        <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:py-16">
-          <div className="inline-flex items-center gap-2 rounded-full bg-ppa-red px-3 py-1 text-xs font-bold uppercase tracking-widest">
-            Next Stop
-            <span className="text-ppa-yellow">
-              {countdown} {countdown === 1 ? "day" : "days"} to go
+      {/* ── Hero ────────────────────────────────────────────── */}
+      <section className="relative isolate flex min-h-[88svh] items-end overflow-hidden">
+        <Image
+          src="/ppa/hero-action.jpg"
+          alt="PPA Tour pro doubles action"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[60%_center]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-ppa-ink via-ppa-ink/65 to-ppa-ink/10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ppa-ink/85 via-ppa-ink/30 to-transparent" />
+
+        <div className="relative mx-auto w-full max-w-6xl px-4 pb-14 pt-28 sm:pb-20">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-ppa-ink/60 px-3 py-1.5 backdrop-blur">
+            <span className="size-1.5 animate-pulse rounded-full bg-ppa-red" />
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-white/90">
+              Next Stop
+            </span>
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-ppa-yellow">
+              {countdown} {countdown === 1 ? "day" : "days"} out
             </span>
           </div>
-          <h1 className="mt-4 max-w-3xl text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl">
-            {next.name}
+
+          <h1 className="mt-5 max-w-4xl font-display text-[clamp(2.5rem,11vw,7rem)] font-bold uppercase leading-[0.92] tracking-tight">
+            {next.shortName}
           </h1>
-          <p className="mt-3 text-lg text-white/70">
+          <p className="mt-4 text-lg font-medium text-white/75 sm:text-xl">
             {formatDateRange(next.startDate, next.endDate)} · {next.venue} ·{" "}
             {next.city}, {next.state}
           </p>
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <a
               href={withUtm(next.ticketsUrl, {
                 campaign: next.slug,
@@ -47,82 +105,98 @@ export default function Home() {
               })}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-13 items-center justify-center rounded-lg bg-ppa-red px-7 text-base font-bold transition-colors hover:bg-ppa-red-dark"
+              className="flex h-14 items-center justify-center bg-ppa-red px-8 font-display text-base font-bold uppercase tracking-wide transition-colors hover:bg-ppa-red-dark"
             >
-              ▶ Buy Tickets · from ${next.ticketPriceFrom}
+              Buy Tickets · from ${next.ticketPriceFrom}
             </a>
             <Link
-              href={`/events/${next.slug}`}
-              className="flex h-13 items-center justify-center rounded-lg border border-white/25 px-7 text-base font-bold transition-colors hover:border-ppa-yellow hover:text-ppa-yellow"
+              href="/watch"
+              className="flex h-14 items-center justify-center border border-white/30 bg-white/5 px-8 font-display text-base font-bold uppercase tracking-wide backdrop-blur transition-colors hover:border-ppa-yellow hover:text-ppa-yellow"
             >
-              Event Details
+              ▶ Watch Live
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ── Two-path routing fork ───────────────────────────── */}
-      <section className="mx-auto w-full max-w-6xl px-4 py-12">
-        <h2 className="text-center text-sm font-bold uppercase tracking-widest text-ppa-navy/50">
-          What brings you here?
-        </h2>
-        <div className="mt-5 grid gap-4 sm:grid-cols-2">
+      {/* ── Two-path fork ───────────────────────────────────── */}
+      <section className="grid sm:grid-cols-2">
+        {[
+          {
+            href: "/watch",
+            image: "/ppa/action-champ-sunday.jpg",
+            kicker: "For Fans",
+            title: "Watch",
+            blurb: "Live streams, brackets, and the pros.",
+          },
+          {
+            href: "/play",
+            image: "/ppa/action-singles.jpg",
+            kicker: "For Players",
+            title: "Play",
+            blurb: "Register for an amateur event and start competing.",
+          },
+        ].map((card) => (
           <Link
-            href="/watch"
-            className="group rounded-2xl bg-ppa-navy p-7 text-white transition-transform hover:-translate-y-1"
+            key={card.href}
+            href={card.href}
+            className="group relative isolate flex min-h-[20rem] items-end overflow-hidden"
           >
-            <p className="text-3xl">🏆</p>
-            <h3 className="mt-3 text-2xl font-extrabold">I Want to Watch</h3>
-            <p className="mt-1 text-white/65">
-              Live streams, brackets, and the pros — everything for fans.
-            </p>
-            <span className="mt-4 inline-block font-bold text-ppa-yellow group-hover:underline">
-              Go to Watch →
-            </span>
+            <Image
+              src={card.image}
+              alt=""
+              fill
+              sizes="(min-width: 640px) 50vw, 100vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-ppa-ink via-ppa-ink/55 to-ppa-ink/10" />
+            <div className="relative w-full p-7">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-ppa-yellow">
+                {card.kicker}
+              </p>
+              <h3 className="mt-1 font-display text-5xl font-bold uppercase leading-none tracking-tight">
+                {card.title}
+              </h3>
+              <p className="mt-2 text-white/70">{card.blurb}</p>
+              <span className="mt-3 inline-block font-display text-sm font-bold uppercase tracking-wide text-ppa-red transition-colors group-hover:text-ppa-yellow">
+                Enter →
+              </span>
+            </div>
           </Link>
-          <Link
-            href="/play"
-            className="group rounded-2xl bg-ppa-red p-7 text-white transition-transform hover:-translate-y-1"
-          >
-            <p className="text-3xl">🎾</p>
-            <h3 className="mt-3 text-2xl font-extrabold">I Want to Play</h3>
-            <p className="mt-1 text-white/80">
-              Register for an amateur event and start your tournament journey.
-            </p>
-            <span className="mt-4 inline-block font-bold text-ppa-yellow group-hover:underline">
-              Go to Play →
-            </span>
-          </Link>
-        </div>
+        ))}
       </section>
 
-      {/* ── Next Stop stack ─────────────────────────────────── */}
-      <section className="bg-zinc-50">
-        <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <h2 className="text-2xl font-extrabold tracking-tight text-ppa-navy">
-            Next Stop on Tour
-          </h2>
-          <div className="mt-5 space-y-3">
-            {upcoming.map((t) => (
-              <div
-                key={t.slug}
-                className="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-5 sm:flex-row sm:items-center sm:justify-between"
-              >
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wide text-ppa-red">
-                    {t.tier}
-                  </p>
-                  <Link
-                    href={`/events/${t.slug}`}
-                    className="text-lg font-bold text-ppa-navy hover:underline"
-                  >
-                    {t.name}
-                  </Link>
-                  <p className="text-sm text-zinc-500">
-                    {formatDateRange(t.startDate, t.endDate)} · {t.city},{" "}
-                    {t.state}
-                  </p>
-                </div>
+      {/* ── Next Stop rail ──────────────────────────────────── */}
+      <section className="mx-auto w-full max-w-6xl px-4 py-16">
+        <SectionHeading kicker="2026 Season" title="Next Stop on Tour" />
+        <div className="mt-7 grid gap-5 md:grid-cols-3">
+          {upcoming.map((t) => (
+            <div
+              key={t.slug}
+              className="group relative isolate flex aspect-[4/5] flex-col justify-end overflow-hidden"
+            >
+              <Image
+                src={t.image}
+                alt={t.name}
+                fill
+                sizes="(min-width: 768px) 33vw, 100vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ppa-ink via-ppa-ink/55 to-transparent" />
+              <div className="relative p-5">
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-yellow">
+                  {t.tier}
+                </p>
+                <Link
+                  href={`/events/${t.slug}`}
+                  className="font-display text-2xl font-bold uppercase leading-tight tracking-tight after:absolute after:inset-0"
+                >
+                  {t.shortName}
+                </Link>
+                <p className="mt-1 text-sm text-white/65">
+                  {formatDateRange(t.startDate, t.endDate)} · {t.city},{" "}
+                  {t.state}
+                </p>
                 <a
                   href={withUtm(t.ticketsUrl, {
                     campaign: t.slug,
@@ -130,56 +204,118 @@ export default function Home() {
                   })}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-11 shrink-0 items-center justify-center rounded-lg bg-ppa-red px-6 font-bold text-white transition-colors hover:bg-ppa-red-dark"
+                  className="relative z-10 mt-3 inline-flex h-10 items-center bg-ppa-red px-4 font-display text-xs font-bold uppercase tracking-wide transition-colors hover:bg-ppa-red-dark"
                 >
                   Buy Tickets
                 </a>
+              </div>
+            </div>
+          ))}
+        </div>
+        <Link
+          href="/events"
+          className="mt-6 inline-block font-display text-sm font-bold uppercase tracking-wide text-ppa-yellow hover:underline"
+        >
+          Full 2026 Schedule →
+        </Link>
+      </section>
+
+      {/* ── Inside the Tour ─────────────────────────────────── */}
+      <section className="border-t border-white/10 bg-black/40">
+        <div className="mx-auto w-full max-w-6xl px-4 py-16">
+          <SectionHeading kicker="Stories" title="Inside the Tour" />
+          <div className="mt-7 grid gap-6 md:grid-cols-3">
+            {STORIES.map((s) => (
+              <article key={s.title} className="group">
+                <div className="relative aspect-video overflow-hidden">
+                  <Image
+                    src={s.image}
+                    alt=""
+                    fill
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <span className="absolute left-3 top-3 bg-ppa-red px-2 py-1 text-[10px] font-bold uppercase tracking-widest">
+                    {s.tag}
+                  </span>
+                </div>
+                <h3 className="mt-3 font-display text-xl font-semibold uppercase leading-tight tracking-tight">
+                  {s.title}
+                </h3>
+                <p className="mt-1 text-sm text-white/60">{s.blurb}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Meet the Pros ───────────────────────────────────── */}
+      <section className="mx-auto w-full max-w-6xl px-4 py-16">
+        <SectionHeading kicker="The Athletes" title="Meet the Pros" />
+        <div className="mt-7 grid grid-cols-3 gap-4 sm:gap-6">
+          {PROS.map((p) => (
+            <div
+              key={p.name}
+              className="group relative isolate flex aspect-square flex-col justify-end overflow-hidden bg-ppa-navy"
+            >
+              <Image
+                src={p.image}
+                alt={p.name}
+                fill
+                sizes="(min-width: 640px) 33vw, 33vw"
+                className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ppa-ink via-transparent to-transparent" />
+              <div className="relative p-3 sm:p-4">
+                <p className="font-display text-base font-bold uppercase leading-none tracking-tight sm:text-xl">
+                  {p.name}
+                </p>
+                <p className="text-[11px] uppercase tracking-wide text-ppa-yellow sm:text-xs">
+                  {p.division}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <Link
+          href="/athletes"
+          className="mt-6 inline-block font-display text-sm font-bold uppercase tracking-wide text-ppa-yellow hover:underline"
+        >
+          All Athletes →
+        </Link>
+      </section>
+
+      {/* ── Where to Watch ──────────────────────────────────── */}
+      <section className="border-t border-white/10 bg-black/40">
+        <div className="mx-auto w-full max-w-6xl px-4 py-16">
+          <SectionHeading kicker="Broadcast" title="Where to Watch" />
+          <div className="mt-7 grid gap-4 sm:grid-cols-3">
+            {BROADCAST.map((b) => (
+              <div
+                key={b.name}
+                className="border border-white/10 bg-ppa-navy/40 p-6"
+              >
+                <p className="font-display text-xl font-bold uppercase tracking-tight text-white">
+                  {b.name}
+                </p>
+                <p className="mt-1 text-sm text-white/55">{b.note}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Story of the Match carousel ─────────────────────── */}
-      <section className="mx-auto w-full max-w-6xl px-4 py-12">
-        <h2 className="text-2xl font-extrabold tracking-tight text-ppa-navy">
-          Story of the Match
-        </h2>
-        <div className="mt-5 flex gap-4 overflow-x-auto pb-2">
-          {STORYLINES.map((s) => (
-            <div
-              key={s.title}
-              className="flex aspect-[9/12] w-52 shrink-0 flex-col justify-end rounded-xl bg-gradient-to-b from-ppa-navy-light to-ppa-navy p-4 text-white"
-            >
-              <span className="flex size-11 items-center justify-center rounded-full bg-ppa-red text-lg">
-                ▶
-              </span>
-              <p className="mt-3 text-[10px] font-bold uppercase tracking-widest text-ppa-yellow">
-                {s.tag}
-              </p>
-              <p className="mt-1 text-sm font-bold leading-snug">{s.title}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Sponsors ────────────────────────────────────────── */}
-      <section className="border-y border-zinc-200 bg-zinc-50">
-        <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-center gap-x-8 gap-y-3 px-4 py-7">
-          {SPONSORS.map((s) => (
-            <span
-              key={s}
-              className="text-sm font-extrabold tracking-widest text-zinc-400"
-            >
-              {s}
-            </span>
-          ))}
-        </div>
-      </section>
-
       {/* ── Email capture ───────────────────────────────────── */}
-      <section className="bg-ppa-navy">
-        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+      <section className="relative isolate overflow-hidden border-t border-white/10">
+        <Image
+          src="/ppa/action-waters-bright.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-ppa-ink/85" />
+        <div className="relative mx-auto w-full max-w-3xl px-4 py-16">
           <LeadMagnetCapture variant="fan" />
         </div>
       </section>
