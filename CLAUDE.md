@@ -20,6 +20,32 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-18 — Phase 2: homepage + global components
+- Built the first real homepage on the new stack. Live (production):
+  https://ppatour-website.vercel.app
+- Brand theme added to `globals.css` (`@theme`): `ppa-red #c8102e`,
+  `ppa-navy #0a1733`, `ppa-yellow #ffd21f` (+ dark variants). **Approximate
+  hex — confirm against the official brand guide (§13 open question).**
+- Global components in `components/global/`: `ScoreTicker` (NEXT/LIVE modes,
+  §9.1), `Header` (mobile drawer, §9.5), `CookieBanner` (footer-only, §9.4),
+  `SiteFooter`, `LeadMagnetCapture` (§9.8), `ComingSoon`.
+- Homepage (`app/page.tsx`): next-event hero, two-path Watch/Play fork,
+  Next Stop stack, Story of the Match carousel, sponsors row, email capture.
+- `lib/utm.ts` — `withUtm()` appends attribution to every outbound commerce
+  link (revenue lever #1). `lib/placeholder-data.ts` — 3 placeholder
+  tournaments + ticker/date helpers (NO live data; replace with Sanity +
+  scoring API).
+- Routes: `/events` (schedule list), `/events/[slug]` (UPCOMING-state stub —
+  NOT the full §7 state machine yet), `/watch` `/play` `/athletes` `/about`
+  (branded Coming Soon). `/api/lead-capture` is a stub that logs (no
+  Customer.io yet).
+- **State:** homepage + nav shipped on placeholder data. No CMS, no scoring
+  API, no GA4/GTM, no tests/CI.
+- **Next:** the §7 tournament state machine (LIVE state + sticky division
+  tabs — the #1 UX fix), then `/watch` + `/play` hubs, schedule filters, and
+  athlete profiles. Wire Sanity + scoring API + GTM. Resolve §13 open
+  questions (brand hex, scoring/tixr/Customer.io creds, CMS confirm).
+
 ### 2026-05-18 — Phase 0: repo + scaffold
 - Created GitHub repo `brycedmorgan/ppatour-website` (public) and local folder
   `/Users/bryce/Documents/ppatour-website`.
