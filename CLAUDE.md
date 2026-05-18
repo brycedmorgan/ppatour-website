@@ -29,9 +29,12 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - Laid down the §5 directory scaffold (`.gitkeep` placeholders) for marketing /
   content / events / athletes / api routes, component groups, and `lib/`.
 - Saved the passoff brief as `CLAUDE_CODE_PASSOFF_v2.md`.
+- Deployed to Vercel (`gull-stack` scope): project `ppatour-website`, live at
+  https://ppatour-website-mpohate97-gull-stack.vercel.app — auto-deploys on
+  push to `main`.
 - **State:** empty scaffold, default create-next-app homepage. Nothing built yet.
-- **Next:** Phase 0 remaining items — Vercel project + preview deploys, Sanity
-  studio decision, GTM container, env vars, Playwright + Vitest + CI. Then
+- **Next:** Phase 0 remaining items — Sanity studio decision, GTM container,
+  env vars, Playwright + Vitest + CI. Then
   Phase 2 build starts with the global components (§9). Resolve §13 open
   questions with Bryce/Jason (repo org transfer, scoring API creds, tixr API,
   CMS confirm, brand hex values).

@@ -1,0 +1,88 @@
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+
+const NAV_ITEMS = [
+  { label: "Watch", href: "/watch" },
+  { label: "Play", href: "/play" },
+  { label: "Athletes", href: "/athletes" },
+  { label: "Events", href: "/events" },
+  { label: "About", href: "/about" },
+];
+
+/**
+ * Site nav (§9.5). Logo · Watch · Play · Athletes · Events · About.
+ * No header Buy Tickets / Register buttons (current 0.1% click rate).
+ */
+export function Header() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <header className="bg-ppa-navy text-white">
+      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4">
+        <Link
+          href="/"
+          className="flex items-baseline gap-1.5 font-extrabold tracking-tight"
+          onClick={() => setOpen(false)}
+        >
+          <span className="text-2xl text-white">PPA</span>
+          <span className="text-2xl text-ppa-red">TOUR</span>
+        </Link>
+
+        <nav className="hidden items-center gap-7 md:flex">
+          {NAV_ITEMS.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="text-sm font-semibold uppercase tracking-wide text-white/85 transition-colors hover:text-ppa-yellow"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        <button
+          type="button"
+          aria-label="Toggle menu"
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+          className="flex size-10 items-center justify-center rounded-md text-white md:hidden"
+        >
+          <div className="space-y-1.5">
+            <span
+              className={`block h-0.5 w-6 bg-current transition-transform ${
+                open ? "translate-y-2 rotate-45" : ""
+              }`}
+            />
+            <span
+              className={`block h-0.5 w-6 bg-current transition-opacity ${
+                open ? "opacity-0" : ""
+              }`}
+            />
+            <span
+              className={`block h-0.5 w-6 bg-current transition-transform ${
+                open ? "-translate-y-2 -rotate-45" : ""
+              }`}
+            />
+          </div>
+        </button>
+      </div>
+
+      {open && (
+        <nav className="border-t border-white/10 md:hidden">
+          {NAV_ITEMS.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setOpen(false)}
+              className="block border-b border-white/5 px-4 py-3.5 text-sm font-semibold uppercase tracking-wide text-white/85 transition-colors hover:bg-ppa-navy-light hover:text-ppa-yellow"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+      )}
+    </header>
+  );
+}
