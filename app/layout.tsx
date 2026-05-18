@@ -6,13 +6,8 @@ import { Header } from "@/components/global/Header";
 import { SiteFooter } from "@/components/global/SiteFooter";
 import { CookieBanner } from "@/components/global/CookieBanner";
 
-/* Official brand fonts (Carvana PPA Tour brand guide): Gobold display, Gotham body. */
-const gobold = localFont({
-  variable: "--font-gobold",
-  display: "swap",
-  src: "./fonts/Gobold-Bold.otf",
-});
-
+/* Official brand font (Carvana PPA Tour brand guide): Gotham, used for both
+   body and headlines (Gotham Black). Single-typeface system. */
 const gotham = localFont({
   variable: "--font-gotham",
   display: "swap",
@@ -41,7 +36,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${gobold.variable} ${gotham.variable} h-full antialiased`}
+      className={`${gotham.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-ppa-paper font-sans text-ppa-navy">
         <div className="sticky top-0 z-50">

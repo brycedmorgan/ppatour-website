@@ -59,8 +59,16 @@
   --color-ppa-yellow: #e7e700; /* secondary — highlight */
   --color-ppa-paper: #f3f5f7; /* light editorial body */
   --color-ppa-line: #d7dee4; /* light borders */
-  --font-display: var(--font-gobold), "Arial Narrow", sans-serif;
+  --font-display: var(--font-gotham), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-gotham), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  /* Headlines: Gotham Black, tight. One-typeface brand system. */
+  .font-display {
+    font-weight: 900;
+    letter-spacing: -0.015em;
+  }
 }
 
 /* Image scrims — navy-tinted rgba so they render predictably across browsers. */

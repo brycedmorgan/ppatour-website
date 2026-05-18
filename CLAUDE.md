@@ -20,6 +20,24 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-18 — Scale + heading-font rework
+- Feedback: everything too big, hero ate the whole viewport, Gobold
+  headlines read "ridiculous." Decisions with Bryce: **Gotham Black for
+  all headings** (Gobold dropped entirely — single-typeface system),
+  **compact hero**, smaller global scale.
+- `font-display` now → Gotham; `.font-display` base rule sets weight 900
+  + tight tracking. Gobold removed from `layout.tsx` (font file still on
+  disk, unused).
+- Hero: `min-h-92svh`→`58svh`, h1 clamp `3–8.5rem`→`1.9–3.25rem`
+  (renders ~52px). Stat band now sits above the fold.
+- Global type cut ~50–60%: section h2 `5xl/7xl`→`2xl/3xl`, schedule/story/
+  pro/broadcast/CTA sizes all down; section padding `py-20`→`py-12`;
+  schedule cards `aspect-3/4`→`16/10` in a `sm:2 / lg:3` grid. Applied to
+  homepage, `/events`, `/events/[slug]`, ComingSoon, LeadMagnetCapture.
+- Verified: build passes (16 pages); compact hero confirmed (418px /
+  720px viewport); h1 = Gotham Black 52px, h2 = 30px.
+- **Not yet deployed** — awaiting Bryce's go-ahead.
+
 ### 2026-05-18 — Official brand applied (Carvana PPA Tour)
 - Bryce supplied the official **Carvana PPA Tour Brand Guide** + tournament
   logo kit. Rebranded the site off the guide (images skipped — API image-size

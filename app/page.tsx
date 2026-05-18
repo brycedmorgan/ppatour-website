@@ -62,18 +62,18 @@ function SectionHead({
 }) {
   return (
     <div>
-      <div className="flex items-center gap-3">
-        <span className="h-2.5 w-2.5 bg-ppa-blue" />
+      <div className="flex items-center gap-2.5">
+        <span className="h-2 w-2 bg-ppa-blue" />
         <p
-          className={`text-xs font-bold uppercase tracking-[0.22em] ${
-            dark ? "text-white/60" : "text-ppa-navy/55"
+          className={`text-[11px] font-bold uppercase tracking-[0.2em] ${
+            dark ? "text-white/55" : "text-ppa-navy/50"
           }`}
         >
           {label}
         </p>
       </div>
       <h2
-        className={`mt-3 font-display text-5xl uppercase leading-[0.9] sm:text-7xl ${
+        className={`mt-2 font-display text-2xl uppercase leading-[1.02] sm:text-3xl ${
           dark ? "text-white" : "text-ppa-navy"
         }`}
       >
@@ -89,8 +89,8 @@ export default function Home() {
 
   return (
     <>
-      {/* ── Hero ────────────────────────────────────────────── */}
-      <section className="relative isolate flex min-h-[92svh] flex-col justify-end overflow-hidden bg-ppa-navy text-white">
+      {/* ── Hero (compact) ──────────────────────────────────── */}
+      <section className="relative isolate flex min-h-[58svh] flex-col justify-end overflow-hidden bg-ppa-navy text-white">
         <Image
           src="/ppa/hero-action.jpg"
           alt="PPA Tour pro action"
@@ -102,23 +102,23 @@ export default function Home() {
         <div className="absolute inset-0 scrim-hero" />
         <div className="absolute inset-0 scrim-side" />
 
-        <div className="relative mx-auto w-full max-w-6xl px-4 pb-12 pt-32">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-bold uppercase tracking-[0.18em]">
-            <span className="bg-ppa-blue px-2.5 py-1">Next Event</span>
+        <div className="relative mx-auto w-full max-w-6xl px-4 pb-9 pt-20">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em]">
+            <span className="bg-ppa-blue px-2 py-0.5">Next Event</span>
             <span className="text-white/70">
               {next.city}, {next.state}
             </span>
-            <span className="text-white/30">/</span>
+            <span className="text-white/25">/</span>
             <span className="text-ppa-yellow">
               {countdown} {countdown === 1 ? "Day" : "Days"} Out
             </span>
           </div>
 
-          <h1 className="mt-6 max-w-[14ch] font-display text-[clamp(3rem,12.5vw,8.5rem)] uppercase leading-[0.86]">
+          <h1 className="mt-3 max-w-[18ch] font-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98]">
             {next.shortName}
           </h1>
 
-          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-1 text-sm font-semibold uppercase tracking-wide text-white/75">
+          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold uppercase tracking-wide text-white/75">
             <span>{formatDateRange(next.startDate, next.endDate)}</span>
             <span className="text-white/25">|</span>
             <span>{next.venue}</span>
@@ -128,7 +128,7 @@ export default function Home() {
             </span>
           </div>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-5 flex flex-col gap-2.5 sm:flex-row">
             <a
               href={withUtm(next.ticketsUrl, {
                 campaign: next.slug,
@@ -136,13 +136,13 @@ export default function Home() {
               })}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-14 items-center justify-center bg-ppa-blue px-9 text-sm font-bold uppercase tracking-[0.14em] transition-colors hover:bg-ppa-blue-deep"
+              className="flex h-11 items-center justify-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:bg-ppa-blue-deep"
             >
               Buy Tickets — from ${next.ticketPriceFrom}
             </a>
             <Link
               href="/watch"
-              className="flex h-14 items-center justify-center border border-white/25 px-9 text-sm font-bold uppercase tracking-[0.14em] backdrop-blur-sm transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
+              className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
             >
               ▶ Watch Live
             </Link>
@@ -157,16 +157,16 @@ export default function Home() {
           {STATS.map((s, i) => (
             <div
               key={s.label}
-              className={`px-2 py-9 ${
+              className={`px-2 py-6 ${
                 i % 2 === 1 ? "border-l border-white/10" : ""
               } ${i >= 2 ? "border-t border-white/10 md:border-t-0" : ""} ${
                 i === 2 ? "md:border-l" : ""
               }`}
             >
-              <p className="font-display text-5xl leading-none text-white sm:text-6xl">
+              <p className="font-display text-3xl leading-none text-white sm:text-4xl">
                 {s.n}
               </p>
-              <p className="mt-2 text-xs font-bold uppercase tracking-[0.16em] text-white/45">
+              <p className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
                 {s.label}
               </p>
             </div>
@@ -176,46 +176,46 @@ export default function Home() {
 
       {/* ── The Main Tour / schedule ────────────────────────── */}
       <section className="bg-ppa-paper">
-        <div className="mx-auto w-full max-w-6xl px-4 py-20">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <SectionHead label="2026 Season" title="The Main Tour" />
             <p className="max-w-xs text-sm text-ppa-navy/55 sm:text-right">
-              Every stop carries 1,000+ ranking points. The pros chase the
-              title — and the climb — at all of them.
+              Every stop carries 1,000+ ranking points — the pros chase the
+              title at all of them.
             </p>
           </div>
 
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {tournaments.map((t, i) => (
               <article
                 key={t.slug}
-                className="group relative isolate flex aspect-[3/4] flex-col justify-end overflow-hidden bg-ppa-navy"
+                className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden bg-ppa-navy"
               >
                 <Image
                   src={t.image}
                   alt={t.name}
                   fill
-                  sizes="(min-width: 768px) 33vw, 100vw"
-                  className="will-change-transform object-cover grayscale-[35%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  className="will-change-transform object-cover grayscale-[30%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
                 />
                 <div className="absolute inset-0 scrim-card" />
-                <span className="absolute left-4 top-3 font-display text-6xl leading-none text-white/25">
+                <span className="absolute left-3 top-2 font-display text-2xl leading-none text-white/30">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="absolute right-4 top-5 bg-ppa-yellow px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-ppa-navy">
+                <span className="absolute right-3 top-3 bg-ppa-yellow px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] text-ppa-navy">
                   {t.points.toLocaleString()} Pts
                 </span>
-                <div className="relative p-5">
-                  <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/55">
+                <div className="relative p-4">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/55">
                     {t.tier}
                   </p>
                   <Link
                     href={`/events/${t.slug}`}
-                    className="mt-1 block font-display text-3xl uppercase leading-[0.9] text-white after:absolute after:inset-0"
+                    className="mt-0.5 block font-display text-lg uppercase leading-[1.05] text-white after:absolute after:inset-0"
                   >
                     {t.shortName}
                   </Link>
-                  <p className="mt-2 text-sm text-white/60">
+                  <p className="mt-1 text-xs text-white/60">
                     {formatDateRange(t.startDate, t.endDate)} · {t.city},{" "}
                     {t.state}
                   </p>
@@ -226,7 +226,7 @@ export default function Home() {
                     })}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="relative z-10 mt-4 inline-flex h-10 items-center bg-ppa-blue px-4 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
+                    className="relative z-10 mt-3 inline-flex h-8 items-center bg-ppa-blue px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors hover:bg-ppa-blue-deep"
                   >
                     Buy Tickets
                   </a>
@@ -237,7 +237,7 @@ export default function Home() {
 
           <Link
             href="/events"
-            className="mt-9 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-1 text-sm font-bold uppercase tracking-[0.14em] text-ppa-navy hover:text-ppa-blue"
+            className="mt-6 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue"
           >
             Full 2026 Schedule →
           </Link>
@@ -265,25 +265,25 @@ export default function Home() {
           <Link
             key={card.href}
             href={card.href}
-            className="group relative isolate flex min-h-[22rem] items-end overflow-hidden bg-ppa-navy"
+            className="group relative isolate flex min-h-[14rem] items-end overflow-hidden bg-ppa-navy"
           >
             <Image
               src={card.image}
               alt=""
               fill
               sizes="(min-width: 640px) 50vw, 100vw"
-              className="will-change-transform object-cover grayscale-[30%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+              className="will-change-transform object-cover grayscale-[25%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
             />
             <div className="absolute inset-0 scrim-hero" />
-            <div className="relative w-full p-7 text-white">
-              <p className="text-xs font-bold uppercase tracking-[0.22em] text-ppa-blue">
+            <div className="relative w-full p-6 text-white">
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-sky">
                 {card.kicker}
               </p>
-              <h3 className="mt-1 font-display text-6xl uppercase leading-none">
+              <h3 className="mt-0.5 font-display text-3xl uppercase leading-none sm:text-4xl">
                 {card.title}
               </h3>
-              <p className="mt-2 text-white/65">{card.blurb}</p>
-              <span className="mt-3 inline-block text-sm font-bold uppercase tracking-[0.14em] text-white transition-colors group-hover:text-ppa-yellow">
+              <p className="mt-1 text-sm text-white/65">{card.blurb}</p>
+              <span className="mt-2 inline-block text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors group-hover:text-ppa-yellow">
                 Enter →
               </span>
             </div>
@@ -293,13 +293,13 @@ export default function Home() {
 
       {/* ── Inside the Tour (editorial) ─────────────────────── */}
       <section className="bg-ppa-paper">
-        <div className="mx-auto w-full max-w-6xl px-4 py-20">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <SectionHead label="Stories" title="Inside the Tour" />
-          <div className="mt-10 grid gap-6 lg:grid-cols-2">
+          <div className="mt-6 grid gap-4 lg:grid-cols-2">
             {/* Feature */}
             <Link
               href="/watch"
-              className="group relative isolate flex aspect-[16/11] flex-col justify-end overflow-hidden bg-ppa-navy lg:row-span-2 lg:aspect-auto"
+              className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden bg-ppa-navy lg:row-span-2 lg:aspect-auto"
             >
               <Image
                 src={STORIES[0].image}
@@ -309,14 +309,14 @@ export default function Home() {
                 className="will-change-transform object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 scrim-soft" />
-              <span className="absolute left-5 top-5 bg-ppa-blue px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
+              <span className="absolute left-4 top-4 bg-ppa-blue px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-white">
                 {STORIES[0].tag}
               </span>
-              <div className="relative p-6 text-white">
-                <h3 className="font-display text-5xl uppercase leading-[0.9] sm:text-7xl">
+              <div className="relative p-5 text-white">
+                <h3 className="font-display text-2xl uppercase leading-[1.02] sm:text-3xl">
                   {STORIES[0].title}
                 </h3>
-                <p className="mt-3 max-w-md text-white/70">
+                <p className="mt-2 max-w-md text-sm text-white/70">
                   {STORIES[0].blurb}
                 </p>
               </div>
@@ -327,25 +327,25 @@ export default function Home() {
               <Link
                 key={s.title}
                 href="/watch"
-                className="group flex gap-4 border border-ppa-line bg-white p-4"
+                className="group flex gap-4 border border-ppa-line bg-white p-3"
               >
-                <div className="relative aspect-square w-28 shrink-0 overflow-hidden bg-ppa-navy sm:w-40">
+                <div className="relative aspect-square w-24 shrink-0 overflow-hidden bg-ppa-navy sm:w-32">
                   <Image
                     src={s.image}
                     alt=""
                     fill
-                    sizes="160px"
+                    sizes="128px"
                     className="will-change-transform object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
                 <div className="flex flex-col justify-center">
-                  <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-blue">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-blue">
                     {s.tag}
                   </p>
-                  <h3 className="mt-1 font-display text-2xl uppercase leading-[0.95] text-ppa-navy sm:text-3xl">
+                  <h3 className="mt-0.5 font-display text-base uppercase leading-[1.1] text-ppa-navy sm:text-lg">
                     {s.title}
                   </h3>
-                  <p className="mt-1 text-sm text-ppa-navy/55">{s.blurb}</p>
+                  <p className="mt-1 text-xs text-ppa-navy/55">{s.blurb}</p>
                 </div>
               </Link>
             ))}
@@ -355,17 +355,17 @@ export default function Home() {
 
       {/* ── The Pros ────────────────────────────────────────── */}
       <section className="bg-ppa-navy">
-        <div className="mx-auto w-full max-w-6xl px-4 py-20">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <SectionHead label="The Athletes" title="Meet the Pros" dark />
             <Link
               href="/athletes"
-              className="text-sm font-bold uppercase tracking-[0.14em] text-ppa-yellow hover:text-white"
+              className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-yellow hover:text-white"
             >
               All Athletes →
             </Link>
           </div>
-          <div className="mt-10 grid grid-cols-3 gap-3 sm:gap-5">
+          <div className="mt-6 grid grid-cols-3 gap-3 sm:gap-4">
             {PROS.map((p) => (
               <Link
                 key={p.name}
@@ -376,15 +376,15 @@ export default function Home() {
                   src={p.image}
                   alt={p.name}
                   fill
-                  sizes="(min-width: 640px) 33vw, 33vw"
+                  sizes="33vw"
                   className="will-change-transform object-cover object-top grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
                 />
                 <div className="absolute inset-0 scrim-soft" />
-                <div className="relative p-3 sm:p-4">
-                  <p className="font-display text-lg uppercase leading-[0.95] text-white sm:text-2xl">
+                <div className="relative p-3">
+                  <p className="font-display text-xs uppercase leading-[1.1] text-white sm:text-sm">
                     {p.name}
                   </p>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-blue sm:text-xs">
+                  <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-ppa-sky sm:text-[10px]">
                     {p.division}
                   </p>
                 </div>
@@ -396,16 +396,16 @@ export default function Home() {
 
       {/* ── Where to Watch ──────────────────────────────────── */}
       <section className="bg-ppa-paper">
-        <div className="mx-auto w-full max-w-6xl px-4 py-20">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <SectionHead label="Broadcast" title="Where to Watch" />
-          <div className="mt-10 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-3">
+          <div className="mt-6 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-3">
             {BROADCAST.map((b) => (
-              <div key={b.name} className="bg-ppa-paper p-7">
-                <span className="font-display text-xl text-ppa-blue">▶</span>
-                <p className="mt-3 font-display text-2xl uppercase leading-none text-ppa-navy">
+              <div key={b.name} className="bg-ppa-paper p-5">
+                <span className="text-sm text-ppa-blue">▶</span>
+                <p className="mt-2 font-display text-lg uppercase leading-none text-ppa-navy">
                   {b.name}
                 </p>
-                <p className="mt-2 text-sm text-ppa-navy/55">{b.note}</p>
+                <p className="mt-1.5 text-xs text-ppa-navy/55">{b.note}</p>
               </div>
             ))}
           </div>
@@ -419,9 +419,9 @@ export default function Home() {
           alt=""
           fill
           sizes="100vw"
-          className="will-change-transform object-cover object-center opacity-25"
+          className="will-change-transform object-cover object-center opacity-20"
         />
-        <div className="relative mx-auto w-full max-w-6xl px-4 py-20">
+        <div className="relative mx-auto w-full max-w-6xl px-4 py-12">
           <LeadMagnetCapture variant="fan" />
         </div>
       </section>
