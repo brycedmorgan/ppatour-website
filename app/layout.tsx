@@ -1,20 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Oswald } from "next/font/google";
+import { Anton, Archivo } from "next/font/google";
 import "./globals.css";
 import { ScoreTicker } from "@/components/global/ScoreTicker";
 import { Header } from "@/components/global/Header";
 import { SiteFooter } from "@/components/global/SiteFooter";
 import { CookieBanner } from "@/components/global/CookieBanner";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const anton = Anton({
+  variable: "--font-anton",
   subsets: ["latin"],
+  weight: "400",
 });
 
-const oswald = Oswald({
-  variable: "--font-oswald",
+const archivo = Archivo({
+  variable: "--font-archivo",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -34,9 +35,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${oswald.variable} h-full antialiased`}
+      className={`${anton.variable} ${archivo.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-ppa-ink text-white">
+      <body className="flex min-h-full flex-col bg-ppa-paper font-sans text-ppa-ink">
         <div className="sticky top-0 z-50">
           <ScoreTicker />
           <Header />

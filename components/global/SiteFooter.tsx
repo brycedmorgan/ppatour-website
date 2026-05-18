@@ -10,33 +10,32 @@ const FOOTER_LINKS = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-white/10 bg-ppa-ink">
-      <div className="mx-auto w-full max-w-6xl px-4 py-12">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <Link
-            href="/"
-            className="font-display text-2xl font-bold uppercase tracking-tight"
-          >
+    <footer className="bg-ppa-ink text-white">
+      <div className="mx-auto w-full max-w-6xl px-4 py-14">
+        <div className="flex flex-col gap-7 sm:flex-row sm:items-center sm:justify-between">
+          <Link href="/" className="font-display text-3xl leading-none">
             <span className="text-white">PPA</span>
-            <span className="text-ppa-red"> Tour</span>
+            <span className="text-ppa-red"> TOUR</span>
           </Link>
-          <nav className="flex flex-wrap gap-x-7 gap-y-2">
+          <nav className="flex flex-wrap gap-x-8 gap-y-2">
             {FOOTER_LINKS.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="font-display text-sm font-semibold uppercase tracking-wide text-white/60 hover:text-ppa-yellow"
+                className="text-[13px] font-bold uppercase tracking-[0.12em] text-white/55 hover:text-white"
               >
                 {item.label}
               </Link>
             ))}
           </nav>
         </div>
-        <p className="mt-10 max-w-xl text-xs leading-relaxed text-white/35">
-          © {new Date().getFullYear()} Professional Pickleball Association. The
-          Pro Tour of Pickleball. Tickets via tixr · amateur registration via
-          pickleballtournaments.com.
-        </p>
+        <div className="mt-10 border-t border-white/10 pt-6">
+          <p className="max-w-xl text-xs leading-relaxed text-white/35">
+            © {new Date().getFullYear()} Professional Pickleball Association.
+            The Pro Tour of Pickleball. Tickets via tixr · amateur registration
+            via pickleballtournaments.com.
+          </p>
+        </div>
       </div>
     </footer>
   );

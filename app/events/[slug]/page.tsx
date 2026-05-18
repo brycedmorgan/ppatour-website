@@ -35,32 +35,35 @@ export default async function EventPage({ params }: Params) {
 
   return (
     <article>
-      <section className="relative isolate flex min-h-[78svh] items-end overflow-hidden">
+      <section className="relative isolate flex min-h-[82svh] flex-col justify-end overflow-hidden bg-ppa-ink text-white">
         <Image
           src={t.image}
           alt={t.name}
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center"
+          className="transform-gpu object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-ppa-ink via-ppa-ink/70 to-ppa-ink/20" />
-        <div className="relative mx-auto w-full max-w-6xl px-4 pb-14 pt-28">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-ppa-ink/60 px-3 py-1.5 backdrop-blur">
-            <span className="text-xs font-bold uppercase tracking-[0.2em] text-white/90">
-              {t.tier}
-            </span>
-            <span className="text-xs font-bold uppercase tracking-[0.2em] text-ppa-yellow">
-              {countdown} {countdown === 1 ? "day" : "days"} out
+        <div className="absolute inset-0 scrim-hero" />
+        <div className="relative mx-auto w-full max-w-6xl px-4 pb-12 pt-32">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-bold uppercase tracking-[0.18em]">
+            <span className="bg-ppa-red px-2.5 py-1">{t.tier}</span>
+            <span className="text-ppa-yellow">
+              {countdown} {countdown === 1 ? "Day" : "Days"} Out
             </span>
           </div>
-          <h1 className="mt-5 max-w-3xl font-display text-[clamp(2.25rem,9vw,5.5rem)] font-bold uppercase leading-[0.92] tracking-tight">
+          <h1 className="mt-6 max-w-[14ch] font-display text-[clamp(2.75rem,10vw,7rem)] uppercase leading-[0.86]">
             {t.shortName}
           </h1>
-          <p className="mt-4 text-lg font-medium text-white/75">
-            {formatDateRange(t.startDate, t.endDate)} · {t.venue} · {t.city},{" "}
-            {t.state}
-          </p>
+          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-1 text-sm font-semibold uppercase tracking-wide text-white/75">
+            <span>{formatDateRange(t.startDate, t.endDate)}</span>
+            <span className="text-white/25">|</span>
+            <span>{t.venue}</span>
+            <span className="text-white/25">|</span>
+            <span className="text-ppa-yellow">
+              {t.points.toLocaleString()} Ranking Points
+            </span>
+          </div>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <a
               href={withUtm(t.ticketsUrl, {
@@ -69,9 +72,9 @@ export default async function EventPage({ params }: Params) {
               })}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-14 items-center justify-center bg-ppa-red px-8 font-display text-base font-bold uppercase tracking-wide transition-colors hover:bg-ppa-red-dark"
+              className="flex h-14 items-center justify-center bg-ppa-red px-9 text-sm font-bold uppercase tracking-[0.14em] transition-colors hover:bg-ppa-red-dark"
             >
-              Buy Tickets · from ${t.ticketPriceFrom}
+              Buy Tickets — from ${t.ticketPriceFrom}
             </a>
             <a
               href={withUtm(t.registerUrl, {
@@ -80,24 +83,25 @@ export default async function EventPage({ params }: Params) {
               })}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-14 items-center justify-center border border-white/30 bg-white/5 px-8 font-display text-base font-bold uppercase tracking-wide backdrop-blur transition-colors hover:border-ppa-yellow hover:text-ppa-yellow"
+              className="flex h-14 items-center justify-center border border-white/25 px-9 text-sm font-bold uppercase tracking-[0.14em] transition-colors hover:border-white hover:bg-white hover:text-ppa-ink"
             >
               Register to Play
             </a>
           </div>
         </div>
+        <div className="relative h-1 bg-ppa-red" />
       </section>
 
-      <div className="mx-auto w-full max-w-6xl px-4 py-12">
-        <p className="max-w-xl text-sm text-white/45">
+      <div className="mx-auto w-full max-w-6xl px-4 py-14">
+        <p className="max-w-xl text-sm text-ppa-ink/55">
           Full event experience — live brackets, division tabs, broadcast
           schedule, and the where-to-watch matrix — is the next Phase 2 build.
         </p>
         <Link
           href="/events"
-          className="mt-4 inline-block font-display text-sm font-bold uppercase tracking-wide text-ppa-yellow hover:underline"
+          className="mt-5 inline-flex items-center gap-2 border-b-2 border-ppa-red pb-1 text-sm font-bold uppercase tracking-[0.14em] text-ppa-ink hover:text-ppa-red"
         >
-          ← All events
+          ← All Events
         </Link>
       </div>
     </article>

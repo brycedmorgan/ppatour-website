@@ -19,23 +19,23 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="border-b border-white/10 bg-ppa-ink/95 backdrop-blur">
+    <header className="bg-ppa-ink text-white">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4">
         <Link
           href="/"
           onClick={() => setOpen(false)}
-          className="font-display text-2xl font-bold uppercase leading-none tracking-tight"
+          className="font-display text-[1.6rem] leading-none"
         >
           <span className="text-white">PPA</span>
-          <span className="text-ppa-red"> Tour</span>
+          <span className="text-ppa-red"> TOUR</span>
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-9 md:flex">
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="font-display text-sm font-semibold uppercase tracking-wide text-white/80 transition-colors hover:text-ppa-yellow"
+              className="text-[13px] font-bold uppercase tracking-[0.12em] text-white/75 transition-colors hover:text-white"
             >
               {item.label}
             </Link>
@@ -76,7 +76,7 @@ export function Header() {
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              className="block border-b border-white/5 px-4 py-3.5 font-display text-sm font-semibold uppercase tracking-wide text-white/80 transition-colors hover:bg-white/5 hover:text-ppa-yellow"
+              className="block border-b border-white/5 px-4 py-4 text-sm font-bold uppercase tracking-[0.12em] text-white/75 transition-colors hover:bg-white/5 hover:text-white"
             >
               {item.label}
             </Link>

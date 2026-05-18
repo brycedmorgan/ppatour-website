@@ -7,17 +7,17 @@ type Variant = "fan" | "amateur" | "streaming";
 const COPY: Record<Variant, { eyebrow: string; heading: string; cta: string }> = {
   fan: {
     eyebrow: "Free Fan Guide",
-    heading: "Your First PPA Event — what to know before you go",
-    cta: "Send it to me",
+    heading: "Your First PPA Event",
+    cta: "Send it",
   },
   amateur: {
     eyebrow: "Free Player Guide",
-    heading: "5 Mistakes to Avoid at Your First Tournament",
+    heading: "5 Mistakes at Your First Tournament",
     cta: "Get the guide",
   },
   streaming: {
     eyebrow: "Never Miss a Match",
-    heading: "Get streaming reminders for every PPA Tour event",
+    heading: "Streaming Reminders for Every Event",
     cta: "Notify me",
   },
 };
@@ -49,32 +49,36 @@ export function LeadMagnetCapture({ variant = "fan" }: { variant?: Variant }) {
   }
 
   return (
-    <div className="rounded-2xl bg-ppa-navy-light p-6 sm:p-8">
-      <p className="text-xs font-bold uppercase tracking-widest text-ppa-yellow">
+    <div>
+      <p className="text-xs font-bold uppercase tracking-[0.25em] text-ppa-red">
         {copy.eyebrow}
       </p>
-      <h3 className="mt-2 text-xl font-extrabold text-white sm:text-2xl">
+      <h3 className="mt-3 font-display text-4xl uppercase leading-[0.95] text-white sm:text-6xl">
         {copy.heading}
       </h3>
+      <p className="mt-3 max-w-md text-white/55">
+        When the checkout lives off-site, email is how we keep you close.
+        No spam — just the matches, drops, and dates that matter.
+      </p>
 
       {status === "done" ? (
-        <p className="mt-4 font-semibold text-ppa-yellow">
+        <p className="mt-6 font-bold uppercase tracking-wide text-ppa-yellow">
           You&apos;re on the list — check your inbox.
         </p>
       ) : (
-        <form onSubmit={onSubmit} className="mt-4 flex flex-col gap-3 sm:flex-row">
+        <form onSubmit={onSubmit} className="mt-6 flex max-w-md flex-col gap-3 sm:flex-row">
           <input
             type="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@email.com"
-            className="h-12 flex-1 rounded-lg border border-white/15 bg-white/5 px-4 text-white placeholder:text-white/40 focus:border-ppa-yellow focus:outline-none"
+            className="h-13 flex-1 border border-white/15 bg-white/5 px-4 text-white placeholder:text-white/40 focus:border-ppa-red focus:outline-none"
           />
           <button
             type="submit"
             disabled={status === "loading"}
-            className="h-12 rounded-lg bg-ppa-red px-6 font-bold text-white transition-colors hover:bg-ppa-red-dark disabled:opacity-60"
+            className="h-13 bg-ppa-red px-7 text-sm font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-red-dark disabled:opacity-60"
           >
             {status === "loading" ? "Sending…" : copy.cta}
           </button>
