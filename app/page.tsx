@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
+import { PartnerSpotlight } from "@/components/home/PartnerSpotlight";
 import {
   daysUntil,
   formatDateRange,
@@ -10,6 +11,7 @@ import {
 import {
   explainers,
   leadStory,
+  partners,
   playersToWatch,
   pointsRace,
   storylines,
@@ -491,6 +493,51 @@ export default function Home() {
             </div>
           </Link>
         ))}
+      </section>
+
+      {/* ── Partners ────────────────────────────────────────── */}
+      <section className="bg-ppa-navy-deep">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <SectionHead label="Partners" title="Powering the Tour" dark />
+            <Link
+              href="/about"
+              className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-yellow hover:text-white"
+            >
+              Partnership Opportunities →
+            </Link>
+          </div>
+
+          <div className="mt-6">
+            <PartnerSpotlight />
+          </div>
+
+          <div
+            className="group mt-4 overflow-hidden border-y border-white/10 py-3.5"
+            style={{
+              maskImage:
+                "linear-gradient(to right, transparent, #000 7%, #000 93%, transparent)",
+              WebkitMaskImage:
+                "linear-gradient(to right, transparent, #000 7%, #000 93%, transparent)",
+            }}
+          >
+            <div className="flex w-max items-center gap-12 animate-marquee motion-reduce:animate-none group-hover:[animation-play-state:paused]">
+              {[...partners, ...partners].map((p, idx) => (
+                <span
+                  key={idx}
+                  className="flex items-baseline gap-2.5 whitespace-nowrap"
+                >
+                  <span className="font-display text-lg uppercase text-white/80">
+                    {p.name}
+                  </span>
+                  <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/35">
+                    {p.role}
+                  </span>
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* ── Where to Watch ──────────────────────────────────── */}

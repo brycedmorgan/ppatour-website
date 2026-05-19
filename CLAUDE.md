@@ -20,6 +20,29 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-19 — ppatour.com audit + dynamic Partners section
+- Audited live ppatour.com. Gaps vs. our rebuild logged for Bryce:
+  sponsors area, homepage live-scores module, rankings split by 6
+  divisions, ecosystem news feed, Shop + Search nav, social links,
+  deep 3-group footer, nav submenus.
+- Built the **Partners section** (replaces ppatour.com's static logo
+  grid). New `lib/home-content.ts` `partners[]` (Carvana title partner
+  + 6 official partners w/ roles + notes). Two dynamic pieces:
+  `components/home/PartnerSpotlight.tsx` (client, auto-rotates every
+  4.5s, clickable dots) + a CSS marquee strip of the full roster.
+  Section sits after Watch/Play, before Where to Watch.
+- **Turbopack gotcha:** plain `@keyframes`/`.class { animation }` in
+  globals.css compiled in `next build` but the **dev server silently
+  dropped every rule from the first `@keyframes` onward.** Fix: register
+  motion as Tailwind v4 theme animations — `--animate-marquee` /
+  `--animate-fade` + `@keyframes` *inside* `@theme` → real
+  `animate-*` utilities the dev pipeline honors. Marquee edge-fade is an
+  inline `mask-image`; hover-pause via `group-hover:[animation-play-state:paused]`;
+  `motion-reduce:animate-none` for a11y.
+- Verified: build passes; marquee `animationName: ppa-marquee`;
+  spotlight rotation + 7 dots confirmed.
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-18 — ESPN-style content build-out
 - Feedback: site felt thin — wanted "much bigger" = more substance,
   ESPN-style storytelling, "why people should care," LIV energy.

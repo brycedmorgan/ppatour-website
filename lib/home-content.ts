@@ -129,3 +129,55 @@ export const explainers: Explainer[] = [
     a: "Pick a stop, watch a Championship Sunday, and follow one player. The race takes care of the rest.",
   },
 ];
+
+export type Partner = {
+  name: string;
+  role: string;
+  note: string;
+  tier: "title" | "official";
+};
+
+export const partners: Partner[] = [
+  {
+    name: "Carvana",
+    role: "Title Partner",
+    note: "The named partner of the tour — on every court, every broadcast, all 25 stops.",
+    tier: "title",
+  },
+  {
+    name: "Veolia",
+    role: "Official Sustainability Partner",
+    note: "Backing the marquee stops in Atlanta, Chicago, and the National Championships.",
+    tier: "official",
+  },
+  {
+    name: "JOOLA",
+    role: "Official Equipment Partner",
+    note: "Presenting partner of the PPA Finals and the gear behind a generation of pros.",
+    tier: "official",
+  },
+  {
+    name: "Humana",
+    role: "Official Health Partner",
+    note: "Keeping players and fans moving, on the court and off it.",
+    tier: "official",
+  },
+  {
+    name: "Ensure",
+    role: "Official Nutrition Partner",
+    note: "Fueling the longest weekends on tour.",
+    tier: "official",
+  },
+  {
+    name: "Proton Sports",
+    role: "Official Paddle Partner",
+    note: "Engineering the paddles behind the tour's hardest hitters.",
+    tier: "official",
+  },
+  {
+    name: "Six Zero",
+    role: "Official Performance Partner",
+    note: "Performance gear built for the demands of the pro game.",
+    tier: "official",
+  },
+];
