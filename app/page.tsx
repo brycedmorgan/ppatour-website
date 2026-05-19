@@ -7,6 +7,13 @@ import {
   getNextTournament,
   tournaments,
 } from "@/lib/placeholder-data";
+import {
+  explainers,
+  leadStory,
+  playersToWatch,
+  pointsRace,
+  storylines,
+} from "@/lib/home-content";
 import { withUtm } from "@/lib/utm";
 
 /* Confirm tour-wide figures with Bryce (§10 lists 150K fans / 25 events / $5.2M). */
@@ -15,34 +22,6 @@ const STATS = [
   { n: "$5.2M", label: "Prize Money" },
   { n: "12", label: "Countries" },
   { n: "150K+", label: "Fans In Arena" },
-];
-
-const STORIES = [
-  {
-    image: "/ppa/action-masters.jpg",
-    tag: "Docuseries",
-    title: "PARTNERS",
-    blurb:
-      "The first reality series inside professional pickleball. From partners to rivals, friends to foe — streaming now on YouTube.",
-  },
-  {
-    image: "/ppa/action-mxd.jpg",
-    tag: "Highlights",
-    title: "Top 10 Plays — Atlanta",
-    blurb: "The shots that brought the crowd to its feet.",
-  },
-  {
-    image: "/ppa/action-md-final.jpg",
-    tag: "Match Report",
-    title: "Championship Sunday Stats",
-    blurb: "The numbers behind a record finals weekend.",
-  },
-];
-
-const PROS = [
-  { image: "/ppa/player-bricker.webp", name: "Austin Bricker", division: "Men's Doubles" },
-  { image: "/ppa/player-safdar.webp", name: "Mehvish Safdar", division: "Women's Doubles" },
-  { image: "/ppa/player-rau.webp", name: "Jade Rau", division: "Women's Singles" },
 ];
 
 const BROADCAST = [
@@ -83,13 +62,20 @@ function SectionHead({
   );
 }
 
+/** Rank movement indicator for the points race. */
+function Move({ n }: { n: number }) {
+  if (n > 0) return <span className="text-ppa-yellow">▲ {n}</span>;
+  if (n < 0) return <span className="text-white/35">▼ {Math.abs(n)}</span>;
+  return <span className="text-white/25">—</span>;
+}
+
 export default function Home() {
   const next = getNextTournament();
   const countdown = daysUntil(next.startDate);
 
   return (
     <>
-      {/* ── Hero (compact) ──────────────────────────────────── */}
+      {/* ── Hero (event lead) ───────────────────────────────── */}
       <section className="relative isolate flex min-h-[58svh] flex-col justify-end overflow-hidden bg-ppa-navy text-white">
         <Image
           src="/ppa/hero-action.jpg"
@@ -174,6 +160,143 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Top Storylines ──────────────────────────────────── */}
+      <section className="bg-ppa-paper">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <SectionHead label="The Storylines" title="What's Happening on Tour" />
+            <Link
+              href="/watch"
+              className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
+            >
+              All Stories →
+            </Link>
+          </div>
+
+          <div className="mt-6 grid gap-4 lg:grid-cols-5">
+            {/* Lead story */}
+            <Link
+              href="/watch"
+              className="group relative isolate flex aspect-[16/11] flex-col justify-end overflow-hidden bg-ppa-navy lg:col-span-3 lg:aspect-auto lg:min-h-[25rem]"
+            >
+              <Image
+                src={leadStory.image}
+                alt=""
+                fill
+                sizes="(min-width: 1024px) 60vw, 100vw"
+                className="will-change-transform object-cover object-top transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 scrim-hero" />
+              <span className="absolute left-4 top-4 bg-ppa-blue px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-white">
+                {leadStory.kicker}
+              </span>
+              <div className="relative p-5 text-white sm:p-6">
+                <h3 className="font-display text-2xl uppercase leading-[1.02] sm:text-4xl">
+                  {leadStory.headline}
+                </h3>
+                <p className="mt-2 max-w-xl text-sm text-white/70">
+                  {leadStory.dek}
+                </p>
+                <p className="mt-3 border-l-2 border-ppa-yellow pl-3 text-xs leading-relaxed text-white/85">
+                  <span className="font-bold uppercase tracking-[0.1em] text-ppa-yellow">
+                    Why it matters ·{" "}
+                  </span>
+                  {leadStory.whyItMatters}
+                </p>
+              </div>
+            </Link>
+
+            {/* Secondary storylines */}
+            <div className="flex flex-col divide-y divide-ppa-line border border-ppa-line bg-white lg:col-span-2">
+              {storylines.map((s) => (
+                <Link
+                  key={s.headline}
+                  href="/watch"
+                  className="group flex flex-1 gap-3 p-4 transition-colors hover:bg-ppa-paper"
+                >
+                  <div className="relative aspect-square w-20 shrink-0 overflow-hidden bg-ppa-navy">
+                    <Image
+                      src={s.image}
+                      alt=""
+                      fill
+                      sizes="80px"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-blue">
+                      {s.kicker}
+                    </p>
+                    <h4 className="mt-0.5 font-display text-sm uppercase leading-[1.1] text-ppa-navy">
+                      {s.headline}
+                    </h4>
+                    <p className="mt-1 text-xs leading-relaxed text-ppa-navy/55">
+                      <span className="font-bold text-ppa-navy/75">
+                        Why it matters ·{" "}
+                      </span>
+                      {s.whyItMatters}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── The Points Race ─────────────────────────────────── */}
+      <section className="bg-ppa-navy">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <SectionHead label="Standings" title="The Points Race" dark />
+            <p className="max-w-xs text-sm text-white/55 sm:text-right">
+              Every main-tour stop is worth 1,000+ points. Here&apos;s who is
+              climbing toward Nationals.
+            </p>
+          </div>
+
+          <div className="mt-6 border border-white/10">
+            <div className="grid grid-cols-[2rem_1fr_5rem_3.5rem] items-center gap-3 border-b border-white/10 bg-ppa-navy-deep px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
+              <span>#</span>
+              <span>Player</span>
+              <span className="text-right">Points</span>
+              <span className="text-right">Move</span>
+            </div>
+            {pointsRace.map((p) => (
+              <div
+                key={p.rank}
+                className="grid grid-cols-[2rem_1fr_5rem_3.5rem] items-center gap-3 border-b border-white/5 px-4 py-3 text-white last:border-b-0"
+              >
+                <span className="font-display text-lg text-white/40">
+                  {p.rank}
+                </span>
+                <span className="min-w-0">
+                  <span className="block truncate text-sm font-bold uppercase tracking-wide">
+                    {p.name}
+                  </span>
+                  <span className="block text-[11px] text-white/45">
+                    {p.division}
+                  </span>
+                </span>
+                <span className="text-right text-sm font-bold tabular-nums text-ppa-sky">
+                  {p.points.toLocaleString()}
+                </span>
+                <span className="text-right text-xs font-bold">
+                  <Move n={p.move} />
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <Link
+            href="/athletes"
+            className="mt-6 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-white hover:text-ppa-sky"
+          >
+            Full Rankings →
+          </Link>
+        </div>
+      </section>
+
       {/* ── The Main Tour / schedule ────────────────────────── */}
       <section className="bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -244,6 +367,85 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Players to Watch ────────────────────────────────── */}
+      <section className="bg-ppa-navy-deep">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <SectionHead label="The Athletes" title="Players to Watch" dark />
+            <Link
+              href="/athletes"
+              className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-yellow hover:text-white"
+            >
+              All Athletes →
+            </Link>
+          </div>
+          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            {playersToWatch.map((p) => (
+              <Link
+                key={p.name}
+                href="/athletes"
+                className="group flex flex-col overflow-hidden border border-white/10 bg-ppa-navy"
+              >
+                <div className="relative aspect-[5/4] overflow-hidden">
+                  <Image
+                    src={p.image}
+                    alt={p.name}
+                    fill
+                    sizes="(min-width: 640px) 33vw, 100vw"
+                    className="will-change-transform object-cover object-top grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                  />
+                  <span className="absolute left-3 top-3 bg-ppa-yellow px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-ppa-navy">
+                    No. {p.rank}
+                  </span>
+                </div>
+                <div className="flex flex-1 flex-col p-4 text-white">
+                  <p className="font-display text-lg uppercase leading-none">
+                    {p.name}
+                  </p>
+                  <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-sky">
+                    {p.division}
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-white/65">
+                    {p.hook}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Why It Matters (explainers) ─────────────────────── */}
+      <section className="bg-ppa-paper">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <SectionHead label="New to the Tour" title="Why It Matters" />
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {explainers.map((e, i) => (
+              <div
+                key={e.q}
+                className="flex flex-col border border-ppa-line bg-white p-5"
+              >
+                <span className="font-display text-2xl leading-none text-ppa-blue">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className="mt-2 font-display text-base uppercase leading-[1.1] text-ppa-navy">
+                  {e.q}
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-ppa-navy/60">
+                  {e.a}
+                </p>
+              </div>
+            ))}
+          </div>
+          <Link
+            href="/watch"
+            className="mt-6 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue"
+          >
+            Start Watching →
+          </Link>
+        </div>
+      </section>
+
       {/* ── Watch / Play ────────────────────────────────────── */}
       <section className="grid sm:grid-cols-2">
         {[
@@ -289,109 +491,6 @@ export default function Home() {
             </div>
           </Link>
         ))}
-      </section>
-
-      {/* ── Inside the Tour (editorial) ─────────────────────── */}
-      <section className="bg-ppa-paper">
-        <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <SectionHead label="Stories" title="Inside the Tour" />
-          <div className="mt-6 grid gap-4 lg:grid-cols-2">
-            {/* Feature */}
-            <Link
-              href="/watch"
-              className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden bg-ppa-navy lg:row-span-2 lg:aspect-auto"
-            >
-              <Image
-                src={STORIES[0].image}
-                alt=""
-                fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                className="will-change-transform object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 scrim-soft" />
-              <span className="absolute left-4 top-4 bg-ppa-blue px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-white">
-                {STORIES[0].tag}
-              </span>
-              <div className="relative p-5 text-white">
-                <h3 className="font-display text-2xl uppercase leading-[1.02] sm:text-3xl">
-                  {STORIES[0].title}
-                </h3>
-                <p className="mt-2 max-w-md text-sm text-white/70">
-                  {STORIES[0].blurb}
-                </p>
-              </div>
-            </Link>
-
-            {/* Secondary stories */}
-            {STORIES.slice(1).map((s) => (
-              <Link
-                key={s.title}
-                href="/watch"
-                className="group flex gap-4 border border-ppa-line bg-white p-3"
-              >
-                <div className="relative aspect-square w-24 shrink-0 overflow-hidden bg-ppa-navy sm:w-32">
-                  <Image
-                    src={s.image}
-                    alt=""
-                    fill
-                    sizes="128px"
-                    className="will-change-transform object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                </div>
-                <div className="flex flex-col justify-center">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-blue">
-                    {s.tag}
-                  </p>
-                  <h3 className="mt-0.5 font-display text-base uppercase leading-[1.1] text-ppa-navy sm:text-lg">
-                    {s.title}
-                  </h3>
-                  <p className="mt-1 text-xs text-ppa-navy/55">{s.blurb}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── The Pros ────────────────────────────────────────── */}
-      <section className="bg-ppa-navy">
-        <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <SectionHead label="The Athletes" title="Meet the Pros" dark />
-            <Link
-              href="/athletes"
-              className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-yellow hover:text-white"
-            >
-              All Athletes →
-            </Link>
-          </div>
-          <div className="mt-6 grid grid-cols-3 gap-3 sm:gap-4">
-            {PROS.map((p) => (
-              <Link
-                key={p.name}
-                href="/athletes"
-                className="group relative isolate flex aspect-[4/5] flex-col justify-end overflow-hidden bg-ppa-navy-deep"
-              >
-                <Image
-                  src={p.image}
-                  alt={p.name}
-                  fill
-                  sizes="33vw"
-                  className="will-change-transform object-cover object-top grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
-                />
-                <div className="absolute inset-0 scrim-soft" />
-                <div className="relative p-3">
-                  <p className="font-display text-xs uppercase leading-[1.1] text-white sm:text-sm">
-                    {p.name}
-                  </p>
-                  <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-ppa-sky sm:text-[10px]">
-                    {p.division}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
       </section>
 
       {/* ── Where to Watch ──────────────────────────────────── */}

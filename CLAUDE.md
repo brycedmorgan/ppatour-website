@@ -20,6 +20,26 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-18 — ESPN-style content build-out
+- Feedback: site felt thin — wanted "much bigger" = more substance,
+  ESPN-style storytelling, "why people should care," LIV energy.
+  Clarified with Bryce: keep current scale + event hero, add editorial
+  depth (all four story modules).
+- New `lib/home-content.ts` — storylines (1 lead + 4 secondary),
+  pointsRace (10-row standings), playersToWatch (3, with narrative
+  hooks), explainers (4). All placeholder copy for the demo.
+- Homepage now 10 sections: hero → stat band → **Top Storylines**
+  (ESPN lead-story + secondary feed, each with a "why it matters" line)
+  → **The Points Race** (broadcast-style standings table, rank/points/
+  movement) → schedule → **Players to Watch** (rank-badged cards w/
+  story hooks) → **Why It Matters** (numbered new-fan explainers) →
+  watch/play → broadcast → email. Old thin "Inside the Tour" + "Meet
+  the Pros" sections replaced.
+- Scale unchanged per Bryce ("size is fine"). Lead-story scrim
+  strengthened (`scrim-soft`→`scrim-hero`) for text legibility.
+- Verified: build passes; all 10 sections render; doc ~8,960px.
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-18 — Scale + heading-font rework
 - Feedback: everything too big, hero ate the whole viewport, Gobold
   headlines read "ridiculous." Decisions with Bryce: **Gotham Black for
@@ -36,7 +56,9 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   homepage, `/events`, `/events/[slug]`, ComingSoon, LeadMagnetCapture.
 - Verified: build passes (16 pages); compact hero confirmed (418px /
   720px viewport); h1 = Gotham Black 52px, h2 = 30px.
-- **Not yet deployed** — awaiting Bryce's go-ahead.
+- Deployed: https://ppatour-website.vercel.app
+- **Standing instruction from Bryce:** always push/deploy for this repo
+  without re-asking — it's a demo site.
 
 ### 2026-05-18 — Official brand applied (Carvana PPA Tour)
 - Bryce supplied the official **Carvana PPA Tour Brand Guide** + tournament
