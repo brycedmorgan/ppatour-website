@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { PartnerSpotlight } from "@/components/home/PartnerSpotlight";
+import { ScoreRail } from "@/components/home/ScoreRail";
 import {
   daysUntil,
   formatDateRange,
@@ -12,7 +13,6 @@ import {
   ecosystemNews,
   explainers,
   leadStory,
-  matches,
   news,
   partners,
   playersToWatch,
@@ -178,75 +178,11 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {matches.map((m) => (
-              <article
-                key={m.id}
-                className="flex flex-col border border-ppa-line bg-ppa-paper p-4"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.13em] text-ppa-navy/45">
-                    {m.division} · {m.round}
-                  </p>
-                  {m.status === "live" ? (
-                    <span className="flex shrink-0 items-center gap-1.5 bg-ppa-blue px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-white">
-                      <span className="size-1.5 animate-pulse rounded-full bg-white" />
-                      Live
-                    </span>
-                  ) : m.status === "final" ? (
-                    <span className="shrink-0 text-[9px] font-bold uppercase tracking-[0.16em] text-ppa-navy/40">
-                      Final
-                    </span>
-                  ) : (
-                    <span className="shrink-0 text-[9px] font-bold uppercase tracking-[0.12em] text-ppa-blue">
-                      {m.detail}
-                    </span>
-                  )}
-                </div>
-
-                <div className="mt-3 flex flex-col gap-2">
-                  {m.sides.map((s, si) => (
-                    <div
-                      key={si}
-                      className="flex items-center justify-between gap-3"
-                    >
-                      <span
-                        className={`truncate text-sm ${
-                          m.status === "final" && !s.winner
-                            ? "font-medium text-ppa-navy/45"
-                            : "font-bold text-ppa-navy"
-                        }`}
-                      >
-                        {s.name}
-                      </span>
-                      {m.status === "upcoming" ? (
-                        <span className="text-xs text-ppa-navy/30">—</span>
-                      ) : (
-                        <span className="flex shrink-0 gap-1">
-                          {s.games.map((g, gi) => (
-                            <span
-                              key={gi}
-                              className={`w-6 text-center text-sm tabular-nums ${
-                                m.status === "live" &&
-                                gi === s.games.length - 1
-                                  ? "font-bold text-ppa-blue"
-                                  : "font-semibold text-ppa-navy/70"
-                              }`}
-                            >
-                              {g}
-                            </span>
-                          ))}
-                        </span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                <p className="mt-3 border-t border-ppa-line pt-2 text-[10px] uppercase tracking-[0.1em] text-ppa-navy/35">
-                  {m.status === "upcoming" ? "Today" : m.detail}
-                </p>
-              </article>
-            ))}
+          <div className="mt-6">
+            <ScoreRail />
+            <p className="mt-3 text-[11px] uppercase tracking-[0.12em] text-ppa-navy/35">
+              Auto-scrolling · hover to pause · drag to browse
+            </p>
           </div>
         </div>
       </section>

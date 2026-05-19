@@ -20,6 +20,18 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-19 — Scores → auto-scrolling drag rail
+- Live scores grid → `components/home/ScoreRail.tsx` (client): a real
+  `overflow-x-auto` rail that auto-advances right via rAF, pauses on
+  hover, and is drag-scrollable (mouse pointer-drag) / swipe-scrollable
+  (native touch). Match list rendered ×2 for a seamless loop; edge-fade
+  mask; `prefers-reduced-motion` disables auto-advance.
+- Verified: build passes; scroll container functional (scrollLeft
+  sticks); grab cursor applied. Auto-scroll uses rAF so it pauses in
+  hidden/background tabs by design — observed in the preview (tab was
+  hidden) but runs normally on a visible page.
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-19 — Live scores, newsroom, social
 - **Live scores** — new "Live & Latest" section after the stat band:
   6 match cards (2 LIVE w/ pulsing indicator, 2 FINAL, 2 UPCOMING),
