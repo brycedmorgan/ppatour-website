@@ -20,6 +20,21 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-19 — Live scores, newsroom, social
+- **Live scores** — new "Live & Latest" section after the stat band:
+  6 match cards (2 LIVE w/ pulsing indicator, 2 FINAL, 2 UPCOMING),
+  game-by-game scores, division/round/court. `matches[]` in
+  home-content.ts.
+- **Newsroom** — new "Latest News" section: a two-column split — "From
+  the PPA Tour" (our own, 5 articles → `/news`) and "From Pickleball.com"
+  (4 external links, open off-site with ↗). `news[]` + `ecosystemNews[]`.
+- **Social** — SiteFooter now carries a "Follow the Tour" row: Instagram,
+  X, YouTube, TikTok, Facebook (inline SVG icons, @ppatour handles —
+  confirm with social team).
+- Homepage is now 13 sections. All copy/scores/handles are placeholder.
+- Verified: build passes; DOM confirms all sections + score states.
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-19 — ppatour.com audit + dynamic Partners section
 - Audited live ppatour.com. Gaps vs. our rebuild logged for Bryce:
   sponsors area, homepage live-scores module, rankings split by 6

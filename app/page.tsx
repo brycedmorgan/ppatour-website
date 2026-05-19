@@ -9,8 +9,11 @@ import {
   tournaments,
 } from "@/lib/placeholder-data";
 import {
+  ecosystemNews,
   explainers,
   leadStory,
+  matches,
+  news,
   partners,
   playersToWatch,
   pointsRace,
@@ -162,6 +165,92 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Live & Latest scores ───────────────────────────── */}
+      <section className="bg-white">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <SectionHead label="Scores" title="Live & Latest" />
+            <Link
+              href="/watch"
+              className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
+            >
+              Full Scores & Brackets →
+            </Link>
+          </div>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {matches.map((m) => (
+              <article
+                key={m.id}
+                className="flex flex-col border border-ppa-line bg-ppa-paper p-4"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.13em] text-ppa-navy/45">
+                    {m.division} · {m.round}
+                  </p>
+                  {m.status === "live" ? (
+                    <span className="flex shrink-0 items-center gap-1.5 bg-ppa-blue px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-white">
+                      <span className="size-1.5 animate-pulse rounded-full bg-white" />
+                      Live
+                    </span>
+                  ) : m.status === "final" ? (
+                    <span className="shrink-0 text-[9px] font-bold uppercase tracking-[0.16em] text-ppa-navy/40">
+                      Final
+                    </span>
+                  ) : (
+                    <span className="shrink-0 text-[9px] font-bold uppercase tracking-[0.12em] text-ppa-blue">
+                      {m.detail}
+                    </span>
+                  )}
+                </div>
+
+                <div className="mt-3 flex flex-col gap-2">
+                  {m.sides.map((s, si) => (
+                    <div
+                      key={si}
+                      className="flex items-center justify-between gap-3"
+                    >
+                      <span
+                        className={`truncate text-sm ${
+                          m.status === "final" && !s.winner
+                            ? "font-medium text-ppa-navy/45"
+                            : "font-bold text-ppa-navy"
+                        }`}
+                      >
+                        {s.name}
+                      </span>
+                      {m.status === "upcoming" ? (
+                        <span className="text-xs text-ppa-navy/30">—</span>
+                      ) : (
+                        <span className="flex shrink-0 gap-1">
+                          {s.games.map((g, gi) => (
+                            <span
+                              key={gi}
+                              className={`w-6 text-center text-sm tabular-nums ${
+                                m.status === "live" &&
+                                gi === s.games.length - 1
+                                  ? "font-bold text-ppa-blue"
+                                  : "font-semibold text-ppa-navy/70"
+                              }`}
+                            >
+                              {g}
+                            </span>
+                          ))}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <p className="mt-3 border-t border-ppa-line pt-2 text-[10px] uppercase tracking-[0.1em] text-ppa-navy/35">
+                  {m.status === "upcoming" ? "Today" : m.detail}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Top Storylines ──────────────────────────────────── */}
       <section className="bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -241,6 +330,82 @@ export default function Home() {
                   </div>
                 </Link>
               ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Latest News ─────────────────────────────────────── */}
+      <section className="bg-white">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <SectionHead label="Newsroom" title="Latest News" />
+
+          <div className="mt-6 grid gap-8 lg:grid-cols-3">
+            {/* PPA Tour's own newsroom */}
+            <div className="lg:col-span-2">
+              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-navy/45">
+                From the PPA Tour
+              </p>
+              <div className="mt-2 border-t border-ppa-line">
+                {news.map((n) => (
+                  <Link
+                    key={n.title}
+                    href={n.href}
+                    className="group flex items-start gap-4 border-b border-ppa-line py-4"
+                  >
+                    <span className="w-16 shrink-0 pt-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-ppa-blue sm:w-20">
+                      {n.category}
+                    </span>
+                    <span className="flex-1">
+                      <span className="block font-display text-base uppercase leading-[1.12] text-ppa-navy transition-colors group-hover:text-ppa-blue">
+                        {n.title}
+                      </span>
+                      <span className="mt-1 block text-[11px] uppercase tracking-[0.1em] text-ppa-navy/40">
+                        PPA Tour · {n.date}
+                      </span>
+                    </span>
+                  </Link>
+                ))}
+              </div>
+              <Link
+                href="/news"
+                className="mt-5 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue"
+              >
+                All PPA Tour News →
+              </Link>
+            </div>
+
+            {/* Linked from Pickleball.com */}
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-navy/45">
+                From Pickleball.com
+              </p>
+              <div className="mt-2 flex flex-col gap-px border border-ppa-line bg-ppa-line">
+                {ecosystemNews.map((e) => (
+                  <a
+                    key={e.title}
+                    href={e.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-start gap-2 bg-white p-4 transition-colors hover:bg-ppa-paper"
+                  >
+                    <span className="flex-1">
+                      <span className="block text-sm font-semibold leading-snug text-ppa-navy transition-colors group-hover:text-ppa-blue">
+                        {e.title}
+                      </span>
+                      <span className="mt-1 block text-[11px] uppercase tracking-[0.1em] text-ppa-navy/40">
+                        {e.date}
+                      </span>
+                    </span>
+                    <span
+                      aria-hidden
+                      className="text-ppa-navy/30 transition-colors group-hover:text-ppa-blue"
+                    >
+                      ↗
+                    </span>
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
         </div>

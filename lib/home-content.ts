@@ -181,3 +181,158 @@ export const partners: Partner[] = [
     tier: "official",
   },
 ];
+
+export type MatchSide = {
+  name: string;
+  /** Game scores in order; empty until a match starts. */
+  games: number[];
+  winner?: boolean;
+};
+
+export type Match = {
+  id: string;
+  division: string;
+  round: string;
+  status: "live" | "final" | "upcoming";
+  /** Court name (live/final) or start time (upcoming). */
+  detail: string;
+  sides: [MatchSide, MatchSide];
+};
+
+export const matches: Match[] = [
+  {
+    id: "ws-sf",
+    division: "Women's Singles",
+    round: "Semifinal",
+    status: "live",
+    detail: "Stadium Court",
+    sides: [
+      { name: "Jade Rau", games: [11, 7] },
+      { name: "Priya Anand", games: [8, 6] },
+    ],
+  },
+  {
+    id: "md-qf",
+    division: "Men's Doubles",
+    round: "Quarterfinal",
+    status: "live",
+    detail: "Court 2",
+    sides: [
+      { name: "Bricker / Hartman", games: [9, 11, 4] },
+      { name: "Reyes / Tanaka", games: [11, 6, 3] },
+    ],
+  },
+  {
+    id: "xd-sf",
+    division: "Mixed Doubles",
+    round: "Semifinal",
+    status: "final",
+    detail: "Stadium Court",
+    sides: [
+      { name: "Marín / Frost", games: [11, 11], winner: true },
+      { name: "Bricker / Boyd", games: [9, 7] },
+    ],
+  },
+  {
+    id: "wd-qf",
+    division: "Women's Doubles",
+    round: "Quarterfinal",
+    status: "final",
+    detail: "Court 3",
+    sides: [
+      { name: "Safdar / Boyd", games: [11, 9, 11], winner: true },
+      { name: "Rau / Anand", games: [6, 11, 8] },
+    ],
+  },
+  {
+    id: "ms-sf",
+    division: "Men's Singles",
+    round: "Semifinal",
+    status: "upcoming",
+    detail: "4:30 PM ET",
+    sides: [
+      { name: "Diego Marín", games: [] },
+      { name: "Tomás Reyes", games: [] },
+    ],
+  },
+  {
+    id: "ws-final",
+    division: "Women's Singles",
+    round: "Final",
+    status: "upcoming",
+    detail: "6:00 PM ET",
+    sides: [
+      { name: "Hannah Boyd", games: [] },
+      { name: "Naomi Frost", games: [] },
+    ],
+  },
+];
+
+export type NewsItem = {
+  category: string;
+  title: string;
+  date: string;
+  href: string;
+};
+
+/** PPA Tour's own newsroom. */
+export const news: NewsItem[] = [
+  {
+    category: "Recap",
+    title: "Championship Sunday: Five Stats That Defined the Vegas Final",
+    date: "May 17",
+    href: "/news",
+  },
+  {
+    category: "Analysis",
+    title: "The Atlanta Draw, Decoded: Where the Bracket Breaks",
+    date: "May 16",
+    href: "/news",
+  },
+  {
+    category: "Feature",
+    title: "Inside the Rookie Class Rewriting the Rankings",
+    date: "May 14",
+    href: "/news",
+  },
+  {
+    category: "The Race",
+    title: "Race Report: Who Moved After the Spring Swing",
+    date: "May 12",
+    href: "/news",
+  },
+  {
+    category: "Tour News",
+    title: "PPA Tour Adds Two Stops to a Record 25-Event Season",
+    date: "May 9",
+    href: "/news",
+  },
+];
+
+/** Linked coverage from Pickleball.com — opens off-site. */
+export const ecosystemNews: NewsItem[] = [
+  {
+    category: "Pickleball.com",
+    title: "Pickleball's Fastest-Growing Markets, Ranked",
+    date: "May 16",
+    href: "https://www.pickleball.com",
+  },
+  {
+    category: "Pickleball.com",
+    title: "Gear Guide: The Paddles the Pros Are Switching To",
+    date: "May 13",
+    href: "https://www.pickleball.com",
+  },
+  {
+    category: "Pickleball.com",
+    title: "How Ranking Points Translate to Tournament Seeding",
+    date: "May 11",
+    href: "https://www.pickleball.com",
+  },
+  {
+    category: "Pickleball.com",
+    title: "From Rec Courts to the Pro Tour: One Player's Climb",
+    date: "May 8",
+    href: "https://www.pickleball.com",
+  },
+];
