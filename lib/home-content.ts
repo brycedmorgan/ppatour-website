@@ -415,6 +415,66 @@ export const news: NewsItem[] = [
     date: "May 9",
     href: "/news",
   },
+  {
+    category: "Recap",
+    title: "Hartman & Bricker Take Down Top Seeds in Chicago",
+    date: "May 6",
+    href: "/news",
+  },
+  {
+    category: "Feature",
+    title: "Anand's Singles Run Continues Into Virginia Beach",
+    date: "May 4",
+    href: "/news",
+  },
+  {
+    category: "Analysis",
+    title: "How the Atlanta Court Surface Plays",
+    date: "May 2",
+    href: "/news",
+  },
+  {
+    category: "Profile",
+    title: "Mehvish Safdar on Repeat Final Appearances",
+    date: "Apr 30",
+    href: "/news",
+  },
+  {
+    category: "Analysis",
+    title: "Inside the Strategy Behind a Two-Game Comeback",
+    date: "Apr 28",
+    href: "/news",
+  },
+  {
+    category: "Junior",
+    title: "The Junior PPA Pipeline: Five Names to Watch",
+    date: "Apr 25",
+    href: "/news",
+  },
+  {
+    category: "Highlights",
+    title: "Top 10 Drop Shots from the Las Vegas Open",
+    date: "Apr 23",
+    href: "/news",
+  },
+  {
+    category: "Tour News",
+    title: "What's New in the 2026 Tournament Rules",
+    date: "Apr 20",
+    href: "/news",
+  },
+  {
+    category: "Explainer",
+    title: "How Ranking Points Are Calculated, Explained",
+    date: "Apr 17",
+    href: "/news",
+  },
+  {
+    category: "Feature",
+    title: "Behind the Scenes: A Day in the Life on Tour",
+    date: "Apr 14",
+    href: "/news",
+  },
 ];
 
 /** Linked coverage from Pickleball.com — opens off-site. */

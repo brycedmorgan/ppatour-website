@@ -276,7 +276,7 @@ export default function Home() {
                 From the PPA Tour
               </p>
               <div className="mt-2 border-t border-ppa-line">
-                {news.map((n) => (
+                {news.slice(0, 5).map((n) => (
                   <Link
                     key={n.title}
                     href={n.href}

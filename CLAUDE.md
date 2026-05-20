@@ -20,6 +20,26 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-19 — Real internal pages (news, watch, athletes, play, about)
+- The five biggest internal stubs are now real pages — no more
+  ComingSoon for the things people click into from the homepage:
+  - `/news` — featured + secondary + list (15 PPA articles), sidebar
+    with Pickleball.com links + section nav, streaming email capture.
+  - `/watch` — Live Scores rail (reused), Next Broadcast hero with
+    YouTube CTA, Where-to-Watch grid with deep cards (FOX/FS1, YouTube,
+    MATCHDAY).
+  - `/athletes` — Players to Watch grid, full 6-division Points Race
+    component, scale summary.
+  - `/play` — three-step "into the tour" funnel, category grid
+    (Junior/Senior/State Champs/Camps/Travel/Hospitality), dual
+    "Register to Play" CTAs to pickleballtournaments.com.
+  - `/about` — story/mission with stats band, mission paragraphs,
+    sidebar of subpage links.
+- `news[]` extended 5 → 15 items; homepage news section now
+  `news.slice(0, 5)`.
+- Verified: build passes; 18 routes prerender.
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-19 — Division-split rankings, deeper nav, deeper footer
 - **PointsRace** (`components/home/PointsRace.tsx`, client): 6 tabs
   (Men's/Women's × Singles/Doubles/Mixed) — was one combined table.
