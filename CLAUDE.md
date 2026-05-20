@@ -20,6 +20,22 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-19 — Division-split rankings, deeper nav, deeper footer
+- **PointsRace** (`components/home/PointsRace.tsx`, client): 6 tabs
+  (Men's/Women's × Singles/Doubles/Mixed) — was one combined table.
+  `lib/home-content.ts` `pointsRace` removed; replaced by
+  `divisionRankings` (6 divisions × ~6 entries each).
+- **Header expanded:** new "Tour ▾" and "About ▾" dropdown submenus
+  (group-hover on desktop, tap-to-expand on mobile), external "Shop"
+  link (Pickleball Central), and a search icon → `/search`.
+- **Deeper footer:** restructured into three link groups — Pro Tour,
+  PPA, Pickleball Inc. — matching ppatour.com. Social row + legal bar
+  at the bottom.
+- **ComingSoon catch-alls** so nothing 404s: `/about/[slug]`,
+  `/tour/[slug]`, `/news`, `/search`. Titles derived from the slug.
+- Verified: build passes (18 routes).
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-19 — Real partner logos
 - Bryce asked for real sponsor logos (was wordmarks). Confirmed via
   AskUserQuestion, then mirrored all 7 from ppatour.com's CDN to

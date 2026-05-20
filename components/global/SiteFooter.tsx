@@ -1,15 +1,58 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const FOOTER_LINKS = [
-  { label: "Watch", href: "/watch" },
-  { label: "Play", href: "/play" },
+type FooterLink = { label: string; href: string; external?: boolean };
+
+const PRO_TOUR_LINKS: FooterLink[] = [
+  { label: "Schedule", href: "/events" },
   { label: "Athletes", href: "/athletes" },
-  { label: "Events", href: "/events" },
-  { label: "About", href: "/about" },
+  { label: "Leaderboard", href: "/athletes" },
+  { label: "Watch", href: "/watch" },
+  { label: "Tickets", href: "https://www.tixr.com/groups/ppa", external: true },
+  { label: "How It Works", href: "/about/how-it-works" },
+  { label: "Player Handbook", href: "/about/player-handbook" },
+  { label: "Tournament History", href: "/about/history" },
 ];
 
-/** Social channels. Confirm handles with the PPA Tour social team. */
+const PPA_LINKS: FooterLink[] = [
+  { label: "About the PPA Tour", href: "/about" },
+  { label: "Sponsors", href: "/about/sponsors" },
+  { label: "Host a Tournament", href: "/about/host-tournament" },
+  { label: "Host a Private Event", href: "/about/private-events" },
+  { label: "Ambassador Program", href: "/about/ambassadors" },
+  { label: "Careers", href: "/about/careers" },
+  { label: "Contact", href: "/about/contact" },
+  { label: "Integrity Reporting", href: "/about/integrity" },
+];
+
+const PICKLEBALL_INC_LINKS: FooterLink[] = [
+  { label: "Pickleball.com", href: "https://www.pickleball.com", external: true },
+  {
+    label: "Pickleball Central",
+    href: "https://www.pickleballcentral.com",
+    external: true,
+  },
+  {
+    label: "PickleballTV",
+    href: "https://www.pickleballtv.com",
+    external: true,
+  },
+  {
+    label: "Pickleball Tournaments",
+    href: "https://www.pickleballtournaments.com",
+    external: true,
+  },
+  { label: "Top Court", href: "https://www.topcourt.com", external: true },
+  { label: "Just Courts", href: "https://www.justcourts.com", external: true },
+  { label: "MATCHDAY App", href: "https://www.matchday.app", external: true },
+];
+
+const LEGAL_LINKS: FooterLink[] = [
+  { label: "Privacy Policy", href: "/about/privacy" },
+  { label: "Terms of Use", href: "/about/terms" },
+  { label: "Transgender Policy", href: "/about/transgender-policy" },
+];
+
 const SOCIAL = [
   {
     name: "Instagram",
@@ -38,11 +81,47 @@ const SOCIAL = [
   },
 ];
 
+function LinkGroup({
+  heading,
+  links,
+}: {
+  heading: string;
+  links: FooterLink[];
+}) {
+  return (
+    <div>
+      <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/45">
+        {heading}
+      </p>
+      <ul className="mt-3 flex flex-col gap-2">
+        {links.map((l) => (
+          <li key={l.label}>
+            <Link
+              href={l.href}
+              target={l.external ? "_blank" : undefined}
+              rel={l.external ? "noopener noreferrer" : undefined}
+              className="inline-flex items-center gap-1 text-[13px] text-white/70 transition-colors hover:text-white"
+            >
+              {l.label}
+              {l.external && (
+                <span aria-hidden className="text-[10px] text-white/30">
+                  ↗
+                </span>
+              )}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export function SiteFooter() {
   return (
     <footer className="bg-ppa-navy text-white">
       <div className="mx-auto w-full max-w-6xl px-4 py-14">
-        <div className="flex flex-col gap-7 sm:flex-row sm:items-center sm:justify-between">
+        {/* Top row — logo + social */}
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <Link
             href="/"
             aria-label="Carvana PPA Tour — home"
@@ -56,20 +135,6 @@ export function SiteFooter() {
               className="h-8 w-auto"
             />
           </Link>
-          <nav className="flex flex-wrap gap-x-8 gap-y-2">
-            {FOOTER_LINKS.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-[13px] font-bold uppercase tracking-[0.12em] text-white/55 hover:text-white"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-
-        <div className="mt-9 flex flex-col gap-6 border-t border-white/10 pt-7 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
             <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/45">
               Follow the Tour
@@ -96,11 +161,32 @@ export function SiteFooter() {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Link groups */}
+        <div className="mt-10 grid gap-10 border-t border-white/10 pt-10 sm:grid-cols-3">
+          <LinkGroup heading="Pro Tour" links={PRO_TOUR_LINKS} />
+          <LinkGroup heading="PPA" links={PPA_LINKS} />
+          <LinkGroup heading="Pickleball Inc." links={PICKLEBALL_INC_LINKS} />
+        </div>
+
+        {/* Bottom bar */}
+        <div className="mt-10 flex flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="max-w-md text-xs leading-relaxed text-white/35">
             © {new Date().getFullYear()} Professional Pickleball Association.
-            The Pro Tour of Pickleball. Tickets via tixr · amateur registration
-            via pickleballtournaments.com.
+            The Pro Tour of Pickleball.
           </p>
+          <nav className="flex flex-wrap gap-x-5 gap-y-1.5">
+            {LEGAL_LINKS.map((l) => (
+              <Link
+                key={l.label}
+                href={l.href}
+                className="text-[11px] font-bold uppercase tracking-[0.12em] text-white/40 hover:text-white"
+              >
+                {l.label}
+              </Link>
+            ))}
+          </nav>
         </div>
       </div>
     </footer>

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { PartnerSpotlight } from "@/components/home/PartnerSpotlight";
+import { PointsRace } from "@/components/home/PointsRace";
 import { ScoreRail } from "@/components/home/ScoreRail";
 import {
   daysUntil,
@@ -16,7 +17,6 @@ import {
   news,
   partners,
   playersToWatch,
-  pointsRace,
   storylines,
 } from "@/lib/home-content";
 import { withUtm } from "@/lib/utm";
@@ -65,13 +65,6 @@ function SectionHead({
       </h2>
     </div>
   );
-}
-
-/** Rank movement indicator for the points race. */
-function Move({ n }: { n: number }) {
-  if (n > 0) return <span className="text-ppa-yellow">▲ {n}</span>;
-  if (n < 0) return <span className="text-white/35">▼ {Math.abs(n)}</span>;
-  return <span className="text-white/25">—</span>;
 }
 
 export default function Home() {
@@ -358,38 +351,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mt-6 border border-white/10">
-            <div className="grid grid-cols-[2rem_1fr_5rem_3.5rem] items-center gap-3 border-b border-white/10 bg-ppa-navy-deep px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
-              <span>#</span>
-              <span>Player</span>
-              <span className="text-right">Points</span>
-              <span className="text-right">Move</span>
-            </div>
-            {pointsRace.map((p) => (
-              <div
-                key={p.rank}
-                className="grid grid-cols-[2rem_1fr_5rem_3.5rem] items-center gap-3 border-b border-white/5 px-4 py-3 text-white last:border-b-0"
-              >
-                <span className="font-display text-lg text-white/40">
-                  {p.rank}
-                </span>
-                <span className="min-w-0">
-                  <span className="block truncate text-sm font-bold uppercase tracking-wide">
-                    {p.name}
-                  </span>
-                  <span className="block text-[11px] text-white/45">
-                    {p.division}
-                  </span>
-                </span>
-                <span className="text-right text-sm font-bold tabular-nums text-ppa-sky">
-                  {p.points.toLocaleString()}
-                </span>
-                <span className="text-right text-xs font-bold">
-                  <Move n={p.move} />
-                </span>
-              </div>
-            ))}
-          </div>
+          <PointsRace />
 
           <Link
             href="/athletes"

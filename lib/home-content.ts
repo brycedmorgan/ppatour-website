@@ -55,23 +55,103 @@ export const storylines: Storyline[] = [
 export type RaceEntry = {
   rank: number;
   name: string;
-  division: string;
   points: number;
   /** Positions moved since the last stop. + up, - down, 0 steady. */
   move: number;
 };
 
-export const pointsRace: RaceEntry[] = [
-  { rank: 1, name: "Jade Rau", division: "Women's Singles", points: 9840, move: 0 },
-  { rank: 2, name: "Austin Bricker", division: "Men's Doubles", points: 9510, move: 1 },
-  { rank: 3, name: "Mehvish Safdar", division: "Women's Doubles", points: 9275, move: -1 },
-  { rank: 4, name: "Diego Marín", division: "Men's Singles", points: 8990, move: 2 },
-  { rank: 5, name: "Priya Anand", division: "Women's Singles", points: 8640, move: 0 },
-  { rank: 6, name: "Cole Hartman", division: "Men's Doubles", points: 8210, move: 3 },
-  { rank: 7, name: "Naomi Frost", division: "Mixed Doubles", points: 7980, move: -2 },
-  { rank: 8, name: "Tomás Reyes", division: "Men's Singles", points: 7650, move: 1 },
-  { rank: 9, name: "Hannah Boyd", division: "Women's Doubles", points: 7420, move: 0 },
-  { rank: 10, name: "Eli Tanaka", division: "Men's Doubles", points: 7180, move: 4 },
+export type DivisionKey = "ms" | "md" | "mxd" | "ws" | "wd" | "wxd";
+
+export type Division = {
+  key: DivisionKey;
+  /** Full label, shown under names. */
+  label: string;
+  /** Tab label. */
+  short: string;
+  entries: RaceEntry[];
+};
+
+/* Per-division points race — split out from the previous combined table.
+   The order mirrors ppatour.com's leaderboards selector. */
+export const divisionRankings: Division[] = [
+  {
+    key: "ms",
+    label: "Men's Singles",
+    short: "Men's Singles",
+    entries: [
+      { rank: 1, name: "Diego Marín", points: 8990, move: 2 },
+      { rank: 2, name: "Tomás Reyes", points: 7650, move: 1 },
+      { rank: 3, name: "Felix Tran", points: 7320, move: -2 },
+      { rank: 4, name: "Owen Kessler", points: 6890, move: 0 },
+      { rank: 5, name: "Marcus Iqbal", points: 6420, move: 3 },
+      { rank: 6, name: "Theo Whitfield", points: 6180, move: -1 },
+    ],
+  },
+  {
+    key: "md",
+    label: "Men's Doubles",
+    short: "Men's Doubles",
+    entries: [
+      { rank: 1, name: "Austin Bricker", points: 9510, move: 1 },
+      { rank: 2, name: "Cole Hartman", points: 8210, move: 3 },
+      { rank: 3, name: "Eli Tanaka", points: 7180, move: 4 },
+      { rank: 4, name: "Jasper Volt", points: 7050, move: -1 },
+      { rank: 5, name: "Cameron Holt", points: 6710, move: 0 },
+      { rank: 6, name: "Devin Park", points: 6480, move: -2 },
+    ],
+  },
+  {
+    key: "mxd",
+    label: "Mixed Doubles",
+    short: "Men's Mixed",
+    entries: [
+      { rank: 1, name: "Diego Marín", points: 8580, move: 1 },
+      { rank: 2, name: "Austin Bricker", points: 8310, move: 0 },
+      { rank: 3, name: "Cole Hartman", points: 7860, move: 2 },
+      { rank: 4, name: "Tomás Reyes", points: 7420, move: -1 },
+      { rank: 5, name: "Owen Kessler", points: 6940, move: 1 },
+      { rank: 6, name: "Felix Tran", points: 6580, move: -2 },
+    ],
+  },
+  {
+    key: "ws",
+    label: "Women's Singles",
+    short: "Women's Singles",
+    entries: [
+      { rank: 1, name: "Jade Rau", points: 9840, move: 0 },
+      { rank: 2, name: "Priya Anand", points: 8640, move: 1 },
+      { rank: 3, name: "Anna Marquez", points: 8210, move: -1 },
+      { rank: 4, name: "Helena Vasquez", points: 7750, move: 2 },
+      { rank: 5, name: "Riley Quinn", points: 7320, move: 0 },
+      { rank: 6, name: "Mia Carter", points: 6980, move: 1 },
+    ],
+  },
+  {
+    key: "wd",
+    label: "Women's Doubles",
+    short: "Women's Doubles",
+    entries: [
+      { rank: 1, name: "Mehvish Safdar", points: 9275, move: -1 },
+      { rank: 2, name: "Hannah Boyd", points: 7420, move: 0 },
+      { rank: 3, name: "Sloane Nakamura", points: 7180, move: 2 },
+      { rank: 4, name: "Aria Bennett", points: 6910, move: 1 },
+      { rank: 5, name: "Madison Yu", points: 6540, move: -1 },
+      { rank: 6, name: "Quinn Larkin", points: 6210, move: 0 },
+    ],
+  },
+  {
+    key: "wxd",
+    label: "Mixed Doubles",
+    short: "Women's Mixed",
+    entries: [
+      { rank: 1, name: "Naomi Frost", points: 8820, move: 1 },
+      { rank: 2, name: "Mehvish Safdar", points: 8490, move: -1 },
+      { rank: 3, name: "Priya Anand", points: 7950, move: 0 },
+      { rank: 4, name: "Hannah Boyd", points: 7310, move: 2 },
+      { rank: 5, name: "Jade Rau", points: 6890, move: -1 },
+      { rank: 6, name: "Sloane Nakamura", points: 6520, move: 1 },
+    ],
+  },
 ];
 
 export type PlayerWatch = {
