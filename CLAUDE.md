@@ -20,6 +20,21 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-19 — Tour programs + richer event detail
+- **/tour/[slug]** is now a real page for all 6 extended-tour programs
+  (Junior PPA / Senior Open / State Championships / PPA Camps / Travel /
+  Hospitality) — driven by `lib/tour-programs.ts`. Each has a hero,
+  body paragraphs, "what's included" list, CTA, and cross-links to the
+  other five. Catch-all falls back to ComingSoon for unknown slugs.
+- **/events/[slug]** expanded from a stub to a real event hub: quick-
+  facts band (Dates / Venue / Points / Tier), day-by-day schedule
+  (computed from start/end), "Players to Watch" sidebar, Where to Watch
+  grid, Travel + Hospitality cross-links, "More Stops" carousel.
+  (Full §7 LIVE/RECAP state machine still ahead — this is the richer
+  UPCOMING surface.)
+- Verified: build passes (27 routes total — was 16 at session start).
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-19 — About subpages (sponsors / how-it-works / what-is-pickleball)
 - `/about/sponsors` — title-partner spotlight (Carvana big), 6-card
   official-partners grid with logos + roles, "Partnership Inquiry" CTA.
