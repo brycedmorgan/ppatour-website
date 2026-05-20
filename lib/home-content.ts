@@ -135,50 +135,78 @@ export type Partner = {
   role: string;
   note: string;
   tier: "title" | "official";
+  /** Logo path under /public + intrinsic pixel dimensions. */
+  logo: string;
+  logoWidth: number;
+  logoHeight: number;
 };
 
+/* Logos are the partners' official marks, mirrored from ppatour.com to
+   /public/ppa/sponsors/ for the rebuild. Swap in the latest brand-kit
+   files when partners refresh. */
 export const partners: Partner[] = [
   {
     name: "Carvana",
     role: "Title Partner",
     note: "The named partner of the tour — on every court, every broadcast, all 25 stops.",
     tier: "title",
+    logo: "/ppa/sponsors/carvana.png",
+    logoWidth: 2048,
+    logoHeight: 449,
   },
   {
     name: "Veolia",
     role: "Official Sustainability Partner",
     note: "Backing the marquee stops in Atlanta, Chicago, and the National Championships.",
     tier: "official",
+    logo: "/ppa/sponsors/veolia.png",
+    logoWidth: 2048,
+    logoHeight: 836,
   },
   {
     name: "JOOLA",
     role: "Official Equipment Partner",
     note: "Presenting partner of the PPA Finals and the gear behind a generation of pros.",
     tier: "official",
+    logo: "/ppa/sponsors/joola.png",
+    logoWidth: 2048,
+    logoHeight: 647,
   },
   {
     name: "Humana",
     role: "Official Health Partner",
     note: "Keeping players and fans moving, on the court and off it.",
     tier: "official",
+    logo: "/ppa/sponsors/humana.png",
+    logoWidth: 2048,
+    logoHeight: 891,
   },
   {
-    name: "Ensure",
+    name: "Ensure Max Protein",
     role: "Official Nutrition Partner",
     note: "Fueling the longest weekends on tour.",
     tier: "official",
+    logo: "/ppa/sponsors/ensure.png",
+    logoWidth: 1200,
+    logoHeight: 781,
   },
   {
     name: "Proton Sports",
     role: "Official Paddle Partner",
     note: "Engineering the paddles behind the tour's hardest hitters.",
     tier: "official",
+    logo: "/ppa/sponsors/proton.webp",
+    logoWidth: 792,
+    logoHeight: 174,
   },
   {
     name: "Six Zero",
     role: "Official Performance Partner",
     note: "Performance gear built for the demands of the pro game.",
     tier: "official",
+    logo: "/ppa/sponsors/six-zero.jpg",
+    logoWidth: 320,
+    logoHeight: 126,
   },
 ];
 

@@ -1,13 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { partners } from "@/lib/home-content";
 
 /**
- * Auto-rotating partner highlight. Cycles through every tour partner,
- * pausing nothing — the static logo grid on ppatour.com becomes a live
- * spotlight. Dots are clickable; respects prefers-reduced-motion via the
- * .animate-fade class (disabled in globals.css).
+ * Auto-rotating partner highlight. Cycles through every tour partner with
+ * their official logo, role, and a short note. Dots are clickable. Fade
+ * animation respects prefers-reduced-motion (utility disabled in CSS).
  */
 export function PartnerSpotlight() {
   const [active, setActive] = useState(0);
@@ -23,37 +23,54 @@ export function PartnerSpotlight() {
   const p = partners[active];
 
   return (
-    <div className="relative isolate overflow-hidden border border-white/10 bg-ppa-navy">
+    <div className="relative isolate overflow-hidden border border-ppa-line bg-white">
       <div className="absolute inset-x-0 top-0 h-1 bg-ppa-blue" />
-      <div className="flex flex-col gap-6 p-6 sm:p-8 lg:flex-row lg:items-end lg:justify-between">
-        <div key={active} className="animate-fade motion-reduce:animate-none">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-yellow">
+      <div
+        key={active}
+        className="grid animate-fade gap-6 p-6 motion-reduce:animate-none sm:p-8 lg:grid-cols-[minmax(0,1fr)_1.4fr] lg:items-center"
+      >
+        {/* Logo block */}
+        <div className="flex h-24 items-center justify-start sm:h-28">
+          <Image
+            src={p.logo}
+            alt={p.name}
+            width={p.logoWidth}
+            height={p.logoHeight}
+            priority
+            className="max-h-full w-auto max-w-[260px] object-contain object-left sm:max-w-[320px]"
+          />
+        </div>
+
+        {/* Editorial block */}
+        <div>
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-blue">
             {p.role}
           </p>
-          <p className="mt-2 font-display text-4xl uppercase leading-[0.95] text-white sm:text-6xl">
+          <p className="mt-1 font-display text-xl uppercase leading-[1.05] text-ppa-navy sm:text-2xl">
             {p.name}
           </p>
-          <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/65">
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-ppa-navy/60">
             {p.note}
           </p>
         </div>
+      </div>
 
-        <div className="flex shrink-0 gap-1.5">
-          {partners.map((d, i) => (
-            <button
-              key={d.name}
-              type="button"
-              aria-label={`Show ${d.name}`}
-              aria-current={i === active}
-              onClick={() => setActive(i)}
-              className={`h-1.5 transition-all duration-300 ${
-                i === active
-                  ? "w-8 bg-ppa-blue"
-                  : "w-3 bg-white/20 hover:bg-white/40"
-              }`}
-            />
-          ))}
-        </div>
+      {/* Dots */}
+      <div className="flex shrink-0 gap-1.5 border-t border-ppa-line bg-ppa-paper px-6 py-3 sm:px-8">
+        {partners.map((d, i) => (
+          <button
+            key={d.name}
+            type="button"
+            aria-label={`Show ${d.name}`}
+            aria-current={i === active}
+            onClick={() => setActive(i)}
+            className={`h-1.5 transition-all duration-300 ${
+              i === active
+                ? "w-8 bg-ppa-blue"
+                : "w-3 bg-ppa-navy/15 hover:bg-ppa-navy/30"
+            }`}
+          />
+        ))}
       </div>
     </div>
   );

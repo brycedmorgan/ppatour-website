@@ -20,6 +20,22 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-19 — Real partner logos
+- Bryce asked for real sponsor logos (was wordmarks). Confirmed via
+  AskUserQuestion, then mirrored all 7 from ppatour.com's CDN to
+  `/public/ppa/sponsors/` (Carvana, Veolia, JOOLA, Humana, Ensure,
+  Proton, Six Zero — same files the live site serves).
+- `Partner` type extended w/ `logo` + intrinsic `logoWidth/Height`
+  (next/Image needs them).
+- PartnerSpotlight rebuilt as a white card on a light section so logos
+  render on their natural canvas — was dark navy. Section bg
+  `bg-ppa-navy-deep` → `bg-ppa-paper`. Marquee items are now actual
+  logo images in a white inner bar; spotlight shows logo + role + note
+  + dots.
+- Verified: build passes; spotlight logo loaded (naturalWidth 1024);
+  all 14 marquee images loaded (7 ×2 for seamless loop).
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-19 — Scores → auto-scrolling drag rail
 - Live scores grid → `components/home/ScoreRail.tsx` (client): a real
   `overflow-x-auto` rail that auto-advances right via rAF, pauses on

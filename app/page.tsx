@@ -597,13 +597,13 @@ export default function Home() {
       </section>
 
       {/* ── Partners ────────────────────────────────────────── */}
-      <section className="bg-ppa-navy-deep">
+      <section className="bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <SectionHead label="Partners" title="Powering the Tour" dark />
+            <SectionHead label="Partners" title="Powering the Tour" />
             <Link
               href="/about"
-              className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-yellow hover:text-white"
+              className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
             >
               Partnership Opportunities →
             </Link>
@@ -613,28 +613,31 @@ export default function Home() {
             <PartnerSpotlight />
           </div>
 
+          {/* Logo marquee — auto-scrolls, pauses on hover */}
           <div
-            className="group mt-4 overflow-hidden border-y border-white/10 py-3.5"
+            className="group mt-4 overflow-hidden border-y border-ppa-line bg-white py-5"
             style={{
               maskImage:
-                "linear-gradient(to right, transparent, #000 7%, #000 93%, transparent)",
+                "linear-gradient(to right, transparent, #000 6%, #000 94%, transparent)",
               WebkitMaskImage:
-                "linear-gradient(to right, transparent, #000 7%, #000 93%, transparent)",
+                "linear-gradient(to right, transparent, #000 6%, #000 94%, transparent)",
             }}
           >
-            <div className="flex w-max items-center gap-12 animate-marquee motion-reduce:animate-none group-hover:[animation-play-state:paused]">
+            <div className="flex w-max items-center gap-14 animate-marquee motion-reduce:animate-none group-hover:[animation-play-state:paused]">
               {[...partners, ...partners].map((p, idx) => (
-                <span
+                <div
                   key={idx}
-                  className="flex items-baseline gap-2.5 whitespace-nowrap"
+                  className="flex h-10 shrink-0 items-center justify-center"
+                  title={`${p.name} — ${p.role}`}
                 >
-                  <span className="font-display text-lg uppercase text-white/80">
-                    {p.name}
-                  </span>
-                  <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/35">
-                    {p.role}
-                  </span>
-                </span>
+                  <Image
+                    src={p.logo}
+                    alt={p.name}
+                    width={p.logoWidth}
+                    height={p.logoHeight}
+                    className="max-h-10 w-auto max-w-[140px] object-contain"
+                  />
+                </div>
               ))}
             </div>
           </div>
