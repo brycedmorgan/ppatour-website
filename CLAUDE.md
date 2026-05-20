@@ -20,6 +20,19 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-19 — About subpages (sponsors / how-it-works / what-is-pickleball)
+- `/about/sponsors` — title-partner spotlight (Carvana big), 6-card
+  official-partners grid with logos + roles, "Partnership Inquiry" CTA.
+- `/about/how-it-works` — five-step season explainer, points-tier table
+  (Main Draw / Grand Slam / Finals), 6-division list, Watch/Play CTAs.
+- `/about/what-is-pickleball` — newcomer page: 4 Q&A basics, "rules in
+  60 seconds" numbered list, growth stats band, next-step CTAs to
+  Watch / Athletes / Play.
+- These now beat the catch-all ComingSoon because specific routes
+  win over `[slug]` in Next.js.
+- Verified: build passes (21 routes).
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-19 — Real internal pages (news, watch, athletes, play, about)
 - The five biggest internal stubs are now real pages — no more
   ComingSoon for the things people click into from the homepage:
