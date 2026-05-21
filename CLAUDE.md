@@ -44,6 +44,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   "better Match Day section (Chris Cantillo)" needs direction; CMS /
   §7 state machine / real search / content pass / SEO / AWS cutover.
 - Live: https://ppatour-website.vercel.app
+- **⚠️ Deploy gotcha:** `git push` to `main` did NOT trigger a Vercel
+  build today (newest auto-deploy was 2 days stale). Had to deploy
+  manually: `vercel --prod --scope gull-stack --yes`. **Going forward,
+  deploy via the CLI after pushing** until the GitHub integration is
+  reconnected — don't assume push = deploy.
 
 ### 2026-05-19 — Tour programs + richer event detail
 - **/tour/[slug]** is now a real page for all 6 extended-tour programs
