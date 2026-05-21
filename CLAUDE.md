@@ -20,6 +20,31 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-21 — Event pages "help & love" + Connor's asks
+- Source: Pickleball Inc tracker (pickleball-inc.vercel.app) — "Pardoe"
+  = Connor Pardoe (CEO). His asks for the new site: **no Toys R Us /
+  partner-only ads / 1000+ schedule filter**, and **individual event
+  pages = top priority**.
+- **Connor's asks:** Toys R Us — already zero refs (clean). Partner-only
+  ads — already satisfied (only official partners appear anywhere).
+  **1,000+ schedule filter** — built: `/events` now uses
+  `components/events/ScheduleGrid.tsx` (client) with All / 1,000+ /
+  Grand Slams pills, defaulting to 1,000+.
+- **Individual event page upgraded** (`/events/[slug]`): sticky in-page
+  tab nav (Overview/Schedule/Divisions/Players/Tickets/Watch, anchors +
+  `scroll-mt-[150px]`, sits below the 100px header stack), Divisions
+  section, Defending Champions, and a real **Tickets** section (3 tiers
+  priced off the event base + Suites/Hospitality card, all UTM-tagged to
+  tixr). Kept schedule, players, watch, travel, more-stops.
+- Verified: build passes (27 routes); event page tabs/tickets/divisions
+  render; schedule filter active.
+- **Blocked (needs Bryce/assets), reported back:** Byron Nelson /
+  Canyon Springs + North Carolina events need real details + Dropbox
+  photos; Tyler/Wesley GitHub access + Zoom training (human/admin);
+  "better Match Day section (Chris Cantillo)" needs direction; CMS /
+  §7 state machine / real search / content pass / SEO / AWS cutover.
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-19 — Tour programs + richer event detail
 - **/tour/[slug]** is now a real page for all 6 extended-tour programs
   (Junior PPA / Senior Open / State Championships / PPA Camps / Travel /

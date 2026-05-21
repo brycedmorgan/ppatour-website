@@ -24,13 +24,33 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return { title: t ? t.shortName : "Event" };
 }
 
+const TABS = [
+  { id: "overview", label: "Overview" },
+  { id: "schedule", label: "Schedule" },
+  { id: "divisions", label: "Divisions" },
+  { id: "players", label: "Players" },
+  { id: "tickets", label: "Tickets" },
+  { id: "watch", label: "Watch" },
+];
+
+const DIVISIONS = [
+  "Men's Singles",
+  "Women's Singles",
+  "Men's Doubles",
+  "Women's Doubles",
+  "Mixed Doubles",
+];
+
+const PAST_CHAMPIONS = [
+  { division: "Men's Singles", name: "Diego Marín" },
+  { division: "Women's Singles", name: "Jade Rau" },
+  { division: "Men's Doubles", name: "Bricker / Hartman" },
+  { division: "Women's Doubles", name: "Safdar / Boyd" },
+  { division: "Mixed Doubles", name: "Marín / Frost" },
+];
+
 const BROADCAST = [
-  {
-    name: "FOX & FS1",
-    note: "Sunday Final, live national TV",
-    href: "/news",
-    external: false,
-  },
+  { name: "FOX & FS1", note: "Sunday Final, live national TV", href: "/news", external: false },
   {
     name: "PPA Tour · YouTube",
     note: "Every court, all weekend",
@@ -45,33 +65,20 @@ const BROADCAST = [
   },
 ];
 
-const TRAVEL_LINKS = [
-  {
-    label: "Travel & Hotels",
-    href: "/tour/travel",
-    blurb: "Partner hotels with event-rate rooms and shuttles.",
-  },
-  {
-    label: "Hospitality",
-    href: "/tour/hospitality",
-    blurb: "Courtside boxes, suites, and player experiences.",
-  },
-];
-
 function buildSchedule(startIso: string, endIso: string) {
   const start = new Date(`${startIso}T00:00:00`);
   const end = new Date(`${endIso}T00:00:00`);
   const days: { date: string; iso: string; label: string }[] = [];
   const cursor = new Date(start);
+  const total = Math.round((end.getTime() - start.getTime()) / 86_400_000);
   let i = 0;
   while (cursor <= end) {
-    const total = Math.round((end.getTime() - start.getTime()) / 86_400_000);
     let label = "Pro main draw";
     if (i === 0) label = "Amateur & junior brackets";
     else if (i === 1) label = "Senior open + pro qualifying";
-    else if (i === total - 1) label = "Championship Sunday — Finals";
-    else if (i === total - 2) label = "Pro semifinals + 3rd-place playoffs";
-    else if (i === total - 3) label = "Pro quarterfinals";
+    else if (i === total) label = "Championship Sunday — Finals";
+    else if (i === total - 1) label = "Pro semifinals + 3rd-place playoffs";
+    else if (i === total - 2) label = "Pro quarterfinals";
     days.push({
       date: formatDate(cursor.toISOString().slice(0, 10)),
       iso: cursor.toISOString().slice(0, 10),
@@ -90,7 +97,27 @@ export default async function EventPage({ params }: Params) {
 
   const countdown = daysUntil(t.startDate);
   const days = buildSchedule(t.startDate, t.endDate);
-  const otherTournaments = tournaments.filter((x) => x.slug !== t.slug).slice(0, 3);
+  const base = t.ticketPriceFrom;
+  const ticketTiers = [
+    {
+      name: "Grounds Pass",
+      from: base,
+      blurb: "All-day access to the outer courts and festival grounds.",
+    },
+    {
+      name: "Reserved Seating",
+      from: base * 2,
+      blurb: "Assigned seats at Championship Court for your session.",
+    },
+    {
+      name: "Championship Sunday",
+      from: Math.round(base * 2.6),
+      blurb: "The finals — the best seats for the title matches.",
+    },
+  ];
+  const otherTournaments = tournaments
+    .filter((x) => x.slug !== t.slug)
+    .slice(0, 3);
 
   return (
     <>
@@ -102,7 +129,7 @@ export default async function EventPage({ params }: Params) {
           fill
           priority
           sizes="100vw"
-          className="will-change-transform object-cover object-center"
+          className="object-cover object-center"
         />
         <div className="absolute inset-0 scrim-hero" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-9 pt-20">
@@ -128,7 +155,7 @@ export default async function EventPage({ params }: Params) {
             <a
               href={withUtm(t.ticketsUrl, {
                 campaign: t.slug,
-                content: "event-page-buy-tickets",
+                content: "event-hero-buy-tickets",
               })}
               target="_blank"
               rel="noopener noreferrer"
@@ -139,7 +166,7 @@ export default async function EventPage({ params }: Params) {
             <a
               href={withUtm(t.registerUrl, {
                 campaign: t.slug,
-                content: "event-page-register",
+                content: "event-hero-register",
               })}
               target="_blank"
               rel="noopener noreferrer"
@@ -152,41 +179,47 @@ export default async function EventPage({ params }: Params) {
         <div className="relative h-1 bg-ppa-blue" />
       </section>
 
-      {/* Quick facts band */}
-      <section className="bg-ppa-navy-deep text-white">
+      {/* Sticky in-page tab nav */}
+      <nav className="sticky top-[100px] z-40 border-b border-ppa-line bg-ppa-paper/95 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {TABS.map((tab) => (
+            <a
+              key={tab.id}
+              href={`#${tab.id}`}
+              className="shrink-0 px-3 py-3 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/55 transition-colors hover:text-ppa-blue"
+            >
+              {tab.label}
+            </a>
+          ))}
+        </div>
+      </nav>
+
+      {/* Overview — quick facts */}
+      <section
+        id="overview"
+        className="scroll-mt-[150px] bg-ppa-navy-deep text-white"
+      >
         <div className="mx-auto grid w-full max-w-6xl grid-cols-2 px-4 sm:grid-cols-4">
-          <div className="border-r border-white/10 px-4 py-5">
-            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
-              Dates
-            </p>
-            <p className="mt-1 font-display text-base uppercase text-white">
-              {formatDateRange(t.startDate, t.endDate)}
-            </p>
-          </div>
-          <div className="border-white/10 px-4 py-5 sm:border-r">
-            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
-              Venue
-            </p>
-            <p className="mt-1 font-display text-base uppercase text-white">
-              {t.venue}
-            </p>
-          </div>
-          <div className="border-r border-t border-white/10 px-4 py-5 sm:border-t-0">
-            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
-              Ranking Points
-            </p>
-            <p className="mt-1 font-display text-base uppercase text-ppa-yellow">
-              {t.points.toLocaleString()}
-            </p>
-          </div>
-          <div className="border-t border-white/10 px-4 py-5 sm:border-t-0">
-            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
-              Tier
-            </p>
-            <p className="mt-1 font-display text-base uppercase text-white">
-              {t.tier}
-            </p>
-          </div>
+          {[
+            { k: "Dates", v: formatDateRange(t.startDate, t.endDate) },
+            { k: "Venue", v: t.venue },
+            { k: "Ranking Points", v: t.points.toLocaleString(), accent: true },
+            { k: "Tier", v: t.tier },
+          ].map((f, i) => (
+            <div
+              key={f.k}
+              className={`px-4 py-5 ${i % 2 === 1 ? "border-l border-white/10" : ""} ${i >= 2 ? "border-t border-white/10 sm:border-t-0" : ""} ${i === 2 ? "sm:border-l" : ""}`}
+            >
+              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
+                {f.k}
+              </p>
+              <p
+                className={`mt-1 font-display text-base uppercase ${f.accent ? "text-ppa-yellow" : "text-white"}`}
+              >
+                {f.v}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -194,8 +227,7 @@ export default async function EventPage({ params }: Params) {
       <section className="bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr]">
-            {/* Schedule */}
-            <div>
+            <div id="schedule" className="scroll-mt-[150px]">
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 Schedule
               </p>
@@ -217,8 +249,7 @@ export default async function EventPage({ params }: Params) {
               </div>
             </div>
 
-            {/* Players to watch */}
-            <aside>
+            <aside id="players" className="scroll-mt-[150px]">
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 Players to Watch
               </p>
@@ -263,8 +294,137 @@ export default async function EventPage({ params }: Params) {
         </div>
       </section>
 
+      {/* Divisions + Past Champions */}
+      <section id="divisions" className="scroll-mt-[150px] bg-white">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <div className="grid gap-10 lg:grid-cols-2">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
+                Divisions
+              </p>
+              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+                Five Brackets, {t.points.toLocaleString()} Points
+              </h2>
+              <p className="mt-3 max-w-md text-sm text-ppa-navy/60">
+                Every division at {t.shortName} carries{" "}
+                {t.points.toLocaleString()} ranking points toward the season
+                race, plus amateur, junior, and senior brackets all weekend.
+              </p>
+              <ul className="mt-5 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-2">
+                {DIVISIONS.map((d) => (
+                  <li
+                    key={d}
+                    className="flex items-center gap-2 bg-white p-3 text-sm font-semibold text-ppa-navy"
+                  >
+                    <span className="size-1.5 bg-ppa-blue" />
+                    {d}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
+                Last Year
+              </p>
+              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+                Defending Champions
+              </h2>
+              <div className="mt-5 border-t border-ppa-line">
+                {PAST_CHAMPIONS.map((c) => (
+                  <div
+                    key={c.division}
+                    className="flex items-center justify-between gap-3 border-b border-ppa-line py-3"
+                  >
+                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/45">
+                      {c.division}
+                    </span>
+                    <span className="font-display text-sm uppercase text-ppa-navy">
+                      {c.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Tickets */}
+      <section id="tickets" className="scroll-mt-[150px] bg-ppa-paper">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
+                Tickets
+              </p>
+              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+                Pick Your Seats
+              </h2>
+            </div>
+            <p className="max-w-xs text-sm text-ppa-navy/55 sm:text-right">
+              Tickets are sold through tixr. Kids under 5 are free on the
+              grounds.
+            </p>
+          </div>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {ticketTiers.map((tier) => (
+              <div
+                key={tier.name}
+                className="flex flex-col border border-ppa-line bg-white p-5"
+              >
+                <p className="font-display text-lg uppercase leading-none text-ppa-navy">
+                  {tier.name}
+                </p>
+                <p className="mt-2 text-sm text-ppa-navy/55">{tier.blurb}</p>
+                <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/40">
+                  From
+                </p>
+                <p className="font-display text-3xl leading-none text-ppa-navy">
+                  ${tier.from}
+                </p>
+                <a
+                  href={withUtm(t.ticketsUrl, {
+                    campaign: t.slug,
+                    content: `event-tickets-${tier.name.toLowerCase().replace(/\s+/g, "-")}`,
+                  })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex h-9 items-center justify-center bg-ppa-blue px-4 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors hover:bg-ppa-blue-deep"
+                >
+                  Buy
+                </a>
+              </div>
+            ))}
+
+            {/* Suites / hospitality */}
+            <div className="flex flex-col border border-ppa-navy bg-ppa-navy p-5 text-white">
+              <p className="font-display text-lg uppercase leading-none">
+                Suites & Hospitality
+              </p>
+              <p className="mt-2 text-sm text-white/65">
+                Courtside boxes, private suites, and player experiences.
+              </p>
+              <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
+                Premium
+              </p>
+              <p className="font-display text-3xl leading-none text-ppa-yellow">
+                Inquire
+              </p>
+              <Link
+                href="/tour/hospitality"
+                className="mt-4 inline-flex h-9 items-center justify-center border border-white/30 px-4 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors hover:bg-white hover:text-ppa-navy"
+              >
+                Learn More
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Where to Watch */}
-      <section className="bg-white">
+      <section id="watch" className="scroll-mt-[150px] bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
             Where to Watch
@@ -292,33 +452,34 @@ export default async function EventPage({ params }: Params) {
               </Link>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* Travel + Hospitality cross-links */}
-      <section className="bg-ppa-paper">
-        <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
-            On-Site
-          </p>
-          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-            Make a Weekend of It
-          </h2>
-          <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            {TRAVEL_LINKS.map((c) => (
+          {/* Travel + hospitality cross-links */}
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            {[
+              {
+                label: "Travel & Hotels",
+                href: "/tour/travel",
+                blurb: "Partner hotels with event-rate rooms and shuttles.",
+              },
+              {
+                label: "Hospitality",
+                href: "/tour/hospitality",
+                blurb: "Courtside boxes, suites, and player experiences.",
+              },
+            ].map((c) => (
               <Link
                 key={c.label}
                 href={c.href}
-                className="group flex flex-col border border-ppa-line bg-white p-5 transition-colors hover:bg-ppa-paper"
+                className="group flex items-center justify-between gap-3 border border-ppa-line bg-ppa-paper p-4 transition-colors hover:bg-white"
               >
-                <span className="font-display text-lg uppercase leading-none text-ppa-navy transition-colors group-hover:text-ppa-blue">
-                  {c.label}
+                <span>
+                  <span className="block font-display text-base uppercase text-ppa-navy transition-colors group-hover:text-ppa-blue">
+                    {c.label}
+                  </span>
+                  <span className="text-xs text-ppa-navy/55">{c.blurb}</span>
                 </span>
-                <span className="mt-1.5 text-xs text-ppa-navy/55">
-                  {c.blurb}
-                </span>
-                <span className="mt-3 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy transition-colors group-hover:text-ppa-blue">
-                  Learn More →
+                <span aria-hidden className="text-ppa-blue">
+                  →
                 </span>
               </Link>
             ))}
@@ -326,8 +487,8 @@ export default async function EventPage({ params }: Params) {
         </div>
       </section>
 
-      {/* Other events */}
-      <section className="bg-white">
+      {/* More stops */}
+      <section className="bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex items-end justify-between">
             <div>
