@@ -20,6 +20,33 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-22 — Real pros (profiles + rankings) + TV guide logos
+- **Pro roster:** `lib/athletes.ts` — 13 real PPA pros with official
+  headshots (600×600) mirrored from ppatour.com → `/public/ppa/pros/`.
+  Short ORIGINAL bios (not copied — copyright). `divisionRankings`
+  (home-content) + `playersToWatch` rebuilt to reference real athletes
+  by slug.
+  - ⚠️ **Dropbox blocker:** the shared-folder link only bulk-exports
+    Dropbox helper DBs (not the images) via `dl=1`; can't enumerate it
+    headless. Fell back to ppatour.com's public headshots. Anna Leigh
+    Waters' headshot 404'd at the known path → not in set yet. If Bryce
+    wants the official Dropbox versions, need direct per-file links / a
+    real zip / a connected Dropbox integration.
+- **Profile pages:** new `/athletes/[slug]` (13) — hero headshot, rank
+  badge, divisions, bio, per-division points-race standings, "more pros."
+  Homepage rankings rows + players-to-watch + /athletes roster + event
+  players-to-watch all show headshots and link to profiles. Event
+  Defending-Champions updated to real names.
+- **TV guide:** pulled the Google Sheet (real PBTV/Tennis Channel/FS1/
+  FOX/CBS schedule). Downloaded **real PBTV + Tennis Channel logos** →
+  `/public/ppa/networks/`. Event Watch section now shows those logos and
+  the broadcast labels reflect the real mix (PBTV every day · Tennis
+  Channel/FOX on QF/SF/Final). Per-event exact CSV mapping still TODO.
+- Verified: build passes (53 routes); profile pages, rankings headshots,
+  TV logos all render.
+- Deployed via `vercel --prod`.
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-22 — Real Nationals photos (for the Pardoe demo)
 - Bryce: use the photos from pbnationals.com for Nationals. Pulled 4
   real shots → `/public/ppa/nationals-*.jpg` (hero, action-2, crowd-1/2).

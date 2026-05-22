@@ -37,24 +37,32 @@ const DIVISIONS = [
 ];
 
 const PAST_CHAMPIONS = [
-  { division: "Men's Singles", name: "Diego Marín" },
-  { division: "Women's Singles", name: "Jade Rau" },
-  { division: "Men's Doubles", name: "Bricker / Hartman" },
-  { division: "Women's Doubles", name: "Safdar / Boyd" },
-  { division: "Mixed Doubles", name: "Marín / Frost" },
+  { division: "Men's Singles", name: "Ben Johns" },
+  { division: "Women's Singles", name: "Anna Bright" },
+  { division: "Men's Doubles", name: "B. Johns / JW Johnson" },
+  { division: "Women's Doubles", name: "Bright / Parenteau" },
+  { division: "Mixed Doubles", name: "JW Johnson / Bright" },
 ];
 
-const HOW_TO_WATCH = [
+const HOW_TO_WATCH: {
+  name: string;
+  logo?: string;
+  note: string;
+  detail: string;
+  href?: string;
+}[] = [
   {
-    name: "FOX & FS1",
-    note: "Championship Sunday and select semifinals, live on national television.",
-    detail: "Check local listings",
+    name: "PickleballTV",
+    logo: "/ppa/networks/pbtv.png",
+    note: "Every court, every match, all weekend — the home of live PPA streaming.",
+    detail: "Stream on PBTV",
+    href: "https://www.pickleballtv.com",
   },
   {
-    name: "PPA Tour · YouTube",
-    note: "Every court, every match, every day — streamed free.",
-    detail: "youtube.com/@ppatour",
-    href: "https://www.youtube.com/@ppatour",
+    name: "Tennis Channel",
+    logo: "/ppa/networks/tennis-channel.svg",
+    note: "Featured rounds and Championship Sunday on national television.",
+    detail: "Check local listings",
   },
   {
     name: "MATCHDAY App",
@@ -97,13 +105,15 @@ function buildSchedule(startIso: string, endIso: string): Day[] {
       label = "Championship Sunday — Finals";
       gates = "10:00 AM";
       firstServe = "11:00 AM";
-      live = "FOX";
+      live = "FOX · PBTV";
     } else if (i === last - 1) {
       label = "Pro semifinals";
-      live = "FS1 + YouTube";
+      live = "Tennis Channel · PBTV";
     } else if (i === last - 2) {
       label = "Pro quarterfinals";
-      live = "PPA Tour YouTube";
+      live = "Tennis Channel · PBTV";
+    } else {
+      live = "PBTV";
     }
     days.push({
       date: formatDate(cursor.toISOString().slice(0, 10)),
@@ -393,7 +403,19 @@ export default async function EventPage({ params }: Params) {
                 key={w.name}
                 className="flex flex-col border border-white/10 bg-ppa-navy-deep p-5"
               >
-                <span className="text-sm text-ppa-sky">▶</span>
+                {w.logo ? (
+                  <span className="flex h-10 w-fit items-center justify-center rounded bg-white px-3">
+                    <Image
+                      src={w.logo}
+                      alt={w.name}
+                      width={120}
+                      height={40}
+                      className="h-6 w-auto object-contain"
+                    />
+                  </span>
+                ) : (
+                  <span className="text-sm text-ppa-sky">▶</span>
+                )}
                 <p className="mt-2 font-display text-lg uppercase leading-none">
                   {w.name}
                 </p>
@@ -542,17 +564,17 @@ export default async function EventPage({ params }: Params) {
               <div className="mt-5 flex flex-col gap-px border border-ppa-line bg-ppa-line">
                 {playersToWatch.map((p) => (
                   <Link
-                    key={p.name}
-                    href="/athletes"
+                    key={p.slug}
+                    href={`/athletes/${p.slug}`}
                     className="group flex items-center gap-3 bg-white p-3 transition-colors hover:bg-ppa-paper"
                   >
-                    <div className="relative size-14 shrink-0 overflow-hidden bg-ppa-navy-deep">
+                    <div className="relative size-14 shrink-0 overflow-hidden rounded-full bg-ppa-navy-deep">
                       <Image
                         src={p.image}
                         alt={p.name}
                         fill
                         sizes="56px"
-                        className="object-cover object-top grayscale transition-all duration-500 group-hover:grayscale-0"
+                        className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
                       />
                     </div>
                     <div className="flex flex-1 flex-col">

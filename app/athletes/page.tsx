@@ -3,16 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { PointsRace } from "@/components/home/PointsRace";
-import { divisionRankings, playersToWatch } from "@/lib/home-content";
+import { athletes } from "@/lib/athletes";
+import { divisionRankings } from "@/lib/home-content";
 
 export const metadata: Metadata = { title: "Athletes" };
 
 export default function AthletesPage() {
   const divisions = divisionRankings.length;
-  const totalAthletes = divisionRankings.reduce(
-    (n, d) => n + d.entries.length,
-    0,
-  );
 
   return (
     <>
@@ -30,55 +27,47 @@ export default function AthletesPage() {
           </h1>
           <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
             The best players in the world, across {divisions} divisions and
-            every main-tour stop. Profiles, rankings, and the race for No. 1.
+            every main-tour stop. Tap any pro for their profile, divisions, and
+            place in the points race.
           </p>
         </div>
       </section>
 
-      {/* Players to watch */}
-      <section className="bg-ppa-navy-deep">
+      {/* Roster */}
+      <section className="bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <div className="flex items-center gap-2.5">
-                <span className="h-2 w-2 bg-ppa-blue" />
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
-                  Featured
-                </p>
-              </div>
-              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
-                Players to Watch
-              </h2>
-            </div>
-          </div>
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            {playersToWatch.map((p) => (
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
+            The Roster
+          </p>
+          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+            Pro Field
+          </h2>
+          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {athletes.map((a) => (
               <Link
-                key={p.name}
-                href="/athletes"
-                className="group flex flex-col overflow-hidden border border-white/10 bg-ppa-navy"
+                key={a.slug}
+                href={`/athletes/${a.slug}`}
+                className="group flex flex-col overflow-hidden border border-ppa-line bg-white"
               >
-                <div className="relative aspect-[5/4] overflow-hidden">
+                <div className="relative aspect-square overflow-hidden bg-ppa-paper">
                   <Image
-                    src={p.image}
-                    alt={p.name}
+                    src={a.headshot}
+                    alt={a.name}
                     fill
-                    sizes="(min-width: 640px) 33vw, 100vw"
-                    className="will-change-transform object-cover object-top grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                    className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
                   />
-                  <span className="absolute left-3 top-3 bg-ppa-yellow px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-ppa-navy">
-                    No. {p.rank}
+                  <span className="absolute left-2 top-2 bg-ppa-yellow px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] text-ppa-navy">
+                    No. {a.bestRank}
                   </span>
                 </div>
-                <div className="flex flex-1 flex-col p-4 text-white">
-                  <p className="font-display text-lg uppercase leading-none">
-                    {p.name}
+                <div className="flex flex-1 flex-col p-3">
+                  <p className="font-display text-base uppercase leading-tight text-ppa-navy transition-colors group-hover:text-ppa-blue">
+                    {a.name}
                   </p>
-                  <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-sky">
-                    {p.division}
-                  </p>
-                  <p className="mt-2 text-sm leading-relaxed text-white/65">
-                    {p.hook}
+                  <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-ppa-blue">
+                    {a.divisions[0]}
+                    {a.country !== "USA" ? ` · ${a.country}` : ""}
                   </p>
                 </div>
               </Link>
@@ -87,26 +76,18 @@ export default function AthletesPage() {
         </div>
       </section>
 
-      {/* Points race — full tabs */}
+      {/* Points race */}
       <section className="bg-ppa-navy">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <div className="flex items-center gap-2.5">
-                <span className="h-2 w-2 bg-ppa-blue" />
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
-                  Standings
-                </p>
-              </div>
-              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
-                The Points Race
-              </h2>
-            </div>
-            <p className="max-w-xs text-sm text-white/55 sm:text-right">
-              {totalAthletes}+ pros across {divisions} divisions, chasing the
-              season title.
+          <div className="flex items-center gap-2.5">
+            <span className="h-2 w-2 bg-ppa-blue" />
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
+              Standings
             </p>
           </div>
+          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
+            The Points Race
+          </h2>
           <PointsRace />
         </div>
       </section>

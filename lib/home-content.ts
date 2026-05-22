@@ -54,7 +54,8 @@ export const storylines: Storyline[] = [
 
 export type RaceEntry = {
   rank: number;
-  name: string;
+  /** Athlete slug — resolves to name + headshot + profile via lib/athletes. */
+  slug: string;
   points: number;
   /** Positions moved since the last stop. + up, - down, 0 steady. */
   move: number;
@@ -71,20 +72,19 @@ export type Division = {
   entries: RaceEntry[];
 };
 
-/* Per-division points race — split out from the previous combined table.
-   The order mirrors ppatour.com's leaderboards selector. */
+/* Per-division points race — real pros (slugs map to lib/athletes). Order
+   mirrors ppatour.com's leaderboards selector. */
 export const divisionRankings: Division[] = [
   {
     key: "ms",
     label: "Men's Singles",
     short: "Men's Singles",
     entries: [
-      { rank: 1, name: "Diego Marín", points: 8990, move: 2 },
-      { rank: 2, name: "Tomás Reyes", points: 7650, move: 1 },
-      { rank: 3, name: "Felix Tran", points: 7320, move: -2 },
-      { rank: 4, name: "Owen Kessler", points: 6890, move: 0 },
-      { rank: 5, name: "Marcus Iqbal", points: 6420, move: 3 },
-      { rank: 6, name: "Theo Whitfield", points: 6180, move: -1 },
+      { rank: 1, slug: "ben-johns", points: 9840, move: 0 },
+      { rank: 2, slug: "federico-staksrud", points: 8990, move: 1 },
+      { rank: 3, slug: "christian-alshon", points: 8210, move: 2 },
+      { rank: 4, slug: "hayden-patriquin", points: 7320, move: 1 },
+      { rank: 5, slug: "jw-johnson", points: 6980, move: -2 },
     ],
   },
   {
@@ -92,12 +92,11 @@ export const divisionRankings: Division[] = [
     label: "Men's Doubles",
     short: "Men's Doubles",
     entries: [
-      { rank: 1, name: "Austin Bricker", points: 9510, move: 1 },
-      { rank: 2, name: "Cole Hartman", points: 8210, move: 3 },
-      { rank: 3, name: "Eli Tanaka", points: 7180, move: 4 },
-      { rank: 4, name: "Jasper Volt", points: 7050, move: -1 },
-      { rank: 5, name: "Cameron Holt", points: 6710, move: 0 },
-      { rank: 6, name: "Devin Park", points: 6480, move: -2 },
+      { rank: 1, slug: "ben-johns", points: 9510, move: 0 },
+      { rank: 2, slug: "jw-johnson", points: 8810, move: 1 },
+      { rank: 3, slug: "andrei-daescu", points: 8210, move: 2 },
+      { rank: 4, slug: "hunter-johnson", points: 7480, move: -1 },
+      { rank: 5, slug: "christian-alshon", points: 7050, move: 1 },
     ],
   },
   {
@@ -105,12 +104,11 @@ export const divisionRankings: Division[] = [
     label: "Mixed Doubles",
     short: "Men's Mixed",
     entries: [
-      { rank: 1, name: "Diego Marín", points: 8580, move: 1 },
-      { rank: 2, name: "Austin Bricker", points: 8310, move: 0 },
-      { rank: 3, name: "Cole Hartman", points: 7860, move: 2 },
-      { rank: 4, name: "Tomás Reyes", points: 7420, move: -1 },
-      { rank: 5, name: "Owen Kessler", points: 6940, move: 1 },
-      { rank: 6, name: "Felix Tran", points: 6580, move: -2 },
+      { rank: 1, slug: "jw-johnson", points: 8580, move: 1 },
+      { rank: 2, slug: "ben-johns", points: 8310, move: -1 },
+      { rank: 3, slug: "hunter-johnson", points: 7860, move: 2 },
+      { rank: 4, slug: "andrei-daescu", points: 7220, move: 0 },
+      { rank: 5, slug: "hayden-patriquin", points: 6580, move: 1 },
     ],
   },
   {
@@ -118,12 +116,11 @@ export const divisionRankings: Division[] = [
     label: "Women's Singles",
     short: "Women's Singles",
     entries: [
-      { rank: 1, name: "Jade Rau", points: 9840, move: 0 },
-      { rank: 2, name: "Priya Anand", points: 8640, move: 1 },
-      { rank: 3, name: "Anna Marquez", points: 8210, move: -1 },
-      { rank: 4, name: "Helena Vasquez", points: 7750, move: 2 },
-      { rank: 5, name: "Riley Quinn", points: 7320, move: 0 },
-      { rank: 6, name: "Mia Carter", points: 6980, move: 1 },
+      { rank: 1, slug: "anna-bright", points: 9275, move: 1 },
+      { rank: 2, slug: "catherine-parenteau", points: 8640, move: 0 },
+      { rank: 3, slug: "brooke-buckner", points: 8010, move: 2 },
+      { rank: 4, slug: "jorja-johnson", points: 7320, move: 1 },
+      { rank: 5, slug: "lacy-schennan", points: 6740, move: -1 },
     ],
   },
   {
@@ -131,12 +128,11 @@ export const divisionRankings: Division[] = [
     label: "Women's Doubles",
     short: "Women's Doubles",
     entries: [
-      { rank: 1, name: "Mehvish Safdar", points: 9275, move: -1 },
-      { rank: 2, name: "Hannah Boyd", points: 7420, move: 0 },
-      { rank: 3, name: "Sloane Nakamura", points: 7180, move: 2 },
-      { rank: 4, name: "Aria Bennett", points: 6910, move: 1 },
-      { rank: 5, name: "Madison Yu", points: 6540, move: -1 },
-      { rank: 6, name: "Quinn Larkin", points: 6210, move: 0 },
+      { rank: 1, slug: "anna-bright", points: 9510, move: 0 },
+      { rank: 2, slug: "catherine-parenteau", points: 8820, move: 1 },
+      { rank: 3, slug: "brooke-buckner", points: 7980, move: 2 },
+      { rank: 4, slug: "jorja-johnson", points: 7410, move: 1 },
+      { rank: 5, slug: "tammy-emmrich", points: 6620, move: -1 },
     ],
   },
   {
@@ -144,17 +140,17 @@ export const divisionRankings: Division[] = [
     label: "Mixed Doubles",
     short: "Women's Mixed",
     entries: [
-      { rank: 1, name: "Naomi Frost", points: 8820, move: 1 },
-      { rank: 2, name: "Mehvish Safdar", points: 8490, move: -1 },
-      { rank: 3, name: "Priya Anand", points: 7950, move: 0 },
-      { rank: 4, name: "Hannah Boyd", points: 7310, move: 2 },
-      { rank: 5, name: "Jade Rau", points: 6890, move: -1 },
-      { rank: 6, name: "Sloane Nakamura", points: 6520, move: 1 },
+      { rank: 1, slug: "anna-bright", points: 8820, move: 1 },
+      { rank: 2, slug: "catherine-parenteau", points: 8490, move: 0 },
+      { rank: 3, slug: "jorja-johnson", points: 7650, move: 2 },
+      { rank: 4, slug: "brooke-buckner", points: 7100, move: 1 },
+      { rank: 5, slug: "lacy-schennan", points: 6520, move: -1 },
     ],
   },
 ];
 
 export type PlayerWatch = {
+  slug: string;
   image: string;
   name: string;
   division: string;
@@ -164,25 +160,28 @@ export type PlayerWatch = {
 
 export const playersToWatch: PlayerWatch[] = [
   {
-    image: "/ppa/player-rau.webp",
-    name: "Jade Rau",
-    division: "Women's Singles",
+    slug: "ben-johns",
+    image: "/ppa/pros/Ben-Johns.png",
+    name: "Ben Johns",
+    division: "Men's Singles · No. 1",
     rank: 1,
-    hook: "Unbeaten in singles finals this season. In Atlanta the streak meets its toughest draw yet.",
+    hook: "The sport's No. 1 arrives chasing yet another triple crown — singles, doubles, and mixed in one weekend.",
   },
   {
-    image: "/ppa/player-bricker.webp",
-    name: "Austin Bricker",
-    division: "Men's Doubles",
+    slug: "anna-bright",
+    image: "/ppa/pros/Anna-Bright.png",
+    name: "Anna Bright",
+    division: "Women's · No. 1",
+    rank: 1,
+    hook: "A title threat in all three disciplines and one of the hottest hands on tour heading into the draw.",
+  },
+  {
+    slug: "federico-staksrud",
+    image: "/ppa/pros/federico-staksrud.png",
+    name: "Federico Staksrud",
+    division: "Men's Singles · No. 2",
     rank: 2,
-    hook: "Riding a 14-match win streak into a home-region stop — and chasing the No. 1 doubles seed for Nationals.",
-  },
-  {
-    image: "/ppa/player-safdar.webp",
-    name: "Mehvish Safdar",
-    division: "Women's Doubles",
-    rank: 3,
-    hook: "Lost the top ranking by 35 points in Las Vegas. Atlanta is where she comes to take it back.",
+    hook: "Argentina's relentless baseliner is knocking on the door of a first Slam title.",
   },
 ];
 

@@ -437,8 +437,8 @@ export default function Home() {
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
             {playersToWatch.map((p) => (
               <Link
-                key={p.name}
-                href="/athletes"
+                key={p.slug}
+                href={`/athletes/${p.slug}`}
                 className="group flex flex-col overflow-hidden border border-white/10 bg-ppa-navy"
               >
                 <div className="relative aspect-[5/4] overflow-hidden">
@@ -447,7 +447,7 @@ export default function Home() {
                     alt={p.name}
                     fill
                     sizes="(min-width: 640px) 33vw, 100vw"
-                    className="will-change-transform object-cover object-top grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                    className="will-change-transform object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   />
                   <span className="absolute left-3 top-3 bg-ppa-yellow px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-ppa-navy">
                     No. {p.rank}
