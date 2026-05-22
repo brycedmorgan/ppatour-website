@@ -30,9 +30,18 @@ const STATS = [
   { n: "150K+", label: "Fans In Arena" },
 ];
 
-const BROADCAST = [
+const BROADCAST: { name: string; note: string; logo?: string }[] = [
+  {
+    name: "PickleballTV",
+    logo: "/ppa/networks/pbtv.png",
+    note: "Every court, every match — the home of live PPA streaming",
+  },
+  {
+    name: "Tennis Channel",
+    logo: "/ppa/networks/tennis-channel.svg",
+    note: "Featured rounds & Championship Sunday on national TV",
+  },
   { name: "FOX & FS1", note: "Marquee finals on national television" },
-  { name: "PPA Tour · YouTube", note: "Every court, every match, streamed live" },
   { name: "MATCHDAY App", note: "Live scores, brackets, and match alerts" },
 ];
 
@@ -621,10 +630,22 @@ export default function Home() {
       <section className="bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <SectionHead label="Broadcast" title="Where to Watch" />
-          <div className="mt-6 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-3">
+          <div className="mt-6 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-2 lg:grid-cols-4">
             {BROADCAST.map((b) => (
-              <div key={b.name} className="bg-ppa-paper p-5">
-                <span className="text-sm text-ppa-blue">▶</span>
+              <div key={b.name} className="flex flex-col bg-ppa-paper p-5">
+                {b.logo ? (
+                  <span className="flex h-9 w-fit items-center rounded bg-white px-2.5">
+                    <Image
+                      src={b.logo}
+                      alt={b.name}
+                      width={120}
+                      height={36}
+                      className="h-5 w-auto object-contain"
+                    />
+                  </span>
+                ) : (
+                  <span className="text-sm text-ppa-blue">▶</span>
+                )}
                 <p className="mt-2 font-display text-lg uppercase leading-none text-ppa-navy">
                   {b.name}
                 </p>
