@@ -15,7 +15,18 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const a = getAthlete(slug);
-  return { title: a ? a.name : "Athlete" };
+  if (!a) return { title: "Athlete" };
+  const description = `${a.tagline}. ${a.divisions.join(" · ")} · ${a.country}.`;
+  return {
+    title: a.name,
+    description,
+    openGraph: {
+      title: `${a.name} — Carvana PPA Tour`,
+      description: a.tagline,
+      images: [a.headshot],
+    },
+    twitter: { card: "summary_large_image", images: [a.headshot] },
+  };
 }
 
 export default async function AthletePage({ params }: Params) {

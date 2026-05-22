@@ -1,0 +1,45 @@
+import type { MetadataRoute } from "next";
+import { athletes } from "@/lib/athletes";
+import { tournaments } from "@/lib/placeholder-data";
+import { tourPrograms } from "@/lib/tour-programs";
+
+const BASE = "https://ppatour-website.vercel.app";
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const staticPaths = [
+    "",
+    "/events",
+    "/watch",
+    "/play",
+    "/athletes",
+    "/news",
+    "/about",
+    "/about/sponsors",
+    "/about/how-it-works",
+    "/about/what-is-pickleball",
+    "/search",
+  ];
+
+  return [
+    ...staticPaths.map((p) => ({
+      url: `${BASE}${p}`,
+      changeFrequency: "weekly" as const,
+      priority: p === "" ? 1 : 0.7,
+    })),
+    ...tournaments.map((t) => ({
+      url: `${BASE}/events/${t.slug}`,
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    })),
+    ...athletes.map((a) => ({
+      url: `${BASE}/athletes/${a.slug}`,
+      changeFrequency: "weekly" as const,
+      priority: 0.6,
+    })),
+    ...tourPrograms.map((p) => ({
+      url: `${BASE}/tour/${p.slug}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.5,
+    })),
+  ];
+}

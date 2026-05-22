@@ -85,6 +85,9 @@ export const divisionRankings: Division[] = [
       { rank: 3, slug: "christian-alshon", points: 8210, move: 2 },
       { rank: 4, slug: "gabe-tardio", points: 7620, move: 1 },
       { rank: 5, slug: "hayden-patriquin", points: 6980, move: -1 },
+      { rank: 6, slug: "jw-johnson", points: 6540, move: 0 },
+      { rank: 7, slug: "jay-devilliers", points: 6080, move: 2 },
+      { rank: 8, slug: "dekel-bar", points: 5720, move: -1 },
     ],
   },
   {
@@ -97,6 +100,9 @@ export const divisionRankings: Division[] = [
       { rank: 3, slug: "riley-newman", points: 8240, move: -1 },
       { rank: 4, slug: "collin-johns", points: 7860, move: 0 },
       { rank: 5, slug: "jw-johnson", points: 7410, move: 2 },
+      { rank: 6, slug: "dylan-frazier", points: 7050, move: 1 },
+      { rank: 7, slug: "hunter-johnson", points: 6620, move: -2 },
+      { rank: 8, slug: "andrei-daescu", points: 6210, move: 0 },
     ],
   },
   {
@@ -109,6 +115,9 @@ export const divisionRankings: Division[] = [
       { rank: 3, slug: "dylan-frazier", points: 7780, move: 2 },
       { rank: 4, slug: "riley-newman", points: 7220, move: -1 },
       { rank: 5, slug: "hunter-johnson", points: 6680, move: 1 },
+      { rank: 6, slug: "gabe-tardio", points: 6320, move: 0 },
+      { rank: 7, slug: "andrei-daescu", points: 5980, move: 1 },
+      { rank: 8, slug: "jack-sock", points: 5610, move: 3 },
     ],
   },
   {
@@ -121,6 +130,9 @@ export const divisionRankings: Division[] = [
       { rank: 3, slug: "tyra-black", points: 8010, move: 2 },
       { rank: 4, slug: "kate-fahey", points: 7320, move: 1 },
       { rank: 5, slug: "lea-jansen", points: 6740, move: -1 },
+      { rank: 6, slug: "catherine-parenteau", points: 6380, move: 0 },
+      { rank: 7, slug: "genie-erokhina", points: 6020, move: 3 },
+      { rank: 8, slug: "judit-castillo", points: 5680, move: 1 },
     ],
   },
   {
@@ -133,6 +145,9 @@ export const divisionRankings: Division[] = [
       { rank: 3, slug: "catherine-parenteau", points: 8210, move: -1 },
       { rank: 4, slug: "jessie-irvine", points: 7610, move: 1 },
       { rank: 5, slug: "paris-todd", points: 7020, move: 2 },
+      { rank: 6, slug: "jorja-johnson", points: 6680, move: 0 },
+      { rank: 7, slug: "kaitlyn-christian", points: 6240, move: 2 },
+      { rank: 8, slug: "rachel-rohrabacher", points: 5910, move: -1 },
     ],
   },
   {
@@ -145,6 +160,9 @@ export const divisionRankings: Division[] = [
       { rank: 3, slug: "jessie-irvine", points: 7650, move: 2 },
       { rank: 4, slug: "paris-todd", points: 7100, move: 1 },
       { rank: 5, slug: "catherine-parenteau", points: 6520, move: -1 },
+      { rank: 6, slug: "kaitlyn-christian", points: 6180, move: 1 },
+      { rank: 7, slug: "rachel-rohrabacher", points: 5840, move: 0 },
+      { rank: 8, slug: "megan-dizon", points: 5510, move: 2 },
     ],
   },
 ];

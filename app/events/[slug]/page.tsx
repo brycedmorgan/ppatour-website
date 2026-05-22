@@ -26,7 +26,19 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const t = tournaments.find((x) => x.slug === slug);
-  return { title: t ? t.shortName : "Event" };
+  if (!t) return { title: "Event" };
+  const where = t.state ? `${t.city}, ${t.state}` : t.city;
+  const description = `${tierLabel(t)} · ${formatDateRange(t.startDate, t.endDate)} · ${where} · ${t.prizeMoney} purse. Schedule, players, tickets, trip guide, and how to watch.`;
+  return {
+    title: t.shortName,
+    description,
+    openGraph: {
+      title: `${t.shortName} — Carvana PPA Tour`,
+      description,
+      images: [t.image],
+    },
+    twitter: { card: "summary_large_image", images: [t.image] },
+  };
 }
 
 const DIVISIONS = [

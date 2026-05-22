@@ -39,6 +39,19 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - Deployed via `vercel --prod`.
 - Live: https://ppatour-website.vercel.app
 
+### 2026-05-22 — Deeper standings + SEO/Open Graph
+- Points Race extended to **top-8 per division** (all 6) using the
+  40-pro roster — fuller, real standings.
+- **SEO/sharing polish:** layout metadata gets `metadataBase`, default
+  Open Graph + Twitter cards; new `app/opengraph-image.tsx` (branded
+  navy OG card via next/og); `app/sitemap.ts` (all static + event +
+  athlete + tour routes) and `app/robots.ts`. Event pages now set OG
+  image = hero photo + a real description (tier/dates/city/purse);
+  athlete pages set OG image = headshot.
+- Build passes (83 routes incl. /opengraph-image, /sitemap.xml,
+  /robots.txt). Deployed via `vercel --prod`.
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-22 — Venue fixes + roster to 40 pros
 - Applied broadcast-sheet venue corrections: Texas Open → Courts of
   McKinney (city McKinney); Malibu → Pepperdine University; Sacramento →

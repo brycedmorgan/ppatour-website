@@ -20,12 +20,26 @@ const gotham = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://ppatour-website.vercel.app"),
   title: {
-    default: "PPA Tour — The Pro Tour of Pickleball",
-    template: "%s · PPA Tour",
+    default: "Carvana PPA Tour — The Pro Tour of Pickleball",
+    template: "%s · Carvana PPA Tour",
   },
   description:
-    "The best content, brackets, and streaming experience in professional pickleball. Watch live, follow the pros, and find your next event.",
+    "The best content, scores, and streaming experience in professional pickleball. Watch live, follow the pros, and plan your trip to every main-tour stop.",
+  openGraph: {
+    type: "website",
+    siteName: "Carvana PPA Tour",
+    title: "Carvana PPA Tour — The Pro Tour of Pickleball",
+    description:
+      "Live scores, the points race, the 2026–27 schedule, and trip guides for every main-tour stop.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Carvana PPA Tour",
+    description:
+      "The Pro Tour of Pickleball — live scores, the points race, and every main-tour stop.",
+  },
 };
 
 export default function RootLayout({
