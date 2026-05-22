@@ -37,8 +37,22 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - Verified: build passes (64 routes); /athletes roster grid + profiles
   + homepage rankings all show official headshots.
 - Deployed via `vercel --prod`.
-- **Next:** exact per-event TV mapping from the broadcast sheet
-  (/tmp/tvguide.csv has it).
+- Live: https://ppatour-website.vercel.app
+
+### 2026-05-22 — Exact per-event TV schedule from the sheet
+- Parsed the PPA Championship-Court broadcast sheet → `lib/broadcast.ts`
+  (`eventBroadcasts` keyed by slug, 16 events). Real round-by-round
+  windows: PBTV streams every round; Tennis Channel / FS1 / FS2 / FOX /
+  CBS carry the TV windows (e.g. Vegas QF/SF/Champ on Tennis Channel;
+  Masters Sunday Men's Doubles on CBS + FS1 tape).
+- Event Watch section now renders the real schedule (Round · Day ·
+  Channel · Window) when a slug has sheet data, templated fallback
+  otherwise. Sheet dates align with our calendar.
+- Sheet also has venue corrections worth applying later: Texas Open =
+  Courts of McKinney; Malibu = Pepperdine; Sacramento = Life Time Arden;
+  Newport = Tennis Club at Newport Beach; St. George = Ivins.
+- Verified: build passes (64 routes); Vegas/Cincinnati broadcast tables
+  show real windows. Deployed via `vercel --prod`.
 - Live: https://ppatour-website.vercel.app
 
 ### 2026-05-22 — Real pros (profiles + rankings) + TV guide logos

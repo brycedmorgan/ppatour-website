@@ -3,6 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
+import { getBroadcast } from "@/lib/broadcast";
 import { getEventGuide } from "@/lib/event-guides";
 import { playersToWatch } from "@/lib/home-content";
 import {
@@ -137,6 +138,7 @@ export default async function EventPage({ params }: Params) {
   const countdown = daysUntil(t.startDate);
   const days = buildSchedule(t.startDate, t.endDate);
   const broadcastDays = days.filter((d) => d.live);
+  const broadcast = getBroadcast(t.slug);
   const guide = getEventGuide(t.slug);
   const mapQuery = guide?.mapQuery ?? `${t.venue}, ${t.city}, ${t.state}`;
 
@@ -371,29 +373,55 @@ export default async function EventPage({ params }: Params) {
             YouTube, with the marquee rounds on national TV.
           </p>
 
-          {/* Broadcast schedule */}
+          {/* Broadcast schedule — real windows from the PPA broadcast sheet */}
           <div className="mt-6 overflow-hidden border border-white/10">
-            <div className="grid grid-cols-[1fr_auto_5rem] gap-3 border-b border-white/10 bg-ppa-navy-deep px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
+            <div className="grid grid-cols-[1fr_auto] gap-3 border-b border-white/10 bg-ppa-navy-deep px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
               <span>Round</span>
-              <span>Channel</span>
-              <span className="text-right">Date</span>
+              <span className="text-right">Channel · Window</span>
             </div>
-            {broadcastDays.map((d) => (
-              <div
-                key={d.iso}
-                className="grid grid-cols-[1fr_auto_5rem] items-center gap-3 border-b border-white/5 px-4 py-3 last:border-b-0"
-              >
-                <span className="text-sm font-bold uppercase tracking-wide text-white">
-                  {d.label.replace("Championship Sunday — ", "")}
-                </span>
-                <span className="text-xs font-bold uppercase tracking-[0.1em] text-ppa-sky">
-                  {d.live}
-                </span>
-                <span className="text-right text-sm font-semibold tabular-nums text-white/70">
-                  {d.date}
-                </span>
-              </div>
-            ))}
+            {broadcast.length > 0
+              ? broadcast.map((b, i) => (
+                  <div
+                    key={`${b.round}-${b.platform}-${i}`}
+                    className="grid grid-cols-[1fr_auto] items-center gap-3 border-b border-white/5 px-4 py-3 last:border-b-0"
+                  >
+                    <span>
+                      <span className="block text-sm font-bold uppercase tracking-wide text-white">
+                        {b.round}
+                        {b.type === "TAPE" && (
+                          <span className="ml-1.5 text-[10px] font-bold text-white/40">
+                            (Tape)
+                          </span>
+                        )}
+                      </span>
+                      <span className="block text-[11px] uppercase tracking-wide text-white/40">
+                        {b.day}
+                      </span>
+                    </span>
+                    <span className="text-right">
+                      <span className="block text-xs font-bold uppercase tracking-[0.1em] text-ppa-sky">
+                        {b.platform}
+                        {b.secondary ? ` · ${b.secondary}` : ""}
+                      </span>
+                      <span className="block text-[11px] tabular-nums text-white/45">
+                        {b.window}
+                      </span>
+                    </span>
+                  </div>
+                ))
+              : broadcastDays.map((d) => (
+                  <div
+                    key={d.iso}
+                    className="grid grid-cols-[1fr_auto] items-center gap-3 border-b border-white/5 px-4 py-3 last:border-b-0"
+                  >
+                    <span className="text-sm font-bold uppercase tracking-wide text-white">
+                      {d.label.replace("Championship Sunday — ", "")}
+                    </span>
+                    <span className="text-right text-xs font-bold uppercase tracking-[0.1em] text-ppa-sky">
+                      {d.live} · {d.date}
+                    </span>
+                  </div>
+                ))}
           </div>
 
           {/* How to watch */}
