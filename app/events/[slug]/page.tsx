@@ -8,6 +8,9 @@ import {
   daysUntil,
   formatDate,
   formatDateRange,
+  tierLabel,
+  tierPoints,
+  tierShort,
   tournaments,
 } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
@@ -134,7 +137,15 @@ export default async function EventPage({ params }: Params) {
         <div className="absolute inset-0 scrim-hero" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-9 pt-20">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em]">
-            <span className="bg-ppa-blue px-2 py-0.5">{t.tier}</span>
+            <span className="bg-ppa-blue px-2 py-0.5">
+              {tierShort(t)} · {tierPoints(t).toLocaleString()} PTS
+            </span>
+            {t.presentedBy && (
+              <span className="text-white/70">
+                Presented by {t.presentedBy}
+              </span>
+            )}
+            <span className="text-white/25">/</span>
             <span className="text-ppa-yellow">
               {countdown} {countdown === 1 ? "Day" : "Days"} Out
             </span>
@@ -147,9 +158,7 @@ export default async function EventPage({ params }: Params) {
             <span className="text-white/25">|</span>
             <span>{t.venue}</span>
             <span className="text-white/25">|</span>
-            <span className="text-ppa-yellow">
-              {t.points.toLocaleString()} Ranking Points
-            </span>
+            <span className="text-ppa-yellow">{t.prizeMoney} Purse</span>
           </div>
           <div className="mt-5 flex flex-col gap-2.5 sm:flex-row">
             <a
@@ -203,8 +212,11 @@ export default async function EventPage({ params }: Params) {
           {[
             { k: "Dates", v: formatDateRange(t.startDate, t.endDate) },
             { k: "Venue", v: t.venue },
-            { k: "Ranking Points", v: t.points.toLocaleString(), accent: true },
-            { k: "Tier", v: t.tier },
+            { k: "Total Purse", v: t.prizeMoney, accent: true },
+            {
+              k: tierLabel(t),
+              v: `${tierPoints(t).toLocaleString()} Pts`,
+            },
           ].map((f, i) => (
             <div
               key={f.k}
@@ -303,12 +315,13 @@ export default async function EventPage({ params }: Params) {
                 Divisions
               </p>
               <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-                Five Brackets, {t.points.toLocaleString()} Points
+                Five Brackets, {tierPoints(t).toLocaleString()} Points
               </h2>
               <p className="mt-3 max-w-md text-sm text-ppa-navy/60">
-                Every division at {t.shortName} carries{" "}
-                {t.points.toLocaleString()} ranking points toward the season
-                race, plus amateur, junior, and senior brackets all weekend.
+                Every pro division at {t.shortName} carries{" "}
+                {tierPoints(t).toLocaleString()} ranking points toward the
+                season race, plus amateur, junior, and senior brackets all
+                weekend.
               </p>
               <ul className="mt-5 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-2">
                 {DIVISIONS.map((d) => (
@@ -523,7 +536,7 @@ export default async function EventPage({ params }: Params) {
                 <div className="absolute inset-0 scrim-card" />
                 <div className="relative p-4 text-white">
                   <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/55">
-                    {o.tier}
+                    {tierShort(o)} · {tierPoints(o).toLocaleString()}
                   </p>
                   <p className="mt-0.5 font-display text-base uppercase leading-[1.05]">
                     {o.shortName}

@@ -3,27 +3,37 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { formatDateRange, tournaments } from "@/lib/placeholder-data";
+import {
+  formatDateRange,
+  getMainTourEvents,
+  tierPoints,
+  tierShort,
+  type Tournament,
+} from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
 
-type FilterKey = "all" | "main" | "slam";
+type FilterKey = "all" | "majors" | "cups" | "opens";
 
-const FILTERS: { key: FilterKey; label: string; test: (p: number) => boolean }[] =
-  [
-    { key: "all", label: "All Events", test: () => true },
-    { key: "main", label: "1,000+ Points", test: (p) => p >= 1000 },
-    { key: "slam", label: "Grand Slams", test: (p) => p >= 2000 },
-  ];
+const FILTERS: {
+  key: FilterKey;
+  label: string;
+  test: (t: Tournament) => boolean;
+}[] = [
+  { key: "all", label: "All Main Tour", test: () => true },
+  { key: "majors", label: "Slams & Worlds", test: (t) => tierPoints(t) >= 2000 },
+  { key: "cups", label: "Cups", test: (t) => tierPoints(t) === 1500 },
+  { key: "opens", label: "Opens", test: (t) => tierPoints(t) === 1000 },
+];
 
 /**
- * Schedule grid with a points filter (Connor's ask: "1000+ schedule
- * filter"). Defaults to the 1,000+ main-tour view per the content-first
- * strategy; "Grand Slams" narrows to 2,000-point stops.
+ * Schedule grid. Source is `getMainTourEvents()` — 1,000+ points only, so
+ * Challengers never appear here. The filter narrows within the main tour by
+ * tier (Connor's "1000+ schedule filter" ask + the premium showcase).
  */
 export function ScheduleGrid() {
-  const [filter, setFilter] = useState<FilterKey>("main");
+  const [filter, setFilter] = useState<FilterKey>("all");
   const active = FILTERS.find((f) => f.key === filter)!;
-  const shown = tournaments.filter((t) => active.test(t.points));
+  const shown = getMainTourEvents().filter(active.test);
 
   return (
     <>
@@ -66,11 +76,11 @@ export function ScheduleGrid() {
               {String(i + 1).padStart(2, "0")}
             </span>
             <span className="absolute right-3 top-3 bg-ppa-yellow px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] text-ppa-navy">
-              {t.points.toLocaleString()} Pts
+              {tierShort(t)} · {tierPoints(t).toLocaleString()}
             </span>
             <div className="relative p-4">
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/55">
-                {t.tier}
+                {t.presentedBy ? `Presented by ${t.presentedBy}` : "PPA Tour"}
               </p>
               <Link
                 href={`/events/${t.slug}`}

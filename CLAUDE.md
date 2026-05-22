@@ -20,6 +20,28 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-21 — Premium pass: real tier system + 1,000+-only showcase
+- Goal: world-class premium sports brand; biggest gap = tournament
+  pages; **showcase ONLY 1,000+ events on homepage + schedule.**
+- Researched real PPA tiers: **Worlds 3,000 · Slam 2,000 · Cup 1,500 ·
+  Open 1,000 · Challenger 125–500.** Rebuilt `placeholder-data.ts`
+  around `tierKey` + `TIER_META`, `prizeMoney`, `presentedBy`. Fuller
+  2026 season: 12 main-tour stops (Atlanta Slam, Vegas/Chicago/Dallas/
+  VB Opens, Cincinnati/Malibu/Mesa Cups, Nationals/Masters Slams, World
+  Champs, PPA Finals) + 2 Challengers.
+- **1,000+ only enforced** via `getMainTourEvents()` (the single source
+  for homepage + schedule). Verified: homepage = 6 main-tour cards,
+  schedule = 12, **zero Challengers on either**; Challenger detail pages
+  exist but are unlinked. Schedule filter is now tier-based within the
+  main tour (All / Slams & Worlds / Cups / Opens).
+- **Event pages elevated** (premium): tier badge (`Slam · 2,000 PTS`),
+  "Presented by {partner}", prize-purse in hero + facts band, tier label
+  in facts. Kept sticky tabs, tickets, divisions, champions, schedule.
+- Helpers `tierPoints/tierShort/tierLabel`; consumers (page, ScheduleGrid,
+  events/[slug]) updated. Build passes (35 routes).
+- Live (via `vercel --prod` — git auto-deploy still down):
+  https://ppatour-website.vercel.app
+
 ### 2026-05-21 — Event pages "help & love" + Connor's asks
 - Source: Pickleball Inc tracker (pickleball-inc.vercel.app) — "Pardoe"
   = Connor Pardoe (CEO). His asks for the new site: **no Toys R Us /

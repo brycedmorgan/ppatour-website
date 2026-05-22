@@ -7,8 +7,10 @@ import { ScoreRail } from "@/components/home/ScoreRail";
 import {
   daysUntil,
   formatDateRange,
+  getMainTourEvents,
   getNextTournament,
-  tournaments,
+  tierPoints,
+  tierShort,
 } from "@/lib/placeholder-data";
 import {
   ecosystemNews,
@@ -108,7 +110,7 @@ export default function Home() {
             <span>{next.venue}</span>
             <span className="text-white/25">|</span>
             <span className="text-ppa-yellow">
-              {next.points.toLocaleString()} Ranking Points
+              {tierPoints(next).toLocaleString()} Ranking Points
             </span>
           </div>
 
@@ -368,59 +370,61 @@ export default function Home() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <SectionHead label="2026 Season" title="The Main Tour" />
             <p className="max-w-xs text-sm text-ppa-navy/55 sm:text-right">
-              Every stop carries 1,000+ ranking points — the pros chase the
-              title at all of them.
+              Worlds, Slams, Cups, and Opens — every main-tour stop carries
+              1,000+ ranking points toward the season title.
             </p>
           </div>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {tournaments.map((t, i) => (
-              <article
-                key={t.slug}
-                className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden bg-ppa-navy"
-              >
-                <Image
-                  src={t.image}
-                  alt={t.name}
-                  fill
-                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                  className="will-change-transform object-cover grayscale-[30%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
-                />
-                <div className="absolute inset-0 scrim-card" />
-                <span className="absolute left-3 top-2 font-display text-2xl leading-none text-white/30">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="absolute right-3 top-3 bg-ppa-yellow px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] text-ppa-navy">
-                  {t.points.toLocaleString()} Pts
-                </span>
-                <div className="relative p-4">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/55">
-                    {t.tier}
-                  </p>
-                  <Link
-                    href={`/events/${t.slug}`}
-                    className="mt-0.5 block font-display text-lg uppercase leading-[1.05] text-white after:absolute after:inset-0"
-                  >
-                    {t.shortName}
-                  </Link>
-                  <p className="mt-1 text-xs text-white/60">
-                    {formatDateRange(t.startDate, t.endDate)} · {t.city},{" "}
-                    {t.state}
-                  </p>
-                  <a
-                    href={withUtm(t.ticketsUrl, {
-                      campaign: t.slug,
-                      content: "schedule-buy-tickets",
-                    })}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="relative z-10 mt-3 inline-flex h-8 items-center bg-ppa-blue px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors hover:bg-ppa-blue-deep"
-                  >
-                    Buy Tickets
-                  </a>
-                </div>
-              </article>
-            ))}
+            {getMainTourEvents()
+              .slice(0, 6)
+              .map((t, i) => (
+                <article
+                  key={t.slug}
+                  className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden bg-ppa-navy"
+                >
+                  <Image
+                    src={t.image}
+                    alt={t.name}
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="will-change-transform object-cover grayscale-[30%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                  />
+                  <div className="absolute inset-0 scrim-card" />
+                  <span className="absolute left-3 top-2 font-display text-2xl leading-none text-white/30">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="absolute right-3 top-3 bg-ppa-yellow px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] text-ppa-navy">
+                    {tierShort(t)} · {tierPoints(t).toLocaleString()}
+                  </span>
+                  <div className="relative p-4">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/55">
+                      {t.presentedBy ? `Presented by ${t.presentedBy}` : "PPA Tour"}
+                    </p>
+                    <Link
+                      href={`/events/${t.slug}`}
+                      className="mt-0.5 block font-display text-lg uppercase leading-[1.05] text-white after:absolute after:inset-0"
+                    >
+                      {t.shortName}
+                    </Link>
+                    <p className="mt-1 text-xs text-white/60">
+                      {formatDateRange(t.startDate, t.endDate)} · {t.city},{" "}
+                      {t.state}
+                    </p>
+                    <a
+                      href={withUtm(t.ticketsUrl, {
+                        campaign: t.slug,
+                        content: "schedule-buy-tickets",
+                      })}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="relative z-10 mt-3 inline-flex h-8 items-center bg-ppa-blue px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors hover:bg-ppa-blue-deep"
+                    >
+                      Buy Tickets
+                    </a>
+                  </div>
+                </article>
+              ))}
           </div>
 
           <Link
