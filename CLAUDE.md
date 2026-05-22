@@ -20,6 +20,27 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-22 — Official photo library → 24-pro roster (incl. ALW)
+- Bryce's 2nd Dropbox link WORKED (`dl=1` zip, 4.1 GB, 137 player folders
+  of official studio headshots, 6000×4000). Selected 24 top pros, center-
+  cropped square + downsized to 700px JPEGs (~80–120 KB) → replaced the
+  ppatour.com PNGs in `/public/ppa/pros/` (now lowercase-slug `.jpg`).
+  Did NOT commit the 4.1 GB library — only the 24 selected, optimized.
+- Roster now includes the real stars I was missing: **Anna Leigh Waters
+  (W #1)**, Collin Johns, Gabe Tardio, Dylan Frazier, Riley Newman, Tyra
+  Black, Jay Devilliers, Dekel Bar, Jessie Irvine, Lea Jansen, Paris
+  Todd, Kate Fahey, Megan Dizon, + the earlier set.
+- `lib/athletes.ts` rebuilt (24 pros, real divisions, short original
+  bios). `divisionRankings` + `playersToWatch` updated to real top-5s
+  (ALW #1 in all three women's; Ben Johns #1 men's). Old ppatour PNGs
+  removed.
+- Verified: build passes (64 routes); /athletes roster grid + profiles
+  + homepage rankings all show official headshots.
+- Deployed via `vercel --prod`.
+- **Next:** exact per-event TV mapping from the broadcast sheet
+  (/tmp/tvguide.csv has it).
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-22 — Real pros (profiles + rankings) + TV guide logos
 - **Pro roster:** `lib/athletes.ts` — 13 real PPA pros with official
   headshots (600×600) mirrored from ppatour.com → `/public/ppa/pros/`.
