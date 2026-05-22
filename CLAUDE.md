@@ -39,6 +39,20 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - Deployed via `vercel --prod`.
 - Live: https://ppatour-website.vercel.app
 
+### 2026-05-22 — Venue fixes + roster to 40 pros
+- Applied broadcast-sheet venue corrections: Texas Open → Courts of
+  McKinney (city McKinney); Malibu → Pepperdine University; Sacramento →
+  Life Time Arden; Newport → Tennis Club at Newport Beach; Greater Zion →
+  Ivins, UT. Map queries + Texas guide copy updated.
+- Re-pulled the 4.1 GB media library, processed **16 more pros** (Jack
+  Sock, Tyler Loong, Connor Garnett, Augie Ge, Pablo Tellez, Andre
+  Mercado, Eddie Perez, Jaume Martinez Vich, Kaitlyn Christian, Etta
+  Tuionetoa, Judit Castillo, Genie Erokhina, Rachel Rohrabacher, Callie
+  Smith, Allyce Jones, Lina Padegimaite) → **roster now 40**. Same square-
+  crop/optimize pipeline; only the 40 selected committed (library deleted).
+- Build passes (80 routes). Deployed via `vercel --prod`.
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-22 — Exact per-event TV schedule from the sheet
 - Parsed the PPA Championship-Court broadcast sheet → `lib/broadcast.ts`
   (`eventBroadcasts` keyed by slug, 16 events). Real round-by-round
