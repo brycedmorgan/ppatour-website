@@ -46,6 +46,26 @@ export default async function AthletePage({ params }: Params) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: a.name,
+            jobTitle: "Professional Pickleball Player",
+            nationality: a.country,
+            image: `https://ppatour-website.vercel.app${a.headshot}`,
+            url: `https://ppatour-website.vercel.app/athletes/${a.slug}`,
+            description: a.bio,
+            memberOf: {
+              "@type": "Organization",
+              name: "Carvana PPA Tour",
+              url: "https://ppatour-website.vercel.app",
+            },
+          }),
+        }}
+      />
       {/* Hero */}
       <section className="relative isolate overflow-hidden bg-ppa-navy text-white">
         <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-12 sm:grid-cols-[auto_1fr] sm:items-end sm:py-14">

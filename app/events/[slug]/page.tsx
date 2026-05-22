@@ -176,6 +176,41 @@ export default async function EventPage({ params }: Params) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SportsEvent",
+            name: t.name,
+            sport: "Pickleball",
+            startDate: t.startDate,
+            endDate: t.endDate,
+            eventStatus: "https://schema.org/EventScheduled",
+            eventAttendanceMode:
+              "https://schema.org/MixedEventAttendanceMode",
+            location: {
+              "@type": "Place",
+              name: t.venue,
+              address: t.state ? `${t.city}, ${t.state}` : t.city,
+            },
+            image: `https://ppatour-website.vercel.app${t.image}`,
+            url: `https://ppatour-website.vercel.app/events/${t.slug}`,
+            organizer: {
+              "@type": "Organization",
+              name: "Carvana PPA Tour",
+              url: "https://ppatour-website.vercel.app",
+            },
+            offers: {
+              "@type": "Offer",
+              url: t.ticketsUrl,
+              price: t.ticketPriceFrom,
+              priceCurrency: "USD",
+              availability: "https://schema.org/InStock",
+            },
+          }),
+        }}
+      />
       {/* Hero */}
       <section className="relative isolate flex min-h-[62svh] flex-col justify-end overflow-hidden bg-ppa-navy text-white">
         <Image

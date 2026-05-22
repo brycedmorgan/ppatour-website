@@ -74,6 +74,27 @@ export default function Home() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SportsOrganization",
+            name: "Carvana PPA Tour",
+            alternateName: "Professional Pickleball Association",
+            sport: "Pickleball",
+            url: "https://ppatour-website.vercel.app",
+            logo: "https://ppatour-website.vercel.app/ppa/logos/ppa-horizontal-blue.svg",
+            sameAs: [
+              "https://www.instagram.com/ppatour",
+              "https://x.com/ppatour",
+              "https://www.youtube.com/@ppatour",
+              "https://www.tiktok.com/@ppatour",
+              "https://www.facebook.com/ppatour",
+            ],
+          }),
+        }}
+      />
       {/* ── Hero (event lead) ───────────────────────────────── */}
       <section className="relative isolate flex min-h-[58svh] flex-col justify-end overflow-hidden bg-ppa-navy text-white">
         <Image
