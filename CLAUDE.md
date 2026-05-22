@@ -20,6 +20,20 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-22 — Real Nationals photos (for the Pardoe demo)
+- Bryce: use the photos from pbnationals.com for Nationals. Pulled 4
+  real shots → `/public/ppa/nationals-*.jpg` (hero, action-2, crowd-1/2).
+- Nationals event image → `nationals-action-2.jpg`; added optional
+  `gallery?: string[]` to `Tournament` and a conditional **"The Scene /
+  Inside {event}"** gallery band on `/events/[slug]` (1 wide + 2, real
+  photos) — only renders when an event has a gallery.
+- Homepage hero now uses `next.image` (was hardcoded stock) → leads with
+  the real Nationals crowd shot, matching the "Next Event" label.
+- Verified: build passes; hero + event hero + 3-photo gallery all use
+  the real images.
+- Deployed via `vercel --prod`.
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-21 — Real schedule (ppatour.com/schedule)
 - Pulled the live PPA schedule and replaced placeholder events with the
   real **2026–27 main-tour calendar** (18 stops, Aug 2026 → May 2027):

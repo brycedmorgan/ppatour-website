@@ -44,6 +44,8 @@ export type Tournament = {
   prizeMoney: string;
   presentedBy?: string;
   image: string;
+  /** Optional real-photo gallery (paths under /public). */
+  gallery?: string[];
 };
 
 const TIXR = "https://www.tixr.com/groups/ppa/events/";
@@ -66,7 +68,12 @@ export const tournaments: Tournament[] = [
     tierKey: "slam",
     prizeMoney: "$300,000",
     presentedBy: "Veolia",
-    image: "/ppa/action-singles.jpg",
+    image: "/ppa/nationals-action-2.jpg",
+    gallery: [
+      "/ppa/nationals-hero.jpg",
+      "/ppa/nationals-crowd-1.jpg",
+      "/ppa/nationals-crowd-2.jpg",
+    ],
   },
   {
     slug: "veolia-cincinnati-cup",

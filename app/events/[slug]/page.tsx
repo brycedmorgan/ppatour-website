@@ -257,6 +257,41 @@ export default async function EventPage({ params }: Params) {
         </div>
       </section>
 
+      {/* Gallery — real event photos when available */}
+      {t.gallery && t.gallery.length > 0 && (
+        <section className="bg-ppa-navy">
+          <div className="mx-auto w-full max-w-6xl px-4 py-12">
+            <div className="flex items-center gap-2.5">
+              <span className="h-2 w-2 bg-ppa-blue" />
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
+                The Scene
+              </p>
+            </div>
+            <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
+              Inside {t.shortName}
+            </h2>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              {t.gallery.map((src, i) => (
+                <div
+                  key={src}
+                  className={`group relative aspect-[4/3] overflow-hidden bg-ppa-navy-deep ${
+                    i === 0 ? "sm:col-span-3 sm:aspect-[16/7]" : ""
+                  }`}
+                >
+                  <Image
+                    src={src}
+                    alt={`${t.shortName} — championship action`}
+                    fill
+                    sizes={i === 0 ? "100vw" : "(min-width: 640px) 33vw, 100vw"}
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Order of Play */}
       <section id="schedule" className="scroll-mt-[150px] bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">

@@ -77,12 +77,12 @@ export default function Home() {
       {/* ── Hero (event lead) ───────────────────────────────── */}
       <section className="relative isolate flex min-h-[58svh] flex-col justify-end overflow-hidden bg-ppa-navy text-white">
         <Image
-          src="/ppa/hero-action.jpg"
-          alt="PPA Tour pro action"
+          src={next.image}
+          alt={next.name}
           fill
           priority
           sizes="100vw"
-          className="will-change-transform object-cover object-[62%_center]"
+          className="will-change-transform object-cover object-center"
         />
         <div className="absolute inset-0 scrim-hero" />
         <div className="absolute inset-0 scrim-side" />
