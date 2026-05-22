@@ -21,7 +21,6 @@ import {
   playersToWatch,
   storylines,
 } from "@/lib/home-content";
-import { withUtm } from "@/lib/utm";
 
 /* Confirm tour-wide figures with Bryce (§10 lists 150K fans / 25 events / $5.2M). */
 const STATS = [
@@ -115,22 +114,17 @@ export default function Home() {
           </div>
 
           <div className="mt-5 flex flex-col gap-2.5 sm:flex-row">
-            <a
-              href={withUtm(next.ticketsUrl, {
-                campaign: next.slug,
-                content: "hero-buy-tickets",
-              })}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href={`/events/${next.slug}`}
               className="flex h-11 items-center justify-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:bg-ppa-blue-deep"
             >
-              Buy Tickets — from ${next.ticketPriceFrom}
-            </a>
+              Explore the Event →
+            </Link>
             <Link
               href="/watch"
               className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
             >
-              ▶ Watch Live
+              ▶ How to Watch
             </Link>
           </div>
         </div>
@@ -411,17 +405,9 @@ export default function Home() {
                       {formatDateRange(t.startDate, t.endDate)} · {t.city},{" "}
                       {t.state}
                     </p>
-                    <a
-                      href={withUtm(t.ticketsUrl, {
-                        campaign: t.slug,
-                        content: "schedule-buy-tickets",
-                      })}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="relative z-10 mt-3 inline-flex h-8 items-center bg-ppa-blue px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors hover:bg-ppa-blue-deep"
-                    >
-                      Buy Tickets
-                    </a>
+                    <span className="mt-3 inline-flex h-8 items-center bg-ppa-blue px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors group-hover:bg-ppa-blue-deep">
+                      Event Guide →
+                    </span>
                   </div>
                 </article>
               ))}

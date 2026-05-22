@@ -20,6 +20,31 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-21 — Event pages = the destination (trip + watch hub)
+- Goal: event pages are the main driver (not straight-to-tickets);
+  "Ragnar for those coming, PGA Tour for those at home." For Connor AM.
+- **Drive-to-event-page:** homepage hero CTA → `Explore the Event`
+  (event page); homepage + schedule cards → `Event Guide →` (whole card
+  links to event page, no direct tixr); global ScoreTicker NEXT CTA →
+  `Event Details →` (event page). `getTickerState` now carries
+  `eventSlug` (was `ticketsUrl`). Tickets now convert ON the event page.
+- **Event page rebuilt as a dual-audience hub** (`/events/[slug]`),
+  6 tabs (Overview · Order of Play · Watch · Plan Your Trip · Players ·
+  Tickets):
+  - **Order of Play** — day-by-day with gates + first-serve times + live
+    channel per day (templated from the date range).
+  - **Watch (PGA-style)** — broadcast schedule table (round/channel/date)
+    + how-to-watch cards (FOX/FS1, YouTube, MATCHDAY).
+  - **Plan Your Trip (Ragnar-style)** — `lib/event-guides.ts` per-event:
+    airport + getting there, parking, Where to Stay / Eat / Things to Do,
+    and a **live Google Maps embed** of the venue (keyless `output=embed`).
+    Guides written for all 12 main-tour stops.
+  - Players/Divisions/Champions + Tickets tiers retained.
+- Verified: build passes (35 routes); event page all 6 sections + map
+  iframe render; surfaces drive to event pages.
+- Deployed via `vercel --prod` (git auto-deploy still down).
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-21 — Premium pass: real tier system + 1,000+-only showcase
 - Goal: world-class premium sports brand; biggest gap = tournament
   pages; **showcase ONLY 1,000+ events on homepage + schedule.**

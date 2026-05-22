@@ -1,5 +1,5 @@
+import Link from "next/link";
 import { formatDate, getTickerState } from "@/lib/placeholder-data";
-import { withUtm } from "@/lib/utm";
 
 /**
  * Site-wide score ticker (§9.1). Two modes (LIVE / NEXT), same component.
@@ -38,17 +38,12 @@ export function ScoreTicker() {
             </span>
             <span className="text-white">{state.tournamentName}</span>
             <span className="text-white/55">{formatDate(state.eventDate)}</span>
-            <a
-              href={withUtm(state.ticketsUrl, {
-                campaign: "score-ticker",
-                content: "ticker-buy-tickets",
-              })}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href={`/events/${state.eventSlug}`}
               className="ml-auto text-ppa-yellow hover:text-white"
             >
-              Buy Tickets →
-            </a>
+              Event Details →
+            </Link>
           </>
         )}
       </div>

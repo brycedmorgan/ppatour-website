@@ -345,7 +345,7 @@ export type TickerState =
       mode: "NEXT";
       tournamentName: string;
       eventDate: string;
-      ticketsUrl: string;
+      eventSlug: string;
     };
 
 /**
@@ -359,7 +359,7 @@ export function getTickerState(): TickerState {
     mode: "NEXT",
     tournamentName: next.shortName,
     eventDate: next.startDate,
-    ticketsUrl: next.ticketsUrl,
+    eventSlug: next.slug,
   };
 }
 
