@@ -20,6 +20,27 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-05-21 — Real schedule (ppatour.com/schedule)
+- Pulled the live PPA schedule and replaced placeholder events with the
+  real **2026–27 main-tour calendar** (18 stops, Aug 2026 → May 2027):
+  Nationals (Cary, Slam), Cincinnati Cup, Vegas Open, Chicago Open
+  (Northbrook), Virginia Beach Open, Proton Daytona Open (Pictona/Holly
+  Hill), Malibu Cup, Carvana Masters (Palm Springs), Minneapolis Open
+  (Lakeville), Cape Coral Open, Carvana Mesa Cup, Newport Beach Open,
+  Texas Open (Dallas), Greater Zion Cup (Black Desert/St. George), PPA
+  Open (TBA), Sacramento Open, Atlanta Championships, PPA Finals (San
+  Clemente). Real dates/cities/tiers/presenters. `next event` = Nationals.
+- Kept one real Challenger (Atlanta) in data to keep the 1,000+ filter
+  honest — excluded from homepage/schedule (verified: 18 main-tour slugs,
+  0 Challengers on schedule).
+- `lib/event-guides.ts` rekeyed to the real slugs + 6 new city guides
+  (Daytona, Minneapolis, Cape Coral, Newport Beach, Greater Zion/St.
+  George, Sacramento). ppa-open (TBA) has no guide → trip section
+  gracefully hidden. Empty-state location display fixed.
+- Verified: build passes (40 routes); schedule mirrors ppatour.com.
+- Deployed via `vercel --prod`.
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-21 — Event pages = the destination (trip + watch hub)
 - Goal: event pages are the main driver (not straight-to-tickets);
   "Ragnar for those coming, PGA Tour for those at home." For Connor AM.

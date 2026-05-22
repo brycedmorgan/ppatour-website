@@ -183,7 +183,8 @@ export default async function EventPage({ params }: Params) {
             <span>{formatDateRange(t.startDate, t.endDate)}</span>
             <span className="text-white/25">|</span>
             <span>
-              {t.venue} · {t.city}, {t.state}
+              {t.venue} · {t.city}
+              {t.state ? `, ${t.state}` : ""}
             </span>
             <span className="text-white/25">|</span>
             <span className="text-ppa-yellow">{t.prizeMoney} Purse</span>

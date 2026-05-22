@@ -402,8 +402,8 @@ export default function Home() {
                       {t.shortName}
                     </Link>
                     <p className="mt-1 text-xs text-white/60">
-                      {formatDateRange(t.startDate, t.endDate)} · {t.city},{" "}
-                      {t.state}
+                      {formatDateRange(t.startDate, t.endDate)} · {t.city}
+                      {t.state ? `, ${t.state}` : ""}
                     </p>
                     <span className="mt-3 inline-flex h-8 items-center bg-ppa-blue px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors group-hover:bg-ppa-blue-deep">
                       Event Guide →
