@@ -154,7 +154,7 @@ export const eventGuides: Record<string, EventGuide> = {
     ],
   },
   "veolia-malibu-cup": {
-    mapQuery: "Malibu Racquet Club, Malibu, CA",
+    mapQuery: "Pepperdine University, Malibu, CA",
     airport: "LAX",
     airportNote: "LAX · ~50 min up the PCH",
     gettingThere:
@@ -264,7 +264,7 @@ export const eventGuides: Record<string, EventGuide> = {
     ],
   },
   "newport-beach-open": {
-    mapQuery: "Newport Beach, CA",
+    mapQuery: "Tennis Club at Newport Beach, CA",
     airport: "SNA",
     airportNote: "John Wayne / OC · ~10 min to venue",
     gettingThere:
@@ -286,11 +286,11 @@ export const eventGuides: Record<string, EventGuide> = {
     ],
   },
   "texas-open": {
-    mapQuery: "Brookhaven Country Club, Dallas, TX",
+    mapQuery: "The Courts of McKinney, McKinney, TX",
     airport: "DFW",
-    airportNote: "DFW Intl · ~25 min to venue",
+    airportNote: "DFW Intl · ~35 min to McKinney",
     gettingThere:
-      "DFW and Love Field both serve Dallas; the venue is 25 minutes from either. Rent a car — the metroplex is built for it.",
+      "DFW and Love Field both serve the metroplex; the Courts of McKinney sit about 35 minutes north. Rent a car — north Dallas is built for it, and downtown is an easy hop.",
     parking:
       "Complimentary club parking with valet on finals weekend. Lots open 8:00 AM.",
     hotels: [
@@ -308,7 +308,7 @@ export const eventGuides: Record<string, EventGuide> = {
     ],
   },
   "greater-zion-cup": {
-    mapQuery: "Black Desert Resort, St. George, UT",
+    mapQuery: "Black Desert Resort, Ivins, UT",
     airport: "SGU",
     airportNote: "St. George Regional · ~20 min · or LAS ~2 hr",
     gettingThere:
@@ -330,7 +330,7 @@ export const eventGuides: Record<string, EventGuide> = {
     ],
   },
   "sacramento-open": {
-    mapQuery: "Sacramento, CA",
+    mapQuery: "Life Time Arden, Sacramento, CA",
     airport: "SMF",
     airportNote: "Sacramento Intl · ~20 min to venue",
     gettingThere:
