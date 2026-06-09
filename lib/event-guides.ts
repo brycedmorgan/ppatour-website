@@ -395,6 +395,28 @@ export const eventGuides: Record<string, EventGuide> = {
       { name: "Trestles", tag: "Surf", note: "World-famous break next door" },
     ],
   },
+  "pickleball-world-championships": {
+    mapQuery: "Brookhaven Country Club, Farmers Branch, TX",
+    airport: "DFW",
+    airportNote: "DFW Intl · ~15 min to venue",
+    gettingThere:
+      "DFW lands you 15 minutes from the venue — the easiest fly-in on the calendar. Love Field is 20 min south. Rent a car; the metroplex is built for it.",
+    parking:
+      "Club parking on-site with finals-weekend valet. Lots open 8:00 AM; expect premium lots to fill early on Sunday.",
+    hotels: [
+      { name: "Hotel Crescent Court", tag: "City Luxury", note: "Uptown Dallas · 20 min · tour rate" },
+      { name: "The Westin Galleria", tag: "Near Venue", note: "10 min north · shopping + skyline" },
+    ],
+    dining: [
+      { name: "Pecan Lodge", tag: "BBQ", note: "Brisket worth the line" },
+      { name: "Uchi", tag: "Sushi", note: "Uptown tasting menu" },
+      { name: "Monarch", tag: "Upscale", note: "49th-floor skyline dining" },
+    ],
+    doing: [
+      { name: "Galleria Dallas", tag: "Indoor", note: "Mall + indoor ice rink · 5 min" },
+      { name: "Reunion Tower", tag: "Views", note: "GeO-Deck over the downtown skyline" },
+    ],
+  },
 };
 
 export function getEventGuide(slug: string): EventGuide | undefined {

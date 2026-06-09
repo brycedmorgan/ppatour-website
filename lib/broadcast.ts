@@ -153,6 +153,15 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
     { round: "SF's", day: "Saturday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
     { round: "Championship", day: "Sunday", window: "1PM ET - 7PM ET", platform: "PBTV", type: "LIVE" },
   ],
+  "pickleball-world-championships": [
+    { round: "RD 64", day: "Tuesday", window: "11AM ET - 7PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "RD 32", day: "Wednesday", window: "11AM ET - 10PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "Celebrity Pro-Am", day: "Wednesday", window: "8PM ET - 10PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
+    { round: "RD 16", day: "Thursday", window: "11AM ET - 7PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "QF's", day: "Friday", window: "11AM ET - 7PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "SF's", day: "Saturday", window: "10AM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "Championship", day: "Sunday", window: "11AM ET - 5PM ET", platform: "PBTV", type: "LIVE" },
+  ],
 };
 
 export function getBroadcast(slug: string): BroadcastSlot[] {
