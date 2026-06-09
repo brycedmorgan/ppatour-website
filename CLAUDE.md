@@ -39,6 +39,26 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - Deployed via `vercel --prod`.
 - Live: https://ppatour-website.vercel.app
 
+### 2026-05-22 — ppatour.com 1:1 audit → 11 new content pages
+- Pulled `ppatour.com/sitemap.xml` (37 static pages) and audited 1:1.
+- Built **11 new real /about/* pages** with PPA-accurate content (the
+  ones the footer + nav linked into ComingSoon):
+  - `/about/pro-tour` — pro-tour overview with stats band + tier table.
+  - `/about/history` — National Champions year-by-year table + timeline.
+  - `/about/host-tournament` — three-step venue bid funnel.
+  - `/about/private-events` — corporate pro-am / hospitality formats.
+  - `/about/ambassadors` + `/about/international-ambassadors` — programs
+    with perks and regions.
+  - `/about/careers` — six-team hiring grid.
+  - `/about/contact` — eight-area email directory.
+  - `/about/integrity` — confidential reporting w/ principles.
+  - `/about/privacy` + `/about/terms` — plain-English legal pages.
+  - `/about/player-handbook` — six-section pro/amateur rule reference.
+- Header About submenu expanded (Pro Tour, Tournament History, Contact);
+  sitemap.ts lists all new routes.
+- Build passes (95 routes). Deployed via `vercel --prod`.
+- Live: https://ppatour-website.vercel.app
+
 ### 2026-05-22 — Deeper standings + SEO/Open Graph
 - Points Race extended to **top-8 per division** (all 6) using the
   40-pro roster — fuller, real standings.

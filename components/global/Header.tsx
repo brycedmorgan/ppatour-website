@@ -32,9 +32,12 @@ const NAV_ITEMS: NavItem[] = [
     label: "About",
     submenu: [
       { label: "About the PPA Tour", href: "/about" },
-      { label: "Sponsors", href: "/about/sponsors" },
+      { label: "The Pro Tour", href: "/about/pro-tour" },
+      { label: "Tournament History", href: "/about/history" },
       { label: "How It Works", href: "/about/how-it-works" },
+      { label: "Sponsors", href: "/about/sponsors" },
       { label: "What is Pickleball?", href: "/about/what-is-pickleball" },
+      { label: "Contact", href: "/about/contact" },
     ],
   },
   {
