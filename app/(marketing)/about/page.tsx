@@ -13,26 +13,19 @@ const STATS = [
 ];
 
 const LINKS = [
-  {
-    label: "Sponsors",
-    href: "/about/sponsors",
-    blurb: "Title partner, official partners, and the brands powering the tour.",
-  },
-  {
-    label: "How It Works",
-    href: "/about/how-it-works",
-    blurb: "Ranking points, brackets, divisions, and the path to Nationals.",
-  },
-  {
-    label: "What is Pickleball?",
-    href: "/about/what-is-pickleball",
-    blurb: "The fastest-growing sport in America, explained in 90 seconds.",
-  },
-  {
-    label: "Careers",
-    href: "/about/careers",
-    blurb: "Help build the pro tour of pickleball.",
-  },
+  { label: "The Pro Tour", href: "/about/pro-tour", blurb: "The eighteen-stop main tour, the tier system, and how a season runs." },
+  { label: "How It Works", href: "/about/how-it-works", blurb: "Ranking points, brackets, divisions, and the path to Nationals." },
+  { label: "Tournament History", href: "/about/history", blurb: "National Champions year-by-year and the tour's milestones." },
+  { label: "What is Pickleball?", href: "/about/what-is-pickleball", blurb: "The fastest-growing sport in America, explained in 90 seconds." },
+  { label: "Sponsors", href: "/about/sponsors", blurb: "Title partner, official partners, and the brands powering the tour." },
+  { label: "Player Handbook", href: "/about/player-handbook", blurb: "Rules, format, code of conduct, and equipment." },
+  { label: "Ambassadors", href: "/about/ambassadors", blurb: "The community program — creators, club owners, coaches." },
+  { label: "International Ambassadors", href: "/about/international-ambassadors", blurb: "The growing global PPA Tour Ambassador network." },
+  { label: "Host a Tournament", href: "/about/host-tournament", blurb: "For venues and cities — bid for a main-tour stop." },
+  { label: "Private Events", href: "/about/private-events", blurb: "For brands — pro-ams, hospitality suites, and activations." },
+  { label: "Careers", href: "/about/careers", blurb: "Help build the pro tour of pickleball." },
+  { label: "Contact", href: "/about/contact", blurb: "The right email for every kind of inquiry." },
+  { label: "Integrity Reporting", href: "/about/integrity", blurb: "Confidential channel for match-conduct and integrity concerns." },
 ];
 
 export default function AboutPage() {
