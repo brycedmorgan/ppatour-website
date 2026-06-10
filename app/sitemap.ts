@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/watch",
     "/play",
     "/athletes",
+    "/rankings",
     "/news",
     "/about",
     "/about/pro-tour",

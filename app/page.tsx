@@ -24,10 +24,49 @@ import {
 
 /* Confirm tour-wide figures with Bryce (§10 lists 150K fans / 25 events / $5.2M). */
 const STATS = [
-  { n: "25", label: "Tour Stops" },
-  { n: "$5.2M", label: "Prize Money" },
-  { n: "12", label: "Countries" },
+  { n: "19", label: "Tour Stops" },
+  { n: "$2.4M+", label: "Season Purse" },
+  { n: "4M+", label: "Sessions / Quarter" },
   { n: "150K+", label: "Fans In Arena" },
+];
+
+const LANES = [
+  {
+    href: "/watch",
+    image: "/ppa/action-champ-sunday.jpg",
+    kicker: "For Fans",
+    title: "Watch",
+    blurb: "Live streams, brackets, broadcast schedule.",
+  },
+  {
+    href: "/events",
+    image: "/ppa/action-waters-bright.jpg",
+    kicker: "For Fans",
+    title: "Tickets",
+    blurb: "Be in the arena at every main-tour stop.",
+  },
+  {
+    href: "/rankings",
+    image: "/ppa/action-mxd.jpg",
+    kicker: "For Fans",
+    title: "Follow",
+    blurb: "Athletes, rankings, the season-long race.",
+  },
+  {
+    href: "/play",
+    image: "/ppa/action-singles.jpg",
+    kicker: "For Players",
+    title: "Play",
+    blurb: "Register for an amateur bracket at any stop.",
+  },
+  {
+    href: "/about/sponsors",
+    image: "/ppa/action-md-final.jpg",
+    kicker: "For Brands",
+    title: "Sponsor",
+    blurb: "Title, presenting, and category partnerships.",
+    highlight: true,
+  },
 ];
 
 const BROADCAST: { name: string; note: string; logo?: string }[] = [
@@ -159,6 +198,49 @@ export default function Home() {
           </div>
         </div>
         <div className="relative h-1 bg-ppa-blue" />
+      </section>
+
+      {/* ── Five-Audience Lanes (Watch · Tickets · Follow · Play · Sponsor) ── */}
+      <section className="grid sm:grid-cols-2 lg:grid-cols-5">
+        {LANES.map((lane) => (
+          <Link
+            key={lane.href}
+            href={lane.href}
+            className="group relative isolate flex aspect-[4/5] flex-col justify-end overflow-hidden bg-ppa-navy lg:aspect-auto lg:min-h-[18rem]"
+          >
+            <Image
+              src={lane.image}
+              alt=""
+              fill
+              sizes="(min-width: 1024px) 20vw, (min-width: 640px) 50vw, 100vw"
+              className="will-change-transform object-cover grayscale-[25%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+            />
+            <div className="absolute inset-0 scrim-hero" />
+            {lane.highlight && (
+              <span className="absolute right-4 top-4 bg-ppa-yellow px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-ppa-navy">
+                Premium
+              </span>
+            )}
+            <div className="relative w-full p-5 text-white">
+              <p
+                className={`text-[10px] font-bold uppercase tracking-[0.2em] ${
+                  lane.highlight ? "text-ppa-yellow" : "text-ppa-sky"
+                }`}
+              >
+                {lane.kicker}
+              </p>
+              <h3 className="mt-0.5 font-display text-3xl uppercase leading-none">
+                {lane.title}
+              </h3>
+              <p className="mt-1.5 text-xs leading-relaxed text-white/70">
+                {lane.blurb}
+              </p>
+              <span className="mt-2.5 inline-block text-[10px] font-bold uppercase tracking-[0.12em] text-white transition-colors group-hover:text-ppa-yellow">
+                Enter →
+              </span>
+            </div>
+          </Link>
+        ))}
       </section>
 
       {/* ── Stat band ───────────────────────────────────────── */}
@@ -529,53 +611,6 @@ export default function Home() {
             Start Watching →
           </Link>
         </div>
-      </section>
-
-      {/* ── Watch / Play ────────────────────────────────────── */}
-      <section className="grid sm:grid-cols-2">
-        {[
-          {
-            href: "/watch",
-            image: "/ppa/action-champ-sunday.jpg",
-            kicker: "For Fans",
-            title: "Watch",
-            blurb: "Live streams, brackets, and the pros.",
-          },
-          {
-            href: "/play",
-            image: "/ppa/action-singles.jpg",
-            kicker: "For Players",
-            title: "Play",
-            blurb: "Register for an amateur event and compete.",
-          },
-        ].map((card) => (
-          <Link
-            key={card.href}
-            href={card.href}
-            className="group relative isolate flex min-h-[14rem] items-end overflow-hidden bg-ppa-navy"
-          >
-            <Image
-              src={card.image}
-              alt=""
-              fill
-              sizes="(min-width: 640px) 50vw, 100vw"
-              className="will-change-transform object-cover grayscale-[25%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
-            />
-            <div className="absolute inset-0 scrim-hero" />
-            <div className="relative w-full p-6 text-white">
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-sky">
-                {card.kicker}
-              </p>
-              <h3 className="mt-0.5 font-display text-3xl uppercase leading-none sm:text-4xl">
-                {card.title}
-              </h3>
-              <p className="mt-1 text-sm text-white/65">{card.blurb}</p>
-              <span className="mt-2 inline-block text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors group-hover:text-ppa-yellow">
-                Enter →
-              </span>
-            </div>
-          </Link>
-        ))}
       </section>
 
       {/* ── Partners ────────────────────────────────────────── */}
