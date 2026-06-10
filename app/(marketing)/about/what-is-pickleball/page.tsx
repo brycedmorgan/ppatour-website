@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
+import { PickleballIn90 } from "@/components/home/PickleballIn90";
 
 export const metadata: Metadata = { title: "What is Pickleball?" };
 
@@ -60,8 +61,27 @@ export default function WhatIsPickleballPage() {
         </div>
       </section>
 
-      {/* Basics — Q&A */}
+      {/* Pickleball in 90 seconds — swipeable explainer */}
       <section className="bg-white">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
+            Pickleball in 90 Seconds
+          </p>
+          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+            Swipe Through the Whole Sport
+          </h2>
+          <p className="mt-2 max-w-xl text-sm text-ppa-navy/55">
+            Seven cards — the court, the net, the rules, scoring. Enough to
+            follow any match on TV by the time you finish.
+          </p>
+          <div className="mt-6">
+            <PickleballIn90 />
+          </div>
+        </div>
+      </section>
+
+      {/* Basics — Q&A */}
+      <section className="bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
             The Basics
