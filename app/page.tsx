@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
+import { CountUp } from "@/components/motion/CountUp";
 import { PartnerSpotlight } from "@/components/home/PartnerSpotlight";
 import { PointsRace } from "@/components/home/PointsRace";
 import { ScoreRail } from "@/components/home/ScoreRail";
@@ -94,7 +95,7 @@ function SectionHead({
   dark?: boolean;
 }) {
   return (
-    <div>
+    <div data-reveal>
       <div className="flex items-center gap-2.5">
         <span className="h-2 w-2 bg-ppa-blue" />
         <p
@@ -151,13 +152,16 @@ export default function Home() {
           fill
           priority
           sizes="100vw"
-          className="will-change-transform object-cover object-center"
+          className="animate-kenburns will-change-transform object-cover object-center motion-reduce:animate-none"
         />
         <div className="absolute inset-0 scrim-hero" />
         <div className="absolute inset-0 scrim-side" />
 
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-9 pt-20">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em]">
+          <div
+            className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em] motion-safe:animate-rise"
+            style={{ animationDelay: "80ms" }}
+          >
             <span className="bg-ppa-blue px-2 py-0.5">Next Event</span>
             <span className="text-white/70">
               {next.city}, {next.state}
@@ -168,11 +172,17 @@ export default function Home() {
             </span>
           </div>
 
-          <h1 className="mt-3 max-w-[18ch] font-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98]">
+          <h1
+            className="mt-3 max-w-[18ch] font-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98] motion-safe:animate-rise"
+            style={{ animationDelay: "160ms" }}
+          >
             {next.shortName}
           </h1>
 
-          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold uppercase tracking-wide text-white/75">
+          <div
+            className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold uppercase tracking-wide text-white/75 motion-safe:animate-rise"
+            style={{ animationDelay: "240ms" }}
+          >
             <span>{formatDateRange(next.startDate, next.endDate)}</span>
             <span className="text-white/25">|</span>
             <span>{next.venue}</span>
@@ -182,7 +192,10 @@ export default function Home() {
             </span>
           </div>
 
-          <div className="mt-5 flex flex-col gap-2.5 sm:flex-row">
+          <div
+            className="mt-5 flex flex-col gap-2.5 sm:flex-row motion-safe:animate-rise"
+            style={{ animationDelay: "320ms" }}
+          >
             <Link
               href={`/events/${next.slug}`}
               className="flex h-11 items-center justify-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:bg-ppa-blue-deep"
@@ -202,10 +215,12 @@ export default function Home() {
 
       {/* ── Five-Audience Lanes (Watch · Tickets · Follow · Play · Sponsor) ── */}
       <section className="grid sm:grid-cols-2 lg:grid-cols-5">
-        {LANES.map((lane) => (
+        {LANES.map((lane, i) => (
           <Link
             key={lane.href}
             href={lane.href}
+            data-reveal
+            style={{ "--reveal-delay": `${i * 70}ms` } as React.CSSProperties}
             className="group relative isolate flex aspect-[4/5] flex-col justify-end overflow-hidden bg-ppa-navy lg:aspect-auto lg:min-h-[18rem]"
           >
             <Image
@@ -249,6 +264,8 @@ export default function Home() {
           {STATS.map((s, i) => (
             <div
               key={s.label}
+              data-reveal
+              style={{ "--reveal-delay": `${i * 90}ms` } as React.CSSProperties}
               className={`px-2 py-6 ${
                 i % 2 === 1 ? "border-l border-white/10" : ""
               } ${i >= 2 ? "border-t border-white/10 md:border-t-0" : ""} ${
@@ -256,7 +273,7 @@ export default function Home() {
               }`}
             >
               <p className="font-display text-3xl leading-none text-white sm:text-4xl">
-                {s.n}
+                <CountUp value={s.n} />
               </p>
               <p className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
                 {s.label}
@@ -487,7 +504,9 @@ export default function Home() {
               .map((t, i) => (
                 <article
                   key={t.slug}
-                  className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden bg-ppa-navy"
+                  data-reveal
+                  style={{ "--reveal-delay": `${(i % 3) * 90}ms` } as React.CSSProperties}
+                  className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden bg-ppa-navy transition-transform duration-500 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1"
                 >
                   <Image
                     src={t.image}
@@ -517,8 +536,14 @@ export default function Home() {
                       {formatDateRange(t.startDate, t.endDate)} · {t.city}
                       {t.state ? `, ${t.state}` : ""}
                     </p>
-                    <span className="mt-3 inline-flex h-8 items-center bg-ppa-blue px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors group-hover:bg-ppa-blue-deep">
-                      Event Guide →
+                    <span className="mt-3 inline-flex h-8 items-center gap-1.5 bg-ppa-blue px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors group-hover:bg-ppa-blue-deep">
+                      Event Guide
+                      <span
+                        aria-hidden
+                        className="transition-transform duration-300 group-hover:translate-x-0.5"
+                      >
+                        →
+                      </span>
                     </span>
                   </div>
                 </article>

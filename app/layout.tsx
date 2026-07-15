@@ -5,6 +5,7 @@ import { ScoreTicker } from "@/components/global/ScoreTicker";
 import { Header } from "@/components/global/Header";
 import { SiteFooter } from "@/components/global/SiteFooter";
 import { CookieBanner } from "@/components/global/CookieBanner";
+import { ScrollReveal } from "@/components/motion/ScrollReveal";
 
 /* Official brand font (Carvana PPA Tour brand guide): Gotham, used for both
    body and headlines (Gotham Black). Single-typeface system. */
@@ -60,6 +61,7 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <SiteFooter />
         <CookieBanner />
+        <ScrollReveal />
       </body>
     </html>
   );

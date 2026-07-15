@@ -61,7 +61,9 @@ export function ScheduleGrid() {
         {shown.map((t, i) => (
           <article
             key={t.slug}
-            className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden bg-ppa-navy"
+            data-reveal
+            style={{ "--reveal-delay": `${(i % 3) * 90}ms` } as React.CSSProperties}
+            className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden bg-ppa-navy transition-transform duration-500 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1"
           >
             <Image
               src={t.image}
