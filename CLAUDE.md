@@ -20,6 +20,16 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-15 (pt. 5) — Per-event payout → full totals (Bryce's call)
+- Bryce wants the biggest true number per event: prizeMoney now shows
+  **prize money + appearance fees** per tier — Slams/Worlds $1,648,641
+  · Cups $1,271,734 · Opens $1,063,327 · Finals $1,252,241 (official
+  2026 tier totals from ppatour.com/how-it-works).
+- Labels reframed honestly: event hero "{X} On the Line" · quick facts
+  + What's-at-Stake tile "Prize Money & Fees" (note: "incl. appearance
+  fees") · stakes copy "the tour puts {X} behind this event."
+- Season stat stays "$5.2M+ Prize Money & Fees."
+
 ### 2026-07-15 (pt. 4) — Sponsorship front door (commit `43545e0`)
 - **Full-bleed pass (Bryce's ask):** homepage ScoreRail + PartnerSpotlight banner +
   sponsor logo marquee now run edge-to-edge; section headings stay capped at max-w-6xl.
