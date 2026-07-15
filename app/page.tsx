@@ -28,7 +28,7 @@ import {
 /* Confirm tour-wide figures with Bryce (§10 lists 150K fans / 25 events / $5.2M). */
 const STATS = [
   { n: "19", label: "Tour Stops" },
-  { n: "$2.4M+", label: "Season Purse" },
+  { n: "$5.2M+", label: "Prize Money & Fees" },
   { n: "4M+", label: "Sessions / Quarter" },
   { n: "150K+", label: "Fans In Arena" },
 ];

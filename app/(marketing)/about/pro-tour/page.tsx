@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "The Pro Tour" };
 const STATS = [
   { n: "18", label: "Main-Tour Stops" },
   { n: "5", label: "Pro Divisions" },
-  { n: "$2.4M+", label: "Season Purse" },
+  { n: "$5.2M+", label: "Prize Money & Fees" },
   { n: "150K+", label: "Fans In-Arena" },
 ];
 
