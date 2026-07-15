@@ -20,6 +20,35 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-14 — Fable 5 audit vs Tyler/Wesley combined review + QA cleanup
+- Audited the build against Tyler's combined review doc (Option A gap
+  analysis + Wesley's QA). All major claims confirmed in code; three
+  parallel audit agents produced file:line findings.
+- **Shipped (commit `54c7112`, pushed → auto-deploy):** working site
+  search (`lib/search-index.ts` static index over events/athletes/
+  programs/news/pages + `/search` client UI — replaces ComingSoon stub);
+  Rankings added to header nav; footer "Leaderboard" repointed
+  `/athletes`→`/rankings`; PickleballTV added as lead Where-to-Watch
+  card on `/watch`; ScoreTicker mobile overflow fixed (truncate + hide
+  date + overflow-hidden); ScoreRail static on touch devices
+  (`pointer: coarse` — no more unstoppable auto-scroll); footer tixr +
+  pickleballtournaments links now carry UTMs; CookieBanner lint fix
+  (useSyncExternalStore); dead code removed (Gobold font, orphan
+  `(content)/news`, empty component scaffold dirs).
+- **Still open from the review (the big ones):** commerce deep links —
+  every event still shares generic `TIXR`/`REGISTER` constants in
+  `lib/placeholder-data.ts:51-52`; needs real per-event tixr event URLs
+  + pickleballtournaments registration URLs (Wesley's API lane; the
+  `Tournament` type already has per-event `ticketsUrl`/`registerUrl`
+  fields, so it's a data swap, zero component changes). Events page is
+  upcoming-main-tour only (no past/Challenger/international data
+  exists yet, no text search on the grid). Sticky mobile buy bar,
+  scarcity, /play rebuild, testimonials/FAQs per the Friday punch list.
+- Build 97 routes clean, eslint clean; search verified with real
+  queries (nationals/vegas/anna leigh/cary) via tsx.
+- Review deadline: site review-ready **Friday 7/17 EOD** (email thread
+  with Tyler + Wesley has the owner-assigned punch list).
+
 ### 2026-05-22 — Official photo library → 24-pro roster (incl. ALW)
 - Bryce's 2nd Dropbox link WORKED (`dl=1` zip, 4.1 GB, 137 player folders
   of official studio headshots, 6000×4000). Selected 24 top pros, center-
