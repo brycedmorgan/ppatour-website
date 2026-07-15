@@ -20,6 +20,21 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-15 (pt. 7) — Coverage↔events linking + Event Report spec (Jackalope)
+- `NewsArticle.eventSlug` ties coverage to tour stops; 6 articles
+  tagged (Vegas ×2, Atlanta ×2, Chicago, Virginia Beach). Event pages
+  get a **Coverage** section + tab when articles exist — "Story So
+  Far" pre-event, "Relive {event}" when `status: "completed"`; hero
+  countdown reads "Final" once completed. The archive state activates
+  automatically when events complete (Wesley's API sets status).
+- **Jackalope**: `ziff/docs/EVENT-REPORT-SPEC.md` — one Event Report
+  record per stop renders both the public site recap AND the
+  per-sponsor recap (Connor's auto-recap ask). Private layers
+  (activations, Hive valuation, ticket revenue) never reach the site.
+  Bryce's framing: this is the knowledge base of tour history.
+- Still open for the Events page (#3): past/Challenger/international
+  event DATA — the archive UI is ready, the records don't exist yet.
+
 ### 2026-07-15 (pt. 6) — Newsroom: 15 real articles + article pages
 - Every news headline now opens a real article. `lib/news-articles.ts`
   holds 15 written pieces (recaps, analysis, features, explainers,
