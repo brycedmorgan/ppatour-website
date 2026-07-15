@@ -80,8 +80,9 @@ export const tournaments: Tournament[] = [
     tierKey: "slam",
     prizeMoney: "$300,000",
     presentedBy: "Veolia",
-    image: "/ppa/nationals-drone-stadium.jpg",
+    image: "/ppa/nationals-drone-champcourt.jpg",
     gallery: [
+      "/ppa/nationals-drone-stadium.jpg",
       "/ppa/nationals-crowd-stadium.jpg",
       "/ppa/nationals-drone-sunset.jpg",
       "/ppa/nationals-crowd-branded.jpg",

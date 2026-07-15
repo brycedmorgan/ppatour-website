@@ -252,7 +252,7 @@ export default async function EventPage({ params }: Params) {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center"
+          className="animate-kenburns will-change-transform object-cover object-center motion-reduce:animate-none"
         />
         <div className="absolute inset-0 scrim-hero" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-10 pt-20">
