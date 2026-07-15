@@ -20,6 +20,26 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-15 (pt. 2) — New Nationals hero + Ken Burns; full TV schedule page
+- **Nationals hero** swapped to Bryce's overhead champ-court drone shot
+  (`nationals-drone-champcourt.jpg`); previous drone shot moved to the
+  gallery (now 9 photos). **Ken Burns drift added to all event-page
+  heroes** (same `animate-kenburns` as homepage; drone video is the
+  future replacement).
+- **TV schedule page** `/watch/tv` built from the Google broadcast
+  sheet (2026 PPA/MLP Championship Court, as of 6/30): remaining
+  season transcribed into `lib/tv-schedule.ts` — 9 events (Nationals →
+  Malibu, incl. MLP Cup). Rest of year is **PBTV + Tennis Channel
+  only** (confirmed vs sheet; Nationals Sunday = TC 11AM–4PM ET ✓;
+  existing per-event `lib/broadcast.ts` Nationals entry already
+  matched). Filter pills (All / TC / PBTV), TC rows highlighted,
+  event-page links, PBTV + find-Tennis-Channel CTAs.
+- /watch "FOX & FS1" card → "Tennis Channel" → /watch/tv (no FOX
+  windows remain); Events mega panel gains TV Schedule link.
+- **Data source note:** sheet is public-readable CSV
+  (`export?format=csv&gid=476669390`) — a build-time fetch or cron
+  could auto-sync `tv-schedule.ts` later (Wesley's API lane).
+
 ### 2026-07-15 — Nationals real photography + flip-through gallery; Tyler's deep links landed
 - **Nationals imagery (commit `2cafbc4`):** hero swapped to the drone
   shot of a packed center court at Cary Tennis Park (from Bryce's
