@@ -312,8 +312,9 @@ export default function Home() {
       </section>
 
       {/* ── Live & Latest scores ───────────────────────────── */}
-      <section className="bg-white">
-        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+      {/* Score rail runs full-bleed; only the heading + caption stay capped. */}
+      <section className="bg-white py-12">
+        <div className="mx-auto w-full max-w-6xl px-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <SectionHead label="Scores" title="Live & Latest" />
             <Link
@@ -324,14 +325,14 @@ export default function Home() {
               <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
           </div>
-
-          <div className="mt-6">
-            <ScoreRail />
-            <p className="mt-3 text-[11px] uppercase tracking-[0.12em] text-ppa-navy/35">
-              Auto-scrolling · hover to pause · drag to browse
-            </p>
-          </div>
         </div>
+
+        <div className="mt-6 w-full">
+          <ScoreRail />
+        </div>
+        <p className="mx-auto mt-3 w-full max-w-6xl px-4 text-[11px] uppercase tracking-[0.12em] text-ppa-navy/35">
+          Auto-scrolling · hover to pause · drag to browse
+        </p>
       </section>
 
       {/* ── Top Storylines ──────────────────────────────────── */}
@@ -679,50 +680,70 @@ export default function Home() {
       </section>
 
       {/* ── Partners ────────────────────────────────────────── */}
-      <section className="bg-ppa-paper">
-        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+      {/* Spotlight banner + logo marquee run full-bleed; heading + CTA stay capped. */}
+      <section className="bg-ppa-paper py-12">
+        <div className="mx-auto w-full max-w-6xl px-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <SectionHead label="Partners" title="Powering the Tour" />
             <Link
-              href="/about"
+              href="/about/sponsors#inquire"
               className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
             >
               Partnership Opportunities →
             </Link>
           </div>
+        </div>
 
-          <div className="mt-6">
-            <PartnerSpotlight />
+        <div className="mt-6 w-full px-4 sm:px-6 lg:px-10">
+          <PartnerSpotlight />
+        </div>
+
+        {/* Logo marquee — auto-scrolls, pauses on hover */}
+        <div
+          className="group mt-4 w-full overflow-hidden border-y border-ppa-line bg-white py-5"
+          style={{
+            maskImage:
+              "linear-gradient(to right, transparent, #000 6%, #000 94%, transparent)",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent, #000 6%, #000 94%, transparent)",
+          }}
+        >
+          <div className="flex w-max items-center gap-14 animate-marquee motion-reduce:animate-none group-hover:[animation-play-state:paused]">
+            {[...partners, ...partners].map((p, idx) => (
+              <div
+                key={idx}
+                className="flex h-10 shrink-0 items-center justify-center"
+                title={`${p.name} — ${p.role}`}
+              >
+                <Image
+                  src={p.logo}
+                  alt={p.name}
+                  width={p.logoWidth}
+                  height={p.logoHeight}
+                  className="max-h-10 w-auto max-w-[140px] object-contain"
+                />
+              </div>
+            ))}
           </div>
+        </div>
 
-          {/* Logo marquee — auto-scrolls, pauses on hover */}
-          <div
-            className="group mt-4 overflow-hidden border-y border-ppa-line bg-white py-5"
-            style={{
-              maskImage:
-                "linear-gradient(to right, transparent, #000 6%, #000 94%, transparent)",
-              WebkitMaskImage:
-                "linear-gradient(to right, transparent, #000 6%, #000 94%, transparent)",
-            }}
+        {/* Sponsorship CTA — the front door to the inquiry form */}
+        <div className="mx-auto mt-10 w-full max-w-6xl px-4 text-center" data-reveal>
+          <p className="text-sm text-ppa-navy/60">
+            Your brand, in front of the fastest-growing sport in America.
+          </p>
+          <Link
+            href="/about/sponsors#inquire"
+            className="group mt-4 inline-flex h-12 items-center justify-center gap-1.5 bg-ppa-blue px-8 text-xs font-bold uppercase tracking-[0.12em] text-white transition hover:bg-ppa-blue-deep active:scale-[0.98]"
           >
-            <div className="flex w-max items-center gap-14 animate-marquee motion-reduce:animate-none group-hover:[animation-play-state:paused]">
-              {[...partners, ...partners].map((p, idx) => (
-                <div
-                  key={idx}
-                  className="flex h-10 shrink-0 items-center justify-center"
-                  title={`${p.name} — ${p.role}`}
-                >
-                  <Image
-                    src={p.logo}
-                    alt={p.name}
-                    width={p.logoWidth}
-                    height={p.logoHeight}
-                    className="max-h-10 w-auto max-w-[140px] object-contain"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+            Find Out What Sponsoring the PPA Tour & Pickleball Is All About
+            <span
+              aria-hidden
+              className="transition-transform duration-300 group-hover:translate-x-0.5"
+            >
+              →
+            </span>
+          </Link>
         </div>
       </section>
 
