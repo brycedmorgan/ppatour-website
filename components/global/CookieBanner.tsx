@@ -13,6 +13,11 @@ function subscribe(onChange: () => void) {
 /**
  * Compliance-minimum cookie banner (§9.4). One-line, footer-anchored,
  * never overlays content. Dismissed state persists for 365 days.
+ *
+ * The stored value drives Google Consent Mode v2 (see Analytics.tsx):
+ * "granted" enables analytics cookies; "denied" keeps GA4 on cookieless
+ * modeling pings only. Accept grants; Manage declines (the most
+ * privacy-preserving reading until a full preferences panel exists).
  */
 export function CookieBanner() {
   const visible = useSyncExternalStore(
@@ -21,8 +26,9 @@ export function CookieBanner() {
     () => false,
   );
 
-  function dismiss() {
-    localStorage.setItem(STORAGE_KEY, new Date().toISOString());
+  function dismiss(consent: "granted" | "denied") {
+    localStorage.setItem(STORAGE_KEY, consent);
+    window.gtag?.("consent", "update", { analytics_storage: consent });
     window.dispatchEvent(new Event(CONSENT_EVENT));
   }
 
@@ -36,14 +42,14 @@ export function CookieBanner() {
         </span>
         <button
           type="button"
-          onClick={dismiss}
+          onClick={() => dismiss("denied")}
           className="font-semibold text-white/60 hover:text-white"
         >
-          Manage
+          Decline
         </button>
         <button
           type="button"
-          onClick={dismiss}
+          onClick={() => dismiss("granted")}
           className="ml-auto rounded-sm bg-ppa-yellow px-3 py-1 font-bold text-ppa-navy hover:bg-ppa-yellow/90"
         >
           Accept
