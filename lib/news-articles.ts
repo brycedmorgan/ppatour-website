@@ -14,12 +14,15 @@ export type NewsArticle = {
   dek: string;
   image: string;
   whyItMatters: string;
+  /** Ties coverage to a tour stop — event pages render these under "Coverage". */
+  eventSlug?: string;
   body: string[];
 };
 
 export const newsArticles: NewsArticle[] = [
   {
     slug: "vegas-final-five-stats",
+    eventSlug: "rate-las-vegas-open",
     category: "Recap",
     title: "Championship Sunday: Five Stats That Defined the Vegas Final",
     date: "May 17",
@@ -37,6 +40,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "atlanta-draw-decoded",
+    eventSlug: "atlanta-pickleball-championships",
     category: "Analysis",
     title: "The Atlanta Draw, Decoded: Where the Bracket Breaks",
     date: "May 16",
@@ -105,6 +109,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "hartman-bricker-chicago-upset",
+    eventSlug: "veolia-chicago-open",
     category: "Recap",
     title: "Hartman & Bricker Take Down Top Seeds in Chicago",
     date: "May 6",
@@ -122,6 +127,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "anand-singles-run",
+    eventSlug: "virginia-beach-open",
     category: "Feature",
     title: "Anand's Singles Run Continues Into Virginia Beach",
     date: "May 4",
@@ -139,6 +145,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "atlanta-court-surface",
+    eventSlug: "atlanta-pickleball-championships",
     category: "Analysis",
     title: "How the Atlanta Court Surface Plays",
     date: "May 2",
@@ -207,6 +214,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "top-10-drop-shots-vegas",
+    eventSlug: "rate-las-vegas-open",
     category: "Highlights",
     title: "Top 10 Drop Shots from the Las Vegas Open",
     date: "Apr 23",
@@ -277,4 +285,9 @@ export const newsArticles: NewsArticle[] = [
 
 export function getArticle(slug: string): NewsArticle | undefined {
   return newsArticles.find((a) => a.slug === slug);
+}
+
+/** Coverage attached to a tour stop — the event's editorial history. */
+export function getArticlesForEvent(eventSlug: string): NewsArticle[] {
+  return newsArticles.filter((a) => a.eventSlug === eventSlug);
 }

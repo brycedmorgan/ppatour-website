@@ -10,6 +10,7 @@ import { Countdown } from "@/components/motion/Countdown";
 import { getBroadcast } from "@/lib/broadcast";
 import { getEventGuide } from "@/lib/event-guides";
 import { playersToWatch } from "@/lib/home-content";
+import { getArticlesForEvent } from "@/lib/news-articles";
 import {
   daysUntil,
   formatDate,
@@ -169,6 +170,9 @@ export default async function EventPage({ params }: Params) {
     .filter((x) => x.slug !== t.slug && tierPoints(x) >= 1000)
     .slice(0, 3);
 
+  const coverage = getArticlesForEvent(t.slug);
+  const completed = t.status === "completed";
+
   const TABS = [
     { id: "overview", label: "Overview" },
     { id: "stakes", label: "What's at Stake" },
@@ -178,6 +182,7 @@ export default async function EventPage({ params }: Params) {
     { id: "travel", label: "Plan Your Trip" },
     { id: "players", label: "Players" },
     { id: "involved", label: "Get Involved" },
+    ...(coverage.length > 0 ? [{ id: "coverage", label: "Coverage" }] : []),
     { id: "tickets", label: "Tickets" },
   ];
 
@@ -265,10 +270,14 @@ export default async function EventPage({ params }: Params) {
             )}
             <span className="text-white/25">/</span>
             <span className="text-ppa-yellow">
-              <Countdown
-                targetIso={t.startDate}
-                fallback={`${countdown} ${countdown === 1 ? "Day" : "Days"} Out`}
-              />
+              {completed ? (
+                "Final"
+              ) : (
+                <Countdown
+                  targetIso={t.startDate}
+                  fallback={`${countdown} ${countdown === 1 ? "Day" : "Days"} Out`}
+                />
+              )}
             </span>
           </div>
           <h1 className="mt-3 max-w-[18ch] font-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98]">
@@ -910,6 +919,63 @@ export default async function EventPage({ params }: Params) {
           </div>
         </div>
       </section>
+
+      {/* Coverage — the event's editorial history */}
+      {coverage.length > 0 && (
+        <section id="coverage" className="scroll-mt-[150px] bg-white">
+          <div className="mx-auto w-full max-w-6xl px-4 py-12">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2.5">
+                  <span className="h-2 w-2 bg-ppa-blue" />
+                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
+                    Coverage
+                  </p>
+                </div>
+                <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+                  {completed ? `Relive ${t.shortName}` : `The ${t.shortName} Story So Far`}
+                </h2>
+              </div>
+              <Link
+                href="/news"
+                className="group hidden shrink-0 text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy sm:block"
+              >
+                All News{" "}
+                <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+              </Link>
+            </div>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {coverage.map((c, i) => (
+                <Link
+                  key={c.slug}
+                  href={`/news/${c.slug}`}
+                  data-reveal
+                  style={{ "--reveal-delay": `${(i % 3) * 80}ms` } as React.CSSProperties}
+                  className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden bg-ppa-navy"
+                >
+                  <Image
+                    src={c.image}
+                    alt=""
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 scrim-card" />
+                  <div className="relative p-4 text-white">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-sky">
+                      {c.category} · {c.date}
+                    </p>
+                    <p className="mt-1 font-display text-base uppercase leading-[1.1]">
+                      {c.title}
+                    </p>
+                    <p className="mt-1 line-clamp-2 text-xs text-white/65">{c.dek}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Get Involved */}
       <section id="involved" className="scroll-mt-[150px] bg-ppa-navy text-white">
