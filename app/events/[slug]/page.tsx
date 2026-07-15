@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { EventConcierge } from "@/components/events/EventConcierge";
+import { EventGallery } from "@/components/events/EventGallery";
 import { VenueMap } from "@/components/events/VenueMap";
 import { Countdown } from "@/components/motion/Countdown";
 import { getBroadcast } from "@/lib/broadcast";
@@ -483,24 +484,11 @@ export default async function EventPage({ params }: Params) {
             <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
               Inside {t.shortName}
             </h2>
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
-              {t.gallery.map((src, i) => (
-                <div
-                  key={src}
-                  className={`group relative aspect-[4/3] overflow-hidden bg-ppa-navy-deep ${
-                    i === 0 ? "sm:col-span-3 sm:aspect-[16/7]" : ""
-                  }`}
-                >
-                  <Image
-                    src={src}
-                    alt={`${t.shortName} — championship action`}
-                    fill
-                    sizes={i === 0 ? "100vw" : "(min-width: 640px) 33vw, 100vw"}
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                </div>
-              ))}
-            </div>
+            <p className="mt-3 max-w-xl text-sm text-white/60">
+              Real photos from the grounds — tap any shot to flip through
+              what a day here actually looks like.
+            </p>
+            <EventGallery images={t.gallery} eventName={t.shortName} />
           </div>
         </section>
       )}
