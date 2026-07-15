@@ -20,6 +20,25 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-15 (pt. 6) — Newsroom: 15 real articles + article pages
+- Every news headline now opens a real article. `lib/news-articles.ts`
+  holds 15 written pieces (recaps, analysis, features, explainers,
+  profiles) — slug/dek/why-it-matters/5-paragraph bodies, grounded in
+  site season data (rankings points, calendar dates, purse totals,
+  PBTV/TC broadcast). No fabricated quotes from real players;
+  narrative arcs lean on the fictional players already in matches[]
+  (Anand, Safdar, Hartman/Bricker).
+- `/news/[slug]` template: image hero + category/byline, dek,
+  why-it-matters callout, body, "See It Live" ticket CTA (UTM
+  `article-{slug}`) + TV Schedule link, 3 related articles, OG/article
+  meta. 114 routes build clean.
+- `home-content.ts` `news[]` is now DERIVED from newsArticles (single
+  source) — /news index, homepage newsroom, and site search link to
+  real slugs automatically. Sitemap includes articles.
+- Storylines on the homepage still have no hrefs (Storyline type) —
+  candidate next: link the 5 storyline cards to matching articles.
+- When Sanity lands, articles move to CMS; the type is CMS-shaped.
+
 ### 2026-07-15 (pt. 5) — Per-event payout → full totals (Bryce's call)
 - Bryce wants the biggest true number per event: prizeMoney now shows
   **prize money + appearance fees** per tier — Slams/Worlds $1,648,641
