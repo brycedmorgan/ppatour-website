@@ -18,7 +18,7 @@ const BROADCAST = [
     note: "The home of pro pickleball — every round, live",
     detail: "PBTV · streams every main-draw round",
     cta: "Watch on PBTV",
-    href: "https://www.pickleballtv.com",
+    href: "https://www.pickleballtv.com/?utm_source=ppatour&utm_medium=website&utm_campaign=watch&utm_content=watch-pbtv",
     external: true,
   },
   {
@@ -41,7 +41,7 @@ const BROADCAST = [
     note: "Live scores, brackets, and match alerts",
     detail: "iOS · Android",
     cta: "Get the App",
-    href: "https://www.matchday.app",
+    href: "https://www.matchday.app/?utm_source=ppatour&utm_medium=website&utm_campaign=watch&utm_content=watch-matchday",
     external: true,
   },
 ];

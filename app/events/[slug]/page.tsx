@@ -72,7 +72,7 @@ const HOW_TO_WATCH: {
     logo: "/ppa/networks/pbtv.png",
     note: "Every court, every match, all weekend — the home of live PPA streaming.",
     detail: "Stream on PBTV",
-    href: "https://www.pickleballtv.com",
+    href: "https://www.pickleballtv.com/?utm_source=ppatour&utm_medium=website&utm_campaign=event&utm_content=event-watch-pbtv",
   },
   {
     name: "Tennis Channel",
@@ -84,7 +84,7 @@ const HOW_TO_WATCH: {
     name: "MATCHDAY App",
     note: "Live scores, brackets, order of play, and match alerts.",
     detail: "iOS · Android",
-    href: "https://www.matchday.app",
+    href: "https://www.matchday.app/?utm_source=ppatour&utm_medium=website&utm_campaign=event&utm_content=event-watch-matchday",
   },
 ];
 

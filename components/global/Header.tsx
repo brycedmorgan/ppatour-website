@@ -54,7 +54,7 @@ const NAV_ITEMS: NavItem[] = [
   },
   {
     label: "Shop",
-    href: "https://pickleballcentral.com/apparel/ppa-tour-apparel/",
+    href: "https://pickleballcentral.com/apparel/ppa-tour-apparel/?utm_source=ppatour&utm_medium=website&utm_campaign=sitewide&utm_content=header-shop",
     external: true,
   },
 ];
