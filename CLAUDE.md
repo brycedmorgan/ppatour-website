@@ -20,7 +20,30 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
-### 2026-07-14 (pt. 3) — Commerce layer + polish (CTA bundle)
+### 2026-07-14 (pt. 4) — Event pages: three-audience upgrade + concierge chat
+- Bryce's brief: event pages must serve travelers, players, and
+  at-home fans — site map, know-what-to-do, schedule, who's playing,
+  where to stay/park, get involved, ask questions (chatbot).
+- **Shipped (commit `05ff854`)** on `/events/[slug]` (all 20 events,
+  richest on Nationals):
+  - Audience router (Going / Playing / Watching From Home lanes)
+  - "What's at Stake" section (points/purse/field + narrative)
+  - Venue Guide: generic brand-styled SVG grounds map
+    (`components/events/VenueMap.tsx`, numbered legend, "official map
+    event week" caption) + Know Before You Go grid (gates, parking
+    from guide data, bag policy, autographs, weather, guest services)
+  - Get Involved: amateur draw (from $89/division), camps, pro-am,
+    volunteer
+  - **EventConcierge** (`components/events/EventConcierge.tsx`) —
+    floating chat, rule-based intents answering from per-event facts
+    built server-side (tickets/schedule/parking/hotels/dining/watch/
+    register, UTM-tagged links); quick chips + free text; graceful
+    contact fallback. NOT an LLM yet — phase 2 plan: API route +
+    Claude with same facts + FAQ corpus; shares the fan-support
+    knowledge base planned for Jackie/phone agent in Jackalope.
+  - Hero countdown ticks live; tab nav now 9 sections.
+- Verified in Chrome: concierge answers real Cary parking data; map +
+  KBYG render; countdown ticking. Build 97 routes + lint clean.
 - Bryce: "more polish and call to action." Shipped commit `95a98ab`:
   - **StickyBuyBar** (`components/global/`, mounted site-wide in layout)
     — slides up after 480px scroll: next event + date + "From $59" +
