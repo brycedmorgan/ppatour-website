@@ -20,6 +20,30 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-14 (pt. 2) — Motion pass + desktop mega menu
+- Bryce's direction: smooth motion + "a beautiful dropdown menu on
+  desktop." Reference: Hers mega-menu (Mobbin screenshot).
+- **Shipped (commit `db79129`):**
+  - **Mega dropdowns** — Events / Tour / About open full-width white
+    panels (columned links + upcoming-stops list + featured image card
+    with arrow CTA); page dims/blurs behind; hover or click opens, Esc
+    closes; active item gets blue underline + rotating chevron; panel +
+    columns stagger in. All content driven from existing lib data.
+    Mobile drawer unchanged.
+  - **Motion system** — `ScrollReveal` (global IntersectionObserver
+    driver; server components opt in via `data-reveal` +
+    `--reveal-delay`; progressive enhancement — no JS / reduced motion
+    never hides content), `CountUp` (stat-band numbers), hero staggered
+    entrance + Ken Burns drift, card hover lift + arrow nudge, new
+    `ppa-rise` / `ppa-kenburns` theme animations.
+  - Applied on: homepage (hero, stat band, lanes, section heads, event
+    cards) + events ScheduleGrid.
+- Verified in Chrome on the local prod build: all three panels, dim
+  backdrop, count-ups, reveals; build 97 routes + lint clean.
+- **Next candidates:** reveals on remaining pages (watch/play/athletes),
+  panel featured-card image preload (brief dark flash on first open),
+  sticky mobile buy bar (Friday punch list #7).
+
 ### 2026-07-14 — Fable 5 audit vs Tyler/Wesley combined review + QA cleanup
 - Audited the build against Tyler's combined review doc (Option A gap
   analysis + Wesley's QA). All major claims confirmed in code; three
