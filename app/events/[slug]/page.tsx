@@ -3,6 +3,9 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
+import { EventConcierge } from "@/components/events/EventConcierge";
+import { VenueMap } from "@/components/events/VenueMap";
+import { Countdown } from "@/components/motion/Countdown";
 import { getBroadcast } from "@/lib/broadcast";
 import { getEventGuide } from "@/lib/event-guides";
 import { playersToWatch } from "@/lib/home-content";
@@ -167,12 +170,41 @@ export default async function EventPage({ params }: Params) {
 
   const TABS = [
     { id: "overview", label: "Overview" },
+    { id: "stakes", label: "What's at Stake" },
     { id: "schedule", label: "Order of Play" },
     { id: "watch", label: "Watch" },
+    { id: "venue", label: "Venue Guide" },
     { id: "travel", label: "Plan Your Trip" },
     { id: "players", label: "Players" },
+    { id: "involved", label: "Get Involved" },
     { id: "tickets", label: "Tickets" },
   ];
+
+  const conciergeFacts = {
+    shortName: t.shortName,
+    city: t.city,
+    state: t.state,
+    venue: t.venue,
+    dates: formatDateRange(t.startDate, t.endDate),
+    gates: days[0]?.gates ?? "an hour before first serve",
+    ticketFrom: t.ticketPriceFrom,
+    ticketsUrl: withUtm(t.ticketsUrl, {
+      campaign: t.slug,
+      content: "event-concierge-tickets",
+    }),
+    registerUrl: withUtm(t.registerUrl, {
+      campaign: t.slug,
+      content: "event-concierge-register",
+    }),
+    parking: guide?.parking,
+    airport: guide ? `${guide.airport} (${guide.airportNote})` : undefined,
+    hotels: guide?.hotels.map((h) => h.name) ?? [],
+    dining: guide?.dining.map((d) => d.name) ?? [],
+    watch:
+      broadcast.length > 0
+        ? `Every round streams live, and the marquee rounds hit national TV — ${[...new Set(broadcast.map((b) => b.platform))].join(", ")}. The full round-by-round broadcast table is under "Watch" on this page.`
+        : `Every round streams live on PickleballTV and YouTube; marquee rounds hit national TV. Details under "Watch" on this page.`,
+  };
 
   return (
     <>
@@ -232,7 +264,10 @@ export default async function EventPage({ params }: Params) {
             )}
             <span className="text-white/25">/</span>
             <span className="text-ppa-yellow">
-              {countdown} {countdown === 1 ? "Day" : "Days"} Out
+              <Countdown
+                targetIso={t.startDate}
+                fallback={`${countdown} ${countdown === 1 ? "Day" : "Days"} Out`}
+              />
             </span>
           </div>
           <h1 className="mt-3 max-w-[18ch] font-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98]">
@@ -292,6 +327,52 @@ export default async function EventPage({ params }: Params) {
         </div>
       </nav>
 
+      {/* Audience router — one page, three ways in */}
+      <section className="bg-white">
+        <div className="mx-auto grid w-full max-w-6xl gap-px border-x border-b border-ppa-line bg-ppa-line sm:grid-cols-3">
+          {[
+            {
+              href: "#venue",
+              kicker: "Going to the Event",
+              title: "Know Before You Go",
+              blurb: "Grounds map, gates, parking, policies, where to stay.",
+            },
+            {
+              href: "#involved",
+              kicker: "Playing the Event",
+              title: "Enter the Amateur Draw",
+              blurb: "Same courts as the pros — brackets by skill and age.",
+            },
+            {
+              href: "#watch",
+              kicker: "Watching From Home",
+              title: "Every Match, Live",
+              blurb: "Streams, TV windows, and what's on the line.",
+            },
+          ].map((lane) => (
+            <a
+              key={lane.href}
+              href={lane.href}
+              className="group bg-white p-5 transition-colors hover:bg-ppa-paper"
+            >
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-ppa-blue">
+                {lane.kicker}
+              </p>
+              <p className="mt-1.5 flex items-baseline gap-2 font-display text-lg uppercase leading-tight text-ppa-navy">
+                {lane.title}
+                <span
+                  aria-hidden
+                  className="text-sm text-ppa-blue opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100"
+                >
+                  ↓
+                </span>
+              </p>
+              <p className="mt-1 text-xs text-ppa-navy/55">{lane.blurb}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+
       {/* Overview — quick facts */}
       <section id="overview" className="scroll-mt-[150px] bg-ppa-navy-deep text-white">
         <div className="mx-auto grid w-full max-w-6xl grid-cols-2 px-4 sm:grid-cols-4">
@@ -313,6 +394,79 @@ export default async function EventPage({ params }: Params) {
               </p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* What's at Stake */}
+      <section id="stakes" className="scroll-mt-[150px] bg-white">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <div className="flex items-center gap-2.5">
+            <span className="h-2 w-2 bg-ppa-blue" />
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
+              What&apos;s at Stake
+            </p>
+          </div>
+          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+            Why {t.shortName} Matters
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm text-ppa-navy/60">
+            A {tierLabel(t)} title is worth{" "}
+            <span className="font-bold text-ppa-navy">
+              {tierPoints(t).toLocaleString()} ranking points
+            </span>{" "}
+            in every division — enough to reshuffle the season-long points
+            race in one weekend. The winners take home a share of the{" "}
+            <span className="font-bold text-ppa-navy">{t.prizeMoney}</span>{" "}
+            purse, and the defending champions below are all back to protect
+            their titles.
+          </p>
+
+          <div data-reveal className="mt-6 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-3">
+            {[
+              {
+                k: "Ranking Points",
+                v: tierPoints(t).toLocaleString(),
+                note: "Per division title — toward the season race",
+              },
+              {
+                k: "Total Purse",
+                v: t.prizeMoney,
+                note: "Across five pro divisions",
+              },
+              {
+                k: "The Field",
+                v: "Top 40+",
+                note: "Every No. 1 seed is entered",
+              },
+            ].map((s) => (
+              <div key={s.k} className="bg-white p-5">
+                <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-ppa-navy/45">
+                  {s.k}
+                </p>
+                <p className="mt-1 font-display text-2xl uppercase text-ppa-blue">
+                  {s.v}
+                </p>
+                <p className="mt-1 text-xs text-ppa-navy/55">{s.note}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-4">
+            <a
+              href="#players"
+              className="group text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
+            >
+              See who&apos;s defending{" "}
+              <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-y-0.5">↓</span>
+            </a>
+            <Link
+              href="/rankings"
+              className="group text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
+            >
+              Current standings{" "}
+              <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -515,6 +669,69 @@ export default async function EventPage({ params }: Params) {
         </div>
       </section>
 
+      {/* Venue Guide — grounds map + know before you go */}
+      <section id="venue" className="scroll-mt-[150px] bg-ppa-paper">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <div className="flex items-center gap-2.5">
+            <span className="h-2 w-2 bg-ppa-blue" />
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
+              At the Venue
+            </p>
+          </div>
+          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+            Your Day at {t.venue}
+          </h2>
+          <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
+            Find your way around the grounds, then check the essentials —
+            gates, parking, and what to bring.
+          </p>
+
+          <div className="mt-6 grid gap-10 lg:grid-cols-[1.5fr_1fr]">
+            <div data-reveal>
+              <VenueMap venue={t.venue} />
+            </div>
+
+            <div data-reveal className="flex flex-col gap-px border border-ppa-line bg-ppa-line">
+              {[
+                {
+                  k: "Gates & Sessions",
+                  v: `Gates open ${days[0]?.gates ?? "an hour before first serve"} daily. Morning and evening sessions are ticketed separately at Championship Court; a grounds pass covers the outer courts all day.`,
+                },
+                {
+                  k: "Parking & Shuttle",
+                  v: guide?.parking ?? "On-site lots open with the gates; ADA and rideshare drop-off at the main gate. Official parking map published event week.",
+                },
+                {
+                  k: "What to Bring",
+                  v: "Small bags OK (checked at the gate) · sunscreen and a hat · no coolers or outside alcohol · personal cameras welcome, no tripods.",
+                },
+                {
+                  k: "Players & Autographs",
+                  v: "Pros warm up on the practice courts and sign after matches near the player zone — bring a paddle skin or ball.",
+                },
+                {
+                  k: "Weather Plan",
+                  v: "Rain pauses play; sessions extend or shift and your ticket stays valid for that session day. Live updates on @ppatour.",
+                },
+                {
+                  k: "Questions On-Site",
+                  v: "Guest Services sits beside the main gate — lost & found, ADA services, first aid, and staff who know the answer.",
+                },
+              ].map((row) => (
+                <div key={row.k} className="bg-white p-4">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-ppa-blue">
+                    {row.k}
+                  </p>
+                  <p className="mt-1 text-sm leading-relaxed text-ppa-navy/70">
+                    {row.v}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Plan Your Trip — Ragnar-style */}
       {guide && (
         <section id="travel" className="scroll-mt-[150px] bg-white">
@@ -706,6 +923,94 @@ export default async function EventPage({ params }: Params) {
         </div>
       </section>
 
+      {/* Get Involved */}
+      <section id="involved" className="scroll-mt-[150px] bg-ppa-navy text-white">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <div className="flex items-center gap-2.5">
+            <span className="h-2 w-2 bg-ppa-blue" />
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
+              Get Involved
+            </p>
+          </div>
+          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] sm:text-3xl">
+            Don&apos;t Just Watch It — Play It
+          </h2>
+          <p className="mt-3 max-w-xl text-sm text-white/65">
+            Every PPA stop runs an amateur draw on the same courts as the
+            pros, plus clinics, pro-ams, and ways to be part of event week.
+          </p>
+
+          <div data-reveal className="mt-6 grid gap-px border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                title: "Play the Amateur Draw",
+                note: "Brackets by skill + age · from $89 per division · medals on Championship Court",
+                cta: "Register to Play",
+                href: withUtm(t.registerUrl, {
+                  campaign: t.slug,
+                  content: "event-involved-register",
+                }),
+                external: true,
+                featured: true,
+              },
+              {
+                title: "Junior Clinics & Camps",
+                note: "Event-week sessions with tour coaches for U-19 players",
+                cta: "PPA Camps",
+                href: "/tour/camps",
+              },
+              {
+                title: "Pro-Am & Hospitality",
+                note: "Play with the pros, host clients courtside",
+                cta: "Hospitality",
+                href: "/tour/hospitality",
+              },
+              {
+                title: "Volunteer Event Week",
+                note: "Court crew, player services, transport — be inside the ropes",
+                cta: "Contact the Team",
+                href: "/about/contact",
+              },
+            ].map((c) => (
+              <div
+                key={c.title}
+                className={`flex flex-col p-5 ${c.featured ? "bg-ppa-blue" : "bg-ppa-navy-deep"}`}
+              >
+                <p className="font-display text-lg uppercase leading-tight">
+                  {c.title}
+                </p>
+                <p className={`mt-1.5 flex-1 text-xs leading-relaxed ${c.featured ? "text-white/85" : "text-white/55"}`}>
+                  {c.note}
+                </p>
+                {c.external ? (
+                  <a
+                    href={c.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`group mt-4 inline-flex items-center gap-1.5 self-start pb-0.5 text-[11px] font-bold uppercase tracking-[0.12em] ${
+                      c.featured
+                        ? "border-b-2 border-white text-white"
+                        : "border-b-2 border-ppa-blue text-white/85 hover:text-white"
+                    }`}
+                  >
+                    {c.cta}
+                    <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">↗</span>
+                  </a>
+                ) : (
+                  <Link
+                    href={c.href}
+                    className="group mt-4 inline-flex items-center gap-1.5 self-start border-b-2 border-ppa-blue pb-0.5 text-[11px] font-bold uppercase tracking-[0.12em] text-white/85 hover:text-white"
+                  >
+                    {c.cta}
+                    <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Tickets */}
       <section id="tickets" className="scroll-mt-[150px] bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -841,6 +1146,7 @@ export default async function EventPage({ params }: Params) {
           <LeadMagnetCapture variant="streaming" />
         </div>
       </section>
+      <EventConcierge facts={conciergeFacts} />
     </>
   );
 }
