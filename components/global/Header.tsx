@@ -190,6 +190,7 @@ function MegaPanelContent({
           <PanelEyebrow>Explore</PanelEyebrow>
           <div className="mt-4 space-y-3">
             <BigLink href="/events" label="Full Schedule" onNavigate={onNavigate} />
+            <BigLink href="/watch/tv" label="TV Schedule" onNavigate={onNavigate} />
             <BigLink href="/rankings" label="Rankings" onNavigate={onNavigate} />
             <BigLink href="/news" label="Latest News" onNavigate={onNavigate} />
           </div>

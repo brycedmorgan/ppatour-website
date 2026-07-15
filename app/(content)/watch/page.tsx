@@ -22,11 +22,11 @@ const BROADCAST = [
     external: true,
   },
   {
-    name: "FOX & FS1",
-    note: "Marquee finals on national television",
-    detail: "Championship Sundays · select semis",
-    cta: "TV Schedule",
-    href: "/news",
+    name: "Tennis Channel",
+    note: "Marquee windows simulcast on national television",
+    detail: "Championship Sundays · select QFs & SFs",
+    cta: "Full TV Schedule",
+    href: "/watch/tv",
   },
   {
     name: "PPA Tour · YouTube",
