@@ -20,6 +20,26 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-15 (pt. 4) — Sponsorship front door (commit `43545e0`)
+- **Full-bleed pass (Bryce's ask):** homepage ScoreRail + PartnerSpotlight banner +
+  sponsor logo marquee now run edge-to-edge; section headings stay capped at max-w-6xl.
+- **Homepage sponsor CTA** under the logos: "Find Out What Sponsoring the PPA Tour &
+  Pickleball Is All About" → `/about/sponsors#inquire`; Partners section link repointed
+  there too (was `/about`).
+- **Real partnership inquiry form** (`components/marketing/SponsorInquiryForm.tsx`) on
+  /about/sponsors — company/name/email/phone/category/budget/message + honeypot; hero
+  "Partnership Inquiry" + closing "The Ask" CTAs now scroll to it (mailto demoted to
+  secondary).
+- **`/api/sponsor-inquiry`** forwards server-to-server to the Jackalope leads hook
+  (`x-lead-secret`) — submissions land as deals under **Leads** in the Sales pipeline
+  (ziff commit `3427a31`, hook live + verified 401/405). **⚠ Blocked on Bryce:**
+  `vercel env add LEAD_HOOK_SECRET production` in BOTH repos (same value), redeploy both,
+  then submit a test inquiry. Until then the route logs + returns ok (nothing breaks).
+- Build 99 routes + lint clean; form/marquee/CTA verified headless on a local prod build.
+- **⚠ Deploy status unknown at log time** — push went to `main`; GitHub auto-deploy has
+  been flaky and the CLI deploy was permission-blocked this session. If
+  ppatour-website.vercel.app doesn't show the CTA, run `vercel --prod --yes`.
+
 ### 2026-07-15 (pt. 3) — Purse correction (official 2026 numbers)
 - Bryce flagged Nationals "$300,000 purse" as way low. Pulled
   ppatour.com/how-it-works: **$5,235,943 total prize money +
