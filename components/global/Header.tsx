@@ -344,6 +344,22 @@ export function Header() {
     return () => window.removeEventListener("keydown", onKey);
   }, [megaOpen]);
 
+  // Warm the mega-panel featured images so the first open doesn't flash
+  // a navy card while the photo lazy-loads.
+  useEffect(() => {
+    const paths = [
+      getNextTournament().image,
+      "/ppa/action-singles.jpg",
+      "/ppa/action-mxd.jpg",
+    ];
+    for (const path of paths) {
+      for (const w of [384, 640]) {
+        const img = new window.Image();
+        img.src = `/_next/image?url=${encodeURIComponent(path)}&w=${w}&q=75`;
+      }
+    }
+  }, []);
+
   return (
     <header className="relative bg-ppa-navy text-white" onMouseLeave={scheduleClose}>
       {/* Dim the page while a mega panel is open. */}

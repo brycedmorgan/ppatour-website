@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { CountUp } from "@/components/motion/CountUp";
+import { Countdown } from "@/components/motion/Countdown";
+import { withUtm } from "@/lib/utm";
 import { PartnerSpotlight } from "@/components/home/PartnerSpotlight";
 import { PointsRace } from "@/components/home/PointsRace";
 import { ScoreRail } from "@/components/home/ScoreRail";
@@ -168,7 +170,10 @@ export default function Home() {
             </span>
             <span className="text-white/25">/</span>
             <span className="text-ppa-yellow">
-              {countdown} {countdown === 1 ? "Day" : "Days"} Out
+              <Countdown
+                targetIso={next.startDate}
+                fallback={`${countdown} ${countdown === 1 ? "Day" : "Days"} Out`}
+              />
             </span>
           </div>
 
@@ -196,15 +201,38 @@ export default function Home() {
             className="mt-5 flex flex-col gap-2.5 sm:flex-row motion-safe:animate-rise"
             style={{ animationDelay: "320ms" }}
           >
+            <a
+              href={withUtm(next.ticketsUrl, {
+                campaign: next.slug,
+                content: "home-hero-buy-tickets",
+              })}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex h-11 items-center justify-center gap-1.5 bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:bg-ppa-blue-deep active:scale-[0.98]"
+            >
+              Buy Tickets — From ${next.ticketPriceFrom}
+              <span
+                aria-hidden
+                className="transition-transform duration-300 group-hover:translate-x-0.5"
+              >
+                →
+              </span>
+            </a>
             <Link
               href={`/events/${next.slug}`}
-              className="flex h-11 items-center justify-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:bg-ppa-blue-deep"
+              className="group flex h-11 items-center justify-center gap-1.5 border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98]"
             >
-              Explore the Event →
+              Explore the Event
+              <span
+                aria-hidden
+                className="transition-transform duration-300 group-hover:translate-x-0.5"
+              >
+                →
+              </span>
             </Link>
             <Link
               href="/watch"
-              className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
+              className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98]"
             >
               ▶ How to Watch
             </Link>
@@ -290,9 +318,10 @@ export default function Home() {
             <SectionHead label="Scores" title="Live & Latest" />
             <Link
               href="/watch"
-              className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
+              className="group text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
             >
-              Full Scores & Brackets →
+              Full Scores & Brackets{" "}
+              <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
           </div>
 
@@ -312,9 +341,10 @@ export default function Home() {
             <SectionHead label="The Storylines" title="What's Happening on Tour" />
             <Link
               href="/watch"
-              className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
+              className="group text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
             >
-              All Stories →
+              All Stories{" "}
+              <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
           </div>
 
@@ -423,9 +453,10 @@ export default function Home() {
               </div>
               <Link
                 href="/news"
-                className="mt-5 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue"
+                className="group mt-5 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue"
               >
-                All PPA Tour News →
+                All PPA Tour News{" "}
+              <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
               </Link>
             </div>
 
@@ -480,9 +511,10 @@ export default function Home() {
 
           <Link
             href="/athletes"
-            className="mt-6 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-white hover:text-ppa-sky"
+            className="group mt-6 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-white hover:text-ppa-sky"
           >
-            Full Rankings →
+            Full Rankings{" "}
+              <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
           </Link>
         </div>
       </section>
@@ -536,13 +568,18 @@ export default function Home() {
                       {formatDateRange(t.startDate, t.endDate)} · {t.city}
                       {t.state ? `, ${t.state}` : ""}
                     </p>
-                    <span className="mt-3 inline-flex h-8 items-center gap-1.5 bg-ppa-blue px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors group-hover:bg-ppa-blue-deep">
-                      Event Guide
-                      <span
-                        aria-hidden
-                        className="transition-transform duration-300 group-hover:translate-x-0.5"
-                      >
-                        →
+                    <span className="mt-3 flex items-center justify-between gap-3">
+                      <span className="inline-flex h-8 items-center gap-1.5 bg-ppa-blue px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors group-hover:bg-ppa-blue-deep">
+                        Event Guide
+                        <span
+                          aria-hidden
+                          className="transition-transform duration-300 group-hover:translate-x-0.5"
+                        >
+                          →
+                        </span>
+                      </span>
+                      <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-yellow">
+                        From ${t.ticketPriceFrom}
                       </span>
                     </span>
                   </div>
@@ -552,9 +589,10 @@ export default function Home() {
 
           <Link
             href="/events"
-            className="mt-6 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue"
+            className="group mt-6 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue"
           >
-            Full 2026 Schedule →
+            Full 2026 Schedule{" "}
+              <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
           </Link>
         </div>
       </section>
@@ -566,9 +604,10 @@ export default function Home() {
             <SectionHead label="The Athletes" title="Players to Watch" dark />
             <Link
               href="/athletes"
-              className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-yellow hover:text-white"
+              className="group text-xs font-bold uppercase tracking-[0.12em] text-ppa-yellow hover:text-white"
             >
-              All Athletes →
+              All Athletes{" "}
+              <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
           </div>
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
@@ -631,9 +670,10 @@ export default function Home() {
           </div>
           <Link
             href="/watch"
-            className="mt-6 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue"
+            className="group mt-6 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue"
           >
-            Start Watching →
+            Start Watching{" "}
+              <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
           </Link>
         </div>
       </section>

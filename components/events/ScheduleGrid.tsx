@@ -93,8 +93,19 @@ export function ScheduleGrid() {
                 {formatDateRange(t.startDate, t.endDate)} · {t.city}
                 {t.state ? `, ${t.state}` : ""}
               </p>
-              <span className="mt-3 inline-flex h-8 items-center bg-ppa-blue px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors group-hover:bg-ppa-blue-deep">
-                Event Guide →
+              <span className="mt-3 flex items-center justify-between gap-3">
+                <span className="inline-flex h-8 items-center gap-1.5 bg-ppa-blue px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors group-hover:bg-ppa-blue-deep">
+                  Event Guide
+                  <span
+                    aria-hidden
+                    className="transition-transform duration-300 group-hover:translate-x-0.5"
+                  >
+                    →
+                  </span>
+                </span>
+                <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-yellow">
+                  From ${t.ticketPriceFrom}
+                </span>
               </span>
             </div>
           </article>
