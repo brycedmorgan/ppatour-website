@@ -20,6 +20,25 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-15 — Nationals real photography + flip-through gallery; Tyler's deep links landed
+- **Nationals imagery (commit `2cafbc4`):** hero swapped to the drone
+  shot of a packed center court at Cary Tennis Park (from Bryce's
+  DRONE PHOTOS.zip); 7 new NC Open photos (same venue) resized into
+  `public/ppa/nationals-*` (4 drone + 3 crowd). Homepage hero + Events
+  mega-panel card inherit it automatically (keyed off next event).
+- **EventGallery** (`components/events/EventGallery.tsx`): gallery on
+  all event pages is now grid + full-screen lightbox — prev/next,
+  keyboard (←/→/Esc), swipe, counter, dot nav. Nationals gallery = 8
+  photos. Verified in Chrome (lightbox open/flip).
+- **Team is committing now:** Tyler (tdodd7) pushed #1 — every ticket
+  + registration CTA deep-links to its real event page
+  (`tixr.com/groups/ppa/events/{slug}` helper + fallback) — and #2,
+  UTM-tagging remaining partner links (Shop, PBTV, MATCHDAY, PBC).
+  Punch-list #6 is DONE. A `wesley-edits` branch exists on origin —
+  check/merge it. My work rebased cleanly on top; build + lint green.
+- Note: push was rejected-then-rebased — always `git pull --rebase`
+  before pushing now that three people commit to main.
+
 ### 2026-07-14 (pt. 4) — Event pages: three-audience upgrade + concierge chat
 - Bryce's brief: event pages must serve travelers, players, and
   at-home fans — site map, know-what-to-do, schedule, who's playing,
