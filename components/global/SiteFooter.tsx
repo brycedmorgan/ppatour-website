@@ -37,12 +37,12 @@ const PICKLEBALL_INC_LINKS: FooterLink[] = [
   { label: "Pickleball.com", href: "https://www.pickleball.com", external: true },
   {
     label: "Pickleball Central",
-    href: "https://www.pickleballcentral.com",
+    href: "https://www.pickleballcentral.com/?utm_source=ppatour&utm_medium=website&utm_campaign=sitewide&utm_content=footer-shop",
     external: true,
   },
   {
     label: "PickleballTV",
-    href: "https://www.pickleballtv.com",
+    href: "https://www.pickleballtv.com/?utm_source=ppatour&utm_medium=website&utm_campaign=sitewide&utm_content=footer-pbtv",
     external: true,
   },
   {
@@ -55,7 +55,7 @@ const PICKLEBALL_INC_LINKS: FooterLink[] = [
   },
   { label: "Top Court", href: "https://www.topcourt.com", external: true },
   { label: "Just Courts", href: "https://www.justcourts.com", external: true },
-  { label: "MATCHDAY App", href: "https://www.matchday.app", external: true },
+  { label: "MATCHDAY App", href: "https://www.matchday.app/?utm_source=ppatour&utm_medium=website&utm_campaign=sitewide&utm_content=footer-matchday", external: true },
 ];
 
 const LEGAL_LINKS: FooterLink[] = [

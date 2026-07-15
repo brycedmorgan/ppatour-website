@@ -340,7 +340,7 @@ export default function Home() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <SectionHead label="The Storylines" title="What's Happening on Tour" />
             <Link
-              href="/watch"
+              href="/news"
               className="group text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
             >
               All Stories{" "}
@@ -351,7 +351,7 @@ export default function Home() {
           <div className="mt-6 grid gap-4 lg:grid-cols-5">
             {/* Lead story */}
             <Link
-              href="/watch"
+              href="/news"
               className="group relative isolate flex aspect-[16/11] flex-col justify-end overflow-hidden bg-ppa-navy lg:col-span-3 lg:aspect-auto lg:min-h-[25rem]"
             >
               <Image
@@ -386,7 +386,7 @@ export default function Home() {
               {storylines.map((s) => (
                 <Link
                   key={s.headline}
-                  href="/watch"
+                  href="/news"
                   className="group flex flex-1 gap-3 p-4 transition-colors hover:bg-ppa-paper"
                 >
                   <div className="relative aspect-square w-20 shrink-0 overflow-hidden bg-ppa-navy">
