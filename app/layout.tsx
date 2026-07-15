@@ -7,6 +7,8 @@ import { SiteFooter } from "@/components/global/SiteFooter";
 import { CookieBanner } from "@/components/global/CookieBanner";
 import { StickyBuyBar } from "@/components/global/StickyBuyBar";
 import { ScrollReveal } from "@/components/motion/ScrollReveal";
+import { Analytics } from "@/components/global/Analytics";
+import { OutboundClickTracker } from "@/components/global/OutboundClickTracker";
 
 /* Official brand font (Carvana PPA Tour brand guide): Gotham, used for both
    body and headlines (Gotham Black). Single-typeface system. */
@@ -64,6 +66,8 @@ export default function RootLayout({
         <StickyBuyBar />
         <CookieBanner />
         <ScrollReveal />
+        <Analytics />
+        <OutboundClickTracker />
       </body>
     </html>
   );
