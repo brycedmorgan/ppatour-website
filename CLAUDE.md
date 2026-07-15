@@ -20,6 +20,29 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-14 (pt. 3) — Commerce layer + polish (CTA bundle)
+- Bryce: "more polish and call to action." Shipped commit `95a98ab`:
+  - **StickyBuyBar** (`components/global/`, mounted site-wide in layout)
+    — slides up after 480px scroll: next event + date + "From $59" +
+    Buy Tickets (UTM `sticky-buy-bar`); renders a ▶ Watch Live state
+    when `getTickerState()` returns LIVE. Punch-list #7 done (desktop
+    + mobile in one component).
+  - **Hero ticket CTA** — "Buy Tickets — From $59" primary button
+    (UTM `home-hero-buy-tickets`); homepage previously had zero ticket
+    CTAs. Hero badge now a live D:H:M **Countdown**
+    (`components/motion/Countdown.tsx`, 30s tick, hydration-safe).
+  - **Price chips** — "From $X" on every event card (homepage + /events
+    ScheduleGrid), fed by existing `ticketPriceFrom`.
+  - **Micro-polish** — arrow-nudge on all seven section links +
+    press-scale on primary CTAs; mega-panel featured images preloaded
+    via `/_next/image` warmup (no navy flash).
+- Verified in Chrome (countdown ticking, bar slide-up, chips, reveals).
+  Note: cookie banner (z-40) overlays the buy bar (z-30) until
+  dismissed — intentional stacking, revisit if Tyler flags it.
+- **Remaining CTA ideas (approved list, second pass):** mid-page
+  conversion band (watch/play fork), email-capture rewrite w/ presale
+  hook, contrast pass, event-page scarcity chips.
+
 ### 2026-07-14 (pt. 2) — Motion pass + desktop mega menu
 - Bryce's direction: smooth motion + "a beautiful dropdown menu on
   desktop." Reference: Hers mega-menu (Mobbin screenshot).
