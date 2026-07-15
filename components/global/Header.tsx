@@ -16,6 +16,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Watch", href: "/watch" },
   { label: "Play", href: "/play" },
   { label: "Athletes", href: "/athletes" },
+  { label: "Rankings", href: "/rankings" },
   { label: "Events", href: "/events" },
   {
     label: "Tour",

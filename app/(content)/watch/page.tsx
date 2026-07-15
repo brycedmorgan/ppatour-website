@@ -14,6 +14,14 @@ export const metadata: Metadata = { title: "Watch" };
 
 const BROADCAST = [
   {
+    name: "PickleballTV",
+    note: "The home of pro pickleball — every round, live",
+    detail: "PBTV · streams every main-draw round",
+    cta: "Watch on PBTV",
+    href: "https://www.pickleballtv.com",
+    external: true,
+  },
+  {
     name: "FOX & FS1",
     note: "Marquee finals on national television",
     detail: "Championship Sundays · select semis",
@@ -156,7 +164,7 @@ export default function WatchPage() {
             Where to Watch
           </h2>
 
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {BROADCAST.map((b) => (
               <div
                 key={b.name}

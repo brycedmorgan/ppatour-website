@@ -1,14 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
+import { withUtm } from "@/lib/utm";
 
 type FooterLink = { label: string; href: string; external?: boolean };
 
 const PRO_TOUR_LINKS: FooterLink[] = [
   { label: "Schedule", href: "/events" },
   { label: "Athletes", href: "/athletes" },
-  { label: "Leaderboard", href: "/athletes" },
+  { label: "Leaderboard", href: "/rankings" },
   { label: "Watch", href: "/watch" },
-  { label: "Tickets", href: "https://www.tixr.com/groups/ppa", external: true },
+  {
+    label: "Tickets",
+    href: withUtm("https://www.tixr.com/groups/ppa", {
+      campaign: "sitewide",
+      content: "footer-tickets",
+    }),
+    external: true,
+  },
   { label: "How It Works", href: "/about/how-it-works" },
   { label: "Player Handbook", href: "/about/player-handbook" },
   { label: "Tournament History", href: "/about/history" },
@@ -39,7 +47,10 @@ const PICKLEBALL_INC_LINKS: FooterLink[] = [
   },
   {
     label: "Pickleball Tournaments",
-    href: "https://www.pickleballtournaments.com",
+    href: withUtm("https://www.pickleballtournaments.com", {
+      campaign: "sitewide",
+      content: "footer-register",
+    }),
     external: true,
   },
   { label: "Top Court", href: "https://www.topcourt.com", external: true },

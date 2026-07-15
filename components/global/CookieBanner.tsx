@@ -1,23 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 const STORAGE_KEY = "ppa-cookie-consent";
+const CONSENT_EVENT = "ppa-cookie-consent-change";
+
+function subscribe(onChange: () => void) {
+  window.addEventListener(CONSENT_EVENT, onChange);
+  return () => window.removeEventListener(CONSENT_EVENT, onChange);
+}
 
 /**
  * Compliance-minimum cookie banner (§9.4). One-line, footer-anchored,
  * never overlays content. Dismissed state persists for 365 days.
  */
 export function CookieBanner() {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    setVisible(!localStorage.getItem(STORAGE_KEY));
-  }, []);
+  const visible = useSyncExternalStore(
+    subscribe,
+    () => !localStorage.getItem(STORAGE_KEY),
+    () => false,
+  );
 
   function dismiss() {
     localStorage.setItem(STORAGE_KEY, new Date().toISOString());
-    setVisible(false);
+    window.dispatchEvent(new Event(CONSENT_EVENT));
   }
 
   if (!visible) return null;

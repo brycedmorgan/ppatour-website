@@ -9,24 +9,24 @@ export function ScoreTicker() {
   const state = getTickerState();
 
   return (
-    <div className="flex h-9 w-full items-center overflow-x-auto bg-ppa-navy text-[11px] font-semibold uppercase tracking-wide text-white">
-      <div className="mx-auto flex w-full max-w-6xl items-center gap-3 whitespace-nowrap px-4">
+    <div className="flex h-9 w-full items-center overflow-hidden bg-ppa-navy text-[11px] font-semibold uppercase tracking-wide text-white">
+      <div className="mx-auto flex w-full min-w-0 max-w-6xl items-center gap-3 whitespace-nowrap px-4">
         {state.mode === "LIVE" ? (
           <>
             <span className="flex items-center gap-1.5 bg-ppa-blue px-2 py-0.5 text-[10px] font-bold tracking-[0.15em]">
               <span className="size-1.5 animate-pulse rounded-full bg-white" />
               Live
             </span>
-            <span className="text-white/55">{state.court}</span>
-            <span className="text-white">
+            <span className="hidden text-white/55 sm:inline">{state.court}</span>
+            <span className="min-w-0 truncate text-white">
               {state.players[0]} vs {state.players[1]}
             </span>
-            <span className="font-bold text-ppa-yellow">{state.score}</span>
+            <span className="shrink-0 font-bold text-ppa-yellow">{state.score}</span>
             <a
               href={state.watchUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="ml-auto text-ppa-yellow hover:text-white"
+              className="ml-auto shrink-0 text-ppa-yellow hover:text-white"
             >
               ▶ Watch Live
             </a>
@@ -36,11 +36,13 @@ export function ScoreTicker() {
             <span className="bg-ppa-blue px-2 py-0.5 text-[10px] font-bold tracking-[0.15em]">
               Next Event
             </span>
-            <span className="text-white">{state.tournamentName}</span>
-            <span className="text-white/55">{formatDate(state.eventDate)}</span>
+            <span className="min-w-0 truncate text-white">{state.tournamentName}</span>
+            <span className="hidden text-white/55 sm:inline">
+              {formatDate(state.eventDate)}
+            </span>
             <Link
               href={`/events/${state.eventSlug}`}
-              className="ml-auto text-ppa-yellow hover:text-white"
+              className="ml-auto shrink-0 text-ppa-yellow hover:text-white"
             >
               Event Details →
             </Link>

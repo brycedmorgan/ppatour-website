@@ -20,12 +20,15 @@ export function ScoreRail() {
     const reduce = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
+    // Touch devices get a static, natively swipeable rail — auto-advance
+    // would carry a score away mid-read and can't be hover-paused (§QA).
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
     let raf = 0;
 
     const tick = () => {
       const half = el.scrollWidth / 2;
       if (half > 0) {
-        if (!hovering.current && !interacting.current && !reduce) {
+        if (!hovering.current && !interacting.current && !reduce && !coarse) {
           el.scrollLeft += 0.7;
         }
         // Seamless wrap — the list is duplicated, so jumping by one
