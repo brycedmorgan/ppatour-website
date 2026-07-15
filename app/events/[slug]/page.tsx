@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const t = tournaments.find((x) => x.slug === slug);
   if (!t) return { title: "Event" };
   const where = t.state ? `${t.city}, ${t.state}` : t.city;
-  const description = `${tierLabel(t)} · ${formatDateRange(t.startDate, t.endDate)} · ${where} · ${t.prizeMoney} purse. Schedule, players, tickets, trip guide, and how to watch.`;
+  const description = `${tierLabel(t)} · ${formatDateRange(t.startDate, t.endDate)} · ${where} · ${t.prizeMoney} in prize money & appearance fees. Schedule, players, tickets, trip guide, and how to watch.`;
   return {
     title: t.shortName,
     description,
@@ -282,7 +282,7 @@ export default async function EventPage({ params }: Params) {
               {t.state ? `, ${t.state}` : ""}
             </span>
             <span className="text-white/25">|</span>
-            <span className="text-ppa-yellow">{t.prizeMoney} Purse</span>
+            <span className="text-ppa-yellow">{t.prizeMoney} On the Line</span>
           </div>
           <div className="mt-5 flex flex-col gap-2.5 sm:flex-row">
             <a
@@ -380,7 +380,7 @@ export default async function EventPage({ params }: Params) {
           {[
             { k: "Dates", v: formatDateRange(t.startDate, t.endDate) },
             { k: "Venue", v: t.venue },
-            { k: "Total Purse", v: t.prizeMoney, accent: true },
+            { k: "Prize Money & Fees", v: t.prizeMoney, accent: true },
             { k: tierLabel(t), v: `${tierPoints(t).toLocaleString()} Pts` },
           ].map((f, i) => (
             <div
@@ -416,10 +416,10 @@ export default async function EventPage({ params }: Params) {
               {tierPoints(t).toLocaleString()} ranking points
             </span>{" "}
             in every division — enough to reshuffle the season-long points
-            race in one weekend. The winners take home a share of the{" "}
+            race in one weekend. The tour puts{" "}
             <span className="font-bold text-ppa-navy">{t.prizeMoney}</span>{" "}
-            purse, and the defending champions below are all back to protect
-            their titles.
+            behind this event in prize money and appearance fees, and the
+            defending champions below are all back to protect their titles.
           </p>
 
           <div data-reveal className="mt-6 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-3">
@@ -430,9 +430,9 @@ export default async function EventPage({ params }: Params) {
                 note: "Per division title — toward the season race",
               },
               {
-                k: "Total Purse",
+                k: "Prize Money & Fees",
                 v: t.prizeMoney,
-                note: "Across five pro divisions",
+                note: "Across five pro divisions, incl. appearance fees",
               },
               {
                 k: "The Field",
