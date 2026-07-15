@@ -20,6 +20,21 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-15 (pt. 3) — Purse correction (official 2026 numbers)
+- Bryce flagged Nationals "$300,000 purse" as way low. Pulled
+  ppatour.com/how-it-works: **$5,235,943 total prize money +
+  appearance fees for 2026**; Gold Prize Grid per event tier:
+  Slams/Worlds $1,024,400 · Cups $647,493 · Opens $439,086 · Finals
+  $628,000.
+- Updated all 20 events' `prizeMoney` by tier (Challenger untouched);
+  homepage + /about/pro-tour stat "$2.4M+ Season Purse" → "$5.2M+
+  Prize Money & Fees". Event-page hero, quick facts, and What's-at-
+  Stake all inherit.
+- Presentation choice: per-event number = Gold Prize Grid (actual
+  purse), season number = prize + appearance fees (the $5.2M headline
+  PPA promotes). Flag if Tyler prefers per-event totals incl. fees
+  (Slam would read $1.65M).
+
 ### 2026-07-15 (pt. 2) — New Nationals hero + Ken Burns; full TV schedule page
 - **Nationals hero** swapped to Bryce's overhead champ-court drone shot
   (`nationals-drone-champcourt.jpg`); previous drone shot moved to the
