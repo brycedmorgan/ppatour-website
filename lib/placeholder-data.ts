@@ -48,8 +48,20 @@ export type Tournament = {
   gallery?: string[];
 };
 
-const TIXR = "https://www.tixr.com/groups/ppa/events/";
-const REGISTER = "https://www.pickleballtournaments.com/";
+/**
+ * Real commerce deep links (verified against ppatour.com/schedule, Jul 15 2026).
+ * Every event that has a live Tixr page or open registration must deep-link to
+ * it — sending buyers to the group listing forces them to re-find the event
+ * and costs conversion. The group/homepage URLs below are FALLBACKS, only for
+ * stops whose pages don't exist yet; replace each fallback as pages go live.
+ */
+const tixrEvent = (slug: string) =>
+  `https://www.tixr.com/groups/ppa/events/${slug}`;
+const registerEvent = (slug: string) =>
+  `https://pickleballtournaments.com/tournaments/${slug}`;
+
+const TIXR = "https://www.tixr.com/groups/ppa/events/"; // fallback — no event page yet
+const REGISTER = "https://www.pickleballtournaments.com/"; // fallback — registration not open yet
 
 export const tournaments: Tournament[] = [
   {
@@ -62,8 +74,8 @@ export const tournaments: Tournament[] = [
     startDate: "2026-08-31",
     endDate: "2026-09-06",
     ticketPriceFrom: 59,
-    ticketsUrl: TIXR,
-    registerUrl: REGISTER,
+    ticketsUrl: tixrEvent("veolia-pickleball-national-championships-184656"),
+    registerUrl: registerEvent("ppa-tour-veolia-ppa-national-championships"),
     status: "upcoming",
     tierKey: "slam",
     prizeMoney: "$300,000",
@@ -85,8 +97,8 @@ export const tournaments: Tournament[] = [
     startDate: "2026-09-14",
     endDate: "2026-09-20",
     ticketPriceFrom: 49,
-    ticketsUrl: TIXR,
-    registerUrl: REGISTER,
+    ticketsUrl: tixrEvent("veolia-ppa-cincinnati-181370"),
+    registerUrl: registerEvent("ppa-tour-2026-veolia-cincinnati-cup"),
     status: "upcoming",
     tierKey: "cup",
     prizeMoney: "$200,000",
@@ -103,8 +115,8 @@ export const tournaments: Tournament[] = [
     startDate: "2026-09-28",
     endDate: "2026-10-04",
     ticketPriceFrom: 45,
-    ticketsUrl: TIXR,
-    registerUrl: REGISTER,
+    ticketsUrl: tixrEvent("ppa-las-vegas-178513"),
+    registerUrl: registerEvent("ppa-tour-2026-rate-las-vegas-open"),
     status: "upcoming",
     tierKey: "open",
     prizeMoney: "$150,000",
@@ -121,8 +133,8 @@ export const tournaments: Tournament[] = [
     startDate: "2026-10-05",
     endDate: "2026-10-11",
     ticketPriceFrom: 45,
-    ticketsUrl: TIXR,
-    registerUrl: REGISTER,
+    ticketsUrl: tixrEvent("ppa-chicago-176687"),
+    registerUrl: registerEvent("ppa-tour-veolia-chicago-open"),
     status: "upcoming",
     tierKey: "open",
     prizeMoney: "$150,000",
@@ -139,8 +151,8 @@ export const tournaments: Tournament[] = [
     startDate: "2026-10-12",
     endDate: "2026-10-18",
     ticketPriceFrom: 39,
-    ticketsUrl: TIXR,
-    registerUrl: REGISTER,
+    ticketsUrl: tixrEvent("ppa-virginia-beach-176326"),
+    registerUrl: registerEvent("ppa-tour-2026-virginia-beach-open"),
     status: "upcoming",
     tierKey: "open",
     prizeMoney: "$150,000",
@@ -156,8 +168,8 @@ export const tournaments: Tournament[] = [
     startDate: "2026-11-03",
     endDate: "2026-11-08",
     ticketPriceFrom: 79,
-    ticketsUrl: TIXR,
-    registerUrl: REGISTER,
+    ticketsUrl: tixrEvent("2026-world-pickleball-championships-166345"),
+    registerUrl: registerEvent("2026-pickleball-world-championships"),
     status: "upcoming",
     tierKey: "worlds",
     prizeMoney: "$500,000",
@@ -173,8 +185,8 @@ export const tournaments: Tournament[] = [
     startDate: "2026-11-16",
     endDate: "2026-11-22",
     ticketPriceFrom: 39,
-    ticketsUrl: TIXR,
-    registerUrl: REGISTER,
+    ticketsUrl: tixrEvent("ppa-daytona-beach-178517"),
+    registerUrl: registerEvent("ppa-tour-florida-open"),
     status: "upcoming",
     tierKey: "open",
     prizeMoney: "$150,000",
@@ -191,8 +203,8 @@ export const tournaments: Tournament[] = [
     startDate: "2026-11-30",
     endDate: "2026-12-06",
     ticketPriceFrom: 55,
-    ticketsUrl: TIXR,
-    registerUrl: REGISTER,
+    ticketsUrl: tixrEvent("ppa-malibu-176502"),
+    registerUrl: registerEvent("ppa-tour-veolia-malibu-cup"),
     status: "upcoming",
     tierKey: "cup",
     prizeMoney: "$200,000",
@@ -210,7 +222,7 @@ export const tournaments: Tournament[] = [
     endDate: "2027-01-17",
     ticketPriceFrom: 59,
     ticketsUrl: TIXR,
-    registerUrl: REGISTER,
+    registerUrl: registerEvent("ppa-tour-carvana-pickleball-masters-powered-by-invited"),
     status: "upcoming",
     tierKey: "slam",
     prizeMoney: "$300,000",
@@ -261,7 +273,7 @@ export const tournaments: Tournament[] = [
     startDate: "2027-02-15",
     endDate: "2027-02-21",
     ticketPriceFrom: 49,
-    ticketsUrl: TIXR,
+    ticketsUrl: tixrEvent("ppa-mesa-195027"),
     registerUrl: REGISTER,
     status: "upcoming",
     tierKey: "cup",
@@ -402,7 +414,7 @@ export const tournaments: Tournament[] = [
     endDate: "2026-06-26",
     ticketPriceFrom: 20,
     ticketsUrl: TIXR,
-    registerUrl: REGISTER,
+    registerUrl: registerEvent("atlanta-ppa-challenger"),
     status: "upcoming",
     tierKey: "challenger",
     prizeMoney: "$25,000",
