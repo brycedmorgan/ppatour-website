@@ -154,6 +154,8 @@ export default function Home() {
           alt={next.name}
           fill
           priority
+          fetchPriority="high"
+          quality={65}
           sizes="100vw"
           className="animate-kenburns will-change-transform object-cover object-center motion-reduce:animate-none"
         />
