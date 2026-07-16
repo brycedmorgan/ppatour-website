@@ -20,6 +20,14 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-16 (pt. 2) — Seconds on the countdown + hero broadcast clock
+- Countdown badge ticks D:H:M:S every second (homepage + event heroes).
+- New `FirstServeCountdown` — "First Serve In" clock bottom-right of
+  the event hero: big tabular digits, DAYS/HRS/MIN/SEC labels,
+  brand-accent colons; hidden under lg and once the event starts.
+- Verify-note: the clock is client-only (null until mount) — check
+  deployed JS chunks for its strings, not the server HTML.
+
 ### 2026-07-16 — Nationals order of play: Pro Play + Amateur & Junior tables
 - Bryce's ask: split the schedule into a "Pro Play" table (first serve
   + TV) and an "Amateur & Junior Play" section (no serve times — they
