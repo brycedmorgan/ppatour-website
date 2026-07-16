@@ -34,7 +34,7 @@ export function OutboundClickTracker() {
   useEffect(() => {
     function onClick(e: MouseEvent) {
       const anchor = (e.target as Element | null)?.closest?.("a[href]");
-      if (!anchor || typeof window.gtag !== "function") return;
+      if (!anchor) return;
 
       let url: URL;
       try {
@@ -46,13 +46,16 @@ export function OutboundClickTracker() {
       const name = eventNameFor(url.hostname.replace(/^www\./, ""));
       if (!name) return;
 
-      window.gtag("event", name, {
+      const params = {
         placement: url.searchParams.get("utm_content") ?? "untagged",
         campaign: url.searchParams.get("utm_campaign") ?? "untagged",
         destination: url.hostname,
         link_url: url.origin + url.pathname,
         page_path: window.location.pathname,
-      });
+      };
+      window.gtag?.("event", name, params);
+      if (name === "ticket_click") window.fbq?.("trackCustom", "TicketClick", params);
+      if (name === "register_click") window.fbq?.("trackCustom", "RegisterClick", params);
     }
 
     document.addEventListener("click", onClick, { capture: true });
