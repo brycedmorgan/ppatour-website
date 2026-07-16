@@ -20,6 +20,25 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-15 (pt. 8) — Branded event nav + scroll behavior + accordions
+- Bryce's asks, all shipped: (1) floating tab bar swaps "Overview" for
+  the event's mark + name once scrolled (`EventTabNav`, threshold
+  420px, tap = back to top); (2) the next-event ScoreTicker collapses
+  site-wide on scroll (`HideOnScroll`, >120px); (3) per-event brand
+  system — `Tournament.brand {primary, accent, icon}`, Nationals wired
+  from its quick guide (navy #023155, deep red #C1272D, trophy mark
+  extracted from the guide PNG w/ PIL → `public/ppa/events/
+  nationals-trophy.png`); accent threads through hero badge/strip/CTA,
+  section markers, router kickers via `--event-accent` CSS var,
+  falling back to PPA blue for unbranded events; (4) Know Before You
+  Go rows → native <details> accordions (first open).
+- Sticky offsets: event tab bar now top-16; sections scroll-mt-[120px].
+- To brand more events: drop their quick-guide colors + mark into
+  `brand` on the tournament record — everything else is automatic.
+- Fonts note: Nationals guide lists Cormorant Garamond Bold as the
+  event serif — NOT applied (site stays Gotham); revisit if Bryce
+  wants full event-skin typography.
+
 ### 2026-07-15 (pt. 7) — Coverage↔events linking + Event Report spec (Jackalope)
 - `NewsArticle.eventSlug` ties coverage to tour stops; 6 articles
   tagged (Vegas ×2, Atlanta ×2, Chicago, Virginia Beach). Event pages
