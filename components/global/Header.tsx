@@ -394,7 +394,7 @@ export function Header() {
           />
         </Link>
 
-        <nav className="hidden items-center md:flex">
+        <nav className="hidden items-center lg:flex">
           {NAV_ITEMS.map((item) => {
             const active = megaOpen === item.label;
             const base = `relative flex items-center gap-1 px-3 py-2 text-[12px] font-bold uppercase tracking-[0.12em] transition-colors ${
@@ -492,7 +492,7 @@ export function Header() {
           aria-label="Toggle menu"
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="flex size-10 items-center justify-center text-white md:hidden"
+          className="flex size-10 items-center justify-center text-white lg:hidden"
         >
           <div className="space-y-1.5">
             <span
@@ -533,7 +533,7 @@ export function Header() {
 
       {/* Mobile drawer */}
       {open && (
-        <nav className="border-t border-white/10 md:hidden">
+        <nav className="border-t border-white/10 lg:hidden">
           {NAV_ITEMS.map((item) => {
             if (item.submenu) {
               const expanded = mobileExpanded === item.label;
