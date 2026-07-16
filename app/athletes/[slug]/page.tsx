@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SITE_URL } from "@/lib/site";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -55,13 +56,13 @@ export default async function AthletePage({ params }: Params) {
             name: a.name,
             jobTitle: "Professional Pickleball Player",
             nationality: a.country,
-            image: `https://ppatour-website.vercel.app${a.headshot}`,
-            url: `https://ppatour-website.vercel.app/athletes/${a.slug}`,
+            image: `${SITE_URL}${a.headshot}`,
+            url: `${SITE_URL}/athletes/${a.slug}`,
             description: a.bio,
             memberOf: {
               "@type": "Organization",
               name: "Carvana PPA Tour",
-              url: "https://ppatour-website.vercel.app",
+              url: SITE_URL,
             },
           }),
         }}

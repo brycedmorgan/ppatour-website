@@ -10,7 +10,11 @@ import {
 } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
 
-export const metadata: Metadata = { title: "Watch" };
+export const metadata: Metadata = {
+  title: "Watch",
+  description:
+    "Watch pro pickleball live — streaming on PickleballTV and YouTube, national TV windows on Tennis Channel and FOX, plus live scores and brackets.",
+};
 
 const BROADCAST = [
   {

@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "Ambassador Program" };
+export const metadata: Metadata = {
+  title: "Ambassador Program",
+  description:
+    "The PPA Tour Ambassador Program — represent the tour in your community and grow the game.",
+};
 
 const PERKS = [
   { title: "Exclusive Gear", note: "Tour-issued apparel and merch drops you can't buy retail." },

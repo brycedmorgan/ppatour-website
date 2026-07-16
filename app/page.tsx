@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { SITE_URL } from "@/lib/site";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { CountUp } from "@/components/motion/CountUp";
@@ -134,8 +135,8 @@ export default function Home() {
             name: "Carvana PPA Tour",
             alternateName: "Professional Pickleball Association",
             sport: "Pickleball",
-            url: "https://ppatour-website.vercel.app",
-            logo: "https://ppatour-website.vercel.app/ppa/logos/ppa-horizontal-blue.svg",
+            url: SITE_URL,
+            logo: `${SITE_URL}/ppa/logos/ppa-horizontal-blue.svg`,
             sameAs: [
               "https://www.instagram.com/ppatour",
               "https://x.com/ppatour",

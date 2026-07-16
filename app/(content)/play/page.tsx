@@ -4,7 +4,11 @@ import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { withUtm } from "@/lib/utm";
 
-export const metadata: Metadata = { title: "Play" };
+export const metadata: Metadata = {
+  title: "Play",
+  description:
+    "Play the Carvana PPA Tour — amateur brackets by skill and age at every main-tour stop. Junior, Senior, Open, and Pro-Am divisions. Register online.",
+};
 
 const REGISTER_URL = "https://www.pickleballtournaments.com/";
 

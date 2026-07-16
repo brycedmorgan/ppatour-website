@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "Tournament History" };
+export const metadata: Metadata = {
+  title: "Tournament History",
+  description:
+    "Tournament history of the PPA Tour — past champions, memorable finals, and the growth of pro pickleball.",
+};
 
 type Champ = { year: number; ms: string; ws: string; md: string; wd: string; xd: string };
 

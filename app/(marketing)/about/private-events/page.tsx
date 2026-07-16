@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "Host a Private Event" };
+export const metadata: Metadata = {
+  title: "Host a Private Event",
+  description:
+    "Host a private event with the PPA Tour — corporate outings, clinics, and custom pickleball experiences.",
+};
 
 const FORMATS = [
   { name: "Corporate Pro-Am", note: "Half-day clinic + bracket with PPA Tour pros. 16–48 guests." },
