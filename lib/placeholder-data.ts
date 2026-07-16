@@ -1,13 +1,13 @@
 /**
- * Tournament data — mirrors the real PPA Tour 2026–27 main-tour schedule
- * (ppatour.com/schedule), 1,000+ points only on the homepage + schedule.
+ * Tournament data — the PPA Tour 2026–27 season (main tour, Challengers, and
+ * international stops) plus recent completed events for the /events Past tab.
  *
  * Tiers follow the real PPA points structure:
  *   Worlds 3,000 · Slam 2,000 · Cup 1,500 · Open 1,000 · Challenger 125–500.
  *
- * `getMainTourEvents()` keeps Challengers off the homepage + schedule.
- * Prize money / ticket prices / venues for the unconfirmed stops are
- * representative; replace with the live calendar + Sanity CMS + scoring API.
+ * `getMainTourEvents()` keeps Challengers + international off the homepage.
+ * Upcoming events use generic action photos as placeholders — replace with the
+ * live calendar + real event art via the CMS / API.
  */
 
 export type EventTier = "worlds" | "slam" | "cup" | "open" | "challenger";
@@ -46,8 +46,12 @@ export type Tournament = {
   image: string;
   /** Optional real-photo gallery (paths under /public). */
   gallery?: string[];
-  /** Per-event brand system (from the event's quick guide). */
-  brand?: { primary: string; accent: string; icon?: string };
+  /** International-tour events (for the /events category filter). Domestic if unset. */
+  region?: "international";
+  /** Country/region for international events (matches the Country filter). */
+  country?: "Asia" | "Australia" | "Canada" | "Italy" | "Spain";
+  /** Season label for completed events (matches the Season filter). */
+  season?: "2025-2026" | "2025" | "2024" | "2023" | "2022";
 };
 
 /**
@@ -65,391 +69,241 @@ const registerEvent = (slug: string) =>
 const TIXR = "https://www.tixr.com/groups/ppa/events/"; // fallback — no event page yet
 const REGISTER = "https://www.pickleballtournaments.com/"; // fallback — registration not open yet
 
-export const tournaments: Tournament[] = [
+/* ---- schedule builder ---- */
+
+// Generic action photos, cycled across upcoming events until real art lands.
+const GENERIC_IMAGES = [
+  "/ppa/action-md-final.jpg",
+  "/ppa/action-mxd.jpg",
+  "/ppa/action-singles.jpg",
+  "/ppa/action-champ-sunday.jpg",
+  "/ppa/action-waters-bright.jpg",
+  "/ppa/action-masters.jpg",
+];
+
+const TIER_PRICE: Record<EventTier, number> = {
+  worlds: 79,
+  slam: 59,
+  cup: 49,
+  open: 39,
+  challenger: 20,
+};
+const TIER_PRIZE: Record<EventTier, string> = {
+  worlds: "$500,000",
+  slam: "$300,000",
+  cup: "$200,000",
+  open: "$150,000",
+  challenger: "$25,000",
+};
+const SPONSORS = ["Veolia", "Carvana", "Rate", "Proton"];
+
+function kebab(s: string): string {
+  return s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+type RawEvent = {
+  name: string;
+  short: string;
+  start: string;
+  end: string;
+  city: string;
+  state: string;
+  venue?: string;
+  type: "ppa" | "challenger" | "international";
+  tier?: EventTier;
+  country?: Tournament["country"];
+  image?: string;
+};
+
+/** Expand the compact schedule into Tournament records with unique slugs. */
+function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
+  return raws.map((r, i) => {
+    let slug = kebab(r.name);
+    if (seen.has(slug)) slug = `${slug}-${r.start}`;
+    seen.add(slug);
+
+    const tier: EventTier =
+      r.type === "challenger" ? "challenger" : r.type === "international" ? "open" : r.tier!;
+    const sponsor = SPONSORS.find((s) => r.name.startsWith(s));
+
+    return {
+      slug,
+      name: r.name,
+      shortName: r.short,
+      city: r.city,
+      state: r.state,
+      venue: r.venue ?? r.city,
+      startDate: r.start,
+      endDate: r.end,
+      ticketPriceFrom: r.type === "international" ? 35 : TIER_PRICE[tier],
+      ticketsUrl: TIXR,
+      registerUrl: REGISTER,
+      status: "upcoming" as const,
+      tierKey: tier,
+      prizeMoney: r.type === "international" ? "$100,000" : TIER_PRIZE[tier],
+      presentedBy: sponsor,
+      image: r.image ?? GENERIC_IMAGES[i % GENERIC_IMAGES.length],
+      region: r.type === "international" ? ("international" as const) : undefined,
+      country: r.country,
+    };
+  });
+}
+
+// 2026–27 season, chronological.
+const SCHEDULE: RawEvent[] = [
+  // July 2026
+  { name: "PPA Australia 250 Melbourne", short: "Melbourne", start: "2026-07-15", end: "2026-07-19", city: "Melbourne", state: "Australia", type: "international", country: "Australia" },
+  { name: "Macon PPA Challenger", short: "Macon Challenger", start: "2026-07-17", end: "2026-07-19", city: "Macon", state: "GA", type: "challenger" },
+  { name: "PPA Italy 125 Portoroz", short: "Portoroz", start: "2026-07-22", end: "2026-07-26", city: "Portoroz", state: "Italy", type: "international", country: "Italy" },
+  { name: "PPA Asia 500 Singapore Open", short: "Singapore Open", start: "2026-07-23", end: "2026-07-26", city: "Singapore", state: "", type: "international", country: "Asia" },
+  { name: "Wisconsin PPA Challenger", short: "Wisconsin Challenger", start: "2026-07-31", end: "2026-08-02", city: "Lake Hallie", state: "WI", type: "challenger" },
+
+  // August 2026
+  { name: "PPA Asia 500 Ho Chi Minh City Open", short: "Ho Chi Minh Open", start: "2026-08-06", end: "2026-08-09", city: "Ho Chi Minh City", state: "Vietnam", type: "international", country: "Asia" },
+  { name: "PPA Australia Gold Coast", short: "Gold Coast", start: "2026-08-13", end: "2026-08-16", city: "Gold Coast", state: "Australia", type: "international", country: "Australia" },
+  { name: "Seattle PPA Challenger", short: "Seattle Challenger", start: "2026-08-14", end: "2026-08-16", city: "Seattle", state: "WA", type: "challenger" },
+  { name: "PPA Canada 250 Vancouver", short: "Vancouver 250", start: "2026-08-19", end: "2026-08-23", city: "Vancouver", state: "Canada", type: "international", country: "Canada" },
+  { name: "PPA Asia 500 China Open 2", short: "China Open", start: "2026-08-20", end: "2026-08-23", city: "Shenzhen", state: "China", type: "international", country: "Asia" },
+  { name: "Atlanta PPA Challenger", short: "Atlanta Challenger", start: "2026-08-28", end: "2026-08-30", city: "Peachtree City", state: "GA", type: "challenger" },
+  { name: "Veolia Pickleball National Championships", short: "National Championships", start: "2026-08-31", end: "2026-09-06", city: "Cary", state: "NC", venue: "Cary Tennis Park", type: "ppa", tier: "slam", image: "/ppa/nationals-action-2.jpg" },
+
+  // September 2026
+  { name: "PPA Asia 1000 Kuala Lumpur Cup", short: "Kuala Lumpur", start: "2026-09-09", end: "2026-09-13", city: "Kuala Lumpur", state: "Malaysia", type: "international", country: "Asia" },
+  { name: "PPA Canada 125 Vancouver", short: "Vancouver 125", start: "2026-09-10", end: "2026-09-13", city: "Vancouver", state: "Canada", type: "international", country: "Canada" },
+  { name: "Veolia Arizona Open", short: "Arizona Open", start: "2026-09-14", end: "2026-09-20", city: "Mesa", state: "AZ", venue: "Arizona Athletic Grounds", type: "ppa", tier: "open" },
+  { name: "Grand Rapids PPA Challenger", short: "Grand Rapids Challenger", start: "2026-09-18", end: "2026-09-20", city: "Rockford", state: "MI", type: "challenger" },
+  { name: "PPA Spain P250 Barcelona", short: "Barcelona P250", start: "2026-09-23", end: "2026-09-27", city: "Barcelona", state: "Spain", type: "international", country: "Spain" },
+  { name: "Charlotte PPA Challenger", short: "Charlotte Challenger", start: "2026-09-25", end: "2026-09-27", city: "Charlotte", state: "NC", type: "challenger" },
+  { name: "Rate Las Vegas Open", short: "Las Vegas Open", start: "2026-09-28", end: "2026-10-04", city: "Las Vegas", state: "NV", venue: "Darling Tennis Center", type: "ppa", tier: "open" },
+
+  // October 2026
+  { name: "Veolia Chicago Cup", short: "Chicago Cup", start: "2026-10-05", end: "2026-10-11", city: "Chicago", state: "IL", venue: "Life Time — Northbrook", type: "ppa", tier: "cup" },
+  { name: "Sarasota PPA Challenger", short: "Sarasota Challenger", start: "2026-10-09", end: "2026-10-11", city: "Englewood", state: "FL", type: "challenger" },
+  { name: "Virginia Beach Open", short: "Virginia Beach Open", start: "2026-10-12", end: "2026-10-18", city: "Virginia Beach", state: "VA", venue: "Virginia Beach Sports Center", type: "ppa", tier: "open" },
+  { name: "PPA 1500 Australia Pickleball Open", short: "Australia Open", start: "2026-10-13", end: "2026-10-18", city: "Australia", state: "", type: "international", country: "Australia" },
+  { name: "PPA Asia 1500 Hong Kong Slam", short: "Hong Kong", start: "2026-10-19", end: "2026-10-25", city: "Hong Kong", state: "China", type: "international", country: "Asia" },
+  { name: "PPA Canada 125 Ottawa", short: "Ottawa", start: "2026-10-22", end: "2026-10-25", city: "Ottawa", state: "Canada", type: "international", country: "Canada" },
+
+  // November 2026
+  { name: "Pickleball World Championships", short: "World Championships", start: "2026-11-02", end: "2026-11-08", city: "Farmers Branch", state: "TX", venue: "Brookhaven Country Club", type: "ppa", tier: "worlds" },
+  { name: "PPA Spain P125", short: "Spain P125", start: "2026-11-11", end: "2026-11-15", city: "TBA", state: "Spain", type: "international", country: "Spain" },
+  { name: "Proton Daytona Beach Open", short: "Daytona Beach Open", start: "2026-11-16", end: "2026-11-22", city: "Holly Hill", state: "FL", venue: "Pictona at Holly Hill", type: "ppa", tier: "open" },
+  { name: "PPA Canada 125 Toronto", short: "Toronto 125", start: "2026-11-26", end: "2026-11-29", city: "Toronto", state: "Canada", type: "international", country: "Canada" },
+  { name: "Veolia Malibu Cup", short: "Malibu Cup", start: "2026-11-30", end: "2026-12-06", city: "Malibu", state: "CA", venue: "Pepperdine University", type: "ppa", tier: "cup" },
+
+  // December 2026
+  { name: "PPA Australia 125 New South Wales", short: "New South Wales", start: "2026-12-11", end: "2026-12-13", city: "New South Wales", state: "Australia", type: "international", country: "Australia" },
+
+  // January 2027
+  { name: "PPA Italy 125 Brescia", short: "Brescia", start: "2027-01-05", end: "2027-01-09", city: "Brescia", state: "Italy", type: "international", country: "Italy" },
+  { name: "Carvana Pickleball Masters", short: "Pickleball Masters", start: "2027-01-11", end: "2027-01-17", city: "Rancho Mirage", state: "CA", venue: "Hyatt Regency Indian Wells", type: "ppa", tier: "slam" },
+  { name: "Minneapolis Indoor Open", short: "Minneapolis Open", start: "2027-01-18", end: "2027-01-24", city: "Lakeville", state: "MN", venue: "Life Time — Lakeville", type: "ppa", tier: "open" },
+  { name: "PPA Spain P125", short: "Spain P125", start: "2027-01-27", end: "2027-01-31", city: "TBA", state: "Spain", type: "international", country: "Spain" },
+
+  // February 2027
+  { name: "Cape Coral Open", short: "Cape Coral Open", start: "2027-02-01", end: "2027-02-07", city: "Cape Coral", state: "FL", venue: "Cape Coral Racquet Club", type: "ppa", tier: "open" },
+  { name: "Carvana Mesa Cup", short: "Mesa Cup", start: "2027-02-15", end: "2027-02-21", city: "Mesa", state: "AZ", venue: "Bell Bank Park", type: "ppa", tier: "cup" },
+  { name: "PPA Australia 125 Melbourne", short: "Melbourne 125", start: "2027-02-18", end: "2027-02-21", city: "Melbourne", state: "Australia", type: "international", country: "Australia" },
+  { name: "PPA Spain P250", short: "Spain P250", start: "2027-02-24", end: "2027-02-28", city: "TBA", state: "Spain", type: "international", country: "Spain" },
+
+  // March 2027
+  { name: "Newport Beach Open", short: "Newport Beach Open", start: "2027-03-02", end: "2027-03-07", city: "Newport Beach", state: "CA", venue: "Tennis Club at Newport Beach", type: "ppa", tier: "open" },
+  { name: "Texas Open", short: "Texas Open", start: "2027-03-08", end: "2027-03-14", city: "Dallas", state: "TX", venue: "The Courts of McKinney", type: "ppa", tier: "open" },
+  { name: "PPA Australia 250 Sydney Finals", short: "Sydney Finals", start: "2027-03-17", end: "2027-03-21", city: "Sydney", state: "Australia", type: "international", country: "Australia" },
+  { name: "PPA Spain P500", short: "Spain P500", start: "2027-03-17", end: "2027-03-21", city: "TBA", state: "Spain", type: "international", country: "Spain" },
+  { name: "Greater Zion Cup at Black Desert Resort", short: "Greater Zion Cup", start: "2027-03-22", end: "2027-03-28", city: "St. George", state: "UT", venue: "Black Desert Resort", type: "ppa", tier: "cup" },
+
+  // April 2027
+  { name: "PPA Open", short: "PPA Open", start: "2027-04-05", end: "2027-04-11", city: "TBD", state: "", type: "ppa", tier: "open" },
+  { name: "Sacramento Open", short: "Sacramento Open", start: "2027-04-05", end: "2027-04-11", city: "Sacramento", state: "CA", venue: "Life Time — Arden", type: "ppa", tier: "open" },
+  { name: "Cincinnati Open", short: "Cincinnati Open", start: "2027-04-12", end: "2027-04-18", city: "Cincinnati", state: "OH", venue: "Lindner Family Tennis Center", type: "ppa", tier: "open" },
+  { name: "PPA Spain P250", short: "Spain P250", start: "2027-04-21", end: "2027-04-25", city: "TBA", state: "Spain", type: "international", country: "Spain" },
+  { name: "Atlanta Pickleball Championships", short: "Atlanta Championships", start: "2027-04-26", end: "2027-05-02", city: "Atlanta", state: "GA", venue: "Life Time — Peachtree Corners", type: "ppa", tier: "slam" },
+
+  // May 2027
+  { name: "PPA Spain P500 Barcelona", short: "Barcelona P500", start: "2027-05-05", end: "2027-05-09", city: "Barcelona", state: "Spain", type: "international", country: "Spain" },
+  { name: "PPA Finals", short: "PPA Finals", start: "2027-05-10", end: "2027-05-16", city: "San Clemente", state: "CA", venue: "Life Time — Rancho San Clemente", type: "ppa", tier: "slam" },
+];
+
+// Recent completed events — power the /events Past tab + Season filter.
+const PAST_EVENTS: Tournament[] = [
   {
-    slug: "veolia-pickleball-national-championships",
-    name: "Veolia Pickleball National Championships",
-    shortName: "National Championships",
-    city: "Cary",
-    state: "NC",
-    venue: "Cary Tennis Park",
-    startDate: "2026-08-31",
-    endDate: "2026-09-06",
-    ticketPriceFrom: 59,
-    ticketsUrl: tixrEvent("veolia-pickleball-national-championships-184656"),
-    registerUrl: registerEvent("ppa-tour-veolia-ppa-national-championships"),
-    status: "upcoming",
-    tierKey: "slam",
-    prizeMoney: "$1,648,641",
-    presentedBy: "Fasenra",
-    brand: {
-      primary: "#023155",
-      accent: "#C1272D",
-      icon: "/ppa/badges/nationals.png",
-    },
-    image: "/ppa/nationals-drone-champcourt.jpg",
-    gallery: [
-      "/ppa/nationals-drone-stadium.jpg",
-      "/ppa/nationals-crowd-stadium.jpg",
-      "/ppa/nationals-drone-sunset.jpg",
-      "/ppa/nationals-crowd-branded.jpg",
-      "/ppa/nationals-drone-grounds.jpg",
-      "/ppa/nationals-crowd-fans.jpg",
-      "/ppa/nationals-drone-courts.jpg",
-      "/ppa/nationals-action-2.jpg",
-      "/ppa/nationals-crowd-1.jpg",
-    ],
-  },
-  {
-    slug: "veolia-cincinnati-cup",
-    name: "Veolia Cincinnati Cup",
-    shortName: "Cincinnati Cup",
-    city: "Mason",
-    state: "OH",
-    venue: "Lindner Family Tennis Center",
-    startDate: "2026-09-14",
-    endDate: "2026-09-20",
-    ticketPriceFrom: 49,
-    ticketsUrl: tixrEvent("veolia-ppa-cincinnati-181370"),
-    registerUrl: registerEvent("ppa-tour-2026-veolia-cincinnati-cup"),
-    status: "upcoming",
-    tierKey: "cup",
-    prizeMoney: "$1,271,734",
-    presentedBy: "Veolia",
-    image: "/ppa/event-melbourne.jpg",
-  },
-  {
-    slug: "rate-las-vegas-open",
-    name: "Rate Las Vegas Open",
-    shortName: "Las Vegas Open",
-    city: "Las Vegas",
-    state: "NV",
-    venue: "Darling Tennis Center",
-    startDate: "2026-09-28",
-    endDate: "2026-10-04",
-    ticketPriceFrom: 45,
-    ticketsUrl: tixrEvent("ppa-las-vegas-178513"),
-    registerUrl: registerEvent("ppa-tour-2026-rate-las-vegas-open"),
-    status: "upcoming",
-    brand: {
-      primary: "#003058",
-      accent: "#2088e0",
-      icon: "/ppa/badges/las-vegas.png",
-    },
-    tierKey: "open",
-    prizeMoney: "$1,063,327",
-    presentedBy: "JOOLA",
-    image: "/ppa/action-md-final.jpg",
-  },
-  {
-    slug: "veolia-chicago-open",
-    name: "Veolia Chicago Cup",
-    shortName: "Chicago Cup",
-    city: "Northbrook",
-    state: "IL",
-    venue: "Life Time — Northbrook",
-    startDate: "2026-10-05",
-    endDate: "2026-10-11",
-    ticketPriceFrom: 45,
-    ticketsUrl: tixrEvent("ppa-chicago-176687"),
-    registerUrl: registerEvent("ppa-tour-veolia-chicago-open"),
-    status: "upcoming",
-    brand: {
-      primary: "#003058",
-      accent: "#c8102e",
-      icon: "/ppa/badges/chicago.png",
-    },
-    tierKey: "cup",
-    prizeMoney: "$1,063,327",
-    presentedBy: "Storm",
-    image: "/ppa/action-mxd.jpg",
-  },
-  {
-    slug: "virginia-beach-open",
-    name: "Virginia Beach Open",
-    shortName: "Virginia Beach Open",
-    city: "Virginia Beach",
-    state: "VA",
-    venue: "Virginia Beach Sports Center",
-    startDate: "2026-10-12",
-    endDate: "2026-10-18",
-    ticketPriceFrom: 39,
-    ticketsUrl: tixrEvent("ppa-virginia-beach-176326"),
-    registerUrl: registerEvent("ppa-tour-2026-virginia-beach-open"),
-    status: "upcoming",
-    brand: {
-      primary: "#003058",
-      accent: "#0078d0",
-      icon: "/ppa/badges/virginia-beach.png",
-    },
-    tierKey: "open",
-    prizeMoney: "$1,063,327",
-    image: "/ppa/action-masters.jpg",
-  },
-  {
-    slug: "pickleball-world-championships",
-    name: "PPA World Pickleball Championships",
-    shortName: "World Championships",
-    city: "Farmers Branch",
-    state: "TX",
-    venue: "Brookhaven Country Club",
-    startDate: "2026-11-03",
-    endDate: "2026-11-08",
-    ticketPriceFrom: 79,
-    ticketsUrl: tixrEvent("2026-world-pickleball-championships-166345"),
-    registerUrl: registerEvent("2026-pickleball-world-championships"),
-    status: "upcoming",
-    brand: {
-      primary: "#182068",
-      accent: "#007838",
-      icon: "/ppa/badges/worlds.png",
-    },
-    tierKey: "worlds",
-    prizeMoney: "$1,648,641",
-    image: "/ppa/action-singles.jpg",
-  },
-  {
-    slug: "proton-daytona-beach-open",
-    name: "Proton Daytona Beach Open",
-    shortName: "Daytona Beach Open",
-    city: "Holly Hill",
-    state: "FL",
-    venue: "Pictona at Holly Hill",
-    startDate: "2026-11-16",
-    endDate: "2026-11-22",
-    ticketPriceFrom: 39,
-    ticketsUrl: tixrEvent("ppa-daytona-beach-178517"),
-    registerUrl: registerEvent("ppa-tour-florida-open"),
-    status: "upcoming",
-    brand: {
-      primary: "#003058",
-      accent: "#2088e0",
-      icon: "/ppa/badges/daytona.png",
-    },
-    tierKey: "open",
-    prizeMoney: "$1,063,327",
-    presentedBy: "Proton",
-    image: "/ppa/action-champ-sunday.jpg",
-  },
-  {
-    slug: "veolia-malibu-cup",
-    name: "Veolia Malibu Cup",
-    shortName: "Malibu Cup",
-    city: "Malibu",
-    state: "CA",
-    venue: "Pepperdine University",
-    startDate: "2026-11-30",
-    endDate: "2026-12-06",
-    ticketPriceFrom: 55,
-    ticketsUrl: tixrEvent("ppa-malibu-176502"),
-    registerUrl: registerEvent("ppa-tour-veolia-malibu-cup"),
-    status: "upcoming",
-    brand: {
-      primary: "#003058",
-      accent: "#e23a76",
-      icon: "/ppa/badges/malibu.png",
-    },
-    tierKey: "cup",
-    prizeMoney: "$1,271,734",
-    presentedBy: "Proton",
-    image: "/ppa/event-macao.jpg",
-  },
-  {
-    slug: "carvana-ppa-masters",
-    name: "Carvana Pickleball Masters",
-    shortName: "PPA Masters",
-    city: "Palm Springs",
-    state: "CA",
-    venue: "Hyatt Regency Indian Wells",
-    startDate: "2027-01-11",
-    endDate: "2027-01-17",
-    ticketPriceFrom: 59,
-    ticketsUrl: TIXR,
-    registerUrl: registerEvent("ppa-tour-carvana-pickleball-masters-powered-by-invited"),
-    status: "upcoming",
-    tierKey: "slam",
-    prizeMoney: "$1,648,641",
-    presentedBy: "Carvana",
-    image: "/ppa/action-champ-sunday.jpg",
-  },
-  {
-    slug: "minneapolis-indoor-open",
-    name: "Minneapolis Indoor Open",
-    shortName: "Minneapolis Open",
-    city: "Lakeville",
-    state: "MN",
-    venue: "Life Time — Lakeville",
-    startDate: "2027-01-18",
-    endDate: "2027-01-24",
-    ticketPriceFrom: 39,
-    ticketsUrl: TIXR,
-    registerUrl: REGISTER,
-    status: "upcoming",
-    tierKey: "open",
-    prizeMoney: "$1,063,327",
-    image: "/ppa/action-singles.jpg",
-  },
-  {
-    slug: "cape-coral-open",
-    name: "Cape Coral Open",
-    shortName: "Cape Coral Open",
-    city: "Cape Coral",
-    state: "FL",
-    venue: "Cape Coral Racquet Club",
-    startDate: "2027-02-01",
-    endDate: "2027-02-07",
-    ticketPriceFrom: 39,
-    ticketsUrl: TIXR,
-    registerUrl: REGISTER,
-    status: "upcoming",
-    tierKey: "open",
-    prizeMoney: "$1,063,327",
-    image: "/ppa/event-gold-coast.webp",
-  },
-  {
-    slug: "carvana-mesa-cup",
-    name: "Veolia Arizona Open",
-    shortName: "Arizona Open",
-    city: "Mesa",
-    state: "AZ",
-    venue: "Bell Bank Park",
-    startDate: "2027-02-15",
-    endDate: "2027-02-21",
-    ticketPriceFrom: 49,
-    ticketsUrl: tixrEvent("ppa-mesa-195027"),
-    registerUrl: REGISTER,
-    status: "upcoming",
-    brand: {
-      primary: "#003058",
-      accent: "#0078d0",
-      icon: "/ppa/badges/arizona.png",
-    },
-    tierKey: "open",
-    prizeMoney: "$1,271,734",
-    image: "/ppa/action-mxd.jpg",
-  },
-  {
-    slug: "newport-beach-open",
-    name: "Newport Beach Open",
-    shortName: "Newport Beach Open",
-    city: "Newport Beach",
-    state: "CA",
-    venue: "Tennis Club at Newport Beach",
-    startDate: "2027-03-02",
-    endDate: "2027-03-07",
-    ticketPriceFrom: 49,
-    ticketsUrl: TIXR,
-    registerUrl: REGISTER,
-    status: "upcoming",
-    tierKey: "open",
-    prizeMoney: "$1,063,327",
-    image: "/ppa/action-waters-bright.jpg",
-  },
-  {
-    slug: "texas-open",
-    name: "Texas Open",
-    shortName: "Texas Open",
-    city: "McKinney",
-    state: "TX",
-    venue: "The Courts of McKinney",
-    startDate: "2027-03-08",
-    endDate: "2027-03-14",
-    ticketPriceFrom: 45,
-    ticketsUrl: TIXR,
-    registerUrl: REGISTER,
-    status: "upcoming",
-    tierKey: "open",
-    prizeMoney: "$1,063,327",
-    image: "/ppa/action-md-final.jpg",
-  },
-  {
-    slug: "greater-zion-cup",
-    name: "Greater Zion Cup at Black Desert Resort",
-    shortName: "Greater Zion Cup",
-    city: "Ivins",
+    slug: "2026-carvana-utah-open",
+    name: "Carvana Utah Open",
+    shortName: "Utah Open",
+    city: "Salt Lake City",
     state: "UT",
-    venue: "Black Desert Resort",
-    startDate: "2027-03-22",
-    endDate: "2027-03-28",
+    venue: "Liberty Park Courts",
+    startDate: "2026-03-30",
+    endDate: "2026-04-05",
+    ticketPriceFrom: 39,
+    ticketsUrl: TIXR,
+    registerUrl: REGISTER,
+    status: "completed",
+    tierKey: "open",
+    prizeMoney: "$150,000",
+    presentedBy: "Carvana",
+    image: "/ppa/action-singles.jpg",
+    season: "2025-2026",
+  },
+  {
+    slug: "2026-veolia-kansas-city-cup",
+    name: "Veolia Kansas City Cup",
+    shortName: "Kansas City Cup",
+    city: "Overland Park",
+    state: "KS",
+    venue: "Chicken N Pickle — Overland Park",
+    startDate: "2026-04-27",
+    endDate: "2026-05-03",
     ticketPriceFrom: 49,
     ticketsUrl: TIXR,
     registerUrl: REGISTER,
-    status: "upcoming",
+    status: "completed",
     tierKey: "cup",
     prizeMoney: "$1,271,734",
-    image: "/ppa/event-gold-coast.webp",
-  },
-  {
-    slug: "ppa-open",
-    name: "PPA Open",
-    shortName: "PPA Open",
-    city: "To Be Announced",
-    state: "",
-    venue: "Venue TBA",
-    startDate: "2027-04-05",
-    endDate: "2027-04-11",
-    ticketPriceFrom: 39,
-    ticketsUrl: TIXR,
-    registerUrl: REGISTER,
-    status: "upcoming",
-    tierKey: "open",
-    prizeMoney: "$1,063,327",
+    presentedBy: "Veolia",
     image: "/ppa/action-mxd.jpg",
+    season: "2025-2026",
   },
   {
-    slug: "sacramento-open",
-    name: "Sacramento Open",
-    shortName: "Sacramento Open",
-    city: "Sacramento",
-    state: "CA",
-    venue: "Life Time — Arden",
-    startDate: "2027-04-12",
-    endDate: "2027-04-18",
+    slug: "2026-orlando-open",
+    name: "Orlando Open",
+    shortName: "Orlando Open",
+    city: "Orlando",
+    state: "FL",
+    venue: "USTA National Campus",
+    startDate: "2026-05-18",
+    endDate: "2026-05-24",
     ticketPriceFrom: 39,
     ticketsUrl: TIXR,
     registerUrl: REGISTER,
-    status: "upcoming",
+    status: "completed",
     tierKey: "open",
-    prizeMoney: "$1,063,327",
-    image: "/ppa/action-singles.jpg",
+    prizeMoney: "$150,000",
+    image: "/ppa/action-md-final.jpg",
+    season: "2025-2026",
   },
   {
-    slug: "atlanta-pickleball-championships",
-    name: "Veolia Atlanta Pickleball Championships",
-    shortName: "Atlanta Championships",
-    city: "Peachtree Corners",
-    state: "GA",
-    venue: "Life Time — Peachtree Corners",
-    startDate: "2027-04-26",
-    endDate: "2027-05-02",
+    slug: "2026-los-angeles-slam",
+    name: "Los Angeles Slam",
+    shortName: "LA Slam",
+    city: "Los Angeles",
+    state: "CA",
+    venue: "Dignity Health Sports Park",
+    startDate: "2026-06-08",
+    endDate: "2026-06-14",
     ticketPriceFrom: 59,
     ticketsUrl: TIXR,
     registerUrl: REGISTER,
-    status: "upcoming",
+    status: "completed",
     tierKey: "slam",
-    prizeMoney: "$1,648,641",
-    presentedBy: "Veolia",
-    image: "/ppa/action-waters-bright.jpg",
+    prizeMoney: "$300,000",
+    image: "/ppa/action-champ-sunday.jpg",
+    season: "2025-2026",
   },
-  {
-    slug: "ppa-finals",
-    name: "PPA Finals",
-    shortName: "PPA Finals",
-    city: "San Clemente",
-    state: "CA",
-    venue: "Life Time — Rancho San Clemente",
-    startDate: "2027-05-10",
-    endDate: "2027-05-16",
-    ticketPriceFrom: 69,
-    ticketsUrl: TIXR,
-    registerUrl: REGISTER,
-    status: "upcoming",
-    tierKey: "slam",
-    prizeMoney: "$1,252,241",
-    image: "/ppa/action-md-final.jpg",
-  },
-  // ── Below main-tour: a Challenger, kept so the 1,000+ filter is real.
-  // Never appears on the homepage or schedule (getMainTourEvents excludes it).
   {
     slug: "atlanta-ppa-challenger",
     name: "Atlanta PPA Challenger",
@@ -461,12 +315,90 @@ export const tournaments: Tournament[] = [
     endDate: "2026-06-26",
     ticketPriceFrom: 20,
     ticketsUrl: TIXR,
-    registerUrl: registerEvent("atlanta-ppa-challenger"),
-    status: "upcoming",
+    registerUrl: REGISTER,
+    status: "completed",
     tierKey: "challenger",
     prizeMoney: "$25,000",
     image: "/ppa/action-mxd.jpg",
+    season: "2025-2026",
   },
+  {
+    slug: "2025-newport-beach-open",
+    name: "Newport Beach Open",
+    shortName: "Newport Open",
+    city: "Newport Beach",
+    state: "CA",
+    venue: "Tennis Club at Newport Beach",
+    startDate: "2025-09-10",
+    endDate: "2025-09-16",
+    ticketPriceFrom: 39,
+    ticketsUrl: TIXR,
+    registerUrl: REGISTER,
+    status: "completed",
+    tierKey: "open",
+    prizeMoney: "$1,063,327",
+    image: "/ppa/action-waters-bright.jpg",
+    season: "2025",
+  },
+  {
+    slug: "2024-dallas-slam",
+    name: "Dallas Open",
+    shortName: "Dallas Open",
+    city: "Dallas",
+    state: "TX",
+    venue: "Brookhaven Country Club",
+    startDate: "2024-10-14",
+    endDate: "2024-10-20",
+    ticketPriceFrom: 55,
+    ticketsUrl: TIXR,
+    registerUrl: REGISTER,
+    status: "completed",
+    tierKey: "slam",
+    prizeMoney: "$300,000",
+    image: "/ppa/action-md-final.jpg",
+    season: "2024",
+  },
+  {
+    slug: "2023-phoenix-cup",
+    name: "Phoenix Cup",
+    shortName: "Phoenix Cup",
+    city: "Phoenix",
+    state: "AZ",
+    venue: "Bell Bank Park",
+    startDate: "2023-11-06",
+    endDate: "2023-11-12",
+    ticketPriceFrom: 45,
+    ticketsUrl: TIXR,
+    registerUrl: REGISTER,
+    status: "completed",
+    tierKey: "cup",
+    prizeMoney: "$200,000",
+    image: "/ppa/action-mxd.jpg",
+    season: "2023",
+  },
+  {
+    slug: "2022-miami-open",
+    name: "Miami Open",
+    shortName: "Miami Open",
+    city: "Miami",
+    state: "FL",
+    venue: "Miami Beach Tennis Center",
+    startDate: "2022-12-05",
+    endDate: "2022-12-11",
+    ticketPriceFrom: 35,
+    ticketsUrl: TIXR,
+    registerUrl: REGISTER,
+    status: "completed",
+    tierKey: "open",
+    prizeMoney: "$125,000",
+    image: "/ppa/action-singles.jpg",
+    season: "2022",
+  },
+];
+
+export const tournaments: Tournament[] = [
+  ...buildSchedule(SCHEDULE, new Set(PAST_EVENTS.map((e) => e.slug))),
+  ...PAST_EVENTS,
 ];
 
 /** Ranking points for an event, from its tier. */
@@ -485,13 +417,24 @@ export function tierLabel(t: Pick<Tournament, "tierKey">): string {
 }
 
 /**
- * Main-tour events only (1,000+ points), chronological. The single source of
- * truth for the homepage + schedule — Challengers never appear on either.
+ * Main-tour events only (1,000+ points, domestic, upcoming), chronological.
+ * The single source of truth for the homepage — Challengers, international,
+ * and completed events never appear.
  */
 export function getMainTourEvents(): Tournament[] {
   return tournaments
-    .filter((t) => tierPoints(t) >= MAIN_TOUR_MIN_POINTS)
+    .filter(
+      (t) =>
+        tierPoints(t) >= MAIN_TOUR_MIN_POINTS &&
+        t.status !== "completed" &&
+        t.region !== "international",
+    )
     .sort((a, b) => a.startDate.localeCompare(b.startDate));
+}
+
+/** Every event — all tiers, domestic + international, past + upcoming — chronological. */
+export function getAllEvents(): Tournament[] {
+  return [...tournaments].sort((a, b) => a.startDate.localeCompare(b.startDate));
 }
 
 /** Next upcoming main-tour event, chronologically. */
@@ -527,6 +470,21 @@ export function getTickerState(): TickerState {
     tournamentName: next.shortName,
     eventDate: next.startDate,
     eventSlug: next.slug,
+  };
+}
+
+/**
+ * Demo LIVE ticker state for the `/live` preview — shows how the site chrome
+ * looks during an active tournament. Replace with real scoring-API data once
+ * that lands (see getTickerState). Not used on the real homepage.
+ */
+export function getLiveTickerState(): TickerState {
+  return {
+    mode: "LIVE",
+    court: "Championship Court",
+    players: ["Ben Johns", "Federico Staksrud"],
+    score: "11–9, 9–11, 8–6",
+    watchUrl: "/watch",
   };
 }
 

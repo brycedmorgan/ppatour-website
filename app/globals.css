@@ -57,6 +57,8 @@
   --color-ppa-blue-deep: #005d9b; /* CTA hover */
   --color-ppa-sky: #4dc1ef; /* secondary — sky accent */
   --color-ppa-yellow: #e7e700; /* secondary — highlight */
+  --color-ppa-live: #e5342a; /* live/broadcast red — live-state indicators only */
+  --color-ppa-live-deep: #c22318; /* live red — hover */
   --color-ppa-paper: #f3f5f7; /* light editorial body */
   --color-ppa-line: #d7dee4; /* light borders */
   --font-display: var(--font-gotham), ui-sans-serif, system-ui, sans-serif;

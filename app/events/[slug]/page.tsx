@@ -272,6 +272,8 @@ export default async function EventPage({ params }: Params) {
           className="animate-kenburns will-change-transform object-cover object-center motion-reduce:animate-none"
         />
         <div className="absolute inset-0 scrim-hero" />
+        {/* Soften the header→hero seam: navy fades down into the hero image. */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-32 bg-gradient-to-b from-ppa-navy to-transparent" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-10 pt-20">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em]">
             <span className="bg-[var(--event-accent)] px-2 py-0.5">

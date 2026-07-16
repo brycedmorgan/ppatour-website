@@ -56,12 +56,10 @@ const LEGACY_REDIRECTS = [
 
 const nextConfig: NextConfig = {
   images: {
-    // qualities must be allowlisted or next/image silently clamps to 75 —
-    // the hero uses 65 (perf/lcp-hero).
-    qualities: [65, 75],
-  },
-  async redirects() {
-    return LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true }));
+    // Player headshots served by the Pickleball.com partner API (rankings feed).
+    remotePatterns: [
+      { protocol: "https", hostname: "images.pickleball.com" },
+    ],
   },
 };
 

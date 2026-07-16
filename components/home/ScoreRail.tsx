@@ -1,49 +1,33 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef, useState } from "react";
 import { matches } from "@/lib/home-content";
 
 /**
- * Live-score ticker. A real horizontal scroll container that auto-advances
- * to the right, pauses on hover, and is fully drag/swipe-scrollable. The
- * match list is rendered twice so the auto-scroll loops seamlessly.
+ * Score rail. A horizontal scroll container — drag with the mouse or swipe on
+ * touch. Does not auto-advance. Each edge fades only when there's more to
+ * scroll that way, so the first and last cards are crisp at the ends.
  */
 export function ScoreRail() {
   const railRef = useRef<HTMLDivElement>(null);
-  const hovering = useRef(false);
-  const interacting = useRef(false);
   const drag = useRef({ active: false, startX: 0, startScroll: 0 });
+  const [edges, setEdges] = useState({ start: true, end: false });
 
-  useEffect(() => {
+  function onScroll() {
     const el = railRef.current;
     if (!el) return;
-    const reduce = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    // Touch devices get a static, natively swipeable rail — auto-advance
-    // would carry a score away mid-read and can't be hover-paused (§QA).
-    const coarse = window.matchMedia("(pointer: coarse)").matches;
-    let raf = 0;
+    setEdges({
+      start: el.scrollLeft <= 2,
+      end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 2,
+    });
+  }
 
-    const tick = () => {
-      const half = el.scrollWidth / 2;
-      if (half > 0) {
-        if (!hovering.current && !interacting.current && !reduce && !coarse) {
-          el.scrollLeft += 0.7;
-        }
-        // Seamless wrap — the list is duplicated, so jumping by one
-        // set width is invisible (works for auto-scroll and dragging).
-        if (el.scrollLeft >= half) el.scrollLeft -= half;
-        else if (el.scrollLeft < 0) el.scrollLeft += half;
-      }
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, []);
+  // Fade an edge only when there's more content past it in that direction.
+  const mask = `linear-gradient(to right, ${
+    edges.start ? "#000 0%" : "transparent 0%, #000 5%"
+  }, ${edges.end ? "#000 100%" : "#000 92%, transparent 100%"})`;
 
   function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
-    interacting.current = true;
     if (e.pointerType !== "mouse") return; // touch/pen use native scroll
     const el = railRef.current;
     if (!el) return;
@@ -61,34 +45,24 @@ export function ScoreRail() {
     el.scrollLeft = drag.current.startScroll - (e.clientX - drag.current.startX);
   }
 
-  function endInteraction() {
-    interacting.current = false;
+  function endDrag() {
     drag.current.active = false;
   }
 
   return (
     <div
       ref={railRef}
-      onMouseEnter={() => (hovering.current = true)}
-      onMouseLeave={() => {
-        hovering.current = false;
-        endInteraction();
-      }}
+      onScroll={onScroll}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
-      onPointerUp={endInteraction}
-      onPointerCancel={endInteraction}
+      onPointerUp={endDrag}
+      onPointerCancel={endDrag}
       className="flex cursor-grab gap-4 overflow-x-auto select-none active:cursor-grabbing [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      style={{
-        maskImage:
-          "linear-gradient(to right, transparent, #000 4%, #000 96%, transparent)",
-        WebkitMaskImage:
-          "linear-gradient(to right, transparent, #000 4%, #000 96%, transparent)",
-      }}
+      style={{ maskImage: mask, WebkitMaskImage: mask }}
     >
-      {[...matches, ...matches].map((m, idx) => (
+      {matches.map((m) => (
         <article
-          key={`${m.id}-${idx}`}
+          key={m.id}
           className="flex w-[286px] shrink-0 flex-col border border-ppa-line bg-ppa-paper p-4"
         >
           <div className="flex items-center justify-between gap-2">
@@ -96,12 +70,12 @@ export function ScoreRail() {
               {m.division} · {m.round}
             </p>
             {m.status === "live" ? (
-              <span className="flex shrink-0 items-center gap-1.5 bg-ppa-blue px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-white">
+              <span className="flex shrink-0 items-center gap-1.5 bg-ppa-live px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-white">
                 <span className="size-1.5 animate-pulse rounded-full bg-white" />
                 Live
               </span>
             ) : m.status === "final" ? (
-              <span className="shrink-0 text-[9px] font-bold uppercase tracking-[0.16em] text-ppa-navy/40">
+              <span className="shrink-0 text-[9px] font-bold uppercase tracking-[0.16em] text-[#2f9e44]">
                 Final
               </span>
             ) : (
