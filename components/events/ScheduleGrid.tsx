@@ -73,9 +73,21 @@ export function ScheduleGrid() {
               className="object-cover grayscale-[30%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
             />
             <div className="absolute inset-0 scrim-card" />
-            <span className="absolute left-3 top-2 font-display text-2xl leading-none text-white/30">
-              {String(i + 1).padStart(2, "0")}
-            </span>
+            {t.brand?.icon ? (
+              <span className="absolute left-3 top-3 block h-20 w-[42px] overflow-hidden rounded drop-shadow-md transition-transform duration-500 group-hover:scale-105">
+                <Image
+                  src={t.brand.icon}
+                  alt={`${t.shortName} badge`}
+                  fill
+                  sizes="42px"
+                  className="object-contain"
+                />
+              </span>
+            ) : (
+              <span className="absolute left-3 top-2 font-display text-2xl leading-none text-white/30">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+            )}
             <span className="absolute right-3 top-3 bg-ppa-yellow px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] text-ppa-navy">
               {tierShort(t)} · {tierPoints(t).toLocaleString()}
             </span>
@@ -94,7 +106,15 @@ export function ScheduleGrid() {
                 {t.state ? `, ${t.state}` : ""}
               </p>
               <span className="mt-3 flex items-center justify-between gap-3">
-                <span className="inline-flex h-8 items-center gap-1.5 bg-ppa-blue px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors group-hover:bg-ppa-blue-deep">
+                <span
+                  style={
+                    t.brand ? { backgroundColor: t.brand.accent } : undefined
+                  }
+                  className={`inline-flex h-8 items-center gap-1.5 px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-all ${
+                    t.brand
+                      ? "group-hover:brightness-90"
+                      : "bg-ppa-blue group-hover:bg-ppa-blue-deep"
+                  }`}>
                   Event Guide
                   <span
                     aria-hidden
