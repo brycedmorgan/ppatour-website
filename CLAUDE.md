@@ -20,6 +20,17 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-15 (pt. 9) — Article player links (inline + rail)
+- Bryce's ask: articles referencing players should hyperlink them and
+  offer bio links on the right. Shipped: `linkifyPlayers` wraps
+  athlete full-name mentions in the dek/body with links to
+  `/athletes/{slug}`; sticky right rail "Players in This Story"
+  (headshot, rank, division) merges explicit `article.players` with
+  auto-detected mentions. No players → centered single column.
+- Seeded players on vegas-final / race-report / atlanta-draw. To
+  feature players on any article: add slugs to `players`; inline
+  linking is automatic wherever the roster name appears verbatim.
+
 ### 2026-07-15 (pt. 8b) — Trophy mark in the event hero
 - Follow-up from Bryce ("it is perfect when you scroll, its stunning"):
   the event mark now also sits left of the event name in the HERO —
