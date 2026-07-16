@@ -10,6 +10,7 @@ import { StickyBuyBar } from "@/components/global/StickyBuyBar";
 import { ScrollReveal } from "@/components/motion/ScrollReveal";
 import { Analytics } from "@/components/global/Analytics";
 import { OutboundClickTracker } from "@/components/global/OutboundClickTracker";
+import { SITE_INDEXABLE, SITE_URL } from "@/lib/site";
 
 /* Official brand font (Carvana PPA Tour brand guide): Gotham, used for both
    body and headlines (Gotham Black). Single-typeface system. */
@@ -25,7 +26,8 @@ const gotham = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ppatour-website.vercel.app"),
+  metadataBase: new URL(SITE_URL),
+  robots: SITE_INDEXABLE ? undefined : { index: false, follow: false },
   title: {
     default: "Carvana PPA Tour — The Pro Tour of Pickleball",
     template: "%s · Carvana PPA Tour",
