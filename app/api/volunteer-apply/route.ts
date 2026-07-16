@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { cioIdentifyAndTrack } from "@/lib/customerio";
 
 /**
  * Volunteer application endpoint. Each submission is emailed to the
@@ -101,6 +102,24 @@ export async function POST(request: Request) {
 
   const applicationDate = new Date().toISOString();
   console.log("[volunteer-apply]", { ...payload, applicationDate });
+
+  // Best-effort: put the applicant in Customer.io with a
+  // `volunteer_application` event so the volunteer team can build segments
+  // and automations. The email to the team below is the system of record.
+  await cioIdentifyAndTrack(
+    payload.email!,
+    {
+      first_name: payload.firstName,
+      last_name: payload.lastName,
+      volunteer_applicant: true,
+    },
+    "volunteer_application",
+    {
+      shirt_size: payload.shirtSize,
+      heard_about: payload.heardAbout ?? "",
+      application_date: applicationDate,
+    },
+  ).catch(() => {});
 
   const apiKey = process.env.CUSTOMERIO_APP_API_KEY;
   if (!apiKey) {
