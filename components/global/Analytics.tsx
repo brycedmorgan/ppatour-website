@@ -39,7 +39,7 @@ export function Analytics() {
       </Script>
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${id}`}
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
     </>
   );
