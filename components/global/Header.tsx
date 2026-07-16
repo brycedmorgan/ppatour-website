@@ -22,11 +22,11 @@ type NavItem = {
 };
 
 const NAV_ITEMS: NavItem[] = [
+  { label: "Events", href: "/events", mega: true },
   { label: "Watch", href: "/watch" },
   { label: "Play", href: "/play" },
   { label: "Athletes", href: "/athletes" },
   { label: "Rankings", href: "/rankings" },
-  { label: "Events", href: "/events", mega: true },
   {
     label: "Tour",
     mega: true,
