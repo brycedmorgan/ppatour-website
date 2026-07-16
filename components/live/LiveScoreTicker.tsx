@@ -257,6 +257,8 @@ export function LiveScoreTicker({ logo }: { logo?: string | null }) {
           const bWins = cols.filter((c) => c.winner === "b").length;
           const matchWinner =
             m.status === "final" ? (aWins > bWins ? 0 : bWins > aWins ? 1 : null) : null;
+          // Doubles names are longer (two players) — render them a touch smaller.
+          const isDoubles = m.teams.some((t) => t.players.length > 1);
           return (
             <article
               key={m.id}
@@ -294,7 +296,11 @@ export function LiveScoreTicker({ logo }: { logo?: string | null }) {
                             <Avatar key={p.slug} player={p} />
                           ))}
                         </div>
-                        <span className="truncate text-[13px] font-semibold text-ppa-navy">
+                        <span
+                          className={`truncate font-semibold text-ppa-navy ${
+                            isDoubles ? "text-[11px]" : "text-[13px]"
+                          }`}
+                        >
                           {team.players.map((p) => p.name).join(" / ")}
                         </span>
                       </div>
