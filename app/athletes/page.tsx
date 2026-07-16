@@ -6,7 +6,11 @@ import { PointsRace } from "@/components/home/PointsRace";
 import { athletes } from "@/lib/athletes";
 import { divisionRankings } from "@/lib/home-content";
 
-export const metadata: Metadata = { title: "Athletes" };
+export const metadata: Metadata = {
+  title: "Athletes",
+  description:
+    "The pros of the Carvana PPA Tour — profiles, rankings, and the season-long points race for every touring professional.",
+};
 
 export default function AthletesPage() {
   const divisions = divisionRankings.length;

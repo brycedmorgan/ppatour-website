@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { ScheduleGrid } from "@/components/events/ScheduleGrid";
 
-export const metadata: Metadata = { title: "Schedule" };
+export const metadata: Metadata = {
+  title: "Schedule",
+  description:
+    "The 2026–27 Carvana PPA Tour schedule — every main-tour stop with dates, venues, ticket prices, and event guides. Slams, Cups, Opens, and Worlds.",
+};
 
 export default function EventsPage() {
   return (

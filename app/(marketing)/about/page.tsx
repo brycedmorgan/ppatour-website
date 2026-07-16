@@ -3,7 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 
-export const metadata: Metadata = { title: "About" };
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "About the Carvana PPA Tour — the premier professional pickleball tour — 25 stops a year and the best players in the world, all chasing one points race.",
+};
 
 const STATS = [
   { n: "25", label: "Tour Stops" },

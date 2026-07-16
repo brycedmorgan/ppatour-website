@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "Contact" };
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Contact the Carvana PPA Tour — tickets, events, partnerships, media, and player questions.",
+};
 
 const CONTACTS = [
   { area: "General", email: "info@ppatour.com", note: "Anything not covered below." },

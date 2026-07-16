@@ -3,7 +3,11 @@ import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { PickleballIn90 } from "@/components/home/PickleballIn90";
 
-export const metadata: Metadata = { title: "What is Pickleball?" };
+export const metadata: Metadata = {
+  title: "What is Pickleball?",
+  description:
+    "What is pickleball? The rules, the court, the kitchen, and why it's America's fastest-growing sport.",
+};
 
 const BASICS = [
   {

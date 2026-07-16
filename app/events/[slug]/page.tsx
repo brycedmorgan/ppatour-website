@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SITE_URL } from "@/lib/site";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -243,12 +244,12 @@ export default async function EventPage({ params }: Params) {
               name: t.venue,
               address: t.state ? `${t.city}, ${t.state}` : t.city,
             },
-            image: `https://ppatour-website.vercel.app${t.image}`,
-            url: `https://ppatour-website.vercel.app/events/${t.slug}`,
+            image: `${SITE_URL}${t.image}`,
+            url: `${SITE_URL}/events/${t.slug}`,
             organizer: {
               "@type": "Organization",
               name: "Carvana PPA Tour",
-              url: "https://ppatour-website.vercel.app",
+              url: SITE_URL,
             },
             offers: {
               "@type": "Offer",

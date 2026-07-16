@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 
-export const metadata: Metadata = { title: "How It Works" };
+export const metadata: Metadata = {
+  title: "How It Works",
+  description:
+    "How the Carvana PPA Tour works — event tiers, ranking points, seeding, and the season-long race explained.",
+};
 
 const POINT_TIERS = [
   {

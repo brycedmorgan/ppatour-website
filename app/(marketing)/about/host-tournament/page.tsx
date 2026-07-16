@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "Host a PPA Tour Tournament" };
+export const metadata: Metadata = {
+  title: "Host a PPA Tour Tournament",
+  description:
+    "Bring a PPA Tour event to your city — venue requirements, formats, and how to host a professional pickleball tournament.",
+};
 
 const STEPS = [
   { n: "01", title: "Submit Your Bid", body: "Send venue, dates, and city info via the inquiry form. We'll reach out within five business days." },
