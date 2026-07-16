@@ -20,6 +20,12 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-15 (pt. 8b) — Trophy mark in the event hero
+- Follow-up from Bryce ("it is perfect when you scroll, its stunning"):
+  the event mark now also sits left of the event name in the HERO —
+  white treatment (brightness-0 invert + navy drop-shadow) over the
+  photo. Renders for any event with `brand.icon`; others unchanged.
+
 ### 2026-07-15 (pt. 8) — Branded event nav + scroll behavior + accordions
 - Bryce's asks, all shipped: (1) floating tab bar swaps "Overview" for
   the event's mark + name once scrolled (`EventTabNav`, threshold
