@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { ScoreTicker } from "@/components/global/ScoreTicker";
-import { Header } from "@/components/global/Header";
+import { TopBar } from "@/components/global/TopBar";
 import { SiteFooter } from "@/components/global/SiteFooter";
 import { CookieBanner } from "@/components/global/CookieBanner";
 import { StickyBuyBar } from "@/components/global/StickyBuyBar";
 import { ScrollReveal } from "@/components/motion/ScrollReveal";
+import { getTournamentDetails, LIVE_EVENT_UUID } from "@/lib/tournament-api";
 
 /* Official brand font (Carvana PPA Tour brand guide): Gotham, used for both
    body and headlines (Gotham Black). Single-typeface system. */
@@ -44,21 +44,26 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Live tournament logo for the /live header ticker (cached; used only there).
+  const liveDetails = await getTournamentDetails(LIVE_EVENT_UUID);
+
   return (
     <html
       lang="en"
       className={`${gotham.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-ppa-paper font-sans text-ppa-navy">
-        <div className="sticky top-0 z-50">
-          <ScoreTicker />
-          <Header />
-        </div>
+      {/* suppressHydrationWarning: browser extensions (Grammarly, Dashlane,
+          ColorZilla, …) inject attributes on <body> before React hydrates. */}
+      <body
+        suppressHydrationWarning
+        className="flex min-h-full flex-col bg-ppa-paper font-sans text-ppa-navy"
+      >
+        <TopBar liveLogo={liveDetails?.logo || null} />
         <main className="flex-1">{children}</main>
         <SiteFooter />
         <StickyBuyBar />

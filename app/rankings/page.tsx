@@ -2,23 +2,23 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
-import { PointsRace } from "@/components/home/PointsRace";
-import { getAthlete } from "@/lib/athletes";
-import { divisionRankings } from "@/lib/home-content";
+import { RankingsBoard } from "@/components/rankings/RankingsBoard";
+import { getRankings } from "@/lib/rankings-api";
 
 export const metadata: Metadata = {
-  title: "Rankings",
+  title: "World Pickleball Rankings",
   description:
-    "The PPA Tour Points Race — top-8 standings across all six pro divisions, updated through the season.",
+    "The World Pickleball Rankings — combined men's and women's standings, updated through the PPA Tour season.",
 };
 
-export default function RankingsPage() {
-  // The current No. 1 in each division — a quick "atop the race" strip.
-  const leaders = divisionRankings.map((d) => {
-    const top = d.entries[0];
-    const a = top ? getAthlete(top.slug) : undefined;
-    return { division: d.label, athlete: a, points: top?.points };
-  });
+export default async function RankingsPage() {
+  // 52-week World Pickleball Rankings (top 25 per gender).
+  const ranking = await getRankings();
+
+  // Current No. 1s: the top man + top woman.
+  const leaders = ranking.divisions
+    .map((d) => ({ division: d.label, entry: d.entries[0] }))
+    .filter((l) => l.entry);
 
   return (
     <>
@@ -32,55 +32,82 @@ export default function RankingsPage() {
             </p>
           </div>
           <h1 className="mt-2 font-display text-3xl uppercase leading-[1.02] sm:text-4xl">
-            The Points Race
+            World Pickleball Rankings
           </h1>
-          <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
-            Every result moves a pro up or down. Top-8 standings in all six
-            divisions — the season-long chase to be the year-end No. 1.
-          </p>
+          <div className="mt-4 max-w-2xl space-y-3 text-sm leading-relaxed text-ppa-navy/60">
+            <p>
+              The World Pickleball Ranking represents a comprehensive system
+              designed to identify the top overall pickleball players in the
+              world. This composite ranking takes into account performance
+              across all three events: gender doubles, mixed doubles, and
+              singles.
+            </p>
+            <p>
+              World Pickleball Rankings are determined using a weighted point
+              system based on a combination of each player&apos;s PPA Tour
+              points earned in the last 52 weeks across all three events:
+            </p>
+            <ul className="space-y-1.5">
+              {[
+                ["Gender Doubles", "50%"],
+                ["Mixed Doubles", "35%"],
+                ["Singles", "15%"],
+              ].map(([event, weight]) => (
+                <li key={event} className="flex items-center gap-2.5">
+                  <span className="h-1.5 w-1.5 shrink-0 bg-ppa-blue" />
+                  <span className="text-ppa-navy/70">
+                    <span className="font-bold text-ppa-navy">{event}:</span>{" "}
+                    {weight}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 
-      {/* Atop the Race — current No. 1 strip */}
+      {/* The Current No. 1s */}
       <section className="bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
-            Atop the Race
+            Atop the Rankings
           </p>
           <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
             The Current No. 1s
           </h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {leaders.map((l) =>
-              l.athlete ? (
-                <Link
-                  key={l.division}
-                  href={`/athletes/${l.athlete.slug}`}
-                  className="group flex items-center gap-4 border border-ppa-line bg-ppa-paper p-4 transition-colors hover:bg-white"
-                >
-                  <div className="relative size-16 shrink-0 overflow-hidden rounded-full bg-ppa-navy-deep">
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {leaders.map(({ division, entry }) => (
+              <Link
+                key={division}
+                href={entry.profileUrl}
+                target={entry.hasLocalProfile ? undefined : "_blank"}
+                rel={entry.hasLocalProfile ? undefined : "noopener noreferrer"}
+                className="group flex items-center gap-4 border border-ppa-line bg-ppa-paper p-4 transition-colors hover:bg-white"
+              >
+                <div className="relative size-16 shrink-0 overflow-hidden rounded-full bg-ppa-navy-deep">
+                  {entry.headshot ? (
                     <Image
-                      src={l.athlete.headshot}
-                      alt={l.athlete.name}
+                      src={entry.headshot}
+                      alt={entry.name}
                       fill
                       sizes="64px"
                       className="object-cover object-top"
                     />
-                  </div>
-                  <div className="flex flex-1 flex-col">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-blue">
-                      {l.division} · No. 1
-                    </span>
-                    <span className="mt-0.5 font-display text-lg uppercase leading-tight text-ppa-navy transition-colors group-hover:text-ppa-blue">
-                      {l.athlete.name}
-                    </span>
-                    <span className="mt-0.5 text-xs tabular-nums text-ppa-navy/55">
-                      {l.points?.toLocaleString()} pts
-                    </span>
-                  </div>
-                </Link>
-              ) : null,
-            )}
+                  ) : null}
+                </div>
+                <div className="flex flex-1 flex-col">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-blue">
+                    {division} · No. 1
+                  </span>
+                  <span className="mt-0.5 font-display text-lg uppercase leading-tight text-ppa-navy transition-colors group-hover:text-ppa-blue">
+                    {entry.name}
+                  </span>
+                  <span className="mt-0.5 text-xs tabular-nums text-ppa-navy/55">
+                    {entry.points.toLocaleString(undefined, { maximumFractionDigits: 1 })} pts
+                  </span>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -95,17 +122,25 @@ export default function RankingsPage() {
             </p>
           </div>
           <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
-            Top 8 · Six Divisions
+            Men&apos;s &amp; Women&apos;s Rankings
           </h2>
           <p className="mt-2 max-w-xl text-sm text-white/60">
-            Tap a division to switch the table. Click any name to open that
-            pro&apos;s profile.
+            Switch between the men&apos;s and women&apos;s boards. Click any name
+            to open that pro&apos;s profile.
           </p>
-          <PointsRace />
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-6">
+            <RankingsBoard divisions={ranking.divisions} />
+          </div>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link
+              href="/leaderboards"
+              className="inline-flex h-11 items-center bg-ppa-blue px-8 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
+            >
+              See Full Leaderboard →
+            </Link>
             <Link
               href="/athletes"
-              className="inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-ppa-blue-deep"
+              className="inline-flex h-11 items-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-white hover:text-ppa-navy"
             >
               Full Roster →
             </Link>

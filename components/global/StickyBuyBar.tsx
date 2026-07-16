@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import {
   formatDate,
+  getLiveTickerState,
   getNextTournament,
   getTickerState,
 } from "@/lib/placeholder-data";
@@ -23,7 +25,8 @@ export function StickyBuyBar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const state = getTickerState();
+  const pathname = usePathname();
+  const state = pathname === "/live" ? getLiveTickerState() : getTickerState();
   const next = getNextTournament();
   const live = state.mode === "LIVE";
   const href = live
@@ -40,10 +43,14 @@ export function StickyBuyBar() {
         visible ? "translate-y-0" : "pointer-events-none translate-y-full"
       }`}
     >
-      <div className="border-t-2 border-ppa-blue bg-ppa-navy-deep/95 text-white backdrop-blur-sm">
+      <div
+        className={`border-t-2 bg-ppa-navy-deep/95 text-white backdrop-blur-sm ${
+          live ? "border-ppa-live" : "border-ppa-blue"
+        }`}
+      >
         <div className="mx-auto flex h-14 w-full max-w-6xl items-center gap-3 px-4">
           {live ? (
-            <span className="flex shrink-0 items-center gap-1.5 bg-ppa-blue px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.15em]">
+            <span className="flex shrink-0 items-center gap-1.5 bg-ppa-live px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.15em]">
               <span className="size-1.5 animate-pulse rounded-full bg-white" />
               Live Now
             </span>
@@ -71,7 +78,11 @@ export function StickyBuyBar() {
             target="_blank"
             rel="noopener noreferrer"
             tabIndex={visible ? undefined : -1}
-            className="group ml-auto flex h-9 shrink-0 items-center gap-1.5 bg-ppa-blue px-4 text-[11px] font-bold uppercase tracking-[0.12em] transition hover:bg-ppa-blue-deep active:scale-[0.97] sm:ml-0"
+            className={`group ml-auto flex h-9 shrink-0 items-center gap-1.5 px-4 text-[11px] font-bold uppercase tracking-[0.12em] transition active:scale-[0.97] sm:ml-0 ${
+              live
+                ? "bg-ppa-live hover:bg-ppa-live-deep"
+                : "bg-ppa-blue hover:bg-ppa-blue-deep"
+            }`}
           >
             {live ? "▶ Watch Live" : `Buy Tickets — $${next.ticketPriceFrom}`}
             {!live && (

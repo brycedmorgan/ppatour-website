@@ -471,6 +471,21 @@ export function getTickerState(): TickerState {
   };
 }
 
+/**
+ * Demo LIVE ticker state for the `/live` preview — shows how the site chrome
+ * looks during an active tournament. Replace with real scoring-API data once
+ * that lands (see getTickerState). Not used on the real homepage.
+ */
+export function getLiveTickerState(): TickerState {
+  return {
+    mode: "LIVE",
+    court: "Championship Court",
+    players: ["Ben Johns", "Federico Staksrud"],
+    score: "11–9, 9–11, 8–6",
+    watchUrl: "/watch",
+  };
+}
+
 /* ---- date helpers ---- */
 
 const MONTHS = [
