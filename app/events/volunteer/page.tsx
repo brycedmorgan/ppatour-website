@@ -266,11 +266,11 @@ export default function VolunteerPage() {
             </div>
             <div className="relative isolate min-h-[18rem] overflow-hidden bg-ppa-navy">
               <Image
-                src="/ppa/nationals-crowd-fans.jpg"
-                alt=""
+                src="/ppa/volunteers-group.jpg"
+                alt="PPA Tour volunteers gathered on a championship court at night"
                 fill
                 sizes="(min-width: 1024px) 40vw, 100vw"
-                className="object-cover grayscale-[15%]"
+                className="object-cover"
               />
               <div className="absolute inset-0 scrim-soft" />
               <div className="relative flex h-full flex-col justify-end p-5 text-white">
@@ -278,7 +278,7 @@ export default function VolunteerPage() {
                   Every Main-Tour Stop
                 </p>
                 <p className="mt-1 font-display text-2xl uppercase leading-[1.02]">
-                  Be Part of Event Week
+                  Be Part of the Crew
                 </p>
               </div>
             </div>
