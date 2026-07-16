@@ -255,7 +255,7 @@ export function EventConcierge({ facts }: { facts: ConciergeFacts }) {
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type a question…"
             aria-label="Ask a question about this event"
-            className="min-w-0 flex-1 px-3 py-2.5 text-sm text-ppa-navy outline-none placeholder:text-ppa-navy/35"
+            className="min-w-0 flex-1 px-3 py-2.5 text-base text-ppa-navy outline-none placeholder:text-ppa-navy/35 sm:text-sm"
           />
           <button
             type="submit"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 
 const STORAGE_KEY = "ppa-cookie-consent";
 const CONSENT_EVENT = "ppa-cookie-consent-change";
@@ -25,6 +25,28 @@ export function CookieBanner() {
     () => !localStorage.getItem(STORAGE_KEY),
     () => false,
   );
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Publish the banner's height so other bottom-fixed chrome (the sticky
+  // buy bar) can sit above it instead of underneath — on mobile both pin
+  // to bottom-0 and the banner would otherwise cover the buy-tickets CTA.
+  useEffect(() => {
+    const root = document.documentElement;
+    if (!visible) {
+      root.style.setProperty("--cookie-banner-h", "0px");
+      return;
+    }
+    const el = ref.current;
+    const update = () =>
+      root.style.setProperty("--cookie-banner-h", `${el?.offsetHeight ?? 0}px`);
+    update();
+    const ro = new ResizeObserver(update);
+    if (el) ro.observe(el);
+    return () => {
+      ro.disconnect();
+      root.style.setProperty("--cookie-banner-h", "0px");
+    };
+  }, [visible]);
 
   function dismiss(consent: "granted" | "denied") {
     localStorage.setItem(STORAGE_KEY, consent);
@@ -36,7 +58,7 @@ export function CookieBanner() {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 bg-ppa-navy text-white">
+    <div ref={ref} className="fixed inset-x-0 bottom-0 z-40 bg-ppa-navy text-white">
       <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2 text-xs">
         <span className="text-white/80">
           We use cookies for analytics.
