@@ -4,7 +4,9 @@ import { tournaments } from "@/lib/placeholder-data";
 import { tourPrograms } from "@/lib/tour-programs";
 import { newsArticles } from "@/lib/news-articles";
 
-const BASE = "https://ppatour-website.vercel.app";
+import { SITE_URL } from "@/lib/site";
+
+const BASE = SITE_URL;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPaths = [
