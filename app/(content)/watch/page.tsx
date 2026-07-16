@@ -10,7 +10,11 @@ import {
 } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
 
-export const metadata: Metadata = { title: "Watch" };
+export const metadata: Metadata = {
+  title: "Watch",
+  description:
+    "Watch pro pickleball live — streaming on PickleballTV and YouTube, national TV windows on Tennis Channel and FOX, plus live scores and brackets.",
+};
 
 const BROADCAST = [
   {
@@ -18,15 +22,15 @@ const BROADCAST = [
     note: "The home of pro pickleball — every round, live",
     detail: "PBTV · streams every main-draw round",
     cta: "Watch on PBTV",
-    href: "https://www.pickleballtv.com",
+    href: "https://www.pickleballtv.com/?utm_source=ppatour&utm_medium=website&utm_campaign=watch&utm_content=watch-pbtv",
     external: true,
   },
   {
-    name: "FOX & FS1",
-    note: "Marquee finals on national television",
-    detail: "Championship Sundays · select semis",
-    cta: "TV Schedule",
-    href: "/news",
+    name: "Tennis Channel",
+    note: "Marquee windows simulcast on national television",
+    detail: "Championship Sundays · select QFs & SFs",
+    cta: "Full TV Schedule",
+    href: "/watch/tv",
   },
   {
     name: "PPA Tour · YouTube",
@@ -41,7 +45,7 @@ const BROADCAST = [
     note: "Live scores, brackets, and match alerts",
     detail: "iOS · Android",
     cta: "Get the App",
-    href: "https://www.matchday.app",
+    href: "https://www.matchday.app/?utm_source=ppatour&utm_medium=website&utm_campaign=watch&utm_content=watch-matchday",
     external: true,
   },
 ];

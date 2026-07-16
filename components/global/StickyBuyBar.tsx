@@ -39,7 +39,8 @@ export function StickyBuyBar() {
   return (
     <div
       aria-hidden={!visible}
-      className={`fixed inset-x-0 bottom-0 z-30 transition-transform duration-500 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${
+      style={{ bottom: "var(--cookie-banner-h, 0px)" }}
+      className={`fixed inset-x-0 z-30 transition-transform duration-500 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${
         visible ? "translate-y-0" : "pointer-events-none translate-y-full"
       }`}
     >

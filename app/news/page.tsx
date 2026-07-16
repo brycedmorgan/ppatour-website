@@ -3,7 +3,11 @@ import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { ecosystemNews, news } from "@/lib/home-content";
 
-export const metadata: Metadata = { title: "Newsroom" };
+export const metadata: Metadata = {
+  title: "Newsroom",
+  description:
+    "PPA Tour news — results, analysis, rankings moves, and storylines from the pro pickleball tour.",
+};
 
 export default function NewsPage() {
   const [featured, second, ...rest] = news;

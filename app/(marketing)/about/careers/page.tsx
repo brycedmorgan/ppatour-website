@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Careers" };
+export const metadata: Metadata = {
+  title: "Careers",
+  description:
+    "Careers at the Carvana PPA Tour — join the team behind the pro pickleball tour.",
+};
 
 const TEAMS = [
   { name: "Tour Operations", note: "Run the eighteen-stop calendar — logistics, sanctioning, on-site." },

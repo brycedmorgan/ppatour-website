@@ -4,6 +4,8 @@
  * demo build; replace with the Sanity CMS + scoring/rankings API.
  */
 
+import { newsArticles } from "@/lib/news-articles";
+
 export type Storyline = {
   kicker: string;
   headline: string;
@@ -400,99 +402,13 @@ export type NewsItem = {
   href: string;
 };
 
-/** PPA Tour's own newsroom. */
-export const news: NewsItem[] = [
-  {
-    category: "Recap",
-    title: "Championship Sunday: Five Stats That Defined the Vegas Final",
-    date: "May 17",
-    href: "/news",
-  },
-  {
-    category: "Analysis",
-    title: "The Atlanta Draw, Decoded: Where the Bracket Breaks",
-    date: "May 16",
-    href: "/news",
-  },
-  {
-    category: "Feature",
-    title: "Inside the Rookie Class Rewriting the Rankings",
-    date: "May 14",
-    href: "/news",
-  },
-  {
-    category: "The Race",
-    title: "Race Report: Who Moved After the Spring Swing",
-    date: "May 12",
-    href: "/news",
-  },
-  {
-    category: "Tour News",
-    title: "PPA Tour Adds Two Stops to a Record 25-Event Season",
-    date: "May 9",
-    href: "/news",
-  },
-  {
-    category: "Recap",
-    title: "Hartman & Bricker Take Down Top Seeds in Chicago",
-    date: "May 6",
-    href: "/news",
-  },
-  {
-    category: "Feature",
-    title: "Anand's Singles Run Continues Into Virginia Beach",
-    date: "May 4",
-    href: "/news",
-  },
-  {
-    category: "Analysis",
-    title: "How the Atlanta Court Surface Plays",
-    date: "May 2",
-    href: "/news",
-  },
-  {
-    category: "Profile",
-    title: "Mehvish Safdar on Repeat Final Appearances",
-    date: "Apr 30",
-    href: "/news",
-  },
-  {
-    category: "Analysis",
-    title: "Inside the Strategy Behind a Two-Game Comeback",
-    date: "Apr 28",
-    href: "/news",
-  },
-  {
-    category: "Junior",
-    title: "The Junior PPA Pipeline: Five Names to Watch",
-    date: "Apr 25",
-    href: "/news",
-  },
-  {
-    category: "Highlights",
-    title: "Top 10 Drop Shots from the Las Vegas Open",
-    date: "Apr 23",
-    href: "/news",
-  },
-  {
-    category: "Tour News",
-    title: "What's New in the 2026 Tournament Rules",
-    date: "Apr 20",
-    href: "/news",
-  },
-  {
-    category: "Explainer",
-    title: "How Ranking Points Are Calculated, Explained",
-    date: "Apr 17",
-    href: "/news",
-  },
-  {
-    category: "Feature",
-    title: "Behind the Scenes: A Day in the Life on Tour",
-    date: "Apr 14",
-    href: "/news",
-  },
-];
+/** PPA Tour's own newsroom — derived from the full articles in lib/news-articles. */
+export const news: NewsItem[] = newsArticles.map((a) => ({
+  category: a.category,
+  title: a.title,
+  date: a.date,
+  href: `/news/${a.slug}`,
+}));
 
 /** Linked coverage from Pickleball.com — opens off-site. */
 export const ecosystemNews: NewsItem[] = [
@@ -500,24 +416,24 @@ export const ecosystemNews: NewsItem[] = [
     category: "Pickleball.com",
     title: "Pickleball's Fastest-Growing Markets, Ranked",
     date: "May 16",
-    href: "https://www.pickleball.com",
+    href: "https://www.pickleball.com/?utm_source=ppatour&utm_medium=website&utm_campaign=ecosystem&utm_content=home-ecosystem-news",
   },
   {
     category: "Pickleball.com",
     title: "Gear Guide: The Paddles the Pros Are Switching To",
     date: "May 13",
-    href: "https://www.pickleball.com",
+    href: "https://www.pickleball.com/?utm_source=ppatour&utm_medium=website&utm_campaign=ecosystem&utm_content=home-ecosystem-news",
   },
   {
     category: "Pickleball.com",
     title: "How Ranking Points Translate to Tournament Seeding",
     date: "May 11",
-    href: "https://www.pickleball.com",
+    href: "https://www.pickleball.com/?utm_source=ppatour&utm_medium=website&utm_campaign=ecosystem&utm_content=home-ecosystem-news",
   },
   {
     category: "Pickleball.com",
     title: "From Rec Courts to the Pro Tour: One Player's Climb",
     date: "May 8",
-    href: "https://www.pickleball.com",
+    href: "https://www.pickleball.com/?utm_source=ppatour&utm_medium=website&utm_campaign=ecosystem&utm_content=home-ecosystem-news",
   },
 ];

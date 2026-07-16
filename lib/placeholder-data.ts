@@ -54,8 +54,20 @@ export type Tournament = {
   season?: "2025-2026" | "2025" | "2024" | "2023" | "2022";
 };
 
-const TIXR = "https://www.tixr.com/groups/ppa/events/";
-const REGISTER = "https://www.pickleballtournaments.com/";
+/**
+ * Real commerce deep links (verified against ppatour.com/schedule, Jul 15 2026).
+ * Every event that has a live Tixr page or open registration must deep-link to
+ * it — sending buyers to the group listing forces them to re-find the event
+ * and costs conversion. The group/homepage URLs below are FALLBACKS, only for
+ * stops whose pages don't exist yet; replace each fallback as pages go live.
+ */
+const tixrEvent = (slug: string) =>
+  `https://www.tixr.com/groups/ppa/events/${slug}`;
+const registerEvent = (slug: string) =>
+  `https://pickleballtournaments.com/tournaments/${slug}`;
+
+const TIXR = "https://www.tixr.com/groups/ppa/events/"; // fallback — no event page yet
+const REGISTER = "https://www.pickleballtournaments.com/"; // fallback — registration not open yet
 
 /* ---- schedule builder ---- */
 
@@ -251,7 +263,7 @@ const PAST_EVENTS: Tournament[] = [
     registerUrl: REGISTER,
     status: "completed",
     tierKey: "cup",
-    prizeMoney: "$200,000",
+    prizeMoney: "$1,271,734",
     presentedBy: "Veolia",
     image: "/ppa/action-mxd.jpg",
     season: "2025-2026",
@@ -324,7 +336,7 @@ const PAST_EVENTS: Tournament[] = [
     registerUrl: REGISTER,
     status: "completed",
     tierKey: "open",
-    prizeMoney: "$150,000",
+    prizeMoney: "$1,063,327",
     image: "/ppa/action-waters-bright.jpg",
     season: "2025",
   },

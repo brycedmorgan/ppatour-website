@@ -22,11 +22,11 @@ type NavItem = {
 };
 
 const NAV_ITEMS: NavItem[] = [
+  { label: "Events", href: "/events", mega: true },
   { label: "Watch", href: "/watch" },
   { label: "Play", href: "/play" },
   { label: "Athletes", href: "/athletes" },
   { label: "Rankings", href: "/rankings" },
-  { label: "Events", href: "/events", mega: true },
   {
     label: "Tour",
     mega: true,
@@ -54,7 +54,7 @@ const NAV_ITEMS: NavItem[] = [
   },
   {
     label: "Shop",
-    href: "https://pickleballcentral.com/apparel/ppa-tour-apparel/",
+    href: "https://pickleballcentral.com/apparel/ppa-tour-apparel/?utm_source=ppatour&utm_medium=website&utm_campaign=sitewide&utm_content=header-shop",
     external: true,
   },
 ];
@@ -190,8 +190,10 @@ function MegaPanelContent({
           <PanelEyebrow>Explore</PanelEyebrow>
           <div className="mt-4 space-y-3">
             <BigLink href="/events" label="Full Schedule" onNavigate={onNavigate} />
+            <BigLink href="/watch/tv" label="TV Schedule" onNavigate={onNavigate} />
             <BigLink href="/rankings" label="Rankings" onNavigate={onNavigate} />
             <BigLink href="/news" label="Latest News" onNavigate={onNavigate} />
+            <BigLink href="/events/volunteer" label="Volunteer" onNavigate={onNavigate} />
           </div>
         </div>
         <div className={col} style={delay(1)}>
@@ -392,7 +394,7 @@ export function Header() {
           />
         </Link>
 
-        <nav className="hidden items-center md:flex">
+        <nav className="hidden items-center lg:flex">
           {NAV_ITEMS.map((item) => {
             const active = megaOpen === item.label;
             const base = `relative flex items-center gap-1 px-3 py-2 text-[12px] font-bold uppercase tracking-[0.12em] transition-colors ${
@@ -490,7 +492,7 @@ export function Header() {
           aria-label="Toggle menu"
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="flex size-10 items-center justify-center text-white md:hidden"
+          className="flex size-10 items-center justify-center text-white lg:hidden"
         >
           <div className="space-y-1.5">
             <span
@@ -531,7 +533,7 @@ export function Header() {
 
       {/* Mobile drawer */}
       {open && (
-        <nav className="border-t border-white/10 md:hidden">
+        <nav className="border-t border-white/10 lg:hidden">
           {NAV_ITEMS.map((item) => {
             if (item.submenu) {
               const expanded = mobileExpanded === item.label;

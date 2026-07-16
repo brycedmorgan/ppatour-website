@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 
 /**
  * Live countdown to first serve. Server-renders the static fallback
- * ("48 Days Out") to avoid hydration drift, then ticks D : H : M on the
- * client every 30s.
+ * ("48 Days Out") to avoid hydration drift, then ticks D : H : M : S on
+ * the client every second.
  */
 export function Countdown({
   targetIso,
@@ -19,7 +19,7 @@ export function Countdown({
   useEffect(() => {
     const tick = () => setNow(Date.now());
     const raf = requestAnimationFrame(tick);
-    const id = window.setInterval(tick, 30_000);
+    const id = window.setInterval(tick, 1_000);
     return () => {
       cancelAnimationFrame(raf);
       window.clearInterval(id);
@@ -33,10 +33,11 @@ export function Countdown({
   const days = Math.floor(diff / 86_400_000);
   const hours = Math.floor((diff % 86_400_000) / 3_600_000);
   const mins = Math.floor((diff % 3_600_000) / 60_000);
+  const secs = Math.floor((diff % 60_000) / 1_000);
 
   return (
     <span className="tabular-nums">
-      {days}D : {hours}H : {mins}M
+      {days}D : {hours}H : {mins}M : {secs}S
     </span>
   );
 }

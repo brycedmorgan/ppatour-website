@@ -2,8 +2,11 @@ import type { MetadataRoute } from "next";
 import { athletes } from "@/lib/athletes";
 import { tournaments } from "@/lib/placeholder-data";
 import { tourPrograms } from "@/lib/tour-programs";
+import { newsArticles } from "@/lib/news-articles";
 
-const BASE = "https://ppatour-website.vercel.app";
+import { SITE_URL } from "@/lib/site";
+
+const BASE = SITE_URL;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPaths = [
@@ -54,6 +57,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${BASE}/tour/${p.slug}`,
       changeFrequency: "monthly" as const,
       priority: 0.5,
+    })),
+    ...newsArticles.map((a) => ({
+      url: `${BASE}/news/${a.slug}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
     })),
   ];
 }

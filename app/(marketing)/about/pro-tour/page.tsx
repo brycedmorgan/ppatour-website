@@ -2,12 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 
-export const metadata: Metadata = { title: "The Pro Tour" };
+export const metadata: Metadata = {
+  title: "The Pro Tour",
+  description:
+    "How the pro tour works — tiers, ranking points, prize money, and the road to the season title on the Carvana PPA Tour.",
+};
 
 const STATS = [
   { n: "18", label: "Main-Tour Stops" },
   { n: "5", label: "Pro Divisions" },
-  { n: "$2.4M+", label: "Season Purse" },
+  { n: "$5.2M+", label: "Prize Money & Fees" },
   { n: "150K+", label: "Fans In-Arena" },
 ];
 

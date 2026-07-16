@@ -20,6 +20,200 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-16 (pt. 3) — Official hotel blocks (Kristen's thread) + Jackalope doc
+- Parsed the "2026/2027 PPA Tour Hotel Links" Gmail thread (Kristen
+  Russell, latest 7/16). 15 official hotels across 6 events loaded into
+  `lib/event-guides.ts` (Place gains href/brand/rate/cutoff). Where to
+  Stay rows show brand mark + "Official" badge (event accent) + rate +
+  book-by + "Book the Group Rate ↗" button. NC first-class: Holiday Inn
+  RDU (IHG, by 7/31) + Home2 Suites RDU (Hilton, by 7/30).
+- Email URLs were quoted-printable-corrupted; reconstructed with QP
+  rules ("= 26-" → "=2026-", "�" = eaten =XX pair). TWO need Kristen's
+  confirmation: Chicago HIE group code, Hampton Farmers Branch h6 link.
+  Full table + flags: ziff `docs/HOTEL-LINKS-2026-27.md`.
+- Brand marks = Google favicon pulls in `public/ppa/hotels/` — swap for
+  official brand assets when marketing supplies them.
+
+### 2026-07-16 (pt. 2) — Seconds on the countdown + hero broadcast clock
+- Countdown badge ticks D:H:M:S every second (homepage + event heroes).
+- New `FirstServeCountdown` — "First Serve In" clock bottom-right of
+  the event hero: big tabular digits, DAYS/HRS/MIN/SEC labels,
+  brand-accent colons; hidden under lg and once the event starts.
+- Verify-note: the clock is client-only (null until mount) — check
+  deployed JS chunks for its strings, not the server HTML.
+
+### 2026-07-16 — Nationals order of play: Pro Play + Amateur & Junior tables
+- Bryce's ask: split the schedule into a "Pro Play" table (first serve
+  + TV) and an "Amateur & Junior Play" section (no serve times — they
+  vary by division). Built `lib/event-schedule.ts` overrides; events
+  without one keep the templated table.
+- Pro days transcribed from the OFFICIAL registration page Bryce sent
+  (pickleballtournaments.com): Mon 8/31 Qualifying (serve TBD) · Tue
+  R64 · Wed R32 · Thu R16 · Fri QF · Sat SF · Sun Championship. NOTE:
+  Bryce's message listed slightly different rounds (Sep 3 "Round 1",
+  no Sep 2) — followed the official page + broadcast sheet instead;
+  flagged to him.
+- Amateur table: week-long skill/age brackets · PPA Tour Camp Aug 31 +
+  Sep 1 (4–7 PM) · Junior PPA + Senior Open · MoneyBall · "division
+  days publish after Aug 24 deadline" note + register deep link.
+- Amateur per-division days aren't published anywhere yet (checked the
+  registration page HTML — no events API exposed). When Wesley's
+  PT.com API lands, sync real division/day data into eventSchedules.
+
+### 2026-07-15 (pt. 9) — Article player links (inline + rail)
+- Bryce's ask: articles referencing players should hyperlink them and
+  offer bio links on the right. Shipped: `linkifyPlayers` wraps
+  athlete full-name mentions in the dek/body with links to
+  `/athletes/{slug}`; sticky right rail "Players in This Story"
+  (headshot, rank, division) merges explicit `article.players` with
+  auto-detected mentions. No players → centered single column.
+- Seeded players on vegas-final / race-report / atlanta-draw. To
+  feature players on any article: add slugs to `players`; inline
+  linking is automatic wherever the roster name appears verbatim.
+
+### 2026-07-15 (pt. 8b) — Trophy mark in the event hero
+- Follow-up from Bryce ("it is perfect when you scroll, its stunning"):
+  the event mark now also sits left of the event name in the HERO —
+  white treatment (brightness-0 invert + navy drop-shadow) over the
+  photo. Renders for any event with `brand.icon`; others unchanged.
+
+### 2026-07-15 (pt. 8) — Branded event nav + scroll behavior + accordions
+- Bryce's asks, all shipped: (1) floating tab bar swaps "Overview" for
+  the event's mark + name once scrolled (`EventTabNav`, threshold
+  420px, tap = back to top); (2) the next-event ScoreTicker collapses
+  site-wide on scroll (`HideOnScroll`, >120px); (3) per-event brand
+  system — `Tournament.brand {primary, accent, icon}`, Nationals wired
+  from its quick guide (navy #023155, deep red #C1272D, trophy mark
+  extracted from the guide PNG w/ PIL → `public/ppa/events/
+  nationals-trophy.png`); accent threads through hero badge/strip/CTA,
+  section markers, router kickers via `--event-accent` CSS var,
+  falling back to PPA blue for unbranded events; (4) Know Before You
+  Go rows → native <details> accordions (first open).
+- Sticky offsets: event tab bar now top-16; sections scroll-mt-[120px].
+- To brand more events: drop their quick-guide colors + mark into
+  `brand` on the tournament record — everything else is automatic.
+- Fonts note: Nationals guide lists Cormorant Garamond Bold as the
+  event serif — NOT applied (site stays Gotham); revisit if Bryce
+  wants full event-skin typography.
+
+### 2026-07-15 (pt. 7) — Coverage↔events linking + Event Report spec (Jackalope)
+- `NewsArticle.eventSlug` ties coverage to tour stops; 6 articles
+  tagged (Vegas ×2, Atlanta ×2, Chicago, Virginia Beach). Event pages
+  get a **Coverage** section + tab when articles exist — "Story So
+  Far" pre-event, "Relive {event}" when `status: "completed"`; hero
+  countdown reads "Final" once completed. The archive state activates
+  automatically when events complete (Wesley's API sets status).
+- **Jackalope**: `ziff/docs/EVENT-REPORT-SPEC.md` — one Event Report
+  record per stop renders both the public site recap AND the
+  per-sponsor recap (Connor's auto-recap ask). Private layers
+  (activations, Hive valuation, ticket revenue) never reach the site.
+  Bryce's framing: this is the knowledge base of tour history.
+- Still open for the Events page (#3): past/Challenger/international
+  event DATA — the archive UI is ready, the records don't exist yet.
+
+### 2026-07-15 (pt. 6) — Newsroom: 15 real articles + article pages
+- Every news headline now opens a real article. `lib/news-articles.ts`
+  holds 15 written pieces (recaps, analysis, features, explainers,
+  profiles) — slug/dek/why-it-matters/5-paragraph bodies, grounded in
+  site season data (rankings points, calendar dates, purse totals,
+  PBTV/TC broadcast). No fabricated quotes from real players;
+  narrative arcs lean on the fictional players already in matches[]
+  (Anand, Safdar, Hartman/Bricker).
+- `/news/[slug]` template: image hero + category/byline, dek,
+  why-it-matters callout, body, "See It Live" ticket CTA (UTM
+  `article-{slug}`) + TV Schedule link, 3 related articles, OG/article
+  meta. 114 routes build clean.
+- `home-content.ts` `news[]` is now DERIVED from newsArticles (single
+  source) — /news index, homepage newsroom, and site search link to
+  real slugs automatically. Sitemap includes articles.
+- Storylines on the homepage still have no hrefs (Storyline type) —
+  candidate next: link the 5 storyline cards to matching articles.
+- When Sanity lands, articles move to CMS; the type is CMS-shaped.
+
+### 2026-07-15 (pt. 5) — Per-event payout → full totals (Bryce's call)
+- Bryce wants the biggest true number per event: prizeMoney now shows
+  **prize money + appearance fees** per tier — Slams/Worlds $1,648,641
+  · Cups $1,271,734 · Opens $1,063,327 · Finals $1,252,241 (official
+  2026 tier totals from ppatour.com/how-it-works).
+- Labels reframed honestly: event hero "{X} On the Line" · quick facts
+  + What's-at-Stake tile "Prize Money & Fees" (note: "incl. appearance
+  fees") · stakes copy "the tour puts {X} behind this event."
+- Season stat stays "$5.2M+ Prize Money & Fees."
+
+### 2026-07-15 (pt. 4) — Sponsorship front door (commit `43545e0`)
+- **Full-bleed pass (Bryce's ask):** homepage ScoreRail + PartnerSpotlight banner +
+  sponsor logo marquee now run edge-to-edge; section headings stay capped at max-w-6xl.
+- **Homepage sponsor CTA** under the logos: "Find Out What Sponsoring the PPA Tour &
+  Pickleball Is All About" → `/about/sponsors#inquire`; Partners section link repointed
+  there too (was `/about`).
+- **Real partnership inquiry form** (`components/marketing/SponsorInquiryForm.tsx`) on
+  /about/sponsors — company/name/email/phone/category/budget/message + honeypot; hero
+  "Partnership Inquiry" + closing "The Ask" CTAs now scroll to it (mailto demoted to
+  secondary).
+- **`/api/sponsor-inquiry`** forwards server-to-server to the Jackalope leads hook
+  (`x-lead-secret`) — submissions land as deals under **Leads** in the Sales pipeline
+  (ziff commit `3427a31`, hook live + verified 401/405). **⚠ Blocked on Bryce:**
+  `vercel env add LEAD_HOOK_SECRET production` in BOTH repos (same value), redeploy both,
+  then submit a test inquiry. Until then the route logs + returns ok (nothing breaks).
+- Build 99 routes + lint clean; form/marquee/CTA verified headless on a local prod build.
+- **⚠ Deploy status unknown at log time** — push went to `main`; GitHub auto-deploy has
+  been flaky and the CLI deploy was permission-blocked this session. If
+  ppatour-website.vercel.app doesn't show the CTA, run `vercel --prod --yes`.
+
+### 2026-07-15 (pt. 3) — Purse correction (official 2026 numbers)
+- Bryce flagged Nationals "$300,000 purse" as way low. Pulled
+  ppatour.com/how-it-works: **$5,235,943 total prize money +
+  appearance fees for 2026**; Gold Prize Grid per event tier:
+  Slams/Worlds $1,024,400 · Cups $647,493 · Opens $439,086 · Finals
+  $628,000.
+- Updated all 20 events' `prizeMoney` by tier (Challenger untouched);
+  homepage + /about/pro-tour stat "$2.4M+ Season Purse" → "$5.2M+
+  Prize Money & Fees". Event-page hero, quick facts, and What's-at-
+  Stake all inherit.
+- Presentation choice: per-event number = Gold Prize Grid (actual
+  purse), season number = prize + appearance fees (the $5.2M headline
+  PPA promotes). Flag if Tyler prefers per-event totals incl. fees
+  (Slam would read $1.65M).
+
+### 2026-07-15 (pt. 2) — New Nationals hero + Ken Burns; full TV schedule page
+- **Nationals hero** swapped to Bryce's overhead champ-court drone shot
+  (`nationals-drone-champcourt.jpg`); previous drone shot moved to the
+  gallery (now 9 photos). **Ken Burns drift added to all event-page
+  heroes** (same `animate-kenburns` as homepage; drone video is the
+  future replacement).
+- **TV schedule page** `/watch/tv` built from the Google broadcast
+  sheet (2026 PPA/MLP Championship Court, as of 6/30): remaining
+  season transcribed into `lib/tv-schedule.ts` — 9 events (Nationals →
+  Malibu, incl. MLP Cup). Rest of year is **PBTV + Tennis Channel
+  only** (confirmed vs sheet; Nationals Sunday = TC 11AM–4PM ET ✓;
+  existing per-event `lib/broadcast.ts` Nationals entry already
+  matched). Filter pills (All / TC / PBTV), TC rows highlighted,
+  event-page links, PBTV + find-Tennis-Channel CTAs.
+- /watch "FOX & FS1" card → "Tennis Channel" → /watch/tv (no FOX
+  windows remain); Events mega panel gains TV Schedule link.
+- **Data source note:** sheet is public-readable CSV
+  (`export?format=csv&gid=476669390`) — a build-time fetch or cron
+  could auto-sync `tv-schedule.ts` later (Wesley's API lane).
+
+### 2026-07-15 — Nationals real photography + flip-through gallery; Tyler's deep links landed
+- **Nationals imagery (commit `2cafbc4`):** hero swapped to the drone
+  shot of a packed center court at Cary Tennis Park (from Bryce's
+  DRONE PHOTOS.zip); 7 new NC Open photos (same venue) resized into
+  `public/ppa/nationals-*` (4 drone + 3 crowd). Homepage hero + Events
+  mega-panel card inherit it automatically (keyed off next event).
+- **EventGallery** (`components/events/EventGallery.tsx`): gallery on
+  all event pages is now grid + full-screen lightbox — prev/next,
+  keyboard (←/→/Esc), swipe, counter, dot nav. Nationals gallery = 8
+  photos. Verified in Chrome (lightbox open/flip).
+- **Team is committing now:** Tyler (tdodd7) pushed #1 — every ticket
+  + registration CTA deep-links to its real event page
+  (`tixr.com/groups/ppa/events/{slug}` helper + fallback) — and #2,
+  UTM-tagging remaining partner links (Shop, PBTV, MATCHDAY, PBC).
+  Punch-list #6 is DONE. A `wesley-edits` branch exists on origin —
+  check/merge it. My work rebased cleanly on top; build + lint green.
+- Note: push was rejected-then-rebased — always `git pull --rebase`
+  before pushing now that three people commit to main.
+
 ### 2026-07-14 (pt. 4) — Event pages: three-audience upgrade + concierge chat
 - Bryce's brief: event pages must serve travelers, players, and
   at-home fans — site map, know-what-to-do, schedule, who's playing,

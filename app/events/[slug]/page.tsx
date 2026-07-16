@@ -1,14 +1,20 @@
 import type { Metadata } from "next";
+import { SITE_URL } from "@/lib/site";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { EventConcierge } from "@/components/events/EventConcierge";
+import { EventTabNav } from "@/components/events/EventTabNav";
+import { FirstServeCountdown } from "@/components/events/FirstServeCountdown";
+import { EventGallery } from "@/components/events/EventGallery";
 import { VenueMap } from "@/components/events/VenueMap";
 import { Countdown } from "@/components/motion/Countdown";
 import { getBroadcast } from "@/lib/broadcast";
 import { getEventGuide } from "@/lib/event-guides";
+import { getEventSchedule } from "@/lib/event-schedule";
 import { playersToWatch } from "@/lib/home-content";
+import { getArticlesForEvent } from "@/lib/news-articles";
 import {
   daysUntil,
   formatDate,
@@ -31,7 +37,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const t = tournaments.find((x) => x.slug === slug);
   if (!t) return { title: "Event" };
   const where = t.state ? `${t.city}, ${t.state}` : t.city;
-  const description = `${tierLabel(t)} · ${formatDateRange(t.startDate, t.endDate)} · ${where} · ${t.prizeMoney} purse. Schedule, players, tickets, trip guide, and how to watch.`;
+  const description = `${tierLabel(t)} · ${formatDateRange(t.startDate, t.endDate)} · ${where} · ${t.prizeMoney} in prize money & appearance fees. Schedule, players, tickets, trip guide, and how to watch.`;
   return {
     title: t.shortName,
     description,
@@ -72,7 +78,7 @@ const HOW_TO_WATCH: {
     logo: "/ppa/networks/pbtv.png",
     note: "Every court, every match, all weekend — the home of live PPA streaming.",
     detail: "Stream on PBTV",
-    href: "https://www.pickleballtv.com",
+    href: "https://www.pickleballtv.com/?utm_source=ppatour&utm_medium=website&utm_campaign=event&utm_content=event-watch-pbtv",
   },
   {
     name: "Tennis Channel",
@@ -84,7 +90,7 @@ const HOW_TO_WATCH: {
     name: "MATCHDAY App",
     note: "Live scores, brackets, order of play, and match alerts.",
     detail: "iOS · Android",
-    href: "https://www.matchday.app",
+    href: "https://www.matchday.app/?utm_source=ppatour&utm_medium=website&utm_campaign=event&utm_content=event-watch-matchday",
   },
 ];
 
@@ -155,6 +161,7 @@ export default async function EventPage({ params }: Params) {
   const broadcastDays = days.filter((d) => d.live);
   const broadcast = getBroadcast(t.slug);
   const guide = getEventGuide(t.slug);
+  const realSchedule = getEventSchedule(t.slug);
   const mapQuery = guide?.mapQuery ?? `${t.venue}, ${t.city}, ${t.state}`;
 
   const base = t.ticketPriceFrom;
@@ -168,6 +175,9 @@ export default async function EventPage({ params }: Params) {
     .filter((x) => x.slug !== t.slug && tierPoints(x) >= 1000)
     .slice(0, 3);
 
+  const coverage = getArticlesForEvent(t.slug);
+  const completed = t.status === "completed";
+
   const TABS = [
     { id: "overview", label: "Overview" },
     { id: "stakes", label: "What's at Stake" },
@@ -177,6 +187,7 @@ export default async function EventPage({ params }: Params) {
     { id: "travel", label: "Plan Your Trip" },
     { id: "players", label: "Players" },
     { id: "involved", label: "Get Involved" },
+    ...(coverage.length > 0 ? [{ id: "coverage", label: "Coverage" }] : []),
     { id: "tickets", label: "Tickets" },
   ];
 
@@ -207,7 +218,14 @@ export default async function EventPage({ params }: Params) {
   };
 
   return (
-    <>
+    <div
+      style={
+        {
+          "--event-primary": t.brand?.primary ?? "#0c2b44",
+          "--event-accent": t.brand?.accent ?? "#228be6",
+        } as React.CSSProperties
+      }
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -226,12 +244,12 @@ export default async function EventPage({ params }: Params) {
               name: t.venue,
               address: t.state ? `${t.city}, ${t.state}` : t.city,
             },
-            image: `https://ppatour-website.vercel.app${t.image}`,
-            url: `https://ppatour-website.vercel.app/events/${t.slug}`,
+            image: `${SITE_URL}${t.image}`,
+            url: `${SITE_URL}/events/${t.slug}`,
             organizer: {
               "@type": "Organization",
               name: "Carvana PPA Tour",
-              url: "https://ppatour-website.vercel.app",
+              url: SITE_URL,
             },
             offers: {
               "@type": "Offer",
@@ -251,14 +269,14 @@ export default async function EventPage({ params }: Params) {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center"
+          className="animate-kenburns will-change-transform object-cover object-center motion-reduce:animate-none"
         />
         <div className="absolute inset-0 scrim-hero" />
         {/* Soften the header→hero seam: navy fades down into the hero image. */}
         <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-32 bg-gradient-to-b from-ppa-navy to-transparent" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-10 pt-20">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em]">
-            <span className="bg-ppa-blue px-2 py-0.5">
+            <span className="bg-[var(--event-accent)] px-2 py-0.5">
               {tierShort(t)} · {tierPoints(t).toLocaleString()} PTS
             </span>
             {t.presentedBy && (
@@ -266,15 +284,31 @@ export default async function EventPage({ params }: Params) {
             )}
             <span className="text-white/25">/</span>
             <span className="text-ppa-yellow">
-              <Countdown
-                targetIso={t.startDate}
-                fallback={`${countdown} ${countdown === 1 ? "Day" : "Days"} Out`}
-              />
+              {completed ? (
+                "Final"
+              ) : (
+                <Countdown
+                  targetIso={t.startDate}
+                  fallback={`${countdown} ${countdown === 1 ? "Day" : "Days"} Out`}
+                />
+              )}
             </span>
           </div>
-          <h1 className="mt-3 max-w-[18ch] font-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98]">
-            {t.shortName}
-          </h1>
+          <div className="mt-3 flex items-center gap-4">
+            {t.brand?.icon && (
+              <Image
+                src={t.brand.icon}
+                alt=""
+                width={133}
+                height={364}
+                className="h-[4.5em] w-auto shrink-0 rounded drop-shadow-[0_2px_12px_rgba(2,49,85,0.5)] motion-safe:animate-rise sm:h-24"
+                style={{ animationDelay: "120ms" }}
+              />
+            )}
+            <h1 className="max-w-[18ch] font-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98]">
+              {t.shortName}
+            </h1>
+          </div>
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold uppercase tracking-wide text-white/75">
             <span>{formatDateRange(t.startDate, t.endDate)}</span>
             <span className="text-white/25">|</span>
@@ -283,7 +317,7 @@ export default async function EventPage({ params }: Params) {
               {t.state ? `, ${t.state}` : ""}
             </span>
             <span className="text-white/25">|</span>
-            <span className="text-ppa-yellow">{t.prizeMoney} Purse</span>
+            <span className="text-ppa-yellow">{t.prizeMoney} On the Line</span>
           </div>
           <div className="mt-5 flex flex-col gap-2.5 sm:flex-row">
             <a
@@ -293,7 +327,7 @@ export default async function EventPage({ params }: Params) {
               })}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-11 items-center justify-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:bg-ppa-blue-deep"
+              className="flex h-11 items-center justify-center bg-[var(--event-accent)] px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:brightness-90 active:scale-[0.98]"
             >
               Buy Tickets — from ${t.ticketPriceFrom}
             </a>
@@ -311,23 +345,12 @@ export default async function EventPage({ params }: Params) {
             </a>
           </div>
         </div>
-        <div className="relative h-1 bg-ppa-blue" />
+        {!completed && <FirstServeCountdown targetIso={t.startDate} />}
+        <div className="relative h-1 bg-[var(--event-accent)]" />
       </section>
 
-      {/* Sticky tab nav */}
-      <nav className="sticky top-[100px] z-40 border-b border-ppa-line bg-ppa-paper/95 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {TABS.map((tab) => (
-            <a
-              key={tab.id}
-              href={`#${tab.id}`}
-              className="shrink-0 px-3 py-3 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/55 transition-colors hover:text-ppa-blue"
-            >
-              {tab.label}
-            </a>
-          ))}
-        </div>
-      </nav>
+      {/* Floating event nav */}
+      <EventTabNav tabs={TABS} eventName={t.shortName} icon={t.brand?.icon} />
 
       {/* Audience router — one page, three ways in */}
       <section className="bg-white">
@@ -357,7 +380,7 @@ export default async function EventPage({ params }: Params) {
               href={lane.href}
               className="group bg-white p-5 transition-colors hover:bg-ppa-paper"
             >
-              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-ppa-blue">
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--event-accent)]">
                 {lane.kicker}
               </p>
               <p className="mt-1.5 flex items-baseline gap-2 font-display text-lg uppercase leading-tight text-ppa-navy">
@@ -376,12 +399,12 @@ export default async function EventPage({ params }: Params) {
       </section>
 
       {/* Overview — quick facts */}
-      <section id="overview" className="scroll-mt-[150px] bg-ppa-navy-deep text-white">
+      <section id="overview" className="scroll-mt-[120px] bg-ppa-navy-deep text-white">
         <div className="mx-auto grid w-full max-w-6xl grid-cols-2 px-4 sm:grid-cols-4">
           {[
             { k: "Dates", v: formatDateRange(t.startDate, t.endDate) },
             { k: "Venue", v: t.venue },
-            { k: "Total Purse", v: t.prizeMoney, accent: true },
+            { k: "Prize Money & Fees", v: t.prizeMoney, accent: true },
             { k: tierLabel(t), v: `${tierPoints(t).toLocaleString()} Pts` },
           ].map((f, i) => (
             <div
@@ -400,10 +423,10 @@ export default async function EventPage({ params }: Params) {
       </section>
 
       {/* What's at Stake */}
-      <section id="stakes" className="scroll-mt-[150px] bg-white">
+      <section id="stakes" className="scroll-mt-[120px] bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex items-center gap-2.5">
-            <span className="h-2 w-2 bg-ppa-blue" />
+            <span className="h-2 w-2 bg-[var(--event-accent)]" />
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
               What&apos;s at Stake
             </p>
@@ -417,10 +440,10 @@ export default async function EventPage({ params }: Params) {
               {tierPoints(t).toLocaleString()} ranking points
             </span>{" "}
             in every division — enough to reshuffle the season-long points
-            race in one weekend. The winners take home a share of the{" "}
+            race in one weekend. The tour puts{" "}
             <span className="font-bold text-ppa-navy">{t.prizeMoney}</span>{" "}
-            purse, and the defending champions below are all back to protect
-            their titles.
+            behind this event in prize money and appearance fees, and the
+            defending champions below are all back to protect their titles.
           </p>
 
           <div data-reveal className="mt-6 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-3">
@@ -431,9 +454,9 @@ export default async function EventPage({ params }: Params) {
                 note: "Per division title — toward the season race",
               },
               {
-                k: "Total Purse",
+                k: "Prize Money & Fees",
                 v: t.prizeMoney,
-                note: "Across five pro divisions",
+                note: "Across five pro divisions, incl. appearance fees",
               },
               {
                 k: "The Field",
@@ -477,7 +500,7 @@ export default async function EventPage({ params }: Params) {
         <section className="bg-ppa-navy">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
             <div className="flex items-center gap-2.5">
-              <span className="h-2 w-2 bg-ppa-blue" />
+              <span className="h-2 w-2 bg-[var(--event-accent)]" />
               <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
                 The Scene
               </p>
@@ -485,30 +508,17 @@ export default async function EventPage({ params }: Params) {
             <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
               Inside {t.shortName}
             </h2>
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
-              {t.gallery.map((src, i) => (
-                <div
-                  key={src}
-                  className={`group relative aspect-[4/3] overflow-hidden bg-ppa-navy-deep ${
-                    i === 0 ? "sm:col-span-3 sm:aspect-[16/7]" : ""
-                  }`}
-                >
-                  <Image
-                    src={src}
-                    alt={`${t.shortName} — championship action`}
-                    fill
-                    sizes={i === 0 ? "100vw" : "(min-width: 640px) 33vw, 100vw"}
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                </div>
-              ))}
-            </div>
+            <p className="mt-3 max-w-xl text-sm text-white/60">
+              Real photos from the grounds — tap any shot to flip through
+              what a day here actually looks like.
+            </p>
+            <EventGallery images={t.gallery} eventName={t.shortName} />
           </div>
         </section>
       )}
 
       {/* Order of Play */}
-      <section id="schedule" className="scroll-mt-[150px] bg-ppa-paper">
+      <section id="schedule" className="scroll-mt-[120px] bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
             Order of Play
@@ -520,6 +530,95 @@ export default async function EventPage({ params }: Params) {
             All times local. Gates open an hour before first serve; finals
             move to a late-morning start for the broadcast window.
           </p>
+          {realSchedule ? (
+            <>
+              {/* Pro Play */}
+              <div className="mt-6 overflow-hidden border border-ppa-line">
+                <div className="grid grid-cols-[4.5rem_1fr_auto] gap-3 border-b border-ppa-line bg-white px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45 sm:grid-cols-[5.5rem_1fr_7rem_10rem]">
+                  <span>Date</span>
+                  <span>Pro Play</span>
+                  <span className="hidden text-right sm:block">First Serve</span>
+                  <span className="text-right">Live</span>
+                </div>
+                {realSchedule.proDays.map((d) => (
+                  <div
+                    key={d.date}
+                    className="grid grid-cols-[4.5rem_1fr_auto] items-center gap-3 border-b border-ppa-line bg-white px-4 py-3 last:border-b-0 sm:grid-cols-[5.5rem_1fr_7rem_10rem]"
+                  >
+                    <span className="font-display text-base uppercase leading-tight text-[var(--event-accent)]">
+                      <span className="block text-[10px] font-sans font-bold leading-none text-ppa-navy/40">
+                        {d.dow}
+                      </span>
+                      {d.date}
+                    </span>
+                    <span>
+                      <span className="block text-sm font-semibold text-ppa-navy">
+                        {d.label}
+                      </span>
+                      <span className="block text-[11px] uppercase tracking-wide text-ppa-navy/40">
+                        Gates {d.gates}
+                      </span>
+                    </span>
+                    <span className="hidden text-right text-sm font-bold tabular-nums text-ppa-navy sm:block">
+                      {d.firstServe}
+                    </span>
+                    <span className="text-right text-[10px] font-bold uppercase tracking-[0.1em]">
+                      {d.live ? (
+                        <span className="text-[var(--event-accent)]">{d.live}</span>
+                      ) : (
+                        <span className="text-ppa-navy/30">—</span>
+                      )}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Amateur & Junior Play */}
+              <h3 className="mt-8 font-display text-lg uppercase text-ppa-navy">
+                Amateur & Junior Play
+              </h3>
+              <div className="mt-3 overflow-hidden border border-ppa-line">
+                <div className="grid grid-cols-[7.5rem_1fr] gap-3 border-b border-ppa-line bg-white px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45 sm:grid-cols-[9rem_1fr]">
+                  <span>When</span>
+                  <span>Amateur & Junior Play</span>
+                </div>
+                {realSchedule.amateur.map((a) => (
+                  <div
+                    key={a.label}
+                    className="grid grid-cols-[7.5rem_1fr] items-baseline gap-3 border-b border-ppa-line bg-white px-4 py-3 last:border-b-0 sm:grid-cols-[9rem_1fr]"
+                  >
+                    <span className="font-display text-sm uppercase leading-tight text-[var(--event-accent)]">
+                      {a.when}
+                    </span>
+                    <span>
+                      <span className="block text-sm font-semibold text-ppa-navy">
+                        {a.label}
+                      </span>
+                      {a.detail && (
+                        <span className="block text-[12px] text-ppa-navy/55">
+                          {a.detail}
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-3 text-[12px] text-ppa-navy/50">
+                {realSchedule.amateurNote}{" "}
+                <a
+                  href={withUtm(t.registerUrl, {
+                    campaign: t.slug,
+                    content: "event-schedule-register",
+                  })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold uppercase tracking-[0.08em] text-[var(--event-accent)] hover:underline"
+                >
+                  Register to play ↗
+                </a>
+              </p>
+            </>
+          ) : (
           <div className="mt-6 overflow-hidden border border-ppa-line">
             <div className="grid grid-cols-[3.5rem_1fr_auto] gap-3 border-b border-ppa-line bg-white px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45 sm:grid-cols-[5rem_1fr_7rem_6rem]">
               <span>Date</span>
@@ -556,14 +655,15 @@ export default async function EventPage({ params }: Params) {
               </div>
             ))}
           </div>
+          )}
         </div>
       </section>
 
       {/* Watch at home — PGA-style */}
-      <section id="watch" className="scroll-mt-[150px] bg-ppa-navy text-white">
+      <section id="watch" className="scroll-mt-[120px] bg-ppa-navy text-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex items-center gap-2.5">
-            <span className="h-2 w-2 bg-ppa-blue" />
+            <span className="h-2 w-2 bg-[var(--event-accent)]" />
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
               Watching at Home
             </p>
@@ -672,10 +772,10 @@ export default async function EventPage({ params }: Params) {
       </section>
 
       {/* Venue Guide — grounds map + know before you go */}
-      <section id="venue" className="scroll-mt-[150px] bg-ppa-paper">
+      <section id="venue" className="scroll-mt-[120px] bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex items-center gap-2.5">
-            <span className="h-2 w-2 bg-ppa-blue" />
+            <span className="h-2 w-2 bg-[var(--event-accent)]" />
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
               At the Venue
             </p>
@@ -719,15 +819,23 @@ export default async function EventPage({ params }: Params) {
                   k: "Questions On-Site",
                   v: "Guest Services sits beside the main gate — lost & found, ADA services, first aid, and staff who know the answer.",
                 },
-              ].map((row) => (
-                <div key={row.k} className="bg-white p-4">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-ppa-blue">
-                    {row.k}
-                  </p>
-                  <p className="mt-1 text-sm leading-relaxed text-ppa-navy/70">
+              ].map((row, i) => (
+                <details key={row.k} className="group bg-white" open={i === 0}>
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-4 [&::-webkit-details-marker]:hidden">
+                    <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--event-accent)]">
+                      {row.k}
+                    </span>
+                    <span
+                      aria-hidden
+                      className="text-xs text-ppa-navy/40 transition-transform duration-300 group-open:rotate-180"
+                    >
+                      ▾
+                    </span>
+                  </summary>
+                  <p className="px-4 pb-4 text-sm leading-relaxed text-ppa-navy/70">
                     {row.v}
                   </p>
-                </div>
+                </details>
               ))}
             </div>
           </div>
@@ -736,10 +844,10 @@ export default async function EventPage({ params }: Params) {
 
       {/* Plan Your Trip — Ragnar-style */}
       {guide && (
-        <section id="travel" className="scroll-mt-[150px] bg-white">
+        <section id="travel" className="scroll-mt-[120px] bg-white">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
             <div className="flex items-center gap-2.5">
-              <span className="h-2 w-2 bg-ppa-blue" />
+              <span className="h-2 w-2 bg-[var(--event-accent)]" />
               <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
                 Make a Trip of It
               </p>
@@ -795,16 +903,49 @@ export default async function EventPage({ params }: Params) {
                     {col.items.map((p) => (
                       <li key={p.name} className="px-4 py-3">
                         <div className="flex items-baseline justify-between gap-2">
-                          <span className="font-display text-sm uppercase leading-tight text-ppa-navy">
-                            {p.name}
+                          <span className="flex min-w-0 items-center gap-2">
+                            {p.brand && (
+                              <Image
+                                src={`/ppa/hotels/${p.brand}.png`}
+                                alt=""
+                                width={32}
+                                height={32}
+                                className="size-5 shrink-0 rounded-[3px] object-contain"
+                              />
+                            )}
+                            <span className="font-display text-sm uppercase leading-tight text-ppa-navy">
+                              {p.name}
+                            </span>
                           </span>
-                          <span className="shrink-0 text-[9px] font-bold uppercase tracking-[0.1em] text-ppa-blue">
+                          <span
+                            className={`shrink-0 text-[9px] font-bold uppercase tracking-[0.1em] ${
+                              p.tag === "Official"
+                                ? "bg-[var(--event-accent)] px-1.5 py-0.5 text-white"
+                                : "text-ppa-blue"
+                            }`}
+                          >
                             {p.tag}
                           </span>
                         </div>
                         <p className="mt-0.5 text-xs text-ppa-navy/55">
                           {p.note}
                         </p>
+                        {(p.rate || p.cutoff) && (
+                          <p className="mt-1 text-[11px] font-bold text-ppa-navy/70">
+                            {[p.rate, p.cutoff].filter(Boolean).join(" · ")}
+                          </p>
+                        )}
+                        {p.href && (
+                          <a
+                            href={p.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group/book mt-2 inline-flex items-center gap-1.5 bg-ppa-navy px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-[var(--event-accent)] active:scale-[0.98]"
+                          >
+                            Book the Group Rate
+                            <span aria-hidden className="transition-transform duration-300 group-hover/book:translate-x-0.5">↗</span>
+                          </a>
+                        )}
                       </li>
                     ))}
                   </ul>
@@ -845,7 +986,7 @@ export default async function EventPage({ params }: Params) {
       )}
 
       {/* Players + Divisions + Champions */}
-      <section id="players" className="scroll-mt-[150px] bg-ppa-paper">
+      <section id="players" className="scroll-mt-[120px] bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="grid gap-10 lg:grid-cols-[1fr_1fr]">
             <div>
@@ -925,11 +1066,68 @@ export default async function EventPage({ params }: Params) {
         </div>
       </section>
 
+      {/* Coverage — the event's editorial history */}
+      {coverage.length > 0 && (
+        <section id="coverage" className="scroll-mt-[120px] bg-white">
+          <div className="mx-auto w-full max-w-6xl px-4 py-12">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2.5">
+                  <span className="h-2 w-2 bg-[var(--event-accent)]" />
+                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
+                    Coverage
+                  </p>
+                </div>
+                <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+                  {completed ? `Relive ${t.shortName}` : `The ${t.shortName} Story So Far`}
+                </h2>
+              </div>
+              <Link
+                href="/news"
+                className="group hidden shrink-0 text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy sm:block"
+              >
+                All News{" "}
+                <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+              </Link>
+            </div>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {coverage.map((c, i) => (
+                <Link
+                  key={c.slug}
+                  href={`/news/${c.slug}`}
+                  data-reveal
+                  style={{ "--reveal-delay": `${(i % 3) * 80}ms` } as React.CSSProperties}
+                  className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden bg-ppa-navy"
+                >
+                  <Image
+                    src={c.image}
+                    alt=""
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 scrim-card" />
+                  <div className="relative p-4 text-white">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-sky">
+                      {c.category} · {c.date}
+                    </p>
+                    <p className="mt-1 font-display text-base uppercase leading-[1.1]">
+                      {c.title}
+                    </p>
+                    <p className="mt-1 line-clamp-2 text-xs text-white/65">{c.dek}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Get Involved */}
-      <section id="involved" className="scroll-mt-[150px] bg-ppa-navy text-white">
+      <section id="involved" className="scroll-mt-[120px] bg-ppa-navy text-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex items-center gap-2.5">
-            <span className="h-2 w-2 bg-ppa-blue" />
+            <span className="h-2 w-2 bg-[var(--event-accent)]" />
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
               Get Involved
             </p>
@@ -970,8 +1168,8 @@ export default async function EventPage({ params }: Params) {
               {
                 title: "Volunteer Event Week",
                 note: "Court crew, player services, transport — be inside the ropes",
-                cta: "Contact the Team",
-                href: "/about/contact",
+                cta: "Volunteer",
+                href: "/events/volunteer",
               },
             ].map((c) => (
               <div
@@ -1014,7 +1212,7 @@ export default async function EventPage({ params }: Params) {
       </section>
 
       {/* Tickets */}
-      <section id="tickets" className="scroll-mt-[150px] bg-white">
+      <section id="tickets" className="scroll-mt-[120px] bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -1149,6 +1347,6 @@ export default async function EventPage({ params }: Params) {
         </div>
       </section>
       <EventConcierge facts={conciergeFacts} />
-    </>
+    </div>
   );
 }

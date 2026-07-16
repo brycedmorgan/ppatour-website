@@ -40,8 +40,12 @@ export function LeadMagnetCapture({ variant = "fan" }: { variant?: Variant }) {
       const res = await fetch("/api/lead-capture", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, variant }),
+        body: JSON.stringify({ email, variant, page: window.location.pathname }),
       });
+      if (res.ok) {
+        window.gtag?.("event", "generate_lead", { variant });
+        window.fbq?.("track", "Lead", { variant });
+      }
       setStatus(res.ok ? "done" : "error");
     } catch {
       setStatus("error");

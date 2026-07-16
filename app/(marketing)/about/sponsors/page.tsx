@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { partners } from "@/lib/home-content";
+import { SponsorInquiryForm } from "@/components/marketing/SponsorInquiryForm";
 
 export const metadata: Metadata = {
   title: "Sponsors & Partnerships",
@@ -128,7 +129,7 @@ export default function SponsorsPage() {
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <a
-              href="mailto:partnerships@ppatour.com"
+              href="#inquire"
               className="inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
             >
               Partnership Inquiry →
@@ -364,6 +365,37 @@ export default function SponsorsPage() {
         </div>
       </section>
 
+      {/* Partnership inquiry form — submissions land in the sales pipeline */}
+      <section id="inquire" className="scroll-mt-[120px] bg-ppa-paper">
+        <div className="mx-auto w-full max-w-6xl px-4 py-14">
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-blue">
+                Start Here
+              </p>
+              <h2 className="mt-2 font-display text-3xl uppercase leading-[1.02] text-ppa-navy sm:text-4xl">
+                Tell Us About Your Brand
+              </h2>
+              <p className="mt-3 max-w-md text-sm leading-relaxed text-ppa-navy/60">
+                Two minutes, no commitment. Your inquiry goes straight to our
+                partnerships team — we&apos;ll come back with a custom plan and
+                the full 2026–27 media kit within five business days.
+              </p>
+              <p className="mt-4 text-sm text-ppa-navy/60">
+                Prefer email?{" "}
+                <a
+                  href="mailto:partnerships@ppatour.com"
+                  className="font-bold text-ppa-blue hover:text-ppa-navy"
+                >
+                  partnerships@ppatour.com
+                </a>
+              </p>
+            </div>
+            <SponsorInquiryForm />
+          </div>
+        </div>
+      </section>
+
       {/* The Ask */}
       <section className="bg-ppa-navy text-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-14">
@@ -383,10 +415,10 @@ export default function SponsorsPage() {
             </div>
             <div className="flex flex-col gap-2">
               <a
-                href="mailto:partnerships@ppatour.com"
+                href="#inquire"
                 className="flex h-12 items-center justify-center bg-ppa-blue px-8 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
               >
-                partnerships@ppatour.com
+                Start a Partnership Inquiry →
               </a>
               <Link
                 href="/about/host-tournament"
