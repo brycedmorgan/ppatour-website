@@ -6,7 +6,17 @@
  * official hotel + partner details closer to each event.
  */
 
-export type Place = { name: string; tag: string; note: string };
+export type Place = {
+  name: string;
+  tag: string;
+  note: string;
+  /** Official group-rate booking link (Kristen Russell, 2026/27 hotel thread). */
+  href?: string;
+  /** Parent brand key → /public/ppa/hotels/{brand}.png */
+  brand?: "marriott" | "hilton" | "ihg" | "bestwestern" | "wyndhamhotels";
+  rate?: string;
+  cutoff?: string;
+};
 
 export type EventGuide = {
   /** Map query — venue + city + state. Drives the Google Maps embed. */
@@ -30,6 +40,22 @@ export const eventGuides: Record<string, EventGuide> = {
     parking:
       "Free on-site parking at Cary Tennis Park; ADA + drop-off at the main gate. Lots open 8:00 AM.",
     hotels: [
+      {
+        name: "Holiday Inn Raleigh-Durham Airport",
+        tag: "Official",
+        note: "930 Airport Blvd, Morrisville — group rate via the PPA block",
+        href: "https://www.ihg.com/redirect?path=rates&brandCode=HI&localeCode=en&regionCode=1&hotelCode=RDUMS&GPC=UPA&cn=no&showApp=true",
+        brand: "ihg",
+        cutoff: "Book by Jul 31",
+      },
+      {
+        name: "Home2 Suites Raleigh-Durham Airport",
+        tag: "Official",
+        note: "Suites near RDU — PPA group block",
+        href: "https://www.hilton.com/en/book/reservation/deeplink/?ctyhocn=RDUTPHT&groupCode=CHT90G&arrivaldate=2026-08-30&departuredate=2026-09-07&cid=OM,WW,HILTONLINK,EN,DirectLink&fromId=HILTONLINKDIRECT",
+        brand: "hilton",
+        cutoff: "Book by Jul 30",
+      },
       { name: "The Umstead Hotel and Spa", tag: "5-Star", note: "Cary · forest-level luxury" },
       { name: "The Mayton", tag: "Boutique", note: "Downtown Cary · walkable" },
     ],
@@ -74,8 +100,30 @@ export const eventGuides: Record<string, EventGuide> = {
     parking:
       "Free on-site parking all week. Strip hotels run rideshare pickup zones; budget 25 min on Championship Sunday.",
     hotels: [
-      { name: "ARIA Resort & Casino", tag: "Official Tour Hotel", note: "Center-Strip · tour rate" },
-      { name: "Virgin Hotels Las Vegas", tag: "Off-Strip", note: "Quieter · closest to courts" },
+      {
+        name: "JW Marriott Las Vegas Resort & Spa",
+        tag: "Official",
+        note: "221 N Rampart Blvd — resort HQ for the PPA block",
+        href: "https://book.passkey.com/e/51292362",
+        brand: "marriott",
+        cutoff: "Book by Aug 28",
+      },
+      {
+        name: "Best Western Plus Las Vegas West",
+        tag: "Official",
+        note: "8669 W Sahara Ave — PPA group rate",
+        href: "https://www.bestwestern.com/en_US/book/hotel-rooms.29084.html?groupId=L43HF0G9",
+        brand: "bestwestern",
+        cutoff: "Book by Aug 28",
+      },
+      {
+        name: "La Quinta Las Vegas Red Rock/Summerlin",
+        tag: "Official",
+        note: "9570 W Sahara Ave — PPA group rate",
+        href: "https://www.wyndhamhotels.com/laquinta/las-vegas-nevada/la-quinta-las-vegas-redrock-summerlin/overview",
+        brand: "wyndhamhotels",
+        cutoff: "Book by Jul 31",
+      },
     ],
     dining: [
       { name: "Bazaar Meat by José Andrés", tag: "Upscale", note: "The Strip's best steak" },
@@ -96,8 +144,20 @@ export const eventGuides: Record<string, EventGuide> = {
     parking:
       "Free on-site lots. The Metra Northbrook stop is a short rideshare; downtown fans can train up.",
     hotels: [
-      { name: "Renaissance Chicago North Shore", tag: "Official Tour Hotel", note: "Northbrook · tour rate" },
-      { name: "The Langham, Chicago", tag: "City Luxury", note: "Downtown · make a city weekend" },
+      {
+        name: "DoubleTree Chicago-North Shore",
+        tag: "Official",
+        note: "9599 Skokie Blvd, Skokie — PPA event block",
+        href: "https://www.hilton.com/en/attend-my-event/chiccdt-90g-84f952e7-f2e9-4af2-93d4-31e2859ef2b7/",
+        brand: "hilton",
+      },
+      {
+        name: "Holiday Inn Express Prospect Heights",
+        tag: "Official",
+        note: "600 N Milwaukee Ave, Prospect Heights — PPA group rate",
+        href: "https://www.ihg.com/holidayinnexpress/hotels/us/en/find-hotels/select-roomrate?fromRedirect=true&qSrt=sBR&qSlH=CHIAM&qRms=1&qAdlt=1&setPMCookies=true&qSHBrC=EX&showApp=true",
+        brand: "ihg",
+      },
     ],
     dining: [
       { name: "Lou Malnati's", tag: "Deep Dish", note: "The Chicago pizza pilgrimage" },
@@ -118,8 +178,15 @@ export const eventGuides: Record<string, EventGuide> = {
     parking:
       "Convention Center garage adjacent · $10/day. Most oceanfront hotels are a 10-min walk.",
     hotels: [
-      { name: "Marriott Oceanfront", tag: "Official Tour Hotel", note: "Walk to courts + beach" },
-      { name: "The Cavalier", tag: "Historic Luxury", note: "Restored 1927 landmark" },
+      {
+        name: "Hampton Inn Virginia Beach Oceanfront South",
+        tag: "Official",
+        note: "1011 Atlantic Ave — oceanfront, PPA group block",
+        href: "https://www.hilton.com/en/book/reservation/rooms/?ctyhocn=ORFOFHX&arrivalDate=2026-10-11&departureDate=2026-10-19&groupCode=CHH90J&room1NumAdults=1&cid=OM%2CWW%2CHILTONLINK%2CEN%2CDirectLink",
+        brand: "hilton",
+        rate: "$119/night",
+        cutoff: "Book by Sep 10",
+      },
     ],
     dining: [
       { name: "Waterman's Surfside Grille", tag: "Seafood", note: "Oceanfront · the famous orange crush" },
@@ -250,8 +317,24 @@ export const eventGuides: Record<string, EventGuide> = {
     parking:
       "Free on-site parking across Bell Bank Park's 320 acres. Misting stations + shade on the concourse.",
     hotels: [
-      { name: "Sheraton Mesa at Wrigleyville West", tag: "Official Tour Hotel", note: "Walk to venue · tour rate" },
-      { name: "The Phoenician", tag: "Resort Luxury", note: "Scottsdale · golf + spa" },
+      {
+        name: "Four Points by Sheraton Mesa Gateway",
+        tag: "Official",
+        note: "6850 E Williams Field Rd, Mesa — PPA group block",
+        href: "https://app.marriott.com/resview2?id=83702845276&key=GRP&app=resvlink",
+        brand: "marriott",
+        rate: "$135/night",
+        cutoff: "Book by Aug 14",
+      },
+      {
+        name: "Hampton Inn & Suites Phoenix/Gilbert",
+        tag: "Official",
+        note: "3265 S Market St, Gilbert — PPA group block",
+        href: "https://www.hilton.com/en/book/reservation/deeplink/?ctyhocn=PHXGTHX&groupCode=CHHUNI&arrivaldate=2026-09-13&departuredate=2026-09-21&cid=OM,WW,HILTONLINK,EN,DirectLink&fromId=HILTONLINKDIRECT",
+        brand: "hilton",
+        rate: "$129/night",
+        cutoff: "Book by Aug 14",
+      },
     ],
     dining: [
       { name: "Pizzeria Bianco", tag: "Icon", note: "America's best pizza, per many" },
@@ -404,8 +487,60 @@ export const eventGuides: Record<string, EventGuide> = {
     parking:
       "Club parking on-site with finals-weekend valet. Lots open 8:00 AM; expect premium lots to fill early on Sunday.",
     hotels: [
-      { name: "Hotel Crescent Court", tag: "City Luxury", note: "Uptown Dallas · 20 min · tour rate" },
-      { name: "The Westin Galleria", tag: "Near Venue", note: "10 min north · shopping + skyline" },
+      {
+        name: "Sheraton Dallas by the Galleria",
+        tag: "Official",
+        note: "2026 World Pickleball fans block",
+        href: "https://app.marriott.com/reslink?id=73858550544&key=GRP&app=resvlink",
+        brand: "marriott",
+        rate: "$139/night",
+        cutoff: "Book by Oct 16",
+      },
+      {
+        name: "Renaissance Dallas North",
+        tag: "Official",
+        note: "1590 LBJ Fwy — breakfast for 2, free parking + wi-fi",
+        href: "https://app.marriott.com/resview2?id=80516175834&key=GRP&app=resvlink",
+        brand: "marriott",
+        rate: "$125/night",
+        cutoff: "Book by Oct 26",
+      },
+      {
+        name: "DoubleTree Dallas Near the Galleria",
+        tag: "Official",
+        note: "4099 Valley View Ln — breakfast for 2, free parking + wi-fi",
+        href: "https://www.hilton.com/en/book/reservation/deeplink/?ctyhocn=DALVVDT&groupCode=DTPKL&arrivaldate=2026-11-02&departuredate=2026-11-08&cid=OM,WW,HILTONLINK,EN,DirectLink&fromId=HILTONLINKDIRECT",
+        brand: "hilton",
+        rate: "$135/night",
+        cutoff: "Book by Sep 30",
+      },
+      {
+        name: "Hampton Inn & Suites Farmers Branch",
+        tag: "Official",
+        note: "1570 Mira Lago Blvd — hot breakfast, free parking + wi-fi",
+        href: "https://links.h6.hilton.com/f/a/nDfI_CdUBl6geagohKipyA~~/AAQRxRA~/JsbxiRmOhFfiMlei-xrAps2D6Dntfy_vejChtRKz2hMkj4DP-XB7P7mEZ08IexqDhrcF4eGdaa8dOAbxKTm0lfDiL08LM0f1-suYval3BYx7qOeNEyAs_cEDVTtleikSSZJapmgnc_MaDwh0Sh_u6Av5YeDPNFvSFPVeF4pVNi1svvoTH6GOqxVwENrdu3eh",
+        brand: "hilton",
+        rate: "$139 until Aug 31, then $159",
+        cutoff: "Book by Aug 31",
+      },
+      {
+        name: "Holiday Inn Express Dallas NW Farmers Branch",
+        tag: "Official",
+        note: "1570 LBJ Fwy — code Pickleball2026, breakfast bar + pool",
+        href: "https://www.ihg.com/redirect?path=rates&brandCode=EX&localeCode=en&regionCode=1&hotelCode=DFWBF&GPC=PKL&cn=no&showApp=true",
+        brand: "ihg",
+        rate: "$144/night",
+        cutoff: "Book by Oct 2",
+      },
+      {
+        name: "Candlewood Suites Farmers Branch",
+        tag: "Official",
+        note: "1561 Mira Largo Blvd — code Pickleball2026, free laundry + parking",
+        href: "https://www.ihg.com/redirect?path=rates&brandCode=CW&localeCode=en&regionCode=1&hotelCode=DFWFB&GPC=PKL&cn=no&showApp=true",
+        brand: "ihg",
+        rate: "$129/night",
+        cutoff: "Book by Oct 2",
+      },
     ],
     dining: [
       { name: "Pecan Lodge", tag: "BBQ", note: "Brisket worth the line" },

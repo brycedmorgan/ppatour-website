@@ -900,16 +900,49 @@ export default async function EventPage({ params }: Params) {
                     {col.items.map((p) => (
                       <li key={p.name} className="px-4 py-3">
                         <div className="flex items-baseline justify-between gap-2">
-                          <span className="font-display text-sm uppercase leading-tight text-ppa-navy">
-                            {p.name}
+                          <span className="flex min-w-0 items-center gap-2">
+                            {p.brand && (
+                              <Image
+                                src={`/ppa/hotels/${p.brand}.png`}
+                                alt=""
+                                width={32}
+                                height={32}
+                                className="size-5 shrink-0 rounded-[3px] object-contain"
+                              />
+                            )}
+                            <span className="font-display text-sm uppercase leading-tight text-ppa-navy">
+                              {p.name}
+                            </span>
                           </span>
-                          <span className="shrink-0 text-[9px] font-bold uppercase tracking-[0.1em] text-ppa-blue">
+                          <span
+                            className={`shrink-0 text-[9px] font-bold uppercase tracking-[0.1em] ${
+                              p.tag === "Official"
+                                ? "bg-[var(--event-accent)] px-1.5 py-0.5 text-white"
+                                : "text-ppa-blue"
+                            }`}
+                          >
                             {p.tag}
                           </span>
                         </div>
                         <p className="mt-0.5 text-xs text-ppa-navy/55">
                           {p.note}
                         </p>
+                        {(p.rate || p.cutoff) && (
+                          <p className="mt-1 text-[11px] font-bold text-ppa-navy/70">
+                            {[p.rate, p.cutoff].filter(Boolean).join(" · ")}
+                          </p>
+                        )}
+                        {p.href && (
+                          <a
+                            href={p.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group/book mt-2 inline-flex items-center gap-1.5 bg-ppa-navy px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-[var(--event-accent)] active:scale-[0.98]"
+                          >
+                            Book the Group Rate
+                            <span aria-hidden className="transition-transform duration-300 group-hover/book:translate-x-0.5">↗</span>
+                          </a>
+                        )}
                       </li>
                     ))}
                   </ul>
