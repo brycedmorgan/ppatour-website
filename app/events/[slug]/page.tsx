@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { EventConcierge } from "@/components/events/EventConcierge";
+import { EventTabNav } from "@/components/events/EventTabNav";
 import { EventGallery } from "@/components/events/EventGallery";
 import { VenueMap } from "@/components/events/VenueMap";
 import { Countdown } from "@/components/motion/Countdown";
@@ -213,7 +214,14 @@ export default async function EventPage({ params }: Params) {
   };
 
   return (
-    <>
+    <div
+      style={
+        {
+          "--event-primary": t.brand?.primary ?? "#0c2b44",
+          "--event-accent": t.brand?.accent ?? "#228be6",
+        } as React.CSSProperties
+      }
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -262,7 +270,7 @@ export default async function EventPage({ params }: Params) {
         <div className="absolute inset-0 scrim-hero" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-10 pt-20">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em]">
-            <span className="bg-ppa-blue px-2 py-0.5">
+            <span className="bg-[var(--event-accent)] px-2 py-0.5">
               {tierShort(t)} · {tierPoints(t).toLocaleString()} PTS
             </span>
             {t.presentedBy && (
@@ -301,7 +309,7 @@ export default async function EventPage({ params }: Params) {
               })}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-11 items-center justify-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:bg-ppa-blue-deep"
+              className="flex h-11 items-center justify-center bg-[var(--event-accent)] px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:brightness-90 active:scale-[0.98]"
             >
               Buy Tickets — from ${t.ticketPriceFrom}
             </a>
@@ -319,23 +327,11 @@ export default async function EventPage({ params }: Params) {
             </a>
           </div>
         </div>
-        <div className="relative h-1 bg-ppa-blue" />
+        <div className="relative h-1 bg-[var(--event-accent)]" />
       </section>
 
-      {/* Sticky tab nav */}
-      <nav className="sticky top-[100px] z-40 border-b border-ppa-line bg-ppa-paper/95 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {TABS.map((tab) => (
-            <a
-              key={tab.id}
-              href={`#${tab.id}`}
-              className="shrink-0 px-3 py-3 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/55 transition-colors hover:text-ppa-blue"
-            >
-              {tab.label}
-            </a>
-          ))}
-        </div>
-      </nav>
+      {/* Floating event nav */}
+      <EventTabNav tabs={TABS} eventName={t.shortName} icon={t.brand?.icon} />
 
       {/* Audience router — one page, three ways in */}
       <section className="bg-white">
@@ -365,7 +361,7 @@ export default async function EventPage({ params }: Params) {
               href={lane.href}
               className="group bg-white p-5 transition-colors hover:bg-ppa-paper"
             >
-              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-ppa-blue">
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--event-accent)]">
                 {lane.kicker}
               </p>
               <p className="mt-1.5 flex items-baseline gap-2 font-display text-lg uppercase leading-tight text-ppa-navy">
@@ -384,7 +380,7 @@ export default async function EventPage({ params }: Params) {
       </section>
 
       {/* Overview — quick facts */}
-      <section id="overview" className="scroll-mt-[150px] bg-ppa-navy-deep text-white">
+      <section id="overview" className="scroll-mt-[120px] bg-ppa-navy-deep text-white">
         <div className="mx-auto grid w-full max-w-6xl grid-cols-2 px-4 sm:grid-cols-4">
           {[
             { k: "Dates", v: formatDateRange(t.startDate, t.endDate) },
@@ -408,10 +404,10 @@ export default async function EventPage({ params }: Params) {
       </section>
 
       {/* What's at Stake */}
-      <section id="stakes" className="scroll-mt-[150px] bg-white">
+      <section id="stakes" className="scroll-mt-[120px] bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex items-center gap-2.5">
-            <span className="h-2 w-2 bg-ppa-blue" />
+            <span className="h-2 w-2 bg-[var(--event-accent)]" />
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
               What&apos;s at Stake
             </p>
@@ -485,7 +481,7 @@ export default async function EventPage({ params }: Params) {
         <section className="bg-ppa-navy">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
             <div className="flex items-center gap-2.5">
-              <span className="h-2 w-2 bg-ppa-blue" />
+              <span className="h-2 w-2 bg-[var(--event-accent)]" />
               <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
                 The Scene
               </p>
@@ -503,7 +499,7 @@ export default async function EventPage({ params }: Params) {
       )}
 
       {/* Order of Play */}
-      <section id="schedule" className="scroll-mt-[150px] bg-ppa-paper">
+      <section id="schedule" className="scroll-mt-[120px] bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
             Order of Play
@@ -555,10 +551,10 @@ export default async function EventPage({ params }: Params) {
       </section>
 
       {/* Watch at home — PGA-style */}
-      <section id="watch" className="scroll-mt-[150px] bg-ppa-navy text-white">
+      <section id="watch" className="scroll-mt-[120px] bg-ppa-navy text-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex items-center gap-2.5">
-            <span className="h-2 w-2 bg-ppa-blue" />
+            <span className="h-2 w-2 bg-[var(--event-accent)]" />
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
               Watching at Home
             </p>
@@ -667,10 +663,10 @@ export default async function EventPage({ params }: Params) {
       </section>
 
       {/* Venue Guide — grounds map + know before you go */}
-      <section id="venue" className="scroll-mt-[150px] bg-ppa-paper">
+      <section id="venue" className="scroll-mt-[120px] bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex items-center gap-2.5">
-            <span className="h-2 w-2 bg-ppa-blue" />
+            <span className="h-2 w-2 bg-[var(--event-accent)]" />
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
               At the Venue
             </p>
@@ -714,15 +710,23 @@ export default async function EventPage({ params }: Params) {
                   k: "Questions On-Site",
                   v: "Guest Services sits beside the main gate — lost & found, ADA services, first aid, and staff who know the answer.",
                 },
-              ].map((row) => (
-                <div key={row.k} className="bg-white p-4">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-ppa-blue">
-                    {row.k}
-                  </p>
-                  <p className="mt-1 text-sm leading-relaxed text-ppa-navy/70">
+              ].map((row, i) => (
+                <details key={row.k} className="group bg-white" open={i === 0}>
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-4 [&::-webkit-details-marker]:hidden">
+                    <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--event-accent)]">
+                      {row.k}
+                    </span>
+                    <span
+                      aria-hidden
+                      className="text-xs text-ppa-navy/40 transition-transform duration-300 group-open:rotate-180"
+                    >
+                      ▾
+                    </span>
+                  </summary>
+                  <p className="px-4 pb-4 text-sm leading-relaxed text-ppa-navy/70">
                     {row.v}
                   </p>
-                </div>
+                </details>
               ))}
             </div>
           </div>
@@ -731,10 +735,10 @@ export default async function EventPage({ params }: Params) {
 
       {/* Plan Your Trip — Ragnar-style */}
       {guide && (
-        <section id="travel" className="scroll-mt-[150px] bg-white">
+        <section id="travel" className="scroll-mt-[120px] bg-white">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
             <div className="flex items-center gap-2.5">
-              <span className="h-2 w-2 bg-ppa-blue" />
+              <span className="h-2 w-2 bg-[var(--event-accent)]" />
               <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
                 Make a Trip of It
               </p>
@@ -840,7 +844,7 @@ export default async function EventPage({ params }: Params) {
       )}
 
       {/* Players + Divisions + Champions */}
-      <section id="players" className="scroll-mt-[150px] bg-ppa-paper">
+      <section id="players" className="scroll-mt-[120px] bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="grid gap-10 lg:grid-cols-[1fr_1fr]">
             <div>
@@ -922,12 +926,12 @@ export default async function EventPage({ params }: Params) {
 
       {/* Coverage — the event's editorial history */}
       {coverage.length > 0 && (
-        <section id="coverage" className="scroll-mt-[150px] bg-white">
+        <section id="coverage" className="scroll-mt-[120px] bg-white">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
             <div className="flex items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2.5">
-                  <span className="h-2 w-2 bg-ppa-blue" />
+                  <span className="h-2 w-2 bg-[var(--event-accent)]" />
                   <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
                     Coverage
                   </p>
@@ -978,10 +982,10 @@ export default async function EventPage({ params }: Params) {
       )}
 
       {/* Get Involved */}
-      <section id="involved" className="scroll-mt-[150px] bg-ppa-navy text-white">
+      <section id="involved" className="scroll-mt-[120px] bg-ppa-navy text-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex items-center gap-2.5">
-            <span className="h-2 w-2 bg-ppa-blue" />
+            <span className="h-2 w-2 bg-[var(--event-accent)]" />
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
               Get Involved
             </p>
@@ -1066,7 +1070,7 @@ export default async function EventPage({ params }: Params) {
       </section>
 
       {/* Tickets */}
-      <section id="tickets" className="scroll-mt-[150px] bg-white">
+      <section id="tickets" className="scroll-mt-[120px] bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -1201,6 +1205,6 @@ export default async function EventPage({ params }: Params) {
         </div>
       </section>
       <EventConcierge facts={conciergeFacts} />
-    </>
+    </div>
   );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ScoreTicker } from "@/components/global/ScoreTicker";
+import { HideOnScroll } from "@/components/global/HideOnScroll";
 import { Header } from "@/components/global/Header";
 import { SiteFooter } from "@/components/global/SiteFooter";
 import { CookieBanner } from "@/components/global/CookieBanner";
@@ -58,7 +59,9 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col bg-ppa-paper font-sans text-ppa-navy">
         <div className="sticky top-0 z-50">
-          <ScoreTicker />
+          <HideOnScroll>
+            <ScoreTicker />
+          </HideOnScroll>
           <Header />
         </div>
         <main className="flex-1">{children}</main>

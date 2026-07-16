@@ -46,6 +46,8 @@ export type Tournament = {
   image: string;
   /** Optional real-photo gallery (paths under /public). */
   gallery?: string[];
+  /** Per-event brand system (from the event's quick guide). */
+  brand?: { primary: string; accent: string; icon?: string };
 };
 
 /**
@@ -80,6 +82,11 @@ export const tournaments: Tournament[] = [
     tierKey: "slam",
     prizeMoney: "$1,648,641",
     presentedBy: "Veolia",
+    brand: {
+      primary: "#023155",
+      accent: "#C1272D",
+      icon: "/ppa/events/nationals-trophy.png",
+    },
     image: "/ppa/nationals-drone-champcourt.jpg",
     gallery: [
       "/ppa/nationals-drone-stadium.jpg",
