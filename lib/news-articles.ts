@@ -16,12 +16,15 @@ export type NewsArticle = {
   whyItMatters: string;
   /** Ties coverage to a tour stop — event pages render these under "Coverage". */
   eventSlug?: string;
+  /** Featured athletes (slugs) — merged with auto-detected name mentions. */
+  players?: string[];
   body: string[];
 };
 
 export const newsArticles: NewsArticle[] = [
   {
     slug: "vegas-final-five-stats",
+    players: ["ben-johns", "jw-johnson", "federico-staksrud"],
     eventSlug: "rate-las-vegas-open",
     category: "Recap",
     title: "Championship Sunday: Five Stats That Defined the Vegas Final",
@@ -40,6 +43,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "atlanta-draw-decoded",
+    players: ["ben-johns", "anna-leigh-waters"],
     eventSlug: "atlanta-pickleball-championships",
     category: "Analysis",
     title: "The Atlanta Draw, Decoded: Where the Bracket Breaks",
@@ -75,6 +79,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "race-report-spring-swing",
+    players: ["ben-johns", "federico-staksrud", "christian-alshon", "anna-leigh-waters"],
     category: "The Race",
     title: "Race Report: Who Moved After the Spring Swing",
     date: "May 12",

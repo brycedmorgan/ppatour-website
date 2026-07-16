@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { getArticle, newsArticles } from "@/lib/news-articles";
+import { athletes, type Athlete } from "@/lib/athletes";
 import { getNextTournament } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
 
@@ -30,6 +31,32 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   };
 }
 
+/** Wraps athlete full-name mentions in links to their bios. */
+function linkifyPlayers(text: string, players: Athlete[]) {
+  const inText = players.filter((p) => text.includes(p.name));
+  if (inText.length === 0) return text;
+  const pattern = new RegExp(
+    `(${inText
+      .map((p) => p.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+      .join("|")})`,
+    "g",
+  );
+  return text.split(pattern).map((part, i) => {
+    const athlete = inText.find((p) => p.name === part);
+    return athlete ? (
+      <Link
+        key={i}
+        href={`/athletes/${athlete.slug}`}
+        className="font-semibold text-ppa-blue underline decoration-ppa-blue/30 underline-offset-2 transition-colors hover:decoration-ppa-blue"
+      >
+        {part}
+      </Link>
+    ) : (
+      part
+    );
+  });
+}
+
 export default async function ArticlePage({ params }: Params) {
   const { slug } = await params;
   const a = getArticle(slug);
@@ -37,6 +64,15 @@ export default async function ArticlePage({ params }: Params) {
 
   const related = newsArticles.filter((x) => x.slug !== a.slug).slice(0, 3);
   const next = getNextTournament();
+
+  const mentioned = athletes.filter((p) =>
+    [a.dek, ...a.body].some((t) => t.includes(p.name)),
+  );
+  const featured = [
+    ...new Set([...(a.players ?? []), ...mentioned.map((p) => p.slug)]),
+  ]
+    .map((s) => athletes.find((p) => p.slug === s))
+    .filter((p): p is Athlete => Boolean(p));
 
   return (
     <>
@@ -68,10 +104,19 @@ export default async function ArticlePage({ params }: Params) {
         <div className="relative h-1 bg-ppa-blue" />
       </section>
 
-      {/* Body */}
+      {/* Body + players rail */}
       <article className="bg-white">
-        <div className="mx-auto w-full max-w-3xl px-4 py-10">
-          <p className="text-lg leading-relaxed text-ppa-navy/80">{a.dek}</p>
+        <div
+          className={`mx-auto w-full px-4 py-10 ${
+            featured.length > 0
+              ? "grid max-w-5xl gap-10 lg:grid-cols-[minmax(0,1fr)_15rem]"
+              : "max-w-3xl"
+          }`}
+        >
+          <div className="min-w-0">
+          <p className="text-lg leading-relaxed text-ppa-navy/80">
+            {linkifyPlayers(a.dek, featured)}
+          </p>
 
           <div className="mt-4 border-l-4 border-ppa-blue bg-ppa-paper p-4">
             <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-ppa-blue">
@@ -85,7 +130,7 @@ export default async function ArticlePage({ params }: Params) {
           <div className="mt-7 space-y-5">
             {a.body.map((p, i) => (
               <p key={i} className="text-[15px] leading-[1.75] text-ppa-navy/75">
-                {p}
+                {linkifyPlayers(p, featured)}
               </p>
             ))}
           </div>
@@ -109,6 +154,59 @@ export default async function ArticlePage({ params }: Params) {
               TV Schedule
             </Link>
           </div>
+          </div>
+
+          {featured.length > 0 && (
+            <aside className="lg:pt-1">
+              <div className="lg:sticky lg:top-24">
+                <div className="flex items-center gap-2.5">
+                  <span className="h-2 w-2 bg-ppa-blue" />
+                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
+                    Players in This Story
+                  </p>
+                </div>
+                <div className="mt-4 flex flex-col gap-px border border-ppa-line bg-ppa-line">
+                  {featured.map((p) => (
+                    <Link
+                      key={p.slug}
+                      href={`/athletes/${p.slug}`}
+                      className="group flex items-center gap-3 bg-white p-3 transition-colors hover:bg-ppa-paper"
+                    >
+                      <span className="relative size-11 shrink-0 overflow-hidden rounded-full bg-ppa-navy-deep">
+                        <Image
+                          src={p.headshot}
+                          alt={p.name}
+                          fill
+                          sizes="44px"
+                          className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </span>
+                      <span className="flex min-w-0 flex-col">
+                        <span className="truncate font-display text-sm uppercase leading-tight text-ppa-navy transition-colors group-hover:text-ppa-blue">
+                          {p.name}
+                        </span>
+                        <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-ppa-blue">
+                          No. {p.bestRank} · {p.divisions[0]}
+                        </span>
+                      </span>
+                      <span
+                        aria-hidden
+                        className="ml-auto text-xs text-ppa-blue opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:opacity-100"
+                      >
+                        →
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+                <p className="mt-2 text-[11px] text-ppa-navy/45">
+                  Full bios, rankings, and match history →{" "}
+                  <Link href="/athletes" className="font-bold text-ppa-blue hover:underline">
+                    all athletes
+                  </Link>
+                </p>
+              </div>
+            </aside>
+          )}
         </div>
       </article>
 
