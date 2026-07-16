@@ -6,7 +6,6 @@ import { SiteFooter } from "@/components/global/SiteFooter";
 import { CookieBanner } from "@/components/global/CookieBanner";
 import { StickyBuyBar } from "@/components/global/StickyBuyBar";
 import { ScrollReveal } from "@/components/motion/ScrollReveal";
-import { getTournamentDetails, LIVE_EVENT_UUID } from "@/lib/tournament-api";
 
 /* Official brand font (Carvana PPA Tour brand guide): Gotham, used for both
    body and headlines (Gotham Black). Single-typeface system. */
@@ -44,14 +43,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Live tournament logo for the /live header ticker (cached; used only there).
-  const liveDetails = await getTournamentDetails(LIVE_EVENT_UUID);
-
   return (
     <html
       lang="en"
@@ -63,7 +59,7 @@ export default async function RootLayout({
         suppressHydrationWarning
         className="flex min-h-full flex-col bg-ppa-paper font-sans text-ppa-navy"
       >
-        <TopBar liveLogo={liveDetails?.logo || null} />
+        <TopBar />
         <main className="flex-1">{children}</main>
         <SiteFooter />
         <StickyBuyBar />

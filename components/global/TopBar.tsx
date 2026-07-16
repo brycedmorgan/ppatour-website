@@ -11,7 +11,7 @@ import { LiveScoreTicker } from "@/components/live/LiveScoreTicker";
  * (score ticker → live bar → menu); every other route keeps the standard
  * ticker + menu.
  */
-export function TopBar({ liveLogo }: { liveLogo?: string | null }) {
+export function TopBar() {
   const isLive = usePathname() === "/live";
 
   // On /live the marquee + score ticker scroll away; only the nav sticks.
@@ -19,7 +19,7 @@ export function TopBar({ liveLogo }: { liveLogo?: string | null }) {
     return (
       <>
         <LiveBar />
-        <LiveScoreTicker logo={liveLogo} />
+        <LiveScoreTicker />
         <div className="sticky top-0 z-50">
           <Header />
         </div>

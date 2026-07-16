@@ -197,10 +197,8 @@ export async function HomeContent({
         />
         <div className="absolute inset-0 scrim-hero" />
         <div className="absolute inset-0 scrim-side" />
-        {live && (
-          // Soften the header→hero seam: navy fades down into the hero image.
-          <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-32 bg-gradient-to-b from-ppa-navy to-transparent" />
-        )}
+        {/* Soften the header→hero seam: navy fades down into the hero image. */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-32 bg-gradient-to-b from-ppa-navy to-transparent" />
 
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-9 pt-20">
           <div
