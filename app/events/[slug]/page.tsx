@@ -299,7 +299,7 @@ export default async function EventPage({ params }: Params) {
                 alt=""
                 width={133}
                 height={364}
-                className="h-[4.5em] w-auto shrink-0 brightness-0 invert drop-shadow-[0_2px_12px_rgba(2,49,85,0.5)] motion-safe:animate-rise sm:h-24"
+                className="h-[4.5em] w-auto shrink-0 rounded drop-shadow-[0_2px_12px_rgba(2,49,85,0.5)] motion-safe:animate-rise sm:h-24"
                 style={{ animationDelay: "120ms" }}
               />
             )}
