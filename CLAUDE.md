@@ -20,6 +20,24 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-16 — Nationals order of play: Pro Play + Amateur & Junior tables
+- Bryce's ask: split the schedule into a "Pro Play" table (first serve
+  + TV) and an "Amateur & Junior Play" section (no serve times — they
+  vary by division). Built `lib/event-schedule.ts` overrides; events
+  without one keep the templated table.
+- Pro days transcribed from the OFFICIAL registration page Bryce sent
+  (pickleballtournaments.com): Mon 8/31 Qualifying (serve TBD) · Tue
+  R64 · Wed R32 · Thu R16 · Fri QF · Sat SF · Sun Championship. NOTE:
+  Bryce's message listed slightly different rounds (Sep 3 "Round 1",
+  no Sep 2) — followed the official page + broadcast sheet instead;
+  flagged to him.
+- Amateur table: week-long skill/age brackets · PPA Tour Camp Aug 31 +
+  Sep 1 (4–7 PM) · Junior PPA + Senior Open · MoneyBall · "division
+  days publish after Aug 24 deadline" note + register deep link.
+- Amateur per-division days aren't published anywhere yet (checked the
+  registration page HTML — no events API exposed). When Wesley's
+  PT.com API lands, sync real division/day data into eventSchedules.
+
 ### 2026-07-15 (pt. 9) — Article player links (inline + rail)
 - Bryce's ask: articles referencing players should hyperlink them and
   offer bio links on the right. Shipped: `linkifyPlayers` wraps
