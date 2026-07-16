@@ -288,9 +288,21 @@ export default async function EventPage({ params }: Params) {
               )}
             </span>
           </div>
-          <h1 className="mt-3 max-w-[18ch] font-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98]">
-            {t.shortName}
-          </h1>
+          <div className="mt-3 flex items-center gap-4">
+            {t.brand?.icon && (
+              <Image
+                src={t.brand.icon}
+                alt=""
+                width={133}
+                height={364}
+                className="h-[4.5em] w-auto shrink-0 brightness-0 invert drop-shadow-[0_2px_12px_rgba(2,49,85,0.5)] motion-safe:animate-rise sm:h-24"
+                style={{ animationDelay: "120ms" }}
+              />
+            )}
+            <h1 className="max-w-[18ch] font-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98]">
+              {t.shortName}
+            </h1>
+          </div>
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold uppercase tracking-wide text-white/75">
             <span>{formatDateRange(t.startDate, t.endDate)}</span>
             <span className="text-white/25">|</span>
