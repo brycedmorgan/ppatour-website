@@ -20,6 +20,20 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-16 (pt. 3) — Official hotel blocks (Kristen's thread) + Jackalope doc
+- Parsed the "2026/2027 PPA Tour Hotel Links" Gmail thread (Kristen
+  Russell, latest 7/16). 15 official hotels across 6 events loaded into
+  `lib/event-guides.ts` (Place gains href/brand/rate/cutoff). Where to
+  Stay rows show brand mark + "Official" badge (event accent) + rate +
+  book-by + "Book the Group Rate ↗" button. NC first-class: Holiday Inn
+  RDU (IHG, by 7/31) + Home2 Suites RDU (Hilton, by 7/30).
+- Email URLs were quoted-printable-corrupted; reconstructed with QP
+  rules ("= 26-" → "=2026-", "�" = eaten =XX pair). TWO need Kristen's
+  confirmation: Chicago HIE group code, Hampton Farmers Branch h6 link.
+  Full table + flags: ziff `docs/HOTEL-LINKS-2026-27.md`.
+- Brand marks = Google favicon pulls in `public/ppa/hotels/` — swap for
+  official brand assets when marketing supplies them.
+
 ### 2026-07-16 (pt. 2) — Seconds on the countdown + hero broadcast clock
 - Countdown badge ticks D:H:M:S every second (homepage + event heroes).
 - New `FirstServeCountdown` — "First Serve In" clock bottom-right of
