@@ -29,6 +29,7 @@ export function CookieBanner() {
   function dismiss(consent: "granted" | "denied") {
     localStorage.setItem(STORAGE_KEY, consent);
     window.gtag?.("consent", "update", { analytics_storage: consent });
+    window.fbq?.("consent", consent === "granted" ? "grant" : "revoke");
     window.dispatchEvent(new Event(CONSENT_EVENT));
   }
 

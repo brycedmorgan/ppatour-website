@@ -10,6 +10,7 @@ import { StickyBuyBar } from "@/components/global/StickyBuyBar";
 import { ScrollReveal } from "@/components/motion/ScrollReveal";
 import { Analytics } from "@/components/global/Analytics";
 import { OutboundClickTracker } from "@/components/global/OutboundClickTracker";
+import { MetaPixel } from "@/components/global/MetaPixel";
 import { SITE_INDEXABLE, SITE_URL } from "@/lib/site";
 
 /* Official brand font (Carvana PPA Tour brand guide): Gotham, used for both
@@ -72,6 +73,7 @@ export default function RootLayout({
         <CookieBanner />
         <ScrollReveal />
         <Analytics />
+        <MetaPixel />
         <OutboundClickTracker />
       </body>
     </html>
