@@ -5,6 +5,7 @@ import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { EventConcierge } from "@/components/events/EventConcierge";
 import { EventTabNav } from "@/components/events/EventTabNav";
+import { FirstServeCountdown } from "@/components/events/FirstServeCountdown";
 import { EventGallery } from "@/components/events/EventGallery";
 import { VenueMap } from "@/components/events/VenueMap";
 import { Countdown } from "@/components/motion/Countdown";
@@ -341,6 +342,7 @@ export default async function EventPage({ params }: Params) {
             </a>
           </div>
         </div>
+        {!completed && <FirstServeCountdown targetIso={t.startDate} />}
         <div className="relative h-1 bg-[var(--event-accent)]" />
       </section>
 
