@@ -10,6 +10,7 @@ import { VenueMap } from "@/components/events/VenueMap";
 import { Countdown } from "@/components/motion/Countdown";
 import { getBroadcast } from "@/lib/broadcast";
 import { getEventGuide } from "@/lib/event-guides";
+import { getEventSchedule } from "@/lib/event-schedule";
 import { playersToWatch } from "@/lib/home-content";
 import { getArticlesForEvent } from "@/lib/news-articles";
 import {
@@ -158,6 +159,7 @@ export default async function EventPage({ params }: Params) {
   const broadcastDays = days.filter((d) => d.live);
   const broadcast = getBroadcast(t.slug);
   const guide = getEventGuide(t.slug);
+  const realSchedule = getEventSchedule(t.slug);
   const mapQuery = guide?.mapQuery ?? `${t.venue}, ${t.city}, ${t.state}`;
 
   const base = t.ticketPriceFrom;
@@ -523,6 +525,95 @@ export default async function EventPage({ params }: Params) {
             All times local. Gates open an hour before first serve; finals
             move to a late-morning start for the broadcast window.
           </p>
+          {realSchedule ? (
+            <>
+              {/* Pro Play */}
+              <div className="mt-6 overflow-hidden border border-ppa-line">
+                <div className="grid grid-cols-[4.5rem_1fr_auto] gap-3 border-b border-ppa-line bg-white px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45 sm:grid-cols-[5.5rem_1fr_7rem_10rem]">
+                  <span>Date</span>
+                  <span>Pro Play</span>
+                  <span className="hidden text-right sm:block">First Serve</span>
+                  <span className="text-right">Live</span>
+                </div>
+                {realSchedule.proDays.map((d) => (
+                  <div
+                    key={d.date}
+                    className="grid grid-cols-[4.5rem_1fr_auto] items-center gap-3 border-b border-ppa-line bg-white px-4 py-3 last:border-b-0 sm:grid-cols-[5.5rem_1fr_7rem_10rem]"
+                  >
+                    <span className="font-display text-base uppercase leading-tight text-[var(--event-accent)]">
+                      <span className="block text-[10px] font-sans font-bold leading-none text-ppa-navy/40">
+                        {d.dow}
+                      </span>
+                      {d.date}
+                    </span>
+                    <span>
+                      <span className="block text-sm font-semibold text-ppa-navy">
+                        {d.label}
+                      </span>
+                      <span className="block text-[11px] uppercase tracking-wide text-ppa-navy/40">
+                        Gates {d.gates}
+                      </span>
+                    </span>
+                    <span className="hidden text-right text-sm font-bold tabular-nums text-ppa-navy sm:block">
+                      {d.firstServe}
+                    </span>
+                    <span className="text-right text-[10px] font-bold uppercase tracking-[0.1em]">
+                      {d.live ? (
+                        <span className="text-[var(--event-accent)]">{d.live}</span>
+                      ) : (
+                        <span className="text-ppa-navy/30">—</span>
+                      )}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Amateur & Junior Play */}
+              <h3 className="mt-8 font-display text-lg uppercase text-ppa-navy">
+                Amateur & Junior Play
+              </h3>
+              <div className="mt-3 overflow-hidden border border-ppa-line">
+                <div className="grid grid-cols-[7.5rem_1fr] gap-3 border-b border-ppa-line bg-white px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45 sm:grid-cols-[9rem_1fr]">
+                  <span>When</span>
+                  <span>Amateur & Junior Play</span>
+                </div>
+                {realSchedule.amateur.map((a) => (
+                  <div
+                    key={a.label}
+                    className="grid grid-cols-[7.5rem_1fr] items-baseline gap-3 border-b border-ppa-line bg-white px-4 py-3 last:border-b-0 sm:grid-cols-[9rem_1fr]"
+                  >
+                    <span className="font-display text-sm uppercase leading-tight text-[var(--event-accent)]">
+                      {a.when}
+                    </span>
+                    <span>
+                      <span className="block text-sm font-semibold text-ppa-navy">
+                        {a.label}
+                      </span>
+                      {a.detail && (
+                        <span className="block text-[12px] text-ppa-navy/55">
+                          {a.detail}
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-3 text-[12px] text-ppa-navy/50">
+                {realSchedule.amateurNote}{" "}
+                <a
+                  href={withUtm(t.registerUrl, {
+                    campaign: t.slug,
+                    content: "event-schedule-register",
+                  })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold uppercase tracking-[0.08em] text-[var(--event-accent)] hover:underline"
+                >
+                  Register to play ↗
+                </a>
+              </p>
+            </>
+          ) : (
           <div className="mt-6 overflow-hidden border border-ppa-line">
             <div className="grid grid-cols-[3.5rem_1fr_auto] gap-3 border-b border-ppa-line bg-white px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45 sm:grid-cols-[5rem_1fr_7rem_6rem]">
               <span>Date</span>
@@ -559,6 +650,7 @@ export default async function EventPage({ params }: Params) {
               </div>
             ))}
           </div>
+          )}
         </div>
       </section>
 
