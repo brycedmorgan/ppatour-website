@@ -33,7 +33,7 @@ const ACKNOWLEDGMENTS = [
 ] as const;
 
 const inputCls =
-  "h-11 w-full border border-ppa-line bg-white px-3.5 text-sm text-ppa-navy placeholder:text-ppa-navy/35 focus:border-ppa-blue focus:outline-none";
+  "h-11 w-full border border-ppa-line bg-white px-3.5 text-base text-ppa-navy placeholder:text-ppa-navy/35 focus:border-ppa-blue focus:outline-none sm:text-sm";
 const labelCls =
   "mb-1.5 block text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/60";
 
@@ -164,7 +164,7 @@ export function VolunteerApplicationForm() {
           <textarea
             name="pastVolunteering"
             rows={3}
-            className="w-full border border-ppa-line bg-white px-3.5 py-2.5 text-sm text-ppa-navy placeholder:text-ppa-navy/35 focus:border-ppa-blue focus:outline-none"
+            className="w-full border border-ppa-line bg-white px-3.5 py-2.5 text-base text-ppa-navy placeholder:text-ppa-navy/35 focus:border-ppa-blue focus:outline-none sm:text-sm"
           />
         </Field>
       </div>
@@ -174,7 +174,7 @@ export function VolunteerApplicationForm() {
             name="additionalInfo"
             rows={3}
             placeholder="Availability, friends or family you'd like to be scheduled with, questions…"
-            className="w-full border border-ppa-line bg-white px-3.5 py-2.5 text-sm text-ppa-navy placeholder:text-ppa-navy/35 focus:border-ppa-blue focus:outline-none"
+            className="w-full border border-ppa-line bg-white px-3.5 py-2.5 text-base text-ppa-navy placeholder:text-ppa-navy/35 focus:border-ppa-blue focus:outline-none sm:text-sm"
           />
         </Field>
       </div>
