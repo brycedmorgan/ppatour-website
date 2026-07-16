@@ -193,6 +193,7 @@ function MegaPanelContent({
             <BigLink href="/watch/tv" label="TV Schedule" onNavigate={onNavigate} />
             <BigLink href="/rankings" label="Rankings" onNavigate={onNavigate} />
             <BigLink href="/news" label="Latest News" onNavigate={onNavigate} />
+            <BigLink href="/events/volunteer" label="Volunteer" onNavigate={onNavigate} />
           </div>
         </div>
         <div className={col} style={delay(1)}>

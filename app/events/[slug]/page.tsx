@@ -1165,8 +1165,8 @@ export default async function EventPage({ params }: Params) {
               {
                 title: "Volunteer Event Week",
                 note: "Court crew, player services, transport — be inside the ropes",
-                cta: "Contact the Team",
-                href: "/about/contact",
+                cta: "Volunteer",
+                href: "/events/volunteer",
               },
             ].map((c) => (
               <div
