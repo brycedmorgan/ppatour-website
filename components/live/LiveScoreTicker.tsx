@@ -174,9 +174,23 @@ function ArrowButton({ dir, onClick }: { dir: "left" | "right"; onClick: () => v
   );
 }
 
-export function LiveScoreTicker() {
+export function LiveScoreTicker({
+  showDate = true,
+  transparent = false,
+  visibleCards = 4,
+}: {
+  /** Month/day badge on the left (the /live broadcast header). */
+  showDate?: boolean;
+  /** Drop the navy backdrop so cards sit on the host section. */
+  transparent?: boolean;
+  /** How many full cards fit before the rail scrolls. */
+  visibleCards?: 3 | 4;
+} = {}) {
   const searchParams = useSearchParams();
   const partner = searchParams.get("partner");
+
+  // Card width tuned so N cards show with a sliver of the next.
+  const cardW = visibleCards === 3 ? "w-[31%]" : "w-[23%]";
 
   const [matches, setMatches] = useState<TickerMatch[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -246,11 +260,11 @@ export function LiveScoreTicker() {
   }, [ordered, loaded]);
 
   return (
-    <div className="flex items-stretch bg-ppa-navy">
-      <DateBadge />
+    <div className={`flex items-stretch ${transparent ? "" : "bg-ppa-navy"}`}>
+      {showDate && <DateBadge />}
 
-      {/* Match cards — ~23% wide so 4 show with a sliver of the 5th.
-          Arrow buttons scroll; native swipe still works on touch. */}
+      {/* Match cards — width tuned so `visibleCards` show with a sliver of
+          the next. Arrow buttons scroll; native swipe still works on touch. */}
       <div className="relative min-w-0 flex-1">
         {loaded && !edges.start && <ArrowButton dir="left" onClick={() => scrollByDir(-1)} />}
         {loaded && !edges.end && <ArrowButton dir="right" onClick={() => scrollByDir(1)} />}
@@ -270,7 +284,7 @@ export function LiveScoreTicker() {
           return (
             <article
               key={m.id}
-              className="flex w-[23%] shrink-0 flex-col overflow-hidden rounded-lg bg-white"
+              className={`flex ${cardW} shrink-0 flex-col overflow-hidden rounded-lg border border-ppa-line bg-white`}
             >
               {/* Header */}
               <div className="flex items-center justify-between gap-2 px-3 py-1.5">
@@ -383,10 +397,10 @@ export function LiveScoreTicker() {
         }) : (
           // Loading skeleton — shown until the first fetch resolves so real
           // matches don't pop in over placeholders. Spinner inside each card.
-          Array.from({ length: 4 }).map((_, i) => (
+          Array.from({ length: visibleCards }).map((_, i) => (
             <div
               key={`sk-${i}`}
-              className="flex h-[104px] w-[23%] shrink-0 items-center justify-center rounded-lg bg-white"
+              className={`flex h-[104px] ${cardW} shrink-0 items-center justify-center rounded-lg border border-ppa-line bg-white`}
             >
               <span
                 aria-hidden

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
-import { ScoreRail } from "@/components/home/ScoreRail";
+import { LiveScoreTicker } from "@/components/live/LiveScoreTicker";
 import {
   daysUntil,
   formatDateRange,
@@ -92,10 +93,11 @@ export default function WatchPage() {
             </div>
           </div>
           <div className="mt-6">
-            <ScoreRail />
-            <p className="mt-3 text-[11px] uppercase tracking-[0.12em] text-ppa-navy/35">
-              Auto-scrolling · hover to pause · drag to browse
-            </p>
+            {/* Same live cards + data as the /live broadcast ticker, on a
+                transparent backdrop with 3 full cards and no date badge. */}
+            <Suspense fallback={<div className="h-[120px]" />}>
+              <LiveScoreTicker showDate={false} transparent visibleCards={3} />
+            </Suspense>
           </div>
         </div>
       </section>
