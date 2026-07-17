@@ -48,6 +48,10 @@ const LEGACY_REDIRECTS = [
   { source: "/camps", destination: "/tour/camps" },
   { source: "/travel", destination: "/tour/travel" },
   { source: "/hospitality", destination: "/tour/hospitality" },
+  // renamed staging-era event slugs
+  { source: "/events/veolia-chicago-open", destination: "/events/veolia-chicago-cup" },
+  { source: "/events/carvana-mesa-cup", destination: "/events/veolia-arizona-open" },
+  { source: "/events/veolia-cincinnati-cup", destination: "/events" },
   // patterns
   { source: "/athlete/:slug", destination: "/athletes/:slug" },
   { source: "/tournament/:path*", destination: "/events" },
@@ -60,6 +64,12 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "images.pickleball.com" },
     ],
+    // qualities must be allowlisted or next/image silently clamps to 75 —
+    // the homepage hero uses 65 (perf/lcp-hero).
+    qualities: [65, 75],
+  },
+  async redirects() {
+    return LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true }));
   },
 };
 
