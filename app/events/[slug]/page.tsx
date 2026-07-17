@@ -351,7 +351,7 @@ export default async function EventPage({ params }: Params) {
             <span className="text-white/25">|</span>
             <span className="text-ppa-yellow">{t.prizeMoney} On the Line</span>
           </div>
-          <div className="mt-5 flex flex-col gap-2.5 sm:flex-row">
+          <div className="mt-5 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap">
             <a
               href={withUtm(t.ticketsUrl, {
                 campaign: t.slug,
@@ -364,6 +364,17 @@ export default async function EventPage({ params }: Params) {
               Buy Tickets — from ${t.ticketPriceFrom}
             </a>
             <a
+              href={withUtm(t.registerUrl, {
+                campaign: t.slug,
+                content: "event-hero-register",
+              })}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
+            >
+              Register to Play ↗
+            </a>
+            <a
               href="#travel"
               className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
             >
@@ -371,7 +382,7 @@ export default async function EventPage({ params }: Params) {
             </a>
             <a
               href="#watch"
-              className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
+              className="hidden h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy sm:flex"
             >
               ▶ How to Watch
             </a>
