@@ -190,9 +190,22 @@ export default async function EventPage({ params }: Params) {
     { name: "Championship Sunday", from: Math.round(base * 2.6), blurb: "The finals — the best seats for the title matches." },
   ];
 
-  const otherTournaments = tournaments
-    .filter((x) => x.slug !== t.slug && tierPoints(x) >= 1000)
-    .slice(0, 3);
+  // Next stops on the domestic main tour (excludes international sister-tour
+  // stops and challengers), soonest first. Prefer events starting after this
+  // one; top up from the rest of the season so it's always full.
+  const mainTour = tournaments
+    .filter(
+      (x) =>
+        x.slug !== t.slug &&
+        x.region !== "international" &&
+        x.tierKey !== "challenger" &&
+        x.status !== "completed",
+    )
+    .sort((a, b) => a.startDate.localeCompare(b.startDate));
+  const otherTournaments = [
+    ...mainTour.filter((x) => x.startDate > t.startDate),
+    ...mainTour.filter((x) => x.startDate <= t.startDate),
+  ].slice(0, 3);
 
   const coverage = getArticlesForEvent(t.slug);
   const completed = t.status === "completed";
@@ -1342,6 +1355,17 @@ export default async function EventPage({ params }: Params) {
                   className="object-cover grayscale-[30%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
                 />
                 <div className="absolute inset-0 scrim-card" />
+                {o.brand?.icon && (
+                  <span className="absolute left-3 top-3 block h-16 w-[34px] overflow-hidden rounded drop-shadow-md transition-transform duration-500 group-hover:scale-105">
+                    <Image
+                      src={o.brand.icon}
+                      alt={`${o.shortName} badge`}
+                      fill
+                      sizes="34px"
+                      className="object-contain"
+                    />
+                  </span>
+                )}
                 <div className="relative p-4 text-white">
                   <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/55">
                     {tierShort(o)} · {tierPoints(o).toLocaleString()}
