@@ -200,6 +200,22 @@ export async function HomeContent({
         {/* Soften the header→hero seam: navy fades down into the hero image. */}
         <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-32 bg-gradient-to-b from-ppa-navy to-transparent" />
 
+        {/* Featured event badge — the crest for the next stop. */}
+        {!live && next.brand?.icon && (
+          <div
+            className="pointer-events-none absolute right-4 top-24 z-[2] hidden motion-safe:animate-rise sm:block lg:right-8"
+            style={{ animationDelay: "120ms" }}
+          >
+            <Image
+              src={next.brand.icon}
+              alt=""
+              width={133}
+              height={364}
+              className="h-36 w-auto rounded drop-shadow-[0_4px_20px_rgba(2,49,85,0.6)] lg:h-52"
+            />
+          </div>
+        )}
+
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-9 pt-20">
           <div
             className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em] motion-safe:animate-rise"
