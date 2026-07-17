@@ -4,12 +4,30 @@ import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { LiveScoreTicker } from "@/components/live/LiveScoreTicker";
+import { fetchLiveTicker } from "@/lib/ticker-api";
 import {
   daysUntil,
   formatDateRange,
   getNextTournament,
 } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
+
+/**
+ * Server-prefetch the live matches so the ticker's first paint already has
+ * data — no post-hydration fetch wait. Streamed under its own Suspense
+ * boundary so the rest of /watch renders immediately.
+ */
+async function LiveScores() {
+  const initialData = await fetchLiveTicker();
+  return (
+    <LiveScoreTicker
+      showDate={false}
+      transparent
+      visibleCards={3}
+      initialData={initialData}
+    />
+  );
+}
 
 export const metadata: Metadata = {
   title: "Watch",
@@ -94,9 +112,11 @@ export default function WatchPage() {
           </div>
           <div className="mt-6">
             {/* Same live cards + data as the /live broadcast ticker, on a
-                transparent backdrop with 3 full cards and no date badge. */}
+                transparent backdrop with 3 full cards and no date badge.
+                Matches are server-prefetched (LiveScores) for a fast first
+                paint; the client hook keeps polling from there. */}
             <Suspense fallback={<div className="h-[120px]" />}>
-              <LiveScoreTicker showDate={false} transparent visibleCards={3} />
+              <LiveScores />
             </Suspense>
           </div>
         </div>

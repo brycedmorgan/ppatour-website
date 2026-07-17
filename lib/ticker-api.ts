@@ -167,26 +167,95 @@ function mapMatch(m: ApiMatch): TickerMatch {
   };
 }
 
-/** First partner with active matches (auto-pick when none is specified). */
+// Cap every upstream call so a slow/unresponsive backend degrades to the empty
+// (loading) state instead of hanging the ticker's spinner indefinitely.
+const TIMEOUT_MS = 5000;
+
+type CacheEntry<T> = { value: T; expires: number };
+// Which partner is live changes slowly; the match window changes fast.
+const PARTNER_TTL_MS = 60_000;
+const RESULT_TTL_MS = 5_000;
+
+// Module-scoped caches. They persist across requests on a warm server instance,
+// so repeated 15s polls and the two ticker consumers (header ticker + sticky
+// live banner) don't each re-hit the upstream API. The in-flight maps collapse
+// simultaneous requests into a single upstream call (request coalescing).
+let partnerCache: CacheEntry<string | null> | null = null;
+let partnerInFlight: Promise<string | null> | null = null;
+const resultCache = new Map<string, CacheEntry<TickerResult>>();
+const resultInFlight = new Map<string, Promise<TickerResult>>();
+
+/**
+ * First partner with active matches (auto-pick when none is specified). Cached
+ * ~60s so we don't pay this extra discovery round trip on every request while
+ * still auto-detecting PPA / PPA Australia / PPA Asia windows.
+ */
 async function pickActivePartner(token: string, base: string): Promise<string | null> {
+  if (partnerCache && partnerCache.expires > Date.now()) return partnerCache.value;
+  if (partnerInFlight) return partnerInFlight;
+
+  partnerInFlight = (async () => {
+    try {
+      const params = new URLSearchParams({
+        partners: "PPA,PPA Australia,PPA Asia",
+        bracket_level_ids: "2",
+        use_camel_case: "true",
+      });
+      const res = await fetch(`${base}/v2/data/homepage_ticker_activity?${params}`, {
+        headers: { "PB-API-TOKEN": token },
+        cache: "no-store",
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+      });
+      if (!res.ok) return null;
+      const json = (await res.json()) as {
+        activeTickers?: { partnersFlag: string; hasActiveMatches: boolean }[];
+      };
+      return json.activeTickers?.find((t) => t.hasActiveMatches)?.partnersFlag ?? null;
+    } catch {
+      return null;
+    }
+  })();
+
   try {
-    const params = new URLSearchParams({
-      partners: "PPA,PPA Australia,PPA Asia",
-      bracket_level_ids: "2",
-      use_camel_case: "true",
-    });
-    const res = await fetch(`${base}/v2/data/homepage_ticker_activity?${params}`, {
-      headers: { "PB-API-TOKEN": token },
-      cache: "no-store",
-    });
-    if (!res.ok) return null;
-    const json = (await res.json()) as {
-      activeTickers?: { partnersFlag: string; hasActiveMatches: boolean }[];
-    };
-    return json.activeTickers?.find((t) => t.hasActiveMatches)?.partnersFlag ?? null;
-  } catch {
-    return null;
+    const value = await partnerInFlight;
+    partnerCache = { value, expires: Date.now() + PARTNER_TTL_MS };
+    return value;
+  } finally {
+    partnerInFlight = null;
   }
+}
+
+/** Fetch + map the current match window for one partner (uncached). */
+async function fetchScores(
+  token: string,
+  base: string,
+  partner: string,
+): Promise<TickerResult> {
+  const now = Math.floor(Date.now() / 1000);
+  const params = new URLSearchParams({
+    start_date: String(now - 86400),
+    end_date: String(now + 86400),
+    partner,
+    bracket_level_ids: "2",
+    page_size: "20",
+    current_page: "1",
+    use_camel_case: "true",
+  });
+  const res = await fetch(`${base}/v2/data/homepage_score_ticker?${params}`, {
+    headers: { "PB-API-TOKEN": token },
+    cache: "no-store",
+    signal: AbortSignal.timeout(TIMEOUT_MS),
+  });
+  if (!res.ok) return { matches: [], tournament: null, partner };
+
+  const json = (await res.json()) as { results?: { results?: ApiMatch[] } };
+  const rows = json.results?.results ?? [];
+  const matches = rows.map(mapMatch);
+  const first = rows[0];
+  const tournament: TickerTournament | null = first
+    ? { title: first.tournamentTitle || "", logo: first.tournamentLogo || null }
+    : null;
+  return { matches, tournament, partner };
 }
 
 export async function fetchLiveTicker(partnerArg?: string): Promise<TickerResult> {
@@ -198,31 +267,23 @@ export async function fetchLiveTicker(partnerArg?: string): Promise<TickerResult
     let partner = partnerArg || process.env.PB_TICKER_PARTNER || "";
     if (!partner) partner = (await pickActivePartner(token, base)) || "PPA";
 
-    const now = Math.floor(Date.now() / 1000);
-    const params = new URLSearchParams({
-      start_date: String(now - 86400),
-      end_date: String(now + 86400),
-      partner,
-      bracket_level_ids: "2",
-      page_size: "20",
-      current_page: "1",
-      use_camel_case: "true",
-    });
-    const res = await fetch(`${base}/v2/data/homepage_score_ticker?${params}`, {
-      headers: { "PB-API-TOKEN": token },
-      cache: "no-store",
-    });
-    if (!res.ok) return { ...empty, partner };
+    const cached = resultCache.get(partner);
+    if (cached && cached.expires > Date.now()) return cached.value;
 
-    const json = (await res.json()) as { results?: { results?: ApiMatch[] } };
-    const rows = json.results?.results ?? [];
-    const matches = rows.map(mapMatch);
-    const first = rows[0];
-    const tournament: TickerTournament | null = first
-      ? { title: first.tournamentTitle || "", logo: first.tournamentLogo || null }
-      : null;
+    const pending = resultInFlight.get(partner);
+    if (pending) return pending;
 
-    return { matches, tournament, partner };
+    const p = (async () => {
+      const result = await fetchScores(token, base, partner);
+      resultCache.set(partner, { value: result, expires: Date.now() + RESULT_TTL_MS });
+      return result;
+    })();
+    resultInFlight.set(partner, p);
+    try {
+      return await p;
+    } finally {
+      resultInFlight.delete(partner);
+    }
   } catch {
     return empty;
   }

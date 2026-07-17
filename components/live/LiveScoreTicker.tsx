@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { TickerMatch, TickerPlayer } from "@/lib/ticker-api";
+import type { TickerMatch, TickerPlayer, TickerResult } from "@/lib/ticker-api";
 import { useLiveTicker } from "@/components/live/use-live-ticker";
 
 /**
@@ -127,6 +127,7 @@ export function LiveScoreTicker({
   showDate = true,
   transparent = false,
   visibleCards = 4,
+  initialData,
 }: {
   /** Month/day badge on the left (the /live broadcast header). */
   showDate?: boolean;
@@ -134,8 +135,10 @@ export function LiveScoreTicker({
   transparent?: boolean;
   /** How many full cards fit before the rail scrolls. */
   visibleCards?: 3 | 4;
+  /** Server-prefetched matches so the first paint skips the fetch wait. */
+  initialData?: TickerResult;
 } = {}) {
-  const { ordered, loaded } = useLiveTicker();
+  const { ordered, loaded } = useLiveTicker({ initialData });
   // No live matches (still loading, or nothing live right now) → keep the
   // loading animation rather than showing fabricated placeholder cards.
   const showCards = loaded && ordered.length > 0;

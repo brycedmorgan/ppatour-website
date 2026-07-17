@@ -30,12 +30,17 @@ export const STATUS_ORDER: Record<TickerMatch["status"], number> = {
  * once the first fetch settles. Pass `enabled: false` to skip fetching entirely
  * (e.g. off the /live route, where the sticky bar shows the Next Event state).
  */
-export function useLiveTicker({ enabled = true }: { enabled?: boolean } = {}) {
+export function useLiveTicker({
+  enabled = true,
+  initialData,
+}: { enabled?: boolean; initialData?: TickerResult } = {}) {
   const searchParams = useSearchParams();
   const partner = searchParams.get("partner");
 
-  const [matches, setMatches] = useState<TickerMatch[]>([]);
-  const [loaded, setLoaded] = useState(false);
+  // Seed from server-fetched data (when a page prefetches it) so the first
+  // paint already has matches instead of waiting for the post-hydration fetch.
+  const [matches, setMatches] = useState<TickerMatch[]>(initialData?.matches ?? []);
+  const [loaded, setLoaded] = useState(Boolean(initialData));
 
   useEffect(() => {
     if (!enabled) return;
