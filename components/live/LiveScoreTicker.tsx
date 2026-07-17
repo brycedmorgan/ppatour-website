@@ -224,9 +224,9 @@ export function LiveScoreTicker() {
   }, [partner]);
 
   const ordered = useMemo(() => {
-    const list = loaded && matches.length > 0 ? matches : PLACEHOLDER;
+    const list = matches.length > 0 ? matches : PLACEHOLDER;
     return [...list].sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
-  }, [loaded, matches]);
+  }, [matches]);
 
   // Recompute which arrows to show when the data or viewport changes.
   useEffect(() => {
@@ -243,7 +243,7 @@ export function LiveScoreTicker() {
       cancelAnimationFrame(id);
       window.removeEventListener("resize", update);
     };
-  }, [ordered]);
+  }, [ordered, loaded]);
 
   return (
     <div className="flex items-stretch bg-ppa-navy">
@@ -252,14 +252,14 @@ export function LiveScoreTicker() {
       {/* Match cards — ~23% wide so 4 show with a sliver of the 5th.
           Arrow buttons scroll; native swipe still works on touch. */}
       <div className="relative min-w-0 flex-1">
-        {!edges.start && <ArrowButton dir="left" onClick={() => scrollByDir(-1)} />}
-        {!edges.end && <ArrowButton dir="right" onClick={() => scrollByDir(1)} />}
+        {loaded && !edges.start && <ArrowButton dir="left" onClick={() => scrollByDir(-1)} />}
+        {loaded && !edges.end && <ArrowButton dir="right" onClick={() => scrollByDir(1)} />}
         <div
           ref={railRef}
           onScroll={onScroll}
           className="flex h-full items-stretch gap-2 overflow-x-auto py-2 pl-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
-        {ordered.map((m) => {
+        {loaded ? ordered.map((m) => {
           const cols = columns(m);
           const aWins = cols.filter((c) => c.winner === "a").length;
           const bWins = cols.filter((c) => c.winner === "b").length;
@@ -380,7 +380,21 @@ export function LiveScoreTicker() {
               </div>
             </article>
           );
-        })}
+        }) : (
+          // Loading skeleton — shown until the first fetch resolves so real
+          // matches don't pop in over placeholders. Spinner inside each card.
+          Array.from({ length: 4 }).map((_, i) => (
+            <div
+              key={`sk-${i}`}
+              className="flex h-[104px] w-[23%] shrink-0 items-center justify-center rounded-lg bg-white"
+            >
+              <span
+                aria-hidden
+                className="size-6 animate-spin rounded-full border-2 border-ppa-line border-t-ppa-blue"
+              />
+            </div>
+          ))
+        )}
         </div>
       </div>
     </div>
