@@ -273,7 +273,7 @@ export async function HomeContent({
           </div>
 
           <div
-            className="mt-5 flex flex-col gap-2.5 sm:flex-row motion-safe:animate-rise"
+            className="mt-5 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap motion-safe:animate-rise"
             style={{ animationDelay: "320ms" }}
           >
             {live ? (
@@ -322,6 +322,23 @@ export async function HomeContent({
                     →
                   </span>
                 </a>
+                <a
+                  href={withUtm(next.registerUrl, {
+                    campaign: next.slug,
+                    content: "home-hero-register",
+                  })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex h-11 items-center justify-center gap-1.5 border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98]"
+                >
+                  Register to Play
+                  <span
+                    aria-hidden
+                    className="transition-transform duration-300 group-hover:translate-x-0.5"
+                  >
+                    ↗
+                  </span>
+                </a>
                 <Link
                   href={`/events/${next.slug}`}
                   className="group flex h-11 items-center justify-center gap-1.5 border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98]"
@@ -336,7 +353,7 @@ export async function HomeContent({
                 </Link>
                 <Link
                   href="/watch"
-                  className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98]"
+                  className="hidden h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98] sm:flex"
                 >
                   ▶ How to Watch
                 </Link>
