@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
   formatDateRange,
-  getAllEvents,
   tierPoints,
   tierShort,
   type Tournament,
@@ -80,14 +79,18 @@ function FilterSelect<T extends string>({
 }
 
 /**
- * Events grid — every tour stop (past + upcoming), with a search box, an
- * Upcoming/Past toggle, and dependent dropdown filters: Type (always), Tier
- * (PPA only), Country (International only), Season (Past only).
+ * Events grid — every tour stop (past + upcoming) from the API, with a search
+ * box, an Upcoming/Past toggle, and dependent dropdown filters: Type (always),
+ * Tier (PPA only), Country (International only), Season (Past only).
+ *
+ * Cards link to our internal `/events/[slug]` page when the event has one
+ * (US "Pro Pickleball Association" stops + curated events); international
+ * sister-tour stops link out to their pickleballtournaments.com page.
  */
-export function ScheduleGrid() {
+export function ScheduleGrid({ events }: { events: Tournament[] }) {
   const [query, setQuery] = useState("");
   const [time, setTime] = useState<TimeKey>("upcoming");
-  const [type, setType] = useState<TypeKey>("ppa");
+  const [type, setType] = useState<TypeKey>("all");
   const [tier, setTier] = useState<TierKey>("all");
   const [country, setCountry] = useState<CountryKey>("all");
   const [season, setSeason] = useState<SeasonKey>("all");
@@ -104,7 +107,7 @@ export function ScheduleGrid() {
 
   const shown = useMemo(() => {
     const q = query.trim();
-    const list = getAllEvents().filter((t) => {
+    const list = events.filter((t) => {
       const inTime = time === "past" ? t.status === "completed" : t.status !== "completed";
       if (!inTime) return false;
 
@@ -130,7 +133,7 @@ export function ScheduleGrid() {
       return matchesQuery(t, q);
     });
     return time === "past" ? list.reverse() : list;
-  }, [query, time, type, tier, country, season]);
+  }, [events, query, time, type, tier, country, season]);
 
   return (
     <>
@@ -203,6 +206,8 @@ export function ScheduleGrid() {
         <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {shown.map((t, i) => {
             const completed = t.status === "completed";
+            const internal = t.hasInternalPage !== false;
+            const href = internal ? `/events/${t.slug}` : t.externalUrl ?? `/events/${t.slug}`;
             return (
               <article
                 key={t.slug}
@@ -245,14 +250,25 @@ export function ScheduleGrid() {
                   <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/55">
                     {t.presentedBy ? `Presented by ${t.presentedBy}` : "PPA Tour"}
                   </p>
-                  <Link
-                    href={`/events/${t.slug}`}
-                    className="mt-0.5 block font-display text-lg uppercase leading-[1.05] text-white after:absolute after:inset-0"
-                  >
-                    {t.shortName}
-                  </Link>
+                  {internal ? (
+                    <Link
+                      href={href}
+                      className="mt-0.5 block font-display text-lg uppercase leading-[1.05] text-white after:absolute after:inset-0"
+                    >
+                      {t.shortName}
+                    </Link>
+                  ) : (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-0.5 block font-display text-lg uppercase leading-[1.05] text-white after:absolute after:inset-0"
+                    >
+                      {t.shortName}
+                    </a>
+                  )}
                   <p className="mt-1 text-xs text-white/60">
-                    {formatDateRange(t.startDate, t.endDate)} · {t.city}
+                    {formatDateRange(t.startDate, t.endDate, true)} · {t.city}
                     {t.state ? `, ${t.state}` : ""}
                   </p>
                   <span className="mt-3 flex items-center justify-between gap-3">
@@ -262,12 +278,12 @@ export function ScheduleGrid() {
                         t.brand ? "group-hover:brightness-90" : "bg-ppa-blue group-hover:bg-ppa-blue-deep"
                       }`}
                     >
-                      {completed ? "View Event" : "Event Guide"}
+                      {internal ? (completed ? "View Event" : "Event Guide") : "Details"}
                       <span
                         aria-hidden
                         className="transition-transform duration-300 group-hover:translate-x-0.5"
                       >
-                        →
+                        {internal ? "→" : "↗"}
                       </span>
                     </span>
                     <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-yellow">

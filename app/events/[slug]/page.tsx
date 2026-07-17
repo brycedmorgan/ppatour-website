@@ -13,6 +13,7 @@ import { Countdown } from "@/components/motion/Countdown";
 import { getBroadcast } from "@/lib/broadcast";
 import { getEventGuide } from "@/lib/event-guides";
 import { getEventSchedule } from "@/lib/event-schedule";
+import { getEvents, getInternalEvent } from "@/lib/events-api";
 import { playersToWatch } from "@/lib/home-content";
 import { getArticlesForEvent } from "@/lib/news-articles";
 import {
@@ -22,19 +23,37 @@ import {
   tierLabel,
   tierPoints,
   tierShort,
+  type Tournament,
   tournaments,
 } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
 
 type Params = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  return tournaments.map((t) => ({ slug: t.slug }));
+/**
+ * Resolve an event for its detail page: a curated record wins (keeps the rich,
+ * hand-authored content), otherwise an API-sourced US event that has an internal
+ * page. Returns null for unknown slugs, challengers, and international stops
+ * (which all link out to their details_url instead).
+ */
+async function resolveEvent(slug: string): Promise<Tournament | null> {
+  const t = tournaments.find((x) => x.slug === slug) ?? (await getInternalEvent(slug));
+  if (!t || t.tierKey === "challenger") return null;
+  return t;
+}
+
+export async function generateStaticParams() {
+  const { events } = await getEvents();
+  const slugs = new Set<string>(
+    tournaments.filter((t) => t.tierKey !== "challenger").map((t) => t.slug),
+  );
+  for (const e of events) if (e.hasInternalPage) slugs.add(e.slug);
+  return [...slugs].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
-  const t = tournaments.find((x) => x.slug === slug);
+  const t = await resolveEvent(slug);
   if (!t) return { title: "Event" };
   const where = t.state ? `${t.city}, ${t.state}` : t.city;
   const description = `${tierLabel(t)} · ${formatDateRange(t.startDate, t.endDate)} · ${where} · ${t.prizeMoney} in prize money & appearance fees. Schedule, players, tickets, trip guide, and how to watch.`;
@@ -153,7 +172,7 @@ function buildSchedule(startIso: string, endIso: string): Day[] {
 
 export default async function EventPage({ params }: Params) {
   const { slug } = await params;
-  const t = tournaments.find((x) => x.slug === slug);
+  const t = await resolveEvent(slug);
   if (!t) notFound();
 
   const countdown = daysUntil(t.startDate);

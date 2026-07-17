@@ -54,6 +54,20 @@ export type Tournament = {
   country?: "Asia" | "Australia" | "Canada" | "Italy" | "Spain";
   /** Season label for completed events (matches the Season filter). */
   season?: "2025-2026" | "2025" | "2024" | "2023" | "2022";
+  /** Stable Pickleball.com tournament UUID (API-sourced events only). */
+  tournamentUuid?: string;
+  /** External details/registration page (pickleballtournaments.com) from the API. */
+  externalUrl?: string;
+  /**
+   * Whether this event has a rich internal `/events/[slug]` page. Curated events
+   * and API events run by the US org ("Pro Pickleball Association") do; other
+   * API events (international sister tours) link out to {@link externalUrl}.
+   */
+  hasInternalPage?: boolean;
+  /** API `logo_url` (square event mark), when available. */
+  logoUrl?: string;
+  /** Where this record came from — the live API or the curated fallback. */
+  source?: "api" | "curated";
 };
 
 /**
@@ -74,7 +88,7 @@ const REGISTER = "https://www.pickleballtournaments.com/"; // fallback — regis
 /* ---- schedule builder ---- */
 
 // Generic action photos, cycled across upcoming events until real art lands.
-const GENERIC_IMAGES = [
+export const GENERIC_IMAGES = [
   "/ppa/action-md-final.jpg",
   "/ppa/action-mxd.jpg",
   "/ppa/action-singles.jpg",
@@ -83,23 +97,23 @@ const GENERIC_IMAGES = [
   "/ppa/action-masters.jpg",
 ];
 
-const TIER_PRICE: Record<EventTier, number> = {
+export const TIER_PRICE: Record<EventTier, number> = {
   worlds: 79,
   slam: 59,
   cup: 49,
   open: 39,
   challenger: 20,
 };
-const TIER_PRIZE: Record<EventTier, string> = {
+export const TIER_PRIZE: Record<EventTier, string> = {
   worlds: "$500,000",
   slam: "$300,000",
   cup: "$200,000",
   open: "$150,000",
   challenger: "$25,000",
 };
-const SPONSORS = ["Veolia", "Carvana", "Rate", "Proton"];
+export const SPONSORS = ["Veolia", "Carvana", "Rate", "Proton"];
 
-function kebab(s: string): string {
+export function kebab(s: string): string {
   return s
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
@@ -588,12 +602,20 @@ export function formatDate(iso: string): string {
   return `${MONTHS[m - 1]} ${d}`;
 }
 
-/** "May 26–31" or "May 28 – Jun 2" */
-export function formatDateRange(startIso: string, endIso: string): string {
-  const [, sm] = startIso.split("-").map(Number);
-  const [, em, ed] = endIso.split("-").map(Number);
-  if (sm === em) return `${formatDate(startIso)}–${ed}`;
-  return `${formatDate(startIso)} – ${formatDate(endIso)}`;
+/**
+ * "May 26–31" or "May 28 – Jun 2". With `withYear`, appends the year — and the
+ * start year too when the range crosses a year boundary ("Dec 30, 2026 – Jan 2, 2027").
+ */
+export function formatDateRange(startIso: string, endIso: string, withYear = false): string {
+  const [sy, sm] = startIso.split("-").map(Number);
+  const [ey, em, ed] = endIso.split("-").map(Number);
+  if (!withYear) {
+    if (sm === em) return `${formatDate(startIso)}–${ed}`;
+    return `${formatDate(startIso)} – ${formatDate(endIso)}`;
+  }
+  if (sy !== ey) return `${formatDate(startIso)}, ${sy} – ${formatDate(endIso)}, ${ey}`;
+  if (sm === em) return `${formatDate(startIso)}–${ed}, ${ey}`;
+  return `${formatDate(startIso)} – ${formatDate(endIso)}, ${ey}`;
 }
 
 /** Whole days from now until the given ISO date (floored at 0). */
