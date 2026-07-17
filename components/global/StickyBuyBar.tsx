@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
+import type { TickerMatch } from "@/lib/ticker-api";
 import { formatDate, getNextTournament } from "@/lib/placeholder-data";
 import {
   formatMatchScore,
@@ -11,12 +12,17 @@ import {
 } from "@/components/live/use-live-ticker";
 import { withUtm } from "@/lib/utm";
 
+// Cross-fade timing: hold each match this long, then fade over FADE_MS.
+const HOLD_MS = 5000;
+const FADE_MS = 500;
+
 /**
  * Sticky commerce bar (Option A punch-list #7). Slides up from the bottom
  * once the visitor scrolls past the hero: next event + price anchor + Buy
  * Tickets. During a live event (the /live route) the same bar swaps to a
- * Watch CTA and shows the featured live match — pulled from the same
- * useLiveTicker source as the header score ticker, so the two never disagree.
+ * Watch CTA and cycles through all live matches — fading between them every
+ * 5s — pulled from the same useLiveTicker source as the header score ticker,
+ * so the two never disagree.
  */
 export function StickyBuyBar() {
   const [visible, setVisible] = useState(false);
@@ -31,8 +37,43 @@ export function StickyBuyBar() {
   const pathname = usePathname();
   const isLive = pathname === "/live";
   const { ordered } = useLiveTicker({ enabled: isLive });
-  const featured = isLive ? pickFeaturedMatch(ordered) : undefined;
   const next = getNextTournament();
+
+  // Every live match to rotate through; fall back to the single featured match
+  // (e.g. only up-next / final in the window) so the banner still shows one.
+  const rotation = useMemo<TickerMatch[]>(() => {
+    if (!isLive) return [];
+    const liveOnly = ordered.filter((m) => m.status === "live");
+    if (liveOnly.length > 0) return liveOnly;
+    const feat = pickFeaturedMatch(ordered);
+    return feat ? [feat] : [];
+  }, [isLive, ordered]);
+
+  // Cross-fade cycler: fade out, swap match, fade back in — every HOLD_MS.
+  const [index, setIndex] = useState(0);
+  const [shown, setShown] = useState(true);
+
+  useEffect(() => {
+    if (rotation.length <= 1) {
+      setIndex(0);
+      setShown(true);
+      return;
+    }
+    let fadeTimer: ReturnType<typeof setTimeout>;
+    const id = setInterval(() => {
+      setShown(false);
+      fadeTimer = setTimeout(() => {
+        setIndex((i) => (i + 1) % rotation.length);
+        setShown(true);
+      }, FADE_MS);
+    }, HOLD_MS);
+    return () => {
+      clearInterval(id);
+      clearTimeout(fadeTimer);
+    };
+  }, [rotation.length]);
+
+  const featured = rotation.length > 0 ? rotation[index % rotation.length] : undefined;
   const live = Boolean(featured);
   const href = featured
     ? featured.watchUrl || "/watch"
@@ -65,7 +106,12 @@ export function StickyBuyBar() {
               Next Event
             </span>
           )}
-          <span className="min-w-0 truncate text-xs font-bold uppercase tracking-[0.1em]">
+          <span
+            aria-live="polite"
+            className={`min-w-0 truncate text-xs font-bold uppercase tracking-[0.1em] transition-opacity duration-500 motion-reduce:transition-none ${
+              shown ? "opacity-100" : "opacity-0"
+            }`}
+          >
             {featured
               ? `${teamLabel(featured.teams[0])} vs ${teamLabel(featured.teams[1])}`
               : next.shortName}
@@ -76,7 +122,11 @@ export function StickyBuyBar() {
             </span>
           )}
 
-          <span className="ml-auto hidden shrink-0 text-xs font-bold uppercase tracking-[0.1em] text-ppa-yellow sm:inline">
+          <span
+            className={`ml-auto hidden shrink-0 text-xs font-bold uppercase tracking-[0.1em] text-ppa-yellow transition-opacity duration-500 motion-reduce:transition-none sm:inline ${
+              shown ? "opacity-100" : "opacity-0"
+            }`}
+          >
             {featured ? formatMatchScore(featured) : `From $${next.ticketPriceFrom}`}
           </span>
           <a
