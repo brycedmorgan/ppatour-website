@@ -1,5 +1,6 @@
 import { getAthlete } from "@/lib/athletes";
 import { type Division, type DivisionKey, divisionRankings } from "@/lib/home-content";
+import { CURATED_TO_CANONICAL, getPublishedAthlete } from "@/lib/published-athletes";
 
 /**
  * Live rankings adapter — Pickleball.com Partner API.
@@ -108,6 +109,11 @@ function resolveProfile(slug: string): { url: string; local: boolean; headshot: 
   const athlete = getAthlete(slug);
   if (athlete) {
     return { url: `/athletes/${athlete.slug}`, local: true, headshot: athlete.headshot };
+  }
+  // We also host a page for every published athlete (bio + quick facts).
+  const published = getPublishedAthlete(slug);
+  if (published) {
+    return { url: `/athletes/${published.slug}`, local: true, headshot: null };
   }
   return { url: `https://pickleball.com/players/${slug}`, local: false, headshot: null };
 }
@@ -284,14 +290,9 @@ export async function getRankingPage(genderKey: string, page: number): Promise<R
 
 export type AthleteRanking = { rank: number; gender: "men" | "women"; points: number };
 
-// Our athlete slugs that differ from the API's player_slug.
-const SLUG_ALIAS: Record<string, string> = {
-  "gabe-tardio": "gabriel-tardio",
-  "tyra-black": "hurricane-tyra-black",
-  "paris-todd": "parris-todd",
-  "megan-dizon": "meghan-dizon",
-  "eddie-perez": "edward-perez",
-};
+// Our curated athlete slugs that differ from the API's player_slug (shared
+// with the published-athletes layer, which is keyed by the canonical slug).
+const SLUG_ALIAS: Record<string, string> = CURATED_TO_CANONICAL;
 
 /**
  * Live WPR ranking for every ranked player, keyed by slug (both the API's
@@ -383,6 +384,32 @@ export async function getWprRoster(): Promise<ApiAthlete[]> {
     return boards.flat();
   } catch {
     return [];
+  }
+}
+
+/**
+ * Live WPR record for every ranked player, keyed by the API `player_slug`,
+ * covering the top 150 of each gender board. Lets the full roster grid show
+ * live rank/points/headshots for any published athlete who is ranked. Never
+ * throws — returns {} on any problem.
+ */
+export async function getWprIndex(): Promise<Record<string, ApiAthlete>> {
+  const { token, baseUrl } = config();
+  if (!token) return {};
+
+  const today = new Date().toISOString().slice(0, 10);
+  const out: Record<string, ApiAthlete> = {};
+  try {
+    await Promise.all(
+      RANKING_GENDERS.map(async (g) => {
+        const { entries } = await fetchPage(g.gender, 1, 150, token, baseUrl, today);
+        const gender = g.gender === "F" ? "female" : "male";
+        for (const e of entries) out[e.slug] = { ...e, gender };
+      }),
+    );
+    return out;
+  } catch {
+    return {};
   }
 }
 

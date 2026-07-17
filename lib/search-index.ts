@@ -1,5 +1,6 @@
 import { athletes } from "@/lib/athletes";
 import { ecosystemNews, news } from "@/lib/home-content";
+import { CURATED_TO_CANONICAL, publishedAthletes } from "@/lib/published-athletes";
 import {
   formatDateRange,
   tierShort,
@@ -78,7 +79,33 @@ function buildIndex(): SearchDoc[] {
     });
   }
 
+  // Every published athlete is searchable; the display slug prefers the curated
+  // shorthand page when one exists (richer, local headshot).
+  const canonicalToCurated: Record<string, string> = Object.fromEntries(
+    Object.entries(CURATED_TO_CANONICAL).map(([ours, api]) => [api, ours]),
+  );
+  const indexedCanonical = new Set<string>();
+  for (const p of publishedAthletes) {
+    indexedCanonical.add(p.slug);
+    const href = `/athletes/${canonicalToCurated[p.slug] ?? p.slug}`;
+    docs.push({
+      group: "Athletes",
+      title: p.name,
+      meta: p.divisions.length ? p.divisions.join(" · ") : "PPA Tour Pro",
+      href,
+      haystack: blob(
+        p.name,
+        p.country,
+        p.divisions.join(" "),
+        p.quickInfo.resides ?? "",
+        "athlete pro player",
+      ),
+    });
+  }
+  // Curated pros without a published profile (keep them searchable too).
   for (const a of athletes) {
+    const canonical = CURATED_TO_CANONICAL[a.slug] ?? a.slug;
+    if (indexedCanonical.has(canonical)) continue;
     docs.push({
       group: "Athletes",
       title: a.name,

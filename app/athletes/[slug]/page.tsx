@@ -5,6 +5,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { athletes, getAthlete } from "@/lib/athletes";
+import {
+  ageFromDob,
+  getPublishedAthlete,
+  publishedAthletes,
+  turnedProYear,
+} from "@/lib/published-athletes";
 import { curatedSlugFor, getWprPlayerBySlug, getWprRoster } from "@/lib/rankings-api";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -12,36 +18,60 @@ type Params = { params: Promise<{ slug: string }> };
 export async function generateStaticParams() {
   const roster = await getWprRoster().catch(() => []);
   const slugs = new Set(athletes.map((a) => a.slug));
+  // Every published profile gets a page (keyed by its canonical slug, unless we
+  // have a curated shorthand that collapses to the same person).
+  for (const p of publishedAthletes) slugs.add(curatedSlugFor(p.slug) ?? p.slug);
   for (const p of roster) slugs.add(curatedSlugFor(p.slug) ?? p.slug);
   return [...slugs].map((slug) => ({ slug }));
 }
 
+function genderFromDivisions(divisions: string[]): "male" | "female" | undefined {
+  if (divisions.some((d) => d.startsWith("Women"))) return "female";
+  if (divisions.some((d) => d.startsWith("Men"))) return "male";
+  return undefined;
+}
+
 /**
- * Merge the live WPR record (rank/points/gender/headshot) with our curated
- * profile (bio/tagline/divisions) when we have one. Either source alone is
- * enough to render a page.
+ * Merge the live WPR record (rank/points/gender/headshot) with the published
+ * profile (bio, quick facts, divisions) and, for top pros, our curated data
+ * (local headshot + tagline). Any one source alone is enough to render a page.
  */
 async function loadAthlete(slug: string) {
   const curated = getAthlete(slug);
+  const published = getPublishedAthlete(slug);
   const api = await getWprPlayerBySlug(slug);
-  if (!curated && !api) return null;
+  if (!curated && !published && !api) return null;
 
-  const name = curated?.name ?? api!.name;
+  const name = curated?.name ?? published?.name ?? api!.name;
+  const divisions = published?.divisions.length
+    ? published.divisions
+    : (curated?.divisions ?? []);
+  const bio: string[] = published?.bio.length
+    ? published.bio
+    : [
+        curated?.bio ??
+          `${name} is a professional pickleball player ranked among the world's best in the Carvana PPA Tour's World Pickleball Rankings.`,
+      ];
+
   return {
     slug,
     name,
     headshot: curated?.headshot ?? api?.headshot ?? "",
-    country: curated?.country ?? api?.country ?? "",
-    countryCode: api?.countryCode ?? "",
+    country: published?.country || curated?.country || api?.country || "",
+    countryCode: api?.countryCode || published?.countryCode || "",
     rank: api?.rank ?? curated?.bestRank ?? 0,
     points: api?.points ?? 0,
-    gender: api?.gender,
-    divisions: curated?.divisions ?? [],
+    gender: api?.gender ?? genderFromDivisions(divisions),
+    divisions,
     tagline:
-      curated?.tagline ?? "Professional pickleball player on the Carvana PPA Tour.",
-    bio:
-      curated?.bio ??
-      `${name} is a professional pickleball player ranked among the world's best in the Carvana PPA Tour's World Pickleball Rankings.`,
+      curated?.tagline ??
+      published?.headline ??
+      "Professional pickleball player on the Carvana PPA Tour.",
+    bio,
+    quickInfo: published?.quickInfo ?? null,
+    turnedPro: published ? turnedProYear(published) : null,
+    age: published ? ageFromDob(published.quickInfo.dob) : null,
+    sourceUrl: published?.sourceUrl ?? null,
   };
 }
 
@@ -85,6 +115,17 @@ export default async function AthletePage({ params }: Params) {
     ? `https://cdn.pickleball.com/circle-flags/${a.countryCode}.svg`
     : null;
 
+  // Structured quick facts from the published profile (skip empty values).
+  const qi = a.quickInfo;
+  const quickFacts: { label: string; value: string }[] = [
+    { label: "Resides", value: qi?.resides ?? "" },
+    { label: "Age", value: a.age != null ? String(a.age) : "" },
+    { label: "Height", value: qi?.height ?? "" },
+    { label: "Plays", value: qi?.plays ?? "" },
+    { label: "Turned Pro", value: a.turnedPro ?? "" },
+    { label: "Paddle", value: qi?.paddle ?? "" },
+  ].filter((f) => f.value);
+
   return (
     <>
       <script
@@ -98,7 +139,7 @@ export default async function AthletePage({ params }: Params) {
             nationality: a.country,
             image: a.headshot,
             url: `${SITE_URL}/athletes/${a.slug}`,
-            description: a.bio,
+            description: a.bio.join(" "),
             memberOf: {
               "@type": "Organization",
               name: "Carvana PPA Tour",
@@ -178,15 +219,29 @@ export default async function AthletePage({ params }: Params) {
               <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
                 About {a.name}
               </h2>
-              <p className="mt-4 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
-                {a.bio}
-              </p>
-              <Link
-                href="/watch"
-                className="mt-6 inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
-              >
-                ▶ Watch {a.name.split(" ")[0]} Live
-              </Link>
+              <div className="mt-4 space-y-4 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
+                {a.bio.map((para, i) => (
+                  <p key={i}>{para}</p>
+                ))}
+              </div>
+              <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
+                <Link
+                  href="/watch"
+                  className="inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
+                >
+                  ▶ Watch {a.name.split(" ")[0]} Live
+                </Link>
+                {a.sourceUrl && (
+                  <a
+                    href={a.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/45 hover:text-ppa-blue"
+                  >
+                    Official PPA Profile ↗
+                  </a>
+                )}
+              </div>
             </div>
 
             <aside>
@@ -217,6 +272,26 @@ export default async function AthletePage({ params }: Params) {
               >
                 Full Rankings →
               </Link>
+
+              {quickFacts.length > 0 && (
+                <div className="mt-8">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
+                    Quick Info
+                  </p>
+                  <dl className="mt-3 divide-y divide-ppa-line border border-ppa-line bg-white">
+                    {quickFacts.map((f) => (
+                      <div key={f.label} className="flex items-baseline justify-between gap-4 px-4 py-2.5">
+                        <dt className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+                          {f.label}
+                        </dt>
+                        <dd className="text-right text-sm font-medium text-ppa-navy">
+                          {f.value}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              )}
             </aside>
           </div>
         </div>

@@ -3,60 +3,48 @@ import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { AthleteRoster, type RosterAthlete } from "@/components/athletes/AthleteRoster";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
-import { athletes } from "@/lib/athletes";
-import { TOP_COUNT, curatedSlugFor, getRankings, getWprRoster } from "@/lib/rankings-api";
+import { getAthlete } from "@/lib/athletes";
+import {
+  CURATED_TO_CANONICAL,
+  countryCodeFor,
+  publishedAthletes,
+} from "@/lib/published-athletes";
+import { curatedSlugFor, getRankings, getWprIndex } from "@/lib/rankings-api";
 
 export const metadata: Metadata = {
   title: "Athletes",
   description:
-    "The pros of the Carvana PPA Tour — the top men and women in the World Pickleball Rankings, with profiles and the season-long points race.",
+    "The full roster of Carvana PPA Tour pros — profiles, quick facts, live World Pickleball Rankings, and the season-long points race.",
 };
 
-// Curated-roster fallback only (used if the live rankings API is unavailable).
-const COUNTRY_ISO: Record<string, string> = {
-  USA: "us",
-  Argentina: "ar",
-  Canada: "ca",
-  Colombia: "co",
-  France: "fr",
-  Israel: "il",
-  Lithuania: "lt",
-  Romania: "ro",
-  Spain: "es",
-};
+function genderFromDivisions(divisions: string[]): "male" | "female" {
+  return divisions.some((d) => d.startsWith("Women")) ? "female" : "male";
+}
 
 export default async function AthletesPage() {
-  // Live roster: top 25 men + top 25 women from the World Pickleball Rankings.
-  const wpr = await getWprRoster();
+  // Live WPR record (rank/points/headshot) for every ranked player, keyed by
+  // the API slug; used to enrich the published roster.
+  const wprIndex = await getWprIndex();
   // Standings board: top 10 of each gender's World Pickleball Ranking.
   const standings = await getRankings();
 
-  const roster: RosterAthlete[] = wpr.length
-    ? wpr.map((p) => ({
-        // Link to the curated profile when we have one, else the API slug.
-        slug: curatedSlugFor(p.slug) ?? p.slug,
-        name: p.name,
-        // Uniform look: use the API's studio cutout for every card.
-        headshot: p.image ?? "",
-        country: p.country,
-        countryCode: p.countryCode,
-        rank: p.rank,
-        points: p.points,
-        gender: p.gender,
-      }))
-    : // Fallback to the curated roster if the API is down.
-      athletes.map((a) => ({
-        slug: a.slug,
-        name: a.name,
-        headshot: a.headshot,
-        country: a.country,
-        countryCode: COUNTRY_ISO[a.country] ?? "",
-        rank: a.bestRank,
-        points: 0,
-        gender: (a.divisions.some((d) => d.startsWith("Women")) ? "female" : "male") as
-          | "male"
-          | "female",
-      }));
+  // Full roster: every published athlete, enriched with live WPR data. Curated
+  // headshots win (local studio crops); otherwise the API cutout; else initials.
+  const roster: RosterAthlete[] = publishedAthletes.map((p) => {
+    const wpr = wprIndex[p.slug];
+    const curated = getAthlete(CURATED_TO_CANONICAL[p.slug] ?? p.slug) ?? getAthlete(p.slug);
+    return {
+      // Prefer a curated shorthand page when one exists (richer, local headshot).
+      slug: curatedSlugFor(p.slug) ?? p.slug,
+      name: p.name,
+      headshot: curated?.headshot ?? wpr?.image ?? "",
+      country: p.country || wpr?.country || "",
+      countryCode: p.countryCode || wpr?.countryCode || countryCodeFor(p.country),
+      rank: wpr?.rank ?? 0,
+      points: wpr?.points ?? 0,
+      gender: wpr?.gender ?? genderFromDivisions(p.divisions),
+    };
+  });
 
   return (
     <>
@@ -73,9 +61,9 @@ export default async function AthletesPage() {
             Meet the Pros
           </h1>
           <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
-            The top {TOP_COUNT} men and top {TOP_COUNT} women in the World
-            Pickleball Rankings. Tap any pro for their profile, ranking, and
-            place in the points race.
+            The full roster of Carvana PPA Tour pros. Search by name or country,
+            filter and sort the field, and tap any pro for their profile, quick
+            facts, and live World Pickleball Ranking.
           </p>
         </div>
       </section>
@@ -87,7 +75,7 @@ export default async function AthletesPage() {
             The Roster
           </p>
           <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-            Pro Field
+            Pro Field <span className="text-ppa-blue">· {roster.length}</span>
           </h2>
           <AthleteRoster athletes={roster} />
         </div>

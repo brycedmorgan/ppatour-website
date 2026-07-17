@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { athletes } from "@/lib/athletes";
+import { CURATED_TO_CANONICAL, publishedAthletes } from "@/lib/published-athletes";
 import { tournaments } from "@/lib/placeholder-data";
 import { tourPrograms } from "@/lib/tour-programs";
 import { newsArticles } from "@/lib/news-articles";
@@ -9,6 +10,15 @@ import { SITE_URL } from "@/lib/site";
 const BASE = SITE_URL;
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  // Every athlete page (curated shorthand slug when we have one, else canonical).
+  const canonicalToCurated: Record<string, string> = Object.fromEntries(
+    Object.entries(CURATED_TO_CANONICAL).map(([ours, api]) => [api, ours]),
+  );
+  const athleteSlugs = new Set<string>(athletes.map((a) => a.slug));
+  for (const p of publishedAthletes) {
+    athleteSlugs.add(canonicalToCurated[p.slug] ?? p.slug);
+  }
+
   const staticPaths = [
     "",
     "/events",
@@ -48,8 +58,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly" as const,
       priority: 0.8,
     })),
-    ...athletes.map((a) => ({
-      url: `${BASE}/athletes/${a.slug}`,
+    ...[...athleteSlugs].map((slug) => ({
+      url: `${BASE}/athletes/${slug}`,
       changeFrequency: "weekly" as const,
       priority: 0.6,
     })),
