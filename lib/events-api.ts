@@ -30,8 +30,14 @@ import {
 } from "@/lib/placeholder-data";
 
 const PATH = "/v2/data/ppa_tournaments";
-/** Calendar changes slowly; refresh a few times a day. */
-const REVALIDATE_SECONDS = 60 * 60 * 6;
+/**
+ * Cache tag for the tournaments fetch. A Vercel Cron hits
+ * `/api/revalidate-events` at midnight Central and calls `revalidateTag` with
+ * this, so the calendar refreshes once a day on a predictable schedule.
+ */
+export const EVENTS_CACHE_TAG = "events";
+/** Backstop TTL (24h) in case the daily cron ever fails to fire. */
+const REVALIDATE_SECONDS = 60 * 60 * 24;
 const TIMEOUT_MS = 8000;
 
 /** The US org — the only one whose events get a rich internal event page. */
@@ -227,7 +233,7 @@ export async function getEvents(): Promise<{ events: Tournament[]; source: "live
   try {
     const res = await fetch(`${baseUrl}${PATH}?current_page=1&page_size=300`, {
       headers: { "PB-API-TOKEN": token },
-      next: { revalidate: REVALIDATE_SECONDS },
+      next: { revalidate: REVALIDATE_SECONDS, tags: [EVENTS_CACHE_TAG] },
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
     if (!res.ok) return fallback();
