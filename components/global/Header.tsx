@@ -198,15 +198,36 @@ function MegaPanelContent({
         </div>
         <div className={col} style={delay(1)}>
           <PanelEyebrow>Upcoming Stops</PanelEyebrow>
-          <ul className="mt-4 space-y-3.5">
+          <ul className="mt-4 space-y-2.5">
             {upcoming.map((t) => (
               <li key={t.slug}>
-                <SmallLink
+                <Link
                   href={`/events/${t.slug}`}
-                  label={t.shortName}
-                  detail={`${tierShort(t)} · ${formatDateRange(t.startDate, t.endDate)} · ${t.city}`}
-                  onNavigate={onNavigate}
-                />
+                  onClick={onNavigate}
+                  className="group/stop flex items-center gap-3"
+                >
+                  {t.brand?.icon ? (
+                    <span className="relative block h-14 w-9 shrink-0 overflow-hidden rounded bg-ppa-navy shadow-sm ring-1 ring-ppa-navy/10">
+                      <Image
+                        src={t.brand.icon}
+                        alt=""
+                        fill
+                        sizes="36px"
+                        className="object-contain p-px"
+                      />
+                    </span>
+                  ) : (
+                    <span className="h-14 w-9 shrink-0 rounded bg-ppa-navy/5" />
+                  )}
+                  <span className="min-w-0">
+                    <span className="block text-sm font-bold text-ppa-navy transition-colors group-hover/stop:text-ppa-blue">
+                      {t.shortName}
+                    </span>
+                    <span className="mt-0.5 block truncate text-xs text-ppa-navy/50">
+                      {tierShort(t)} · {formatDateRange(t.startDate, t.endDate)} · {t.city}
+                    </span>
+                  </span>
+                </Link>
               </li>
             ))}
           </ul>
