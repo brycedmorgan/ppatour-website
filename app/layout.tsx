@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import localFont from "next/font/local";
 import "./globals.css";
 import { TopBar } from "@/components/global/TopBar";
@@ -67,7 +68,11 @@ export default function RootLayout({
         <TopBar />
         <main className="flex-1">{children}</main>
         <SiteFooter />
-        <StickyBuyBar />
+        {/* Suspense: StickyBuyBar reads useSearchParams (?partner=) via
+            useLiveTicker, which needs a boundary to prerender. */}
+        <Suspense fallback={null}>
+          <StickyBuyBar />
+        </Suspense>
         <CookieBanner />
         <ScrollReveal />
         <Analytics />

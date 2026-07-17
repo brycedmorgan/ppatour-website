@@ -2,18 +2,21 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { formatDate, getNextTournament } from "@/lib/placeholder-data";
 import {
-  formatDate,
-  getLiveTickerState,
-  getNextTournament,
-  getTickerState,
-} from "@/lib/placeholder-data";
+  formatMatchScore,
+  pickFeaturedMatch,
+  teamLabel,
+  useLiveTicker,
+} from "@/components/live/use-live-ticker";
 import { withUtm } from "@/lib/utm";
 
 /**
  * Sticky commerce bar (Option A punch-list #7). Slides up from the bottom
  * once the visitor scrolls past the hero: next event + price anchor + Buy
- * Tickets. During a live event the same bar swaps to a Watch CTA.
+ * Tickets. During a live event (the /live route) the same bar swaps to a
+ * Watch CTA and shows the featured live match — pulled from the same
+ * useLiveTicker source as the header score ticker, so the two never disagree.
  */
 export function StickyBuyBar() {
   const [visible, setVisible] = useState(false);
@@ -26,11 +29,13 @@ export function StickyBuyBar() {
   }, []);
 
   const pathname = usePathname();
-  const state = pathname === "/live" ? getLiveTickerState() : getTickerState();
+  const isLive = pathname === "/live";
+  const { ordered } = useLiveTicker({ enabled: isLive });
+  const featured = isLive ? pickFeaturedMatch(ordered) : undefined;
   const next = getNextTournament();
-  const live = state.mode === "LIVE";
-  const href = live
-    ? state.watchUrl
+  const live = Boolean(featured);
+  const href = featured
+    ? featured.watchUrl || "/watch"
     : withUtm(next.ticketsUrl, {
         campaign: next.slug,
         content: "sticky-buy-bar",
@@ -61,8 +66,8 @@ export function StickyBuyBar() {
             </span>
           )}
           <span className="min-w-0 truncate text-xs font-bold uppercase tracking-[0.1em]">
-            {live
-              ? `${state.players[0]} vs ${state.players[1]}`
+            {featured
+              ? `${teamLabel(featured.teams[0])} vs ${teamLabel(featured.teams[1])}`
               : next.shortName}
           </span>
           {!live && (
@@ -72,7 +77,7 @@ export function StickyBuyBar() {
           )}
 
           <span className="ml-auto hidden shrink-0 text-xs font-bold uppercase tracking-[0.1em] text-ppa-yellow sm:inline">
-            {live ? state.score : `From $${next.ticketPriceFrom}`}
+            {featured ? formatMatchScore(featured) : `From $${next.ticketPriceFrom}`}
           </span>
           <a
             href={href}

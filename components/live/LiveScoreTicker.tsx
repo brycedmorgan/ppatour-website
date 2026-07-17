@@ -1,68 +1,17 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
-import type { TickerMatch, TickerPlayer, TickerResult } from "@/lib/ticker-api";
+import { useEffect, useRef, useState } from "react";
+import type { TickerMatch, TickerPlayer } from "@/lib/ticker-api";
+import { useLiveTicker } from "@/components/live/use-live-ticker";
 
 /**
- * Live broadcast score ticker for the /live header. Fetches real match data
- * from /api/ticker (server proxy → Pickleball.com homepage_score_ticker) on
- * mount and polls every 15s. Override the partner with ?partner=… (e.g.
- * "PPA Australia", or the dev tournament's partner). Falls back to placeholder
- * cards when nothing is live.
+ * Live broadcast score ticker for the /live header. Reads real match data from
+ * the shared useLiveTicker hook (server proxy → Pickleball.com
+ * homepage_score_ticker), polled every 15s. Override the partner with
+ * ?partner=… (e.g. "PPA Australia", or the dev tournament's partner). Falls
+ * back to placeholder cards when nothing is live. The sticky live banner
+ * (StickyBuyBar) reads the same hook, so both surfaces stay in sync.
  */
-
-const POLL_MS = 15000;
-
-// Shown until the first fetch resolves / when no live matches are available.
-const PLACEHOLDER: TickerMatch[] = [
-  {
-    id: "ph-1",
-    round: "Round of 64",
-    status: "live",
-    court: "CC",
-    liveGame: 2,
-    teams: [
-      {
-        players: [
-          { name: "A. Waters", headshot: "/ppa/pros/anna-leigh-waters.jpg" },
-          { name: "B. Johns", headshot: "/ppa/pros/ben-johns.jpg" },
-        ],
-        games: [11, 5, 6],
-      },
-      {
-        players: [
-          { name: "P. Todd", headshot: "/ppa/pros/paris-todd.jpg" },
-          { name: "F. Staksrud", headshot: "/ppa/pros/federico-staksrud.jpg" },
-        ],
-        games: [5, 11, 3],
-      },
-    ],
-  },
-  {
-    id: "ph-2",
-    round: "Round of 32",
-    status: "upnext",
-    court: "SC 1",
-    time: "2:30 PM ET",
-    teams: [
-      { players: [{ name: "A. Bright", headshot: "/ppa/pros/anna-bright.jpg" }], games: [null, null, null] },
-      { players: [{ name: "L. Jansen", headshot: "/ppa/pros/lea-jansen.jpg" }], games: [null, null, null] },
-    ],
-  },
-  {
-    id: "ph-3",
-    round: "Round of 32",
-    status: "final",
-    court: "GS",
-    teams: [
-      { players: [{ name: "C. Alshon", headshot: "/ppa/pros/christian-alshon.jpg" }], games: [11, 11, null] },
-      { players: [{ name: "G. Tardio", headshot: "/ppa/pros/gabe-tardio.jpg" }], games: [7, 9, null] },
-    ],
-  },
-];
-
-const STATUS_ORDER: Record<TickerMatch["status"], number> = { live: 0, upnext: 1, final: 2 };
 
 function initials(name: string): string {
   return name
@@ -186,14 +135,11 @@ export function LiveScoreTicker({
   /** How many full cards fit before the rail scrolls. */
   visibleCards?: 3 | 4;
 } = {}) {
-  const searchParams = useSearchParams();
-  const partner = searchParams.get("partner");
+  const { ordered, loaded } = useLiveTicker();
 
   // Card width tuned so N cards show with a sliver of the next.
   const cardW = visibleCards === 3 ? "w-[31%]" : "w-[23%]";
 
-  const [matches, setMatches] = useState<TickerMatch[]>([]);
-  const [loaded, setLoaded] = useState(false);
   const [pbtvSrc, setPbtvSrc] = useState("/ppa/networks/pickleballtv-white.svg");
 
   // Arrow-button scrolling (native swipe still works on touch).
@@ -212,35 +158,6 @@ export function LiveScoreTicker({
     const el = railRef.current;
     if (el) el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: "smooth" });
   }
-
-  useEffect(() => {
-    let active = true;
-    const url = partner ? `/api/ticker?partner=${encodeURIComponent(partner)}` : "/api/ticker";
-    const load = async () => {
-      try {
-        const res = await fetch(url, { cache: "no-store" });
-        if (!res.ok) return;
-        const data = (await res.json()) as TickerResult;
-        if (!active) return;
-        setMatches(data.matches);
-      } catch {
-        // keep last-known / placeholder on transient errors
-      } finally {
-        if (active) setLoaded(true);
-      }
-    };
-    void load();
-    const id = setInterval(load, POLL_MS);
-    return () => {
-      active = false;
-      clearInterval(id);
-    };
-  }, [partner]);
-
-  const ordered = useMemo(() => {
-    const list = matches.length > 0 ? matches : PLACEHOLDER;
-    return [...list].sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
-  }, [matches]);
 
   // Recompute which arrows to show when the data or viewport changes.
   useEffect(() => {
