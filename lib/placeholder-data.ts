@@ -46,6 +46,8 @@ export type Tournament = {
   image: string;
   /** Optional real-photo gallery (paths under /public). */
   gallery?: string[];
+  /** Per-event brand system (colors + optional icon) used on the event page. */
+  brand?: { primary: string; accent: string; icon?: string };
   /** International-tour events (for the /events category filter). Domestic if unset. */
   region?: "international";
   /** Country/region for international events (matches the Country filter). */
