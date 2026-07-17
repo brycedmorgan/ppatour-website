@@ -136,6 +136,9 @@ export function LiveScoreTicker({
   visibleCards?: 3 | 4;
 } = {}) {
   const { ordered, loaded } = useLiveTicker();
+  // No live matches (still loading, or nothing live right now) → keep the
+  // loading animation rather than showing fabricated placeholder cards.
+  const showCards = loaded && ordered.length > 0;
 
   // Card width tuned so N cards show with a sliver of the next.
   const cardW = visibleCards === 3 ? "w-[31%]" : "w-[23%]";
@@ -183,14 +186,14 @@ export function LiveScoreTicker({
       {/* Match cards — width tuned so `visibleCards` show with a sliver of
           the next. Arrow buttons scroll; native swipe still works on touch. */}
       <div className="relative min-w-0 flex-1">
-        {loaded && !edges.start && <ArrowButton dir="left" onClick={() => scrollByDir(-1)} />}
-        {loaded && !edges.end && <ArrowButton dir="right" onClick={() => scrollByDir(1)} />}
+        {showCards && !edges.start && <ArrowButton dir="left" onClick={() => scrollByDir(-1)} />}
+        {showCards && !edges.end && <ArrowButton dir="right" onClick={() => scrollByDir(1)} />}
         <div
           ref={railRef}
           onScroll={onScroll}
           className="flex h-full items-stretch gap-2 overflow-x-auto py-2 pl-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
-        {loaded ? ordered.map((m) => {
+        {showCards ? ordered.map((m) => {
           const cols = columns(m);
           const aWins = cols.filter((c) => c.winner === "a").length;
           const bWins = cols.filter((c) => c.winner === "b").length;
@@ -312,8 +315,8 @@ export function LiveScoreTicker({
             </article>
           );
         }) : (
-          // Loading skeleton — shown until the first fetch resolves so real
-          // matches don't pop in over placeholders. Spinner inside each card.
+          // Loading / no-live state — spinner in each card. Shown until the
+          // first fetch resolves and whenever nothing is live (no fake cards).
           Array.from({ length: visibleCards }).map((_, i) => (
             <div
               key={`sk-${i}`}
