@@ -10,7 +10,9 @@ export const metadata: Metadata = {
     "Play the Carvana PPA Tour — amateur brackets by skill and age at every main-tour stop. Junior, Senior, Open, and Pro-Am divisions. Register online.",
 };
 
-const REGISTER_URL = "https://www.pickleballtournaments.com/";
+// Pre-filtered pickleballtournaments.com search — PPA-sanctioned events only.
+const REGISTER_URL =
+  "https://pickleballtournaments.com/search?page=1&limit=25&map_area=false&partner=sanction_ppa&show_all=true&zoom_level=7&current_page=1";
 
 const STEPS = [
   {
