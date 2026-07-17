@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { TickerMatch, TickerPlayer, TickerResult } from "@/lib/ticker-api";
-import { useLiveTicker } from "@/components/live/use-live-ticker";
+import { matchWatchUrl, useLiveTicker } from "@/components/live/use-live-ticker";
 
 /**
  * Live broadcast score ticker for the /live header. Reads real match data from
@@ -297,11 +297,11 @@ export function LiveScoreTicker({
                   </span>
                 ) : (
                   <a
-                    href={m.watchUrl || undefined}
-                    target={m.watchUrl ? "_blank" : undefined}
-                    rel={m.watchUrl ? "noopener noreferrer" : undefined}
-                    aria-label={m.watchUrl ? "Watch on PickleballTV" : undefined}
-                    className={m.watchUrl ? "transition hover:opacity-70" : "pointer-events-none"}
+                    href={matchWatchUrl(m)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Watch on PickleballTV"
+                    className="transition hover:opacity-70"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img

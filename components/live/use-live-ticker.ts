@@ -86,6 +86,15 @@ export function teamLabel(team: TickerTeam): string {
   return team.players.map((p) => p.name).join(" / ");
 }
 
+/** Where to send viewers when a match has no stream link of its own. */
+export const PBTV_WATCH_URL =
+  "https://www.pickleballtv.com/?utm_source=ppatour&utm_medium=website&utm_campaign=live&utm_content=match-watch";
+
+/** A match's own live/archived stream link, falling back to PickleballTV. */
+export function matchWatchUrl(m: TickerMatch): string {
+  return m.watchUrl || PBTV_WATCH_URL;
+}
+
 /** "11–9, 9–11, 8–6" — the games that have a score, in order. */
 export function formatMatchScore(m: TickerMatch): string {
   const cells: string[] = [];
