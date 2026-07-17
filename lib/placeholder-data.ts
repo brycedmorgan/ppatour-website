@@ -120,6 +120,18 @@ type RawEvent = {
   image?: string;
 };
 
+// Badge-matched brand colors + icons per event (keyed by generated slug).
+const BRAND_BY_SLUG: Record<string, { primary: string; accent: string; icon?: string }> = {
+  "veolia-pickleball-national-championships": { primary: "#023155", accent: "#C1272D", icon: "/ppa/badges/nationals.png" },
+  "rate-las-vegas-open": { primary: "#003058", accent: "#2088e0", icon: "/ppa/badges/las-vegas.png" },
+  "veolia-chicago-cup": { primary: "#003058", accent: "#c8102e", icon: "/ppa/badges/chicago.png" },
+  "virginia-beach-open": { primary: "#003058", accent: "#0078d0", icon: "/ppa/badges/virginia-beach.png" },
+  "pickleball-world-championships": { primary: "#182068", accent: "#007838", icon: "/ppa/badges/worlds.png" },
+  "proton-daytona-beach-open": { primary: "#003058", accent: "#2088e0", icon: "/ppa/badges/daytona.png" },
+  "veolia-malibu-cup": { primary: "#003058", accent: "#e23a76", icon: "/ppa/badges/malibu.png" },
+  "carvana-mesa-cup": { primary: "#003058", accent: "#0078d0", icon: "/ppa/badges/arizona.png" },
+};
+
 /** Expand the compact schedule into Tournament records with unique slugs. */
 function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
   return raws.map((r, i) => {
@@ -148,6 +160,7 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
       prizeMoney: r.type === "international" ? "$100,000" : TIER_PRIZE[tier],
       presentedBy: sponsor,
       image: r.image ?? GENERIC_IMAGES[i % GENERIC_IMAGES.length],
+      brand: BRAND_BY_SLUG[slug],
       region: r.type === "international" ? ("international" as const) : undefined,
       country: r.country,
     };
