@@ -53,6 +53,8 @@ export type RankingEntry = {
   countryCode: string;
   /** Local headshot or remote profile image; null renders an initials chip. */
   headshot: string | null;
+  /** Raw API cutout (transparent PNG), independent of any curated override. */
+  image: string | null;
   /** Internal /athletes/[slug] when we have the profile, else pickleball.com. */
   profileUrl: string;
   hasLocalProfile: boolean;
@@ -123,6 +125,7 @@ function mapPlayer(p: ApiPlayer): RankingEntry {
     country: p.country ?? "",
     countryCode: (p.player_country_two_digit_abbreviation ?? "").toLowerCase(),
     headshot: headshot ?? (p.profile_image || null),
+    image: p.profile_image || null,
     profileUrl: url,
     hasLocalProfile: local,
   };
@@ -187,6 +190,7 @@ function fallbackEntries(genderKey: string): RankingEntry[] {
       country: athlete?.country ?? "",
       countryCode: "",
       headshot,
+      image: null,
       profileUrl: url,
       hasLocalProfile: local,
     };
@@ -273,5 +277,134 @@ export async function getRankingPage(genderKey: string, page: number): Promise<R
     };
   } catch {
     return fallbackPage(g, safePage, FULL_PAGE_SIZE);
+  }
+}
+
+/* ---- per-athlete WPR ranking (by slug) ---- */
+
+export type AthleteRanking = { rank: number; gender: "men" | "women"; points: number };
+
+// Our athlete slugs that differ from the API's player_slug.
+const SLUG_ALIAS: Record<string, string> = {
+  "gabe-tardio": "gabriel-tardio",
+  "tyra-black": "hurricane-tyra-black",
+  "paris-todd": "parris-todd",
+  "megan-dizon": "meghan-dizon",
+  "eddie-perez": "edward-perez",
+};
+
+/**
+ * Live WPR ranking for every ranked player, keyed by slug (both the API's
+ * player_slug and our local aliases). Lets our athlete pages show each pro's
+ * current combined ranking. Never throws — returns {} on any problem.
+ */
+export async function getRankingBySlug(): Promise<Record<string, AthleteRanking>> {
+  const { token, baseUrl } = config();
+  if (!token) return {};
+
+  const today = new Date().toISOString().slice(0, 10);
+  const out: Record<string, AthleteRanking> = {};
+
+  try {
+    for (const g of RANKING_GENDERS) {
+      const params = new URLSearchParams({
+        partner: "ppa",
+        division_type: String(WORLD_DIVISION_TYPE),
+        gender: g.gender,
+        race: String(RACE),
+        is_live: "false",
+        bracket_level_id: String(PRO_BRACKET),
+        current_page: "1",
+        page_size: "150",
+        rank: today,
+      });
+      const res = await fetch(`${baseUrl}/v2/data/partner_rankings?${params}`, {
+        headers: { "PB-API-TOKEN": token },
+        next: { revalidate: REVALIDATE_SECONDS },
+      });
+      if (!res.ok) continue;
+      const json = (await res.json()) as { results?: { player_rankings?: ApiPlayer[] } };
+      for (const p of json.results?.player_rankings ?? []) {
+        const rank = Number.parseInt(p.ranking, 10);
+        if (p.player_slug && rank > 0) {
+          out[p.player_slug] = { rank, gender: g.key as "men" | "women", points: p.points ?? 0 };
+        }
+      }
+    }
+    // Map our aliased slugs onto the API's ranking.
+    for (const [ours, api] of Object.entries(SLUG_ALIAS)) {
+      if (out[api]) out[ours] = out[api];
+    }
+    return out;
+  } catch {
+    return {};
+  }
+}
+
+/* ---- API-driven athlete roster (top 25 Men + top 25 Women) ---- */
+
+/** One athlete in the WPR-driven roster — a ranking entry plus its board gender. */
+export type ApiAthlete = RankingEntry & { gender: "male" | "female" };
+
+// API player_slug -> our curated slug, so grid cards/profiles reuse the rich
+// (bio-bearing) curated page when we have one.
+const REVERSE_ALIAS: Record<string, string> = Object.fromEntries(
+  Object.entries(SLUG_ALIAS).map(([ours, api]) => [api, ours]),
+);
+
+/**
+ * The curated /athletes/[slug] to link to for an API player, or null when we
+ * have no curated profile (the API slug is used, and the profile page renders
+ * from live data). Handles the handful of slug aliases.
+ */
+export function curatedSlugFor(apiSlug: string): string | null {
+  if (REVERSE_ALIAS[apiSlug]) return REVERSE_ALIAS[apiSlug];
+  return getAthlete(apiSlug) ? apiSlug : null;
+}
+
+/**
+ * The athlete roster grid: the top {@link TOP_COUNT} of each gender's World
+ * Pickleball Ranking, straight from the API. Never throws — returns [] on any
+ * problem so the page can fall back to the curated roster.
+ */
+export async function getWprRoster(): Promise<ApiAthlete[]> {
+  const { token, baseUrl } = config();
+  if (!token) return [];
+
+  const today = new Date().toISOString().slice(0, 10);
+  try {
+    const boards = await Promise.all(
+      RANKING_GENDERS.map(async (g) => {
+        const { entries } = await fetchPage(g.gender, 1, TOP_COUNT, token, baseUrl, today);
+        const gender = g.gender === "F" ? "female" : "male";
+        return entries.map((e): ApiAthlete => ({ ...e, gender }));
+      }),
+    );
+    return boards.flat();
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * A single player's live WPR record by slug (accepts our curated slug or the
+ * API's player_slug). Scans the top 150 of both boards. Null if not found or
+ * on any error.
+ */
+export async function getWprPlayerBySlug(slug: string): Promise<ApiAthlete | null> {
+  const { token, baseUrl } = config();
+  if (!token) return null;
+
+  const target = SLUG_ALIAS[slug] ?? slug;
+  const today = new Date().toISOString().slice(0, 10);
+  try {
+    for (const g of RANKING_GENDERS) {
+      const { entries } = await fetchPage(g.gender, 1, 150, token, baseUrl, today);
+      const found = entries.find((e) => e.slug === target);
+      if (found) return { ...found, gender: g.gender === "F" ? "female" : "male" };
+    }
+    return null;
+  } catch {
+    return null;
   }
 }

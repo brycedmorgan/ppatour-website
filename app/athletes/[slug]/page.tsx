@@ -5,45 +5,85 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { athletes, getAthlete } from "@/lib/athletes";
-import { divisionRankings } from "@/lib/home-content";
+import { curatedSlugFor, getWprPlayerBySlug, getWprRoster } from "@/lib/rankings-api";
 
 type Params = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  return athletes.map((a) => ({ slug: a.slug }));
+export async function generateStaticParams() {
+  const roster = await getWprRoster().catch(() => []);
+  const slugs = new Set(athletes.map((a) => a.slug));
+  for (const p of roster) slugs.add(curatedSlugFor(p.slug) ?? p.slug);
+  return [...slugs].map((slug) => ({ slug }));
+}
+
+/**
+ * Merge the live WPR record (rank/points/gender/headshot) with our curated
+ * profile (bio/tagline/divisions) when we have one. Either source alone is
+ * enough to render a page.
+ */
+async function loadAthlete(slug: string) {
+  const curated = getAthlete(slug);
+  const api = await getWprPlayerBySlug(slug);
+  if (!curated && !api) return null;
+
+  const name = curated?.name ?? api!.name;
+  return {
+    slug,
+    name,
+    headshot: curated?.headshot ?? api?.headshot ?? "",
+    country: curated?.country ?? api?.country ?? "",
+    countryCode: api?.countryCode ?? "",
+    rank: api?.rank ?? curated?.bestRank ?? 0,
+    points: api?.points ?? 0,
+    gender: api?.gender,
+    divisions: curated?.divisions ?? [],
+    tagline:
+      curated?.tagline ?? "Professional pickleball player on the Carvana PPA Tour.",
+    bio:
+      curated?.bio ??
+      `${name} is a professional pickleball player ranked among the world's best in the Carvana PPA Tour's World Pickleball Rankings.`,
+  };
+}
+
+function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .map((w) => w[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
-  const a = getAthlete(slug);
+  const a = await loadAthlete(slug);
   if (!a) return { title: "Athlete" };
-  const description = `${a.tagline}. ${a.divisions.join(" · ")} · ${a.country}.`;
+  const description = `${a.tagline}${a.country ? ` · ${a.country}` : ""}.`;
+  const images = a.headshot ? [a.headshot] : [];
   return {
     title: a.name,
     description,
     openGraph: {
       title: `${a.name} — Carvana PPA Tour`,
       description: a.tagline,
-      images: [a.headshot],
+      images,
     },
-    twitter: { card: "summary_large_image", images: [a.headshot] },
+    twitter: { card: "summary_large_image", images },
   };
 }
 
 export default async function AthletePage({ params }: Params) {
   const { slug } = await params;
-  const a = getAthlete(slug);
+  const a = await loadAthlete(slug);
   if (!a) notFound();
 
-  // Where this athlete sits in the points race, by division.
-  const standings = divisionRankings
-    .map((d) => {
-      const entry = d.entries.find((e) => e.slug === a.slug);
-      return entry ? { division: d.label, rank: entry.rank, points: entry.points } : null;
-    })
-    .filter((x): x is { division: string; rank: number; points: number } => x !== null);
-
+  const boardLabel =
+    a.gender === "female" ? "Women's" : a.gender === "male" ? "Men's" : null;
   const others = athletes.filter((x) => x.slug !== a.slug).slice(0, 4);
+  const flag = a.countryCode
+    ? `https://cdn.pickleball.com/circle-flags/${a.countryCode}.svg`
+    : null;
 
   return (
     <>
@@ -56,7 +96,7 @@ export default async function AthletePage({ params }: Params) {
             name: a.name,
             jobTitle: "Professional Pickleball Player",
             nationality: a.country,
-            image: `${SITE_URL}${a.headshot}`,
+            image: a.headshot,
             url: `${SITE_URL}/athletes/${a.slug}`,
             description: a.bio,
             memberOf: {
@@ -71,20 +111,38 @@ export default async function AthletePage({ params }: Params) {
       <section className="relative isolate overflow-hidden bg-ppa-navy text-white">
         <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-12 sm:grid-cols-[auto_1fr] sm:items-end sm:py-14">
           <div className="relative size-40 shrink-0 overflow-hidden border border-white/15 bg-ppa-navy-deep sm:size-48">
-            <Image
-              src={a.headshot}
-              alt={a.name}
-              fill
-              priority
-              sizes="192px"
-              className="object-cover object-top"
-            />
+            {a.headshot ? (
+              <Image
+                src={a.headshot}
+                alt={a.name}
+                fill
+                priority
+                sizes="192px"
+                className="object-cover object-top"
+              />
+            ) : (
+              <span className="flex h-full w-full items-center justify-center font-display text-5xl text-white/60">
+                {initials(a.name)}
+              </span>
+            )}
             <div className="absolute inset-x-0 bottom-0 h-1 bg-ppa-blue" />
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em]">
-              <span className="bg-ppa-blue px-2 py-0.5">No. {a.bestRank}</span>
-              <span className="text-white/70">{a.country}</span>
+              <span className="bg-ppa-blue px-2 py-0.5">No. {a.rank}</span>
+              {a.country && (
+                <span className="flex items-center gap-1.5 text-white/70">
+                  {flag && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={flag}
+                      alt=""
+                      className="size-4 rounded-full ring-1 ring-white/30"
+                    />
+                  )}
+                  {a.country}
+                </span>
+              )}
             </div>
             <h1 className="mt-3 font-display text-[clamp(2rem,6vw,3.75rem)] uppercase leading-[0.95]">
               {a.name}
@@ -92,22 +150,24 @@ export default async function AthletePage({ params }: Params) {
             <p className="mt-2 max-w-xl text-sm text-ppa-yellow sm:text-base">
               {a.tagline}
             </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {a.divisions.map((d) => (
-                <span
-                  key={d}
-                  className="border border-white/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/75"
-                >
-                  {d}
-                </span>
-              ))}
-            </div>
+            {a.divisions.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {a.divisions.map((d) => (
+                  <span
+                    key={d}
+                    className="border border-white/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/75"
+                  >
+                    {d}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
         <div className="relative h-1 bg-ppa-blue" />
       </section>
 
-      {/* Bio + standings */}
+      {/* Bio + WPR standing */}
       <section className="bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr]">
@@ -131,36 +191,31 @@ export default async function AthletePage({ params }: Params) {
 
             <aside>
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
-                In the Points Race
+                World Pickleball Ranking
               </p>
-              <div className="mt-3 border border-ppa-line">
-                <div className="grid grid-cols-[1fr_auto_5rem] gap-3 border-b border-ppa-line bg-white px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
-                  <span>Division</span>
-                  <span className="text-right">Rank</span>
-                  <span className="text-right">Points</span>
+              <div className="mt-3 grid grid-cols-2 gap-3">
+                <div className="border border-ppa-line bg-white px-4 py-5">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+                    {boardLabel ? `${boardLabel} World Rank` : "World Rank"}
+                  </p>
+                  <p className="mt-1 font-display text-4xl text-ppa-blue">
+                    No. {a.rank}
+                  </p>
                 </div>
-                {standings.map((s) => (
-                  <div
-                    key={s.division}
-                    className="grid grid-cols-[1fr_auto_5rem] items-center gap-3 border-b border-ppa-line bg-white px-4 py-3 last:border-b-0"
-                  >
-                    <span className="text-sm font-semibold text-ppa-navy">
-                      {s.division}
-                    </span>
-                    <span className="text-right font-display text-lg text-ppa-blue">
-                      {s.rank}
-                    </span>
-                    <span className="text-right text-sm font-bold tabular-nums text-ppa-navy/70">
-                      {s.points.toLocaleString()}
-                    </span>
-                  </div>
-                ))}
+                <div className="border border-ppa-line bg-white px-4 py-5">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+                    WPR Points
+                  </p>
+                  <p className="mt-1 font-display text-4xl text-ppa-navy">
+                    {a.points > 0 ? a.points.toLocaleString() : "—"}
+                  </p>
+                </div>
               </div>
               <Link
-                href="/athletes"
+                href="/rankings"
                 className="mt-4 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue"
               >
-                ← All Athletes
+                Full Rankings →
               </Link>
             </aside>
           </div>
