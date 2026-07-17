@@ -129,7 +129,79 @@ const BRAND_BY_SLUG: Record<string, { primary: string; accent: string; icon?: st
   "pickleball-world-championships": { primary: "#182068", accent: "#007838", icon: "/ppa/badges/worlds.png" },
   "proton-daytona-beach-open": { primary: "#003058", accent: "#2088e0", icon: "/ppa/badges/daytona.png" },
   "veolia-malibu-cup": { primary: "#003058", accent: "#e23a76", icon: "/ppa/badges/malibu.png" },
-  "carvana-mesa-cup": { primary: "#003058", accent: "#0078d0", icon: "/ppa/badges/arizona.png" },
+  "veolia-arizona-open": { primary: "#003058", accent: "#0078d0", icon: "/ppa/badges/arizona.png" },
+};
+
+// Real commerce deep links per generated slug (verified against the live
+// ppatour.com schedule buttons + HTTP-checked, Jul 2026). Anything not listed
+// falls back to the group listing / registration home until its page exists.
+const COMMERCE_BY_SLUG: Record<string, { tickets?: string; register?: string }> = {
+  "veolia-pickleball-national-championships": {
+    tickets: tixrEvent("veolia-pickleball-national-championships-184656"),
+    register: registerEvent("ppa-tour-veolia-ppa-national-championships"),
+  },
+  "veolia-arizona-open": { tickets: tixrEvent("ppa-mesa-195027") },
+  "rate-las-vegas-open": {
+    tickets: tixrEvent("ppa-las-vegas-178513"),
+    register: registerEvent("ppa-tour-2026-rate-las-vegas-open"),
+  },
+  "veolia-chicago-cup": {
+    tickets: tixrEvent("ppa-chicago-176687"),
+    register: registerEvent("ppa-tour-veolia-chicago-open"),
+  },
+  "virginia-beach-open": {
+    tickets: tixrEvent("ppa-virginia-beach-176326"),
+    register: registerEvent("ppa-tour-2026-virginia-beach-open"),
+  },
+  "pickleball-world-championships": {
+    tickets: tixrEvent("2026-world-pickleball-championships-166345"),
+    register: registerEvent("2026-pickleball-world-championships"),
+  },
+  "proton-daytona-beach-open": {
+    tickets: tixrEvent("ppa-daytona-beach-178517"),
+    register: registerEvent("ppa-tour-florida-open"), // Holly Hill venue — same event
+  },
+  "veolia-malibu-cup": {
+    tickets: tixrEvent("ppa-malibu-176502"),
+    register: registerEvent("ppa-tour-veolia-malibu-cup"),
+  },
+  "carvana-pickleball-masters": {
+    register: registerEvent("ppa-tour-carvana-pickleball-masters-powered-by-invited"),
+  },
+  "macon-ppa-challenger": {
+    tickets: tixrEvent("ppa-challenger-series-macon-166226"),
+    register: registerEvent("2026-macon-ppa-challenger"),
+  },
+  "wisconsin-ppa-challenger": {
+    tickets: tixrEvent("ppa-challenger-series-wisonsin-166227"), // (sic — Tixr's slug)
+    register: registerEvent("2026-wisconsin-ppa-challenger"),
+  },
+  "seattle-ppa-challenger": {
+    tickets: tixrEvent("ppa-challenger-series-seattle-166228"),
+    register: registerEvent("2026-seattle-ppa-challenger"),
+  },
+  "atlanta-ppa-challenger": {
+    tickets: tixrEvent("ppa-challenger-series-peachtree-city-173667"),
+    register: registerEvent("atlanta-ppa-challenger"),
+  },
+  "grand-rapids-ppa-challenger": {
+    tickets: tixrEvent("ppa-challenger-series-grand-rapids-166229"),
+    register: registerEvent("2026-grand-rapids-ppa-challenger"),
+  },
+  "charlotte-ppa-challenger": { register: registerEvent("charlotte-ppa-challenger") },
+  "sarasota-ppa-challenger": {
+    tickets: tixrEvent("ppa-challenger-series-sarasota-171536"),
+    register: registerEvent("sarasota-ppa-challenger"),
+  },
+};
+
+// Presenting sponsors that differ from the name-prefix heuristic (per the
+// official badge artwork: title sponsor lives in the name, presenter below).
+const PRESENTER_BY_SLUG: Record<string, string> = {
+  "veolia-pickleball-national-championships": "Fasenra",
+  "rate-las-vegas-open": "JOOLA",
+  "veolia-chicago-cup": "Storm",
+  "veolia-malibu-cup": "Proton",
 };
 
 /** Expand the compact schedule into Tournament records with unique slugs. */
@@ -153,12 +225,12 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
       startDate: r.start,
       endDate: r.end,
       ticketPriceFrom: r.type === "international" ? 35 : TIER_PRICE[tier],
-      ticketsUrl: TIXR,
-      registerUrl: REGISTER,
+      ticketsUrl: COMMERCE_BY_SLUG[slug]?.tickets ?? TIXR,
+      registerUrl: COMMERCE_BY_SLUG[slug]?.register ?? REGISTER,
       status: "upcoming" as const,
       tierKey: tier,
       prizeMoney: r.type === "international" ? "$100,000" : TIER_PRIZE[tier],
-      presentedBy: sponsor,
+      presentedBy: PRESENTER_BY_SLUG[slug] ?? sponsor,
       image: r.image ?? GENERIC_IMAGES[i % GENERIC_IMAGES.length],
       brand: BRAND_BY_SLUG[slug],
       region: r.type === "international" ? ("international" as const) : undefined,
