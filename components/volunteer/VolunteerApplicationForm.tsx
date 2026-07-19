@@ -57,10 +57,19 @@ function Field({
   );
 }
 
-export function VolunteerApplicationForm() {
+export function VolunteerApplicationForm({
+  embedded = false,
+}: {
+  /** Drop the form's own card border/background when it already sits inside a
+   *  chrome'd container (e.g. the event-page modal). */
+  embedded?: boolean;
+} = {}) {
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">(
     "idle",
   );
+  const formCls = embedded
+    ? "p-6 sm:p-8"
+    : "border border-ppa-line bg-white p-6 sm:p-8";
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -95,7 +104,9 @@ export function VolunteerApplicationForm() {
 
   if (status === "done") {
     return (
-      <div className="border border-ppa-line bg-white p-8 text-center">
+      <div
+        className={`p-8 text-center ${embedded ? "" : "border border-ppa-line bg-white"}`}
+      >
         <p className="font-display text-2xl uppercase text-ppa-navy">
           Application received
         </p>
@@ -109,7 +120,7 @@ export function VolunteerApplicationForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="border border-ppa-line bg-white p-6 sm:p-8">
+    <form onSubmit={onSubmit} className={formCls}>
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="First Name" required>
           <input name="firstName" required className={inputCls} autoComplete="given-name" />

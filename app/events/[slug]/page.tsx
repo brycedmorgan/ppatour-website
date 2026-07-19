@@ -9,6 +9,7 @@ import { EventTabNav } from "@/components/events/EventTabNav";
 import { FirstServeCountdown } from "@/components/events/FirstServeCountdown";
 import { EventGallery } from "@/components/events/EventGallery";
 import { VenueMap } from "@/components/events/VenueMap";
+import { VolunteerModalButton } from "@/components/events/VolunteerModalButton";
 import { Countdown } from "@/components/motion/Countdown";
 import { getBroadcast } from "@/lib/broadcast";
 import { getEventGuide } from "@/lib/event-guides";
@@ -1213,6 +1214,7 @@ export default async function EventPage({ params }: Params) {
                 note: "Court crew, player services, transport — be inside the ropes",
                 cta: "Volunteer",
                 href: "/events/volunteer",
+                modal: true,
               },
             ].map((c) => (
               <div
@@ -1225,7 +1227,9 @@ export default async function EventPage({ params }: Params) {
                 <p className={`mt-1.5 flex-1 text-xs leading-relaxed ${c.featured ? "text-white/85" : "text-white/55"}`}>
                   {c.note}
                 </p>
-                {c.external ? (
+                {"modal" in c && c.modal ? (
+                  <VolunteerModalButton label={c.cta} eventName={t.shortName} />
+                ) : c.external ? (
                   <a
                     href={c.href}
                     target="_blank"
