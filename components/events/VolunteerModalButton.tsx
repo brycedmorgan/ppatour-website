@@ -57,14 +57,14 @@ export function VolunteerModalButton({
           aria-modal="true"
           aria-label={eventName ? `Volunteer at ${eventName}` : "Volunteer application"}
           onClick={() => setOpen(false)}
-          className="fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto bg-ppa-navy-deep/80 p-4 backdrop-blur-sm motion-safe:animate-fade sm:p-8"
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-ppa-navy-deep/80 p-4 backdrop-blur-sm motion-safe:animate-fade sm:p-8"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative my-auto flex w-full max-w-2xl flex-col bg-white shadow-2xl"
+            className="relative flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden bg-white shadow-2xl"
           >
-            {/* Header */}
-            <div className="sticky top-0 flex items-start justify-between gap-4 border-b border-ppa-line bg-white px-6 py-4">
+            {/* Header — pinned; only the body below scrolls */}
+            <div className="flex shrink-0 items-start justify-between gap-4 border-b border-ppa-line bg-white px-6 py-4">
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-blue">
                   Volunteer
@@ -84,17 +84,20 @@ export function VolunteerModalButton({
               </button>
             </div>
 
-            <VolunteerApplicationForm embedded />
+            {/* Scrollable body */}
+            <div className="min-h-0 flex-1 overflow-y-auto">
+              <VolunteerApplicationForm embedded />
 
-            <p className="border-t border-ppa-line px-6 pb-6 text-xs text-ppa-navy/50">
-              Want the full rundown — requirements, perks, and FAQs?{" "}
-              <Link
-                href="/events/volunteer"
-                className="font-semibold text-ppa-blue hover:text-ppa-navy"
-              >
-                Visit the volunteer page ↗
-              </Link>
-            </p>
+              <p className="border-t border-ppa-line px-6 pb-6 text-xs text-ppa-navy/50">
+                Want the full rundown — requirements, perks, and FAQs?{" "}
+                <Link
+                  href="/events/volunteer"
+                  className="font-semibold text-ppa-blue hover:text-ppa-navy"
+                >
+                  Visit the volunteer page ↗
+                </Link>
+              </p>
+            </div>
           </div>
         </div>
       )}
