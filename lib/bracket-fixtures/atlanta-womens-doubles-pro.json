@@ -1,0 +1,5794 @@
+[
+ {
+  "id": "5b9f76fe-0bcf-4d55-8fdd-c0ec639f4886",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-28T23:57:30Z",
+  "matchNumber": 1,
+  "templateMatchID": "00064W-00002",
+  "templateMatchNumber": 2,
+  "matchWinnerGoesTo": "a8d59528-e846-478d-b61f-92d078ecd8b1",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "$undefined",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": null,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Tue Apr 28 7:14 PM EDT",
+  "court": "CC",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/5b9f76fe-0bcf-4d55-8fdd-c0ec639f4886",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/VHkNpfd6?disablePlayNext%3Dfalse%26withErrors%3Dfalse&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "703a382f-d648-493b-927c-bbd46bc90172",
+    "players": [
+     "Xiao Yi Wang-Beckvall",
+     "Albie Huang"
+    ],
+    "seedNumber": 32,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "af0a2150-7c63-42a8-a3e9-eb48660fc325",
+    "players": [
+     "Genie Bouchard",
+     "Marcela Aguila Ampon"
+    ],
+    "seedNumber": 33,
+    "games": [
+     {
+      "score": 4,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 5,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 0,
+  "isAloneOnContext": true,
+  "position": "A"
+ },
+ {
+  "id": "2c56746a-2da6-4eed-b7fe-1699da413e0a",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-28T23:23:57Z",
+  "matchNumber": 2,
+  "templateMatchID": "00064W-00004",
+  "templateMatchNumber": 4,
+  "matchWinnerGoesTo": "9f264577-1168-43f6-b632-3406279d523f",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "$undefined",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": null,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Tue Apr 28 6:59 PM EDT",
+  "court": "GS",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/2c56746a-2da6-4eed-b7fe-1699da413e0a",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/4Ydq4SVJ?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "9d3035f6-d470-436e-875e-331ac1ce3e02",
+    "players": [
+     "Lina Padegimaite",
+     "Zoeya Khan"
+    ],
+    "seedNumber": 20,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "00011d09-d667-4145-a168-fb3a52856533",
+    "players": [
+     "Spencer Liang",
+     "Lauren Cole"
+    ],
+    "seedNumber": 48,
+    "games": [
+     {
+      "score": 3,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 2,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 2,
+  "isAloneOnContext": true,
+  "position": "B"
+ },
+ {
+  "id": "0106c0db-dc23-4716-8528-01876688d868",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-28T23:49:29Z",
+  "matchNumber": 3,
+  "templateMatchID": "00064W-00006",
+  "templateMatchNumber": 6,
+  "matchWinnerGoesTo": "de6bab68-1d14-47d8-b1eb-8b0afb491e94",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "$undefined",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": null,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Tue Apr 28 7:02 PM EDT",
+  "court": "24",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/0106c0db-dc23-4716-8528-01876688d868",
+   "liveURL": "https://youtube.com/live/f5EsSbDWGC0?feature=share&t=17859",
+   "archivedURL": "https://youtube.com/live/f5EsSbDWGC0?feature=share&t=17859",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/ppaSideCourts.png",
+   "serviceId": 13,
+   "serviceName": "PPA Streamed Courts"
+  },
+  "teams": [
+   {
+    "id": "4a852708-0a67-43f0-81a9-8e6d220f166f",
+    "players": [
+     "Martina Frantova",
+     "Mehvish Safdar"
+    ],
+    "seedNumber": 31,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 7,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "0c0acba2-8ff1-415b-9f0e-59077073344d",
+    "players": [
+     "Luana Stanciu",
+     "Polina Libo"
+    ],
+    "seedNumber": 40,
+    "games": [
+     {
+      "score": 4,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 4,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 4,
+  "isAloneOnContext": true,
+  "position": "B"
+ },
+ {
+  "id": "a0e44f1e-d7e3-47f6-a89f-c847220a8b53",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T01:29:49Z",
+  "matchNumber": 4,
+  "templateMatchID": "00064W-00008",
+  "templateMatchNumber": 8,
+  "matchWinnerGoesTo": "e7116bdc-2325-475f-81aa-4b0057d7b56f",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "$undefined",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": null,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Tue Apr 28 8:37 PM EDT",
+  "court": "CC",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/a0e44f1e-d7e3-47f6-a89f-c847220a8b53",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/VHkNpfd6?disablePlayNext%3Dfalse%26withErrors%3Dfalse&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "d2fcf758-b0e3-4be0-bad2-24ab3859e557",
+    "players": [
+     "Genie Erokhina",
+     "Elsie Hendershot"
+    ],
+    "seedNumber": 18,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 4,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "48aef8f9-49a4-4e0c-8fca-9b49de02fc36",
+    "players": [
+     "Kelly Goodnow",
+     "Ella Cosma"
+    ],
+    "seedNumber": 42,
+    "games": [
+     {
+      "score": 3,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 2,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 6,
+  "isAloneOnContext": true,
+  "position": "B"
+ },
+ {
+  "id": "d9986c4c-807f-49ef-8746-44f504037516",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-28T23:36:23Z",
+  "matchNumber": 5,
+  "templateMatchID": "00064W-00010",
+  "templateMatchNumber": 10,
+  "matchWinnerGoesTo": "21699f64-e786-4b3f-831a-eccbff3f235f",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "$undefined",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": null,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Tue Apr 28 7:17 PM EDT",
+  "court": "SC1",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/d9986c4c-807f-49ef-8746-44f504037516",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/wM3FWR9v?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "69b16a51-9a9f-4ea8-a73f-fb1ad3905376",
+    "players": [
+     "Lingwei Kong",
+     "Andrea Koop"
+    ],
+    "seedNumber": 25,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "3d71184e-e0cb-4e6d-9504-ceb05e7523f7",
+    "players": [
+     "Ava Ignatowich",
+     "Audrey Adele Brown"
+    ],
+    "seedNumber": 36,
+    "games": [
+     {
+      "score": 0,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 1,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 8,
+  "isAloneOnContext": true,
+  "position": "B"
+ },
+ {
+  "id": "0e44861c-5d62-452b-a763-ffae5d8b57eb",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T00:34:05Z",
+  "matchNumber": 6,
+  "templateMatchID": "00064W-00012",
+  "templateMatchNumber": 12,
+  "matchWinnerGoesTo": "2760daaf-1b27-4844-9a22-834df40c6a8d",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "$undefined",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": null,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Tue Apr 28 7:55 PM EDT",
+  "court": "SC2",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/0e44861c-5d62-452b-a763-ffae5d8b57eb",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/bslVJ0xS?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "2aeb48e9-97cc-47db-89a5-7db4272fbb02",
+    "players": [
+     "Isabella Dunlap",
+     "Nicole Conard"
+    ],
+    "seedNumber": 22,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "a9d5f0a7-f5a1-48dd-b72e-b1361f3a353a",
+    "players": [
+     "Aibika Kalsarieva",
+     "Kara Wheatley"
+    ],
+    "seedNumber": 45,
+    "games": [
+     {
+      "score": 7,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 6,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 10,
+  "isAloneOnContext": true,
+  "position": "B"
+ },
+ {
+  "id": "acc8b4ab-b33c-4a6b-901e-d81faae61cc1",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-28T23:39:54Z",
+  "matchNumber": 7,
+  "templateMatchID": "00064W-00014",
+  "templateMatchNumber": 14,
+  "matchWinnerGoesTo": "68b1b2d2-af1a-4745-be85-ce5252e58766",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "$undefined",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": null,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Tue Apr 28 6:54 PM EDT",
+  "court": "SC3",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/acc8b4ab-b33c-4a6b-901e-d81faae61cc1",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/LbobIj9X?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "4d35c66e-d4ff-45c6-ad82-eb2ca6d73d2f",
+    "players": [
+     "Chloe Igleski",
+     "Ella Yeh"
+    ],
+    "seedNumber": 28,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 12,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "957f2b33-c575-442c-b672-8b54ee30c59a",
+    "players": [
+     "Brooke Caruso",
+     "Ashley Griffith"
+    ],
+    "seedNumber": 34,
+    "games": [
+     {
+      "score": 9,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 10,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 12,
+  "isAloneOnContext": true,
+  "position": "B"
+ },
+ {
+  "id": "ebb92f24-9245-4471-88e8-75bb5a764199",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-28T23:26:23Z",
+  "matchNumber": 8,
+  "templateMatchID": "00064W-00016",
+  "templateMatchNumber": 16,
+  "matchWinnerGoesTo": "75a570d4-a301-4752-9d79-ea592de5e55d",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "$undefined",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": null,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Tue Apr 28 6:42 PM EDT",
+  "court": "SC4",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/ebb92f24-9245-4471-88e8-75bb5a764199",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/UnC1j58F?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "1cdb9846-cfc5-4e9a-a931-db8acf114f37",
+    "players": [
+     "Jalina Ingram",
+     "Kiora Kunimoto"
+    ],
+    "seedNumber": 19,
+    "games": [
+     {
+      "score": 6,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   },
+   {
+    "id": "295c2915-b7fd-4588-812d-0cfe3dae423f",
+    "players": [
+     "Mihae Kwon",
+     "Nok Yiu Tang"
+    ],
+    "seedNumber": 44,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 13,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 14,
+  "isAloneOnContext": true,
+  "position": "B"
+ },
+ {
+  "id": "77a08a86-a6d4-494c-891a-884d27017c43",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-28T23:35:25Z",
+  "matchNumber": 9,
+  "templateMatchID": "00064W-00018",
+  "templateMatchNumber": 18,
+  "matchWinnerGoesTo": "ca637f00-d613-4f8e-9025-64c36c6a0b53",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "$undefined",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": null,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Tue Apr 28 6:29 PM EDT",
+  "court": "SC5",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/77a08a86-a6d4-494c-891a-884d27017c43",
+   "liveURL": "https://youtube.com/live/7Yq6nAR373E?feature=share&t=16712",
+   "archivedURL": "https://youtube.com/live/7Yq6nAR373E?feature=share&t=16712",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/ppaSideCourts.png",
+   "serviceId": 13,
+   "serviceName": "PPA Streamed Courts"
+  },
+  "teams": [
+   {
+    "id": "a800c80c-53da-4d85-afb3-fdd2e6482432",
+    "players": [
+     "Abbigal Hatton",
+     "Allison Phillips"
+    ],
+    "seedNumber": 27,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 7,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "3d4e6712-5e44-4840-8d09-551d4fcf94b2",
+    "players": [
+     "Keilly Ulery",
+     "Jaeda Minniefield"
+    ],
+    "seedNumber": 39,
+    "games": [
+     {
+      "score": 5,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 9,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 16,
+  "isAloneOnContext": true,
+  "position": "B"
+ },
+ {
+  "id": "25ac8e7e-9b81-4563-b7e7-f0e98966b708",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T00:50:03Z",
+  "matchNumber": 10,
+  "templateMatchID": "00064W-00020",
+  "templateMatchNumber": 20,
+  "matchWinnerGoesTo": "ebd93e68-c178-4375-9c89-9277cac2f954",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "$undefined",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": null,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Tue Apr 28 8:19 PM EDT",
+  "court": "SC1",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/25ac8e7e-9b81-4563-b7e7-f0e98966b708",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/wM3FWR9v?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "72cfc512-b336-449f-a2bf-f82ca59aeed7",
+    "players": [
+     "Samantha Parker",
+     "Christa Gecheva"
+    ],
+    "seedNumber": 23,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "001900bf-2e2c-472d-b81e-025acbd97be6",
+    "players": [
+     "Helen To",
+     "Samantha Buyckx"
+    ],
+    "seedNumber": 47,
+    "games": [
+     {
+      "score": 2,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 5,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 18,
+  "isAloneOnContext": true,
+  "position": "B"
+ },
+ {
+  "id": "73a70d9d-7df0-4fe0-bb57-56fb466b2d4b",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T01:23:48Z",
+  "matchNumber": 11,
+  "templateMatchID": "00064W-00022",
+  "templateMatchNumber": 22,
+  "matchWinnerGoesTo": "13c99443-065a-4275-ba4e-da78157e7e1b",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "$undefined",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": null,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Tue Apr 28 8:49 PM EDT",
+  "court": "GS",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/73a70d9d-7df0-4fe0-bb57-56fb466b2d4b",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/4Ydq4SVJ?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "48eeb15a-5c43-407c-a549-ae4738dc88c9",
+    "players": [
+     "Tamaryn Emmrich",
+     "Ewa Radzikowska"
+    ],
+    "seedNumber": 30,
+    "games": [
+     {
+      "score": 15,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "4fd3008d-9669-45ea-8a88-4b9412b9422a",
+    "players": [
+     "Cleo Bond",
+     "Giovanna Morelli"
+    ],
+    "seedNumber": 37,
+    "games": [
+     {
+      "score": 13,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 8,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 20,
+  "isAloneOnContext": true,
+  "position": "B"
+ },
+ {
+  "id": "07f97729-163a-4774-bf81-0e9cad45c232",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-28T23:53:36Z",
+  "matchNumber": 12,
+  "templateMatchID": "00064W-00024",
+  "templateMatchNumber": 24,
+  "matchWinnerGoesTo": "ffd80104-2cb2-475b-9394-a82f725166ad",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "$undefined",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": null,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Tue Apr 28 7:03 PM EDT",
+  "court": "SC6",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/07f97729-163a-4774-bf81-0e9cad45c232",
+   "liveURL": "https://youtube.com/live/T29m-hTMuZM?feature=share&t=18593",
+   "archivedURL": "https://youtube.com/live/T29m-hTMuZM?feature=share&t=18593",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/ppaSideCourts.png",
+   "serviceId": 13,
+   "serviceName": "PPA Streamed Courts"
+  },
+  "teams": [
+   {
+    "id": "09be64de-c377-46a3-9f19-b9a458a7e62f",
+    "players": [
+     "Paula Rives",
+     "Mya Bui"
+    ],
+    "seedNumber": 24,
+    "games": [
+     {
+      "score": 14,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "a79c4987-a8f5-472e-b348-d076c5d10781",
+    "players": [
+     "Alexa Schull",
+     "Ava Cavataio"
+    ],
+    "seedNumber": 43,
+    "games": [
+     {
+      "score": 12,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 3,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 22,
+  "isAloneOnContext": true,
+  "position": "B"
+ },
+ {
+  "id": "18a9b2ec-cc62-4017-9399-c16dd0f56fd9",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T00:00:43Z",
+  "matchNumber": 13,
+  "templateMatchID": "00064W-00026",
+  "templateMatchNumber": 26,
+  "matchWinnerGoesTo": "94eef83a-f459-4e09-97b4-b2148174a1ca",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "$undefined",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": null,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Tue Apr 28 7:36 PM EDT",
+  "court": "SC7",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/18a9b2ec-cc62-4017-9399-c16dd0f56fd9",
+   "liveURL": "https://youtube.com/live/YB2MapOw9pc?feature=share&t=20696",
+   "archivedURL": "https://youtube.com/live/YB2MapOw9pc?feature=share&t=20696",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/ppaSideCourts.png",
+   "serviceId": 13,
+   "serviceName": "PPA Streamed Courts"
+  },
+  "teams": [
+   {
+    "id": "2e678aed-b12a-4648-baea-5a1a2caca317",
+    "players": [
+     "Layne Sleeth",
+     "Victoria DiMuzio"
+    ],
+    "seedNumber": 29,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "cf0e208c-8580-4eda-948b-e432de727628",
+    "players": [
+     "Rachel Rettger",
+     "Camila Zilveti"
+    ],
+    "seedNumber": 38,
+    "games": [
+     {
+      "score": 0,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 1,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 24,
+  "isAloneOnContext": true,
+  "position": "B"
+ },
+ {
+  "id": "59eec7d2-ffb8-4542-bce9-47aff494dbd7",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T01:29:57Z",
+  "matchNumber": 14,
+  "templateMatchID": "00064W-00028",
+  "templateMatchNumber": 28,
+  "matchWinnerGoesTo": "9b7e210d-7aa8-46b1-ac0b-80c5b1409c9a",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "$undefined",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": null,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Tue Apr 28 8:39 PM EDT",
+  "court": "SC2",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/59eec7d2-ffb8-4542-bce9-47aff494dbd7",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/bslVJ0xS?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "a6335543-3ac6-4b8f-bf29-009458637aa5",
+    "players": [
+     "Alex Walker",
+     "Lauren Stratman"
+    ],
+    "seedNumber": 17,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "0d7f2f98-ba83-4f10-8d4a-775ea8185f03",
+    "players": [
+     "Anne-Sophie Courteau",
+     "Maria Klokotzky"
+    ],
+    "seedNumber": 46,
+    "games": [
+     {
+      "score": 8,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 6,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 26,
+  "isAloneOnContext": true,
+  "position": "B"
+ },
+ {
+  "id": "575da6d1-cb3c-4578-bdcc-bf4cbbc74a34",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-28T22:37:05Z",
+  "matchNumber": 15,
+  "templateMatchID": "00064W-00030",
+  "templateMatchNumber": 30,
+  "matchWinnerGoesTo": "70043784-1580-4d1c-abab-3c92d1bc28c2",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "$undefined",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": null,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Tue Apr 28 6:08 PM EDT",
+  "court": "SC8",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/575da6d1-cb3c-4578-bdcc-bf4cbbc74a34",
+   "liveURL": "https://youtube.com/live/BORIC5AYaZo?feature=share&t=15057",
+   "archivedURL": "https://youtube.com/live/BORIC5AYaZo?feature=share&t=15057",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/ppaSideCourts.png",
+   "serviceId": 13,
+   "serviceName": "PPA Streamed Courts"
+  },
+  "teams": [
+   {
+    "id": "d625f085-2cf7-4625-95f6-34eec5ef5721",
+    "players": [
+     "Hannah Blatt",
+     "Olivia McMillan"
+    ],
+    "seedNumber": 26,
+    "games": [
+     {
+      "score": 0,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 6,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   },
+   {
+    "id": "5ac9e04f-1ecd-4e94-aa10-bf660aa1bd18",
+    "players": [
+     "Aiko Yoshitomi",
+     "Estee Widdershoven"
+    ],
+    "seedNumber": 35,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 28,
+  "isAloneOnContext": true,
+  "position": "B"
+ },
+ {
+  "id": "2152bd66-6ad4-46af-86d4-bdf96857f0c9",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-28T22:40:44Z",
+  "matchNumber": 16,
+  "templateMatchID": "00064W-00032",
+  "templateMatchNumber": 32,
+  "matchWinnerGoesTo": "2f563adc-d8f4-487d-8ed4-0abdfd9ee35d",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "$undefined",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": null,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Tue Apr 28 6:10 PM EDT",
+  "court": "23",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/2152bd66-6ad4-46af-86d4-bdf96857f0c9",
+   "liveURL": "https://youtube.com/live/BAo-FyKzLBM?feature=share&t=15011",
+   "archivedURL": "https://youtube.com/live/BAo-FyKzLBM?feature=share&t=15011",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/ppaSideCourts.png",
+   "serviceId": 13,
+   "serviceName": "PPA Streamed Courts"
+  },
+  "teams": [
+   {
+    "id": "57c8719c-7873-4f1e-909b-0c530b6eeaf0",
+    "players": [
+     "Zoey Weil",
+     "Pierina Imparato"
+    ],
+    "seedNumber": 21,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "0f30f31d-70f3-40f1-909c-08e24741ce69",
+    "players": [
+     "Valerie R Simon",
+     "Victoria Simon"
+    ],
+    "seedNumber": 41,
+    "games": [
+     {
+      "score": 6,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 0,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 30,
+  "isAloneOnContext": true,
+  "position": "B"
+ },
+ {
+  "id": "a8d59528-e846-478d-b61f-92d078ecd8b1",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T18:48:54Z",
+  "matchNumber": 17,
+  "templateMatchID": "00032W-00001",
+  "templateMatchNumber": 1,
+  "matchWinnerGoesTo": "0c91247b-bbce-4ee3-a6ad-0ec2fd7f4717",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "5b9f76fe-0bcf-4d55-8fdd-c0ec639f4886",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": 1,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Wed Apr 29 2:20 PM EDT",
+  "court": "CC",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/a8d59528-e846-478d-b61f-92d078ecd8b1",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/VHkNpfd6?disablePlayNext%3Dfalse%26withErrors%3Dfalse&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "f08c2f85-4d94-4708-a15f-b0f2b1a029b3",
+    "players": [
+     "Anna Bright",
+     "Anna Leigh Waters"
+    ],
+    "seedNumber": 1,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "703a382f-d648-493b-927c-bbd46bc90172",
+    "players": [
+     "Xiao Yi Wang-Beckvall",
+     "Albie Huang"
+    ],
+    "seedNumber": 32,
+    "games": [
+     {
+      "score": 2,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 0,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 0
+ },
+ {
+  "id": "9f264577-1168-43f6-b632-3406279d523f",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T20:27:33Z",
+  "matchNumber": 18,
+  "templateMatchID": "00032W-00002",
+  "templateMatchNumber": 2,
+  "matchWinnerGoesTo": "0c91247b-bbce-4ee3-a6ad-0ec2fd7f4717",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "2c56746a-2da6-4eed-b7fe-1699da413e0a",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": 2,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Wed Apr 29 3:43 PM EDT",
+  "court": "SC3",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/9f264577-1168-43f6-b632-3406279d523f",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/8G7we6L8?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "512a20f0-86ed-4c9f-8591-04d52c3ab642",
+    "players": [
+     "Brooke Buckner",
+     "Milan Rane"
+    ],
+    "seedNumber": 13,
+    "games": [
+     {
+      "score": 12,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "9d3035f6-d470-436e-875e-331ac1ce3e02",
+    "players": [
+     "Lina Padegimaite",
+     "Zoeya Khan"
+    ],
+    "seedNumber": 20,
+    "games": [
+     {
+      "score": 10,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 3,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 0
+ },
+ {
+  "id": "de6bab68-1d14-47d8-b1eb-8b0afb491e94",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T19:54:25Z",
+  "matchNumber": 19,
+  "templateMatchID": "00032W-00003",
+  "templateMatchNumber": 3,
+  "matchWinnerGoesTo": "7b84e593-f868-4651-a8ad-bfe563f2e506",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "0106c0db-dc23-4716-8528-01876688d868",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": 3,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Wed Apr 29 3:32 PM EDT",
+  "court": "SC2",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/de6bab68-1d14-47d8-b1eb-8b0afb491e94",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/84gfmONQ?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "896d2212-846d-4a24-b143-004740531a31",
+    "players": [
+     "Jackie Kawamoto",
+     "Jade Kawamoto"
+    ],
+    "seedNumber": 5,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "4a852708-0a67-43f0-81a9-8e6d220f166f",
+    "players": [
+     "Martina Frantova",
+     "Mehvish Safdar"
+    ],
+    "seedNumber": 31,
+    "games": [
+     {
+      "score": 1,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 0,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 2
+ },
+ {
+  "id": "e7116bdc-2325-475f-81aa-4b0057d7b56f",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T21:42:51Z",
+  "matchNumber": 20,
+  "templateMatchID": "00032W-00004",
+  "templateMatchNumber": 4,
+  "matchWinnerGoesTo": "7b84e593-f868-4651-a8ad-bfe563f2e506",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "a0e44f1e-d7e3-47f6-a89f-c847220a8b53",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": 4,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Wed Apr 29 4:50 PM EDT",
+  "court": "SC2",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/e7116bdc-2325-475f-81aa-4b0057d7b56f",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/84gfmONQ?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "aa576366-2876-463b-94f9-20af3fd7f616",
+    "players": [
+     "Lea Jansen",
+     "Callie Smith"
+    ],
+    "seedNumber": 10,
+    "games": [
+     {
+      "score": 8,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "d2fcf758-b0e3-4be0-bad2-24ab3859e557",
+    "players": [
+     "Genie Erokhina",
+     "Elsie Hendershot"
+    ],
+    "seedNumber": 18,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 1,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 9,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 2
+ },
+ {
+  "id": "21699f64-e786-4b3f-831a-eccbff3f235f",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T22:32:50Z",
+  "matchNumber": 21,
+  "templateMatchID": "00032W-00005",
+  "templateMatchNumber": 5,
+  "matchWinnerGoesTo": "04b98d93-09a3-4a28-ae4e-1664d36256a3",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "d9986c4c-807f-49ef-8746-44f504037516",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": 5,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Wed Apr 29 6:00 PM EDT",
+  "court": "SC3",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/21699f64-e786-4b3f-831a-eccbff3f235f",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/8G7we6L8?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "b79daa6c-caec-4508-a54a-cabdb6f7b865",
+    "players": [
+     "Rachel Rohrabacher",
+     "Catherine Parenteau"
+    ],
+    "seedNumber": 3,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "69b16a51-9a9f-4ea8-a73f-fb1ad3905376",
+    "players": [
+     "Lingwei Kong",
+     "Andrea Koop"
+    ],
+    "seedNumber": 25,
+    "games": [
+     {
+      "score": 2,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 5,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 4
+ },
+ {
+  "id": "2760daaf-1b27-4844-9a22-834df40c6a8d",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T21:10:55Z",
+  "matchNumber": 22,
+  "templateMatchID": "00032W-00006",
+  "templateMatchNumber": 6,
+  "matchWinnerGoesTo": "04b98d93-09a3-4a28-ae4e-1664d36256a3",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "0e44861c-5d62-452b-a763-ffae5d8b57eb",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": 6,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Wed Apr 29 4:01 PM EDT",
+  "court": "SC4",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/2760daaf-1b27-4844-9a22-834df40c6a8d",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/caKRfYeE?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "d5d036f3-b98b-4498-87c6-3fe5c442583d",
+    "players": [
+     "Danni-Elle Townsend",
+     "Sahra Dennehy"
+    ],
+    "seedNumber": 16,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 12,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "2aeb48e9-97cc-47db-89a5-7db4272fbb02",
+    "players": [
+     "Isabella Dunlap",
+     "Nicole Conard"
+    ],
+    "seedNumber": 22,
+    "games": [
+     {
+      "score": 9,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 10,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 4
+ },
+ {
+  "id": "68b1b2d2-af1a-4745-be85-ce5252e58766",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T22:37:41Z",
+  "matchNumber": 23,
+  "templateMatchID": "00032W-00007",
+  "templateMatchNumber": 7,
+  "matchWinnerGoesTo": "4cdbba28-cfb3-4b0a-8ca1-66360b5b8cf4",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "acc8b4ab-b33c-4a6b-901e-d81faae61cc1",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": 7,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Wed Apr 29 6:02 PM EDT",
+  "court": "SC6",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/68b1b2d2-af1a-4745-be85-ce5252e58766",
+   "liveURL": "",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "",
+   "serviceId": 0,
+   "serviceName": ""
+  },
+  "teams": [
+   {
+    "id": "88c824c6-85c1-4b49-82e2-e9ee9e82fa40",
+    "players": [
+     "Lacy Schneemann",
+     "Etta Tuionetoa"
+    ],
+    "seedNumber": 7,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "4d35c66e-d4ff-45c6-ad82-eb2ca6d73d2f",
+    "players": [
+     "Chloe Igleski",
+     "Ella Yeh"
+    ],
+    "seedNumber": 28,
+    "games": [
+     {
+      "score": 0,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 8,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 6
+ },
+ {
+  "id": "75a570d4-a301-4752-9d79-ea592de5e55d",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T20:32:08Z",
+  "matchNumber": 24,
+  "templateMatchID": "00032W-00008",
+  "templateMatchNumber": 8,
+  "matchWinnerGoesTo": "4cdbba28-cfb3-4b0a-8ca1-66360b5b8cf4",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "ebb92f24-9245-4471-88e8-75bb5a764199",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": 8,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Wed Apr 29 3:32 PM EDT",
+  "court": "SC6",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/75a570d4-a301-4752-9d79-ea592de5e55d",
+   "liveURL": "",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "",
+   "serviceId": 0,
+   "serviceName": ""
+  },
+  "teams": [
+   {
+    "id": "62a0d5de-9770-4169-ac8a-1e6e9ff7deeb",
+    "players": [
+     "Kaitlyn Christian",
+     "Lucy Kovalova"
+    ],
+    "seedNumber": 11,
+    "games": [
+     {
+      "score": 8,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 8,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   },
+   {
+    "id": "295c2915-b7fd-4588-812d-0cfe3dae423f",
+    "players": [
+     "Mihae Kwon",
+     "Nok Yiu Tang"
+    ],
+    "seedNumber": 44,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 0,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 6
+ },
+ {
+  "id": "ca637f00-d613-4f8e-9025-64c36c6a0b53",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T20:42:46Z",
+  "matchNumber": 25,
+  "templateMatchID": "00032W-00009",
+  "templateMatchNumber": 9,
+  "matchWinnerGoesTo": "9588fe3f-3d45-4f3b-9ba2-aeb1b2a69664",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "77a08a86-a6d4-494c-891a-884d27017c43",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": 9,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Wed Apr 29 4:09 PM EDT",
+  "court": "CC",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/ca637f00-d613-4f8e-9025-64c36c6a0b53",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/VHkNpfd6?disablePlayNext%3Dfalse%26withErrors%3Dfalse&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "77689c86-8d82-4032-a818-fbeaf0aa6a29",
+    "players": [
+     "Jorja Johnson",
+     "Tyra Hurricane Black"
+    ],
+    "seedNumber": 2,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "a800c80c-53da-4d85-afb3-fdd2e6482432",
+    "players": [
+     "Abbigal Hatton",
+     "Allison Phillips"
+    ],
+    "seedNumber": 27,
+    "games": [
+     {
+      "score": 7,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 0,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 8
+ },
+ {
+  "id": "ebd93e68-c178-4375-9c89-9277cac2f954",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T20:51:20Z",
+  "matchNumber": 26,
+  "templateMatchID": "00032W-00010",
+  "templateMatchNumber": 10,
+  "matchWinnerGoesTo": "9588fe3f-3d45-4f3b-9ba2-aeb1b2a69664",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "25ac8e7e-9b81-4563-b7e7-f0e98966b708",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": 10,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Wed Apr 29 4:10 PM EDT",
+  "court": "GS",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/ebd93e68-c178-4375-9c89-9277cac2f954",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/enJfxLnd?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "47a2b1ad-e4f7-4329-8fd8-61a0c9953e0e",
+    "players": [
+     "Jessie Irvine",
+     "Judit Castillo"
+    ],
+    "seedNumber": 14,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "72cfc512-b336-449f-a2bf-f82ca59aeed7",
+    "players": [
+     "Samantha Parker",
+     "Christa Gecheva"
+    ],
+    "seedNumber": 23,
+    "games": [
+     {
+      "score": 0,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 8,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 8
+ },
+ {
+  "id": "13c99443-065a-4275-ba4e-da78157e7e1b",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T22:33:50Z",
+  "matchNumber": 27,
+  "templateMatchID": "00032W-00011",
+  "templateMatchNumber": 11,
+  "matchWinnerGoesTo": "a06dbe0c-3cc5-4a24-aaf2-ded9410e5f1b",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "73a70d9d-7df0-4fe0-bb57-56fb466b2d4b",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": 11,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Wed Apr 29 5:27 PM EDT",
+  "court": "SC1",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/13c99443-065a-4275-ba4e-da78157e7e1b",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/1M6TMbd9?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "2012ac5d-ec68-45f7-9395-37f9c9cf7355",
+    "players": [
+     "Tina Pisnik",
+     "Meghan Dizon"
+    ],
+    "seedNumber": 6,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 8,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "48eeb15a-5c43-407c-a549-ae4738dc88c9",
+    "players": [
+     "Tamaryn Emmrich",
+     "Ewa Radzikowska"
+    ],
+    "seedNumber": 30,
+    "games": [
+     {
+      "score": 6,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 3,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 10
+ },
+ {
+  "id": "ffd80104-2cb2-475b-9394-a82f725166ad",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T20:34:26Z",
+  "matchNumber": 28,
+  "templateMatchID": "00032W-00012",
+  "templateMatchNumber": 12,
+  "matchWinnerGoesTo": "a06dbe0c-3cc5-4a24-aaf2-ded9410e5f1b",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "07f97729-163a-4774-bf81-0e9cad45c232",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": 12,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Wed Apr 29 3:42 PM EDT",
+  "court": "SC1",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/ffd80104-2cb2-475b-9394-a82f725166ad",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/1M6TMbd9?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "74c19336-b87b-4f79-82ca-8b1e317aec4f",
+    "players": [
+     "Allyce Jones",
+     "Ting Chieh Wei"
+    ],
+    "seedNumber": 9,
+    "games": [
+     {
+      "score": 12,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 12,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "09be64de-c377-46a3-9f19-b9a458a7e62f",
+    "players": [
+     "Paula Rives",
+     "Mya Bui"
+    ],
+    "seedNumber": 24,
+    "games": [
+     {
+      "score": 10,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 10,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 10
+ },
+ {
+  "id": "94eef83a-f459-4e09-97b4-b2148174a1ca",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T19:34:45Z",
+  "matchNumber": 29,
+  "templateMatchID": "00032W-00013",
+  "templateMatchNumber": 13,
+  "matchWinnerGoesTo": "79ceed1a-1dc4-43a6-b685-1e915a55462d",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "18a9b2ec-cc62-4017-9399-c16dd0f56fd9",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": 13,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Wed Apr 29 2:59 PM EDT",
+  "court": "GS",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/94eef83a-f459-4e09-97b4-b2148174a1ca",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/enJfxLnd?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "5238bbc7-04fa-4b50-9c4c-58e1ae91e0c7",
+    "players": [
+     "Kate Fahey",
+     "Parris Todd"
+    ],
+    "seedNumber": 4,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "2e678aed-b12a-4648-baea-5a1a2caca317",
+    "players": [
+     "Layne Sleeth",
+     "Victoria DiMuzio"
+    ],
+    "seedNumber": 29,
+    "games": [
+     {
+      "score": 2,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 3,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 12
+ },
+ {
+  "id": "9b7e210d-7aa8-46b1-ac0b-80c5b1409c9a",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T22:22:26Z",
+  "matchNumber": 30,
+  "templateMatchID": "00032W-00014",
+  "templateMatchNumber": 14,
+  "matchWinnerGoesTo": "79ceed1a-1dc4-43a6-b685-1e915a55462d",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "59eec7d2-ffb8-4542-bce9-47aff494dbd7",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": 14,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Wed Apr 29 5:21 PM EDT",
+  "court": "SC4",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/9b7e210d-7aa8-46b1-ac0b-80c5b1409c9a",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/caKRfYeE?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "37f595ec-1b25-489c-9753-d1da30ce4056",
+    "players": [
+     "Angie Walker",
+     "Cailyn Campbell"
+    ],
+    "seedNumber": 15,
+    "games": [
+     {
+      "score": 9,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 9,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   },
+   {
+    "id": "a6335543-3ac6-4b8f-bf29-009458637aa5",
+    "players": [
+     "Alex Walker",
+     "Lauren Stratman"
+    ],
+    "seedNumber": 17,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 12
+ },
+ {
+  "id": "70043784-1580-4d1c-abab-3c92d1bc28c2",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T21:36:27Z",
+  "matchNumber": 31,
+  "templateMatchID": "00032W-00015",
+  "templateMatchNumber": 15,
+  "matchWinnerGoesTo": "80da2bd9-9a2d-404c-a941-04559108356f",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "575da6d1-cb3c-4578-bdcc-bf4cbbc74a34",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": 15,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Wed Apr 29 5:01 PM EDT",
+  "court": "SC5",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/70043784-1580-4d1c-abab-3c92d1bc28c2",
+   "liveURL": "https://youtube.com/live/jxd_1ET9iyY?feature=share&t=23928",
+   "archivedURL": "https://youtube.com/live/jxd_1ET9iyY?feature=share&t=23928",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/ppaSideCourts.png",
+   "serviceId": 13,
+   "serviceName": "PPA Streamed Courts"
+  },
+  "teams": [
+   {
+    "id": "878070a7-cab4-4d1e-a9ae-e8ddbe5bf8b3",
+    "players": [
+     "Alix Truong",
+     "Chao Yi Wang"
+    ],
+    "seedNumber": 8,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "5ac9e04f-1ecd-4e94-aa10-bf660aa1bd18",
+    "players": [
+     "Aiko Yoshitomi",
+     "Estee Widdershoven"
+    ],
+    "seedNumber": 35,
+    "games": [
+     {
+      "score": 6,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 3,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 14
+ },
+ {
+  "id": "2f563adc-d8f4-487d-8ed4-0abdfd9ee35d",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-29T19:57:48Z",
+  "matchNumber": 32,
+  "templateMatchID": "00032W-00016",
+  "templateMatchNumber": 16,
+  "matchWinnerGoesTo": "80da2bd9-9a2d-404c-a941-04559108356f",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "$undefined",
+  "matchTeamTwoComesFrom": "2152bd66-6ad4-46af-86d4-bdf96857f0c9",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": null,
+  "displayMatchNumberTeamTwoComesFrom": 16,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Wed Apr 29 3:27 PM EDT",
+  "court": "SC5",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/2f563adc-d8f4-487d-8ed4-0abdfd9ee35d",
+   "liveURL": "https://youtube.com/live/jxd_1ET9iyY?feature=share&t=18570",
+   "archivedURL": "https://youtube.com/live/jxd_1ET9iyY?feature=share&t=18570",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/ppaSideCourts.png",
+   "serviceId": 13,
+   "serviceName": "PPA Streamed Courts"
+  },
+  "teams": [
+   {
+    "id": "a67fd2ef-0ba6-4cc6-970a-b94bc4d66ed5",
+    "players": [
+     "Mari Humberg",
+     "Liz Truluck"
+    ],
+    "seedNumber": 12,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "57c8719c-7873-4f1e-909b-0c530b6eeaf0",
+    "players": [
+     "Zoey Weil",
+     "Pierina Imparato"
+    ],
+    "seedNumber": 21,
+    "games": [
+     {
+      "score": 1,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 5,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 14
+ },
+ {
+  "id": "0c91247b-bbce-4ee3-a6ad-0ec2fd7f4717",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-30T20:43:50Z",
+  "matchNumber": 33,
+  "templateMatchID": "00016W-00001",
+  "templateMatchNumber": 1,
+  "matchWinnerGoesTo": "6296b3fa-18a1-4e89-b2e5-dda0d28e13d5",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "a8d59528-e846-478d-b61f-92d078ecd8b1",
+  "matchTeamTwoComesFrom": "9f264577-1168-43f6-b632-3406279d523f",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": 17,
+  "displayMatchNumberTeamTwoComesFrom": 18,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Thu Apr 30 3:53 PM EDT",
+  "court": "GS",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/0c91247b-bbce-4ee3-a6ad-0ec2fd7f4717",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/qvJT9VEn?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "f08c2f85-4d94-4708-a15f-b0f2b1a029b3",
+    "players": [
+     "Anna Bright",
+     "Anna Leigh Waters"
+    ],
+    "seedNumber": 1,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "512a20f0-86ed-4c9f-8591-04d52c3ab642",
+    "players": [
+     "Brooke Buckner",
+     "Milan Rane"
+    ],
+    "seedNumber": 13,
+    "games": [
+     {
+      "score": 6,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 7,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 0
+ },
+ {
+  "id": "7b84e593-f868-4651-a8ad-bfe563f2e506",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-30T19:41:12Z",
+  "matchNumber": 34,
+  "templateMatchID": "00016W-00002",
+  "templateMatchNumber": 2,
+  "matchWinnerGoesTo": "6296b3fa-18a1-4e89-b2e5-dda0d28e13d5",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "de6bab68-1d14-47d8-b1eb-8b0afb491e94",
+  "matchTeamTwoComesFrom": "e7116bdc-2325-475f-81aa-4b0057d7b56f",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": 19,
+  "displayMatchNumberTeamTwoComesFrom": 20,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Thu Apr 30 2:59 PM EDT",
+  "court": "SC2",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/7b84e593-f868-4651-a8ad-bfe563f2e506",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/gMXMlHcj?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "896d2212-846d-4a24-b143-004740531a31",
+    "players": [
+     "Jackie Kawamoto",
+     "Jade Kawamoto"
+    ],
+    "seedNumber": 5,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "aa576366-2876-463b-94f9-20af3fd7f616",
+    "players": [
+     "Lea Jansen",
+     "Callie Smith"
+    ],
+    "seedNumber": 10,
+    "games": [
+     {
+      "score": 3,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 2,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 0
+ },
+ {
+  "id": "04b98d93-09a3-4a28-ae4e-1664d36256a3",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-30T20:40:01Z",
+  "matchNumber": 35,
+  "templateMatchID": "00016W-00003",
+  "templateMatchNumber": 3,
+  "matchWinnerGoesTo": "7d8b419f-f8c5-4e4b-98b0-a3ed7f61b798",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "21699f64-e786-4b3f-831a-eccbff3f235f",
+  "matchTeamTwoComesFrom": "2760daaf-1b27-4844-9a22-834df40c6a8d",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": 21,
+  "displayMatchNumberTeamTwoComesFrom": 22,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Thu Apr 30 4:10 PM EDT",
+  "court": "CC",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/04b98d93-09a3-4a28-ae4e-1664d36256a3",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/VHkNpfd6?disablePlayNext%3Dfalse%26withErrors%3Dfalse&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "b79daa6c-caec-4508-a54a-cabdb6f7b865",
+    "players": [
+     "Rachel Rohrabacher",
+     "Catherine Parenteau"
+    ],
+    "seedNumber": 3,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "d5d036f3-b98b-4498-87c6-3fe5c442583d",
+    "players": [
+     "Danni-Elle Townsend",
+     "Sahra Dennehy"
+    ],
+    "seedNumber": 16,
+    "games": [
+     {
+      "score": 0,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 4,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 2
+ },
+ {
+  "id": "4cdbba28-cfb3-4b0a-8ca1-66360b5b8cf4",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-30T21:30:35Z",
+  "matchNumber": 36,
+  "templateMatchID": "00016W-00004",
+  "templateMatchNumber": 4,
+  "matchWinnerGoesTo": "7d8b419f-f8c5-4e4b-98b0-a3ed7f61b798",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "68b1b2d2-af1a-4745-be85-ce5252e58766",
+  "matchTeamTwoComesFrom": "75a570d4-a301-4752-9d79-ea592de5e55d",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": 23,
+  "displayMatchNumberTeamTwoComesFrom": 24,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Thu Apr 30 4:48 PM EDT",
+  "court": "SC1",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/4cdbba28-cfb3-4b0a-8ca1-66360b5b8cf4",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/6kbO5dNS?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "88c824c6-85c1-4b49-82e2-e9ee9e82fa40",
+    "players": [
+     "Lacy Schneemann",
+     "Etta Tuionetoa"
+    ],
+    "seedNumber": 7,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "295c2915-b7fd-4588-812d-0cfe3dae423f",
+    "players": [
+     "Mihae Kwon",
+     "Nok Yiu Tang"
+    ],
+    "seedNumber": 44,
+    "games": [
+     {
+      "score": 6,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 8,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 2
+ },
+ {
+  "id": "9588fe3f-3d45-4f3b-9ba2-aeb1b2a69664",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-30T22:32:38Z",
+  "matchNumber": 37,
+  "templateMatchID": "00016W-00005",
+  "templateMatchNumber": 5,
+  "matchWinnerGoesTo": "5aa8dafc-132d-4479-931e-730b3ea40bb7",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "ca637f00-d613-4f8e-9025-64c36c6a0b53",
+  "matchTeamTwoComesFrom": "ebd93e68-c178-4375-9c89-9277cac2f954",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": 25,
+  "displayMatchNumberTeamTwoComesFrom": 26,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Thu Apr 30 5:58 PM EDT",
+  "court": "CC",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/9588fe3f-3d45-4f3b-9ba2-aeb1b2a69664",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/VHkNpfd6?disablePlayNext%3Dfalse%26withErrors%3Dfalse&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "77689c86-8d82-4032-a818-fbeaf0aa6a29",
+    "players": [
+     "Jorja Johnson",
+     "Tyra Hurricane Black"
+    ],
+    "seedNumber": 2,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "47a2b1ad-e4f7-4329-8fd8-61a0c9953e0e",
+    "players": [
+     "Jessie Irvine",
+     "Judit Castillo"
+    ],
+    "seedNumber": 14,
+    "games": [
+     {
+      "score": 4,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 6,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 4
+ },
+ {
+  "id": "a06dbe0c-3cc5-4a24-aaf2-ded9410e5f1b",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-30T21:30:50Z",
+  "matchNumber": 38,
+  "templateMatchID": "00016W-00006",
+  "templateMatchNumber": 6,
+  "matchWinnerGoesTo": "5aa8dafc-132d-4479-931e-730b3ea40bb7",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "13c99443-065a-4275-ba4e-da78157e7e1b",
+  "matchTeamTwoComesFrom": "ffd80104-2cb2-475b-9394-a82f725166ad",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": 27,
+  "displayMatchNumberTeamTwoComesFrom": 28,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Thu Apr 30 4:58 PM EDT",
+  "court": "SC2",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/a06dbe0c-3cc5-4a24-aaf2-ded9410e5f1b",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/gMXMlHcj?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "2012ac5d-ec68-45f7-9395-37f9c9cf7355",
+    "players": [
+     "Tina Pisnik",
+     "Meghan Dizon"
+    ],
+    "seedNumber": 6,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "74c19336-b87b-4f79-82ca-8b1e317aec4f",
+    "players": [
+     "Allyce Jones",
+     "Ting Chieh Wei"
+    ],
+    "seedNumber": 9,
+    "games": [
+     {
+      "score": 7,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 1,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 4
+ },
+ {
+  "id": "79ceed1a-1dc4-43a6-b685-1e915a55462d",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-30T22:32:44Z",
+  "matchNumber": 39,
+  "templateMatchID": "00016W-00007",
+  "templateMatchNumber": 7,
+  "matchWinnerGoesTo": "3beb9a25-3c6e-43b7-a647-899947ba43ae",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "94eef83a-f459-4e09-97b4-b2148174a1ca",
+  "matchTeamTwoComesFrom": "9b7e210d-7aa8-46b1-ac0b-80c5b1409c9a",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": 29,
+  "displayMatchNumberTeamTwoComesFrom": 30,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Thu Apr 30 5:44 PM EDT",
+  "court": "GS",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/79ceed1a-1dc4-43a6-b685-1e915a55462d",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/qvJT9VEn?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "5238bbc7-04fa-4b50-9c4c-58e1ae91e0c7",
+    "players": [
+     "Kate Fahey",
+     "Parris Todd"
+    ],
+    "seedNumber": 4,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "a6335543-3ac6-4b8f-bf29-009458637aa5",
+    "players": [
+     "Alex Walker",
+     "Lauren Stratman"
+    ],
+    "seedNumber": 17,
+    "games": [
+     {
+      "score": 0,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 5,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 6
+ },
+ {
+  "id": "80da2bd9-9a2d-404c-a941-04559108356f",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-04-30T22:54:40Z",
+  "matchNumber": 40,
+  "templateMatchID": "00016W-00008",
+  "templateMatchNumber": 8,
+  "matchWinnerGoesTo": "3beb9a25-3c6e-43b7-a647-899947ba43ae",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "70043784-1580-4d1c-abab-3c92d1bc28c2",
+  "matchTeamTwoComesFrom": "2f563adc-d8f4-487d-8ed4-0abdfd9ee35d",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": 31,
+  "displayMatchNumberTeamTwoComesFrom": 32,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Thu Apr 30 6:20 PM EDT",
+  "court": "SC1",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/80da2bd9-9a2d-404c-a941-04559108356f",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/6kbO5dNS?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "878070a7-cab4-4d1e-a9ae-e8ddbe5bf8b3",
+    "players": [
+     "Alix Truong",
+     "Chao Yi Wang"
+    ],
+    "seedNumber": 8,
+    "games": [
+     {
+      "score": 1,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 9,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   },
+   {
+    "id": "a67fd2ef-0ba6-4cc6-970a-b94bc4d66ed5",
+    "players": [
+     "Mari Humberg",
+     "Liz Truluck"
+    ],
+    "seedNumber": 12,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 6
+ },
+ {
+  "id": "6296b3fa-18a1-4e89-b2e5-dda0d28e13d5",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-05-01T20:54:35Z",
+  "matchNumber": 41,
+  "templateMatchID": "00008W-00001",
+  "templateMatchNumber": 1,
+  "matchWinnerGoesTo": "b951bcfb-5a86-4490-9609-1cfc2672c20d",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "0c91247b-bbce-4ee3-a6ad-0ec2fd7f4717",
+  "matchTeamTwoComesFrom": "7b84e593-f868-4651-a8ad-bfe563f2e506",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": 33,
+  "displayMatchNumberTeamTwoComesFrom": 34,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Fri May 1 4:18 PM EDT",
+  "court": "CC",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/6296b3fa-18a1-4e89-b2e5-dda0d28e13d5",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/VHkNpfd6?disablePlayNext%3Dfalse%26withErrors%3Dfalse&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "f08c2f85-4d94-4708-a15f-b0f2b1a029b3",
+    "players": [
+     "Anna Bright",
+     "Anna Leigh Waters"
+    ],
+    "seedNumber": 1,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "896d2212-846d-4a24-b143-004740531a31",
+    "players": [
+     "Jackie Kawamoto",
+     "Jade Kawamoto"
+    ],
+    "seedNumber": 5,
+    "games": [
+     {
+      "score": 3,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 2,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 0
+ },
+ {
+  "id": "7d8b419f-f8c5-4e4b-98b0-a3ed7f61b798",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-05-01T22:54:40Z",
+  "matchNumber": 42,
+  "templateMatchID": "00008W-00002",
+  "templateMatchNumber": 2,
+  "matchWinnerGoesTo": "b951bcfb-5a86-4490-9609-1cfc2672c20d",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "04b98d93-09a3-4a28-ae4e-1664d36256a3",
+  "matchTeamTwoComesFrom": "4cdbba28-cfb3-4b0a-8ca1-66360b5b8cf4",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": 35,
+  "displayMatchNumberTeamTwoComesFrom": 36,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Fri May 1 6:06 PM EDT",
+  "court": "CC",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/7d8b419f-f8c5-4e4b-98b0-a3ed7f61b798",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/VHkNpfd6?disablePlayNext%3Dfalse%26withErrors%3Dfalse&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "b79daa6c-caec-4508-a54a-cabdb6f7b865",
+    "players": [
+     "Rachel Rohrabacher",
+     "Catherine Parenteau"
+    ],
+    "seedNumber": 3,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "88c824c6-85c1-4b49-82e2-e9ee9e82fa40",
+    "players": [
+     "Lacy Schneemann",
+     "Etta Tuionetoa"
+    ],
+    "seedNumber": 7,
+    "games": [
+     {
+      "score": 9,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 3,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 0
+ },
+ {
+  "id": "5aa8dafc-132d-4479-931e-730b3ea40bb7",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-05-01T20:18:28Z",
+  "matchNumber": 43,
+  "templateMatchID": "00008W-00003",
+  "templateMatchNumber": 3,
+  "matchWinnerGoesTo": "d078f7c4-af28-4dd7-81d0-4c65e1cc0efc",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "9588fe3f-3d45-4f3b-9ba2-aeb1b2a69664",
+  "matchTeamTwoComesFrom": "a06dbe0c-3cc5-4a24-aaf2-ded9410e5f1b",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": 37,
+  "displayMatchNumberTeamTwoComesFrom": 38,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Fri May 1 3:42 PM EDT",
+  "court": "GS",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/5aa8dafc-132d-4479-931e-730b3ea40bb7",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/rMQnE6A9?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "77689c86-8d82-4032-a818-fbeaf0aa6a29",
+    "players": [
+     "Jorja Johnson",
+     "Tyra Hurricane Black"
+    ],
+    "seedNumber": 2,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "2012ac5d-ec68-45f7-9395-37f9c9cf7355",
+    "players": [
+     "Tina Pisnik",
+     "Meghan Dizon"
+    ],
+    "seedNumber": 6,
+    "games": [
+     {
+      "score": 0,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 8,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 2
+ },
+ {
+  "id": "3beb9a25-3c6e-43b7-a647-899947ba43ae",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-05-01T22:35:43Z",
+  "matchNumber": 44,
+  "templateMatchID": "00008W-00004",
+  "templateMatchNumber": 4,
+  "matchWinnerGoesTo": "d078f7c4-af28-4dd7-81d0-4c65e1cc0efc",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "79ceed1a-1dc4-43a6-b685-1e915a55462d",
+  "matchTeamTwoComesFrom": "80da2bd9-9a2d-404c-a941-04559108356f",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": 39,
+  "displayMatchNumberTeamTwoComesFrom": 40,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Fri May 1 5:39 PM EDT",
+  "court": "GS",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/3beb9a25-3c6e-43b7-a647-899947ba43ae",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/rMQnE6A9?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "5238bbc7-04fa-4b50-9c4c-58e1ae91e0c7",
+    "players": [
+     "Kate Fahey",
+     "Parris Todd"
+    ],
+    "seedNumber": 4,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "a67fd2ef-0ba6-4cc6-970a-b94bc4d66ed5",
+    "players": [
+     "Mari Humberg",
+     "Liz Truluck"
+    ],
+    "seedNumber": 12,
+    "games": [
+     {
+      "score": 4,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 7,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 2
+ },
+ {
+  "id": "b951bcfb-5a86-4490-9609-1cfc2672c20d",
+  "displayMatchNumberLoserGoesTo": 47,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-05-02T21:26:02Z",
+  "matchNumber": 45,
+  "templateMatchID": "00004W-00001",
+  "templateMatchNumber": 1,
+  "matchWinnerGoesTo": "7075798f-fbfd-4e3e-a36f-c84f2dc0e360",
+  "matchLoserGoesTo": "fd53ab2d-713e-484b-8d75-74717647d503",
+  "matchTeamOneComesFrom": "6296b3fa-18a1-4e89-b2e5-dda0d28e13d5",
+  "matchTeamTwoComesFrom": "7d8b419f-f8c5-4e4b-98b0-a3ed7f61b798",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": 41,
+  "displayMatchNumberTeamTwoComesFrom": 42,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Sat May 2 4:47 PM EDT",
+  "court": "CC",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/b951bcfb-5a86-4490-9609-1cfc2672c20d",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/VHkNpfd6?disablePlayNext%3Dfalse%26withErrors%3Dfalse&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "f08c2f85-4d94-4708-a15f-b0f2b1a029b3",
+    "players": [
+     "Anna Bright",
+     "Anna Leigh Waters"
+    ],
+    "seedNumber": 1,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "b79daa6c-caec-4508-a54a-cabdb6f7b865",
+    "players": [
+     "Rachel Rohrabacher",
+     "Catherine Parenteau"
+    ],
+    "seedNumber": 3,
+    "games": [
+     {
+      "score": 4,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 1,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 0
+ },
+ {
+  "id": "d078f7c4-af28-4dd7-81d0-4c65e1cc0efc",
+  "displayMatchNumberLoserGoesTo": 47,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-05-02T22:22:29Z",
+  "matchNumber": 46,
+  "templateMatchID": "00004W-00002",
+  "templateMatchNumber": 2,
+  "matchWinnerGoesTo": "7075798f-fbfd-4e3e-a36f-c84f2dc0e360",
+  "matchLoserGoesTo": "fd53ab2d-713e-484b-8d75-74717647d503",
+  "matchTeamOneComesFrom": "5aa8dafc-132d-4479-931e-730b3ea40bb7",
+  "matchTeamTwoComesFrom": "3beb9a25-3c6e-43b7-a647-899947ba43ae",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": 43,
+  "displayMatchNumberTeamTwoComesFrom": 44,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "W",
+  "timezoneAbbreviation": "EDT",
+  "date": "Sat May 2 5:35 PM EDT",
+  "court": "CC",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/d078f7c4-af28-4dd7-81d0-4c65e1cc0efc",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/VHkNpfd6?disablePlayNext%3Dfalse%26withErrors%3Dfalse&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "77689c86-8d82-4032-a818-fbeaf0aa6a29",
+    "players": [
+     "Jorja Johnson",
+     "Tyra Hurricane Black"
+    ],
+    "seedNumber": 2,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 12,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "$undefined"
+   },
+   {
+    "id": "5238bbc7-04fa-4b50-9c4c-58e1ae91e0c7",
+    "players": [
+     "Kate Fahey",
+     "Parris Todd"
+    ],
+    "seedNumber": 4,
+    "games": [
+     {
+      "score": 4,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 10,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 0
+ },
+ {
+  "id": "7075798f-fbfd-4e3e-a36f-c84f2dc0e360",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-05-03T17:04:31Z",
+  "matchNumber": 48,
+  "templateMatchID": "00002W-00001",
+  "templateMatchNumber": 1,
+  "matchWinnerGoesTo": "$undefined",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "b951bcfb-5a86-4490-9609-1cfc2672c20d",
+  "matchTeamTwoComesFrom": "d078f7c4-af28-4dd7-81d0-4c65e1cc0efc",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": 45,
+  "displayMatchNumberTeamTwoComesFrom": 46,
+  "maxGames": 5,
+  "isHidden": 0,
+  "inBracketType": "GS",
+  "timezoneAbbreviation": "EDT",
+  "date": "Sun May 3 12:11 PM EDT",
+  "court": "CC",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/7075798f-fbfd-4e3e-a36f-c84f2dc0e360",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/VHkNpfd6?disablePlayNext%3Dfalse%26withErrors%3Dfalse&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "f08c2f85-4d94-4708-a15f-b0f2b1a029b3",
+    "players": [
+     "Anna Bright",
+     "Anna Leigh Waters"
+    ],
+    "seedNumber": 1,
+    "games": [
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "gold"
+   },
+   {
+    "id": "77689c86-8d82-4032-a818-fbeaf0aa6a29",
+    "players": [
+     "Jorja Johnson",
+     "Tyra Hurricane Black"
+    ],
+    "seedNumber": 2,
+    "games": [
+     {
+      "score": 3,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 4,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 0,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "silver"
+   }
+  ],
+  "bracketContext": 0
+ },
+ {
+  "id": "fd53ab2d-713e-484b-8d75-74717647d503",
+  "displayMatchNumberLoserGoesTo": null,
+  "matchStatus": 4,
+  "matchCompletedType": 5,
+  "matchCompleted": "2026-05-03T16:44:11Z",
+  "matchNumber": 47,
+  "templateMatchID": "00002W-00002",
+  "templateMatchNumber": 2,
+  "matchWinnerGoesTo": "$undefined",
+  "matchLoserGoesTo": "$undefined",
+  "matchTeamOneComesFrom": "b951bcfb-5a86-4490-9609-1cfc2672c20d",
+  "matchTeamTwoComesFrom": "d078f7c4-af28-4dd7-81d0-4c65e1cc0efc",
+  "isCancelled": false,
+  "displayMatchNumberTeamOneComesFrom": 45,
+  "displayMatchNumberTeamTwoComesFrom": 46,
+  "maxGames": 3,
+  "isHidden": 0,
+  "inBracketType": "B",
+  "timezoneAbbreviation": "EDT",
+  "date": "Sun May 3 11:37 AM EDT",
+  "court": "GS",
+  "gameStart": true,
+  "isConsumedByRefereeApp": true,
+  "completedByRefereeapp": "$undefined",
+  "links": {
+   "matchStatsURL": "/results/match/fd53ab2d-713e-484b-8d75-74717647d503",
+   "liveURL": "https://stream.pickleballtv.com/player?self-link=https://zapp-pbtv.web.app/jw/media/6CRGKsTn?disablePlayNext%3Dfalse%26withErrors%3Dtrue&screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94",
+   "archivedURL": "",
+   "highlightsURL": "",
+   "liveURLTarget": "_blank",
+   "archivedURLTarget": "_blank",
+   "highlightsURLTarget": "_blank"
+  },
+  "server": 0,
+  "serverFromTeam": 0,
+  "currentServingNumber": 0,
+  "sponsors": {
+   "logoUrl": "https://images.pickleball.com/systemLogos/pickleball-tv.png",
+   "serviceId": 5,
+   "serviceName": "PickleballTV"
+  },
+  "teams": [
+   {
+    "id": "b79daa6c-caec-4508-a54a-cabdb6f7b865",
+    "players": [
+     "Rachel Rohrabacher",
+     "Catherine Parenteau"
+    ],
+    "seedNumber": 3,
+    "games": [
+     {
+      "score": 14,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 4,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": true,
+    "medal": "bronze"
+   },
+   {
+    "id": "5238bbc7-04fa-4b50-9c4c-58e1ae91e0c7",
+    "players": [
+     "Kate Fahey",
+     "Parris Todd"
+    ],
+    "seedNumber": 4,
+    "games": [
+     {
+      "score": 12,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": 11,
+      "variation": "DEFAULT",
+      "isWinner": true
+     },
+     {
+      "score": 8,
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     },
+     {
+      "score": "",
+      "variation": "DEFAULT",
+      "isWinner": false
+     }
+    ],
+    "isWinner": false,
+    "medal": "$undefined"
+   }
+  ],
+  "bracketContext": 0
+ }
+]

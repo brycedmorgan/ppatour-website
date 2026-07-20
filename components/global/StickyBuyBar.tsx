@@ -83,6 +83,10 @@ export function StickyBuyBar() {
         content: "sticky-buy-bar",
       });
 
+  // The full-page brackets view has its own bottom-pinned horizontal scrollbar;
+  // don't let this bar sit on top of it.
+  if (pathname === "/brackets") return null;
+
   return (
     <div
       aria-hidden={!visible}
