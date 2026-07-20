@@ -246,3 +246,13 @@ html[data-motion="on"] [data-reveal].is-revealed {
     @apply font-sans;
   }
 }
+/* ── Event-page chrome behavior (Connor, 7/20) ────────────────────────────
+   While an event page's tab bar owns the top edge (EventTabNav stamps
+   `data-event-nav-scrolled` on <html> past the hero), the site chrome
+   (ticker + top nav) slides out of the way; scrolling back up restores it. */
+.site-chrome {
+  transition: transform 0.3s ease-out;
+}
+html[data-event-nav-scrolled] .site-chrome {
+  transform: translateY(-100%);
+}

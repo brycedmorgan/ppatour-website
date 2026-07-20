@@ -8,6 +8,8 @@ import { EventConcierge } from "@/components/events/EventConcierge";
 import { EventTabNav } from "@/components/events/EventTabNav";
 import { FirstServeCountdown } from "@/components/events/FirstServeCountdown";
 import { EventGallery } from "@/components/events/EventGallery";
+import { EventSponsors } from "@/components/events/EventSponsors";
+import { RegisteredCount } from "@/components/events/RegisteredCount";
 import { VenueMap } from "@/components/events/VenueMap";
 import { VolunteerModalButton } from "@/components/events/VolunteerModalButton";
 import { Countdown } from "@/components/motion/Countdown";
@@ -221,6 +223,7 @@ export default async function EventPage({ params }: Params) {
     { id: "players", label: "Players" },
     { id: "involved", label: "Get Involved" },
     ...(coverage.length > 0 ? [{ id: "coverage", label: "Coverage" }] : []),
+    { id: "sponsors", label: "Sponsors" },
     { id: "tickets", label: "Tickets" },
   ];
 
@@ -394,7 +397,16 @@ export default async function EventPage({ params }: Params) {
       </section>
 
       {/* Floating event nav */}
-      <EventTabNav tabs={TABS} eventName={t.shortName} icon={t.brand?.icon} />
+      <EventTabNav
+        tabs={TABS}
+        eventName={t.shortName}
+        icon={t.brand?.icon}
+        ticketsUrl={withUtm(t.ticketsUrl, {
+          campaign: t.slug,
+          content: "event-tabnav-buy-tickets",
+        })}
+        ticketPriceFrom={t.ticketPriceFrom}
+      />
 
       {/* Audience router — one page, three ways in */}
       <section className="bg-white">
@@ -1184,6 +1196,12 @@ export default async function EventPage({ params }: Params) {
             pros, plus clinics, pro-ams, and ways to be part of event week.
           </p>
 
+          {/* Live registered-player count (PT.com) — honest placeholder
+              until Jason's API creds land (docs/DATA-ASKS.md). */}
+          <div className="mt-4">
+            <RegisteredCount tournamentUuid={t.tournamentUuid} accent />
+          </div>
+
           <div data-reveal className="mt-6 grid gap-px border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
@@ -1257,6 +1275,9 @@ export default async function EventPage({ params }: Params) {
           </div>
         </div>
       </section>
+
+      {/* Sponsors — who backs this event + become-a-sponsor lead hook */}
+      <EventSponsors event={t} />
 
       {/* Tickets */}
       <section id="tickets" className="scroll-mt-[120px] bg-white">
