@@ -65,6 +65,20 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   Sadie the venue shot list; per-event sponsor lists from
   Jackalope/SponsorCX when they exist.
 
+### 2026-07-20 — Generated OG share cards site-wide + purse regression fix
+- next/og cards replace raw-photo shares: event cards (photo + navy
+  scrim + tier badge + event mark chip + Gotham title + "$1.65M on the
+  line · tickets from $59" + brand-accent bar), article cards (category
+  chip + headline + dateline), rebuilt site default (drone shot). New
+  `lib/og.ts` (Gotham loading + public-image data URIs). File-based
+  opengraph-image overrides metadata images automatically.
+- Satori gotchas: use backgroundImage for gradients; `inset` shorthand
+  unsupported — explicit top/left/width/height.
+- ⚠ FIXED REGRESSION: the ppa_tournaments API rewrite reintroduced old
+  TIER_PRIZE placeholders ($300k Slams) — restored official 2026 totals
+  (Slams/Worlds $1,648,641 · Cups $1,271,734 · Opens $1,063,327). If
+  the events pipeline gets rewritten again, keep TIER_PRIZE authoritative.
+
 ### 2026-07-16 (pt. 3) — Official hotel blocks (Kristen's thread) + Jackalope doc
 - Parsed the "2026/2027 PPA Tour Hotel Links" Gmail thread (Kristen
   Russell, latest 7/16). 15 official hotels across 6 events loaded into
