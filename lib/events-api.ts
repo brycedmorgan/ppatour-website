@@ -26,6 +26,7 @@ import {
   SPONSORS,
   TIER_PRICE,
   TIER_PRIZE,
+  VENUE_IMAGES,
   type Tournament,
 } from "@/lib/placeholder-data";
 
@@ -200,7 +201,13 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     tierKey: tier,
     prizeMoney: curated?.prizeMoney ?? TIER_PRIZE[tier],
     presentedBy: curated?.presentedBy ?? sponsor,
-    image: curated?.image ?? GENERIC_IMAGES[index % GENERIC_IMAGES.length],
+    // Venue scenes for main-tour cards, action shots for the smaller
+    // Challenger/international treatments (see docs/VENUE-ASSETS.md).
+    image:
+      curated?.image ??
+      (!isChallenger && isUsOrg
+        ? VENUE_IMAGES[index % VENUE_IMAGES.length]
+        : GENERIC_IMAGES[index % GENERIC_IMAGES.length]),
     gallery: curated?.gallery,
     brand: curated?.brand,
     region: isUsOrg ? undefined : "international",

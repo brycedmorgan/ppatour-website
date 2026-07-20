@@ -97,6 +97,36 @@ export const GENERIC_IMAGES = [
   "/ppa/action-masters.jpg",
 ];
 
+/**
+ * Venue/stadium scenes for MAIN-TOUR event cards (Connor, 7/20: events lead
+ * with venue/aerial photography, not player shots; the Nationals page is the
+ * reference standard). Only three generic venue placeholders exist today —
+ * every event still needing real venue/aerial art is listed in
+ * docs/VENUE-ASSETS.md for Sadie's venue-asset pipeline.
+ */
+export const VENUE_IMAGES = [
+  "/ppa/event-melbourne.jpg",
+  "/ppa/event-macao.jpg",
+  "/ppa/event-gold-coast.webp",
+];
+
+// Real venue photo galleries per event (restored for Nationals — the drone
+// aerials + crowd set from Bryce's DRONE PHOTOS.zip; the flip-through gallery
+// renders whenever an event has one).
+const GALLERY_BY_SLUG: Record<string, string[]> = {
+  "veolia-pickleball-national-championships": [
+    "/ppa/nationals-drone-stadium.jpg",
+    "/ppa/nationals-crowd-stadium.jpg",
+    "/ppa/nationals-drone-sunset.jpg",
+    "/ppa/nationals-crowd-branded.jpg",
+    "/ppa/nationals-drone-grounds.jpg",
+    "/ppa/nationals-crowd-fans.jpg",
+    "/ppa/nationals-drone-courts.jpg",
+    "/ppa/nationals-action-2.jpg",
+    "/ppa/nationals-crowd-1.jpg",
+  ],
+};
+
 export const TIER_PRICE: Record<EventTier, number> = {
   worlds: 79,
   slam: 59,
@@ -245,7 +275,14 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
       tierKey: tier,
       prizeMoney: r.type === "international" ? "$100,000" : TIER_PRIZE[tier],
       presentedBy: PRESENTER_BY_SLUG[slug] ?? sponsor,
-      image: r.image ?? GENERIC_IMAGES[i % GENERIC_IMAGES.length],
+      // Main-tour cards lead with venue scenes; Challengers/international
+      // keep action shots (their cards are the smaller treatments).
+      image:
+        r.image ??
+        (r.type === "ppa"
+          ? VENUE_IMAGES[i % VENUE_IMAGES.length]
+          : GENERIC_IMAGES[i % GENERIC_IMAGES.length]),
+      gallery: GALLERY_BY_SLUG[slug],
       brand: BRAND_BY_SLUG[slug],
       region: r.type === "international" ? ("international" as const) : undefined,
       country: r.country,
@@ -269,7 +306,7 @@ const SCHEDULE: RawEvent[] = [
   { name: "PPA Canada 250 Vancouver", short: "Vancouver 250", start: "2026-08-19", end: "2026-08-23", city: "Vancouver", state: "Canada", type: "international", country: "Canada" },
   { name: "PPA Asia 500 China Open 2", short: "China Open", start: "2026-08-20", end: "2026-08-23", city: "Shenzhen", state: "China", type: "international", country: "Asia" },
   { name: "Atlanta PPA Challenger", short: "Atlanta Challenger", start: "2026-08-28", end: "2026-08-30", city: "Peachtree City", state: "GA", type: "challenger" },
-  { name: "Veolia Pickleball National Championships", short: "National Championships", start: "2026-08-31", end: "2026-09-06", city: "Cary", state: "NC", venue: "Cary Tennis Park", type: "ppa", tier: "slam", image: "/ppa/nationals-action-2.jpg" },
+  { name: "Veolia Pickleball National Championships", short: "National Championships", start: "2026-08-31", end: "2026-09-06", city: "Cary", state: "NC", venue: "Cary Tennis Park", type: "ppa", tier: "slam", image: "/ppa/nationals-drone-champcourt.jpg" },
 
   // September 2026
   { name: "PPA Asia 1000 Kuala Lumpur Cup", short: "Kuala Lumpur", start: "2026-09-09", end: "2026-09-13", city: "Kuala Lumpur", state: "Malaysia", type: "international", country: "Asia" },
