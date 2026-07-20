@@ -203,7 +203,7 @@ export async function HomeContent({
         {/* Featured event badge — the crest for the next stop. */}
         {!live && next.brand?.icon && (
           <div
-            className="pointer-events-none absolute right-8 top-20 z-[2] hidden motion-safe:animate-rise sm:block lg:right-24"
+            className="pointer-events-none absolute right-4 top-16 z-[2] block motion-safe:animate-rise sm:right-8 sm:top-20 lg:right-24"
             style={{ animationDelay: "120ms" }}
           >
             <Image
@@ -211,7 +211,7 @@ export async function HomeContent({
               alt=""
               width={133}
               height={364}
-              className="h-44 w-auto rounded drop-shadow-[0_4px_22px_rgba(2,49,85,0.65)] lg:h-64"
+              className="h-24 w-auto rounded drop-shadow-[0_4px_22px_rgba(2,49,85,0.65)] sm:h-44 lg:h-64"
             />
           </div>
         )}
