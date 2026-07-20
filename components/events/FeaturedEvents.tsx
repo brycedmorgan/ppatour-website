@@ -9,11 +9,24 @@ import {
 } from "@/lib/placeholder-data";
 
 /**
- * Featured band at the top of /events — the next three upcoming PPA Tour
- * (US main-tour) stops as large, brand-accented cards linking to their event
- * pages. Renders nothing if there are no upcoming main-tour events.
+ * Big-card band on /events — upcoming PPA Tour (US main-tour, 1,000+ point)
+ * stops as large, brand-accented cards linking to their event pages. Renders
+ * nothing if there are no upcoming main-tour events. Heading is configurable
+ * so the same treatment serves "Next Up on Tour" and the full main-tour band.
  */
-export function FeaturedEvents({ events }: { events: Tournament[] }) {
+export function FeaturedEvents({
+  events,
+  kicker = "Featured",
+  title = "Next Up on Tour",
+  subtitle,
+  headingAs: Heading = "h2",
+}: {
+  events: Tournament[];
+  kicker?: string;
+  title?: string;
+  subtitle?: string;
+  headingAs?: "h1" | "h2";
+}) {
   if (events.length === 0) return null;
 
   return (
@@ -22,12 +35,15 @@ export function FeaturedEvents({ events }: { events: Tournament[] }) {
         <div className="flex items-center gap-2.5">
           <span className="h-2 w-2 bg-ppa-blue" />
           <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
-            Featured
+            {kicker}
           </p>
         </div>
-        <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] sm:text-3xl">
-          Next Up on Tour
-        </h2>
+        <Heading className="mt-2 font-display text-2xl uppercase leading-[1.02] sm:text-3xl">
+          {title}
+        </Heading>
+        {subtitle && (
+          <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">{subtitle}</p>
+        )}
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {events.map((t) => {

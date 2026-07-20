@@ -11,14 +11,16 @@ import {
 } from "@/lib/placeholder-data";
 
 type TimeKey = "upcoming" | "past";
-type TypeKey = "all" | "ppa" | "challengers" | "international";
+type TypeKey = "all" | "main" | "challengers" | "international";
 type TierKey = "all" | "slam" | "cup" | "open";
-type CountryKey = "all" | "Asia" | "Australia" | "Canada" | "Italy" | "Spain";
+type CountryKey = "all" | "USA" | "Asia" | "Australia" | "Canada" | "Italy" | "Spain";
 type SeasonKey = "all" | "2025-2026" | "2025" | "2024" | "2023" | "2022";
 
+// "PPA Tour" includes EVERYTHING the tour runs (Connor's spec) — main draw,
+// Challengers, and the international series. Narrow with the other options.
 const TYPE_OPTIONS: { value: TypeKey; label: string }[] = [
-  { value: "all", label: "All Types" },
-  { value: "ppa", label: "PPA Tour" },
+  { value: "all", label: "PPA Tour — All Events" },
+  { value: "main", label: "Main Tour · 1,000+ Pts" },
   { value: "challengers", label: "Challengers" },
   { value: "international", label: "International" },
 ];
@@ -28,8 +30,11 @@ const TIER_OPTIONS: { value: TierKey; label: string }[] = [
   { value: "cup", label: "Cup" },
   { value: "open", label: "Open" },
 ];
+// Country is its own filter dimension (always visible) so international
+// stops are reachable by country without hunting through types.
 const COUNTRY_OPTIONS: { value: CountryKey; label: string }[] = [
   { value: "all", label: "All Countries" },
+  { value: "USA", label: "USA" },
   { value: "Asia", label: "Asia" },
   { value: "Australia", label: "Australia" },
   { value: "Canada", label: "Canada" },
@@ -97,8 +102,7 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
 
   function onTypeChange(v: TypeKey) {
     setType(v);
-    if (v !== "ppa") setTier("all");
-    if (v !== "international") setCountry("all");
+    if (v !== "main") setTier("all");
   }
   function onTimeChange(v: TimeKey) {
     setTime(v);
@@ -111,21 +115,22 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
       const inTime = time === "past" ? t.status === "completed" : t.status !== "completed";
       if (!inTime) return false;
 
-      // Type
-      if (type === "ppa" && (t.region === "international" || t.tierKey === "challenger")) return false;
+      // Type — "all" is the whole PPA Tour (main draw + Challengers + international).
+      if (type === "main" && (t.region === "international" || t.tierKey === "challenger")) return false;
       if (type === "challengers" && t.tierKey !== "challenger") return false;
       if (type === "international" && t.region !== "international") return false;
 
-      // Tier (PPA only)
-      if (type === "ppa" && tier !== "all") {
+      // Tier (main tour only)
+      if (type === "main" && tier !== "all") {
         const pts = tierPoints(t);
         if (tier === "slam" && pts < 2000) return false;
         if (tier === "cup" && pts !== 1500) return false;
         if (tier === "open" && pts !== 1000) return false;
       }
 
-      // Country (International only)
-      if (type === "international" && country !== "all" && t.country !== country) return false;
+      // Country — independent dimension. "USA" = the domestic tour.
+      if (country === "USA" && t.region === "international") return false;
+      if (country !== "all" && country !== "USA" && t.country !== country) return false;
 
       // Season (Past only)
       if (time === "past" && season !== "all" && t.season !== season) return false;
@@ -186,10 +191,8 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
       {/* Dropdown filters (dependent) */}
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <FilterSelect value={type} onChange={onTypeChange} options={TYPE_OPTIONS} />
-        {type === "ppa" && <FilterSelect value={tier} onChange={setTier} options={TIER_OPTIONS} />}
-        {type === "international" && (
-          <FilterSelect value={country} onChange={setCountry} options={COUNTRY_OPTIONS} />
-        )}
+        {type === "main" && <FilterSelect value={tier} onChange={setTier} options={TIER_OPTIONS} />}
+        <FilterSelect value={country} onChange={setCountry} options={COUNTRY_OPTIONS} />
         {time === "past" && (
           <FilterSelect value={season} onChange={setSeason} options={SEASON_OPTIONS} />
         )}
