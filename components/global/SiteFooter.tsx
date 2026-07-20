@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { partners } from "@/lib/home-content";
 import { withUtm } from "@/lib/utm";
 
 type FooterLink = { label: string; href: string; external?: boolean };
@@ -171,6 +172,45 @@ export function SiteFooter() {
                 </a>
               ))}
             </div>
+          </div>
+        </div>
+
+        {/* Our sponsors — strip + become-a-sponsor CTA (leads → /about/sponsors#inquire) */}
+        <div className="mt-10 border-t border-white/10 pt-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/45">
+              Our Sponsors
+            </p>
+            <Link
+              href="/about/sponsors#inquire"
+              className="group inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-ppa-yellow transition-colors hover:text-white"
+            >
+              Become a Sponsor
+              <span
+                aria-hidden
+                className="transition-transform duration-300 group-hover:translate-x-0.5"
+              >
+                →
+              </span>
+            </Link>
+          </div>
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            {partners.map((p) => (
+              <Link
+                key={p.name}
+                href="/about/sponsors"
+                title={`${p.name} — ${p.role}`}
+                className="flex h-12 items-center justify-center bg-white px-4 transition-opacity hover:opacity-85"
+              >
+                <Image
+                  src={p.logo}
+                  alt={p.name}
+                  width={p.logoWidth}
+                  height={p.logoHeight}
+                  className="max-h-6 w-auto max-w-[104px] object-contain"
+                />
+              </Link>
+            ))}
           </div>
         </div>
 
