@@ -21,10 +21,12 @@ type NavItem = {
   submenu?: SubLink[];
 };
 
+/* Nav order per Connor (7/20): "Play" is folded into the event pages (Get
+   Involved) and /play stays reachable from the Tour panel; "Sponsors" sits
+   immediately right of "Tour" — the partnership pipeline front door. */
 const NAV_ITEMS: NavItem[] = [
   { label: "Events", href: "/events", mega: true },
   { label: "Watch", href: "/watch" },
-  { label: "Play", href: "/play" },
   { label: "Athletes", href: "/athletes" },
   { label: "Rankings", href: "/rankings" },
   {
@@ -39,6 +41,7 @@ const NAV_ITEMS: NavItem[] = [
       { label: "Hospitality", href: "/tour/hospitality" },
     ],
   },
+  { label: "Sponsors", href: "/about/sponsors" },
   {
     label: "About",
     mega: true,
