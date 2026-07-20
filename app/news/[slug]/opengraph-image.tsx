@@ -1,15 +1,18 @@
 import { ImageResponse } from "next/og";
 import { OG_SIZE, ogFonts, ogImageData } from "@/lib/og";
+import { getArticle, newsArticles } from "@/lib/news-articles";
 
-export const alt = "Carvana PPA Tour — The Pro Tour of Pickleball";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
-export default async function OpengraphImage() {
-  const [fonts, bg] = await Promise.all([
-    ogFonts(),
-    ogImageData("/ppa/nationals-drone-stadium.jpg"),
-  ]);
+export default async function Image({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const a = getArticle(slug) ?? newsArticles[0];
+  const [fonts, bg] = await Promise.all([ogFonts(), ogImageData(a.image)]);
 
   return new ImageResponse(
     (
@@ -47,7 +50,7 @@ export default async function OpengraphImage() {
             width: "100%",
             height: "100%",
             backgroundImage:
-              "linear-gradient(to top, rgba(7,34,58,0.96) 10%, rgba(7,34,58,0.5) 55%, rgba(7,34,58,0.2) 100%)",
+              "linear-gradient(to top, rgba(7,34,58,0.97) 15%, rgba(7,34,58,0.6) 55%, rgba(7,34,58,0.2) 100%)",
           }}
         />
 
@@ -69,7 +72,7 @@ export default async function OpengraphImage() {
               color: "#ffffff",
             }}
           >
-            CARVANA PPA TOUR
+            PPA TOUR NEWS
           </div>
         </div>
 
@@ -82,38 +85,43 @@ export default async function OpengraphImage() {
             position: "relative",
           }}
         >
+          <div style={{ display: "flex" }}>
+            <div
+              style={{
+                background: "#228be6",
+                color: "#ffffff",
+                fontSize: 21,
+                fontWeight: 900,
+                letterSpacing: 3,
+                padding: "8px 16px",
+              }}
+            >
+              {a.category.toUpperCase()}
+            </div>
+          </div>
           <div
             style={{
-              fontSize: 92,
+              fontSize: a.title.length > 55 ? 54 : 64,
               fontWeight: 900,
               color: "#ffffff",
-              lineHeight: 1.0,
-              textTransform: "uppercase",
-            }}
-          >
-            The Pro Tour
-          </div>
-          <div
-            style={{
-              fontSize: 92,
-              fontWeight: 900,
-              color: "#4dc1ef",
-              lineHeight: 1.0,
-              textTransform: "uppercase",
-            }}
-          >
-            of Pickleball
-          </div>
-          <div
-            style={{
-              fontSize: 25,
-              fontWeight: 500,
-              color: "rgba(255,255,255,0.8)",
+              lineHeight: 1.08,
               marginTop: 18,
+              textTransform: "uppercase",
+              maxWidth: 1040,
+            }}
+          >
+            {a.title}
+          </div>
+          <div
+            style={{
+              fontSize: 23,
+              fontWeight: 500,
+              color: "rgba(255,255,255,0.75)",
+              marginTop: 16,
               letterSpacing: 2,
             }}
           >
-            LIVE SCORES · THE POINTS RACE · EVERY MAIN-TOUR STOP
+            {`${a.date.toUpperCase()}, 2026 · PPATOUR.COM`}
           </div>
         </div>
         <div

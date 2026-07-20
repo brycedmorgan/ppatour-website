@@ -134,11 +134,13 @@ export const TIER_PRICE: Record<EventTier, number> = {
   open: 39,
   challenger: 20,
 };
+// Official 2026 tier totals — prize money + appearance fees
+// (ppatour.com/how-it-works; Bryce 7/15: show the full player payout).
 export const TIER_PRIZE: Record<EventTier, string> = {
-  worlds: "$500,000",
-  slam: "$300,000",
-  cup: "$200,000",
-  open: "$150,000",
+  worlds: "$1,648,641",
+  slam: "$1,648,641",
+  cup: "$1,271,734",
+  open: "$1,063,327",
   challenger: "$25,000",
 };
 export const SPONSORS = ["Veolia", "Carvana", "Rate", "Proton"];
