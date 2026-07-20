@@ -20,6 +20,51 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-20 — Connor's site-walk punch list (all 10 items)
+- Connor walked the site with Bryce ("better than the PGA site", live in
+  ~2 weeks) and left a 10-item list. All shipped this session (9 commits,
+  `f2b31db`…); build 260+ routes clean; the 3 eslint errors are
+  pre-existing in Wesley/Tyler files (volunteer page, StickyBuyBar,
+  Analytics), untouched.
+- **#1 Events page**: 1,000+ stops lead BIG (all upcoming main tour in the
+  large card band), Challenger Series in a smaller strip below, full
+  search/filter last. "PPA Tour" filter now includes EVERYTHING; Country
+  is its own always-visible dimension (incl. USA).
+- **#2 Sponsors everywhere**: nav "Sponsors" right of Tour; every event
+  page has a Sponsors section (marquee partners + tour roster + "Want to
+  be a sponsor?" → /about/sponsors#inquire → Jacob's Leads pipeline);
+  footer "Our Sponsors" strip + Become a Sponsor CTA.
+- **#3 Rankings**: `getFullRankings()` pages the API until exhausted —
+  /rankings now renders the COMPLETE men's/women's boards (tab shows
+  count). Locally it falls back to the 8-row placeholder (no PB_API_TOKEN
+  on this machine) — verify row counts on the Vercel deploy.
+- **#4 AI-coverage approval gate**: `NewsArticle.status` REQUIRED; drafts
+  invisible site-wide (404 included); consumers all read
+  `publishedArticles`. New/rewritten AI articles MUST land as
+  `status: "draft"`; **Dylan** flips to published. docs/CONTENT-APPROVAL.md.
+- **#5 Homepage labeling**: hero carries an event ID chip (name + dates +
+  venue); Live & Latest rail carries an event label chip.
+- **#6 Event sticky nav**: past the hero, site chrome slides away
+  (`html[data-event-nav-scrolled]` + `.site-chrome` in globals.css) and
+  the event tab bar sticks top-0 all the way down w/ a pinned Buy Tickets
+  CTA.
+- **#7 Play tab removed** from nav; /play route kept (Tour panel's Get On
+  Court card); event pages carry play via Get Involved.
+- **#8 Imagery**: Nationals hero back to the champ-court drone shot + its
+  9-photo gallery restored (reference standard); main-tour cards cycle
+  venue/stadium placeholders instead of player shots. Per-event asset
+  gaps for **Sadie**: docs/VENUE-ASSETS.md.
+- **#9 Athletes**: single chest-up crop anchor, branded "Photo Coming"
+  placeholder for missing photos, no "No. 0" badge; filters Gender /
+  Discipline / Ranking range added.
+- **#10 Registered counts — BLOCKED on Jason**: display + adapter shipped
+  (`lib/registrations.ts`, honest "Registration Count Coming" chip in Get
+  Involved). Needs `PT_API_TOKEN` + `PT_API_BASE_URL` in Vercel + endpoint
+  confirm. docs/DATA-ASKS.md.
+- Next: get Jason's PT.com creds; brief Dylan on the article gate; feed
+  Sadie the venue shot list; per-event sponsor lists from
+  Jackalope/SponsorCX when they exist.
+
 ### 2026-07-16 (pt. 3) — Official hotel blocks (Kristen's thread) + Jackalope doc
 - Parsed the "2026/2027 PPA Tour Hotel Links" Gmail thread (Kristen
   Russell, latest 7/16). 15 official hotels across 6 events loaded into
