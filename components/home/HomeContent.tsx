@@ -216,6 +216,19 @@ export async function HomeContent({
           </div>
         )}
 
+        {/* Event ID chip — the hero must SAY which event it is (Connor, 7/20). */}
+        <div className="pointer-events-none absolute bottom-6 right-4 z-[2] hidden flex-col items-end bg-ppa-navy-deep/70 px-3.5 py-2.5 backdrop-blur-sm md:flex lg:right-8">
+          <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-ppa-sky">
+            {live ? "Live Now" : "Featured Event"}
+          </span>
+          <span className="mt-0.5 font-display text-sm uppercase leading-tight text-white">
+            {ev.name}
+          </span>
+          <span className="mt-0.5 text-[10px] uppercase tracking-wide text-white/65">
+            {formatDateRange(ev.startDate, ev.endDate, true)} · {ev.venue}
+          </span>
+        </div>
+
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-9 pt-20">
           <div
             className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em] motion-safe:animate-rise"
@@ -448,7 +461,16 @@ export async function HomeContent({
             </Link>
           </div>
 
-          <div className="mt-6">
+          {/* The scores rail must SAY which event it covers (Connor, 7/20). */}
+          <p className="mt-3 inline-flex flex-wrap items-center gap-x-2 gap-y-1 border-l-2 border-ppa-blue bg-ppa-paper px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/70">
+            {ev.name}
+            <span className="font-medium normal-case tracking-normal text-ppa-navy/50">
+              {formatDateRange(ev.startDate, ev.endDate, true)} · {ev.city}
+              {ev.state ? `, ${ev.state}` : ""}
+            </span>
+          </p>
+
+          <div className="mt-4">
             <ScoreRail />
             <p className="mt-3 text-[11px] uppercase tracking-[0.12em] text-ppa-navy/35">
               Drag or swipe to browse
