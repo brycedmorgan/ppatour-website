@@ -4,7 +4,7 @@
  * demo build; replace with the Sanity CMS + scoring/rankings API.
  */
 
-import { newsArticles } from "@/lib/news-articles";
+import { publishedArticles } from "@/lib/news-articles";
 
 export type Storyline = {
   kicker: string;
@@ -402,8 +402,8 @@ export type NewsItem = {
   href: string;
 };
 
-/** PPA Tour's own newsroom — derived from the full articles in lib/news-articles. */
-export const news: NewsItem[] = newsArticles.map((a) => ({
+/** PPA Tour's own newsroom — APPROVED articles only (drafts never surface). */
+export const news: NewsItem[] = publishedArticles.map((a) => ({
   category: a.category,
   title: a.title,
   date: a.date,

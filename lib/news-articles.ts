@@ -3,10 +3,24 @@
  * original copy grounded in the site's own season data (roster, rankings,
  * calendar, purses, broadcast). No direct quotes are attributed to real
  * players. Swap for Sanity CMS when the content pipeline lands.
+ *
+ * ── APPROVAL GATE (Connor's directive, 7/20) ─────────────────────────────
+ * Nothing AI-written goes live or silently mutates without a human click.
+ * Every NEW or REWRITTEN article MUST be committed with `status: "draft"`.
+ * Drafts never render anywhere (no index, no page, no sitemap, no event
+ * coverage, no homepage). Dylan approves by flipping `status` to
+ * "published" in a follow-up commit. When Sanity lands, this field maps
+ * onto Sanity's native draft/publish and Dylan approves in the Studio.
+ * Full workflow: docs/CONTENT-APPROVAL.md
  */
 
 export type NewsArticle = {
   slug: string;
+  /**
+   * Approval gate — REQUIRED. New/updated AI-generated articles start as
+   * "draft" (invisible site-wide) until Dylan flips them to "published".
+   */
+  status: "published" | "draft";
   category: string;
   title: string;
   /** Display date, e.g. "May 17" (2026). */
@@ -24,6 +38,7 @@ export type NewsArticle = {
 export const newsArticles: NewsArticle[] = [
   {
     slug: "vegas-final-five-stats",
+    status: "published",
     players: ["ben-johns", "jw-johnson", "federico-staksrud"],
     eventSlug: "rate-las-vegas-open",
     category: "Recap",
@@ -43,6 +58,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "atlanta-draw-decoded",
+    status: "published",
     players: ["ben-johns", "anna-leigh-waters"],
     eventSlug: "atlanta-pickleball-championships",
     category: "Analysis",
@@ -62,6 +78,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "rookie-class-rankings",
+    status: "published",
     category: "Feature",
     title: "Inside the Rookie Class Rewriting the Rankings",
     date: "May 14",
@@ -79,6 +96,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "race-report-spring-swing",
+    status: "published",
     players: ["ben-johns", "federico-staksrud", "christian-alshon", "anna-leigh-waters"],
     category: "The Race",
     title: "Race Report: Who Moved After the Spring Swing",
@@ -97,6 +115,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "record-25-event-season",
+    status: "published",
     category: "Tour News",
     title: "PPA Tour Adds Two Stops to a Record 25-Event Season",
     date: "May 9",
@@ -114,6 +133,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "hartman-bricker-chicago-upset",
+    status: "published",
     eventSlug: "veolia-chicago-open",
     category: "Recap",
     title: "Hartman & Bricker Take Down Top Seeds in Chicago",
@@ -132,6 +152,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "anand-singles-run",
+    status: "published",
     eventSlug: "virginia-beach-open",
     category: "Feature",
     title: "Anand's Singles Run Continues Into Virginia Beach",
@@ -150,6 +171,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "atlanta-court-surface",
+    status: "published",
     eventSlug: "atlanta-pickleball-championships",
     category: "Analysis",
     title: "How the Atlanta Court Surface Plays",
@@ -168,6 +190,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "safdar-repeat-finals",
+    status: "published",
     category: "Profile",
     title: "Mehvish Safdar on Repeat Final Appearances",
     date: "Apr 30",
@@ -185,6 +208,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "two-game-comeback-strategy",
+    status: "published",
     category: "Analysis",
     title: "Inside the Strategy Behind a Two-Game Comeback",
     date: "Apr 28",
@@ -202,6 +226,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "junior-ppa-pipeline",
+    status: "published",
     category: "Junior",
     title: "The Junior PPA Pipeline: Five Names to Watch",
     date: "Apr 25",
@@ -219,6 +244,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "top-10-drop-shots-vegas",
+    status: "published",
     eventSlug: "rate-las-vegas-open",
     category: "Highlights",
     title: "Top 10 Drop Shots from the Las Vegas Open",
@@ -237,6 +263,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "2026-rule-changes",
+    status: "published",
     category: "Tour News",
     title: "What's New in the 2026 Tournament Rules",
     date: "Apr 20",
@@ -254,6 +281,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "ranking-points-explained",
+    status: "published",
     category: "Explainer",
     title: "How Ranking Points Are Calculated, Explained",
     date: "Apr 17",
@@ -271,6 +299,7 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "day-in-the-life-on-tour",
+    status: "published",
     category: "Feature",
     title: "Behind the Scenes: A Day in the Life on Tour",
     date: "Apr 14",
@@ -288,11 +317,20 @@ export const newsArticles: NewsArticle[] = [
   },
 ];
 
+/**
+ * Approved articles only — the ONLY list any page should render from.
+ * Drafts (pending Dylan's approval) are invisible everywhere.
+ */
+export const publishedArticles: NewsArticle[] = newsArticles.filter(
+  (a) => a.status === "published",
+);
+
+/** A single approved article; drafts resolve to undefined (→ 404). */
 export function getArticle(slug: string): NewsArticle | undefined {
-  return newsArticles.find((a) => a.slug === slug);
+  return publishedArticles.find((a) => a.slug === slug);
 }
 
-/** Coverage attached to a tour stop — the event's editorial history. */
+/** Approved coverage attached to a tour stop — the event's editorial history. */
 export function getArticlesForEvent(eventSlug: string): NewsArticle[] {
-  return newsArticles.filter((a) => a.eventSlug === eventSlug);
+  return publishedArticles.filter((a) => a.eventSlug === eventSlug);
 }

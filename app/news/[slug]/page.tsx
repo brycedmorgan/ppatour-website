@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
-import { getArticle, newsArticles } from "@/lib/news-articles";
+import { getArticle, publishedArticles } from "@/lib/news-articles";
 import { athletes, type Athlete } from "@/lib/athletes";
 import { getNextTournament } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
@@ -11,7 +11,7 @@ import { withUtm } from "@/lib/utm";
 type Params = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
-  return newsArticles.map((a) => ({ slug: a.slug }));
+  return publishedArticles.map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
@@ -62,7 +62,7 @@ export default async function ArticlePage({ params }: Params) {
   const a = getArticle(slug);
   if (!a) notFound();
 
-  const related = newsArticles.filter((x) => x.slug !== a.slug).slice(0, 3);
+  const related = publishedArticles.filter((x) => x.slug !== a.slug).slice(0, 3);
   const next = getNextTournament();
 
   const mentioned = athletes.filter((p) =>

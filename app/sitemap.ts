@@ -3,7 +3,7 @@ import { athletes } from "@/lib/athletes";
 import { CURATED_TO_CANONICAL, publishedAthletes } from "@/lib/published-athletes";
 import { tournaments } from "@/lib/placeholder-data";
 import { tourPrograms } from "@/lib/tour-programs";
-import { newsArticles } from "@/lib/news-articles";
+import { publishedArticles } from "@/lib/news-articles";
 
 import { SITE_URL } from "@/lib/site";
 
@@ -68,7 +68,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.5,
     })),
-    ...newsArticles.map((a) => ({
+    ...publishedArticles.map((a) => ({
       url: `${BASE}/news/${a.slug}`,
       changeFrequency: "monthly" as const,
       priority: 0.6,
