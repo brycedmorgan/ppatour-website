@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
-import { getRankings } from "@/lib/rankings-api";
+import { getFullRankings } from "@/lib/rankings-api";
 
 export const metadata: Metadata = {
   title: "World Pickleball Rankings",
@@ -12,8 +12,9 @@ export const metadata: Metadata = {
 };
 
 export default async function RankingsPage() {
-  // 52-week World Pickleball Rankings (top 25 per gender).
-  const ranking = await getRankings();
+  // 52-week World Pickleball Rankings — the COMPLETE boards, every ranked
+  // pro in both genders (Connor: "all the way", no 25-row cap).
+  const ranking = await getFullRankings();
 
   // Current No. 1s: the top man + top woman.
   const leaders = ranking.divisions
@@ -125,8 +126,9 @@ export default async function RankingsPage() {
             Men&apos;s &amp; Women&apos;s Rankings
           </h2>
           <p className="mt-2 max-w-xl text-sm text-white/60">
-            Switch between the men&apos;s and women&apos;s boards. Click any name
-            to open that pro&apos;s profile.
+            The complete boards — every ranked pro, top to bottom. Switch
+            between men&apos;s and women&apos;s, and click any name to open
+            that pro&apos;s profile.
           </p>
           <div className="mt-6">
             <RankingsBoard divisions={ranking.divisions} />

@@ -26,6 +26,9 @@ export function RankingsBoard({ divisions }: { divisions: RankingDivision[] }) {
             }`}
           >
             {d.short}
+            {d.entries.length > 10 && (
+              <span className="ml-1.5 opacity-60">· {d.entries.length}</span>
+            )}
           </button>
         ))}
       </div>

@@ -251,6 +251,44 @@ export async function getRankings(): Promise<RankingsResult> {
 }
 
 /**
+ * The COMPLETE ranking boards — every ranked pro, both genders, no cap
+ * (Connor's "all the way" ask for /rankings). Pages through the API at 100
+ * rows a call until the reported total is exhausted (hard cap 10 pages per
+ * gender as a runaway guard). Never throws — placeholder fallback on error.
+ */
+export async function getFullRankings(): Promise<RankingsResult> {
+  const { token, baseUrl } = config();
+  if (!token) return fallbackResult();
+
+  const PAGE = 100;
+  const MAX_PAGES = 10;
+  const today = new Date().toISOString().slice(0, 10);
+  try {
+    const divisions = await Promise.all(
+      RANKING_GENDERS.map(async (g) => {
+        const all: RankingEntry[] = [];
+        let page = 1;
+        let total = Infinity;
+        while (all.length < total && page <= MAX_PAGES) {
+          const { entries, total: reported } = await fetchPage(
+            g.gender, page, PAGE, token, baseUrl, today,
+          );
+          if (entries.length === 0) break;
+          all.push(...entries);
+          total = reported;
+          page += 1;
+        }
+        return { key: g.key, label: g.label, short: g.short, entries: all };
+      }),
+    );
+    if (divisions.every((d) => d.entries.length === 0)) return fallbackResult();
+    return { divisions, source: "live" };
+  } catch {
+    return fallbackResult();
+  }
+}
+
+/**
  * One paginated page of a single gender board for the full /leaderboards page.
  * `page` is 1-indexed. Never throws — returns the placeholder fallback on error.
  */
