@@ -43,6 +43,7 @@ export default async function AthletesPage() {
       rank: wpr?.rank ?? 0,
       points: wpr?.points ?? 0,
       gender: wpr?.gender ?? genderFromDivisions(p.divisions),
+      divisions: p.divisions,
     };
   });
 
