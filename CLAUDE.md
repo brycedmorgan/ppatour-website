@@ -65,6 +65,28 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   Sadie the venue shot list; per-event sponsor lists from
   Jackalope/SponsorCX when they exist.
 
+### 2026-07-21 — Full official-partner roster (Connor: all sponsors, feel valuable)
+- Connor Pardoe priority: every sponsor listed + made to feel valuable
+  across homepage + event pages. Expanded `partners` 7 → **all 17**
+  current designated partners from the exclusivity roster (Carvana
+  title + Veolia, JOOLA, Humana, Ensure, Proton, Six Zero, Rate,
+  Fasenra, Holland America, Joma, LT Pro 48, Park Place, Selkirk, Reign
+  Storm, Tixr, Acrytech). Each leads with the category it owns
+  ("Official {X} of the PPA Tour") — the designation IS the value.
+- New `components/global/PartnerWall.tsx` directory (title hero + full
+  official grid, accent-tintable) used on homepage AND every event
+  Sponsors section. Logo shown where we hold the brand-kit file; clean
+  name-wordmark card otherwise. /about/sponsors shows all 17.
+- Logo field now optional; guarded every partner-logo render (footer,
+  spotlight, marquee, sponsors page, event marquee).
+- **Logos for the 10 non-flagship partners = per-partner asset swap**
+  (favicons were too low-quality to sit beside the 2048px wordmarks;
+  the data field is ready — drop a real brand-kit PNG in
+  public/ppa/sponsors + set logo/logoWidth/logoHeight).
+- Source of truth: Jackalope sponsorship exclusivity sheet
+  (ziff sponsorship.js SPN_EXCLUSIVES). Roster shifts as designations
+  renew/lapse — resync when the sheet changes.
+
 ### 2026-07-20 (pt. 2) — Per-event display typography (Nationals serif)
 - Answered the open font question: YES, per-event serif — opt-in, not
   tour-wide. `brand.font: "cormorant"` sets `--font-event-serif` on the
