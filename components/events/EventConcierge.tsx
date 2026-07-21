@@ -165,7 +165,7 @@ export function EventConcierge({ facts }: { facts: ConciergeFacts }) {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="fixed bottom-20 right-4 z-40 flex h-11 items-center gap-2 bg-ppa-navy px-4 text-[11px] font-bold uppercase tracking-[0.12em] text-white shadow-[0_12px_32px_-8px_rgba(7,34,58,0.5)] transition hover:bg-ppa-blue active:scale-[0.97]"
+        className="fixed bottom-20 right-4 z-40 flex h-11 items-center gap-2 bg-ppa-blue px-4 text-[11px] font-bold uppercase tracking-[0.12em] text-white shadow-[0_12px_32px_-8px_rgba(7,34,58,0.5)] transition hover:bg-ppa-blue-deep active:scale-[0.97]"
       >
         <span
           aria-hidden

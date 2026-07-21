@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { SITE_URL } from "@/lib/site";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -11,7 +11,7 @@ import { EventTabNav } from "@/components/events/EventTabNav";
 import { EventGallery } from "@/components/events/EventGallery";
 import { VenueMap } from "@/components/events/VenueMap";
 import { VolunteerModalButton } from "@/components/events/VolunteerModalButton";
-import { LiveScoreGrid } from "@/components/live/LiveScoreGrid";
+import { ScoresBoard } from "@/components/live/ScoresBoard";
 import { BracketPanel } from "@/components/live/BracketPanel";
 import { ATLANTA_EVENT_ID } from "@/lib/bracket-sample";
 import { getBroadcast } from "@/lib/broadcast";
@@ -229,8 +229,8 @@ export function NationalsLive() {
   const completed = false;
 
   const TABS = [
-    { id: "live", label: "Live Scores" },
     { id: "overview", label: "Overview" },
+    { id: "live", label: "Live Scores" },
     { id: "stakes", label: "What's at Stake" },
     { id: "schedule", label: "Order of Play" },
     { id: "watch", label: "Watch" },
@@ -531,6 +531,30 @@ export function NationalsLive() {
         </div>
       </section>
 
+      {/* Overview — quick facts */}
+      <section id="overview" className="scroll-mt-[120px] bg-ppa-navy-deep text-white">
+        <div className="mx-auto grid w-full max-w-6xl grid-cols-2 px-4 sm:grid-cols-4">
+          {[
+            { k: "Dates", v: formatDateRange(t.startDate, t.endDate) },
+            { k: "Venue", v: t.venue },
+            { k: "Prize Money & Fees", v: t.prizeMoney, accent: true },
+            { k: tierLabel(t), v: `${tierPoints(t).toLocaleString()} Pts` },
+          ].map((f, i) => (
+            <div
+              key={f.k}
+              className={`px-4 py-5 ${i % 2 === 1 ? "border-l border-white/10" : ""} ${i >= 2 ? "border-t border-white/10 sm:border-t-0" : ""} ${i === 2 ? "sm:border-l" : ""}`}
+            >
+              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
+                {f.k}
+              </p>
+              <p className={`mt-1 font-display text-base uppercase ${f.accent ? "text-ppa-yellow" : "text-white"}`}>
+                {f.v}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Live scores — happening now */}
       <section id="live" className="scroll-mt-[120px] bg-ppa-navy">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -577,9 +601,7 @@ export function NationalsLive() {
           <div className="mt-6">
             {isLive ? (
               scoreView === "scores" ? (
-                <Suspense fallback={<div className="h-[120px]" />}>
-                  <LiveScoreGrid />
-                </Suspense>
+                <ScoresBoard eventId={ATLANTA_EVENT_ID} />
               ) : (
                 <BracketPanel
                   eventId={ATLANTA_EVENT_ID}
@@ -602,30 +624,6 @@ export function NationalsLive() {
               </div>
             )}
           </div>
-        </div>
-      </section>
-
-      {/* Overview — quick facts */}
-      <section id="overview" className="scroll-mt-[120px] bg-ppa-navy-deep text-white">
-        <div className="mx-auto grid w-full max-w-6xl grid-cols-2 px-4 sm:grid-cols-4">
-          {[
-            { k: "Dates", v: formatDateRange(t.startDate, t.endDate) },
-            { k: "Venue", v: t.venue },
-            { k: "Prize Money & Fees", v: t.prizeMoney, accent: true },
-            { k: tierLabel(t), v: `${tierPoints(t).toLocaleString()} Pts` },
-          ].map((f, i) => (
-            <div
-              key={f.k}
-              className={`px-4 py-5 ${i % 2 === 1 ? "border-l border-white/10" : ""} ${i >= 2 ? "border-t border-white/10 sm:border-t-0" : ""} ${i === 2 ? "sm:border-l" : ""}`}
-            >
-              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
-                {f.k}
-              </p>
-              <p className={`mt-1 font-display text-base uppercase ${f.accent ? "text-ppa-yellow" : "text-white"}`}>
-                {f.v}
-              </p>
-            </div>
-          ))}
         </div>
       </section>
 
