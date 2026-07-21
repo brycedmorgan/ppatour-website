@@ -21,6 +21,7 @@ import { getEventSchedule } from "@/lib/event-schedule";
 import { playersToWatch } from "@/lib/home-content";
 import { getArticlesForEvent } from "@/lib/news-articles";
 import {
+  eventHref,
   formatDate,
   formatDateRange,
   tierLabel,
@@ -256,7 +257,7 @@ export function NationalsLive() {
     city: t.city,
     state: t.state,
     venue: t.venue,
-    dates: formatDateRange(t.startDate, t.endDate),
+    dates: formatDateRange(t.startDate, t.endDate, true),
     gates: days[0]?.gates ?? "an hour before first serve",
     ticketFrom: t.ticketPriceFrom,
     ticketsUrl: withUtm(t.ticketsUrl, {
@@ -381,7 +382,7 @@ export function NationalsLive() {
             </h1>
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold uppercase tracking-wide text-white/75">
-            <span>{formatDateRange(t.startDate, t.endDate)}</span>
+            <span>{formatDateRange(t.startDate, t.endDate, true)}</span>
             <span className="text-white/25">|</span>
             <span>
               {t.venue} · {t.city}
@@ -582,7 +583,7 @@ export function NationalsLive() {
       <section id="overview" className="scroll-mt-[120px] bg-ppa-navy-deep text-white">
         <div className="mx-auto grid w-full max-w-6xl grid-cols-2 px-4 sm:grid-cols-4">
           {[
-            { k: "Dates", v: formatDateRange(t.startDate, t.endDate) },
+            { k: "Dates", v: formatDateRange(t.startDate, t.endDate, true) },
             { k: "Venue", v: t.venue },
             { k: "Prize Money & Fees", v: t.prizeMoney, accent: true },
             { k: tierLabel(t), v: `${tierPoints(t).toLocaleString()} Pts` },
@@ -1580,7 +1581,7 @@ export function NationalsLive() {
             {otherTournaments.map((o) => (
               <Link
                 key={o.slug}
-                href={`/events/${o.slug}`}
+                href={eventHref(o)}
                 className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden bg-ppa-navy"
               >
                 <Image
@@ -1610,7 +1611,7 @@ export function NationalsLive() {
                     {o.shortName}
                   </p>
                   <p className="mt-1 text-xs text-white/60">
-                    {formatDateRange(o.startDate, o.endDate)} · {o.city}
+                    {formatDateRange(o.startDate, o.endDate, true)} · {o.city}
                   </p>
                 </div>
               </Link>

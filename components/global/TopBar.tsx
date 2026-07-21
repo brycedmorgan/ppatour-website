@@ -27,7 +27,7 @@ export function TopBar() {
               above the date in the ticker badge and links to the event page. */}
           <LiveScoreTicker
             logo="/ppa/logos/2026-atl.webp"
-            logoHref="/events/veolia-atlanta-pickleball-championships-2026"
+            logoHref="/events/2026/veolia-atlanta-pickleball-championships"
           />
         </Suspense>
         <div className="site-chrome sticky top-0 z-50">

@@ -158,6 +158,16 @@ export function kebab(s: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
+/** The 4-digit year an event belongs to (from its start date). */
+export function eventYear(t: Pick<Tournament, "startDate">): string {
+  return t.startDate.slice(0, 4);
+}
+
+/** Canonical internal path for an event: /events/{year}/{slug}. */
+export function eventHref(t: Pick<Tournament, "startDate" | "slug">): string {
+  return `/events/${t.startDate.slice(0, 4)}/${t.slug}`;
+}
+
 type RawEvent = {
   name: string;
   short: string;
@@ -380,7 +390,7 @@ const SCHEDULE: RawEvent[] = [
 // Recent completed events — power the /events Past tab + Season filter.
 const PAST_EVENTS: Tournament[] = [
   {
-    slug: "2026-carvana-utah-open",
+    slug: "carvana-utah-open",
     name: "Carvana Utah Open",
     shortName: "Utah Open",
     city: "Salt Lake City",
@@ -399,7 +409,7 @@ const PAST_EVENTS: Tournament[] = [
     season: "2025-2026",
   },
   {
-    slug: "2026-veolia-kansas-city-cup",
+    slug: "veolia-kansas-city-cup",
     name: "Veolia Kansas City Cup",
     shortName: "Kansas City Cup",
     city: "Overland Park",
@@ -418,7 +428,7 @@ const PAST_EVENTS: Tournament[] = [
     season: "2025-2026",
   },
   {
-    slug: "2026-orlando-open",
+    slug: "orlando-open",
     name: "Orlando Open",
     shortName: "Orlando Open",
     city: "Orlando",
@@ -436,7 +446,7 @@ const PAST_EVENTS: Tournament[] = [
     season: "2025-2026",
   },
   {
-    slug: "2026-los-angeles-slam",
+    slug: "los-angeles-slam",
     name: "Los Angeles Slam",
     shortName: "LA Slam",
     city: "Los Angeles",
@@ -472,7 +482,7 @@ const PAST_EVENTS: Tournament[] = [
     season: "2025-2026",
   },
   {
-    slug: "2025-newport-beach-open",
+    slug: "newport-beach-open",
     name: "Newport Beach Open",
     shortName: "Newport Open",
     city: "Newport Beach",
@@ -490,7 +500,7 @@ const PAST_EVENTS: Tournament[] = [
     season: "2025",
   },
   {
-    slug: "2024-dallas-slam",
+    slug: "dallas-slam",
     name: "Dallas Open",
     shortName: "Dallas Open",
     city: "Dallas",
@@ -508,7 +518,7 @@ const PAST_EVENTS: Tournament[] = [
     season: "2024",
   },
   {
-    slug: "2023-phoenix-cup",
+    slug: "phoenix-cup",
     name: "Phoenix Cup",
     shortName: "Phoenix Cup",
     city: "Phoenix",
@@ -526,7 +536,7 @@ const PAST_EVENTS: Tournament[] = [
     season: "2023",
   },
   {
-    slug: "2022-miami-open",
+    slug: "miami-open",
     name: "Miami Open",
     shortName: "Miami Open",
     city: "Miami",

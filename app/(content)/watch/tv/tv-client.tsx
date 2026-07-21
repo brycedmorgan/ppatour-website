@@ -66,7 +66,7 @@ export function TvScheduleList() {
               </span>
               {e.slug ? (
                 <Link
-                  href={`/events/${e.slug}`}
+                  href={`/events/${e.startIso.slice(0, 4)}/${e.slug}`}
                   className="font-display text-lg uppercase leading-tight hover:text-ppa-sky"
                 >
                   {e.name} →

@@ -95,6 +95,18 @@ export function matchWatchUrl(m: TickerMatch): string {
   return m.watchUrl || PBTV_WATCH_URL;
 }
 
+/** The PickleballTV live stream — the fallback when no marquee-court match has
+ *  its own live link. */
+export const PBTV_STREAM_URL = "https://stream.pickleballtv.com/";
+
+/** Where a "Watch Live" button should send viewers: the live match on
+ *  Championship Court, else Grandstand Court, else the PickleballTV stream. */
+export function liveWatchUrl(matches: TickerMatch[]): string {
+  const live = matches.filter((m) => m.status === "live" && m.watchUrl);
+  const onCourt = (re: RegExp) => live.find((m) => re.test(m.court))?.watchUrl;
+  return onCourt(/champ/i) || onCourt(/grandstand/i) || PBTV_STREAM_URL;
+}
+
 /** "11–9, 9–11, 8–6" — the games that have a score, in order. */
 export function formatMatchScore(m: TickerMatch): string {
   const cells: string[] = [];

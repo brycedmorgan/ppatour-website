@@ -150,28 +150,29 @@ export function BracketView({
 
   const scrollToRound = (i: number) => {
     const el = scrollRef.current;
-    // Move to the round's first match card — over (x) and down (y) — since
-    // later rounds' cards sit lower where the tree centers them.
-    const firstId = bracket.rounds[i]?.matches[0]?.id;
-    const card = firstId ? cardRefs.current.get(firstId) : undefined;
     const col = colRefs.current[i];
-    if (el && card) {
-      if (fullPage) {
-        // Full page: the box is content-tall, so the window scrolls vertically.
-        el.scrollTo({ left: Math.max(0, card.offsetLeft - 8), behavior: "smooth" });
-        const y = card.getBoundingClientRect().top + window.scrollY - 140;
+    if (!el || !col) return;
+    // Anchor on the round's COLUMN (always present) — not a match-id lookup that
+    // can miss for some rounds and make the jump behave inconsistently.
+    const left = Math.max(0, col.offsetLeft - 8);
+    // The column centers its matches vertically, so scroll to the first card too
+    // (else a short round like the final sits off-screen below the fold).
+    const firstCard = col.querySelector("article") as HTMLElement | null;
+    if (fullPage) {
+      // Content-tall box: the box scrolls horizontally, the window vertically.
+      el.scrollTo({ left, behavior: "smooth" });
+      if (firstCard) {
+        const y = firstCard.getBoundingClientRect().top + window.scrollY - 140;
         window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
-      } else {
-        // In-section: scroll x + y together — two scrollTo calls on the same
-        // element cancel each other, so the horizontal jump is lost.
-        el.scrollTo({
-          left: Math.max(0, card.offsetLeft - 8),
-          top: Math.max(0, card.offsetTop - 8),
-          behavior: "smooth",
-        });
       }
-    } else if (el && col) {
-      el.scrollTo({ left: Math.max(0, col.offsetLeft - 8), behavior: "smooth" });
+    } else {
+      // In-section box scrolls both axes; issue x + y in one call (two calls on
+      // the same element cancel each other).
+      el.scrollTo({
+        left,
+        top: firstCard ? Math.max(0, firstCard.offsetTop - 8) : el.scrollTop,
+        behavior: "smooth",
+      });
     }
     setActiveRound(i);
   };

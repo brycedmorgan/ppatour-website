@@ -49,8 +49,8 @@ const LEGACY_REDIRECTS = [
   { source: "/travel", destination: "/tour/travel" },
   { source: "/hospitality", destination: "/tour/hospitality" },
   // renamed staging-era event slugs
-  { source: "/events/veolia-chicago-open", destination: "/events/veolia-chicago-cup" },
-  { source: "/events/carvana-mesa-cup", destination: "/events/veolia-arizona-open" },
+  { source: "/events/veolia-chicago-open", destination: "/events/2026/veolia-chicago-cup" },
+  { source: "/events/carvana-mesa-cup", destination: "/events/2026/veolia-arizona-open" },
   { source: "/events/veolia-cincinnati-cup", destination: "/events" },
   // patterns
   { source: "/athlete/:slug", destination: "/athletes/:slug" },

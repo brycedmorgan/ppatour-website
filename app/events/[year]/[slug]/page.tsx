@@ -15,18 +15,19 @@ import { VolunteerModalButton } from "@/components/events/VolunteerModalButton";
 import { ResultsPanel } from "@/components/live/ResultsPanel";
 import { ChampionsBanner } from "@/components/live/ChampionsBanner";
 import { ReplayGallery } from "@/components/live/ReplayGallery";
-import { ATLANTA_EVENT_ID } from "@/lib/bracket-sample";
 import { getReplayPlaylistId } from "@/lib/event-replays";
 import { getPlaylistVideos } from "@/lib/youtube";
 import { Countdown } from "@/components/motion/Countdown";
 import { getBroadcast } from "@/lib/broadcast";
 import { getEventGuide } from "@/lib/event-guides";
 import { getEventSchedule } from "@/lib/event-schedule";
-import { getEvents, getInternalEvent } from "@/lib/events-api";
+import { getEvents } from "@/lib/events-api";
 import { playersToWatch } from "@/lib/home-content";
 import { getArticlesForEvent } from "@/lib/news-articles";
 import {
   daysUntil,
+  eventHref,
+  eventYear,
   formatDate,
   formatDateRange,
   tierLabel,
@@ -37,35 +38,45 @@ import {
 } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
 
-type Params = { params: Promise<{ slug: string }> };
+type Params = { params: Promise<{ year: string; slug: string }> };
 
 /**
- * Resolve an event for its detail page: a curated record wins (keeps the rich,
- * hand-authored content), otherwise an API-sourced US event that has an internal
- * page. Returns null for unknown slugs, challengers, and international stops
- * (which all link out to their details_url instead).
+ * Resolve an event for its detail page by year + slug: a curated record wins
+ * (keeps the rich, hand-authored content), otherwise an API-sourced US event
+ * that has an internal page. Matching on the year disambiguates recurring
+ * events (e.g. the 2026 vs 2027 PPA Finals, which share the slug `ppa-finals`).
+ * Returns null for unknown events, challengers, and international stops (which
+ * all link out to their details_url instead).
  */
-async function resolveEvent(slug: string): Promise<Tournament | null> {
-  const t = tournaments.find((x) => x.slug === slug) ?? (await getInternalEvent(slug));
+async function resolveEvent(year: string, slug: string): Promise<Tournament | null> {
+  const match = (x: Tournament) => x.slug === slug && eventYear(x) === year;
+  const t = tournaments.find(match) ?? (await getEvents()).events.find(match) ?? null;
   if (!t || t.tierKey === "challenger") return null;
   return t;
 }
 
 export async function generateStaticParams() {
   const { events } = await getEvents();
-  const slugs = new Set<string>(
-    tournaments.filter((t) => t.tierKey !== "challenger").map((t) => t.slug),
-  );
-  for (const e of events) if (e.hasInternalPage) slugs.add(e.slug);
-  return [...slugs].map((slug) => ({ slug }));
+  const seen = new Set<string>();
+  const params: { year: string; slug: string }[] = [];
+  const add = (t: Tournament) => {
+    const year = eventYear(t);
+    const key = `${year}/${t.slug}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    params.push({ year, slug: t.slug });
+  };
+  for (const t of tournaments) if (t.tierKey !== "challenger") add(t);
+  for (const e of events) if (e.hasInternalPage) add(e);
+  return params;
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
-  const { slug } = await params;
-  const t = await resolveEvent(slug);
+  const { year, slug } = await params;
+  const t = await resolveEvent(year, slug);
   if (!t) return { title: "Event" };
   const where = t.state ? `${t.city}, ${t.state}` : t.city;
-  const description = `${tierLabel(t)} · ${formatDateRange(t.startDate, t.endDate)} · ${where} · ${t.prizeMoney} in prize money & appearance fees. Schedule, players, tickets, trip guide, and how to watch.`;
+  const description = `${tierLabel(t)} · ${formatDateRange(t.startDate, t.endDate, true)} · ${where} · ${t.prizeMoney} in prize money & appearance fees. Schedule, players, tickets, trip guide, and how to watch.`;
   return {
     title: t.shortName,
     description,
@@ -180,8 +191,8 @@ function buildSchedule(startIso: string, endIso: string): Day[] {
 }
 
 export default async function EventPage({ params }: Params) {
-  const { slug } = await params;
-  const t = await resolveEvent(slug);
+  const { year, slug } = await params;
+  const t = await resolveEvent(year, slug);
   if (!t) notFound();
 
   const countdown = daysUntil(t.startDate);
@@ -217,12 +228,18 @@ export default async function EventPage({ params }: Params) {
   ].slice(0, 3);
 
   const coverage = getArticlesForEvent(t.slug);
-  const completed = t.status === "completed";
+  // Completed once the tour marks it so, OR once the current date is past the
+  // event's end date (recomputed on the page's daily revalidate).
+  const now = new Date();
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const todayKey = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+  const completed = t.status === "completed" || (t.endDate ? t.endDate.slice(0, 10) < todayKey : false);
   // Completed events show champions + final scores (any event with a UUID);
   // full brackets only where we have the draw data (Atlanta for now).
   const uuid = t.tournamentUuid;
   const showResults = completed && Boolean(uuid);
-  const showBracket = completed && uuid?.toLowerCase() === ATLANTA_EVENT_ID.toLowerCase();
+  // Brackets are built live from the match feed for any completed event.
+  const showBracket = showResults;
 
   // Tournament replays — YouTube playlist mapped by slug (lib/event-replays.ts),
   // fetched server-side. Empty until a playlist ID is configured / a key exists.
@@ -247,7 +264,7 @@ export default async function EventPage({ params }: Params) {
           { id: "watch", label: "Watch" },
           { id: "venue", label: "Venue Guide" },
         ]),
-    ...(guide ? [{ id: "travel", label: "Plan Your Trip" }] : []),
+    ...(guide && !completed ? [{ id: "travel", label: "Plan Your Trip" }] : []),
     ...(completed ? [] : [{ id: "players", label: "Players" }]),
     ...(completed ? [] : [{ id: "involved", label: "Get Involved" }]),
     ...(coverage.length > 0 ? [{ id: "coverage", label: "Coverage" }] : []),
@@ -260,7 +277,7 @@ export default async function EventPage({ params }: Params) {
     city: t.city,
     state: t.state,
     venue: t.venue,
-    dates: formatDateRange(t.startDate, t.endDate),
+    dates: formatDateRange(t.startDate, t.endDate, true),
     gates: days[0]?.gates ?? "an hour before first serve",
     ticketFrom: t.ticketPriceFrom,
     ticketsUrl: withUtm(t.ticketsUrl, {
@@ -312,7 +329,7 @@ export default async function EventPage({ params }: Params) {
               address: t.state ? `${t.city}, ${t.state}` : t.city,
             },
             image: `${SITE_URL}${t.image}`,
-            url: `${SITE_URL}/events/${t.slug}`,
+            url: `${SITE_URL}${eventHref(t)}`,
             organizer: {
               "@type": "Organization",
               name: "Carvana PPA Tour",
@@ -377,7 +394,7 @@ export default async function EventPage({ params }: Params) {
             </h1>
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold uppercase tracking-wide text-white/75">
-            <span>{formatDateRange(t.startDate, t.endDate)}</span>
+            <span>{formatDateRange(t.startDate, t.endDate, true)}</span>
             <span className="text-white/25">|</span>
             <span>
               {t.venue} · {t.city}
@@ -471,7 +488,7 @@ export default async function EventPage({ params }: Params) {
       <section id="overview" className="scroll-mt-[120px] bg-ppa-navy-deep text-white">
         <div className="mx-auto grid w-full max-w-6xl grid-cols-2 px-4 sm:grid-cols-4">
           {[
-            { k: "Dates", v: formatDateRange(t.startDate, t.endDate) },
+            { k: "Dates", v: formatDateRange(t.startDate, t.endDate, true) },
             { k: "Venue", v: t.venue },
             { k: "Prize Money & Fees", v: t.prizeMoney, accent: true },
             { k: tierLabel(t), v: `${tierPoints(t).toLocaleString()} Pts` },
@@ -1016,8 +1033,8 @@ export default async function EventPage({ params }: Params) {
       </>
       )}
 
-      {/* Plan Your Trip — Ragnar-style */}
-      {guide && (
+      {/* Plan Your Trip — Ragnar-style (upcoming/live only) */}
+      {guide && !completed && (
         <section id="travel" className="scroll-mt-[120px] bg-white">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
             <div className="flex items-center gap-2.5">
@@ -1504,7 +1521,7 @@ export default async function EventPage({ params }: Params) {
             {otherTournaments.map((o) => (
               <Link
                 key={o.slug}
-                href={`/events/${o.slug}`}
+                href={eventHref(o)}
                 className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden bg-ppa-navy"
               >
                 <Image
@@ -1534,7 +1551,7 @@ export default async function EventPage({ params }: Params) {
                     {o.shortName}
                   </p>
                   <p className="mt-1 text-xs text-white/60">
-                    {formatDateRange(o.startDate, o.endDate)} · {o.city}
+                    {formatDateRange(o.startDate, o.endDate, true)} · {o.city}
                   </p>
                 </div>
               </Link>

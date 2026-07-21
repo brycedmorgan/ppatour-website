@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { athletes } from "@/lib/athletes";
 import { CURATED_TO_CANONICAL, publishedAthletes } from "@/lib/published-athletes";
-import { tournaments } from "@/lib/placeholder-data";
+import { eventHref, tournaments } from "@/lib/placeholder-data";
 import { tourPrograms } from "@/lib/tour-programs";
 import { publishedArticles } from "@/lib/news-articles";
 
@@ -54,7 +54,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: p === "" ? 1 : 0.7,
     })),
     ...tournaments.map((t) => ({
-      url: `${BASE}/events/${t.slug}`,
+      url: `${BASE}${eventHref(t)}`,
       changeFrequency: "weekly" as const,
       priority: 0.8,
     })),

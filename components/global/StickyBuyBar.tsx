@@ -6,7 +6,7 @@ import type { TickerMatch } from "@/lib/ticker-api";
 import { formatDate, getNextTournament } from "@/lib/placeholder-data";
 import {
   formatMatchScore,
-  matchWatchUrl,
+  liveWatchUrl,
   pickFeaturedMatch,
   teamLabel,
   useLiveTicker,
@@ -77,7 +77,7 @@ export function StickyBuyBar() {
   const featured = rotation.length > 0 ? rotation[index % rotation.length] : undefined;
   const live = Boolean(featured);
   const href = featured
-    ? matchWatchUrl(featured)
+    ? liveWatchUrl(ordered)
     : withUtm(next.ticketsUrl, {
         campaign: next.slug,
         content: "sticky-buy-bar",

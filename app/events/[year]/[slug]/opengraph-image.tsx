@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { OG_SIZE, ogFonts, ogImageData } from "@/lib/og";
 import {
+  eventYear,
   formatDateRange,
   tierPoints,
   tierShort,
@@ -13,10 +14,11 @@ export const contentType = "image/png";
 export default async function Image({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ year: string; slug: string }>;
 }) {
-  const { slug } = await params;
-  const t = tournaments.find((x) => x.slug === slug) ?? tournaments[0];
+  const { year, slug } = await params;
+  const t =
+    tournaments.find((x) => x.slug === slug && eventYear(x) === year) ?? tournaments[0];
   const accent = t.brand?.accent ?? "#228be6";
   const [fonts, bg, icon] = await Promise.all([
     ogFonts(),

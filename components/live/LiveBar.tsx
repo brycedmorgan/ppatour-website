@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { WatchLiveButton } from "@/components/live/WatchLiveButton";
 
 // Placeholder live context (swap for scoring-API data once wired).
 const LIVE_ROUND = "Round of 64";
@@ -37,12 +37,9 @@ export function LiveBar() {
       <div className="mx-auto flex w-full max-w-6xl items-center gap-4 px-4 py-2">
       {/* Left — Watch Live */}
       <div className="flex shrink-0 items-center gap-4">
-        <Link
-          href="/watch"
-          className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-yellow transition-colors hover:text-white"
-        >
+        <WatchLiveButton className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-yellow transition-colors hover:text-white">
           ▶ Watch Live
-        </Link>
+        </WatchLiveButton>
       </div>
 
       {/* Center — marquee (edge-faded, slowed) */}

@@ -8,6 +8,7 @@ import {
   tierPoints,
   tierShort,
   type Tournament,
+  eventHref,
 } from "@/lib/placeholder-data";
 
 type TimeKey = "upcoming" | "past";
@@ -210,7 +211,7 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
           {shown.map((t, i) => {
             const completed = t.status === "completed";
             const internal = t.hasInternalPage !== false;
-            const href = internal ? `/events/${t.slug}` : t.externalUrl ?? `/events/${t.slug}`;
+            const href = internal ? eventHref(t) : t.externalUrl ?? eventHref(t);
             return (
               <article
                 key={t.slug}

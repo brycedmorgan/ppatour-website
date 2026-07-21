@@ -3,6 +3,7 @@ import {
   formatDateRange,
   tierPoints,
   type Tournament,
+  eventHref,
 } from "@/lib/placeholder-data";
 
 /**
@@ -40,7 +41,7 @@ export function ChallengerStrip({ events }: { events: Tournament[] }) {
           {events.map((t) => {
             const internal = t.hasInternalPage !== false;
             const href = internal
-              ? `/events/${t.slug}`
+              ? eventHref(t)
               : t.externalUrl ?? t.registerUrl ?? t.ticketsUrl;
             const inner = (
               <>

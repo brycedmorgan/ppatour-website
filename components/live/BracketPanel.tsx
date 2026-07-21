@@ -9,8 +9,9 @@ import { BracketView } from "@/components/live/BracketView";
  * Bracket panel for the live-scores area: a division picker + the selected
  * division's bracket, polled every 15s from /api/brackets (same live cadence as
  * the score ticker). Divisions load once; the chosen bracket refreshes on its
- * own interval. Double-elim divisions also load a losers bracket and get a
- * Winners/Losers toggle.
+ * own interval. Double-elim divisions load a losers bracket (Winners/Losers
+ * toggle); group+knockout round-robin divisions load their pool play (Round
+ * Robin/Bracket toggle).
  */
 const POLL_MS = 15000;
 
@@ -35,7 +36,8 @@ export function BracketPanel({
   const [selected, setSelected] = useState<string | null>(null);
   const [bracket, setBracket] = useState<Bracket | null>(null);
   const [losers, setLosers] = useState<Bracket | null>(null);
-  const [stage, setStage] = useState<"winners" | "losers">("winners");
+  const [pools, setPools] = useState<Bracket | null>(null);
+  const [view, setView] = useState<"main" | "losers" | "pools">("main");
   const [loading, setLoading] = useState(true);
 
   // Division list — once.
@@ -59,7 +61,7 @@ export function BracketPanel({
   useEffect(() => {
     if (!selected) return;
     let active = true;
-    setStage("winners");
+    let first = true;
     const load = () =>
       fetch(`/api/brackets?event=${encodeURIComponent(eventId)}&division=${selected}`, {
         cache: "no-store",
@@ -69,6 +71,13 @@ export function BracketPanel({
           if (!active || !d) return;
           setBracket(d.bracket);
           setLosers(d.losers ?? null);
+          setPools(d.pools ?? null);
+          // Default view per division (once, so polling doesn't reset a manual
+          // toggle) — round-robin events open on their pool play.
+          if (first) {
+            setView(d.pools ? "pools" : "main");
+            first = false;
+          }
           setLoading(false);
         })
         .catch(() => {});
@@ -81,7 +90,8 @@ export function BracketPanel({
     };
   }, [eventId, selected]);
 
-  const shown = stage === "losers" && losers ? losers : bracket;
+  const shown =
+    view === "losers" && losers ? losers : view === "pools" && pools ? pools : bracket;
 
   const fullHref =
     expandHref && selected
@@ -128,40 +138,53 @@ export function BracketPanel({
         )}
       </div>
 
-      {/* Winners / Losers toggle — only for double-elim (losers bracket present) */}
-      {losers && (
-        <div className={`mt-4 inline-flex rounded-full border p-0.5 ${light ? "border-ppa-line" : "border-white/15"}`}>
-          {(["winners", "losers"] as const).map((s) => (
-            <button
-              key={s}
-              type="button"
-              onClick={() => setStage(s)}
-              className={`rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] transition-colors ${
-                stage === s
-                  ? light
-                    ? "bg-ppa-blue text-white"
-                    : "bg-ppa-yellow text-ppa-navy"
-                  : light
-                    ? "text-ppa-navy/55 hover:text-ppa-navy"
-                    : "text-white/60 hover:text-white"
-              }`}
-            >
-              {s === "winners" ? "Winners" : "Losers"}
-            </button>
-          ))}
-        </div>
-      )}
+      {/* Stage toggle — Winners/Losers for double-elim, or Round Robin/Bracket
+          for group+knockout round-robin events (Finals "Top 8 Ranked"). */}
+      {(() => {
+        const options: { v: "main" | "losers" | "pools"; label: string }[] = losers
+          ? [{ v: "main", label: "Winners" }, { v: "losers", label: "Losers" }]
+          : pools
+            ? [{ v: "pools", label: "Round Robin" }, { v: "main", label: "Bracket" }]
+            : [];
+        if (!options.length) return null;
+        return (
+          <div className={`mt-4 inline-flex rounded-full border p-0.5 ${light ? "border-ppa-line" : "border-white/15"}`}>
+            {options.map((o) => (
+              <button
+                key={o.v}
+                type="button"
+                onClick={() => setView(o.v)}
+                className={`rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] transition-colors ${
+                  view === o.v
+                    ? light
+                      ? "bg-ppa-blue text-white"
+                      : "bg-ppa-yellow text-ppa-navy"
+                    : light
+                      ? "text-ppa-navy/55 hover:text-ppa-navy"
+                      : "text-white/60 hover:text-white"
+                }`}
+              >
+                {o.label}
+              </button>
+            ))}
+          </div>
+        );
+      })()}
 
       {/* Format caption (from BracketFormatID detection) */}
       {(() => {
         const sel = divisions.find((d) => d.id === selected);
         if (!sel) return null;
         const label =
-          sel.type === "double-elim"
-            ? "Double elimination"
-            : sel.type === "round-robin"
-              ? "Round robin"
-              : "Single elimination";
+          view === "pools"
+            ? "Round robin — pool play"
+            : view === "losers"
+              ? "Losers bracket"
+              : sel.type === "double-elim"
+                ? "Double elimination"
+                : sel.type === "round-robin"
+                  ? "Round robin"
+                  : "Single elimination";
         return (
           <p className={`mt-3 text-[11px] font-bold uppercase tracking-[0.16em] ${light ? "text-ppa-navy/40" : "text-white/40"}`}>
             {label}

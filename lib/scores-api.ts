@@ -83,10 +83,11 @@ function fullName(first: string, last: string): string {
   return [first.trim(), last.trim()].filter(Boolean).join(" ");
 }
 
-/** "Mens Doubles Pro Main Draw" → "Men's Doubles". */
-function cleanDivision(title: string): string {
+/** "Mens Doubles Pro Main Draw" / "Women's Doubles Pro Top 8 Ranked" →
+ *  "Men's Doubles" / "Women's Doubles". */
+export function cleanDivision(title: string): string {
   return title
-    .replace(/\s*Pro Main Draw\s*/i, "")
+    .replace(/\s*Pro\s+(?:Main Draw|Top 8 Ranked|Qualifier)\s*/i, "")
     .replace(/\bMens\b/i, "Men's")
     .replace(/\bWomens\b/i, "Women's")
     .trim();
@@ -242,9 +243,23 @@ async function build(tournamentId: string): Promise<ScoresResult> {
     const evJson = (await get(base, token, `/v1/ppa/tournaments/${tournamentId}/tournament_events?bracket_level=Pro`)) as
       | { results?: ApiEvent[] }
       | null;
-    const events = (evJson?.results ?? []).filter(
+    const rawEvents = (evJson?.results ?? []).filter(
       (e) => e.eventType !== "UNDEFINED_PPA_EVENT_TYPE" && e.eventId && e.eventTitle,
     );
+    // Some tournaments (e.g. the PPA Finals) run both a "Pro Main Draw" and a
+    // "Pro Top 8 Ranked" bracket per discipline. The Top 8 Ranked bracket is the
+    // real championship (the marquee field), so it supersedes the Main Draw when
+    // both exist for the same division.
+    const isTop8 = (t?: string) => /top\s*8\s*ranked/i.test(t ?? "");
+    const byDivision = new Map<string, ApiEvent>();
+    for (const e of rawEvents) {
+      const div = cleanDivision(e.eventTitle as string);
+      const existing = byDivision.get(div);
+      if (!existing || (isTop8(e.eventTitle) && !isTop8(existing.eventTitle))) {
+        byDivision.set(div, e);
+      }
+    }
+    const events = [...byDivision.values()];
     const divisions = events.map((e) => ({ id: e.eventId as string, name: cleanDivision(e.eventTitle as string) }));
 
     const perEvent = await Promise.all(

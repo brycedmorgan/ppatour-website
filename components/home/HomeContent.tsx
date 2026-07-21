@@ -8,6 +8,7 @@ import { PartnerSpotlight } from "@/components/home/PartnerSpotlight";
 import { PartnerWall } from "@/components/global/PartnerWall";
 import { ScoreRail } from "@/components/home/ScoreRail";
 import { ScoresBracketToggle } from "@/components/live/ScoresBracketToggle";
+import { WatchLiveButton } from "@/components/live/WatchLiveButton";
 import { ATLANTA_EVENT_ID } from "@/lib/bracket-sample";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
 import { getRankings } from "@/lib/rankings-api";
@@ -18,6 +19,7 @@ import {
   getNextTournament,
   tierPoints,
   tierShort,
+  eventHref,
 } from "@/lib/placeholder-data";
 import {
   ecosystemNews,
@@ -315,10 +317,7 @@ export async function HomeContent({
           >
             {live ? (
               <>
-                <Link
-                  href="/watch"
-                  className="group flex h-11 items-center justify-center gap-1.5 bg-ppa-live px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:bg-ppa-live-deep active:scale-[0.98]"
-                >
+                <WatchLiveButton className="group flex h-11 items-center justify-center gap-1.5 bg-ppa-live px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:bg-ppa-live-deep active:scale-[0.98]">
                   ▶ Watch Live
                   <span
                     aria-hidden
@@ -326,7 +325,7 @@ export async function HomeContent({
                   >
                     →
                   </span>
-                </Link>
+                </WatchLiveButton>
                 <Link
                   href="/watch"
                   className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98]"
@@ -377,7 +376,7 @@ export async function HomeContent({
                   </span>
                 </a>
                 <Link
-                  href={`/events/${next.slug}`}
+                  href={eventHref(next)}
                   className="group flex h-11 items-center justify-center gap-1.5 border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98]"
                 >
                   Explore the Event
@@ -741,7 +740,7 @@ export async function HomeContent({
                       {t.presentedBy ? `Presented by ${t.presentedBy}` : "PPA Tour"}
                     </p>
                     <Link
-                      href={`/events/${t.slug}`}
+                      href={eventHref(t)}
                       className="mt-0.5 block font-display text-lg uppercase leading-[1.05] text-white after:absolute after:inset-0"
                     >
                       {t.shortName}

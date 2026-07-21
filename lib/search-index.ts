@@ -5,6 +5,7 @@ import {
   formatDateRange,
   tierShort,
   tournaments,
+  eventHref,
 } from "@/lib/placeholder-data";
 import { tourPrograms } from "@/lib/tour-programs";
 
@@ -64,7 +65,7 @@ function buildIndex(): SearchDoc[] {
       group: "Events",
       title: t.name,
       meta: `${tierShort(t)} · ${t.city}, ${t.state} · ${dates}`,
-      href: `/events/${t.slug}`,
+      href: eventHref(t),
       haystack: blob(
         t.name,
         t.shortName,

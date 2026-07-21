@@ -6,6 +6,7 @@ import {
   tierPoints,
   tierShort,
   type Tournament,
+  eventHref,
 } from "@/lib/placeholder-data";
 
 /**
@@ -99,7 +100,7 @@ export function FeaturedEvents({
                     {t.presentedBy ? `Presented by ${t.presentedBy}` : "PPA Tour"}
                   </p>
                   <Link
-                    href={`/events/${t.slug}`}
+                    href={eventHref(t)}
                     className="mt-1 block font-display text-2xl uppercase leading-[1.02] text-white after:absolute after:inset-0"
                   >
                     {t.shortName}

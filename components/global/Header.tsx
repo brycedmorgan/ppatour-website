@@ -8,6 +8,7 @@ import {
   getMainTourEvents,
   getNextTournament,
   tierShort,
+  eventHref,
 } from "@/lib/placeholder-data";
 import { tourPrograms } from "@/lib/tour-programs";
 
@@ -205,7 +206,7 @@ function MegaPanelContent({
             {upcoming.map((t) => (
               <li key={t.slug}>
                 <Link
-                  href={`/events/${t.slug}`}
+                  href={eventHref(t)}
                   onClick={onNavigate}
                   className="group/stop flex items-center gap-3"
                 >
@@ -239,7 +240,7 @@ function MegaPanelContent({
           <PanelEyebrow>Next Event</PanelEyebrow>
           <div className="mt-4">
             <FeatureCard
-              href={`/events/${next.slug}`}
+              href={eventHref(next)}
               image={next.image}
               eyebrow={`${tierShort(next)} · ${next.city}, ${next.state}`}
               title={next.shortName}

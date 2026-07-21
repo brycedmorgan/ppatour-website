@@ -167,19 +167,19 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
   const startDate = dateOnly(t.start_date);
 
   // Prefer the curated slug (so guides/broadcast/brand + existing URLs light up);
-  // otherwise a unique kebab of the title, disambiguated by year on collision.
+  // otherwise a kebab of the title. The year now lives in the path
+  // (/events/{year}/{slug}), so slugs stay year-free and only need to be unique
+  // within a year — a numeric suffix breaks the rare same-year, same-name clash.
+  const year = startDate.slice(0, 4);
   const curated = findCurated(kebab(name));
-  let slug = curated?.slug ?? kebab(name);
-  if (!curated) {
-    let candidate = slug;
-    let n = 0;
-    while (seen.has(candidate)) {
-      n += 1;
-      candidate = n === 1 ? `${slug}-${startDate.slice(0, 4)}` : `${slug}-${startDate.slice(0, 4)}-${n}`;
-    }
-    slug = candidate;
+  const base = curated?.slug ?? kebab(name);
+  let slug = base;
+  let n = 1;
+  while (seen.has(`${year}/${slug}`)) {
+    n += 1;
+    slug = `${base}-${n}`;
   }
-  seen.add(slug);
+  seen.add(`${year}/${slug}`);
 
   const tier: EventTier = curated?.tierKey ?? (isChallenger ? "challenger" : inferTier(name));
   const status = mapStatus(t.tournament_status);

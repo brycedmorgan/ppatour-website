@@ -46,7 +46,7 @@ export function ScoreTicker() {
               {formatDate(state.eventDate)}
             </span>
             <Link
-              href={`/events/${state.eventSlug}`}
+              href={`/events/${state.eventDate.slice(0, 4)}/${state.eventSlug}`}
               className="ml-auto shrink-0 text-ppa-yellow hover:text-white"
             >
               Event Details →
