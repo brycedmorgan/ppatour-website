@@ -123,10 +123,13 @@ function MatchCard({
 export function BracketView({
   bracket,
   fullPage = false,
+  light = false,
 }: {
   bracket: Bracket;
   /** Fill the viewport on the dedicated brackets page (vs. the compact box). */
   fullPage?: boolean;
+  /** Style the round navigator for a light/white background. */
+  light?: boolean;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<Map<string, HTMLElement>>(new Map());
@@ -153,13 +156,19 @@ export function BracketView({
     const card = firstId ? cardRefs.current.get(firstId) : undefined;
     const col = colRefs.current[i];
     if (el && card) {
-      el.scrollTo({ left: Math.max(0, card.offsetLeft - 8), behavior: "smooth" });
       if (fullPage) {
         // Full page: the box is content-tall, so the window scrolls vertically.
+        el.scrollTo({ left: Math.max(0, card.offsetLeft - 8), behavior: "smooth" });
         const y = card.getBoundingClientRect().top + window.scrollY - 140;
         window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
       } else {
-        el.scrollTo({ top: Math.max(0, card.offsetTop - 8), behavior: "smooth" });
+        // In-section: scroll x + y together — two scrollTo calls on the same
+        // element cancel each other, so the horizontal jump is lost.
+        el.scrollTo({
+          left: Math.max(0, card.offsetLeft - 8),
+          top: Math.max(0, card.offsetTop - 8),
+          behavior: "smooth",
+        });
       }
     } else if (el && col) {
       el.scrollTo({ left: Math.max(0, col.offsetLeft - 8), behavior: "smooth" });
@@ -242,8 +251,12 @@ export function BracketView({
             onClick={() => scrollToRound(i)}
             className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] transition-colors ${
               activeRound === i
-                ? "bg-white text-ppa-navy"
-                : "border border-white/20 text-white/60 hover:border-white/50 hover:text-white"
+                ? light
+                  ? "bg-ppa-blue text-white"
+                  : "bg-white text-ppa-navy"
+                : light
+                  ? "border border-ppa-line text-ppa-navy/60 hover:border-ppa-blue/50 hover:text-ppa-navy"
+                  : "border border-white/20 text-white/60 hover:border-white/50 hover:text-white"
             }`}
           >
             {r.name}

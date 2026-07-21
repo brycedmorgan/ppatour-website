@@ -179,7 +179,7 @@ export function BracketPanel({
             />
           </div>
         ) : (
-          <BracketView bracket={shown} fullPage={fullPage} />
+          <BracketView bracket={shown} fullPage={fullPage} light={light} />
         )}
       </div>
     </div>
