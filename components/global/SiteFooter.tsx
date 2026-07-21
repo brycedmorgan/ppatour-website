@@ -195,22 +195,24 @@ export function SiteFooter() {
             </Link>
           </div>
           <div className="mt-4 flex flex-wrap items-center gap-2">
-            {partners.map((p) => (
-              <Link
-                key={p.name}
-                href="/about/sponsors"
-                title={`${p.name} — ${p.role}`}
-                className="flex h-12 items-center justify-center bg-white px-4 transition-opacity hover:opacity-85"
-              >
-                <Image
-                  src={p.logo}
-                  alt={p.name}
-                  width={p.logoWidth}
-                  height={p.logoHeight}
-                  className="max-h-6 w-auto max-w-[104px] object-contain"
-                />
-              </Link>
-            ))}
+            {partners
+              .filter((p) => p.logo)
+              .map((p) => (
+                <Link
+                  key={p.name}
+                  href="/about/sponsors"
+                  title={`${p.name} — ${p.role}`}
+                  className="flex h-12 items-center justify-center bg-white px-4 transition-opacity hover:opacity-85"
+                >
+                  <Image
+                    src={p.logo!}
+                    alt={p.name}
+                    width={p.logoWidth!}
+                    height={p.logoHeight!}
+                    className="max-h-6 w-auto max-w-[104px] object-contain"
+                  />
+                </Link>
+              ))}
           </div>
         </div>
 

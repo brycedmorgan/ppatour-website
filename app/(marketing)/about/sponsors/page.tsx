@@ -272,14 +272,16 @@ export default function SponsorsPage() {
             <div className="absolute inset-x-0 top-0 h-1 bg-ppa-blue" />
             <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_1.4fr] lg:items-center">
               <div className="flex h-28 items-center justify-start sm:h-32">
-                <Image
-                  src={title.logo}
-                  alt={title.name}
-                  width={title.logoWidth}
-                  height={title.logoHeight}
-                  priority
-                  className="max-h-full w-auto max-w-[320px] object-contain object-left sm:max-w-[400px]"
-                />
+                {title.logo && (
+                  <Image
+                    src={title.logo}
+                    alt={title.name}
+                    width={title.logoWidth!}
+                    height={title.logoHeight!}
+                    priority
+                    className="max-h-full w-auto max-w-[320px] object-contain object-left sm:max-w-[400px]"
+                  />
+                )}
               </div>
               <div>
                 <p className="font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
@@ -310,13 +312,19 @@ export default function SponsorsPage() {
                 className="flex flex-col overflow-hidden border border-ppa-line bg-white"
               >
                 <div className="flex h-24 items-center justify-center border-b border-ppa-line bg-white p-5">
-                  <Image
-                    src={p.logo}
-                    alt={p.name}
-                    width={p.logoWidth}
-                    height={p.logoHeight}
-                    className="max-h-full w-auto max-w-[180px] object-contain"
-                  />
+                  {p.logo ? (
+                    <Image
+                      src={p.logo}
+                      alt={p.name}
+                      width={p.logoWidth!}
+                      height={p.logoHeight!}
+                      className="max-h-full w-auto max-w-[180px] object-contain"
+                    />
+                  ) : (
+                    <span className="font-display text-xl uppercase text-ppa-navy">
+                      {p.name}
+                    </span>
+                  )}
                 </div>
                 <div className="flex flex-1 flex-col p-5">
                   <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-blue">

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { PartnerWall } from "@/components/global/PartnerWall";
 import { partners } from "@/lib/home-content";
 import type { Tournament } from "@/lib/placeholder-data";
 
@@ -15,6 +16,7 @@ import type { Tournament } from "@/lib/placeholder-data";
  * `Tournament` and swap the roster source here.
  */
 export function EventSponsors({ event }: { event: Tournament }) {
+  const accent = event.brand?.accent ?? "#228be6";
   // The named partners on this event's own marquee: a title sponsor embedded
   // in the event name (e.g. "Veolia …", "Rate …") plus the presenting partner.
   const titleSponsor = partners.find((p) =>
@@ -50,13 +52,13 @@ export function EventSponsors({ event }: { event: Tournament }) {
                   key={m.name}
                   className="flex items-center gap-5 border border-ppa-line bg-ppa-paper p-5"
                 >
-                  {p ? (
+                  {p?.logo ? (
                     <span className="flex h-14 w-36 shrink-0 items-center justify-center bg-white px-3">
                       <Image
                         src={p.logo}
                         alt={p.name}
-                        width={p.logoWidth}
-                        height={p.logoHeight}
+                        width={p.logoWidth!}
+                        height={p.logoHeight!}
                         className="max-h-10 w-auto max-w-[120px] object-contain"
                       />
                     </span>
@@ -79,26 +81,12 @@ export function EventSponsors({ event }: { event: Tournament }) {
           </div>
         )}
 
-        {/* Tour partner roster */}
+        {/* Full official partner family — every designated partner */}
         <p className="mt-8 text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-navy/45">
-          Official PPA Tour Partners
+          The Official Partners of the PPA Tour
         </p>
-        <div className="mt-3 grid grid-cols-2 gap-px border border-ppa-line bg-ppa-line sm:grid-cols-4">
-          {partners.map((p) => (
-            <div
-              key={p.name}
-              title={`${p.name} — ${p.role}`}
-              className="flex h-20 items-center justify-center bg-white px-4"
-            >
-              <Image
-                src={p.logo}
-                alt={p.name}
-                width={p.logoWidth}
-                height={p.logoHeight}
-                className="max-h-9 w-auto max-w-[120px] object-contain"
-              />
-            </div>
-          ))}
+        <div className="mt-3">
+          <PartnerWall accentVar={accent} eventName={event.shortName} />
         </div>
 
         {/* Become-a-sponsor CTA — the lead hook */}

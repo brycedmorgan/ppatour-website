@@ -5,6 +5,7 @@ import { CountUp } from "@/components/motion/CountUp";
 import { Countdown } from "@/components/motion/Countdown";
 import { withUtm } from "@/lib/utm";
 import { PartnerSpotlight } from "@/components/home/PartnerSpotlight";
+import { PartnerWall } from "@/components/global/PartnerWall";
 import { ScoreRail } from "@/components/home/ScoreRail";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
 import { getRankings } from "@/lib/rankings-api";
@@ -72,6 +73,9 @@ const LANES = [
     highlight: true,
   },
 ];
+
+// Only partners whose wordmark logo we hold scroll in the logo band.
+const MARQUEE_PARTNERS = partners.filter((p) => p.logo);
 
 const BROADCAST: { name: string; note: string; logo?: string }[] = [
   {
@@ -832,22 +836,29 @@ export async function HomeContent({
       <section className="bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <SectionHead label="Partners" title="Powering the Tour" />
+            <SectionHead
+              label="Partners"
+              title="The Official Partners of the PPA Tour"
+            />
             <Link
-              href="/about"
+              href="/about/sponsors#inquire"
               className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
             >
-              Partnership Opportunities →
+              Become a Partner →
             </Link>
           </div>
 
+          {/* Flagship spotlight, then the full official-partner directory */}
           <div className="mt-6">
             <PartnerSpotlight />
+          </div>
+          <div className="mt-4">
+            <PartnerWall />
           </div>
 
           {/* Logo marquee — auto-scrolls, pauses on hover */}
           <div
-            className="group mt-4 overflow-hidden border-y border-ppa-line bg-white py-5"
+            className="group mt-6 overflow-hidden border-y border-ppa-line bg-white py-5"
             style={{
               maskImage:
                 "linear-gradient(to right, transparent, #000 6%, #000 94%, transparent)",
@@ -856,17 +867,17 @@ export async function HomeContent({
             }}
           >
             <div className="flex w-max items-center gap-14 animate-marquee motion-reduce:animate-none group-hover:[animation-play-state:paused]">
-              {[...partners, ...partners].map((p, idx) => (
+              {[...MARQUEE_PARTNERS, ...MARQUEE_PARTNERS].map((p, idx) => (
                 <div
                   key={idx}
                   className="flex h-10 shrink-0 items-center justify-center"
                   title={`${p.name} — ${p.role}`}
                 >
                   <Image
-                    src={p.logo}
+                    src={p.logo!}
                     alt={p.name}
-                    width={p.logoWidth}
-                    height={p.logoHeight}
+                    width={p.logoWidth!}
+                    height={p.logoHeight!}
                     className="max-h-10 w-auto max-w-[140px] object-contain"
                   />
                 </div>

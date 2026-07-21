@@ -231,22 +231,33 @@ export const explainers: Explainer[] = [
 
 export type Partner = {
   name: string;
+  /** Public-facing designation — "Official {X} of the PPA Tour". */
   role: string;
+  /** Exclusive category the partner owns (from the exclusivity roster). */
+  category: string;
   note: string;
   tier: "title" | "official";
-  /** Logo path under /public + intrinsic pixel dimensions. */
-  logo: string;
-  logoWidth: number;
-  logoHeight: number;
+  /** Real wordmark logo path + intrinsic pixel dimensions (when we have the
+      brand-kit file). Partners without a mark yet render as designation cards
+      until their logo lands. */
+  logo?: string;
+  logoWidth?: number;
+  logoHeight?: number;
 };
 
 /* Logos are the partners' official marks, mirrored from ppatour.com to
    /public/ppa/sponsors/ for the rebuild. Swap in the latest brand-kit
    files when partners refresh. */
+/* The official partner family — every current designated partner of the PPA
+   Tour, from the exclusivity roster. Each owns a category ("Official {X} of
+   the PPA Tour"), which is what confers the value. Wordmark logos are set for
+   partners whose brand-kit file we hold; the rest render as designation cards
+   until their logo lands (a per-partner asset swap). */
 export const partners: Partner[] = [
   {
     name: "Carvana",
     role: "Title Partner",
+    category: "Auto Retailer",
     note: "The named partner of the tour — on every court, every broadcast, all 25 stops.",
     tier: "title",
     logo: "/ppa/sponsors/carvana.png",
@@ -256,6 +267,7 @@ export const partners: Partner[] = [
   {
     name: "Veolia",
     role: "Official Sustainability Partner",
+    category: "Sustainability",
     note: "Backing the marquee stops in Atlanta, Chicago, and the National Championships.",
     tier: "official",
     logo: "/ppa/sponsors/veolia.png",
@@ -264,7 +276,8 @@ export const partners: Partner[] = [
   },
   {
     name: "JOOLA",
-    role: "Official Equipment Partner",
+    role: "Official Paddle Partner",
+    category: "Paddle",
     note: "Presenting partner of the PPA Finals and the gear behind a generation of pros.",
     tier: "official",
     logo: "/ppa/sponsors/joola.png",
@@ -273,7 +286,8 @@ export const partners: Partner[] = [
   },
   {
     name: "Humana",
-    role: "Official Health Partner",
+    role: "Official Human Care Partner",
+    category: "Insurance",
     note: "Keeping players and fans moving, on the court and off it.",
     tier: "official",
     logo: "/ppa/sponsors/humana.png",
@@ -283,6 +297,7 @@ export const partners: Partner[] = [
   {
     name: "Ensure Max Protein",
     role: "Official Nutrition Partner",
+    category: "Nutritional Beverage",
     note: "Fueling the longest weekends on tour.",
     tier: "official",
     logo: "/ppa/sponsors/ensure.png",
@@ -292,6 +307,7 @@ export const partners: Partner[] = [
   {
     name: "Proton Sports",
     role: "Official Paddle Partner",
+    category: "Paddle",
     note: "Engineering the paddles behind the tour's hardest hitters.",
     tier: "official",
     logo: "/ppa/sponsors/proton.webp",
@@ -300,12 +316,83 @@ export const partners: Partner[] = [
   },
   {
     name: "Six Zero",
-    role: "Official Performance Partner",
+    role: "Official Paddle Partner",
+    category: "Paddle",
     note: "Performance gear built for the demands of the pro game.",
     tier: "official",
     logo: "/ppa/sponsors/six-zero.jpg",
     logoWidth: 320,
     logoHeight: 126,
+  },
+  {
+    name: "Rate",
+    role: "Official Mortgage Partner",
+    category: "Mortgage",
+    note: "Title partner of the Rate Las Vegas Open.",
+    tier: "official",
+  },
+  {
+    name: "Fasenra",
+    role: "Official Asthma Partner",
+    category: "Medicinal",
+    note: "The tour's exclusive asthma partner.",
+    tier: "official",
+  },
+  {
+    name: "Holland America Line",
+    role: "Official Cruise Line",
+    category: "Cruise / Hospitality",
+    note: "The exclusive cruise line of the PPA Tour.",
+    tier: "official",
+  },
+  {
+    name: "Joma",
+    role: "Official Footwear Partner",
+    category: "Footwear",
+    note: "On-court footwear for the pro game.",
+    tier: "official",
+  },
+  {
+    name: "LT Pro 48",
+    role: "Official Ball",
+    category: "Ball",
+    note: "The official ball of PPA Tour play.",
+    tier: "official",
+  },
+  {
+    name: "Park Place Technologies",
+    role: "Official Technology Partner",
+    category: "Technology",
+    note: "Powering the tour's infrastructure.",
+    tier: "official",
+  },
+  {
+    name: "Selkirk",
+    role: "Official Net Partner",
+    category: "Net",
+    note: "The net at play across the tour.",
+    tier: "official",
+  },
+  {
+    name: "Reign Storm",
+    role: "Official Energy Drink Partner",
+    category: "Energy Drink",
+    note: "Fuel for the fans and the grind of a tour weekend.",
+    tier: "official",
+  },
+  {
+    name: "Tixr",
+    role: "Official Ticketing Partner",
+    category: "Ticketing",
+    note: "How fans get into every PPA Tour event.",
+    tier: "official",
+  },
+  {
+    name: "Acrytech",
+    role: "Official Court Surface Partner",
+    category: "Court Surface",
+    note: "The surface underfoot at PPA Tour stops.",
+    tier: "official",
   },
 ];
 

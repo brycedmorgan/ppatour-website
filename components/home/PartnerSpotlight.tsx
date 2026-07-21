@@ -9,18 +9,21 @@ import { partners } from "@/lib/home-content";
  * their official logo, role, and a short note. Dots are clickable. Fade
  * animation respects prefers-reduced-motion (utility disabled in CSS).
  */
+// Only partners whose wordmark logo we hold rotate in the spotlight.
+const logoPartners = partners.filter((p) => p.logo);
+
 export function PartnerSpotlight() {
   const [active, setActive] = useState(0);
 
   useEffect(() => {
     const id = setInterval(
-      () => setActive((v) => (v + 1) % partners.length),
+      () => setActive((v) => (v + 1) % logoPartners.length),
       4500,
     );
     return () => clearInterval(id);
   }, []);
 
-  const p = partners[active];
+  const p = logoPartners[active];
 
   return (
     <div className="relative isolate overflow-hidden border border-ppa-line bg-white">
@@ -32,10 +35,10 @@ export function PartnerSpotlight() {
         {/* Logo block */}
         <div className="flex h-24 items-center justify-start sm:h-28">
           <Image
-            src={p.logo}
+            src={p.logo!}
             alt={p.name}
-            width={p.logoWidth}
-            height={p.logoHeight}
+            width={p.logoWidth!}
+            height={p.logoHeight!}
             priority
             className="max-h-full w-auto max-w-[260px] object-contain object-left sm:max-w-[320px]"
           />
@@ -57,7 +60,7 @@ export function PartnerSpotlight() {
 
       {/* Dots */}
       <div className="flex shrink-0 gap-1.5 border-t border-ppa-line bg-ppa-paper px-6 py-3 sm:px-8">
-        {partners.map((d, i) => (
+        {logoPartners.map((d, i) => (
           <button
             key={d.name}
             type="button"
