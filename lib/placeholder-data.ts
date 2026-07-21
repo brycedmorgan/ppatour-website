@@ -47,7 +47,13 @@ export type Tournament = {
   /** Optional real-photo gallery (paths under /public). */
   gallery?: string[];
   /** Per-event brand system (colors + optional icon) used on the event page. */
-  brand?: { primary: string; accent: string; icon?: string };
+  brand?: {
+    primary: string;
+    accent: string;
+    icon?: string;
+    /** Opt-in display serif for the event page (echoes the event's wordmark). */
+    font?: "cormorant";
+  };
   /** International-tour events (for the /events category filter). Domestic if unset. */
   region?: "international";
   /** Country/region for international events (matches the Country filter). */
@@ -167,8 +173,11 @@ type RawEvent = {
 };
 
 // Badge-matched brand colors + icons per event (keyed by generated slug).
-const BRAND_BY_SLUG: Record<string, { primary: string; accent: string; icon?: string }> = {
-  "veolia-pickleball-national-championships": { primary: "#023155", accent: "#C1272D", icon: "/ppa/badges/nationals.png" },
+const BRAND_BY_SLUG: Record<
+  string,
+  { primary: string; accent: string; icon?: string; font?: "cormorant" }
+> = {
+  "veolia-pickleball-national-championships": { primary: "#023155", accent: "#C1272D", icon: "/ppa/badges/nationals.png", font: "cormorant" },
   "rate-las-vegas-open": { primary: "#003058", accent: "#2088e0", icon: "/ppa/badges/las-vegas.png" },
   "veolia-chicago-cup": { primary: "#003058", accent: "#c8102e", icon: "/ppa/badges/chicago.png" },
   "virginia-beach-open": { primary: "#003058", accent: "#0078d0", icon: "/ppa/badges/virginia-beach.png" },

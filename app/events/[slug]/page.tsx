@@ -259,6 +259,9 @@ export default async function EventPage({ params }: Params) {
         {
           "--event-primary": t.brand?.primary ?? "#0c2b44",
           "--event-accent": t.brand?.accent ?? "#228be6",
+          ...(t.brand?.font === "cormorant"
+            ? { "--font-event-serif": "var(--font-cormorant)" }
+            : {}),
         } as React.CSSProperties
       }
     >
@@ -341,7 +344,7 @@ export default async function EventPage({ params }: Params) {
                 style={{ animationDelay: "120ms" }}
               />
             )}
-            <h1 className="max-w-[18ch] font-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98]">
+            <h1 className="max-w-[18ch] event-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98]">
               {t.shortName}
             </h1>
           </div>
@@ -487,7 +490,7 @@ export default async function EventPage({ params }: Params) {
               What&apos;s at Stake
             </p>
           </div>
-          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+          <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
             Why {t.shortName} Matters
           </h2>
           <p className="mt-3 max-w-2xl text-sm text-ppa-navy/60">
@@ -561,7 +564,7 @@ export default async function EventPage({ params }: Params) {
                 The Scene
               </p>
             </div>
-            <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
+            <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
               Inside {t.shortName}
             </h2>
             <p className="mt-3 max-w-xl text-sm text-white/60">
@@ -579,7 +582,7 @@ export default async function EventPage({ params }: Params) {
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
             Order of Play
           </p>
-          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+          <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
             Daily Schedule & Session Times
           </h2>
           <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
@@ -724,7 +727,7 @@ export default async function EventPage({ params }: Params) {
               Watching at Home
             </p>
           </div>
-          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] sm:text-3xl">
+          <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] sm:text-3xl">
             Every Match, Every Screen
           </h2>
           <p className="mt-3 max-w-xl text-sm text-white/65">
@@ -836,7 +839,7 @@ export default async function EventPage({ params }: Params) {
               At the Venue
             </p>
           </div>
-          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+          <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
             Your Day at {t.venue}
           </h2>
           <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
@@ -908,7 +911,7 @@ export default async function EventPage({ params }: Params) {
                 Make a Trip of It
               </p>
             </div>
-            <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+            <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
               Plan Your {t.city} Weekend
             </h2>
             <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
@@ -1049,7 +1052,7 @@ export default async function EventPage({ params }: Params) {
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 Players to Watch
               </p>
-              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+              <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
                 In the Draw
               </h2>
               <div className="mt-5 flex flex-col gap-px border border-ppa-line bg-ppa-line">
@@ -1085,7 +1088,7 @@ export default async function EventPage({ params }: Params) {
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 Divisions
               </p>
-              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+              <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
                 Five Brackets, {tierPoints(t).toLocaleString()} Points
               </h2>
               <ul className="mt-5 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-2">
@@ -1134,7 +1137,7 @@ export default async function EventPage({ params }: Params) {
                     Coverage
                   </p>
                 </div>
-                <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+                <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
                   {completed ? `Relive ${t.shortName}` : `The ${t.shortName} Story So Far`}
                 </h2>
               </div>
@@ -1188,7 +1191,7 @@ export default async function EventPage({ params }: Params) {
               Get Involved
             </p>
           </div>
-          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] sm:text-3xl">
+          <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] sm:text-3xl">
             Don&apos;t Just Watch It — Play It
           </h2>
           <p className="mt-3 max-w-xl text-sm text-white/65">
@@ -1287,7 +1290,7 @@ export default async function EventPage({ params }: Params) {
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 Tickets
               </p>
-              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+              <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
                 Be There in {t.city}
               </h2>
             </div>
@@ -1365,7 +1368,7 @@ export default async function EventPage({ params }: Params) {
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 More Stops
               </p>
-              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+              <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
                 Next on the Main Tour
               </h2>
             </div>

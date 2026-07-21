@@ -25,6 +25,16 @@ const gotham = localFont({
   ],
 });
 
+/* Optional per-event display serif. Cormorant Garamond is the Nationals
+   brand-guide serif (it sets the event's own wordmark); events opt in via
+   `brand.font: "cormorant"` and it drives `--font-event-serif` on their page
+   only — the tour-wide system stays single-typeface Gotham. */
+const cormorant = localFont({
+  variable: "--font-cormorant",
+  display: "swap",
+  src: [{ path: "./fonts/CormorantGaramond.ttf", style: "normal" }],
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   robots: SITE_INDEXABLE ? undefined : { index: false, follow: false },
@@ -57,7 +67,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${gotham.variable} h-full antialiased`}
+      className={`${gotham.variable} ${cormorant.variable} h-full antialiased`}
     >
       {/* suppressHydrationWarning: browser extensions (Grammarly, Dashlane,
           ColorZilla, …) inject attributes on <body> before React hydrates. */}
