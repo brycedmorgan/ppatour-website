@@ -12,14 +12,18 @@ import { WatchLiveButton } from "@/components/live/WatchLiveButton";
 import { ATLANTA_EVENT_ID } from "@/lib/bracket-sample";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
 import { getRankings } from "@/lib/rankings-api";
+import { getEvents } from "@/lib/events-api";
+import { getScores, type Champion } from "@/lib/scores-api";
+import { playerInitials, playerPhoto } from "@/lib/player-photos";
 import {
   daysUntil,
+  eventHref,
   formatDateRange,
   getMainTourEvents,
   getNextTournament,
   tierPoints,
   tierShort,
-  eventHref,
+  type Tournament,
 } from "@/lib/placeholder-data";
 import {
   ecosystemNews,
@@ -150,6 +154,52 @@ export type LiveEvent = {
   logo?: string;
 };
 
+/** Champion headshot (roster photo, else an initials chip) for the light
+ *  homepage champions band. */
+function ChampionAvatar({ name }: { name: string }) {
+  const src = playerPhoto(name);
+  if (src) {
+    return (
+      <Image
+        src={src}
+        alt={name}
+        width={64}
+        height={64}
+        className="size-12 shrink-0 rounded-full object-cover object-top ring-2 ring-ppa-yellow"
+      />
+    );
+  }
+  return (
+    <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-ppa-navy text-xs font-bold text-white ring-2 ring-ppa-yellow/60">
+      {playerInitials(name)}
+    </span>
+  );
+}
+
+/** Most recently completed main-tour event that has decided champions, with
+ *  those champions — powers the non-live homepage "Champions" band. */
+async function lastCompletedChampions(): Promise<{ event: Tournament; champions: Champion[] } | null> {
+  const { events } = await getEvents();
+  const now = new Date();
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const today = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+  const done = events
+    .filter(
+      (e) =>
+        e.tournamentUuid &&
+        e.tierKey !== "challenger" &&
+        e.region !== "international" &&
+        (e.status === "completed" || (e.endDate && e.endDate.slice(0, 10) < today)),
+    )
+    .sort((a, b) => b.endDate.localeCompare(a.endDate));
+  // Walk the most-recent few until one has champions posted.
+  for (const event of done.slice(0, 4)) {
+    const { champions } = await getScores(event.tournamentUuid as string);
+    if (champions.length) return { event, champions };
+  }
+  return null;
+}
+
 export async function HomeContent({
   live = false,
   liveEvent,
@@ -171,6 +221,9 @@ export async function HomeContent({
     startDate: liveEvent?.startDate ?? next.startDate,
     endDate: liveEvent?.endDate ?? next.endDate,
   };
+  // Off-season/between-events homepage: no live scores make sense, so lead with
+  // the most recent tour stop's champions instead.
+  const latestChampions = live ? null : await lastCompletedChampions();
 
   return (
     <>
@@ -474,39 +527,80 @@ export async function HomeContent({
       <section className="bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <SectionHead label={live ? "Live Now" : "Scores"} title="Live & Latest" pulse={live} />
+            <SectionHead
+              label={live ? "Live Now" : latestChampions ? "Champions" : "Scores"}
+              title={live || !latestChampions ? "Live & Latest" : "Latest Champions"}
+              pulse={live}
+            />
             <Link
-              href={live ? `/brackets?event=${ATLANTA_EVENT_ID}` : "/watch"}
+              href={
+                live
+                  ? `/brackets?event=${ATLANTA_EVENT_ID}`
+                  : latestChampions
+                    ? eventHref(latestChampions.event)
+                    : "/watch"
+              }
               className="group text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
             >
-              {live ? "View Full Bracket" : "Full Scores & Brackets"}{" "}
+              {live ? "View Full Bracket" : latestChampions ? "Full Results" : "Full Scores & Brackets"}{" "}
               <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
           </div>
 
-          {/* The scores rail must SAY which event it covers (Connor, 7/20). */}
-          <p className="mt-3 inline-flex flex-wrap items-center gap-x-2 gap-y-1 border-l-2 border-ppa-blue bg-ppa-paper px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/70">
-            {ev.name}
-            <span className="font-medium normal-case tracking-normal text-ppa-navy/50">
-              {formatDateRange(ev.startDate, ev.endDate, true)} · {ev.city}
-              {ev.state ? `, ${ev.state}` : ""}
-            </span>
-          </p>
+          {/* The band must SAY which event it covers (Connor, 7/20). */}
+          {(() => {
+            const chip = !live && latestChampions ? latestChampions.event : ev;
+            const name = !live && latestChampions ? latestChampions.event.shortName : ev.name;
+            return (
+              <p className="mt-3 inline-flex flex-wrap items-center gap-x-2 gap-y-1 border-l-2 border-ppa-blue bg-ppa-paper px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/70">
+                {name}
+                <span className="font-medium normal-case tracking-normal text-ppa-navy/50">
+                  {formatDateRange(chip.startDate, chip.endDate, true)} · {chip.city}
+                  {chip.state ? `, ${chip.state}` : ""}
+                </span>
+              </p>
+            );
+          })()}
 
-          <div className="mt-4">
-            {live ? (
-              // The section's "Full Scores & Brackets" link opens the full-page
-              // bracket, so the in-panel link is omitted (no expandHref).
+          {live ? (
+            <div className="mt-4">
+              {/* The section's "View Full Bracket" link opens the full-page
+                  bracket, so the in-panel link is omitted (no expandHref). */}
               <ScoresBracketToggle eventId={ATLANTA_EVENT_ID} light />
-            ) : (
-              <>
-                <ScoreRail />
-                <p className="mt-3 text-[11px] uppercase tracking-[0.12em] text-ppa-navy/35">
-                  Drag or swipe to browse
-                </p>
-              </>
-            )}
-          </div>
+            </div>
+          ) : latestChampions ? (
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {latestChampions.champions.map((c) => (
+                <div
+                  key={c.divisionId}
+                  className="flex items-center gap-4 rounded-md border border-ppa-line bg-ppa-paper p-4"
+                >
+                  <div className="flex shrink-0 -space-x-3">
+                    {c.players.map((p) => (
+                      <ChampionAvatar key={p} name={p} />
+                    ))}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-ppa-blue">
+                      {c.division}
+                    </p>
+                    {c.players.map((p) => (
+                      <p key={p} className="font-display text-base uppercase leading-tight text-ppa-navy">
+                        {p}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="mt-4">
+              <ScoreRail />
+              <p className="mt-3 text-[11px] uppercase tracking-[0.12em] text-ppa-navy/35">
+                Drag or swipe to browse
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
