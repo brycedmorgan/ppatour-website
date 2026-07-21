@@ -20,6 +20,9 @@ export default async function LivePage() {
         startDate: details.startDate,
         endDate: details.endDate,
         ticketsUrl: details.ticketsUrl,
+        // /live previews the Veolia Atlanta Championships — its crest fills the
+        // hero badge slot (same treatment as the homepage next-event crest).
+        logo: "/ppa/logos/2026-atl.webp",
       }
     : undefined;
 

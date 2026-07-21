@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { TickerResult } from "@/lib/ticker-api";
 import { useLiveTicker } from "@/components/live/use-live-ticker";
@@ -14,9 +16,9 @@ import { MatchCard, MatchCardSkeleton } from "@/components/live/MatchCard";
  * reads the same hook, so both surfaces stay in sync.
  */
 
-/** Month + day badge. Lazy-computed; suppressHydrationWarning covers the rare
- *  midnight SSR/client boundary. */
-function DateBadge() {
+/** Tournament logo (optional) + month + day badge. Lazy-computed;
+ *  suppressHydrationWarning covers the rare midnight SSR/client boundary. */
+function DateBadge({ logo, logoHref }: { logo?: string; logoHref?: string }) {
   const [date] = useState(() => {
     const d = new Date();
     return {
@@ -24,11 +26,24 @@ function DateBadge() {
       day: String(d.getDate()),
     };
   });
+  const logoImg = logo && (
+    <div className="relative h-32 w-full">
+      <Image src={logo} alt="" fill sizes="224px" className="object-contain" />
+    </div>
+  );
   return (
     <div
       suppressHydrationWarning
-      className="flex w-16 shrink-0 flex-col items-center justify-center border-r border-white/10 px-2 py-2 leading-none text-white"
+      className="flex w-32 shrink-0 flex-col items-center justify-center gap-1 border-r border-white/10 px-3 py-2 leading-none text-white"
     >
+      {logo &&
+        (logoHref ? (
+          <Link href={logoHref} aria-label="Tournament page" className="w-full transition hover:opacity-80">
+            {logoImg}
+          </Link>
+        ) : (
+          logoImg
+        ))}
       <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-white/60">
         {date.month}
       </span>
@@ -65,12 +80,18 @@ function ArrowButton({ dir, onClick }: { dir: "left" | "right"; onClick: () => v
 
 export function LiveScoreTicker({
   showDate = true,
+  logo,
+  logoHref,
   transparent = false,
   visibleCards = 4,
   initialData,
 }: {
   /** Month/day badge on the left (the /live broadcast header). */
   showDate?: boolean;
+  /** Tournament logo shown above the date in the badge. */
+  logo?: string;
+  /** Link target for the logo (the tournament page). */
+  logoHref?: string;
   /** Drop the navy backdrop so cards sit on the host section. */
   transparent?: boolean;
   /** How many full cards fit before the rail scrolls. */
@@ -122,7 +143,7 @@ export function LiveScoreTicker({
 
   return (
     <div className={`flex items-stretch ${transparent ? "" : "bg-ppa-navy"}`}>
-      {showDate && <DateBadge />}
+      {showDate && <DateBadge logo={logo} logoHref={logoHref} />}
 
       {/* Match cards — width tuned so `visibleCards` show with a sliver of
           the next. Arrow buttons scroll; native swipe still works on touch. */}

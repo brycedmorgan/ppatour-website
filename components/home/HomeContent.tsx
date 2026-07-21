@@ -142,6 +142,8 @@ export type LiveEvent = {
   startDate: string;
   endDate: string;
   ticketsUrl: string;
+  /** Tournament crest for the hero badge (same slot as the homepage). */
+  logo?: string;
 };
 
 export async function HomeContent({
@@ -215,6 +217,22 @@ export async function HomeContent({
               alt=""
               width={133}
               height={364}
+              className="h-24 w-auto rounded drop-shadow-[0_4px_22px_rgba(2,49,85,0.65)] sm:h-44 lg:h-64"
+            />
+          </div>
+        )}
+
+        {/* Live tournament crest — same hero slot/treatment as the homepage. */}
+        {live && liveEvent?.logo && (
+          <div
+            className="pointer-events-none absolute right-4 top-16 z-[2] block motion-safe:animate-rise sm:right-8 sm:top-20 lg:right-24"
+            style={{ animationDelay: "120ms" }}
+          >
+            <Image
+              src={liveEvent.logo}
+              alt=""
+              width={562}
+              height={702}
               className="h-24 w-auto rounded drop-shadow-[0_4px_22px_rgba(2,49,85,0.65)] sm:h-44 lg:h-64"
             />
           </div>

@@ -18,6 +18,8 @@ export type TickerTeam = { players: TickerPlayer[]; games: (number | null)[] };
 export type TickerMatch = {
   id: string;
   round: string;
+  /** Division, e.g. "Men's Doubles" (cleaned eventTitle); "" if unknown. */
+  division: string;
   status: "live" | "final" | "upnext";
   court: string;
   time?: string;
@@ -39,6 +41,7 @@ type ApiMatch = {
   matchUuid: string;
   matchStatus: number; // 1 upcoming · 2 live · 4 final
   roundText?: string;
+  eventTitle?: string; // division, e.g. "Mens Doubles Pro Main Draw"
   courtTitle?: string;
   winner?: number;
   localDateMatchPlannedStart?: string;
@@ -103,6 +106,15 @@ function formatTime(iso?: string, tz?: string): string | undefined {
   return `${h}:${min} ${ampm}${tz ? ` ${tz}` : ""}`;
 }
 
+/** "Mens Doubles Pro Main Draw" → "Men's Doubles". */
+function cleanDivision(title: string): string {
+  return title
+    .replace(/\s*Pro Main Draw\s*/i, "")
+    .replace(/\bMens\b/i, "Men's")
+    .replace(/\bWomens\b/i, "Women's")
+    .trim();
+}
+
 function mapMatch(m: ApiMatch): TickerMatch {
   const status: TickerMatch["status"] =
     m.matchStatus === 2 ? "live" : m.matchStatus === 4 ? "final" : "upnext";
@@ -155,6 +167,7 @@ function mapMatch(m: ApiMatch): TickerMatch {
   return {
     id: m.matchUuid,
     round: m.roundText || "",
+    division: cleanDivision(m.eventTitle || ""),
     status,
     court: m.courtTitle || "",
     time: status === "upnext" ? formatTime(m.localDateMatchPlannedStart, m.timezoneAbbreviation) : undefined,

@@ -23,7 +23,12 @@ export function TopBar() {
         {/* Suspense: LiveScoreTicker reads useSearchParams (?partner=), which
             needs a boundary to build/prerender. */}
         <Suspense fallback={<div className="h-[104px] bg-ppa-navy" />}>
-          <LiveScoreTicker />
+          {/* /live previews the Veolia Atlanta Championships — its logo sits
+              above the date in the ticker badge and links to the event page. */}
+          <LiveScoreTicker
+            logo="/ppa/logos/2026-atl.webp"
+            logoHref="/events/veolia-atlanta-pickleball-championships-2026"
+          />
         </Suspense>
         <div className="site-chrome sticky top-0 z-50">
           <Header />

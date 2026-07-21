@@ -87,7 +87,7 @@ export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: s
       {/* Header */}
       <div className="flex items-center justify-between gap-2 px-3 py-1.5">
         <span className="truncate font-display text-sm uppercase leading-none text-ppa-navy">
-          {m.round}
+          {m.division || m.round}
         </span>
         <div className="flex shrink-0 items-center gap-1.5">
           <StatusBadge status={m.status} />
@@ -170,12 +170,13 @@ export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: s
           <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-blue">
             {m.time}
           </span>
-        ) : (
+        ) : m.status === "live" ? (
+          // Live — PickleballTV logo linking to the live stream.
           <a
             href={matchWatchUrl(m)}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Watch on PickleballTV"
+            aria-label="Watch live on PickleballTV"
             className="transition hover:opacity-70"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -188,7 +189,17 @@ export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: s
               }`}
             />
           </a>
-        )}
+        ) : m.watchUrl ? (
+          // Final — a "Watch" link to the replay when the feed provides one.
+          <a
+            href={m.watchUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-blue transition-colors hover:text-ppa-blue-deep"
+          >
+            <span aria-hidden>▶</span> Watch
+          </a>
+        ) : null}
       </div>
     </article>
   );
