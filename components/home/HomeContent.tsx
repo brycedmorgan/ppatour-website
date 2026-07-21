@@ -7,6 +7,8 @@ import { withUtm } from "@/lib/utm";
 import { PartnerSpotlight } from "@/components/home/PartnerSpotlight";
 import { PartnerWall } from "@/components/global/PartnerWall";
 import { ScoreRail } from "@/components/home/ScoreRail";
+import { ScoresBracketToggle } from "@/components/live/ScoresBracketToggle";
+import { ATLANTA_EVENT_ID } from "@/lib/bracket-sample";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
 import { getRankings } from "@/lib/rankings-api";
 import {
@@ -475,10 +477,10 @@ export async function HomeContent({
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <SectionHead label={live ? "Live Now" : "Scores"} title="Live & Latest" pulse={live} />
             <Link
-              href="/watch"
+              href={live ? `/brackets?event=${ATLANTA_EVENT_ID}` : "/watch"}
               className="group text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
             >
-              Full Scores & Brackets{" "}
+              {live ? "View Full Bracket" : "Full Scores & Brackets"}{" "}
               <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
           </div>
@@ -493,10 +495,18 @@ export async function HomeContent({
           </p>
 
           <div className="mt-4">
-            <ScoreRail />
-            <p className="mt-3 text-[11px] uppercase tracking-[0.12em] text-ppa-navy/35">
-              Drag or swipe to browse
-            </p>
+            {live ? (
+              // The section's "Full Scores & Brackets" link opens the full-page
+              // bracket, so the in-panel link is omitted (no expandHref).
+              <ScoresBracketToggle eventId={ATLANTA_EVENT_ID} light />
+            ) : (
+              <>
+                <ScoreRail />
+                <p className="mt-3 text-[11px] uppercase tracking-[0.12em] text-ppa-navy/35">
+                  Drag or swipe to browse
+                </p>
+              </>
+            )}
           </div>
         </div>
       </section>

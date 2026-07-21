@@ -19,6 +19,7 @@ export function BracketPanel({
   fullPage = false,
   expandHref,
   initialDivision,
+  light = false,
 }: {
   eventId: string;
   /** Fill the viewport (dedicated /brackets page). */
@@ -27,6 +28,8 @@ export function BracketPanel({
   expandHref?: string;
   /** Division to select on load (deep-link into a specific bracket). */
   initialDivision?: string;
+  /** Style the controls for a light/white background. */
+  light?: boolean;
 }) {
   const [divisions, setDivisions] = useState<BracketDivision[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
@@ -99,8 +102,12 @@ export function BracketPanel({
                 onClick={() => setSelected(d.id)}
                 className={`rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] transition-colors ${
                   active
-                    ? "bg-white text-ppa-navy"
-                    : "border border-white/20 text-white/70 hover:border-white/50 hover:text-white"
+                    ? light
+                      ? "bg-ppa-blue text-white"
+                      : "bg-white text-ppa-navy"
+                    : light
+                      ? "border border-ppa-line text-ppa-navy/60 hover:border-ppa-blue/50 hover:text-ppa-navy"
+                      : "border border-white/20 text-white/70 hover:border-white/50 hover:text-white"
                 }`}
               >
                 {d.name}
@@ -111,7 +118,9 @@ export function BracketPanel({
         {fullHref && (
           <Link
             href={fullHref}
-            className="group shrink-0 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-yellow hover:text-white"
+            className={`group shrink-0 text-[11px] font-bold uppercase tracking-[0.12em] ${
+              light ? "text-ppa-blue hover:text-ppa-navy" : "text-ppa-yellow hover:text-white"
+            }`}
           >
             Full-Page Bracket{" "}
             <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-0.5">↗</span>
@@ -121,14 +130,20 @@ export function BracketPanel({
 
       {/* Winners / Losers toggle — only for double-elim (losers bracket present) */}
       {losers && (
-        <div className="mt-4 inline-flex rounded-full border border-white/15 p-0.5">
+        <div className={`mt-4 inline-flex rounded-full border p-0.5 ${light ? "border-ppa-line" : "border-white/15"}`}>
           {(["winners", "losers"] as const).map((s) => (
             <button
               key={s}
               type="button"
               onClick={() => setStage(s)}
               className={`rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] transition-colors ${
-                stage === s ? "bg-ppa-yellow text-ppa-navy" : "text-white/60 hover:text-white"
+                stage === s
+                  ? light
+                    ? "bg-ppa-blue text-white"
+                    : "bg-ppa-yellow text-ppa-navy"
+                  : light
+                    ? "text-ppa-navy/55 hover:text-ppa-navy"
+                    : "text-white/60 hover:text-white"
               }`}
             >
               {s === "winners" ? "Winners" : "Losers"}
@@ -148,7 +163,7 @@ export function BracketPanel({
               ? "Round robin"
               : "Single elimination";
         return (
-          <p className="mt-3 text-[11px] font-bold uppercase tracking-[0.16em] text-white/40">
+          <p className={`mt-3 text-[11px] font-bold uppercase tracking-[0.16em] ${light ? "text-ppa-navy/40" : "text-white/40"}`}>
             {label}
           </p>
         );
@@ -157,10 +172,10 @@ export function BracketPanel({
       {/* Bracket */}
       <div className="mt-4">
         {loading || !shown ? (
-          <div className="flex h-[220px] items-center justify-center rounded-lg border border-white/10 bg-ppa-navy-deep">
+          <div className={`flex h-[220px] items-center justify-center rounded-lg border ${light ? "border-ppa-line bg-ppa-paper" : "border-white/10 bg-ppa-navy-deep"}`}>
             <span
               aria-hidden
-              className="size-6 animate-spin rounded-full border-2 border-white/20 border-t-white"
+              className={`size-6 animate-spin rounded-full border-2 ${light ? "border-ppa-line border-t-ppa-blue" : "border-white/20 border-t-white"}`}
             />
           </div>
         ) : (

@@ -79,7 +79,7 @@ function ScoreCard({ m }: { m: ScoreMatch }) {
   );
 }
 
-export function ScoresBoard({ eventId }: { eventId: string }) {
+export function ScoresBoard({ eventId, light = false }: { eventId: string; light?: boolean }) {
   const [data, setData] = useState<ScoresResult | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [day, setDay] = useState<string | null>(null);
@@ -151,17 +151,23 @@ export function ScoresBoard({ eventId }: { eventId: string }) {
     [data, day, division],
   );
 
+  const panel = light ? "border-ppa-line bg-ppa-paper" : "border-white/10 bg-ppa-navy-deep";
+  const muted = light ? "text-ppa-navy/55" : "text-white/55";
+
   if (!loaded) {
     return (
-      <div className="flex h-[160px] items-center justify-center rounded-lg border border-white/10 bg-ppa-navy-deep">
-        <span aria-hidden className="size-6 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+      <div className={`flex h-[160px] items-center justify-center rounded-lg border ${panel}`}>
+        <span
+          aria-hidden
+          className={`size-6 animate-spin rounded-full border-2 ${light ? "border-ppa-line border-t-ppa-blue" : "border-white/20 border-t-white"}`}
+        />
       </div>
     );
   }
 
   if (!days.length) {
     return (
-      <div className="rounded-lg border border-white/10 bg-ppa-navy-deep px-6 py-10 text-center text-sm text-white/55">
+      <div className={`rounded-lg border px-6 py-10 text-center text-sm ${panel} ${muted}`}>
         No scores available yet.
       </div>
     );
@@ -171,14 +177,18 @@ export function ScoresBoard({ eventId }: { eventId: string }) {
     <div>
       {/* Day picker */}
       <div className="flex flex-wrap items-center gap-3">
-        <label htmlFor="scores-day" className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/55">
+        <label htmlFor="scores-day" className={`text-[11px] font-bold uppercase tracking-[0.16em] ${muted}`}>
           Results by day
         </label>
         <select
           id="scores-day"
           value={day ?? ""}
           onChange={(e) => setDay(e.target.value)}
-          className="rounded-md border border-white/20 bg-ppa-navy-deep px-3 py-2 text-sm font-semibold text-white focus:border-white/50 focus:outline-none"
+          className={`rounded-md border px-3 py-2 text-sm font-semibold focus:outline-none ${
+            light
+              ? "border-ppa-line bg-white text-ppa-navy focus:border-ppa-navy/50"
+              : "border-white/20 bg-ppa-navy-deep text-white focus:border-white/50"
+          }`}
         >
           {days.map((d) => (
             <option key={d.key} value={d.key}>
@@ -205,8 +215,12 @@ export function ScoresBoard({ eventId }: { eventId: string }) {
               onClick={() => setDivision(d.id)}
               className={`flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] transition-colors ${
                 active
-                  ? "bg-white text-ppa-navy"
-                  : "border border-white/20 text-white/70 hover:border-white/50 hover:text-white"
+                  ? light
+                    ? "bg-ppa-blue text-white"
+                    : "bg-white text-ppa-navy"
+                  : light
+                    ? "border border-ppa-line text-ppa-navy/60 hover:border-ppa-blue/50 hover:text-ppa-navy"
+                    : "border border-white/20 text-white/70 hover:border-white/50 hover:text-white"
               }`}
             >
               {liveDivsToday.has(d.id) && <span className="size-1.5 animate-pulse rounded-full bg-ppa-live" />}
@@ -219,7 +233,7 @@ export function ScoresBoard({ eventId }: { eventId: string }) {
       {/* Matches for the selected day + division */}
       <div className="mt-6">
         {matches.length === 0 ? (
-          <p className="text-sm text-white/55">No matches on this day for this division.</p>
+          <p className={`text-sm ${muted}`}>No matches on this day for this division.</p>
         ) : (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {matches.map((m) => (
