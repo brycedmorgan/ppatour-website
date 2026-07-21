@@ -65,6 +65,19 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   Sadie the venue shot list; per-event sponsor lists from
   Jackalope/SponsorCX when they exist.
 
+### 2026-07-20 (pt. 2) — Per-event display typography (Nationals serif)
+- Answered the open font question: YES, per-event serif — opt-in, not
+  tour-wide. `brand.font: "cormorant"` sets `--font-event-serif` on the
+  event page; `.event-display` (hero title + section H2s) swaps to
+  Cormorant Garamond — the Nationals brand-guide serif that sets its own
+  wordmark. Self-hosted variable font (app/fonts/CormorantGaramond.ttf).
+- `.event-display` is self-contained: default branch = exact Gotham Black
+  (weight 900, tight), serif branch = weight 700 + slight tracking for
+  uppercase. So every non-branded event stays Gotham (verified: Las Vegas
+  Open hero + headings still Gotham Black).
+- To skin another event: add `font: "cormorant"` (or a new serif) to its
+  BRAND_BY_SLUG entry. Only Nationals opted in for now.
+
 ### 2026-07-20 — Generated OG share cards site-wide + purse regression fix
 - next/og cards replace raw-photo shares: event cards (photo + navy
   scrim + tier badge + event mark chip + Gotham title + "$1.65M on the
