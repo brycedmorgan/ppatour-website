@@ -12,6 +12,12 @@ import { EventSponsors } from "@/components/events/EventSponsors";
 import { RegisteredCount } from "@/components/events/RegisteredCount";
 import { VenueMap } from "@/components/events/VenueMap";
 import { VolunteerModalButton } from "@/components/events/VolunteerModalButton";
+import { ResultsPanel } from "@/components/live/ResultsPanel";
+import { ChampionsBanner } from "@/components/live/ChampionsBanner";
+import { ReplayGallery } from "@/components/live/ReplayGallery";
+import { ATLANTA_EVENT_ID } from "@/lib/bracket-sample";
+import { getReplayPlaylistId } from "@/lib/event-replays";
+import { getPlaylistVideos } from "@/lib/youtube";
 import { Countdown } from "@/components/motion/Countdown";
 import { getBroadcast } from "@/lib/broadcast";
 import { getEventGuide } from "@/lib/event-guides";
@@ -212,19 +218,41 @@ export default async function EventPage({ params }: Params) {
 
   const coverage = getArticlesForEvent(t.slug);
   const completed = t.status === "completed";
+  // Completed events show champions + final scores (any event with a UUID);
+  // full brackets only where we have the draw data (Atlanta for now).
+  const uuid = t.tournamentUuid;
+  const showResults = completed && Boolean(uuid);
+  const showBracket = completed && uuid?.toLowerCase() === ATLANTA_EVENT_ID.toLowerCase();
+
+  // Tournament replays — YouTube playlist mapped by slug (lib/event-replays.ts),
+  // fetched server-side. Empty until a playlist ID is configured / a key exists.
+  const replayPlaylistId = getReplayPlaylistId(t.slug);
+  const replays = replayPlaylistId ? await getPlaylistVideos(replayPlaylistId) : [];
+  const showReplays = replays.length > 0;
 
   const TABS = [
     { id: "overview", label: "Overview" },
-    { id: "stakes", label: "What's at Stake" },
-    { id: "schedule", label: "Order of Play" },
-    { id: "watch", label: "Watch" },
-    { id: "venue", label: "Venue Guide" },
-    { id: "travel", label: "Plan Your Trip" },
-    { id: "players", label: "Players" },
-    { id: "involved", label: "Get Involved" },
+    ...(showResults
+      ? [
+          { id: "champions", label: "Champions" },
+          { id: "results", label: "Final Results" },
+        ]
+      : []),
+    ...(showReplays ? [{ id: "replays", label: "Replays" }] : []),
+    ...(completed
+      ? []
+      : [
+          { id: "stakes", label: "What's at Stake" },
+          { id: "schedule", label: "Order of Play" },
+          { id: "watch", label: "Watch" },
+          { id: "venue", label: "Venue Guide" },
+        ]),
+    ...(guide ? [{ id: "travel", label: "Plan Your Trip" }] : []),
+    ...(completed ? [] : [{ id: "players", label: "Players" }]),
+    ...(completed ? [] : [{ id: "involved", label: "Get Involved" }]),
     ...(coverage.length > 0 ? [{ id: "coverage", label: "Coverage" }] : []),
     { id: "sponsors", label: "Sponsors" },
-    { id: "tickets", label: "Tickets" },
+    ...(completed ? [] : [{ id: "tickets", label: "Tickets" }]),
   ];
 
   const conciergeFacts = {
@@ -356,47 +384,74 @@ export default async function EventPage({ params }: Params) {
               {t.state ? `, ${t.state}` : ""}
             </span>
             <span className="text-white/25">|</span>
-            <span className="text-ppa-yellow">{t.prizeMoney} On the Line</span>
+            <span className="text-ppa-yellow">
+              {completed ? "🏆 Champions crowned" : `${t.prizeMoney} On the Line`}
+            </span>
           </div>
           <div className="mt-5 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap">
-            <a
-              href={withUtm(t.ticketsUrl, {
-                campaign: t.slug,
-                content: "event-hero-buy-tickets",
-              })}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex h-11 items-center justify-center bg-[var(--event-accent)] px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:brightness-90 active:scale-[0.98]"
-            >
-              Buy Tickets — from ${t.ticketPriceFrom}
-            </a>
-            <a
-              href={withUtm(t.registerUrl, {
-                campaign: t.slug,
-                content: "event-hero-register",
-              })}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
-            >
-              Register to Play ↗
-            </a>
-            <a
-              href="#travel"
-              className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
-            >
-              Plan Your Trip ↓
-            </a>
-            <a
-              href="#watch"
-              className="hidden h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy sm:flex"
-            >
-              ▶ How to Watch
-            </a>
+            {completed ? (
+              <>
+                {showResults && (
+                  <a
+                    href="#results"
+                    className="flex h-11 items-center justify-center bg-ppa-yellow px-6 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy transition hover:brightness-95 active:scale-[0.98]"
+                  >
+                    Full Results ↓
+                  </a>
+                )}
+                <a
+                  href="https://www.pickleballtv.com/?utm_source=ppatour&utm_medium=website&utm_campaign=event&utm_content=event-hero-replays"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
+                >
+                  ▶ Watch Replays
+                </a>
+                {showBracket && (
+                  <a
+                    href={`/brackets?event=${uuid}`}
+                    className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
+                  >
+                    Full Bracket ↗
+                  </a>
+                )}
+              </>
+            ) : (
+              <>
+                <a
+                  href={withUtm(t.ticketsUrl, { campaign: t.slug, content: "event-hero-buy-tickets" })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-11 items-center justify-center bg-[var(--event-accent)] px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:brightness-90 active:scale-[0.98]"
+                >
+                  Buy Tickets — from ${t.ticketPriceFrom}
+                </a>
+                <a
+                  href={withUtm(t.registerUrl, { campaign: t.slug, content: "event-hero-register" })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
+                >
+                  Register to Play ↗
+                </a>
+                <a
+                  href="#travel"
+                  className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
+                >
+                  Plan Your Trip ↓
+                </a>
+                <a
+                  href="#watch"
+                  className="hidden h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy sm:flex"
+                >
+                  ▶ How to Watch
+                </a>
+              </>
+            )}
           </div>
         </div>
         {!completed && <FirstServeCountdown targetIso={t.startDate} />}
-        <div className="relative h-1 bg-[var(--event-accent)]" />
+        <div className={`relative h-1 ${completed ? "bg-ppa-yellow" : "bg-[var(--event-accent)]"}`} />
       </section>
 
       {/* Floating event nav */}
@@ -404,14 +459,92 @@ export default async function EventPage({ params }: Params) {
         tabs={TABS}
         eventName={t.shortName}
         icon={t.brand?.icon}
-        ticketsUrl={withUtm(t.ticketsUrl, {
-          campaign: t.slug,
-          content: "event-tabnav-buy-tickets",
-        })}
-        ticketPriceFrom={t.ticketPriceFrom}
+        ticketsUrl={
+          completed
+            ? undefined
+            : withUtm(t.ticketsUrl, { campaign: t.slug, content: "event-tabnav-buy-tickets" })
+        }
+        ticketPriceFrom={completed ? undefined : t.ticketPriceFrom}
       />
 
-      {/* Audience router — one page, three ways in */}
+      {/* Overview — quick facts (right below the hero) */}
+      <section id="overview" className="scroll-mt-[120px] bg-ppa-navy-deep text-white">
+        <div className="mx-auto grid w-full max-w-6xl grid-cols-2 px-4 sm:grid-cols-4">
+          {[
+            { k: "Dates", v: formatDateRange(t.startDate, t.endDate) },
+            { k: "Venue", v: t.venue },
+            { k: "Prize Money & Fees", v: t.prizeMoney, accent: true },
+            { k: tierLabel(t), v: `${tierPoints(t).toLocaleString()} Pts` },
+          ].map((f, i) => (
+            <div
+              key={f.k}
+              className={`px-4 py-5 ${i % 2 === 1 ? "border-l border-white/10" : ""} ${i >= 2 ? "border-t border-white/10 sm:border-t-0" : ""} ${i === 2 ? "sm:border-l" : ""}`}
+            >
+              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
+                {f.k}
+              </p>
+              <p className={`mt-1 font-display text-base uppercase ${f.accent ? "text-ppa-yellow" : "text-white"}`}>
+                {f.v}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Completed events: champions → final results (standings / scores / bracket) */}
+      {showResults && uuid && (
+        <>
+          <ChampionsBanner eventId={uuid} />
+
+          <section id="results" className="scroll-mt-[120px] bg-ppa-navy">
+            <div className="mx-auto w-full max-w-6xl px-4 py-12">
+              <div className="flex items-center gap-2.5">
+                <span className="h-2 w-2 bg-ppa-yellow" />
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
+                  Final Results
+                </p>
+              </div>
+              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
+                How {t.shortName} Finished
+              </h2>
+              <div className="mt-6">
+                <ResultsPanel
+                  eventId={uuid}
+                  showBracket={showBracket}
+                  expandHref={showBracket ? `/brackets?event=${uuid}` : undefined}
+                />
+              </div>
+            </div>
+          </section>
+        </>
+      )}
+
+      {/* Replays — the tournament's YouTube playlist */}
+      {showReplays && replayPlaylistId && (
+        <section id="replays" className="scroll-mt-[120px] bg-ppa-navy-deep">
+          <div className="mx-auto w-full max-w-6xl px-4 py-12">
+            <div className="flex items-center gap-2.5">
+              <span className="text-ppa-yellow">▶</span>
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
+                Replays
+              </p>
+            </div>
+            <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
+              Watch {t.shortName} Back
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm text-white/55">
+              Every match, highlight, and marquee moment from {t.shortName}, straight
+              from the PPA Tour on YouTube.
+            </p>
+            <div className="mt-6">
+              <ReplayGallery videos={replays} playlistId={replayPlaylistId} />
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Audience router — one page, three ways in (upcoming/live only) */}
+      {!completed && (
       <section className="bg-white">
         <div className="mx-auto grid w-full max-w-6xl gap-px border-x border-b border-ppa-line bg-ppa-line sm:grid-cols-3">
           {[
@@ -456,31 +589,11 @@ export default async function EventPage({ params }: Params) {
           ))}
         </div>
       </section>
+      )}
 
-      {/* Overview — quick facts */}
-      <section id="overview" className="scroll-mt-[120px] bg-ppa-navy-deep text-white">
-        <div className="mx-auto grid w-full max-w-6xl grid-cols-2 px-4 sm:grid-cols-4">
-          {[
-            { k: "Dates", v: formatDateRange(t.startDate, t.endDate) },
-            { k: "Venue", v: t.venue },
-            { k: "Prize Money & Fees", v: t.prizeMoney, accent: true },
-            { k: tierLabel(t), v: `${tierPoints(t).toLocaleString()} Pts` },
-          ].map((f, i) => (
-            <div
-              key={f.k}
-              className={`px-4 py-5 ${i % 2 === 1 ? "border-l border-white/10" : ""} ${i >= 2 ? "border-t border-white/10 sm:border-t-0" : ""} ${i === 2 ? "sm:border-l" : ""}`}
-            >
-              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
-                {f.k}
-              </p>
-              <p className={`mt-1 font-display text-base uppercase ${f.accent ? "text-ppa-yellow" : "text-white"}`}>
-                {f.v}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
+      {/* Attend/watch planning sections — hidden once the event is completed */}
+      {!completed && (
+      <>
       {/* What's at Stake */}
       <section id="stakes" className="scroll-mt-[120px] bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -900,6 +1013,8 @@ export default async function EventPage({ params }: Params) {
           </div>
         </div>
       </section>
+      </>
+      )}
 
       {/* Plan Your Trip — Ragnar-style */}
       {guide && (
@@ -1044,7 +1159,8 @@ export default async function EventPage({ params }: Params) {
         </section>
       )}
 
-      {/* Players + Divisions + Champions */}
+      {/* Players + Divisions + Champions (upcoming/live only) */}
+      {!completed && (
       <section id="players" className="scroll-mt-[120px] bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="grid gap-10 lg:grid-cols-[1fr_1fr]">
@@ -1124,6 +1240,7 @@ export default async function EventPage({ params }: Params) {
           </div>
         </div>
       </section>
+      )}
 
       {/* Coverage — the event's editorial history */}
       {coverage.length > 0 && (
@@ -1182,7 +1299,8 @@ export default async function EventPage({ params }: Params) {
         </section>
       )}
 
-      {/* Get Involved */}
+      {/* Get Involved (upcoming/live only) */}
+      {!completed && (
       <section id="involved" className="scroll-mt-[120px] bg-ppa-navy text-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex items-center gap-2.5">
@@ -1278,11 +1396,13 @@ export default async function EventPage({ params }: Params) {
           </div>
         </div>
       </section>
+      )}
 
       {/* Sponsors — who backs this event + become-a-sponsor lead hook */}
       <EventSponsors event={t} />
 
-      {/* Tickets */}
+      {/* Tickets (upcoming/live only) */}
+      {!completed && (
       <section id="tickets" className="scroll-mt-[120px] bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -1359,6 +1479,7 @@ export default async function EventPage({ params }: Params) {
           </div>
         </div>
       </section>
+      )}
 
       {/* More stops */}
       <section className="bg-ppa-paper">

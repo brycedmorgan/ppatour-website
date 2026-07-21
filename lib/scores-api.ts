@@ -37,10 +37,18 @@ export type ScoreMatch = {
   status: "live" | "final" | "scheduled";
   teams: [ScoreTeam, ScoreTeam];
 };
+export type Champion = { divisionId: string; division: string; players: string[] };
+export type Medal = "gold" | "silver" | "bronze";
+export type Standing = { place: number; medal: Medal | null; players: string[] };
+export type DivisionStandings = { divisionId: string; division: string; places: Standing[] };
 export type ScoresResult = {
   tournamentId: string;
   divisions: { id: string; name: string }[];
   matches: ScoreMatch[];
+  /** Division winners (gold-medal match), once decided. */
+  champions: Champion[];
+  /** Final podium (gold/silver/bronze) per division, once decided. */
+  standings: DivisionStandings[];
 };
 
 type ApiEvent = {
@@ -155,6 +163,64 @@ function normalize(m: ApiMatch, division: string, divisionId: string): ScoreMatc
   };
 }
 
+/** 1 / 2 / 0 (undecided) — from the winner field, else a game-win tally. */
+function winnerTeam(m: ApiMatch): 0 | 1 | 2 {
+  const wf = str(m, "winner", "matchWinner").toLowerCase();
+  if (wf === "team_1") return 1;
+  if (wf === "team_2") return 2;
+  const bestOf = num(m, "scoreFormatGameBestOutOf", "best_out_of") ?? 3;
+  const g1 = ["teamOneGameOneScore","teamOneGameTwoScore","teamOneGameThreeScore","teamOneGameFourScore","teamOneGameFiveScore"];
+  const g2 = ["teamTwoGameOneScore","teamTwoGameTwoScore","teamTwoGameThreeScore","teamTwoGameFourScore","teamTwoGameFiveScore"];
+  let w1 = 0;
+  let w2 = 0;
+  for (let i = 0; i < bestOf; i++) {
+    const a = num(m, g1[i]);
+    const b = num(m, g2[i]);
+    if (a == null || b == null) continue;
+    if (a > b) w1++;
+    else if (b > a) w2++;
+  }
+  return w1 > w2 ? 1 : w2 > w1 ? 2 : 0;
+}
+
+/** Player names for team 1 or 2 of a raw match. */
+function teamPlayers(m: ApiMatch, team: 1 | 2): string[] {
+  const p =
+    team === 1
+      ? [fullName(str(m, "teamOnePlayerOneFirstName"), str(m, "teamOnePlayerOneLastName")), fullName(str(m, "teamOnePlayerTwoFirstName"), str(m, "teamOnePlayerTwoLastName"))]
+      : [fullName(str(m, "teamTwoPlayerOneFirstName"), str(m, "teamTwoPlayerOneLastName")), fullName(str(m, "teamTwoPlayerTwoFirstName"), str(m, "teamTwoPlayerTwoLastName"))];
+  return p.filter(Boolean);
+}
+
+/** Final podium for a division: gold + silver from the gold-medal match (GS,
+ *  else the highest completed round), bronze from the bronze match (B) if one
+ *  was played. Null until the final is decided. */
+function standingsOf(raws: ApiMatch[], division: string, divisionId: string): DivisionStandings | null {
+  const completed = raws.filter((m) => str(m, "matchCompleted", "match_completed", "date_completed"));
+  if (!completed.length) return null;
+  const bracket = (m: ApiMatch) => str(m, "inBracketType", "in_bracket_type").toUpperCase();
+  const final =
+    completed.find((m) => bracket(m) === "GS") ??
+    completed.slice().sort((a, b) => (num(b, "roundNumber") ?? 0) - (num(a, "roundNumber") ?? 0))[0];
+  const w = winnerTeam(final);
+  if (!w) return null;
+
+  const places: Standing[] = [];
+  const gold = teamPlayers(final, w);
+  const silver = teamPlayers(final, w === 1 ? 2 : 1);
+  if (gold.length) places.push({ place: 1, medal: "gold", players: gold });
+  if (silver.length) places.push({ place: 2, medal: "silver", players: silver });
+
+  const bronzeMatch = completed.find((m) => bracket(m) === "B");
+  if (bronzeMatch) {
+    const bw = winnerTeam(bronzeMatch);
+    const bronze = bw ? teamPlayers(bronzeMatch, bw) : [];
+    if (bronze.length) places.push({ place: 3, medal: "bronze", players: bronze });
+  }
+
+  return places.length ? { divisionId, division, places } : null;
+}
+
 async function get(base: string, token: string, path: string): Promise<unknown> {
   const res = await fetch(`${base}${path}`, {
     headers: { "PB-API-TOKEN": token },
@@ -170,7 +236,7 @@ const inFlight = new Map<string, Promise<ScoresResult>>();
 
 async function build(tournamentId: string): Promise<ScoresResult> {
   const { token, base } = config();
-  const empty: ScoresResult = { tournamentId, divisions: [], matches: [] };
+  const empty: ScoresResult = { tournamentId, divisions: [], matches: [], champions: [], standings: [] };
   if (!token) return empty;
   try {
     const evJson = (await get(base, token, `/v1/ppa/tournaments/${tournamentId}/tournament_events?bracket_level=Pro`)) as
@@ -186,14 +252,29 @@ async function build(tournamentId: string): Promise<ScoresResult> {
         const mj = (await get(base, token, `/v1/ppa/tournaments/${tournamentId}/tournament_events/${e.eventId}`)) as
           | { results?: ApiMatch[] }
           | null;
+        const raws = mj?.results ?? [];
         const division = cleanDivision(e.eventTitle as string);
-        return (mj?.results ?? [])
-          .map((m) => normalize(m, division, e.eventId as string))
-          .filter((x): x is ScoreMatch => x !== null);
+        const eid = e.eventId as string;
+        return {
+          matches: raws.map((m) => normalize(m, division, eid)).filter((x): x is ScoreMatch => x !== null),
+          standings: standingsOf(raws, division, eid),
+        };
       }),
     );
 
-    return { tournamentId, divisions, matches: perEvent.flat() };
+    const standings = perEvent.map((p) => p.standings).filter((s): s is DivisionStandings => s !== null);
+    return {
+      tournamentId,
+      divisions,
+      matches: perEvent.flatMap((p) => p.matches),
+      champions: standings
+        .map((s) => {
+          const gold = s.places.find((p) => p.place === 1);
+          return gold ? { divisionId: s.divisionId, division: s.division, players: gold.players } : null;
+        })
+        .filter((c): c is Champion => c !== null),
+      standings,
+    };
   } catch {
     return empty;
   }

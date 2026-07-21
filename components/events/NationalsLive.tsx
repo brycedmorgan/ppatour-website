@@ -12,6 +12,7 @@ import { EventGallery } from "@/components/events/EventGallery";
 import { VenueMap } from "@/components/events/VenueMap";
 import { VolunteerModalButton } from "@/components/events/VolunteerModalButton";
 import { ScoresBoard } from "@/components/live/ScoresBoard";
+import { ChampionsBanner } from "@/components/live/ChampionsBanner";
 import { BracketPanel } from "@/components/live/BracketPanel";
 import { ATLANTA_EVENT_ID } from "@/lib/bracket-sample";
 import { getBroadcast } from "@/lib/broadcast";
@@ -166,9 +167,10 @@ export function NationalsLive() {
   // Same event; the hero + live sections flip on once first serve arrives.
   const t = { ...baseEvent, status: "live" as const };
 
-  // Live clock → first serve. Resolved on mount (needs the URL); until then
-  // the page renders its pre-live/countdown state.
+  // Lifecycle clock. `target` = first serve, `endTarget` = tournament over.
+  // Resolved on mount (needs the URL); until then it renders the countdown.
   const [target, setTarget] = useState<number | null>(null);
+  const [endTarget, setEndTarget] = useState<number | null>(null);
   const [now, setNow] = useState<number | null>(null);
 
   useEffect(() => {
@@ -181,15 +183,22 @@ export function NationalsLive() {
       tgt = Date.now() + Number(inS) * 1000;
     else tgt = Date.now() + DEFAULT_DEMO_LEAD_S * 1000;
     setTarget(tgt);
+
+    // This live demo stays live once first serve hits — the completed state
+    // lives on the real completed event pages (/events/[slug]), not here.
+    setEndTarget(Number.MAX_SAFE_INTEGER);
+
     const tick = () => setNow(Date.now());
     tick();
     const id = window.setInterval(tick, 1000);
     return () => window.clearInterval(id);
   }, []);
 
-  const ready = now !== null && target !== null;
+  const ready = now !== null && target !== null && endTarget !== null;
   const diffMs = ready ? Math.max(0, target - now) : null;
-  const isLive = ready ? now >= target : false;
+  const isCompleted = ready ? now >= endTarget : false;
+  const isLive = ready ? now >= target && now < endTarget : false;
+  const started = isLive || isCompleted; // first serve has happened
 
   // Live-scores area: scoreboard vs bracket.
   const [scoreView, setScoreView] = useState<"scores" | "bracket">("scores");
@@ -333,6 +342,9 @@ export function NationalsLive() {
                 Live Now
               </span>
             )}
+            {isCompleted && (
+              <span className="bg-ppa-yellow px-2 py-0.5 text-ppa-navy">Final</span>
+            )}
             <span className="bg-[var(--event-accent)] px-2 py-0.5">
               {tierShort(t)} · {tierPoints(t).toLocaleString()} PTS
             </span>
@@ -341,14 +353,16 @@ export function NationalsLive() {
             )}
             <span className="text-white/25">/</span>
             <span className="text-ppa-yellow tabular-nums">
-              {isLive
-                ? "Matches in progress"
-                : diffMs === null
-                  ? "First Serve Soon"
-                  : (() => {
-                      const { days: dd, hours, mins, secs } = splitDiff(diffMs);
-                      return `${dd}D : ${hours}H : ${mins}M : ${secs}S`;
-                    })()}
+              {isCompleted
+                ? "Champions crowned"
+                : isLive
+                  ? "Matches in progress"
+                  : diffMs === null
+                    ? "First Serve Soon"
+                    : (() => {
+                        const { days: dd, hours, mins, secs } = splitDiff(diffMs);
+                        return `${dd}D : ${hours}H : ${mins}M : ${secs}S`;
+                      })()}
             </span>
           </div>
           <div className="mt-3 flex items-center gap-4">
@@ -375,11 +389,38 @@ export function NationalsLive() {
             </span>
             <span className="text-white/25">|</span>
             <span className="text-ppa-yellow">
-              {isLive ? "▶ Live on PickleballTV" : `${t.prizeMoney} On the Line`}
+              {isCompleted
+                ? "🏆 Champions crowned"
+                : isLive
+                  ? "▶ Live on PickleballTV"
+                  : `${t.prizeMoney} On the Line`}
             </span>
           </div>
           <div className="mt-5 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap">
-            {isLive && (
+            {isCompleted ? (
+              <>
+                <a
+                  href="#live"
+                  className="flex h-11 items-center justify-center bg-ppa-yellow px-6 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy transition hover:brightness-95 active:scale-[0.98]"
+                >
+                  Full Results ↓
+                </a>
+                <a
+                  href="https://www.pickleballtv.com/?utm_source=ppatour&utm_medium=website&utm_campaign=veolia-pickleball-national-championships-live&utm_content=event-hero-replays"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
+                >
+                  ▶ Watch Replays
+                </a>
+                <a
+                  href={`/brackets?event=${ATLANTA_EVENT_ID}`}
+                  className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
+                >
+                  Full Bracket ↗
+                </a>
+              </>
+            ) : isLive ? (
               <>
                 <a
                   href="https://www.pickleballtv.com/?utm_source=ppatour&utm_medium=website&utm_campaign=veolia-pickleball-national-championships-live&utm_content=event-hero-watch-live"
@@ -395,54 +436,57 @@ export function NationalsLive() {
                 >
                   Live Scores ↓
                 </a>
+                <a
+                  href={withUtm(t.ticketsUrl, { campaign: t.slug, content: "event-hero-buy-tickets" })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
+                >
+                  Buy Tickets — from ${t.ticketPriceFrom}
+                </a>
+                <a
+                  href="#travel"
+                  className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
+                >
+                  Plan Your Trip ↓
+                </a>
               </>
-            )}
-            <a
-              href={withUtm(t.ticketsUrl, {
-                campaign: t.slug,
-                content: "event-hero-buy-tickets",
-              })}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`flex h-11 items-center justify-center px-6 text-xs font-bold uppercase tracking-[0.12em] transition active:scale-[0.98] ${
-                isLive
-                  ? "border border-white/25 hover:border-white hover:bg-white hover:text-ppa-navy"
-                  : "bg-[var(--event-accent)] hover:brightness-90"
-              }`}
-            >
-              Buy Tickets — from ${t.ticketPriceFrom}
-            </a>
-            {!isLive && (
-              <a
-                href={withUtm(t.registerUrl, {
-                  campaign: t.slug,
-                  content: "event-hero-register",
-                })}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
-              >
-                Register to Play ↗
-              </a>
-            )}
-            <a
-              href="#travel"
-              className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
-            >
-              Plan Your Trip ↓
-            </a>
-            {!isLive && (
-              <a
-                href="#watch"
-                className="hidden h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy sm:flex"
-              >
-                ▶ How to Watch
-              </a>
+            ) : (
+              <>
+                <a
+                  href={withUtm(t.ticketsUrl, { campaign: t.slug, content: "event-hero-buy-tickets" })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-11 items-center justify-center bg-[var(--event-accent)] px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:brightness-90 active:scale-[0.98]"
+                >
+                  Buy Tickets — from ${t.ticketPriceFrom}
+                </a>
+                <a
+                  href={withUtm(t.registerUrl, { campaign: t.slug, content: "event-hero-register" })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
+                >
+                  Register to Play ↗
+                </a>
+                <a
+                  href="#travel"
+                  className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
+                >
+                  Plan Your Trip ↓
+                </a>
+                <a
+                  href="#watch"
+                  className="hidden h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy sm:flex"
+                >
+                  ▶ How to Watch
+                </a>
+              </>
             )}
           </div>
         </div>
         {/* First Serve clock — bottom-right, until the moment it goes live */}
-        {!isLive && diffMs !== null && (
+        {!started && diffMs !== null && (
           <div className="absolute bottom-8 right-4 hidden text-right motion-safe:animate-fade lg:block xl:right-8">
             <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-white/60">
               First Serve In
@@ -479,11 +523,14 @@ export function NationalsLive() {
             </div>
           </div>
         )}
-        <div className={`relative h-1 ${isLive ? "bg-ppa-live" : "bg-[var(--event-accent)]"}`} />
+        <div className={`relative h-1 ${isCompleted ? "bg-ppa-yellow" : isLive ? "bg-ppa-live" : "bg-[var(--event-accent)]"}`} />
       </section>
 
       {/* Floating event nav */}
       <EventTabNav tabs={TABS} eventName={t.shortName} icon={t.brand?.icon} />
+
+      {/* Champions — leads the completed state */}
+      {isCompleted && <ChampionsBanner eventId={ATLANTA_EVENT_ID} />}
 
       {/* Audience router — one page, three ways in */}
       <section className="bg-white">
@@ -561,13 +608,13 @@ export function NationalsLive() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="flex items-center gap-2.5">
-                <span className={`size-2 rounded-full ${isLive ? "animate-pulse bg-ppa-live" : "bg-white/30"}`} />
+                <span className={`size-2 rounded-full ${isLive ? "animate-pulse bg-ppa-live" : isCompleted ? "bg-ppa-yellow" : "bg-white/30"}`} />
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
-                  {isLive ? "Happening Now" : "Starts at First Serve"}
+                  {isLive ? "Happening Now" : isCompleted ? "Final Results" : "Starts at First Serve"}
                 </p>
               </div>
               <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
-                Live Scores
+                {isCompleted ? "Scores & Brackets" : "Live Scores"}
               </h2>
             </div>
             <a
@@ -580,8 +627,8 @@ export function NationalsLive() {
               <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">↗</span>
             </a>
           </div>
-          {/* Scores ↔ Bracket toggle (once live) */}
-          {isLive && (
+          {/* Scores ↔ Bracket toggle (once play has started) */}
+          {started && (
             <div className="mt-6 inline-flex rounded-full border border-white/15 p-0.5">
               {(["scores", "bracket"] as const).map((v) => (
                 <button
@@ -599,7 +646,7 @@ export function NationalsLive() {
           )}
 
           <div className="mt-6">
-            {isLive ? (
+            {started ? (
               scoreView === "scores" ? (
                 <ScoresBoard eventId={ATLANTA_EVENT_ID} />
               ) : (
@@ -746,7 +793,7 @@ export function NationalsLive() {
                   <span className="text-right">Live</span>
                 </div>
                 {realSchedule.proDays.map((d, i) => {
-                  const dayDone = isLive && i < LIVE_DAY_INDEX;
+                  const dayDone = isCompleted || (isLive && i < LIVE_DAY_INDEX);
                   const dayLive = isLive && i === LIVE_DAY_INDEX;
                   return (
                   <div

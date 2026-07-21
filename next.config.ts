@@ -63,6 +63,8 @@ const nextConfig: NextConfig = {
     // Player headshots served by the Pickleball.com partner API (rankings feed).
     remotePatterns: [
       { protocol: "https", hostname: "images.pickleball.com" },
+      // YouTube video thumbnails (tournament replay galleries).
+      { protocol: "https", hostname: "i.ytimg.com" },
     ],
     // qualities must be allowlisted or next/image silently clamps to 75 —
     // the homepage hero uses 65 (perf/lcp-hero).
