@@ -13,9 +13,12 @@
  * Never throws — returns null/[] on any problem. Cached 1h.
  */
 import { pbGetJson } from "@/lib/pb-fetch";
+import { ATHLETES_CACHE_TAG } from "@/lib/cache-tags";
 
 const TIMEOUT_MS = 8000;
 const TTL_MS = 60 * 60 * 1000;
+const REVALIDATE_S = 60 * 60 * 24; // Data Cache; the daily cron refreshes it
+const CACHE_OPTS = { timeoutMs: TIMEOUT_MS, revalidate: REVALIDATE_S, tags: [ATHLETES_CACHE_TAG] };
 
 export type VideoTournament = { uuid: string; title: string };
 export type AthleteVideo = {
@@ -84,7 +87,7 @@ async function fetchTournaments(slug: string): Promise<VideoTournament[]> {
   const json = (await pbGetJson(
     `${base}/v2/data/users/${encodeURIComponent(slug)}/list_player_highlight_tournaments?type=ARCHIVED&use_camel_case=true`,
     { "PB-API-TOKEN": token },
-    { timeoutMs: TIMEOUT_MS },
+    CACHE_OPTS,
   )) as { results?: { tournaments?: Obj[] } } | null;
   const rows = (json?.results?.tournaments ?? [])
     .map((t) => ({
@@ -105,7 +108,7 @@ async function fetchHighlights(slug: string, uuid: string): Promise<AthleteVideo
   const json = (await pbGetJson(
     `${base}/v2/data/users/${encodeURIComponent(slug)}/player_highlight_links_extended?type=archived&page_size=24&current_page=1&use_camel_case=true&tournament_uuid=${uuid}`,
     { "PB-API-TOKEN": token },
-    { timeoutMs: TIMEOUT_MS },
+    CACHE_OPTS,
   )) as { results?: { highlights?: Obj[] } } | null;
   const out: AthleteVideo[] = [];
   for (const h of json?.results?.highlights ?? []) {

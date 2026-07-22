@@ -17,9 +17,11 @@
  * which covers the ranked pros we feature.
  */
 import { pbGetJson } from "@/lib/pb-fetch";
+import { ATHLETES_CACHE_TAG } from "@/lib/cache-tags";
 
 const TIMEOUT_MS = 8000;
 const TTL_MS = 6 * 60 * 60 * 1000;
+const REVALIDATE_S = 60 * 60 * 24; // Data Cache; the daily cron refreshes it
 const PAGE_SIZE = 250;
 
 export type DivisionRank = { rank: number; points: number };
@@ -63,9 +65,11 @@ async function fetchBoard(dt: number, gender: "M" | "F"): Promise<Map<string, Di
       current_page: "1",
       page_size: String(PAGE_SIZE),
     });
-    const json = (await pbGetJson(`${base}/v2/data/partner_rankings?${params}`, { "PB-API-TOKEN": token }, { timeoutMs: TIMEOUT_MS })) as
-      | { results?: { player_rankings?: ApiPlayer[] } }
-      | null;
+    const json = (await pbGetJson(`${base}/v2/data/partner_rankings?${params}`, { "PB-API-TOKEN": token }, {
+      timeoutMs: TIMEOUT_MS,
+      revalidate: REVALIDATE_S,
+      tags: [ATHLETES_CACHE_TAG],
+    })) as { results?: { player_rankings?: ApiPlayer[] } } | null;
     for (const p of json?.results?.player_rankings ?? []) {
       const slug = p.player_slug;
       const rank = Number.parseInt(p.ranking ?? "", 10);

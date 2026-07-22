@@ -13,9 +13,11 @@
  * Cached 1h (matches the WordPress theme's transients) + in-flight coalescing.
  */
 import { pbGetJson } from "@/lib/pb-fetch";
+import { ATHLETES_CACHE_TAG } from "@/lib/cache-tags";
 
 const TIMEOUT_MS = 8000;
 const TTL_MS = 60 * 60 * 1000;
+const REVALIDATE_S = 60 * 60 * 24; // Data Cache; the daily cron refreshes it
 
 export type MedalSet = { gold: number; silver: number; bronze: number };
 export type AthleteStats = {
@@ -93,7 +95,11 @@ function medalSet(m: Obj, prefix: string): MedalSet {
 }
 
 async function get(base: string, token: string, path: string): Promise<Obj | null> {
-  return (await pbGetJson(`${base}${path}`, { "PB-API-TOKEN": token }, { timeoutMs: TIMEOUT_MS })) as Obj | null;
+  return (await pbGetJson(`${base}${path}`, { "PB-API-TOKEN": token }, {
+    timeoutMs: TIMEOUT_MS,
+    revalidate: REVALIDATE_S,
+    tags: [ATHLETES_CACHE_TAG],
+  })) as Obj | null;
 }
 
 async function build(slug: string): Promise<AthleteStats | null> {
