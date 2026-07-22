@@ -15,6 +15,8 @@
  * Server-only. Never throws — returns null (→ placeholder) on any problem.
  */
 
+import { REGISTRATIONS_CACHE_TAG } from "@/lib/cache-tags";
+
 const TIMEOUT_MS = 5000;
 const REVALIDATE_SECONDS = 60 * 60; // hourly is plenty for a registration count
 
@@ -37,7 +39,7 @@ export async function getRegisteredCount(
       `${base}/v1/tournaments/${tournamentUuid}/registrations/summary`,
       {
         headers: { "PT-API-TOKEN": token },
-        next: { revalidate: REVALIDATE_SECONDS },
+        next: { revalidate: REVALIDATE_SECONDS, tags: [REGISTRATIONS_CACHE_TAG] },
         signal: AbortSignal.timeout(TIMEOUT_MS),
       },
     );

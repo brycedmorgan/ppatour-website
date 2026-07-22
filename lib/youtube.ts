@@ -14,6 +14,8 @@
  * 6-hour revalidate so pages stay static/ISR and quota use stays tiny.
  */
 
+import { REPLAYS_CACHE_TAG } from "@/lib/cache-tags";
+
 const API = "https://www.googleapis.com/youtube/v3";
 const TIMEOUT_MS = 6000;
 const REVALIDATE_S = 6 * 60 * 60; // 6h — replay playlists change rarely
@@ -49,7 +51,7 @@ async function get(url: string): Promise<Record<string, unknown> | null> {
   try {
     const res = await fetch(url, {
       signal: AbortSignal.timeout(TIMEOUT_MS),
-      next: { revalidate: REVALIDATE_S },
+      next: { revalidate: REVALIDATE_S, tags: [REPLAYS_CACHE_TAG] },
     });
     if (!res.ok) return null;
     return (await res.json()) as Record<string, unknown>;

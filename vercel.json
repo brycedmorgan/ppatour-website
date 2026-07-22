@@ -3,6 +3,7 @@
   "crons": [
     { "path": "/api/revalidate-events", "schedule": "0 5 * * *" },
     { "path": "/api/revalidate-events", "schedule": "0 6 * * *" },
-    { "path": "/api/revalidate-athletes", "schedule": "0 7 * * *" }
+    { "path": "/api/revalidate-athletes", "schedule": "0 7 * * *" },
+    { "path": "/api/revalidate-content", "schedule": "0 8 * * *" }
   ]
 }

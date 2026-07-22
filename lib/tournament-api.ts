@@ -11,6 +11,8 @@
  * problem so callers can fall back to placeholder data.
  */
 
+import { TOURNAMENT_DETAILS_CACHE_TAG } from "@/lib/cache-tags";
+
 const SP_PATH = "/v1/pb_data/json?sp_name=API_v2_Tourney_GetDetails";
 
 /** Test event: 2026 Veolia Atlanta Pickleball Championships. */
@@ -79,7 +81,7 @@ export async function getTournamentDetails(eventId: string): Promise<TournamentD
       headers: { "PB-API-TOKEN": token, "Content-Type": "application/json" },
       body: JSON.stringify({ EventID: eventId }),
       // SP endpoint is a POST; cache for a day via the framework's data cache.
-      next: { revalidate: 60 * 60 * 24 },
+      next: { revalidate: 60 * 60 * 24, tags: [TOURNAMENT_DETAILS_CACHE_TAG] },
     });
     if (!res.ok) return null;
 
