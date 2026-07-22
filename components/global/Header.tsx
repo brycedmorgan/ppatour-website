@@ -78,15 +78,20 @@ function BigLink({
   href,
   label,
   onNavigate,
+  external = false,
 }: {
   href: string;
   label: string;
   onNavigate: () => void;
+  /** Opens a separate property (e.g. Pickleball Vacations) in a new tab. */
+  external?: boolean;
 }) {
   return (
     <Link
       href={href}
       onClick={onNavigate}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
       className="group/big flex items-baseline gap-2 font-display text-xl uppercase leading-tight text-ppa-navy transition-colors hover:text-ppa-blue"
     >
       {label}
@@ -94,7 +99,7 @@ function BigLink({
         aria-hidden
         className="text-sm text-ppa-blue opacity-0 transition-all duration-300 group-hover/big:translate-x-1 group-hover/big:opacity-100"
       >
-        →
+        {external ? "↗" : "→"}
       </span>
     </Link>
   );
@@ -198,6 +203,12 @@ function MegaPanelContent({
             <BigLink href="/rankings" label="Rankings" onNavigate={onNavigate} />
             <BigLink href="/news" label="Latest News" onNavigate={onNavigate} />
             <BigLink href="/events/volunteer" label="Volunteer" onNavigate={onNavigate} />
+            <BigLink
+              href="https://vacations.ppatour.com"
+              label="Pickleball Vacations"
+              onNavigate={onNavigate}
+              external
+            />
           </div>
         </div>
         <div className={col} style={delay(1)}>
