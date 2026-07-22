@@ -12,6 +12,10 @@ import {
   turnedProYear,
 } from "@/lib/published-athletes";
 import { curatedSlugFor, getWprPlayerBySlug, getWprRoster } from "@/lib/rankings-api";
+import { getAthleteStats } from "@/lib/athlete-stats";
+import { getDivisionRanks } from "@/lib/division-rankings";
+import { getAthleteVideoData } from "@/lib/athlete-videos";
+import { AthleteVideos } from "@/components/athletes/AthleteVideos";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -108,6 +112,16 @@ export default async function AthletePage({ params }: Params) {
   const a = await loadAthlete(slug);
   if (!a) notFound();
 
+  // Live stats from the player API (DUPR ratings, career medals, bio facts) +
+  // per-division World Pickleball rankings. Null/empty when the API is
+  // unavailable — the stats section simply hides.
+  const stats = await getAthleteStats(slug);
+  const divRanks = await getDivisionRanks(
+    slug,
+    a.gender === "male" || a.gender === "female" ? a.gender : null,
+  );
+  const videoData = await getAthleteVideoData(slug);
+
   const boardLabel =
     a.gender === "female" ? "Women's" : a.gender === "male" ? "Men's" : null;
   const others = athletes.filter((x) => x.slug !== a.slug).slice(0, 4);
@@ -117,14 +131,36 @@ export default async function AthletePage({ params }: Params) {
 
   // Structured quick facts from the published profile (skip empty values).
   const qi = a.quickInfo;
+  const ageVal = stats?.age ?? a.age;
   const quickFacts: { label: string; value: string }[] = [
-    { label: "Resides", value: qi?.resides ?? "" },
-    { label: "Age", value: a.age != null ? String(a.age) : "" },
-    { label: "Height", value: qi?.height ?? "" },
-    { label: "Plays", value: qi?.plays ?? "" },
-    { label: "Turned Pro", value: a.turnedPro ?? "" },
+    { label: "Resides", value: stats?.hometown ?? qi?.resides ?? "" },
+    { label: "Age", value: ageVal != null ? String(ageVal) : "" },
+    { label: "Height", value: stats?.height ?? qi?.height ?? "" },
+    { label: "Plays", value: stats?.handed ? `${stats.handed}-handed` : qi?.plays ?? "" },
+    { label: "Turned Pro", value: stats?.turnedPro ?? a.turnedPro ?? "" },
     { label: "Paddle", value: qi?.paddle ?? "" },
   ].filter((f) => f.value);
+
+  // DUPR ratings for the stats section (present values only, 2-decimals).
+  const ratings = [
+    { label: "Singles", value: stats?.dupr.singles },
+    { label: "Doubles", value: stats?.dupr.doubles },
+  ].filter((r): r is { label: string; value: number } => r.value != null);
+  // Per-division rankings — always show all three; "Unranked" where the athlete
+  // isn't in that discipline's board.
+  const divisionRanks = [
+    { label: "Singles", data: divRanks.singles ?? null },
+    { label: "Doubles", data: divRanks.doubles ?? null },
+    { label: "Mixed", data: divRanks.mixed ?? null },
+  ];
+  const hasAnyDivRank = divisionRanks.some((r) => r.data);
+  const medalRows = stats?.medals
+    ? ([
+        ["Singles", stats.medals.singles],
+        ["Doubles", stats.medals.doubles],
+        ["Mixed", stats.medals.mixed],
+      ] as const).filter(([, m]) => m.gold + m.silver + m.bronze > 0)
+    : [];
 
   return (
     <>
@@ -296,6 +332,147 @@ export default async function AthletePage({ params }: Params) {
           </div>
         </div>
       </section>
+
+      {/* By the Numbers — rankings, DUPR + career medals (live player API) */}
+      {(stats?.hasStats || hasAnyDivRank) && (
+        <section className="bg-white">
+          <div className="mx-auto w-full max-w-6xl px-4 py-12">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
+              Career
+            </p>
+            <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+              By the Numbers
+            </h2>
+
+            {hasAnyDivRank && (
+              <div className="mt-6">
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
+                  Division Rankings
+                </p>
+                <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  {divisionRanks.map((r) => (
+                    <div key={r.label} className="border border-ppa-line bg-ppa-paper px-4 py-4">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+                        {r.label}
+                      </p>
+                      {r.data ? (
+                        <>
+                          <p className="mt-1 font-display text-4xl leading-none text-ppa-blue">
+                            No. {r.data.rank}
+                          </p>
+                          <p className="mt-1 text-xs text-ppa-navy/55">
+                            {r.data.points.toLocaleString()} pts
+                          </p>
+                        </>
+                      ) : (
+                        <p className="mt-1 font-display text-2xl leading-none text-ppa-navy/30">
+                          Unranked
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {stats?.medals && (
+              <div className="mt-6">
+                <div className="grid grid-cols-3 gap-3 sm:max-w-lg">
+                  {(
+                    [
+                      ["Gold", stats.medals.total.gold, "text-ppa-navy", "bg-ppa-yellow"],
+                      ["Silver", stats.medals.total.silver, "text-ppa-navy", "bg-ppa-line"],
+                      ["Bronze", stats.medals.total.bronze, "text-white", "bg-[#c98a3c]"],
+                    ] as const
+                  ).map(([label, count, text, bar]) => (
+                    <div key={label} className="overflow-hidden rounded-md border border-ppa-line bg-ppa-paper">
+                      <div className={`h-1.5 ${bar}`} />
+                      <div className="px-4 py-4">
+                        <p className={`font-display text-4xl leading-none ${text === "text-white" ? "text-[#c98a3c]" : "text-ppa-navy"}`}>
+                          {count}
+                        </p>
+                        <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+                          {label}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {medalRows.length > 0 && (
+                  <div className="mt-4 overflow-hidden rounded-md border border-ppa-line">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="bg-ppa-navy text-white">
+                          <th className="px-4 py-2 text-left text-[10px] font-bold uppercase tracking-[0.14em]">Division</th>
+                          {["Gold", "Silver", "Bronze"].map((h) => (
+                            <th key={h} className="px-4 py-2 text-right text-[10px] font-bold uppercase tracking-[0.14em]">{h}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {medalRows.map(([div, m]) => (
+                          <tr key={div} className="border-t border-ppa-line">
+                            <td className="px-4 py-2 font-semibold text-ppa-navy">{div}</td>
+                            <td className="px-4 py-2 text-right tabular-nums text-ppa-navy">{m.gold}</td>
+                            <td className="px-4 py-2 text-right tabular-nums text-ppa-navy/70">{m.silver}</td>
+                            <td className="px-4 py-2 text-right tabular-nums text-ppa-navy/70">{m.bronze}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {ratings.length > 0 && (
+              <div className="mt-8">
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
+                  DUPR
+                </p>
+                <div className="mt-3 grid grid-cols-2 gap-3 sm:max-w-md">
+                  {ratings.map((r) => (
+                    <div key={r.label} className="border border-ppa-line bg-ppa-paper px-4 py-4">
+                      <p className="font-display text-3xl leading-none text-ppa-blue">
+                        {r.value.toFixed(2)}
+                      </p>
+                      <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+                        {r.label}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-3 text-[11px] text-ppa-navy/40">
+                  DUPR = Dynamic Universal Pickleball Rating
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* Highlights — player video clips from the API */}
+      {videoData && videoData.videos.length > 0 && (
+        <section className="bg-ppa-paper">
+          <div className="mx-auto w-full max-w-6xl px-4 py-12">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
+              Watch
+            </p>
+            <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+              {a.name.split(" ")[0]}&apos;s Highlights
+            </h2>
+            <div className="mt-6">
+              <AthleteVideos
+                slug={a.slug}
+                tournaments={videoData.tournaments}
+                initialUuid={videoData.tournamentUuid}
+                initialVideos={videoData.videos}
+              />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* More pros */}
       <section className="bg-ppa-navy-deep">
