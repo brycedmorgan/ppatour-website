@@ -20,6 +20,31 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-23 (pt. 5) — Gold Prize Grid + honest defending champs + nav dedup
+- **Gold Prize Grid** (`components/events/GoldPrizeGrid.tsx`, Connor:
+  "clickable… make us look biggest and best") — leads the What's-at-Stake
+  section with the real on-court purse BIG, native `<details>` expands to the
+  full 5-division × podium grid. Real grid totals in `GOLD_GRID` +
+  `goldGridTotal()` (Majors/Worlds $1,024,400 · Cups $647,493 · Opens
+  $439,086 · Finals $628,000 via slug override). Wired into the event page
+  AND NationalsLive. No fabricated per-cell dollars — shows the real total +
+  podium structure.
+- **Defending champions fixed** (Connor: "make sure it's right"). Was the
+  SAME hardcoded 5 names (Ben Johns / Anna Bright / …) on EVERY event.
+  Now `Tournament.defendingChampions` per-event, with an honest "confirmed
+  once last season's champions are set" fallback — deleted the placeholder
+  constant from both event components. **Data ask: Wesley → per-event
+  prior-year champions** (then it lights up automatically).
+- **Nav dedup**: "Sponsors" was listed twice (top-level tab + inside About
+  dropdown AND the desktop About panel) — removed the About duplicates. The
+  deeper "which tab feels pointless" is ambiguous (may be the Jackalope app,
+  not the site) — flagged to Connor for specifics before restructuring.
+- Cleaned unused `tierShort`/`tierLabel` imports left by the Major swap.
+- **Genuinely still open (not code tweaks)**: Jeff's ranking wheel + "where
+  the points come from" (needs per-event results the athlete/event feed
+  doesn't expose yet — Wesley) and the **PPA Shop** "Powered by PBC"
+  (a Jackalope/commerce build, not a website section).
+
 ### 2026-07-23 (pt. 4) — Player-profile redesign (Connor: "sloppy", "link to gear")
 - Rebuilt `/athletes/[slug]` for flow + the missing gear link (`be01350`,
   live). Premium hero (bigger portrait, brand glow) + a **broadcast-style
