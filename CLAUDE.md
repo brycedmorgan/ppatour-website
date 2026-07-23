@@ -20,6 +20,25 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-23 (pt. 4) — Player-profile redesign (Connor: "sloppy", "link to gear")
+- Rebuilt `/athletes/[slug]` for flow + the missing gear link (`be01350`,
+  live). Premium hero (bigger portrait, brand glow) + a **broadcast-style
+  stat strip** under it (World Rank / WPR Points / DUPR / Career Gold) so
+  rank + DUPR + hardware hit immediately. Strip is count-aware (2/3/4 cols).
+- Killed the duplicate rank/points cards that sat in the sidebar (they're in
+  the hero strip now) — the "sloppy" redundancy. Sidebar → Quick Info +
+  Full World Rankings link.
+- **New "In the Bag" gear section** (`lib/athlete-gear.ts`): player's paddle
+  + shop CTA. Official partners (JOOLA/Selkirk/Six Zero) link straight to
+  their store (UTM `athlete-gear`); any other brand points to our
+  official-partner directory — we only send traffic to gear we rep (Connor's
+  "only our official shit"). Verified: 42 profiles link to a partner store,
+  rest → official gear. Repoint to the PPA Shop when it exists.
+- Bio / division rankings / medals / DUPR retained, tighter.
+- **Still ahead** (needs data, flagged): "where the points come from" /
+  previous results + Jeff's ranking wheel — the athlete feed has no
+  per-event results yet (Wesley's API lane / Jeff's component).
+
 ### 2026-07-23 (pt. 3) — Majors designation wired (Connor confirmed the four)
 - Connor: **Atlanta Open = "the Players"** major. So the four Majors are
   Masters, Atlanta (Players), Nationals, Worlds. Shipped `52fe997` (live).
