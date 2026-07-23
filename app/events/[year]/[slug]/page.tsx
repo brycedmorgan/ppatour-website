@@ -372,17 +372,25 @@ export default async function EventPage({ params }: Params) {
             {t.presentedBy && (
               <span className="text-white/70">Presented by {t.presentedBy}</span>
             )}
-            <span className="text-white/25">/</span>
-            <span className="text-ppa-yellow">
-              {completed ? (
-                "Final"
-              ) : (
-                <Countdown
-                  targetIso={t.startDate}
-                  fallback={`${countdown} ${countdown === 1 ? "Day" : "Days"} Out`}
-                />
-              )}
-            </span>
+            {completed ? (
+              <>
+                <span className="text-white/25">/</span>
+                <span className="text-ppa-yellow">Final</span>
+              </>
+            ) : (
+              <>
+                {/* Countdown here only below lg — the "First Serve In" block
+                    (FirstServeCountdown, lg:block) is the desktop countdown, so
+                    the two never show together. */}
+                <span className="text-white/25 lg:hidden">/</span>
+                <span className="text-ppa-yellow lg:hidden">
+                  <Countdown
+                    targetIso={t.startDate}
+                    fallback={`${countdown} ${countdown === 1 ? "Day" : "Days"} Out`}
+                  />
+                </span>
+              </>
+            )}
           </div>
           <div className="mt-3 flex items-center gap-4">
             {t.brand?.icon && (
