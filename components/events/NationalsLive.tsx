@@ -25,8 +25,10 @@ import {
   formatDate,
   formatDateRange,
   tierLabel,
+  eventTierLabel,
   tierPoints,
   tierShort,
+  eventTierShort,
   tournaments,
 } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
@@ -347,7 +349,7 @@ export function NationalsLive() {
               <span className="bg-ppa-yellow px-2 py-0.5 text-ppa-navy">Final</span>
             )}
             <span className="bg-[var(--event-accent)] px-2 py-0.5">
-              {tierShort(t)} · {tierPoints(t).toLocaleString()} PTS
+              {eventTierShort(t)} · {tierPoints(t).toLocaleString()} PTS
             </span>
             {t.presentedBy && (
               <span className="text-white/70">Presented by {t.presentedBy}</span>
@@ -586,7 +588,7 @@ export function NationalsLive() {
             { k: "Dates", v: formatDateRange(t.startDate, t.endDate, true) },
             { k: "Venue", v: t.venue },
             { k: "Prize Money & Fees", v: t.prizeMoney, accent: true },
-            { k: tierLabel(t), v: `${tierPoints(t).toLocaleString()} Pts` },
+            { k: eventTierLabel(t), v: `${tierPoints(t).toLocaleString()} Pts` },
           ].map((f, i) => (
             <div
               key={f.k}
@@ -688,7 +690,7 @@ export function NationalsLive() {
             Why {t.shortName} Matters
           </h2>
           <p className="mt-3 max-w-2xl text-sm text-ppa-navy/60">
-            A {tierLabel(t)} title is worth{" "}
+            A {eventTierLabel(t)} title is worth{" "}
             <span className="font-bold text-ppa-navy">
               {tierPoints(t).toLocaleString()} ranking points
             </span>{" "}
@@ -1605,7 +1607,7 @@ export function NationalsLive() {
                 )}
                 <div className="relative p-4 text-white">
                   <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/55">
-                    {tierShort(o)} · {tierPoints(o).toLocaleString()}
+                    {eventTierShort(o)} · {tierPoints(o).toLocaleString()}
                   </p>
                   <p className="mt-0.5 font-display text-base uppercase leading-[1.05]">
                     {o.shortName}

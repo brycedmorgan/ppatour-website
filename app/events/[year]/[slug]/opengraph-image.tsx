@@ -5,6 +5,7 @@ import {
   formatDateRange,
   tierPoints,
   tierShort,
+  eventTierShort,
   tournaments,
 } from "@/lib/placeholder-data";
 
@@ -126,7 +127,7 @@ export default async function Image({
                 padding: "8px 16px",
               }}
             >
-              {`${tierShort(t).toUpperCase()} · ${tierPoints(t).toLocaleString()} PTS`}
+              {`${eventTierShort(t).toUpperCase()} · ${tierPoints(t).toLocaleString()} PTS`}
             </div>
             <div
               style={{

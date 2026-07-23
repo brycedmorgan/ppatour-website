@@ -7,6 +7,7 @@ import {
   formatDateRange,
   tierPoints,
   tierShort,
+  eventTierShort,
   type Tournament,
   eventHref,
 } from "@/lib/placeholder-data";
@@ -242,7 +243,7 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
                 )}
                 <div className="absolute right-3 top-3 flex flex-col items-end gap-1">
                   <span className="bg-ppa-yellow px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] text-ppa-navy">
-                    {tierShort(t)} · {tierPoints(t).toLocaleString()}
+                    {eventTierShort(t)} · {tierPoints(t).toLocaleString()}
                   </span>
                   {t.region === "international" && (
                     <span className="bg-ppa-blue px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] text-white">

@@ -3,7 +3,12 @@
  * international stops) plus recent completed events for the /events Past tab.
  *
  * Tiers follow the real PPA points structure:
- *   Worlds 3,000 · Major 2,000 · Cup 1,500 · Open 1,000 · Challenger 125–500.
+ *   Worlds 3,000 · Championship 2,000 · Cup 1,500 · Open 1,000 · Challenger 125–500.
+ *
+ * "Majors" are a separate, curated designation layered on top of the points
+ * tier (Connor, 7/23): the four crown-jewel stops — Masters, the Players
+ * (Atlanta), Nationals, and Worlds — carry a MAJOR badge regardless of tier.
+ * See {@link isMajor}. (PPA Finals is 2,000-pt but NOT a major.)
  *
  * `getMainTourEvents()` keeps Challengers + international off the homepage.
  * Upcoming events use generic action photos as placeholders — replace with the
@@ -17,7 +22,7 @@ export const TIER_META: Record<
   { label: string; short: string; points: number }
 > = {
   worlds: { label: "World Championship", short: "Worlds", points: 3000 },
-  slam: { label: "PPA Major", short: "Major", points: 2000 },
+  slam: { label: "PPA Tour Championship", short: "Championship", points: 2000 },
   cup: { label: "PPA Tour Cup", short: "Cup", points: 1500 },
   open: { label: "PPA Tour Open", short: "Open", points: 1000 },
   challenger: { label: "PPA Challenger", short: "Challenger", points: 500 },
@@ -589,14 +594,51 @@ export function tierPoints(t: Pick<Tournament, "tierKey">): number {
   return TIER_META[t.tierKey].points;
 }
 
-/** Short tier label, e.g. "Major". */
+/** Short tier label, e.g. "Championship". */
 export function tierShort(t: Pick<Tournament, "tierKey">): string {
   return TIER_META[t.tierKey].short;
 }
 
-/** Full tier label, e.g. "PPA Major". */
+/** Full tier label, e.g. "PPA Tour Championship". */
 export function tierLabel(t: Pick<Tournament, "tierKey">): string {
   return TIER_META[t.tierKey].label;
+}
+
+/**
+ * The four Majors (Connor, 7/23) — the crown-jewel stops, a curated
+ * designation independent of the points tier: the Masters, the Players
+ * (Atlanta), Nationals, and Worlds. Matched by curated slug and, as a
+ * backstop for API-sourced records, by name — never a Challenger, and
+ * PPA Finals is intentionally excluded (2,000-pt but not a Major).
+ */
+const MAJOR_SLUGS = new Set([
+  "carvana-pickleball-masters",
+  "atlanta-pickleball-championships",
+  "veolia-pickleball-national-championships",
+  "pickleball-world-championships",
+]);
+
+export function isMajor(t: Pick<Tournament, "slug" | "name" | "tierKey">): boolean {
+  if (t.tierKey === "challenger") return false;
+  if (MAJOR_SLUGS.has(t.slug)) return true;
+  const n = t.name.toLowerCase();
+  if (/challenger/.test(n)) return false;
+  return (
+    /national championship/.test(n) ||
+    /world championship/.test(n) ||
+    /\bmasters\b/.test(n) ||
+    (/atlanta/.test(n) && /championship/.test(n))
+  );
+}
+
+/** Badge short label — "Major" for the four Majors, else the tier short. */
+export function eventTierShort(t: Pick<Tournament, "slug" | "name" | "tierKey">): string {
+  return isMajor(t) ? "Major" : tierShort(t);
+}
+
+/** Full badge label — "PPA Major" for the four Majors, else the tier label. */
+export function eventTierLabel(t: Pick<Tournament, "slug" | "name" | "tierKey">): string {
+  return isMajor(t) ? "PPA Major" : tierLabel(t);
 }
 
 /**

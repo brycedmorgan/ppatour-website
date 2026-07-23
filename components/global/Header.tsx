@@ -8,6 +8,7 @@ import {
   getMainTourEvents,
   getNextTournament,
   tierShort,
+  eventTierShort,
   eventHref,
 } from "@/lib/placeholder-data";
 import { tourPrograms } from "@/lib/tour-programs";
@@ -239,7 +240,7 @@ function MegaPanelContent({
                       {t.shortName}
                     </span>
                     <span className="mt-0.5 block truncate text-xs text-ppa-navy/50">
-                      {tierShort(t)} · {formatDateRange(t.startDate, t.endDate)} · {t.city}
+                      {eventTierShort(t)} · {formatDateRange(t.startDate, t.endDate)} · {t.city}
                     </span>
                   </span>
                 </Link>
@@ -253,7 +254,7 @@ function MegaPanelContent({
             <FeatureCard
               href={eventHref(next)}
               image={next.image}
-              eyebrow={`${tierShort(next)} · ${next.city}, ${next.state}`}
+              eyebrow={`${eventTierShort(next)} · ${next.city}, ${next.state}`}
               title={next.shortName}
               meta={`Tickets from $${next.ticketPriceFrom}`}
               onNavigate={onNavigate}

@@ -33,8 +33,10 @@ import {
   formatDate,
   formatDateRange,
   tierLabel,
+  eventTierLabel,
   tierPoints,
   tierShort,
+  eventTierShort,
   type Tournament,
   tournaments,
 } from "@/lib/placeholder-data";
@@ -78,7 +80,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const t = await resolveEvent(year, slug);
   if (!t) return { title: "Event" };
   const where = t.state ? `${t.city}, ${t.state}` : t.city;
-  const description = `${tierLabel(t)} · ${formatDateRange(t.startDate, t.endDate, true)} · ${where} · ${t.prizeMoney} prize purse. Schedule, players, tickets, trip guide, and how to watch.`;
+  const description = `${eventTierLabel(t)} · ${formatDateRange(t.startDate, t.endDate, true)} · ${where} · ${t.prizeMoney} prize purse. Schedule, players, tickets, trip guide, and how to watch.`;
   return {
     title: t.shortName,
     description,
@@ -367,7 +369,7 @@ export default async function EventPage({ params }: Params) {
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-10 pt-20">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em]">
             <span className="bg-[var(--event-accent)] px-2 py-0.5">
-              {tierShort(t)} · {tierPoints(t).toLocaleString()} PTS
+              {eventTierShort(t)} · {tierPoints(t).toLocaleString()} PTS
             </span>
             {t.presentedBy && (
               <span className="text-white/70">Presented by {t.presentedBy}</span>
@@ -505,7 +507,7 @@ export default async function EventPage({ params }: Params) {
             { k: "Dates", v: formatDateRange(t.startDate, t.endDate, true) },
             { k: "Venue", v: t.venue },
             { k: "Prize Purse", v: t.prizeMoney, accent: true },
-            { k: tierLabel(t), v: `${tierPoints(t).toLocaleString()} Pts` },
+            { k: eventTierLabel(t), v: `${tierPoints(t).toLocaleString()} Pts` },
           ].map((f, i) => (
             <div
               key={f.k}
@@ -638,7 +640,7 @@ export default async function EventPage({ params }: Params) {
             Why {t.shortName} Matters
           </h2>
           <p className="mt-3 max-w-2xl text-sm text-ppa-navy/60">
-            A {tierLabel(t)} title is worth{" "}
+            A {eventTierLabel(t)} title is worth{" "}
             <span className="font-bold text-ppa-navy">
               {tierPoints(t).toLocaleString()} ranking points
             </span>{" "}
@@ -1551,7 +1553,7 @@ export default async function EventPage({ params }: Params) {
                 )}
                 <div className="relative p-4 text-white">
                   <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/55">
-                    {tierShort(o)} · {tierPoints(o).toLocaleString()}
+                    {eventTierShort(o)} · {tierPoints(o).toLocaleString()}
                   </p>
                   <p className="mt-0.5 font-display text-base uppercase leading-[1.05]">
                     {o.shortName}
