@@ -16,6 +16,7 @@ import { getAthleteStats } from "@/lib/athlete-stats";
 import { getDivisionRanks } from "@/lib/division-rankings";
 import { getAthleteVideoData } from "@/lib/athlete-videos";
 import { AthleteVideos } from "@/components/athletes/AthleteVideos";
+import { resolveGear } from "@/lib/athlete-gear";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -162,6 +163,25 @@ export default async function AthletePage({ params }: Params) {
       ] as const).filter(([, m]) => m.gold + m.silver + m.bronze > 0)
     : [];
 
+  // Player's paddle → official-partner gear link (Connor's "link to gear").
+  const gear = resolveGear(a.quickInfo?.paddle ?? null);
+
+  // Broadcast-style stat strip under the hero — the marquee numbers up front so
+  // rank / DUPR / hardware read instantly (only render what we actually have).
+  const topDupr = stats?.dupr.doubles ?? stats?.dupr.singles ?? null;
+  const goldTotal = stats?.medals?.total.gold ?? null;
+  const heroStats: { label: string; value: string }[] = [
+    {
+      label: boardLabel ? `${boardLabel} World Rank` : "World Rank",
+      value: a.rank ? `No. ${a.rank}` : "—",
+    },
+    { label: "WPR Points", value: a.points > 0 ? a.points.toLocaleString() : "—" },
+    ...(topDupr != null ? [{ label: "DUPR", value: topDupr.toFixed(2) }] : []),
+    ...(goldTotal != null && goldTotal > 0
+      ? [{ label: "Career Gold", value: String(goldTotal) }]
+      : []),
+  ];
+
   return (
     <>
       <script
@@ -186,27 +206,34 @@ export default async function AthletePage({ params }: Params) {
       />
       {/* Hero */}
       <section className="relative isolate overflow-hidden bg-ppa-navy text-white">
-        <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-12 sm:grid-cols-[auto_1fr] sm:items-end sm:py-14">
-          <div className="relative size-40 shrink-0 overflow-hidden border border-white/15 bg-ppa-navy-deep sm:size-48">
+        {/* soft brand glow behind the portrait for depth */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-24 -top-24 hidden size-[28rem] rounded-full bg-ppa-blue/20 blur-3xl sm:block"
+        />
+        <div className="relative mx-auto grid w-full max-w-6xl gap-8 px-4 py-12 sm:grid-cols-[auto_1fr] sm:items-end sm:py-16">
+          <div className="relative size-44 shrink-0 overflow-hidden rounded-sm bg-ppa-navy-deep shadow-2xl ring-1 ring-white/15 sm:size-56">
             {a.headshot ? (
               <Image
                 src={a.headshot}
                 alt={a.name}
                 fill
                 priority
-                sizes="192px"
+                sizes="224px"
                 className="object-cover object-top"
               />
             ) : (
-              <span className="flex h-full w-full items-center justify-center font-display text-5xl text-white/60">
+              <span className="flex h-full w-full items-center justify-center font-display text-6xl text-white/60">
                 {initials(a.name)}
               </span>
             )}
-            <div className="absolute inset-x-0 bottom-0 h-1 bg-ppa-blue" />
+            <div className="absolute inset-x-0 bottom-0 h-1.5 bg-ppa-blue" />
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em]">
-              <span className="bg-ppa-blue px-2 py-0.5">No. {a.rank}</span>
+              <span className="bg-ppa-blue px-2.5 py-1 text-white">
+                World No. {a.rank || "—"}
+              </span>
               {a.country && (
                 <span className="flex items-center gap-1.5 text-white/70">
                   {flag && (
@@ -221,7 +248,7 @@ export default async function AthletePage({ params }: Params) {
                 </span>
               )}
             </div>
-            <h1 className="mt-3 font-display text-[clamp(2rem,6vw,3.75rem)] uppercase leading-[0.95]">
+            <h1 className="mt-3 font-display text-[clamp(2.25rem,6.5vw,4.25rem)] uppercase leading-[0.92]">
               {a.name}
             </h1>
             <p className="mt-2 max-w-xl text-sm text-ppa-yellow sm:text-base">
@@ -240,6 +267,30 @@ export default async function AthletePage({ params }: Params) {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Broadcast-style stat strip — marquee numbers up front */}
+        <div className="relative border-t border-white/10 bg-ppa-navy-deep">
+          <dl
+            className={`mx-auto grid w-full max-w-6xl grid-cols-2 divide-x divide-white/10 ${
+              heroStats.length >= 4
+                ? "sm:grid-cols-4"
+                : heroStats.length === 3
+                  ? "sm:grid-cols-3"
+                  : "sm:grid-cols-2"
+            }`}
+          >
+            {heroStats.map((s) => (
+              <div key={s.label} className="px-4 py-5 sm:px-6 sm:py-6">
+                <dd className="font-display text-3xl leading-none text-white sm:text-4xl">
+                  {s.value}
+                </dd>
+                <dt className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/50">
+                  {s.label}
+                </dt>
+              </div>
+            ))}
+          </dl>
         </div>
         <div className="relative h-1 bg-ppa-blue" />
       </section>
@@ -282,52 +333,32 @@ export default async function AthletePage({ params }: Params) {
 
             <aside>
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
-                World Pickleball Ranking
+                Quick Info
               </p>
-              <div className="mt-3 grid grid-cols-2 gap-3">
-                <div className="border border-ppa-line bg-white px-4 py-5">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
-                    {boardLabel ? `${boardLabel} World Rank` : "World Rank"}
-                  </p>
-                  <p className="mt-1 font-display text-4xl text-ppa-blue">
-                    No. {a.rank}
-                  </p>
-                </div>
-                <div className="border border-ppa-line bg-white px-4 py-5">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
-                    WPR Points
-                  </p>
-                  <p className="mt-1 font-display text-4xl text-ppa-navy">
-                    {a.points > 0 ? a.points.toLocaleString() : "—"}
-                  </p>
-                </div>
-              </div>
+              {quickFacts.length > 0 ? (
+                <dl className="mt-3 divide-y divide-ppa-line border border-ppa-line bg-white">
+                  {quickFacts.map((f) => (
+                    <div key={f.label} className="flex items-baseline justify-between gap-4 px-4 py-2.5">
+                      <dt className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+                        {f.label}
+                      </dt>
+                      <dd className="text-right text-sm font-medium text-ppa-navy">
+                        {f.value}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              ) : (
+                <p className="mt-3 text-sm text-ppa-navy/50">
+                  Full profile details coming soon.
+                </p>
+              )}
               <Link
                 href="/rankings"
                 className="mt-4 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue"
               >
-                Full Rankings →
+                Full World Rankings →
               </Link>
-
-              {quickFacts.length > 0 && (
-                <div className="mt-8">
-                  <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
-                    Quick Info
-                  </p>
-                  <dl className="mt-3 divide-y divide-ppa-line border border-ppa-line bg-white">
-                    {quickFacts.map((f) => (
-                      <div key={f.label} className="flex items-baseline justify-between gap-4 px-4 py-2.5">
-                        <dt className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
-                          {f.label}
-                        </dt>
-                        <dd className="text-right text-sm font-medium text-ppa-navy">
-                          {f.value}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-              )}
             </aside>
           </div>
         </div>
@@ -448,6 +479,53 @@ export default async function AthletePage({ params }: Params) {
                 </p>
               </div>
             )}
+          </div>
+        </section>
+      )}
+
+      {/* In the Bag — the athlete's paddle + a shop link (official partners
+          only; Connor's "link to gear"). */}
+      {gear && (
+        <section className="bg-ppa-navy text-white">
+          <div className="mx-auto w-full max-w-6xl px-4 py-12">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/50">
+              In the Bag
+            </p>
+            <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] sm:text-3xl">
+              {a.name.split(" ")[0]}&apos;s Gear
+            </h2>
+            <div className="mt-6 flex flex-col gap-6 border border-white/12 bg-ppa-navy-deep p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
+                  Paddle
+                </p>
+                <p className="mt-1 font-display text-2xl uppercase leading-tight sm:text-3xl">
+                  {gear.paddle}
+                </p>
+                {gear.brand && (
+                  <p className="mt-2 text-xs font-medium text-ppa-sky">
+                    Official Partner of the PPA Tour
+                  </p>
+                )}
+              </div>
+              {gear.external ? (
+                <a
+                  href={gear.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex h-12 shrink-0 items-center justify-center bg-ppa-blue px-7 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
+                >
+                  Shop {gear.brand} ↗
+                </a>
+              ) : (
+                <Link
+                  href={gear.href}
+                  className="inline-flex h-12 shrink-0 items-center justify-center border border-white/25 px-7 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:border-ppa-blue hover:bg-ppa-blue"
+                >
+                  Shop Official Gear →
+                </Link>
+              )}
+            </div>
           </div>
         </section>
       )}
