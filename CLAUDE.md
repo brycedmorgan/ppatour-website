@@ -20,6 +20,55 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-23 (pt. 2) — Connor's 7/23 text punch list (from his flight)
+- Connor texted a fresh walk-through list this morning. Shipped the
+  confident naming/structure wins in one commit (`fd8456b`), pushed to
+  main → Vercel auto-deploy (production). Build 274 routes clean; the 8
+  eslint errors are all pre-existing "setState-in-effect" flags in the
+  live/interactive client components (StickyBuyBar, LiveScoreGrid,
+  BracketPanel, ScoresBoard, AthleteVideos, NationalsLive) — none in
+  files touched this session.
+- **"Don't use main" / "The Pro Tour or just The Tour"**: events page
+  hero "The Main Tour" → **"The Tour"**; homepage schedule section, event
+  "Next on Tour", ScheduleGrid filter, and all `main-tour`/`main tour`
+  marketing copy across nav/about/tour/play → "the Tour"/"tour stop".
+  ("main draw" left — real bracket term.)
+- **Events buckets** (his spec): **The Tour** = 1,000+ pts, **Other
+  Events** = under 1,000 (was "Challenger Series"). 
+- **Asia/Australia 1,000+ now in The Tour**: dropped the
+  `region !== international` exclusion. Root fix — international events
+  were ALL defaulting to 1,000 pts (both the curated builder and live
+  `inferTier`), so a "Spain P125"/"Canada 125" would've flooded The Tour.
+  New `tierFromName()` parses the points token in the title (1500 / P250
+  / 125) and it wins over keyword inference. Verified in the build:
+  Hong Kong/Kuala Lumpur/Gold Coast/Australia in The Tour band, 125s
+  stay in Other Events. **Still TODO**: full internal event pages for
+  the intl 1,000+ stops (they surface + link out today; need
+  venue/guide content — flagged to Connor).
+- **"No more Slam" → majors**: tier label `slam` → **"PPA Major" / "Major"**
+  (badges, tables, filters, TV schedule); generic "Worlds, Slams, Cups,
+  Opens" copy → "Worlds, majors, cups, opens". **Left + flagged**: the two
+  proper event names still containing "Slam" (LA Slam, PPA Asia 1500 Hong
+  Kong Slam) — need Connor's official rename; Jack Sock's real-tennis
+  "Grand Slam champion" bio; the 15 news articles (Dylan's editorial).
+  Also flagged: which 4 events carry the Major designation (his list:
+  Masters/Players/Nationals/Worlds — "Players" has no event in data yet).
+- **"Prize money and fees" → "Prize Purse"**: homepage stat, event
+  What's-at-Stake tiles + quick-facts, event meta description, stakes prose.
+- **Sponsor logos forward to partner sites** (his "forward when you click
+  the logo"): `Partner.website` added; PartnerWall title + every official
+  card now click through (UTM `sponsor-directory`, `target=_blank`) for the
+  13 partners we have confident URLs for; the other 4 (Proton, LT Pro 48,
+  Reign Storm, Acrytech) stay non-linked until we confirm — never a wrong
+  destination. `↗` on hover.
+- **Not done this pass (bigger design projects, in the Connor reply as
+  "next")**: player-profile redesign (bio/ranking/medals/DUPR/gear,
+  "sloppy right now"), Jeff's ranking wheel + where-points-come-from,
+  gold-grid clickable/"biggest & best" display, tab navigation cleanup,
+  and the **PPA Shop** ("Powered by PBC", official-partner-only, medals/
+  signed gear/trading cards) — that one is a Jackalope/commerce build,
+  not a copy tweak.
+
 ### 2026-07-23 — Event hotels pull from Jackalope + booking-link click tracking
 - `lib/published-hotels.ts` server-fetches Jackalope's public hotels feed
   (Kristen's blocks flagged "on ppatour.com"), matches by city, overrides
