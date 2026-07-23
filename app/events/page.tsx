@@ -8,39 +8,38 @@ import { tierPoints } from "@/lib/placeholder-data";
 export const metadata: Metadata = {
   title: "Events",
   description:
-    "The full PPA Tour schedule — main tour, Challengers, and international stops, past and upcoming. Search or filter to find your event.",
+    "The full PPA Tour schedule — The Tour and every other event, U.S. and international, past and upcoming. Search or filter to find your event.",
 };
 
 /**
- * Events page structure (Connor's spec, 7/20): the 1,000+ point stops lead
- * BIG, the under-1,000 Challenger Series sits below in a smaller treatment,
- * and the full search/filter of every event closes the page.
+ * Events page structure (Connor's spec, 7/23): "The Tour" = every stop worth
+ * 1,000+ ranking points (now including the international 1,000+ events in Asia
+ * and Australia); "Other Events" = everything under 1,000. The full
+ * search/filter of every event closes the page.
  */
 export default async function EventsPage() {
   const { events } = await getEvents();
   const upcoming = events.filter((e) => e.status !== "completed");
 
-  // Over 1,000 points — the US main tour (Opens, Cups, Slams, Worlds).
-  const mainTour = upcoming.filter(
-    (e) =>
-      e.region !== "international" &&
-      e.tierKey !== "challenger" &&
-      tierPoints(e) >= 1000,
+  // The Tour — every stop worth 1,000+ points, U.S. AND international
+  // (Asia/Australia 1,000+ now live here as full events — Connor, 7/23).
+  const theTour = upcoming.filter(
+    (e) => e.tierKey !== "challenger" && tierPoints(e) >= 1000,
   );
 
-  // Under 1,000 points — the Challenger Series.
-  const challengers = upcoming.filter((e) => e.tierKey === "challenger");
+  // Other Events — everything under 1,000 points (the Challenger Series).
+  const otherEvents = upcoming.filter((e) => tierPoints(e) < 1000);
 
   return (
     <>
       <FeaturedEvents
-        events={mainTour}
-        kicker="Over 1,000 Points"
-        title="The Main Tour"
+        events={theTour}
+        kicker="1,000+ Points"
+        title="The Tour"
         headingAs="h1"
-        subtitle="Opens, Cups, Slams, and Worlds — every stop worth 1,000+ ranking points, in season order."
+        subtitle="The majors, cups, and opens — every stop worth 1,000+ ranking points, U.S. and international, in season order."
       />
-      <ChallengerStrip events={challengers} />
+      <ChallengerStrip events={otherEvents} />
       <section className="bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex items-center gap-2.5">
@@ -53,7 +52,7 @@ export default async function EventsPage() {
             Find an Event
           </h2>
           <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
-            Search everything the PPA Tour runs — main draw, Challengers, and
+            Search everything the PPA Tour runs — The Tour, Challengers, and
             the international series — past and upcoming, filterable by tier
             and country.
           </p>

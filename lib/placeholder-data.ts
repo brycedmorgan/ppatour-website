@@ -3,7 +3,7 @@
  * international stops) plus recent completed events for the /events Past tab.
  *
  * Tiers follow the real PPA points structure:
- *   Worlds 3,000 · Slam 2,000 · Cup 1,500 · Open 1,000 · Challenger 125–500.
+ *   Worlds 3,000 · Major 2,000 · Cup 1,500 · Open 1,000 · Challenger 125–500.
  *
  * `getMainTourEvents()` keeps Challengers + international off the homepage.
  * Upcoming events use generic action photos as placeholders — replace with the
@@ -17,11 +17,29 @@ export const TIER_META: Record<
   { label: string; short: string; points: number }
 > = {
   worlds: { label: "World Championship", short: "Worlds", points: 3000 },
-  slam: { label: "PPA Tour Slam", short: "Slam", points: 2000 },
+  slam: { label: "PPA Major", short: "Major", points: 2000 },
   cup: { label: "PPA Tour Cup", short: "Cup", points: 1500 },
   open: { label: "PPA Tour Open", short: "Open", points: 1000 },
   challenger: { label: "PPA Challenger", short: "Challenger", points: 500 },
 };
+
+/**
+ * Tier from a points number in the event name, when present. International
+ * stops carry their level in the title — "PPA Asia 1500 Hong Kong",
+ * "PPA Spain P250 Barcelona", "PPA Canada 125 Ottawa" — so we can rank them
+ * honestly (only 1,000+ belong on The Tour; 125/250/500 stay in Other Events).
+ * Returns null when the name has no recognizable points token.
+ */
+export function tierFromName(name: string): EventTier | null {
+  const m = name.match(/\bP?(3000|2000|1500|1000|500|250|125)\b/i);
+  if (!m) return null;
+  const pts = Number(m[1]);
+  if (pts >= 3000) return "worlds";
+  if (pts >= 2000) return "slam";
+  if (pts >= 1500) return "cup";
+  if (pts >= 1000) return "open";
+  return "challenger";
+}
 
 /** Minimum ranking points for an event to appear on the homepage + schedule. */
 export const MAIN_TOUR_MIN_POINTS = 1000;
@@ -277,7 +295,13 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
     seen.add(slug);
 
     const tier: EventTier =
-      r.type === "challenger" ? "challenger" : r.type === "international" ? "open" : r.tier!;
+      r.type === "challenger"
+        ? "challenger"
+        : r.type === "international"
+          ? // International stops carry their level in the title (1500 / P250 /
+            // 125) — rank by that so only the true 1,000+ stops reach The Tour.
+            (tierFromName(r.name) ?? "open")
+          : r.tier!;
     const sponsor = SPONSORS.find((s) => r.name.startsWith(s));
 
     return {
@@ -565,12 +589,12 @@ export function tierPoints(t: Pick<Tournament, "tierKey">): number {
   return TIER_META[t.tierKey].points;
 }
 
-/** Short tier label, e.g. "Slam". */
+/** Short tier label, e.g. "Major". */
 export function tierShort(t: Pick<Tournament, "tierKey">): string {
   return TIER_META[t.tierKey].short;
 }
 
-/** Full tier label, e.g. "PPA Tour Slam". */
+/** Full tier label, e.g. "PPA Major". */
 export function tierLabel(t: Pick<Tournament, "tierKey">): string {
   return TIER_META[t.tierKey].label;
 }

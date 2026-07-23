@@ -69,7 +69,7 @@ export const athletes: Athlete[] = [
     headshot: P("gabe-tardio"),
     divisions: ["Men's Singles", "Men's Doubles", "Mixed Doubles"],
     bestRank: 2,
-    tagline: "The young gun winning Slams with the best",
+    tagline: "The young gun winning majors with the best",
     bio: "Gabriel Tardio is one of the brightest young stars in the sport, a teenage talent who has won major doubles titles alongside the game's elite and is climbing fast in singles.",
   },
   {
@@ -330,7 +330,7 @@ export const athletes: Athlete[] = [
     divisions: ["Men's Doubles", "Mixed Doubles"],
     bestRank: 10,
     tagline: "A veteran doubles presence",
-    bio: "Eddie Perez is an experienced doubles and mixed competitor and a familiar face across the main-tour brackets.",
+    bio: "Eddie Perez is an experienced doubles and mixed competitor and a familiar face across the tour brackets.",
   },
   {
     slug: "jaume-martinez-vich",
@@ -400,7 +400,7 @@ export const athletes: Athlete[] = [
     divisions: ["Women's Doubles"],
     bestRank: 8,
     tagline: "A steady women's doubles presence",
-    bio: "Callie Smith is a consistent women's doubles competitor and a familiar name across the main-tour brackets.",
+    bio: "Callie Smith is a consistent women's doubles competitor and a familiar name across the tour brackets.",
   },
   {
     slug: "allyce-jones",
@@ -410,7 +410,7 @@ export const athletes: Athlete[] = [
     divisions: ["Women's Doubles"],
     bestRank: 9,
     tagline: "A competitive women's doubles player",
-    bio: "Allyce Jones is a competitive doubles player working her way up the women's main-tour rankings.",
+    bio: "Allyce Jones is a competitive doubles player working her way up the women's tour rankings.",
   },
   {
     slug: "lina-padegimaite",

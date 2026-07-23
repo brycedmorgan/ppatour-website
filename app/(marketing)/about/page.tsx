@@ -17,7 +17,7 @@ const STATS = [
 ];
 
 const LINKS = [
-  { label: "The Pro Tour", href: "/about/pro-tour", blurb: "The eighteen-stop main tour, the tier system, and how a season runs." },
+  { label: "The Pro Tour", href: "/about/pro-tour", blurb: "The eighteen-stop tour, the tier system, and how a season runs." },
   { label: "How It Works", href: "/about/how-it-works", blurb: "Ranking points, brackets, divisions, and the path to Nationals." },
   { label: "Tournament History", href: "/about/history", blurb: "National Champions year-by-year and the tour's milestones." },
   { label: "What is Pickleball?", href: "/about/what-is-pickleball", blurb: "The fastest-growing sport in America, explained in 90 seconds." },
@@ -25,7 +25,7 @@ const LINKS = [
   { label: "Player Handbook", href: "/about/player-handbook", blurb: "Rules, format, code of conduct, and equipment." },
   { label: "Ambassadors", href: "/about/ambassadors", blurb: "The community program — creators, club owners, coaches." },
   { label: "International Ambassadors", href: "/about/international-ambassadors", blurb: "The growing global PPA Tour Ambassador network." },
-  { label: "Host a Tournament", href: "/about/host-tournament", blurb: "For venues and cities — bid for a main-tour stop." },
+  { label: "Host a Tournament", href: "/about/host-tournament", blurb: "For venues and cities — bid for a tour stop." },
   { label: "Private Events", href: "/about/private-events", blurb: "For brands — pro-ams, hospitality suites, and activations." },
   { label: "Careers", href: "/about/careers", blurb: "Help build the pro tour of pickleball." },
   { label: "Contact", href: "/about/contact", blurb: "The right email for every kind of inquiry." },
@@ -57,7 +57,7 @@ export default function AboutPage() {
           </h1>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/75 sm:text-base">
             The PPA Tour is the premier professional pickleball circuit —
-            twenty-five main-tour stops a year, the best players in the world,
+            twenty-five tour stops a year, the best players in the world,
             sold-out arenas, and one points race. We exist to put the best
             content, the cleanest broadcast, and the most exciting matches in
             pickleball in front of the largest possible audience.
@@ -109,9 +109,9 @@ export default function AboutPage() {
                   every match.
                 </p>
                 <p>
-                  Twenty-five main-tour stops cover every region of the
+                  Twenty-five tour stops cover every region of the
                   country, plus a growing international footprint. Each stop
-                  carries 1,000+ ranking points; Grand Slams pay double. The
+                  carries 1,000+ ranking points; the majors pay double. The
                   season ends at the Veolia Pickleball National Championships
                   and the Toys&nbsp;&quot;R&quot;&nbsp;Us PPA Finals, where the
                   No.&nbsp;1 ranking is decided.

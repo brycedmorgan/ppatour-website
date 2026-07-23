@@ -78,7 +78,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const t = await resolveEvent(year, slug);
   if (!t) return { title: "Event" };
   const where = t.state ? `${t.city}, ${t.state}` : t.city;
-  const description = `${tierLabel(t)} · ${formatDateRange(t.startDate, t.endDate, true)} · ${where} · ${t.prizeMoney} in prize money & appearance fees. Schedule, players, tickets, trip guide, and how to watch.`;
+  const description = `${tierLabel(t)} · ${formatDateRange(t.startDate, t.endDate, true)} · ${where} · ${t.prizeMoney} prize purse. Schedule, players, tickets, trip guide, and how to watch.`;
   return {
     title: t.shortName,
     description,
@@ -216,7 +216,7 @@ export default async function EventPage({ params }: Params) {
     { name: "Championship Sunday", from: Math.round(base * 2.6), blurb: "The finals — the best seats for the title matches." },
   ];
 
-  // Next stops on the domestic main tour (excludes international sister-tour
+  // Next stops on the domestic tour (excludes international sister-tour
   // stops and challengers), soonest first. Prefer events starting after this
   // one; top up from the rest of the season so it's always full.
   const mainTour = tournaments
@@ -504,7 +504,7 @@ export default async function EventPage({ params }: Params) {
           {[
             { k: "Dates", v: formatDateRange(t.startDate, t.endDate, true) },
             { k: "Venue", v: t.venue },
-            { k: "Prize Money & Fees", v: t.prizeMoney, accent: true },
+            { k: "Prize Purse", v: t.prizeMoney, accent: true },
             { k: tierLabel(t), v: `${tierPoints(t).toLocaleString()} Pts` },
           ].map((f, i) => (
             <div
@@ -645,7 +645,7 @@ export default async function EventPage({ params }: Params) {
             in every division — enough to reshuffle the season-long points
             race in one weekend. The tour puts{" "}
             <span className="font-bold text-ppa-navy">{t.prizeMoney}</span>{" "}
-            behind this event in prize money and appearance fees, and the
+            in prize purse behind this event, and the
             defending champions below are all back to protect their titles.
           </p>
 
@@ -657,7 +657,7 @@ export default async function EventPage({ params }: Params) {
                 note: "Per division title — toward the season race",
               },
               {
-                k: "Prize Money & Fees",
+                k: "Prize Purse",
                 v: t.prizeMoney,
                 note: "Across five pro divisions, incl. appearance fees",
               },
@@ -1513,7 +1513,7 @@ export default async function EventPage({ params }: Params) {
                 More Stops
               </p>
               <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-                Next on the Main Tour
+                Next on Tour
               </h2>
             </div>
             <Link

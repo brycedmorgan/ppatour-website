@@ -10,10 +10,10 @@ import {
 } from "@/lib/placeholder-data";
 
 /**
- * Big-card band on /events — upcoming PPA Tour (US main-tour, 1,000+ point)
+ * Big-card band on /events — upcoming PPA Tour (1,000+ point)
  * stops as large, brand-accented cards linking to their event pages. Renders
- * nothing if there are no upcoming main-tour events. Heading is configurable
- * so the same treatment serves "Next Up on Tour" and the full main-tour band.
+ * nothing if there are no upcoming tour events. Heading is configurable
+ * so the same treatment serves "Next Up on Tour" and the full tour band.
  */
 export function FeaturedEvents({
   events,

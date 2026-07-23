@@ -39,7 +39,7 @@ const RULES = [
 const GROWTH = [
   { n: "5x", label: "Years as America's fastest-growing sport" },
   { n: "36M+", label: "U.S. players (latest SFIA report)" },
-  { n: "25", label: "PPA Tour main-tour stops a year" },
+  { n: "25", label: "PPA Tour tour stops a year" },
   { n: "150K+", label: "PPA Tour in-arena fans annually" },
 ];
 

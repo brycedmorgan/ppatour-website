@@ -201,7 +201,7 @@ export const playersToWatch: PlayerWatch[] = [
     name: "Gabriel Tardio",
     division: "Men's Doubles · No. 2",
     rank: 2,
-    hook: "The young star already winning Slams alongside the game's best — and climbing fast in singles.",
+    hook: "The young star already winning majors alongside the game's best — and climbing fast in singles.",
   },
 ];
 
@@ -217,7 +217,7 @@ export const explainers: Explainer[] = [
   },
   {
     q: "How do ranking points work?",
-    a: "Every result moves a player up or down. Main-tour stops are worth 1,000+ points; Grand Slams pay double.",
+    a: "Every result moves a player up or down. Tour stops are worth 1,000+ points; the majors pay double.",
   },
   {
     q: "Why does this matter now?",
@@ -237,6 +237,10 @@ export type Partner = {
   category: string;
   note: string;
   tier: "title" | "official";
+  /** Partner's own site — clicking their logo/card forwards here (Connor, 7/23).
+      Only set where we're confident of the destination; unset = no outbound
+      link (card stays put) so we never send a fan to a wrong/dead page. */
+  website?: string;
   /** Real wordmark logo path + intrinsic pixel dimensions (when we have the
       brand-kit file). Partners without a mark yet render as designation cards
       until their logo lands. */
@@ -256,6 +260,7 @@ export type Partner = {
 export const partners: Partner[] = [
   {
     name: "Carvana",
+    website: "https://www.carvana.com",
     role: "Title Partner",
     category: "Auto Retailer",
     note: "The named partner of the tour — on every court, every broadcast, all 25 stops.",
@@ -266,6 +271,7 @@ export const partners: Partner[] = [
   },
   {
     name: "Veolia",
+    website: "https://www.veolianorthamerica.com",
     role: "Official Sustainability Partner",
     category: "Sustainability",
     note: "Backing the marquee stops in Atlanta, Chicago, and the National Championships.",
@@ -276,6 +282,7 @@ export const partners: Partner[] = [
   },
   {
     name: "JOOLA",
+    website: "https://www.joola.com",
     role: "Official Paddle Partner",
     category: "Paddle",
     note: "Presenting partner of the PPA Finals and the gear behind a generation of pros.",
@@ -286,6 +293,7 @@ export const partners: Partner[] = [
   },
   {
     name: "Humana",
+    website: "https://www.humana.com",
     role: "Official Human Care Partner",
     category: "Insurance",
     note: "Keeping players and fans moving, on the court and off it.",
@@ -296,6 +304,7 @@ export const partners: Partner[] = [
   },
   {
     name: "Ensure Max Protein",
+    website: "https://www.ensure.com",
     role: "Official Nutrition Partner",
     category: "Nutritional Beverage",
     note: "Fueling the longest weekends on tour.",
@@ -316,6 +325,7 @@ export const partners: Partner[] = [
   },
   {
     name: "Six Zero",
+    website: "https://sixzeropickleball.com",
     role: "Official Paddle Partner",
     category: "Paddle",
     note: "Performance gear built for the demands of the pro game.",
@@ -326,6 +336,7 @@ export const partners: Partner[] = [
   },
   {
     name: "Rate",
+    website: "https://www.rate.com",
     role: "Official Mortgage Partner",
     category: "Mortgage",
     note: "Title partner of the Rate Las Vegas Open.",
@@ -333,6 +344,7 @@ export const partners: Partner[] = [
   },
   {
     name: "Fasenra",
+    website: "https://www.fasenra.com",
     role: "Official Asthma Partner",
     category: "Medicinal",
     note: "The tour's exclusive asthma partner.",
@@ -340,6 +352,7 @@ export const partners: Partner[] = [
   },
   {
     name: "Holland America Line",
+    website: "https://www.hollandamerica.com",
     role: "Official Cruise Line",
     category: "Cruise / Hospitality",
     note: "The exclusive cruise line of the PPA Tour.",
@@ -347,6 +360,7 @@ export const partners: Partner[] = [
   },
   {
     name: "Joma",
+    website: "https://www.joma-sport.com",
     role: "Official Footwear Partner",
     category: "Footwear",
     note: "On-court footwear for the pro game.",
@@ -361,6 +375,7 @@ export const partners: Partner[] = [
   },
   {
     name: "Park Place Technologies",
+    website: "https://www.parkplacetechnologies.com",
     role: "Official Technology Partner",
     category: "Technology",
     note: "Powering the tour's infrastructure.",
@@ -368,6 +383,7 @@ export const partners: Partner[] = [
   },
   {
     name: "Selkirk",
+    website: "https://www.selkirk.com",
     role: "Official Net Partner",
     category: "Net",
     note: "The net at play across the tour.",
@@ -382,6 +398,7 @@ export const partners: Partner[] = [
   },
   {
     name: "Tixr",
+    website: "https://www.tixr.com",
     role: "Official Ticketing Partner",
     category: "Ticketing",
     note: "How fans get into every PPA Tour event.",

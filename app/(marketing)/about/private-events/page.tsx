@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const FORMATS = [
   { name: "Corporate Pro-Am", note: "Half-day clinic + bracket with PPA Tour pros. 16–48 guests." },
   { name: "Executive Retreat", note: "Two-day private camp at a tour-grade venue. Catering, swag, brand activation." },
-  { name: "Hospitality Suites", note: "Premium boxes at any main-tour stop. Catered, branded, client-ready." },
+  { name: "Hospitality Suites", note: "Premium boxes at any tour stop. Catered, branded, client-ready." },
   { name: "Brand Activation", note: "On-site partner experiences during a tour weekend — sampling, demos, suites." },
 ];
 
@@ -25,7 +25,7 @@ export default function PrivateEventsPage() {
           </div>
           <h1 className="mt-2 font-display text-3xl uppercase leading-[1.02] sm:text-4xl">Host a PPA-Sponsored Private Event</h1>
           <p className="mt-3 max-w-2xl text-sm text-ppa-navy/55 sm:text-base">
-            From corporate pro-ams to client hospitality at a main-tour stop, the PPA produces premium private events featuring tour pros, broadcast-grade production, and full activation support.
+            From corporate pro-ams to client hospitality at a tour stop, the PPA produces premium private events featuring tour pros, broadcast-grade production, and full activation support.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <a href="mailto:events@ppatour.com" className="inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-ppa-blue-deep">Inquire →</a>

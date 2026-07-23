@@ -7,9 +7,10 @@ import {
 } from "@/lib/placeholder-data";
 
 /**
- * Compact under-1,000-points band on /events — the Challenger Series, rendered
- * deliberately smaller than the main-tour cards above it (Connor's spec: the
- * 1,000+ stops lead big, Challengers sit below in a lighter treatment).
+ * Compact under-1,000-points band on /events — "Other Events" (the Challenger
+ * Series), rendered deliberately smaller than The Tour cards above it (Connor's
+ * spec: the 1,000+ stops lead big, everything under sits below in a lighter
+ * treatment).
  * Challengers link out to their pickleballtournaments.com page when they have
  * no internal event page.
  */
@@ -28,12 +29,13 @@ export function ChallengerStrip({ events }: { events: Tournament[] }) {
               </p>
             </div>
             <h2 className="mt-2 font-display text-xl uppercase leading-[1.02] text-ppa-navy sm:text-2xl">
-              Challenger Series
+              Other Events
             </h2>
           </div>
           <p className="max-w-sm text-xs text-ppa-navy/50">
-            The proving ground — 125–500 point events that feed the main-tour
-            pipeline. Open registration at every stop.
+            The proving ground — the Challenger Series and every event under
+            1,000 points that feeds the Tour pipeline. Open registration at
+            every stop.
           </p>
         </div>
 

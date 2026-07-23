@@ -7,7 +7,7 @@ import { withUtm } from "@/lib/utm";
 export const metadata: Metadata = {
   title: "Play",
   description:
-    "Play the Carvana PPA Tour — amateur brackets by skill and age at every main-tour stop. Junior, Senior, Open, and Pro-Am divisions. Register online.",
+    "Play the Carvana PPA Tour — amateur brackets by skill and age at every tour stop. Junior, Senior, Open, and Pro-Am divisions. Register online.",
 };
 
 // Pre-filtered pickleballtournaments.com search — PPA-sanctioned events only.
@@ -18,7 +18,7 @@ const STEPS = [
   {
     n: "01",
     title: "Pick a Stop",
-    body: "Browse the 25-event main-tour schedule and pick an event near you (or far from you — we don't judge).",
+    body: "Browse the 25-event tour schedule and pick an event near you (or far from you — we don't judge).",
   },
   {
     n: "02",
@@ -56,7 +56,7 @@ const CATEGORIES = [
   {
     label: "Travel",
     href: "/tour/travel",
-    blurb: "Hotel partners and travel rates for every main-tour stop.",
+    blurb: "Hotel partners and travel rates for every tour stop.",
   },
   {
     label: "Hospitality",
@@ -81,7 +81,7 @@ export default function PlayPage() {
             Compete on the PPA Tour
           </h1>
           <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
-            Amateur brackets run at every main-tour stop — Junior, Open,
+            Amateur brackets run at every tour stop — Junior, Open,
             Senior, and Pro-Am. Register, show up, climb the rankings.
           </p>
           <div className="mt-5">

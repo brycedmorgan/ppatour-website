@@ -55,7 +55,7 @@ const TIERS = [
   },
   {
     name: "Presenting Partner",
-    note: "Premier branding at an individual main-tour stop — court, signage, segments, and the right to name the event (e.g. Veolia Cincinnati Cup).",
+    note: "Premier branding at an individual tour stop — court, signage, segments, and the right to name the event (e.g. Veolia Cincinnati Cup).",
     cta: "Per-stop or season package",
   },
   {
@@ -81,7 +81,7 @@ const CASE_STUDIES = [
   {
     partner: "Carvana",
     role: "Title Partner",
-    note: "Primary court branding sees 2M+ broadcast impressions per finals weekend; a mobile activation visits every main-tour stop; co-branded social and segment integration across the season.",
+    note: "Primary court branding sees 2M+ broadcast impressions per finals weekend; a mobile activation visits every tour stop; co-branded social and segment integration across the season.",
   },
   {
     partner: "Veolia",

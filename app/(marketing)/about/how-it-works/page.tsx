@@ -12,10 +12,10 @@ const POINT_TIERS = [
   {
     tier: "Main Draw",
     points: "1,000+",
-    detail: "Every standard main-tour stop (Atlanta, Las Vegas, Chicago, etc.)",
+    detail: "Every standard tour stop (Atlanta, Las Vegas, Chicago, etc.)",
   },
   {
-    tier: "Grand Slam",
+    tier: "Major",
     points: "2,000+",
     detail: "The marquee events — Nationals and the Pickleball Masters",
   },
@@ -39,12 +39,12 @@ const SEASON_STEPS = [
   {
     n: "01",
     title: "The Schedule",
-    body: "Twenty-five main-tour stops a year across every region, plus a growing international footprint.",
+    body: "Twenty-five tour stops a year across every region, plus a growing international footprint.",
   },
   {
     n: "02",
     title: "The Points",
-    body: "Every result moves a player up or down. Main-tour stops carry 1,000+ points; Grand Slams pay double.",
+    body: "Every result moves a player up or down. Tour stops carry 1,000+ points; the majors pay double.",
   },
   {
     n: "03",

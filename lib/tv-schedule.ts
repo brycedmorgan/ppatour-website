@@ -35,7 +35,7 @@ export const tvSchedule: TvEvent[] = [
   {
     name: "Veolia Pickleball National Championships",
     location: "Cary Tennis Park · Cary, NC",
-    tier: "Grand Slam · 2,000",
+    tier: "Major · 2,000",
     league: "PPA",
     startIso: "2026-09-01",
     endIso: "2026-09-06",
@@ -217,7 +217,7 @@ export const tvSchedule: TvEvent[] = [
   {
     name: "PPA World Pickleball Championships",
     location: "Brookhaven Country Club · Farmers Branch, TX",
-    tier: "Grand Slam · 3,000",
+    tier: "Worlds · 3,000",
     league: "PPA",
     startIso: "2026-11-03",
     endIso: "2026-11-08",

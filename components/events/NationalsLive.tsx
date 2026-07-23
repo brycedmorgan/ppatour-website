@@ -218,7 +218,7 @@ export function NationalsLive() {
     { name: "Championship Sunday", from: Math.round(base * 2.6), blurb: "The finals — the best seats for the title matches." },
   ];
 
-  // Next stops on the domestic main tour (excludes international sister-tour
+  // Next stops on the domestic tour (excludes international sister-tour
   // stops and challengers), soonest first. Prefer events starting after this
   // one; top up from the rest of the season so it's always full.
   const mainTour = tournaments
@@ -695,7 +695,7 @@ export function NationalsLive() {
             in every division — enough to reshuffle the season-long points
             race in one weekend. The tour puts{" "}
             <span className="font-bold text-ppa-navy">{t.prizeMoney}</span>{" "}
-            behind this event in prize money and appearance fees, and the
+            in prize purse behind this event, and the
             defending champions below are all back to protect their titles.
           </p>
 
@@ -1567,7 +1567,7 @@ export function NationalsLive() {
                 More Stops
               </p>
               <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-                Next on the Main Tour
+                Next on Tour
               </h2>
             </div>
             <Link

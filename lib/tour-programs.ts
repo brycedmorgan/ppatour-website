@@ -24,12 +24,12 @@ export const tourPrograms: TourProgram[] = [
     eyebrow: "For Players 18 & Under",
     headline: "The Amateur Circuit for the Next Generation",
     body: [
-      "Junior PPA is the amateur circuit for players 18 and under — the developmental pipeline for the pro tour. Brackets run at every main-tour stop, with dedicated junior divisions and championship weekends.",
+      "Junior PPA is the amateur circuit for players 18 and under — the developmental pipeline for the pro tour. Brackets run at every tour stop, with dedicated junior divisions and championship weekends.",
       "Players climb a national junior ranking that mirrors the pro tour's points race, and the top juniors qualify into Junior Nationals at the end of the season.",
     ],
     bullets: [
       { title: "Age divisions", detail: "Under-12, Under-14, Under-16, Under-19 in singles, doubles, and mixed doubles." },
-      { title: "Run at every main-tour stop", detail: "Play in the same venue as the pros, the same weekend." },
+      { title: "Run at every tour stop", detail: "Play in the same venue as the pros, the same weekend." },
       { title: "Junior Nationals", detail: "Top-ranked juniors qualify for the season-end championship." },
       { title: "Coach + parent resources", detail: "Tournament prep, travel, and on-site player support." },
     ],
@@ -43,13 +43,13 @@ export const tourPrograms: TourProgram[] = [
     headline: "Senior Open Brackets at Every Stop",
     body: [
       "The Senior Open is the dedicated 50+ amateur circuit — separate brackets, separate seedings, and a national ranking that runs all season.",
-      "Senior divisions are split by age (50+, 55+, 60+, 65+, 70+, 75+) and skill (3.5, 4.0, 4.5, 5.0), with singles, doubles, and mixed doubles at every main-tour stop.",
+      "Senior divisions are split by age (50+, 55+, 60+, 65+, 70+, 75+) and skill (3.5, 4.0, 4.5, 5.0), with singles, doubles, and mixed doubles at every tour stop.",
     ],
     bullets: [
       { title: "Age brackets", detail: "50+, 55+, 60+, 65+, 70+, 75+ in every event." },
       { title: "Skill brackets", detail: "3.5, 4.0, 4.5, 5.0 — find your level, play your match." },
       { title: "Senior Nationals", detail: "Top seniors compete for the season-end title in each age × skill bracket." },
-      { title: "Same venues, same weekends", detail: "Play alongside the pro tour at every main-tour stop." },
+      { title: "Same venues, same weekends", detail: "Play alongside the pro tour at every tour stop." },
     ],
     cta: { label: "Register for a Senior Bracket", href: REGISTER, external: true },
     image: "/ppa/action-md-final.jpg",
@@ -96,11 +96,11 @@ export const tourPrograms: TourProgram[] = [
     eyebrow: "Hotel + Travel Partners",
     headline: "Travel With the Tour",
     body: [
-      "Tour partner hotels offer event-rate rooms at every main-tour stop, with priority booking for registered players and ticket holders.",
+      "Tour partner hotels offer event-rate rooms at every tour stop, with priority booking for registered players and ticket holders.",
       "Partner airlines and rental partners offer event-rate flights and ground transport into each host city, and on-site shuttles run from partner hotels to the venue.",
     ],
     bullets: [
-      { title: "Partner hotels", detail: "Event-rate rooms at every main-tour stop, walking distance or shuttle to the venue." },
+      { title: "Partner hotels", detail: "Event-rate rooms at every tour stop, walking distance or shuttle to the venue." },
       { title: "Airline partners", detail: "Event-rate flights and priority booking into each host city." },
       { title: "Ground transport", detail: "Rental rates and on-site shuttles included in partner bookings." },
       { title: "Priority booking", detail: "Registered players and ticket holders book first." },
@@ -114,7 +114,7 @@ export const tourPrograms: TourProgram[] = [
     eyebrow: "Premium Seating + Suites",
     headline: "The Best Seats on Every Court",
     body: [
-      "PPA Tour Hospitality delivers premium seating, private suites, and player experiences at every main-tour stop — from courtside boxes at Stadium Court to corporate suites with catering and dedicated service.",
+      "PPA Tour Hospitality delivers premium seating, private suites, and player experiences at every tour stop — from courtside boxes at Stadium Court to corporate suites with catering and dedicated service.",
       "Hospitality packages include on-site concierge, player meet-and-greets, and broadcast-quality views of every match.",
     ],
     bullets: [

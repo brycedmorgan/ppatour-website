@@ -6,7 +6,7 @@ const SECTIONS = [
   { n: "01", title: "Registration & Eligibility", body: "Who can play, age and skill divisions, partner rules, and visa requirements for international competitors." },
   { n: "02", title: "Format & Scoring", body: "Games to 11 (win by 2), best-of-three for early rounds, best-of-five for select finals. Single elimination after the round-robin stage." },
   { n: "03", title: "Code of Conduct", body: "On-court behavior, dress code, social media, and unsportsmanlike conduct rules." },
-  { n: "04", title: "Rankings & Points", body: "How tour ranking points are awarded by tier (Worlds, Slams, Cups, Opens) and how seedings are determined." },
+  { n: "04", title: "Rankings & Points", body: "How tour ranking points are awarded by tier (Worlds, majors, cups, opens) and how seedings are determined." },
   { n: "05", title: "Officiating", body: "Referee authority, line-calling, replay review, and the protest process." },
   { n: "06", title: "Equipment", body: "Approved paddle list, ball spec, attire and shoe requirements." },
 ];

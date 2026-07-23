@@ -38,7 +38,7 @@ import {
 /* Confirm tour-wide figures with Bryce (§10 lists 150K fans / 25 events / $5.2M). */
 const STATS = [
   { n: "25", label: "Tour Stops" },
-  { n: "$5.2M+", label: "Prize Money & Fees" },
+  { n: "$5.2M+", label: "Prize Purse" },
   { n: "4M+", label: "Sessions / Quarter" },
   { n: "150K+", label: "Fans In Arena" },
 ];
@@ -56,7 +56,7 @@ const LANES = [
     image: "/ppa/action-waters-bright.jpg",
     kicker: "For Fans",
     title: "Tickets",
-    blurb: "Be in the arena at every main-tour stop.",
+    blurb: "Be in the arena at every tour stop.",
   },
   {
     href: "/rankings",
@@ -176,7 +176,7 @@ function ChampionAvatar({ name }: { name: string }) {
   );
 }
 
-/** Most recently completed main-tour event that has decided champions, with
+/** Most recently completed tour event that has decided champions, with
  *  those champions — powers the non-live homepage "Champions" band. */
 async function lastCompletedChampions(): Promise<{ event: Tournament; champions: Champion[] } | null> {
   const { events } = await getEvents();
@@ -794,13 +794,13 @@ export async function HomeContent({
         </div>
       </section>
 
-      {/* ── The Main Tour / schedule ────────────────────────── */}
+      {/* ── The Tour / schedule ────────────────────────── */}
       <section className="bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <SectionHead label="2026 Season" title="The Main Tour" />
+            <SectionHead label="2026 Season" title="The Tour" />
             <p className="max-w-xs text-sm text-ppa-navy/55 sm:text-right">
-              Worlds, Slams, Cups, and Opens — every main-tour stop carries
+              Worlds, majors, cups, and opens — every Tour stop carries
               1,000+ ranking points toward the season title.
             </p>
           </div>

@@ -21,13 +21,13 @@ type SeasonKey = "all" | "2025-2026" | "2025" | "2024" | "2023" | "2022";
 // Challengers, and the international series. Narrow with the other options.
 const TYPE_OPTIONS: { value: TypeKey; label: string }[] = [
   { value: "all", label: "PPA Tour — All Events" },
-  { value: "main", label: "Main Tour · 1,000+ Pts" },
+  { value: "main", label: "The Tour · 1,000+ Pts" },
   { value: "challengers", label: "Challengers" },
   { value: "international", label: "International" },
 ];
 const TIER_OPTIONS: { value: TierKey; label: string }[] = [
   { value: "all", label: "All Tiers" },
-  { value: "slam", label: "Slam" },
+  { value: "slam", label: "Major" },
   { value: "cup", label: "Cup" },
   { value: "open", label: "Open" },
 ];
@@ -121,7 +121,7 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
       if (type === "challengers" && t.tierKey !== "challenger") return false;
       if (type === "international" && t.region !== "international") return false;
 
-      // Tier (main tour only)
+      // Tier
       if (type === "main" && tier !== "all") {
         const pts = tierPoints(t);
         if (tier === "slam" && pts < 2000) return false;

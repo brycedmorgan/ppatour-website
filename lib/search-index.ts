@@ -33,7 +33,7 @@ const STATIC_PAGES: { title: string; meta: string; href: string }[] = [
   { title: "Athletes", meta: "The full pro roster", href: "/athletes" },
   { title: "Rankings", meta: "World Pickleball Rankings — the top men's and women's standings", href: "/rankings" },
   { title: "Leaderboards", meta: "The full World Pickleball Rankings, 50 players per page", href: "/leaderboards" },
-  { title: "Schedule", meta: "Every main-tour event", href: "/events" },
+  { title: "Schedule", meta: "Every tour event", href: "/events" },
   { title: "News", meta: "Storylines and recaps from the tour", href: "/news" },
   { title: "About the PPA Tour", meta: "Story, mission, and structure", href: "/about" },
   { title: "The Pro Tour", meta: "How the professional tour works", href: "/about/pro-tour" },

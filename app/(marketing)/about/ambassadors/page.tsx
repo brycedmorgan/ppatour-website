@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 const PERKS = [
   { title: "Exclusive Gear", note: "Tour-issued apparel and merch drops you can't buy retail." },
-  { title: "Event Access", note: "Discounted or comped tickets to main-tour stops in your region." },
+  { title: "Event Access", note: "Discounted or comped tickets to tour stops in your region." },
   { title: "Pro Connection", note: "Behind-the-scenes content, Q&As, and direct lines to tour staff." },
   { title: "Affiliate Earnings", note: "Tracked commission on tickets, merch, and event registrations." },
 ];

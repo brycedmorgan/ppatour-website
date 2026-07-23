@@ -32,7 +32,7 @@ export default function HostTournamentPage() {
           </div>
           <h1 className="mt-2 font-display text-3xl uppercase leading-[1.02] sm:text-4xl">Host a PPA Tour Tournament</h1>
           <p className="mt-3 max-w-2xl text-sm text-ppa-navy/55 sm:text-base">
-            Bring the pros to your city. The PPA Tour partners with venues, resorts, and CVBs nationwide to deliver six-day, broadcast-quality main-tour events that fill rooms and pack courts.
+            Bring the pros to your city. The PPA Tour partners with venues, resorts, and CVBs nationwide to deliver six-day, broadcast-quality tour events that fill rooms and pack courts.
           </p>
           <div className="mt-5">
             <a href="mailto:tournaments@ppatour.com" className="inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-ppa-blue-deep">

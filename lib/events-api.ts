@@ -26,6 +26,7 @@ import {
   SPONSORS,
   TIER_PRICE,
   TIER_PRIZE,
+  tierFromName,
   VENUE_IMAGES,
   type Tournament,
 } from "@/lib/placeholder-data";
@@ -101,8 +102,12 @@ function findCurated(apiSlug: string): Tournament | null {
 
 /* ---- field inference ---- */
 
-/** Tier from the event title (no points in the feed); challengers detected upstream. */
+/** Tier from the event title (no points in the feed); challengers detected upstream.
+ *  A points number in the name (international stops carry one — "1500", "P250",
+ *  "125") is authoritative and wins over keyword inference. */
 function inferTier(name: string): EventTier {
+  const byPoints = tierFromName(name);
+  if (byPoints) return byPoints;
   if (/world championship|world pickleball/i.test(name)) return "worlds";
   if (/\bslam\b|masters|national championship|nationals|finals/i.test(name)) return "slam";
   if (/\bcup\b/i.test(name)) return "cup";

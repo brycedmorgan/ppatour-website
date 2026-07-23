@@ -17,7 +17,7 @@ const STATS = [
 
 const TIERS = [
   { name: "Worlds", points: "3,000 pts", note: "The single biggest event of the season." },
-  { name: "Slam", points: "2,000 pts", note: "Marquee stops — Nationals, Masters, Atlanta, Finals." },
+  { name: "Major", points: "2,000 pts", note: "Marquee stops — Nationals, Masters, Atlanta, Finals." },
   { name: "Cup", points: "1,500 pts", note: "Premium destinations and longer broadcast windows." },
   { name: "Open", points: "1,000 pts", note: "The backbone of the tour — every city, every weekend." },
 ];
@@ -37,7 +37,7 @@ export default function ProTourPage() {
             The Premier Professional Pickleball Circuit
           </h1>
           <p className="mt-3 max-w-2xl text-sm text-ppa-navy/55 sm:text-base">
-            Eighteen main-tour stops a year, the best players in the world,
+            Eighteen tour stops a year, the best players in the world,
             five divisions every weekend, and one season-long points race —
             broadcast on PickleballTV, Tennis Channel, and FOX.
           </p>
@@ -68,7 +68,7 @@ export default function ProTourPage() {
               </h2>
               <div className="mt-4 flex flex-col gap-4 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
                 <p>
-                  The Carvana PPA Tour runs eighteen main-tour stops — Worlds, Slams, Cups, and Opens — across every region of the country, ending at the PPA Finals. Each stop runs five pro divisions (Men&apos;s and Women&apos;s Singles, Doubles, and Mixed Doubles) plus a deep amateur and junior bracket. Every result moves a player up or down the season-long points race.
+                  The Carvana PPA Tour runs eighteen tour stops — Worlds, majors, cups, and opens — across every region of the country, ending at the PPA Finals. Each stop runs five pro divisions (Men&apos;s and Women&apos;s Singles, Doubles, and Mixed Doubles) plus a deep amateur and junior bracket. Every result moves a player up or down the season-long points race.
                 </p>
                 <p>
                   Off the court, the tour partners with <strong>PickleballTV</strong> for live streaming, <strong>Tennis Channel</strong> and <strong>FOX</strong> for national broadcast windows, and <strong>Carvana</strong> as title partner across every court and every broadcast. Tickets run through tixr; amateurs register on pickleballtournaments.com.
