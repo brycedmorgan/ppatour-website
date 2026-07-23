@@ -12,6 +12,8 @@ import { EventSponsors } from "@/components/events/EventSponsors";
 import { RegisteredCount } from "@/components/events/RegisteredCount";
 import { VenueMap } from "@/components/events/VenueMap";
 import { VolunteerModalButton } from "@/components/events/VolunteerModalButton";
+import { BookGroupRateLink } from "@/components/events/BookGroupRateLink";
+import { publishedHotelsFor } from "@/lib/published-hotels";
 import { ResultsPanel } from "@/components/live/ResultsPanel";
 import { ChampionsBanner } from "@/components/live/ChampionsBanner";
 import { ReplayGallery } from "@/components/live/ReplayGallery";
@@ -202,6 +204,10 @@ export default async function EventPage({ params }: Params) {
   const guide = getEventGuide(t.slug);
   const realSchedule = getEventSchedule(t.slug);
   const mapQuery = guide?.mapQuery ?? `${t.venue}, ${t.city}, ${t.state}`;
+  // Hotels published from Jackalope (Kristen's live blocks) override the static
+  // guide list when present, matched by city; otherwise the guide's own hotels.
+  const publishedHotels = await publishedHotelsFor(t.city);
+  const stayHotels = publishedHotels ?? guide?.hotels ?? [];
 
   const base = t.ticketPriceFrom;
   const ticketTiers = [
@@ -1082,7 +1088,7 @@ export default async function EventPage({ params }: Params) {
             {/* Stay / Eat / Do */}
             <div className="mt-4 grid gap-4 lg:grid-cols-3">
               {[
-                { heading: "Where to Stay", items: guide.hotels },
+                { heading: "Where to Stay", items: stayHotels },
                 { heading: "Where to Eat", items: guide.dining },
                 { heading: "Things to Do", items: guide.doing },
               ].map((col) => (
@@ -1126,16 +1132,8 @@ export default async function EventPage({ params }: Params) {
                             {[p.rate, p.cutoff].filter(Boolean).join(" · ")}
                           </p>
                         )}
-                        {p.href && (
-                          <a
-                            href={p.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group/book mt-2 inline-flex items-center gap-1.5 bg-ppa-navy px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-[var(--event-accent)] active:scale-[0.98]"
-                          >
-                            Book the Group Rate
-                            <span aria-hidden className="transition-transform duration-300 group-hover/book:translate-x-0.5">↗</span>
-                          </a>
+                        {p.href && col.heading === "Where to Stay" && (
+                          <BookGroupRateLink href={p.href} eventSlug={t.slug} />
                         )}
                       </li>
                     ))}
