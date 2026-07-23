@@ -20,6 +20,15 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-23 — Event hotels pull from Jackalope + booking-link click tracking
+- `lib/published-hotels.ts` server-fetches Jackalope's public hotels feed
+  (Kristen's blocks flagged "on ppatour.com"), matches by city, overrides
+  the static event-guide hotels (5-min ISR; falls back to guide when
+  empty/unreachable). `BookGroupRateLink` sendBeacons each click to the
+  Jackalope counter → demand shows per hotel in Travel → All Hotels.
+- Kristen now manages hotels in Jackalope (Travel), not the sheet/email.
+
+
 ### 2026-07-20 — Connor's site-walk punch list (all 10 items)
 - Connor walked the site with Bryce ("better than the PGA site", live in
   ~2 weeks) and left a 10-item list. All shipped this session (9 commits,
