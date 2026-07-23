@@ -8,6 +8,7 @@ import { EventConcierge } from "@/components/events/EventConcierge";
 import { EventTabNav } from "@/components/events/EventTabNav";
 import { FirstServeCountdown } from "@/components/events/FirstServeCountdown";
 import { EventGallery } from "@/components/events/EventGallery";
+import { GoldPrizeGrid } from "@/components/events/GoldPrizeGrid";
 import { EventSponsors } from "@/components/events/EventSponsors";
 import { RegisteredCount } from "@/components/events/RegisteredCount";
 import { VenueMap } from "@/components/events/VenueMap";
@@ -32,10 +33,8 @@ import {
   eventYear,
   formatDate,
   formatDateRange,
-  tierLabel,
   eventTierLabel,
   tierPoints,
-  tierShort,
   eventTierShort,
   type Tournament,
   tournaments,
@@ -99,14 +98,6 @@ const DIVISIONS = [
   "Men's Doubles",
   "Women's Doubles",
   "Mixed Doubles",
-];
-
-const PAST_CHAMPIONS = [
-  { division: "Men's Singles", name: "Ben Johns" },
-  { division: "Women's Singles", name: "Anna Bright" },
-  { division: "Men's Doubles", name: "B. Johns / JW Johnson" },
-  { division: "Women's Doubles", name: "Bright / Parenteau" },
-  { division: "Mixed Doubles", name: "JW Johnson / Bright" },
 ];
 
 const HOW_TO_WATCH: {
@@ -647,8 +638,8 @@ export default async function EventPage({ params }: Params) {
             in every division — enough to reshuffle the season-long points
             race in one weekend. The tour puts{" "}
             <span className="font-bold text-ppa-navy">{t.prizeMoney}</span>{" "}
-            in prize purse behind this event, and the
-            defending champions below are all back to protect their titles.
+            in prize purse behind this event, with every top seed chasing
+            the title.
           </p>
 
           <div data-reveal className="mt-6 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-3">
@@ -681,7 +672,12 @@ export default async function EventPage({ params }: Params) {
             ))}
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-4">
+          {/* Gold Prize Grid — clickable, "biggest & best" (Connor 7/23) */}
+          <div data-reveal className="mt-4">
+            <GoldPrizeGrid t={t} accent={t.brand?.accent ?? "#228be6"} />
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-4">
             <a
               href="#players"
               className="group text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
@@ -1246,21 +1242,28 @@ export default async function EventPage({ params }: Params) {
               <p className="mt-5 text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 Defending Champions
               </p>
-              <div className="mt-2 border-t border-ppa-line">
-                {PAST_CHAMPIONS.map((c) => (
-                  <div
-                    key={c.division}
-                    className="flex items-center justify-between gap-3 border-b border-ppa-line py-2.5"
-                  >
-                    <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/45">
-                      {c.division}
-                    </span>
-                    <span className="font-display text-sm uppercase text-ppa-navy">
-                      {c.name}
-                    </span>
-                  </div>
-                ))}
-              </div>
+              {t.defendingChampions && t.defendingChampions.length > 0 ? (
+                <div className="mt-2 border-t border-ppa-line">
+                  {t.defendingChampions.map((c) => (
+                    <div
+                      key={c.division}
+                      className="flex items-center justify-between gap-3 border-b border-ppa-line py-2.5"
+                    >
+                      <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/45">
+                        {c.division}
+                      </span>
+                      <span className="font-display text-sm uppercase text-ppa-navy">
+                        {c.name}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-2 border-t border-ppa-line py-3 text-sm text-ppa-navy/50">
+                  Confirmed once last season&apos;s champions are set — the
+                  titleholders will defend right here.
+                </p>
+              )}
             </div>
           </div>
         </div>

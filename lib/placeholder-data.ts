@@ -67,6 +67,11 @@ export type Tournament = {
   prizeMoney: string;
   presentedBy?: string;
   image: string;
+  /** Real defending champions by division (last year's winners at THIS event).
+      Per-event — only set where confirmed; the page shows an honest
+      "to be confirmed" state otherwise, never the same placeholder names on
+      every event (Connor, 7/23: "make sure it's right"). */
+  defendingChampions?: { division: string; name: string }[];
   /** Optional real-photo gallery (paths under /public). */
   gallery?: string[];
   /** Per-event brand system (colors + optional icon) used on the event page. */
@@ -173,6 +178,28 @@ export const TIER_PRIZE: Record<EventTier, string> = {
   challenger: "$25,000",
 };
 export const SPONSORS = ["Veolia", "Carvana", "Rate", "Proton"];
+
+/**
+ * The Gold Prize Grid — the on-court prize money paid out per event by finish,
+ * across the five pro divisions (distinct from the prize+fees headline in
+ * TIER_PRIZE). Real 2026 grid totals from ppatour.com/how-it-works
+ * (Bryce, 7/15). PPA Finals runs its own $628k grid — see GOLD_GRID_BY_SLUG.
+ */
+export const GOLD_GRID: Record<EventTier, string> = {
+  worlds: "$1,024,400",
+  slam: "$1,024,400",
+  cup: "$647,493",
+  open: "$439,086",
+  challenger: "$25,000",
+};
+const GOLD_GRID_BY_SLUG: Record<string, string> = {
+  "ppa-finals": "$628,000",
+};
+
+/** The event's Gold Prize Grid total (slug override wins, else the tier grid). */
+export function goldGridTotal(t: Pick<Tournament, "slug" | "tierKey">): string {
+  return GOLD_GRID_BY_SLUG[t.slug] ?? GOLD_GRID[t.tierKey];
+}
 
 export function kebab(s: string): string {
   return s

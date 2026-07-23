@@ -7,7 +7,6 @@ import {
   formatDateRange,
   getMainTourEvents,
   getNextTournament,
-  tierShort,
   eventTierShort,
   eventHref,
 } from "@/lib/placeholder-data";
@@ -52,7 +51,6 @@ const NAV_ITEMS: NavItem[] = [
       { label: "The Pro Tour", href: "/about/pro-tour" },
       { label: "Tournament History", href: "/about/history" },
       { label: "How It Works", href: "/about/how-it-works" },
-      { label: "Sponsors", href: "/about/sponsors" },
       { label: "What is Pickleball?", href: "/about/what-is-pickleball" },
       { label: "Contact", href: "/about/contact" },
     ],
@@ -315,9 +313,6 @@ function MegaPanelContent({
         <ul className="mt-4 space-y-3.5">
           <li>
             <SmallLink href="/about/how-it-works" label="How It Works" detail="Season format, points, and divisions" onNavigate={onNavigate} />
-          </li>
-          <li>
-            <SmallLink href="/about/sponsors" label="Sponsors" detail="Title and official partners" onNavigate={onNavigate} />
           </li>
           <li>
             <SmallLink href="/about/host-tournament" label="Host a Tournament" detail="Bring a PPA event to your venue" onNavigate={onNavigate} />

@@ -6,7 +6,6 @@ import { useMemo, useState } from "react";
 import {
   formatDateRange,
   tierPoints,
-  tierShort,
   eventTierShort,
   type Tournament,
   eventHref,

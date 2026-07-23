@@ -4,7 +4,6 @@ import {
   eventYear,
   formatDateRange,
   tierPoints,
-  tierShort,
   eventTierShort,
   tournaments,
 } from "@/lib/placeholder-data";

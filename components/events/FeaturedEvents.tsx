@@ -4,7 +4,6 @@ import {
   daysUntil,
   formatDateRange,
   tierPoints,
-  tierShort,
   eventTierShort,
   type Tournament,
   eventHref,

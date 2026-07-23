@@ -22,7 +22,6 @@ import {
   getMainTourEvents,
   getNextTournament,
   tierPoints,
-  tierShort,
   eventTierShort,
   type Tournament,
 } from "@/lib/placeholder-data";
