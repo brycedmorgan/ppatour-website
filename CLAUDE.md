@@ -20,6 +20,21 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-23 (pt. 3) — Majors designation wired (Connor confirmed the four)
+- Connor: **Atlanta Open = "the Players"** major. So the four Majors are
+  Masters, Atlanta (Players), Nationals, Worlds. Shipped `52fe997` (live).
+- Majors are now a curated per-event designation — `isMajor()` in
+  placeholder-data (MAJOR_SLUGS + name backstop for API records), NOT a
+  tier. Those four carry a **MAJOR badge** everywhere (hero, cards, header
+  eyebrow, OG card, meta) via new `eventTierShort()`/`eventTierLabel()`,
+  swapped in at every badge site.
+- Reverted the 2,000-pt tier label off "Major" → **"Championship"** so
+  **PPA Finals** (2,000-pt but NOT one of the four) reads correctly and
+  "Major" stays exclusive to the four. Verified in the build + live:
+  Nationals/Worlds/Masters/Atlanta = Major; Finals = Championship.
+- Connor confirmed the two proper event names (LA Slam, Hong Kong Slam)
+  **keep "Slam" for now** — no change (already left as-is).
+
 ### 2026-07-23 (pt. 2) — Connor's 7/23 text punch list (from his flight)
 - Connor texted a fresh walk-through list this morning. Shipped the
   confident naming/structure wins in one commit (`fd8456b`), pushed to
