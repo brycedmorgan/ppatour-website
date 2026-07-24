@@ -39,6 +39,7 @@ export function PartnerSpotlight() {
             alt={p.name}
             width={p.logoWidth!}
             height={p.logoHeight!}
+            sizes="320px"
             priority
             className="max-h-full w-auto max-w-[260px] object-contain object-left sm:max-w-[320px]"
           />

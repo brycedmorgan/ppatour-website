@@ -209,6 +209,7 @@ export function SiteFooter() {
                     alt={p.name}
                     width={p.logoWidth!}
                     height={p.logoHeight!}
+                    sizes="104px"
                     className="max-h-6 w-auto max-w-[104px] object-contain"
                   />
                 </Link>

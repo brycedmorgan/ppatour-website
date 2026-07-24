@@ -59,6 +59,7 @@ export function EventSponsors({ event }: { event: Tournament }) {
                         alt={p.name}
                         width={p.logoWidth!}
                         height={p.logoHeight!}
+                        sizes="120px"
                         className="max-h-10 w-auto max-w-[120px] object-contain"
                       />
                     </span>

@@ -255,6 +255,7 @@ export async function HomeContent({
           alt={next.name}
           fill
           priority
+          quality={70}
           sizes="100vw"
           className="animate-kenburns will-change-transform object-cover object-[center_25%] motion-reduce:animate-none"
         />
@@ -999,6 +1000,7 @@ export async function HomeContent({
                     alt={p.name}
                     width={p.logoWidth!}
                     height={p.logoHeight!}
+                    sizes="140px"
                     className="max-h-10 w-auto max-w-[140px] object-contain"
                   />
                 </div>

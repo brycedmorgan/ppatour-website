@@ -59,6 +59,7 @@ export function PartnerWall({
                     alt={title.name}
                     width={title.logoWidth!}
                     height={title.logoHeight!}
+                    sizes="200px"
                     className="max-h-full w-auto max-w-[200px] object-contain object-left"
                   />
                 </span>
@@ -125,6 +126,7 @@ function PartnerCard({ p, accent }: { p: Partner; accent: string }) {
             alt={p.name}
             width={p.logoWidth!}
             height={p.logoHeight!}
+            sizes="130px"
             className="max-h-9 w-auto max-w-[130px] object-contain object-left"
           />
         </span>

@@ -18,21 +18,25 @@ const gotham = localFont({
   variable: "--font-gotham",
   display: "swap",
   src: [
-    { path: "./fonts/Gotham-Book.otf", weight: "400", style: "normal" },
-    { path: "./fonts/Gotham-Medium.ttf", weight: "500", style: "normal" },
-    { path: "./fonts/Gotham-Bold.ttf", weight: "700", style: "normal" },
-    { path: "./fonts/Gotham-Black.ttf", weight: "900", style: "normal" },
+    { path: "./fonts/Gotham-Book.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/Gotham-Medium.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/Gotham-Bold.woff2", weight: "700", style: "normal" },
+    { path: "./fonts/Gotham-Black.woff2", weight: "900", style: "normal" },
   ],
 });
 
 /* Optional per-event display serif. Cormorant Garamond is the Nationals
    brand-guide serif (it sets the event's own wordmark); events opt in via
    `brand.font: "cormorant"` and it drives `--font-event-serif` on their page
-   only — the tour-wide system stays single-typeface Gotham. */
+   only — the tour-wide system stays single-typeface Gotham.
+   `preload: false` — only Nationals-style branded events use it, so it must
+   NOT preload on every page (it was pulling a 1.2 MB TTF site-wide). Now a
+   Latin-subset woff2 (~30 KB), fetched only when a page actually renders it. */
 const cormorant = localFont({
   variable: "--font-cormorant",
   display: "swap",
-  src: [{ path: "./fonts/CormorantGaramond.ttf", style: "normal" }],
+  preload: false,
+  src: [{ path: "./fonts/CormorantGaramond.woff2", style: "normal" }],
 });
 
 export const metadata: Metadata = {
