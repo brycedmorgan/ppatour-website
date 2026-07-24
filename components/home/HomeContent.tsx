@@ -255,7 +255,7 @@ export async function HomeContent({
           alt={next.name}
           fill
           priority
-          quality={70}
+          quality={65}
           sizes="100vw"
           className="animate-kenburns will-change-transform object-cover object-[center_25%] motion-reduce:animate-none"
         />
