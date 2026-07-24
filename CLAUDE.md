@@ -20,6 +20,26 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-24 — Homepage perf: fonts woff2 + Cormorant preload fix + image sizes
+- Bryce flagged the homepage feeling slow. Server was fine (warm TTFB ~0.3s);
+  the weight was fonts + oversized images.
+- **Root cause = Cormorant Garamond preloaded site-wide**: it was a 1.2 MB
+  UNSUBSET .ttf pulled on EVERY page (`preload: true` default on the localFont)
+  despite only Nationals-style events using it. Fix: `preload: false` +
+  Latin-subset woff2 → **1,195 KB → 30 KB**, and 0 on the homepage.
+- **Gotham → woff2** (was .ttf/.otf, incl. a 128 KB Book .otf): 325 KB → ~100 KB.
+  ⚠ Kept `Gotham-Black.ttf` + `Gotham-Medium.ttf` on disk — `lib/og.ts`
+  (Satori OG cards) needs TTF, not woff2. Layout references only the woff2;
+  the TTFs bundle into the OG route only.
+- **Sponsor logos**: no `sizes` → next/image served the 3840px candidate for
+  ~130px logos. Added `sizes` to all 6 render sites (PartnerWall ×2, footer,
+  spotlight, homepage marquee, EventSponsors).
+- **Hero**: `quality={65}` (65/75 are the only allowlisted qualities in
+  next.config — 70 clamps). ~516 KB → ~400 KB.
+- **Net: homepage sheds ~1.5 MB.** Fonts 1.52 MB → 0.10 MB is the headline.
+- Tooling note: converted with `fontTools` + `brotli` (pip). woff2 files live
+  in `app/fonts/`.
+
 ### 2026-07-23 (pt. 5) — Gold Prize Grid + honest defending champs + nav dedup
 - **Gold Prize Grid** (`components/events/GoldPrizeGrid.tsx`, Connor:
   "clickable… make us look biggest and best") — leads the What's-at-Stake
