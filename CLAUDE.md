@@ -20,6 +20,22 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-25 — PickleWave reverse-engineered: data-source map for the PPA data layer
+- Brett/Bryce convo → task: figure out where picklewave.com pulls its data.
+  Full write-up in [`PICKLEWAVE-API-ANALYSIS.md`](PICKLEWAVE-API-ANALYSIS.md).
+- Verdict: PickleWave is a server-rendered Rails app with its own Postgres;
+  no privileged access. Sources = Pickleball Inc's own public feeds:
+  **PickleballBrackets engine** (system of record; every pickleball.com
+  tournament record says `Platform: PickleballBrackets`, ptd.aspx?eid=GUID),
+  **pickleball.com/api/v1|v2** (results/rankings, unauthenticated),
+  **pickleballtournaments.com/tournaments/api/** (tourneyEvents, open),
+  **ppatour.com admin-ajax `get_rankings`**, **DUPR** ratings, and
+  **@ppastreamedcourts YouTube VODs** for the replay catalog. ELO/Pickles are
+  computed in-house.
+- For the rebuild's data layer: ask Jason for direct brackets-engine +
+  pickleball.com API access — same data first-party, no scraping.
+- Next: fold this into the Pickleball+ / app spec conversation with Connor.
+
 ### 2026-07-24 — Homepage perf: fonts woff2 + Cormorant preload fix + image sizes
 - Bryce flagged the homepage feeling slow. Server was fine (warm TTFB ~0.3s);
   the weight was fonts + oversized images.
@@ -1019,7 +1035,7 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ### 2026-05-18 — Phase 0: repo + scaffold
 - Created GitHub repo `brycedmorgan/ppatour-website` (public) and local folder
-  `/Users/bryce/Documents/ppatour-website`.
+  `/Users/bryce/Documents/pickleball/ppatour-website`.
 - Scaffolded with `create-next-app` (Next.js 16.2.6, App Router, TypeScript
   strict, Tailwind v4, ESLint, `@/*` import alias, no `src/` dir).
 - Initialized shadcn/ui (`components/ui/button.tsx`, `lib/utils.ts`).
