@@ -1,8 +1,13 @@
 /**
- * Season-wide Championship Court broadcast schedule — transcribed from the
- * "2026 PPA/MLP Broadcast Schedule" sheet (as of 6/30/26), remaining events
- * only. Rest of season airs on exactly two platforms: PBTV streams every
- * round; Tennis Channel simulcasts the marquee windows. All times ET.
+ * Season-wide Championship Court broadcast schedule. Tennis Channel windows
+ * reconciled to "Pickleball Scheduling 2026 V22 — 7.17.26" (PPA TC Broadcast
+ * Hours sheet; the authoritative TC schedule). PBTV streams every round;
+ * Tennis Channel simulcasts the marquee windows. All times ET.
+ *
+ * TC windows verified vs V22: Cary 23h (Thu–Sun), Las Vegas 4h (Sun only),
+ * Chicago 12h (Fri–Sun 11–3), VA Beach 13h, Dallas/Worlds (Wed Pro-Am only),
+ * Malibu 20h (Thu–Sun). PBTV windows are still templated — reconcile against
+ * the V22 "Coverage Schedule & Broadcast" sheet when syncing PBTV.
  */
 
 export type TvWindow = {
@@ -43,9 +48,30 @@ export const tvSchedule: TvEvent[] = [
     days: [
       { date: "Sep 1", dow: "Tue", windows: [{ channel: "PBTV", window: "10AM – 6PM", round: "Round of 64" }] },
       { date: "Sep 2", dow: "Wed", windows: [{ channel: "PBTV", window: "10AM – 6PM", round: "Round of 32" }] },
-      { date: "Sep 3", dow: "Thu", windows: [{ channel: "PBTV", window: "10AM – 6PM", round: "Round of 16" }] },
-      { date: "Sep 4", dow: "Fri", windows: [{ channel: "PBTV", window: "10AM – 6PM", round: "Quarterfinals" }] },
-      { date: "Sep 5", dow: "Sat", windows: [{ channel: "PBTV", window: "9AM – 5PM", round: "Semifinals" }] },
+      {
+        date: "Sep 3",
+        dow: "Thu",
+        windows: [
+          { channel: "PBTV", window: "10AM – 6PM", round: "Round of 16" },
+          { channel: "Tennis Channel", window: "11:30AM – 5PM", round: "Round of 16" },
+        ],
+      },
+      {
+        date: "Sep 4",
+        dow: "Fri",
+        windows: [
+          { channel: "PBTV", window: "10AM – 6PM", round: "Quarterfinals" },
+          { channel: "Tennis Channel", window: "11:30AM – 5PM", round: "Quarterfinals" },
+        ],
+      },
+      {
+        date: "Sep 5",
+        dow: "Sat",
+        windows: [
+          { channel: "PBTV", window: "9AM – 5PM", round: "Semifinals" },
+          { channel: "Tennis Channel", window: "11AM – 5PM", round: "Semifinals" },
+        ],
+      },
       {
         date: "Sep 6",
         dow: "Sun",
@@ -88,22 +114,8 @@ export const tvSchedule: TvEvent[] = [
     slug: "rate-las-vegas-open",
     days: [
       { date: "Oct 1", dow: "Thu", windows: [{ channel: "PBTV", window: "1PM – 9PM", round: "Round of 16" }] },
-      {
-        date: "Oct 2",
-        dow: "Fri",
-        windows: [
-          { channel: "PBTV", window: "1PM – 9PM", round: "Quarterfinals" },
-          { channel: "Tennis Channel", window: "2PM – 5PM", round: "Quarterfinals" },
-        ],
-      },
-      {
-        date: "Oct 3",
-        dow: "Sat",
-        windows: [
-          { channel: "PBTV", window: "12PM – 8PM", round: "Semifinals" },
-          { channel: "Tennis Channel", window: "2PM – 5PM", round: "Semifinals" },
-        ],
-      },
+      { date: "Oct 2", dow: "Fri", windows: [{ channel: "PBTV", window: "1PM – 9PM", round: "Quarterfinals" }] },
+      { date: "Oct 3", dow: "Sat", windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Semifinals" }] },
       {
         date: "Oct 4",
         dow: "Sun",
@@ -131,7 +143,7 @@ export const tvSchedule: TvEvent[] = [
         dow: "Fri",
         windows: [
           { channel: "PBTV", window: "11AM – 7PM", round: "Quarterfinals" },
-          { channel: "Tennis Channel", window: "11AM – 2PM", round: "Quarterfinals" },
+          { channel: "Tennis Channel", window: "11AM – 3PM", round: "Quarterfinals" },
         ],
       },
       {
@@ -139,7 +151,7 @@ export const tvSchedule: TvEvent[] = [
         dow: "Sat",
         windows: [
           { channel: "PBTV", window: "10AM – 6PM", round: "Semifinals" },
-          { channel: "Tennis Channel", window: "11AM – 2PM", round: "Semifinals" },
+          { channel: "Tennis Channel", window: "11AM – 3PM", round: "Semifinals" },
         ],
       },
       {
@@ -147,7 +159,7 @@ export const tvSchedule: TvEvent[] = [
         dow: "Sun",
         windows: [
           { channel: "PBTV", window: "11AM – 5PM", round: "Championship Sunday" },
-          { channel: "Tennis Channel", window: "11AM – 2PM", round: "Championship Sunday" },
+          { channel: "Tennis Channel", window: "11AM – 3PM", round: "Championship Sunday" },
         ],
       },
     ],
@@ -263,14 +275,7 @@ export const tvSchedule: TvEvent[] = [
     slug: "veolia-malibu-cup",
     days: [
       { date: "Dec 1", dow: "Tue", windows: [{ channel: "PBTV", window: "1PM – 9PM", round: "Round of 64" }] },
-      {
-        date: "Dec 2",
-        dow: "Wed",
-        windows: [
-          { channel: "PBTV", window: "1PM – 9PM", round: "Round of 32" },
-          { channel: "Tennis Channel", window: "3PM – 9PM", round: "Round of 32" },
-        ],
-      },
+      { date: "Dec 2", dow: "Wed", windows: [{ channel: "PBTV", window: "1PM – 9PM", round: "Round of 32" }] },
       {
         date: "Dec 3",
         dow: "Thu",
@@ -284,16 +289,23 @@ export const tvSchedule: TvEvent[] = [
         dow: "Fri",
         windows: [
           { channel: "PBTV", window: "1PM – 9PM", round: "Quarterfinals" },
-          { channel: "Tennis Channel", window: "1PM – 7PM", round: "Quarterfinals" },
+          { channel: "Tennis Channel", window: "3PM – 9PM", round: "Quarterfinals" },
         ],
       },
-      { date: "Dec 5", dow: "Sat", windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Semifinals" }] },
+      {
+        date: "Dec 5",
+        dow: "Sat",
+        windows: [
+          { channel: "PBTV", window: "12PM – 8PM", round: "Semifinals" },
+          { channel: "Tennis Channel", window: "3PM – 7PM", round: "Semifinals" },
+        ],
+      },
       {
         date: "Dec 6",
         dow: "Sun",
         windows: [
           { channel: "PBTV", window: "1PM – 7PM", round: "Championship Sunday" },
-          { channel: "Tennis Channel", window: "1PM – 5PM", round: "Championship Sunday" },
+          { channel: "Tennis Channel", window: "3PM – 7PM", round: "Championship Sunday" },
         ],
       },
     ],
