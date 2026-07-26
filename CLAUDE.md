@@ -20,6 +20,33 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-26 — TV data reconciled to Scheduling V22 (7/17/26)
+- Bryce: "make sure our TV stuff matches this" (Adam Friedman PBTV update +
+  Pickleball Scheduling 2026 V22 + Champions Series sheet). Synced the
+  Tennis Channel windows — the site was built off the 6/30 sheet — to V22's
+  authoritative "PPA TC Broadcast Hours". Fixed in BOTH `lib/tv-schedule.ts`
+  (/watch/tv) and `lib/broadcast.ts` (event-page Watch tables):
+  - Cary/Nationals: TC Thu–Sun (was Sun only) — 23h
+  - Las Vegas: TC Sun ONLY 1–5 (removed Fri/Sat) — 4h
+  - Chicago: TC 11a–3p (was 11a–2p) — 12h
+  - Malibu: TC Thu–Sun 3–9/3–7; dropped Wed, added Sat SF + Sun — 20h
+  - VA Beach + Worlds already matched.
+- **Flagged, NOT changed** (need Bryce/Adam): (1) Sept "Arizona Open" and the
+  Oct/Nov "MLP Cup" carry TC windows V22's TC sheets don't list — remove or
+  PBTV-only? (2) `carvana-mesa-cup` slug: Sept event vs V22's Feb Mesa Cup —
+  naming/date mismatch. (3) `virginia-beach-open` has stray "Premier Pool
+  Play" rows in broadcast.ts that look misplaced. (4) PBTV windows still
+  templated — reconcile vs V22 "Coverage Schedule & Broadcast" (417 rows).
+  (5) MLP Champions Series (senior, PBTV Mon/Tue from 8/3) + Adam's new
+  originals (Picklers, Brighter, Partners, Spec Check…) not on the site's TV
+  page yet — add a PBTV programming section?
+- **Separately** (not this repo): parsed the "PPA Tour Ratings Track - 2026"
+  Nielsen workbook → structured JSON + summary + source xlsx in
+  `~/pickleball/_ratings/` (a private non-repo folder — confidential Nielsen
+  data, deliberately NOT in any deployed/public repo). 52 telecasts, peak
+  reach 2.0M (MLP Midseason Finals/FOX), 1.65M
+  (PPA Finals/FOX), ~9.4M cumulative P2+ reach.
+
 ### 2026-07-25 — PickleWave reverse-engineered: data-source map for the PPA data layer
 - Brett/Bryce convo → task: figure out where picklewave.com pulls its data.
   Full write-up in [`PICKLEWAVE-API-ANALYSIS.md`](PICKLEWAVE-API-ANALYSIS.md).
