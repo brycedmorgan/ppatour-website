@@ -232,9 +232,9 @@ export async function HomeContent({
             sameAs: [
               "https://www.instagram.com/ppatour",
               "https://x.com/ppatour",
-              "https://www.youtube.com/@ppatour",
-              "https://www.tiktok.com/@ppatour",
-              "https://www.facebook.com/ppatour",
+              "https://www.youtube.com/@PPAtour",
+              "https://www.tiktok.com/@officialppatour",
+              "https://www.facebook.com/OfficialPPATour",
             ],
           }),
         }}
