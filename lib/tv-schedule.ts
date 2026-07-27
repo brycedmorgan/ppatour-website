@@ -94,14 +94,8 @@ export const tvSchedule: TvEvent[] = [
       { date: "Sep 17", dow: "Thu", windows: [{ channel: "PBTV", window: "1PM – 9PM", round: "Round of 16" }] },
       { date: "Sep 18", dow: "Fri", windows: [{ channel: "PBTV", window: "1PM – 9PM", round: "Quarterfinals" }] },
       { date: "Sep 19", dow: "Sat", windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Semifinals" }] },
-      {
-        date: "Sep 20",
-        dow: "Sun",
-        windows: [
-          { channel: "PBTV", window: "1PM – 7PM", round: "Championship Sunday" },
-          { channel: "Tennis Channel", window: "1PM – 5PM", round: "Championship Sunday" },
-        ],
-      },
+      // V22: Mesa 2 (Sept Open) is PBTV-only — no Tennis Channel window.
+      { date: "Sep 20", dow: "Sun", windows: [{ channel: "PBTV", window: "1PM – 7PM", round: "Championship Sunday" }] },
     ],
   },
   {
