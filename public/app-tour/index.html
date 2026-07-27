@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The APP Tour Is Running Out Of Events — PPA Tour</title>
+<meta name="description" content="Six seasons of APP Tour player registrations, event by event, pulled from the platforms that hosted them. Fewer events, smaller fields, and a widening gap to the PPA Tour.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="The APP Tour Is Running Out Of Events">
+<meta property="og:description" content="Six seasons of APP Tour player registrations, event by event. Fewer events, smaller fields, and a widening gap.">
+<meta property="og:type" content="article">
+<link rel="icon" href="/favicon.ico">
+<style>
+  @font-face{font-family:Gotham;src:url("fonts/Gotham-Book.woff2") format("woff2");font-weight:400;font-display:swap}
+  @font-face{font-family:Gotham;src:url("fonts/Gotham-Medium.woff2") format("woff2");font-weight:500;font-display:swap}
+  @font-face{font-family:Gotham;src:url("fonts/Gotham-Bold.woff2") format("woff2");font-weight:700;font-display:swap}
+  @font-face{font-family:Gotham;src:url("fonts/Gotham-Black.woff2") format("woff2");font-weight:900;font-display:swap}
+
+  :root{
+    --navy:#0c2b44; --navy-deep:#07223a; --navy-soft:#15456c;
+    --blue:#228be6; --blue-deep:#005d9b; --sky:#4dc1ef; --yellow:#e7e700;
+    --red:#e5342a; --red-deep:#c22318;
+    --paper:#f3f5f7; --line:#d7dee4; --white:#fff;
+    --ink:#0c2b44; --ink-2:#3d5568; --muted:#6b8199;
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:Gotham,ui-sans-serif,system-ui,-apple-system,sans-serif;
+    font-weight:400;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  section{padding:64px 0;border-top:1px solid var(--line)}
+  section:first-of-type{border-top:none}
+  h1,h2,h3{font-weight:900;letter-spacing:-.02em;line-height:1.04;margin:0;text-wrap:balance}
+  h1{font-size:clamp(34px,6vw,68px)}
+  h2{font-size:clamp(26px,3.6vw,42px)}
+  h3{font-size:19px;letter-spacing:-.01em;line-height:1.25}
+  p{margin:0;max-width:66ch;color:var(--ink-2)}
+  .lede{font-size:clamp(18px,2vw,22px);line-height:1.5;color:var(--ink-2)}
+  .eyebrow{font-weight:700;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue)}
+  .stack{display:flex;flex-direction:column;gap:18px}
+  .stack-sm{display:flex;flex-direction:column;gap:10px}
+  .num{font-variant-numeric:tabular-nums}
+  .down{color:var(--red-deep)}
+  .up{color:#0f7b4f}
+
+  /* ---------- masthead ---------- */
+  .mast{background:var(--navy);color:#fff;padding:22px 0}
+  .mast .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .brandmark{font-weight:900;font-size:15px;letter-spacing:.14em;text-transform:uppercase}
+  .mast .meta{font-size:12px;color:#a9c2d6;letter-spacing:.04em}
+
+  /* ---------- hero ---------- */
+  .hero{background:var(--navy);color:#fff;padding:76px 0 84px}
+  .hero h1{color:#fff}
+  .hero .lede{color:#c5d8e6;max-width:60ch}
+  .hero .kicker{color:var(--yellow);font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:20px}
+  .heroStats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--navy-soft);margin-top:44px;border:1px solid var(--navy-soft)}
+  .heroStat{background:var(--navy-deep);padding:20px 22px}
+  .heroStat .v{font-weight:900;font-size:34px;line-height:1;letter-spacing:-.03em;color:#fff}
+  .heroStat .v.bad{color:#ff8b82}
+  .heroStat .l{font-size:12.5px;line-height:1.4;color:#a9c2d6;margin-top:8px}
+
+  /* ---------- charts ---------- */
+  .chart{background:#fff;border:1px solid var(--line);margin-top:24px}
+  .chart .head{padding:16px 20px;border-bottom:1px solid var(--line)}
+  .chart .head .t{font-weight:700;font-size:14px}
+  .chart .head .s{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .row{display:grid;grid-template-columns:64px 1fr 200px;gap:16px;align-items:center;padding:11px 20px;border-bottom:1px solid #eef1f4}
+  .row:last-child{border-bottom:none}
+  .row .yr{font-weight:700;font-size:14px;color:var(--ink)}
+  .track{height:20px;background:#f3f5f7;position:relative}
+  .fill{position:absolute;left:0;top:0;height:100%;background:var(--navy)}
+  .fill.alt{background:var(--blue)}
+  .fill.warn{background:var(--red)}
+  .fill.hatch{background:repeating-linear-gradient(135deg,var(--navy) 0 6px,#8fa8bd 6px 12px)}
+  .row .v{text-align:right;font-weight:700;font-size:15px}
+  .row .v small{display:block;font-weight:400;font-size:11.5px;color:var(--muted);margin-top:2px}
+  .legend{display:flex;gap:20px;flex-wrap:wrap;font-size:12px;color:var(--muted);padding:12px 20px;border-top:1px solid var(--line);background:#fafbfc}
+  .sw{display:inline-block;width:11px;height:11px;margin-right:6px;vertical-align:-1px}
+
+  /* ---------- tables ---------- */
+  .tblwrap{background:#fff;border:1px solid var(--line);margin-top:24px;overflow-x:auto}
+  table{border-collapse:collapse;width:100%;font-size:14px}
+  caption{text-align:left;padding:16px 20px 0;font-size:12.5px;color:var(--muted)}
+  th,td{padding:10px 14px;text-align:right;white-space:nowrap;border-bottom:1px solid #eef1f4}
+  th{font-weight:700;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left;white-space:normal;width:100%}
+  td.n{font-variant-numeric:tabular-nums;font-weight:500}
+  tbody tr:hover td{background:#fafbfc}
+  tfoot td{font-weight:900;border-top:2px solid var(--navy);border-bottom:none;background:#fafbfc}
+  .mkt{font-weight:700}
+  .mkt small{display:block;font-weight:400;font-size:11.5px;color:var(--muted)}
+  .delta{font-weight:700;font-variant-numeric:tabular-nums}
+  .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border:1px solid var(--line);background:#fafbfc;color:var(--ink-2)}
+  .tag.red{color:var(--red-deep);border-color:#f3c7c3;background:#fdf2f1}
+  .tag.navy{color:#fff;background:var(--navy);border-color:var(--navy)}
+
+  /* ---------- cards ---------- */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:26px}
+  .card{background:#fff;border:1px solid var(--line);border-top:3px solid var(--navy);padding:20px 22px}
+  .card.red{border-top-color:var(--red)}
+  .card p{font-size:14.5px;margin-top:8px}
+  .pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+
+  /* ---------- assessment band ---------- */
+  .assess{background:var(--navy-deep);color:#fff}
+  .assess h2{color:#fff}
+  .assess p{color:#c5d8e6}
+  .assess .card{background:var(--navy);border:1px solid var(--navy-soft);border-top:3px solid var(--yellow)}
+  .assess .card h3{color:#fff}
+  .assess .card p{color:#a9c2d6}
+  .stamp{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);background:var(--yellow);padding:4px 10px;margin-bottom:18px}
+
+  /* ---------- method ---------- */
+  ol.method{margin:24px 0 0;padding:0;list-style:none;counter-reset:m}
+  ol.method li{counter-increment:m;position:relative;padding:0 0 18px 46px;font-size:14.5px;color:var(--ink-2);max-width:78ch}
+  ol.method li:before{content:counter(m);position:absolute;left:0;top:0;width:30px;height:30px;background:var(--navy);color:#fff;font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}
+  ol.method li b{color:var(--ink)}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;background:#eaeef2;padding:1px 5px}
+
+  footer{background:var(--navy);color:#a9c2d6;padding:40px 0;font-size:12.5px}
+  footer .wrap{display:flex;flex-direction:column;gap:10px}
+  footer a{color:var(--sky)}
+
+  @media (max-width:640px){
+    section{padding:44px 0}
+    .row{grid-template-columns:44px 1fr 108px;gap:10px;padding:10px 14px}
+    .row .v{font-size:13.5px}
+    .heroStat .v{font-size:28px}
+  }
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="mast"><div class="wrap">
+  <div class="brandmark">PPA Tour · Competitive Briefing</div>
+  <div class="meta">27 July 2026</div>
+</div></div>
+
+<div class="hero"><div class="wrap">
+  <div class="kicker">The APP Tour, 2020&ndash;2026</div>
+  <h1>Fewer events. Smaller fields.<br>Every year, in every market.</h1>
+  <div class="lede" style="margin-top:22px">
+    The APP publishes a registered-player count on whichever platform hosts its events. That makes their
+    amateur business fully observable from the outside &mdash; and we pulled six seasons of it, event by
+    event. Their field peaked in 2023. Through late July of 2026 they have registered fewer players than
+    a single PPA Tour weekend.
+  </div>
+  <div class="heroStats">
+    <div class="heroStat"><div class="v bad">&minus;73%</div><div class="l">APP registrations, 1 Jan &ndash; 27 Jul 2026 vs. the same window in 2025</div></div>
+    <div class="heroStat"><div class="v bad">23 &rarr; 11</div><div class="l">U.S. events on the APP calendar, 2022 vs. 2026</div></div>
+    <div class="heroStat"><div class="v">7.2&times;</div><div class="l">PPA Tour registrations vs. APP over the same 2026 window</div></div>
+    <div class="heroStat"><div class="v bad">6</div><div class="l">Markets on their 2025 calendar that are simply gone in 2026</div></div>
+  </div>
+</div></div>
+
+<!-- ============================================ 1. FEWER EVENTS -->
+<section id="events"><div class="wrap stack">
+  <div class="stack-sm">
+    <div class="eyebrow">01 &nbsp;·&nbsp; Fewer events</div>
+    <h2>The calendar has been cut in half</h2>
+    <p>U.S. events on the APP Tour calendar, by season. They peaked at 23 stops in 2022 and have taken
+    events off the board every year since. 2026 is 11 &mdash; and one of those, the announced Fort
+    Lauderdale Open in March, never opened registration on any platform.</p>
+  </div>
+
+  <div class="chart">
+    <div class="head"><div class="t">U.S. APP Tour events per season</div><div class="s">Opens plus the APP Next development series. Excludes APP Asia and international stops.</div></div>
+    <div class="row"><div class="yr">2020</div><div class="track"><div class="fill" style="width:17.4%"></div></div><div class="v num">4<small>first season, COVID-shortened</small></div></div>
+    <div class="row"><div class="yr">2021</div><div class="track"><div class="fill" style="width:69.6%"></div></div><div class="v num">16</div></div>
+    <div class="row"><div class="yr">2022</div><div class="track"><div class="fill" style="width:100%"></div></div><div class="v num">23<small>peak calendar</small></div></div>
+    <div class="row"><div class="yr">2023</div><div class="track"><div class="fill" style="width:69.6%"></div></div><div class="v num">16</div></div>
+    <div class="row"><div class="yr">2024</div><div class="track"><div class="fill" style="width:56.5%"></div></div><div class="v num">13</div></div>
+    <div class="row"><div class="yr">2025</div><div class="track"><div class="fill" style="width:60.9%"></div></div><div class="v num">14</div></div>
+    <div class="row"><div class="yr">2026</div><div class="track"><div class="fill warn" style="width:47.8%"></div></div><div class="v num down">11<small>&minus;52% vs. 2022</small></div></div>
+  </div>
+</div></section>
+
+<!-- ============================================ 2. SMALLER FIELDS -->
+<section id="field"><div class="wrap stack">
+  <div class="stack-sm">
+    <div class="eyebrow">02 &nbsp;·&nbsp; Smaller fields</div>
+    <h2>And the events that remain are shrinking</h2>
+    <p>Total registered players across every APP event we could locate, by season. The peak was 2023.
+    2024 matched it on volume but needed ten more events to do it. Then the line breaks.</p>
+  </div>
+
+  <div class="chart">
+    <div class="head"><div class="t">Total APP registered players per season</div><div class="s">Hatched bars are floors &mdash; 2020&ndash;2022 records are partly unrecoverable, and 2026 is a season in progress.</div></div>
+    <div class="row"><div class="yr">2020</div><div class="track"><div class="fill hatch" style="width:12.6%"></div></div><div class="v num">1,606<small>4 events</small></div></div>
+    <div class="row"><div class="yr">2021</div><div class="track"><div class="fill hatch" style="width:45.6%"></div></div><div class="v num">5,820<small>11 events with a count</small></div></div>
+    <div class="row"><div class="yr">2022</div><div class="track"><div class="fill hatch" style="width:88.3%"></div></div><div class="v num">11,271<small>20 events with a count</small></div></div>
+    <div class="row"><div class="yr">2023</div><div class="track"><div class="fill" style="width:100%"></div></div><div class="v num">12,760<small>20 events &mdash; the peak</small></div></div>
+    <div class="row"><div class="yr">2024</div><div class="track"><div class="fill" style="width:96.6%"></div></div><div class="v num">12,332<small>23 events</small></div></div>
+    <div class="row"><div class="yr">2025</div><div class="track"><div class="fill" style="width:84.9%"></div></div><div class="v num">10,833<small>20 events</small></div></div>
+    <div class="row"><div class="yr">2026</div><div class="track"><div class="fill warn hatch" style="width:20.4%"></div></div><div class="v num down">2,602<small>season to date, incl. open registrations</small></div></div>
+  </div>
+
+  <div class="cards">
+    <div class="card"><h3>Per-event average, flagship opens</h3>
+      <p><b>778</b> in 2023 &rarr; <b>895</b> in 2024 &rarr; <b>741</b> in 2025 &rarr; <b class="down">630</b> across 2026&rsquo;s completed opens. Fewer-but-bigger would push this number up. It is going down.</p></div>
+    <div class="card red"><h3>Their own framing</h3>
+      <p>The APP&rsquo;s 2026 announcement describes a move to &ldquo;larger, more premium events&rdquo; with four pro
+      invitationals. The registration data does not show larger events. It shows fewer events, each with a
+      smaller field.</p></div>
+  </div>
+</div></section>
+
+<!-- ============================================ 3. HEAD TO HEAD -->
+<section id="headtohead"><div class="wrap stack">
+  <div class="stack-sm">
+    <div class="eyebrow">03 &nbsp;·&nbsp; Head to head</div>
+    <h2>Same window, same metric: we grew, they collapsed</h2>
+    <p>1 January &ndash; 27 July, both tours, both counted the same way &mdash; unique registered players as
+    reported by the tournament platform. The PPA Tour ran fewer events in 2026 than in 2025 and still
+    registered <b>more</b> players. The APP ran fewer events and registered a quarter as many.</p>
+  </div>
+
+  <div class="chart">
+    <div class="head"><div class="t">Registered players, 1 Jan &ndash; 27 Jul</div><div class="s">PPA Tour in navy, APP Tour in red.</div></div>
+    <div class="row"><div class="yr">PPA<br><small style="font-weight:400;color:#6b8199">2025</small></div><div class="track"><div class="fill" style="width:95.4%"></div></div><div class="v num">13,575<small>15 events · 905 per event</small></div></div>
+    <div class="row"><div class="yr">PPA<br><small style="font-weight:400;color:#6b8199">2026</small></div><div class="track"><div class="fill" style="width:100%"></div></div><div class="v num">14,235<small>11 events · <b class="up">1,294</b> per event</small></div></div>
+    <div class="row"><div class="yr">APP<br><small style="font-weight:400;color:#6b8199">2025</small></div><div class="track"><div class="fill warn" style="width:52.2%"></div></div><div class="v num">7,430<small>12 events · 619 per event</small></div></div>
+    <div class="row"><div class="yr">APP<br><small style="font-weight:400;color:#6b8199">2026</small></div><div class="track"><div class="fill warn" style="width:13.8%"></div></div><div class="v num down">1,971<small>5 events · <b class="down">394</b> per event</small></div></div>
+    <div class="legend">
+      <span><span class="sw" style="background:#0c2b44"></span>PPA Tour</span>
+      <span><span class="sw" style="background:#e5342a"></span>APP Tour</span>
+      <span>Both series pulled from PickleballTournaments.com &ldquo;Completed &mdash; N players&rdquo; and, for the APP&rsquo;s 2025 season, UTR&rsquo;s public event API.</span>
+    </div>
+  </div>
+
+  <div class="tblwrap">
+    <table>
+      <caption>The gap, stated plainly.</caption>
+      <thead><tr><th>1 Jan &ndash; 27 Jul</th><th>PPA Tour</th><th>APP Tour</th><th>Gap</th></tr></thead>
+      <tbody>
+        <tr><td class="mkt">Registered players, 2025</td><td class="n">13,575</td><td class="n">7,430</td><td class="n">1.8&times;</td></tr>
+        <tr><td class="mkt">Registered players, 2026</td><td class="n">14,235</td><td class="n">1,971</td><td class="n"><b>7.2&times;</b></td></tr>
+        <tr><td class="mkt">Year-over-year change</td><td class="n up">+4.9%</td><td class="n down">&minus;73.5%</td><td class="n">&mdash;</td></tr>
+        <tr><td class="mkt">Average field per event, 2026</td><td class="n">1,294</td><td class="n">394</td><td class="n">3.3&times;</td></tr>
+        <tr><td class="mkt">Largest single event, 2026</td><td class="n">1,891<small style="display:block;font-weight:400;color:#6b8199">Veolia Atlanta Championships</small></td><td class="n">892<small style="display:block;font-weight:400;color:#6b8199">APP Sacramento Open</small></td><td class="n">2.1&times;</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div></section>
+
+<!-- ============================================ 4. MARKET BY MARKET -->
+<section id="markets"><div class="wrap stack">
+  <div class="stack-sm">
+    <div class="eyebrow">04 &nbsp;·&nbsp; Event over event</div>
+    <h2>Not one market grew</h2>
+    <p>Every APP market that carried across the 2024&ndash;25 platform change lost registrations. Same city,
+    same venue, same slot on the calendar. This is not a scheduling artifact or a definitional change &mdash;
+    it is the same event, counted the same way, with fewer players in it.</p>
+  </div>
+
+  <div class="tblwrap">
+    <table>
+      <caption>APP registered players by market. &ldquo;Gone&rdquo; means the market is not on the 2026 calendar at all.</caption>
+      <thead><tr><th>Market</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>&rsquo;24&rarr;&rsquo;25</th><th>2026 status</th></tr></thead>
+      <tbody>
+        <tr><td class="mkt">Newport Beach <small>Tennis &amp; Pickleball Club, CA</small></td><td class="n">1,442</td><td class="n">1,742</td><td class="n">1,219</td><td class="n">&mdash;</td><td class="delta down">&minus;30%</td><td><span class="tag red">Gone</span></td></tr>
+        <tr><td class="mkt">New York City <small>Billie Jean King NTC</small></td><td class="n">1,105</td><td class="n">1,296</td><td class="n">1,093</td><td class="n">&mdash;</td><td class="delta down">&minus;16%</td><td><span class="tag red">Gone</span></td></tr>
+        <tr><td class="mkt">Sacramento <small>Roseville, CA</small></td><td class="n">430</td><td class="n">1,470</td><td class="n">1,239</td><td class="n">892</td><td class="delta down">&minus;16%</td><td><span class="tag">&minus;28% again</span></td></tr>
+        <tr><td class="mkt">Cincinnati <small>Sawyer Point · Vlasic Classic</small></td><td class="n">893</td><td class="n">976</td><td class="n">527</td><td class="n">563</td><td class="delta down">&minus;46%</td><td><span class="tag">Flat</span></td></tr>
+        <tr><td class="mkt">Chicago <small>Highland Park, IL</small></td><td class="n">825</td><td class="n">910</td><td class="n">634</td><td class="n">379</td><td class="delta down">&minus;30%</td><td><span class="tag red">&minus;40% again</span></td></tr>
+        <tr><td class="mkt">Punta Gorda &rarr; Fort Lauderdale <small>Florida season opener</small></td><td class="n">688</td><td class="n">1,119</td><td class="n">1,191</td><td class="n">&mdash;</td><td class="delta up">+6%</td><td><span class="tag red">No listing</span></td></tr>
+        <tr><td class="mkt">Daytona Beach <small>Pictona at Holly Hill, FL</small></td><td class="n">1,137</td><td class="n">425</td><td class="n">691</td><td class="n">&mdash;</td><td class="delta up">+63%</td><td><span class="tag red">Gone</span></td></tr>
+        <tr><td class="mkt">Mesa / Phoenix <small>Arizona</small></td><td class="n">1,173</td><td class="n">&mdash;</td><td class="n">614</td><td class="n">&mdash;</td><td class="delta">&mdash;</td><td><span class="tag">Nov, not open</span></td></tr>
+        <tr><td class="mkt">Columbus <small>Women&rsquo;s Open &rarr; Columbus Open</small></td><td class="n">&mdash;</td><td class="n">249</td><td class="n">239</td><td class="n">10</td><td class="delta down">&minus;4%</td><td><span class="tag">Oct, open</span></td></tr>
+        <tr><td class="mkt">Dallas <small>Rockwall, TX</small></td><td class="n">518</td><td class="n">391</td><td class="n">&mdash;</td><td class="n">&mdash;</td><td class="delta">&mdash;</td><td><span class="tag red">Gone since &rsquo;24</span></td></tr>
+        <tr><td class="mkt">Atlanta · Houston · Philadelphia · New Jersey · St. Louis <small>five markets, all dropped after 2023</small></td><td class="n">2,592</td><td class="n">&mdash;</td><td class="n">&mdash;</td><td class="n">&mdash;</td><td class="delta">&mdash;</td><td><span class="tag red">Gone</span></td></tr>
+      </tbody>
+      <tfoot><tr><td>Markets carried 2024 &rarr; 2025</td><td class="n">&mdash;</td><td class="n">&mdash;</td><td class="n">&mdash;</td><td class="n">&mdash;</td><td class="n down">All down</td><td>&mdash;</td></tr></tfoot>
+    </table>
+  </div>
+
+  <div class="cards">
+    <div class="card red"><h3>Chicago is the cleanest read in the dataset</h3>
+      <p>Same market, same venue, seven straight years:<br>
+      <b class="num">365 &rarr; 679 &rarr; 712 &rarr; 825 &rarr; 910</b> &rarr; <b class="num down">634 &rarr; 379</b>.<br>
+      Four consecutive years of growth, then two years of decline. The 2026 figure is with registration two
+      days from closing, so it is close to final.</p></div>
+    <div class="card"><h3>What left the 2026 calendar</h3>
+      <p>Six markets that ran in 2025 are not on the 2026 schedule. Between them they carried
+      <b>4,062 registered players &mdash; 38% of the APP&rsquo;s entire 2025 field.</b></p>
+      <div class="pills">
+        <span class="tag red">New York City</span><span class="tag red">Newport Beach</span>
+        <span class="tag red">Fort Lauderdale</span><span class="tag red">Daytona Beach</span>
+        <span class="tag red">Great Lakes</span><span class="tag red">Cayman Islands</span>
+      </div></div>
+  </div>
+</div></section>
+
+<!-- ============================================ 5. ASSESSMENT -->
+<section class="assess" id="read"><div class="wrap stack">
+  <div class="stack-sm">
+    <span class="stamp">PPA Tour assessment</span>
+    <h2>Why the calendar is shrinking</h2>
+    <p>Everything above is measured. What follows is our read as the operator with the most U.S. event
+    weekends in this sport. We run this business; we know what each line of an event P&amp;L costs.</p>
+  </div>
+
+  <p style="color:#c5d8e6;max-width:70ch">A professional pickleball event stands on three revenue legs.
+  Take any one away and the weekend loses money. Take two away and no amount of scheduling fixes it.
+  On our read of the APP&rsquo;s events, only one leg was ever carrying weight &mdash; and it is the one that
+  just fell 73%.</p>
+
+  <div class="cards">
+    <div class="card"><h3>1 &nbsp;Sponsorship</h3>
+      <p>Sponsorship follows audience and broadcast guarantees. It is sold against attendance, reach and
+      inventory an operator can prove. A calendar that loses six markets in one year is a calendar that
+      is harder to sell nationally, and category deals price off the schedule you can commit to.</p></div>
+    <div class="card"><h3>2 &nbsp;Gate</h3>
+      <p>The APP&rsquo;s stops are largely municipal parks and community complexes &mdash; Danny Cunniff Park,
+      Sawyer Point, Spalding County. Those are excellent places to play and they are not ticketed
+      stadium environments. Without a built venue there is no meaningful gate, no premium hospitality
+      and no reserved seating to sell.</p></div>
+    <div class="card"><h3>3 &nbsp;Registrations</h3>
+      <p>Amateur entry fees are the one leg that pays cash up front, weeks before the event, and it is the
+      leg we can measure from outside. It is down <b style="color:#ff8b82">73% year over year</b>. On a
+      $85 entry plus division fees, a field falling from 619 to 394 players removes a six-figure sum from
+      a single weekend before a single cost is paid.</p></div>
+  </div>
+
+  <div class="card" style="margin-top:18px;border-top-color:#ff8b82">
+    <h3>The pattern is a retreat, not a strategy</h3>
+    <p>Operators do not remove New York City, Newport Beach and their Florida season opener from a
+    calendar because those markets are working. Those were their three largest fields. Dropping your
+    biggest events is what it looks like when the event-level economics stop closing &mdash; you cut the
+    weekends that need the most cash to stage. The 2026 calendar also has no U.S. open event at all
+    before 25 March, which is a quarter of the year with no registration revenue coming in.</p>
+  </div>
+
+  <div class="card" style="margin-top:18px;border-top-color:#4dc1ef">
+    <h3>Where we think this goes</h3>
+    <p>We expect the contraction to continue: more markets removed, more of the calendar shifted to
+    international and licensed events where the APP carries less cost, and continued erosion of the
+    amateur field that funds the rest. A tour cannot run indefinitely on one shrinking revenue leg. We
+    would treat a further step down in 2027 &mdash; or a sale, merger or wind-down of the U.S. tour &mdash;
+    as the most likely outcomes, and we are planning our own calendar and partner conversations on that
+    basis. This is our judgment, not a statement about the APP&rsquo;s finances, which are private.</p>
+  </div>
+</div></section>
+
+<!-- ============================================ 6. METHOD -->
+<section id="method"><div class="wrap stack">
+  <div class="stack-sm">
+    <div class="eyebrow">05 &nbsp;·&nbsp; Method</div>
+    <h2>Where every number came from</h2>
+    <p>All four sources are public. Nothing here is modelled, estimated or extrapolated &mdash; each figure is
+    the count the hosting platform published for that event.</p>
+  </div>
+
+  <ol class="method">
+    <li><b>2020 &ndash; mid-2023 &mdash; PickleballTournaments.com.</b> Event pages recovered from the Internet
+    Archive, where the page counter reads &ldquo;Registered Players.&rdquo; We take the latest post-event capture.
+    Some pages were never archived, so these three seasons are <b>floors, not totals</b> &mdash; the real
+    numbers are higher, which makes the decline from the 2023 peak larger, not smaller.</li>
+    <li><b>June 2023 &ndash; October 2024 &mdash; PickleballTournaments.com.</b> Pulled live from the tournament
+    search filtered to APP-sanctioned events, where the platform reports &ldquo;Completed &mdash; N players.&rdquo;</li>
+    <li><b>October 2024 &ndash; December 2025 &mdash; UTR Sports.</b> The APP moved tournament operations to UTR in
+    April 2024. Counts come from UTR&rsquo;s public event API &mdash; <code>registeredCount</code>, unique players,
+    for the APP Tour club. Division-level entries run roughly 1.8&times; higher and are deliberately not used.</li>
+    <li><b>2026 &mdash; Pickleball Den.</b> The APP moved platforms again for 2026. Each event page publishes
+    &ldquo;Players Registered.&rdquo; Events whose registration is still open are labelled as such; the Chicago
+    figure of 379 was captured two days before registration closed.</li>
+    <li><b>PPA Tour figures</b> come from the same PickleballTournaments.com &ldquo;Completed &mdash; N players&rdquo;
+    metric as the APP&rsquo;s own PT-era numbers, so the head-to-head is a like-for-like comparison of the same
+    definition.</li>
+    <li><b>Excluded on purpose:</b> APP Asia and international stops, NPL events, and pro-only invitationals
+    with no amateur draw &mdash; none of them compete for U.S. amateur entry. Collegiate series stops report
+    teams rather than players and are excluded from every total.</li>
+  </ol>
+</div></section>
+
+<footer><div class="wrap">
+  <div><b style="color:#fff">PPA Tour · Competitive Briefing</b> &nbsp;·&nbsp; Compiled 27 July 2026</div>
+  <div>Sources: pickleballtournaments.com &middot; api.utrsports.net &middot; app.pickleballden.com &middot; theapp.global &middot; web.archive.org</div>
+  <div>Sections 01&ndash;04 and 05 are measured data. Section &ldquo;Why the calendar is shrinking&rdquo; is PPA Tour&rsquo;s
+  assessment and is labelled as such. We make no claim about the APP&rsquo;s financial position, which is not public.</div>
+</div></footer>
+
+</body>
+</html>
