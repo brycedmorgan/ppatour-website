@@ -127,7 +127,7 @@ export const tvSchedule: TvEvent[] = [
     league: "PPA",
     startIso: "2026-10-06",
     endIso: "2026-10-11",
-    slug: "veolia-chicago-open",
+    slug: "veolia-chicago-cup",
     days: [
       { date: "Oct 6", dow: "Tue", windows: [{ channel: "PBTV", window: "11AM – 7PM", round: "Round of 64" }] },
       { date: "Oct 7", dow: "Wed", windows: [{ channel: "PBTV", window: "11AM – 7PM", round: "Round of 32" }] },
