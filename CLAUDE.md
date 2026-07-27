@@ -20,6 +20,35 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-27 — APP Tour competitive briefing hosted at `/app-tour` (`396350c`)
+- Bryce needed a **public, forwardable** version of the APP registration analysis. The Jackalope
+  module (`ziff` → Competitor Research) sits behind Google SSO, so stakeholders outside the company
+  can't open it. Static deck at `public/app-tour/index.html`, same pattern as `/pbtv`.
+  **Live: https://ppatour-website.vercel.app/app-tour**
+- **The data.** Six seasons of APP registered-player counts, pulled from the three platforms that
+  hosted their events: legacy PT via the Internet Archive (2020–mid-2023), current PT's
+  APP-sanctioned search (Jun 23–Oct 24), UTR's public event API `registeredCount` for club "APP Tour"
+  (Oct 24–Dec 25), Pickleball Den event pages (2026). APP peaked at **12,760 across 20 events in
+  2023**; 1 Jan–27 Jul **2026 is 1,971 across 5** (−73% YoY). U.S. calendar 23 stops (2022) → 11 (2026).
+- **The head-to-head is the strongest slide and it's ours.** Same window, same PT
+  "Completed — N players" metric: **PPA 13,575 (15 events) → 14,235 (11 events), +4.9%** while APP fell
+  73%. Per event PPA 905 → **1,294**; APP 619 → **394**. Pulled from
+  `pickleballtournaments.com/search?partner=sanction_ppa&past_tours=true`.
+- **Measured data and opinion are deliberately separated.** Sections 01–04 + Method are sourced
+  counts. The "Why the calendar is shrinking" band carries a **PPA TOUR ASSESSMENT** stamp and states
+  in the footer that we make no claim about the APP's private finances. No invented APP revenue
+  figures anywhere — the gate argument rests on the observable (municipal parks, no ticketed
+  stadium build), not on numbers we don't have.
+- `noindex, nofollow` so it's link-shareable without being searchable. Brand fonts copied to
+  `public/app-tour/fonts/` (a static page can't use the Next font pipeline).
+- **⚠ Flagged to Bryce, his call:** this repo is a **public GitHub repo**, so the deck's HTML —
+  including the assessment language — is readable by anyone who finds the repo, and noindex only
+  stops search engines. If the shutdown language should stay internal, it belongs on the Jackalope
+  version and this page should carry the data sections only.
+- **Next:** re-pull the ◦ open-registration rows after 7/29 for a final Chicago figure; if this
+  becomes a recurring briefing, drive it off a shared JSON rather than two hand-maintained copies
+  (here and `ziff/competitors.js`).
+
 ### 2026-07-26 — TV data reconciled to Scheduling V22 (7/17/26)
 - Bryce: "make sure our TV stuff matches this" (Adam Friedman PBTV update +
   Pickleball Scheduling 2026 V22 + Champions Series sheet). Synced the
