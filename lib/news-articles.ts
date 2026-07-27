@@ -134,7 +134,7 @@ export const newsArticles: NewsArticle[] = [
   {
     slug: "hartman-bricker-chicago-upset",
     status: "published",
-    eventSlug: "veolia-chicago-open",
+    eventSlug: "veolia-chicago-cup",
     category: "Recap",
     title: "Hartman & Bricker Take Down Top Seeds in Chicago",
     date: "May 6",

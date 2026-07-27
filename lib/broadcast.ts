@@ -117,7 +117,7 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
     { round: "Championship", day: "Sunday", window: "1PM ET - 7PM ET", platform: "PBTV", type: "LIVE" },
     { round: "Championship", day: "Sunday", window: "1PM ET - 5PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
   ],
-  "veolia-chicago-open": [
+  "veolia-chicago-cup": [
     { round: "RD 16", day: "Thursday", window: "11AM ET - 7PM ET", platform: "PBTV", type: "LIVE" },
     { round: "QF's", day: "Friday", window: "11AM ET - 7PM ET", platform: "PBTV", type: "LIVE" },
     { round: "QF's", day: "Friday", window: "11AM ET - 3PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },

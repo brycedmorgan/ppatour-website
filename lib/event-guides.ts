@@ -135,7 +135,7 @@ export const eventGuides: Record<string, EventGuide> = {
       { name: "Red Rock Canyon", tag: "Outdoors", note: "20 min · hikes + scenic drive" },
     ],
   },
-  "veolia-chicago-open": {
+  "veolia-chicago-cup": {
     mapQuery: "Life Time Northbrook, IL",
     airport: "ORD",
     airportNote: "O'Hare · ~20 min to venue",
