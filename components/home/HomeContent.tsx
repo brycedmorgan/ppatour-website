@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
-import { CountUp } from "@/components/motion/CountUp";
 import { Countdown } from "@/components/motion/Countdown";
 import { withUtm } from "@/lib/utm";
 import { PartnerSpotlight } from "@/components/home/PartnerSpotlight";
@@ -34,14 +33,6 @@ import {
   playersToWatch,
   storylines,
 } from "@/lib/home-content";
-
-/* Confirm tour-wide figures with Bryce (§10 lists 150K fans / 25 events / $5.2M). */
-const STATS = [
-  { n: "25", label: "Tour Stops" },
-  { n: "$5.2M+", label: "Prize Purse" },
-  { n: "4M+", label: "Sessions / Quarter" },
-  { n: "150K+", label: "Fans In Arena" },
-];
 
 const LANES = [
   {
@@ -499,30 +490,8 @@ export async function HomeContent({
         ))}
       </section>
 
-      {/* ── Stat band ───────────────────────────────────────── */}
-      <section className="bg-ppa-navy-deep text-white">
-        <div className="mx-auto grid w-full max-w-6xl grid-cols-2 px-4 md:grid-cols-4">
-          {STATS.map((s, i) => (
-            <div
-              key={s.label}
-              data-reveal
-              style={{ "--reveal-delay": `${i * 90}ms` } as React.CSSProperties}
-              className={`px-2 py-6 ${
-                i % 2 === 1 ? "border-l border-white/10" : ""
-              } ${i >= 2 ? "border-t border-white/10 md:border-t-0" : ""} ${
-                i === 2 ? "md:border-l" : ""
-              }`}
-            >
-              <p className="font-display text-3xl leading-none text-white sm:text-4xl">
-                <CountUp value={s.n} />
-              </p>
-              <p className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
-                {s.label}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* Stat band removed (Connor 7/27: the 25 stops / $5.2M / 4M sessions /
+          150K fans bar "isn't doing anything" — lead with the next event). */}
 
       {/* ── Live & Latest scores ───────────────────────────── */}
       <section className="bg-white">
