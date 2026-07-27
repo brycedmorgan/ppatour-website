@@ -53,11 +53,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly" as const,
       priority: p === "" ? 1 : 0.7,
     })),
-    ...tournaments.map((t) => ({
-      url: `${BASE}${eventHref(t)}`,
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    })),
+    // Only events that actually have an internal page. Challengers and
+    // international sister-tour stops link out to pickleballtournaments.com,
+    // so their /events/[year]/[slug] URLs 404 — keep them out of the sitemap.
+    ...tournaments
+      .filter((t) => t.tierKey !== "challenger" && t.region !== "international")
+      .map((t) => ({
+        url: `${BASE}${eventHref(t)}`,
+        changeFrequency: "weekly" as const,
+        priority: 0.8,
+      })),
     ...[...athleteSlugs].map((slug) => ({
       url: `${BASE}/athletes/${slug}`,
       changeFrequency: "weekly" as const,
