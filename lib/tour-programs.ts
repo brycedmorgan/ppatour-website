@@ -16,6 +16,10 @@ export type TourProgram = {
 };
 
 const REGISTER = "https://www.pickleballtournaments.com/";
+/** PPA-sanctioned event search — where an amateur/junior actually registers.
+ *  Dave Rogers 7/27: "register a junior player takes you to the wrong spot"
+ *  (it landed on the pickleballtournaments.com homepage). */
+const REGISTER_PPA = "https://www.pickleballtournaments.com/search?partner=sanction_ppa";
 
 export const tourPrograms: TourProgram[] = [
   {
@@ -33,7 +37,7 @@ export const tourPrograms: TourProgram[] = [
       { title: "Junior Nationals", detail: "Top-ranked juniors qualify for the season-end championship." },
       { title: "Coach + parent resources", detail: "Tournament prep, travel, and on-site player support." },
     ],
-    cta: { label: "Register a Junior Player", href: REGISTER, external: true },
+    cta: { label: "Register a Junior Player", href: REGISTER_PPA, external: true },
     image: "/ppa/action-singles.jpg",
   },
   {
@@ -51,7 +55,7 @@ export const tourPrograms: TourProgram[] = [
       { title: "Senior Nationals", detail: "Top seniors compete for the season-end title in each age × skill bracket." },
       { title: "Same venues, same weekends", detail: "Play alongside the pro tour at every tour stop." },
     ],
-    cta: { label: "Register for a Senior Bracket", href: REGISTER, external: true },
+    cta: { label: "Register for a Senior Bracket", href: REGISTER_PPA, external: true },
     image: "/ppa/action-md-final.jpg",
   },
   {
@@ -69,7 +73,7 @@ export const tourPrograms: TourProgram[] = [
       { title: "Path to Nationals", detail: "State Champions get priority registration at the National Championships." },
       { title: "Community + competition", detail: "The largest pickleball weekend in your state, every year." },
     ],
-    cta: { label: "Find Your State", href: REGISTER, external: true },
+    cta: { label: "Find Your State", href: REGISTER_PPA, external: true },
     image: "/ppa/action-mxd.jpg",
   },
   {
@@ -96,12 +100,12 @@ export const tourPrograms: TourProgram[] = [
     eyebrow: "Hotel + Travel Partners",
     headline: "Travel With the Tour",
     body: [
-      "Tour partner hotels offer event-rate rooms at every tour stop, with priority booking for registered players and ticket holders.",
-      "Partner airlines and rental partners offer event-rate flights and ground transport into each host city, and on-site shuttles run from partner hotels to the venue.",
+      "Tour partner hotels offer tournament-rate rooms at every tour stop, with priority booking for registered players and ticket holders.",
+      "Partner airlines and rental partners offer tournament-rate flights and ground transport into each host city, and on-site shuttles run from partner hotels to the venue.",
     ],
     bullets: [
-      { title: "Partner hotels", detail: "Event-rate rooms at every tour stop, walking distance or shuttle to the venue." },
-      { title: "Airline partners", detail: "Event-rate flights and priority booking into each host city." },
+      { title: "Partner hotels", detail: "Tournament-rate rooms at every tour stop, walking distance or shuttle to the venue." },
+      { title: "Airline partners", detail: "Tournament-rate flights and priority booking into each host city." },
       { title: "Ground transport", detail: "Rental rates and on-site shuttles included in partner bookings." },
       { title: "Priority booking", detail: "Registered players and ticket holders book first." },
     ],

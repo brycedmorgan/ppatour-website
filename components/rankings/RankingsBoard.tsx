@@ -4,15 +4,21 @@ import { useState } from "react";
 import type { RankingDivision } from "@/lib/rankings-api";
 import { RankingTable } from "./RankingTable";
 
-/** /rankings preview: Men/Women tabs over the shared standings table. */
+/**
+ * The World Pickleball Rankings board.
+ *
+ * Bryce 7/28: desktop had too much dead space left-to-right with one board at
+ * a time, so from `lg` up BOTH boards render side by side (men's left, women's
+ * right) and the gender toggle is hidden. Below `lg` the toggle stays and only
+ * the active board renders. One render tree, CSS decides — no duplicate DOM.
+ */
 export function RankingsBoard({ divisions }: { divisions: RankingDivision[] }) {
   const [active, setActive] = useState(0);
-  const division = divisions[active] ?? divisions[0];
 
   return (
     <div>
-      {/* Gender tabs */}
-      <div className="flex gap-1">
+      {/* Gender tabs — mobile/tablet only; desktop shows both boards. */}
+      <div className="flex gap-1 lg:hidden">
         {divisions.map((d, i) => (
           <button
             key={d.key}
@@ -33,8 +39,28 @@ export function RankingsBoard({ divisions }: { divisions: RankingDivision[] }) {
         ))}
       </div>
 
-      <div className="mt-6">
-        <RankingTable entries={division?.entries ?? []} />
+      <div className="mt-6 grid gap-6 lg:grid-cols-2 lg:gap-8">
+        {divisions.map((d, i) => (
+          <div
+            key={d.key}
+            className={i === active ? "block" : "hidden lg:block"}
+          >
+            {/* Column heading stands in for the toggle on desktop. */}
+            <div className="mb-3 hidden items-baseline justify-between border-b border-white/10 pb-2 lg:flex">
+              <h3 className="font-display text-lg uppercase leading-none text-white">
+                {d.label}
+              </h3>
+              {/* Count only on the full boards — the homepage module shows a
+                  top-10 slice, where "10 ranked" would read as the whole field. */}
+              {d.entries.length > 10 && (
+                <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/40">
+                  {d.entries.length} ranked
+                </span>
+              )}
+            </div>
+            <RankingTable entries={d.entries} />
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -15,6 +15,8 @@
  * live calendar + real event art via the CMS / API.
  */
 
+import { venueGalleryFor, venueHeroFor } from "@/lib/venue-photos";
+
 export type EventTier = "worlds" | "slam" | "cup" | "open" | "challenger";
 
 export const TIER_META: Record<
@@ -143,6 +145,17 @@ export const VENUE_IMAGES = [
   "/ppa/event-macao.jpg",
   "/ppa/event-gold-coast.webp",
 ];
+
+/**
+ * ⚠ VENUE_IMAGES are Melbourne / Macao / Gold Coast city shots. Cycling them
+ * across the U.S. calendar is how the Las Vegas Open ended up illustrated with
+ * the Brisbane skyline and the World Championships with the Macau tower
+ * (Bryce, 7/28). They are now used ONLY for the international stops they
+ * actually depict; domestic events fall back to real PPA action photography
+ * until their venue is synced from Jackalope (see lib/venue-photos.ts and
+ * scripts/sync-venue-photos.mjs).
+ */
+export const DOMESTIC_FALLBACK_IMAGES = GENERIC_IMAGES;
 
 // Real venue photo galleries per event (restored for Nationals — the drone
 // aerials + crowd set from Bryce's DRONE PHOTOS.zip; the flip-through gallery
@@ -354,15 +367,27 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
       presentedBy: PRESENTER_BY_SLUG[slug] ?? sponsor,
       // Main-tour cards lead with venue scenes; Challengers/international
       // keep action shots (their cards are the smaller treatments).
+      // The event's OWN venue photography wins (synced from Jackalope), then a
+      // curated override, then honest generic action. A U.S. stop never
+      // borrows another city's skyline.
       image:
+        venueHeroFor(slug) ??
         r.image ??
-        (r.type === "ppa"
+        (r.type === "international"
           ? VENUE_IMAGES[i % VENUE_IMAGES.length]
           : GENERIC_IMAGES[i % GENERIC_IMAGES.length]),
-      gallery: GALLERY_BY_SLUG[slug],
+      // Synced venue gallery wins; the hand-curated Nationals set is the
+      // fallback until Cary re-syncs.
+      gallery: venueGalleryFor(slug).length ? venueGalleryFor(slug) : GALLERY_BY_SLUG[slug],
       brand: BRAND_BY_SLUG[slug],
       region: r.type === "international" ? ("international" as const) : undefined,
       country: r.country,
+      // Only U.S. PPA stops get a rich internal page; Challengers and the
+      // international sister tours link out. Stated EXPLICITLY (not left
+      // undefined) because the card components treat `!== false` as internal —
+      // when the events API is unreachable and we serve this curated list,
+      // undefined sent ~28 cards to /events/{year}/{slug} 404s.
+      hasInternalPage: r.type === "ppa",
     };
   });
 }

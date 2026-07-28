@@ -45,14 +45,14 @@ export function PartnerSpotlight() {
           />
         </div>
 
-        {/* Editorial block */}
+        {/* Editorial block — the logo carries the name (Bryce, 7/28), so only
+            the designation and the note are typed out. */}
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-blue">
-            {p.role}
-          </p>
-          <p className="mt-1 font-display text-xl uppercase leading-[1.05] text-ppa-navy sm:text-2xl">
-            {p.name}
-          </p>
+          {!p.hideRole && (
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-blue">
+              {p.role}
+            </p>
+          )}
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-ppa-navy/60">
             {p.note}
           </p>

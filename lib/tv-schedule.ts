@@ -83,13 +83,16 @@ export const tvSchedule: TvEvent[] = [
     ],
   },
   {
-    name: "PPA Arizona Open",
+    name: "Veolia Arizona Open",
     location: "Arizona Athletic Grounds · Mesa, AZ",
     tier: "Open · 1,000",
     league: "PPA",
     startIso: "2026-09-17",
     endIso: "2026-09-20",
-    slug: "carvana-mesa-cup",
+    // Was `carvana-mesa-cup` — that's the FEBRUARY 2027 Mesa Cup, so this row
+    // linked to /events/2026/carvana-mesa-cup and 404'd (Conner Ogden's broken
+    // link, 7/27). The September 2026 Mesa stop is the Veolia Arizona Open.
+    slug: "veolia-arizona-open",
     days: [
       { date: "Sep 17", dow: "Thu", windows: [{ channel: "PBTV", window: "1PM – 9PM", round: "Round of 16" }] },
       { date: "Sep 18", dow: "Fri", windows: [{ channel: "PBTV", window: "1PM – 9PM", round: "Quarterfinals" }] },

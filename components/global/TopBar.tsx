@@ -3,6 +3,7 @@
 import { Suspense } from "react";
 import { usePathname } from "next/navigation";
 import { Header } from "@/components/global/Header";
+import { HideOnScroll } from "@/components/global/HideOnScroll";
 import { ScoreTicker } from "@/components/global/ScoreTicker";
 import { LiveBar } from "@/components/live/LiveBar";
 import { LiveScoreTicker } from "@/components/live/LiveScoreTicker";
@@ -39,9 +40,13 @@ export function TopBar() {
 
   // `site-chrome`: event pages slide this stack away on scroll so the event
   // tab bar (with its Buy Tickets CTA) owns the top edge (see globals.css).
+  // The Next-Event sub-bar retires on first scroll (Bryce 7/28) — only the
+  // main floating header travels down the page.
   return (
     <div className="site-chrome sticky top-0 z-50">
-      <ScoreTicker />
+      <HideOnScroll>
+        <ScoreTicker />
+      </HideOnScroll>
       <Header />
     </div>
   );

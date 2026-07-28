@@ -68,13 +68,19 @@ export function EventSponsors({ event }: { event: Tournament }) {
                       {m.name}
                     </span>
                   )}
+                  {/* No partner name beside a logo (Bryce, 7/28) — the mark
+                      says who it is; only the designation is typed. */}
                   <span>
-                    <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--event-accent)]">
-                      {m.role}
-                    </span>
-                    <span className="mt-0.5 block font-display text-lg uppercase leading-tight text-ppa-navy">
-                      {m.name}
-                    </span>
+                    {!p?.hideRole && (
+                      <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--event-accent)]">
+                        {m.role}
+                      </span>
+                    )}
+                    {!p?.logo && (
+                      <span className="mt-0.5 block font-display text-lg uppercase leading-tight text-ppa-navy">
+                        {m.name}
+                      </span>
+                    )}
                   </span>
                 </div>
               );

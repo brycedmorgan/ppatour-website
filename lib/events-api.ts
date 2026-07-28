@@ -30,6 +30,7 @@ import {
   VENUE_IMAGES,
   type Tournament,
 } from "@/lib/placeholder-data";
+import { venueGalleryFor, venueHeroFor } from "@/lib/venue-photos";
 
 const PATH = "/v2/data/ppa_tournaments";
 /**
@@ -208,12 +209,16 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     presentedBy: curated?.presentedBy ?? sponsor,
     // Venue scenes for main-tour cards, action shots for the smaller
     // Challenger/international treatments (see docs/VENUE-ASSETS.md).
+    // The event's own venue photography (synced from Jackalope) leads, then
+    // the curated override. VENUE_IMAGES are Melbourne/Macao/Gold Coast city
+    // shots — they only ever illustrate international stops now (Bryce, 7/28).
     image:
+      venueHeroFor(slug) ??
       curated?.image ??
-      (!isChallenger && isUsOrg
+      (!isUsOrg
         ? VENUE_IMAGES[index % VENUE_IMAGES.length]
         : GENERIC_IMAGES[index % GENERIC_IMAGES.length]),
-    gallery: curated?.gallery,
+    gallery: venueGalleryFor(slug).length ? venueGalleryFor(slug) : curated?.gallery,
     brand: curated?.brand,
     region: isUsOrg ? undefined : "international",
     country: isUsOrg ? undefined : inferCountry(t.organization_name, t.venue_country),

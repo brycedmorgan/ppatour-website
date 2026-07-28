@@ -36,21 +36,22 @@ export default async function RankingsPage() {
             World Pickleball Rankings
           </h1>
           <div className="mt-4 max-w-2xl space-y-3 text-sm leading-relaxed text-ppa-navy/60">
+            {/* Copy: Jeff + Nathan's audit doc, 7/27. */}
             <p>
-              The World Pickleball Ranking represents a comprehensive system
-              designed to identify the top overall pickleball players in the
-              world. This composite ranking takes into account performance
-              across all three events: gender doubles, mixed doubles, and
-              singles.
+              Designed to identify the top overall pickleball players in the
+              world, the World Pickleball Ranking is a composite ranking that
+              takes into account performance across all three events:
+              men&apos;s/women&apos;s doubles, mixed doubles, and singles.
             </p>
             <p>
-              World Pickleball Rankings are determined using a weighted point
-              system based on a combination of each player&apos;s PPA Tour
-              points earned in the last 52 weeks across all three events:
+              The World Pickleball Rankings are determined using a weighted
+              point system based on a combination of each player&apos;s Carvana
+              PPA Tour points earned in the last 52 weeks across all three
+              disciplines:
             </p>
             <ul className="space-y-1.5">
               {[
-                ["Gender Doubles", "50%"],
+                ["Men's/Women's Doubles", "50%"],
                 ["Mixed Doubles", "35%"],
                 ["Singles", "15%"],
               ].map(([event, weight]) => (
@@ -126,9 +127,8 @@ export default async function RankingsPage() {
             Men&apos;s &amp; Women&apos;s Rankings
           </h2>
           <p className="mt-2 max-w-xl text-sm text-white/60">
-            The complete boards — every ranked pro, top to bottom. Switch
-            between men&apos;s and women&apos;s, and click any name to open
-            that pro&apos;s profile.
+            The complete boards — every ranked pro, top to bottom. Click any
+            name to open that pro&apos;s profile.
           </p>
           <div className="mt-6">
             <RankingsBoard divisions={ranking.divisions} />

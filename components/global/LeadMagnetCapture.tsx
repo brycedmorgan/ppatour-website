@@ -60,9 +60,11 @@ export function LeadMagnetCapture({ variant = "fan" }: { variant?: Variant }) {
       <h3 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
         {copy.heading}
       </h3>
+      {/* Dave Rogers 7/27: "when the checkout lives off-site" meant nothing to
+          a reader — it was internal language about our commerce partners. */}
       <p className="mt-2 max-w-md text-sm text-white/55">
-        When the checkout lives off-site, email is how we keep you close.
-        No spam — just the matches, drops, and dates that matter.
+        No spam — just the matches, ticket drops, and dates that matter,
+        straight to your inbox.
       </p>
 
       {status === "done" ? (

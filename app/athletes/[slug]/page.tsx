@@ -508,23 +508,33 @@ export default async function AthletePage({ params }: Params) {
                   </p>
                 )}
               </div>
-              {gear.external ? (
+              {/* Conner Ogden 7/27: link the pro's paddle so a fan can buy the
+                  same one. Official-partner brands lead with their own store;
+                  Pickleball Central always sits alongside it. */}
+              <div className="flex shrink-0 flex-col gap-2.5 sm:flex-row sm:items-center">
+                {gear.brand && (
+                  <a
+                    href={gear.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex h-12 shrink-0 items-center justify-center bg-ppa-blue px-7 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
+                  >
+                    Shop {gear.brand} ↗
+                  </a>
+                )}
                 <a
-                  href={gear.href}
+                  href={gear.pbcHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-12 shrink-0 items-center justify-center bg-ppa-blue px-7 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
+                  className={`inline-flex h-12 shrink-0 items-center justify-center px-7 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors ${
+                    gear.brand
+                      ? "border border-white/25 hover:border-ppa-blue hover:bg-ppa-blue"
+                      : "bg-ppa-blue hover:bg-ppa-blue-deep"
+                  }`}
                 >
-                  Shop {gear.brand} ↗
+                  Buy This Paddle ↗
                 </a>
-              ) : (
-                <Link
-                  href={gear.href}
-                  className="inline-flex h-12 shrink-0 items-center justify-center border border-white/25 px-7 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:border-ppa-blue hover:bg-ppa-blue"
-                >
-                  Shop Official Gear →
-                </Link>
-              )}
+              </div>
             </div>
           </div>
         </section>

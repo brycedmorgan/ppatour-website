@@ -241,6 +241,12 @@ export type Partner = {
       Only set where we're confident of the destination; unset = no outbound
       link (card stays put) so we never send a fan to a wrong/dead page. */
   website?: string;
+  /** Suppress the designation line and let the logo stand alone (Bryce, 7/28 —
+      "we do not need to type out the partner names next to their logos when
+      the logo itself makes it obvious"). Set where the written designation
+      added nothing: Veolia and Humana. The partner name is never printed
+      beside a logo anywhere; this hides the ROLE line too. */
+  hideRole?: boolean;
   /** Real wordmark logo path + intrinsic pixel dimensions (when we have the
       brand-kit file). Partners without a mark yet render as designation cards
       until their logo lands. */
@@ -276,6 +282,7 @@ export const partners: Partner[] = [
     category: "Sustainability",
     note: "Backing the marquee stops in Atlanta, Chicago, and the National Championships.",
     tier: "official",
+    hideRole: true,
     logo: "/ppa/sponsors/veolia.png",
     logoWidth: 2048,
     logoHeight: 836,
@@ -298,6 +305,7 @@ export const partners: Partner[] = [
     category: "Insurance",
     note: "Keeping players and fans moving, on the court and off it.",
     tier: "official",
+    hideRole: true,
     logo: "/ppa/sponsors/humana.png",
     logoWidth: 2048,
     logoHeight: 891,
@@ -315,6 +323,9 @@ export const partners: Partner[] = [
   },
   {
     name: "Proton Sports",
+    // Verified 7/28 (Conner Ogden: sponsor tiles were bouncing to a PPA page
+    // instead of the sponsor).
+    website: "https://protonsports.com",
     role: "Official Paddle Partner",
     category: "Paddle",
     note: "Engineering the paddles behind the tour's hardest hitters.",
@@ -406,6 +417,9 @@ export const partners: Partner[] = [
   },
   {
     name: "Acrytech",
+    // Acry-Tech Coatings — verified 7/28. LT Pro 48 and Reign Storm still have
+    // no confirmed URL, so their cards stay unlinked rather than guess wrong.
+    website: "https://www.acrytech.com",
     role: "Official Court Surface Partner",
     category: "Court Surface",
     note: "The surface underfoot at PPA Tour stops.",

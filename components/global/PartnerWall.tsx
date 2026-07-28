@@ -71,9 +71,12 @@ export function PartnerWall({
                 >
                   Title Partner
                 </p>
-                <p className="mt-1 font-display text-2xl uppercase leading-none text-ppa-navy sm:text-3xl">
-                  {title.name}
-                </p>
+                {/* Name printed only when we have no mark to show (Bryce 7/28). */}
+                {!title.logo && (
+                  <p className="mt-1 font-display text-2xl uppercase leading-none text-ppa-navy sm:text-3xl">
+                    {title.name}
+                  </p>
+                )}
                 <p className="mt-2 max-w-xl text-sm text-ppa-navy/55">
                   {eventName
                     ? `The named partner of the tour — on court at ${eventName} and all 25 stops.`
@@ -117,17 +120,22 @@ function PartnerCard({ p, accent }: { p: Partner; accent: string }) {
   const { href, external } = partnerLink(p);
   const cls =
     "group flex min-h-[132px] flex-col justify-between bg-white p-5 transition-colors hover:bg-ppa-paper";
+  // Bryce 7/28: where we hold the mark, the mark IS the card — the logo runs
+  // bigger and the partner's name is never typed beside it. The designation
+  // line stays (it's the value we sell) unless `hideRole` says otherwise.
+  // Partners with no mark yet keep the wordmark card so nobody drops off the
+  // directory while we chase their logo file.
   const inner = (
     <>
       {p.logo ? (
-        <span className="flex h-9 w-fit items-center">
+        <span className="flex h-12 w-fit items-center">
           <Image
             src={p.logo}
             alt={p.name}
             width={p.logoWidth!}
             height={p.logoHeight!}
-            sizes="130px"
-            className="max-h-9 w-auto max-w-[130px] object-contain object-left"
+            sizes="170px"
+            className="max-h-12 w-auto max-w-[170px] object-contain object-left"
           />
         </span>
       ) : (
@@ -137,24 +145,30 @@ function PartnerCard({ p, accent }: { p: Partner; accent: string }) {
           style={{ backgroundColor: accent }}
         />
       )}
-      <div className="mt-4">
-        <p
-          className="text-[10px] font-bold uppercase tracking-[0.16em]"
-          style={{ color: accent }}
-        >
-          {p.role}
-        </p>
-        <p className="mt-1 flex items-center gap-1.5 font-display text-lg uppercase leading-[1.05] text-ppa-navy">
-          {p.name}
-          {external && (
-            <span
-              aria-hidden
-              className="text-xs opacity-0 transition-opacity group-hover:opacity-60"
+      <div className="mt-4 flex items-end justify-between gap-2">
+        <div>
+          {!p.hideRole && (
+            <p
+              className="text-[10px] font-bold uppercase tracking-[0.16em]"
+              style={{ color: accent }}
             >
-              ↗
-            </span>
+              {p.role}
+            </p>
           )}
-        </p>
+          {!p.logo && (
+            <p className="mt-1 font-display text-lg uppercase leading-[1.05] text-ppa-navy">
+              {p.name}
+            </p>
+          )}
+        </div>
+        {external && (
+          <span
+            aria-hidden
+            className="text-xs text-ppa-navy/60 opacity-0 transition-opacity group-hover:opacity-100"
+          >
+            ↗
+          </span>
+        )}
       </div>
     </>
   );

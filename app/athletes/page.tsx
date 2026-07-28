@@ -75,8 +75,10 @@ export default async function AthletesPage() {
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
             The Roster
           </p>
+          {/* Dave Rogers 7/27: drop the headcount — the field is constantly
+              evolving and a hard number dates the page. */}
           <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-            Pro Field <span className="text-ppa-blue">· {roster.length}</span>
+            Pro Field
           </h2>
           <AthleteRoster athletes={roster} />
         </div>

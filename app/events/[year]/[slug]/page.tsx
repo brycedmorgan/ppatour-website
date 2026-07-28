@@ -710,8 +710,8 @@ export default async function EventPage({ params }: Params) {
               Inside {t.shortName}
             </h2>
             <p className="mt-3 max-w-xl text-sm text-white/60">
-              Real photos from the grounds — tap any shot to flip through
-              what a day here actually looks like.
+              Real photos from the grounds — slide through and see what a
+              day here actually looks like.
             </p>
             <EventGallery images={t.gallery} eventName={t.shortName} />
           </div>
@@ -1010,7 +1010,7 @@ export default async function EventPage({ params }: Params) {
                 },
                 {
                   k: "Players & Autographs",
-                  v: "Pros warm up on the practice courts and sign after matches near the player zone — bring a paddle skin or ball.",
+                  v: "Pros warm up on the practice courts and sign after matches near the player zone — bring a paddle or something from the merch store.",
                 },
                 {
                   k: "Weather Plan",

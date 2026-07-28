@@ -211,7 +211,12 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
           {shown.map((t, i) => {
             const completed = t.status === "completed";
             const internal = t.hasInternalPage !== false;
-            const href = internal ? eventHref(t) : t.externalUrl ?? eventHref(t);
+            // Link-out events must never fall back to eventHref — that route
+            // 404s for anything without an internal page (Conner Ogden's
+            // broken-link report, 7/27).
+            const href = internal
+              ? eventHref(t)
+              : t.externalUrl ?? t.registerUrl ?? t.ticketsUrl;
             return (
               <article
                 key={t.slug}

@@ -30,14 +30,19 @@ export default async function EventsPage() {
   // Other Events — everything under 1,000 points (the Challenger Series).
   const otherEvents = upcoming.filter((e) => tierPoints(e) < 1000);
 
+  // Bryce 7/28: clicking "Full 2026 Schedule" should land on the big-card view
+  // of the NEXT SIX tour stops, not the entire season in one wall of cards.
+  // Everything else stays one scroll down in the searchable grid.
+  const nextSix = theTour.slice(0, 6);
+
   return (
     <>
       <FeaturedEvents
-        events={theTour}
+        events={nextSix}
         kicker="1,000+ Points"
-        title="The Tour"
+        title="Next Six on Tour"
         headingAs="h1"
-        subtitle="The majors, cups, and opens — every stop worth 1,000+ ranking points, U.S. and international, in season order."
+        subtitle="Majors, Cups, and Opens — every Carvana PPA Tour stop is a crucial stop in the race to the PPA Finals and worth 1,000+ World Pickleball Ranking points."
       />
       <ChallengerStrip events={otherEvents} />
       <section className="bg-ppa-paper">
@@ -52,9 +57,9 @@ export default async function EventsPage() {
             Find an Event
           </h2>
           <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
-            Search everything the PPA Tour runs — The Tour, Challengers, and
-            the international series — past and upcoming, filterable by tier
-            and country.
+            The complete calendar — every stop on The Tour plus the Challenger
+            and international series, past and upcoming, filterable by tier and
+            country.
           </p>
 
           <ScheduleGrid events={events} />

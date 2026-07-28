@@ -326,13 +326,19 @@ export default function SponsorsPage() {
                     </span>
                   )}
                 </div>
+                {/* Logo card carries the name (Bryce, 7/28) — only the
+                    designation and note are typed out beneath it. */}
                 <div className="flex flex-1 flex-col p-5">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-blue">
-                    {p.role}
-                  </p>
-                  <p className="mt-1 font-display text-lg uppercase leading-[1.1] text-ppa-navy">
-                    {p.name}
-                  </p>
+                  {!p.hideRole && (
+                    <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-blue">
+                      {p.role}
+                    </p>
+                  )}
+                  {!p.logo && (
+                    <p className="mt-1 font-display text-lg uppercase leading-[1.1] text-ppa-navy">
+                      {p.name}
+                    </p>
+                  )}
                   <p className="mt-2 text-sm leading-relaxed text-ppa-navy/60">
                     {p.note}
                   </p>

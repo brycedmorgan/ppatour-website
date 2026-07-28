@@ -13,7 +13,7 @@ import { RankingsBoard } from "@/components/rankings/RankingsBoard";
 import { getRankings } from "@/lib/rankings-api";
 import { getEvents } from "@/lib/events-api";
 import { getScores, type Champion } from "@/lib/scores-api";
-import { playerInitials, playerPhoto } from "@/lib/player-photos";
+import { playerInitials, playerPhoto, playerProfileHref } from "@/lib/player-photos";
 import {
   daysUntil,
   eventHref,
@@ -34,41 +34,38 @@ import {
   storylines,
 } from "@/lib/home-content";
 
+// Kickers ("For Fans" / "For Players" / "For Brands") dropped 7/28 — Jeff +
+// Nathan: unnecessary and cluttered. Blurbs are their copy from the audit doc.
 const LANES = [
   {
     href: "/watch",
     image: "/ppa/action-champ-sunday.jpg",
-    kicker: "For Fans",
     title: "Watch",
-    blurb: "Live streams, brackets, broadcast schedule.",
+    blurb: "Live streams, match results, and broadcast schedule.",
   },
   {
     href: "/events",
     image: "/ppa/action-waters-bright.jpg",
-    kicker: "For Fans",
     title: "Tickets",
-    blurb: "Be in the arena at every tour stop.",
+    blurb: "Be there for every iconic moment.",
   },
   {
     href: "/rankings",
     image: "/ppa/action-mxd.jpg",
-    kicker: "For Fans",
     title: "Follow",
-    blurb: "Athletes, rankings, the season-long race.",
+    blurb: "Players, World Pickleball Rankings, season standings.",
   },
   {
     href: "/play",
     image: "/ppa/action-singles.jpg",
-    kicker: "For Players",
     title: "Play",
-    blurb: "Register for an amateur bracket at any stop.",
+    blurb: "Register for amateur competition at every tournament.",
   },
   {
     href: "/about/sponsors",
     image: "/ppa/action-md-final.jpg",
-    kicker: "For Brands",
     title: "Sponsor",
-    blurb: "Title, presenting, and category partnerships.",
+    blurb: "Partner with the world's leading pickleball tour.",
     highlight: true,
   },
 ];
@@ -215,6 +212,8 @@ export async function HomeContent({
   // Off-season/between-events homepage: no live scores make sense, so lead with
   // the most recent tour stop's champions instead.
   const latestChampions = live ? null : await lastCompletedChampions();
+  // Next six tour stops for the "Next on Tour" strip above the callouts.
+  const upNext = getMainTourEvents().slice(0, 6);
 
   return (
     <>
@@ -240,7 +239,9 @@ export async function HomeContent({
         }}
       />
       {/* ── Hero (event lead) ───────────────────────────────── */}
-      <section className="relative isolate flex min-h-[58svh] flex-col justify-end overflow-hidden bg-ppa-navy text-white">
+      {/* Hero trimmed 58svh → 50svh (Bryce 7/28) to buy height for the taller
+          audience callouts below. Video hero drops into this same slot. */}
+      <section className="relative isolate flex min-h-[50svh] flex-col justify-end overflow-hidden bg-ppa-navy text-white">
         <Image
           src={next.image}
           alt={next.name}
@@ -255,21 +256,10 @@ export async function HomeContent({
         {/* Soften the header→hero seam: navy fades down into the hero image. */}
         <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-32 bg-gradient-to-b from-ppa-navy to-transparent" />
 
-        {/* Featured event badge — the crest for the next stop. */}
-        {!live && next.brand?.icon && (
-          <div
-            className="pointer-events-none absolute right-4 top-16 z-[2] block motion-safe:animate-rise sm:right-8 sm:top-20 lg:right-24"
-            style={{ animationDelay: "120ms" }}
-          >
-            <Image
-              src={next.brand.icon}
-              alt=""
-              width={133}
-              height={364}
-              className="h-24 w-auto rounded drop-shadow-[0_4px_22px_rgba(2,49,85,0.65)] sm:h-44 lg:h-64"
-            />
-          </div>
-        )}
+        {/* Floating event crest removed (Bryce 7/28: the Nationals mark
+            hovering over the hero "doesn't make a whole lot of sense there").
+            The hero photo + headline already name the event. Kept on /live,
+            where the crest identifies which tournament is on. */}
 
         {/* Live tournament crest — same hero slot/treatment as the homepage. */}
         {live && liveEvent?.logo && (
@@ -287,20 +277,24 @@ export async function HomeContent({
           </div>
         )}
 
-        {/* Event ID chip — the hero must SAY which event it is (Connor, 7/20). */}
-        <div className="pointer-events-none absolute bottom-6 right-4 z-[2] hidden flex-col items-end bg-ppa-navy-deep/70 px-3.5 py-2.5 backdrop-blur-sm md:flex lg:right-8">
-          <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-ppa-sky">
-            {live ? "Live Now" : "Featured Event"}
-          </span>
-          <span className="mt-0.5 font-display text-sm uppercase leading-tight text-white">
-            {ev.name}
-          </span>
-          <span className="mt-0.5 text-[10px] uppercase tracking-wide text-white/65">
-            {formatDateRange(ev.startDate, ev.endDate, true)} · {ev.venue}
-          </span>
-        </div>
+        {/* Floating "Featured Event" card removed on the homepage (Bryce 7/28:
+            redundant — the hero itself is that event). Retained in live mode,
+            where it carries the LIVE NOW label. */}
+        {live && (
+          <div className="pointer-events-none absolute bottom-6 right-4 z-[2] hidden flex-col items-end bg-ppa-navy-deep/70 px-3.5 py-2.5 backdrop-blur-sm md:flex lg:right-8">
+            <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-ppa-sky">
+              Live Now
+            </span>
+            <span className="mt-0.5 font-display text-sm uppercase leading-tight text-white">
+              {ev.name}
+            </span>
+            <span className="mt-0.5 text-[10px] uppercase tracking-wide text-white/65">
+              {formatDateRange(ev.startDate, ev.endDate, true)} · {ev.venue}
+            </span>
+          </div>
+        )}
 
-        <div className="relative mx-auto w-full max-w-6xl px-4 pb-9 pt-20">
+        <div className="relative mx-auto w-full max-w-6xl px-4 pb-7 pt-16">
           <div
             className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em] motion-safe:animate-rise"
             style={{ animationDelay: "80ms" }}
@@ -320,9 +314,14 @@ export async function HomeContent({
             ) : (
               <>
                 <span className="bg-ppa-blue px-2 py-0.5">Next Event</span>
-                <span className="text-white/70">
+                {/* Dave Rogers 7/27: "I would like to click on Cary, NC and see
+                    where that is" — goes to the event's Plan Your Trip guide. */}
+                <Link
+                  href={`${eventHref(next)}#travel`}
+                  className="text-white/70 underline-offset-4 transition-colors hover:text-white hover:underline"
+                >
                   {next.city}, {next.state}
-                </span>
+                </Link>
                 <span className="text-white/25">/</span>
                 <span className="text-ppa-yellow">
                   <Countdown
@@ -349,11 +348,18 @@ export async function HomeContent({
             <span className="text-white/25">|</span>
             <span>{ev.venue}</span>
             <span className="text-white/25">|</span>
-            <span className="text-ppa-yellow">
-              {live
-                ? "▶ Live on PickleballTV"
-                : `${tierPoints(next).toLocaleString()} Ranking Points`}
-            </span>
+            {/* Dave Rogers 7/27: "I would like to click on 2,000 rankings
+                points and find out what that means." */}
+            {live ? (
+              <span className="text-ppa-yellow">▶ Live on PickleballTV</span>
+            ) : (
+              <Link
+                href="/about/how-it-works"
+                className="text-ppa-yellow underline-offset-4 transition-colors hover:underline"
+              >
+                {tierPoints(next).toLocaleString()} Ranking Points
+              </Link>
+            )}
           </div>
 
           <div
@@ -445,6 +451,71 @@ export async function HomeContent({
         <div className="relative h-1 bg-ppa-blue" />
       </section>
 
+      {/* ── Next on Tour (Bryce 7/28: text links + arrows, directly above the
+             five callouts — next three stops, then the three after that) ── */}
+      <section className="border-b border-ppa-line bg-white">
+        <div className="mx-auto w-full max-w-6xl px-4 py-7">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <span className="h-2 w-2 bg-ppa-blue" />
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
+                Next on Tour
+              </p>
+            </div>
+            <Link
+              href="/events"
+              className="group text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-blue transition-colors hover:text-ppa-blue-deep"
+            >
+              Full 2026 Schedule{" "}
+              <span
+                aria-hidden
+                className="inline-block transition-transform duration-300 group-hover:translate-x-0.5"
+              >
+                →
+              </span>
+            </Link>
+          </div>
+
+          <ul className="mt-4 grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
+            {upNext.map((t, i) => (
+              <li
+                key={t.slug}
+                className={
+                  i >= 3
+                    ? "border-t border-ppa-line/70 lg:border-t-0"
+                    : undefined
+                }
+              >
+                <Link
+                  href={eventHref(t)}
+                  className="group flex items-baseline justify-between gap-4 border-b border-ppa-line/70 py-2.5 lg:border-b-0"
+                >
+                  <span className="min-w-0">
+                    <span
+                      className={`block truncate font-display uppercase leading-tight text-ppa-navy transition-colors group-hover:text-ppa-blue ${
+                        i < 3 ? "text-base" : "text-sm text-ppa-navy/75"
+                      }`}
+                    >
+                      {t.shortName}
+                    </span>
+                    <span className="mt-0.5 block text-[11px] uppercase tracking-wide text-ppa-navy/50">
+                      {formatDateRange(t.startDate, t.endDate)} · {t.city},{" "}
+                      {t.state}
+                    </span>
+                  </span>
+                  <span
+                    aria-hidden
+                    className="shrink-0 text-ppa-blue transition-transform duration-300 group-hover:translate-x-0.5"
+                  >
+                    →
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       {/* ── Five-Audience Lanes (Watch · Tickets · Follow · Play · Sponsor) ── */}
       <section className="grid sm:grid-cols-2 lg:grid-cols-5">
         {LANES.map((lane, i) => (
@@ -453,7 +524,7 @@ export async function HomeContent({
             href={lane.href}
             data-reveal
             style={{ "--reveal-delay": `${i * 70}ms` } as React.CSSProperties}
-            className="group relative isolate flex aspect-[4/5] flex-col justify-end overflow-hidden bg-ppa-navy lg:aspect-auto lg:min-h-[18rem]"
+            className="group relative isolate flex aspect-[4/5] flex-col justify-end overflow-hidden bg-ppa-navy lg:aspect-auto lg:min-h-[23rem]"
           >
             <Image
               src={lane.image}
@@ -469,14 +540,7 @@ export async function HomeContent({
               </span>
             )}
             <div className="relative w-full p-5 text-white">
-              <p
-                className={`text-[10px] font-bold uppercase tracking-[0.2em] ${
-                  lane.highlight ? "text-ppa-yellow" : "text-ppa-sky"
-                }`}
-              >
-                {lane.kicker}
-              </p>
-              <h3 className="mt-0.5 font-display text-3xl uppercase leading-none">
+              <h3 className="font-display text-3xl uppercase leading-none">
                 {lane.title}
               </h3>
               <p className="mt-1.5 text-xs leading-relaxed text-white/70">
@@ -502,19 +566,18 @@ export async function HomeContent({
               title={live || !latestChampions ? "Live & Latest" : "Latest Champions"}
               pulse={live}
             />
-            <Link
-              href={
-                live
-                  ? `/brackets?event=${ATLANTA_EVENT_ID}`
-                  : latestChampions
-                    ? eventHref(latestChampions.event)
-                    : "/watch"
-              }
-              className="group text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
-            >
-              {live ? "View Full Bracket" : latestChampions ? "Full Results" : "Full Scores & Brackets"}{" "}
-              <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
-            </Link>
+            {/* In the champions state "Full Results" moves down beside the
+                tournament name — Dave Rogers 7/27: over here on the right it
+                gets missed. */}
+            {!latestChampions && (
+              <Link
+                href={live ? `/brackets?event=${ATLANTA_EVENT_ID}` : "/watch"}
+                className="group text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
+              >
+                {live ? "View Full Bracket" : "Full Scores & Brackets"}{" "}
+                <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+              </Link>
+            )}
           </div>
 
           {/* The band must SAY which event it covers (Connor, 7/20). */}
@@ -528,6 +591,20 @@ export async function HomeContent({
                   {formatDateRange(chip.startDate, chip.endDate, true)} · {chip.city}
                   {chip.state ? `, ${chip.state}` : ""}
                 </span>
+                {!live && latestChampions && (
+                  <Link
+                    href={eventHref(latestChampions.event)}
+                    className="group text-ppa-blue hover:text-ppa-navy"
+                  >
+                    Full Results{" "}
+                    <span
+                      aria-hidden
+                      className="inline-block transition-transform duration-300 group-hover:translate-x-0.5"
+                    >
+                      →
+                    </span>
+                  </Link>
+                )}
               </p>
             );
           })()}
@@ -554,11 +631,27 @@ export async function HomeContent({
                     <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-ppa-blue">
                       {c.division}
                     </p>
-                    {c.players.map((p) => (
-                      <p key={p} className="font-display text-base uppercase leading-tight text-ppa-navy">
-                        {p}
-                      </p>
-                    ))}
+                    {/* Champion names open their profile when the player is on
+                        our roster (Dave Rogers, 7/27). */}
+                    {c.players.map((p) => {
+                      const href = playerProfileHref(p);
+                      return href ? (
+                        <Link
+                          key={p}
+                          href={href}
+                          className="block font-display text-base uppercase leading-tight text-ppa-navy transition-colors hover:text-ppa-blue"
+                        >
+                          {p}
+                        </Link>
+                      ) : (
+                        <p
+                          key={p}
+                          className="font-display text-base uppercase leading-tight text-ppa-navy"
+                        >
+                          {p}
+                        </p>
+                      );
+                    })}
                   </div>
                 </div>
               ))}
@@ -741,9 +834,10 @@ export async function HomeContent({
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <SectionHead label="Standings" title="World Pickleball Rankings" dark />
+            {/* Copy: Jeff + Nathan's audit doc, 7/27. */}
             <p className="max-w-xs text-sm text-white/55 sm:text-right">
-              The combined men&apos;s and women&apos;s world rankings — who&apos;s
-              on top across every discipline.
+              The official men&apos;s and women&apos;s world rankings —
+              who&apos;s the best of the best.
             </p>
           </div>
 
@@ -769,9 +863,10 @@ export async function HomeContent({
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <SectionHead label="2026 Season" title="The Tour" />
+            {/* Copy: Jeff + Nathan's audit doc, 7/27. */}
             <p className="max-w-xs text-sm text-ppa-navy/55 sm:text-right">
-              Worlds, majors, cups, and opens — every Tour stop carries
-              1,000+ ranking points toward the season title.
+              Majors, Cups, and Opens — every Carvana PPA Tour stop carries
+              crucial ranking points toward the PPA Finals.
             </p>
           </div>
 
