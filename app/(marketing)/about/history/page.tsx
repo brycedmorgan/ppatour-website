@@ -18,12 +18,19 @@ const NATIONALS: Champ[] = [
   { year: 2021, ms: "Ben Johns", ws: "Anna Leigh Waters", md: "B. Johns / Riley Newman", wd: "Anna Leigh Waters / Leigh Waters", xd: "JW Johnson / Jorja Johnson" },
 ];
 
+/**
+ * Tour milestones. Corrected 7/28 against Hannah's historical timeline (the doc
+ * behind the Pickleball Central on-site superstore) — we had the founding year
+ * and the Carvana deal wrong.
+ */
 const MILESTONES = [
-  { year: "2018", note: "PPA Tour founded; first national pro circuit established." },
-  { year: "2020", note: "Carvana joins as title partner of the PPA Tour." },
-  { year: "2022", note: "FOX & FS1 begin broadcasting marquee finals nationally." },
-  { year: "2023", note: "Annual prize money crosses $2 million across the season." },
-  { year: "2025", note: "PickleballTV becomes the home of live PPA streaming." },
+  { year: "2019", note: "The PPA Tour is founded by Connor Pardoe." },
+  { year: "2020", note: "The first PPA Tour event is held in Mesa, Arizona." },
+  { year: "2021", note: "The tour signs the first exclusive pro player contracts in pickleball." },
+  { year: "2022", note: "Tom Dundon unites the sport's top brands, and CBS airs live pickleball on national television for the first time." },
+  { year: "2023", note: "Dallas draws 3,500 players and 50,000 spectators, the biggest pickleball event ever held. Carvana signs on as title partner." },
+  { year: "2024", note: "PPA Tour and MLP merge to form the United Pickleball Association." },
+  { year: "2025", note: "The tour goes global with its first international events across five continents." },
 ];
 
 export default function TournamentHistoryPage() {

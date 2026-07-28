@@ -1219,6 +1219,19 @@ export default async function EventPage({ params }: Params) {
                   </Link>
                 ))}
               </div>
+              {/* Hannah 7/28: people come looking for one specific player. */}
+              <Link
+                href="/athletes"
+                className="group mt-4 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy transition-colors hover:text-ppa-blue"
+              >
+                See All Pros Competing
+                <span
+                  aria-hidden
+                  className="transition-transform duration-300 group-hover:translate-x-0.5"
+                >
+                  →
+                </span>
+              </Link>
             </div>
 
             <div>

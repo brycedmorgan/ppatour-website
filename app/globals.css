@@ -149,6 +149,39 @@
     rgba(7, 34, 58, 0) 100%
   );
 }
+
+/* Homepage hero scrim. Hannah 7/28: with the floating event crest gone, the
+   right half of the hero is open canvas and "it's really dark right now" —
+   the venue should show through. Same vertical scrim as .scrim-hero (the
+   headline still needs its contrast) but masked so the darkening falls away
+   toward the right. Small screens keep the full scrim: the headline spans the
+   whole width there, so there is no right half to reclaim. */
+.scrim-hero-left {
+  background: linear-gradient(
+    to top,
+    rgba(7, 34, 58, 0.97) 0%,
+    rgba(7, 34, 58, 0.55) 42%,
+    rgba(7, 34, 58, 0.08) 100%
+  );
+}
+@media (min-width: 1024px) {
+  .scrim-hero-left {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      #000 0%,
+      #000 40%,
+      rgba(0, 0, 0, 0.45) 68%,
+      rgba(0, 0, 0, 0.15) 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      #000 0%,
+      #000 40%,
+      rgba(0, 0, 0, 0.45) 68%,
+      rgba(0, 0, 0, 0.15) 100%
+    );
+  }
+}
 .scrim-card {
   background: linear-gradient(
     to top,

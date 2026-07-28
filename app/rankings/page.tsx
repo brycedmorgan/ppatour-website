@@ -16,7 +16,7 @@ export default async function RankingsPage() {
   // pro in both genders (Connor: "all the way", no 25-row cap).
   const ranking = await getFullRankings();
 
-  // Current No. 1s: the top man + top woman.
+  // Current No. 1's: the top man + top woman.
   const leaders = ranking.divisions
     .map((d) => ({ division: d.label, entry: d.entries[0] }))
     .filter((l) => l.entry);
@@ -68,14 +68,14 @@ export default async function RankingsPage() {
         </div>
       </section>
 
-      {/* The Current No. 1s */}
+      {/* The Current No. 1&apos;s */}
       <section className="bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
             Atop the Rankings
           </p>
           <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-            The Current No. 1s
+            The Current No. 1&apos;s
           </h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             {leaders.map(({ division, entry }) => (
@@ -146,6 +146,17 @@ export default async function RankingsPage() {
             >
               Full Roster →
             </Link>
+            {/* Hannah 7/28: people still search for a pro's singles/doubles/
+                mixed ranking. If we don't answer that query, someone else
+                outranks us for it. */}
+            <a
+              href="https://www.pickleball.com/rankings?utm_source=ppatour&utm_medium=website&utm_campaign=rankings&utm_content=event-specific-standings"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-11 items-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-white hover:text-ppa-navy"
+            >
+              Event-Specific Standings ↗
+            </a>
             <Link
               href="/about/how-it-works"
               className="inline-flex h-11 items-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-white hover:text-ppa-navy"

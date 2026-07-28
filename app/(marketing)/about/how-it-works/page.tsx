@@ -26,13 +26,14 @@ const POINT_TIERS = [
   },
 ];
 
+// FIVE divisions, not six (Hannah, 7/28) — mixed doubles is one division, it
+// is not split by gender.
 const DIVISIONS = [
   "Men's Singles",
-  "Men's Doubles",
-  "Mixed Doubles (Men)",
   "Women's Singles",
+  "Men's Doubles",
   "Women's Doubles",
-  "Mixed Doubles (Women)",
+  "Mixed Doubles",
 ];
 
 const SEASON_STEPS = [
@@ -49,7 +50,7 @@ const SEASON_STEPS = [
   {
     n: "03",
     title: "The Brackets",
-    body: "Six divisions per stop — Men's and Women's, Singles / Doubles / Mixed — with seeded draws and best-of-three matches.",
+    body: "Five divisions per stop, from men's and women's singles and doubles through mixed doubles, with seeded draws and best-of-three matches.",
   },
   {
     n: "04",
@@ -159,11 +160,11 @@ export default function HowItWorksPage() {
                 Divisions
               </p>
               <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-                Six Brackets per Stop
+                Five Divisions per Stop
               </h2>
               <p className="mt-3 max-w-md text-sm leading-relaxed text-ppa-navy/65">
-                Each stop runs all six divisions — singles, doubles, and
-                mixed doubles, for both men and women. Players accumulate
+                Every stop runs men&apos;s and women&apos;s singles, men&apos;s
+                and women&apos;s doubles, and mixed doubles. Players accumulate
                 points in every division they enter.
               </p>
               <ul className="mt-5 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-2">

@@ -58,18 +58,21 @@ function Avatar({ entry, size }: { entry: RankingEntry; size: number }) {
   );
 }
 
+/**
+ * Rank chip. Hannah 7/28: no medal terminology or gold/silver/bronze coloring
+ * anywhere — we rank players, we don't hand out medals. The top five now stand
+ * out as a block in tour yellow, with No. 1 carrying the solid fill.
+ */
 function RankBadge({ rank, tied }: { rank: number; tied: boolean }) {
-  const medal =
+  const style =
     rank === 1
       ? "bg-ppa-yellow text-ppa-navy"
-      : rank === 2
-        ? "bg-white/85 text-ppa-navy"
-        : rank === 3
-          ? "bg-[#E8B27D] text-ppa-navy"
-          : "bg-white/10 text-white/55";
+      : rank <= 5
+        ? "border border-ppa-yellow/60 text-ppa-yellow"
+        : "bg-white/10 text-white/55";
   return (
     <span
-      className={`inline-flex h-7 min-w-7 items-center justify-center px-1.5 font-display text-sm tabular-nums ${medal}`}
+      className={`inline-flex h-7 min-w-7 items-center justify-center px-1.5 font-display text-sm tabular-nums ${style}`}
     >
       {tied ? `T${rank}` : rank}
     </span>

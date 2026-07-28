@@ -215,6 +215,157 @@ export async function HomeContent({
   // Next six tour stops for the "Next on Tour" strip above the callouts.
   const upNext = getMainTourEvents().slice(0, 6);
 
+  // Hannah 7/28: rankings matter more to a visitor than latest champions, so
+  // off-season the rankings board takes the block right under the callouts and
+  // champions drop below it. During a live event the scores rail still leads —
+  // nothing outranks live pickleball.
+  const scoresSection = (
+    <>
+        {/* ── Live & Latest scores ───────────────────────────── */}
+        <section className="bg-white">
+          <div className="mx-auto w-full max-w-6xl px-4 py-12">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <SectionHead
+                label={live ? "Live Now" : latestChampions ? "Champions" : "Scores"}
+                title={live || !latestChampions ? "Live & Latest" : "Latest Champions"}
+                pulse={live}
+              />
+              {/* In the champions state "Full Results" moves down beside the
+                  tournament name — Dave Rogers 7/27: over here on the right it
+                  gets missed. */}
+              {!latestChampions && (
+                <Link
+                  href={live ? `/brackets?event=${ATLANTA_EVENT_ID}` : "/watch"}
+                  className="group text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
+                >
+                  {live ? "View Full Bracket" : "Full Scores & Brackets"}{" "}
+                  <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+                </Link>
+              )}
+            </div>
+
+            {/* The band must SAY which event it covers (Connor, 7/20). */}
+            {(() => {
+              const chip = !live && latestChampions ? latestChampions.event : ev;
+              const name = !live && latestChampions ? latestChampions.event.shortName : ev.name;
+              return (
+                <p className="mt-3 inline-flex flex-wrap items-center gap-x-2 gap-y-1 border-l-2 border-ppa-blue bg-ppa-paper px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/70">
+                  {name}
+                  <span className="font-medium normal-case tracking-normal text-ppa-navy/50">
+                    {formatDateRange(chip.startDate, chip.endDate, true)} · {chip.city}
+                    {chip.state ? `, ${chip.state}` : ""}
+                  </span>
+                  {!live && latestChampions && (
+                    <Link
+                      href={eventHref(latestChampions.event)}
+                      className="group text-ppa-blue hover:text-ppa-navy"
+                    >
+                      Full Results{" "}
+                      <span
+                        aria-hidden
+                        className="inline-block transition-transform duration-300 group-hover:translate-x-0.5"
+                      >
+                        →
+                      </span>
+                    </Link>
+                  )}
+                </p>
+              );
+            })()}
+
+            {live ? (
+              <div className="mt-4">
+                {/* The section's "View Full Bracket" link opens the full-page
+                    bracket, so the in-panel link is omitted (no expandHref). */}
+                <ScoresBracketToggle eventId={ATLANTA_EVENT_ID} light />
+              </div>
+            ) : latestChampions ? (
+              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {latestChampions.champions.map((c) => (
+                  <div
+                    key={c.divisionId}
+                    className="flex items-center gap-4 rounded-md border border-ppa-line bg-ppa-paper p-4"
+                  >
+                    <div className="flex shrink-0 -space-x-3">
+                      {c.players.map((p) => (
+                        <ChampionAvatar key={p} name={p} />
+                      ))}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-ppa-blue">
+                        {c.division}
+                      </p>
+                      {/* Champion names open their profile when the player is on
+                          our roster (Dave Rogers, 7/27). */}
+                      {c.players.map((p) => {
+                        const href = playerProfileHref(p);
+                        return href ? (
+                          <Link
+                            key={p}
+                            href={href}
+                            className="block font-display text-base uppercase leading-tight text-ppa-navy transition-colors hover:text-ppa-blue"
+                          >
+                            {p}
+                          </Link>
+                        ) : (
+                          <p
+                            key={p}
+                            className="font-display text-base uppercase leading-tight text-ppa-navy"
+                          >
+                            {p}
+                          </p>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="mt-4">
+                <ScoreRail />
+                <p className="mt-3 text-[11px] uppercase tracking-[0.12em] text-ppa-navy/35">
+                  Drag or swipe to browse
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
+    </>
+  );
+
+  const rankingsSection = (
+    <>
+        {/* ── World Pickleball Rankings ───────────────────────── */}
+        <section className="bg-ppa-navy">
+          <div className="mx-auto w-full max-w-6xl px-4 py-12">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <SectionHead label="Standings" title="World Pickleball Rankings" dark />
+              {/* Copy: Jeff + Nathan's audit doc, 7/27. */}
+              <p className="max-w-xs text-sm text-white/55 sm:text-right">
+                The official men&apos;s and women&apos;s world rankings —
+                who&apos;s the best of the best.
+              </p>
+            </div>
+
+            <div className="mt-6">
+              {/* Top 10 on the home/live surfaces; full list lives on /rankings. */}
+              <RankingsBoard
+                divisions={wpr.divisions.map((d) => ({ ...d, entries: d.entries.slice(0, 10) }))}
+              />
+            </div>
+
+            <Link
+              href="/rankings"
+              className="group mt-6 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-white hover:text-ppa-sky"
+            >
+              Full Rankings{" "}
+                <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+            </Link>
+          </div>
+        </section>
+    </>
+  );
+
   return (
     <>
       <script
@@ -251,7 +402,8 @@ export async function HomeContent({
           sizes="100vw"
           className="animate-kenburns will-change-transform object-cover object-[center_25%] motion-reduce:animate-none"
         />
-        <div className="absolute inset-0 scrim-hero" />
+        {/* Left-weighted scrim so the venue reads on the right (Hannah, 7/28). */}
+        <div className="absolute inset-0 scrim-hero-left" />
         <div className="absolute inset-0 scrim-side" />
         {/* Soften the header→hero seam: navy fades down into the hero image. */}
         <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-32 bg-gradient-to-b from-ppa-navy to-transparent" />
@@ -557,115 +709,18 @@ export async function HomeContent({
       {/* Stat band removed (Connor 7/27: the 25 stops / $5.2M / 4M sessions /
           150K fans bar "isn't doing anything" — lead with the next event). */}
 
-      {/* ── Live & Latest scores ───────────────────────────── */}
-      <section className="bg-white">
-        <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <SectionHead
-              label={live ? "Live Now" : latestChampions ? "Champions" : "Scores"}
-              title={live || !latestChampions ? "Live & Latest" : "Latest Champions"}
-              pulse={live}
-            />
-            {/* In the champions state "Full Results" moves down beside the
-                tournament name — Dave Rogers 7/27: over here on the right it
-                gets missed. */}
-            {!latestChampions && (
-              <Link
-                href={live ? `/brackets?event=${ATLANTA_EVENT_ID}` : "/watch"}
-                className="group text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
-              >
-                {live ? "View Full Bracket" : "Full Scores & Brackets"}{" "}
-                <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
-              </Link>
-            )}
-          </div>
-
-          {/* The band must SAY which event it covers (Connor, 7/20). */}
-          {(() => {
-            const chip = !live && latestChampions ? latestChampions.event : ev;
-            const name = !live && latestChampions ? latestChampions.event.shortName : ev.name;
-            return (
-              <p className="mt-3 inline-flex flex-wrap items-center gap-x-2 gap-y-1 border-l-2 border-ppa-blue bg-ppa-paper px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/70">
-                {name}
-                <span className="font-medium normal-case tracking-normal text-ppa-navy/50">
-                  {formatDateRange(chip.startDate, chip.endDate, true)} · {chip.city}
-                  {chip.state ? `, ${chip.state}` : ""}
-                </span>
-                {!live && latestChampions && (
-                  <Link
-                    href={eventHref(latestChampions.event)}
-                    className="group text-ppa-blue hover:text-ppa-navy"
-                  >
-                    Full Results{" "}
-                    <span
-                      aria-hidden
-                      className="inline-block transition-transform duration-300 group-hover:translate-x-0.5"
-                    >
-                      →
-                    </span>
-                  </Link>
-                )}
-              </p>
-            );
-          })()}
-
-          {live ? (
-            <div className="mt-4">
-              {/* The section's "View Full Bracket" link opens the full-page
-                  bracket, so the in-panel link is omitted (no expandHref). */}
-              <ScoresBracketToggle eventId={ATLANTA_EVENT_ID} light />
-            </div>
-          ) : latestChampions ? (
-            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {latestChampions.champions.map((c) => (
-                <div
-                  key={c.divisionId}
-                  className="flex items-center gap-4 rounded-md border border-ppa-line bg-ppa-paper p-4"
-                >
-                  <div className="flex shrink-0 -space-x-3">
-                    {c.players.map((p) => (
-                      <ChampionAvatar key={p} name={p} />
-                    ))}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-ppa-blue">
-                      {c.division}
-                    </p>
-                    {/* Champion names open their profile when the player is on
-                        our roster (Dave Rogers, 7/27). */}
-                    {c.players.map((p) => {
-                      const href = playerProfileHref(p);
-                      return href ? (
-                        <Link
-                          key={p}
-                          href={href}
-                          className="block font-display text-base uppercase leading-tight text-ppa-navy transition-colors hover:text-ppa-blue"
-                        >
-                          {p}
-                        </Link>
-                      ) : (
-                        <p
-                          key={p}
-                          className="font-display text-base uppercase leading-tight text-ppa-navy"
-                        >
-                          {p}
-                        </p>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="mt-4">
-              <ScoreRail />
-              <p className="mt-3 text-[11px] uppercase tracking-[0.12em] text-ppa-navy/35">
-                Drag or swipe to browse
-              </p>
-            </div>
-          )}
-        </div>
-      </section>
+      {/* Order flips off-season — see the note on scoresSection. */}
+      {live ? (
+        <>
+          {scoresSection}
+          {rankingsSection}
+        </>
+      ) : (
+        <>
+          {rankingsSection}
+          {scoresSection}
+        </>
+      )}
 
       {/* ── Top Storylines ──────────────────────────────────── */}
       <section className="bg-ppa-paper">
@@ -829,34 +884,6 @@ export async function HomeContent({
         </div>
       </section>
 
-      {/* ── World Pickleball Rankings ───────────────────────── */}
-      <section className="bg-ppa-navy">
-        <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <SectionHead label="Standings" title="World Pickleball Rankings" dark />
-            {/* Copy: Jeff + Nathan's audit doc, 7/27. */}
-            <p className="max-w-xs text-sm text-white/55 sm:text-right">
-              The official men&apos;s and women&apos;s world rankings —
-              who&apos;s the best of the best.
-            </p>
-          </div>
-
-          <div className="mt-6">
-            {/* Top 10 on the home/live surfaces; full list lives on /rankings. */}
-            <RankingsBoard
-              divisions={wpr.divisions.map((d) => ({ ...d, entries: d.entries.slice(0, 10) }))}
-            />
-          </div>
-
-          <Link
-            href="/rankings"
-            className="group mt-6 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-white hover:text-ppa-sky"
-          >
-            Full Rankings{" "}
-              <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
-          </Link>
-        </div>
-      </section>
 
       {/* ── The Tour / schedule ────────────────────────── */}
       <section className="bg-ppa-paper">

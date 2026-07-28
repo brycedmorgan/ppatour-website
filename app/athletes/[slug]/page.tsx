@@ -113,7 +113,8 @@ export default async function AthletePage({ params }: Params) {
   const a = await loadAthlete(slug);
   if (!a) notFound();
 
-  // Live stats from the player API (DUPR ratings, career medals, bio facts) +
+  // Live stats from the player API (DUPR ratings, career podium finishes, bio
+  // facts) +
   // per-division World Pickleball rankings. Null/empty when the API is
   // unavailable — the stats section simply hides.
   const stats = await getAthleteStats(slug);
@@ -178,7 +179,7 @@ export default async function AthletePage({ params }: Params) {
     { label: "WPR Points", value: a.points > 0 ? a.points.toLocaleString() : "—" },
     ...(topDupr != null ? [{ label: "DUPR", value: topDupr.toFixed(2) }] : []),
     ...(goldTotal != null && goldTotal > 0
-      ? [{ label: "Career Gold", value: String(goldTotal) }]
+      ? [{ label: "Career Titles", value: String(goldTotal) }]
       : []),
   ];
 
@@ -364,7 +365,7 @@ export default async function AthletePage({ params }: Params) {
         </div>
       </section>
 
-      {/* By the Numbers — rankings, DUPR + career medals (live player API) */}
+      {/* By the Numbers — rankings, DUPR + career podium finishes (live player API) */}
       {(stats?.hasStats || hasAnyDivRank) && (
         <section className="bg-white">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -411,15 +412,15 @@ export default async function AthletePage({ params }: Params) {
                 <div className="grid grid-cols-3 gap-3 sm:max-w-lg">
                   {(
                     [
-                      ["Gold", stats.medals.total.gold, "text-ppa-navy", "bg-ppa-yellow"],
-                      ["Silver", stats.medals.total.silver, "text-ppa-navy", "bg-ppa-line"],
-                      ["Bronze", stats.medals.total.bronze, "text-white", "bg-[#c98a3c]"],
+                      ["Titles", stats.medals.total.gold, "bg-ppa-yellow"],
+                      ["Finals", stats.medals.total.silver, "bg-ppa-blue"],
+                      ["Semifinals", stats.medals.total.bronze, "bg-ppa-line"],
                     ] as const
-                  ).map(([label, count, text, bar]) => (
+                  ).map(([label, count, bar]) => (
                     <div key={label} className="overflow-hidden rounded-md border border-ppa-line bg-ppa-paper">
                       <div className={`h-1.5 ${bar}`} />
                       <div className="px-4 py-4">
-                        <p className={`font-display text-4xl leading-none ${text === "text-white" ? "text-[#c98a3c]" : "text-ppa-navy"}`}>
+                        <p className="font-display text-4xl leading-none text-ppa-navy">
                           {count}
                         </p>
                         <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
@@ -436,7 +437,7 @@ export default async function AthletePage({ params }: Params) {
                       <thead>
                         <tr className="bg-ppa-navy text-white">
                           <th className="px-4 py-2 text-left text-[10px] font-bold uppercase tracking-[0.14em]">Division</th>
-                          {["Gold", "Silver", "Bronze"].map((h) => (
+                          {["Titles", "Finals", "Semifinals"].map((h) => (
                             <th key={h} className="px-4 py-2 text-right text-[10px] font-bold uppercase tracking-[0.14em]">{h}</th>
                           ))}
                         </tr>
@@ -492,7 +493,7 @@ export default async function AthletePage({ params }: Params) {
               In the Bag
             </p>
             <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] sm:text-3xl">
-              {a.name.split(" ")[0]}&apos;s Gear
+              {a.name}&apos;s Gear
             </h2>
             <div className="mt-6 flex flex-col gap-6 border border-white/12 bg-ppa-navy-deep p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
               <div>
@@ -548,7 +549,7 @@ export default async function AthletePage({ params }: Params) {
               Watch
             </p>
             <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-              {a.name.split(" ")[0]}&apos;s Highlights
+              {a.name}&apos;s Highlights
             </h2>
             <div className="mt-6">
               <AthleteVideos
