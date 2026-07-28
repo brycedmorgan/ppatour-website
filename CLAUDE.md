@@ -20,6 +20,60 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-28 — Website audit pass: Bryce's punch list + the 7/27 thread (`74f1d25`)
+- Worked Connor's "Full Website Audit Request" thread (Conner Ogden, Dave Rogers,
+  Jeff Watson + Nathan's Google doc) plus Bryce's own 7/28 punch list. Pushed to main.
+- **Homepage**: floating Veolia crest + floating "Featured Event" card removed (both
+  redundant with the hero; kept on `/live`); new **Next on Tour** strip above the five
+  callouts (next 3 stops then the next 3, text links + arrows); callouts 18rem → 23rem
+  and hero 58svh → 50svh; the Next-Event sub-bar now retires on first scroll —
+  `HideOnScroll` existed but was **orphaned**, now wired into `TopBar`.
+- **Rankings**: men's left / women's right side-by-side from `lg` up (kills the desktop
+  dead space Bryce flagged), toggle retained below `lg`. Same component powers the
+  homepage module, so both change together.
+- **Watch rebuilt broadcast-first**: "As Seen On" network band leads, then a real TV
+  guide (`components/watch/TvGuide.tsx`) showing the next four events day-by-day,
+  channel-by-channel. ⚠ **CBS + FOX are confirmed in `lib/broadcast.ts`; ESPN + NBC are
+  NOT in any broadcast sheet we hold** — they came from Connor's brief. Confirm with
+  Adam Friedman before launch; deleting a row in `AS_SEEN_ON` is the whole fix.
+- **VENUE PHOTOGRAPHY — the big one.** `VENUE_IMAGES` were Melbourne/Macao/Gold Coast
+  city shots cycling across the US calendar (Las Vegas illustrated with Brisbane, Worlds
+  with the Macau tower). Now: `lib/venue-photos.ts` joins **event slug → venue id → real
+  photography**, with two importers writing one manifest —
+  `scripts/import-venue-photos.mjs` (reads the event photo zips in `~/Downloads`, no
+  credentials) and `scripts/sync-venue-photos.mjs` (Jackalope's Blob library, **needs
+  `BLOB_READ_WRITE_TOKEN`** — OIDC is off for the dev environment).
+  **145 photos across 10 venues imported**; Cary/Mesa/Brookhaven/Lakeville/San
+  Clemente/Mission Hills lead with their own aerials and all now have galleries
+  (Worlds had none). **Still generic**: Las Vegas (`lv-summerlin`, 33 in Jackalope),
+  Virginia Beach (`pickleball-vb-va`, 24) and Chicago/Malibu (no library) — the first two
+  land the moment someone runs the Blob sync with a token.
+- **EventGallery → single horizontal rail** (Bryce: "one row gliding across instead of
+  taking up vertical space"): pointer-drag on desktop, native swipe on touch, arrows on
+  `lg`, drag-vs-click disambiguated so dragging never opens the lightbox.
+- **Broken links**: full crawl went **28 → 0**. Two real bugs — the TV schedule's Arizona
+  Open row pointed at the *2027* `carvana-mesa-cup` slug, and link-out events fell back
+  to `eventHref()` (which 404s) whenever `hasInternalPage` was undefined, i.e. any time
+  the events API is unreachable and we serve the curated list.
+- **Thread fixes**: YouTube no longer claims "every court, every match" (that's PBTV —
+  Dave); PBTV is the primary Watch CTA; athlete paddles → Pickleball Central; junior/
+  senior/state registration → the PPA-sanctioned event search; Proton + Acry-Tech tiles
+  link to the partner; Jeff/Nathan's copy for rankings/tour/callouts; "paddle skin" →
+  "paddle or something from the merch store"; event-rate → tournament-rate; the
+  "checkout lives off-site" line cut; 180-athlete count dropped; champion names +
+  "Full Results" clickable; Cary NC and "2,000 Ranking Points" now link out.
+- **Sponsors**: the logo IS the card — partner names are never typed beside their marks.
+  New `Partner.hideRole` makes Veolia + Humana logo-only; JOOLA keeps "Official Paddle
+  Partner". Applies on homepage, event pages, `/about/sponsors`, and the spotlight.
+- **Next / open for Bryce**: (1) the six decisions in the thread that need him +
+  Connor — news home (ppatour.com vs pickleball.com), ad inventory, Slam/Majors
+  nomenclature + what Worlds is, MLP's total absence, whether to make a statement above
+  the fold, and whether Buy Tickets is really the first callout; (2) confirm ESPN/NBC;
+  (3) run the Blob sync for Vegas + Virginia Beach; (4) Jeff flagged "remove square
+  bullets" on `/events` — left alone, it reads as the site-wide section marker and needs
+  him to point at the specific element; (5) per-discipline rankings/seeds (Dave) still
+  blocked on Wesley's feed — the Discipline control filters but can't sort.
+
 ### 2026-07-27 — APP Tour competitive briefing hosted at `/app-tour` (`396350c`)
 - Bryce needed a **public, forwardable** version of the APP registration analysis. The Jackalope
   module (`ziff` → Competitor Research) sits behind Google SSO, so stakeholders outside the company
