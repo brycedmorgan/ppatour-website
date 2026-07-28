@@ -20,6 +20,40 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-28 (pt. 2) — Hannah's audit round (`d991e03`)
+- Hannah Johns sent 18 items to the audit thread after the first pass shipped. Ten are live.
+- **Homepage order flips off-season**: the World Pickleball Rankings board takes the block
+  under the callouts, Latest Champions drops below it (her read: people come for rankings and
+  player profiles). `scoresSection` / `rankingsSection` are now consts in `HomeContent` and the
+  order is conditional — **live events still lead with the scores rail**.
+- **Hero right half lightened**: new `.scrim-hero-left` masks the vertical scrim away toward the
+  right above `lg`, so the space freed by removing the crest shows the venue instead of dead
+  navy. Below `lg` the full scrim stays (headline spans the width).
+- **All medal language gone** (her "doing away with medal terminology across the board"): rank
+  chips lost gold/silver/bronze for a top-five treatment in tour yellow; player pages read
+  Titles / Finals / Semifinals; "Career Gold" → "Career Titles".
+- **Footer social icons in brand colors**, Instagram via a real `linearGradient` def.
+- **History timeline was wrong and is now right** — we had founding 2018 and Carvana 2020.
+  Corrected off her Pickleball Central timeline doc: 2019 founding, Mesa 2020, player contracts
+  2021, Dundon + first CBS broadcast 2022, Dallas + Carvana 2023, merger 2024, global 2025.
+- **How It Works said six divisions and split mixed by gender** — it's five. Fixed there (event
+  pages already had it right).
+- Rankings page gains an **Event-Specific Standings** link to pickleball.com (her SEO point);
+  player profile headings use the **full name**; event pages get **See All Pros Competing**;
+  "The Current No. 1's" takes her apostrophe.
+- **⚠ NOT changed, needs a ruling**: she says Opens 500 / Cups 1500 / Majors 2000. The live tier
+  system is Opens 1000 / Cups 1500 / Championship 2000 / Worlds 3000, and Connor's 7/23 spec
+  ("The Tour = 1,000+ points") is baked into `getMainTourEvents()`, the events buckets and copy
+  in ~10 places. If Opens are really 500 the whole Tour bucket needs rethinking. Asked Connor.
+- **Blocked on data, not design** (told her so): career earnings, W/L + win streaks, latest
+  articles on profiles, paddle photos + specs, ranking movement arrows, per-event historical
+  champions, and the full tour records archive. All need Wesley's feeds. The records archive is
+  the highest-value one — evergreen SEO plus broadcast/stats utility.
+- **Blocked on content owners**: video hero, Point/Match/Clip of the Week, Pressroom section —
+  asked Jeff to own the weekly feed before we build the slots.
+- News consolidation deliberately deferred until Connor rules on ppatour.com vs pickleball.com,
+  so we restructure once instead of twice.
+
 ### 2026-07-28 — Website audit pass: Bryce's punch list + the 7/27 thread (`74f1d25`)
 - Worked Connor's "Full Website Audit Request" thread (Conner Ogden, Dave Rogers,
   Jeff Watson + Nathan's Google doc) plus Bryce's own 7/28 punch list. Pushed to main.
