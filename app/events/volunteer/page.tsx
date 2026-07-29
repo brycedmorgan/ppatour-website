@@ -11,14 +11,14 @@ export const metadata: Metadata = {
 
 /* ── Content ────────────────────────────────────────────────── */
 
-const REQUIREMENTS = [
-  "NEW volunteers must submit an application online",
-  "Commit to a minimum of 2 shifts",
-  "Sign a waiver and release form",
-  "Must be 18 years of age by the first day of the tournament (exceptions for ball crew)",
-  "Obtain the required training to learn the responsibilities of your position prior to the tournament",
-  "Adhere to all tournament policies and volunteer guidelines",
-  "Dedication to the success of the PPA tournament, commitment to excellence and teamwork",
+const REQUIREMENTS: { label: string; href?: string }[] = [
+  { label: "NEW volunteers must submit an application online", href: "#apply" },
+  { label: "Commit to a minimum of two shifts" },
+  { label: "Sign a waiver and release form" },
+  { label: "Must be 18 years of age by the first day of the tournament (exceptions for ball crew)" },
+  { label: "Obtain the required training to learn the responsibilities of your position prior to tournament start" },
+  { label: "Adhere to all tournament policies and volunteer guidelines" },
+  { label: "Dedication to the success of the Carvana PPA Tour tournament, a commitment to excellence, and teamwork" },
 ];
 
 const PERKS = [
@@ -219,9 +219,9 @@ export default function VolunteerPage() {
             Volunteer at the PPA Tour
           </h1>
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/75">
-            Tournament week runs on volunteers — the crew that welcomes fans,
-            keeps courts moving, and makes every stop feel like the biggest
-            event in pickleball. Be inside the ropes with us.
+            Every PPA tournament week runs on volunteers — the crew that
+            welcomes fans, keeps courts moving, and makes every tournament feel
+            like the biggest event in pickleball. Be inside the ropes with us.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <a
@@ -245,21 +245,27 @@ export default function VolunteerPage() {
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
             <div>
-              <SectionEyebrow>Volunteer Requirements</SectionEyebrow>
+              <SectionEyebrow>Volunteer Expectations</SectionEyebrow>
               <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
                 What We Ask of You
               </h2>
               <p className="mt-3 max-w-xl text-sm leading-relaxed text-ppa-navy/60">
-                Volunteers are required to commit to 2 shifts and to sign a
+                Volunteers are required to commit to two shifts and to sign a
                 waiver and release. Applicants are required to be photographed
                 for identification purposes, and acceptance of an applicant as
-                a volunteer is within the sole discretion of the PPA Tour.
+                a volunteer is at the sole discretion of the Carvana PPA Tour.
               </p>
               <ul className="mt-5 flex flex-col gap-2.5">
                 {REQUIREMENTS.map((r) => (
-                  <li key={r} className="flex items-start gap-2.5 text-sm text-ppa-navy/70">
+                  <li key={r.label} className="flex items-start gap-2.5 text-sm text-ppa-navy/70">
                     <span className="mt-1.5 h-1.5 w-1.5 shrink-0 bg-ppa-blue" />
-                    {r}
+                    {r.href ? (
+                      <a href={r.href} className="font-semibold text-ppa-blue hover:text-ppa-navy">
+                        {r.label}
+                      </a>
+                    ) : (
+                      r.label
+                    )}
                   </li>
                 ))}
               </ul>
