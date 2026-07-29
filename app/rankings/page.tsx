@@ -40,11 +40,11 @@ export default async function RankingsPage() {
             <p>
               Designed to identify the top overall pickleball players in the
               world, the World Pickleball Ranking is a composite ranking that
-              takes into account performance across all three events:
+              takes into account performance across all three disciplines:
               men&apos;s/women&apos;s doubles, mixed doubles, and singles.
             </p>
             <p>
-              The World Pickleball Rankings are determined using a weighted
+              The World Pickleball Ranking is determined using a weighted
               point system based on a combination of each player&apos;s Carvana
               PPA Tour points earned in the last 52 weeks across all three
               disciplines:
