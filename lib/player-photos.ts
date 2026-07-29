@@ -15,15 +15,33 @@ function norm(s: string): string {
     .trim();
 }
 
+/** "tyra hurricane black" → "tyra black": first + last token only. */
+function firstLast(normalized: string): string {
+  const parts = normalized.split(" ").filter(Boolean);
+  return parts.length > 2 ? `${parts[0]} ${parts[parts.length - 1]}` : normalized;
+}
+
 const byName = new Map<string, string>();
 const slugByName = new Map<string, string>();
+// Secondary index ignoring middle names — the results feeds carry them where the
+// roster doesn't (e.g. "Tyra Hurricane Black" vs our "Tyra Black"). Only filled
+// where it doesn't collide with a full-name key, so exact matches always win.
+const byFirstLast = new Map<string, string>();
+const slugByFirstLast = new Map<string, string>();
 for (const a of athletes) {
-  byName.set(norm(a.name), a.headshot);
-  slugByName.set(norm(a.name), a.slug);
+  const n = norm(a.name);
+  byName.set(n, a.headshot);
+  slugByName.set(n, a.slug);
+  const fl = firstLast(n);
+  if (fl !== n) {
+    byFirstLast.set(fl, a.headshot);
+    slugByFirstLast.set(fl, a.slug);
+  }
 }
 
 export function playerPhoto(name: string): string | null {
-  return byName.get(norm(name)) ?? null;
+  const n = norm(name);
+  return byName.get(n) ?? byFirstLast.get(firstLast(n)) ?? byName.get(firstLast(n)) ?? null;
 }
 
 /**
@@ -32,7 +50,9 @@ export function playerPhoto(name: string): string | null {
  * homepage should open the player's page.
  */
 export function playerProfileHref(name: string): string | null {
-  const slug = slugByName.get(norm(name));
+  const n = norm(name);
+  const slug =
+    slugByName.get(n) ?? slugByFirstLast.get(firstLast(n)) ?? slugByName.get(firstLast(n));
   return slug ? `/athletes/${slug}` : null;
 }
 

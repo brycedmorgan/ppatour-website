@@ -18,7 +18,9 @@ import { publishedHotelsFor } from "@/lib/published-hotels";
 import { ResultsPanel } from "@/components/live/ResultsPanel";
 import { ChampionsBanner } from "@/components/live/ChampionsBanner";
 import { ReplayGallery } from "@/components/live/ReplayGallery";
+import { getDefendingChampions } from "@/lib/defending-champions";
 import { getReplayPlaylistId } from "@/lib/event-replays";
+import { playerInitials, playerPhoto, playerProfileHref } from "@/lib/player-photos";
 import { getPlaylistVideos } from "@/lib/youtube";
 import { Countdown } from "@/components/motion/Countdown";
 import { getBroadcast } from "@/lib/broadcast";
@@ -91,14 +93,6 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     twitter: { card: "summary_large_image", images: [t.image] },
   };
 }
-
-const DIVISIONS = [
-  "Men's Singles",
-  "Women's Singles",
-  "Men's Doubles",
-  "Women's Doubles",
-  "Mixed Doubles",
-];
 
 const HOW_TO_WATCH: {
   name: string;
@@ -245,6 +239,13 @@ export default async function EventPage({ params }: Params) {
   const replayPlaylistId = getReplayPlaylistId(t.slug);
   const replays = replayPlaylistId ? await getPlaylistVideos(replayPlaylistId) : [];
   const showReplays = replays.length > 0;
+
+  // Last season's winners per division. A curated `defendingChampions` on the
+  // record wins; otherwise the prior-year podium generated into
+  // lib/data/defending-champions.json. [] → the honest fallback copy below.
+  const defendingChampions = t.defendingChampions?.length
+    ? t.defendingChampions
+    : getDefendingChampions(year, t.slug);
 
   const TABS = [
     { id: "overview", label: "Overview" },
@@ -1236,43 +1237,66 @@ export default async function EventPage({ params }: Params) {
 
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
-                Divisions
+                Last Season
               </p>
               <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-                Five Brackets, {tierPoints(t).toLocaleString()} Points
-              </h2>
-              <ul className="mt-5 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-2">
-                {DIVISIONS.map((d) => (
-                  <li
-                    key={d}
-                    className="flex items-center gap-2 bg-white p-3 text-sm font-semibold text-ppa-navy"
-                  >
-                    <span className="size-1.5 bg-ppa-blue" />
-                    {d}
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-5 text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 Defending Champions
-              </p>
-              {t.defendingChampions && t.defendingChampions.length > 0 ? (
-                <div className="mt-2 border-t border-ppa-line">
-                  {t.defendingChampions.map((c) => (
-                    <div
-                      key={c.division}
-                      className="flex items-center justify-between gap-3 border-b border-ppa-line py-2.5"
-                    >
-                      <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/45">
+              </h2>
+              {defendingChampions.length > 0 ? (
+                <div className="mt-5 flex flex-col gap-px border border-ppa-line bg-ppa-line">
+                  {defendingChampions.map((c) => (
+                    <div key={c.division} className="bg-white p-3">
+                      <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
                         {c.division}
                       </span>
-                      <span className="font-display text-sm uppercase text-ppa-navy">
-                        {c.name}
-                      </span>
+                      {/* Champion names arrive joined ("A & B") — split so each
+                          player gets their own headshot + profile link. */}
+                      <div className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-2">
+                        {c.name.split(" & ").map((player) => {
+                          const photo = playerPhoto(player);
+                          const href = playerProfileHref(player);
+                          const chip = (
+                            <>
+                              <span className="relative size-9 shrink-0 overflow-hidden rounded-full bg-ppa-navy-deep">
+                                {photo ? (
+                                  <Image
+                                    src={photo}
+                                    alt={player}
+                                    fill
+                                    sizes="36px"
+                                    className="object-cover object-top"
+                                  />
+                                ) : (
+                                  <span className="flex h-full w-full items-center justify-center text-[10px] font-bold text-white/70">
+                                    {playerInitials(player)}
+                                  </span>
+                                )}
+                              </span>
+                              <span className="font-display text-sm uppercase leading-tight text-ppa-navy transition-colors group-hover:text-ppa-blue">
+                                {player}
+                              </span>
+                            </>
+                          );
+                          return href ? (
+                            <Link
+                              key={player}
+                              href={href}
+                              className="group flex min-w-0 items-center gap-2"
+                            >
+                              {chip}
+                            </Link>
+                          ) : (
+                            <span key={player} className="flex min-w-0 items-center gap-2">
+                              {chip}
+                            </span>
+                          );
+                        })}
+                      </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="mt-2 border-t border-ppa-line py-3 text-sm text-ppa-navy/50">
+                <p className="mt-5 border border-ppa-line bg-white p-3 text-sm text-ppa-navy/50">
                   Confirmed once last season&apos;s champions are set — the
                   titleholders will defend right here.
                 </p>
