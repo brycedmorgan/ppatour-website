@@ -45,7 +45,7 @@ const LANES = [
   },
   {
     href: "/events",
-    image: "/ppa/action-waters-bright.jpg",
+    image: "/ppa/tickets-worlds-crowd.jpg",
     title: "Tickets",
     blurb: "Be there for every iconic moment.",
   },
