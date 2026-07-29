@@ -813,7 +813,13 @@ export async function HomeContent({
       {/* ── Latest News ─────────────────────────────────────── */}
       <section className="bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <SectionHead label="Newsroom" title="Latest News" />
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <SectionHead label="Newsroom" title="Latest News" />
+            <p className="max-w-sm text-sm text-ppa-navy/55 sm:text-right">
+              Tournament recaps, analysis, player profiles, and the race to the
+              PPA Finals — every storyline shaping the Carvana PPA Tour.
+            </p>
+          </div>
 
           <div className="mt-6 grid gap-8 lg:grid-cols-3">
             {/* PPA Tour's own newsroom */}
