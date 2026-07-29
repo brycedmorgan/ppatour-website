@@ -27,8 +27,8 @@ export default function NewsPage() {
             The Latest from the PPA Tour
           </h1>
           <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
-            Recaps, analysis, athlete profiles, and the race report —
-            every storyline shaping the 2026 season.
+            Tournament recaps, analysis, player profiles, and the race to the
+            PPA Finals — every storyline shaping the Carvana PPA Tour.
           </p>
         </div>
       </section>
