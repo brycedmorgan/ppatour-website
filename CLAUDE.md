@@ -20,6 +20,46 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-29 — Connor's morning texts: fake 1,000s, Dink, paddles, About (`c09760e`)
+- Worked Connor's 7/29 iMessage list (plus his 7/28 Watch note). Pushed to main.
+- **The fake 1,000-point events — root cause found.** `inferTier()` in
+  `lib/events-api.ts` defaulted every unrecognized event to `open` = 1,000 pts, so
+  one-day MLP qualifiers at Australian clubs sat in the "1,000+ Points / Next Six on
+  Tour" band. Now qualifier/league/junior/senior/camp names **and any event under
+  three days** drop to `challenger` → Other Events. Verifying against the live feed
+  turned up two more: **"PPA125 - GOLD COAST"** read as 1,000 because
+  `tierFromName`'s `\b` never matches inside "PPA125" (regex now `(?:\b|PPA)P?…`),
+  and **"PPA Spain: Template"** was rendering as a live tour stop (now junk-filtered
+  with `/template|test event|TBD/`).
+- **"The Dink Minor League" — four events dropped from the feed entirely**
+  (`NON_TOUR_NAME` in `isJunk`). Third-party minor league on the same tournament
+  platform, not ours to promote.
+- **Australian names cleaned**: trailing `@ Venue` and the leading region word come
+  off in `cleanTitle` — the venue field and country chip already say both.
+- **Player profiles → Pickleball Central, never the manufacturer.** Ben Johns' paddle
+  was going to joola.com. The "Shop JOOLA" button is gone; "Buy This Paddle" → PBC.
+  Partner still *named* on the card; `GearLink.brandHref` retains the store URL so
+  restoring the button is one line if Connor reverses it.
+- **About page stat band deleted** (his "can't show that prize money number and those
+  stats") — 25 stops / $5.2M / 12 countries / 150K fans. Same on `/about/pro-tour`,
+  replaced with structural facts (20 stops / 5 divisions / 4 majors / 1,000+ pts).
+  While in there: copy still credited the **Toys "R" Us** PPA Finals and claimed
+  FOX/FS1/YouTube carry every match; **stop count was 25 in five places and 18 in
+  four** — it's **20**, normalized sitewide off `getMainTourEvents()`.
+- **Watch page rebuilt to his 7/28 spec**: real network marks (CBS/FOX/ESPN/NBC/Tennis
+  Channel) on white tiles five-across — white because network logos are colour-locked
+  and a knocked-out version isn't ours to make — then the **PickleballTV banner
+  directly under the big five**, then where-to-watch. SVGs in `public/ppa/networks/`.
+- **⚠ ESPN + NBC still unconfirmed** in any broadcast sheet we hold. That mattered less
+  when we typed the names in Gotham; we now publish their actual trademarks. Adam
+  Friedman needs to confirm — deleting a row in `AS_SEEN_ON` is the whole fix.
+- **Not done, needs Bryce**: the header ("too many chiefs", "should look electric") —
+  that's his own redesign call, not a spec I could execute. Also his own ask to put
+  **staff photos on the site** (searchable) has no owner or asset source yet.
+- Gotcha for next session: `next start` serves `public/` from a **boot-time** manifest,
+  and a stale server on :3000 will silently 404 newly added assets. `lsof -ti:3000 |
+  xargs kill -9` before trusting a local verify.
+
 ### 2026-07-28 (pt. 2) — Hannah's audit round (`d991e03`)
 - Hannah Johns sent 18 items to the audit thread after the first pass shipped. Ten are live.
 - **Homepage order flips off-season**: the World Pickleball Rankings board takes the block
