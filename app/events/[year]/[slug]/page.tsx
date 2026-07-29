@@ -1296,9 +1296,12 @@ export default async function EventPage({ params }: Params) {
                   ))}
                 </div>
               ) : (
+                // Every stop that hits this state has no prior-year event at
+                // all (see scripts/gen-defending-champions.mjs), so don't imply
+                // champions are pending — there are none to defend.
                 <p className="mt-5 border border-ppa-line bg-white p-3 text-sm text-ppa-navy/50">
-                  Confirmed once last season&apos;s champions are set — the
-                  titleholders will defend right here.
+                  No titles to defend — this stop crowns its first champions
+                  this year.
                 </p>
               )}
             </div>

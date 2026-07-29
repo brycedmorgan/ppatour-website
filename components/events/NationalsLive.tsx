@@ -1328,8 +1328,8 @@ export function NationalsLive() {
                 </div>
               ) : (
                 <p className="mt-2 border-t border-ppa-line py-3 text-sm text-ppa-navy/50">
-                  Confirmed once last season&apos;s champions are set — the
-                  titleholders will defend right here.
+                  No titles to defend — this stop crowns its first champions
+                  this year.
                 </p>
               )}
             </div>
