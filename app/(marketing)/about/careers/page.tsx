@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { InquiryForm } from "@/components/forms/InquiryForm";
 
 export const metadata: Metadata = {
   title: "Careers",
@@ -49,6 +50,19 @@ export default function CareersPage() {
           <p className="mt-6 text-sm text-ppa-navy/60">
             Don&apos;t see the right fit? Send a note about your background and what you want to build. We read every email.
           </p>
+        </div>
+      </section>
+
+      <section className="bg-ppa-paper">
+        <div className="mx-auto w-full max-w-3xl px-4 py-12">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">Get in Touch</p>
+          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">Introduce Yourself</h2>
+          <p className="mt-3 max-w-2xl text-sm text-ppa-navy/55">
+            Tell us about your background and what you want to build — link your resume or portfolio and we&apos;ll follow up.
+          </p>
+          <div className="mt-6">
+            <InquiryForm formType="careers" />
+          </div>
         </div>
       </section>
     </>

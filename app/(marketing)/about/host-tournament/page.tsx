@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { InquiryForm } from "@/components/forms/InquiryForm";
 
 export const metadata: Metadata = {
   title: "Host a PPA Tour Tournament",
@@ -35,7 +36,7 @@ export default function HostTournamentPage() {
             Bring the pros to your city. The PPA Tour partners with venues, resorts, and CVBs nationwide to deliver six-day, broadcast-quality tour events that fill rooms and pack courts.
           </p>
           <div className="mt-5">
-            <a href="mailto:tournaments@ppatour.com" className="inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-ppa-blue-deep">
+            <a href="#rfp" className="inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-ppa-blue-deep">
               Submit a Bid →
             </a>
           </div>
@@ -81,6 +82,34 @@ export default function HostTournamentPage() {
               <p className="mt-5 text-[11px] uppercase tracking-[0.1em] text-ppa-navy/35">Bids reviewed weekly. Sites typically lock 9–12 months ahead.</p>
               <Link href="/about/private-events" className="mt-5 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue">Or host a private event →</Link>
             </aside>
+          </div>
+        </div>
+      </section>
+
+      {/* Classic Series RFP form (GF #7) */}
+      <section id="rfp" className="bg-white scroll-mt-24">
+        <div className="mx-auto w-full max-w-3xl px-4 py-12">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">Venue Application</p>
+          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">PPA Tour Classic Series RFP</h2>
+          <p className="mt-3 text-sm text-ppa-navy/55">
+            Submit your venue details and any supporting documents. Selected venues are contacted to finalize a contract.
+          </p>
+          <div className="mt-6">
+            <InquiryForm formType="host-tournament" />
+          </div>
+        </div>
+      </section>
+
+      {/* International / bring-an-event inquiry (GF #20) */}
+      <section id="event-inquiry" className="bg-ppa-paper scroll-mt-24">
+        <div className="mx-auto w-full max-w-3xl px-4 py-12">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">Bring an Event to Your Market</p>
+          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">PPA Tour Event Inquiry</h2>
+          <p className="mt-3 text-sm text-ppa-navy/55">
+            Want to bring a PPA Tour event to your city or country? Tell us about your organization and proposed event.
+          </p>
+          <div className="mt-6">
+            <InquiryForm formType="event-inquiry" />
           </div>
         </div>
       </section>

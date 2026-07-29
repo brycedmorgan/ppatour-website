@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { InquiryForm } from "@/components/forms/InquiryForm";
 
 export const metadata: Metadata = { title: "Integrity Reporting" };
 
@@ -43,6 +44,19 @@ export default function IntegrityPage() {
           <p className="mt-6 text-sm text-ppa-navy/60">
             For urgent concerns during an event, alert any tour official on-site — they are trained to escalate immediately.
           </p>
+        </div>
+      </section>
+
+      <section className="bg-ppa-paper">
+        <div className="mx-auto w-full max-w-3xl px-4 py-12">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">Confidential Channel</p>
+          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">File a Report</h2>
+          <p className="mt-3 max-w-2xl text-sm text-ppa-navy/55">
+            Reviewed confidentially by the integrity team. To file anonymously, leave your name and email blank.
+          </p>
+          <div className="mt-6">
+            <InquiryForm formType="reporting" />
+          </div>
         </div>
       </section>
     </>

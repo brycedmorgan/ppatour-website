@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { InquiryForm } from "@/components/forms/InquiryForm";
 
 export const metadata: Metadata = {
   title: "Host a Private Event",
@@ -28,7 +29,7 @@ export default function PrivateEventsPage() {
             From corporate pro-ams to client hospitality at a tour stop, the PPA produces premium private events featuring tour pros, broadcast-grade production, and full activation support.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <a href="mailto:events@ppatour.com" className="inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-ppa-blue-deep">Inquire →</a>
+            <a href="#inquire" className="inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-ppa-blue-deep">Inquire →</a>
             <Link href="/tour/hospitality" className="inline-flex h-11 items-center border border-ppa-line bg-white px-6 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:border-ppa-blue hover:text-ppa-blue">Or browse on-site hospitality</Link>
           </div>
         </div>
@@ -49,15 +50,15 @@ export default function PrivateEventsPage() {
         </div>
       </section>
 
-      <section className="bg-ppa-navy">
-        <div className="mx-auto w-full max-w-6xl px-4 py-12 text-white">
-          <div className="grid gap-6 sm:grid-cols-[1fr_auto] sm:items-center">
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">Ready</p>
-              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] sm:text-3xl">Tell Us About Your Event</h2>
-              <p className="mt-2 max-w-xl text-sm text-white/65">Share your dates, headcount, and goals and we&apos;ll come back with a tailored plan and a quote within five business days.</p>
-            </div>
-            <a href="mailto:events@ppatour.com" className="flex h-12 items-center justify-center bg-ppa-blue px-8 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-ppa-blue-deep">events@ppatour.com</a>
+      <section id="inquire" className="bg-ppa-paper scroll-mt-24">
+        <div className="mx-auto w-full max-w-3xl px-4 py-12">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">Ready</p>
+          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">Tell Us About Your Event</h2>
+          <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
+            Share your dates, headcount, and goals and we&apos;ll come back with a tailored plan within five business days.
+          </p>
+          <div className="mt-6">
+            <InquiryForm formType="private-event" />
           </div>
         </div>
       </section>

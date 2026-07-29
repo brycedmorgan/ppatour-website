@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { partners } from "@/lib/home-content";
 import { withUtm } from "@/lib/utm";
+import { InquiryForm } from "@/components/forms/InquiryForm";
 
 type FooterLink = { label: string; href: string; external?: boolean };
 
@@ -185,6 +186,21 @@ export function SiteFooter() {
                   </svg>
                 </a>
               ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Newsletter signup (GF #2) */}
+        <div className="mt-10 border-t border-white/10 pt-8">
+          <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-center">
+            <div>
+              <p className="font-display text-lg uppercase text-white">Stay in the Know</p>
+              <p className="mt-1 max-w-md text-[13px] leading-relaxed text-white/55">
+                Be among the first to know about upcoming events, promotions, giveaways, news, and more.
+              </p>
+            </div>
+            <div className="w-full sm:w-80">
+              <InquiryForm formType="newsletter" />
             </div>
           </div>
         </div>

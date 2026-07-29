@@ -3,7 +3,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { ComingSoon } from "@/components/global/ComingSoon";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
+import { InquiryForm } from "@/components/forms/InquiryForm";
 import { getTourProgram, tourPrograms } from "@/lib/tour-programs";
+
+// Tour-program slugs that carry a form (matches lib/forms/schema.ts keys).
+const PROGRAM_FORM: Record<string, "hospitality" | "newsletter-junior"> = {
+  hospitality: "hospitality",
+  junior: "newsletter-junior",
+};
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -37,6 +44,7 @@ export default async function TourProgramPage({ params }: Params) {
   }
 
   const others = tourPrograms.filter((p) => p.slug !== program.slug);
+  const formType = PROGRAM_FORM[program.slug];
 
   return (
     <>
@@ -117,6 +125,23 @@ export default async function TourProgramPage({ params }: Params) {
           </div>
         </div>
       </section>
+
+      {/* Program form (hospitality booking / junior newsletter) */}
+      {formType && (
+        <section className="bg-white">
+          <div className="mx-auto w-full max-w-3xl px-4 py-12">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
+              {formType === "hospitality" ? "Book Hospitality" : "Stay in the Know"}
+            </p>
+            <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+              {formType === "hospitality" ? "Request Hospitality" : "Junior PPA Tour Newsletter"}
+            </h2>
+            <div className="mt-6">
+              <InquiryForm formType={formType} />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Cross-link to other programs */}
       <section className="bg-white">

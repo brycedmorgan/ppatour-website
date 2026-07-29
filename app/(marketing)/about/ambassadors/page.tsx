@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { InquiryForm } from "@/components/forms/InquiryForm";
 
 export const metadata: Metadata = {
   title: "Ambassador Program",
@@ -28,7 +29,7 @@ export default function AmbassadorPage() {
             Pickleball creators, club owners, coaches, and community leaders who carry the tour into every market. Ambassadors get exclusive access, event perks, and an affiliate revenue share.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <a href="mailto:ambassadors@ppatour.com" className="inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-ppa-blue-deep">Apply →</a>
+            <a href="#apply" className="inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-ppa-blue-deep">Apply →</a>
             <Link href="/about/international-ambassadors" className="inline-flex h-11 items-center border border-ppa-line bg-white px-6 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:border-ppa-blue hover:text-ppa-blue">International Program</Link>
           </div>
         </div>
@@ -46,6 +47,20 @@ export default function AmbassadorPage() {
                 <p className="mt-1.5 text-xs leading-relaxed text-ppa-navy/60">{p.note}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Ambassador application (GF #6) */}
+      <section id="apply" className="bg-ppa-paper scroll-mt-24">
+        <div className="mx-auto w-full max-w-3xl px-4 py-12">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">Apply</p>
+          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">Ambassador Program Application</h2>
+          <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
+            Tell us about yourself and your reach. We review every application.
+          </p>
+          <div className="mt-6">
+            <InquiryForm formType="ambassador" />
           </div>
         </div>
       </section>
