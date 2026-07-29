@@ -75,6 +75,7 @@ export function venuePhotosFor(slug: string): VenuePhoto[] {
 const HERO_OVERRIDE_BY_EVENT_SLUG: Record<string, string> = {
   "veolia-arizona-open": "/ppa/venues/aag-mesa/featured-mesa-cup.jpg",
   "rate-las-vegas-open": "/ppa/venues/lv-summerlin/featured-vegas-cup.jpg",
+  "veolia-chicago-cup": "/ppa/venues/lt-northbrook/featured-aerial.jpg",
 };
 
 /**
