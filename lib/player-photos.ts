@@ -39,9 +39,26 @@ for (const a of athletes) {
   }
 }
 
+/**
+ * Headshots for players the scores/rankings feed surfaces (e.g. as champions)
+ * who aren't in the curated roster yet. Without this they render an initials
+ * chip on the homepage champions band even though pickleball.com has a photo.
+ * Keyed by normalized name.
+ */
+const EXTRA_HEADSHOTS: Record<string, string> = {
+  "christopher haworth": "/ppa/pros/christopher-haworth.jpg",
+  "chris haworth": "/ppa/pros/christopher-haworth.jpg",
+};
+
 export function playerPhoto(name: string): string | null {
   const n = norm(name);
-  return byName.get(n) ?? byFirstLast.get(firstLast(n)) ?? byName.get(firstLast(n)) ?? null;
+  return (
+    byName.get(n) ??
+    byFirstLast.get(firstLast(n)) ??
+    byName.get(firstLast(n)) ??
+    EXTRA_HEADSHOTS[n] ??
+    null
+  );
 }
 
 /**
