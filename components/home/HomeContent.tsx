@@ -39,7 +39,7 @@ import {
 const LANES = [
   {
     href: "/watch",
-    image: "/ppa/action-champ-sunday.jpg",
+    image: "/ppa/watch-broadcast-desk.jpg",
     title: "Watch",
     blurb: "Live streams, match results, and broadcast schedule.",
   },
