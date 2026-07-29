@@ -68,11 +68,24 @@ export function venuePhotosFor(slug: string): VenuePhoto[] {
 }
 
 /**
- * The hero/card image for an event: its own venue, aerial first (Connor's
- * standing rule — events lead with venue/aerial photography, not player
- * shots), then a wide venue shot. Null when the venue hasn't been synced.
+ * Per-event hero overrides. When we want a specific card/hero image for one
+ * event (regardless of the synced venue set, and without changing another
+ * event that shares the same venue), pin it here. Gallery is unaffected.
+ */
+const HERO_OVERRIDE_BY_EVENT_SLUG: Record<string, string> = {
+  "veolia-arizona-open": "/ppa/venues/aag-mesa/featured-mesa-cup.jpg",
+  "rate-las-vegas-open": "/ppa/venues/lv-summerlin/featured-vegas-cup.jpg",
+};
+
+/**
+ * The hero/card image for an event: an explicit override first, then its own
+ * venue, aerial first (Connor's standing rule — events lead with venue/aerial
+ * photography, not player shots), then a wide venue shot. Null when the venue
+ * hasn't been synced.
  */
 export function venueHeroFor(slug: string): string | null {
+  const override = HERO_OVERRIDE_BY_EVENT_SLUG[slug];
+  if (override) return override;
   const photos = venuePhotosFor(slug);
   if (!photos.length) return null;
   const pick =
