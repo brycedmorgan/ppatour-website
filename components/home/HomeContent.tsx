@@ -400,7 +400,7 @@ export async function HomeContent({
           priority
           quality={65}
           sizes="100vw"
-          className="animate-kenburns will-change-transform object-cover object-[center_25%] motion-reduce:animate-none"
+          className="animate-kenburns will-change-transform object-cover object-[center_60%] motion-reduce:animate-none"
         />
         {/* Left-weighted scrim so the venue reads on the right (Hannah, 7/28). */}
         <div className="absolute inset-0 scrim-hero-left" />
