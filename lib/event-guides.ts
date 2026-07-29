@@ -155,7 +155,13 @@ export const eventGuides: Record<string, EventGuide> = {
         name: "Holiday Inn Express Prospect Heights",
         tag: "Official",
         note: "600 N Milwaukee Ave, Prospect Heights — PPA group rate",
-        href: "https://www.ihg.com/holidayinnexpress/hotels/us/en/find-hotels/select-roomrate?fromRedirect=true&qSrt=sBR&qSlH=CHIAM&qRms=1&qAdlt=1&setPMCookies=true&qSHBrC=EX&showApp=true",
+        // ⚠ NO href ON PURPOSE. The link from Kristen's thread 404s at IHG
+        // (verified 7/29 with a browser UA — a real 404, not IHG's usual 403
+        // bot-block): its `qSlH=CHIAM` hotel code isn't Prospect Heights, and
+        // every other IHG link in this file uses the /redirect?hotelCode= form.
+        // The row degrades to name + address + rate with no Book button, which
+        // beats sending a fan to a dead page. Guessing a hotel code risks
+        // booking them into the wrong hotel — needs the real link from Kristen.
         brand: "ihg",
       },
     ],
@@ -518,7 +524,11 @@ export const eventGuides: Record<string, EventGuide> = {
         name: "Hampton Inn & Suites Farmers Branch",
         tag: "Official",
         note: "1570 Mira Lago Blvd — hot breakfast, free parking + wi-fi",
-        href: "https://links.h6.hilton.com/f/a/nDfI_CdUBl6geagohKipyA~~/AAQRxRA~/JsbxiRmOhFfiMlei-xrAps2D6Dntfy_vejChtRKz2hMkj4DP-XB7P7mEZ08IexqDhrcF4eGdaa8dOAbxKTm0lfDiL08LM0f1-suYval3BYx7qOeNEyAs_cEDVTtleikSSZJapmgnc_MaDwh0Sh_u6Av5YeDPNFvSFPVeF4pVNi1svvoTH6GOqxVwENrdu3eh",
+        // Was an `links.h6.hilton.com` email-tracking URL out of Kristen's
+        // thread. Resolved it 7/29 (200 → this canonical attend-my-event page)
+        // and swapped it in — tracking redirects expire, the canonical doesn't.
+        // Also closes the "needs Kristen's confirmation" flag from 7/16: good.
+        href: "https://www.hilton.com/en/attend-my-event/daljkhx-pic-85a4022e-fa11-4731-bad1-08d2d00cc291/",
         brand: "hilton",
         rate: "$139 until Aug 31, then $159",
         cutoff: "Book by Aug 31",

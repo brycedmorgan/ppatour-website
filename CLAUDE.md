@@ -35,6 +35,28 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-29 (pt. 3) — Full link crawl of the live site: 2 real hotel breaks
+- Crawled all **256 sitemap routes** live: every page 200s, **0 broken internal links**
+  across 265 internal hrefs. The 7/28 "28 → 0" result holds and this session's changes
+  didn't regress it. Crawler saved at `scratchpad/crawl.mjs` if it's worth committing.
+- 135 external non-200s, but **almost all are bot-blocks, not breaks** — tixr, Carvana,
+  Hilton, Best Western and IHG all 403 automated HEAD/GET. Confirmed by control: the
+  known-good tixr group page 403s too. `pickleballtournaments.com` ETIMEDOUTs were my
+  own crawl concurrency; it's 200 on a single request. **Don't chase these.**
+- **Two real findings, both hotels, both previously flagged "needs Kristen" on 7/16:**
+  - **Chicago Holiday Inn Express Prospect Heights — genuine 404** (verified with a
+    browser UA, so not the 403 bot-block). Its `qSlH=CHIAM` hotel code isn't Prospect
+    Heights and the URL form differs from every other IHG link in the file. **href
+    removed** — the row degrades to name + address + rate with no Book button, which
+    beats a dead page. Not guessing a hotel code: wrong hotel is worse than no link.
+    **Still needs the real link from Kristen.**
+  - **Hampton Inn Farmers Branch — good, and now durable.** The `links.h6.hilton.com`
+    email-tracking URL resolves 200 to a canonical `attend-my-event` page; swapped the
+    canonical in, since tracking redirects expire. Closes that 7/16 flag.
+- Method note for next time: verify a suspected broken external link **individually with
+  a browser User-Agent** before acting. A concurrent crawl produces mostly false
+  positives on travel/commerce domains.
+
 ### 2026-07-29 (pt. 2) — Bryce's rulings: Opens, Worlds, ad inventory
 - Three of the six open audit-thread decisions are now closed. See **Standing rulings**
   above — Opens 1,000, Worlds is the biggest Major, ad inventory dropped.
