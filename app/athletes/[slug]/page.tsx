@@ -510,28 +510,15 @@ export default async function AthletePage({ params }: Params) {
                 )}
               </div>
               {/* Conner Ogden 7/27: link the pro's paddle so a fan can buy the
-                  same one. Official-partner brands lead with their own store;
-                  Pickleball Central always sits alongside it. */}
+                  same one. Connor 7/29: that link is ALWAYS Pickleball Central
+                  for now — never the manufacturer. The partner brand is still
+                  named above; only the destination changed. */}
               <div className="flex shrink-0 flex-col gap-2.5 sm:flex-row sm:items-center">
-                {gear.brand && (
-                  <a
-                    href={gear.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex h-12 shrink-0 items-center justify-center bg-ppa-blue px-7 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
-                  >
-                    Shop {gear.brand} ↗
-                  </a>
-                )}
                 <a
                   href={gear.pbcHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`inline-flex h-12 shrink-0 items-center justify-center px-7 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors ${
-                    gear.brand
-                      ? "border border-white/25 hover:border-ppa-blue hover:bg-ppa-blue"
-                      : "bg-ppa-blue hover:bg-ppa-blue-deep"
-                  }`}
+                  className="inline-flex h-12 shrink-0 items-center justify-center bg-ppa-blue px-7 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
                 >
                   Buy This Paddle ↗
                 </a>

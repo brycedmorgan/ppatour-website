@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 const TEAMS = [
-  { name: "Tour Operations", note: "Run the eighteen-stop calendar — logistics, sanctioning, on-site." },
+  { name: "Tour Operations", note: "Run the twenty-stop calendar — logistics, sanctioning, on-site." },
   { name: "Broadcast & Production", note: "PBTV streaming, Tennis Channel and FOX windows, on-site truck." },
   { name: "Marketing & Brand", note: "Owned media, partner activations, social, ticketing." },
   { name: "Player Relations", note: "The pros, rankings, brackets, and the rules of competition." },

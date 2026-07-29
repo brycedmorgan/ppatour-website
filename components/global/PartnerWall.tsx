@@ -79,7 +79,7 @@ export function PartnerWall({
                 )}
                 <p className="mt-2 max-w-xl text-sm text-ppa-navy/55">
                   {eventName
-                    ? `The named partner of the tour — on court at ${eventName} and all 25 stops.`
+                    ? `The named partner of the tour — on court at ${eventName} and all twenty stops.`
                     : title.note}
                 </p>
               </div>

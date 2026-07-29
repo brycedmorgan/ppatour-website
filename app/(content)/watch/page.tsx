@@ -40,19 +40,35 @@ export const metadata: Metadata = {
  * National-television networks that have carried the tour (Bryce 7/28: lead
  * the page with "As seen on CBS, Fox, ESPN, NBC").
  *
+ * Connor 7/29: "Let's use actual logos — those 5 on top, then a good
+ * PickleballTV banner below the big 5, then where to watch." So these are real
+ * network marks on white tiles (network logos are colour-locked; the previous
+ * treatment typed the names in Gotham, which read as placeholder), and the PBTV
+ * banner is its own block underneath.
+ *
  * ⚠ CBS, FOX and FS1/FS2 are confirmed in `lib/broadcast.ts` (transcribed from
  * the Championship Court sheet). ESPN and NBC are NOT in any broadcast sheet
  * we hold — they came from Connor's brief. Confirm with Adam Friedman before
- * launch; deleting a row here is the whole fix if either is wrong.
- * Network marks: only Tennis Channel's is on disk, so the rest are set in
- * type. Drop real logo files in public/ppa/networks/ and add `logo` here.
+ * launch; deleting a row here is the whole fix if either is wrong. This matters
+ * more now that we publish their actual trademarks rather than the name in type.
  */
-const AS_SEEN_ON: { name: string; logo?: string; confirmed: boolean }[] = [
-  { name: "CBS", confirmed: true },
-  { name: "FOX", confirmed: true },
-  { name: "ESPN", confirmed: false },
-  { name: "NBC", confirmed: false },
-  { name: "Tennis Channel", logo: "/ppa/networks/tennis-channel.svg", confirmed: true },
+const AS_SEEN_ON: {
+  name: string;
+  logo: string;
+  /** Intrinsic ratio, so each mark sits at the same optical weight. */
+  width: number;
+  height: number;
+  /** Per-mark height class — a square peacock needs less height than a wordmark. */
+  className: string;
+  confirmed: boolean;
+}[] = [
+  { name: "CBS", logo: "/ppa/networks/cbs.svg", width: 1000, height: 447, className: "h-9 sm:h-10", confirmed: true },
+  { name: "FOX", logo: "/ppa/networks/fox.svg", width: 1000, height: 422, className: "h-7 sm:h-8", confirmed: true },
+  { name: "ESPN", logo: "/ppa/networks/espn.svg", width: 554, height: 137, className: "h-6 sm:h-7", confirmed: false },
+  { name: "NBC", logo: "/ppa/networks/nbc.svg", width: 567, height: 559, className: "h-11 sm:h-12", confirmed: false },
+  // Stacked lockup (mark over wordmark), so it needs more height than the
+  // wordmark-only marks to sit at the same optical weight.
+  { name: "Tennis Channel", logo: "/ppa/networks/tennis-channel.svg", width: 130, height: 170, className: "h-12 sm:h-14", confirmed: true },
 ];
 
 const BROADCAST = [
@@ -110,48 +126,62 @@ export default function WatchPage() {
             As Seen On
           </h1>
 
-          <div className="mt-6 grid grid-cols-2 gap-px border border-white/10 bg-white/10 sm:grid-cols-3 lg:grid-cols-5">
+          {/* The big five, in their real marks — white tiles because network
+              logos are colour-locked and a knocked-out version isn't ours to
+              make. */}
+          <div className="mt-6 grid grid-cols-2 gap-px bg-white/15 sm:grid-cols-3 lg:grid-cols-5">
             {AS_SEEN_ON.map((n) => (
               <div
                 key={n.name}
-                className="flex min-h-[6.5rem] items-center justify-center bg-ppa-navy px-4 py-6"
+                className="flex min-h-[7rem] items-center justify-center bg-white px-5 py-7"
               >
-                {n.logo ? (
-                  <Image
-                    src={n.logo}
-                    alt={n.name}
-                    width={180}
-                    height={48}
-                    sizes="180px"
-                    className="h-8 w-auto brightness-0 invert"
-                  />
-                ) : (
-                  <span className="font-display text-2xl uppercase leading-none tracking-tight text-white sm:text-3xl">
-                    {n.name}
-                  </span>
-                )}
+                <Image
+                  src={n.logo}
+                  alt={n.name}
+                  width={n.width}
+                  height={n.height}
+                  sizes="220px"
+                  className={`w-auto ${n.className}`}
+                />
               </div>
             ))}
           </div>
 
+          {/* PBTV banner, directly under the big five (Connor, 7/29). */}
+          <a
+            href="https://www.pickleballtv.com/?utm_source=ppatour&utm_medium=website&utm_campaign=watch&utm_content=watch-pbtv-banner"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group mt-px flex flex-col items-start gap-5 bg-ppa-blue px-6 py-7 transition-colors hover:bg-ppa-blue-deep sm:flex-row sm:items-center sm:justify-between sm:px-8"
+          >
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+              <Image
+                src="/ppa/networks/pickleballtv-white.svg"
+                alt="PickleballTV"
+                width={220}
+                height={48}
+                sizes="220px"
+                className="h-9 w-auto shrink-0 sm:h-10"
+              />
+              <p className="font-display text-lg uppercase leading-tight text-white sm:text-xl">
+                Every court. Every match. Live.
+              </p>
+            </div>
+            <span className="flex h-11 shrink-0 items-center border border-white/40 px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors group-hover:border-white group-hover:bg-white group-hover:text-ppa-blue">
+              ▶ Stream on PBTV ↗
+            </span>
+          </a>
+
           <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/65">
-            Pro pickleball reaches national television every season — and{" "}
-            <span className="font-bold text-white">PickleballTV</span> streams
-            every round of every Carvana PPA Tour event in between. The full
-            broadcast and streaming schedule is below. All times Eastern.
+            Pro pickleball reaches national television every season — and
+            PickleballTV streams every round of every Carvana PPA Tour event in
+            between. The full broadcast and streaming schedule is below. All
+            times Eastern.
           </p>
-          <div className="mt-5 flex flex-wrap gap-2.5">
-            <a
-              href="https://www.pickleballtv.com/?utm_source=ppatour&utm_medium=website&utm_campaign=watch&utm_content=watch-hero-pbtv"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:bg-ppa-blue-deep active:scale-[0.98]"
-            >
-              ▶ Stream on PickleballTV ↗
-            </a>
+          <div className="mt-5">
             <Link
               href="/watch/tv"
-              className="flex h-11 items-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98]"
+              className="flex h-11 w-fit items-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98]"
             >
               Full Season TV Schedule →
             </Link>

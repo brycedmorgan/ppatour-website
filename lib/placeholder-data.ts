@@ -36,9 +36,14 @@ export const TIER_META: Record<
  * "PPA Spain P250 Barcelona", "PPA Canada 125 Ottawa" — so we can rank them
  * honestly (only 1,000+ belong on The Tour; 125/250/500 stay in Other Events).
  * Returns null when the name has no recognizable points token.
+ *
+ * The token is not always space-separated — the Australia feed sends
+ * "PPA125 - GOLD COAST" and "PPA1500 - AUSTRALIA PICKLEBALL CUP" glued to the
+ * org prefix, which `\b` alone never matched. That's why a 125-point Gold Coast
+ * stop was being sold as a 1,000-point tour event (Connor, 7/29).
  */
 export function tierFromName(name: string): EventTier | null {
-  const m = name.match(/\bP?(3000|2000|1500|1000|500|250|125)\b/i);
+  const m = name.match(/(?:\b|PPA)P?(3000|2000|1500|1000|500|250|125)\b/i);
   if (!m) return null;
   const pts = Number(m[1]);
   if (pts >= 3000) return "worlds";

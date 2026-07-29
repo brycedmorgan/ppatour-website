@@ -213,7 +213,7 @@ export type Explainer = {
 export const explainers: Explainer[] = [
   {
     q: "What is the PPA Tour?",
-    a: "The top professional pickleball circuit — 25 stops a year, the best players in the world, all chasing one points race.",
+    a: "The top professional pickleball circuit — 20 stops a year, the best players in the world, all chasing one points race.",
   },
   {
     q: "How do ranking points work?",
@@ -269,7 +269,7 @@ export const partners: Partner[] = [
     website: "https://www.carvana.com",
     role: "Title Partner",
     category: "Auto Retailer",
-    note: "The named partner of the tour — on every court, every broadcast, all 25 stops.",
+    note: "The named partner of the tour — on every court, every broadcast, all twenty stops.",
     tier: "title",
     logo: "/ppa/sponsors/carvana.png",
     logoWidth: 2048,

@@ -17,10 +17,13 @@ export type GearLink = {
   paddle: string;
   /** Matched official-partner brand, or null when it isn't one of ours. */
   brand: string | null;
-  /** Where "Shop the gear" points. */
+  /** Where "Shop the gear" points. Always Pickleball Central — see below. */
   href: string;
   /** true = official partner's own shop; false = our sponsor directory. */
   external: boolean;
+  /** The matched partner's own store. NOT linked today (Connor, 7/29) — kept so
+   *  the brand-store CTA is a one-line restore when he reverses the call. */
+  brandHref: string | null;
   /** This exact paddle on Pickleball Central — "buy the same paddle as your
    *  favorite pro" (Conner Ogden, 7/27). Always set; PBC is our retail
    *  partner, so it's a valid destination for every paddle on the roster. */
@@ -49,11 +52,16 @@ export function resolveGear(paddle: string | null | undefined): GearLink | null 
     return {
       paddle,
       brand: partner.name,
-      href: withUtm(partner.website, {
+      // Connor 7/29: "make sure on player profiles that it's always linking to
+      // Pickleball Central for now, not directly to the manufacturers" — Ben
+      // Johns' paddle was sending fans to joola.com. PBC is our retail partner
+      // and every one of these paddles is sold there.
+      href: pbcSearch(paddle),
+      external: true,
+      brandHref: withUtm(partner.website, {
         campaign: "athlete-gear",
         content: `paddle-${contentSlug}`,
       }),
-      external: true,
       pbcHref: pbcSearch(paddle),
     };
   }
@@ -66,6 +74,7 @@ export function resolveGear(paddle: string | null | undefined): GearLink | null 
     brand: null,
     href: pbcSearch(paddle),
     external: true,
+    brandHref: null,
     pbcHref: pbcSearch(paddle),
   };
 }

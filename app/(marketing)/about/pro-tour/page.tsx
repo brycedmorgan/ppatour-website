@@ -8,11 +8,17 @@ export const metadata: Metadata = {
     "How the pro tour works — tiers, ranking points, prize money, and the road to the season title on the Carvana PPA Tour.",
 };
 
+/**
+ * Connor 7/29: the season purse and the in-arena number come off the public
+ * pages. What's left is structural and verifiable — the calendar and the
+ * divisions. Per-event purses still show on event pages (the Gold Prize Grid),
+ * which is the number the tour actually promotes.
+ */
 const STATS = [
-  { n: "18", label: "Main-Tour Stops" },
+  { n: "20", label: "Tour Stops" },
   { n: "5", label: "Pro Divisions" },
-  { n: "$5.2M+", label: "Prize Money & Fees" },
-  { n: "150K+", label: "Fans In-Arena" },
+  { n: "4", label: "Majors" },
+  { n: "1,000+", label: "Points Per Stop" },
 ];
 
 const TIERS = [
@@ -37,7 +43,7 @@ export default function ProTourPage() {
             The Premier Professional Pickleball Circuit
           </h1>
           <p className="mt-3 max-w-2xl text-sm text-ppa-navy/55 sm:text-base">
-            Eighteen tour stops a year, the best players in the world,
+            Twenty tour stops a year, the best players in the world,
             five divisions every weekend, and one season-long points race —
             broadcast on PickleballTV, Tennis Channel, and FOX.
           </p>
@@ -64,11 +70,11 @@ export default function ProTourPage() {
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">The Season</p>
               <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-                One Race. Eighteen Stops. Five Divisions.
+                One Race. Twenty Stops. Five Divisions.
               </h2>
               <div className="mt-4 flex flex-col gap-4 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
                 <p>
-                  The Carvana PPA Tour runs eighteen tour stops — Worlds, majors, cups, and opens — across every region of the country, ending at the PPA Finals. Each stop runs five pro divisions (Men&apos;s and Women&apos;s Singles, Doubles, and Mixed Doubles) plus a deep amateur and junior bracket. Every result moves a player up or down the season-long points race.
+                  The Carvana PPA Tour runs twenty tour stops — Worlds, majors, cups, and opens — across every region of the country, ending at the PPA Finals. Each stop runs five pro divisions (Men&apos;s and Women&apos;s Singles, Doubles, and Mixed Doubles) plus a deep amateur and junior bracket. Every result moves a player up or down the season-long points race.
                 </p>
                 <p>
                   Off the court, the tour partners with <strong>PickleballTV</strong> for live streaming, <strong>Tennis Channel</strong> and <strong>FOX</strong> for national broadcast windows, and <strong>Carvana</strong> as title partner across every court and every broadcast. Tickets run through tixr; amateurs register on pickleballtournaments.com.

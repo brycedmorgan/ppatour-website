@@ -73,11 +73,24 @@ function config() {
   return { token, baseUrl };
 }
 
-/** Strip the "PPA Tour:" prefix and a leading year from the event title. */
+/**
+ * Strip the "PPA Tour:" prefix and a leading year from the event title.
+ *
+ * Connor 7/29 ("those Australia names are insane"): the sister-tour feeds send
+ * the venue, the host club and the sanctioning body all inside one title —
+ * "Australia PPA Tour Northern Crocs Qualifier @ Raya Pickleball Club". We
+ * drop the trailing "@ venue" (the venue already renders on the card), the
+ * leading region word the country chip already says, and any doubled spacing.
+ */
 function cleanTitle(title: string): string {
   return title
     .replace(/^PPA Tour:\s*/i, "")
     .replace(/^\d{4}\s+/, "")
+    // "… @ Raya Pickleball Club" / "…@House of Pickle" — the venue field has it.
+    .replace(/\s*@\s*[^@]+$/, "")
+    // Leading region/org word — the country chip and the region filter say it.
+    .replace(/^(Australia|Asia|Italy|Spain|Canada|USA)\s+(?=\S)/i, "")
+    .replace(/\s{2,}/g, " ")
     .trim();
 }
 
@@ -103,16 +116,45 @@ function findCurated(apiSlug: string): Tournament | null {
 
 /* ---- field inference ---- */
 
+/**
+ * Events that are NOT the PPA Tour and never belong on ppatour.com — third-party
+ * minor leagues running on the same tournament platform. Connor 7/29: "I'd
+ * rather get rid of anything that says the Dink Minor League."
+ */
+const NON_TOUR_NAME = /minor league|the dink\b|dink minor/i;
+
+/**
+ * Names that are real PPA properties but structurally NOT a 1,000-point tour
+ * stop — qualifiers, club/league play, junior + senior draws, camps. Before
+ * this, `inferTier` defaulted every unrecognized event to "open" (1,000), which
+ * is why one-day MLP qualifiers at Australian clubs were sitting in the
+ * "1,000+ Points / Next Six on Tour" band (Connor 7/29).
+ */
+const SUB_TOUR_NAME =
+  /qualifier|\bleague\b|\bjunior\b|\bsenior\b|\bcamp\b|clinic|club championship|amateur|\bopen play\b/i;
+
 /** Tier from the event title (no points in the feed); challengers detected upstream.
  *  A points number in the name (international stops carry one — "1500", "P250",
  *  "125") is authoritative and wins over keyword inference. */
-function inferTier(name: string): EventTier {
+function inferTier(name: string, days: number): EventTier {
   const byPoints = tierFromName(name);
   if (byPoints) return byPoints;
   if (/world championship|world pickleball/i.test(name)) return "worlds";
   if (/\bslam\b|masters|national championship|nationals|finals/i.test(name)) return "slam";
   if (/\bcup\b/i.test(name)) return "cup";
+  if (SUB_TOUR_NAME.test(name)) return "challenger";
+  // A 1,000+ tour stop is a multi-day event — every stop on the calendar runs
+  // four days or more. A one- or two-day event is club/qualifier play whatever
+  // it calls itself, so it never inherits the 1,000-point default.
+  if (days > 0 && days < 3) return "challenger";
   return "open";
+}
+
+/** Inclusive day count for an event, 0 when either date is missing. */
+function eventDays(startIso: string, endIso: string): number {
+  if (!startIso || !endIso) return 0;
+  const ms = Date.parse(endIso) - Date.parse(startIso);
+  return Number.isNaN(ms) ? 0 : Math.floor(ms / 86_400_000) + 1;
 }
 
 const COUNTRY_BY_CODE: Record<string, Tournament["country"]> = {
@@ -154,7 +196,8 @@ function mapStatus(s: string): Tournament["status"] {
   return "upcoming";
 }
 
-/** Drop cancelled, advertise-only, stub, dateless, and "Additional Events" noise. */
+/** Drop cancelled, advertise-only, stub, dateless, and "Additional Events" noise —
+ *  plus third-party minor-league events that aren't ours to promote. */
 function isJunk(t: ApiTournament): boolean {
   return (
     t.is_canceled ||
@@ -162,6 +205,10 @@ function isJunk(t: ApiTournament): boolean {
     t.is_advertise_only ||
     t.tournament_status === "Cancelled" ||
     /additional events/i.test(t.title) ||
+    // "PPA Spain: Template" — an unfilled record the sister tours leave in the
+    // feed. It was rendering as a live 1,000-point stop (Connor, 7/29).
+    /\btemplate\b|\btest event\b|\bTBD\b/i.test(t.title) ||
+    NON_TOUR_NAME.test(t.title) ||
     !t.start_date
   );
 }
@@ -187,7 +234,10 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
   }
   seen.add(`${year}/${slug}`);
 
-  const tier: EventTier = curated?.tierKey ?? (isChallenger ? "challenger" : inferTier(name));
+  const endDate = dateOnly(t.end_date) || startDate;
+  const tier: EventTier =
+    curated?.tierKey ??
+    (isChallenger ? "challenger" : inferTier(name, eventDays(startDate, endDate)));
   const status = mapStatus(t.tournament_status);
   const sponsor = SPONSORS.find((s) => name.startsWith(s));
 
@@ -199,7 +249,7 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     state: curated?.state ?? (t.venue_state || ""),
     venue: curated?.venue ?? (t.venue_name || t.venue_city || ""),
     startDate,
-    endDate: dateOnly(t.end_date) || startDate,
+    endDate,
     ticketPriceFrom: curated?.ticketPriceFrom ?? TIER_PRICE[tier],
     ticketsUrl: curated?.ticketsUrl ?? t.details_url,
     registerUrl: t.details_url || curated?.registerUrl || "",

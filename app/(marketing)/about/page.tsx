@@ -6,18 +6,19 @@ import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "About the Carvana PPA Tour — the premier professional pickleball tour — 25 stops a year and the best players in the world, all chasing one points race.",
+    "About the Carvana PPA Tour — the premier professional pickleball tour — 20 stops a year and the best players in the world, all chasing one points race.",
 };
 
-const STATS = [
-  { n: "25", label: "Tour Stops" },
-  { n: "$5.2M", label: "Prize Money" },
-  { n: "12", label: "Countries" },
-  { n: "150K+", label: "Fans In Arena" },
-];
+/**
+ * NO STAT BAND HERE. Connor, 7/29: "Can't show that prize money number and
+ * those stats." The band read 25 Tour Stops / $5.2M Prize Money / 12 Countries
+ * / 150K+ Fans In Arena — the purse is not a public number we want on an About
+ * page, and the other three were never sourced. If a stat band comes back it
+ * needs figures someone owns, not marketing round numbers.
+ */
 
 const LINKS = [
-  { label: "The Pro Tour", href: "/about/pro-tour", blurb: "The eighteen-stop tour, the tier system, and how a season runs." },
+  { label: "The Pro Tour", href: "/about/pro-tour", blurb: "The full tour calendar, the tier system, and how a season runs." },
   { label: "How It Works", href: "/about/how-it-works", blurb: "Ranking points, brackets, divisions, and the path to Nationals." },
   { label: "Tournament History", href: "/about/history", blurb: "National Champions year-by-year and the tour's milestones." },
   { label: "What is Pickleball?", href: "/about/what-is-pickleball", blurb: "The fastest-growing sport in America, explained in 90 seconds." },
@@ -57,34 +58,11 @@ export default function AboutPage() {
           </h1>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/75 sm:text-base">
             The PPA Tour is the premier professional pickleball circuit —
-            twenty-five tour stops a year, the best players in the world,
+            twenty tour stops a year, the best players in the world,
             sold-out arenas, and one points race. We exist to put the best
             content, the cleanest broadcast, and the most exciting matches in
             pickleball in front of the largest possible audience.
           </p>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="bg-ppa-navy-deep text-white">
-        <div className="mx-auto grid w-full max-w-6xl grid-cols-2 px-4 md:grid-cols-4">
-          {STATS.map((s, i) => (
-            <div
-              key={s.label}
-              className={`px-2 py-7 ${
-                i % 2 === 1 ? "border-l border-white/10" : ""
-              } ${i >= 2 ? "border-t border-white/10 md:border-t-0" : ""} ${
-                i === 2 ? "md:border-l" : ""
-              }`}
-            >
-              <p className="font-display text-3xl leading-none text-white sm:text-4xl">
-                {s.n}
-              </p>
-              <p className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
-                {s.label}
-              </p>
-            </div>
-          ))}
         </div>
       </section>
 
@@ -109,16 +87,16 @@ export default function AboutPage() {
                   every match.
                 </p>
                 <p>
-                  Twenty-five tour stops cover every region of the
-                  country, plus a growing international footprint. Each stop
-                  carries 1,000+ ranking points; the majors pay double. The
-                  season ends at the Veolia Pickleball National Championships
-                  and the Toys&nbsp;&quot;R&quot;&nbsp;Us PPA Finals, where the
-                  No.&nbsp;1 ranking is decided.
+                  Twenty tour stops cover every region of the country, plus a
+                  growing international footprint. Each stop carries 1,000+
+                  ranking points; the majors pay double. The season ends at the
+                  Veolia Pickleball National Championships and the PPA Finals,
+                  where the No.&nbsp;1 ranking is decided.
                 </p>
                 <p>
-                  Off the court, the PPA Tour partners with FOX, FS1, and
-                  YouTube to broadcast every main match; with Pickleball
+                  Off the court, the PPA Tour partners with CBS, FOX and the
+                  Tennis Channel for national broadcast windows and
+                  PickleballTV for every court, every match; with Pickleball
                   Central for retail; with Pickleball.com for ecosystem
                   coverage; and with Carvana as our title partner across every
                   court and every broadcast.

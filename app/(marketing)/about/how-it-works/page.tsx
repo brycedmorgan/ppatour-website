@@ -40,7 +40,7 @@ const SEASON_STEPS = [
   {
     n: "01",
     title: "The Schedule",
-    body: "Twenty-five tour stops a year across every region, plus a growing international footprint.",
+    body: "Twenty tour stops a year across every region, plus a growing international footprint.",
   },
   {
     n: "02",
