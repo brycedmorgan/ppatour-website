@@ -18,7 +18,40 @@ Strategy`) is the ultimate source of truth.
 Next.js 16 (App Router) · TypeScript strict · Tailwind v4 · shadcn/ui ·
 Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
+## Standing rulings (don't re-litigate)
+
+- **Opens are 1,000 points.** Bryce, 7/29 — closing Hannah's "Opens 500 / Cups 1500 /
+  Majors 2000" claim outright ("Hannah is full of shit"). The live tier system stands:
+  Opens 1,000 · Cups 1,500 · Championship 2,000 · Worlds 3,000, and Connor's 7/23
+  "The Tour = 1,000+ points" spec stays baked into `getMainTourEvents()` and the
+  events buckets. **No further changes on this.**
+- **Worlds is a Major** — the biggest one, at 3,000 points. Bryce, 7/29: "Worlds is
+  the biggest slam. Still in the category." It is NOT a tier sitting above the Majors.
+  `isMajor()` already badged it correctly; the pro-tour tier table, the TV schedule
+  label, and the "Worlds, majors, cups, opens" copy pattern were the places that
+  presented it as a peer category, and they're fixed.
+- **Ad inventory on ppatour.com is off the table for now** (Bryce, 7/29). Don't build
+  slots, don't ask again.
+
 ## Session Log
+
+### 2026-07-29 (pt. 2) — Bryce's rulings: Opens, Worlds, ad inventory
+- Three of the six open audit-thread decisions are now closed. See **Standing rulings**
+  above — Opens 1,000, Worlds is the biggest Major, ad inventory dropped.
+- Only code change needed was the Worlds one: `/about/pro-tour` tier table restructured
+  (Major 2,000–3,000 leads, with **Championship as its own row** because the PPA Finals
+  is a 2,000-pt stop that is deliberately *not* one of the four Majors — the old note
+  wrongly listed it as one), `lib/tv-schedule.ts` Worlds row → "Major · 3,000", and the
+  "Worlds, majors, cups, opens" pattern in pro-tour / player-handbook / PickleballIn90
+  drops the redundant "Worlds".
+- Opens needed no change — 1,000 was already live and correct.
+- **Left alone deliberately**: `lib/news-articles.ts` states the ladder as "Worlds
+  (3,000), Slams (2,000)…" in two articles. That's Dylan's editorial copy under the
+  content-approval gate, and the points are factually right; flag it to him rather than
+  editing published articles.
+- **Still open from the six**: news home (ppatour.com vs pickleball.com), MLP's total
+  absence from the site, whether to make a statement above the fold, and whether Buy
+  Tickets is really the first callout.
 
 ### 2026-07-29 — Connor's morning texts: fake 1,000s, Dink, paddles, About (`c09760e`)
 - Worked Connor's 7/29 iMessage list (plus his 7/28 Watch note). Pushed to main.

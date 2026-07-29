@@ -226,7 +226,8 @@ export const tvSchedule: TvEvent[] = [
   {
     name: "PPA World Pickleball Championships",
     location: "Brookhaven Country Club · Farmers Branch, TX",
-    tier: "Worlds · 3,000",
+    // Worlds is a Major — the biggest one (Bryce, 7/29) — not its own tier.
+    tier: "Major · 3,000",
     league: "PPA",
     startIso: "2026-11-03",
     endIso: "2026-11-08",

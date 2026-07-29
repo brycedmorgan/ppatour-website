@@ -21,11 +21,21 @@ const STATS = [
   { n: "1,000+", label: "Points Per Stop" },
 ];
 
+/**
+ * Bryce, 7/29 — the ruling on the open Worlds question: "Worlds is the biggest
+ * slam. Still in the category." So Worlds is a Major, not a tier sitting above
+ * the Majors, and the table says so. Opens are 1,000 (his call, closing
+ * Hannah's 500 claim).
+ *
+ * Championship is its own row because the PPA Finals is a 2,000-point stop that
+ * is deliberately NOT one of the four Majors — the old note listed it as one.
+ */
 const TIERS = [
-  { name: "Worlds", points: "3,000 pts", note: "The single biggest event of the season." },
-  { name: "Major", points: "2,000 pts", note: "Marquee stops — Nationals, Masters, Atlanta, Finals." },
+  { name: "Major", points: "2,000–3,000 pts", note: "The four crown jewels — the Masters, the Players, Nationals, and Worlds, the biggest of them at 3,000." },
+  { name: "Championship", points: "2,000 pts", note: "The season-ending PPA Finals." },
   { name: "Cup", points: "1,500 pts", note: "Premium destinations and longer broadcast windows." },
   { name: "Open", points: "1,000 pts", note: "The backbone of the tour — every city, every weekend." },
+  { name: "Challenger", points: "125–500 pts", note: "The feeder series underneath the tour." },
 ];
 
 export default function ProTourPage() {
@@ -74,7 +84,7 @@ export default function ProTourPage() {
               </h2>
               <div className="mt-4 flex flex-col gap-4 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
                 <p>
-                  The Carvana PPA Tour runs twenty tour stops — Worlds, majors, cups, and opens — across every region of the country, ending at the PPA Finals. Each stop runs five pro divisions (Men&apos;s and Women&apos;s Singles, Doubles, and Mixed Doubles) plus a deep amateur and junior bracket. Every result moves a player up or down the season-long points race.
+                  The Carvana PPA Tour runs twenty tour stops — majors, cups, and opens — across every region of the country, ending at the PPA Finals. Each stop runs five pro divisions (Men&apos;s and Women&apos;s Singles, Doubles, and Mixed Doubles) plus a deep amateur and junior bracket. Every result moves a player up or down the season-long points race.
                 </p>
                 <p>
                   Off the court, the tour partners with <strong>PickleballTV</strong> for live streaming, <strong>Tennis Channel</strong> and <strong>FOX</strong> for national broadcast windows, and <strong>Carvana</strong> as title partner across every court and every broadcast. Tickets run through tixr; amateurs register on pickleballtournaments.com.

@@ -169,7 +169,7 @@ const CARDS: Card[] = [
   },
   {
     title: "Winning a Match",
-    body: "Most pro matches are best-of-3 games. Finals at the majors and Worlds go best-of-5.",
+    body: "Most pro matches are best-of-3 games. Finals at the majors go best-of-5.",
     svg: <TrophySvg />,
   },
 ];
