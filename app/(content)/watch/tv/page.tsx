@@ -22,11 +22,11 @@ export default function TvSchedulePage() {
             The TV Schedule
           </h1>
           <p className="mt-3 max-w-2xl text-sm text-white/65">
-            Every remaining Championship Court window for the season. Two ways
-            to watch: <span className="font-bold text-white">PickleballTV</span>{" "}
-            streams every round of every event, and{" "}
-            <span className="font-bold text-white">Tennis Channel</span>{" "}
-            simulcasts the marquee windows on national TV. All times Eastern.
+            There are two ways to watch the world&apos;s best pickleball:{" "}
+            <span className="font-bold text-white">PickleballTV</span> streams
+            every round of every event, while select tournaments are broadcast
+            nationwide on marquee windows. Find the latest broadcast and
+            streaming schedule below. All times Eastern Standard Time.
           </p>
           <div className="mt-5 flex flex-wrap gap-2.5">
             <a
