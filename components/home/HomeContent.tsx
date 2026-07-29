@@ -57,13 +57,13 @@ const LANES = [
   },
   {
     href: "/play",
-    image: "/ppa/action-singles.jpg",
+    image: "/ppa/play-amateur-court.jpg",
     title: "Play",
     blurb: "Register for amateur competition at every tournament.",
   },
   {
     href: "/about/sponsors",
-    image: "/ppa/action-md-final.jpg",
+    image: "/ppa/sponsor-carvana-boards.jpg",
     title: "Sponsor",
     blurb: "Partner with the world's leading pickleball tour.",
     highlight: true,
