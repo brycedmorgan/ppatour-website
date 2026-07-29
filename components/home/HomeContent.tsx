@@ -489,7 +489,10 @@ export async function HomeContent({
             className="mt-3 max-w-[18ch] font-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98] motion-safe:animate-rise"
             style={{ animationDelay: "160ms" }}
           >
-            {ev.name}
+            {/* Hero headline shows the full event name (e.g. "Veolia Pickleball
+                National Championships"); in live mode it's the live event's name.
+                The short form stays on the scores-band chip below. */}
+            {live ? ev.name : next.name}
           </h1>
 
           <div
