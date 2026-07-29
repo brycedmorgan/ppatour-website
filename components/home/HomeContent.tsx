@@ -51,7 +51,7 @@ const LANES = [
   },
   {
     href: "/rankings",
-    image: "/ppa/action-mxd.jpg",
+    image: "/ppa/follow-finals-crowd.jpg",
     title: "Follow",
     blurb: "Players, World Pickleball Rankings, season standings.",
   },
