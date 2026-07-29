@@ -5,11 +5,22 @@
  *   GET {base}/v2/data/partner_rankings?partner=ppa&division_type={dt}&gender={M|F}
  *       &race=false&is_live=false&bracket_level_id=2&rank={today}&page_size=250
  *
- * division_type (verified against live data): 1 = Women's Singles ·
- * 2 = Men's Singles · 3 = Doubles (split by the gender param) · 4 = Women's
- * Mixed · 5 = Men's Mixed. (Singles + Mixed encode gender in the division_type
- * itself; only Doubles uses the gender param. 8 = combined World Pickleball
- * Ranking used elsewhere.)
+ * division_type — CORRECTED 2026-07-29, matching pickleball.com's own frontend
+ * (`getPlayersRankingsHistory`) and proven by the weighting identity below:
+ *   1 = Women's Singles · 2 = Men's Singles · 3 = MIXED DOUBLES (split by the
+ *   gender param) · 4 = WOMEN'S DOUBLES · 5 = MEN'S DOUBLES.
+ * Singles and gender-doubles encode gender in the division_type itself and
+ * IGNORE the gender param; only Mixed (3) uses it. 8 = the combined World
+ * Pickleball Ranking used elsewhere.
+ *
+ * ⚠️ This file previously had 3 and 4/5 swapped (3 read as "doubles", 4/5 as
+ * "mixed"), which silently mislabeled every athlete page's discipline ranks.
+ * Proof of the corrected mapping: for ALL 2,033 ranked pros,
+ *   WPR = 0.5·(4|5 doubles) + 0.35·(3 mixed) + 0.15·(1|2 singles)
+ * reproduces the official combined points EXACTLY (Ben Johns
+ * 0.5·21800 + 0.35·23300 + 0.15·1600 = 19295 ✓). Under the old mapping it
+ * matched only 224 of 1,296 men. Empirically: dt4 returns women and dt5 men
+ * whatever gender you pass; dt3 splits 610 M / 556 F.
  *
  * Boards are identical for every athlete, so each (division_type, gender) board
  * is fetched once and cached; per-athlete lookups just read the shared index.
@@ -96,11 +107,13 @@ export async function getDivisionRanks(
   if (!gender) return {};
   const g: "M" | "F" = gender === "female" ? "F" : "M";
   const singlesDt = gender === "female" ? 1 : 2;
-  const mixedDt = gender === "female" ? 4 : 5;
+  // Gender doubles is 4 (women) / 5 (men); mixed is 3, the only one that uses
+  // the gender param. Do NOT swap these — see the header note.
+  const doublesDt = gender === "female" ? 4 : 5;
   const [singlesBoard, doublesBoard, mixedBoard] = await Promise.all([
     fetchBoard(singlesDt, g),
+    fetchBoard(doublesDt, g),
     fetchBoard(3, g),
-    fetchBoard(mixedDt, g),
   ]);
   const out: AthleteDivisionRanks = {};
   const s = singlesBoard.get(slug);
