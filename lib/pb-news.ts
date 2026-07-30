@@ -38,7 +38,11 @@
  * have (see the rankings API fallback).
  */
 
-const DEFAULT_BASE = "https://api.pickleballdev.net";
+/**
+ * Production host, confirmed by probe: the existing `PB_API_TOKEN` returns 200
+ * on /v2/data/partner_rankings here. `api.pickleballdev.net` is the dev host.
+ */
+const DEFAULT_BASE = "https://api.pickleball.com";
 
 /** Region category — "PPA" here, "PPA Canada" on the Canada build, etc. */
 const DEFAULT_CATEGORY = "PPA";
@@ -77,12 +81,24 @@ const EMPTY = (source: PbNewsResult["source"], reason?: string): PbNewsResult =>
   reason,
 });
 
+/**
+ * Credentials default to the partner token this project already uses, because
+ * that token IS the PPA platform: probing showed it resolves to platformID 9 —
+ * the same platform as the "PPA Dev" key in the integration doc — and it
+ * already authenticates against the production host. So none of the doc's four
+ * keys are needed for ppatour.com; there is one credential to rotate, not two.
+ *
+ * `PB_NEWS_API_KEY` / `PB_NEWS_API_BASE_URL` remain optional overrides, which is
+ * what the Canada build (and any future region on its own platform) sets.
+ */
 function config() {
-  const key = process.env.PB_NEWS_API_KEY;
+  const key = process.env.PB_NEWS_API_KEY || process.env.PB_API_TOKEN;
   if (!key) return null;
+  const base =
+    process.env.PB_NEWS_API_BASE_URL || process.env.PB_API_BASE_URL || DEFAULT_BASE;
   return {
     key,
-    base: (process.env.PB_NEWS_API_BASE_URL || DEFAULT_BASE).replace(/\/$/, ""),
+    base: base.replace(/\/$/, ""),
     category: process.env.PB_NEWS_CATEGORY || DEFAULT_CATEGORY,
     tag: process.env.PB_NEWS_TAG || DEFAULT_TAG,
   };
