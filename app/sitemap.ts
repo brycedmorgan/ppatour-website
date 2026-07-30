@@ -39,7 +39,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/leaderboards",
     "/news",
     "/about",
-    "/about/pro-tour",
     "/about/sponsors",
     "/about/how-it-works",
     "/about/what-is-pickleball",
