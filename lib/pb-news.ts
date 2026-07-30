@@ -13,29 +13,32 @@
  * tournaments…). Reusing it would repoint all of them at the news host and take
  * down most of the dynamic site, so this integration uses its own prefix.
  *
- * ── CONTRACT STATUS (probed live 2026-07-30) ──────────────────────────────
- * CONFIRMED by probing api.pickleballdev.net:
- *   · Auth header is `PB-API-TOKEN` — NOT the doc's `Authorization: <key>`,
- *     which returns 301/404. Verified by getting 200 on /v2/data/partner_rankings
- *     with the same key.
- *   · The router recognizes the resource path `/news`; it echoes `path=/news`.
- *   · The dev host accepts the two DEV keys. Both PROD keys return 401 there,
- *     so production is a different host and still needs confirming.
+ * ── CONTRACT STATUS (2026-07-30) ──────────────────────────────────────────
+ * CONFIRMED:
+ *   · Host is api.pickleball.com. Probed: the partner token returns 200 on
+ *     /v2/data/partner_rankings there. api.pickleballdev.net is the dev host.
+ *   · Path is /v2/data/news — confirmed by Kenan. NOT /v2/news, and
+ *     /v2/articles does not exist (both were guesses of mine).
+ *   · Auth header is PB-API-TOKEN, NOT the doc's `Authorization: <key>`,
+ *     which 301s. Verified against the working partner_rankings call.
+ *   · Credentials: the token this project already holds IS the PPA platform
+ *     (platformID 9), so none of the doc's four keys are needed here. Its two
+ *     prod keys 401 on api.pickleball.com with "get platform: record not
+ *     found" and look stale — Canada will need a valid one.
  *
- * BLOCKED, and not discoverable until access is granted:
- *   · Both dev keys authenticate but are refused on the news path:
- *       {"Code":403,"Error":"platform access denied: platformID=9 path=/news"}
- *     PPA Dev = platformID 9, Canada Dev = platformID 37.
- *   · So the exact filter params, response field names, and pagination params
- *     are still unverified. `mapArticle` below is written defensively to accept
- *     the plausible spellings; once the real payload is visible, delete the
- *     alternatives and keep what is real.
+ * BLOCKED on one grant, and not discoverable from outside:
+ *   · GET /v2/data/news -> 403
+ *     {"Error":"platform access denied: platformID=9 path=/data/news"}
+ *     Identical with ?category=PPA&tag=news attached. The gateway rejects on
+ *     platform before routing, so response field names, the exact filter
+ *     values and the pagination params cannot be read until platformID 9 is
+ *     allowlisted. `mapArticle` therefore accepts the plausible spellings;
+ *     collapse it to the real ones once a payload is visible.
  *
- * Until the grant lands, `getPickleballNews()` returns an empty list with a
- * reason. Nothing renders — deliberately. The four "From Pickleball.com" items
- * this replaces were invented headlines pointing at the homepage, and the house
- * rule here is to show nothing rather than publish numbers or copy we do not
- * have (see the rankings API fallback).
+ * Until then getPickleballNews() returns an empty list with a reason and
+ * nothing renders — deliberately. The four "From Pickleball.com" items this
+ * replaced were invented headlines pointing at the homepage, and the house rule
+ * is to show nothing rather than publish content we do not have.
  */
 
 /**
@@ -48,8 +51,8 @@ const DEFAULT_BASE = "https://api.pickleball.com";
 const DEFAULT_CATEGORY = "PPA";
 const DEFAULT_TAG = "news";
 
-/** Provisional: the path the router acknowledged. Confirm with Kenan. */
-const NEWS_PATH = "/v2/news";
+/** Confirmed by Kenan 2026-07-30: it is /v2/data/news, not /v2/news. */
+const NEWS_PATH = "/v2/data/news";
 
 export type PbArticle = {
   /** Absolute pickleball.com URL — cards link out, so this is required. */
