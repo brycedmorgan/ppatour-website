@@ -48,7 +48,7 @@ const NAV_ITEMS: NavItem[] = [
     mega: true,
     submenu: [
       { label: "About the PPA Tour", href: "/about" },
-      { label: "The Pro Tour", href: "/about/pro-tour" },
+      { label: "The Pro Tour", href: "/about" },
       { label: "Tournament History", href: "/about/history" },
       { label: "How It Works", href: "/about/how-it-works" },
       { label: "What is Pickleball?", href: "/about/what-is-pickleball" },
@@ -304,7 +304,7 @@ function MegaPanelContent({
         <PanelEyebrow>The Organization</PanelEyebrow>
         <div className="mt-4 space-y-3">
           <BigLink href="/about" label="About the Tour" onNavigate={onNavigate} />
-          <BigLink href="/about/pro-tour" label="The Pro Tour" onNavigate={onNavigate} />
+          <BigLink href="/about" label="The Pro Tour" onNavigate={onNavigate} />
           <BigLink href="/about/history" label="History" onNavigate={onNavigate} />
         </div>
       </div>

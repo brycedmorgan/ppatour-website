@@ -21,8 +21,17 @@ const STATS = [
   { n: "12", label: "Countries", note: "A growing international footprint" },
 ];
 
+// Ported from the merged /about/pro-tour page (Tyler, 7/30 — that page was
+// redundant with About). Bryce's 7/29 tier ruling preserved.
+const TIERS = [
+  { name: "Major", points: "2,000–3,000 pts", note: "The four crown jewels — the Masters, the Players, Nationals, and Worlds, the biggest of them at 3,000." },
+  { name: "Championship", points: "2,000 pts", note: "The season-ending PPA Finals." },
+  { name: "Cup", points: "1,500 pts", note: "Premium destinations and longer broadcast windows." },
+  { name: "Open", points: "1,000 pts", note: "The backbone of the tour — every city, every weekend." },
+  { name: "Challenger", points: "125–500 pts", note: "The feeder series underneath the tour." },
+];
+
 const LINKS = [
-  { label: "The Pro Tour", href: "/about/pro-tour", blurb: "The full tour calendar, the tier system, and how a season runs." },
   { label: "How It Works", href: "/about/how-it-works", blurb: "Ranking points, brackets, divisions, and the path to Nationals." },
   { label: "Tournament History", href: "/about/history", blurb: "National Champions year-by-year and the tour's milestones." },
   { label: "What is Pickleball?", href: "/about/what-is-pickleball", blurb: "The fastest-growing sport in America, explained in 90 seconds." },
@@ -151,6 +160,56 @@ export default function AboutPage() {
                   </Link>
                 ))}
               </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      {/* The Season (merged from the former Pro Tour page) */}
+      <section className="bg-white">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr]">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
+                The Season
+              </p>
+              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+                One Race. Eighteen Stops. Five Divisions.
+              </h2>
+              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
+                The Carvana PPA Tour runs eighteen tour stops — majors, cups, and
+                opens — across every region of the country, ending at the PPA
+                Finals. Each tournament runs five pro divisions (men&apos;s and
+                women&apos;s singles, men&apos;s and women&apos;s doubles, and
+                mixed doubles) plus a deep amateur and junior bracket. Every
+                result moves a player up or down the season-long points race.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link href="/events" className="inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-ppa-blue-deep">
+                  Full Schedule →
+                </Link>
+                <Link href="/athletes" className="inline-flex h-11 items-center border border-ppa-line bg-white px-6 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:border-ppa-blue hover:text-ppa-blue">
+                  Meet the Pros
+                </Link>
+              </div>
+            </div>
+
+            <aside>
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">Tier System</p>
+              <div className="mt-3 border border-ppa-line">
+                {TIERS.map((t) => (
+                  <div key={t.name} className="grid grid-cols-[1fr_auto] gap-3 border-b border-ppa-line bg-white p-4 last:border-b-0">
+                    <span>
+                      <span className="block font-display text-base uppercase text-ppa-navy">{t.name}</span>
+                      <span className="mt-0.5 block text-xs text-ppa-navy/55">{t.note}</span>
+                    </span>
+                    <span className="text-right font-display text-base text-ppa-blue tabular-nums">{t.points}</span>
+                  </div>
+                ))}
+              </div>
+              <Link href="/about/how-it-works" className="mt-5 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue">
+                How It Works →
+              </Link>
             </aside>
           </div>
         </div>

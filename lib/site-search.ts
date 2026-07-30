@@ -72,7 +72,7 @@ const STATIC_PAGES: { title: string; meta: string; href: string; extra?: string 
   { title: "Schedule", meta: "Every tour event", href: "/events", extra: "calendar tournaments stops dates tickets" },
   { title: "News", meta: "Storylines and recaps from the tour", href: "/news", extra: "newsroom articles coverage archive" },
   { title: "About the PPA Tour", meta: "Story, mission, and structure", href: "/about" },
-  { title: "The Pro Tour", meta: "How the professional tour works", href: "/about/pro-tour" },
+  { title: "The Pro Tour", meta: "How the professional tour works", href: "/about" },
   { title: "Tournament History", meta: "National champions year by year", href: "/about/history", extra: "past champions winners records" },
   { title: "How It Works", meta: "Season format, points, and divisions", href: "/about/how-it-works", extra: "ranking points tiers majors cups opens divisions" },
   { title: "Sponsors", meta: "Title and official partners", href: "/about/sponsors", extra: "carvana veolia joola humana partners partnership" },
