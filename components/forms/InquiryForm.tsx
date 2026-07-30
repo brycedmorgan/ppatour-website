@@ -314,7 +314,12 @@ export function InquiryForm({ formType }: { formType: keyof typeof FORM_SCHEMAS 
     }
   }
 
-  const grid = schema.compact ? "flex flex-col gap-3 sm:flex-row" : "grid gap-4 sm:grid-cols-2";
+  /**
+   * Compact forms stack at every width. They previously went `sm:flex-row`,
+   * which in the footer's 320px column left the email input about 135px beside a
+   * 172px button. Stacked, the field gets the full width of its container.
+   */
+  const grid = schema.compact ? "flex flex-col gap-3" : "grid gap-4 sm:grid-cols-2";
 
   return (
     <form onSubmit={onSubmit} className={grid}>
@@ -345,7 +350,13 @@ export function InquiryForm({ formType }: { formType: keyof typeof FORM_SCHEMAS 
         <button
           type="submit"
           disabled={status === "sending" || uploading}
-          className="group mt-3 inline-flex h-12 w-full items-center justify-center gap-1.5 bg-ppa-blue px-8 text-xs font-bold uppercase tracking-[0.12em] text-white transition hover:bg-ppa-blue-deep active:scale-[0.98] disabled:opacity-60 sm:w-auto"
+          className={`group inline-flex h-12 items-center justify-center gap-1.5 bg-ppa-blue px-8 text-xs font-bold uppercase tracking-[0.12em] text-white transition hover:bg-ppa-blue-deep active:scale-[0.98] disabled:opacity-60 ${
+            schema.compact
+              ? // Stacked: match the field's width, and let the form's gap-3 do
+                // the spacing instead of adding a second margin on top of it.
+                "w-full"
+              : "mt-3 w-full sm:w-auto"
+          }`}
         >
           {uploading ? "Uploading…" : status === "sending" ? "Sending…" : schema.submitLabel}
           <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-0.5">
