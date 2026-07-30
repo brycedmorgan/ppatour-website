@@ -28,9 +28,12 @@
  * "captures first PPA gold medal"). The UUID is not self-describing and the
  * lookup endpoints (/v2/data/news_categories, …_subcategories, …_tags) are all
  * 403 for this platform, but the UUID was confirmed another way: pickleball.com's
- * public news index embeds it as {"title":"PPA Tour","slug":"ppa"}. Still
- * env-overridable, and worth asking whether any OTHER subcategory also carries
- * PPA content.
+ * public news index embeds it as {"title":"PPA Tour","slug":"ppa"}.
+ *
+ * "PPA Tour" is the ONLY subcategory we pull (Wesley, 2026-07-30) — deliberately
+ * one source, not a union. Kept env-overridable so the UUID can be corrected
+ * without a code change, but adding a second subcategory would be a decision,
+ * not a config tweak: it would need a second request and a merge.
  *
  * ⚠ SORTING IS BROKEN SERVER-SIDE. `sort_by` selects a field and validates it
  * (a bad value 400s), but `sort_order` has no effect: asc, desc, ASC, DESC,
