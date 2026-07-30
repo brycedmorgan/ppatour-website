@@ -190,6 +190,21 @@
     rgba(7, 34, 58, 0.05) 100%
   );
 }
+/* Newsroom lead card. A large share of the migrated WordPress featured images
+   are promotional graphics with their own headline type baked in (JOOLA Pops,
+   PARTNERS, "Introducing PPA Spain"), so .scrim-hero leaves two headlines
+   competing in the upper half. This carries the darkening higher and holds it
+   heavier through the middle, while still letting the top third of the artwork
+   read. */
+.scrim-feature {
+  background: linear-gradient(
+    to top,
+    rgba(7, 34, 58, 0.98) 0%,
+    rgba(7, 34, 58, 0.92) 32%,
+    rgba(7, 34, 58, 0.58) 64%,
+    rgba(7, 34, 58, 0.18) 100%
+  );
+}
 .scrim-soft {
   background: linear-gradient(
     to top,

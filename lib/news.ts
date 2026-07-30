@@ -72,6 +72,31 @@ function isoFromNativeDate(date: string): string {
   return `${NATIVE_YEAR}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}T12:00:00`;
 }
 
+/**
+ * WordPress auto-generated excerpts carry two artifacts that read as sloppy
+ * once the dek is displayed on a card: 737 of the 811 migrated posts end with
+ * the "Read more" link text, and one leads with an "Author: Name" byline.
+ *
+ * Cleaned here rather than in the importer so it applies to the stored data
+ * without a re-import (WordPress is being decommissioned, so re-running the
+ * import is not a durable fix), and so cards, the article page, and the SEO
+ * description fallback all get the same string.
+ */
+function cleanDek(dek: string): string {
+  let s = dek
+    // Exactly the label plus a first + last name. A greedier match would also
+    // swallow the capitalized first word of the actual sentence.
+    .replace(/^author\s*:\s*[A-Z][\p{L}'’-]+\s+[A-Z][\p{L}'’-]+\s*/iu, "")
+    .replace(/\s*\bread\s*more\s*$/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  // Trailing punctuation is often mid-sentence after the link text is removed.
+  s = s.replace(/[,;:]$/, "");
+  // Signal truncation rather than leaving a sentence hanging.
+  if (s && !/[.!?"'’”]$/.test(s)) s += "…";
+  return s;
+}
+
 function nativeToCard(a: NewsArticle): NewsCard {
   const publishedAt = isoFromNativeDate(a.date);
   return {
@@ -79,7 +104,7 @@ function nativeToCard(a: NewsArticle): NewsCard {
     href: `/${a.slug}`,
     category: a.category,
     title: a.title,
-    dek: a.dek,
+    dek: cleanDek(a.dek),
     image: a.image,
     imageAlt: "",
     author: HOUSE_BYLINE,
@@ -106,7 +131,7 @@ function wpToCard(p: {
     href: `/${p.slug}`,
     category: p.category,
     title: p.title,
-    dek: p.dek,
+    dek: cleanDek(p.dek),
     image: p.image ? resolveAsset(p.image.url) : null,
     imageAlt: p.image?.alt ?? "",
     author: p.author,
