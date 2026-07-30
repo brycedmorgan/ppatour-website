@@ -20,7 +20,6 @@
 import { searchNews, type NewsCard } from "@/lib/news";
 import { athletes } from "@/lib/athletes";
 import { CURATED_TO_CANONICAL, publishedAthletes } from "@/lib/published-athletes";
-import { ecosystemNews } from "@/lib/home-content";
 import { eventGuides } from "@/lib/event-guides";
 import { getEvents } from "@/lib/events-api";
 import {
@@ -272,24 +271,12 @@ export async function searchSite(query: string): Promise<SiteSearchResult> {
     s: score(terms, norm(p.title), norm(`${p.meta} ${p.extra ?? ""}`), ""),
   })).filter((x) => x.s > 0);
 
-  const ecoScored = ecosystemNews
-    .map((n) => ({
-      item: {
-        group: "News" as const,
-        title: n.title,
-        meta: `Pickleball.com · ${n.date}`,
-        href: n.href,
-        external: true,
-      } as SearchHit,
-      s: score(terms, norm(n.title), norm(`${n.category} pickleball.com`), ""),
-    }))
-    .filter((x) => x.s > 0);
 
   const groups: SearchGroupResult[] = ([
     {
       group: "News" as const,
-      hits: [...newsHits, ...takeTop(ecoScored, 2)].slice(0, PER_GROUP + 2),
-      total: newsResult.total + ecoScored.length,
+      hits: newsHits,
+      total: newsResult.total,
     },
     { group: "Athletes" as const, hits: takeTop(athleteScored, PER_GROUP), total: athleteScored.length },
     { group: "Events" as const, hits: takeTop(eventScored, PER_GROUP), total: eventScored.length },

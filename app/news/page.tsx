@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
-import { ecosystemNews } from "@/lib/home-content";
+import { getPickleballNews, pbArticleDate, type PbArticle } from "@/lib/pb-news";
 import { newsCategories, newsPage, searchNews, type NewsCard } from "@/lib/news";
 
 const PAGE_SIZE = 24;
@@ -121,6 +121,42 @@ export default async function NewsPage({ searchParams }: Search) {
   const from = (feed.page - 1) * feed.pageSize + 1;
   const to = Math.min(feed.page * feed.pageSize, feed.total);
   const total = newsPage({ pageSize: 1 }).total;
+
+  /**
+   * Live pickleball.com coverage. Interleaved into the feed AND given its own
+   * rail, both clearly marked as another site and linking out. Returns an empty
+   * list until the API grant lands, in which case nothing below renders — the
+   * items this replaced were invented headlines.
+   */
+  const pbNews = await getPickleballNews(searching ? 0 : 8);
+  const external = pbNews.articles;
+
+  /**
+   * Split so both surfaces get distinct articles rather than repeating four
+   * headlines twice: the newest four interleave into the feed by date, the rest
+   * fill the sidebar rail. Capped at four in the feed so external coverage never
+   * outweighs our own reporting on our own newsroom.
+   *
+   * Excluded entirely while searching — /search and /news search our archive by
+   * body text, and pickleball.com bodies aren't ours to index, so a query would
+   * silently miss them and the results would be misleading.
+   */
+  const feedExternal = external.slice(0, 4);
+  const railExternal = external.slice(4, 8);
+
+  type FeedRow =
+    | { kind: "ppa"; card: NewsCard; at: string }
+    | { kind: "external"; article: PbArticle; at: string };
+
+  const merged: FeedRow[] = [
+    ...list.map((card): FeedRow => ({ kind: "ppa", card, at: card.publishedAt })),
+    ...feedExternal.map((article): FeedRow => ({ kind: "external", article, at: article.publishedAt })),
+  ].sort((a, b) => {
+    // Undated external rows sort last rather than jumping to the top.
+    if (!a.at) return 1;
+    if (!b.at) return -1;
+    return b.at.localeCompare(a.at);
+  });
 
   return (
     <>
@@ -317,40 +353,118 @@ export default async function NewsPage({ searchParams }: Search) {
               )}
 
               <div className="mt-3 flex flex-col">
-                {list.map((n, i) => (
-                  <Link
-                    key={`${n.source}-${n.slug}`}
-                    href={n.href}
-                    data-reveal
-                    style={{ "--reveal-delay": `${Math.min(i, 6) * 50}ms` } as React.CSSProperties}
-                    className="group flex items-start gap-4 border-t border-ppa-line py-4 last:border-b"
-                  >
-                    <span className="relative aspect-4/3 w-24 shrink-0 overflow-hidden bg-ppa-navy sm:w-32">
-                      <CardImage card={n} sizes="(min-width: 640px) 128px, 96px" />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-[10px] font-bold uppercase tracking-[0.12em] text-ppa-blue">
-                        {n.category}
-                        <span className="text-ppa-navy/30"> · </span>
-                        <span className="text-ppa-navy/45">{n.displayDate}</span>
+                {merged.map((row, i) =>
+                  row.kind === "ppa" ? (
+                    <Link
+                      key={`${row.card.source}-${row.card.slug}`}
+                      href={row.card.href}
+                      data-reveal
+                      style={{ "--reveal-delay": `${Math.min(i, 6) * 50}ms` } as React.CSSProperties}
+                      className="group flex items-start gap-4 border-t border-ppa-line py-4 last:border-b"
+                    >
+                      <span className="relative aspect-4/3 w-24 shrink-0 overflow-hidden bg-ppa-navy sm:w-32">
+                        <CardImage card={row.card} sizes="(min-width: 640px) 128px, 96px" />
                       </span>
-                      <span className="mt-1 block font-display text-base uppercase leading-[1.12] text-ppa-navy transition-colors group-hover:text-ppa-blue">
-                        {n.title}
-                      </span>
-                      {n.dek && (
-                        <span className="mt-1 line-clamp-2 hidden text-[13px] leading-relaxed text-ppa-navy/55 sm:block">
-                          {n.dek}
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-[10px] font-bold uppercase tracking-[0.12em] text-ppa-blue">
+                          {row.card.category}
+                          <span className="text-ppa-navy/30"> · </span>
+                          <span className="text-ppa-navy/45">{row.card.displayDate}</span>
                         </span>
-                      )}
-                      <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.1em] text-ppa-navy/35">
-                        {n.author}
+                        <span className="mt-1 block font-display text-base uppercase leading-[1.12] text-ppa-navy transition-colors group-hover:text-ppa-blue">
+                          {row.card.title}
+                        </span>
+                        {row.card.dek && (
+                          <span className="mt-1 line-clamp-2 hidden text-[13px] leading-relaxed text-ppa-navy/55 sm:block">
+                            {row.card.dek}
+                          </span>
+                        )}
+                        <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.1em] text-ppa-navy/35">
+                          {row.card.author}
+                        </span>
                       </span>
-                    </span>
-                  </Link>
-                ))}
+                    </Link>
+                  ) : (
+                    /* pickleball.com article — a plain <a> to the original, on a
+                       tinted row with the mark, so it never reads as our story. */
+                    <a
+                      key={`pb-${row.article.url}`}
+                      href={row.article.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      data-reveal
+                      style={{ "--reveal-delay": `${Math.min(i, 6) * 50}ms` } as React.CSSProperties}
+                      className="group flex items-start gap-4 border-t border-ppa-line bg-ppa-paper/60 py-4 pl-2 pr-2 transition-colors last:border-b hover:bg-ppa-paper"
+                    >
+                      <span className="relative aspect-4/3 w-24 shrink-0 overflow-hidden bg-ppa-navy sm:w-32">
+                        {row.article.imageUrl ? (
+                          <Image
+                            src={row.article.imageUrl}
+                            alt=""
+                            fill
+                            sizes="(min-width: 640px) 128px, 96px"
+                            className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                          />
+                        ) : (
+                          <span className="flex h-full items-center justify-center bg-ppa-navy-deep p-3">
+                            <Image
+                              src="/ppa/ecosystem/pickleball-com-mark-white.svg"
+                              alt=""
+                              width={40}
+                              height={28}
+                              className="opacity-70"
+                            />
+                          </span>
+                        )}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="flex items-center gap-1.5">
+                          {/* Lockup + ".com" kept tight so the brand reads as one
+                              word rather than "PICKLEBALL .COM". */}
+                          <span className="flex shrink-0 items-baseline">
+                            <Image
+                              src="/ppa/ecosystem/pickleball-com-lockup.svg"
+                              alt="Pickleball.com"
+                              width={78}
+                              height={15}
+                            />
+                            <span className="text-[10px] font-bold uppercase tracking-[0.06em] text-ppa-navy/45">
+                              .com
+                            </span>
+                          </span>
+                          {row.article.publishedAt && (
+                            <>
+                              <span className="text-ppa-navy/30">·</span>
+                              <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-ppa-navy/45">
+                                {pbArticleDate(row.article.publishedAt)}
+                              </span>
+                            </>
+                          )}
+                        </span>
+                        <span className="mt-1 block font-display text-base uppercase leading-[1.12] text-ppa-navy transition-colors group-hover:text-ppa-blue">
+                          {row.article.title}
+                          <span aria-hidden className="ml-1 text-ppa-navy/40">
+                            ↗
+                          </span>
+                        </span>
+                        {row.article.excerpt && (
+                          <span className="mt-1 line-clamp-2 hidden text-[13px] leading-relaxed text-ppa-navy/55 sm:block">
+                            {row.article.excerpt}
+                          </span>
+                        )}
+                        <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.1em] text-ppa-navy/35">
+                          Reads on Pickleball.com
+                        </span>
+                      </span>
+                    </a>
+                  ),
+                )}
               </div>
 
-              {list.length === 0 && (
+              {/* Tests the rendered array, not `list` — otherwise a page whose
+                  only rows are pickleball.com articles would show "nothing
+                  here" directly above them. */}
+              {merged.length === 0 && (
                 <div className="mt-6 border border-ppa-line bg-ppa-paper px-4 py-12 text-center">
                   {searching ? (
                     <>
@@ -416,40 +530,52 @@ export default async function NewsPage({ searchParams }: Search) {
                 page's players rail); a 24-story list otherwise leaves it
                 stranded at the top of a very long column. */}
             <aside className="flex flex-col gap-8 lg:sticky lg:top-24 lg:self-start">
-              <div>
-                <div className="flex items-center gap-2.5">
-                  <span className="h-2 w-2 bg-ppa-blue" />
-                  <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/45">
-                    From Pickleball.com
-                  </p>
-                </div>
-                <div className="mt-3 flex flex-col gap-px border border-ppa-line bg-ppa-line">
-                  {ecosystemNews.map((e) => (
-                    <a
-                      key={e.title}
-                      href={e.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-start gap-2 bg-white p-4 transition-colors hover:bg-ppa-paper"
-                    >
-                      <span className="flex-1">
-                        <span className="block text-sm font-semibold leading-snug text-ppa-navy transition-colors group-hover:text-ppa-blue">
-                          {e.title}
-                        </span>
-                        <span className="mt-1 block text-[11px] uppercase tracking-[0.1em] text-ppa-navy/40">
-                          {e.date}
-                        </span>
-                      </span>
-                      <span
-                        aria-hidden
-                        className="text-ppa-navy/30 transition-colors group-hover:text-ppa-blue"
+              {/* Live pickleball.com coverage, marked with their lockup and
+                  linking out. Renders only when the feed answers — the four
+                  items this replaced were invented headlines pointing at the
+                  pickleball.com homepage, and an empty rail beats fake copy. */}
+              {railExternal.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 bg-ppa-blue" />
+                    <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/45">
+                      More From
+                    </p>
+                    <Image
+                      src="/ppa/ecosystem/pickleball-com-lockup.svg"
+                      alt="Pickleball.com"
+                      width={86}
+                      height={16}
+                    />
+                  </div>
+                  <div className="mt-3 flex flex-col gap-px border border-ppa-line bg-ppa-line">
+                    {railExternal.map((a) => (
+                      <a
+                        key={a.url}
+                        href={a.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-start gap-2 bg-white p-4 transition-colors hover:bg-ppa-paper"
                       >
-                        ↗
-                      </span>
-                    </a>
-                  ))}
+                        <span className="flex-1">
+                          <span className="block text-sm font-semibold leading-snug text-ppa-navy transition-colors group-hover:text-ppa-blue">
+                            {a.title}
+                          </span>
+                          <span className="mt-1 block text-[11px] uppercase tracking-[0.1em] text-ppa-navy/40">
+                            {pbArticleDate(a.publishedAt) || "Pickleball.com"}
+                          </span>
+                        </span>
+                        <span
+                          aria-hidden
+                          className="text-ppa-navy/30 transition-colors group-hover:text-ppa-blue"
+                        >
+                          ↗
+                        </span>
+                      </a>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="border border-ppa-line bg-ppa-paper p-5">
                 <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/45">

@@ -24,9 +24,7 @@ import {
   eventTierShort,
   type Tournament,
 } from "@/lib/placeholder-data";
-import {
-  ecosystemNews,
-  explainers,
+import {  explainers,
   leadStory,
   partners,
   playersToWatch,
@@ -36,6 +34,7 @@ import {
 // is rendered exclusively by app/page.tsx and app/live/page.tsx, both server
 // components. Do not import this from a "use client" file.
 import { allNews } from "@/lib/news";
+import { getPickleballNews, pbArticleDate } from "@/lib/pb-news";
 
 // Kickers ("For Fans" / "For Players" / "For Brands") dropped 7/28 — Jeff +
 // Nathan: unnecessary and cluttered. Blurbs are their copy from the audit doc.
@@ -215,6 +214,9 @@ export async function HomeContent({
   // Off-season/between-events homepage: no live scores make sense, so lead with
   // the most recent tour stop's champions instead.
   const latestChampions = live ? null : await lastCompletedChampions();
+  // Live pickleball.com coverage. Empty until the API grant lands, in which case
+  // the rail is omitted rather than showing the invented headlines it replaced.
+  const ecosystem = (await getPickleballNews(4)).articles;
   // Next six tour stops for the "Next on Tour" strip above the callouts.
   const upNext = getMainTourEvents().slice(0, 6);
 
@@ -860,16 +862,27 @@ export async function HomeContent({
               </Link>
             </div>
 
-            {/* Linked from Pickleball.com */}
+            {/* Live pickleball.com coverage, linking out. Hidden entirely when
+                the feed is unavailable — an empty bordered box is worse than no
+                box, and the placeholder headlines this replaced were invented. */}
+            {ecosystem.length > 0 && (
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-navy/45">
-                From Pickleball.com
-              </p>
+              <div className="flex items-center gap-2">
+                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-navy/45">
+                  From
+                </p>
+                <Image
+                  src="/ppa/ecosystem/pickleball-com-lockup.svg"
+                  alt="Pickleball.com"
+                  width={86}
+                  height={16}
+                />
+              </div>
               <div className="mt-2 flex flex-col gap-px border border-ppa-line bg-ppa-line">
-                {ecosystemNews.map((e) => (
+                {ecosystem.map((e) => (
                   <a
-                    key={e.title}
-                    href={e.href}
+                    key={e.url}
+                    href={e.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group flex items-start gap-2 bg-white p-4 transition-colors hover:bg-ppa-paper"
@@ -879,7 +892,7 @@ export async function HomeContent({
                         {e.title}
                       </span>
                       <span className="mt-1 block text-[11px] uppercase tracking-[0.1em] text-ppa-navy/40">
-                        {e.date}
+                        {pbArticleDate(e.publishedAt) || "Pickleball.com"}
                       </span>
                     </span>
                     <span
@@ -892,6 +905,7 @@ export async function HomeContent({
                 ))}
               </div>
             </div>
+            )}
           </div>
         </div>
       </section>

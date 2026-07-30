@@ -95,6 +95,11 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.pickleball.com" },
       // YouTube video thumbnails (tournament replay galleries).
       { protocol: "https", hostname: "i.ytimg.com" },
+      // Hero images on live pickleball.com articles (lib/pb-news.ts). Those
+      // articles are linked out to, never republished — only the card thumbnail
+      // is served here.
+      { protocol: "https", hostname: "cdn.pickleball.com" },
+      { protocol: "https", hostname: "www.pickleball.com" },
       // Rehosted media for the 811 migrated WordPress posts (Vercel Blob store
       // `ppatour-website-media`). This is the permanent home.
       {

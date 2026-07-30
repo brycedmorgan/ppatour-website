@@ -528,30 +528,9 @@ export const news: NewsItem[] = publishedArticles.map((a) => ({
   href: `/${a.slug}`,
 }));
 
-/** Linked coverage from Pickleball.com — opens off-site. */
-export const ecosystemNews: NewsItem[] = [
-  {
-    category: "Pickleball.com",
-    title: "Pickleball's Fastest-Growing Markets, Ranked",
-    date: "May 16",
-    href: "https://www.pickleball.com/?utm_source=ppatour&utm_medium=website&utm_campaign=ecosystem&utm_content=home-ecosystem-news",
-  },
-  {
-    category: "Pickleball.com",
-    title: "Gear Guide: The Paddles the Pros Are Switching To",
-    date: "May 13",
-    href: "https://www.pickleball.com/?utm_source=ppatour&utm_medium=website&utm_campaign=ecosystem&utm_content=home-ecosystem-news",
-  },
-  {
-    category: "Pickleball.com",
-    title: "How Ranking Points Translate to Tournament Seeding",
-    date: "May 11",
-    href: "https://www.pickleball.com/?utm_source=ppatour&utm_medium=website&utm_campaign=ecosystem&utm_content=home-ecosystem-news",
-  },
-  {
-    category: "Pickleball.com",
-    title: "From Rec Courts to the Pro Tour: One Player's Climb",
-    date: "May 8",
-    href: "https://www.pickleball.com/?utm_source=ppatour&utm_medium=website&utm_campaign=ecosystem&utm_content=home-ecosystem-news",
-  },
-];
+/**
+ * Coverage from Pickleball.com is fetched live in lib/pb-news.ts and linked
+ * out to, not stored here. The four hardcoded items that used to live at this
+ * spot were invented headlines pointing at the pickleball.com homepage.
+ */
+
