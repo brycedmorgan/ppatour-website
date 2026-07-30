@@ -39,7 +39,6 @@
 
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import sharp from "sharp";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const POSTS = path.join(ROOT, "lib/data/news-posts.json");
@@ -190,6 +189,13 @@ async function fetchBuffer(url, timeoutMs = 45_000) {
  * Downloads, optionally upgrades a derivative URL to its original, transcodes,
  * and returns whichever of {original, transcoded} is smaller.
  */
+/** Loaded on demand: --verify never transcodes, so it must not need sharp. */
+let sharpLib = null;
+async function sharpFor(buf) {
+  if (!sharpLib) sharpLib = (await import("sharp")).default;
+  return sharpLib(buf);
+}
+
 async function prepare(asset) {
   let source = asset.url;
   let buf;
@@ -228,7 +234,7 @@ async function prepare(asset) {
   let transcoded = false;
 
   try {
-    const webp = await sharp(buf)
+    const webp = await (await sharpFor(buf))
       .rotate() // honor EXIF, else phone photos land sideways
       .resize({ width: cap, height: cap, fit: "inside", withoutEnlargement: true })
       .webp({ quality: QUALITY })

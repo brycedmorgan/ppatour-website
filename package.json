@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "prebuild": "node scripts/sync-wp-media.mjs --verify",
+    "verify:media": "node scripts/sync-wp-media.mjs --verify"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
