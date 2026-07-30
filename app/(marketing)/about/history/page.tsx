@@ -46,8 +46,8 @@ export default function TournamentHistoryPage() {
             Every Champion. Every Year.
           </h1>
           <p className="mt-3 max-w-2xl text-sm text-ppa-navy/55 sm:text-base">
-            The full record of PPA Tour National Champions across every pro
-            division, plus the milestones that shaped the sport.
+            The full record of Carvana PPA Tour champions across every pro
+            division, plus milestones that shaped the sport.
           </p>
         </div>
       </section>
