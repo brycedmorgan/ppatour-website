@@ -165,9 +165,10 @@ export function AthleteRoster({ athletes }: { athletes: RosterAthlete[] }) {
             onChange={setRange}
             options={[
               { value: "all", label: "Everyone" },
-              { value: "10", label: "Top 10" },
-              { value: "25", label: "Top 25" },
-              { value: "50", label: "Top 50" },
+              // Per BOARD, not overall — see the count line below the controls.
+              { value: "10", label: "Top 10 Each" },
+              { value: "25", label: "Top 25 Each" },
+              { value: "50", label: "Top 50 Each" },
             ]}
           />
           <Select
@@ -181,6 +182,16 @@ export function AthleteRoster({ athletes }: { athletes: RosterAthlete[] }) {
           />
         </div>
       </div>
+
+      {/* Result count. "Top 10" filters on rank <= 10 of EACH gender board, so
+          Everyone + Top 10 is 20 pros, not 10 — which is why the counts read as
+          wrong ("sometimes it's 12, sometimes 32" — Hannah, 7/29). Stating the
+          number outright makes the filter legible instead of surprising, and
+          answers the separate "how many pros are on here?" question. */}
+      <p className="mt-5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/45">
+        Showing {shown.length} of {athletes.length} pros
+        {range !== "all" && ` · top ${range} of each world ranking board`}
+      </p>
 
       {shown.length === 0 ? (
         <p className="mt-10 border border-ppa-line bg-white px-4 py-12 text-center text-sm text-ppa-navy/55">
@@ -225,8 +236,15 @@ export function AthleteRoster({ athletes }: { athletes: RosterAthlete[] }) {
                   </span>
                 )}
                 {a.rank > 0 && (
+                  /* Board-qualified on purpose. WPR ranks are per-gender, and
+                     the grid interleaves both boards by absolute points, so an
+                     unqualified chip reads 1, 1, 2, 2, 3, 3, 4, 5, 6, 4 down
+                     the page — which looks like a broken sort even though the
+                     order is exactly right (Hannah, 7/29: "not properly
+                     sorting from Pro No. 4 onwards"). Naming the board makes
+                     the duplicate numbers self-explanatory. */
                   <span className="absolute left-2 top-2 bg-ppa-yellow px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] text-ppa-navy">
-                    No. {a.rank}
+                    {a.gender === "female" ? "W" : "M"} No. {a.rank}
                   </span>
                 )}
                 {a.countryCode && (
