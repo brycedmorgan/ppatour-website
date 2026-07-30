@@ -9,6 +9,9 @@ export type TourProgram = {
   label: string;
   eyebrow: string;
   headline: string;
+  /** Optional distinct heading for the About section; falls back to `headline`.
+   *  When set, the About body skips body[0] (already shown in the hero). */
+  sectionHeadline?: string;
   body: string[];
   bullets: { title: string; detail: string }[];
   cta: { label: string; href: string; external?: boolean };
@@ -44,15 +47,17 @@ export const tourPrograms: TourProgram[] = [
     slug: "senior",
     label: "Senior Open",
     eyebrow: "For Players 50+",
-    headline: "Senior Open Brackets at Every Stop",
+    headline: "Seniors Competition at Every Tournament",
+    sectionHeadline: "Top Competition Exclusive to Seniors at Every Carvana PPA Tour Stop",
     body: [
-      "The Senior Open is the dedicated 50+ amateur circuit — separate brackets, separate seedings, and a national ranking that runs all season.",
+      "The Senior Open is the PPA's dedicated 50+ amateur circuit — separate brackets, separate seedings, and national rankings that run all season.",
+      "The PPA values senior pickleball competition and is thrilled to provide dedicated brackets at every Carvana PPA Tour destination.",
       "Senior divisions are split by age (50+, 55+, 60+, 65+, 70+, 75+) and skill (3.5, 4.0, 4.5, 5.0), with singles, doubles, and mixed doubles at every tour stop.",
     ],
     bullets: [
-      { title: "Age brackets", detail: "50+, 55+, 60+, 65+, 70+, 75+ in every event." },
+      { title: "Age brackets", detail: "50+, 55+, 60+, 65+, 70+, 75+ in every tournament." },
       { title: "Skill brackets", detail: "3.5, 4.0, 4.5, 5.0 — find your level, play your match." },
-      { title: "Senior Nationals", detail: "Top seniors compete for the season-end title in each age × skill bracket." },
+      { title: "Senior Nationals", detail: "Top seniors compete for the season-end title in each age and skill bracket at the Pickleball World Championships in Dallas." },
       { title: "Same venues, same weekends", detail: "Play alongside the pro tour at every tour stop." },
     ],
     cta: { label: "Register for a Senior Bracket", href: REGISTER_PPA, external: true },
