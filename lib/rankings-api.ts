@@ -70,8 +70,19 @@ export type RankingDivision = {
 
 export type RankingsResult = {
   divisions: RankingDivision[];
-  /** "live" from the API, or "fallback" to the placeholder data. */
-  source: "live" | "fallback";
+  /**
+   * "live"        — real API data.
+   * "fallback"    — the demo placeholder. ONLY legitimate with no PB_API_TOKEN,
+   *                 i.e. local dev. Never serve it in production: these are
+   *                 invented point totals and they look completely plausible.
+   * "unavailable" — we are configured but the API failed. The page must say so
+   *                 rather than print numbers we made up (7/29: /rankings was
+   *                 publishing the 8-row demo set as though it were the board —
+   *                 Fed at 9,840 when he is really on 10,895 — and three people
+   *                 reported it as "the rankings are wrong" without anyone
+   *                 realising the data was fictional).
+   */
+  source: "live" | "fallback" | "unavailable";
 };
 
 export type RankingPage = {
@@ -82,7 +93,7 @@ export type RankingPage = {
   pageSize: number;
   total: number;
   totalPages: number;
-  source: "live" | "fallback";
+  source: "live" | "fallback" | "unavailable";
 };
 
 /** Shape of one entry in results.player_rankings we rely on. */
@@ -203,6 +214,22 @@ function fallbackEntries(genderKey: string): RankingEntry[] {
   });
 }
 
+/** Configured but the API failed: no rows, and the page says so. */
+function unavailableResult(): RankingsResult {
+  return {
+    divisions: RANKING_GENDERS.map((g) => ({
+      key: g.key, label: g.label, short: g.short, entries: [],
+    })),
+    source: "unavailable",
+  };
+}
+function unavailablePage(g: GenderQuery, page: number, pageSize: number): RankingPage {
+  return {
+    gender: g.key, label: g.label, entries: [],
+    page, pageSize, total: 0, totalPages: 0, source: "unavailable",
+  };
+}
+
 function fallbackResult(): RankingsResult {
   const divisions = RANKING_GENDERS.map((g) => ({
     key: g.key,
@@ -236,18 +263,20 @@ export async function getRankings(): Promise<RankingsResult> {
   if (!token) return fallbackResult();
 
   const today = new Date().toISOString().slice(0, 10);
-  try {
-    const divisions = await Promise.all(
-      RANKING_GENDERS.map(async (g) => {
+  /* One board failing must not take the other down with it, and NEITHER may be
+     replaced by the demo data — see the note on RankingsResult.source. */
+  const divisions = await Promise.all(
+    RANKING_GENDERS.map(async (g) => {
+      try {
         const { entries } = await fetchPage(g.gender, 1, TOP_COUNT, token, baseUrl, today);
         return { key: g.key, label: g.label, short: g.short, entries };
-      }),
-    );
-    if (divisions.every((d) => d.entries.length === 0)) return fallbackResult();
-    return { divisions, source: "live" };
-  } catch {
-    return fallbackResult();
-  }
+      } catch {
+        return { key: g.key, label: g.label, short: g.short, entries: [] as RankingEntry[] };
+      }
+    }),
+  );
+  if (divisions.every((d) => d.entries.length === 0)) return unavailableResult();
+  return { divisions, source: "live" };
 }
 
 /**
@@ -263,29 +292,33 @@ export async function getFullRankings(): Promise<RankingsResult> {
   const PAGE = 100;
   const MAX_PAGES = 10;
   const today = new Date().toISOString().slice(0, 10);
-  try {
-    const divisions = await Promise.all(
-      RANKING_GENDERS.map(async (g) => {
-        const all: RankingEntry[] = [];
-        let page = 1;
-        let total = Infinity;
-        while (all.length < total && page <= MAX_PAGES) {
-          const { entries, total: reported } = await fetchPage(
-            g.gender, page, PAGE, token, baseUrl, today,
-          );
-          if (entries.length === 0) break;
-          all.push(...entries);
-          total = reported;
-          page += 1;
+  /* THE BUG THIS FIXES (7/29): a single failed page threw out of the loop, the
+     outer catch swallowed it, and the whole board was replaced by the demo data
+     — so a partial outage silently became 16 rows of invented points on the
+     tour's own rankings page. Now a failed page ends that gender's paging and we
+     serve what we already collected; only a total wipeout reports unavailable. */
+  const divisions = await Promise.all(
+    RANKING_GENDERS.map(async (g) => {
+      const all: RankingEntry[] = [];
+      let page = 1;
+      let total = Infinity;
+      while (all.length < total && page <= MAX_PAGES) {
+        let got;
+        try {
+          got = await fetchPage(g.gender, page, PAGE, token, baseUrl, today);
+        } catch {
+          break; // keep the pages we already have
         }
-        return { key: g.key, label: g.label, short: g.short, entries: all };
-      }),
-    );
-    if (divisions.every((d) => d.entries.length === 0)) return fallbackResult();
-    return { divisions, source: "live" };
-  } catch {
-    return fallbackResult();
-  }
+        if (got.entries.length === 0) break;
+        all.push(...got.entries);
+        total = got.total;
+        page += 1;
+      }
+      return { key: g.key, label: g.label, short: g.short, entries: all };
+    }),
+  );
+  if (divisions.every((d) => d.entries.length === 0)) return unavailableResult();
+  return { divisions, source: "live" };
 }
 
 /**
@@ -308,7 +341,7 @@ export async function getRankingPage(genderKey: string, page: number): Promise<R
       baseUrl,
       today,
     );
-    if (entries.length === 0 && safePage === 1) return fallbackPage(g, safePage, FULL_PAGE_SIZE);
+    if (entries.length === 0 && safePage === 1) return unavailablePage(g, safePage, FULL_PAGE_SIZE);
     return {
       gender: g.key,
       label: g.label,
@@ -320,7 +353,8 @@ export async function getRankingPage(genderKey: string, page: number): Promise<R
       source: "live",
     };
   } catch {
-    return fallbackPage(g, safePage, FULL_PAGE_SIZE);
+    // Configured but the call failed — say so, never print the demo rows.
+    return unavailablePage(g, safePage, FULL_PAGE_SIZE);
   }
 }
 

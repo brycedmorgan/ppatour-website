@@ -131,7 +131,31 @@ export default async function RankingsPage() {
             name to open that pro&apos;s profile.
           </p>
           <div className="mt-6">
-            <RankingsBoard divisions={ranking.divisions} />
+            {ranking.source === "unavailable" ? (
+              /* Say the board is down rather than print numbers we invented.
+                 The demo dataset used to land here on any API hiccup and read
+                 as real — Fed at 9,840 when he is on 10,895 (7/29). */
+              <div className="border border-ppa-line bg-white px-4 py-12 text-center">
+                <p className="font-display text-lg uppercase text-ppa-navy">
+                  Rankings are temporarily unavailable
+                </p>
+                <p className="mx-auto mt-2 max-w-md text-sm text-ppa-navy/55">
+                  We couldn&apos;t reach the World Pickleball Rankings feed just now. Rather
+                  than show numbers that might be out of date, we&apos;ve left this blank —
+                  please check back shortly.
+                </p>
+                <a
+                  href="https://www.pickleball.com/rankings"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-5 inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
+                >
+                  View on Pickleball.com ↗
+                </a>
+              </div>
+            ) : (
+              <RankingsBoard divisions={ranking.divisions} />
+            )}
           </div>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link
