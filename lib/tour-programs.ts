@@ -26,9 +26,9 @@ export const tourPrograms: TourProgram[] = [
     slug: "junior",
     label: "Junior PPA",
     eyebrow: "For Players 18 & Under",
-    headline: "The Amateur Circuit for the Next Generation",
+    headline: "The Official Competition for the Next Generation",
     body: [
-      "Junior PPA is the amateur circuit for players 18 and under — the developmental pipeline for the pro tour. Brackets run at every tour stop, with dedicated junior divisions and championship weekends.",
+      "The Junior PPA Tour is the official competition for players 18 and younger. Serving as the developmental pipeline for the Carvana PPA Tour, events transpire alongside each Carvana PPA Tour stop, with dedicated junior divisions and championship weekends.",
       "Players climb a national junior ranking that mirrors the pro tour's points race, and the top juniors qualify into Junior Nationals at the end of the season.",
     ],
     bullets: [
