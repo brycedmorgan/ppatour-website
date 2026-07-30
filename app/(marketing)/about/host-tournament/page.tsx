@@ -15,9 +15,9 @@ const STEPS = [
 ];
 
 const WHAT_YOU_GET = [
-  "Full-week broadcast on PickleballTV and select Tennis Channel windows",
+  "Full-week broadcast on PickleballTV and select national windows",
   "On-site production crew, scoring, and brackets management",
-  "Title and presenting sponsor activations turn-key",
+  "Title and presenting sponsor activations",
   "National marketing push — email, social, and partner channels",
   "Amateur & junior brackets that fill mid-week hotel nights",
 ];
@@ -31,9 +31,9 @@ export default function HostTournamentPage() {
             <span className="h-2 w-2 bg-ppa-blue" />
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">For Venues & Cities</p>
           </div>
-          <h1 className="mt-2 font-display text-3xl uppercase leading-[1.02] sm:text-4xl">Host a PPA Tour Tournament</h1>
+          <h1 className="mt-2 font-display text-3xl uppercase leading-[1.02] sm:text-4xl">Host a Carvana PPA Tour Tournament</h1>
           <p className="mt-3 max-w-2xl text-sm text-ppa-navy/55 sm:text-base">
-            Bring the pros to your city. The PPA Tour partners with venues, resorts, and CVBs nationwide to deliver six-day, broadcast-quality tour events that fill rooms and pack courts.
+            Bring the best to your city. The Carvana PPA Tour partners with venues, resorts, cities, and CVBs nationwide to deliver six-day, ultra-professional tournaments that fill venue grounds and pack courts.
           </p>
           <div className="mt-5">
             <a href="#rfp" className="inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-ppa-blue-deep">
@@ -64,7 +64,7 @@ export default function HostTournamentPage() {
           <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr]">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">What&apos;s Included</p>
-              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">A Turn-Key Pro Stop</h2>
+              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">A Turn-Key Pro Tournament</h2>
               <ul className="mt-5 grid gap-px border border-ppa-line bg-ppa-line">
                 {WHAT_YOU_GET.map((b) => (
                   <li key={b} className="flex items-start gap-3 bg-white p-4 text-sm text-ppa-navy/75">
