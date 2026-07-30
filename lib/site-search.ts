@@ -162,10 +162,15 @@ function buildAthleteDocs(): AthleteDoc[] {
         title: a.name,
         meta: a.divisions.join(" · "),
         href: `/athletes/${a.slug}`,
-        snippet: a.tagline,
+        // Bio, not tagline — the taglines were pulled from the site as "odd and
+        // incorrect" (Hannah/Dave, 29 Jul), and a search snippet is just as
+        // visible as the page. Affects 2 athletes: only jay-devilliers and
+        // augie-ge reach this branch.
+        snippet: a.bio ?? undefined,
       },
       title: norm(a.name),
       meta: norm(`${a.divisions.join(" ")} ${a.country} athlete pro player`),
+      // Tagline stays in the match text (not shown, just helps a query land).
       body: norm(`${a.tagline ?? ""} ${a.bio ?? ""}`),
     });
   }

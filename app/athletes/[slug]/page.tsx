@@ -90,6 +90,33 @@ async function loadAthlete(slug: string) {
   };
 }
 
+/**
+ * Search/social description for a pro, from sourced facts only.
+ *
+ * The bio's opening sentence is real content from the athlete feed, so it is
+ * preferred. 165 of 180 profiles have one; the rest fall back to a line built
+ * from divisions and country. Deliberately not the tagline — see the hero.
+ */
+function athleteDescription(a: {
+  name: string;
+  bio: string[];
+  divisions: string[];
+  country: string;
+}): string {
+  const opening = a.bio
+    .join(" ")
+    .split(/(?<=[.!?])\s+/)
+    .map((s) => s.trim())
+    // Skip the "Name: Professional Pickleball Player on the PPA Tour" header
+    // some feed bios lead with — it is a title, not a sentence.
+    .find((s) => s.length > 40 && !/^[^.]{0,40}:\s/.test(s));
+  if (opening) return opening.length > 300 ? `${opening.slice(0, 297)}…` : opening;
+
+  const divisions = a.divisions.length ? ` Competes in ${a.divisions.join(", ")}.` : "";
+  const country = a.country ? ` ${a.country}.` : "";
+  return `${a.name} is a professional pickleball player on the Carvana PPA Tour.${divisions}${country}`.trim();
+}
+
 function initials(name: string): string {
   return name
     .split(/\s+/)
@@ -104,14 +131,20 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const a = await loadAthlete(slug);
   if (!a) return { title: "Athlete" };
-  const description = `${a.tagline}${a.country ? ` · ${a.country}` : ""}.`;
+  /**
+   * Built from facts rather than the tagline. The taglines were pulled from the
+   * page as "odd and incorrect" (see the hero), and a meta description is just
+   * as public — it is what Google and every social card show. Prefers the real
+   * sourced bio, falls back to divisions and country.
+   */
+  const description = athleteDescription(a);
   const images = a.headshot ? [a.headshot] : [];
   return {
     title: a.name,
     description,
     openGraph: {
       title: `${a.name} — Carvana PPA Tour`,
-      description: a.tagline,
+      description,
       images,
     },
     twitter: { card: "summary_large_image", images },
@@ -266,14 +299,21 @@ export default async function AthletePage({ params }: Params) {
             <h1 className="mt-3 font-display text-[clamp(2.25rem,6.5vw,4.25rem)] uppercase leading-[0.92]">
               {a.name}
             </h1>
-            <p className="mt-2 max-w-xl text-sm text-ppa-yellow sm:text-base">
-              {a.tagline}
-            </p>
-            {/* Division chips removed — Connor 7/29: "eliminate writing men's
-                doubles men's mixed doubles and men's singles. Don't understand
-                what the point of those boxes are right underneath the yellow
-                text." The divisions still drive gender inference and the
-                rankings board lookup, they're just not printed here. */}
+            {/* The yellow tagline line is gone — Hannah Johns (item 8) and Dave
+                Fleming, 29 Jul: "odd and incorrect", both asked to pull them.
+                They were subjective editorial claims ("the tour's most complete
+                all-court player") applied to only 40 of 180 pros, with everyone
+                else getting a generic boilerplate line, because the intended
+                `published.headline` fallback is empty for all 180. Uneven and
+                unverifiable is worse than absent on a player's own page.
+
+                `tagline` is still on the curated records, so restoring this is
+                one element — but it should not come back until the copy is
+                sourced and covers the whole roster.
+
+                Division chips were removed just below here earlier — Connor
+                7/29. Divisions still drive gender inference and the rankings
+                board lookup, they're just not printed. */}
           </div>
         </div>
 
