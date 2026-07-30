@@ -1,0 +1,465 @@
+{
+  "asOf": "2026-07-29",
+  "comparedTo": "2026-04-30",
+  "lookbackDays": 90,
+  "movement": {
+    "men": {
+      "risers": [
+        {
+          "slug": "len-yang",
+          "name": "Len Yang",
+          "from": 43,
+          "to": 25,
+          "places": 18
+        },
+        {
+          "slug": "hong-kit-wong",
+          "name": "Hong kit Wong",
+          "from": 33,
+          "to": 20,
+          "places": 13
+        },
+        {
+          "slug": "tama-shimabukuro",
+          "name": "Tama Shimabukuro",
+          "from": 26,
+          "to": 15,
+          "places": 11
+        },
+        {
+          "slug": "armaan-bhatia",
+          "name": "Armaan Bhatia",
+          "from": 24,
+          "to": 19,
+          "places": 5
+        }
+      ],
+      "sliding": [
+        {
+          "slug": "jaume-martinez-vich",
+          "name": "Jaume Martinez Vich",
+          "from": 15,
+          "to": 18,
+          "places": 3,
+          "lostPoints": false
+        },
+        {
+          "slug": "jonathan-truong",
+          "name": "Jonathan Truong",
+          "from": 18,
+          "to": 21,
+          "places": 3,
+          "lostPoints": false
+        },
+        {
+          "slug": "roscoe-bellamy",
+          "name": "Roscoe Bellamy",
+          "from": 19,
+          "to": 22,
+          "places": 3,
+          "lostPoints": false
+        },
+        {
+          "slug": "jack-sock",
+          "name": "Jack Sock",
+          "from": 20,
+          "to": 23,
+          "places": 3,
+          "lostPoints": false
+        },
+        {
+          "slug": "augustus-ge",
+          "name": "Augustus Ge",
+          "from": 21,
+          "to": 24,
+          "places": 3,
+          "lostPoints": false
+        }
+      ]
+    },
+    "women": {
+      "risers": [
+        {
+          "slug": "yufei-long",
+          "name": "Yufei Long",
+          "from": 43,
+          "to": 24,
+          "places": 19
+        },
+        {
+          "slug": "sahra-dennehy",
+          "name": "Sahra Dennehy",
+          "from": 29,
+          "to": 21,
+          "places": 8
+        },
+        {
+          "slug": "danni-elle-townsend",
+          "name": "Danni-Elle Townsend",
+          "from": 27,
+          "to": 23,
+          "places": 4
+        },
+        {
+          "slug": "lea-jansen",
+          "name": "Lea Jansen",
+          "from": 18,
+          "to": 16,
+          "places": 2
+        }
+      ],
+      "sliding": [
+        {
+          "slug": "etta-tuionetoa",
+          "name": "Etta Tuionetoa",
+          "from": 22,
+          "to": 25,
+          "places": 3,
+          "lostPoints": false
+        },
+        {
+          "slug": "mari-humberg",
+          "name": "Mari Humberg",
+          "from": 20,
+          "to": 22,
+          "places": 2,
+          "lostPoints": false
+        }
+      ]
+    }
+  },
+  "silverNoGold": [
+    {
+      "name": "Rachel Rohrabacher",
+      "silvers": 8
+    },
+    {
+      "name": "Hayden Patriquin",
+      "silvers": 5
+    },
+    {
+      "name": "Jaume Martinez Vich",
+      "silvers": 3
+    },
+    {
+      "name": "Jessie Irvine",
+      "silvers": 3
+    },
+    {
+      "name": "Gabriel Joseph",
+      "silvers": 3
+    },
+    {
+      "name": "Allyce Jones",
+      "silvers": 2
+    },
+    {
+      "name": "Brooke Buckner",
+      "silvers": 2
+    },
+    {
+      "name": "Callie Smith",
+      "silvers": 2
+    },
+    {
+      "name": "Roscoe Bellamy",
+      "silvers": 2
+    },
+    {
+      "name": "Genie Bouchard",
+      "silvers": 2
+    }
+  ],
+  "tripleCrowns": [
+    {
+      "name": "Anna Leigh Waters",
+      "count": 6,
+      "events": [
+        "Masters",
+        "Veolia Cape Coral Open",
+        "Veolia Atlanta Pickleball Championships",
+        "Select Medical Orange County Cup - 2025",
+        "Fasenra Virginia Beach Cup presented by Joola",
+        "Rate Vegas Cup"
+      ]
+    }
+  ],
+  "topRanked": {
+    "men": {
+      "name": "Ben Johns",
+      "rank": 1,
+      "points": 19295
+    },
+    "women": {
+      "name": "Anna Leigh Waters",
+      "rank": 1,
+      "points": 22255
+    }
+  },
+  "runnersUp": {
+    "2026/carvana-ppa-masters-powered-by-invited": [
+      {
+        "division": "Men's Doubles",
+        "name": "Hayden Patriquin & Federico Staksrud"
+      },
+      {
+        "division": "Men's Singles",
+        "name": "Jaume Martinez Vich"
+      },
+      {
+        "division": "Mixed Doubles",
+        "name": "Catherine Parenteau & Federico Staksrud"
+      },
+      {
+        "division": "Women's Doubles",
+        "name": "Rachel Rohrabacher & Anna Bright"
+      },
+      {
+        "division": "Women's Singles",
+        "name": "Kaitlyn Christian"
+      }
+    ],
+    "2026/indoor-national-championships": [
+      {
+        "division": "Men's Doubles",
+        "name": "Connor Garnett & Tyler Loong"
+      },
+      {
+        "division": "Men's Singles",
+        "name": "Connor Garnett"
+      },
+      {
+        "division": "Mixed Doubles",
+        "name": "Rachel Rohrabacher & Federico Staksrud"
+      },
+      {
+        "division": "Women's Doubles",
+        "name": "Callie Smith & Lucy Kovalova"
+      },
+      {
+        "division": "Women's Singles",
+        "name": "Parris Todd"
+      }
+    ],
+    "2026/zimmer-biomet-cape-coral-open": [
+      {
+        "division": "Men's Doubles",
+        "name": "Christian Alshon & Federico Staksrud"
+      },
+      {
+        "division": "Men's Singles",
+        "name": "Jaume Martinez Vich"
+      },
+      {
+        "division": "Mixed Doubles",
+        "name": "Anna Bright & JW Johnson"
+      },
+      {
+        "division": "Women's Doubles",
+        "name": "Rachel Rohrabacher & Anna Bright"
+      },
+      {
+        "division": "Women's Singles",
+        "name": "Lea Jansen"
+      }
+    ],
+    "2026/carvana-mesa-cup": [
+      {
+        "division": "Men's Doubles",
+        "name": "Ben Johns & Gabriel Tardio"
+      },
+      {
+        "division": "Men's Singles",
+        "name": "Hunter Johnson"
+      },
+      {
+        "division": "Mixed Doubles",
+        "name": "Anna Bright & Dekel Bar"
+      },
+      {
+        "division": "Women's Doubles",
+        "name": "Rachel Rohrabacher & Anna Bright"
+      },
+      {
+        "division": "Women's Singles",
+        "name": "Brooke Buckner"
+      }
+    ],
+    "2026/veolia-texas-open": [
+      {
+        "division": "Men's Doubles",
+        "name": "Christian Alshon & Federico Staksrud"
+      },
+      {
+        "division": "Men's Singles",
+        "name": "Federico Staksrud"
+      },
+      {
+        "division": "Mixed Doubles",
+        "name": "Jorja Johnson & JW Johnson"
+      },
+      {
+        "division": "Women's Doubles",
+        "name": "Etta Tuionetoa & Callie Smith"
+      },
+      {
+        "division": "Women's Singles",
+        "name": "Kate Fahey"
+      }
+    ],
+    "2026/sacramento-open": [
+      {
+        "division": "Men's Doubles",
+        "name": "Augustus Ge & James Ignatowich"
+      },
+      {
+        "division": "Men's Singles",
+        "name": "Gabriel Joseph"
+      },
+      {
+        "division": "Mixed Doubles",
+        "name": "Kate Fahey & Dylan Frazier"
+      },
+      {
+        "division": "Women's Doubles",
+        "name": "Jessie Irvine & Callie Smith"
+      },
+      {
+        "division": "Women's Singles",
+        "name": "Genie Bouchard"
+      }
+    ],
+    "2026/veolia-atlanta-pickleball-championships": [
+      {
+        "division": "Men's Doubles",
+        "name": "Ben Johns & Gabriel Tardio"
+      },
+      {
+        "division": "Men's Singles",
+        "name": "Connor Garnett"
+      },
+      {
+        "division": "Mixed Doubles",
+        "name": "Etta Tuionetoa & Christian Alshon"
+      },
+      {
+        "division": "Women's Doubles",
+        "name": "Rachel Rohrabacher & Catherine Parenteau"
+      },
+      {
+        "division": "Women's Singles",
+        "name": "Kate Fahey"
+      }
+    ],
+    "2026/ppa-finals": [
+      {
+        "division": "Men's Doubles",
+        "name": "JW Johnson & Gabriel Tardio"
+      },
+      {
+        "division": "Men's Singles",
+        "name": "Connor Garnett"
+      },
+      {
+        "division": "Mixed Doubles",
+        "name": "Catherine Parenteau & Christian Alshon"
+      },
+      {
+        "division": "Women's Doubles",
+        "name": "Rachel Rohrabacher & Anna Bright"
+      },
+      {
+        "division": "Women's Singles",
+        "name": "Parris Todd"
+      }
+    ],
+    "2026/rate-las-vegas-open": [
+      {
+        "division": "Men's Doubles",
+        "name": "JW Johnson & Dylan Frazier"
+      },
+      {
+        "division": "Men's Singles",
+        "name": "Connor Garnett"
+      },
+      {
+        "division": "Mixed Doubles",
+        "name": "Jorja Johnson & JW Johnson"
+      },
+      {
+        "division": "Women's Doubles",
+        "name": "Rachel Rohrabacher & Anna Bright"
+      },
+      {
+        "division": "Women's Singles",
+        "name": "Brooke Buckner"
+      }
+    ],
+    "2026/virginia-beach-open": [
+      {
+        "division": "Men's Doubles",
+        "name": "CJ Klinger & JW Johnson"
+      },
+      {
+        "division": "Men's Singles",
+        "name": "Christian Alshon"
+      },
+      {
+        "division": "Mixed Doubles",
+        "name": "Jorja Johnson & JW Johnson"
+      },
+      {
+        "division": "Women's Doubles",
+        "name": "Rachel Rohrabacher & Jorja Johnson"
+      },
+      {
+        "division": "Women's Singles",
+        "name": "Brooke Buckner"
+      }
+    ],
+    "2026/pickleball-world-championships": [
+      {
+        "division": "Men's Doubles",
+        "name": "JW Johnson & CJ Klinger"
+      },
+      {
+        "division": "Men's Singles",
+        "name": "Christopher Haworth"
+      },
+      {
+        "division": "Mixed Doubles",
+        "name": "Jorja Johnson & JW Johnson"
+      },
+      {
+        "division": "Women's Doubles",
+        "name": "Parris Todd & Catherine Parenteau"
+      },
+      {
+        "division": "Women's Singles",
+        "name": "Kate Fahey"
+      }
+    ],
+    "2026/florida-open": [
+      {
+        "division": "Men's Doubles",
+        "name": "Riley Newman & Noe Khlif"
+      },
+      {
+        "division": "Men's Singles",
+        "name": "Gabriel Joseph"
+      },
+      {
+        "division": "Mixed Doubles",
+        "name": "Kaitlyn Christian & Andrei Daescu"
+      },
+      {
+        "division": "Women's Doubles",
+        "name": "Tyra Hurricane Black & Catherine Parenteau"
+      },
+      {
+        "division": "Women's Singles",
+        "name": "Katerina Stewart"
+      }
+    ]
+  }
+}

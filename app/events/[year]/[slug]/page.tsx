@@ -19,7 +19,9 @@ import { ResultsPanel } from "@/components/live/ResultsPanel";
 import { ChampionsBanner } from "@/components/live/ChampionsBanner";
 import { ReplayGallery } from "@/components/live/ReplayGallery";
 import { getDefendingChampions } from "@/lib/defending-champions";
+import { getEventField } from "@/lib/event-field";
 import { getReplayPlaylistId } from "@/lib/event-replays";
+import { getPlayersToWatch } from "@/lib/players-to-watch";
 import { playerInitials, playerPhoto, playerProfileHref } from "@/lib/player-photos";
 import { getPlaylistVideos } from "@/lib/youtube";
 import { Countdown } from "@/components/motion/Countdown";
@@ -27,7 +29,6 @@ import { getBroadcast } from "@/lib/broadcast";
 import { getEventGuide } from "@/lib/event-guides";
 import { getEventSchedule } from "@/lib/event-schedule";
 import { getEvents } from "@/lib/events-api";
-import { playersToWatch } from "@/lib/home-content";
 import { getArticlesForEvent } from "@/lib/news-articles";
 import {
   daysUntil,
@@ -246,6 +247,10 @@ export default async function EventPage({ params }: Params) {
   const defendingChampions = t.defendingChampions?.length
     ? t.defendingChampions
     : getDefendingChampions(year, t.slug);
+
+  // Players to Watch is driven by the published draw: no draw, no column.
+  const field = await getEventField(t.tournamentUuid);
+  const watchPicks = getPlayersToWatch(field, defendingChampions, `${year}/${t.slug}`);
 
   const TABS = [
     { id: "overview", label: "Overview" },
@@ -1185,40 +1190,85 @@ export default async function EventPage({ params }: Params) {
       {!completed && (
       <section id="players" className="scroll-mt-[120px] bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <div className="grid gap-10 lg:grid-cols-[1fr_1fr]">
+          <div
+            className={
+              watchPicks.length > 0 ? "grid gap-10 lg:grid-cols-[1fr_1fr]" : "grid gap-10"
+            }
+          >
+            {/* Only rendered once the draw is published — before that we have no
+                entry list, and generic picks are what made every event page show
+                the same three players. See lib/players-to-watch.ts. */}
+            {watchPicks.length > 0 && (
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 Players to Watch
               </p>
+              {/* Don't claim "In the Draw" before the draw exists — pre-draw
+                  picks are storylines, not a statement of who is entered. */}
               <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-                In the Draw
+                {field.published ? "In the Draw" : "Ones to Watch"}
               </h2>
               <div className="mt-5 flex flex-col gap-px border border-ppa-line bg-ppa-line">
-                {playersToWatch.map((p) => (
-                  <Link
-                    key={p.slug}
-                    href={`/athletes/${p.slug}`}
-                    className="group flex items-center gap-3 bg-white p-3 transition-colors hover:bg-ppa-paper"
-                  >
-                    <div className="relative size-14 shrink-0 overflow-hidden rounded-full bg-ppa-navy-deep">
-                      <Image
-                        src={p.image}
-                        alt={p.name}
-                        fill
-                        sizes="56px"
-                        className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                      />
+                {watchPicks.map((p) => {
+                  // A card can hold more than one player — triple-crown winners
+                  // share a box rather than taking a slot each.
+                  const solo = p.players.length === 1 ? p.players[0] : null;
+                  const href = solo ? playerProfileHref(solo) : null;
+                  const card = (
+                    <>
+                      <div className="flex shrink-0 items-center -space-x-3">
+                        {p.players.map((name) => {
+                          const photo = playerPhoto(name);
+                          return (
+                            <div
+                              key={name}
+                              className="relative size-14 overflow-hidden rounded-full bg-ppa-navy-deep ring-2 ring-white"
+                            >
+                              {photo ? (
+                                <Image
+                                  src={photo}
+                                  alt={name}
+                                  fill
+                                  sizes="56px"
+                                  className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                                />
+                              ) : (
+                                <span className="flex h-full w-full items-center justify-center text-xs font-bold text-white/70">
+                                  {playerInitials(name)}
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className="flex flex-1 flex-col">
+                        <span className="font-display text-sm uppercase leading-tight text-ppa-navy transition-colors group-hover:text-ppa-blue">
+                          {p.players.join(" & ")}
+                        </span>
+                        <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-ppa-blue">
+                          {p.badge}
+                        </span>
+                        <span className="mt-1 text-xs leading-snug text-ppa-navy/60">
+                          {p.hook}
+                        </span>
+                      </div>
+                    </>
+                  );
+                  const key = p.players.join("|");
+                  return href ? (
+                    <Link
+                      key={key}
+                      href={href}
+                      className="group flex items-start gap-3 bg-white p-3 transition-colors hover:bg-ppa-paper"
+                    >
+                      {card}
+                    </Link>
+                  ) : (
+                    <div key={key} className="group flex items-start gap-3 bg-white p-3">
+                      {card}
                     </div>
-                    <div className="flex flex-1 flex-col">
-                      <span className="font-display text-sm uppercase leading-tight text-ppa-navy transition-colors group-hover:text-ppa-blue">
-                        {p.name}
-                      </span>
-                      <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-ppa-blue">
-                        No. {p.rank} · {p.division}
-                      </span>
-                    </div>
-                  </Link>
-                ))}
+                  );
+                })}
               </div>
               {/* Hannah 7/28: people come looking for one specific player. */}
               <Link
@@ -1234,6 +1284,7 @@ export default async function EventPage({ params }: Params) {
                 </span>
               </Link>
             </div>
+            )}
 
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
