@@ -13,7 +13,14 @@ export type Athlete = {
   headshot: string;
   /** Pro divisions this athlete competes in. */
   divisions: string[];
-  /** Best current ranking across divisions. */
+  /**
+   * ⚠️ CAREER-BEST rank, hand-maintained, last touched May 2026 — NOT a current
+   * rank. Verified 7/29: it disagrees with the live WPR board for 31 of the 40
+   * pros here (Andre Mercado reads 10, he's live 108; Collin Johns 3 vs 36).
+   * NEVER render this as a rank. Use `getRankingBySlug()` from lib/rankings-api
+   * — one cached board fetch keyed by slug. Kept only as a rough seed for
+   * ordering/priority, which is why it isn't deleted outright.
+   */
   bestRank: number;
   tagline: string;
   bio: string;

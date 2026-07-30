@@ -11,7 +11,12 @@ import {
   publishedAthletes,
   turnedProYear,
 } from "@/lib/published-athletes";
-import { curatedSlugFor, getWprPlayerBySlug, getWprRoster } from "@/lib/rankings-api";
+import {
+  curatedSlugFor,
+  getRankingBySlug,
+  getWprPlayerBySlug,
+  getWprRoster,
+} from "@/lib/rankings-api";
 import { getAthleteStats } from "@/lib/athlete-stats";
 import { getDivisionRanks } from "@/lib/division-rankings";
 import { getAthleteVideoData } from "@/lib/athlete-videos";
@@ -64,7 +69,12 @@ async function loadAthlete(slug: string) {
     headshot: curated?.headshot ?? api?.headshot ?? "",
     country: published?.country || curated?.country || api?.country || "",
     countryCode: api?.countryCode || published?.countryCode || "",
-    rank: api?.rank ?? curated?.bestRank ?? 0,
+    // NEVER fall back to curated.bestRank here. That field is a hand-maintained
+    // career-best from May and is stale for 31 of our 40 curated pros (Andre
+    // Mercado reads #10, he's live #108) — falling back to it renders a
+    // career-best under a "World Rank" label, which is Connor's 7/29 "rankings
+    // different on different pages". No live rank → show a dash.
+    rank: api?.rank ?? 0,
     points: api?.points ?? 0,
     gender: api?.gender ?? genderFromDivisions(divisions),
     divisions,
@@ -113,8 +123,7 @@ export default async function AthletePage({ params }: Params) {
   const a = await loadAthlete(slug);
   if (!a) notFound();
 
-  // Live stats from the player API (DUPR ratings, career podium finishes, bio
-  // facts) +
+  // Live stats from the player API (career podium finishes, bio facts) +
   // per-division World Pickleball rankings. Null/empty when the API is
   // unavailable — the stats section simply hides.
   const stats = await getAthleteStats(slug);
@@ -127,6 +136,9 @@ export default async function AthletePage({ params }: Params) {
   const boardLabel =
     a.gender === "female" ? "Women's" : a.gender === "male" ? "Men's" : null;
   const others = athletes.filter((x) => x.slug !== a.slug).slice(0, 4);
+  // Live WPR rank for the "More Pros" cards. One cached board fetch serves every
+  // slug — see the note on `bestRank` in lib/athletes.ts for why we can't use it.
+  const liveRanks = await getRankingBySlug();
   const flag = a.countryCode
     ? `https://cdn.pickleball.com/circle-flags/${a.countryCode}.svg`
     : null;
@@ -143,19 +155,10 @@ export default async function AthletePage({ params }: Params) {
     { label: "Paddle", value: qi?.paddle ?? "" },
   ].filter((f) => f.value);
 
-  // DUPR ratings for the stats section (present values only, 2-decimals).
-  const ratings = [
-    { label: "Singles", value: stats?.dupr.singles },
-    { label: "Doubles", value: stats?.dupr.doubles },
-  ].filter((r): r is { label: string; value: number } => r.value != null);
-  // Per-division rankings — always show all three; "Unranked" where the athlete
-  // isn't in that discipline's board.
-  const divisionRanks = [
-    { label: "Singles", data: divRanks.singles ?? null },
-    { label: "Doubles", data: divRanks.doubles ?? null },
-    { label: "Mixed", data: divRanks.mixed ?? null },
-  ];
-  const hasAnyDivRank = divisionRanks.some((r) => r.data);
+  // `divRanks` still tells us which boards the athlete sits on, which is what
+  // decides whether the By-the-Numbers section renders at all. The three
+  // per-discipline cards it used to feed are gone (Connor, 7/29).
+  const hasAnyDivRank = Boolean(divRanks.singles || divRanks.doubles || divRanks.mixed);
   const medalRows = stats?.medals
     ? ([
         ["Singles", stats.medals.singles],
@@ -168,8 +171,7 @@ export default async function AthletePage({ params }: Params) {
   const gear = resolveGear(a.quickInfo?.paddle ?? null);
 
   // Broadcast-style stat strip under the hero — the marquee numbers up front so
-  // rank / DUPR / hardware read instantly (only render what we actually have).
-  const topDupr = stats?.dupr.doubles ?? stats?.dupr.singles ?? null;
+  // rank + hardware read instantly (only render what we actually have).
   const goldTotal = stats?.medals?.total.gold ?? null;
   const heroStats: { label: string; value: string }[] = [
     {
@@ -177,7 +179,8 @@ export default async function AthletePage({ params }: Params) {
       value: a.rank ? `No. ${a.rank}` : "—",
     },
     { label: "WPR Points", value: a.points > 0 ? a.points.toLocaleString() : "—" },
-    ...(topDupr != null ? [{ label: "DUPR", value: topDupr.toFixed(2) }] : []),
+    // DUPR removed from the strip — Connor 7/29: "let's also not show DUPR".
+    // It's a third-party rating; the tour's own number is the WPR.
     ...(goldTotal != null && goldTotal > 0
       ? [{ label: "Career Titles", value: String(goldTotal) }]
       : []),
@@ -255,18 +258,11 @@ export default async function AthletePage({ params }: Params) {
             <p className="mt-2 max-w-xl text-sm text-ppa-yellow sm:text-base">
               {a.tagline}
             </p>
-            {a.divisions.length > 0 && (
-              <div className="mt-4 flex flex-wrap gap-2">
-                {a.divisions.map((d) => (
-                  <span
-                    key={d}
-                    className="border border-white/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/75"
-                  >
-                    {d}
-                  </span>
-                ))}
-              </div>
-            )}
+            {/* Division chips removed — Connor 7/29: "eliminate writing men's
+                doubles men's mixed doubles and men's singles. Don't understand
+                what the point of those boxes are right underneath the yellow
+                text." The divisions still drive gender inference and the
+                rankings board lookup, they're just not printed here. */}
           </div>
         </div>
 
@@ -376,36 +372,16 @@ export default async function AthletePage({ params }: Params) {
               By the Numbers
             </h2>
 
-            {hasAnyDivRank && (
-              <div className="mt-6">
-                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
-                  Division Rankings
-                </p>
-                <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                  {divisionRanks.map((r) => (
-                    <div key={r.label} className="border border-ppa-line bg-ppa-paper px-4 py-4">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
-                        {r.label}
-                      </p>
-                      {r.data ? (
-                        <>
-                          <p className="mt-1 font-display text-4xl leading-none text-ppa-blue">
-                            No. {r.data.rank}
-                          </p>
-                          <p className="mt-1 text-xs text-ppa-navy/55">
-                            {r.data.points.toLocaleString()} pts
-                          </p>
-                        </>
-                      ) : (
-                        <p className="mt-1 font-display text-2xl leading-none text-ppa-navy/30">
-                          Unranked
-                        </p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            {/* Division Rankings block removed — Connor 7/29: "let's only show
+                WPR, not individual disciplines."
+                Worth knowing WHY it looked broken to him: WPR is a weighted
+                average of the three boards, not a sum —
+                  WPR = 0.5·doubles + 0.35·mixed + 0.15·singles
+                (Ben Johns: 0.5·21,800 + 0.35·23,300 + 0.15·1,600 = 19,295 ✓).
+                So the per-discipline point totals are LARGER than the combined
+                WPR, which reads as an error even though the math is right.
+                `getDivisionRanks` is still called — it's what tells us which
+                board an athlete sits on — we just don't print the three cards. */}
 
             {stats?.medals && (
               <div className="mt-6">
@@ -458,28 +434,8 @@ export default async function AthletePage({ params }: Params) {
               </div>
             )}
 
-            {ratings.length > 0 && (
-              <div className="mt-8">
-                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
-                  DUPR
-                </p>
-                <div className="mt-3 grid grid-cols-2 gap-3 sm:max-w-md">
-                  {ratings.map((r) => (
-                    <div key={r.label} className="border border-ppa-line bg-ppa-paper px-4 py-4">
-                      <p className="font-display text-3xl leading-none text-ppa-blue">
-                        {r.value.toFixed(2)}
-                      </p>
-                      <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
-                        {r.label}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-                <p className="mt-3 text-[11px] text-ppa-navy/40">
-                  DUPR = Dynamic Universal Pickleball Rating
-                </p>
-              </div>
-            )}
+            {/* DUPR section removed — Connor 7/29: "let's also not show DUPR."
+                Third-party rating; the tour's own number is the WPR. */}
           </div>
         </section>
       )}
@@ -579,9 +535,11 @@ export default async function AthletePage({ params }: Params) {
                   <p className="font-display text-sm uppercase leading-tight transition-colors group-hover:text-ppa-sky">
                     {o.name}
                   </p>
-                  <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-ppa-sky">
-                    No. {o.bestRank}
-                  </p>
+                  {liveRanks[o.slug] && (
+                    <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-ppa-sky">
+                      No. {liveRanks[o.slug].rank}
+                    </p>
+                  )}
                 </div>
               </Link>
             ))}

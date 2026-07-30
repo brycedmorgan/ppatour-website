@@ -6,6 +6,7 @@ import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { getArticle, publishedArticles } from "@/lib/news-articles";
 import { athletes, type Athlete } from "@/lib/athletes";
 import { getNextTournament } from "@/lib/placeholder-data";
+import { getRankingBySlug } from "@/lib/rankings-api";
 import { withUtm } from "@/lib/utm";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -64,6 +65,11 @@ export default async function ArticlePage({ params }: Params) {
 
   const related = publishedArticles.filter((x) => x.slug !== a.slug).slice(0, 3);
   const next = getNextTournament();
+  // Live WPR rank for the "Players in This Story" rail. Was `bestRank`, a
+  // hand-maintained career-best that's stale for most of the roster — that's
+  // how the same pro could read No. 3 here and No. 36 on their own profile
+  // (Connor, 7/29: "rankings different on different pages").
+  const liveRanks = await getRankingBySlug();
 
   const mentioned = athletes.filter((p) =>
     [a.dek, ...a.body].some((t) => t.includes(p.name)),
@@ -186,7 +192,9 @@ export default async function ArticlePage({ params }: Params) {
                           {p.name}
                         </span>
                         <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-ppa-blue">
-                          No. {p.bestRank} · {p.divisions[0]}
+                          {liveRanks[p.slug]
+                            ? `No. ${liveRanks[p.slug].rank} · ${p.divisions[0]}`
+                            : p.divisions[0]}
                         </span>
                       </span>
                       <span

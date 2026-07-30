@@ -110,7 +110,11 @@ function buildIndex(): SearchDoc[] {
     docs.push({
       group: "Athletes",
       title: a.name,
-      meta: `#${a.bestRank} · ${a.divisions.join(" · ")}`,
+      // No rank here on purpose: this index is built synchronously for a client
+      // component, so it can't read the live board — and `bestRank` is a stale
+      // career-best (Connor 7/29, "rankings different on different pages").
+      // Divisions only; the profile page shows the live rank.
+      meta: a.divisions.join(" · "),
       href: `/athletes/${a.slug}`,
       haystack: blob(a.name, a.country, a.divisions.join(" "), a.tagline, "athlete pro player"),
     });
