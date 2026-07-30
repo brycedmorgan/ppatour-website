@@ -171,6 +171,17 @@ function mapRow(row: ApiRow): PbArticle | null {
 }
 
 /**
+ * Newest first by publish date. Reversing the ascending feed gets close, but the
+ * API's ascending order is not keyed on publish_date_displayed, so a reversed
+ * page comes back only roughly ordered — this makes each page strictly correct.
+ */
+function byNewest(a: PbArticle, b: PbArticle): number {
+  if (!a.publishedAt) return 1;
+  if (!b.publishedAt) return -1;
+  return b.publishedAt.localeCompare(a.publishedAt);
+}
+
+/**
  * PPA news from pickleball.com, newest first. Never throws: any failure returns
  * an empty list with a reason so the page renders without the section rather
  * than erroring or inventing content.
@@ -229,6 +240,7 @@ export async function getPickleballNews(limit = 6): Promise<PbNewsResult> {
     const articles = newest
       .map(mapRow)
       .filter((a): a is PbArticle => a !== null)
+      .sort(byNewest)
       .slice(0, limit);
 
     if (rows.length > 0 && articles.length === 0) {
@@ -241,6 +253,98 @@ export async function getPickleballNews(limit = 6): Promise<PbNewsResult> {
       return EMPTY("denied", `HTTP ${status} — token not authorized for ${NEWS_PATH}`);
     }
     return EMPTY("error", err instanceof Error ? err.message : String(err));
+  }
+}
+
+export type PbNewsPage = PbNewsResult & {
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+};
+
+/**
+ * A page of PPA news, newest first — for the dedicated "Pickleball.com" filter,
+ * where all 1,444 articles are browsable rather than just the newest handful.
+ *
+ * The API only serves ASCENDING order (sort_order is ignored, see the header),
+ * so newest-first page N maps to an ascending index window near the end:
+ * [total − N·size, total − (N−1)·size). That window rarely aligns to a page
+ * boundary, so it is covered by fetching the one or two ascending pages that
+ * contain it and slicing — at most three requests including the count.
+ */
+export async function getPickleballNewsPage(page = 1, pageSize = 24): Promise<PbNewsPage> {
+  const empty = (r: PbNewsResult): PbNewsPage => ({
+    ...r,
+    page: 1,
+    pageSize,
+    total: 0,
+    totalPages: 1,
+  });
+
+  const cfg = config();
+  if (!cfg) return empty(EMPTY("unconfigured", "no PB_NEWS_API_KEY or PB_API_TOKEN"));
+
+  const endpoint = (p: number, size: number) =>
+    `${cfg.base}${NEWS_PATH}?` +
+    new URLSearchParams({
+      is_active: "true",
+      is_blog: "false",
+      subcategory_uuid: cfg.subcategory,
+      current_page: String(p),
+      page_size: String(size),
+    });
+
+  async function get(p: number, size: number): Promise<ApiEnvelope> {
+    const res = await fetch(endpoint(p, size), {
+      headers: { "PB-API-TOKEN": cfg!.key },
+      next: { revalidate: 600, tags: ["pb-news"] },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) {
+      const err = new Error(`HTTP ${res.status}`) as Error & { status?: number };
+      err.status = res.status;
+      throw err;
+    }
+    return (await res.json()) as ApiEnvelope;
+  }
+
+  try {
+    const total = (await get(1, 1)).total_records ?? 0;
+    if (total === 0) return empty({ articles: [], source: "live" });
+
+    const totalPages = Math.max(1, Math.ceil(total / pageSize));
+    const current = Math.min(Math.max(1, Math.floor(page)), totalPages);
+
+    // Ascending window this newest-first page corresponds to.
+    const end = total - (current - 1) * pageSize;
+    const start = Math.max(0, end - pageSize);
+    const firstPage = Math.floor(start / pageSize) + 1;
+    const offset = start % pageSize;
+
+    const rows = (await get(firstPage, pageSize)).results?.news_articles ?? [];
+    let window = rows;
+    // Straddles a boundary — pull the next ascending page to complete it.
+    if (offset + (end - start) > rows.length && firstPage < Math.ceil(total / pageSize)) {
+      const more = (await get(firstPage + 1, pageSize)).results?.news_articles ?? [];
+      window = [...rows, ...more];
+    }
+
+    const articles = window
+      .slice(offset, offset + (end - start))
+      .reverse()
+      .map(mapRow)
+      .filter((a): a is PbArticle => a !== null)
+      .sort(byNewest);
+
+    return { articles, source: "live", page: current, pageSize, total, totalPages };
+  } catch (err) {
+    const status = (err as Error & { status?: number }).status;
+    return empty(
+      status === 401 || status === 403
+        ? EMPTY("denied", `HTTP ${status} — token not authorized for ${NEWS_PATH}`)
+        : EMPTY("error", err instanceof Error ? err.message : String(err)),
+    );
   }
 }
 

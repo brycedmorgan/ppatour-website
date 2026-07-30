@@ -2,12 +2,22 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
-import { getPickleballNews, pbArticleDate, type PbArticle } from "@/lib/pb-news";
+import {
+  getPickleballNews,
+  getPickleballNewsPage,
+  pbArticleDate,
+  type PbArticle,
+} from "@/lib/pb-news";
 import { newsCategories, newsPage, searchNews, type NewsCard } from "@/lib/news";
 
 const PAGE_SIZE = 24;
 
-type Search = { searchParams: Promise<{ page?: string; category?: string; q?: string }> };
+type Search = {
+  searchParams: Promise<{ page?: string; category?: string; q?: string; source?: string }>;
+};
+
+/** Value of ?source= that switches the feed to pickleball.com's PPA archive. */
+const PB_SOURCE = "pickleball";
 
 export async function generateMetadata({ searchParams }: Search): Promise<Metadata> {
   const { page, q } = await searchParams;
@@ -28,8 +38,9 @@ export async function generateMetadata({ searchParams }: Search): Promise<Metada
 }
 
 /** Preserves the active category and query when paging or switching sections. */
-function pageHref(page: number, category: string | null, query = ""): string {
+function pageHref(page: number, category: string | null, query = "", source = ""): string {
   const p = new URLSearchParams();
+  if (source) p.set("source", source);
   if (category) p.set("category", category);
   if (query) p.set("q", query);
   if (page > 1) p.set("page", String(page));
@@ -99,6 +110,15 @@ export default async function NewsPage({ searchParams }: Search) {
     categories.find((c) => c.category.toLowerCase() === (sp.category ?? "").toLowerCase())
       ?.category ?? null;
 
+  /**
+   * ?source=pickleball turns the feed into pickleball.com's PPA archive — all
+   * 1,444 of their tour articles, paginated, instead of the four that interleave
+   * into our own feed. Their bodies aren't ours to index, so this mode ignores a
+   * search query rather than pretending to search them.
+   */
+  const pbMode = (sp.source ?? "") === PB_SOURCE;
+  const pbFeed = pbMode ? await getPickleballNewsPage(Number(sp.page) || 1, PAGE_SIZE) : null;
+
   const query = (sp.q ?? "").trim();
   const feed = searchNews({
     query,
@@ -106,11 +126,13 @@ export default async function NewsPage({ searchParams }: Search) {
     pageSize: PAGE_SIZE,
     category: active,
   });
-  const searching = query.length > 0;
+  const searching = query.length > 0 && !pbMode;
   // While searching, the lead + two-up are suppressed and the whole feed becomes
   // ranked results. Keeping them would hide the three best matches behind an
   // unrelated "newest story" treatment.
-  const onFirstPage = feed.page === 1 && !searching;
+  // No lead treatment in pickleball.com mode — the hero slots are for our own
+  // reporting, not a partner feed.
+  const onFirstPage = feed.page === 1 && !searching && !pbMode;
 
   // The lead + two-up treatment marks the top of the feed; deeper pages are a
   // straight list so "lead story" keeps meaning "newest".
@@ -128,8 +150,16 @@ export default async function NewsPage({ searchParams }: Search) {
    * list until the API grant lands, in which case nothing below renders — the
    * items this replaced were invented headlines.
    */
-  const pbNews = await getPickleballNews(searching ? 0 : 8);
+  const pbNews = await getPickleballNews(searching || pbMode ? 0 : 8);
   const external = pbNews.articles;
+  /**
+   * Whether to offer the filter at all — derived from the feed already fetched
+   * rather than a second probe. A denied or unreachable feed simply has no chip
+   * instead of one that leads to an empty page.
+   */
+  const pbAvailable = pbMode
+    ? pbFeed?.source === "live" && (pbFeed?.total ?? 0) > 0
+    : pbNews.source === "live" && external.length > 0;
 
   /**
    * Split so both surfaces get distinct articles rather than repeating four
@@ -177,15 +207,26 @@ export default async function NewsPage({ searchParams }: Search) {
     | { kind: "ppa"; card: NewsCard; at: string }
     | { kind: "external"; article: PbArticle; at: string };
 
-  const merged: FeedRow[] = [
+  const merged: FeedRow[] = pbMode
+    ? (pbFeed?.articles ?? []).map((article): FeedRow => ({
+        kind: "external",
+        article,
+        at: article.publishedAt,
+      }))
+    : [
     ...list.map((card): FeedRow => ({ kind: "ppa", card, at: card.publishedAt })),
     ...feedExternal.map((article): FeedRow => ({ kind: "external", article, at: article.publishedAt })),
-  ].sort((a, b) => {
-    // Undated external rows sort last rather than jumping to the top.
-    if (!a.at) return 1;
-    if (!b.at) return -1;
-    return b.at.localeCompare(a.at);
-  });
+      ].sort((a, b) => {
+        // Undated external rows sort last rather than jumping to the top.
+        if (!a.at) return 1;
+        if (!b.at) return -1;
+        return b.at.localeCompare(a.at);
+      });
+
+  // Pagination + counts read from whichever feed is driving the page.
+  const shownPage = pbMode ? (pbFeed?.page ?? 1) : feed.page;
+  const shownTotalPages = pbMode ? (pbFeed?.totalPages ?? 1) : feed.totalPages;
+  const shownTotal = pbMode ? (pbFeed?.total ?? 0) : feed.total;
 
   return (
     <>
@@ -213,7 +254,7 @@ export default async function NewsPage({ searchParams }: Search) {
           </div>
           <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <h1 className="font-display text-3xl uppercase leading-[1.02] sm:text-4xl">
-              {active ?? "The Latest from the PPA Tour"}
+              {pbMode ? "From Pickleball.com" : (active ?? "The Latest from the PPA Tour")}
             </h1>
             <p className="max-w-sm text-sm text-white/65 sm:text-right">
               Tournament recaps, analysis, player profiles, and the race to the
@@ -236,6 +277,33 @@ export default async function NewsPage({ searchParams }: Search) {
                 {total.toLocaleString()}
               </span>
             </Link>
+            {/* Their archive, as its own filter. Marked with the lockup so it
+                never reads as our reporting; only shown once the feed answers. */}
+            {pbAvailable && (
+              <Link
+                href={pageHref(1, null, "", PB_SOURCE)}
+                className={`flex h-9 items-center gap-1.5 border px-3 text-[11px] font-bold uppercase tracking-[0.1em] transition-colors ${
+                  pbMode
+                    ? "border-white bg-white text-ppa-navy"
+                    : "border-white/25 bg-white/10 text-white hover:border-white/60 hover:bg-white/20"
+                }`}
+              >
+                <Image
+                  src={
+                    pbMode
+                      ? "/ppa/ecosystem/pickleball-com-mark.svg"
+                      : "/ppa/ecosystem/pickleball-com-mark-white.svg"
+                  }
+                  alt=""
+                  width={13}
+                  height={9}
+                />
+                Pickleball.com
+                {pbMode && pbFeed && (
+                  <span className="text-ppa-navy/40">{pbFeed.total.toLocaleString()}</span>
+                )}
+              </Link>
+            )}
             {chipCategories.map((c) => {
               const on = active === c.category;
               return (
@@ -256,9 +324,9 @@ export default async function NewsPage({ searchParams }: Search) {
               );
             })}
             <span className="ml-auto text-[11px] font-bold uppercase tracking-[0.12em] text-white/45">
-              {feed.totalPages > 1
-                ? `${from}–${to} of ${feed.total.toLocaleString()}`
-                : `${feed.total.toLocaleString()} ${feed.total === 1 ? "Story" : "Stories"}`}
+              {shownTotalPages > 1
+                ? `${(shownPage - 1) * PAGE_SIZE + 1}–${Math.min(shownPage * PAGE_SIZE, shownTotal)} of ${shownTotal.toLocaleString()}`
+                : `${shownTotal.toLocaleString()} ${shownTotal === 1 ? "Story" : "Stories"}`}
             </span>
           </div>
         </div>
@@ -329,11 +397,13 @@ export default async function NewsPage({ searchParams }: Search) {
                 <div className="flex items-center gap-2.5">
                   <span className="h-2 w-2 bg-ppa-blue" />
                   <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/45">
-                    {searching
-                      ? "Search Results"
-                      : onFirstPage
-                        ? "More Coverage"
-                        : `Page ${feed.page} of ${feed.totalPages}`}
+                    {pbMode
+                      ? "PPA Coverage on Pickleball.com"
+                      : searching
+                        ? "Search Results"
+                        : onFirstPage
+                          ? "More Coverage"
+                          : `Page ${feed.page} of ${feed.totalPages}`}
                   </p>
                 </div>
 
@@ -341,6 +411,7 @@ export default async function NewsPage({ searchParams }: Search) {
                     costs no client JS and survives a shared or bookmarked URL.
                     The hidden field keeps a section filter applied while
                     searching within it. */}
+                {!pbMode && (
                 <form method="get" action="/news" role="search" className="flex items-center gap-1.5">
                   {active && <input type="hidden" name="category" value={active} />}
                   <label htmlFor="news-q" className="sr-only">
@@ -361,6 +432,7 @@ export default async function NewsPage({ searchParams }: Search) {
                     Search
                   </button>
                 </form>
+                )}
               </div>
 
               {searching && (
@@ -523,14 +595,14 @@ export default async function NewsPage({ searchParams }: Search) {
               )}
 
               {/* Pagination */}
-              {feed.totalPages > 1 && (
+              {shownTotalPages > 1 && (
                 <nav
                   aria-label="Newsroom pagination"
                   className="mt-8 flex items-center justify-between gap-4"
                 >
-                  {feed.page > 1 ? (
+                  {shownPage > 1 ? (
                     <Link
-                      href={pageHref(feed.page - 1, active, query)}
+                      href={pageHref(shownPage - 1, active, query, pbMode ? PB_SOURCE : "")}
                       className="flex h-10 items-center border border-ppa-line px-4 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy transition hover:border-ppa-blue hover:text-ppa-blue"
                     >
                       ← Newer
@@ -539,11 +611,11 @@ export default async function NewsPage({ searchParams }: Search) {
                     <span />
                   )}
                   <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/40">
-                    Page {feed.page} / {feed.totalPages}
+                    Page {shownPage} / {shownTotalPages}
                   </span>
-                  {feed.page < feed.totalPages ? (
+                  {shownPage < shownTotalPages ? (
                     <Link
-                      href={pageHref(feed.page + 1, active, query)}
+                      href={pageHref(shownPage + 1, active, query, pbMode ? PB_SOURCE : "")}
                       className="flex h-10 items-center border border-ppa-line px-4 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy transition hover:border-ppa-blue hover:text-ppa-blue"
                     >
                       Older →
