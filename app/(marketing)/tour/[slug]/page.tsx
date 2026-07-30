@@ -94,12 +94,16 @@ export default async function TourProgramPage({ params }: Params) {
                 About {program.label}
               </p>
               <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-                {program.headline}
+                {program.sectionHeadline ?? program.headline}
               </h2>
               <div className="mt-4 flex flex-col gap-3 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
-                {program.body.map((para, i) => (
-                  <p key={i}>{para}</p>
-                ))}
+                {/* When a distinct section heading is set, body[0] already leads
+                    the hero — don't repeat it here. */}
+                {program.body
+                  .slice(program.sectionHeadline ? 1 : 0)
+                  .map((para, i) => (
+                    <p key={i}>{para}</p>
+                  ))}
               </div>
             </div>
             <aside>
