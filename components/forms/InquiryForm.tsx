@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { FORM_SCHEMAS, type FormField } from "@/lib/forms/schema";
+import { FORM_SCHEMAS, formNeedsTurnstile, type FormField } from "@/lib/forms/schema";
 import { Turnstile, turnstileEnabled } from "@/components/forms/Turnstile";
 
 /**
@@ -95,6 +95,12 @@ export function InquiryForm({ formType }: { formType: keyof typeof FORM_SCHEMAS 
   const [errorMsg, setErrorMsg] = useState("");
   const [turnstileToken, setTurnstileToken] = useState("");
   const [turnstileKey, setTurnstileKey] = useState(0);
+  /**
+   * Newsletter signups skip the widget — see TURNSTILE_EXEMPT_FORMS. Also gated
+   * on the key being configured at all, so an unconfigured environment doesn't
+   * block submits waiting for a token that can never arrive.
+   */
+  const needsTurnstile = turnstileEnabled() && formNeedsTurnstile(formType);
 
   function setValue(name: string, v: Value) {
     setValues((prev) => ({ ...prev, [name]: v }));
@@ -153,7 +159,7 @@ export function InquiryForm({ formType }: { formType: keyof typeof FORM_SCHEMAS 
       setStatus("error");
       return;
     }
-    if (turnstileEnabled() && !turnstileToken) {
+    if (needsTurnstile && !turnstileToken) {
       setErrorMsg("Please complete the anti-spam check.");
       setStatus("error");
       return;
@@ -335,7 +341,7 @@ export function InquiryForm({ formType }: { formType: keyof typeof FORM_SCHEMAS 
       )}
 
       <div className={schema.compact ? "" : "sm:col-span-2"}>
-        <Turnstile onToken={setTurnstileToken} resetKey={turnstileKey} />
+        {needsTurnstile && <Turnstile onToken={setTurnstileToken} resetKey={turnstileKey} />}
         <button
           type="submit"
           disabled={status === "sending" || uploading}

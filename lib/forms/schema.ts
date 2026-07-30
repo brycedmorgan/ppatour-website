@@ -323,3 +323,29 @@ export const FORM_SCHEMAS: Record<string, FormSchema> = {
     ],
   },
 };
+
+/**
+ * Form types that skip the Cloudflare Turnstile widget.
+ *
+ * The newsletter signups are a single email field laid out as a row
+ * (`compact`), and Turnstile's widget is a fixed 300×65px that cannot shrink.
+ * In the footer's 320px column that box crowded the email input out of its own
+ * form — reported as "'Stay in the Know' shows a verification box instead of a
+ * signup field" (Hannah Johns, 29 Jul). A one-field newsletter is also thin
+ * spam bait, and the honeypot below still covers it.
+ *
+ * ⚠ Read by BOTH the client (whether to render the widget) and
+ * `app/api/form-submit/route.ts` (whether to require a token). It has to stay a
+ * single source: dropping the widget without relaxing the server check would
+ * have made every signup fail the anti-spam gate — a silent conversion loss,
+ * strictly worse than the cramped layout it replaced.
+ */
+export const TURNSTILE_EXEMPT_FORMS: ReadonlySet<string> = new Set([
+  "newsletter",
+  "newsletter-junior",
+]);
+
+/** Whether this form type should render and require a Turnstile token. */
+export function formNeedsTurnstile(formType: string): boolean {
+  return !TURNSTILE_EXEMPT_FORMS.has(formType);
+}

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { FORM_SCHEMAS, type FormField } from "@/lib/forms/schema";
+import { FORM_SCHEMAS, type FormField, formNeedsTurnstile } from "@/lib/forms/schema";
 import { FORM_ROUTING } from "@/lib/forms/routing";
 import { appendToSheet } from "@/lib/google-sheet";
 import { cioIdentifyAndTrack } from "@/lib/customerio";
@@ -97,12 +97,22 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true }); // honeypot
   }
 
+  const formType = String(body.formType ?? "");
+
+  /**
+   * Newsletter signups don't render the widget (see TURNSTILE_EXEMPT_FORMS), so
+   * they can't produce a token — requiring one here would fail every signup at
+   * the anti-spam gate. The honeypot above still applies to them.
+   *
+   * Read from the same set the client uses, so the two can't drift apart. Note
+   * this runs AFTER formType is resolved; an unknown formType is not exempt and
+   * still has to verify.
+   */
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
-  if (!(await verifyTurnstile(body.turnstileToken, ip))) {
+  if (formNeedsTurnstile(formType) && !(await verifyTurnstile(body.turnstileToken, ip))) {
     return NextResponse.json({ error: "Anti-spam check failed — please try again." }, { status: 400 });
   }
 
-  const formType = String(body.formType ?? "");
   const schema = FORM_SCHEMAS[formType];
   const routing = FORM_ROUTING[formType];
   if (!schema || !routing) {
