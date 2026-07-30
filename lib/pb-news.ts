@@ -27,9 +27,10 @@
  * unmistakably tour coverage ("PPA Finals hopefuls", "Championship Sunday",
  * "captures first PPA gold medal"). The UUID is not self-describing and the
  * lookup endpoints (/v2/data/news_categories, …_subcategories, …_tags) are all
- * 403 for this platform, so ASK KENAN TO CONFIRM the UUID — and whether any
- * other subcategory also carries PPA content. Overridable via env so it can be
- * corrected without touching this file.
+ * 403 for this platform, but the UUID was confirmed another way: pickleball.com's
+ * public news index embeds it as {"title":"PPA Tour","slug":"ppa"}. Still
+ * env-overridable, and worth asking whether any OTHER subcategory also carries
+ * PPA content.
  *
  * ⚠ SORTING IS BROKEN SERVER-SIDE. `sort_by` selects a field and validates it
  * (a bad value 400s), but `sort_order` has no effect: asc, desc, ASC, DESC,
@@ -49,7 +50,13 @@
 const DEFAULT_BASE = "https://api.pickleball.com";
 const NEWS_PATH = "/v2/data/news";
 
-/** PPA tour coverage. Inferred from content and verified; confirm with Kenan. */
+/**
+ * The "PPA Tour" subcategory. CONFIRMED, not inferred: pickleball.com's own news
+ * index embeds
+ *   {"uuid":"5a3a363b-8618-4e10-ab61-242612d4dbfd","title":"PPA Tour",
+ *    "slug":"ppa","categoryUuid":"579527f7-…"}   ← parent category "News"
+ * so this is the tour feed, nested under News. Env-overridable all the same.
+ */
 const DEFAULT_SUBCATEGORY = "5a3a363b-8618-4e10-ab61-242612d4dbfd";
 
 /** Public article URL. www redirects to the bare host, so skip the hop. */
