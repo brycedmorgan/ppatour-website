@@ -6,16 +6,20 @@ import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "About the Carvana PPA Tour — the premier professional pickleball tour — 20 stops a year and the best players in the world, all chasing one points race.",
+    "About the Carvana PPA Tour — the premier professional pickleball tour — 18 stops a year and the best players in the world, all chasing one points race.",
 };
 
 /**
- * NO STAT BAND HERE. Connor, 7/29: "Can't show that prize money number and
- * those stats." The band read 25 Tour Stops / $5.2M Prize Money / 12 Countries
- * / 150K+ Fans In Arena — the purse is not a public number we want on an About
- * page, and the other three were never sourced. If a stat band comes back it
- * needs figures someone owns, not marketing round numbers.
+ * Stat band rebuilt with Tyler's figures (7/30). The prior band was pulled
+ * (Connor, 7/29) because the purse/stops weren't owned numbers; these come from
+ * Tyler and still want a final confirm — total stop count is TBD (18 shown
+ * provisionally), attendance intentionally omitted.
  */
+const STATS = [
+  { n: "18", label: "Tour Stops", note: "Each worth 1,000+ ranking points" },
+  { n: "$30M+", label: "Prize Money", note: "Across the season" },
+  { n: "12", label: "Countries", note: "A growing international footprint" },
+];
 
 const LINKS = [
   { label: "The Pro Tour", href: "/about/pro-tour", blurb: "The full tour calendar, the tier system, and how a season runs." },
@@ -54,15 +58,36 @@ export default function AboutPage() {
             </p>
           </div>
           <h1 className="mt-2 max-w-3xl font-display text-3xl uppercase leading-[1.02] sm:text-5xl">
-            The Pro Tour of the Fastest-Growing Sport
+            The Pro Tour of America&apos;s Fastest-Growing Sport
           </h1>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/75 sm:text-base">
-            The PPA Tour is the premier professional pickleball circuit —
-            twenty tour stops a year, the best players in the world,
-            sold-out arenas, and one points race. We exist to put the best
-            content, the cleanest broadcast, and the most exciting matches in
-            pickleball in front of the largest possible audience.
+            The Carvana PPA Tour is the professional pickleball circuit — 18
+            tour stops per year, the best players in the world, sold-out venues,
+            and the greatest community in sports. The Carvana PPA Tour engages
+            and amplifies fans, partners and pickleball communities worldwide by
+            showcasing the best pickleball players competing for the sport&apos;s
+            largest purses and crucial World Pickleball Ranking points.
           </p>
+        </div>
+      </section>
+
+      {/* Stats */}
+      <section className="bg-ppa-navy-deep text-white">
+        <div className="mx-auto grid w-full max-w-6xl grid-cols-1 px-4 sm:grid-cols-3">
+          {STATS.map((s, i) => (
+            <div
+              key={s.label}
+              className={`px-3 py-7 ${i > 0 ? "border-t border-white/10 sm:border-l sm:border-t-0" : ""}`}
+            >
+              <p className="font-display text-3xl leading-none text-ppa-yellow sm:text-4xl">
+                {s.n}
+              </p>
+              <p className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/55">
+                {s.label}
+              </p>
+              <p className="mt-1 text-[11px] text-white/45">{s.note}</p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -80,26 +105,30 @@ export default function AboutPage() {
               <div className="mt-4 flex flex-col gap-4 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
                 <p>
                   Pickleball is the fastest-growing sport in America for the
-                  fifth year running. The PPA Tour was built to meet that
-                  growth with a pro circuit that looks, feels, and runs like
-                  the major sports: a real season, a real ranking, marquee
-                  venues, national TV windows, and a unified place to follow
-                  every match.
+                  fifth year running. The Carvana PPA Tour was built to meet
+                  that growth with a professional tour that looks, feels, and
+                  runs like the major sports: a real season, a real ranking,
+                  marquee venues, national TV windows, and a unified place to
+                  follow every match.
                 </p>
                 <p>
-                  Twenty tour stops cover every region of the country, plus a
-                  growing international footprint. Each stop carries 1,000+
-                  ranking points; the majors pay double. The season ends at the
-                  Veolia Pickleball National Championships and the PPA Finals,
-                  where the No.&nbsp;1 ranking is decided.
+                  18 tour stops cover every region of the country, plus a
+                  growing international footprint. Each tournament carries 1,000+
+                  ranking points; the majors pay double. The season begins in
+                  August with the Veolia Pickleball National Championships and
+                  ends in May with the PPA Finals, where all season
+                  championships are decided.
                 </p>
                 <p>
-                  Off the court, the PPA Tour partners with CBS, FOX and the
-                  Tennis Channel for national broadcast windows and
-                  PickleballTV for every court, every match; with Pickleball
-                  Central for retail; with Pickleball.com for ecosystem
-                  coverage; and with Carvana as our title partner across every
-                  court and every broadcast.
+                  Off the court, the Carvana PPA Tour is a part of Pickleball
+                  Inc., the largest singularly-operated pickleball ecosystem in
+                  existence, integrating professional and amateur pickleball
+                  with leading technology, retail, and infrastructure platforms.
+                  In addition to the Carvana PPA Tour, Pickleball Inc. owns and
+                  operates Major League Pickleball (MLP presented by DoorDash)
+                  plus other business verticals including Pickleball Central,
+                  Pickleball Play Solutions, Just Courts, Pickleball.com, and
+                  PickleballTV.
                 </p>
               </div>
             </div>
