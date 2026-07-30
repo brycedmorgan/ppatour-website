@@ -122,12 +122,13 @@ export const tourPrograms: TourProgram[] = [
     label: "Hospitality",
     eyebrow: "Premium Seating + Suites",
     headline: "The Best Seats on Every Court",
+    sectionHeadline: "Enjoy an Elevated Experience at all Carvana PPA Tour stops",
     body: [
-      "PPA Tour Hospitality delivers premium seating, private suites, and player experiences at every tour stop — from courtside boxes at Stadium Court to corporate suites with catering and dedicated service.",
-      "Hospitality packages include on-site concierge, player meet-and-greets, and broadcast-quality views of every match.",
+      "Carvana PPA Tour Hospitality delivers premium seating, private suites, and on-court player experiences at every Carvana PPA Tour stop — from courtside boxes at Humana Championship Court to corporate suites with catering and dedicated VIP service.",
+      "The Carvana PPA Tour is proud to offer the very best hospitality offerings to every tournament. Hospitality packages include courtside boxes and corporate suites at Humana Championship Court, on-site concierge and dedicated VIP service, player meet-and-greets and on-court experiences, plus broadcast-quality views of every match.",
     ],
     bullets: [
-      { title: "Courtside boxes", detail: "Premium reserved seating at Stadium Court for the marquee matches." },
+      { title: "Courtside boxes", detail: "Premium reserved seating at Humana Championship Court for every marquee match." },
       { title: "Corporate suites", detail: "Private suites with catering, dedicated bar, and a host." },
       { title: "Player experiences", detail: "Meet-and-greets, clinics, and access opportunities with PPA pros." },
       { title: "Concierge service", detail: "On-site host, parking, and dedicated entry across the weekend." },
