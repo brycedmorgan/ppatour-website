@@ -326,16 +326,11 @@ export default async function AthletePage({ params }: Params) {
                 >
                   ▶ Watch {a.name.split(" ")[0]} Live
                 </Link>
-                {a.sourceUrl && (
-                  <a
-                    href={a.sourceUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/45 hover:text-ppa-blue"
-                  >
-                    Official PPA Profile ↗
-                  </a>
-                )}
+                {/* "Official PPA Profile ↗" removed — Dave Fleming and Dillon
+                    Segur both asked what it meant. It pointed at the OLD ppatour
+                    site, so once this IS ppatour.com the label is nonsense and
+                    the destination is a downgrade. `sourceUrl` is kept on the
+                    record as provenance for the imported bio, just not linked. */}
               </div>
             </div>
 
