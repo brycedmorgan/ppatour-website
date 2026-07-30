@@ -525,7 +525,7 @@ export const news: NewsItem[] = publishedArticles.map((a) => ({
   category: a.category,
   title: a.title,
   date: a.date,
-  href: `/news/${a.slug}`,
+  href: `/${a.slug}`,
 }));
 
 /** Linked coverage from Pickleball.com — opens off-site. */

@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import wpRedirects from "./lib/data/wp-redirects.json";
 
 /**
  * 301s from the current WordPress ppatour.com URL structure to this site's
@@ -8,11 +7,13 @@ import wpRedirects from "./lib/data/wp-redirects.json";
  * cutover (none of these paths exist here). Sources: page-sitemap.xml,
  * athlete-sitemap.xml, tournament-sitemap.xml on the live site (Jul 2026).
  *
- * Root-level blog posts ARE now covered: the WordPress import generates one
- * explicit 301 per post into `lib/data/wp-redirects.json` (811 rows, appended
- * below). Verified at generation time to be root-level only, with no
- * self-referential loops and no path that shadows a real route here. Regenerate
- * with `node scripts/import-wp-posts.mjs` whenever slugs change.
+ * Blog posts need NO redirect: `app/[slug]` serves them at the same root URL
+ * WordPress used, so ppatour.com/some-post-slug keeps working byte-for-byte
+ * after cutover. (An earlier pass mapped each post to /news/{slug} and shipped
+ * 811 redirects; both are gone.) Verified: none of the 826 slugs collides with a
+ * route segment, a public/ path, or a redirect source below — and Next matches
+ * static segments before the dynamic `[slug]`, so /events, /athletes and friends
+ * always win.
  */
 const LEGACY_REDIRECTS = [
   // sections
@@ -76,6 +77,9 @@ const LEGACY_REDIRECTS = [
   { source: "/events/atlanta-georgia-open", destination: "/events" },
 
   // patterns
+  // Articles briefly lived at /news/{slug}; fold those into the root URL so the
+  // two paths don't compete for the same content.
+  { source: "/news/:slug", destination: "/:slug" },
   { source: "/athlete/:slug", destination: "/athletes/:slug" },
   // `/pro/:slug` was the other legacy profile prefix and had no rule; 6 of the
   // 9 links using it point at athletes who do have a page here.
@@ -108,10 +112,26 @@ const nextConfig: NextConfig = {
     qualities: [65, 75],
   },
   async redirects() {
-    return [...LEGACY_REDIRECTS, ...wpRedirects].map((r) => ({
-      ...r,
-      permanent: true,
-    }));
+    return LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true }));
+  },
+  /**
+   * The two static decks live as `public/<name>/index.html`. They resolved at
+   * `/app-tour` and `/pbtv` purely through Vercel's static directory-index
+   * behavior — which never worked under `next start`, and which now has a
+   * dynamic `app/[slug]` route competing for the same paths. `beforeFiles` runs
+   * ahead of both the filesystem and dynamic routes, so these are pinned
+   * regardless of match order. /app-tour is forwarded to stakeholders outside
+   * the company, so it must not 404.
+   */
+  async rewrites() {
+    return {
+      beforeFiles: [
+        { source: "/app-tour", destination: "/app-tour/index.html" },
+        { source: "/pbtv", destination: "/pbtv/index.html" },
+      ],
+      afterFiles: [],
+      fallback: [],
+    };
   },
 };
 

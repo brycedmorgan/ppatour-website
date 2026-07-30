@@ -1338,7 +1338,7 @@ export default async function EventPage({ params }: Params) {
               {coverage.map((c, i) => (
                 <Link
                   key={c.slug}
-                  href={`/news/${c.slug}`}
+                  href={`/${c.slug}`}
                   data-reveal
                   style={{ "--reveal-delay": `${(i % 3) * 80}ms` } as React.CSSProperties}
                   className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden bg-ppa-navy"

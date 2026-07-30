@@ -76,7 +76,7 @@ function nativeToCard(a: NewsArticle): NewsCard {
   const publishedAt = isoFromNativeDate(a.date);
   return {
     slug: a.slug,
-    href: `/news/${a.slug}`,
+    href: `/${a.slug}`,
     category: a.category,
     title: a.title,
     dek: a.dek,
@@ -103,7 +103,7 @@ function wpToCard(p: {
 }): NewsCard {
   return {
     slug: p.slug,
-    href: `/news/${p.slug}`,
+    href: `/${p.slug}`,
     category: p.category,
     title: p.title,
     dek: p.dek,

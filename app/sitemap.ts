@@ -78,7 +78,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // the 301s from their old root-level URLs need the new URL to look
     // authoritative to crawlers.
     ...allNews().map((n) => ({
-      url: `${BASE}/news/${n.slug}`,
+      url: `${BASE}/${n.slug}`,
       lastModified: new Date(n.publishedAt),
       changeFrequency: "monthly" as const,
       priority: 0.6,

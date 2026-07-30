@@ -375,11 +375,11 @@ const mediaManifest = [...assets.entries()].map(([url, meta]) => ({ url, ...meta
 await writeFile(path.join(SCRATCH, "wp-media-manifest.json"), JSON.stringify(mediaManifest, null, 2));
 await writeFile(path.join(SCRATCH, "wp-import-warnings.txt"), warnings.join("\n"));
 
-const redirects = out.map((p) => ({
-  source: new URL(p.legacyUrl).pathname.replace(/\/$/, ""),
-  destination: `/news/${p.slug}`,
-}));
-await writeFile(path.join(SCRATCH, "wp-redirects.json"), JSON.stringify(redirects, null, 2));
+/*
+ * No redirect map is emitted any more: `app/[slug]` serves each post at the
+ * same root URL WordPress used, so there is nothing to redirect. Slugs are
+ * verified collision-free against the site's route segments in next.config.ts.
+ */
 
 /* ─────────────────────────── report ─────────────────────────── */
 
@@ -403,5 +403,5 @@ console.log(`warnings:                ${warnings.length}`);
 console.log(`\n  ${path.relative(ROOT, jsonPath)}`);
 console.log(`  ${csvPath}`);
 console.log(`  ${path.join(SCRATCH, "wp-media-manifest.json")}`);
-console.log(`  ${path.join(SCRATCH, "wp-redirects.json")}`);
+
 console.log(`  ${path.join(SCRATCH, "wp-import-warnings.txt")}`);

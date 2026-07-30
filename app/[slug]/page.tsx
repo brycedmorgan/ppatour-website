@@ -20,8 +20,14 @@ import { withUtm } from "@/lib/utm";
 type Params = { params: Promise<{ slug: string }> };
 
 /**
- * All 826 posts (15 native + 811 migrated) are prerendered. `dynamicParams`
- * stays at its default so an unknown slug still 404s via notFound().
+ * Articles live at the ROOT (`/{slug}`), matching the URLs WordPress served, so
+ * nothing that was ever shared or indexed changes shape. Next matches static
+ * segments first, so /events, /athletes, /news and friends are unaffected;
+ * verified none of the 826 slugs collides with a real route.
+ *
+ * All 826 (15 native + 811 migrated) are prerendered. `dynamicParams` stays at
+ * its default, so this also becomes the catch-all for unknown root paths — they
+ * 404 through notFound() exactly as before.
  */
 export function generateStaticParams() {
   return allNews().map((n) => ({ slug: n.slug }));
