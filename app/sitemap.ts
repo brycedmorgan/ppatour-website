@@ -3,7 +3,7 @@ import { athletes } from "@/lib/athletes";
 import { CURATED_TO_CANONICAL, publishedAthletes } from "@/lib/published-athletes";
 import { eventHref, tournaments } from "@/lib/placeholder-data";
 import { tourPrograms } from "@/lib/tour-programs";
-import { publishedArticles } from "@/lib/news-articles";
+import { allNews } from "@/lib/news";
 
 import { SITE_URL } from "@/lib/site";
 
@@ -73,8 +73,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.5,
     })),
-    ...publishedArticles.map((a) => ({
-      url: `${BASE}/news/${a.slug}`,
+    // Native articles + the 811 migrated WordPress posts. `lastModified`
+    // matters here: these carry real publication dates going back to 2023, and
+    // the 301s from their old root-level URLs need the new URL to look
+    // authoritative to crawlers.
+    ...allNews().map((n) => ({
+      url: `${BASE}/news/${n.slug}`,
+      lastModified: new Date(n.publishedAt),
       changeFrequency: "monthly" as const,
       priority: 0.6,
     })),

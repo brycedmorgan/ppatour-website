@@ -28,11 +28,14 @@ import {
   ecosystemNews,
   explainers,
   leadStory,
-  news,
   partners,
   playersToWatch,
   storylines,
 } from "@/lib/home-content";
+// Server-only (pulls the migrated WP archive) — safe here because HomeContent
+// is rendered exclusively by app/page.tsx and app/live/page.tsx, both server
+// components. Do not import this from a "use client" file.
+import { allNews } from "@/lib/news";
 
 // Kickers ("For Fans" / "For Players" / "For Brands") dropped 7/28 — Jeff +
 // Nathan: unnecessary and cluttered. Blurbs are their copy from the audit doc.
@@ -828,9 +831,9 @@ export async function HomeContent({
                 From the PPA Tour
               </p>
               <div className="mt-2 border-t border-ppa-line">
-                {news.slice(0, 5).map((n) => (
+                {allNews().slice(0, 5).map((n) => (
                   <Link
-                    key={n.title}
+                    key={`${n.source}-${n.slug}`}
                     href={n.href}
                     className="group flex items-start gap-4 border-b border-ppa-line py-4"
                   >
@@ -842,7 +845,7 @@ export async function HomeContent({
                         {n.title}
                       </span>
                       <span className="mt-1 block text-[11px] uppercase tracking-[0.1em] text-ppa-navy/40">
-                        PPA Tour · {n.date}
+                        {n.author} · {n.displayDate}
                       </span>
                     </span>
                   </Link>

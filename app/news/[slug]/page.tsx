@@ -3,32 +3,52 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
-import { getArticle, publishedArticles } from "@/lib/news-articles";
 import { athletes, type Athlete } from "@/lib/athletes";
+import {
+  allNews,
+  getNewsDetail,
+  newsPlayersFor,
+  relatedNews,
+  type NewsPlayer,
+} from "@/lib/news";
+import { renderPostHtml, readingMinutes } from "@/lib/news-html";
+import { playerInitials } from "@/lib/player-photos";
 import { getNextTournament } from "@/lib/placeholder-data";
 import { getRankingBySlug } from "@/lib/rankings-api";
 import { withUtm } from "@/lib/utm";
 
 type Params = { params: Promise<{ slug: string }> };
 
+/**
+ * All 826 posts (15 native + 811 migrated) are prerendered. `dynamicParams`
+ * stays at its default so an unknown slug still 404s via notFound().
+ */
 export function generateStaticParams() {
-  return publishedArticles.map((a) => ({ slug: a.slug }));
+  return allNews().map((n) => ({ slug: n.slug }));
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
-  const a = getArticle(slug);
-  if (!a) return { title: "News" };
+  const detail = getNewsDetail(slug);
+  if (!detail) return { title: "News" };
+  const { card } = detail;
+  // Migrated posts carry their Yoast title/description, so search snippets
+  // survive the move instead of being regenerated.
+  const seo = detail.source === "wordpress" ? detail.post.seo : null;
+  const title = seo?.title?.trim() || card.title;
+  const description = seo?.description?.trim() || card.dek;
   return {
-    title: a.title,
-    description: a.dek,
+    title: card.title,
+    description,
     openGraph: {
-      title: a.title,
-      description: a.dek,
-      images: [a.image],
+      title,
+      description,
+      images: card.image ? [card.image] : undefined,
       type: "article",
+      publishedTime: card.publishedAt,
+      authors: [card.author],
     },
-    twitter: { card: "summary_large_image", images: [a.image] },
+    twitter: { card: "summary_large_image", images: card.image ? [card.image] : undefined },
   };
 }
 
@@ -60,51 +80,68 @@ function linkifyPlayers(text: string, players: Athlete[]) {
 
 export default async function ArticlePage({ params }: Params) {
   const { slug } = await params;
-  const a = getArticle(slug);
-  if (!a) notFound();
+  const detail = getNewsDetail(slug);
+  if (!detail) notFound();
 
-  const related = publishedArticles.filter((x) => x.slug !== a.slug).slice(0, 3);
+  const { card } = detail;
+  const related = relatedNews(card.slug, card.category, 3);
   const next = getNextTournament();
+  const featured: NewsPlayer[] = newsPlayersFor(detail);
   // Live WPR rank for the "Players in This Story" rail. Was `bestRank`, a
   // hand-maintained career-best that's stale for most of the roster — that's
   // how the same pro could read No. 3 here and No. 36 on their own profile
   // (Connor, 7/29: "rankings different on different pages").
   const liveRanks = await getRankingBySlug();
 
-  const mentioned = athletes.filter((p) =>
-    [a.dek, ...a.body].some((t) => t.includes(p.name)),
-  );
-  const featured = [
-    ...new Set([...(a.players ?? []), ...mentioned.map((p) => p.slug)]),
-  ]
-    .map((s) => athletes.find((p) => p.slug === s))
-    .filter((p): p is Athlete => Boolean(p));
+  // Native articles keep the React-node linkifier over their paragraph array;
+  // migrated posts go through the HTML-safe path in lib/news-html.ts.
+  const curatedForLinkify =
+    detail.source === "native"
+      ? athletes.filter((p) => featured.some((f) => f.slug === p.slug))
+      : [];
+  const bodyHtml =
+    detail.source === "wordpress"
+      ? renderPostHtml(
+          detail.post.bodyHtml,
+          featured.map((p) => ({ name: p.name, slug: p.slug })),
+        )
+      : "";
+  const minutes = detail.source === "wordpress" ? readingMinutes(detail.post.bodyHtml) : null;
+  const tags = detail.source === "wordpress" ? detail.post.tags : [];
 
   return (
     <>
       {/* Article hero */}
       <section className="relative isolate flex min-h-[44svh] flex-col justify-end overflow-hidden bg-ppa-navy text-white">
-        <Image
-          src={a.image}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-        />
-        <div className="absolute inset-0 scrim-hero" />
+        {card.image && (
+          <Image
+            src={card.image}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+        )}
+        <div className={`absolute inset-0 ${card.image ? "scrim-hero" : "bg-ppa-navy-deep"}`} />
         <div className="relative mx-auto w-full max-w-3xl px-4 pb-9 pt-24">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em] motion-safe:animate-rise">
-            <span className="bg-ppa-blue px-2 py-0.5">{a.category}</span>
-            <span className="text-white/70">{a.date}, 2026</span>
+            <span className="bg-ppa-blue px-2 py-0.5">{card.category}</span>
+            <span className="text-white/70">{card.displayDate}</span>
             <span className="text-white/25">/</span>
-            <span className="text-white/70">PPA Tour Staff</span>
+            <span className="text-white/70">{card.author}</span>
+            {minutes !== null && (
+              <>
+                <span className="text-white/25">/</span>
+                <span className="text-white/70">{minutes} min read</span>
+              </>
+            )}
           </div>
           <h1
             className="mt-3 font-display text-[clamp(1.6rem,4.4vw,2.6rem)] uppercase leading-[1.02] motion-safe:animate-rise"
             style={{ animationDelay: "120ms" }}
           >
-            {a.title}
+            {card.title}
           </h1>
         </div>
         <div className="relative h-1 bg-ppa-blue" />
@@ -120,46 +157,77 @@ export default async function ArticlePage({ params }: Params) {
           }`}
         >
           <div className="min-w-0">
-          <p className="text-lg leading-relaxed text-ppa-navy/80">
-            {linkifyPlayers(a.dek, featured)}
-          </p>
-
-          <div className="mt-4 border-l-4 border-ppa-blue bg-ppa-paper p-4">
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-ppa-blue">
-              Why It Matters
-            </p>
-            <p className="mt-1 text-sm font-semibold leading-relaxed text-ppa-navy">
-              {a.whyItMatters}
-            </p>
-          </div>
-
-          <div className="mt-7 space-y-5">
-            {a.body.map((p, i) => (
-              <p key={i} className="text-[15px] leading-[1.75] text-ppa-navy/75">
-                {linkifyPlayers(p, featured)}
+            {card.dek && (
+              <p className="text-lg leading-relaxed text-ppa-navy/80">
+                {detail.source === "native"
+                  ? linkifyPlayers(card.dek, curatedForLinkify)
+                  : card.dek}
               </p>
-            ))}
-          </div>
+            )}
 
-          <div className="mt-9 flex flex-wrap gap-2.5 border-t border-ppa-line pt-6">
-            <a
-              href={withUtm(next.ticketsUrl, {
-                campaign: next.slug,
-                content: `article-${a.slug}`,
-              })}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex h-10 items-center bg-ppa-blue px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-ppa-blue-deep active:scale-[0.98]"
-            >
-              See It Live — {next.shortName} Tickets
-            </a>
-            <Link
-              href="/watch/tv"
-              className="flex h-10 items-center border border-ppa-line px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy transition hover:border-ppa-blue hover:text-ppa-blue active:scale-[0.98]"
-            >
-              TV Schedule
-            </Link>
-          </div>
+            {detail.source === "native" && (
+              <div className="mt-4 border-l-4 border-ppa-blue bg-ppa-paper p-4">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-ppa-blue">
+                  Why It Matters
+                </p>
+                <p className="mt-1 text-sm font-semibold leading-relaxed text-ppa-navy">
+                  {detail.article.whyItMatters}
+                </p>
+              </div>
+            )}
+
+            {detail.source === "native" ? (
+              <div className="mt-7 space-y-5">
+                {detail.article.body.map((p, i) => (
+                  <p key={i} className="text-[15px] leading-[1.75] text-ppa-navy/75">
+                    {linkifyPlayers(p, curatedForLinkify)}
+                  </p>
+                ))}
+              </div>
+            ) : (
+              /* Sanitized in lib/news-html.ts: tag/attribute allowlist, no
+                 scripts or handlers, iframes restricted to known embed hosts. */
+              <div
+                className="mt-7 space-y-5 [&>*+*]:mt-5"
+                dangerouslySetInnerHTML={{ __html: bodyHtml }}
+              />
+            )}
+
+            {tags.length > 0 && (
+              <div className="mt-8 flex flex-wrap items-center gap-2 border-t border-ppa-line pt-5">
+                <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-ppa-navy/45">
+                  Topics
+                </span>
+                {tags.map((t) => (
+                  <span
+                    key={t}
+                    className="bg-ppa-paper px-2 py-1 text-[11px] font-semibold text-ppa-navy/70"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <div className="mt-9 flex flex-wrap gap-2.5 border-t border-ppa-line pt-6">
+              <a
+                href={withUtm(next.ticketsUrl, {
+                  campaign: next.slug,
+                  content: `article-${card.slug}`,
+                })}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-10 items-center bg-ppa-blue px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-ppa-blue-deep active:scale-[0.98]"
+              >
+                See It Live — {next.shortName} Tickets
+              </a>
+              <Link
+                href="/watch/tv"
+                className="flex h-10 items-center border border-ppa-line px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy transition hover:border-ppa-blue hover:text-ppa-blue active:scale-[0.98]"
+              >
+                TV Schedule
+              </Link>
+            </div>
           </div>
 
           {featured.length > 0 && (
@@ -178,24 +246,37 @@ export default async function ArticlePage({ params }: Params) {
                       href={`/athletes/${p.slug}`}
                       className="group flex items-center gap-3 bg-white p-3 transition-colors hover:bg-ppa-paper"
                     >
-                      <span className="relative size-11 shrink-0 overflow-hidden rounded-full bg-ppa-navy-deep">
-                        <Image
-                          src={p.headshot}
-                          alt={p.name}
-                          fill
-                          sizes="44px"
-                          className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                        />
+                      <span className="relative flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-ppa-navy-deep">
+                        {p.headshot ? (
+                          <Image
+                            src={p.headshot}
+                            alt={p.name}
+                            fill
+                            sizes="44px"
+                            className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                          />
+                        ) : (
+                          /* The majority state below the curated roster — a
+                             designed initials chip, not a broken image slot. */
+                          <span className="font-display text-xs uppercase tracking-wide text-ppa-sky">
+                            {playerInitials(p.name)}
+                          </span>
+                        )}
                       </span>
                       <span className="flex min-w-0 flex-col">
                         <span className="truncate font-display text-sm uppercase leading-tight text-ppa-navy transition-colors group-hover:text-ppa-blue">
                           {p.name}
                         </span>
-                        <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-ppa-blue">
-                          {liveRanks[p.slug]
-                            ? `No. ${liveRanks[p.slug].rank} · ${p.divisions[0]}`
-                            : p.divisions[0]}
-                        </span>
+                        {/* Rank comes from the live WPR board, never from
+                            `bestRank` — see the note where liveRanks is built.
+                            Falls back to the division alone when a player isn't
+                            on the board (common for the archive's deeper names). */}
+                        {(liveRanks[p.slug] || p.division) && (
+                          <span className="truncate text-[10px] font-bold uppercase tracking-[0.1em] text-ppa-blue">
+                            {liveRanks[p.slug] ? `No. ${liveRanks[p.slug].rank} · ` : ""}
+                            {p.division}
+                          </span>
+                        )}
                       </span>
                       <span
                         aria-hidden
@@ -245,22 +326,24 @@ export default async function ArticlePage({ params }: Params) {
             {related.map((r, i) => (
               <Link
                 key={r.slug}
-                href={`/news/${r.slug}`}
+                href={r.href}
                 data-reveal
                 style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
                 className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden bg-ppa-navy"
               >
-                <Image
-                  src={r.image}
-                  alt=""
-                  fill
-                  sizes="(min-width: 640px) 33vw, 100vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 scrim-card" />
+                {r.image && (
+                  <Image
+                    src={r.image}
+                    alt=""
+                    fill
+                    sizes="(min-width: 640px) 33vw, 100vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                )}
+                <div className={`absolute inset-0 ${r.image ? "scrim-card" : "bg-ppa-navy-deep"}`} />
                 <div className="relative p-4 text-white">
                   <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-sky">
-                    {r.category} · {r.date}
+                    {r.category} · {r.displayDate}
                   </p>
                   <p className="mt-1 font-display text-base uppercase leading-[1.1]">
                     {r.title}

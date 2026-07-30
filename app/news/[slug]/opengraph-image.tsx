@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { OG_SIZE, ogFonts, ogImageData } from "@/lib/og";
-import { getArticle, newsArticles } from "@/lib/news-articles";
+import { allNews, getNewsDetail } from "@/lib/news";
 
 export const size = OG_SIZE;
 export const contentType = "image/png";
@@ -11,8 +11,27 @@ export default async function Image({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const a = getArticle(slug) ?? newsArticles[0];
-  const [fonts, bg] = await Promise.all([ogFonts(), ogImageData(a.image)]);
+  const card = getNewsDetail(slug)?.card ?? allNews()[0];
+
+  /**
+   * `ogImageData` inlines a file from `public/`, so it only resolves for the
+   * hand-written articles. Migrated posts still point at
+   * ppatour.com/wp-content, and fetching 799 remote photos during the build
+   * would mean well over a gigabyte of hotlinked downloads — so those cards
+   * render text-only on the navy field, which is on-brand either way. They
+   * pick up their photo automatically once the Blob rehost rewrites
+   * lib/data/wp-media-map.json to local URLs.
+   */
+  const localImage = card.image?.startsWith("/") ? card.image : null;
+  const [fonts, bg] = await Promise.all([
+    ogFonts(),
+    localImage ? ogImageData(localImage) : Promise.resolve(null),
+  ]);
+  const a = {
+    category: card.category,
+    title: card.title,
+    dateline: `${card.displayDate.toUpperCase()} · PPATOUR.COM`,
+  };
 
   return new ImageResponse(
     (
@@ -121,7 +140,7 @@ export default async function Image({
               letterSpacing: 2,
             }}
           >
-            {`${a.date.toUpperCase()}, 2026 · PPATOUR.COM`}
+            {a.dateline}
           </div>
         </div>
         <div
