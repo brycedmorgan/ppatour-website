@@ -183,6 +183,12 @@ export default async function AthletePage({ params }: Params) {
   // Live WPR rank for the "More Pros" cards. One cached board fetch serves every
   // slug — see the note on `bestRank` in lib/athletes.ts for why we can't use it.
   const liveRanks = await getRankingBySlug();
+  /**
+   * Single source for "does this player have video" — read by the hero CTA and
+   * by the Highlights section itself, so the button can never point at a section
+   * that isn't rendered.
+   */
+  const highlights = videoData && videoData.videos.length > 0 ? videoData : null;
   const flag = a.countryCode
     ? `https://cdn.pickleball.com/circle-flags/${a.countryCode}.svg`
     : null;
@@ -360,12 +366,33 @@ export default async function AthletePage({ params }: Params) {
                 ))}
               </div>
               <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
-                <Link
-                  href="/watch"
-                  className="inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
-                >
-                  ▶ Watch {a.name.split(" ")[0]} Live
-                </Link>
+                {/**
+                 * Was an unconditional "Watch {First} Live" → /watch, which
+                 * claimed the player was live whenever anyone opened the page —
+                 * Dave Fleming, 29 Jul: it "is always on, even when he isn't
+                 * playing". His alternative was better than a fix: point it at a
+                 * great match instead, merged with the Highlights section.
+                 *
+                 * So when this player has video, the CTA is "See {First} in
+                 * Action" and jumps to their own Highlights below. When they
+                 * don't, it drops to the honest where-to-watch label rather than
+                 * asserting a live match we have no way to confirm here.
+                 */}
+                {highlights ? (
+                  <Link
+                    href="#highlights"
+                    className="inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
+                  >
+                    ▶ See {a.name.split(" ")[0]} in Action
+                  </Link>
+                ) : (
+                  <Link
+                    href="/watch"
+                    className="inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
+                  >
+                    ▶ Where to Watch
+                  </Link>
+                )}
                 {/* "Official PPA Profile ↗" removed — Dave Fleming and Dillon
                     Segur both asked what it meant. It pointed at the OLD ppatour
                     site, so once this IS ppatour.com the label is nonsense and
@@ -531,8 +558,8 @@ export default async function AthletePage({ params }: Params) {
       )}
 
       {/* Highlights — player video clips from the API */}
-      {videoData && videoData.videos.length > 0 && (
-        <section className="bg-ppa-paper">
+      {highlights && (
+        <section id="highlights" className="scroll-mt-24 bg-ppa-paper">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
               Watch
@@ -543,9 +570,9 @@ export default async function AthletePage({ params }: Params) {
             <div className="mt-6">
               <AthleteVideos
                 slug={a.slug}
-                tournaments={videoData.tournaments}
-                initialUuid={videoData.tournamentUuid}
-                initialVideos={videoData.videos}
+                tournaments={highlights.tournaments}
+                initialUuid={highlights.tournamentUuid}
+                initialVideos={highlights.videos}
               />
             </div>
           </div>
