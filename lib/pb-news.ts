@@ -1,58 +1,62 @@
 /**
- * Live news/blog articles from pickleball.com, surfaced on ppatour.com.
+ * Live PPA news from pickleball.com, surfaced on ppatour.com.
  *
- * Server-only: the API key never reaches the browser. Articles are never
- * copied or stored — they are fetched under ISR so the feed stays in sync with
- * pickleball.com, and every card links OUT to the original article rather than
+ * Server-only: the API token never reaches the browser. Articles are never
+ * copied or stored — they are fetched under ISR so the feed stays in sync, and
+ * every card links OUT to the original on pickleball.com rather than
  * republishing the body (no duplicate content, no canonical juggling).
  *
- * ── ENV NAMES: deliberately NOT the ones in the integration doc ────────────
- * The doc specifies `PB_API_BASE_URL` / `PB_API_KEY`. `PB_API_BASE_URL` is
- * already `https://api.pickleball.com` in this project and is read by ten
- * modules (rankings, events, scores, brackets, athlete stats, ticker,
- * tournaments…). Reusing it would repoint all of them at the news host and take
- * down most of the dynamic site, so this integration uses its own prefix.
+ * ── CONTRACT (verified against api.pickleball.com, 2026-07-30) ─────────────
+ *   GET /v2/data/news
+ *   header  PB-API-TOKEN: <token>          (NOT `Authorization`, which 301s)
+ *   params  is_active=true                 REQUIRED — 400 without it
+ *           is_blog=false                  REQUIRED — 400 without it
+ *           subcategory_uuid=<PPA>         the PPA filter (see below)
+ *           current_page, page_size        1-indexed pagination
+ *   returns { total_records, current_page, page_size, next_page, prev_page,
+ *             results: { news_articles: [ … ] } }
  *
- * ── CONTRACT STATUS (2026-07-30) ──────────────────────────────────────────
- * CONFIRMED:
- *   · Host is api.pickleball.com. Probed: the partner token returns 200 on
- *     /v2/data/partner_rankings there. api.pickleballdev.net is the dev host.
- *   · Path is /v2/data/news — confirmed by Kenan. NOT /v2/news, and
- *     /v2/articles does not exist (both were guesses of mine).
- *   · Auth header is PB-API-TOKEN, NOT the doc's `Authorization: <key>`,
- *     which 301s. Verified against the working partner_rankings call.
- *   · Credentials: the token this project already holds IS the PPA platform
- *     (platformID 9), so none of the doc's four keys are needed here. Its two
- *     prod keys 401 on api.pickleball.com with "get platform: record not
- *     found" and look stale — Canada will need a valid one.
+ * ⚠ THE DOC'S FILTER DOES NOT WORK. `category=PPA` is silently IGNORED — it
+ * returns all 3,870 articles, i.e. the entire pickleball.com newsroom including
+ * MLP, APP, gear and fashion. There is no "PPA" category at all: news_category
+ * is one of News / People / Culture / Learn / Gear / Fashion. Shipping the doc's
+ * filter would have leaked non-PPA content straight onto the site.
  *
- * BLOCKED on one grant, and not discoverable from outside:
- *   · GET /v2/data/news -> 403
- *     {"Error":"platform access denied: platformID=9 path=/data/news"}
- *     Identical with ?category=PPA&tag=news attached. The gateway rejects on
- *     platform before routing, so response field names, the exact filter
- *     values and the pagination params cannot be read until platformID 9 is
- *     allowlisted. `mapArticle` therefore accepts the plausible spellings;
- *     collapse it to the real ones once a payload is visible.
+ * PPA content is a SUBCATEGORY. `subcategory_uuid=5a3a363b-…` returns 1,444
+ * articles, every one under parent category "News", and the titles are
+ * unmistakably tour coverage ("PPA Finals hopefuls", "Championship Sunday",
+ * "captures first PPA gold medal"). The UUID is not self-describing and the
+ * lookup endpoints (/v2/data/news_categories, …_subcategories, …_tags) are all
+ * 403 for this platform, so ASK KENAN TO CONFIRM the UUID — and whether any
+ * other subcategory also carries PPA content. Overridable via env so it can be
+ * corrected without touching this file.
  *
- * Until then getPickleballNews() returns an empty list with a reason and
- * nothing renders — deliberately. The four "From Pickleball.com" items this
- * replaced were invented headlines pointing at the homepage, and the house rule
- * is to show nothing rather than publish content we do not have.
+ * ⚠ SORTING IS BROKEN SERVER-SIDE. `sort_by` selects a field and validates it
+ * (a bad value 400s), but `sort_order` has no effect: asc, desc, ASC, DESC,
+ * descending, 1 and -1 all return the same ascending order. So newest-first is
+ * achieved by walking to the LAST page and reversing — verified: the final page
+ * holds "PPA Tour calendar gets a shakeup" (2026-07-01), the genuine newest.
+ *
+ * ── ENV NAMES: deliberately NOT the doc's ──────────────────────────────────
+ * The doc says `PB_API_BASE_URL` / `PB_API_KEY`. `PB_API_BASE_URL` is already
+ * https://api.pickleball.com here and is read by ten modules (rankings, events,
+ * scores, brackets, athlete stats, ticker, tournaments…) — reusing it would
+ * repoint all of them. Credentials default to the token this project already
+ * holds, which IS the PPA platform (platformID 9), so none of the doc's four
+ * keys are needed. PB_NEWS_* stay as overrides for the Canada build.
  */
 
-/**
- * Production host, confirmed by probe: the existing `PB_API_TOKEN` returns 200
- * on /v2/data/partner_rankings here. `api.pickleballdev.net` is the dev host.
- */
 const DEFAULT_BASE = "https://api.pickleball.com";
-
-/** Region category — "PPA" here, "PPA Canada" on the Canada build, etc. */
-const DEFAULT_CATEGORY = "PPA";
-const DEFAULT_TAG = "news";
-
-/** Confirmed by Kenan 2026-07-30: it is /v2/data/news, not /v2/news. */
 const NEWS_PATH = "/v2/data/news";
+
+/** PPA tour coverage. Inferred from content and verified; confirm with Kenan. */
+const DEFAULT_SUBCATEGORY = "5a3a363b-8618-4e10-ab61-242612d4dbfd";
+
+/** Public article URL. www redirects to the bare host, so skip the hop. */
+const PUBLIC_BASE = "https://pickleball.com/news";
+
+/** Rows per request when walking to the last page. */
+const PAGE = 60;
 
 export type PbArticle = {
   /** Absolute pickleball.com URL — cards link out, so this is required. */
@@ -60,11 +64,12 @@ export type PbArticle = {
   title: string;
   excerpt: string;
   imageUrl: string | null;
+  imageAlt: string;
   author: string | null;
   /** ISO date, or "" when the payload has none. */
   publishedAt: string;
+  /** Parent editorial category — "News", "People", … */
   category: string;
-  tags: string[];
 };
 
 export type PbNewsResult = {
@@ -78,22 +83,32 @@ export type PbNewsResult = {
   reason?: string;
 };
 
+type ApiRow = {
+  slug?: string;
+  title?: string;
+  description?: string;
+  content?: string;
+  image_url?: string;
+  image_alt_text?: string;
+  small_news_card_img_url?: string;
+  author_full_name?: string;
+  publish_date_displayed?: string;
+  date_created?: string;
+  external_url?: string;
+  news_category?: { title?: string } | null;
+};
+
+type ApiEnvelope = {
+  total_records?: number;
+  results?: { news_articles?: ApiRow[] };
+};
+
 const EMPTY = (source: PbNewsResult["source"], reason?: string): PbNewsResult => ({
   articles: [],
   source,
   reason,
 });
 
-/**
- * Credentials default to the partner token this project already uses, because
- * that token IS the PPA platform: probing showed it resolves to platformID 9 —
- * the same platform as the "PPA Dev" key in the integration doc — and it
- * already authenticates against the production host. So none of the doc's four
- * keys are needed for ppatour.com; there is one credential to rotate, not two.
- *
- * `PB_NEWS_API_KEY` / `PB_NEWS_API_BASE_URL` remain optional overrides, which is
- * what the Canada build (and any future region on its own platform) sets.
- */
 function config() {
   const key = process.env.PB_NEWS_API_KEY || process.env.PB_API_TOKEN;
   if (!key) return null;
@@ -102,156 +117,122 @@ function config() {
   return {
     key,
     base: base.replace(/\/$/, ""),
-    category: process.env.PB_NEWS_CATEGORY || DEFAULT_CATEGORY,
-    tag: process.env.PB_NEWS_TAG || DEFAULT_TAG,
+    subcategory: process.env.PB_NEWS_SUBCATEGORY_UUID || DEFAULT_SUBCATEGORY,
   };
 }
 
-/** First non-empty string among the candidate keys. */
-function pick(row: Record<string, unknown>, ...keys: string[]): string {
-  for (const k of keys) {
-    const v = row[k];
-    if (typeof v === "string" && v.trim()) return v.trim();
-    if (typeof v === "number") return String(v);
-  }
-  return "";
-}
-
-function pickNested(row: Record<string, unknown>, path: string[]): string {
-  let cur: unknown = row;
-  for (const p of path) {
-    if (!cur || typeof cur !== "object") return "";
-    cur = (cur as Record<string, unknown>)[p];
-  }
-  return typeof cur === "string" ? cur.trim() : "";
-}
-
-function stripHtml(s: string): string {
-  return s.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
-}
+const clean = (s: string | undefined) =>
+  (s ?? "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 
 /**
- * Maps one API row into `PbArticle`. Field names are unverified (see the
- * contract note above), so each value tries the plausible spellings and falls
- * back to "". A row with no resolvable URL or title is dropped rather than
- * rendered as a broken card.
+ * Image paths are not URL-encoded upstream — one real filename is
+ * `…/maggie:mary brascia .jpeg`, whose raw spaces break next/image. Encode
+ * without double-encoding anything already escaped.
  */
-function mapArticle(raw: unknown): PbArticle | null {
-  if (!raw || typeof raw !== "object") return null;
-  const row = raw as Record<string, unknown>;
+function safeImage(raw: string | undefined): string | null {
+  const s = (raw ?? "").trim();
+  if (!s) return null;
+  try {
+    return encodeURI(decodeURI(s));
+  } catch {
+    return null;
+  }
+}
 
-  // `permalink` belongs with the absolute-URL candidates, not the slug ones:
-  // treating it as a slug produced ".../news/https://www.pickleball.com/news/x".
-  const explicitUrl = pick(row, "url", "link", "permalink", "permalink_url", "canonical_url", "web_url");
-  const slug = pick(row, "slug", "url_slug", "post_name");
-  const url = /^https?:\/\//.test(explicitUrl)
-    ? explicitUrl
-    : // Belt and braces: a slug field that already holds a full URL is used as-is.
-      /^https?:\/\//.test(slug)
-      ? slug
-      : slug
-        ? `https://www.pickleball.com/news/${slug.replace(/^\/+/, "")}`
-        : "";
-
-  const title = pick(row, "title", "headline", "name", "post_title");
+function mapRow(row: ApiRow): PbArticle | null {
+  const title = clean(row.title);
+  const slug = (row.slug ?? "").trim();
+  // Prefer the pickleball.com page (verified 200). external_url is only a
+  // fallback for outlet-sourced items with no page of their own.
+  const url = slug
+    ? `${PUBLIC_BASE}/${slug}`
+    : /^https?:\/\//.test(row.external_url ?? "")
+      ? (row.external_url as string)
+      : "";
   if (!url || !title) return null;
-
-  const rawExcerpt =
-    pick(row, "excerpt", "summary", "description", "dek", "subtitle", "post_excerpt") ||
-    pick(row, "content", "contentHtml", "body", "post_content").slice(0, 400);
-
-  const image =
-    pick(row, "heroImageUrl", "hero_image_url", "image", "image_url", "featured_image", "thumbnail", "cover_image") ||
-    pickNested(row, ["image", "url"]) ||
-    pickNested(row, ["featured_image", "url"]) ||
-    pickNested(row, ["hero", "url"]);
-
-  const author =
-    pick(row, "author", "author_name", "byline", "post_author") || pickNested(row, ["author", "name"]);
-
-  const tagsRaw = row.tags ?? row.tag_names ?? row.taxonomy_tags;
-  const tags = Array.isArray(tagsRaw)
-    ? tagsRaw
-        .map((t) => (typeof t === "string" ? t : typeof t === "object" && t ? pick(t as Record<string, unknown>, "name", "title", "slug") : ""))
-        .filter(Boolean)
-    : [];
 
   return {
     url,
-    title: stripHtml(title),
-    excerpt: stripHtml(rawExcerpt),
-    imageUrl: image || null,
-    author: author || null,
-    publishedAt: pick(row, "publishedAt", "published_at", "date", "publish_date", "created_at", "post_date"),
-    category: pick(row, "category", "category_name") || pickNested(row, ["category", "name"]),
-    tags,
+    title,
+    excerpt: clean(row.description) || clean(row.content).slice(0, 220),
+    imageUrl: safeImage(row.image_url) ?? safeImage(row.small_news_card_img_url),
+    imageAlt: clean(row.image_alt_text),
+    author: clean(row.author_full_name) || null,
+    publishedAt: (row.publish_date_displayed || row.date_created || "").trim(),
+    category: clean(row.news_category?.title),
   };
 }
 
-/** The array of rows can plausibly sit under any of these keys. */
-function extractRows(data: unknown): unknown[] {
-  if (Array.isArray(data)) return data;
-  if (!data || typeof data !== "object") return [];
-  const d = data as Record<string, unknown>;
-  for (const key of ["articles", "news", "posts", "data", "items", "results"]) {
-    const v = d[key];
-    if (Array.isArray(v)) return v;
-    // The partner API nests one level: { results: { player_rankings: [...] } }
-    if (v && typeof v === "object") {
-      for (const inner of Object.values(v as Record<string, unknown>)) {
-        if (Array.isArray(inner)) return inner;
-      }
-    }
-  }
-  return [];
-}
-
 /**
- * PPA-category news from pickleball.com. Never throws: any failure returns an
- * empty list with a reason so the page renders without the section rather than
- * erroring or inventing content.
- *
- * @param limit how many articles the caller wants (page size).
+ * PPA news from pickleball.com, newest first. Never throws: any failure returns
+ * an empty list with a reason so the page renders without the section rather
+ * than erroring or inventing content.
  */
 export async function getPickleballNews(limit = 6): Promise<PbNewsResult> {
+  if (limit <= 0) return { articles: [], source: "live" };
   const cfg = config();
-  if (!cfg) return EMPTY("unconfigured", "PB_NEWS_API_KEY is not set");
+  if (!cfg) return EMPTY("unconfigured", "no PB_NEWS_API_KEY or PB_API_TOKEN");
 
-  const params = new URLSearchParams({
-    category: cfg.category,
-    tag: cfg.tag,
-    current_page: "1",
-    page_size: String(Math.max(1, limit)),
-  });
-  const url = `${cfg.base}${NEWS_PATH}?${params}`;
+  const endpoint = (page: number, size: number) =>
+    `${cfg.base}${NEWS_PATH}?` +
+    new URLSearchParams({
+      is_active: "true",
+      is_blog: "false",
+      subcategory_uuid: cfg.subcategory,
+      current_page: String(page),
+      page_size: String(size),
+    });
 
-  try {
-    const res = await fetch(url, {
-      // Confirmed by probe: PB-API-TOKEN, not `Authorization`.
-      headers: { "PB-API-TOKEN": cfg.key },
+  async function get(page: number, size: number): Promise<ApiEnvelope> {
+    const res = await fetch(endpoint(page, size), {
+      headers: { "PB-API-TOKEN": cfg!.key },
       // 10 minutes: fresh enough for news, and it keeps a busy page off the API.
       next: { revalidate: 600, tags: ["pb-news"] },
       signal: AbortSignal.timeout(8000),
     });
-
-    if (res.status === 401 || res.status === 403) {
+    if (!res.ok) {
       const body = await res.text().catch(() => "");
-      return EMPTY(
-        "denied",
-        `HTTP ${res.status} — the key is not authorized for ${NEWS_PATH}. ${body.slice(0, 160)}`,
-      );
+      const err = new Error(`HTTP ${res.status} ${body.slice(0, 180)}`) as Error & {
+        status?: number;
+      };
+      err.status = res.status;
+      throw err;
     }
-    if (!res.ok) return EMPTY("error", `HTTP ${res.status} on ${NEWS_PATH}`);
+    return (await res.json()) as ApiEnvelope;
+  }
 
-    const rows = extractRows(await res.json());
-    const articles = rows.map(mapArticle).filter((a): a is PbArticle => a !== null);
-    // A 200 that yields nothing usable means the shape moved — surface it as an
-    // error so it does not read as "pickleball.com published nothing".
-    if (rows.length > 0 && articles.length === 0) {
-      return EMPTY("error", `${rows.length} rows returned but none matched the expected shape`);
+  try {
+    // One cheap call for the count, because the newest articles live on the LAST
+    // page (see the sorting note above) and its number depends on the total.
+    const head = await get(1, 1);
+    const total = head.total_records ?? 0;
+    if (total === 0) return { articles: [], source: "live" };
+
+    const lastPage = Math.max(1, Math.ceil(total / PAGE));
+    const rows = (await get(lastPage, PAGE)).results?.news_articles ?? [];
+    let newest = [...rows].reverse();
+
+    // The final page can be short; top up from the page before so `limit` is
+    // still satisfiable.
+    if (newest.length < limit && lastPage > 1) {
+      const prev = (await get(lastPage - 1, PAGE)).results?.news_articles ?? [];
+      newest = [...newest, ...prev.reverse()];
     }
-    return { articles: articles.slice(0, limit), source: "live" };
+
+    const articles = newest
+      .map(mapRow)
+      .filter((a): a is PbArticle => a !== null)
+      .slice(0, limit);
+
+    if (rows.length > 0 && articles.length === 0) {
+      return EMPTY("error", `${rows.length} rows returned but none were usable`);
+    }
+    return { articles, source: "live" };
   } catch (err) {
+    const status = (err as Error & { status?: number }).status;
+    if (status === 401 || status === 403) {
+      return EMPTY("denied", `HTTP ${status} — token not authorized for ${NEWS_PATH}`);
+    }
     return EMPTY("error", err instanceof Error ? err.message : String(err));
   }
 }

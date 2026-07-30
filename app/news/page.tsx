@@ -141,8 +141,37 @@ export default async function NewsPage({ searchParams }: Search) {
    * body text, and pickleball.com bodies aren't ours to index, so a query would
    * silently miss them and the results would be misleading.
    */
-  const feedExternal = external.slice(0, 4);
-  const railExternal = external.slice(4, 8);
+  /**
+   * Drop pickleball.com articles that duplicate a story we already published.
+   * They cover the PPA too, so the same press release lands on both sites — the
+   * first live render put "Professional Pickleball Association Announces PPA
+   * Spain" from pickleball.com directly above our own post on it.
+   *
+   * Significant-word overlap rather than exact match, because the two headlines
+   * are rarely identical (ours ran with a longer subhead). Compared against the
+   * whole current feed page, and only when the words genuinely coincide.
+   */
+  const significantWords = (s: string) =>
+    new Set(
+      s
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, " ")
+        .split(/\s+/)
+        .filter((w) => w.length > 3),
+    );
+  const ourTitleSets = list.map((c) => significantWords(c.title));
+  const isDuplicateOfOurs = (title: string) => {
+    const words = [...significantWords(title)];
+    if (words.length < 3) return false;
+    return ourTitleSets.some((ours) => {
+      const shared = words.filter((w) => ours.has(w)).length;
+      return shared / words.length >= 0.7;
+    });
+  };
+
+  const deduped = external.filter((a) => !isDuplicateOfOurs(a.title));
+  const feedExternal = deduped.slice(0, 4);
+  const railExternal = deduped.slice(4, 8);
 
   type FeedRow =
     | { kind: "ppa"; card: NewsCard; at: string }
@@ -400,7 +429,7 @@ export default async function NewsPage({ searchParams }: Search) {
                         {row.article.imageUrl ? (
                           <Image
                             src={row.article.imageUrl}
-                            alt=""
+                            alt={row.article.imageAlt}
                             fill
                             sizes="(min-width: 640px) 128px, 96px"
                             className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
