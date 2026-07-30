@@ -17,6 +17,7 @@
 import { publishedArticles, type NewsArticle } from "@/lib/news-articles";
 import { getWpPost, wpPostSummaries, type WpPost } from "@/lib/wp-news";
 import { resolveAsset } from "@/lib/wp-media";
+import { postPlainText } from "@/lib/news-html";
 import { athletes, getAthlete } from "@/lib/athletes";
 import { getPublishedAthlete, publishedProfileSlug } from "@/lib/published-athletes";
 
@@ -73,6 +74,19 @@ function isoFromNativeDate(date: string): string {
 }
 
 /**
+ * Titles are plain-text fields everywhere they are used (card, <h1>, <title>,
+ * OG image), but 57 of the migrated posts wrap theirs in <strong>: WordPress
+ * stores markup in `title.rendered`, and the importer decoded `&lt;strong&gt;`
+ * into a real tag. React then escapes it, so the tag shows up as visible text.
+ */
+function cleanTitle(title: string): string {
+  return title
+    .replace(/<[^>]*>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
  * WordPress auto-generated excerpts carry two artifacts that read as sloppy
  * once the dek is displayed on a card: 737 of the 811 migrated posts end with
  * the "Read more" link text, and one leads with an "Author: Name" byline.
@@ -103,7 +117,7 @@ function nativeToCard(a: NewsArticle): NewsCard {
     slug: a.slug,
     href: `/${a.slug}`,
     category: a.category,
-    title: a.title,
+    title: cleanTitle(a.title),
     dek: cleanDek(a.dek),
     image: a.image,
     imageAlt: "",
@@ -130,7 +144,7 @@ function wpToCard(p: {
     slug: p.slug,
     href: `/${p.slug}`,
     category: p.category,
-    title: p.title,
+    title: cleanTitle(p.title),
     dek: cleanDek(p.dek),
     image: p.image ? resolveAsset(p.image.url) : null,
     imageAlt: p.image?.alt ?? "",
@@ -292,4 +306,116 @@ export function newsPlayersFor(detail: NewsDetail): NewsPlayer[] {
  */
 export function newsForEvent(eventSlug: string): NewsCard[] {
   return allNews().filter((n) => n.eventSlug === eventSlug);
+}
+
+/* ─────────────────────────── keyword search ─────────────────────────── */
+
+/**
+ * Search runs on the server against `searchParams`, matching the section chips
+ * and pagination on /news — no client bundle, works without JS, and it composes
+ * with the category filter for free.
+ *
+ * Post BODIES are indexed, not just titles and tags. Measured on this archive:
+ * "ben johns" matches 438 posts with bodies included versus 169 on metadata
+ * alone, which is the difference between a useful archive search and one that
+ * only finds headlines. The cost is a 62ms one-time index build (~3MB, memoized
+ * per process) and ~1ms per query.
+ */
+type SearchEntry = {
+  card: NewsCard;
+  title: string;
+  tags: string;
+  dek: string;
+  meta: string;
+  body: string;
+};
+
+let searchIndex: SearchEntry[] | null = null;
+
+function buildSearchIndex(): SearchEntry[] {
+  if (searchIndex) return searchIndex;
+  searchIndex = allNews().map((card) => {
+    const detail = getNewsDetail(card.slug);
+    const tags = detail?.source === "wordpress" ? detail.post.tags : [];
+    const body =
+      detail?.source === "wordpress"
+        ? postPlainText(detail.post.bodyHtml)
+        : (detail?.article.body.join(" ") ?? "");
+    return {
+      card,
+      title: card.title.toLowerCase(),
+      tags: tags.join(" ").toLowerCase(),
+      dek: card.dek.toLowerCase(),
+      meta: `${card.category} ${card.author} ${card.series ?? ""}`.toLowerCase(),
+      body: body.toLowerCase(),
+    };
+  });
+  return searchIndex;
+}
+
+/** Field weights — a title hit should outrank a passing body mention. */
+const WEIGHT = { title: 12, tags: 6, dek: 4, meta: 3, body: 1 };
+
+function scoreEntry(e: SearchEntry, terms: string[], phrase: string): number {
+  let score = 0;
+  for (const t of terms) {
+    // Every term must appear somewhere (AND), else the result is irrelevant.
+    let hit = 0;
+    if (e.title.includes(t)) hit += WEIGHT.title;
+    if (e.tags.includes(t)) hit += WEIGHT.tags;
+    if (e.dek.includes(t)) hit += WEIGHT.dek;
+    if (e.meta.includes(t)) hit += WEIGHT.meta;
+    if (e.body.includes(t)) hit += WEIGHT.body;
+    if (hit === 0) return 0;
+    score += hit;
+  }
+  // Reward the whole query appearing intact — "anna leigh waters" beating three
+  // posts that each mention one of those words.
+  if (terms.length > 1) {
+    if (e.title.includes(phrase)) score += WEIGHT.title * 2;
+    else if (e.body.includes(phrase) || e.dek.includes(phrase)) score += WEIGHT.dek;
+  }
+  return score;
+}
+
+export type NewsSearchResult = NewsPage & { query: string };
+
+/**
+ * Ranked matches, paginated. Falls back to the plain feed for a blank query so
+ * callers can treat search as just another filter.
+ */
+export function searchNews(
+  opts: { query?: string; page?: number; pageSize?: number; category?: string | null } = {},
+): NewsSearchResult {
+  const query = (opts.query ?? "").trim().replace(/\s+/g, " ");
+  if (!query) return { ...newsPage(opts), query: "" };
+
+  const phrase = query.toLowerCase();
+  const terms = [...new Set(phrase.split(" ").filter((t) => t.length > 1))];
+  if (terms.length === 0) return { ...newsPage(opts), query };
+
+  const category = opts.category ?? null;
+  const scored: { card: NewsCard; score: number }[] = [];
+  for (const e of buildSearchIndex()) {
+    if (category && e.card.category.toLowerCase() !== category.toLowerCase()) continue;
+    const score = scoreEntry(e, terms, phrase);
+    if (score > 0) scored.push({ card: e.card, score });
+  }
+  // Score first, then recency — two equally relevant posts should read newest-first.
+  scored.sort((a, b) =>
+    b.score - a.score || b.card.publishedAt.localeCompare(a.card.publishedAt),
+  );
+
+  const pageSize = Math.max(1, opts.pageSize ?? 24);
+  const totalPages = Math.max(1, Math.ceil(scored.length / pageSize));
+  const page = Math.min(Math.max(1, Math.floor(opts.page ?? 1)), totalPages);
+  return {
+    items: scored.slice((page - 1) * pageSize, page * pageSize).map((s) => s.card),
+    page,
+    pageSize,
+    total: scored.length,
+    totalPages,
+    category,
+    query,
+  };
 }

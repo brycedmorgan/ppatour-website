@@ -3,28 +3,37 @@ import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { ecosystemNews } from "@/lib/home-content";
-import { newsCategories, newsPage, type NewsCard } from "@/lib/news";
+import { newsCategories, newsPage, searchNews, type NewsCard } from "@/lib/news";
 
 const PAGE_SIZE = 24;
 
-type Search = { searchParams: Promise<{ page?: string; category?: string }> };
+type Search = { searchParams: Promise<{ page?: string; category?: string; q?: string }> };
 
 export async function generateMetadata({ searchParams }: Search): Promise<Metadata> {
-  const { page } = await searchParams;
+  const { page, q } = await searchParams;
   const n = Number(page) || 1;
+  const query = (q ?? "").trim();
   return {
-    title: n > 1 ? `Newsroom — Page ${n}` : "Newsroom",
+    title: query
+      ? `“${query}” — Newsroom Search`
+      : n > 1
+        ? `Newsroom — Page ${n}`
+        : "Newsroom",
     description:
       "PPA Tour news — results, analysis, rankings moves, and storylines from the pro pickleball tour.",
+    // Search result pages are thin, infinite in number, and duplicate content
+    // that is already indexed at its own URL — keep crawlers on the articles.
+    robots: query ? { index: false, follow: true } : undefined,
   };
 }
 
-/** Preserves the active category when paging. */
-function pageHref(page: number, category: string | null): string {
-  const q = new URLSearchParams();
-  if (category) q.set("category", category);
-  if (page > 1) q.set("page", String(page));
-  const s = q.toString();
+/** Preserves the active category and query when paging or switching sections. */
+function pageHref(page: number, category: string | null, query = ""): string {
+  const p = new URLSearchParams();
+  if (category) p.set("category", category);
+  if (query) p.set("q", query);
+  if (page > 1) p.set("page", String(page));
+  const s = p.toString();
   return s ? `/news?${s}` : "/news";
 }
 
@@ -90,8 +99,18 @@ export default async function NewsPage({ searchParams }: Search) {
     categories.find((c) => c.category.toLowerCase() === (sp.category ?? "").toLowerCase())
       ?.category ?? null;
 
-  const feed = newsPage({ page: Number(sp.page) || 1, pageSize: PAGE_SIZE, category: active });
-  const onFirstPage = feed.page === 1;
+  const query = (sp.q ?? "").trim();
+  const feed = searchNews({
+    query,
+    page: Number(sp.page) || 1,
+    pageSize: PAGE_SIZE,
+    category: active,
+  });
+  const searching = query.length > 0;
+  // While searching, the lead + two-up are suppressed and the whole feed becomes
+  // ranked results. Keeping them would hide the three best matches behind an
+  // unrelated "newest story" treatment.
+  const onFirstPage = feed.page === 1 && !searching;
 
   // The lead + two-up treatment marks the top of the feed; deeper pages are a
   // straight list so "lead story" keeps meaning "newest".
@@ -157,7 +176,7 @@ export default async function NewsPage({ searchParams }: Search) {
               return (
                 <Link
                   key={c.category}
-                  href={pageHref(1, c.category)}
+                  href={pageHref(1, c.category, query)}
                   className={`flex h-9 items-center border px-3 text-[11px] font-bold uppercase tracking-[0.1em] transition-colors ${
                     on
                       ? "border-white bg-white text-ppa-navy"
@@ -241,12 +260,61 @@ export default async function NewsPage({ searchParams }: Search) {
         <div className="mx-auto w-full max-w-6xl px-4 pb-12 pt-10">
           <div className="grid gap-10 lg:grid-cols-[2fr_1fr]">
             <div className="min-w-0">
-              <div className="flex items-center gap-2.5">
-                <span className="h-2 w-2 bg-ppa-blue" />
-                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/45">
-                  {onFirstPage ? "More Coverage" : `Page ${feed.page} of ${feed.totalPages}`}
-                </p>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-2.5">
+                  <span className="h-2 w-2 bg-ppa-blue" />
+                  <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/45">
+                    {searching
+                      ? "Search Results"
+                      : onFirstPage
+                        ? "More Coverage"
+                        : `Page ${feed.page} of ${feed.totalPages}`}
+                  </p>
+                </div>
+
+                {/* A plain GET form: the archive search is server-side, so it
+                    costs no client JS and survives a shared or bookmarked URL.
+                    The hidden field keeps a section filter applied while
+                    searching within it. */}
+                <form method="get" action="/news" role="search" className="flex items-center gap-1.5">
+                  {active && <input type="hidden" name="category" value={active} />}
+                  <label htmlFor="news-q" className="sr-only">
+                    Search {active ?? "all"} coverage
+                  </label>
+                  <input
+                    id="news-q"
+                    type="search"
+                    name="q"
+                    defaultValue={query}
+                    placeholder="Search keywords, players, tags…"
+                    className="h-9 w-full min-w-0 border border-ppa-line bg-white px-3 text-[13px] text-ppa-navy outline-none transition-colors placeholder:text-ppa-navy/35 focus:border-ppa-blue sm:w-60"
+                  />
+                  <button
+                    type="submit"
+                    className="flex h-9 shrink-0 items-center bg-ppa-navy px-3.5 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors hover:bg-ppa-blue"
+                  >
+                    Search
+                  </button>
+                </form>
               </div>
+
+              {searching && (
+                <p className="mt-3 text-[13px] text-ppa-navy/60">
+                  <span className="font-bold text-ppa-navy">
+                    {feed.total.toLocaleString()}
+                  </span>{" "}
+                  {feed.total === 1 ? "result" : "results"} for{" "}
+                  <span className="font-bold text-ppa-navy">“{query}”</span>
+                  {active && <> in {active}</>}
+                  {" · "}
+                  <Link
+                    href={active ? pageHref(1, active) : "/news"}
+                    className="font-bold text-ppa-blue hover:underline"
+                  >
+                    Clear search
+                  </Link>
+                </p>
+              )}
 
               <div className="mt-3 flex flex-col">
                 {list.map((n, i) => (
@@ -283,9 +351,32 @@ export default async function NewsPage({ searchParams }: Search) {
               </div>
 
               {list.length === 0 && (
-                <p className="mt-6 border border-ppa-line bg-ppa-paper px-4 py-12 text-center text-sm text-ppa-navy/55">
-                  Nothing else in this section yet.
-                </p>
+                <div className="mt-6 border border-ppa-line bg-ppa-paper px-4 py-12 text-center">
+                  {searching ? (
+                    <>
+                      <p className="text-sm font-semibold text-ppa-navy">
+                        No stories match “{query}”{active && <> in {active}</>}.
+                      </p>
+                      <p className="mt-1.5 text-sm text-ppa-navy/55">
+                        Try a player name, a venue, or a single keyword.
+                        {active && (
+                          <>
+                            {" "}
+                            <Link
+                              href={pageHref(1, null, query)}
+                              className="font-bold text-ppa-blue hover:underline"
+                            >
+                              Search all sections
+                            </Link>
+                            .
+                          </>
+                        )}
+                      </p>
+                    </>
+                  ) : (
+                    <p className="text-sm text-ppa-navy/55">Nothing else in this section yet.</p>
+                  )}
+                </div>
               )}
 
               {/* Pagination */}
@@ -296,7 +387,7 @@ export default async function NewsPage({ searchParams }: Search) {
                 >
                   {feed.page > 1 ? (
                     <Link
-                      href={pageHref(feed.page - 1, active)}
+                      href={pageHref(feed.page - 1, active, query)}
                       className="flex h-10 items-center border border-ppa-line px-4 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy transition hover:border-ppa-blue hover:text-ppa-blue"
                     >
                       ← Newer
@@ -309,7 +400,7 @@ export default async function NewsPage({ searchParams }: Search) {
                   </span>
                   {feed.page < feed.totalPages ? (
                     <Link
-                      href={pageHref(feed.page + 1, active)}
+                      href={pageHref(feed.page + 1, active, query)}
                       className="flex h-10 items-center border border-ppa-line px-4 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy transition hover:border-ppa-blue hover:text-ppa-blue"
                     >
                       Older →
@@ -372,7 +463,7 @@ export default async function NewsPage({ searchParams }: Search) {
                   {categories.slice(0, 4).map((c) => (
                     <Link
                       key={c.category}
-                      href={pageHref(1, c.category)}
+                      href={pageHref(1, c.category, query)}
                       className="flex h-8 items-center border border-ppa-line bg-white px-2.5 text-[10px] font-bold uppercase tracking-[0.1em] text-ppa-navy transition-colors hover:border-ppa-blue hover:text-ppa-blue"
                     >
                       {c.category}
