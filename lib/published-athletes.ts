@@ -15,6 +15,7 @@
  */
 
 import raw from "@/lib/data/published-athletes.json";
+import { getAthlete } from "@/lib/athletes";
 
 export type QuickInfo = {
   /** City, State/Country of residence. */
@@ -300,6 +301,36 @@ function normalizeName(name: string): string {
  */
 export function getPublishedAthlete(slug: string): PublishedAthlete | undefined {
   return BY_SLUG[slug] ?? BY_SLUG[CURATED_TO_CANONICAL[slug] ?? ""];
+}
+
+/** Canonical slug → curated shorthand (the inverse of CURATED_TO_CANONICAL). */
+const CANONICAL_TO_CURATED: Record<string, string> = Object.fromEntries(
+  Object.entries(CURATED_TO_CANONICAL).map(([curated, canonical]) => [canonical, curated]),
+);
+
+/**
+ * The slug `/athletes/[slug]` actually prerenders for this athlete, or null
+ * when we publish no profile for them.
+ *
+ * Two traps this closes: the page is keyed by the CURATED shorthand when one
+ * exists (so `gabriel-tardio` lives at `/athletes/gabe-tardio`), and the old
+ * WordPress site had 218 athlete entries against the 180 published here — so a
+ * legacy slug resolving to nothing is normal, not exceptional.
+ */
+export function publishedProfileSlug(slug: string): string | null {
+  const curated = CANONICAL_TO_CURATED[slug] ?? slug;
+  if (getAthlete(curated)) return curated;
+  return getPublishedAthlete(slug) ? slug : null;
+}
+
+/**
+ * A never-404 link for an athlete: their profile when we have one, otherwise
+ * the roster index. Used for athlete references inside migrated WordPress posts,
+ * where the archive names players we don't publish (Sam Querrey, Quang Duong…).
+ */
+export function athleteProfileHref(slug: string): string {
+  const resolved = publishedProfileSlug(slug);
+  return resolved ? `/athletes/${resolved}` : "/athletes";
 }
 
 /** Look up a published profile by full name (accent/spacing-insensitive). */

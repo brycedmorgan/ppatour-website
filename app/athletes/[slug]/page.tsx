@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/site";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { athletes, getAthlete } from "@/lib/athletes";
 import {
@@ -121,7 +121,18 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 export default async function AthletePage({ params }: Params) {
   const { slug } = await params;
   const a = await loadAthlete(slug);
-  if (!a) notFound();
+  /**
+   * Unknown slug → the roster index, not a 404. `loadAthlete` only returns null
+   * when the curated roster, the published profiles, AND the live WPR feed all
+   * have nothing, so this is a genuinely unpublished player.
+   *
+   * Why redirect: the old WordPress site had 218 athlete entries against the 180
+   * published here, and the migrated blog archive links players we don't carry
+   * (Sam Querrey, Quang Duong…). Inbound traffic from Google's index of the old
+   * site and from old bookmarks lands on those URLs, and the roster is a more
+   * useful destination than a dead end.
+   */
+  if (!a) redirect("/athletes");
 
   // Live stats from the player API (career podium finishes, bio facts) +
   // per-division World Pickleball rankings. Null/empty when the API is

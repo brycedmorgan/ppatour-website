@@ -18,7 +18,7 @@ import { publishedArticles, type NewsArticle } from "@/lib/news-articles";
 import { getWpPost, wpPostSummaries, type WpPost } from "@/lib/wp-news";
 import { resolveAsset } from "@/lib/wp-media";
 import { athletes, getAthlete } from "@/lib/athletes";
-import { CURATED_TO_CANONICAL, getPublishedAthlete } from "@/lib/published-athletes";
+import { getPublishedAthlete, publishedProfileSlug } from "@/lib/published-athletes";
 
 export type NewsSource = "native" | "wordpress";
 
@@ -202,22 +202,6 @@ export function relatedNews(slug: string, category: string, limit = 3): NewsCard
 
 /* ─────────────────────── players in a story ─────────────────────── */
 
-/**
- * Canonical slug → curated shorthand. `/athletes/[slug]` prerenders
- * `curatedSlugFor(slug) ?? slug`, so 4 of the 60 athletes the archive
- * references (gabriel-tardio, parris-todd, meghan-dizon,
- * hurricane-tyra-black) only have a page at their shorthand. Linking the
- * canonical slug would 404.
- */
-const CANONICAL_TO_CURATED: Record<string, string> = Object.fromEntries(
-  Object.entries(CURATED_TO_CANONICAL).map(([curated, canonical]) => [canonical, curated]),
-);
-
-/** The slug that actually has a page. */
-export function athleteHrefSlug(slug: string): string {
-  return CANONICAL_TO_CURATED[slug] ?? slug;
-}
-
 export type NewsPlayer = {
   /** Link slug — already resolved to one with a page. */
   slug: string;
@@ -228,8 +212,11 @@ export type NewsPlayer = {
 };
 
 function toNewsPlayer(canonicalSlug: string): NewsPlayer | null {
-  const href = athleteHrefSlug(canonicalSlug);
-  const curated = getAthlete(href);
+  // Resolves the curated shorthand when one exists — `/athletes/[slug]` is keyed
+  // by it, so linking the canonical slug would 404 (gabriel-tardio et al).
+  const resolved = publishedProfileSlug(canonicalSlug);
+  if (!resolved) return null;
+  const curated = getAthlete(resolved);
   if (curated) {
     return {
       slug: curated.slug,

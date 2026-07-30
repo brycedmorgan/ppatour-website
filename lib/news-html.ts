@@ -23,6 +23,26 @@
  */
 
 import { isDeadAsset, resolveAsset, resolveLink } from "@/lib/wp-media";
+import { athleteProfileHref } from "@/lib/published-athletes";
+
+/**
+ * Legacy athlete-profile URL shapes found in the archive — `/athlete/x`,
+ * `/pro/x`, and the current `/athletes/x` — absolute or relative.
+ */
+const ATHLETE_HREF = /^(?:https?:\/\/(?:www\.)?ppatour\.com)?\/(?:athletes?|pro)\/([a-z0-9-]+)\/?$/i;
+
+/**
+ * Points an in-body athlete reference at a page that exists: their profile, or
+ * the roster index when we publish none. Returns null for any other href.
+ *
+ * Doing this at render time rather than with redirect rules covers every
+ * athlete the archive mentions — including ones nobody has enumerated yet — and
+ * skips a 308 hop for the links that do resolve.
+ */
+function rewriteAthleteHref(href: string): string | null {
+  const m = href.match(ATHLETE_HREF);
+  return m ? athleteProfileHref(m[1].toLowerCase()) : null;
+}
 
 /** Tags kept. Anything else is unwrapped (content survives, tag doesn't). */
 const ALLOWED = new Set([
@@ -259,12 +279,17 @@ export function renderPostHtml(html: string, players: LinkablePlayer[] = []): st
       for (const [k, v] of Object.entries(parsed)) {
         if (!keep.has(k)) continue;
         if ((k === "href" || k === "src") && !isSafeUrl(v)) continue;
-        // Repoint links at rehosted assets — the draw PDFs in particular.
-        const value = name === "a" && k === "href" ? resolveLink(v) : v;
+        // Repoint links at rehosted assets (the draw PDFs) and at athlete
+        // profiles that actually exist.
+        const value =
+          name === "a" && k === "href"
+            ? (rewriteAthleteHref(v) ?? resolveLink(v))
+            : v;
         built.push(`${k}="${escapeAttr(value)}"`);
       }
       if (name === "a") {
-        const href = resolveLink(parsed.href ?? "");
+        const raw = parsed.href ?? "";
+        const href = rewriteAthleteHref(raw) ?? resolveLink(raw);
         const external = /^https?:\/\//i.test(href) && !href.includes("ppatour.com");
         if (external) built.push('target="_blank"', 'rel="noopener noreferrer"');
       }
