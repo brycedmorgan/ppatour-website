@@ -34,7 +34,7 @@ export function SearchClient({ initial }: { initial: SiteSearchResult }) {
     const timer = setTimeout(async () => {
       setPending(true);
       try {
-        const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`, {
+        const res = await fetch(`/api/search/?q=${encodeURIComponent(q)}`, {
           signal: controller.signal,
         });
         const data = (await res.json()) as SiteSearchResult;

@@ -26,7 +26,7 @@ export function SponsorInquiryForm() {
     if (data.website) return; // honeypot — bots fill every field
     setStatus("sending");
     try {
-      const res = await fetch("/api/sponsor-inquiry", {
+      const res = await fetch("/api/sponsor-inquiry/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

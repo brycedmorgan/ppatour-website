@@ -37,7 +37,7 @@ export function LeadMagnetCapture({ variant = "fan" }: { variant?: Variant }) {
     e.preventDefault();
     setStatus("loading");
     try {
-      const res = await fetch("/api/lead-capture", {
+      const res = await fetch("/api/lead-capture/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, variant, page: window.location.pathname }),

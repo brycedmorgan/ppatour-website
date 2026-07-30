@@ -164,7 +164,7 @@ export function InquiryForm({ formType }: { formType: keyof typeof FORM_SCHEMAS 
     const payload: Values = { formType, turnstileToken };
     for (const f of visibleFields()) if (values[f.name] != null) payload[f.name] = values[f.name];
     try {
-      const res = await fetch("/api/form-submit", {
+      const res = await fetch("/api/form-submit/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

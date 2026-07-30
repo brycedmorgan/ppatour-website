@@ -9,6 +9,16 @@ import { SITE_URL } from "@/lib/site";
 
 const BASE = SITE_URL;
 
+/**
+ * trailingSlash is on (see next.config.ts), so the canonical form of every route
+ * ends in a slash. Emitting the bare path would make every sitemap entry point
+ * at a 308.
+ */
+const url = (path: string) => {
+  const abs = `${BASE}${path}`;
+  return abs.endsWith("/") ? abs : `${abs}/`;
+};
+
 export default function sitemap(): MetadataRoute.Sitemap {
   // Every athlete page (curated shorthand slug when we have one, else canonical).
   const canonicalToCurated: Record<string, string> = Object.fromEntries(
@@ -49,7 +59,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     ...staticPaths.map((p) => ({
-      url: `${BASE}${p}`,
+      url: url(p),
       changeFrequency: "weekly" as const,
       priority: p === "" ? 1 : 0.7,
     })),
@@ -59,17 +69,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...tournaments
       .filter((t) => t.tierKey !== "challenger" && t.region !== "international")
       .map((t) => ({
-        url: `${BASE}${eventHref(t)}`,
+        url: url(eventHref(t)),
         changeFrequency: "weekly" as const,
         priority: 0.8,
       })),
     ...[...athleteSlugs].map((slug) => ({
-      url: `${BASE}/athletes/${slug}`,
+      url: url(`/athletes/${slug}`),
       changeFrequency: "weekly" as const,
       priority: 0.6,
     })),
     ...tourPrograms.map((p) => ({
-      url: `${BASE}/tour/${p.slug}`,
+      url: url(`/tour/${p.slug}`),
       changeFrequency: "monthly" as const,
       priority: 0.5,
     })),
@@ -78,7 +88,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // the 301s from their old root-level URLs need the new URL to look
     // authoritative to crawlers.
     ...allNews().map((n) => ({
-      url: `${BASE}/${n.slug}`,
+      url: url(`/${n.slug}`),
       lastModified: new Date(n.publishedAt),
       changeFrequency: "monthly" as const,
       priority: 0.6,

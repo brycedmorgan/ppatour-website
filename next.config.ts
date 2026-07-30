@@ -89,6 +89,18 @@ const LEGACY_REDIRECTS = [
 ];
 
 const nextConfig: NextConfig = {
+  /**
+   * Every WordPress URL ended in a slash — all 811 migrated posts carry a Yoast
+   * canonical of `https://ppatour.com/{slug}/`. With the default (false) each of
+   * those indexed URLs would take a 308 to the bare path forever; with this on,
+   * the old URL is served directly and the migration is byte-for-byte invisible
+   * to crawlers and to anything already linking in.
+   *
+   * It applies site-wide, which is the right call rather than a side effect:
+   * WordPress used trailing slashes everywhere, so this matches the old site's
+   * convention on every route, not just the blog.
+   */
+  trailingSlash: true,
   images: {
     // Player headshots served by the Pickleball.com partner API (rankings feed).
     remotePatterns: [
