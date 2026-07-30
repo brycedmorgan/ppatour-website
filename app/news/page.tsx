@@ -106,11 +106,24 @@ export default async function NewsPage({ searchParams }: Search) {
   return (
     <>
       {/* Masthead */}
-      <section className="bg-ppa-paper">
-        <div className="mx-auto w-full max-w-6xl px-4 pb-6 pt-12">
+      <section className="relative isolate overflow-hidden bg-ppa-navy text-white">
+        {/* Decorative only, so no alt text. quality={65} because the photo sits
+            under a heavy scrim as texture — the detail is not perceivable and
+            65/75 are the only qualities allowlisted in next.config. */}
+        <Image
+          src="/ppa/nationals-hero.jpg"
+          alt=""
+          fill
+          priority
+          quality={65}
+          sizes="100vw"
+          className="object-cover object-[center_60%]"
+        />
+        <div className="absolute inset-0 scrim-masthead" />
+        <div className="relative mx-auto w-full max-w-6xl px-4 pb-6 pt-12">
           <div className="flex items-center gap-2.5">
             <span className="h-2 w-2 bg-ppa-blue" />
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
               Newsroom
             </p>
           </div>
@@ -118,7 +131,7 @@ export default async function NewsPage({ searchParams }: Search) {
             <h1 className="font-display text-3xl uppercase leading-[1.02] sm:text-4xl">
               {active ?? "The Latest from the PPA Tour"}
             </h1>
-            <p className="max-w-sm text-sm text-ppa-navy/55 sm:text-right">
+            <p className="max-w-sm text-sm text-white/65 sm:text-right">
               Tournament recaps, analysis, player profiles, and the race to the
               PPA Finals — every storyline shaping the Carvana PPA Tour.
             </p>
@@ -130,12 +143,12 @@ export default async function NewsPage({ searchParams }: Search) {
               href="/news"
               className={`flex h-9 items-center border px-3 text-[11px] font-bold uppercase tracking-[0.1em] transition-colors ${
                 active
-                  ? "border-ppa-line bg-white text-ppa-navy hover:border-ppa-blue hover:text-ppa-blue"
-                  : "border-ppa-navy bg-ppa-navy text-white"
+                  ? "border-white/25 bg-white/10 text-white hover:border-white/60 hover:bg-white/20"
+                  : "border-white bg-white text-ppa-navy"
               }`}
             >
               All
-              <span className={`ml-1.5 ${active ? "text-ppa-navy/35" : "text-white/50"}`}>
+              <span className={`ml-1.5 ${active ? "text-white/45" : "text-ppa-navy/40"}`}>
                 {total.toLocaleString()}
               </span>
             </Link>
@@ -147,18 +160,18 @@ export default async function NewsPage({ searchParams }: Search) {
                   href={pageHref(1, c.category)}
                   className={`flex h-9 items-center border px-3 text-[11px] font-bold uppercase tracking-[0.1em] transition-colors ${
                     on
-                      ? "border-ppa-navy bg-ppa-navy text-white"
-                      : "border-ppa-line bg-white text-ppa-navy hover:border-ppa-blue hover:text-ppa-blue"
+                      ? "border-white bg-white text-ppa-navy"
+                      : "border-white/25 bg-white/10 text-white hover:border-white/60 hover:bg-white/20"
                   }`}
                 >
                   {c.category}
-                  <span className={`ml-1.5 ${on ? "text-white/50" : "text-ppa-navy/35"}`}>
+                  <span className={`ml-1.5 ${on ? "text-ppa-navy/40" : "text-white/45"}`}>
                     {c.count}
                   </span>
                 </Link>
               );
             })}
-            <span className="ml-auto text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/40">
+            <span className="ml-auto text-[11px] font-bold uppercase tracking-[0.12em] text-white/45">
               {feed.totalPages > 1
                 ? `${from}–${to} of ${feed.total.toLocaleString()}`
                 : `${feed.total.toLocaleString()} ${feed.total === 1 ? "Story" : "Stories"}`}

@@ -190,6 +190,19 @@
     rgba(7, 34, 58, 0.05) 100%
   );
 }
+/* Newsroom masthead. A page-header band needs fairly even darkening rather
+   than the bottom-weighted hero gradient: the type sits across the middle, so
+   the photo has to read as texture at every height. Heavy enough for white
+   type and the inverted filter chips to hold contrast over a bright aerial. */
+.scrim-masthead {
+  background: linear-gradient(
+    to bottom,
+    rgba(7, 34, 58, 0.82) 0%,
+    rgba(7, 34, 58, 0.68) 52%,
+    rgba(7, 34, 58, 0.9) 100%
+  );
+}
+
 /* Newsroom lead card. A large share of the migrated WordPress featured images
    are promotional graphics with their own headline type baked in (JOOLA Pops,
    PARTNERS, "Introducing PPA Spain"), so .scrim-hero leaves two headlines
