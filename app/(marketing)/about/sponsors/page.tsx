@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 const REACH = [
-  { n: "4M+", label: "Sessions / Quarter", note: "Owned web + app traffic" },
+  { n: "4M+", label: "Matches", note: "Owned web + app traffic" },
   { n: "1.2M+", label: "Social Followers", note: "Across PPA channels" },
   { n: "150K+", label: "Fans In-Arena", note: "Annual gate, all stops" },
   { n: "500+", label: "Broadcast Hours", note: "PBTV + national TV" },
@@ -21,14 +21,14 @@ const SURFACES = [
   {
     label: "TV & Streaming",
     items: [
-      "PickleballTV — every match, every weekend, free streaming",
-      "Tennis Channel — featured rounds and Championship Sundays",
-      "FOX & FS1 — marquee finals on national television",
+      "PickleballTV — every match, every tournament, free streaming",
+      "National Broadcast Windows — marquee matches on national television",
+      "Tennis Channel — featured rounds",
       "MATCHDAY App — live scores, brackets, push alerts",
     ],
   },
   {
-    label: "In-Arena & On-Court",
+    label: "Venue & On-Court",
     items: [
       "Title and presenting-partner court branding (every televised court)",
       "Premium hospitality suites and courtside boxes",
@@ -123,9 +123,9 @@ export default function SponsorsPage() {
           </h1>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/75 sm:text-base">
             The Carvana PPA Tour delivers what brand teams are chasing: an
-            affluent, balanced, deeply engaged audience watching live every
-            weekend — on national TV, on premium streaming, and in sold-out
-            arenas across eighteen U.S. markets.
+            affluent, balanced, and deeply engaged audience watching live every
+            weekend — on national broadcast television, on premium streaming,
+            and in sold-out venues across eighteen U.S. markets.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <a
@@ -189,7 +189,7 @@ export default function SponsorsPage() {
             ))}
           </div>
           <p className="mt-4 text-[11px] uppercase tracking-[0.1em] text-ppa-navy/40">
-            Full demographic and brand-affinity breakdowns in the 2026–27 media kit.
+            Contact us today to find out why you should partner with the Carvana PPA Tour.
           </p>
         </div>
       </section>
@@ -288,7 +288,8 @@ export default function SponsorsPage() {
                   {title.name}
                 </p>
                 <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ppa-navy/65 sm:text-base">
-                  {title.note}
+                  The named title partner of the tour — on every court, every
+                  broadcast, all tournaments.
                 </p>
               </div>
             </div>
@@ -326,8 +327,9 @@ export default function SponsorsPage() {
                     </span>
                   )}
                 </div>
-                {/* Logo card carries the name (Bryce, 7/28) — only the
-                    designation and note are typed out beneath it. */}
+                {/* Logo card carries the name (Bryce, 7/28). Category Leaders
+                    show only the logo + the "Official ___ Partner" designation
+                    — no descriptive copy (Tyler, sponsors reformat). */}
                 <div className="flex flex-1 flex-col p-5">
                   {!p.hideRole && (
                     <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-blue">
@@ -339,9 +341,6 @@ export default function SponsorsPage() {
                       {p.name}
                     </p>
                   )}
-                  <p className="mt-2 text-sm leading-relaxed text-ppa-navy/60">
-                    {p.note}
-                  </p>
                 </div>
               </div>
             ))}
