@@ -43,6 +43,7 @@ import {
   tournaments,
 } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
+import { matchdayPrimary } from "@/lib/matchday";
 
 type Params = { params: Promise<{ year: string; slug: string }> };
 
@@ -119,7 +120,7 @@ const HOW_TO_WATCH: {
     name: "MATCHDAY App",
     note: "Live scores, brackets, order of play, and match alerts.",
     detail: "iOS · Android",
-    href: "https://www.matchday.app/?utm_source=ppatour&utm_medium=website&utm_campaign=event&utm_content=event-watch-matchday",
+    href: matchdayPrimary("event-watch-matchday"),
   },
 ];
 

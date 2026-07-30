@@ -17,7 +17,11 @@ import { useEffect } from "react";
  */
 const PARTNER_HOSTS = [
   "pickleballtv.com",
-  "matchday.app",
+  // MATCHDAY now links to the two app stores, not matchday.app (which is a
+  // parked domain — see lib/matchday.ts). Without these, every app-install
+  // click would have stopped being counted the moment the links were fixed.
+  "apps.apple.com",
+  "play.google.com",
   "pickleballcentral.com",
   "pickleball.com",
 ];

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { partners } from "@/lib/home-content";
 import { withUtm } from "@/lib/utm";
 import { InquiryForm } from "@/components/forms/InquiryForm";
+import { matchdayPrimary } from "@/lib/matchday";
 
 type FooterLink = { label: string; href: string; external?: boolean };
 
@@ -57,7 +58,7 @@ const PICKLEBALL_INC_LINKS: FooterLink[] = [
   },
   { label: "Top Court", href: "https://www.topcourt.com", external: true },
   { label: "Just Courts", href: "https://www.justcourts.com", external: true },
-  { label: "MATCHDAY App", href: "https://www.matchday.app/?utm_source=ppatour&utm_medium=website&utm_campaign=sitewide&utm_content=footer-matchday", external: true },
+  { label: "MATCHDAY App", href: matchdayPrimary("footer-matchday"), external: true },
 ];
 
 const LEGAL_LINKS: FooterLink[] = [

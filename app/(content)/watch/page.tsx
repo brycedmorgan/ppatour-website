@@ -12,6 +12,7 @@ import {
   getNextTournament,
 } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
+import { matchdayLinks } from "@/lib/matchday";
 
 /**
  * Server-prefetch the live matches so the ticker's first paint already has
@@ -76,16 +77,14 @@ const BROADCAST = [
     name: "PickleballTV",
     note: "The home of pro pickleball — every round of every event, live",
     detail: "PBTV · streams every main-draw round",
-    cta: "Watch on PBTV",
-    href: "https://www.pickleballtv.com/?utm_source=ppatour&utm_medium=website&utm_campaign=watch&utm_content=watch-pbtv",
+    links: [{ cta: "Watch on PBTV", href: "https://www.pickleballtv.com/?utm_source=ppatour&utm_medium=website&utm_campaign=watch&utm_content=watch-pbtv" }],
     external: true,
   },
   {
     name: "Tennis Channel",
     note: "Marquee windows simulcast on national television",
     detail: "Championship Sundays · select QFs & SFs",
-    cta: "Full TV Schedule",
-    href: "/watch/tv",
+    links: [{ cta: "Full TV Schedule", href: "/watch/tv" }],
   },
   {
     name: "PPA Tour · YouTube",
@@ -93,16 +92,22 @@ const BROADCAST = [
     // YouTube (Dave Rogers, 7/27 audit). Corrected.
     note: "Highlights, replays, and featured-court coverage",
     detail: "Free · full match replays",
-    href: "https://www.youtube.com/channel/UCSP6HlrMmRqogym2aHBPHpw",
-    cta: "Open YouTube",
+    links: [{ cta: "Open YouTube", href: "https://www.youtube.com/channel/UCSP6HlrMmRqogym2aHBPHpw" }],
     external: true,
   },
   {
     name: "MATCHDAY App",
     note: "Live scores, brackets, and match alerts",
     detail: "iOS · Android",
-    cta: "Get the App",
-    href: "https://www.matchday.app/?utm_source=ppatour&utm_medium=website&utm_campaign=watch&utm_content=watch-matchday",
+    /**
+     * Two CTAs, one per store. The old single link pointed at matchday.app,
+     * which is now a parked ad domain — see lib/matchday.ts. "iOS · Android"
+     * above promises both platforms, so both need a real destination.
+     */
+    links: [
+      { cta: "App Store", href: matchdayLinks("watch").ios },
+      { cta: "Google Play", href: matchdayLinks("watch").android },
+    ],
     external: true,
   },
 ];
@@ -345,14 +350,19 @@ export default function WatchPage() {
                 <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/40">
                   {b.detail}
                 </p>
-                <Link
-                  href={b.href}
-                  target={b.external ? "_blank" : undefined}
-                  rel={b.external ? "noopener noreferrer" : undefined}
-                  className="mt-4 inline-flex items-center gap-1 self-start border-b-2 border-ppa-blue pb-0.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue"
-                >
-                  {b.cta} {b.external ? "↗" : "→"}
-                </Link>
+                <span className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+                  {b.links.map((l) => (
+                    <Link
+                      key={l.href}
+                      href={l.href}
+                      target={b.external ? "_blank" : undefined}
+                      rel={b.external ? "noopener noreferrer" : undefined}
+                      className="inline-flex items-center gap-1 self-start border-b-2 border-ppa-blue pb-0.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue"
+                    >
+                      {l.cta} {b.external ? "↗" : "→"}
+                    </Link>
+                  ))}
+                </span>
               </div>
             ))}
           </div>
