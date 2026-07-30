@@ -64,7 +64,7 @@ export const tourPrograms: TourProgram[] = [
     eyebrow: "Your State's Biggest Amateur Stage",
     headline: "Every State, One Title",
     body: [
-      "The PPA State Championships are the largest single-state amateur events in pickleball — qualifier weekends in every state, leading into State Finals for the top seeds.",
+      "The PPA State Championships are the most competitive single-state amateur events in pickleball — qualifier weekends in every state, with the top seeds competing in the Champion's Division at the Pickleball World Championships in Dallas.",
       "Brackets are open by age and skill, and State Champions earn priority entry into the National Championships.",
     ],
     bullets: [
