@@ -35,6 +35,41 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-31 (pt. 5) — The five callouts were 2,438px on a phone; now a swipe rail
+- Wesley: the Watch/Tickets/Follow/Play/Sponsor band "takes way too much space on
+  mobile." It had **no mobile layout at all** — `grid sm:grid-cols-2 lg:grid-cols-5`,
+  so below 640px it stacked one full-width `aspect-[4/5]` card per row. **Measured 2,438px
+  on a 390px phone (~3.5 screens)**, the tallest thing on the homepage, walling the hero
+  off from the rankings and newsroom.
+- Built three options against the real component/photos and screenshotted each at a true
+  390px viewport: 2-up grid (405px), **swipe rail (331px)**, compact rows (400px).
+  Wesley picked the rail. **2,438 → 331px, −86%.** Desktop is untouched — verified the
+  band still renders five-across at exactly 368px at 1280px.
+- Cards sit at **68vw so the next one always peeks** — that peek is the only affordance
+  saying "swipe," so don't widen it to 100vw. Scrollbar-hiding utilities copied from the
+  house rail pattern (`EventGallery` / `PickleballIn90` / `ScoreRail`).
+- **⚠ The real bug this turned up: `data-reveal` per card is broken inside a horizontal
+  rail.** A card parked off-screen to the side never intersects, so it sits at
+  `opacity: 0` — and a **fast fling carries it from off-right to off-left without ever
+  intersecting, leaving a permanently blank card**. Reproduced it: after flinging to the
+  end, cards 4 and 5 revealed but **"Follow" stayed at opacity 0**.
+  - Fix is a new **`data-reveal-group`** in `globals.css`: the *parent* is the observer
+    target (it always intersects vertically, whatever the rail's scroll position) and the
+    children stagger off it via their own `--reveal-delay`. Stagger is preserved exactly —
+    verified 0/70/140/210/280ms on both mobile and desktop.
+  - **Use `data-reveal-group` for any future horizontal rail**, not per-child `data-reveal`.
+- Verified on a local **production** build, not dev: section 331px, `isRail` true
+  (scrollWidth 1326 vs viewport 390), 5 cards at 265px, all five opacity 1 before *and*
+  after a full fling, and **`pageOverflows: false`** — the rail doesn't leak horizontal
+  scroll to the page. Typecheck + lint clean, build 1174 pages.
+- **Method note — headless Chrome lies about mobile width on Windows.** `--window-size=390`
+  floors the *layout* viewport near 500px, so the first screenshots rendered the cards
+  625px tall (not 488px) while the PNG was still 390px wide. Use CDP
+  `Emulation.setDeviceMetricsOverride` for any mobile measurement; `--window-size` alone is
+  not trustworthy. Also: `overflow-x: hidden` on `body` makes body the scroll container, so
+  `documentElement.scrollHeight` collapses to the viewport height — measure
+  `body.scrollHeight` too.
+
 ### 2026-07-31 (pt. 4) — Tickets held back by hand: Cincinnati + Cape Coral 2027
 - Wesley: hide tickets on **Cincinnati Open (12–18 Apr 2027)** and **Cape Coral Open
   (1–7 Feb 2027)** "until we turn it back on". Both are genuinely listed and on sale on

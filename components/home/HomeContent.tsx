@@ -687,21 +687,30 @@ export async function HomeContent({
         </div>
       </section>
 
-      {/* ── Five-Audience Lanes (Watch · Tickets · Follow · Play · Sponsor) ── */}
-      <section className="grid sm:grid-cols-2 lg:grid-cols-5">
+      {/* ── Five-Audience Lanes (Watch · Tickets · Follow · Play · Sponsor) ──
+             Below sm this is a swipe rail, not a stack: five full-width 4:5
+             cards ran 2,438px on a 390px phone (~3.5 screens) and walled the
+             hero off from the rankings and newsroom below. As a rail it's
+             331px. Cards sit at 68vw so the next one always peeks — that peek
+             is the only affordance saying "swipe", so don't widen it to 100vw.
+             Scrollbar-hiding utilities match EventGallery / PickleballIn90. */}
+      <section
+        data-reveal
+        data-reveal-group
+        className="flex snap-x snap-mandatory overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:snap-none sm:grid-cols-2 sm:overflow-visible lg:grid-cols-5"
+      >
         {LANES.map((lane, i) => (
           <Link
             key={lane.href}
             href={lane.href}
-            data-reveal
             style={{ "--reveal-delay": `${i * 70}ms` } as React.CSSProperties}
-            className="group relative isolate flex aspect-[4/5] flex-col justify-end overflow-hidden bg-ppa-navy lg:aspect-auto lg:min-h-[23rem]"
+            className="group relative isolate flex aspect-[4/5] w-[68vw] shrink-0 snap-start flex-col justify-end overflow-hidden bg-ppa-navy sm:w-auto lg:aspect-auto lg:min-h-[23rem]"
           >
             <Image
               src={lane.image}
               alt=""
               fill
-              sizes="(min-width: 1024px) 20vw, (min-width: 640px) 50vw, 100vw"
+              sizes="(min-width: 1024px) 20vw, (min-width: 640px) 50vw, 68vw"
               className="will-change-transform object-cover grayscale-[25%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
             />
             <div className="absolute inset-0 scrim-hero" />

@@ -243,6 +243,26 @@ html[data-motion="on"] [data-reveal].is-revealed {
   transform: none;
 }
 
+/* Stagger a group's children off the PARENT's reveal, with each child's own
+   --reveal-delay. Use this instead of data-reveal-per-child inside a
+   horizontally scrolling rail: a child parked off-screen to the side never
+   intersects, so it would sit at opacity 0 — and a fast fling can carry it
+   from off-right to off-left without ever intersecting, leaving a permanent
+   blank card. The parent always intersects vertically, so the group reveals
+   as one band no matter where the rail is scrolled. */
+html[data-motion="on"] [data-reveal-group] > * {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+html[data-motion="on"] [data-reveal-group].is-revealed > * {
+  opacity: 1;
+  transform: none;
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
