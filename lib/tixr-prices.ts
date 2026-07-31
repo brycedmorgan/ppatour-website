@@ -29,6 +29,9 @@
  * in the other direction. Grounds Pass is $25 across every 2026 PPA stop.
  */
 import snapshot from "@/lib/data/tixr-ticket-prices.json";
+import { tixrEventIdFrom } from "@/lib/tixr-price-index";
+
+export { tixrEventIdFrom };
 
 type RawTicket = {
   name: string;
@@ -63,13 +66,6 @@ const BY_ID = new Map(EVENTS.map((e) => [String(e.event_id), e]));
  */
 const NOT_ADMISSION =
   /king of the court|king'?s court|camp\b|clinic|skills lab|play with a pro|on court with|glow in the dark|family night|register here|discount|vacations/i;
-
-/** Trailing Tixr event id from a tickets URL, or null. */
-export function tixrEventIdFrom(ticketsUrl: string | undefined): string | null {
-  if (!ticketsUrl) return null;
-  const m = ticketsUrl.match(/-(\d{4,})(?:[/?#]|$)/);
-  return m ? m[1] : null;
-}
 
 /** Every ticket tier for an event, admission first, cheapest first. */
 export function ticketTiersFor(ticketsUrl: string | undefined): TicketTier[] {
@@ -112,4 +108,27 @@ export function admissionTiersFor(ticketsUrl: string | undefined): TicketTier[] 
 /** Snapshot freshness, so a page can say how current the prices are. */
 export function tixrPricesGeneratedAt(): string | null {
   return (snapshot as { generated_at?: string }).generated_at ?? null;
+}
+
+/**
+ * Is this event actually on sale on Tixr?
+ *
+ * False when we hold no Tixr listing for it — which is the case for stops that
+ * simply haven't been listed yet (the 2027 season, 6-10 months out). Wesley,
+ * 31 Jul: "If we don't have them up, we need to remove any info regarding ticket
+ * prices and not have a link to tixr. We should have a 'Tickets coming soon'."
+ *
+ * So this gates three things together, and they must move together: the price,
+ * the Buy Tickets link, and the copy. Publishing a price with no listing was
+ * inventing a number; linking to the generic tixr.com/groups/ppa page instead of
+ * a listing sends a fan to a directory to hunt for their own event.
+ *
+ * Note this is about the LISTING existing, not about a specific tier being in
+ * stock — a listed event whose tiers are all sold out is still "on sale" as far
+ * as the site is concerned, and its own page will say so.
+ */
+export function ticketsOnSale(ticketsUrl: string | undefined): boolean {
+  const id = tixrEventIdFrom(ticketsUrl);
+  if (!id) return false; // generic group URL, or no URL at all
+  return BY_ID.has(id) && ticketPriceFrom(ticketsUrl) != null;
 }

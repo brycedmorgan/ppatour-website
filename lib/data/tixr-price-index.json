@@ -1,0 +1,249 @@
+{
+  "generated_at": "2026-07-31T17:44:34Z",
+  "prices": {
+    "166227": {
+      "from": 15,
+      "onSale": true
+    },
+    "166228": {
+      "from": 15,
+      "onSale": true
+    },
+    "166229": {
+      "from": 15,
+      "onSale": true
+    },
+    "166345": {
+      "from": 25,
+      "onSale": true
+    },
+    "166349": {
+      "from": 25,
+      "onSale": true
+    },
+    "166381": {
+      "from": 25,
+      "onSale": true
+    },
+    "166387": {
+      "from": 25,
+      "onSale": true
+    },
+    "166396": {
+      "from": 25,
+      "onSale": true
+    },
+    "166397": {
+      "from": 25,
+      "onSale": true
+    },
+    "166399": {
+      "from": 25,
+      "onSale": true
+    },
+    "166402": {
+      "from": 25,
+      "onSale": true
+    },
+    "166404": {
+      "from": 25,
+      "onSale": true
+    },
+    "169289": {
+      "from": 25,
+      "onSale": true
+    },
+    "169798": {
+      "from": 25000,
+      "onSale": true
+    },
+    "169799": {
+      "from": 30,
+      "onSale": true
+    },
+    "169802": {
+      "from": 30,
+      "onSale": true
+    },
+    "169803": {
+      "from": 30,
+      "onSale": true
+    },
+    "169804": {
+      "from": 30,
+      "onSale": true
+    },
+    "169805": {
+      "from": 30,
+      "onSale": true
+    },
+    "169837": {
+      "from": 30,
+      "onSale": true
+    },
+    "169839": {
+      "from": 30,
+      "onSale": true
+    },
+    "170002": {
+      "from": null,
+      "onSale": false
+    },
+    "171536": {
+      "from": 15,
+      "onSale": true
+    },
+    "173667": {
+      "from": 15,
+      "onSale": true
+    },
+    "176326": {
+      "from": 25,
+      "onSale": true
+    },
+    "176502": {
+      "from": 25,
+      "onSale": true
+    },
+    "176687": {
+      "from": 25,
+      "onSale": true
+    },
+    "178517": {
+      "from": 25,
+      "onSale": true
+    },
+    "181370": {
+      "from": 25,
+      "onSale": true
+    },
+    "183665": {
+      "from": 13000,
+      "onSale": true
+    },
+    "183669": {
+      "from": 25,
+      "onSale": true
+    },
+    "183673": {
+      "from": 25,
+      "onSale": true
+    },
+    "183676": {
+      "from": 25,
+      "onSale": true
+    },
+    "184656": {
+      "from": 25,
+      "onSale": true
+    },
+    "184760": {
+      "from": 25,
+      "onSale": true
+    },
+    "184762": {
+      "from": 25,
+      "onSale": true
+    },
+    "184764": {
+      "from": 25,
+      "onSale": true
+    },
+    "184765": {
+      "from": 25,
+      "onSale": true
+    },
+    "184766": {
+      "from": 25,
+      "onSale": true
+    },
+    "184767": {
+      "from": 25,
+      "onSale": true
+    },
+    "185682": {
+      "from": 25,
+      "onSale": true
+    },
+    "186573": {
+      "from": 25,
+      "onSale": true
+    },
+    "186574": {
+      "from": 25,
+      "onSale": true
+    },
+    "186575": {
+      "from": 25,
+      "onSale": true
+    },
+    "194597": {
+      "from": null,
+      "onSale": false
+    },
+    "195027": {
+      "from": 25,
+      "onSale": true
+    },
+    "195032": {
+      "from": 25,
+      "onSale": true
+    },
+    "195334": {
+      "from": 25,
+      "onSale": true
+    },
+    "195335": {
+      "from": 25,
+      "onSale": true
+    },
+    "195336": {
+      "from": 25,
+      "onSale": true
+    },
+    "195857": {
+      "from": 25,
+      "onSale": true
+    },
+    "196548": {
+      "from": 25,
+      "onSale": true
+    },
+    "196611": {
+      "from": 25,
+      "onSale": true
+    },
+    "196616": {
+      "from": 25,
+      "onSale": true
+    },
+    "196624": {
+      "from": 25,
+      "onSale": true
+    },
+    "196629": {
+      "from": 25,
+      "onSale": true
+    },
+    "197214": {
+      "from": 25,
+      "onSale": true
+    },
+    "197226": {
+      "from": 25,
+      "onSale": true
+    },
+    "197234": {
+      "from": 25,
+      "onSale": true
+    },
+    "197261": {
+      "from": 25,
+      "onSale": true
+    },
+    "198728": {
+      "from": 10500,
+      "onSale": true
+    }
+  }
+}

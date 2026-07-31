@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import type { TickerMatch } from "@/lib/ticker-api";
-import { formatDate, getNextTournament } from "@/lib/placeholder-data";
+import { eventHref, formatDate, getNextTournament } from "@/lib/placeholder-data";
 import {
   formatMatchScore,
   liveWatchUrl,
@@ -76,12 +76,15 @@ export function StickyBuyBar() {
 
   const featured = rotation.length > 0 ? rotation[index % rotation.length] : undefined;
   const live = Boolean(featured);
+  // Unlisted on Tixr -> the bar points at the event page, not a ticket link.
   const href = featured
     ? liveWatchUrl(ordered)
-    : withUtm(next.ticketsUrl, {
-        campaign: next.slug,
-        content: "sticky-buy-bar",
-      });
+    : next.ticketsOnSale
+      ? withUtm(next.ticketsUrl, {
+          campaign: next.slug,
+          content: "sticky-buy-bar",
+        })
+      : eventHref(next);
 
   // The full-page brackets view has its own bottom-pinned horizontal scrollbar;
   // don't let this bar sit on top of it.
@@ -132,7 +135,11 @@ export function StickyBuyBar() {
               shown ? "opacity-100" : "opacity-0"
             }`}
           >
-            {featured ? formatMatchScore(featured) : `From $${next.ticketPriceFrom}`}
+            {featured
+              ? formatMatchScore(featured)
+              : next.ticketsOnSale
+                ? `From $${next.ticketPriceFrom}`
+                : "Tickets soon"}
           </span>
           <a
             href={href}
@@ -145,7 +152,11 @@ export function StickyBuyBar() {
                 : "bg-ppa-blue hover:bg-ppa-blue-deep"
             }`}
           >
-            {live ? "▶ Watch Live" : `Buy Tickets — $${next.ticketPriceFrom}`}
+            {live
+              ? "▶ Watch Live"
+              : next.ticketsOnSale
+                ? `Buy Tickets — ${next.ticketPriceFrom}`
+                : "Event Details"}
             {!live && (
               <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-0.5">
                 →

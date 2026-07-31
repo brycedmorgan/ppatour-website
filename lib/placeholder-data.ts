@@ -16,7 +16,7 @@
  */
 
 import { venueGalleryFor, venueHeroFor } from "@/lib/venue-photos";
-import { ticketPriceFrom } from "@/lib/tixr-prices";
+import { ticketPriceFrom, ticketsOnSale } from "@/lib/tixr-price-index";
 
 export type EventTier = "worlds" | "slam" | "cup" | "open" | "challenger";
 
@@ -73,6 +73,13 @@ export type Tournament = {
   startDate: string;
   endDate: string;
   ticketPriceFrom: number;
+  /**
+   * Resolved server-side from the Tixr snapshot. Lives on the record rather than
+   * being computed in components because ScheduleGrid is a client component and
+   * importing lib/tixr-prices there would ship the whole 193KB price snapshot to
+   * the browser.
+   */
+  ticketsOnSale?: boolean;
   ticketsUrl: string;
   registerUrl: string;
   status: "upcoming" | "live" | "completed";
@@ -387,6 +394,7 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
       ticketPriceFrom:
         ticketPriceFrom(COMMERCE_BY_SLUG[slug]?.tickets) ??
         (r.type === "international" ? 35 : TIER_PRICE[tier]),
+      ticketsOnSale: ticketsOnSale(COMMERCE_BY_SLUG[slug]?.tickets),
       ticketsUrl: COMMERCE_BY_SLUG[slug]?.tickets ?? TIXR,
       registerUrl: COMMERCE_BY_SLUG[slug]?.register ?? REGISTER,
       status: "upcoming" as const,

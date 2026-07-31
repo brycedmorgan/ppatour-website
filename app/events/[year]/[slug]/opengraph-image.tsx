@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { OG_SIZE, ogFonts, ogImageData } from "@/lib/og";
+import { ticketsOnSale } from "@/lib/tixr-prices";
 import {
   eventYear,
   formatDateRange,
@@ -168,7 +169,9 @@ export default async function Image({
               letterSpacing: 2,
             }}
           >
-            {`${t.prizeMoney} ON THE LINE · TICKETS FROM $${t.ticketPriceFrom}`}
+            {ticketsOnSale(t.ticketsUrl)
+              ? `${t.prizeMoney} ON THE LINE · TICKETS FROM ${t.ticketPriceFrom}`
+              : `${t.prizeMoney} ON THE LINE`}
           </div>
         </div>
         <div

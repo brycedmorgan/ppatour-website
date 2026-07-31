@@ -33,6 +33,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const SNAPSHOT_PATH = resolve(ROOT, "lib/data/tixr-ticket-prices.json");
+const INDEX_PATH = resolve(ROOT, "lib/data/tixr-price-index.json");
 const CHANGELOG_PATH = resolve(ROOT, "lib/data/tixr-price-changes.json");
 
 const GROUP = "ppa";
@@ -220,6 +221,36 @@ async function main() {
     },
     events,
   };
+
+  /**
+   * Compact index alongside the full snapshot: Tixr event id -> resolved
+   * admission price + whether it's listed. Exists purely for bundle size.
+   *
+   * lib/placeholder-data.ts needs these two values, and it is imported by client
+   * components (ScheduleGrid, NationalsLive…). Importing the full snapshot there
+   * shipped all 864 ticket records — a 156KB client chunk — for two numbers per
+   * event. This file is a couple of KB and carries no tier detail.
+   *
+   * The full snapshot stays server-only, for the event page's tier list and the
+   * OG card.
+   */
+  const NOT_ADMISSION =
+    /king of the court|king'?s court|camp|clinic|skills lab|play with a pro|on court with|glow in the dark|family night|register here|discount|vacations/i;
+  const index = {};
+  for (const e of events) {
+    const open = (e.tickets || []).filter(
+      (t) => t.sale_state === "OPEN" && t.base_price != null && t.base_price > 0,
+    );
+    const grounds = open.find((t) => /grounds pass/i.test(t.name));
+    const admission = open.find((t) => !NOT_ADMISSION.test(t.name));
+    const from = grounds ? grounds.base_price : (admission ? admission.base_price : null);
+    index[String(e.event_id)] = { from, onSale: from != null };
+  }
+  writeFileSync(
+    INDEX_PATH,
+    JSON.stringify({ generated_at: stamp, prices: index }, null, 2) + "\n",
+  );
+  console.log(`Wrote ${INDEX_PATH} (${Object.keys(index).length} events)`);
 
   const prev = existsSync(SNAPSHOT_PATH)
     ? JSON.parse(readFileSync(SNAPSHOT_PATH, "utf8"))

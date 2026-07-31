@@ -553,16 +553,24 @@ export async function HomeContent({
               </>
             ) : (
               <>
+                {/* No Tixr listing yet -> the CTA becomes the event page, not a
+                    ticket link. See lib/tixr-price-index.ts. */}
                 <a
-                  href={withUtm(next.ticketsUrl, {
-                    campaign: next.slug,
-                    content: "home-hero-buy-tickets",
-                  })}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={
+                    next.ticketsOnSale
+                      ? withUtm(next.ticketsUrl, {
+                          campaign: next.slug,
+                          content: "home-hero-buy-tickets",
+                        })
+                      : eventHref(next)
+                  }
+                  target={next.ticketsOnSale ? "_blank" : undefined}
+                  rel={next.ticketsOnSale ? "noopener noreferrer" : undefined}
                   className="group flex h-11 items-center justify-center gap-1.5 bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:bg-ppa-blue-deep active:scale-[0.98]"
                 >
-                  Buy Tickets — From ${next.ticketPriceFrom}
+                  {next.ticketsOnSale
+                    ? `Buy Tickets — From $${next.ticketPriceFrom}`
+                    : "Event Details"}
                   <span
                     aria-hidden
                     className="transition-transform duration-300 group-hover:translate-x-0.5"
@@ -973,7 +981,7 @@ export async function HomeContent({
                         </span>
                       </span>
                       <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-yellow">
-                        From ${t.ticketPriceFrom}
+                        {t.ticketsOnSale ? `From $${t.ticketPriceFrom}` : "Tickets soon"}
                       </span>
                     </span>
                   </div>

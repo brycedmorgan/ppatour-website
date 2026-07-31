@@ -302,7 +302,11 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
                       </span>
                     </span>
                     <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-yellow">
-                      {completed ? "Completed" : `From $${t.ticketPriceFrom}`}
+                      {completed
+                        ? "Completed"
+                        : t.ticketsOnSale
+                          ? `From $${t.ticketPriceFrom}`
+                          : "Tickets soon"}
                     </span>
                   </span>
                 </div>

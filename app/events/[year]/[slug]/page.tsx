@@ -45,7 +45,7 @@ import {
 } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
 import { matchdayPrimary } from "@/lib/matchday";
-import { admissionTiersFor } from "@/lib/tixr-prices";
+import { admissionTiersFor, ticketsOnSale } from "@/lib/tixr-prices";
 
 type Params = { params: Promise<{ year: string; slug: string }> };
 
@@ -211,6 +211,11 @@ export default async function EventPage({ params }: Params) {
    * camps and King of the Court are filtered out upstream — they aren't
    * admission. Falls back to the old shape only when we have no Tixr listing.
    */
+  /**
+   * Whether this stop is listed on Tixr at all. When it isn't, we publish no
+   * price and no ticket link anywhere on the page — see lib/tixr-prices.ts.
+   */
+  const onSale = ticketsOnSale(t.ticketsUrl);
   const realTiers = admissionTiersFor(t.ticketsUrl)
     .filter((x) => !x.soldOut)
     .slice(0, 3);
@@ -487,14 +492,21 @@ export default async function EventPage({ params }: Params) {
               </>
             ) : (
               <>
-                <a
-                  href={withUtm(t.ticketsUrl, { campaign: t.slug, content: "event-hero-buy-tickets" })}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex h-11 items-center justify-center bg-[var(--event-accent)] px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:brightness-90 active:scale-[0.98]"
-                >
-                  Buy Tickets — from ${t.ticketPriceFrom}
-                </a>
+                {onSale ? (
+                  <a
+                    href={withUtm(t.ticketsUrl, { campaign: t.slug, content: "event-hero-buy-tickets" })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-11 items-center justify-center bg-[var(--event-accent)] px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:brightness-90 active:scale-[0.98]"
+                  >
+                    Buy Tickets — from ${t.ticketPriceFrom}
+                  </a>
+                ) : (
+                  // Not listed on Tixr yet: no price, no link, no guess.
+                  <span className="flex h-11 cursor-default items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] text-white/70">
+                    Tickets Coming Soon
+                  </span>
+                )}
                 <a
                   href={withUtm(t.registerUrl, { campaign: t.slug, content: "event-hero-register" })}
                   target="_blank"
@@ -529,11 +541,11 @@ export default async function EventPage({ params }: Params) {
         eventName={t.shortName}
         icon={t.brand?.icon}
         ticketsUrl={
-          completed
+          completed || !onSale
             ? undefined
             : withUtm(t.ticketsUrl, { campaign: t.slug, content: "event-tabnav-buy-tickets" })
         }
-        ticketPriceFrom={completed ? undefined : t.ticketPriceFrom}
+        ticketPriceFrom={completed || !onSale ? undefined : t.ticketPriceFrom}
       />
 
       {/* Overview — quick facts (right below the hero) */}
@@ -1617,8 +1629,23 @@ export default async function EventPage({ params }: Params) {
             </a>
           </div>
 
+          {!onSale && (
+            /* Not listed on Tixr yet — no prices, no Buy buttons, no link to a
+               group directory the fan would have to search. */
+            <div className="mt-6 border border-ppa-line bg-ppa-paper p-6">
+              <p className="font-display text-xl uppercase leading-none text-ppa-navy">
+                Tickets Coming Soon
+              </p>
+              <p className="mt-2 max-w-xl text-sm leading-relaxed text-ppa-navy/60">
+                {t.shortName} tickets aren&apos;t on sale yet. Prices and seating
+                go live here the moment they open — or join the list below and
+                we&apos;ll tell you.
+              </p>
+            </div>
+          )}
+
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {ticketTiers.map((tier) => (
+            {onSale && ticketTiers.map((tier) => (
               <div
                 key={tier.name}
                 className="flex flex-col border border-ppa-line bg-ppa-paper p-5"

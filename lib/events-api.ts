@@ -32,7 +32,7 @@ import {
   type Tournament,
 } from "@/lib/placeholder-data";
 import { venueGalleryFor, venueHeroFor } from "@/lib/venue-photos";
-import { ticketPriceFrom } from "@/lib/tixr-prices";
+import { ticketPriceFrom, ticketsOnSale } from "@/lib/tixr-price-index";
 
 const PATH = "/v2/data/ppa_tournaments";
 /**
@@ -273,6 +273,7 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
       ticketPriceFrom(curated?.ticketsUrl ?? t.details_url) ??
       curated?.ticketPriceFrom ??
       TIER_PRICE[tier],
+    ticketsOnSale: ticketsOnSale(curated?.ticketsUrl ?? t.details_url),
     ticketsUrl: curated?.ticketsUrl ?? t.details_url,
     registerUrl: t.details_url || curated?.registerUrl || "",
     status,
