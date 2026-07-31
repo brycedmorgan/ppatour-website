@@ -170,7 +170,7 @@ export default async function Image({
             }}
           >
             {ticketsOnSale(t.ticketsUrl)
-              ? `${t.prizeMoney} ON THE LINE · TICKETS FROM ${t.ticketPriceFrom}`
+              ? `${t.prizeMoney} ON THE LINE · TICKETS FROM $${t.ticketPriceFrom}`
               : `${t.prizeMoney} ON THE LINE`}
           </div>
         </div>

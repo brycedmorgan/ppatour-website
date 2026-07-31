@@ -155,7 +155,7 @@ export function StickyBuyBar() {
             {live
               ? "▶ Watch Live"
               : next.ticketsOnSale
-                ? `Buy Tickets — ${next.ticketPriceFrom}`
+                ? `Buy Tickets — $${next.ticketPriceFrom}`
                 : "Event Details"}
             {!live && (
               <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-0.5">
