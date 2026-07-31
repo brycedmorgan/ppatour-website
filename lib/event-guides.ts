@@ -14,6 +14,8 @@ export type Place = {
   href?: string;
   /** Parent brand key → /public/ppa/hotels/{brand}.png */
   brand?: "marriott" | "hilton" | "ihg" | "bestwestern" | "wyndhamhotels";
+  /** Explicit logo path, for marks that aren't hotel chains (e.g. a food partner). */
+  logo?: string;
   rate?: string;
   cutoff?: string;
 };
@@ -60,6 +62,20 @@ export const eventGuides: Record<string, EventGuide> = {
       { name: "The Mayton", tag: "Boutique", note: "Downtown Cary · walkable" },
     ],
     dining: [
+      // ⚠ PITCH MOCKUP — NOT A REAL PARTNERSHIP. Wendy's is a Tier-1 outreach
+      // target, not a signed sponsor. This entry exists so Bryce can show them
+      // what the placement looks like on a real event page. It lives on the
+      // `pitch/wendys-nationals` branch and must NEVER be merged to main while
+      // the deal is unsigned — a brand's logo under an "Official" tag on the
+      // public site is an implied endorsement we have no right to make.
+      // Nearest of the three Cary locations to Cary Tennis Park (27519);
+      // the other two are on Kildaire Farm Rd, further south.
+      {
+        name: "Wendy's",
+        tag: "Official",
+        note: "1809 N Harrison Ave · ~10 min from the courts · Frosty cart at the Vendor Village all week",
+        logo: "/ppa/partners/wendys.png",
+      },
       { name: "Angus Barn", tag: "Steak", note: "Raleigh's special-occasion legend" },
       { name: "Bida Manda", tag: "Laotian", note: "Downtown Raleigh standout" },
       { name: "Postmaster", tag: "Cocktails", note: "Cary's date-night bar" },

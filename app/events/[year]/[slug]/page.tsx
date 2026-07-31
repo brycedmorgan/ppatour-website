@@ -1147,9 +1147,9 @@ export default async function EventPage({ params }: Params) {
                       <li key={p.name} className="px-4 py-3">
                         <div className="flex items-baseline justify-between gap-2">
                           <span className="flex min-w-0 items-center gap-2">
-                            {p.brand && (
+                            {(p.logo ?? (p.brand ? `/ppa/hotels/${p.brand}.png` : null)) && (
                               <Image
-                                src={`/ppa/hotels/${p.brand}.png`}
+                                src={p.logo ?? `/ppa/hotels/${p.brand}.png`}
                                 alt=""
                                 width={32}
                                 height={32}
