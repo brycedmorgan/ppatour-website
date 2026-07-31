@@ -1,0 +1,47 @@
+name: Sync Tixr ticket prices
+
+# Runs the PPA Tixr price scraper once a day. If any ticket price or
+# availability changed, it commits the updated data files — which, on Vercel,
+# triggers a redeploy so the live site shows the new prices automatically.
+#
+# You can also run it on demand from the Actions tab (workflow_dispatch).
+
+on:
+  schedule:
+    - cron: "0 13 * * *" # 13:00 UTC daily (~9am ET / 6am PT). Adjust as you like.
+  workflow_dispatch: {}
+
+permissions:
+  contents: write # needed to commit the refreshed JSON back to the repo
+
+concurrency:
+  group: sync-tixr-prices
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run Tixr price sync
+        run: node scripts/sync-tixr-prices.mjs
+
+      - name: Commit changes if prices moved
+        run: |
+          if [ -n "$(git status --porcelain lib/data/tixr-ticket-prices.json lib/data/tixr-price-changes.json)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add lib/data/tixr-ticket-prices.json lib/data/tixr-price-changes.json
+            git commit -m "chore(data): sync PPA Tixr ticket prices [skip ci]"
+            git push
+            echo "Committed price changes."
+          else
+            echo "No price changes today."
+          fi

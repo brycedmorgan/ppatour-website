@@ -45,6 +45,7 @@ import {
 } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
 import { matchdayPrimary } from "@/lib/matchday";
+import { admissionTiersFor } from "@/lib/tixr-prices";
 
 type Params = { params: Promise<{ year: string; slug: string }> };
 
@@ -199,12 +200,34 @@ export default async function EventPage({ params }: Params) {
   const publishedHotels = await publishedHotelsFor(t.city);
   const stayHotels = publishedHotels ?? guide?.hotels ?? [];
 
+  /**
+   * Real Tixr tiers, not arithmetic. These were `base`, `base * 2` and
+   * `round(base * 2.6)` with invented names — so Nationals advertised
+   * "Reserved Seating from $118" when no such ticket exists and the actual
+   * grounds pass is $25.
+   *
+   * Cheapest admission first, capped at three: the full ladder runs to a $1,500
+   * On Court VIP and reads as a price list rather than an entry point. Clinics,
+   * camps and King of the Court are filtered out upstream — they aren't
+   * admission. Falls back to the old shape only when we have no Tixr listing.
+   */
+  const realTiers = admissionTiersFor(t.ticketsUrl)
+    .filter((x) => !x.soldOut)
+    .slice(0, 3);
   const base = t.ticketPriceFrom;
-  const ticketTiers = [
-    { name: "Grounds Pass", from: base, blurb: "All-day access to the outer courts and festival grounds." },
-    { name: "Reserved Seating", from: base * 2, blurb: "Assigned seats at Championship Court for your session." },
-    { name: "Championship Sunday", from: Math.round(base * 2.6), blurb: "The finals — the best seats for the title matches." },
-  ];
+  const ticketTiers = realTiers.length
+    ? realTiers.map((x) => ({
+        name: x.name,
+        from: x.price,
+        blurb: x.allIn
+          ? `$${x.allIn.toFixed(2)} with fees, per Tixr.`
+          : "Sold through Tixr.",
+      }))
+    : [
+        { name: "Grounds Pass", from: base, blurb: "All-day access to the outer courts and festival grounds." },
+        { name: "Reserved Seating", from: base * 2, blurb: "Assigned seats at Championship Court for your session." },
+        { name: "Championship Sunday", from: Math.round(base * 2.6), blurb: "The finals — the best seats for the title matches." },
+      ];
 
   // Next stops on the domestic tour (excludes international sister-tour
   // stops and challengers), soonest first. Prefer events starting after this

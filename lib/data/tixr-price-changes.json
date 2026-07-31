@@ -1,0 +1,311 @@
+{
+  "updated_at": "2026-07-31T17:02:05Z",
+  "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
+  "entries": [
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "ticket_added",
+      "event_id": "183665",
+      "event": "Major League Pickleball Newport Beach - Playoffs",
+      "ticket": "Friday - Sunday   Courtside**",
+      "base_price": 240,
+      "all_in_price": 264.71
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "ticket_added",
+      "event_id": "183665",
+      "event": "Major League Pickleball Newport Beach - Playoffs",
+      "ticket": "Friday - Sunday  Courtside*",
+      "base_price": 280,
+      "all_in_price": 307.93
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "ticket_removed",
+      "event_id": "183665",
+      "event": "Major League Pickleball Newport Beach - Playoffs",
+      "ticket": "Friday - Sunday Courtside*"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "ticket_removed",
+      "event_id": "183665",
+      "event": "Major League Pickleball Newport Beach - Playoffs",
+      "ticket": "Friday - Sunday Courtside**"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "ticket_added",
+      "event_id": "169799",
+      "event": "Major League Pickleball New York Finals- Session 1",
+      "ticket": "VIP Session 1",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "ticket_added",
+      "event_id": "169804",
+      "event": "Major League Pickleball New York Finals - Saturday: Session 3",
+      "ticket": "VIP Session 3",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "ticket_added",
+      "event_id": "169803",
+      "event": "Major League Pickleball New York Finals - Saturday: Session 4",
+      "ticket": "VIP Session 4",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "184764",
+      "event": "Veolia Pickleball National Championships Saturday Evening - Men's and Women's Doubles Semifinals"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "184762",
+      "event": "Veolia Pickleball National Championships Saturday Morning - Singles and Mxd Doubles Semifinals"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "184760",
+      "event": "Veolia Pickleball National Championships Sunday - Championships"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "195027",
+      "event": "PPA Mesa"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "195336",
+      "event": "PPA Mesa Thursday - Round of 16"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "166229",
+      "event": "PPA Challenger Series - Grand Rapids"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "195335",
+      "event": "PPA Mesa Friday - Quarterfinals"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "195334",
+      "event": "PPA Mesa Saturday - Semifinals"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "195032",
+      "event": "PPA Mesa Sunday - Championships"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "195857",
+      "event": "PPA Las Vegas"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "197261",
+      "event": "PPA Las Vegas Thursday"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "197234",
+      "event": "PPA Las Vegas Friday - Quarterfinals"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "197226",
+      "event": "PPA Las Vegas Saturday - Semifinals"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "197214",
+      "event": "PPA Las Vegas Sunday - Championships"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "171536",
+      "event": "PPA Challenger Series - Sarasota"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "176326",
+      "event": "PPA Virginia Beach"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "198728",
+      "event": "2026 Major League Pickleball Nations Cup"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "166345",
+      "event": "2026 World Pickleball Championships"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "166404",
+      "event": "2026 Pickleball World Championships Tuesday - Round of 64"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "166402",
+      "event": "2026 Pickleball World Championships Wednesday - Round of 32"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "166399",
+      "event": "2026 Pickleball World Championships Thursday - Round of 16"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "166396",
+      "event": "2026 Pickleball World Championships Friday Evening - Men's and Women's Doubles Quarterfinals"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "166397",
+      "event": "2026 Pickleball World Championships Friday Morning - Singles and Mxd Double Quarterfinals"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "166381",
+      "event": "2026 Pickleball World Championships Saturday Evening - Men's and Women's Doubles Semifinals"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "166387",
+      "event": "2026 Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "166349",
+      "event": "2026 Pickleball World Championships Sunday - Championships"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "178517",
+      "event": "PPA Daytona Beach"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "176502",
+      "event": "Veolia PPA Malibu"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "196548",
+      "event": "PPA Cape Coral"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "196629",
+      "event": "PPA Cape Coral Thursday"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "196624",
+      "event": "PPA Cape Coral Friday"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "196616",
+      "event": "PPA Cape Coral Saturday"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "194597",
+      "event": "Cape Coral Sunday"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "196611",
+      "event": "PPA Cape Coral Sunday"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "181370",
+      "event": "Veolia PPA Cincinnati"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "186575",
+      "event": "Veolia PPA Cincinnati Thursday - Round of 16"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "186574",
+      "event": "Veolia PPA Cincinnati Friday - Quarterfinals"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "186573",
+      "event": "Veolia PPA Cincinnati Saturday - Semifinals"
+    },
+    {
+      "at": "2026-07-31T17:02:05Z",
+      "type": "event_added",
+      "event_id": "185682",
+      "event": "Veolia PPA Cincinnati Sunday - Championships"
+    }
+  ]
+}

@@ -1,0 +1,7104 @@
+{
+  "source": "https://www.tixr.com/groups/ppa",
+  "group": "Professional Pickleball Association",
+  "generated_at": "2026-07-31T17:02:05Z",
+  "event_count": 61,
+  "ticket_type_count": 864,
+  "series_breakdown": {
+    "Major League Pickleball": 15,
+    "PPA Challenger Series": 5,
+    "PPA Tour": 41
+  },
+  "field_notes": {
+    "base_price": "Face value set by the organizer (USD). null when the tier is sold out / not on public sale.",
+    "all_in_price": "Price the buyer pays including Tixr fees/taxes (USD). 0 for sold-out/placeholder tiers.",
+    "sale_state": "OPEN = on sale, SOLD_OUT = sold out, HIDE = not publicly listed / hidden tier.",
+    "status": "Tixr event publication status."
+  },
+  "events": [
+    {
+      "event_id": "170002",
+      "name": "Amway Major League Pickleball Orlando",
+      "series": "Major League Pickleball",
+      "status": "PUBLISHED",
+      "start_date": "2026-07-30",
+      "end_date": "2026-08-03",
+      "venue": {
+        "name": "ESPN Wide World of Sports Complex",
+        "city": "Orlando",
+        "state": "FL"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/amway-major-league-pickleball-orlando-170002",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        }
+      ]
+    },
+    {
+      "event_id": "166227",
+      "name": "PPA Challenger Series - Wisconsin",
+      "series": "PPA Challenger Series",
+      "status": "PUBLISHED",
+      "start_date": "2026-07-31",
+      "end_date": "2026-08-03",
+      "venue": {
+        "name": "Lake Hallie Pickleball",
+        "city": "Lake Hallie",
+        "state": "WI"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-challenger-series-wisconsin-166227",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Weekend Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        }
+      ]
+    },
+    {
+      "event_id": "169289",
+      "name": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "series": "Major League Pickleball",
+      "status": "PUBLISHED",
+      "start_date": "2026-08-07",
+      "end_date": "2026-08-10",
+      "venue": {
+        "name": "Pickler Universe - Carrollton",
+        "city": "Dallas",
+        "state": "TX"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-playoffs-dallas-presented-by-eisneramper-169289",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "3 Day Box Suites",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 14500,
+          "all_in_price": 15705.92
+        },
+        {
+          "name": "Friday Box Suites",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 4500,
+          "all_in_price": 4877.97
+        },
+        {
+          "name": "Saturday Box Suites",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 4500,
+          "all_in_price": 4877.97
+        },
+        {
+          "name": "Sunday Box Suites",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 4500,
+          "all_in_price": 4877.97
+        },
+        {
+          "name": "3 Day Courtside Friday - Sunday",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 156.66
+        },
+        {
+          "name": "Friday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "GOVX Tickets",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "3 Day VIP Platinum",
+          "category": "MISCELLANEOUS",
+          "sale_state": "OPEN",
+          "base_price": 825,
+          "all_in_price": 896.79
+        },
+        {
+          "name": "Friday Platinum Lounge",
+          "category": "MISCELLANEOUS",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Saturday Platinum Lounge",
+          "category": "MISCELLANEOUS",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Sunday Platinum Lounge",
+          "category": "MISCELLANEOUS",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        }
+      ]
+    },
+    {
+      "event_id": "183669",
+      "name": "Major League Pickleball Newport Beach - Friday",
+      "series": "Major League Pickleball",
+      "status": "PUBLISHED",
+      "start_date": "2026-08-14",
+      "end_date": "2026-08-15",
+      "venue": {
+        "name": "Newport Beach Tennis and Pickleball Club",
+        "city": "Newport Beach",
+        "state": "CA"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-newport-beach-friday-183669",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "North Box Suites",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 5000,
+          "all_in_price": 5407.75
+        },
+        {
+          "name": "South Box Suites",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 4500,
+          "all_in_price": 4867.51
+        },
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "GOVX Tickets",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Courtside Reserved*",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 120,
+          "all_in_price": 135.05
+        },
+        {
+          "name": "Courtside*",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 70,
+          "all_in_price": 81.03
+        },
+        {
+          "name": "Courtside**",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Courtside***",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Reserved VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Reserved VIP*",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 275,
+          "all_in_price": 302.53
+        },
+        {
+          "name": "Reserved VIP**",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 250,
+          "all_in_price": 275.51
+        }
+      ]
+    },
+    {
+      "event_id": "183665",
+      "name": "Major League Pickleball Newport Beach - Playoffs",
+      "series": "Major League Pickleball",
+      "status": "PUBLISHED",
+      "start_date": "2026-08-14",
+      "end_date": "2026-08-17",
+      "venue": {
+        "name": "Newport Beach Tennis and Pickleball Club",
+        "city": "Newport Beach",
+        "state": "CA"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-newport-beach-playoffs-183665",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Friday - Sunday South Box Suites",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 13000,
+          "all_in_price": 14051.51
+        },
+        {
+          "name": "Friday- Sunday North Box Suites",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 16550,
+          "all_in_price": 17887.18
+        },
+        {
+          "name": "Friday",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "GOVX Tickets",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Sunday",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Courtside Friday - Sunday",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 325,
+          "all_in_price": 356.55
+        },
+        {
+          "name": "Friday - Sunday   Courtside**",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 240,
+          "all_in_price": 264.71
+        },
+        {
+          "name": "Friday - Sunday  Courtside*",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 280,
+          "all_in_price": 307.93
+        },
+        {
+          "name": "Friday - Sunday Courtside Reserved*",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 375,
+          "all_in_price": 410.58
+        },
+        {
+          "name": "Friday - Sunday Courtside***",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 175,
+          "all_in_price": 194.48
+        },
+        {
+          "name": "Friday - Sunday Reserved VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 1100,
+          "all_in_price": 1193.91
+        },
+        {
+          "name": "Friday - Sunday Reserved VIP*",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 1000,
+          "all_in_price": 1085.87
+        },
+        {
+          "name": "Friday - Sunday Reserved VIP**",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 900,
+          "all_in_price": 977.82
+        }
+      ]
+    },
+    {
+      "event_id": "166228",
+      "name": "PPA Challenger Series - Seattle",
+      "series": "PPA Challenger Series",
+      "status": "PUBLISHED",
+      "start_date": "2026-08-14",
+      "end_date": "2026-08-17",
+      "venue": {
+        "name": "Sideout Tsunami Pickleball",
+        "city": "Seattle",
+        "state": "WA"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-challenger-series-seattle-166228",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Weekend Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        }
+      ]
+    },
+    {
+      "event_id": "183673",
+      "name": "Major League Pickleball Newport Beach - Saturday",
+      "series": "Major League Pickleball",
+      "status": "PUBLISHED",
+      "start_date": "2026-08-15",
+      "end_date": "2026-08-16",
+      "venue": {
+        "name": "Newport Beach Tennis and Pickleball Club",
+        "city": "Newport Beach",
+        "state": "CA"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-newport-beach-saturday-183673",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "North Box Suites",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 6000,
+          "all_in_price": 6488.22
+        },
+        {
+          "name": "South Box Suites",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 5000,
+          "all_in_price": 5407.75
+        },
+        {
+          "name": "GOVX Tickets",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Courtside Reserved*",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 120,
+          "all_in_price": 135.05
+        },
+        {
+          "name": "Courtside*",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 70,
+          "all_in_price": 81.03
+        },
+        {
+          "name": "Courtside**",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Courtside***",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Reserved VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Reserved VIP*",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 275,
+          "all_in_price": 302.53
+        },
+        {
+          "name": "Reserved VIP**",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 250,
+          "all_in_price": 275.51
+        }
+      ]
+    },
+    {
+      "event_id": "183676",
+      "name": "Major League Pickleball Newport Beach - Sunday",
+      "series": "Major League Pickleball",
+      "status": "PUBLISHED",
+      "start_date": "2026-08-16",
+      "end_date": "2026-08-17",
+      "venue": {
+        "name": "Newport Beach Tennis and Pickleball Club",
+        "city": "Newport Beach",
+        "state": "CA"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-newport-beach-sunday-183676",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "North Box Suites",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 6000,
+          "all_in_price": 6488.22
+        },
+        {
+          "name": "South Box Suites",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 5000,
+          "all_in_price": 5407.75
+        },
+        {
+          "name": "GOVX Tickets",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Courtside Reserved*",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 120,
+          "all_in_price": 135.05
+        },
+        {
+          "name": "Courtside*",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 70,
+          "all_in_price": 81.03
+        },
+        {
+          "name": "Courtside**",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Courtside***",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Reserved VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Reserved VIP*",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 275,
+          "all_in_price": 302.53
+        },
+        {
+          "name": "Reserved VIP**",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 250,
+          "all_in_price": 275.51
+        }
+      ]
+    },
+    {
+      "event_id": "169798",
+      "name": "Major League Pickleball New York City Finals 2026",
+      "series": "Major League Pickleball",
+      "status": "PUBLISHED",
+      "start_date": "2026-08-28",
+      "end_date": "2026-08-30",
+      "venue": {
+        "name": "CityPickle At Wollman Rink",
+        "city": "New York",
+        "state": "NY"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-city-finals-2026-169798",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Friday-Sunday Box Suite",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 25000,
+          "all_in_price": 27083.71
+        },
+        {
+          "name": "MLP New York Finals 2026- Friday Pass",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "MLP New York Finals 2026- Friday Session 1",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "MLP New York Finals 2026- Friday Session 2",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "MLP New York Finals 2026- Saturday Pass",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "MLP New York Finals 2026- Saturday Session 3",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "MLP New York Finals 2026- Saturday Session 4",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "MLP New York Finals- Championship Sunday",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "VIP",
+          "category": "GA",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 319.51
+        },
+        {
+          "name": "Courtside",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 113.71
+        },
+        {
+          "name": "Courtside*",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 113.71
+        },
+        {
+          "name": "Courtside**",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 113.71
+        },
+        {
+          "name": "Courtside***",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 113.71
+        }
+      ]
+    },
+    {
+      "event_id": "169837",
+      "name": "Major League Pickleball New York Finals 2026 - Friday: Session 1 & 2",
+      "series": "Major League Pickleball",
+      "status": "PUBLISHED",
+      "start_date": "2026-08-28",
+      "end_date": "2026-08-28",
+      "venue": {
+        "name": "CityPickle At Wollman Rink",
+        "city": "New York",
+        "state": "NY"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-finals-2026-friday-session-1-2-169837",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Courtside Session 1 & 2",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 30,
+          "all_in_price": 35.83
+        },
+        {
+          "name": "Courtside Session 1 & 2",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 70,
+          "all_in_price": 81.22
+        },
+        {
+          "name": "Courtside Session 1 & 2",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.71
+        },
+        {
+          "name": "Courtside Session 1 & 2",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 140,
+          "all_in_price": 156.66
+        },
+        {
+          "name": "VIP Session 1 & 2",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 384.49
+        }
+      ]
+    },
+    {
+      "event_id": "169799",
+      "name": "Major League Pickleball New York Finals- Session 1",
+      "series": "Major League Pickleball",
+      "status": "PUBLISHED",
+      "start_date": "2026-08-28",
+      "end_date": "2026-08-28",
+      "venue": {
+        "name": "CityPickle At Wollman Rink",
+        "city": "New York",
+        "state": "NY"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-finals-session-1-169799",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Box Suite Friday Session 1",
+          "category": "BOOTH",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Courtside Session 1",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 30,
+          "all_in_price": 35.83
+        },
+        {
+          "name": "Courtside Session 1",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Courtside Session 1",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.39
+        },
+        {
+          "name": "Courtside Session 1",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 92.05
+        },
+        {
+          "name": "VIP Session 1",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 0
+        }
+      ]
+    },
+    {
+      "event_id": "169802",
+      "name": "Major League Pickleball New York Finals- Session 2",
+      "series": "Major League Pickleball",
+      "status": "PUBLISHED",
+      "start_date": "2026-08-28",
+      "end_date": "2026-08-29",
+      "venue": {
+        "name": "CityPickle At Wollman Rink",
+        "city": "New York",
+        "state": "NY"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-finals-session-2-169802",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Box Suite Friday Session 2",
+          "category": "BOOTH",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Courtside Session 2",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 30,
+          "all_in_price": 35.83
+        },
+        {
+          "name": "Courtside Session 2",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Courtside Session 2",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.39
+        },
+        {
+          "name": "Courtside Session 2",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 92.05
+        },
+        {
+          "name": "VIP Session 2",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 0
+        }
+      ]
+    },
+    {
+      "event_id": "173667",
+      "name": "PPA Challenger Series - Peachtree City",
+      "series": "PPA Challenger Series",
+      "status": "PUBLISHED",
+      "start_date": "2026-08-28",
+      "end_date": "2026-08-31",
+      "venue": {
+        "name": "Let's Go Pickleball & Padel",
+        "city": "Peachtree City",
+        "state": "GA"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-challenger-series-peachtree-city-173667",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Weekend Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        }
+      ]
+    },
+    {
+      "event_id": "169804",
+      "name": "Major League Pickleball New York Finals - Saturday: Session 3",
+      "series": "Major League Pickleball",
+      "status": "PUBLISHED",
+      "start_date": "2026-08-29",
+      "end_date": "2026-08-29",
+      "venue": {
+        "name": "CityPickle At Wollman Rink",
+        "city": "New York",
+        "state": "NY"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-finals-saturday-session-3-169804",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Box Suite Saturday Session 3",
+          "category": "BOOTH",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Courtside Session 3",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 30,
+          "all_in_price": 35.83
+        },
+        {
+          "name": "Courtside Session 3",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Courtside Session 3",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.39
+        },
+        {
+          "name": "Courtside Session 3",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 92.05
+        },
+        {
+          "name": "VIP Session 3",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 0
+        }
+      ]
+    },
+    {
+      "event_id": "169803",
+      "name": "Major League Pickleball New York Finals - Saturday: Session 4",
+      "series": "Major League Pickleball",
+      "status": "PUBLISHED",
+      "start_date": "2026-08-29",
+      "end_date": "2026-08-31",
+      "venue": {
+        "name": "CityPickle At Wollman Rink",
+        "city": "New York",
+        "state": "NY"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-finals-saturday-session-4-169803",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Box Suite Saturday Session 4",
+          "category": "BOOTH",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Courtside Session 4",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 30,
+          "all_in_price": 35.83
+        },
+        {
+          "name": "Courtside Session 4",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.39
+        },
+        {
+          "name": "Courtside Session 4",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 92.05
+        },
+        {
+          "name": "Courtside Session 4",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.71
+        },
+        {
+          "name": "VIP Session 4",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 0
+        }
+      ]
+    },
+    {
+      "event_id": "169839",
+      "name": "Major League Pickleball New York Finals 2026 - Saturday: Session 3 & 4",
+      "series": "Major League Pickleball",
+      "status": "PUBLISHED",
+      "start_date": "2026-08-29",
+      "end_date": "2026-08-30",
+      "venue": {
+        "name": "CityPickle At Wollman Rink",
+        "city": "New York",
+        "state": "NY"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-finals-2026-saturday-session-3-4-169839",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Courtside Session 3 & 4",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 30,
+          "all_in_price": 35.83
+        },
+        {
+          "name": "Courtside Session 3 & 4",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.71
+        },
+        {
+          "name": "Courtside Session 3 & 4",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 120,
+          "all_in_price": 135.37
+        },
+        {
+          "name": "Courtside Session 3 & 4",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 160,
+          "all_in_price": 178.7
+        },
+        {
+          "name": "VIP Session 3 & 4",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 384.49
+        }
+      ]
+    },
+    {
+      "event_id": "169805",
+      "name": "Major League Pickleball New York Finals - Championship Sunday: Session 5",
+      "series": "Major League Pickleball",
+      "status": "PUBLISHED",
+      "start_date": "2026-08-30",
+      "end_date": "2026-08-30",
+      "venue": {
+        "name": "CityPickle At Wollman Rink",
+        "city": "New York",
+        "state": "NY"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-finals-championship-sunday-session-5-169805",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Box Suite Sunday Session 5",
+          "category": "BOOTH",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Courtside Session 5",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 30,
+          "all_in_price": 35.83
+        },
+        {
+          "name": "Courtside Session 5",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.71
+        },
+        {
+          "name": "Courtside Session 5",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 140,
+          "all_in_price": 157.04
+        },
+        {
+          "name": "Courtside Session 5",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 170,
+          "all_in_price": 189.53
+        },
+        {
+          "name": "VIP Session 5",
+          "category": "STANDARD",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 438.65
+        }
+      ]
+    },
+    {
+      "event_id": "184656",
+      "name": "Veolia Pickleball National Championships",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-08-31",
+      "end_date": "2026-09-07",
+      "venue": {
+        "name": "Cary Tennis Center",
+        "city": "Cary",
+        "state": "NC"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-pickleball-national-championships-184656",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Connor Garnett Skills Lab Powered by the PPA",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 135,
+          "all_in_price": 151.27
+        },
+        {
+          "name": "GovX Discount",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 370,
+          "all_in_price": 405.17
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday: Family Night",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 0,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday: King's Court 3.0 - 3.5",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 20,
+          "all_in_price": 24.95
+        },
+        {
+          "name": "Thursday: King's Court 4.0 - 4.5",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 20,
+          "all_in_price": 24.95
+        },
+        {
+          "name": "Tuesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Tuesday: Glow in the Dark Pickleball",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 45,
+          "all_in_price": 51.96
+        },
+        {
+          "name": "Tuesday: On Court with Andrei Daescu",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 150,
+          "all_in_price": 167.47
+        },
+        {
+          "name": "Wednesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Wednesday: Play with a Pro 3.0 - 3.5",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Wednesday: Play with a Pro 4.0 - 4.5",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Weeklong Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Thursday-Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Thursday-Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 437.59
+        },
+        {
+          "name": "Thursday-Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 500,
+          "all_in_price": 545.63
+        },
+        {
+          "name": "Thursday-Sunday Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 600,
+          "all_in_price": 653.68
+        },
+        {
+          "name": "Thursday-Sunday Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 700,
+          "all_in_price": 761.73
+        },
+        {
+          "name": "Thursday-Sunday On Court VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 1500,
+          "all_in_price": 1626.1
+        },
+        {
+          "name": "Thursday-Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 1000,
+          "all_in_price": 1085.87
+        },
+        {
+          "name": "Thursday-Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 1200,
+          "all_in_price": 1301.96
+        }
+      ]
+    },
+    {
+      "event_id": "184767",
+      "name": "Veolia Pickleball National Championships Thursday - Round of 16",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-09-03",
+      "end_date": "2026-09-04",
+      "venue": {
+        "name": "Cary Tennis Center",
+        "city": "Cary",
+        "state": "NC"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-pickleball-national-championships-thursday-round-of-16-184767",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Thursday Courtside+",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 135.05
+        },
+        {
+          "name": "Thursday Courtside+",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 156.66
+        },
+        {
+          "name": "Thursday On Court VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 437.59
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        }
+      ]
+    },
+    {
+      "event_id": "184766",
+      "name": "Veolia Pickleball National Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-09-04",
+      "end_date": "2026-09-05",
+      "venue": {
+        "name": "Cary Tennis Center",
+        "city": "Cary",
+        "state": "NC"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-pickleball-national-championships-friday-evening-men-s-and-women-s-doubles-quarterfinals-184766",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Friday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Friday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Friday Evening Courtside+",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 156.66
+        },
+        {
+          "name": "Friday Evening Courtside+",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 135.05
+        },
+        {
+          "name": "Friday Evening On Court VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 437.59
+        },
+        {
+          "name": "Friday Evening VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Friday Evening VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        }
+      ]
+    },
+    {
+      "event_id": "184765",
+      "name": "Veolia Pickleball National Championships Friday Morning - Singles and Mxd Doubles Quarterfinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-09-04",
+      "end_date": "2026-09-04",
+      "venue": {
+        "name": "Cary Tennis Center",
+        "city": "Cary",
+        "state": "NC"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-pickleball-national-championships-friday-morning-singles-and-mxd-doubles-quarterfinals-184765",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Morning Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Friday Morning Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Friday Morning Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Friday Morning Courtside+",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 135.05
+        },
+        {
+          "name": "Friday Morning Courtside+",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 156.66
+        },
+        {
+          "name": "Friday Morning On Court VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 437.59
+        },
+        {
+          "name": "Friday Morning VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Friday Morning VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        }
+      ]
+    },
+    {
+      "event_id": "184764",
+      "name": "Veolia Pickleball National Championships Saturday Evening - Men's and Women's Doubles Semifinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-09-05",
+      "end_date": "2026-09-06",
+      "venue": {
+        "name": "Cary Tennis Center",
+        "city": "Cary",
+        "state": "NC"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-pickleball-national-championships-saturday-evening-men-s-and-women-s-doubles-semifinals-184764",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Semifinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Saturday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Saturday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Saturday Evening Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 140,
+          "all_in_price": 156.66
+        },
+        {
+          "name": "Saturday Evening Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 160,
+          "all_in_price": 178.27
+        },
+        {
+          "name": "Saturday Evening On Court VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 437.59
+        },
+        {
+          "name": "Saturday Evening VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Saturday Evening VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        }
+      ]
+    },
+    {
+      "event_id": "184762",
+      "name": "Veolia Pickleball National Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-09-05",
+      "end_date": "2026-09-05",
+      "venue": {
+        "name": "Cary Tennis Center",
+        "city": "Cary",
+        "state": "NC"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-pickleball-national-championships-saturday-morning-singles-and-mxd-doubles-semifinals-184762",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Semifinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Morning Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Saturday Morning Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Saturday Morning Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Saturday Morning Courtside+",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 199.88
+        },
+        {
+          "name": "Saturday Morning Courtside+",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 178.27
+        },
+        {
+          "name": "Saturday Morning On Court VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 437.59
+        },
+        {
+          "name": "Saturday Morning VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Saturday Morning VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        }
+      ]
+    },
+    {
+      "event_id": "184760",
+      "name": "Veolia Pickleball National Championships Sunday - Championships",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-09-06",
+      "end_date": "2026-09-07",
+      "venue": {
+        "name": "Cary Tennis Center",
+        "city": "Cary",
+        "state": "NC"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-pickleball-national-championships-sunday-championships-184760",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 120,
+          "all_in_price": 135.05
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 140,
+          "all_in_price": 156.66
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Sunday Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 200,
+          "all_in_price": 221.49
+        },
+        {
+          "name": "Sunday Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 220,
+          "all_in_price": 243.1
+        },
+        {
+          "name": "Sunday On Court VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 545.63
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 437.59
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 450,
+          "all_in_price": 491.61
+        }
+      ]
+    },
+    {
+      "event_id": "195027",
+      "name": "PPA Mesa",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-09-14",
+      "end_date": "2026-09-21",
+      "venue": {
+        "name": "Arizona Athletic Grounds",
+        "city": "Mesa",
+        "state": "AZ"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-mesa-195027",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 370,
+          "all_in_price": 405.17
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Tuesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Wednesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Thursday-Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 200,
+          "all_in_price": 221.49
+        },
+        {
+          "name": "Thursday-Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 250,
+          "all_in_price": 275.51
+        },
+        {
+          "name": "Thursday-Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Thursday-Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 900,
+          "all_in_price": 977.82
+        },
+        {
+          "name": "Thursday-Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 1100,
+          "all_in_price": 1193.91
+        },
+        {
+          "name": "Thursday-Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 1300,
+          "all_in_price": 1410.01
+        }
+      ]
+    },
+    {
+      "event_id": "195336",
+      "name": "PPA Mesa Thursday - Round of 16",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-09-17",
+      "end_date": "2026-09-18",
+      "venue": {
+        "name": "Arizona Athletic Grounds",
+        "city": "Mesa",
+        "state": "AZ"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-mesa-thursday-round-of-16-195336",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 437.59
+        }
+      ]
+    },
+    {
+      "event_id": "166229",
+      "name": "PPA Challenger Series - Grand Rapids",
+      "series": "PPA Challenger Series",
+      "status": "PUBLISHED",
+      "start_date": "2026-09-18",
+      "end_date": "2026-09-21",
+      "venue": {
+        "name": "Meijer Sports Complex",
+        "city": "Rockford",
+        "state": "MI"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-challenger-series-grand-rapids-166229",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Weekend Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        }
+      ]
+    },
+    {
+      "event_id": "195335",
+      "name": "PPA Mesa Friday - Quarterfinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-09-18",
+      "end_date": "2026-09-19",
+      "venue": {
+        "name": "Arizona Athletic Grounds",
+        "city": "Mesa",
+        "state": "AZ"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-mesa-friday-quarterfinals-195335",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Friday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Friday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Friday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Friday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Friday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 437.59
+        }
+      ]
+    },
+    {
+      "event_id": "195334",
+      "name": "PPA Mesa Saturday - Semifinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-09-19",
+      "end_date": "2026-09-20",
+      "venue": {
+        "name": "Arizona Athletic Grounds",
+        "city": "Mesa",
+        "state": "AZ"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-mesa-saturday-semifinals-195334",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Saturday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Saturday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Saturday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Saturday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 437.59
+        },
+        {
+          "name": "Saturday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 500,
+          "all_in_price": 545.63
+        }
+      ]
+    },
+    {
+      "event_id": "195032",
+      "name": "PPA Mesa Sunday - Championships",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-09-20",
+      "end_date": "2026-09-21",
+      "venue": {
+        "name": "Arizona Athletic Grounds",
+        "city": "Mesa",
+        "state": "AZ"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-mesa-sunday-championships-195032",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 437.59
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 500,
+          "all_in_price": 545.63
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 383.56
+        }
+      ]
+    },
+    {
+      "event_id": "195857",
+      "name": "PPA Las Vegas",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-09-28",
+      "end_date": "2026-10-05",
+      "venue": {
+        "name": "Darling Tennis Center",
+        "city": "Las Vegas",
+        "state": "NV"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-las-vegas-195857",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "GovX Discount",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 370,
+          "all_in_price": 405.17
+        },
+        {
+          "name": "King of the Court (3.0-3.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "King of the Court (4.0-4.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Play with the Pro’s (3.0-3.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Play with the Pro’s (4.0-4.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Tuesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Wednesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Thursday-Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 160,
+          "all_in_price": 178.27
+        },
+        {
+          "name": "Thursday-Sunday Courtside Chair",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 250,
+          "all_in_price": 275.51
+        },
+        {
+          "name": "Thursday-Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 1000,
+          "all_in_price": 1085.87
+        }
+      ]
+    },
+    {
+      "event_id": "197261",
+      "name": "PPA Las Vegas Thursday",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-10-01",
+      "end_date": "2026-10-02",
+      "venue": {
+        "name": "Darling Tennis Center",
+        "city": "Las Vegas",
+        "state": "NV"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-las-vegas-thursday-197261",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "GovX Discount",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Thursday Courtside Chair",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        }
+      ]
+    },
+    {
+      "event_id": "197234",
+      "name": "PPA Las Vegas Friday - Quarterfinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-10-02",
+      "end_date": "2026-10-03",
+      "venue": {
+        "name": "Darling Tennis Center",
+        "city": "Las Vegas",
+        "state": "NV"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-las-vegas-friday-quarterfinals-197234",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "GovX Discount",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Friday Courtside Chair",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Friday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        }
+      ]
+    },
+    {
+      "event_id": "197226",
+      "name": "PPA Las Vegas Saturday - Semifinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-10-03",
+      "end_date": "2026-10-04",
+      "venue": {
+        "name": "Darling Tennis Center",
+        "city": "Las Vegas",
+        "state": "NV"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-las-vegas-saturday-semifinals-197226",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "GovX Discount",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Saturday Courtside Chair",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Saturday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        }
+      ]
+    },
+    {
+      "event_id": "197214",
+      "name": "PPA Las Vegas Sunday - Championships",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-10-04",
+      "end_date": "2026-10-05",
+      "venue": {
+        "name": "Darling Tennis Center",
+        "city": "Las Vegas",
+        "state": "NV"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-las-vegas-sunday-championships-197214",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "GovX Discount",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Sunday Courtside Chair",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        }
+      ]
+    },
+    {
+      "event_id": "176687",
+      "name": "Veolia PPA Chicago",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-10-05",
+      "end_date": "2026-10-12",
+      "venue": {
+        "name": "Life Time",
+        "city": "Northbrook",
+        "state": "IL"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-ppa-chicago-176687",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Connor Garnett Skills Lab Powered by the PPA",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 135,
+          "all_in_price": 151.27
+        },
+        {
+          "name": "Friday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Friday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "GovX Discount",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 370,
+          "all_in_price": 405.17
+        },
+        {
+          "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp + Weeklong Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 550,
+          "all_in_price": 599.66
+        },
+        {
+          "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp + Weeklong VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 1100,
+          "all_in_price": 1193.91
+        },
+        {
+          "name": "King of the Court (3.0-3.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "King of the Court (4.0-4.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Play with the Pro’s (3.0-3.5)",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Play with the Pro’s (4.0-4.5)",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Saturday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Thursday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Tuesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Wednesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Wednesday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Weeklong Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 220,
+          "all_in_price": 243.1
+        },
+        {
+          "name": "Weeklong Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Weeklong VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 900,
+          "all_in_price": 977.82
+        }
+      ]
+    },
+    {
+      "event_id": "171536",
+      "name": "PPA Challenger Series - Sarasota",
+      "series": "PPA Challenger Series",
+      "status": "PUBLISHED",
+      "start_date": "2026-10-09",
+      "end_date": "2026-10-12",
+      "venue": {
+        "name": "Englewood Sports Complex ",
+        "city": "Englewood",
+        "state": "FL"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-challenger-series-sarasota-171536",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Weekend Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        }
+      ]
+    },
+    {
+      "event_id": "176326",
+      "name": "PPA Virginia Beach",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-10-12",
+      "end_date": "2026-10-19",
+      "venue": {
+        "name": "Pickleball Virginia Beach",
+        "city": "Virginia Beach",
+        "state": "VA"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-virginia-beach-176326",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Friday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Friday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "GovX Discount",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 370,
+          "all_in_price": 405.17
+        },
+        {
+          "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp + Weeklong Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 500,
+          "all_in_price": 545.63
+        },
+        {
+          "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp + Weeklong VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 1000,
+          "all_in_price": 1085.87
+        },
+        {
+          "name": "King of the Court (3.0-3.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "King of the Court (4.0-4.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Play with the Pro’s (3.0-3.5)",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Play with the Pro’s (4.0-4.5)",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Saturday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Thursday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Tuesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Wednesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Wednesday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Weeklong Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 170,
+          "all_in_price": 189.08
+        },
+        {
+          "name": "Weeklong Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Weeklong VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 800,
+          "all_in_price": 869.77
+        }
+      ]
+    },
+    {
+      "event_id": "198728",
+      "name": "2026 Major League Pickleball Nations Cup",
+      "series": "Major League Pickleball",
+      "status": "PUBLISHED",
+      "start_date": "2026-10-30",
+      "end_date": "2026-11-02",
+      "venue": {
+        "name": "Brookhaven Country Club",
+        "city": "Farmers Branch",
+        "state": "TX"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/2026-major-league-pickleball-nations-cup-198728",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "3 Day Box Suite",
+          "category": "CABANA",
+          "sale_state": "OPEN",
+          "base_price": 10500,
+          "all_in_price": 11376.32
+        },
+        {
+          "name": "Friday Box Suite",
+          "category": "CABANA",
+          "sale_state": "OPEN",
+          "base_price": 3500,
+          "all_in_price": 3795.7
+        },
+        {
+          "name": "Saturday Box Suite",
+          "category": "CABANA",
+          "sale_state": "OPEN",
+          "base_price": 4000,
+          "all_in_price": 4337.18
+        },
+        {
+          "name": "Sunday Box Suite",
+          "category": "CABANA",
+          "sale_state": "OPEN",
+          "base_price": 4000,
+          "all_in_price": 4337.18
+        },
+        {
+          "name": "3 Day Courtside Friday-Sunday",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.37
+        },
+        {
+          "name": "Championship Sunday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 30,
+          "all_in_price": 35.83
+        },
+        {
+          "name": "Friday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 20,
+          "all_in_price": 25
+        },
+        {
+          "name": "Saturday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 30,
+          "all_in_price": 35.83
+        },
+        {
+          "name": "3 Day VIP",
+          "category": "VIP",
+          "sale_state": "OPEN",
+          "base_price": 750,
+          "all_in_price": 817.61
+        },
+        {
+          "name": "Championship Sunday VIP",
+          "category": "VIP",
+          "sale_state": "OPEN",
+          "base_price": 150,
+          "all_in_price": 167.84
+        },
+        {
+          "name": "Friday VIP",
+          "category": "VIP",
+          "sale_state": "OPEN",
+          "base_price": 150,
+          "all_in_price": 167.84
+        },
+        {
+          "name": "Saturday VIP",
+          "category": "VIP",
+          "sale_state": "OPEN",
+          "base_price": 150,
+          "all_in_price": 167.84
+        }
+      ]
+    },
+    {
+      "event_id": "166345",
+      "name": "2026 World Pickleball Championships",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-11-02",
+      "end_date": "2026-11-09",
+      "venue": {
+        "name": "Brookhaven Country Club",
+        "city": "Farmers Branch",
+        "state": "TX"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/2026-world-pickleball-championships-166345",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Weeklong Box Suite",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 20000,
+          "all_in_price": 21664.3
+        },
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Connor Garnett Skills Lab Powered by the PPA",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 135,
+          "all_in_price": 151.27
+        },
+        {
+          "name": "Monday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.42
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Men's & Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Singles & Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Men's & Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Singles & Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 330.28
+        },
+        {
+          "name": "Weeklong Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 330.28
+        },
+        {
+          "name": "Weeklong Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 450,
+          "all_in_price": 492.72
+        },
+        {
+          "name": "Weeklong Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 600,
+          "all_in_price": 655.16
+        },
+        {
+          "name": "Weeklong Courtside Chair",
+          "category": "STANDARD",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 1088.34
+        },
+        {
+          "name": "Weeklong VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 1200,
+          "all_in_price": 1304.93
+        },
+        {
+          "name": "Weeklong VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 1600,
+          "all_in_price": 1738.11
+        },
+        {
+          "name": "Weeklong VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 2000,
+          "all_in_price": 2171.29
+        }
+      ]
+    },
+    {
+      "event_id": "166404",
+      "name": "2026 Pickleball World Championships Tuesday - Round of 64",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-11-03",
+      "end_date": "2026-11-04",
+      "venue": {
+        "name": "Brookhaven Country Club",
+        "city": "Farmers Branch",
+        "state": "TX"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/2026-pickleball-world-championships-tuesday-round-of-64-166404",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Tuesday Box Suite",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 2500,
+          "all_in_price": 2712.76
+        },
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Qualifiers",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Men's & Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Singles & Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Men's & Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Singles & Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Tuesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.42
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Tuesday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Tuesday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.37
+        },
+        {
+          "name": "Tuesday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 92.03
+        },
+        {
+          "name": "Tuesday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Tuesday Courtside Chair",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.69
+        },
+        {
+          "name": "Tuesday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 250,
+          "all_in_price": 276.13
+        },
+        {
+          "name": "Tuesday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 330.28
+        },
+        {
+          "name": "Tuesday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 384.43
+        }
+      ]
+    },
+    {
+      "event_id": "166402",
+      "name": "2026 Pickleball World Championships Wednesday - Round of 32",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-11-04",
+      "end_date": "2026-11-05",
+      "venue": {
+        "name": "Brookhaven Country Club",
+        "city": "Farmers Branch",
+        "state": "TX"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/2026-pickleball-world-championships-wednesday-round-of-32-166402",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Wednesday Box Suite",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 3000,
+          "all_in_price": 3254.23
+        },
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Qualifiers",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Men's & Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Singles & Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Men's & Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Singles & Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Wednesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.42
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Wednesday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Wednesday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.37
+        },
+        {
+          "name": "Wednesday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 92.03
+        },
+        {
+          "name": "Wednesday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Wednesday Courtside Chair",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.69
+        },
+        {
+          "name": "Wednesday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 250,
+          "all_in_price": 276.13
+        },
+        {
+          "name": "Wednesday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 330.28
+        },
+        {
+          "name": "Wednesday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 384.43
+        }
+      ]
+    },
+    {
+      "event_id": "166399",
+      "name": "2026 Pickleball World Championships Thursday - Round of 16",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-11-05",
+      "end_date": "2026-11-06",
+      "venue": {
+        "name": "Brookhaven Country Club",
+        "city": "Farmers Branch",
+        "state": "TX"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/2026-pickleball-world-championships-thursday-round-of-16-166399",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Thursday Box Suite",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 4000,
+          "all_in_price": 4337.18
+        },
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Qualifiers",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Men's & Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Singles & Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Men's & Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Singles & Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.42
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Thursday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.37
+        },
+        {
+          "name": "Thursday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 92.03
+        },
+        {
+          "name": "Thursday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Thursday Courtside Chair",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 120,
+          "all_in_price": 135.35
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 250,
+          "all_in_price": 276.13
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 330.28
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 384.43
+        }
+      ]
+    },
+    {
+      "event_id": "166396",
+      "name": "2026 Pickleball World Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-11-06",
+      "end_date": "2026-11-08",
+      "venue": {
+        "name": "Brookhaven Country Club",
+        "city": "Farmers Branch",
+        "state": "TX"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/2026-pickleball-world-championships-friday-evening-men-s-and-women-s-doubles-quarterfinals-166396",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Friday Full Day Box Suite",
+          "category": "BOOTH",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 5420.12
+        },
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.42
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Qualifiers",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Singles & Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Men's & Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Singles & Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Evening Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Friday Evening Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.37
+        },
+        {
+          "name": "Friday Evening Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 92.03
+        },
+        {
+          "name": "Friday Evening Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Friday Evening Courtside Chair",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 150,
+          "all_in_price": 167.84
+        },
+        {
+          "name": "Friday Evening VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 250,
+          "all_in_price": 276.13
+        },
+        {
+          "name": "Friday Evening VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 330.28
+        },
+        {
+          "name": "Friday Evening VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 438.58
+        }
+      ]
+    },
+    {
+      "event_id": "166397",
+      "name": "2026 Pickleball World Championships Friday Morning - Singles and Mxd Double Quarterfinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-11-06",
+      "end_date": "2026-11-07",
+      "venue": {
+        "name": "Brookhaven Country Club",
+        "city": "Farmers Branch",
+        "state": "TX"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/2026-pickleball-world-championships-friday-morning-singles-and-mxd-double-quarterfinals-166397",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Friday Full Day Box Suite",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 5000,
+          "all_in_price": 5420.12
+        },
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.42
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Qualifiers",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Men's & Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Men's & Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Singles & Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Morning Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Friday Morning Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.37
+        },
+        {
+          "name": "Friday Morning Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 92.03
+        },
+        {
+          "name": "Friday Morning Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Friday Morning Courtside Chair",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 150,
+          "all_in_price": 167.84
+        },
+        {
+          "name": "Friday Morning VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 250,
+          "all_in_price": 276.13
+        },
+        {
+          "name": "Friday Morning VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 330.28
+        },
+        {
+          "name": "Friday Morning VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 438.58
+        }
+      ]
+    },
+    {
+      "event_id": "166381",
+      "name": "2026 Pickleball World Championships Saturday Evening - Men's and Women's Doubles Semifinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-11-07",
+      "end_date": "2026-11-09",
+      "venue": {
+        "name": "Brookhaven Country Club",
+        "city": "Farmers Branch",
+        "state": "TX"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/2026-pickleball-world-championships-saturday-evening-men-s-and-women-s-doubles-semifinals-166381",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Saturday Full Day Box Suite",
+          "category": "BOOTH",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 5420.12
+        },
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Qualifiers",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Men's & Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Singles & Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.42
+        },
+        {
+          "name": "Semifinals - Singles & Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Evening Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Saturday Evening Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.37
+        },
+        {
+          "name": "Saturday Evening Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 92.03
+        },
+        {
+          "name": "Saturday Evening Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Saturday Evening Courtside Chair",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 200.33
+        },
+        {
+          "name": "Saturday Evening VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 330.28
+        },
+        {
+          "name": "Saturday Evening VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 384.43
+        },
+        {
+          "name": "Saturday Evening VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 438.58
+        }
+      ]
+    },
+    {
+      "event_id": "166387",
+      "name": "2026 Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-11-07",
+      "end_date": "2026-11-07",
+      "venue": {
+        "name": "Brookhaven Country Club",
+        "city": "Farmers Branch",
+        "state": "TX"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/2026-pickleball-world-championships-saturday-morning-singles-and-mxd-doubles-semifinals-166387",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Saturday Full Day Box Suite",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 5000,
+          "all_in_price": 5420.12
+        },
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Qualifiers",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Men's & Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Singles & Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.42
+        },
+        {
+          "name": "Semifinals - Men's & Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Morning Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Saturday Morning Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.37
+        },
+        {
+          "name": "Saturday Morning Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 92.03
+        },
+        {
+          "name": "Saturday Morning Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Saturday Morning Courtside Chair",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 180,
+          "all_in_price": 200.33
+        },
+        {
+          "name": "Saturday Morning VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 330.28
+        },
+        {
+          "name": "Saturday Morning VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 384.43
+        },
+        {
+          "name": "Saturday Morning VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 438.58
+        }
+      ]
+    },
+    {
+      "event_id": "166349",
+      "name": "2026 Pickleball World Championships Sunday - Championships",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-11-08",
+      "end_date": "2026-11-09",
+      "venue": {
+        "name": "Brookhaven Country Club",
+        "city": "Farmers Branch",
+        "state": "TX"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/2026-pickleball-world-championships-sunday-championships-166349",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Sunday Box Suite",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 5000,
+          "all_in_price": 5420.12
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Qualifiers",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Men's & Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Singles & Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Men's & Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Singles & Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.42
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Sunday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.48
+        },
+        {
+          "name": "Sunday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 92.03
+        },
+        {
+          "name": "Sunday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.69
+        },
+        {
+          "name": "Sunday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 57.48
+        },
+        {
+          "name": "Sunday Courtside Chair",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 221.99
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 384.43
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 438.58
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 546.87
+        }
+      ]
+    },
+    {
+      "event_id": "178517",
+      "name": "PPA Daytona Beach",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-11-16",
+      "end_date": "2026-11-23",
+      "venue": {
+        "name": "Pictona at Holly Hill",
+        "city": "Daytona Beach",
+        "state": "FL"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-daytona-beach-178517",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Friday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Friday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "GovX Discount",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 370,
+          "all_in_price": 405.17
+        },
+        {
+          "name": "King of the Court (3.0-3.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "King of the Court (4.0-4.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Play with the Pro’s (3.0-3.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Play with the Pro’s (4.0-4.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Saturday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Saturday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Thursday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Tuesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Wednesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Courtside",
+          "category": "GA",
+          "sale_state": "AVAIL_SOON",
+          "base_price": null,
+          "all_in_price": 189.08
+        },
+        {
+          "name": "Weeklong Grounds Pass",
+          "category": "GA",
+          "sale_state": "AVAIL_SOON",
+          "base_price": null,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Weeklong VIP",
+          "category": "GA",
+          "sale_state": "AVAIL_SOON",
+          "base_price": null,
+          "all_in_price": 869.77
+        }
+      ]
+    },
+    {
+      "event_id": "176502",
+      "name": "Veolia PPA Malibu",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-11-30",
+      "end_date": "2026-12-07",
+      "venue": {
+        "name": "Pepperdine University",
+        "city": "Malibu",
+        "state": "CA"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-ppa-malibu-176502",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Connor Garnett Skills Lab Powered by the PPA",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 135,
+          "all_in_price": 151.27
+        },
+        {
+          "name": "Friday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Friday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "GovX Discount",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 370,
+          "all_in_price": 405.17
+        },
+        {
+          "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp + Weeklong Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 500,
+          "all_in_price": 545.63
+        },
+        {
+          "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp + Weeklong VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 1000,
+          "all_in_price": 1085.87
+        },
+        {
+          "name": "King of the Court (3.0-3.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "King of the Court (4.0-4.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Play with the Pro’s (3.0-3.5)",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Play with the Pro’s (4.0-4.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Saturday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Thursday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Tuesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Wednesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Wednesday VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Weeklong Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 170,
+          "all_in_price": 189.08
+        },
+        {
+          "name": "Weeklong Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Weeklong VIP",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 800,
+          "all_in_price": 869.77
+        }
+      ]
+    },
+    {
+      "event_id": "196548",
+      "name": "PPA Cape Coral",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2027-02-01",
+      "end_date": "2027-02-08",
+      "venue": {
+        "name": "TBD",
+        "city": "Cape Coral",
+        "state": "FL"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-cape-coral-196548",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Tuesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Wednesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Thursday-Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 437.59
+        },
+        {
+          "name": "Thursday-Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 500,
+          "all_in_price": 545.63
+        },
+        {
+          "name": "Thursday-Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 1000,
+          "all_in_price": 1085.87
+        },
+        {
+          "name": "Thursday-Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 1200,
+          "all_in_price": 1301.96
+        }
+      ]
+    },
+    {
+      "event_id": "196629",
+      "name": "PPA Cape Coral Thursday",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2027-02-04",
+      "end_date": "2027-02-05",
+      "venue": {
+        "name": "TBD",
+        "city": "Cape Coral",
+        "state": "FL"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-cape-coral-thursday-196629",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 437.59
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 450,
+          "all_in_price": 491.61
+        }
+      ]
+    },
+    {
+      "event_id": "196624",
+      "name": "PPA Cape Coral Friday",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2027-02-05",
+      "end_date": "2027-02-06",
+      "venue": {
+        "name": "TBD",
+        "city": "Cape Coral",
+        "state": "FL"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-cape-coral-friday-196624",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Friday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Friday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 437.59
+        },
+        {
+          "name": "Friday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 450,
+          "all_in_price": 491.61
+        }
+      ]
+    },
+    {
+      "event_id": "196616",
+      "name": "PPA Cape Coral Saturday",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2027-02-06",
+      "end_date": "2027-02-07",
+      "venue": {
+        "name": "TBD",
+        "city": "Cape Coral",
+        "state": "FL"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-cape-coral-saturday-196616",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Saturday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Saturday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 437.59
+        },
+        {
+          "name": "Saturday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 450,
+          "all_in_price": 491.61
+        }
+      ]
+    },
+    {
+      "event_id": "194597",
+      "name": "Cape Coral Sunday",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2027-02-07",
+      "end_date": "2027-02-08",
+      "venue": {
+        "name": "TBD",
+        "city": "Cape Coral",
+        "state": "FL"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/cape-coral-sunday-194597",
+      "currency": "USD",
+      "tickets": []
+    },
+    {
+      "event_id": "196611",
+      "name": "PPA Cape Coral Sunday",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2027-02-07",
+      "end_date": "2027-02-08",
+      "venue": {
+        "name": "TBD",
+        "city": "Cape Coral",
+        "state": "FL"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-cape-coral-sunday-196611",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 437.59
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 450,
+          "all_in_price": 491.61
+        }
+      ]
+    },
+    {
+      "event_id": "181370",
+      "name": "Veolia PPA Cincinnati",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2027-04-12",
+      "end_date": "2027-04-19",
+      "venue": {
+        "name": "TBD",
+        "city": "Mason",
+        "state": "OH"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-ppa-cincinnati-181370",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "GovX Discount",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 370,
+          "all_in_price": 405.17
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Tuesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Wednesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Thursday-Sunday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 170,
+          "all_in_price": 189.08
+        },
+        {
+          "name": "Thursday-Sunday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 250,
+          "all_in_price": 275.51
+        },
+        {
+          "name": "Thursday-Sunday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Thursday-Sunday On Court VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 1100,
+          "all_in_price": 1193.91
+        },
+        {
+          "name": "Thursday-Sunday Skybox VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 1100,
+          "all_in_price": 1193.91
+        }
+      ]
+    },
+    {
+      "event_id": "186575",
+      "name": "Veolia PPA Cincinnati Thursday - Round of 16",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2027-04-15",
+      "end_date": "2027-04-15",
+      "venue": {
+        "name": "TBD",
+        "city": "Mason",
+        "state": "OH"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-ppa-cincinnati-thursday-round-of-16-186575",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Thursday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Thursday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Thursday On Court VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Thursday Skybox VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        }
+      ]
+    },
+    {
+      "event_id": "186574",
+      "name": "Veolia PPA Cincinnati Friday - Quarterfinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2027-04-16",
+      "end_date": "2027-04-16",
+      "venue": {
+        "name": "TBD",
+        "city": "Mason",
+        "state": "OH"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-ppa-cincinnati-friday-quarterfinals-186574",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Friday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Friday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Friday On Court VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Friday Skybox VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        }
+      ]
+    },
+    {
+      "event_id": "186573",
+      "name": "Veolia PPA Cincinnati Saturday - Semifinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2027-04-17",
+      "end_date": "2027-04-17",
+      "venue": {
+        "name": "TBD",
+        "city": "Mason",
+        "state": "OH"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-ppa-cincinnati-saturday-semifinals-186573",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Saturday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Saturday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Saturday On Court VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 437.59
+        },
+        {
+          "name": "Saturday Skybox VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 437.59
+        }
+      ]
+    },
+    {
+      "event_id": "185682",
+      "name": "Veolia PPA Cincinnati Sunday - Championships",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2027-04-18",
+      "end_date": "2027-04-18",
+      "venue": {
+        "name": "TBD",
+        "city": "Mason",
+        "state": "OH"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-ppa-cincinnati-sunday-championships-185682",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Sunday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Sunday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Sunday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Sunday On Court VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 437.59
+        },
+        {
+          "name": "Sunday Skybox VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 437.59
+        }
+      ]
+    }
+  ]
+}

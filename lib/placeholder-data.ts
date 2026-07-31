@@ -16,6 +16,7 @@
  */
 
 import { venueGalleryFor, venueHeroFor } from "@/lib/venue-photos";
+import { ticketPriceFrom } from "@/lib/tixr-prices";
 
 export type EventTier = "worlds" | "slam" | "cup" | "open" | "challenger";
 
@@ -285,8 +286,15 @@ const COMMERCE_BY_SLUG: Record<string, { tickets?: string; register?: string }> 
     register: registerEvent("ppa-tour-veolia-ppa-national-championships"),
   },
   "veolia-arizona-open": { tickets: tixrEvent("ppa-mesa-195027") },
+  // Both matched to their Tixr listing on exact city + start date; each was
+  // pointing at the generic tixr.com/groups/ppa page before.
+  "cape-coral-open": { tickets: tixrEvent("ppa-cape-coral-196548") },
+  "cincinnati-open": { tickets: tixrEvent("veolia-ppa-cincinnati-181370") },
   "rate-las-vegas-open": {
-    tickets: tixrEvent("ppa-las-vegas-178513"),
+    // 178513 is no longer in the PPA group's 61 Tixr events; 195857 is the
+    // current "PPA Las Vegas" listing and matches our stop on city and start
+    // date (Sep 28 2026). The old id sat behind a live Buy Tickets button.
+    tickets: tixrEvent("ppa-las-vegas-195857"),
     register: registerEvent("ppa-tour-2026-rate-las-vegas-open"),
   },
   "veolia-chicago-cup": {
@@ -374,7 +382,11 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
       venue: r.venue ?? r.city,
       startDate: r.start,
       endDate: r.end,
-      ticketPriceFrom: r.type === "international" ? 35 : TIER_PRICE[tier],
+      // Real Tixr price when we have it; the tier table is only a fallback for
+      // stops with no Tixr listing yet. See lib/tixr-prices.ts.
+      ticketPriceFrom:
+        ticketPriceFrom(COMMERCE_BY_SLUG[slug]?.tickets) ??
+        (r.type === "international" ? 35 : TIER_PRICE[tier]),
       ticketsUrl: COMMERCE_BY_SLUG[slug]?.tickets ?? TIXR,
       registerUrl: COMMERCE_BY_SLUG[slug]?.register ?? REGISTER,
       status: "upcoming" as const,
