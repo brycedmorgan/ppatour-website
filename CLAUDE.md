@@ -35,6 +35,32 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-31 — Connor's /events restructure: Other Events out, points filter in (`1cb467d`)
+- Connor's website-update note: keep **Next Six on Tour** (1,000+), **kill the
+  "Other Events" under-1,000 section**, put everything including the 500s into
+  **Find an Event** and sort there, and cut the region list to **USA, Asia,
+  Australia, Europe, Canada — in that order**. All four shipped, pushed to main.
+- `ChallengerStrip.tsx` **deleted**; `/events` is now Next Six → Find an Event.
+- **Points filter is always visible and goes all the way down**: Major 2,000+ /
+  Cup 1,500 / Open 1,000 / 500 / 250 / 125. It used to be Major/Cup/Open and
+  only appeared when Type was "The Tour", which is why the sub-1,000 stops were
+  unreachable by filter and needed their own band.
+- **New `Tournament.points`** — the flat `challenger` tier reads 500 for
+  *everything* under 1,000, so a 125 was badged "Challenger · 500" and the new
+  filter would have been a lie. `pointsFromName()` (split out of `tierFromName`)
+  now sets the real level on sub-1,000 stops in BOTH the curated builder and the
+  API mapper; `tierPoints()` prefers it. Verified against the curated list:
+  28 sub-1,000 events → 13× 500, 6× 250, 9× 125.
+- **Italy and Spain rolled up into Europe** (`Tournament.country` union +
+  `COUNTRY_BY_CODE`). Added the rest of the European ISO codes while in there so
+  a French or Portuguese stop lands in Europe without a code change. Card chips
+  now read "Europe" — consistent with Asia/Australia, which were already regions
+  under a "Country" label. Filter label is now **Regions**, not Countries.
+- Verified on a local prod build: 0 "Other Events" strings, the three dropdowns
+  render Connor's exact lists, cards badge "Challenger · 250" / "Challenger ·
+  500" honestly, 51 upcoming events in the finder.
+- Rebased onto Wesley/Tyler's `tierBadgeClass` commit (`c5fdde2`) — clean.
+
 ### 2026-07-29 (pt. 3) — Full link crawl of the live site: 2 real hotel breaks
 - Crawled all **256 sitemap routes** live: every page 200s, **0 broken internal links**
   across 265 internal hrefs. The 7/28 "28 → 0" result holds and this session's changes
