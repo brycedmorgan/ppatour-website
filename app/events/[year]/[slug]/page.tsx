@@ -741,18 +741,20 @@ export default async function EventPage({ params }: Params) {
           </p>
           {realSchedule ? (
             <>
-              {/* Pro Play */}
+              {/* One calendar block — Pro Play and Amateur & Junior Play side
+                  by side on the day each actually happens (Bryce, 7/31). */}
               <div className="mt-6 overflow-hidden border border-ppa-line">
-                <div className="grid grid-cols-[4.5rem_1fr_auto] gap-3 border-b border-ppa-line bg-white px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45 sm:grid-cols-[5.5rem_1fr_7rem_10rem]">
+                <div className="grid grid-cols-[4.5rem_1fr_auto] gap-3 border-b border-ppa-line bg-white px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45 lg:grid-cols-[5.5rem_1fr_1fr_6rem_9rem]">
                   <span>Date</span>
                   <span>Pro Play</span>
-                  <span className="hidden text-right sm:block">First Serve</span>
+                  <span className="hidden lg:block">Amateur &amp; Junior Play</span>
+                  <span className="hidden text-right lg:block">First Serve</span>
                   <span className="text-right">Live</span>
                 </div>
                 {realSchedule.proDays.map((d) => (
                   <div
                     key={d.date}
-                    className="grid grid-cols-[4.5rem_1fr_auto] items-center gap-3 border-b border-ppa-line bg-white px-4 py-3 last:border-b-0 sm:grid-cols-[5.5rem_1fr_7rem_10rem]"
+                    className="grid grid-cols-[4.5rem_1fr_auto] items-start gap-3 border-b border-ppa-line bg-white px-4 py-3 last:border-b-0 lg:grid-cols-[5.5rem_1fr_1fr_6rem_9rem] lg:items-center"
                   >
                     <span className="font-display text-base uppercase leading-tight text-[var(--event-accent)]">
                       <span className="block text-[10px] font-sans font-bold leading-none text-ppa-navy/40">
@@ -766,9 +768,42 @@ export default async function EventPage({ params }: Params) {
                       </span>
                       <span className="block text-[11px] uppercase tracking-wide text-ppa-navy/40">
                         Gates {d.gates}
+                        <span className="lg:hidden">
+                          {" · "}First serve {d.firstServe}
+                        </span>
                       </span>
+                      {/* Under lg the amateur column folds under Pro Play —
+                          the day still owns both, it just stacks. */}
+                      {d.amateur && d.amateur.length > 0 && (
+                        <span className="mt-1.5 block border-l-2 border-ppa-line pl-2 lg:hidden">
+                          {d.amateur.map((a) => (
+                            <span key={a.label} className="block text-[12px] text-ppa-navy/60">
+                              {a.label}
+                              {a.detail ? ` — ${a.detail}` : ""}
+                            </span>
+                          ))}
+                        </span>
+                      )}
                     </span>
-                    <span className="hidden text-right text-sm font-bold tabular-nums text-ppa-navy sm:block">
+                    <span className="hidden lg:block">
+                      {d.amateur && d.amateur.length > 0 ? (
+                        d.amateur.map((a) => (
+                          <span key={a.label} className="mt-1 block first:mt-0">
+                            <span className="block text-sm font-semibold text-ppa-navy">
+                              {a.label}
+                            </span>
+                            {a.detail && (
+                              <span className="block text-[11px] uppercase tracking-wide text-ppa-navy/40">
+                                {a.detail}
+                              </span>
+                            )}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-sm text-ppa-navy/25">—</span>
+                      )}
+                    </span>
+                    <span className="hidden text-right text-sm font-bold tabular-nums text-ppa-navy lg:block">
                       {d.firstServe}
                     </span>
                     <span className="text-right text-[10px] font-bold uppercase tracking-[0.1em]">
@@ -782,36 +817,29 @@ export default async function EventPage({ params }: Params) {
                 ))}
               </div>
 
-              {/* Amateur & Junior Play */}
-              <h3 className="mt-8 font-display text-lg uppercase text-ppa-navy">
-                Amateur & Junior Play
-              </h3>
-              <div className="mt-3 overflow-hidden border border-ppa-line">
-                <div className="grid grid-cols-[7.5rem_1fr] gap-3 border-b border-ppa-line bg-white px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45 sm:grid-cols-[9rem_1fr]">
-                  <span>When</span>
-                  <span>Amateur & Junior Play</span>
-                </div>
-                {realSchedule.amateur.map((a) => (
-                  <div
-                    key={a.label}
-                    className="grid grid-cols-[7.5rem_1fr] items-baseline gap-3 border-b border-ppa-line bg-white px-4 py-3 last:border-b-0 sm:grid-cols-[9rem_1fr]"
-                  >
-                    <span className="font-display text-sm uppercase leading-tight text-[var(--event-accent)]">
-                      {a.when}
-                    </span>
-                    <span>
-                      <span className="block text-sm font-semibold text-ppa-navy">
-                        {a.label}
-                      </span>
-                      {a.detail && (
-                        <span className="block text-[12px] text-ppa-navy/55">
-                          {a.detail}
+              {/* Only what the tournament hasn't dated yet. Everything with a
+                  known day lives in the grid above. */}
+              {realSchedule.amateur.length > 0 && (
+                <div className="mt-4 border border-ppa-line bg-white px-4 py-3">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+                    Day still to be announced
+                  </p>
+                  <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-x-8">
+                    {realSchedule.amateur.map((a) => (
+                      <span key={a.label} className="block">
+                        <span className="block text-sm font-semibold text-ppa-navy">
+                          {a.label}
                         </span>
-                      )}
-                    </span>
+                        {a.detail && (
+                          <span className="block text-[11px] text-ppa-navy/50">
+                            {a.detail}
+                          </span>
+                        )}
+                      </span>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
               <p className="mt-3 text-[12px] text-ppa-navy/50">
                 {realSchedule.amateurNote}{" "}
                 <a
@@ -881,12 +909,15 @@ export default async function EventPage({ params }: Params) {
             Every Match, Every Screen
           </h2>
           <p className="mt-3 max-w-xl text-sm text-white/65">
-            Can&apos;t make it to {t.city}? Follow all four days live — free on
-            YouTube, with the marquee rounds on national TV.
+            Can&apos;t make it to {t.city}? Every court streams live on
+            PickleballTV, with the marquee rounds on national TV.
           </p>
 
-          {/* Broadcast schedule — real windows from the PPA broadcast sheet */}
-          <div className="mt-6 overflow-hidden border border-white/10">
+          {/* Two columns (Bryce, 7/31): the round — what's on and where to
+              watch it — on the left, the channels this event is on stacked
+              down the right. */}
+          <div className="mt-6 grid gap-6 lg:grid-cols-[1.6fr_1fr] lg:items-start">
+          <div className="overflow-hidden border border-white/10">
             <div className="grid grid-cols-[1fr_auto] gap-3 border-b border-white/10 bg-ppa-navy-deep px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
               <span>Round</span>
               <span className="text-right">Channel · Window</span>
@@ -936,8 +967,8 @@ export default async function EventPage({ params }: Params) {
                 ))}
           </div>
 
-          {/* How to watch */}
-          <div className="mt-4 grid gap-4 sm:grid-cols-3">
+          {/* The channels, in order: PickleballTV, Tennis Channel, MATCHDAY. */}
+          <div className="flex flex-col gap-3">
             {HOW_TO_WATCH.map((w) => (
               <div
                 key={w.name}
@@ -976,6 +1007,7 @@ export default async function EventPage({ params }: Params) {
                 )}
               </div>
             ))}
+          </div>
           </div>
         </div>
       </section>

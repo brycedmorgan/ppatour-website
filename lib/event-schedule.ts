@@ -6,6 +6,11 @@
  * registration deadline; sync from Wesley's PT.com API when it lands.
  */
 
+export type AmateurSession = {
+  label: string;
+  detail?: string;
+};
+
 export type ProDay = {
   date: string; // "Aug 31"
   dow: string;
@@ -13,8 +18,19 @@ export type ProDay = {
   firstServe: string;
   gates: string;
   live?: string;
+  /**
+   * Amateur / junior / senior sessions running THIS day — rendered in the
+   * Amateur & Junior Play column beside Pro Play (Bryce, 7/31: one calendar
+   * block, everything on the day it actually happens).
+   */
+  amateur?: AmateurSession[];
 };
 
+/**
+ * Sessions we know are in the event but whose day the tournament has not
+ * published yet. These are the only rows that still sit outside the day grid —
+ * move each one onto its ProDay the moment the real date is known.
+ */
 export type AmateurItem = {
   when: string;
   label: string;
@@ -33,32 +49,58 @@ export const eventSchedules: Record<string, EventSchedule> = {
   // PPA/MLP broadcast sheet windows. Pulled 7/16/26.
   "veolia-pickleball-national-championships": {
     proDays: [
-      { date: "Aug 31", dow: "Mon", label: "Pro Qualifying — all pro events", firstServe: "TBD", gates: "8:00 AM" },
-      { date: "Sep 1", dow: "Tue", label: "Main Draw — Round of 64", firstServe: "10:00 AM", gates: "9:00 AM", live: "PBTV" },
-      { date: "Sep 2", dow: "Wed", label: "Main Draw — Round of 32", firstServe: "10:00 AM", gates: "9:00 AM", live: "PBTV" },
-      { date: "Sep 3", dow: "Thu", label: "Main Draw — Round of 16", firstServe: "10:00 AM", gates: "9:00 AM", live: "PBTV" },
-      { date: "Sep 4", dow: "Fri", label: "Quarterfinals", firstServe: "10:00 AM", gates: "9:00 AM", live: "PBTV" },
-      { date: "Sep 5", dow: "Sat", label: "Semifinals", firstServe: "9:00 AM", gates: "8:00 AM", live: "PBTV" },
-      { date: "Sep 6", dow: "Sun", label: "Championship Sunday — Gold & Bronze", firstServe: "10:00 AM", gates: "9:00 AM", live: "Tennis Channel · PBTV" },
+      {
+        date: "Aug 31", dow: "Mon", label: "Pro Qualifying — all pro events", firstServe: "TBD", gates: "8:00 AM",
+        amateur: [
+          { label: "Amateur skill & age brackets", detail: "Start times vary by division" },
+          { label: "PPA Tour Camp (3.0/4.0)", detail: "4:00–7:00 PM · day 1 of 2" },
+        ],
+      },
+      {
+        date: "Sep 1", dow: "Tue", label: "Main Draw — Round of 64", firstServe: "10:00 AM", gates: "9:00 AM", live: "PBTV",
+        amateur: [
+          { label: "Amateur skill & age brackets" },
+          { label: "PPA Tour Camp (3.0/4.0)", detail: "4:00–7:00 PM · day 2 of 2" },
+        ],
+      },
+      {
+        date: "Sep 2", dow: "Wed", label: "Main Draw — Round of 32", firstServe: "10:00 AM", gates: "9:00 AM", live: "PBTV",
+        amateur: [{ label: "Amateur skill & age brackets" }],
+      },
+      {
+        date: "Sep 3", dow: "Thu", label: "Main Draw — Round of 16", firstServe: "10:00 AM", gates: "9:00 AM", live: "PBTV",
+        amateur: [{ label: "Amateur skill & age brackets" }],
+      },
+      {
+        date: "Sep 4", dow: "Fri", label: "Quarterfinals", firstServe: "10:00 AM", gates: "9:00 AM", live: "PBTV",
+        amateur: [{ label: "Amateur skill & age brackets" }],
+      },
+      {
+        date: "Sep 5", dow: "Sat", label: "Semifinals", firstServe: "9:00 AM", gates: "8:00 AM", live: "PBTV",
+        amateur: [{ label: "Amateur skill & age brackets" }],
+      },
+      {
+        date: "Sep 6", dow: "Sun", label: "Championship Sunday — Gold & Bronze", firstServe: "10:00 AM", gates: "9:00 AM", live: "Tennis Channel · PBTV",
+        amateur: [{ label: "Amateur skill & age brackets", detail: "Medal matches" }],
+      },
     ],
+    // ⚠ ONLY the sessions whose day the tournament has not published. The
+    // registration page still says TBD for all three (re-checked 7/31) — the
+    // amateur bracket week and the camp moved onto their real days above.
+    // Move these three up the moment the days land.
     amateur: [
       {
-        when: "Aug 31 – Sep 6",
-        label: "Amateur skill & age brackets",
-        detail: "All week, on the same courts as the pros — start times vary by division.",
-      },
-      {
-        when: "Aug 31 & Sep 1",
-        label: "PPA Tour Camp (3.0/4.0)",
-        detail: "Two-day camp, 4:00–7:00 PM each day.",
-      },
-      {
-        when: "During the week",
-        label: "Junior PPA & Senior Open",
+        when: "Day TBA",
+        label: "Junior PPA",
         detail: "Selections confirmed by email after the Aug 24 registration deadline.",
       },
       {
-        when: "Event week",
+        when: "Day TBA",
+        label: "Senior Open",
+        detail: "Selections confirmed by email after the Aug 24 registration deadline.",
+      },
+      {
+        when: "Day TBA",
         label: "MoneyBall",
         detail: "Open double-elimination side draw — limited to 16 teams.",
       },

@@ -784,12 +784,14 @@ export function NationalsLive() {
           </p>
           {realSchedule ? (
             <>
-              {/* Pro Play */}
+              {/* One calendar block — Pro Play and Amateur & Junior Play side
+                  by side on the day each actually happens (Bryce, 7/31). */}
               <div className="mt-6 overflow-hidden border border-ppa-line">
-                <div className="grid grid-cols-[4.5rem_1fr_auto] gap-3 border-b border-ppa-line bg-white px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45 sm:grid-cols-[5.5rem_1fr_7rem_10rem]">
+                <div className="grid grid-cols-[4.5rem_1fr_auto] gap-3 border-b border-ppa-line bg-white px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45 lg:grid-cols-[5.5rem_1fr_1fr_6rem_9rem]">
                   <span>Date</span>
                   <span>Pro Play</span>
-                  <span className="hidden text-right sm:block">First Serve</span>
+                  <span className="hidden lg:block">Amateur &amp; Junior Play</span>
+                  <span className="hidden text-right lg:block">First Serve</span>
                   <span className="text-right">Live</span>
                 </div>
                 {realSchedule.proDays.map((d, i) => {
@@ -798,7 +800,7 @@ export function NationalsLive() {
                   return (
                   <div
                     key={d.date}
-                    className={`grid grid-cols-[4.5rem_1fr_auto] items-center gap-3 border-b border-ppa-line px-4 py-3 last:border-b-0 sm:grid-cols-[5.5rem_1fr_7rem_10rem] ${
+                    className={`grid grid-cols-[4.5rem_1fr_auto] items-start gap-3 border-b border-ppa-line px-4 py-3 last:border-b-0 lg:grid-cols-[5.5rem_1fr_1fr_6rem_9rem] lg:items-center ${
                       dayLive ? "bg-ppa-live/5" : "bg-white"
                     }`}
                   >
@@ -814,9 +816,41 @@ export function NationalsLive() {
                       </span>
                       <span className="block text-[11px] uppercase tracking-wide text-ppa-navy/40">
                         Gates {d.gates}
+                        <span className="lg:hidden">
+                          {" · "}First serve {d.firstServe}
+                        </span>
                       </span>
+                      {/* Under lg the amateur column folds under Pro Play. */}
+                      {d.amateur && d.amateur.length > 0 && (
+                        <span className="mt-1.5 block border-l-2 border-ppa-line pl-2 lg:hidden">
+                          {d.amateur.map((a) => (
+                            <span key={a.label} className="block text-[12px] text-ppa-navy/60">
+                              {a.label}
+                              {a.detail ? ` — ${a.detail}` : ""}
+                            </span>
+                          ))}
+                        </span>
+                      )}
                     </span>
-                    <span className="hidden text-right text-sm font-bold tabular-nums text-ppa-navy sm:block">
+                    <span className="hidden lg:block">
+                      {d.amateur && d.amateur.length > 0 ? (
+                        d.amateur.map((a) => (
+                          <span key={a.label} className="mt-1 block first:mt-0">
+                            <span className={`block text-sm font-semibold ${dayDone ? "text-ppa-navy/50" : "text-ppa-navy"}`}>
+                              {a.label}
+                            </span>
+                            {a.detail && (
+                              <span className="block text-[11px] uppercase tracking-wide text-ppa-navy/40">
+                                {a.detail}
+                              </span>
+                            )}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-sm text-ppa-navy/25">—</span>
+                      )}
+                    </span>
+                    <span className="hidden text-right text-sm font-bold tabular-nums text-ppa-navy lg:block">
                       {d.firstServe}
                     </span>
                     <span className="text-right text-[10px] font-bold uppercase tracking-[0.1em]">
@@ -838,36 +872,28 @@ export function NationalsLive() {
                 })}
               </div>
 
-              {/* Amateur & Junior Play */}
-              <h3 className="mt-8 font-display text-lg uppercase text-ppa-navy">
-                Amateur & Junior Play
-              </h3>
-              <div className="mt-3 overflow-hidden border border-ppa-line">
-                <div className="grid grid-cols-[7.5rem_1fr] gap-3 border-b border-ppa-line bg-white px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45 sm:grid-cols-[9rem_1fr]">
-                  <span>When</span>
-                  <span>Amateur & Junior Play</span>
-                </div>
-                {realSchedule.amateur.map((a) => (
-                  <div
-                    key={a.label}
-                    className="grid grid-cols-[7.5rem_1fr] items-baseline gap-3 border-b border-ppa-line bg-white px-4 py-3 last:border-b-0 sm:grid-cols-[9rem_1fr]"
-                  >
-                    <span className="font-display text-sm uppercase leading-tight text-[var(--event-accent)]">
-                      {a.when}
-                    </span>
-                    <span>
-                      <span className="block text-sm font-semibold text-ppa-navy">
-                        {a.label}
-                      </span>
-                      {a.detail && (
-                        <span className="block text-[12px] text-ppa-navy/55">
-                          {a.detail}
+              {/* Only what the tournament hasn't dated yet. */}
+              {realSchedule.amateur.length > 0 && (
+                <div className="mt-4 border border-ppa-line bg-white px-4 py-3">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+                    Day still to be announced
+                  </p>
+                  <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-x-8">
+                    {realSchedule.amateur.map((a) => (
+                      <span key={a.label} className="block">
+                        <span className="block text-sm font-semibold text-ppa-navy">
+                          {a.label}
                         </span>
-                      )}
-                    </span>
+                        {a.detail && (
+                          <span className="block text-[11px] text-ppa-navy/50">
+                            {a.detail}
+                          </span>
+                        )}
+                      </span>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
               <p className="mt-3 text-[12px] text-ppa-navy/50">
                 {realSchedule.amateurNote}{" "}
                 <a
@@ -937,8 +963,8 @@ export function NationalsLive() {
             Every Match, Every Screen
           </h2>
           <p className="mt-3 max-w-xl text-sm text-white/65">
-            Can&apos;t make it to {t.city}? Follow all four days live — free on
-            YouTube, with the marquee rounds on national TV.
+            Can&apos;t make it to {t.city}? Every court streams live on
+            PickleballTV, with the marquee rounds on national TV.
           </p>
 
           {/* Broadcast schedule — real windows from the PPA broadcast sheet */}
