@@ -196,6 +196,25 @@ async function main() {
   if (!Array.isArray(groupEvents)) throw new Error("Group events API did not return an array");
   console.log(`Fetched ${groupEvents.length} events from the PPA group`);
 
+  // Refuse to publish a collapsed result. Tixr blocks datacenter IPs hard, and a
+  // block can come back as an empty (or near-empty) 200 rather than an error. If
+  // that got written, every event's price would vanish and the live site would
+  // flip to "Tickets Coming Soon" across the board — then commit and deploy it.
+  // Bail loudly instead and leave the last good snapshot in place.
+  const prevSnapshot = existsSync(SNAPSHOT_PATH)
+    ? JSON.parse(readFileSync(SNAPSHOT_PATH, "utf8"))
+    : null;
+  const prevCount = prevSnapshot?.event_count ?? 0;
+  const floor = Math.max(1, Math.floor(prevCount * 0.5));
+  if (prevCount > 0 && groupEvents.length < floor) {
+    throw new Error(
+      `Tixr returned ${groupEvents.length} events but the last good snapshot had ` +
+        `${prevCount}. That looks like a bot-block or an API change, not a real ` +
+        `change. Refusing to overwrite the snapshot. Re-run, or run it locally ` +
+        `where Tixr answers residential IPs.`
+    );
+  }
+
   const events = groupEvents.map((d) => extractEvent(d.id, d));
 
   events.sort(
@@ -246,16 +265,29 @@ async function main() {
     const from = grounds ? grounds.base_price : (admission ? admission.base_price : null);
     index[String(e.event_id)] = { from, onSale: from != null };
   }
+  // Second floor, same reasoning as above: the group listing can come back
+  // intact while every per-event ticket call is blocked, which yields prices for
+  // nobody. Don't publish that either.
+  const onSaleNow = Object.values(index).filter((e) => e.onSale).length;
+  const prevOnSale = existsSync(INDEX_PATH)
+    ? Object.values(JSON.parse(readFileSync(INDEX_PATH, "utf8")).prices ?? {}).filter(
+        (e) => e.onSale
+      ).length
+    : 0;
+  if (prevOnSale > 0 && onSaleNow === 0) {
+    throw new Error(
+      `Resolved 0 on-sale prices but the last index had ${prevOnSale}. Treating ` +
+        `that as a blocked/changed API, not a real sell-out. Snapshot not written.`
+    );
+  }
+
   writeFileSync(
     INDEX_PATH,
     JSON.stringify({ generated_at: stamp, prices: index }, null, 2) + "\n",
   );
   console.log(`Wrote ${INDEX_PATH} (${Object.keys(index).length} events)`);
 
-  const prev = existsSync(SNAPSHOT_PATH)
-    ? JSON.parse(readFileSync(SNAPSHOT_PATH, "utf8"))
-    : null;
-  const changes = diffSnapshots(prev, snapshot, stamp);
+  const changes = diffSnapshots(prevSnapshot, snapshot, stamp);
 
   mkdirSync(dirname(SNAPSHOT_PATH), { recursive: true });
   writeFileSync(SNAPSHOT_PATH, JSON.stringify(snapshot, null, 2) + "\n");
@@ -269,7 +301,7 @@ async function main() {
     log.updated_at = stamp;
     writeFileSync(CHANGELOG_PATH, JSON.stringify(log, null, 2) + "\n");
     console.log(`Logged ${changes.length} change(s) to ${CHANGELOG_PATH}`);
-  } else if (prev) {
+  } else if (prevSnapshot) {
     console.log("No changes since last run.");
   }
 }

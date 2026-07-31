@@ -35,10 +35,23 @@ jobs:
 
       - name: Commit changes if prices moved
         run: |
-          if [ -n "$(git status --porcelain lib/data/tixr-ticket-prices.json lib/data/tixr-price-changes.json)" ]; then
+          # tixr-price-index.json MUST be in this list — it's the file the site
+          # actually reads (lib/tixr-price-index.ts). Committing the snapshot
+          # without it means prices move and the site never notices.
+          FILES="lib/data/tixr-ticket-prices.json lib/data/tixr-price-index.json lib/data/tixr-price-changes.json"
+          # Gate on the CHANGELOG, not on the files being dirty. Every run stamps
+          # a fresh generated_at, so the snapshot is always dirty — committing on
+          # that would push (and redeploy Vercel) daily for nothing. The changelog
+          # only moves when a real price or availability changed.
+          if [ -z "$(git status --porcelain lib/data/tixr-price-changes.json)" ]; then
+            git checkout -- $FILES
+            echo "No price changes today (timestamp-only churn discarded)."
+            exit 0
+          fi
+          if [ -n "$(git status --porcelain $FILES)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add lib/data/tixr-ticket-prices.json lib/data/tixr-price-changes.json
+            git add $FILES
             git commit -m "chore(data): sync PPA Tixr ticket prices [skip ci]"
             git push
             echo "Committed price changes."
