@@ -1,5 +1,7 @@
 import { getAthlete } from "@/lib/athletes";
+import { ATHLETES_CACHE_TAG } from "@/lib/cache-tags";
 import { type Division, type DivisionKey, divisionRankings } from "@/lib/home-content";
+import { pbGetJson } from "@/lib/pb-fetch";
 import { CURATED_TO_CANONICAL, getPublishedAthlete } from "@/lib/published-athletes";
 
 /**
@@ -20,6 +22,24 @@ import { CURATED_TO_CANONICAL, getPublishedAthlete } from "@/lib/published-athle
  * verified against live data, bracket_level_id=2) split only by gender —
  * no singles/doubles/mixed breakdown. Points aggregate across every
  * discipline; the rolling 52-week ranking (race=false) is what we display.
+ *
+ * CACHING (7/31 — we were being throttled on this endpoint). Every consumer in
+ * this file reads through {@link boardPage}, which layers three things:
+ *
+ *   1. `pbGetJson` — retry with backoff, so a 429 is absorbed instead of
+ *      collapsing the board to "unavailable" on the first throttle.
+ *   2. Next Data Cache, 24h, tagged {@link ATHLETES_CACHE_TAG} — durable across
+ *      requests, builds and deploys, refreshed by the daily
+ *      /api/revalidate-athletes cron.
+ *   3. A module-scope memo + in-flight map — collapses the parallel page
+ *      renders of one build (or one warm instance) into a single upstream call,
+ *      which the Data Cache alone can't do while it's still cold.
+ *
+ * And critically, ONE page size for all of them: this file used to ask for 25,
+ * 50, 100 and 150 rows of the same board, so each variant was its own cache
+ * entry and its own upstream request. Everything now derives from
+ * {@link BOARD_PAGE_SIZE}-row pages, so the whole site shares two URLs (one per
+ * gender) instead of eight.
  */
 
 const PRO_BRACKET = 2;
@@ -32,6 +52,18 @@ export const TOP_COUNT = 25;
 export const FULL_PAGE_SIZE = 50;
 /** Cache the upstream response for a day; the `rank=<today>` param also rolls it. */
 const REVALIDATE_SECONDS = 60 * 60 * 24;
+/**
+ * The ONE page size every upstream board request uses, so all consumers share a
+ * cache entry. Chosen so that it is a multiple of {@link FULL_PAGE_SIZE} (a
+ * 50-row display page never straddles two upstream pages) and deep enough to
+ * cover the 150-row scans the per-athlete lookups used to make on their own.
+ */
+const BOARD_PAGE_SIZE = 250;
+/** Runaway guard when paging the full board. */
+const MAX_BOARD_PAGES = 10;
+const TIMEOUT_MS = 8000;
+/** In-process memo lifetime. The Data Cache behind it is the durable layer. */
+const BOARD_TTL_MS = 6 * 60 * 60 * 1000;
 
 type GenderQuery = { key: string; label: string; short: string; gender: "M" | "F" };
 
@@ -148,41 +180,89 @@ function mapPlayer(p: ApiPlayer): RankingEntry {
   };
 }
 
-/** Fetch one page of one gender board; returns mapped entries + the API total. */
-async function fetchPage(
-  gender: "M" | "F",
-  page: number,
-  pageSize: number,
-  token: string,
-  baseUrl: string,
-  today: string,
-): Promise<{ entries: RankingEntry[]; total: number }> {
-  const params = new URLSearchParams({
-    partner: "ppa",
-    division_type: String(WORLD_DIVISION_TYPE),
-    gender,
-    race: String(RACE),
-    is_live: "false",
-    bracket_level_id: String(PRO_BRACKET),
-    current_page: String(page),
-    page_size: String(pageSize),
-    rank: today,
-  });
+/** One {@link BOARD_PAGE_SIZE}-row page of one gender board. */
+type Board = { entries: RankingEntry[]; total: number };
 
-  const res = await fetch(`${baseUrl}/v2/data/partner_rankings?${params}`, {
-    headers: { "PB-API-TOKEN": token },
-    next: { revalidate: REVALIDATE_SECONDS },
-  });
-  if (!res.ok) throw new Error(`partner_rankings ${gender} p${page} → HTTP ${res.status}`);
+const boardCache = new Map<string, { value: Board; expires: number }>();
+const boardInFlight = new Map<string, Promise<Board | null>>();
 
-  const data = (await res.json()) as {
-    total_records?: number;
-    results?: { player_rankings?: ApiPlayer[] };
-  };
-  const players = data.results?.player_rankings ?? [];
-  // Always drop zero-point players (matches the source handler).
-  const entries = players.filter((p) => (p.points ?? 0) > 0).map(mapPlayer);
-  return { entries, total: data.total_records ?? entries.length };
+/**
+ * One page of one gender board, cached three ways (see the file header). Null
+ * means the call genuinely failed — callers must distinguish that from a page
+ * that legitimately came back empty, since we never print the demo rows in
+ * place of live data.
+ */
+async function boardPage(gender: "M" | "F", page: number): Promise<Board | null> {
+  const key = `${gender}:${page}`;
+  const hit = boardCache.get(key);
+  if (hit && hit.expires > Date.now()) return hit.value;
+  // Collapse concurrent callers (parallel page renders in a build) into one call.
+  const pending = boardInFlight.get(key);
+  if (pending) return pending;
+
+  const p = (async (): Promise<Board | null> => {
+    const { token, baseUrl } = config();
+    if (!token) return null;
+    const params = new URLSearchParams({
+      partner: "ppa",
+      division_type: String(WORLD_DIVISION_TYPE),
+      gender,
+      race: String(RACE),
+      is_live: "false",
+      bracket_level_id: String(PRO_BRACKET),
+      current_page: String(page),
+      page_size: String(BOARD_PAGE_SIZE),
+      // Day-scoped key: rolls the cache over at midnight UTC on its own.
+      rank: new Date().toISOString().slice(0, 10),
+    });
+
+    const json = (await pbGetJson(
+      `${baseUrl}/v2/data/partner_rankings?${params}`,
+      { "PB-API-TOKEN": token },
+      { timeoutMs: TIMEOUT_MS, revalidate: REVALIDATE_SECONDS, tags: [ATHLETES_CACHE_TAG] },
+    )) as { total_records?: number; results?: { player_rankings?: ApiPlayer[] } } | null;
+    if (!json) return null;
+
+    const players = json.results?.player_rankings ?? [];
+    // Always drop zero-point players (matches the source handler).
+    const entries = players.filter((pl) => (pl.points ?? 0) > 0).map(mapPlayer);
+    const value: Board = { entries, total: json.total_records ?? entries.length };
+    // Only memo a populated page — never pin an empty result from a transient
+    // blip for six hours (the next caller retries instead).
+    if (entries.length > 0) boardCache.set(key, { value, expires: Date.now() + BOARD_TTL_MS });
+    return value;
+  })();
+
+  boardInFlight.set(key, p);
+  try {
+    return await p;
+  } finally {
+    boardInFlight.delete(key);
+  }
+}
+
+/** The top rows of one gender board, from the shared cached page 1. */
+async function boardTop(gender: "M" | "F", count: number): Promise<RankingEntry[] | null> {
+  const board = await boardPage(gender, 1);
+  return board ? board.entries.slice(0, count) : null;
+}
+
+/**
+ * Every ranked player on one gender board, paging the shared cache. A failed
+ * page ends paging and we keep what we already collected (see getFullRankings).
+ */
+async function boardAll(gender: "M" | "F"): Promise<RankingEntry[]> {
+  const all: RankingEntry[] = [];
+  let page = 1;
+  let total = Infinity;
+  while (all.length < total && page <= MAX_BOARD_PAGES) {
+    const got = await boardPage(gender, page);
+    if (!got || got.entries.length === 0) break;
+    all.push(...got.entries);
+    total = got.total;
+    page += 1;
+  }
+  return all;
 }
 
 /* ---- placeholder fallbacks (API down / unconfigured) ---- */
@@ -259,20 +339,14 @@ function fallbackPage(g: GenderQuery, page: number, pageSize: number): RankingPa
  * server components; never throws — returns the placeholder fallback on error.
  */
 export async function getRankings(): Promise<RankingsResult> {
-  const { token, baseUrl } = config();
-  if (!token) return fallbackResult();
+  if (!config().token) return fallbackResult();
 
-  const today = new Date().toISOString().slice(0, 10);
   /* One board failing must not take the other down with it, and NEITHER may be
      replaced by the demo data — see the note on RankingsResult.source. */
   const divisions = await Promise.all(
     RANKING_GENDERS.map(async (g) => {
-      try {
-        const { entries } = await fetchPage(g.gender, 1, TOP_COUNT, token, baseUrl, today);
-        return { key: g.key, label: g.label, short: g.short, entries };
-      } catch {
-        return { key: g.key, label: g.label, short: g.short, entries: [] as RankingEntry[] };
-      }
+      const entries = (await boardTop(g.gender, TOP_COUNT)) ?? [];
+      return { key: g.key, label: g.label, short: g.short, entries };
     }),
   );
   if (divisions.every((d) => d.entries.length === 0)) return unavailableResult();
@@ -281,41 +355,27 @@ export async function getRankings(): Promise<RankingsResult> {
 
 /**
  * The COMPLETE ranking boards — every ranked pro, both genders, no cap
- * (Connor's "all the way" ask for /rankings). Pages through the API at 100
- * rows a call until the reported total is exhausted (hard cap 10 pages per
- * gender as a runaway guard). Never throws — placeholder fallback on error.
+ * (Connor's "all the way" ask for /rankings). Pages the shared board cache
+ * until the reported total is exhausted. Never throws — placeholder fallback
+ * when unconfigured.
+ *
+ * THE BUG THIS PRESERVES A FIX FOR (7/29): a single failed page used to throw
+ * out of the loop, the outer catch swallowed it, and the whole board was
+ * replaced by the demo data — so a partial outage silently became 16 rows of
+ * invented points on the tour's own rankings page. A failed page still just
+ * ends that gender's paging and we serve what we already collected; only a
+ * total wipeout reports unavailable.
  */
 export async function getFullRankings(): Promise<RankingsResult> {
-  const { token, baseUrl } = config();
-  if (!token) return fallbackResult();
+  if (!config().token) return fallbackResult();
 
-  const PAGE = 100;
-  const MAX_PAGES = 10;
-  const today = new Date().toISOString().slice(0, 10);
-  /* THE BUG THIS FIXES (7/29): a single failed page threw out of the loop, the
-     outer catch swallowed it, and the whole board was replaced by the demo data
-     — so a partial outage silently became 16 rows of invented points on the
-     tour's own rankings page. Now a failed page ends that gender's paging and we
-     serve what we already collected; only a total wipeout reports unavailable. */
   const divisions = await Promise.all(
-    RANKING_GENDERS.map(async (g) => {
-      const all: RankingEntry[] = [];
-      let page = 1;
-      let total = Infinity;
-      while (all.length < total && page <= MAX_PAGES) {
-        let got;
-        try {
-          got = await fetchPage(g.gender, page, PAGE, token, baseUrl, today);
-        } catch {
-          break; // keep the pages we already have
-        }
-        if (got.entries.length === 0) break;
-        all.push(...got.entries);
-        total = got.total;
-        page += 1;
-      }
-      return { key: g.key, label: g.label, short: g.short, entries: all };
-    }),
+    RANKING_GENDERS.map(async (g) => ({
+      key: g.key,
+      label: g.label,
+      short: g.short,
+      entries: await boardAll(g.gender),
+    })),
   );
   if (divisions.every((d) => d.entries.length === 0)) return unavailableResult();
   return { divisions, source: "live" };
@@ -324,38 +384,36 @@ export async function getFullRankings(): Promise<RankingsResult> {
 /**
  * One paginated page of a single gender board for the full /leaderboards page.
  * `page` is 1-indexed. Never throws — returns the placeholder fallback on error.
+ *
+ * Served by slicing a shared {@link BOARD_PAGE_SIZE}-row page rather than asking
+ * upstream for 50 rows: paging /leaderboards costs no extra upstream calls
+ * within a block of five display pages, and the rows come from the same cache
+ * entry /rankings and the athlete pages already populated. BOARD_PAGE_SIZE is a
+ * multiple of FULL_PAGE_SIZE, so a display page never straddles two of them.
  */
 export async function getRankingPage(genderKey: string, page: number): Promise<RankingPage> {
   const g = RANKING_GENDERS.find((x) => x.key === genderKey) ?? RANKING_GENDERS[0];
   const safePage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
-  const { token, baseUrl } = config();
-  if (!token) return fallbackPage(g, safePage, FULL_PAGE_SIZE);
+  if (!config().token) return fallbackPage(g, safePage, FULL_PAGE_SIZE);
 
-  const today = new Date().toISOString().slice(0, 10);
-  try {
-    const { entries, total } = await fetchPage(
-      g.gender,
-      safePage,
-      FULL_PAGE_SIZE,
-      token,
-      baseUrl,
-      today,
-    );
-    if (entries.length === 0 && safePage === 1) return unavailablePage(g, safePage, FULL_PAGE_SIZE);
-    return {
-      gender: g.key,
-      label: g.label,
-      entries,
-      page: safePage,
-      pageSize: FULL_PAGE_SIZE,
-      total,
-      totalPages: Math.max(1, Math.ceil(total / FULL_PAGE_SIZE)),
-      source: "live",
-    };
-  } catch {
-    // Configured but the call failed — say so, never print the demo rows.
-    return unavailablePage(g, safePage, FULL_PAGE_SIZE);
-  }
+  const offset = (safePage - 1) * FULL_PAGE_SIZE;
+  const board = await boardPage(g.gender, Math.floor(offset / BOARD_PAGE_SIZE) + 1);
+  // Configured but the call failed — say so, never print the demo rows.
+  if (!board) return unavailablePage(g, safePage, FULL_PAGE_SIZE);
+
+  const start = offset % BOARD_PAGE_SIZE;
+  const entries = board.entries.slice(start, start + FULL_PAGE_SIZE);
+  if (entries.length === 0 && safePage === 1) return unavailablePage(g, safePage, FULL_PAGE_SIZE);
+  return {
+    gender: g.key,
+    label: g.label,
+    entries,
+    page: safePage,
+    pageSize: FULL_PAGE_SIZE,
+    total: board.total,
+    totalPages: Math.max(1, Math.ceil(board.total / FULL_PAGE_SIZE)),
+    source: "live",
+  };
 }
 
 /* ---- per-athlete WPR ranking (by slug) ---- */
@@ -370,48 +428,28 @@ const SLUG_ALIAS: Record<string, string> = CURATED_TO_CANONICAL;
  * Live WPR ranking for every ranked player, keyed by slug (both the API's
  * player_slug and our local aliases). Lets our athlete pages show each pro's
  * current combined ranking. Never throws — returns {} on any problem.
+ *
+ * Called by EVERY news article page as well as the athlete pages, so it has to
+ * be free after the first hit — it reads the same shared board cache the rest
+ * of this file does and makes no request of its own.
  */
 export async function getRankingBySlug(): Promise<Record<string, AthleteRanking>> {
-  const { token, baseUrl } = config();
-  if (!token) return {};
+  if (!config().token) return {};
 
-  const today = new Date().toISOString().slice(0, 10);
   const out: Record<string, AthleteRanking> = {};
-
-  try {
-    for (const g of RANKING_GENDERS) {
-      const params = new URLSearchParams({
-        partner: "ppa",
-        division_type: String(WORLD_DIVISION_TYPE),
-        gender: g.gender,
-        race: String(RACE),
-        is_live: "false",
-        bracket_level_id: String(PRO_BRACKET),
-        current_page: "1",
-        page_size: "150",
-        rank: today,
-      });
-      const res = await fetch(`${baseUrl}/v2/data/partner_rankings?${params}`, {
-        headers: { "PB-API-TOKEN": token },
-        next: { revalidate: REVALIDATE_SECONDS },
-      });
-      if (!res.ok) continue;
-      const json = (await res.json()) as { results?: { player_rankings?: ApiPlayer[] } };
-      for (const p of json.results?.player_rankings ?? []) {
-        const rank = Number.parseInt(p.ranking, 10);
-        if (p.player_slug && rank > 0) {
-          out[p.player_slug] = { rank, gender: g.key as "men" | "women", points: p.points ?? 0 };
-        }
+  for (const g of RANKING_GENDERS) {
+    const board = await boardPage(g.gender, 1);
+    for (const e of board?.entries ?? []) {
+      if (e.slug && e.rank > 0) {
+        out[e.slug] = { rank: e.rank, gender: g.key as "men" | "women", points: e.points };
       }
     }
-    // Map our aliased slugs onto the API's ranking.
-    for (const [ours, api] of Object.entries(SLUG_ALIAS)) {
-      if (out[api]) out[ours] = out[api];
-    }
-    return out;
-  } catch {
-    return {};
   }
+  // Map our aliased slugs onto the API's ranking.
+  for (const [ours, api] of Object.entries(SLUG_ALIAS)) {
+    if (out[api]) out[ours] = out[api];
+  }
+  return out;
 }
 
 /* ---- API-driven athlete roster (top 25 Men + top 25 Women) ---- */
@@ -441,69 +479,54 @@ export function curatedSlugFor(apiSlug: string): string | null {
  * problem so the page can fall back to the curated roster.
  */
 export async function getWprRoster(): Promise<ApiAthlete[]> {
-  const { token, baseUrl } = config();
-  if (!token) return [];
+  if (!config().token) return [];
 
-  const today = new Date().toISOString().slice(0, 10);
-  try {
-    const boards = await Promise.all(
-      RANKING_GENDERS.map(async (g) => {
-        const { entries } = await fetchPage(g.gender, 1, TOP_COUNT, token, baseUrl, today);
-        const gender = g.gender === "F" ? "female" : "male";
-        return entries.map((e): ApiAthlete => ({ ...e, gender }));
-      }),
-    );
-    return boards.flat();
-  } catch {
-    return [];
-  }
+  const boards = await Promise.all(
+    RANKING_GENDERS.map(async (g) => {
+      const entries = (await boardTop(g.gender, TOP_COUNT)) ?? [];
+      const gender = g.gender === "F" ? "female" : "male";
+      return entries.map((e): ApiAthlete => ({ ...e, gender }));
+    }),
+  );
+  return boards.flat();
 }
 
 /**
  * Live WPR record for every ranked player, keyed by the API `player_slug`,
- * covering the top 150 of each gender board. Lets the full roster grid show
- * live rank/points/headshots for any published athlete who is ranked. Never
- * throws — returns {} on any problem.
+ * covering the first {@link BOARD_PAGE_SIZE} of each gender board. Lets the full
+ * roster grid show live rank/points/headshots for any published athlete who is
+ * ranked. Never throws — returns {} on any problem.
  */
 export async function getWprIndex(): Promise<Record<string, ApiAthlete>> {
-  const { token, baseUrl } = config();
-  if (!token) return {};
+  if (!config().token) return {};
 
-  const today = new Date().toISOString().slice(0, 10);
   const out: Record<string, ApiAthlete> = {};
-  try {
-    await Promise.all(
-      RANKING_GENDERS.map(async (g) => {
-        const { entries } = await fetchPage(g.gender, 1, 150, token, baseUrl, today);
-        const gender = g.gender === "F" ? "female" : "male";
-        for (const e of entries) out[e.slug] = { ...e, gender };
-      }),
-    );
-    return out;
-  } catch {
-    return {};
-  }
+  await Promise.all(
+    RANKING_GENDERS.map(async (g) => {
+      const board = await boardPage(g.gender, 1);
+      const gender = g.gender === "F" ? "female" : "male";
+      for (const e of board?.entries ?? []) out[e.slug] = { ...e, gender };
+    }),
+  );
+  return out;
 }
 
 /**
  * A single player's live WPR record by slug (accepts our curated slug or the
- * API's player_slug). Scans the top 150 of both boards. Null if not found or
- * on any error.
+ * API's player_slug). Scans the first {@link BOARD_PAGE_SIZE} of both boards.
+ * Null if not found or on any error.
+ *
+ * Called once per athlete page AND again from its generateMetadata, so it must
+ * cost nothing beyond the shared board — hence no request of its own.
  */
 export async function getWprPlayerBySlug(slug: string): Promise<ApiAthlete | null> {
-  const { token, baseUrl } = config();
-  if (!token) return null;
+  if (!config().token) return null;
 
   const target = SLUG_ALIAS[slug] ?? slug;
-  const today = new Date().toISOString().slice(0, 10);
-  try {
-    for (const g of RANKING_GENDERS) {
-      const { entries } = await fetchPage(g.gender, 1, 150, token, baseUrl, today);
-      const found = entries.find((e) => e.slug === target);
-      if (found) return { ...found, gender: g.gender === "F" ? "female" : "male" };
-    }
-    return null;
-  } catch {
-    return null;
+  for (const g of RANKING_GENDERS) {
+    const board = await boardPage(g.gender, 1);
+    const found = board?.entries.find((e) => e.slug === target);
+    if (found) return { ...found, gender: g.gender === "F" ? "female" : "male" };
   }
+  return null;
 }

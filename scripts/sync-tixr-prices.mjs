@@ -39,7 +39,7 @@ const CHANGELOG_PATH = resolve(ROOT, "lib/data/tixr-price-changes.json");
 const GROUP = "ppa";
 const GROUP_ID = 1164; // Tixr internal id for the "Professional Pickleball Association" group
 const GROUP_URL = `https://www.tixr.com/groups/${GROUP}`;
-const GROUP_EVENTS_API = `https://www.tixr.com/api/groups/${GROUP_ID}/events?page_number=1&page_length=200`;
+export const GROUP_EVENTS_API = `https://www.tixr.com/api/groups/${GROUP_ID}/events?page_number=1&page_length=200`;
 /**
  * Keep this current. Tixr's filter rejects stale Chrome versions: with every
  * other header identical, Chrome/125.0 returns 403 on both attempts and
@@ -56,6 +56,19 @@ function seriesOf(name = "") {
 }
 
 /**
+ * Ticket names that are NOT general admission — a fan cannot buy these to WATCH.
+ * Excluded when resolving an event's "from" price, or a $370 coaching camp would
+ * be published as the entry price.
+ *
+ * ⚠ MUST stay identical to NOT_ADMISSION in lib/tixr-prices.ts. This copy decides
+ * the "From $X" on event cards; that one decides the tier list on the event page.
+ * If they drift a card and its own page can disagree about the cheapest ticket,
+ * so scripts/audit-tixr-mapping.mjs asserts the two literals match.
+ */
+export const NOT_ADMISSION =
+  /king of the court|king'?s court|camp\b|clinic|skills lab|play with a pro|on court with|glow in the dark|family night|register here|discount|vacations/i;
+
+/**
  * Tixr fronts the site with a bot filter that 403s a bare User-Agent request —
  * a UA plus `Accept: application/json,text/html` is NOT enough, which is why
  * earlier runs failed. Sending Referer, Origin and Accept-Language alongside a
@@ -65,7 +78,7 @@ function seriesOf(name = "") {
  * Note the public HTML page (tixr.com/groups/ppa) still 403s even with these —
  * only the JSON API is reachable. That's fine, the API is what we want.
  */
-const API_HEADERS = {
+export const API_HEADERS = {
   "User-Agent": UA,
   Accept: "application/json, text/plain, */*",
   "Accept-Language": "en-US,en;q=0.9",
@@ -253,8 +266,6 @@ async function main() {
    * The full snapshot stays server-only, for the event page's tier list and the
    * OG card.
    */
-  const NOT_ADMISSION =
-    /king of the court|king'?s court|camp|clinic|skills lab|play with a pro|on court with|glow in the dark|family night|register here|discount|vacations/i;
   const index = {};
   for (const e of events) {
     const open = (e.tickets || []).filter(

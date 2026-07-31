@@ -12,14 +12,24 @@ import { getBracketDivisions, getBracketDraw } from "@/lib/brackets-api";
  */
 export const dynamic = "force-dynamic";
 
+/**
+ * BracketPanel polls every 15s per viewer, and one bracket build fans out into a
+ * call per division upstream. Cached at the CDN so concurrent viewers of the
+ * same draw share one refresh; a bracket only changes as matches complete, so
+ * 15s of shared staleness is invisible. Errors stay uncached so a transient
+ * upstream failure isn't pinned at the edge.
+ */
+const CACHE_CONTROL = "public, s-maxage=15, stale-while-revalidate=60";
+const NO_STORE = { "Cache-Control": "no-store" };
+
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const event = url.searchParams.get("event");
   const division = url.searchParams.get("division");
-  const headers = { "Cache-Control": "no-store" };
+  const headers = { "Cache-Control": CACHE_CONTROL };
 
   if (!event) {
-    return NextResponse.json({ error: "Missing event" }, { status: 400, headers });
+    return NextResponse.json({ error: "Missing event" }, { status: 400, headers: NO_STORE });
   }
 
   if (!division) {
@@ -29,7 +39,7 @@ export async function GET(request: Request) {
 
   const draw = await getBracketDraw(event, division);
   if (!draw) {
-    return NextResponse.json({ error: "Bracket not found" }, { status: 404, headers });
+    return NextResponse.json({ error: "Bracket not found" }, { status: 404, headers: NO_STORE });
   }
   return NextResponse.json(
     { division: draw.division, bracket: draw.bracket, losers: draw.losers, pools: draw.pools },
