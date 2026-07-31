@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { NationalsLive } from "@/components/events/NationalsLive";
+import { tournaments } from "@/lib/placeholder-data";
+import { buildTicketGrid } from "@/lib/ticket-grid";
 
 /**
  * Live variant of the National Championships event page. Counts down to first
@@ -17,5 +19,15 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <NationalsLive />;
+  // NationalsLive is a client component, so the grid is built here on the server
+  // and passed down — lib/ticket-grid.ts reads the full price snapshot and must
+  // never be imported into the browser bundle.
+  const event = tournaments.find(
+    (t) => t.slug === "veolia-pickleball-national-championships"
+  );
+  const ticketGrid = event
+    ? buildTicketGrid(event.ticketsUrl, event.startDate, event.endDate)
+    : null;
+
+  return <NationalsLive ticketGrid={ticketGrid} />;
 }

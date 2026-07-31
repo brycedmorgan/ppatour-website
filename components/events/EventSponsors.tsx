@@ -38,7 +38,7 @@ export function EventSponsors({ event }: { event: Tournament }) {
             Sponsors
           </p>
         </div>
-        <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+        <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
           Powering {event.shortName}
         </h2>
 

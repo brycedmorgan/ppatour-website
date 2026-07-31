@@ -29,9 +29,9 @@
  * in the other direction. Grounds Pass is $25 across every 2026 PPA stop.
  */
 import snapshot from "@/lib/data/tixr-ticket-prices.json";
-import { tixrEventIdFrom } from "@/lib/tixr-price-index";
+import { ticketsHidden, tixrEventIdFrom } from "@/lib/tixr-price-index";
 
-export { tixrEventIdFrom };
+export { ticketsHidden, tixrEventIdFrom };
 
 type RawTicket = {
   name: string;
@@ -65,10 +65,15 @@ const BY_ID = new Map(EVENTS.map((e) => [String(e.event_id), e]));
  * rather than clever: each entry is something a fan cannot buy to *watch*.
  */
 const NOT_ADMISSION =
-  /king of the court|king'?s court|camp\b|clinic|skills lab|play with a pro|on court with|glow in the dark|family night|register here|discount|vacations/i;
+  /king of the court|king'?s court|camp\b|clinic|skills lab|play with (a|the) pro|on court with|glow in the dark|family night|register here|discount|vacations/i;
 
 /** Every ticket tier for an event, admission first, cheapest first. */
 export function ticketTiersFor(ticketsUrl: string | undefined): TicketTier[] {
+  // Held back by hand (see TICKETS_HIDDEN). Gating here rather than in each
+  // caller means the tier grid, `ticketPriceFrom`, `admissionTiersFor` and
+  // `ticketsOnSale` below all go dark together — they all derive from this.
+  if (ticketsHidden(ticketsUrl)) return [];
+
   const id = tixrEventIdFrom(ticketsUrl);
   const event = id ? BY_ID.get(id) : undefined;
   if (!event?.tickets) return [];

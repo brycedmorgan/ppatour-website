@@ -66,7 +66,7 @@ function seriesOf(name = "") {
  * so scripts/audit-tixr-mapping.mjs asserts the two literals match.
  */
 export const NOT_ADMISSION =
-  /king of the court|king'?s court|camp\b|clinic|skills lab|play with a pro|on court with|glow in the dark|family night|register here|discount|vacations/i;
+  /king of the court|king'?s court|camp\b|clinic|skills lab|play with (a|the) pro|on court with|glow in the dark|family night|register here|discount|vacations/i;
 
 /**
  * Tixr fronts the site with a bot filter that 403s a bare User-Agent request —
@@ -143,6 +143,65 @@ function extractEvent(id, d) {
     currency,
     tickets,
   };
+}
+
+/**
+ * Tixr sells a tour stop as one week-long PARENT listing plus a separate listing
+ * per finals day ("Veolia PPA Cincinnati Sunday - Championships"). Fans buy a
+ * single day from the child; the parent carries grounds passes and multi-day
+ * courtside/VIP. To show a per-day price grid we need that relation.
+ *
+ * Resolve it ONCE here and stamp `parent_event_id` onto each child, so the site
+ * (lib/ticket-grid.ts) and the audit both read one answer instead of each
+ * re-deriving it.
+ *
+ * Matched on city + date containment, NOT on name: Tixr's own naming is
+ * inconsistent — the Worlds parent is "2026 World Pickleball Championships" and
+ * its children are "2026 Pickleball World Championships …", words transposed.
+ * The parent is the shortest-spanning listing that still strictly contains the
+ * child, so a day listing attaches to its own stop rather than to a longer
+ * overlapping one.
+ */
+const DAY_TOKEN =
+  /\b(mon|tues|wednes|thurs|fri|satur|sun)day\b|round of|quarterfinal|semifinal|championship|session|qualifier/i;
+
+function linkSessionsToParents(events) {
+  const span = (e) =>
+    e.start_date && e.end_date
+      ? (Date.parse(e.end_date) - Date.parse(e.start_date)) / 86400000
+      : 0;
+  // A session sells at most one day; a tour-stop parent spans the week. Evening
+  // sessions end after midnight, so their end_date is the NEXT day (span 1) —
+  // without an explicit floor on the parent's span, "Friday Evening" then looks
+  // like a valid parent for "Saturday Morning" and stops chain onto each other
+  // instead of onto the stop. Worlds lost 3 of its 8 sessions that way.
+  // Anything between 1 and 3 days is ambiguous: leave it unlinked rather than
+  // guess, since a wrong link would put a price on the wrong day.
+  // Session end_dates in Tixr are unreliable: evening sessions roll past midnight
+  // and some are stamped two days out (Worlds "Friday Evening" ends on Sunday).
+  // We key the grid off start_date, which is correct, so allow up to 2 — still
+  // well clear of MIN_PARENT_SPAN, which is what actually prevents chaining.
+  const MAX_SESSION_SPAN = 2;
+  const MIN_PARENT_SPAN = 3;
+  for (const child of events) {
+    if (!child.start_date || !DAY_TOKEN.test(child.name)) continue;
+    if (span(child) > MAX_SESSION_SPAN) continue;
+    const candidates = events.filter(
+      (p) =>
+        p.event_id !== child.event_id &&
+        p.venue?.city &&
+        child.venue?.city &&
+        p.venue.city.toLowerCase() === child.venue.city.toLowerCase() &&
+        p.start_date &&
+        p.end_date &&
+        child.start_date >= p.start_date &&
+        child.start_date <= p.end_date &&
+        span(p) >= MIN_PARENT_SPAN
+    );
+    if (!candidates.length) continue;
+    candidates.sort((a, b) => span(a) - span(b));
+    child.parent_event_id = candidates[0].event_id;
+  }
 }
 
 /** Stable key for a single ticket tier within an event. */
@@ -233,6 +292,8 @@ async function main() {
   events.sort(
     (a, b) => (a.start_date || "").localeCompare(b.start_date || "") || a.name.localeCompare(b.name)
   );
+
+  linkSessionsToParents(events);
 
   const seriesBreakdown = {};
   for (const e of events) seriesBreakdown[e.series] = (seriesBreakdown[e.series] || 0) + 1;

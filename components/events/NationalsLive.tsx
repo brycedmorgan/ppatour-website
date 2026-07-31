@@ -31,6 +31,8 @@ import {
   tournaments,
 } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
+import { TicketGrid } from "@/components/events/TicketGrid";
+import type { TicketGrid as TicketGridData } from "@/lib/ticket-grid-view";
 import { matchdayPrimary } from "@/lib/matchday";
 
 /**
@@ -156,7 +158,16 @@ function buildSchedule(startIso: string, endIso: string): Day[] {
   return days;
 }
 
-export function NationalsLive() {
+export function NationalsLive({
+  ticketGrid = null,
+}: {
+  /**
+   * Built on the server by the route (lib/ticket-grid.ts reads the 200KB price
+   * snapshot and must stay out of the client bundle). Null when the stop isn't
+   * on sale or is withheld, in which case the flat tier cards below apply.
+   */
+  ticketGrid?: TicketGridData | null;
+} = {}) {
   const baseEvent = tournaments.find((x) => x.slug === BASE_SLUG);
   if (!baseEvent) notFound();
   // Same event; the hero + live sections flip on once first serve arrives.
@@ -205,6 +216,11 @@ export function NationalsLive() {
   const realSchedule = getEventSchedule(t.slug);
   const mapQuery = guide?.mapQuery ?? `${t.venue}, ${t.city}, ${t.state}`;
 
+  const showGrid = Boolean(ticketGrid?.hasPerDayPricing);
+  // Fallback only. These three were derived arithmetically (base x2, x2.6) and
+  // were never real Tixr prices — the main event page stopped publishing them
+  // once the snapshot landed, and this file kept doing it. They now render only
+  // when there is no real per-day grid to show.
   const base = t.ticketPriceFrom;
   const ticketTiers = [
     { name: "Grounds Pass", from: base, blurb: "All-day access to the outer courts and festival grounds." },
@@ -278,6 +294,14 @@ export function NationalsLive() {
         {
           "--event-primary": t.brand?.primary ?? "#0c2b44",
           "--event-accent": t.brand?.accent ?? "#228be6",
+          // This was missing, which is why the live page rendered every heading
+          // in Gotham while the main page for the SAME event rendered them in
+          // Cormorant. `.event-display` falls back to Gotham when the variable
+          // is absent, so the drift was silent — the classes looked right.
+          // Keep in step with app/events/[year]/[slug]/page.tsx.
+          ...(t.brand?.font === "cormorant"
+            ? { "--font-event-serif": "var(--font-cormorant)" }
+            : {}),
         } as React.CSSProperties
       }
     >
@@ -376,7 +400,7 @@ export function NationalsLive() {
                 style={{ animationDelay: "120ms" }}
               />
             )}
-            <h1 className="max-w-[18ch] font-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98]">
+            <h1 className="max-w-[18ch] event-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98]">
               {t.shortName}
             </h1>
           </div>
@@ -613,7 +637,7 @@ export function NationalsLive() {
                   {isLive ? "Happening Now" : isCompleted ? "Final Results" : "Starts at First Serve"}
                 </p>
               </div>
-              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
+              <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
                 {isCompleted ? "Scores & Brackets" : "Live Scores"}
               </h2>
             </div>
@@ -683,7 +707,7 @@ export function NationalsLive() {
               What&apos;s at Stake
             </p>
           </div>
-          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+          <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
             Why {t.shortName} Matters
           </h2>
           <p className="mt-3 max-w-2xl text-sm text-ppa-navy/60">
@@ -762,7 +786,7 @@ export function NationalsLive() {
                 The Scene
               </p>
             </div>
-            <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
+            <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
               Inside {t.shortName}
             </h2>
             <p className="mt-3 max-w-xl text-sm text-white/60">
@@ -780,7 +804,7 @@ export function NationalsLive() {
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
             Order of Play
           </p>
-          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+          <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
             Daily Schedule & Session Times
           </h2>
           <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
@@ -964,7 +988,7 @@ export function NationalsLive() {
               Watching at Home
             </p>
           </div>
-          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] sm:text-3xl">
+          <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] sm:text-3xl">
             Every Match, Every Screen
           </h2>
           <p className="mt-3 max-w-xl text-sm text-white/65">
@@ -1076,7 +1100,7 @@ export function NationalsLive() {
               At the Venue
             </p>
           </div>
-          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+          <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
             Your Day at {t.venue}
           </h2>
           <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
@@ -1148,7 +1172,7 @@ export function NationalsLive() {
                 Make a Trip of It
               </p>
             </div>
-            <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+            <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
               Plan Your {t.city} Weekend
             </h2>
             <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
@@ -1289,7 +1313,7 @@ export function NationalsLive() {
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 Players to Watch
               </p>
-              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+              <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
                 In the Draw
               </h2>
               <div className="mt-5 flex flex-col gap-px border border-ppa-line bg-ppa-line">
@@ -1325,7 +1349,7 @@ export function NationalsLive() {
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 Divisions
               </p>
-              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+              <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
                 Five Brackets, {tierPoints(t).toLocaleString()} Points
               </h2>
               <ul className="mt-5 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-2">
@@ -1381,7 +1405,7 @@ export function NationalsLive() {
                     Coverage
                   </p>
                 </div>
-                <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+                <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
                   {completed ? `Relive ${t.shortName}` : `The ${t.shortName} Story So Far`}
                 </h2>
               </div>
@@ -1435,7 +1459,7 @@ export function NationalsLive() {
               Get Involved
             </p>
           </div>
-          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] sm:text-3xl">
+          <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] sm:text-3xl">
             Don&apos;t Just Watch It — Play It
           </h2>
           <p className="mt-3 max-w-xl text-sm text-white/65">
@@ -1525,7 +1549,7 @@ export function NationalsLive() {
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 Tickets
               </p>
-              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+              <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
                 Be There in {t.city}
               </h2>
             </div>
@@ -1542,8 +1566,12 @@ export function NationalsLive() {
             </a>
           </div>
 
+          {showGrid && ticketGrid && (
+            <TicketGrid grid={ticketGrid} slug={t.slug} />
+          )}
+
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {ticketTiers.map((tier) => (
+            {!showGrid && ticketTiers.map((tier) => (
               <div
                 key={tier.name}
                 className="flex flex-col border border-ppa-line bg-ppa-paper p-5"
@@ -1603,7 +1631,7 @@ export function NationalsLive() {
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 More Stops
               </p>
-              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+              <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
                 Next on Tour
               </h2>
             </div>

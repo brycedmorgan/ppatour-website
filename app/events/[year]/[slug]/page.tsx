@@ -46,6 +46,8 @@ import {
 import { withUtm } from "@/lib/utm";
 import { matchdayPrimary } from "@/lib/matchday";
 import { admissionTiersFor, ticketsOnSale } from "@/lib/tixr-prices";
+import { buildTicketGrid } from "@/lib/ticket-grid";
+import { TicketGrid } from "@/components/events/TicketGrid";
 
 type Params = { params: Promise<{ year: string; slug: string }> };
 
@@ -216,6 +218,13 @@ export default async function EventPage({ params }: Params) {
    * price and no ticket link anywhere on the page — see lib/tixr-prices.ts.
    */
   const onSale = ticketsOnSale(t.ticketsUrl);
+  /**
+   * Per-day pricing, when Tixr sells this stop day by day (it sells most of them
+   * as a week-long parent listing plus one listing per finals day). Null for stops
+   * with only a single flat listing — those keep the tier cards below.
+   */
+  const ticketGrid = onSale ? buildTicketGrid(t.ticketsUrl, t.startDate, t.endDate) : null;
+  const showGrid = Boolean(ticketGrid?.hasPerDayPricing);
   const realTiers = admissionTiersFor(t.ticketsUrl)
     .filter((x) => !x.soldOut)
     .slice(0, 3);
@@ -314,11 +323,12 @@ export default async function EventPage({ params }: Params) {
     venue: t.venue,
     dates: formatDateRange(t.startDate, t.endDate, true),
     gates: days[0]?.gates ?? "an hour before first serve",
-    ticketFrom: t.ticketPriceFrom,
-    ticketsUrl: withUtm(t.ticketsUrl, {
-      campaign: t.slug,
-      content: "event-concierge-tickets",
-    }),
+    // Same gate as the rest of the page — no price and no Tixr link when
+    // tickets aren't on sale.
+    ticketFrom: onSale ? t.ticketPriceFrom : null,
+    ticketsUrl: onSale
+      ? withUtm(t.ticketsUrl, { campaign: t.slug, content: "event-concierge-tickets" })
+      : null,
     registerUrl: withUtm(t.registerUrl, {
       campaign: t.slug,
       content: "event-concierge-register",
@@ -370,13 +380,23 @@ export default async function EventPage({ params }: Params) {
               name: "Carvana PPA Tour",
               url: SITE_URL,
             },
-            offers: {
-              "@type": "Offer",
-              url: t.ticketsUrl,
-              price: t.ticketPriceFrom,
-              priceCurrency: "USD",
-              availability: "https://schema.org/InStock",
-            },
+            // Only claim an offer when tickets are actually for sale. This block
+            // published `price: t.ticketPriceFrom` — which falls back to the tier
+            // table when there is no listing — as an InStock Offer, so an event
+            // whose own page correctly read "Tickets Coming Soon" was still
+            // feeding Google a $39 buyable offer and a Tixr link for a rich
+            // result. Omitting `offers` entirely is the honest signal.
+            ...(onSale
+              ? {
+                  offers: {
+                    "@type": "Offer",
+                    url: t.ticketsUrl,
+                    price: t.ticketPriceFrom,
+                    priceCurrency: "USD",
+                    availability: "https://schema.org/InStock",
+                  },
+                }
+              : {}),
           }),
         }}
       />
@@ -585,7 +605,7 @@ export default async function EventPage({ params }: Params) {
                   Final Results
                 </p>
               </div>
-              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
+              <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
                 How {t.shortName} Finished
               </h2>
               <div className="mt-6">
@@ -610,7 +630,7 @@ export default async function EventPage({ params }: Params) {
                 Replays
               </p>
             </div>
-            <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
+            <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
               Watch {t.shortName} Back
             </h2>
             <p className="mt-3 max-w-2xl text-sm text-white/55">
@@ -1646,8 +1666,14 @@ export default async function EventPage({ params }: Params) {
             </div>
           )}
 
+          {/* Day-by-day grid when Tixr sells the stop per day; the flat tier
+              cards below are the fallback for stops it doesn't. */}
+          {showGrid && ticketGrid && (
+            <TicketGrid grid={ticketGrid} slug={t.slug} />
+          )}
+
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {onSale && ticketTiers.map((tier) => (
+            {onSale && !showGrid && ticketTiers.map((tier) => (
               <div
                 key={tier.name}
                 className="flex flex-col border border-ppa-line bg-ppa-paper p-5"

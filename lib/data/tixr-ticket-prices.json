@@ -1,7 +1,7 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-07-31T17:44:34Z",
+  "generated_at": "2026-07-31T19:39:27Z",
   "event_count": 61,
   "ticket_type_count": 864,
   "series_breakdown": {
@@ -327,7 +327,8 @@
           "base_price": 250,
           "all_in_price": 275.51
         }
-      ]
+      ],
+      "parent_event_id": "183665"
     },
     {
       "event_id": "183665",
@@ -609,7 +610,8 @@
           "base_price": 250,
           "all_in_price": 275.51
         }
-      ]
+      ],
+      "parent_event_id": "183665"
     },
     {
       "event_id": "183676",
@@ -717,7 +719,8 @@
           "base_price": 250,
           "all_in_price": 275.51
         }
-      ]
+      ],
+      "parent_event_id": "183665"
     },
     {
       "event_id": "169798",
@@ -1639,7 +1642,8 @@
           "base_price": 350,
           "all_in_price": 383.56
         }
-      ]
+      ],
+      "parent_event_id": "184656"
     },
     {
       "event_id": "184766",
@@ -1789,7 +1793,8 @@
           "base_price": 350,
           "all_in_price": 383.56
         }
-      ]
+      ],
+      "parent_event_id": "184656"
     },
     {
       "event_id": "184765",
@@ -1939,7 +1944,8 @@
           "base_price": 350,
           "all_in_price": 383.56
         }
-      ]
+      ],
+      "parent_event_id": "184656"
     },
     {
       "event_id": "184764",
@@ -2089,7 +2095,8 @@
           "base_price": 350,
           "all_in_price": 383.56
         }
-      ]
+      ],
+      "parent_event_id": "184656"
     },
     {
       "event_id": "184762",
@@ -2239,7 +2246,8 @@
           "base_price": 350,
           "all_in_price": 383.56
         }
-      ]
+      ],
+      "parent_event_id": "184656"
     },
     {
       "event_id": "184760",
@@ -2389,7 +2397,8 @@
           "base_price": 450,
           "all_in_price": 491.61
         }
-      ]
+      ],
+      "parent_event_id": "184656"
     },
     {
       "event_id": "195027",
@@ -2626,7 +2635,8 @@
           "base_price": 400,
           "all_in_price": 437.59
         }
-      ]
+      ],
+      "parent_event_id": "195027"
     },
     {
       "event_id": "166229",
@@ -2786,7 +2796,8 @@
           "base_price": 400,
           "all_in_price": 437.59
         }
-      ]
+      ],
+      "parent_event_id": "195027"
     },
     {
       "event_id": "195334",
@@ -2901,7 +2912,8 @@
           "base_price": 500,
           "all_in_price": 545.63
         }
-      ]
+      ],
+      "parent_event_id": "195027"
     },
     {
       "event_id": "195032",
@@ -3016,7 +3028,8 @@
           "base_price": null,
           "all_in_price": 383.56
         }
-      ]
+      ],
+      "parent_event_id": "195027"
     },
     {
       "event_id": "195857",
@@ -3267,7 +3280,8 @@
           "base_price": 300,
           "all_in_price": 329.54
         }
-      ]
+      ],
+      "parent_event_id": "195857"
     },
     {
       "event_id": "197234",
@@ -3375,7 +3389,8 @@
           "base_price": 300,
           "all_in_price": 329.54
         }
-      ]
+      ],
+      "parent_event_id": "195857"
     },
     {
       "event_id": "197226",
@@ -3483,7 +3498,8 @@
           "base_price": 350,
           "all_in_price": 383.56
         }
-      ]
+      ],
+      "parent_event_id": "195857"
     },
     {
       "event_id": "197214",
@@ -3591,7 +3607,8 @@
           "base_price": 350,
           "all_in_price": 383.56
         }
-      ]
+      ],
+      "parent_event_id": "195857"
     },
     {
       "event_id": "176687",
@@ -4484,7 +4501,8 @@
           "base_price": 350,
           "all_in_price": 384.43
         }
-      ]
+      ],
+      "parent_event_id": "166345"
     },
     {
       "event_id": "166402",
@@ -4641,7 +4659,8 @@
           "base_price": 350,
           "all_in_price": 384.43
         }
-      ]
+      ],
+      "parent_event_id": "166345"
     },
     {
       "event_id": "166399",
@@ -4798,7 +4817,8 @@
           "base_price": null,
           "all_in_price": 384.43
         }
-      ]
+      ],
+      "parent_event_id": "166345"
     },
     {
       "event_id": "166396",
@@ -4955,7 +4975,8 @@
           "base_price": null,
           "all_in_price": 438.58
         }
-      ]
+      ],
+      "parent_event_id": "166345"
     },
     {
       "event_id": "166397",
@@ -5112,7 +5133,8 @@
           "base_price": null,
           "all_in_price": 438.58
         }
-      ]
+      ],
+      "parent_event_id": "166345"
     },
     {
       "event_id": "166381",
@@ -5269,7 +5291,8 @@
           "base_price": null,
           "all_in_price": 438.58
         }
-      ]
+      ],
+      "parent_event_id": "166345"
     },
     {
       "event_id": "166387",
@@ -5426,7 +5449,8 @@
           "base_price": null,
           "all_in_price": 438.58
         }
-      ]
+      ],
+      "parent_event_id": "166345"
     },
     {
       "event_id": "166349",
@@ -5583,7 +5607,8 @@
           "base_price": null,
           "all_in_price": 546.87
         }
-      ]
+      ],
+      "parent_event_id": "166345"
     },
     {
       "event_id": "178517",
@@ -6190,7 +6215,8 @@
           "base_price": 450,
           "all_in_price": 491.61
         }
-      ]
+      ],
+      "parent_event_id": "196548"
     },
     {
       "event_id": "196624",
@@ -6291,7 +6317,8 @@
           "base_price": 450,
           "all_in_price": 491.61
         }
-      ]
+      ],
+      "parent_event_id": "196548"
     },
     {
       "event_id": "196616",
@@ -6392,7 +6419,8 @@
           "base_price": 450,
           "all_in_price": 491.61
         }
-      ]
+      ],
+      "parent_event_id": "196548"
     },
     {
       "event_id": "194597",
@@ -6408,7 +6436,8 @@
       },
       "url": "https://www.tixr.com/groups/ppa/events/cape-coral-sunday-194597",
       "currency": "USD",
-      "tickets": []
+      "tickets": [],
+      "parent_event_id": "196548"
     },
     {
       "event_id": "196611",
@@ -6509,7 +6538,8 @@
           "base_price": 450,
           "all_in_price": 491.61
         }
-      ]
+      ],
+      "parent_event_id": "196548"
     },
     {
       "event_id": "181370",
@@ -6753,7 +6783,8 @@
           "base_price": 350,
           "all_in_price": 383.56
         }
-      ]
+      ],
+      "parent_event_id": "181370"
     },
     {
       "event_id": "186574",
@@ -6868,7 +6899,8 @@
           "base_price": 350,
           "all_in_price": 383.56
         }
-      ]
+      ],
+      "parent_event_id": "181370"
     },
     {
       "event_id": "186573",
@@ -6983,7 +7015,8 @@
           "base_price": 400,
           "all_in_price": 437.59
         }
-      ]
+      ],
+      "parent_event_id": "181370"
     },
     {
       "event_id": "185682",
@@ -7098,7 +7131,8 @@
           "base_price": 400,
           "all_in_price": 437.59
         }
-      ]
+      ],
+      "parent_event_id": "181370"
     }
   ]
 }
