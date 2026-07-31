@@ -83,7 +83,7 @@ export function FeaturedEvents({
                 )}
 
                 <div className="absolute right-3 top-3 flex flex-col items-end gap-1">
-                  <span className={tierBadgeClass(t)}>
+                  <span className={`${tierBadgeClass(t)} px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] whitespace-nowrap`}>
                     {eventTierShort(t)} · {tierPoints(t).toLocaleString()}
                   </span>
                   {days > 0 && (

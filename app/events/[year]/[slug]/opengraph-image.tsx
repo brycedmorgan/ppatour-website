@@ -5,6 +5,7 @@ import {
   formatDateRange,
   tierPoints,
   eventTierShort,
+  tierBadgeColors,
   tournaments,
 } from "@/lib/placeholder-data";
 
@@ -118,8 +119,11 @@ export default async function Image({
             <div
               style={{
                 display: "flex",
-                background: accent,
-                color: "#ffffff",
+                // Tier colour, not the event accent — the share card has to
+                // teach the same ladder the site does. Hex because Satori can't
+                // read Tailwind; same decision as tierBadgeClass().
+                background: tierBadgeColors(t).bg,
+                color: tierBadgeColors(t).fg,
                 fontSize: 22,
                 fontWeight: 900,
                 letterSpacing: 3,

@@ -39,6 +39,7 @@ import {
   eventTierLabel,
   tierPoints,
   eventTierShort,
+  tierBadgeClass,
   type Tournament,
   tournaments,
 } from "@/lib/placeholder-data";
@@ -366,7 +367,7 @@ export default async function EventPage({ params }: Params) {
         <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-32 bg-gradient-to-b from-ppa-navy to-transparent" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-10 pt-20">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em]">
-            <span className="bg-[var(--event-accent)] px-2 py-0.5">
+            <span className={`${tierBadgeClass(t)} px-2 py-0.5`}>
               {eventTierShort(t)} · {tierPoints(t).toLocaleString()} PTS
             </span>
             {t.presentedBy && (
@@ -1647,8 +1648,12 @@ export default async function EventPage({ params }: Params) {
                   </span>
                 )}
                 <div className="relative p-4 text-white">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/55">
-                    {eventTierShort(o)} · {tierPoints(o).toLocaleString()}
+                  <p>
+                    <span
+                      className={`${tierBadgeClass(o)} px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] whitespace-nowrap`}
+                    >
+                      {eventTierShort(o)} · {tierPoints(o).toLocaleString()}
+                    </span>
                   </p>
                   <p className="mt-0.5 font-display text-base uppercase leading-[1.05]">
                     {o.shortName}
