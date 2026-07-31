@@ -1,7 +1,7 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-07-31T19:39:27Z",
+  "generated_at": "2026-07-31T21:10:30Z",
   "event_count": 61,
   "ticket_type_count": 864,
   "series_breakdown": {
@@ -1612,14 +1612,14 @@
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 135.05
+          "all_in_price": 156.66
         },
         {
           "name": "Thursday Courtside+",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 156.66
+          "all_in_price": 135.05
         },
         {
           "name": "Thursday On Court VIP",
