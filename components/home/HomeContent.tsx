@@ -803,13 +803,19 @@ export async function HomeContent({
                   href={n.href}
                   className="group flex flex-1 gap-3 p-4 transition-colors hover:bg-ppa-paper"
                 >
+                  {/* sizes is 2× the 80px box, not 80px: object-cover on a
+                      landscape source scales the image until its WIDTH covers
+                      the square, so the intrinsic width needed is the box times
+                      the source aspect ratio (1.5× on a 3:2 photo). Declaring
+                      the box width under-fetches at DPR 1/1.25/1.5 — i.e. every
+                      Windows display-scaling setting — and the thumb upscales. */}
                   <div className="relative aspect-square w-20 shrink-0 overflow-hidden bg-ppa-navy-deep">
                     {n.image && (
                       <Image
                         src={n.image}
                         alt={n.imageAlt}
                         fill
-                        sizes="80px"
+                        sizes="160px"
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                     )}
