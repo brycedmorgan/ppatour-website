@@ -394,12 +394,26 @@ export default async function EventPage({ params }: Params) {
             )}
           </div>
           <div className="mt-3 flex items-center gap-4">
+            {/**
+             * width/height must match the real badge ratio. They were 133x364
+             * (0.365) while every file in public/ppa/badges is ~0.545 — e.g.
+             * arizona.png is 726x1333. With `w-auto` the browser reserves space
+             * from the declared ratio, then relays out to the intrinsic one once
+             * the image loads, so the badge jumped ~50% wider on load and shoved
+             * the H1 beside it. 720x1320 is exact for 6 of the 8 badges and
+             * within 2% of the other two.
+             *
+             * `priority` because this sits in the hero above the fold, and Next
+             * flagged it as the LCP element on /events/2026/veolia-arizona-open.
+             */}
             {t.brand?.icon && (
               <Image
                 src={t.brand.icon}
                 alt=""
-                width={133}
-                height={364}
+                width={720}
+                height={1320}
+                priority
+                sizes="(min-width: 640px) 96px, 62px"
                 className="h-28 w-auto shrink-0 rounded-md drop-shadow-[0_4px_18px_rgba(2,49,85,0.55)] motion-safe:animate-rise sm:h-44"
                 style={{ animationDelay: "120ms" }}
               />

@@ -361,12 +361,17 @@ export function NationalsLive() {
             </span>
           </div>
           <div className="mt-3 flex items-center gap-4">
+            {/* Same badge, same fix as the event hero: 133x364 declared a 0.365
+                ratio against real files at ~0.545, so it relaid out ~50% wider
+                once loaded. Above the fold here too, hence `priority`. */}
             {t.brand?.icon && (
               <Image
                 src={t.brand.icon}
                 alt=""
-                width={133}
-                height={364}
+                width={720}
+                height={1320}
+                priority
+                sizes="(min-width: 640px) 96px, 62px"
                 className="h-28 w-auto shrink-0 rounded-md drop-shadow-[0_4px_18px_rgba(2,49,85,0.55)] motion-safe:animate-rise sm:h-44"
                 style={{ animationDelay: "120ms" }}
               />
