@@ -35,6 +35,33 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-31 (pt. 6) — Be the Best in the footer, the WPR mark on Rankings
+- **Two real brand packs landed** (Bryce, via Dropbox) and are now on the site. Both were converted from
+  Illustrator to **true vector SVG** and are hosted in Jackalope under `/brand-assets/marks/` as the
+  single source; the copies here in `public/ppa/logos/` are the site's cut of that same art.
+- **Be the Best is the footer sign-off** — Jeff Watson asked for it "semi front-and-center," so it sits
+  directly under the tour logo at `h-11 → h-20`, the first thing you meet entering the footer.
+  **The reversed two-colour lockup is the right one for a navy field**: white letters, yellow pickleball
+  as the full stop. That ball *is* the mark — the flat all-white variant exists for single-colour print
+  and must not be used here. Tour logo dropped a step (`h-8 → h-7 sm:h-8`) so the two don't compete.
+- **The WPR wordmark replaces the Rankings `<h1>` text.** ⚠ **The `<h1>` stays in the DOM as `sr-only`**
+  — swapping a heading for an image must not cost the heading, and Rankings is a page people search for
+  by name.
+- **⚠ AND IT USES BOTH MARKS, WHICH IS THE POINT OF SHIPPING A SYSTEM.** The horizontal wordmark is
+  **17:1** — at 390px it would render ~19px tall and stop being readable. So `< sm` renders the **stacked
+  combo mark** (182×80) and `≥ sm` renders the horizontal (746×44). Scaling one mark past its floor is
+  the failure the combo mark was drawn to prevent.
+- **Be the Best also closes the Rankings page** (Bryce: put it "by the rankings stuff as well"). It sits
+  under the standings, not above them — this is the one page where the tagline is a statement of fact
+  rather than a slogan, and the board is the answer to it. Marked `aria-hidden`: the footer already
+  carries it, and reading "Be the Best" aloud twice per visit is noise.
+- **Verified by rendering, not just building:** clean `tsc` + `next build`, then drove the real prod
+  server at **1440px and 390px** — every mark resolves, correct mark visible at each breakpoint, `<h1>`
+  text intact, **zero horizontal overflow, zero HTTP ≥400**.
+- **Next:** the WPR icon is the avatar/profile-slot mark and nothing uses it yet — athlete cards and the
+  leaderboard are the natural homes · ⚠ the WPR icon ships a **different navy** (`#00335B`) to the rest
+  of its own system (`#0C2844`), so don't place it beside the wordmark until somebody settles that.
+
 ### 2026-07-31 (pt. 5) — The five callouts were 2,438px on a phone; now a swipe rail
 - Wesley: the Watch/Tickets/Follow/Play/Sponsor band "takes way too much space on
   mobile." It had **no mobile layout at all** — `grid sm:grid-cols-2 lg:grid-cols-5`,
@@ -147,7 +174,6 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - **⚠ Attribution:** a parallel `git commit -a` (`0b36eca`, "Add a Tixr mapping audit")
   swept these changes into its commit. The code is right and in main-line history, but that
   message doesn't describe it. Only `lib/event-field.ts` is still uncommitted.
-
 ### 2026-07-31 (pt. 2) — Event page: one calendar block, two-column Watch (`e532c4f`)
 - Bryce on the Nationals page: put Amateur & Junior Play in the same calendar
   block as Pro Play, on the real days; and make Watch two columns with the

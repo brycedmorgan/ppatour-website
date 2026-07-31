@@ -32,9 +32,32 @@ export default async function RankingsPage() {
               Standings
             </p>
           </div>
-          <h1 className="mt-2 font-display text-3xl uppercase leading-[1.02] sm:text-4xl">
-            World Pickleball Rankings
-          </h1>
+          {/* Jeff Watson, 7/31: "the ranking one should be the header of the
+              ranking page." The WPR identity ships a horizontal wordmark AND a
+              stacked combo mark precisely so a narrow screen doesn't have to
+              shrink a 17:1 lockup down to unreadable — so we swap marks rather
+              than scale one past its floor. The <h1> stays in the DOM as
+              screen-reader/SEO text: replacing a heading with an image must not
+              cost us the heading. */}
+          <h1 className="sr-only">World Pickleball Rankings</h1>
+          <div aria-hidden className="mt-3">
+            <Image
+              src="/ppa/logos/wpr-combo-color.svg"
+              alt=""
+              width={530}
+              height={233}
+              priority
+              className="h-20 w-auto sm:hidden"
+            />
+            <Image
+              src="/ppa/logos/wpr-horizontal-color.svg"
+              alt=""
+              width={1003}
+              height={60}
+              priority
+              className="hidden h-9 w-auto sm:block lg:h-11"
+            />
+          </div>
           <div className="mt-4 max-w-2xl space-y-3 text-sm leading-relaxed text-ppa-navy/60">
             {/* Copy: Jeff + Nathan's audit doc, 7/27. */}
             <p>
@@ -187,6 +210,23 @@ export default async function RankingsPage() {
             >
               How Points Work
             </Link>
+          </div>
+
+          {/* Bryce, 7/31: put Be the Best "by the rankings stuff as well" — and
+              this is the one page on the site where the tagline is a statement
+              of fact rather than a slogan. The board above is literally the
+              answer to it, so the lockup closes the page instead of opening it.
+              Decorative: the tagline is already the footer's, and a second
+              "Be the Best" read aloud on every rankings visit is noise. */}
+          <div className="mt-12 flex justify-center border-t border-white/10 pt-10">
+            <Image
+              src="/ppa/logos/be-the-best-white.svg"
+              alt=""
+              aria-hidden
+              width={881}
+              height={172}
+              className="h-10 w-auto opacity-90 sm:h-14"
+            />
           </div>
         </div>
       </section>

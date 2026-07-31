@@ -151,7 +151,7 @@ export function SiteFooter() {
               alt="Carvana PPA Tour"
               width={1408}
               height={149}
-              className="h-8 w-auto"
+              className="h-7 w-auto sm:h-8"
             />
           </Link>
           <div className="flex items-center gap-4">
@@ -189,6 +189,24 @@ export function SiteFooter() {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* The tagline lockup — Jeff Watson, 7/31: "would be nice to be
+            semi front-and-center." It sits directly under the tour logo so it
+            reads as the brand sign-off rather than another footer widget.
+            The reversed art is the one drawn for a navy field: white letters,
+            yellow pickleball as the full stop. That ball IS the mark, so we
+            use the two-colour reversed lockup and never the flat white one
+            here. Vector, so it stays sharp at every size below. */}
+        <div className="mt-7">
+          <Image
+            src="/ppa/logos/be-the-best-white.svg"
+            alt="Be the Best"
+            width={881}
+            height={172}
+            priority={false}
+            className="h-11 w-auto sm:h-16 lg:h-20"
+          />
         </div>
 
         {/* Newsletter signup (GF #2) */}
