@@ -135,7 +135,10 @@ export default function WatchPage() {
               logos are colour-locked and a knocked-out version isn't ours to
               make. */}
           <div className="mt-6 grid grid-cols-2 gap-px bg-white/15 sm:grid-cols-3 lg:grid-cols-5">
-            {AS_SEEN_ON.map((n) => (
+            {/* Only render networks confirmed in a broadcast sheet — ESPN/NBC
+                stay out until Adam Friedman confirms them (launch item 10).
+                Flip `confirmed: true` in AS_SEEN_ON to publish a mark. */}
+            {AS_SEEN_ON.filter((n) => n.confirmed).map((n) => (
               <div
                 key={n.name}
                 className="flex min-h-[7rem] items-center justify-center bg-white px-5 py-7"
