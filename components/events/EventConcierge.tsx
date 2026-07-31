@@ -16,8 +16,14 @@ export type ConciergeFacts = {
   venue: string;
   dates: string;
   gates: string;
-  ticketFrom: number;
-  ticketsUrl: string;
+  /**
+   * Null when tickets aren't on sale (unlisted on Tixr, or held back by hand —
+   * see TICKETS_HIDDEN). The concierge must not quote a price or hand out a
+   * ticket link in that state: it was answering "Tickets start at $39" off the
+   * tier-table fallback for events whose own page said "Tickets Coming Soon".
+   */
+  ticketFrom: number | null;
+  ticketsUrl: string | null;
   registerUrl: string;
   parking?: string;
   airport?: string;
@@ -41,11 +47,16 @@ type Intent = {
 const INTENTS: Intent[] = [
   {
     test: /ticket|price|cost|how much|buy|seat/i,
-    answer: (f) => ({
-      text: `Tickets start at $${f.ticketFrom} for a grounds pass (all outer courts, all day). Reserved Championship Court seating and Championship Sunday run higher — grab them early, finals sessions go first.`,
-      href: f.ticketsUrl,
-      hrefLabel: "Buy tickets",
-    }),
+    answer: (f) =>
+      f.ticketFrom == null || !f.ticketsUrl
+        ? {
+            text: `Tickets for ${f.shortName} aren't on sale yet — we haven't announced pricing for this stop. Keep an eye on this page and we'll post them as soon as they're live.`,
+          }
+        : {
+            text: `Tickets start at $${f.ticketFrom} for a grounds pass (all outer courts, all day). Reserved Championship Court seating and Championship Sunday run higher — grab them early, finals sessions go first.`,
+            href: f.ticketsUrl,
+            hrefLabel: "Buy tickets",
+          },
   },
   {
     test: /schedule|time|when|gate|start|first serve|hours|session/i,

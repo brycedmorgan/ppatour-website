@@ -17,6 +17,7 @@
  * Server-only. Never throws — returns an empty field on any problem, which reads
  * as "no draw yet" and hides the column.
  */
+import { TOURNAMENT_DETAILS_CACHE_TAG } from "@/lib/cache-tags";
 import { pbGetJson } from "@/lib/pb-fetch";
 
 /** Draws drop mid-week without warning, so keep this fresher than a day. */
@@ -98,7 +99,14 @@ export async function getEventField(uuid: string | undefined): Promise<EventFiel
   const { token, base } = config();
   if (!token) return EMPTY;
 
-  const opts = { timeoutMs: TIMEOUT_MS, revalidate: REVALIDATE_S };
+  // Tagged so the daily /api/revalidate-content cron refreshes the field —
+  // without a tag these entries were cached but unreachable by any cron, and
+  // this call fans out one request per pro division per event page.
+  const opts = {
+    timeoutMs: TIMEOUT_MS,
+    revalidate: REVALIDATE_S,
+    tags: [TOURNAMENT_DETAILS_CACHE_TAG],
+  };
   const listed = (await pbGetJson(
     `${base}/v1/ppa/tournaments/${uuid}/tournament_events?bracket_level=Pro`,
     { "PB-API-TOKEN": token },

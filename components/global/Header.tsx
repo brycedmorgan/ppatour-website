@@ -254,7 +254,13 @@ function MegaPanelContent({
               image={next.image}
               eyebrow={`${eventTierShort(next)} · ${next.city}, ${next.state}`}
               title={next.shortName}
-              meta={`Tickets from $${next.ticketPriceFrom}`}
+              // Same gate as every other ticket surface: an unlisted (or
+              // held-back) stop must not advertise a price here. `ticketPriceFrom`
+              // falls back to the tier table when there's no Tixr listing, so
+              // printing it ungated published a number we made up.
+              meta={
+                next.ticketsOnSale ? `Tickets from $${next.ticketPriceFrom}` : "Tickets Coming Soon"
+              }
               onNavigate={onNavigate}
             />
           </div>

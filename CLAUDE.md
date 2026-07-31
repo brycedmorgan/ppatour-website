@@ -35,6 +35,84 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-31 (pt. 4) — Tickets held back by hand: Cincinnati + Cape Coral 2027
+- Wesley: hide tickets on **Cincinnati Open (12–18 Apr 2027)** and **Cape Coral Open
+  (1–7 Feb 2027)** "until we turn it back on". Both are genuinely listed and on sale on
+  Tixr at $25, so this is an **editorial switch, not a fact about the listing** — which is
+  why it is `TICKETS_HIDDEN` in `lib/tixr-price-index.ts` and **not** an edit to the
+  snapshot JSON: `scripts/sync-tixr-prices.mjs` recomputes `onSale` from the live feed
+  every morning and would have silently put the tickets back. Dropping the `ticketsUrl`
+  mapping would also work but `npm run tixr:audit` would then flag them as unlinked live
+  listings, and we'd lose the ids needed to switch back on.
+- **To re-enable: delete the event's line from `TICKETS_HIDDEN`.** That's the whole
+  operation — price, link and copy return together on every surface.
+- Keyed by **Tixr event id** (181370, 196548) and gated in the two modules everything else
+  funnels through, so no call site changed: the client-safe index (`ticketPriceFrom` /
+  `ticketsOnSale`) and, server-side, `ticketTiersFor` — gating that one kills the tier grid,
+  `ticketPriceFrom`, `admissionTiersFor` and `ticketsOnSale` together, since all derive
+  from it. Verified all four gates false, 0 tiers, and the 12 genuinely on-sale events
+  untouched. Rendered pages: **4× "Tickets Coming Soon", zero price strings.**
+- **Three ungated leaks found while verifying — all pre-existing drift from `2bf593e`,
+  which gated the visible UI only.** The first two published ticket info for these two
+  events (and for the ten 2027 stops hidden on 7/31 pt.1) despite their pages correctly
+  reading "Tickets Coming Soon":
+  - **JSON-LD `offers` (worst one)** — `app/events/[year]/[slug]/page.tsx` emitted
+    `price: t.ticketPriceFrom` as a `schema.org/InStock` Offer with the Tixr URL. That
+    price is the **tier-table fallback**, so we were feeding Google a **$39 buyable offer
+    for an event whose real Tixr price is $25 and which we aren't selling**. Now the whole
+    `offers` block is omitted unless `onSale`.
+  - **EventConcierge** — the chatbot answered "Tickets start at $39… [Buy tickets]" off the
+    same fallback. `ticketFrom`/`ticketsUrl` are now `number | null` / `string | null` with
+    a coming-soon answer.
+  - **Header "Next Event" panel** — `meta={`Tickets from $${next.ticketPriceFrom}`}`
+    ungated. Not firing for these two (they're months from being "next") but it would have,
+    and it fires for whichever hidden 2027 stop reaches the front of the calendar first.
+- **⚠ Still ungated, deliberately left: `components/events/NationalsLive.tsx`** has **zero
+  `onSale` references** — its hero prints "Buy Tickets — from $X" unconditionally in both
+  branches. Harmless today because it only serves the Nationals `-live` route and Nationals
+  is on sale, so it publishes nothing wrong. But it is exactly the silent drift CLAUDE.md
+  warns about on that file, and it will publish a fabricated price the moment that route
+  points at an unlisted event. Worth mirroring the gate.
+- ⚠ Typecheck + lint clean on every changed file, and the full build passed **before** the
+  JSON-LD/concierge edits (the confirming rebuild was cancelled). **Re-run `npm run build`
+  before deploying** to re-verify the rendered output.
+
+### 2026-07-31 (pt. 3) — Rate-limited on `partner_rankings`: caching every API call
+- We were throttled on `/v2/data/partner_rankings`. Root cause was **`lib/rankings-api.ts`
+  — the one `partner_rankings` caller still on a bare `fetch`**. Every other consumer
+  (`division-rankings.ts`) already went through `pbGetJson`; this one had `revalidate` but
+  **no retry, no cache tag, and four different `page_size` values (25/50/100/150) for the
+  same two boards** — so eight cache entries, eight cold-start requests, and a single 429
+  went straight to an "unavailable" rankings page with no retry.
+- **Everything now reads through one `boardPage(gender, page)`** with three layers:
+  `pbGetJson` (429 backoff) → Data Cache 24h tagged `ATHLETES_CACHE_TAG` (the existing
+  daily cron already refreshes it) → **module memo + in-flight map**, which is the part the
+  Data Cache can't do: it collapses the parallel page renders of one build into a single
+  upstream call while the cache is still cold. **One page size (250)** for all of them.
+- **Measured, same workload (240 page loads, cold cache): 684 → 4 upstream requests;
+  20 → 4 distinct cache entries.** `getRankingBySlug` was the sleeper — every one of the
+  ~150 news article pages calls it, and it made its own two requests. It now costs nothing.
+- `getRankingPage` (/leaderboards) **slices the shared 250-row page** instead of asking
+  upstream for 50 — paging costs no upstream calls within a block of five display pages.
+  250 is deliberately a multiple of `FULL_PAGE_SIZE` so a display page never straddles two.
+- **The four client-polled proxies were all `Cache-Control: no-store`** — the site-wide
+  ScoreTicker polls `/api/ticker` every 15s from every open tab, so N visitors meant N
+  origin hits, each possibly on a cold instance with an empty in-process cache. Now
+  `s-maxage` + `stale-while-revalidate` so the CDN absorbs the polls: ticker 10s, brackets
+  15s, scores 30s (each under its poll interval, so live data stays live), athlete-videos
+  1h (finished tournaments don't change). **Upstream call rate is now flat in traffic.**
+  Error responses stay `no-store` so a transient failure isn't pinned at the edge.
+- `lib/event-field.ts` was cached but **untagged** — unreachable by any cron, and it fans
+  out one request per pro division per event page. Tagged `TOURNAMENT_DETAILS_CACHE_TAG`.
+- Left `no-store` **deliberately**: the 5 live-data fetchers in `ticker-api`/`scores-api`/
+  `brackets-api` (they have 5–60s module caches + request coalescing, and their routes are
+  now CDN-cached in front), and every POST write path (customerio, google-sheet, the form
+  routes) — caching those would be a bug.
+- Build clean, 1174 pages. Static generation **116s → 49s** as a side effect.
+- **⚠ Attribution:** a parallel `git commit -a` (`0b36eca`, "Add a Tixr mapping audit")
+  swept these changes into its commit. The code is right and in main-line history, but that
+  message doesn't describe it. Only `lib/event-field.ts` is still uncommitted.
+
 ### 2026-07-31 (pt. 2) — Event page: one calendar block, two-column Watch (`e532c4f`)
 - Bryce on the Nationals page: put Amateur & Junior Play in the same calendar
   block as Pro Play, on the real days; and make Watch two columns with the
