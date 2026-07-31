@@ -52,7 +52,13 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add $FILES
-            git commit -m "chore(data): sync PPA Tixr ticket prices [skip ci]"
+            # Do NOT put [skip ci] in this message. Vercel treats [skip ci] as
+            # "don't build", so the job would commit new prices and the site
+            # would never deploy them — green run, stale prices. It isn't needed
+            # to prevent an Actions loop either: pushes made with the Actions
+            # token don't retrigger workflows, and this workflow only runs on a
+            # schedule or by hand.
+            git commit -m "chore(data): sync PPA Tixr ticket prices"
             git push
             echo "Committed price changes."
           else
