@@ -23,6 +23,7 @@ import {
   GENERIC_IMAGES,
   getAllEvents,
   kebab,
+  pointsFromName,
   SPONSORS,
   TIER_PRICE,
   TIER_PRIZE,
@@ -167,17 +168,33 @@ const COUNTRY_BY_CODE: Record<string, Tournament["country"]> = {
   CHN: "Asia",
   SGP: "Asia",
   MAC: "Asia",
-  ITA: "Italy",
-  SVN: "Italy",
-  ESP: "Spain",
+  // Europe is one entry, not a country list (Connor, 7/31) — the sister tours
+  // run Italy/Slovenia/Spain today and the filter shouldn't grow a row every
+  // time they add a stop.
+  ITA: "Europe",
+  SVN: "Europe",
+  ESP: "Europe",
+  FRA: "Europe",
+  GBR: "Europe",
+  DEU: "Europe",
+  PRT: "Europe",
+  NLD: "Europe",
+  AUT: "Europe",
+  CHE: "Europe",
+  BEL: "Europe",
+  SWE: "Europe",
+  NOR: "Europe",
+  DNK: "Europe",
+  POL: "Europe",
+  CZE: "Europe",
+  GRC: "Europe",
   CAN: "Canada",
 };
 
 function inferCountry(org: string, code: string): Tournament["country"] | undefined {
   if (/australia/i.test(org)) return "Australia";
   if (/asia/i.test(org)) return "Asia";
-  if (/italy/i.test(org)) return "Italy";
-  if (/spain/i.test(org)) return "Spain";
+  if (/italy|spain|europe/i.test(org)) return "Europe";
   return COUNTRY_BY_CODE[code];
 }
 
@@ -255,6 +272,9 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     registerUrl: t.details_url || curated?.registerUrl || "",
     status,
     tierKey: tier,
+    // Sub-1,000 stops keep their real level (125 / 250 / 500) — the flat
+    // Challenger tier reads 500 for all of them otherwise.
+    points: tier === "challenger" ? (pointsFromName(name) ?? undefined) : undefined,
     prizeMoney: curated?.prizeMoney ?? TIER_PRIZE[tier],
     presentedBy: curated?.presentedBy ?? sponsor,
     // Venue scenes for main-tour cards, action shots for the smaller

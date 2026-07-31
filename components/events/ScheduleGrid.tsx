@@ -14,8 +14,8 @@ import {
 
 type TimeKey = "upcoming" | "past";
 type TypeKey = "all" | "main" | "challengers" | "international";
-type TierKey = "all" | "slam" | "cup" | "open";
-type CountryKey = "all" | "USA" | "Asia" | "Australia" | "Canada" | "Italy" | "Spain";
+type TierKey = "all" | "slam" | "cup" | "open" | "500" | "250" | "125";
+type CountryKey = "all" | "USA" | "Asia" | "Australia" | "Europe" | "Canada";
 type SeasonKey = "all" | "2025-2026" | "2025" | "2024" | "2023" | "2022";
 
 // "PPA Tour" includes EVERYTHING the tour runs (Connor's spec) — main draw,
@@ -26,22 +26,27 @@ const TYPE_OPTIONS: { value: TypeKey; label: string }[] = [
   { value: "challengers", label: "Challengers" },
   { value: "international", label: "International" },
 ];
+// Points, all the way down to the 125s — the under-1,000 stops no longer have
+// their own band on the page, so this is how you get to them (Connor, 7/31).
 const TIER_OPTIONS: { value: TierKey; label: string }[] = [
-  { value: "all", label: "All Tiers" },
-  { value: "slam", label: "Major" },
-  { value: "cup", label: "Cup" },
-  { value: "open", label: "Open" },
+  { value: "all", label: "All Points" },
+  { value: "slam", label: "Major · 2,000+" },
+  { value: "cup", label: "Cup · 1,500" },
+  { value: "open", label: "Open · 1,000" },
+  { value: "500", label: "500" },
+  { value: "250", label: "250" },
+  { value: "125", label: "125" },
 ];
-// Country is its own filter dimension (always visible) so international
-// stops are reachable by country without hunting through types.
+// Region is its own filter dimension (always visible) so international stops
+// are reachable without hunting through types. Connor's order, 7/31: USA,
+// Asia, Australia, Europe, Canada.
 const COUNTRY_OPTIONS: { value: CountryKey; label: string }[] = [
-  { value: "all", label: "All Countries" },
+  { value: "all", label: "All Regions" },
   { value: "USA", label: "USA" },
   { value: "Asia", label: "Asia" },
   { value: "Australia", label: "Australia" },
+  { value: "Europe", label: "Europe" },
   { value: "Canada", label: "Canada" },
-  { value: "Italy", label: "Italy" },
-  { value: "Spain", label: "Spain" },
 ];
 const SEASON_OPTIONS: { value: SeasonKey; label: string }[] = [
   { value: "all", label: "All Seasons" },
@@ -87,8 +92,10 @@ function FilterSelect<T extends string>({
 
 /**
  * Events grid — every tour stop (past + upcoming) from the API, with a search
- * box, an Upcoming/Past toggle, and dependent dropdown filters: Type (always),
- * Tier (PPA only), Country (International only), Season (Past only).
+ * box, an Upcoming/Past toggle, and dropdown filters: Type, Points (Major down
+ * to 125), Region, and Season (Past only). This is the ONLY place the
+ * under-1,000 stops appear on /events — Connor cut their separate band on 7/31,
+ * so the points filter has to reach them.
  *
  * Cards link to our internal `/events/[slug]` page when the event has one
  * (US "Pro Pickleball Association" stops + curated events); international
@@ -102,10 +109,6 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
   const [country, setCountry] = useState<CountryKey>("all");
   const [season, setSeason] = useState<SeasonKey>("all");
 
-  function onTypeChange(v: TypeKey) {
-    setType(v);
-    if (v !== "main") setTier("all");
-  }
   function onTimeChange(v: TimeKey) {
     setTime(v);
     if (v !== "past") setSeason("all");
@@ -122,15 +125,17 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
       if (type === "challengers" && t.tierKey !== "challenger") return false;
       if (type === "international" && t.region !== "international") return false;
 
-      // Tier
-      if (type === "main" && tier !== "all") {
+      // Points — an independent dimension now that the under-1,000 stops live
+      // in this grid instead of their own band.
+      if (tier !== "all") {
         const pts = tierPoints(t);
         if (tier === "slam" && pts < 2000) return false;
         if (tier === "cup" && pts !== 1500) return false;
         if (tier === "open" && pts !== 1000) return false;
+        if (/^\d+$/.test(tier) && pts !== Number(tier)) return false;
       }
 
-      // Country — independent dimension. "USA" = the domestic tour.
+      // Region — independent dimension. "USA" = the domestic tour.
       if (country === "USA" && t.region === "international") return false;
       if (country !== "all" && country !== "USA" && t.country !== country) return false;
 
@@ -192,8 +197,8 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
 
       {/* Dropdown filters (dependent) */}
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <FilterSelect value={type} onChange={onTypeChange} options={TYPE_OPTIONS} />
-        {type === "main" && <FilterSelect value={tier} onChange={setTier} options={TIER_OPTIONS} />}
+        <FilterSelect value={type} onChange={setType} options={TYPE_OPTIONS} />
+        <FilterSelect value={tier} onChange={setTier} options={TIER_OPTIONS} />
         <FilterSelect value={country} onChange={setCountry} options={COUNTRY_OPTIONS} />
         {time === "past" && (
           <FilterSelect value={season} onChange={setSeason} options={SEASON_OPTIONS} />

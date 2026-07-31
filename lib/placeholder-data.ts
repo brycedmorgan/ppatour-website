@@ -31,21 +31,26 @@ export const TIER_META: Record<
 };
 
 /**
- * Tier from a points number in the event name, when present. International
- * stops carry their level in the title — "PPA Asia 1500 Hong Kong",
- * "PPA Spain P250 Barcelona", "PPA Canada 125 Ottawa" — so we can rank them
- * honestly (only 1,000+ belong on The Tour; 125/250/500 stay in Other Events).
- * Returns null when the name has no recognizable points token.
+ * The points number stated in an event name, when present. International stops
+ * carry their level in the title — "PPA Asia 1500 Hong Kong", "PPA Spain P250
+ * Barcelona", "PPA Canada 125 Ottawa" — so we can rank them honestly (only
+ * 1,000+ belong on The Tour) and filter the sub-1,000 stops apart from each
+ * other in Find an Event. Returns null when there's no recognizable token.
  *
  * The token is not always space-separated — the Australia feed sends
  * "PPA125 - GOLD COAST" and "PPA1500 - AUSTRALIA PICKLEBALL CUP" glued to the
  * org prefix, which `\b` alone never matched. That's why a 125-point Gold Coast
  * stop was being sold as a 1,000-point tour event (Connor, 7/29).
  */
-export function tierFromName(name: string): EventTier | null {
+export function pointsFromName(name: string): number | null {
   const m = name.match(/(?:\b|PPA)P?(3000|2000|1500|1000|500|250|125)\b/i);
-  if (!m) return null;
-  const pts = Number(m[1]);
+  return m ? Number(m[1]) : null;
+}
+
+/** Tier from that same token. Null when the name doesn't state one. */
+export function tierFromName(name: string): EventTier | null {
+  const pts = pointsFromName(name);
+  if (pts === null) return null;
   if (pts >= 3000) return "worlds";
   if (pts >= 2000) return "slam";
   if (pts >= 1500) return "cup";
@@ -71,6 +76,10 @@ export type Tournament = {
   registerUrl: string;
   status: "upcoming" | "live" | "completed";
   tierKey: EventTier;
+  /** Exact ranking points when the event name states them. Only set on
+      sub-1,000 stops, where the flat `challenger` tier would otherwise sell a
+      125 as a 500 — the Find an Event tier filter needs the real number. */
+  points?: number;
   prizeMoney: string;
   presentedBy?: string;
   image: string;
@@ -91,8 +100,10 @@ export type Tournament = {
   };
   /** International-tour events (for the /events category filter). Domestic if unset. */
   region?: "international";
-  /** Country/region for international events (matches the Country filter). */
-  country?: "Asia" | "Australia" | "Canada" | "Italy" | "Spain";
+  /** Region for international events (matches the Country filter). Connor,
+      7/31: the list is USA / Asia / Australia / Europe / Canada — Italy and
+      Spain roll up into Europe rather than sitting as their own entries. */
+  country?: "Asia" | "Australia" | "Canada" | "Europe";
   /** Season label for completed events (matches the Season filter). */
   season?: "2025-2026" | "2025" | "2024" | "2023" | "2022";
   /** Stable Pickleball.com tournament UUID (API-sourced events only). */
@@ -368,6 +379,9 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
       registerUrl: COMMERCE_BY_SLUG[slug]?.register ?? REGISTER,
       status: "upcoming" as const,
       tierKey: tier,
+      // Sub-1,000 stops keep their real level (125 / 250 / 500) — the flat
+      // Challenger tier reads 500 for all of them otherwise.
+      points: tier === "challenger" ? (pointsFromName(r.name) ?? undefined) : undefined,
       prizeMoney: r.type === "international" ? "$100,000" : TIER_PRIZE[tier],
       presentedBy: PRESENTER_BY_SLUG[slug] ?? sponsor,
       // Main-tour cards lead with venue scenes; Challengers/international
@@ -402,7 +416,7 @@ const SCHEDULE: RawEvent[] = [
   // July 2026
   { name: "PPA Australia 250 Melbourne", short: "Melbourne", start: "2026-07-15", end: "2026-07-19", city: "Melbourne", state: "Australia", type: "international", country: "Australia" },
   { name: "Macon PPA Challenger", short: "Macon Challenger", start: "2026-07-17", end: "2026-07-19", city: "Macon", state: "GA", type: "challenger" },
-  { name: "PPA Italy 125 Portoroz", short: "Portoroz", start: "2026-07-22", end: "2026-07-26", city: "Portoroz", state: "Italy", type: "international", country: "Italy" },
+  { name: "PPA Italy 125 Portoroz", short: "Portoroz", start: "2026-07-22", end: "2026-07-26", city: "Portoroz", state: "Italy", type: "international", country: "Europe" },
   { name: "PPA Asia 500 Singapore Open", short: "Singapore Open", start: "2026-07-23", end: "2026-07-26", city: "Singapore", state: "", type: "international", country: "Asia" },
   { name: "Wisconsin PPA Challenger", short: "Wisconsin Challenger", start: "2026-07-31", end: "2026-08-02", city: "Lake Hallie", state: "WI", type: "challenger" },
 
@@ -420,7 +434,7 @@ const SCHEDULE: RawEvent[] = [
   { name: "PPA Canada 125 Vancouver", short: "Vancouver 125", start: "2026-09-10", end: "2026-09-13", city: "Vancouver", state: "Canada", type: "international", country: "Canada" },
   { name: "Veolia Arizona Open", short: "Arizona Open", start: "2026-09-14", end: "2026-09-20", city: "Mesa", state: "AZ", venue: "Arizona Athletic Grounds", type: "ppa", tier: "open" },
   { name: "Grand Rapids PPA Challenger", short: "Grand Rapids Challenger", start: "2026-09-18", end: "2026-09-20", city: "Rockford", state: "MI", type: "challenger" },
-  { name: "PPA Spain P250 Barcelona", short: "Barcelona P250", start: "2026-09-23", end: "2026-09-27", city: "Barcelona", state: "Spain", type: "international", country: "Spain" },
+  { name: "PPA Spain P250 Barcelona", short: "Barcelona P250", start: "2026-09-23", end: "2026-09-27", city: "Barcelona", state: "Spain", type: "international", country: "Europe" },
   { name: "Charlotte PPA Challenger", short: "Charlotte Challenger", start: "2026-09-25", end: "2026-09-27", city: "Charlotte", state: "NC", type: "challenger" },
   { name: "Rate Las Vegas Open", short: "Las Vegas Open", start: "2026-09-28", end: "2026-10-04", city: "Las Vegas", state: "NV", venue: "Darling Tennis Center", type: "ppa", tier: "open" },
 
@@ -434,7 +448,7 @@ const SCHEDULE: RawEvent[] = [
 
   // November 2026
   { name: "Pickleball World Championships", short: "World Championships", start: "2026-11-02", end: "2026-11-08", city: "Farmers Branch", state: "TX", venue: "Brookhaven Country Club", type: "ppa", tier: "worlds" },
-  { name: "PPA Spain P125", short: "Spain P125", start: "2026-11-11", end: "2026-11-15", city: "TBA", state: "Spain", type: "international", country: "Spain" },
+  { name: "PPA Spain P125", short: "Spain P125", start: "2026-11-11", end: "2026-11-15", city: "TBA", state: "Spain", type: "international", country: "Europe" },
   { name: "Proton Daytona Beach Open", short: "Daytona Beach Open", start: "2026-11-16", end: "2026-11-22", city: "Holly Hill", state: "FL", venue: "Pictona at Holly Hill", type: "ppa", tier: "open" },
   { name: "PPA Canada 125 Toronto", short: "Toronto 125", start: "2026-11-26", end: "2026-11-29", city: "Toronto", state: "Canada", type: "international", country: "Canada" },
   { name: "Veolia Malibu Cup", short: "Malibu Cup", start: "2026-11-30", end: "2026-12-06", city: "Malibu", state: "CA", venue: "Pepperdine University", type: "ppa", tier: "cup" },
@@ -443,33 +457,33 @@ const SCHEDULE: RawEvent[] = [
   { name: "PPA Australia 125 New South Wales", short: "New South Wales", start: "2026-12-11", end: "2026-12-13", city: "New South Wales", state: "Australia", type: "international", country: "Australia" },
 
   // January 2027
-  { name: "PPA Italy 125 Brescia", short: "Brescia", start: "2027-01-05", end: "2027-01-09", city: "Brescia", state: "Italy", type: "international", country: "Italy" },
+  { name: "PPA Italy 125 Brescia", short: "Brescia", start: "2027-01-05", end: "2027-01-09", city: "Brescia", state: "Italy", type: "international", country: "Europe" },
   { name: "Carvana Pickleball Masters", short: "Pickleball Masters", start: "2027-01-11", end: "2027-01-17", city: "Rancho Mirage", state: "CA", venue: "Hyatt Regency Indian Wells", type: "ppa", tier: "slam" },
   { name: "Minneapolis Indoor Open", short: "Minneapolis Open", start: "2027-01-18", end: "2027-01-24", city: "Lakeville", state: "MN", venue: "Life Time — Lakeville", type: "ppa", tier: "open" },
-  { name: "PPA Spain P125", short: "Spain P125", start: "2027-01-27", end: "2027-01-31", city: "TBA", state: "Spain", type: "international", country: "Spain" },
+  { name: "PPA Spain P125", short: "Spain P125", start: "2027-01-27", end: "2027-01-31", city: "TBA", state: "Spain", type: "international", country: "Europe" },
 
   // February 2027
   { name: "Cape Coral Open", short: "Cape Coral Open", start: "2027-02-01", end: "2027-02-07", city: "Cape Coral", state: "FL", venue: "Cape Coral Racquet Club", type: "ppa", tier: "open" },
   { name: "Carvana Mesa Cup", short: "Mesa Cup", start: "2027-02-15", end: "2027-02-21", city: "Mesa", state: "AZ", venue: "Bell Bank Park", type: "ppa", tier: "cup" },
   { name: "PPA Australia 125 Melbourne", short: "Melbourne 125", start: "2027-02-18", end: "2027-02-21", city: "Melbourne", state: "Australia", type: "international", country: "Australia" },
-  { name: "PPA Spain P250", short: "Spain P250", start: "2027-02-24", end: "2027-02-28", city: "TBA", state: "Spain", type: "international", country: "Spain" },
+  { name: "PPA Spain P250", short: "Spain P250", start: "2027-02-24", end: "2027-02-28", city: "TBA", state: "Spain", type: "international", country: "Europe" },
 
   // March 2027
   { name: "Newport Beach Open", short: "Newport Beach Open", start: "2027-03-02", end: "2027-03-07", city: "Newport Beach", state: "CA", venue: "Tennis Club at Newport Beach", type: "ppa", tier: "open" },
   { name: "Texas Open", short: "Texas Open", start: "2027-03-08", end: "2027-03-14", city: "Dallas", state: "TX", venue: "The Courts of McKinney", type: "ppa", tier: "open" },
   { name: "PPA Australia 250 Sydney Finals", short: "Sydney Finals", start: "2027-03-17", end: "2027-03-21", city: "Sydney", state: "Australia", type: "international", country: "Australia" },
-  { name: "PPA Spain P500", short: "Spain P500", start: "2027-03-17", end: "2027-03-21", city: "TBA", state: "Spain", type: "international", country: "Spain" },
+  { name: "PPA Spain P500", short: "Spain P500", start: "2027-03-17", end: "2027-03-21", city: "TBA", state: "Spain", type: "international", country: "Europe" },
   { name: "Greater Zion Cup at Black Desert Resort", short: "Greater Zion Cup", start: "2027-03-22", end: "2027-03-28", city: "St. George", state: "UT", venue: "Black Desert Resort", type: "ppa", tier: "cup" },
 
   // April 2027
   { name: "PPA Open", short: "PPA Open", start: "2027-04-05", end: "2027-04-11", city: "TBD", state: "", type: "ppa", tier: "open" },
   { name: "Sacramento Open", short: "Sacramento Open", start: "2027-04-05", end: "2027-04-11", city: "Sacramento", state: "CA", venue: "Life Time — Arden", type: "ppa", tier: "open" },
   { name: "Cincinnati Open", short: "Cincinnati Open", start: "2027-04-12", end: "2027-04-18", city: "Cincinnati", state: "OH", venue: "Lindner Family Tennis Center", type: "ppa", tier: "open" },
-  { name: "PPA Spain P250", short: "Spain P250", start: "2027-04-21", end: "2027-04-25", city: "TBA", state: "Spain", type: "international", country: "Spain" },
+  { name: "PPA Spain P250", short: "Spain P250", start: "2027-04-21", end: "2027-04-25", city: "TBA", state: "Spain", type: "international", country: "Europe" },
   { name: "Atlanta Pickleball Championships", short: "Atlanta Championships", start: "2027-04-26", end: "2027-05-02", city: "Atlanta", state: "GA", venue: "Life Time — Peachtree Corners", type: "ppa", tier: "slam" },
 
   // May 2027
-  { name: "PPA Spain P500 Barcelona", short: "Barcelona P500", start: "2027-05-05", end: "2027-05-09", city: "Barcelona", state: "Spain", type: "international", country: "Spain" },
+  { name: "PPA Spain P500 Barcelona", short: "Barcelona P500", start: "2027-05-05", end: "2027-05-09", city: "Barcelona", state: "Spain", type: "international", country: "Europe" },
   { name: "PPA Finals", short: "PPA Finals", start: "2027-05-10", end: "2027-05-16", city: "San Clemente", state: "CA", venue: "Life Time — Rancho San Clemente", type: "ppa", tier: "slam" },
 ];
 
@@ -647,8 +661,8 @@ export const tournaments: Tournament[] = [
 ];
 
 /** Ranking points for an event, from its tier. */
-export function tierPoints(t: Pick<Tournament, "tierKey">): number {
-  return TIER_META[t.tierKey].points;
+export function tierPoints(t: Pick<Tournament, "tierKey"> & { points?: number }): number {
+  return t.points ?? TIER_META[t.tierKey].points;
 }
 
 /** Short tier label, e.g. "Championship". */
