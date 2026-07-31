@@ -1,58 +1,14 @@
 /**
- * Editorial content for the ESPN-style homepage — storylines, the points
- * race, players to watch, and new-fan explainers. Placeholder copy for the
- * demo build; replace with the Sanity CMS + scoring/rankings API.
+ * Editorial content for the ESPN-style homepage — the points race, players to
+ * watch, and new-fan explainers. Placeholder copy for the demo build; replace
+ * with the Sanity CMS + scoring/rankings API.
+ *
+ * `leadStory` / `storylines` / the `Storyline` type lived here until 7/31.
+ * They were invented headlines that every card linked to /watch with, and the
+ * homepage newsroom grid now renders real posts from `lib/news.ts` instead.
  */
 
 import { publishedArticles } from "@/lib/news-articles";
-
-export type Storyline = {
-  kicker: string;
-  headline: string;
-  dek: string;
-  whyItMatters: string;
-  image: string;
-};
-
-export const leadStory: Storyline = {
-  kicker: "Championship Race",
-  headline: "Atlanta Reopens the Fight for No. 1",
-  dek: "Six weeks, six 1,000-point stops, one ranking. The Veolia Atlanta Championships restart a title race that's been decided by a single bad weekend all season.",
-  whyItMatters:
-    "The top two are 340 points apart — one final weekend swings the whole season.",
-  image: "/ppa/action-waters-bright.jpg",
-};
-
-export const storylines: Storyline[] = [
-  {
-    kicker: "The Rivalry",
-    headline: "The Rematch Three Months in the Making",
-    dek: "They split the last two finals down to the wire. The Atlanta bracket lines up a third.",
-    whyItMatters: "Bragging rights — and the No. 1 seed heading into Nationals.",
-    image: "/ppa/action-md-final.jpg",
-  },
-  {
-    kicker: "The Streak",
-    headline: "Fourteen Straight. Can Anyone End It?",
-    dek: "A doubles pairing hasn't dropped a match since the spring swing opened.",
-    whyItMatters: "One loss reshuffles every projected bracket on tour.",
-    image: "/ppa/action-mxd.jpg",
-  },
-  {
-    kicker: "Breakout",
-    headline: "The Rookie Who Crashed the Top 10",
-    dek: "An unseeded run in Las Vegas turned into a permanent address near the top.",
-    whyItMatters: "First-year players almost never climb the race this fast.",
-    image: "/ppa/action-singles.jpg",
-  },
-  {
-    kicker: "Upset Watch",
-    headline: "Three Seeds Built to Fall Early",
-    dek: "The draw wasn't kind to a few favorites at this stop.",
-    whyItMatters: "A first-round exit can cost a player a full season of points.",
-    image: "/ppa/action-masters.jpg",
-  },
-];
 
 export type RaceEntry = {
   rank: number;

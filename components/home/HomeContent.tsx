@@ -26,10 +26,8 @@ import {
   type Tournament,
 } from "@/lib/placeholder-data";
 import {  explainers,
-  leadStory,
   partners,
   playersToWatch,
-  storylines,
 } from "@/lib/home-content";
 // Server-only (pulls the migrated WP archive) — safe here because HomeContent
 // is rendered exclusively by app/page.tsx and app/live/page.tsx, both server
@@ -218,6 +216,10 @@ export async function HomeContent({
   // Live pickleball.com coverage. Empty until the API grant lands, in which case
   // the rail is omitted rather than showing the invented headlines it replaced.
   const ecosystem = (await getPickleballNews(4)).articles;
+  // The newsroom grid: one lead + four secondaries. Real posts, newest first —
+  // the hand-written `storylines` placeholders this replaced all pointed at
+  // /watch, so the homepage carried no link into an actual article.
+  const [leadPost, ...secondaryPosts] = allNews().slice(0, 5);
   // Next six tour stops for the "Next on Tour" strip above the callouts.
   const upNext = getMainTourEvents().slice(0, 6);
 
@@ -739,143 +741,100 @@ export async function HomeContent({
         </>
       )}
 
-      {/* ── Top Storylines ──────────────────────────────────── */}
+      {/* ── What's Happening on Tour ────────────────────────────
+          One newsroom section: the lead + secondary grid on top, the
+          pickleball.com row underneath. Merged 7/31 — this was two adjacent
+          news sections ("Top Storylines" and "Latest News") saying the same
+          thing twice. */}
       <section className="bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <SectionHead label="The Storylines" title="What's Happening on Tour" />
+            <SectionHead label="Newsroom" title="What's Happening on Tour" />
             <Link
-              href="/watch"
+              href="/news"
               className="group text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
             >
-              All Stories{" "}
+              All News{" "}
               <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
           </div>
 
           <div className="mt-6 grid gap-4 lg:grid-cols-5">
             {/* Lead story */}
-            <Link
-              href="/watch"
-              className="group relative isolate flex aspect-[16/11] flex-col justify-end overflow-hidden bg-ppa-navy lg:col-span-3 lg:aspect-auto lg:min-h-[25rem]"
-            >
-              <Image
-                src={leadStory.image}
-                alt=""
-                fill
-                sizes="(min-width: 1024px) 60vw, 100vw"
-                className="will-change-transform object-cover object-top transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 scrim-hero" />
-              <span className="absolute left-4 top-4 bg-ppa-blue px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-white">
-                {leadStory.kicker}
-              </span>
-              <div className="relative p-5 text-white sm:p-6">
-                <h3 className="font-display text-2xl uppercase leading-[1.02] sm:text-4xl">
-                  {leadStory.headline}
-                </h3>
-                <p className="mt-2 max-w-xl text-sm text-white/70">
-                  {leadStory.dek}
-                </p>
-                <p className="mt-3 border-l-2 border-ppa-yellow pl-3 text-xs leading-relaxed text-white/85">
-                  <span className="font-bold uppercase tracking-[0.1em] text-ppa-yellow">
-                    Why it matters ·{" "}
-                  </span>
-                  {leadStory.whyItMatters}
-                </p>
-              </div>
-            </Link>
+            {leadPost && (
+              <Link
+                href={leadPost.href}
+                className="group relative isolate flex aspect-[16/11] flex-col justify-end overflow-hidden bg-ppa-navy lg:col-span-3 lg:aspect-auto lg:min-h-[25rem]"
+              >
+                {/* 799 of the 811 migrated posts carry a featured image; the
+                    12 that don't keep the navy field rather than a broken frame. */}
+                {leadPost.image && (
+                  <Image
+                    src={leadPost.image}
+                    alt={leadPost.imageAlt}
+                    fill
+                    sizes="(min-width: 1024px) 60vw, 100vw"
+                    className="will-change-transform object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                  />
+                )}
+                <div className={`absolute inset-0 ${leadPost.image ? "scrim-hero" : "bg-ppa-navy-deep"}`} />
+                <span className="absolute left-4 top-4 bg-ppa-blue px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-white">
+                  {leadPost.category}
+                </span>
+                <div className="relative p-5 text-white sm:p-6">
+                  <h3 className="font-display text-2xl uppercase leading-[1.02] sm:text-4xl">
+                    {leadPost.title}
+                  </h3>
+                  <p className="mt-2 max-w-xl text-sm text-white/70">
+                    {leadPost.dek}
+                  </p>
+                  <p className="mt-3 text-[11px] uppercase tracking-[0.1em] text-white/50">
+                    {leadPost.author} · {leadPost.displayDate}
+                  </p>
+                </div>
+              </Link>
+            )}
 
-            {/* Secondary storylines */}
+            {/* Secondary posts */}
             <div className="flex flex-col divide-y divide-ppa-line border border-ppa-line bg-white lg:col-span-2">
-              {storylines.map((s) => (
+              {secondaryPosts.map((n) => (
                 <Link
-                  key={s.headline}
-                  href="/watch"
+                  key={`${n.source}-${n.slug}`}
+                  href={n.href}
                   className="group flex flex-1 gap-3 p-4 transition-colors hover:bg-ppa-paper"
                 >
-                  <div className="relative aspect-square w-20 shrink-0 overflow-hidden bg-ppa-navy">
-                    <Image
-                      src={s.image}
-                      alt=""
-                      fill
-                      sizes="80px"
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
+                  <div className="relative aspect-square w-20 shrink-0 overflow-hidden bg-ppa-navy-deep">
+                    {n.image && (
+                      <Image
+                        src={n.image}
+                        alt={n.imageAlt}
+                        fill
+                        sizes="80px"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    )}
                   </div>
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-blue">
-                      {s.kicker}
+                      {n.category}
                     </p>
-                    <h4 className="mt-0.5 font-display text-sm uppercase leading-[1.1] text-ppa-navy">
-                      {s.headline}
+                    <h4 className="mt-0.5 font-display text-sm uppercase leading-[1.1] text-ppa-navy transition-colors group-hover:text-ppa-blue">
+                      {n.title}
                     </h4>
-                    <p className="mt-1 text-xs leading-relaxed text-ppa-navy/55">
-                      <span className="font-bold text-ppa-navy/75">
-                        Why it matters ·{" "}
-                      </span>
-                      {s.whyItMatters}
+                    <p className="mt-1 text-[11px] uppercase tracking-[0.1em] text-ppa-navy/40">
+                      {n.author} · {n.displayDate}
                     </p>
                   </div>
                 </Link>
               ))}
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* ── Latest News ─────────────────────────────────────── */}
-      <section className="bg-white">
-        <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <SectionHead label="Newsroom" title="Latest News" />
-            <p className="max-w-sm text-sm text-ppa-navy/55 sm:text-right">
-              Tournament recaps, analysis, player profiles, and the race to the
-              PPA Finals — every storyline shaping the Carvana PPA Tour.
-            </p>
-          </div>
-
-          <div className="mt-6 grid gap-8 lg:grid-cols-3">
-            {/* PPA Tour's own newsroom */}
-            <div className="lg:col-span-2">
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-navy/45">
-                From the PPA Tour
-              </p>
-              <div className="mt-2 border-t border-ppa-line">
-                {allNews().slice(0, 5).map((n) => (
-                  <Link
-                    key={`${n.source}-${n.slug}`}
-                    href={n.href}
-                    className="group flex items-start gap-4 border-b border-ppa-line py-4"
-                  >
-                    <span className="w-16 shrink-0 pt-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-ppa-blue sm:w-20">
-                      {n.category}
-                    </span>
-                    <span className="flex-1">
-                      <span className="block font-display text-base uppercase leading-[1.12] text-ppa-navy transition-colors group-hover:text-ppa-blue">
-                        {n.title}
-                      </span>
-                      <span className="mt-1 block text-[11px] uppercase tracking-[0.1em] text-ppa-navy/40">
-                        {n.author} · {n.displayDate}
-                      </span>
-                    </span>
-                  </Link>
-                ))}
-              </div>
-              <Link
-                href="/news"
-                className="group mt-5 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue"
-              >
-                All PPA Tour News{" "}
-              <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
-              </Link>
-            </div>
-
-            {/* Live pickleball.com coverage, linking out. Hidden entirely when
-                the feed is unavailable — an empty bordered box is worse than no
-                box, and the placeholder headlines this replaced were invented. */}
-            {ecosystem.length > 0 && (
-            <div>
+          {/* Live pickleball.com coverage, linking out. Hidden entirely when
+              the feed is unavailable — an empty row is worse than no row, and
+              the placeholder headlines this replaced were invented. */}
+          {ecosystem.length > 0 && (
+            <div className="mt-10 border-t border-ppa-line pt-6">
               <div className="flex items-center gap-2">
                 <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-navy/45">
                   From
@@ -887,35 +846,47 @@ export async function HomeContent({
                   height={16}
                 />
               </div>
-              <div className="mt-2 flex flex-col gap-px border border-ppa-line bg-ppa-line">
+              <div className="mt-3 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-2 lg:grid-cols-4">
                 {ecosystem.map((e) => (
                   <a
                     key={e.url}
                     href={e.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-start gap-2 bg-white p-4 transition-colors hover:bg-ppa-paper"
+                    className="group flex flex-col bg-white transition-colors hover:bg-ppa-paper"
                   >
-                    <span className="flex-1">
-                      <span className="block text-sm font-semibold leading-snug text-ppa-navy transition-colors group-hover:text-ppa-blue">
-                        {e.title}
-                      </span>
-                      <span className="mt-1 block text-[11px] uppercase tracking-[0.1em] text-ppa-navy/40">
-                        {pbArticleDate(e.publishedAt) || "Pickleball.com"}
-                      </span>
+                    <span className="relative block aspect-[16/9] overflow-hidden bg-ppa-navy-deep">
+                      {e.imageUrl && (
+                        <Image
+                          src={e.imageUrl}
+                          alt={e.imageAlt}
+                          fill
+                          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                          className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                        />
+                      )}
                     </span>
-                    <span
-                      aria-hidden
-                      className="text-ppa-navy/30 transition-colors group-hover:text-ppa-blue"
-                    >
-                      ↗
+                    <span className="flex flex-1 items-start gap-2 p-4">
+                      <span className="flex-1">
+                        <span className="block text-sm font-semibold leading-snug text-ppa-navy transition-colors group-hover:text-ppa-blue">
+                          {e.title}
+                        </span>
+                        <span className="mt-1 block text-[11px] uppercase tracking-[0.1em] text-ppa-navy/40">
+                          {pbArticleDate(e.publishedAt) || "Pickleball.com"}
+                        </span>
+                      </span>
+                      <span
+                        aria-hidden
+                        className="text-ppa-navy/30 transition-colors group-hover:text-ppa-blue"
+                      >
+                        ↗
+                      </span>
                     </span>
                   </a>
                 ))}
               </div>
             </div>
-            )}
-          </div>
+          )}
         </div>
       </section>
 
