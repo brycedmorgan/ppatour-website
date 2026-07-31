@@ -45,7 +45,13 @@ const LIMIT = Number(argOf("--limit")) || Infinity;
 
 /* ─────────────────────────── bylines ───────────────────────────
  * 7 of the 17 WP accounts are raw logins. Real names supplied by Wesley
- * 2026-07-29; the three unattributable accounts become the house byline.  */
+ * 2026-07-29; the three unattributable accounts become the house byline.
+ *
+ * w-ahlfeld (35 posts) joined them 2026-07-31 at Wesley's request — those
+ * posts were published from his account but run as tour copy, not under a
+ * personal byline. Mapped here rather than only in lib/data/news-posts.json
+ * because this importer is re-runnable and reads the live WP display name,
+ * so a JSON-only edit would silently revert on the next import.            */
 const BYLINES = {
   "e-parker": "Evan Parker",
   "h-johns": "Hannah Johns",
@@ -55,6 +61,7 @@ const BYLINES = {
   yiyunzhou: "PPA Tour",
   "pete-7twodesign": "PPA Tour",
   "m-cudzinowski": "PPA Tour",
+  "w-ahlfeld": "PPA Tour",
 };
 const HOUSE_BYLINE = "PPA Tour";
 
