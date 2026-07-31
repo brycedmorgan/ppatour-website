@@ -805,3 +805,44 @@ export function daysUntil(iso: string): number {
   const now = Date.now();
   return Math.max(0, Math.ceil((target - now) / 86_400_000));
 }
+
+/**
+ * Visual treatment for a tier badge, so the tier is legible at a glance instead
+ * of only by reading the word.
+ *
+ * Triage item #14 — Brian Clark and Dana, 29 Jul: "Majors, Cups and Opens don't
+ * differ enough at a glance." Every badge was the same yellow chip, so a 500-pt
+ * Challenger and a 3,000-pt Worlds were visually identical and the tier
+ * structure Bryce ruled on was invisible on the page it organises.
+ *
+ * The ramp is deliberate and follows the points ladder, brightest at the top:
+ *   Major / Worlds  yellow on navy  — tour accent, reserved for the four Majors
+ *                                     and Worlds (3,000, the biggest Major)
+ *   Championship    white on navy   — the 2,000-pt Finals, which is NOT a Major
+ *   Cup             navy on sky     — 1,500
+ *   Open            navy on white   — 1,000, the tour floor
+ *   Challenger      muted outline   — under 1,000, deliberately recessive
+ *
+ * Returns the full class string for the chip, so every render site shares one
+ * definition — the badge appears on the events grid, event heroes, the homepage,
+ * featured cards and the nav panel, and they drifted apart before.
+ */
+export function tierBadgeClass(
+  t: Pick<Tournament, "slug" | "name" | "tierKey">,
+): string {
+  const base =
+    "px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] whitespace-nowrap";
+  if (isMajor(t) || t.tierKey === "worlds") {
+    return `${base} bg-ppa-yellow text-ppa-navy`;
+  }
+  switch (t.tierKey) {
+    case "slam": // 2,000-pt Championship that isn't one of the four Majors
+      return `${base} bg-ppa-navy text-white`;
+    case "cup":
+      return `${base} bg-ppa-sky text-ppa-navy`;
+    case "open":
+      return `${base} bg-white text-ppa-navy`;
+    default: // challenger — recessive on purpose
+      return `${base} bg-ppa-navy/70 text-white/75 ring-1 ring-inset ring-white/25`;
+  }
+}

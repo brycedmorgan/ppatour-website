@@ -22,6 +22,7 @@ import {
   getNextTournament,
   tierPoints,
   eventTierShort,
+  tierBadgeClass,
   type Tournament,
 } from "@/lib/placeholder-data";
 import {  explainers,
@@ -944,7 +945,7 @@ export async function HomeContent({
                   <span className="absolute left-3 top-2 font-display text-2xl leading-none text-white/30">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="absolute right-3 top-3 bg-ppa-yellow px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] text-ppa-navy">
+                  <span className={`absolute right-3 top-3 ${tierBadgeClass(t)}`}>
                     {eventTierShort(t)} · {tierPoints(t).toLocaleString()}
                   </span>
                   <div className="relative p-4">

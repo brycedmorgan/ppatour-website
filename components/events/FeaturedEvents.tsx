@@ -5,6 +5,7 @@ import {
   formatDateRange,
   tierPoints,
   eventTierShort,
+  tierBadgeClass,
   type Tournament,
   eventHref,
 } from "@/lib/placeholder-data";
@@ -82,7 +83,7 @@ export function FeaturedEvents({
                 )}
 
                 <div className="absolute right-3 top-3 flex flex-col items-end gap-1">
-                  <span className="bg-ppa-yellow px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] text-ppa-navy">
+                  <span className={tierBadgeClass(t)}>
                     {eventTierShort(t)} · {tierPoints(t).toLocaleString()}
                   </span>
                   {days > 0 && (
