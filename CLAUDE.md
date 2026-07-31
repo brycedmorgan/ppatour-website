@@ -35,6 +35,31 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-07-31 (pt. 2) — Event page: one calendar block, two-column Watch (`e532c4f`)
+- Bryce on the Nationals page: put Amateur & Junior Play in the same calendar
+  block as Pro Play, on the real days; and make Watch two columns with the
+  channels down the right.
+- **Order of Play is one table now.** New `ProDay.amateur[]` renders an
+  **Amateur & Junior Play** column beside Pro Play. Amateur skill/age brackets
+  sit on all seven days; **PPA Tour Camp on Aug 31 & Sep 1, 4–7 PM**. That's two
+  of the four old rows absorbed, which was the point. Below `lg` the column
+  folds under Pro Play (5-col → 3-col) rather than squeezing.
+- **Junior PPA, Senior Open and MoneyBall are still undated.** Re-pulled
+  `pickleballtournaments.com/tournaments/ppa-tour-veolia-ppa-national-championships`
+  today — the pro block is there, the amateur day assignments are **still TBD**,
+  same wall as 7/16. They render in a small "Day still to be announced" strip;
+  move each onto its `ProDay` the moment the days publish (after the Aug 24
+  registration deadline). **Bryce is sending a PT link** — if it's a different
+  page than the one above, it may have the real days.
+- **Watch is two columns**: rounds (what's on + where to watch) left, channels
+  stacked right in **PBTV → Tennis Channel → MATCHDAY** order. `HOW_TO_WATCH`
+  was already in that order, so it was purely layout.
+- **Fixed stale copy in both files**: "Follow all four days live — free on
+  YouTube" on a seven-day event, months after YouTube stopped being the play.
+  Now points at PickleballTV.
+- Both the main event page and the `-live` variant (`NationalsLive.tsx`) carry
+  every change — they render the same schedule data and drift silently.
+
 ### 2026-07-31 — Connor's /events restructure: Other Events out, points filter in (`1cb467d`)
 - Connor's website-update note: keep **Next Six on Tour** (1,000+), **kill the
   "Other Events" under-1,000 section**, put everything including the 500s into
