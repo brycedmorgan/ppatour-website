@@ -1636,10 +1636,12 @@ export default async function EventPage({ params }: Params) {
               <p className="font-display text-xl uppercase leading-none text-ppa-navy">
                 Tickets Coming Soon
               </p>
+              {/* One template string, not JSX text beside {t.shortName}. A
+                  multi-line text node gets its leading whitespace trimmed by
+                  JSX, which rendered "Pickleball Masterstickets" — the source
+                  looked correct, so this is worth keeping as one string. */}
               <p className="mt-2 max-w-xl text-sm leading-relaxed text-ppa-navy/60">
-                {t.shortName} tickets aren&apos;t on sale yet. Prices and seating
-                go live here the moment they open — or join the list below and
-                we&apos;ll tell you.
+                {`${t.shortName} tickets aren’t on sale yet. Prices and seating go live here the moment they open — or join the list below and we’ll tell you.`}
               </p>
             </div>
           )}
