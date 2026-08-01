@@ -106,6 +106,28 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
     and won't match a spine event — it lands in the untagged-spend bucket `spend-by-event.js`
     already surfaces. Correct failure mode (visible, fixable) but **someone should add the
     international stops to the spine.**
+- **✅ BIO PASSTHROUGH SHIPPED (`67d71a6`)** — the bios were scraped once and froze; the stat rail
+  above them is live, so the same screen disagreed with itself. **Ben Johns read "188 Career
+  Titles" over "123+ PPA Tour titles … As of 2024"; Anna Leigh Waters read 181 against a live 196.**
+  `lib/bio-live.ts` substitutes the live medals figure wherever the prose states a career total.
+  **It is a REPLACER, never a writer** — only rewrites digits already in the sentence, needs a live
+  value to fire, and no-ops entirely when stats are unavailable, so an API outage returns the prose
+  untouched rather than blank. Also applied to the JSON-LD description (structured data Google
+  reads must not contradict the page).
+  - **⚠ "Titles" means two different things in these bios and only one tracks the API.** Three traps,
+    all found by dry-running the roster, all now guarded: **STREAK** ("16 consecutive mixed doubles
+    titles"), **PAREN** ("(31 titles together)"), **SCOPED** ("won 3 gold medals with Andrei").
+  - **⚠ The SCOPED guard silently did nothing at first** — a trailing `\b` after `with\s+[A-Z]` can
+    never match, because the capital is followed by a lowercase letter. Pesa Teoni's single-event
+    result was being rewritten into a career total. **Put the boundary on each alternative.**
+  - **⚠ The streak guard window is 30 chars BEFORE only.** A ±60 window let a "consecutive" from a
+    later clause suppress a valid substitution two clauses earlier — these bios are run-ons.
+  - Final dry run over all 180: **9 substitutions, all genuine career totals on 2 athletes;
+    2 correctly skipped.** Verified live: Johns' prose now reads 188 / 42 singles / 65 doubles
+    (42+65+81 = 188, matching the rail); ALW reads 196.
+  - **Ben Johns' career section was a bulleted list flattened into one unreadable run-on.**
+    Repunctuated into sentences — **number sets verified byte-identical before and after**, and the
+    digits are deliberately left as scraped so the passthrough still updates them at render.
 - **Jackalope marketing analytics — Bryce wants all four: per-event funnel, GA4 on first,
   forecasting, launch-day live board.** Plumbing already exists (`api/marketing/ga4.js`,
   `spend-by-event.js`, `pulse.js`, `api/reach/aggregate.js`) and all of it joins on the event
