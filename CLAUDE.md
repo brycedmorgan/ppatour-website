@@ -35,6 +35,64 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-01 — Launch audit: /rankings weight, bio scrape artifacts, analytics leak
+- **Audited the site as a fan, two days out from the Aug 5 launch.** Six findings; four are
+  fixed and pushed (`36cf945`, `7ea2ef0`), two need a person.
+- **⚠ /rankings was a 3.96 MB HTML document** — 2,556 images, DOMContentLoaded **14.0s**. It
+  renders the COMPLETE boards (Connor: "all the way"), so per-row markup IS the page. Three
+  fixes, zero visual change: avatars used `fill`+`sizes` (8 srcset candidates per image, 26%
+  of the document) → `width`/`height` gives 1x/2x; **the flag `<img>` had no `loading` attr so
+  ~2,000 circle-flag SVGs were fetched eagerly on first paint — that was the 14s**; row class
+  string + `grid-template-columns` were repeated 2,033× → hoisted to `.wpr-row` + a single
+  `--wpr-cols` custom property, plus `content-visibility:auto`.
+  **Measured on production: 3.96 → 2.04 MB (48%), DCL 14.0s → 5.3s, image requests 2,556 → 6.**
+- **⚠ Still 18,646 DOM nodes and 5.3s.** The rest is inherent to 2,033 rows — the structural
+  call (paginate, or top-N + "show all") is Connor's, since "all the way" was his ruling.
+- **Bio cleaner missed two scrape artifacts that reached published pages.** "Frequently Asked
+  Questions" is now a STOP header — 13 pages ended with *"Frequently Asked Questions About Kate
+  Fahey Is Kate Fahey on the PPA Tour? Yes, ..."*, and **Kate Fahey is the reigning women's
+  singles champ, linked from the homepage**. "Major League Pickleball" is a header on ben-johns
+  and **ordinary prose in 86 other bios**, so it needs a sentence-boundary guard — `PLAIN_HEADERS`
+  deliberately excludes the boundary set; listing it in both splits those 86 mid-sentence
+  (I did exactly that once, caught it in verification).
+  Verified across all 180: 0 non-200, all four artifacts 0/180, **every remaining paragraph is a
+  subset of the old text** (nothing invented), 38 pages shorter, 10,724 chars of boilerplate gone.
+- **⚠ MEASUREMENT LEAK — every preview/staging deploy was firing the production GA4 stream
+  (G-NKVE1BRLK7) and the production Meta Pixel.** The components only checked "is the ID set",
+  and it's set project-wide. Months of QA clicks and crawls landed in the property the business
+  reads. Both now gate on `ANALYTICS_ENABLED` (`lib/analytics.ts` → `NEXT_PUBLIC_SITE_INDEXABLE`),
+  which is already step 1 of the cutover runbook.
+- **Ported the tags the old site runs via GTM-KG5F7W6 that this rebuild never carried**: 2nd GA4
+  property `G-VFNFRP66Z5`, TikTok `D41T2AJC77U69K483TK0`, Clarity `vx8dxhws9k`, Hotjar `3598441`.
+  All ship **dark** — env + production + consent gated; IDs live in `docs/LAUNCH.md`, not in code.
+  **⚠ UserWay (accessibility widget, `YBUtdPKa3d`) is on ppatour.com and is NOT ported** — that
+  changes our accessibility posture at cutover and needs a decision, not an omission.
+- **Vercel Web Analytics + Speed Insights** added (Bryce enabled the project). Deliberately
+  outside the consent banner and the production gate — both cookieless. Speed Insights is the
+  one that matters: real-user Core Web Vitals per route, which GA4 can't report and which
+  /rankings and open issue #17 (mobile LCP 5.0s) need measured.
+- **/live** was rendering "LIVE NOW · MATCHES IN PROGRESS" + a WATCH LIVE button for an event
+  that ended **May 3**. `noindex` keeps it out of search, not out of the address bar. Now
+  redirects to /watch unless its event is genuinely running.
+- **Watch "As Seen On"** was a hard 5-col grid; withholding unconfirmed ESPN/NBC left 3 logos
+  and a dead grey block. Column count now follows the confirmed marks.
+- **⚠ NEEDS A PERSON, not code:**
+  - **10 of 17 partners have no logo** (Rate, Fasenra, Holland America, Joma, LT Pro 48, Park
+    Place, Selkirk, Reign Storm, Tixr, Acrytech) — they render as a blue dash + typed name.
+    **Fasenra presents the National Championships.** Sponsors will open this page Wednesday.
+  - **ben-johns reads 188 career titles in the stat rail and "123+ PPA Tour titles" in the bio**
+    (and 36 singles + 41 doubles = 77). Different scopes, probably — but it reads as a
+    contradiction on the most-visited profile.
+- **⚠ THE BIG ONE FOR JACKALOPE: the website does not speak the event-code spine.** Jackalope's
+  `api/marketing/spend-by-event.js` and `lib/ga4.js` both join marketing data to events by
+  parsing **`MMYY-SERIES-CITY`** out of campaign names. The site's `lib/utm.ts` emits page-type
+  labels instead — `utm_campaign=event|watch|rankings|sitewide`. So **every Buy-Tickets click
+  from launch week lands in GA4 unattributable to any event, and UTMs cannot be backfilled.**
+  Fixing `withUtm()` to carry the canonical code is the whole tie-in. Bryce's call on whether
+  it goes in before Wednesday.
+- **Next:** event-code UTMs (above) · set `GA4_SA_KEY` in Jackalope — `api/marketing/ga4.js` is
+  built but returns `configured:false` · sponsor logos · the /rankings pagination call.
+
 ### 2026-07-31 (pt. 6) — Be the Best in the footer, the WPR mark on Rankings
 - **Two real brand packs landed** (Bryce, via Dropbox) and are now on the site. Both were converted from
   Illustrator to **true vector SVG** and are hosted in Jackalope under `/brand-assets/marks/` as the
