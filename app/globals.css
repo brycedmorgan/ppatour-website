@@ -343,6 +343,136 @@ html[data-motion="on"] [data-reveal-group].is-revealed > * {
     @apply font-sans;
   }
 }
+/* ── World Pickleball Rankings rows ───────────────────────────────────────
+   /rankings renders the COMPLETE men's + women's boards — Connor's "all the
+   way", no cap — which is ~2,000 rows. At that multiplier the per-row markup
+   IS the page: the Tailwind class string and the inline grid-template were
+   1,382 KB and 89 KB of a 4.06 MB document. Both are hoisted here.
+
+   `--wpr-cols` is set once on the table container (RankingTable) and inherited,
+   so the header and every row share one declaration.
+
+   `content-visibility` is the other half: it lets the browser skip layout and
+   paint for rows scrolled out of view. `contain-intrinsic-size` supplies the
+   row height (2.5rem avatar + 2 × 0.625rem padding ≈ 59px) so the scrollbar
+   stays honest and anchoring doesn't jump while you scroll. */
+.wpr-row {
+  display: grid;
+  grid-template-columns: var(--wpr-cols);
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+}
+.wpr-row-link {
+  color: #fff;
+  border-bottom: 1px solid rgb(255 255 255 / 0.05);
+  transition: background-color 150ms ease;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 59px;
+}
+.wpr-row-link:last-child {
+  border-bottom: 0;
+}
+.wpr-row-link:hover {
+  background-color: rgb(255 255 255 / 0.05);
+}
+
+/* Row internals. Same reason as above — each of these class strings was
+   repeated once per row, so they're worth more as CSS than as markup.
+   These are a 1:1 translation of the Tailwind they replace; if you restyle a
+   row, restyle it here. */
+.wpr-avatar {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 9999px;
+  background-color: var(--color-ppa-navy-deep);
+}
+.wpr-shot {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+.wpr-initials {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgb(255 255 255 / 0.7);
+}
+.wpr-flag {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 1rem;
+  width: 1rem;
+  border-radius: 9999px;
+  box-shadow: 0 0 0 1px var(--color-ppa-navy);
+}
+/* Rank chip. Hannah 7/28: no medal colours — the top five read as a block in
+   tour yellow, No. 1 solid. `.is-1` / `.is-top5` are the only variants; an
+   unranked-position chip carries neither. */
+.wpr-badge {
+  display: inline-flex;
+  height: 1.75rem;
+  min-width: 1.75rem;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 0.375rem;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  background-color: rgb(255 255 255 / 0.1);
+  color: rgb(255 255 255 / 0.55);
+}
+.wpr-badge.is-1 {
+  background-color: var(--color-ppa-yellow);
+  color: var(--color-ppa-navy);
+}
+.wpr-badge.is-top5 {
+  background-color: transparent;
+  border: 1px solid rgb(from var(--color-ppa-yellow) r g b / 0.6);
+  color: var(--color-ppa-yellow);
+}
+.wpr-player {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.75rem;
+}
+.wpr-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  transition: color 150ms ease;
+}
+.group:hover .wpr-name {
+  color: var(--color-ppa-sky);
+}
+.wpr-pts {
+  text-align: right;
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ppa-sky);
+}
+.wpr-prize {
+  text-align: right;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: rgb(255 255 255 / 0.55);
+}
+
 /* ── Event-page chrome behavior (Connor, 7/20) ────────────────────────────
    While an event page's tab bar owns the top edge (EventTabNav stamps
    `data-event-nav-scrolled` on <html> past the hero), the site chrome

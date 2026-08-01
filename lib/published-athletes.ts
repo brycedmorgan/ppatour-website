@@ -125,6 +125,7 @@ const KEEP_ORDER = [
   "Background",
   "Playing Style & Strengths",
   "Playing Style",
+  "Major League Pickleball",
   "Career Highlights",
   "Career Achievements",
   "Notable Achievements",
@@ -133,8 +134,46 @@ const KEEP_ORDER = [
   "Personal Life",
   "Personal",
 ];
-const STOP_HEADERS = ["Related Articles", "Off the Court", "Off Court"];
+/**
+ * Everything from one of these to the end of the bio is dropped.
+ *
+ * "Frequently Asked Questions" is the SEO Q&A block the old WordPress profiles
+ * carried under the biography. It's in 32 raw bios and, unrecognised, it read
+ * as prose — 13 published pages ended with sentences like "Frequently Asked
+ * Questions About Kate Fahey Is Kate Fahey on the PPA Tour? Yes, Kate Fahey is
+ * a professional pickleball player…". It is never body copy; stop at it.
+ */
+const STOP_HEADERS = [
+  "Related Articles",
+  "Frequently Asked Questions",
+  "Off the Court",
+  "Off Court",
+];
+
+/**
+ * Headers that are ALSO ordinary prose, so they only count as a header at a
+ * sentence boundary followed by a new capitalised clause.
+ *
+ * ⚠ "Major League Pickleball" appears in 87 raw bios and in 86 of them it is an
+ * inline mention ("competes in Major League Pickleball (MLP)"). Matching it the
+ * way the other headers are matched would split 86 bios mid-sentence. Verified
+ * against the full roster: this rule fires on ben-johns only — the one bio where
+ * it genuinely is a section header — and leaves the other 86 untouched.
+ */
+const BOUNDARY_HEADERS = ["Major League Pickleball"];
+
+/**
+ * Every recognised header — used to canonicalise a matched header string and to
+ * decide which sections survive.
+ *
+ * ⚠ `PLAIN_HEADERS` is what the unguarded half of the splitter matches, and it
+ * MUST exclude `BOUNDARY_HEADERS`. A boundary header listed here would be
+ * matched anywhere, which is precisely what it's meant to avoid: with
+ * "Major League Pickleball" left in this alternation, 86 bios split mid-sentence
+ * on their ordinary "competes in Major League Pickleball (MLP)" mention.
+ */
 const ALL_HEADERS = ["Quick Facts", ...KEEP_ORDER, ...STOP_HEADERS];
+const PLAIN_HEADERS = ALL_HEADERS.filter((h) => !BOUNDARY_HEADERS.includes(h));
 const STOP = new Set(STOP_HEADERS);
 
 const norm = (s: string | null | undefined) => (s || "").replace(/\s+/g, " ").trim();
@@ -170,17 +209,31 @@ function dedupeKey(s: string): string {
 }
 
 // Built once.
+const rx = (h: string) =>
+  h
+    .replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+    .replace(/ /g, "\\s+")
+    .replace(/&/g, "(?:&|and)");
+
+/**
+ * Two alternations, because the two header classes need different guards:
+ * group 1 is the unambiguous headers (match anywhere), group 2 the
+ * prose-colliding ones (sentence boundary + a following capital only).
+ * Read `match[1] ?? match[2]` at the call site.
+ */
 const HEADER_SPLITTER = (() => {
-  const pattern = ALL_HEADERS.slice()
+  const plain = PLAIN_HEADERS.slice()
     .sort((a, b) => b.length - a.length)
-    .map((h) =>
-      h
-        .replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
-        .replace(/ /g, "\\s+")
-        .replace(/&/g, "(?:&|and)"),
-    )
+    .map(rx)
     .join("|");
-  return new RegExp(`\\s+(${pattern})\\s+`, "g");
+  const bounded = BOUNDARY_HEADERS.slice()
+    .sort((a, b) => b.length - a.length)
+    .map(rx)
+    .join("|");
+  return new RegExp(
+    `\\s+(${plain})\\s+|(?<=[.!?])\\s+(${bounded})\\s+(?=[A-Z])`,
+    "g",
+  );
 })();
 
 function cleanBio(rawBio: string | null, name: string): { headline: string | null; paragraphs: string[] } {
@@ -194,7 +247,7 @@ function cleanBio(rawBio: string | null, name: string): { headline: string | nul
   HEADER_SPLITTER.lastIndex = 0;
   while ((match = HEADER_SPLITTER.exec(text)) !== null) {
     segs.push({ type: "body", text: text.slice(prev, match.index) });
-    segs.push({ type: "header", text: norm(match[1]) });
+    segs.push({ type: "header", text: norm(match[1] ?? match[2]) });
     prev = HEADER_SPLITTER.lastIndex;
   }
   segs.push({ type: "body", text: text.slice(prev) });
@@ -230,10 +283,51 @@ function cleanBio(rawBio: string | null, name: string): { headline: string | nul
   const order = ["__intro", ...KEEP_ORDER];
   const seen = new Set<string>();
   const paragraphs: string[] = [];
+  const first = name.split(" ")[0] ?? "";
+  /** A question that names the subject is an SEO FAQ item, never bio prose. */
+  const isFaqQuestion = (s: string) =>
+    s.trimEnd().endsWith("?") &&
+    ((name.length > 0 && s.includes(name)) || (first.length > 2 && s.includes(first)));
+
+  /**
+   * FAQ answers are only dropped when they're boilerplate — a restatement of
+   * something the profile already says.
+   *
+   * ⚠ Do NOT drop every answer. Some carry facts that appear nowhere else:
+   * Anna Leigh Waters' "181 gold medals and 39 Triple Crowns" is the answer to
+   * "How many titles has she won?" and is the ONLY place that number lives.
+   * Dropping answers wholesale silently deleted it.
+   */
+  const isBoilerplateAnswer = (s: string) =>
+    /^(?:yes|no)\b/i.test(s) ||
+    /^check the (?:ppa )?tour schedule/i.test(s) ||
+    /is a professional pickleball player/i.test(s) ||
+    /competes in [^.]*on the ppa tour\.?$/i.test(s) ||
+    /\bplays with (?:a|the)\b/i.test(s);
+
+
   for (const key of order) {
     if (!buckets[key]) continue;
     const kept: string[] = [];
-    for (const s of splitSentences(buckets[key])) {
+    const sentences = splitSentences(buckets[key]);
+    let dropAnswer = false;
+    for (const s of sentences) {
+      /**
+       * SEO FAQ pairs, dropped a pair at a time rather than by truncating.
+       *
+       * ⚠ Do NOT "stop at the first question" — 35 bios carry real closing
+       * prose ("He continues to develop his game…") AFTER a FAQ item, and
+       * truncating would eat it. Each question takes exactly its own next
+       * sentence, which is the answer; anything else survives.
+       */
+      if (isFaqQuestion(s)) {
+        dropAnswer = true;
+        continue;
+      }
+      const wasAnswer = dropAnswer;
+      dropAnswer = false;
+      if (wasAnswer && isBoilerplateAnswer(s)) continue;
+
       const k = dedupeKey(s);
       // Drop dupes, tiny fragments, and leftover "Paddle:" boilerplate
       // (the paddle lives in structured quickInfo).

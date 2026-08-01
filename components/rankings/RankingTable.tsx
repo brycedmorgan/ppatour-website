@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { RankingEntry } from "@/lib/rankings-api";
@@ -25,23 +26,39 @@ function fmtPrize(n: number): string {
   return `$${Math.round(n).toLocaleString()}`;
 }
 
+/**
+ * Row avatar.
+ *
+ * ⚠ Both image choices here are payload decisions, not style ones — this table
+ * renders the COMPLETE boards (Connor: "all the way", no cap), so every byte
+ * and every request is multiplied by ~2,000 rows. Measured on the live page
+ * before this change: 4.06 MB of HTML and 2,555 images.
+ *
+ *  - `width`/`height` instead of `fill`. A fixed-size square doesn't need a
+ *    responsive srcset: `fill` + `sizes` emitted **8 candidate URLs** per
+ *    avatar (~2 KB of markup each, 1,037 KB / 26% of the document). With
+ *    intrinsic dimensions next/image emits 1x/2x only.
+ *  - `loading="lazy"` on the flag. It was absent, so the browser fetched
+ *    **all ~2,000 circle-flag SVGs eagerly** on first paint — the single
+ *    biggest reason DOMContentLoaded was 14s.
+ */
 function Avatar({ entry, size }: { entry: RankingEntry; size: number }) {
   const flag = flagUrl(entry.countryCode);
   return (
     <span
-      className="relative shrink-0 overflow-hidden rounded-full bg-ppa-navy-deep"
+      className="wpr-avatar"
       style={{ width: size, height: size }}
     >
       {entry.headshot ? (
         <Image
           src={entry.headshot}
           alt={entry.name}
-          fill
-          sizes={`${size}px`}
-          className="object-cover object-top"
+          width={size}
+          height={size}
+          className="wpr-shot"
         />
       ) : (
-        <span className="flex h-full w-full items-center justify-center text-xs font-bold text-white/70">
+        <span className="wpr-initials">
           {initials(entry.name)}
         </span>
       )}
@@ -51,7 +68,11 @@ function Avatar({ entry, size }: { entry: RankingEntry; size: number }) {
         <img
           src={flag}
           alt=""
-          className="absolute bottom-0 right-0 size-4 rounded-full ring-1 ring-ppa-navy"
+          width={16}
+          height={16}
+          loading="lazy"
+          decoding="async"
+          className="wpr-flag"
         />
       )}
     </span>
@@ -66,13 +87,13 @@ function Avatar({ entry, size }: { entry: RankingEntry; size: number }) {
 function RankBadge({ rank, tied }: { rank: number; tied: boolean }) {
   const style =
     rank === 1
-      ? "bg-ppa-yellow text-ppa-navy"
+      ? "is-1"
       : rank <= 5
-        ? "border border-ppa-yellow/60 text-ppa-yellow"
-        : "bg-white/10 text-white/55";
+        ? "is-top5"
+        : "";
   return (
     <span
-      className={`inline-flex h-7 min-w-7 items-center justify-center px-1.5 font-display text-sm tabular-nums ${style}`}
+      className={`wpr-badge ${style}`}
     >
       {tied ? `T${rank}` : rank}
     </span>
@@ -87,11 +108,16 @@ export function RankingTable({ entries }: { entries: RankingEntry[] }) {
     .join(" ");
 
   return (
-    <div className="border border-white/10">
-      <div
-        className="grid items-center gap-3 border-b border-white/10 bg-ppa-navy-deep px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45"
-        style={{ gridTemplateColumns: gridTemplate }}
-      >
+    /* The column template is declared ONCE as a custom property on the
+       container and inherited by `.wpr-row`. It used to be an inline
+       `style="grid-template-columns:…"` repeated on the header and every row —
+       2,035 copies, 89 KB. Same for the row class string: `.wpr-row` carries
+       what was a ~120-char Tailwind repetition on every row. */
+    <div
+      className="border border-white/10"
+      style={{ "--wpr-cols": gridTemplate } as CSSProperties}
+    >
+      <div className="wpr-row border-b border-white/10 bg-ppa-navy-deep text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
         <span>#</span>
         <span>Player</span>
         <span className="text-right">Points</span>
@@ -103,23 +129,22 @@ export function RankingTable({ entries }: { entries: RankingEntry[] }) {
           href={e.profileUrl}
           target={e.hasLocalProfile ? undefined : "_blank"}
           rel={e.hasLocalProfile ? undefined : "noopener noreferrer"}
-          className="group grid items-center gap-3 border-b border-white/5 px-4 py-2.5 text-white transition-colors last:border-b-0 hover:bg-white/5"
-          style={{ gridTemplateColumns: gridTemplate }}
+          className="wpr-row wpr-row-link group"
         >
           <span>
             <RankBadge rank={e.rank} tied={e.isTied} />
           </span>
-          <span className="flex min-w-0 items-center gap-3">
+          <span className="wpr-player">
             <Avatar entry={e} size={38} />
-            <span className="min-w-0 truncate text-sm font-bold uppercase tracking-wide transition-colors group-hover:text-ppa-sky">
+            <span className="wpr-name">
               {e.name}
             </span>
           </span>
-          <span className="text-right text-sm font-bold tabular-nums text-ppa-sky">
+          <span className="wpr-pts">
             {fmtPoints(e.points)}
           </span>
           {showPrize && (
-            <span className="text-right text-xs tabular-nums text-white/55">
+            <span className="wpr-prize">
               {e.prizeMoney > 0 ? fmtPrize(e.prizeMoney) : "—"}
             </span>
           )}
