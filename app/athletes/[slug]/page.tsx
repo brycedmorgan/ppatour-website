@@ -18,6 +18,7 @@ import {
   getWprRoster,
 } from "@/lib/rankings-api";
 import { getAthleteStats } from "@/lib/athlete-stats";
+import { reconcileBio } from "@/lib/bio-live";
 import { getDivisionRanks } from "@/lib/division-rankings";
 import { getAthleteVideoData } from "@/lib/athlete-videos";
 import { AthleteVideos } from "@/components/athletes/AthleteVideos";
@@ -171,6 +172,15 @@ export default async function AthletePage({ params }: Params) {
   // per-division World Pickleball rankings. Null/empty when the API is
   // unavailable — the stats section simply hides.
   const stats = await getAthleteStats(slug);
+
+  /**
+   * Bio passthrough — reconcile the scraped prose against the live medals feed
+   * before it renders. The stat rail immediately above the bio is live, so
+   * without this the two disagree on the same screen: Ben Johns read "188
+   * Career Titles" over "123+ PPA Tour titles … As of 2024". Substitution only;
+   * see lib/bio-live.ts for why streaks and partner counts are left alone.
+   */
+  const bioParagraphs = reconcileBio(a.bio, stats).paragraphs;
   const divRanks = await getDivisionRanks(
     slug,
     a.gender === "male" || a.gender === "female" ? a.gender : null,
@@ -249,7 +259,9 @@ export default async function AthletePage({ params }: Params) {
             nationality: a.country,
             image: a.headshot,
             url: `${SITE_URL}/athletes/${a.slug}`,
-            description: a.bio.join(" "),
+            // Reconciled, not raw — this is structured data Google reads, so it
+            // must not publish a title count the page itself contradicts.
+            description: bioParagraphs.join(" "),
             memberOf: {
               "@type": "Organization",
               name: "Carvana PPA Tour",
@@ -361,7 +373,7 @@ export default async function AthletePage({ params }: Params) {
                 About {a.name}
               </h2>
               <div className="mt-4 space-y-4 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
-                {a.bio.map((para, i) => (
+                {bioParagraphs.map((para, i) => (
                   <p key={i}>{para}</p>
                 ))}
               </div>
