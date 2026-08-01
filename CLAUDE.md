@@ -90,7 +90,31 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   from launch week lands in GA4 unattributable to any event, and UTMs cannot be backfilled.**
   Fixing `withUtm()` to carry the canonical code is the whole tie-in. Bryce's call on whether
   it goes in before Wednesday.
-- **Next:** event-code UTMs (above) · set `GA4_SA_KEY` in Jackalope — `api/marketing/ga4.js` is
+- **✅ EVENT-CODE UTMs SHIPPED (`afd6f88`)** — Bryce called it for before Wednesday. New
+  `lib/event-code.ts` derives the canonical **`MMYY-PPA-CITY-ST-USA`** code (validated against
+  all 35 dated US PPA rows in Jackalope's `lib/spine-match.js` — 35/35, 0 mismatches), and it's
+  a derived `Tournament.eventCode` set in BOTH builders so the curated and API paths can't drift.
+  23 `withUtm` call sites moved off `t.slug`; `TicketGrid`'s `slug` prop became `campaign`; new
+  `withCampaign()` stamps the code onto module-level partner links (PBTV) that can't know which
+  event page they're on. **Verified live: every event-linked outbound click carries
+  `0926-PPA-CARY-NC-USA`, zero `utm_campaign=event` left.**
+  - **⚠ SERIES is the tour brand `PPA`, never the tier** (Bryce corrected my first draft, which
+    used MAJOR). Every stop is PPA whether it's a Major, a Cup or a 125.
+  - **⚠ MMYY is the END date.** Atlanta runs Apr 27 – May 3 and codes `0526`, not `0426`.
+    Parsed as text so no timezone can roll the month.
+  - **⚠ The spine has NO international PPA codes.** Melbourne derives `0726-PPA-MELBOURNE-AUS`
+    and won't match a spine event — it lands in the untagged-spend bucket `spend-by-event.js`
+    already surfaces. Correct failure mode (visible, fixable) but **someone should add the
+    international stops to the spine.**
+- **Jackalope marketing analytics — Bryce wants all four: per-event funnel, GA4 on first,
+  forecasting, launch-day live board.** Plumbing already exists (`api/marketing/ga4.js`,
+  `spend-by-event.js`, `pulse.js`, `api/reach/aggregate.js`) and all of it joins on the event
+  code, which the website now emits. **⚠ BLOCKED: `GA4_SA_KEY` is unset, so `api/marketing/ga4.js`
+  returns `configured:false`** — a GA4 service-account key plus Viewer on properties 358407319
+  (PPA - GA4) and the second property behind `G-VFNFRP66Z5`. Nothing website-side reaches
+  Jackalope until that lands. Funnel + live board are next once it does; forecasting needs a
+  couple of completed events of history first.
+- **Next:** set `GA4_SA_KEY` in Jackalope — `api/marketing/ga4.js` is
   built but returns `configured:false` · sponsor logos · the /rankings pagination call.
 
 ### 2026-07-31 (pt. 6) — Be the Best in the footer, the WPR mark on Rankings
