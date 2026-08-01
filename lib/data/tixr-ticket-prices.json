@@ -1,7 +1,7 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-07-31T21:10:30Z",
+  "generated_at": "2026-08-01T14:22:10Z",
   "event_count": 61,
   "ticket_type_count": 864,
   "series_breakdown": {
@@ -2618,13 +2618,6 @@
           "name": "Thursday VIP",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 300,
-          "all_in_price": 329.54
-        },
-        {
-          "name": "Thursday VIP",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 350,
           "all_in_price": 383.56
         },
@@ -2634,6 +2627,13 @@
           "sale_state": "OPEN",
           "base_price": 400,
           "all_in_price": 437.59
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 329.54
         }
       ],
       "parent_event_id": "195027"

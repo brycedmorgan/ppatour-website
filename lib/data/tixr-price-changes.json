@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-31T21:10:30Z",
+  "updated_at": "2026-08-01T14:22:10Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -320,6 +320,32 @@
       "all_in_price": {
         "from": 156.66,
         "to": 135.05
+      }
+    },
+    {
+      "at": "2026-08-01T14:22:10Z",
+      "type": "price_change",
+      "event_id": "195336",
+      "event": "PPA Mesa Thursday - Round of 16",
+      "ticket": "Thursday VIP",
+      "base_price": {
+        "from": 400,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 437.59,
+        "to": 329.54
+      }
+    },
+    {
+      "at": "2026-08-01T14:22:10Z",
+      "type": "availability_change",
+      "event_id": "195336",
+      "event": "PPA Mesa Thursday - Round of 16",
+      "ticket": "Thursday VIP",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
       }
     }
   ]
