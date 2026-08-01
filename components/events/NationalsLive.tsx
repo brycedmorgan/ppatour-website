@@ -30,7 +30,7 @@ import {
   eventTierShort,
   tournaments,
 } from "@/lib/placeholder-data";
-import { withUtm } from "@/lib/utm";
+import { withUtm, withCampaign } from "@/lib/utm";
 import { TicketGrid } from "@/components/events/TicketGrid";
 import type { TicketGrid as TicketGridData } from "@/lib/ticket-grid-view";
 import { matchdayPrimary } from "@/lib/matchday";
@@ -271,11 +271,11 @@ export function NationalsLive({
     gates: days[0]?.gates ?? "an hour before first serve",
     ticketFrom: t.ticketPriceFrom,
     ticketsUrl: withUtm(t.ticketsUrl, {
-      campaign: t.slug,
+      campaign: t.eventCode ?? t.slug,
       content: "event-concierge-tickets",
     }),
     registerUrl: withUtm(t.registerUrl, {
-      campaign: t.slug,
+      campaign: t.eventCode ?? t.slug,
       content: "event-concierge-register",
     }),
     parking: guide?.parking,
@@ -461,7 +461,7 @@ export function NationalsLive({
                   Live Scores ↓
                 </a>
                 <a
-                  href={withUtm(t.ticketsUrl, { campaign: t.slug, content: "event-hero-buy-tickets" })}
+                  href={withUtm(t.ticketsUrl, { campaign: t.eventCode ?? t.slug, content: "event-hero-buy-tickets" })}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
@@ -478,7 +478,7 @@ export function NationalsLive({
             ) : (
               <>
                 <a
-                  href={withUtm(t.ticketsUrl, { campaign: t.slug, content: "event-hero-buy-tickets" })}
+                  href={withUtm(t.ticketsUrl, { campaign: t.eventCode ?? t.slug, content: "event-hero-buy-tickets" })}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex h-11 items-center justify-center bg-[var(--event-accent)] px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:brightness-90 active:scale-[0.98]"
@@ -486,7 +486,7 @@ export function NationalsLive({
                   Buy Tickets — from ${t.ticketPriceFrom}
                 </a>
                 <a
-                  href={withUtm(t.registerUrl, { campaign: t.slug, content: "event-hero-register" })}
+                  href={withUtm(t.registerUrl, { campaign: t.eventCode ?? t.slug, content: "event-hero-register" })}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
@@ -927,7 +927,7 @@ export function NationalsLive({
                 {realSchedule.amateurNote}{" "}
                 <a
                   href={withUtm(t.registerUrl, {
-                    campaign: t.slug,
+                    campaign: t.eventCode ?? t.slug,
                     content: "event-schedule-register",
                   })}
                   target="_blank"
@@ -1073,7 +1073,7 @@ export function NationalsLive({
                 <p className="mt-1.5 text-xs text-white/60">{w.note}</p>
                 {w.href ? (
                   <a
-                    href={w.href}
+                    href={withCampaign(w.href, t.eventCode)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mt-3 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-yellow hover:text-white"
@@ -1474,7 +1474,7 @@ export function NationalsLive({
                 note: "Brackets by skill + age · from $89 per division · medals on Championship Court",
                 cta: "Register to Play",
                 href: withUtm(t.registerUrl, {
-                  campaign: t.slug,
+                  campaign: t.eventCode ?? t.slug,
                   content: "event-involved-register",
                 }),
                 external: true,
@@ -1555,7 +1555,7 @@ export function NationalsLive({
             </div>
             <a
               href={withUtm(t.registerUrl, {
-                campaign: t.slug,
+                campaign: t.eventCode ?? t.slug,
                 content: "event-tickets-register",
               })}
               target="_blank"
@@ -1567,7 +1567,7 @@ export function NationalsLive({
           </div>
 
           {showGrid && ticketGrid && (
-            <TicketGrid grid={ticketGrid} slug={t.slug} />
+            <TicketGrid grid={ticketGrid} campaign={t.eventCode ?? t.slug} />
           )}
 
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -1588,7 +1588,7 @@ export function NationalsLive({
                 </p>
                 <a
                   href={withUtm(t.ticketsUrl, {
-                    campaign: t.slug,
+                    campaign: t.eventCode ?? t.slug,
                     content: `event-tickets-${tier.name.toLowerCase().replace(/\s+/g, "-")}`,
                   })}
                   target="_blank"

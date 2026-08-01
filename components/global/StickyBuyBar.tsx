@@ -81,7 +81,7 @@ export function StickyBuyBar() {
     ? liveWatchUrl(ordered)
     : next.ticketsOnSale
       ? withUtm(next.ticketsUrl, {
-          campaign: next.slug,
+          campaign: next.eventCode ?? next.slug,
           content: "sticky-buy-bar",
         })
       : eventHref(next);

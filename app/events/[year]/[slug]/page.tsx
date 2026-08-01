@@ -43,7 +43,7 @@ import {
   type Tournament,
   tournaments,
 } from "@/lib/placeholder-data";
-import { withUtm } from "@/lib/utm";
+import { withUtm, withCampaign } from "@/lib/utm";
 import { matchdayPrimary } from "@/lib/matchday";
 import { admissionTiersFor, ticketsOnSale } from "@/lib/tixr-prices";
 import { buildTicketGrid } from "@/lib/ticket-grid";
@@ -327,10 +327,10 @@ export default async function EventPage({ params }: Params) {
     // tickets aren't on sale.
     ticketFrom: onSale ? t.ticketPriceFrom : null,
     ticketsUrl: onSale
-      ? withUtm(t.ticketsUrl, { campaign: t.slug, content: "event-concierge-tickets" })
+      ? withUtm(t.ticketsUrl, { campaign: t.eventCode ?? t.slug, content: "event-concierge-tickets" })
       : null,
     registerUrl: withUtm(t.registerUrl, {
-      campaign: t.slug,
+      campaign: t.eventCode ?? t.slug,
       content: "event-concierge-register",
     }),
     parking: guide?.parking,
@@ -494,7 +494,7 @@ export default async function EventPage({ params }: Params) {
                   </a>
                 )}
                 <a
-                  href="https://www.pickleballtv.com/?utm_source=ppatour&utm_medium=website&utm_campaign=event&utm_content=event-hero-replays"
+                  href={withCampaign("https://www.pickleballtv.com/?utm_source=ppatour&utm_medium=website&utm_campaign=event&utm_content=event-hero-replays", t.eventCode)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
@@ -514,7 +514,7 @@ export default async function EventPage({ params }: Params) {
               <>
                 {onSale ? (
                   <a
-                    href={withUtm(t.ticketsUrl, { campaign: t.slug, content: "event-hero-buy-tickets" })}
+                    href={withUtm(t.ticketsUrl, { campaign: t.eventCode ?? t.slug, content: "event-hero-buy-tickets" })}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex h-11 items-center justify-center bg-[var(--event-accent)] px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:brightness-90 active:scale-[0.98]"
@@ -528,7 +528,7 @@ export default async function EventPage({ params }: Params) {
                   </span>
                 )}
                 <a
-                  href={withUtm(t.registerUrl, { campaign: t.slug, content: "event-hero-register" })}
+                  href={withUtm(t.registerUrl, { campaign: t.eventCode ?? t.slug, content: "event-hero-register" })}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
@@ -563,7 +563,7 @@ export default async function EventPage({ params }: Params) {
         ticketsUrl={
           completed || !onSale
             ? undefined
-            : withUtm(t.ticketsUrl, { campaign: t.slug, content: "event-tabnav-buy-tickets" })
+            : withUtm(t.ticketsUrl, { campaign: t.eventCode ?? t.slug, content: "event-tabnav-buy-tickets" })
         }
         ticketPriceFrom={completed || !onSale ? undefined : t.ticketPriceFrom}
       />
@@ -913,7 +913,7 @@ export default async function EventPage({ params }: Params) {
                 {realSchedule.amateurNote}{" "}
                 <a
                   href={withUtm(t.registerUrl, {
-                    campaign: t.slug,
+                    campaign: t.eventCode ?? t.slug,
                     content: "event-schedule-register",
                   })}
                   target="_blank"
@@ -1062,7 +1062,7 @@ export default async function EventPage({ params }: Params) {
                 <p className="mt-1.5 text-xs text-white/60">{w.note}</p>
                 {w.href ? (
                   <a
-                    href={w.href}
+                    href={withCampaign(w.href, t.eventCode)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mt-3 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-yellow hover:text-white"
@@ -1552,7 +1552,7 @@ export default async function EventPage({ params }: Params) {
                 note: "Brackets by skill + age · from $89 per division · medals on Championship Court",
                 cta: "Register to Play",
                 href: withUtm(t.registerUrl, {
-                  campaign: t.slug,
+                  campaign: t.eventCode ?? t.slug,
                   content: "event-involved-register",
                 }),
                 external: true,
@@ -1638,7 +1638,7 @@ export default async function EventPage({ params }: Params) {
             </div>
             <a
               href={withUtm(t.registerUrl, {
-                campaign: t.slug,
+                campaign: t.eventCode ?? t.slug,
                 content: "event-tickets-register",
               })}
               target="_blank"
@@ -1669,7 +1669,7 @@ export default async function EventPage({ params }: Params) {
           {/* Day-by-day grid when Tixr sells the stop per day; the flat tier
               cards below are the fallback for stops it doesn't. */}
           {showGrid && ticketGrid && (
-            <TicketGrid grid={ticketGrid} slug={t.slug} />
+            <TicketGrid grid={ticketGrid} campaign={t.eventCode ?? t.slug} />
           )}
 
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -1690,7 +1690,7 @@ export default async function EventPage({ params }: Params) {
                 </p>
                 <a
                   href={withUtm(t.ticketsUrl, {
-                    campaign: t.slug,
+                    campaign: t.eventCode ?? t.slug,
                     content: `event-tickets-${tier.name.toLowerCase().replace(/\s+/g, "-")}`,
                   })}
                   target="_blank"

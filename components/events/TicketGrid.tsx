@@ -23,19 +23,23 @@ import { withUtm } from "@/lib/utm";
  */
 export function TicketGrid({
   grid,
-  slug,
+  campaign,
   accent = true,
 }: {
   grid: TicketGridData;
-  /** UTM campaign, so grid clicks are attributable per event. */
-  slug: string;
+  /**
+   * UTM campaign — the event's canonical `MMYY-PPA-CITY-ST-USA` code, so grid
+   * clicks are attributable to the event in Jackalope. Was the slug, which
+   * Jackalope's join cannot resolve. See lib/event-code.ts.
+   */
+  campaign: string;
   /** Use the event's brand accent for prices; false keeps it navy. */
   accent?: boolean;
 }) {
   const priceClass = accent ? "text-[var(--event-accent)]" : "text-ppa-navy";
 
   const buyHref = (cell: GridCell, content: string) =>
-    withUtm(cell.url, { campaign: slug, content });
+    withUtm(cell.url, { campaign, content });
 
   return (
     <div className="mt-6">
@@ -156,7 +160,7 @@ export function TicketGrid({
               <a
                 key={pass.name}
                 href={withUtm(pass.url, {
-                  campaign: slug,
+                  campaign,
                   content: `ticket-grid-multiday-${pass.level}`,
                 })}
                 target="_blank"

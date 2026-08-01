@@ -18,6 +18,7 @@
  * on any problem so the page always renders.
  */
 
+import { eventCode } from "@/lib/event-code";
 import {
   type EventTier,
   GENERIC_IMAGES,
@@ -277,6 +278,14 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     ticketsUrl: curated?.ticketsUrl ?? t.details_url,
     registerUrl: t.details_url || curated?.registerUrl || "",
     status,
+    // Same join key as the curated builder — an API-sourced event must be
+    // attributable in Jackalope too, so this is derived here rather than
+    // looked up in a static table.
+    eventCode: eventCode({
+      city: curated?.city ?? (t.venue_city || ""),
+      state: curated?.state ?? (t.venue_state || ""),
+      endDate,
+    }),
     tierKey: tier,
     // Sub-1,000 stops keep their real level (125 / 250 / 500) — the flat
     // Challenger tier reads 500 for all of them otherwise.

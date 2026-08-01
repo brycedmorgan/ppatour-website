@@ -43,6 +43,8 @@ export const TIER_META: Record<
  * org prefix, which `\b` alone never matched. That's why a 125-point Gold Coast
  * stop was being sold as a 1,000-point tour event (Connor, 7/29).
  */
+import { eventCode } from "@/lib/event-code";
+
 export function pointsFromName(name: string): number | null {
   const m = name.match(/(?:\b|PPA)P?(3000|2000|1500|1000|500|250|125)\b/i);
   return m ? Number(m[1]) : null;
@@ -83,6 +85,12 @@ export type Tournament = {
   ticketsUrl: string;
   registerUrl: string;
   status: "upcoming" | "live" | "completed";
+  /**
+   * Canonical `MMYY-PPA-CITY-ST-USA` code — the join key Jackalope parses out
+   * of `utm_campaign` to attribute marketing to this event. Derived, never
+   * hand-set; see lib/event-code.ts.
+   */
+  eventCode: string | null;
   tierKey: EventTier;
   /** Exact ranking points when the event name states them. Only set on
       sub-1,000 stops, where the flat `challenger` tier would otherwise sell a
@@ -398,6 +406,7 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
       ticketsUrl: COMMERCE_BY_SLUG[slug]?.tickets ?? TIXR,
       registerUrl: COMMERCE_BY_SLUG[slug]?.register ?? REGISTER,
       status: "upcoming" as const,
+      eventCode: eventCode({ city: r.city, state: r.state, endDate: r.end }),
       tierKey: tier,
       // Sub-1,000 stops keep their real level (125 / 250 / 500) — the flat
       // Challenger tier reads 500 for all of them otherwise.
@@ -508,7 +517,12 @@ const SCHEDULE: RawEvent[] = [
 ];
 
 // Recent completed events — power the /events Past tab + Season filter.
-const PAST_EVENTS: Tournament[] = [
+/**
+ * Completed events. Written without `eventCode` and stamped below — the code is
+ * derived from city/state/endDate, so hand-writing it 10 times would just be 10
+ * chances to typo the join key.
+ */
+const PAST_EVENTS: Tournament[] = ([
   {
     slug: "carvana-utah-open",
     name: "Carvana Utah Open",
@@ -673,7 +687,10 @@ const PAST_EVENTS: Tournament[] = [
     image: "/ppa/action-singles.jpg",
     season: "2022",
   },
-];
+] as Omit<Tournament, "eventCode">[]).map((e) => ({
+  ...e,
+  eventCode: eventCode(e),
+}));
 
 export const tournaments: Tournament[] = [
   ...buildSchedule(SCHEDULE, new Set(PAST_EVENTS.map((e) => e.slug))),

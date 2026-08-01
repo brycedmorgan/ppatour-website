@@ -18,3 +18,26 @@ export function withUtm(baseUrl: string, { campaign, content }: UtmParams): stri
   url.searchParams.set("utm_content", content);
   return url.toString();
 }
+
+/**
+ * Rewrite ONLY `utm_campaign` on a link that already carries its own UTMs.
+ *
+ * For partner links declared in module-level tables (PBTV, MATCHDAY) that are
+ * rendered on an event page: the table can't know which event it's on, so it
+ * ships a generic `utm_campaign=event`, and every partner click from every
+ * event page collapses into one unattributable bucket. This stamps the event's
+ * canonical code at render time and leaves `utm_content` — the placement label
+ * the table author chose — untouched.
+ *
+ * Returns the input unchanged if it isn't a parseable absolute URL.
+ */
+export function withCampaign(href: string, campaign: string | null | undefined): string {
+  if (!campaign) return href;
+  try {
+    const url = new URL(href);
+    url.searchParams.set("utm_campaign", campaign);
+    return url.toString();
+  } catch {
+    return href;
+  }
+}

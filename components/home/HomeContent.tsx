@@ -25,7 +25,8 @@ import {
   tierBadgeClass,
   type Tournament,
 } from "@/lib/placeholder-data";
-import {  explainers,
+import {
+  explainers,
   partners,
   playersToWatch,
 } from "@/lib/home-content";
@@ -561,7 +562,7 @@ export async function HomeContent({
                   href={
                     next.ticketsOnSale
                       ? withUtm(next.ticketsUrl, {
-                          campaign: next.slug,
+                          campaign: next.eventCode ?? next.slug,
                           content: "home-hero-buy-tickets",
                         })
                       : eventHref(next)
@@ -582,7 +583,7 @@ export async function HomeContent({
                 </a>
                 <a
                   href={withUtm(next.registerUrl, {
-                    campaign: next.slug,
+                    campaign: next.eventCode ?? next.slug,
                     content: "home-hero-register",
                   })}
                   target="_blank"

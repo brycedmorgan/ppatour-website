@@ -332,7 +332,7 @@ export default function WatchPage() {
             </Link>
             <a
               href={withUtm(next.ticketsUrl, {
-                campaign: next.slug,
+                campaign: next.eventCode ?? next.slug,
                 content: "watch-page-tickets",
               })}
               target="_blank"

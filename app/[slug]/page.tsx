@@ -218,7 +218,7 @@ export default async function ArticlePage({ params }: Params) {
             <div className="mt-9 flex flex-wrap gap-2.5 border-t border-ppa-line pt-6">
               <a
                 href={withUtm(next.ticketsUrl, {
-                  campaign: next.slug,
+                  campaign: next.eventCode ?? next.slug,
                   content: `article-${card.slug}`,
                 })}
                 target="_blank"
