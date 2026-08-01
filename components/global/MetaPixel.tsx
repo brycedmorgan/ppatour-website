@@ -3,6 +3,7 @@
 import Script from "next/script";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
+import { ANALYTICS_ENABLED } from "@/lib/analytics";
 
 /**
  * Meta Pixel, loaded only when NEXT_PUBLIC_META_PIXEL_ID is set (the active
@@ -21,7 +22,7 @@ export function MetaPixel() {
 
   useEffect(() => {
     // Skip the first render — the init script below fires the initial PageView.
-    if (!PIXEL_ID) return;
+    if (!ANALYTICS_ENABLED || !PIXEL_ID) return;
     if (!loaded.current) {
       loaded.current = true;
       return;
@@ -29,7 +30,8 @@ export function MetaPixel() {
     window.fbq?.("track", "PageView");
   }, [pathname]);
 
-  if (!PIXEL_ID) return null;
+  // Production domain only — previews were firing the live pixel.
+  if (!ANALYTICS_ENABLED || !PIXEL_ID) return null;
 
   return (
     <Script id="meta-pixel" strategy="lazyOnload">

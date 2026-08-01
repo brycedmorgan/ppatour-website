@@ -15,6 +15,33 @@ Measurement/SEO infrastructure status as of 2026-07-16.
 | Legacy 301s | `next.config.ts` | Every URL pattern from the old site's sitemaps. Inert until the domain moves. |
 | Staging noindex | `lib/site.ts` + robots | Site is noindex/disallow until the env vars below are set. |
 
+## Ported from the old site at the launch audit (2026-08-01)
+
+The current ppatour.com fires these through GTM container **GTM-KG5F7W6**,
+which this site deliberately does not load (gtag is wired directly so Consent
+Mode lives in code). Each one is now supported in `MarketingTags.tsx` /
+`Analytics.tsx` but **ships dark** — set the env var to turn it on.
+
+| Tag | Env var | ID on the live site |
+|---|---|---|
+| GA4 — second property | `NEXT_PUBLIC_GA_MEASUREMENT_ID_SECONDARY` | `G-VFNFRP66Z5` |
+| TikTok pixel | `NEXT_PUBLIC_TIKTOK_PIXEL_ID` | `D41T2AJC77U69K483TK0` |
+| Microsoft Clarity | `NEXT_PUBLIC_CLARITY_ID` | `vx8dxhws9k` |
+| Hotjar | `NEXT_PUBLIC_HOTJAR_ID` | `3598441` |
+
+⚠ **Clarity and Hotjar record real sessions.** They're consent-gated in code,
+but switching them on is a privacy call — get whoever owns the accounts to make
+it, don't just paste the IDs.
+
+⚠ **UserWay (accessibility widget, account `YBUtdPKa3d`) is on ppatour.com and
+is NOT ported.** Dropping it changes the site's accessibility posture at
+cutover. That needs a decision, not an omission — it is not wired up here.
+
+**Vercel Web Analytics + Speed Insights** are live in `app/layout.tsx`. Both are
+cookieless, so they sit outside the consent banner and outside the production
+gate — Speed Insights on previews is how a Core Web Vitals regression gets
+caught before it reaches the domain.
+
 ## At cutover (ordered)
 
 1. **Vercel env (production):**
@@ -24,6 +51,13 @@ Measurement/SEO infrastructure status as of 2026-07-16.
    ```
    Redeploy. This flips robots/meta-robots to indexable and moves the
    sitemap, canonical metadataBase, and JSON-LD URLs to ppatour.com.
+
+   ⚠ **It also switches the marketing tags on.** GA4, Meta, and anything in
+   `MarketingTags` are gated on `NEXT_PUBLIC_SITE_INDEXABLE` (see
+   `lib/analytics.ts`), because until the audit every preview and staging
+   deployment was reporting into the **production** GA4 stream and the
+   **production** Meta Pixel — months of QA clicks and crawls landing in the
+   property the business reads. Nothing reports until this flag is true.
 2. **Point the domain** at the Vercel project; verify the legacy 301s
    (`/schedule` → `/events`, `/athlete/ben-johns` → `/athletes/ben-johns`).
 3. **GA4** (property *PPA - GA4*, 358407319): update the "PPA Tour | New"

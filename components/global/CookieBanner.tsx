@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useSyncExternalStore } from "react";
+import { CONSENT_KEY, CONSENT_EVENT } from "@/lib/analytics";
 
-const STORAGE_KEY = "ppa-cookie-consent";
-const CONSENT_EVENT = "ppa-cookie-consent-change";
+/* Both live in lib/analytics.ts — MarketingTags subscribes to the same
+   event so Accept turns tags on immediately, without a page load. */
+const STORAGE_KEY = CONSENT_KEY;
 
 function subscribe(onChange: () => void) {
   window.addEventListener(CONSENT_EVENT, onChange);

@@ -112,6 +112,13 @@ const BROADCAST = [
   },
 ];
 
+/**
+ * Only networks confirmed in a broadcast sheet publish. ESPN/NBC stay out
+ * until Adam Friedman confirms them (launch item 10) — flip `confirmed: true`
+ * in AS_SEEN_ON to publish a mark.
+ */
+const confirmedNetworks = AS_SEEN_ON.filter((n) => n.confirmed);
+
 export default function WatchPage() {
   const next = getNextTournament();
   const countdown = daysUntil(next.startDate);
@@ -131,14 +138,26 @@ export default function WatchPage() {
             As Seen On
           </h1>
 
-          {/* The big five, in their real marks — white tiles because network
-              logos are colour-locked and a knocked-out version isn't ours to
-              make. */}
-          <div className="mt-6 grid grid-cols-2 gap-px bg-white/15 sm:grid-cols-3 lg:grid-cols-5">
-            {/* Only render networks confirmed in a broadcast sheet — ESPN/NBC
-                stay out until Adam Friedman confirms them (launch item 10).
-                Flip `confirmed: true` in AS_SEEN_ON to publish a mark. */}
-            {AS_SEEN_ON.filter((n) => n.confirmed).map((n) => (
+          {/* The confirmed networks in their real marks — white tiles because
+              network logos are colour-locked and a knocked-out version isn't
+              ours to make.
+
+              ⚠ The column count follows the number of confirmed marks. It was
+              a hard `lg:grid-cols-5` written when five networks were listed;
+              once ESPN and NBC were withheld (launch item 10) that left three
+              logos in a five-column grid and two empty cells reading as a dead
+              grey block across the top of the page. Confirming a network is
+              now the only edit needed — the grid re-flows itself. */}
+          <div
+            className={`mt-6 grid grid-cols-2 gap-px bg-white/15 sm:grid-cols-3 ${
+              confirmedNetworks.length >= 5
+                ? "lg:grid-cols-5"
+                : confirmedNetworks.length === 4
+                  ? "lg:grid-cols-4"
+                  : "lg:grid-cols-3"
+            }`}
+          >
+            {confirmedNetworks.map((n) => (
               <div
                 key={n.name}
                 className="flex min-h-[7rem] items-center justify-center bg-white px-5 py-7"

@@ -10,6 +10,9 @@ import { ScrollReveal } from "@/components/motion/ScrollReveal";
 import { Analytics } from "@/components/global/Analytics";
 import { OutboundClickTracker } from "@/components/global/OutboundClickTracker";
 import { MetaPixel } from "@/components/global/MetaPixel";
+import { MarketingTags } from "@/components/global/MarketingTags";
+import { Analytics as VercelAnalytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_INDEXABLE, SITE_URL } from "@/lib/site";
 
 /* Official brand font (Carvana PPA Tour brand guide): Gotham, used for both
@@ -91,7 +94,25 @@ export default function RootLayout({
         <ScrollReveal />
         <Analytics />
         <MetaPixel />
+        <MarketingTags />
         <OutboundClickTracker />
+        {/**
+         * Vercel Web Analytics + Speed Insights.
+         *
+         * Deliberately NOT behind the consent banner or the production gate,
+         * unlike everything above: both are cookieless and collect no personal
+         * data, which is the point of running them alongside GA4 rather than
+         * instead of it —
+         *   - Web Analytics counts the traffic GA4 loses to Decline and to ad
+         *     blockers, so launch day has an honest denominator.
+         *   - Speed Insights is real-user Core Web Vitals per route. GA4 cannot
+         *     report that, and it's what /rankings and the open mobile-LCP
+         *     issue actually need measured.
+         * Running on previews too is correct here — that's where regressions
+         * get caught before they reach the domain.
+         */}
+        <VercelAnalytics />
+        <SpeedInsights />
       </body>
     </html>
   );

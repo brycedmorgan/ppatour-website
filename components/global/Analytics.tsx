@@ -1,4 +1,5 @@
 import Script from "next/script";
+import { ANALYTICS_ENABLED } from "@/lib/analytics";
 
 /**
  * GA4 via gtag.js, loaded only when NEXT_PUBLIC_GA_MEASUREMENT_ID is set
@@ -16,7 +17,16 @@ export const GA_CONSENT_KEY = "ppa-cookie-consent";
 
 export function Analytics() {
   const id = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
-  if (!id) return null;
+  /**
+   * The second GA4 property the current ppatour.com reports to alongside the
+   * primary stream (it rides in GTM container GTM-KG5F7W6, which this site
+   * doesn't load). Without it that property goes dark at cutover.
+   */
+  const secondaryId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID_SECONDARY;
+
+  // Production domain only — see lib/analytics.ts. Previews must never report
+  // into the property the business reads.
+  if (!ANALYTICS_ENABLED || !id) return null;
 
   return (
     <>
@@ -35,6 +45,7 @@ export function Analytics() {
           });
           gtag("js", new Date());
           gtag("config", "${id}");
+          ${secondaryId ? `gtag("config", "${secondaryId}");` : ""}
         `}
       </Script>
       <Script
