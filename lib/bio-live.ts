@@ -85,8 +85,15 @@ function replaceCount(
   return text.replace(re, (match, prefix: string, digits: string, suffix: string, offset: number) => {
     if (notACareerTotal(text, offset, match.length)) return match;
     if (Number(digits) === live) return match;
-    log.push({ kind, from: match.trim(), to: `${prefix}${live}${suffix}`.trim() });
-    return `${prefix}${live}${suffix}`;
+    /**
+     * Drop a trailing "+". The scrape wrote "123+" to mean "at least 123",
+     * which was honest for a frozen number. The live figure is exact, so
+     * "188+" would be claiming an approximation we no longer need — and it
+     * reads as sloppy next to a stat rail showing a clean 188.
+     */
+    const tail = suffix.replace(/^\+/, "");
+    log.push({ kind, from: match.trim(), to: `${prefix}${live}${tail}`.trim() });
+    return `${prefix}${live}${tail}`;
   });
 }
 
