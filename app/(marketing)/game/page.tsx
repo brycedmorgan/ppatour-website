@@ -160,16 +160,33 @@ export default function GamePage() {
               <StoreButtons tone="dark" layout="grid" />
             </div>
           </div>
-          <div className="relative aspect-[4/3] w-full overflow-hidden border border-white/10">
-            <Image
-              src="/ppa/game/ppa-pickleball-tour-2025-video-game.webp"
-              alt="PPA Pickleball Tour 2025 key art"
-              fill
-              priority
-              sizes="(min-width: 1024px) 32rem, 100vw"
-              className="object-cover"
-            />
-          </div>
+          {/**
+           * The finished 30s commercial FarSight and the media team made in
+           * Oct 2025 (`1539 PPA Video Game Trailer V2`). It had never been on
+           * the website — it was cut for a PickleballTV run.
+           *
+           * ⚠ `preload="metadata"` and a real poster, NOT autoplay. The source
+           * is 62 MB of 1080p; this is a 1280px CRF-27 encode at 5.6 MB with
+           * faststart, and even that only downloads when someone presses play.
+           * Autoplaying it would undo the caching work on the rest of the site
+           * for a page most visitors will scroll past.
+           */}
+          <figure className="m-0">
+            <video
+              className="aspect-video w-full border border-white/10 bg-black"
+              controls
+              preload="metadata"
+              playsInline
+              poster="/ppa/game/trailer-poster.jpg"
+            >
+              <source src="/ppa/game/trailer.mp4" type="video/mp4" />
+              Your browser doesn&apos;t support embedded video.{" "}
+              <a href="/ppa/game/trailer.mp4">Download the trailer</a>.
+            </video>
+            <figcaption className="mt-2 text-[11px] uppercase tracking-[0.14em] text-white/40">
+              Official trailer · 0:30
+            </figcaption>
+          </figure>
         </div>
       </section>
 
