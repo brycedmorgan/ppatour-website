@@ -121,7 +121,14 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
       if (!inTime) return false;
 
       // Type — "all" is the whole PPA Tour (main draw + Challengers + international).
-      if (type === "main" && (t.region === "international" || t.tierKey === "challenger")) return false;
+      //
+      // ⚠ "main" tests POINTS, not just the tier key. The dropdown is labelled
+      // "The Tour · 1,000+ Pts", and app/events/page.tsx defines The Tour as
+      // `tierKey !== "challenger" && tierPoints(e) >= 1000` for the Next Six
+      // band. This filter previously checked only region + tierKey, so the two
+      // could disagree about the same event and the label was a claim the code
+      // didn't enforce. Same predicate in both places now.
+      if (type === "main" && (t.tierKey === "challenger" || tierPoints(t) < 1000)) return false;
       if (type === "challengers" && t.tierKey !== "challenger") return false;
       if (type === "international" && t.region !== "international") return false;
 
@@ -225,7 +232,29 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
               : t.externalUrl ?? t.registerUrl ?? t.ticketsUrl;
             return (
               <article
-                key={t.slug}
+                /**
+                 * ⚠ KEY MUST INCLUDE THE YEAR — `slug` alone is NOT unique.
+                 *
+                 * Ten slugs carry more than one record because they are annual
+                 * editions of the same event: carvana-mesa-cup exists for 2025,
+                 * 2026 AND 2027, pickleball-world-championships for 2025 and
+                 * 2026, ppa-finals for 2026 and 2027, and so on. The data is
+                 * right — an event's identity is year + slug, which is exactly
+                 * what `eventHref` builds (/events/[year]/[slug]).
+                 *
+                 * With duplicate keys React cannot reconcile the list, so cards
+                 * from the PREVIOUS filter state survive the re-render. That is
+                 * the whole of the three filter faults reported on 8/3:
+                 *   - Past + "The Tour 1,000+" showed three Challenger · 500
+                 *     cards (counter said 74, the DOM held 77)
+                 *   - Past + "Challengers" showed Veolia Atlanta Pickleball
+                 *     Championships and Mesa Cup (counter 47, DOM 54)
+                 *   - and it only misbehaved on some filter sequences, which is
+                 *     why it read as "filters break when you change them
+                 *     several times".
+                 * The counter was always right; the DOM was stale.
+                 */
+                key={`${t.startDate.slice(0, 4)}-${t.slug}`}
                 className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden bg-ppa-navy transition-transform duration-500 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1"
               >
                 <Image
