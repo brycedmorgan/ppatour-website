@@ -33,9 +33,25 @@ Mode lives in code). Each one is now supported in `MarketingTags.tsx` /
 but switching them on is a privacy call — get whoever owns the accounts to make
 it, don't just paste the IDs.
 
-⚠ **UserWay (accessibility widget, account `YBUtdPKa3d`) is on ppatour.com and
-is NOT ported.** Dropping it changes the site's accessibility posture at
-cutover. That needs a decision, not an omission — it is not wired up here.
+**UserWay (accessibility widget, account `YBUtdPKa3d`) — PORTED 8/3.** Lives in
+`components/global/AccessibilityWidget.tsx`, mounted in `app/layout.tsx`.
+
+Deliberately **not** in the table above, and deliberately **not** in
+`MarketingTags.tsx`, because all three of those gates are wrong for it:
+
+- **No consent gate.** Gating an accessibility toolbar behind "Accept cookies"
+  means a screen-reader or low-vision visitor who clicks Decline loses the one
+  feature built for them. It stores the visitor's own accessibility preferences —
+  functional, not tracking.
+- **No production gate.** Previews are where accessibility gets tested.
+- **Account ID is hardcoded** (with a `NEXT_PUBLIC_USERWAY_ACCOUNT` override)
+  rather than env-gated, so it cannot silently be absent at launch because nobody
+  set a Vercel var. Set `NEXT_PUBLIC_USERWAY_ACCOUNT=off` to disable it.
+
+⚠ Its button floats **bottom-left**, which is why `CookieBanner` and
+`StickyBuyBar` carry `pl-16` below `sm` — at 390px the button occupies x 13–57
+and was covering "We use cookies for analytics." Verified clear on both bars at
+390px and 1440px. If either bar's padding is ever refactored, re-check that.
 
 **Vercel Web Analytics + Speed Insights** are live in `app/layout.tsx`. Both are
 cookieless, so they sit outside the consent banner and outside the production

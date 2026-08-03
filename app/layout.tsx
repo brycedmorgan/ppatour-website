@@ -11,6 +11,7 @@ import { Analytics } from "@/components/global/Analytics";
 import { OutboundClickTracker } from "@/components/global/OutboundClickTracker";
 import { MetaPixel } from "@/components/global/MetaPixel";
 import { MarketingTags } from "@/components/global/MarketingTags";
+import { AccessibilityWidget } from "@/components/global/AccessibilityWidget";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_INDEXABLE, SITE_URL } from "@/lib/site";
@@ -131,6 +132,11 @@ export default function RootLayout({
          */}
         <VercelAnalytics />
         <SpeedInsights />
+        {/* UserWay accessibility toolbar. Sits here, outside the consent and
+            production gates, for the same reason the two above do — see the
+            component for why gating an accessibility widget behind cookie
+            consent would defeat it. */}
+        <AccessibilityWidget />
       </body>
     </html>
   );

@@ -61,7 +61,12 @@ export function CookieBanner() {
 
   return (
     <div ref={ref} className="fixed inset-x-0 bottom-0 z-40 bg-ppa-navy text-white">
-      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2 text-xs">
+      {/* `pl-16` below sm keeps this clear of the UserWay accessibility button,
+          which floats bottom-left over whatever bar is pinned there. Measured at
+          390px: the button occupies x 13–57, and at `px-4` the notice started at
+          x 16 — so "We use cookies" was rendering behind it. Desktop has room
+          already. */}
+      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-x-3 gap-y-1 py-2 pl-16 pr-4 text-xs sm:px-4">
         <span className="text-white/80">
           We use cookies for analytics.
         </span>

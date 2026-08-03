@@ -103,7 +103,10 @@ export function StickyBuyBar() {
           live ? "border-ppa-live" : "border-ppa-blue"
         }`}
       >
-        <div className="mx-auto flex h-14 w-full max-w-6xl items-center gap-3 px-4">
+        {/* pl-16 below sm for the same reason as CookieBanner: the UserWay
+            accessibility button floats bottom-left, and once the cookie banner
+            is dismissed this is the bar it sits on. */}
+        <div className="mx-auto flex h-14 w-full max-w-6xl items-center gap-3 pl-16 pr-4 sm:px-4">
           {live ? (
             <span className="flex shrink-0 items-center gap-1.5 bg-ppa-live px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.15em]">
               <span className="size-1.5 animate-pulse rounded-full bg-white" />
