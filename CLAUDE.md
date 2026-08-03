@@ -35,6 +35,36 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-03 (pt. 2) — ISR shipped: /rankings 34.8s -> 0.21s; Vacations front door
+- **✅ ISR IS LIVE AND VERIFIED.** `/` `/rankings` `/events` `/athletes` all serve
+  **`x-vercel-cache: HIT`**. `/rankings` TTFB **34.8s → 0.21s**.
+- **⚠ THE REAL CAUSE, AND IT IS A TRAP WORTH REMEMBERING.** Adding `export const revalidate`
+  fixed `/events` and `/athletes` but NOT `/` or `/rankings`. The Vercel build log settled it:
+  **both build `○` locally and `ƒ` in production.** The difference is `PB_API_TOKEN` — with a
+  token the rankings fetch actually runs, and **`lib/pb-fetch` retries a 429 with
+  `cache: "no-store"`**, which opts the whole route out of static generation. partner_rankings
+  rate-limits under build load (that retry is why the 7/31 caching work exists), so **whether the
+  homepage was CDN-cacheable came down to whether upstream throttled us mid-build.** It had been
+  losing. Fixed with `export const dynamic = "force-static"` on both — neither page reads cookies,
+  headers or searchParams, so nothing is lost. **Never trust a local `○` for a page that fetches.**
+- **`/watch` stays dynamic on purpose.** Its LiveScores boundary server-prefetches the ticker with
+  `no-store`. Caching that for 60s would put a stale score on the page whose job is live scores.
+  Dropping the prefetch would make it static (the component already polls CDN-cached
+  `/api/ticker`) but that is a live-scores decision, not a cleanup. Documented in the file.
+- **`/news` gets no ISR** — it reads `searchParams`, so it is dynamic regardless and a revalidate
+  export there would be a comment that lies.
+- **`/tour/travel` is now the Pickleball Vacations front door.** That trip is **0 of 20 rooms
+  against $102k** and the travel page was generic hotel copy that never mentioned it. Now leads
+  with Club Med Turkoise, Dec 8-12, clinics, ten courts, all-inclusive, then hands off.
+  **Deliberately NOT a port** — Vacations is its own Stripe checkout with a Jackalope room block,
+  and this site's rule is commerce redirects out. **No price quoted**, it lives in that project's
+  `pricing.ts`. CTA + nav link are UTM-tagged and both hostnames added to `PARTNER_HOSTS`, so the
+  handoff fires `partner_click`. ⚠ Update the trip facts here when the trip rolls over.
+- **Drafted the sponsor-logo ask to Patrick Sorensen** (`p.sorensen@ppatour.com`, cc jacob@ +
+  b.jones@) as a continuation of Connor's 7/29 sponsors-page review thread. **In drafts, not sent.**
+- **Next:** Bryce to grant the GA4 service account (Editor if he wants key events set by API,
+  Viewer is enough for reporting) · cutover env vars · the 6 remaining orphan URLs.
+
 ### 2026-08-03 — Rankings hero rebalanced; legacy-sitemap orphans; Semrush baseline
 - **Rankings hero is two columns now** (`2ee9ef5`). Bryce: "balanced better up top… highlight the
   breakout… use space better." The mark + copy ran down the left half and left the right half
