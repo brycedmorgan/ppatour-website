@@ -17,6 +17,24 @@ import { getFullRankings } from "@/lib/rankings-api";
  */
 export const revalidate = 300;
 
+/**
+ * ⚠ `force-static` is load-bearing, not decoration.
+ *
+ * This page built as Static locally but **Dynamic in production** — confirmed
+ * in the Vercel build log (`ƒ /rankings`). The difference is `PB_API_TOKEN`:
+ * with a token the rankings fetch actually runs, and `lib/pb-fetch` retries a
+ * 429 with `cache: "no-store"` (the partner_rankings endpoint rate-limits
+ * under build load — that is the whole reason the retry exists). A single
+ * no-store fetch during render opts the route out of static generation, so
+ * whether this page was cacheable came down to whether upstream throttled us
+ * mid-build. Non-deterministic, and it lost: every request re-rendered ~2,000
+ * rows at the origin, with a 34.8s TTFB on one measured pull.
+ *
+ * force-static pins the intent instead of hoping the build wins the race. This
+ * page reads no cookies, headers or searchParams, so nothing is lost by it.
+ */
+export const dynamic = "force-static";
+
 export const metadata: Metadata = {
   title: "World Pickleball Rankings",
   description:

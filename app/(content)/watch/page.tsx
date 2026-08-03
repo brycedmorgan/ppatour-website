@@ -31,6 +31,21 @@ import { matchdayLinks } from "@/lib/matchday";
 export const revalidate = 60;
 
 /**
+ * ⚠ Deliberately NOT `force-static`, unlike / and /rankings.
+ *
+ * The LiveScores boundary below server-prefetches the ticker with
+ * `cache: "no-store"`, so this route renders per request (`ƒ /watch` in the
+ * build log). Pinning it static would cache that first payload for up to a
+ * minute, and a stale score on the page whose whole job is live scores is a
+ * worse trade than an origin render.
+ *
+ * If /watch needs to survive launch-scale traffic, the fix is to drop the
+ * server prefetch and let the component's own poll fill it — it already polls
+ * /api/ticker, which is CDN-cached at 10s. That is a live-scores behaviour
+ * change, so it is a decision, not a cleanup.
+ */
+
+/**
  * Server-prefetch the live matches so the ticker's first paint already has
  * data — no post-hydration fetch wait. Streamed under its own Suspense
  * boundary so the rest of /watch renders immediately.

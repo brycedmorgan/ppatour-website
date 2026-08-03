@@ -12,6 +12,21 @@ import { HomeContent } from "@/components/home/HomeContent";
  */
 export const revalidate = 60;
 
+/**
+ * ⚠ Same story as /rankings: this built Static locally and **Dynamic in
+ * production** (`ƒ /` in the Vercel build log). With `PB_API_TOKEN` present the
+ * rankings fetch really runs, and a 429 retry inside `lib/pb-fetch` uses
+ * `cache: "no-store"`, which opts the whole route out of static generation.
+ * So whether the HOMEPAGE was CDN-cacheable depended on whether the partner
+ * API throttled us mid-build.
+ *
+ * Nothing here reads cookies, headers or searchParams on the server — the
+ * ticker, countdown and sticky buy bar are all client components that poll
+ * their own CDN-cached endpoints — so pinning it costs nothing and the 60s
+ * shell is not stale in any way a visitor can see.
+ */
+export const dynamic = "force-static";
+
 export default function Home() {
   return <HomeContent />;
 }
