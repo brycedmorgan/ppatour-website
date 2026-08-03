@@ -35,6 +35,39 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-03 (pt. 3) — Cutover env vars ARE IN; /game rebuilt; canonicals added
+- **⚠ THE SITE IS LIVE AND INDEXABLE AS OF TODAY.** Bryce set `NEXT_PUBLIC_SITE_URL` +
+  `NEXT_PUBLIC_SITE_INDEXABLE` (Production scope, correct) and deployed. Verified: robots meta
+  gone, `robots.txt` now `Allow: /`, sitemap on `www.ppatour.com`, **GA4 `G-NKVE1BRLK7` and the
+  Meta Pixel both firing** (`gtag` and `fbq` both functions in-browser). **Launch moved to
+  Tuesday night.**
+- **Tyler was right that GA4 wasn't on the site, and it was my doing.** The env var existed for
+  19 days; I gated the tag behind `SITE_INDEXABLE` on 8/1 to stop previews reporting into the
+  production stream. It came on automatically with the cutover vars. **Worth saying out loud to
+  the team — "not installed" and "held until launch" look identical from outside.**
+- **⚠ NO CANONICAL TAGS EXISTED ANYWHERE.** Found while verifying the above, and it only became
+  urgent *because* of the above: the site is indexable on `ppatour-website.vercel.app` while DNS
+  still points ppatour.com at WordPress, so Google could index the staging hostname as the real
+  one. Fixed with `alternates: { canonical: "./" }` on the root layout — relative, so Next
+  resolves per-route against `metadataBase`, one line instead of 1,174 pages. **Verified live:
+  every page now says `https://www.ppatour.com/<path>`.**
+- **All 10 page-sitemap orphans are closed.** Six now go home (social-media-landing-page, vote,
+  vote/thank-you, ppa-survey-ticket-giveaway, video-submission, welcome-email) per Bryce's call.
+  ⚠ `video-submission` is retired "for now" — if the intake returns it wants a real page.
+- **`/game` — PPA Pickleball Tour 2025 rebuilt, not redirected** (Bryce: "we want it, make it
+  bigger and better"). **The old page never named the game, never gave a platform or date, and
+  its four store buttons were bare `<img>` links with no alt text** — a product page with no way
+  to buy it. Now: real labelled buttons in the hero AND at the foot, six features with the real
+  in-game screenshots (rehosted to `public/ppa/game/`), cross-links into /events + /athletes.
+  Legacy URL 301s in. All four storefronts verified 200 and added to `PARTNER_HOSTS`, links
+  UTM-tagged `ppa-tour-2025-game`.
+  - Steam `app/2574120` · PS `concept/10009246` · Xbox `9nfjp2z9x13k` · Switch `ppa-pickleball-tour-2025-switch`
+  - **⚠ STILL NEEDED FROM BRYCE: price, release date, a trailer, and whether a 2026 edition is
+    coming.** The page says "out now" because that is all the old one claimed. **No Dropbox mount
+    exists on this machine** — assets need a shared link, same as the 5/22 photo drop.
+- **Next:** GA4 service account is STILL the only thing blocking the Jackalope funnel · DNS
+  Tuesday night · sponsor logos (draft sitting in Bryce's Gmail).
+
 ### 2026-08-03 (pt. 2) — ISR shipped: /rankings 34.8s -> 0.21s; Vacations front door
 - **✅ ISR IS LIVE AND VERIFIED.** `/` `/rankings` `/events` `/athletes` all serve
   **`x-vercel-cache: HIT`**. `/rankings` TTFB **34.8s → 0.21s**.
