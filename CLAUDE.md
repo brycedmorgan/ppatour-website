@@ -35,6 +35,72 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-03 (pt. 4) — Sponsor wall: real tiers off the live site, all 29 marks, all linked
+- Wesley dropped the brand-asset zips (**Platinum / Gold / Tour Sponsors**) and then
+  pointed at **ppatour.com/sponsors**, which is now the source of truth for tiers.
+  **Every one of the 29 partners has a real mark and links to its own site** — the
+  "10 partners render as a blue dash" gap from 8/1 is closed.
+- **⚠ TIERS COME FROM THE LIVE PAGE, NOT THE ZIPS.** Building them off the folders was
+  wrong four ways: there is **no Silver folder at all** (Hertz / PlaySight / Tixr), and the
+  folders filed **Pickleball Central as Tour** (live: Gold), **Tixr + PlaySight as Tour**
+  (live: Silver). Zips are authoritative for ARTWORK, the live page for TIER. New
+  `PartnerTier` = title · platinum · gold · silver · tour · official, and
+  `partnersByTier()` is the single ordering every surface reads — the old
+  `tier === "official"` filters would have silently meant "Selkirk only".
+- **The live page also fixed a duplicate I created**: `LT Pro 48` (Tour) and `Life Time`
+  (Platinum, from the Platinum folder) are **one partner** — LT = Life Time, the ball is
+  their product, and the live page lists a single "Lifetime — Official Ball" under Tour.
+  Merged. ⚠ Which mark to show is still open; `life-time.webp` stays on disk.
+- **It filled the nine missing designations** (Zimmer Biomet "Official MedTech and Joint
+  Replacement Partner", DUPR "Official Rating", Black Clover "Official Apparel", Engine,
+  Mineragua, O2, PlaySight, Pickleball Central "Official Store"). `role`/`category`/`note`
+  are now **optional** — a partner with a mark but no confirmed designation gets a
+  logo-only card (same treatment `hideRole` gives Veolia/Humana), never an invented one.
+- **Five sponsors we didn't carry at all** added: PickleballTV (I'd wrongly excluded it as
+  "our own property" — it's a Gold sponsor), Pickleball Tournaments, Just Courts, Hertz,
+  Picklebalm. Their marks came from the live media library via new **URL support in
+  `scripts/import-sponsor-logos.mjs`** — re-run that rather than hand-placing files.
+- **⚠ THE REAL BUG THIS TURNED UP: a fabricated sponsorship on Worlds.** `EventSponsors`
+  inferred an event's title sponsor by matching the event name against a partner's **first
+  word**, so adding Pickleball Central made **"Pickleball World Championships" credit them
+  as title partner**. Full-name matching doesn't fix it either (the Daytona stop reads
+  "Proton", the partner is "Proton Sports"). Now a curated **`eventNamePrefix`** — unset
+  means the partner never titles an event. Verified: 10 legitimate matches kept, Worlds 0.
+- **Encoding is chosen per file, and this mattered.** A fixed webp encoder was *worse* than
+  the source art (Ensure 24 KB → 71 KB). The importer now encodes 5 ways and ships the
+  smallest, so **every refreshed mark is smaller than the file it replaced** (Carvana
+  21.3→6.1 KB, JOOLA 17.4→6.9 KB). 30 assets, 384 KB. Extensions are mixed on purpose.
+- **Links: all 29 outbound**, destinations taken from the live page's own hrefs (srsltid
+  Google-click junk stripped), verified reachable with a browser UA — 27×200, Carvana +
+  Tixr 403 which are the known bot-blocks from 7/29. `partnerLink()` moved to
+  **`lib/partner-link.ts`**: it was private to PartnerWall, which is exactly why
+  **/about/sponsors rendered 29 logos and not one was clickable**, title card included.
+- **Footer = title + Platinum only** (Wesley) — 29 marks wrapping on all 1,174 pages gave a
+  Tour Sponsor the same site-wide billing as Carvana. Now 9 + an "All Sponsors →" link,
+  since the marks themselves now leave the site. ⚠ 9 tiles still wrap to 5 rows at 390px.
+- **Selkirk removed** (Wesley, "for now"): absent from the live page in every tier AND from
+  the zips. Two knock-ons handled — the Selkirk **case study** on /about/sponsors went with
+  them (it claimed "Official Equipment Partner" on a page that no longer lists them), and
+  ~15 athletes on Selkirk paddles **stopped showing "Official Partner of the PPA Tour"**,
+  which is correct and happened for free because `athlete-gear` reads the live roster.
+  Historical references left alone (past event names, paddle names) — those are facts.
+- **⚠ STILL NEEDS A DECISION:**
+  - **Fasenra vs AstraZeneca.** The live page lists **AstraZeneca (Official Partner)**, no
+    Fasenra; the only art is the AstraZeneca corporate mark. Wesley's call was keep the
+    name. Card reads AstraZeneca mark + "Official Asthma Partner"; link is fasenra.com
+    where the live page uses astrazeneca.com. Fasenra presents Nationals in copy.
+  - **Acrytech vs "Court Surfaces/Tennis Paint"** (live) vs **"AT Sports"** (the artwork) —
+    three names, one partner. Our link stays acrytech.com (Conner verified 7/28).
+  - **Two competing tier taxonomies on /about/sponsors**: the sales ladder ("Tier 01 Title
+    → Tier 04 Official Partner") now sits directly above Platinum/Gold/Silver/Tour.
+  - **JOOLA, Proton and Six Zero are all "Official Paddle Partner"** — three exclusive
+    paddle partners is a contradiction, and the live page gives none of them a designation.
+  - PBTV's mark is a **square lockup**, so height-capped it reads small beside wordmarks.
+  - Only two case studies remain in a three-column grid; a third is a marketing claim.
+- **Rankings pagination built, verified, then REVERTED** — 2,033 rows → 50/page took DOM
+  18,646 → 1,292 and HTML 2.04 → 0.88 MB, but "all the way" was Connor's ruling. Asked
+  Bryce + Tyler to confirm in #ppa-website-crew. Diff is parked, not committed.
+
 ### 2026-08-03 (pt. 3) — Cutover env vars ARE IN; /game rebuilt; canonicals added
 - **⚠ THE SITE IS LIVE AND INDEXABLE AS OF TODAY.** Bryce set `NEXT_PUBLIC_SITE_URL` +
   `NEXT_PUBLIC_SITE_INDEXABLE` (Production scope, correct) and deployed. Verified: robots meta
