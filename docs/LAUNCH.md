@@ -88,6 +88,41 @@ caught before it reaches the domain.
 - [ ] **GSC access**: confirm who owns the ppatour.com Search Console
       property before launch day.
 
+## ⚠ Seven legacy pages with nowhere to land — needs a decision before cutover
+
+Crawled all five ppatour.com sitemaps against this build on 2026-08-02.
+Coverage is otherwise excellent — **post 812, ppa-blog 40, athlete 218 and
+tournament 178 all resolve** — but 10 of the 37 `page-sitemap` URLs 404 here,
+and **all 10 return 200 on ppatour.com today**. Three had an obvious home and
+are now redirected (`/opt-out-preferences`, `/content-policy`,
+`/ppa-tour-event-inquiry-form`). These seven do not:
+
+| Live URL | What it is | Why it needs a person |
+|---|---|---|
+| `/social-media-landing-page/` | Link-in-bio page | **Check the Instagram/TikTok bios first.** If this is the live bio link it breaks every social profile on launch day. |
+| `/vote/` + `/vote/thank-you/` | "Carvana Driving Pickleball Forward Award" vote | Sponsor-named campaign. Recurring? Retire, or rebuild on the new site? |
+| `/ppa-pickleball-tour-video-game/` | Video game marketing page | Is the game still live? Has backlinks. |
+| `/ppa-survey-ticket-giveaway/` | Campaign landing page | Presumably expired — confirm before dropping. |
+| `/video-submission/` | Submission form | Who owns the intake now? |
+| `/welcome-email/` | Email template preview | Almost certainly safe to drop — confirm. |
+
+A wrong destination is worse than a 404: same reasoning that left the Chicago
+hotel link unmapped on 7/29.
+
+## SEO baseline to protect (Semrush, 2026-08-02)
+
+Site Audit on ppatour.com: **Site Health 81% (+4%)**, but **broken pages 16
+(+15)** and **errors 53 (+24)**, top issues "15 pages returned 4XX" and "wrong
+pages found in sitemap". ⚠ **The audit is capped at 100 crawled pages** on a
+site with 812 posts, so that score is a ~12% sample — don't read it as
+whole-site health.
+
+Position Tracking has ppatour.com at **#1 for "when was pickleball invented"
+(6,600/mo)** and **#1 for "dallas pickleball tournament"**, both new entries.
+Those are evergreen informational rankings sitting on migrated blog posts —
+the 812/812 post coverage above is what protects them. Re-check Position
+Tracking daily for two weeks after cutover.
+
 ## Deferred (needs content migration)
 
 - Old blog posts published at **root level** (e.g.

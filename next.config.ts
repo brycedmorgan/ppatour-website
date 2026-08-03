@@ -76,6 +76,22 @@ const LEGACY_REDIRECTS = [
   { source: "/events/skechers-invitational", destination: "/events" },
   { source: "/events/atlanta-georgia-open", destination: "/events" },
 
+  /**
+   * Orphans from ppatour.com's page-sitemap, found by crawling all five legacy
+   * sitemaps against this build (2026-08-02). Coverage was otherwise excellent —
+   * post 812/812, blog 40/40, athlete 218/218, tournament 178/178 all resolve —
+   * but 10 of the 37 page-sitemap URLs had nowhere to land. All 10 are live 200s
+   * on ppatour.com today, so each is a real 404 the moment the domain moves.
+   *
+   * Only the three with an unambiguous destination are mapped here. The other
+   * seven need a human call and are listed in docs/LAUNCH.md — guessing a
+   * destination for a sponsor-named campaign page is worse than a 404, the same
+   * reasoning that left the Chicago hotel link unmapped on 7/29.
+   */
+  { source: "/opt-out-preferences", destination: "/about/privacy" },
+  { source: "/content-policy", destination: "/about/terms" },
+  { source: "/ppa-tour-event-inquiry-form", destination: "/about/host-tournament" },
+
   // patterns
   // Articles briefly lived at /news/{slug}; fold those into the root URL so the
   // two paths don't compete for the same content.
