@@ -35,6 +35,126 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-03 (pt. 6) — Rankings search + region filter; a phantom leaderboard page killed
+- Wesley: add **search by name** and **filter by region** to /rankings and /leaderboards.
+  His framing on search was the right one — *"all 2,000 at once" doesn't help anyone find a
+  specific player; if they want No. 400 they scroll past 399 rows either way.* Both shipped.
+- **New `lib/ranking-filters.ts` is shared by the client board AND the server page**, so the
+  two surfaces can't drift on what "matches" means. Search folds accents and punctuation and
+  matches all terms in any order — verified against the **10 genuinely accented names on the
+  board**, e.g. plain `nguyen hoang` finds *Nguyễn Hoàng*. A search box that can't find an
+  accented name is worse than none for the pros most likely to have one.
+- **⚠ REGION IS DERIVED FROM `countryCode`, NEVER STORED ON THE ROW.** /rankings renders the
+  complete boards, so a `region` field would be ~25 KB of extra payload on the document the
+  8/1 pass fought from 3.96 MB down to 2.04 MB. The two-letter code is already in the payload
+  for the circle-flag, so deriving is free. **Don't add the field.**
+- **⚠ CONNOR'S FIVE REGIONS DO NOT COVER THE RANKED FIELD, and this mattered.** His USA /
+  Asia / Australia / Europe / Canada is right for *events* — the tour only runs stops there —
+  but players come from everywhere. Measured on the live feed: **47 of 2,075 ranked pros are
+  from none of the five** (Brazil 9, Puerto Rico/Mexico/Colombia/Venezuela 5 each, Peru,
+  Chile, Bolivia, Argentina, Ecuador, Saint Lucia, + South Africa, Morocco, Libya, Zambia,
+  Tunisia). Shipping the five alone would have left them **unreachable by any filter value** —
+  the same bug the 7/31 events work fixed when the sub-1,000 stops had no reachable filter.
+  So: Connor's five, **in Connor's order**, plus a trailing **"Rest of World"**.
+  - **That bucket is not fringe — it holds men's No. 2 (Gabriel Tardio) and No. 5 (Federico
+    Staksrud).** Dropping it would have hidden two top-five players from the region filter.
+  - Verified as a true partition, client and server: the six counts sum to exactly 1,324 men
+    and 751 women, every player reachable, **no player in two regions**.
+  - ⚠ **NZ is filed under "Australia"** (32 players), following the existing `NZL: "Australia"`
+    in events-api's `COUNTRY_BY_CODE`. Consistent with /events; one line to split if anyone
+    objects. Israel → Asia (geographic); Turkey/Georgia/Russia → Europe (sporting convention).
+    **Puerto Rico is deliberately NOT "usa"** — the feed gives it its own country and flag.
+- **⚠ THE REAL BUG THIS TURNED UP: /leaderboards advertised a page that did not exist.** It
+  reported the API's `total_records` (**1,366**) as the total, but the mapper drops zero-point
+  players (**42 of them**), so the board actually ends at **1,324 on page 27** — and page 28
+  was linked in the pagination and rendered *"No players on this page"* in the tour's own
+  standings. Found because the new filtered path counts real rows, so the same screen quoted
+  **1,366 and 1,324 for one board**. `getRankingPage` now assembles the board once and
+  paginates that, so `total`/`totalPages` count only rows that render. Page 28 is gone; a
+  deep `?page=99999` clamps to 27 instead of going blank.
+  - Cost is ~nothing: `boardAll` reads the same 24h tagged Data Cache entries that
+    /rankings — `force-static`, built at deploy — already populates for both genders.
+- **The wrong-board dead end is handled on both pages**, and it's the likeliest zero-result:
+  searching "waters" while sitting on the men's board. Mobile tabs now carry per-board match
+  counts (`Men · 0 / Women · 2`) and the empty state offers **"2 matches in Women →"**.
+  Without it, a *correct* search reads as "no results" — only one board is on screen at 390px.
+- **True world rank is never reindexed by a filter** — searching "duckworth" shows the badge
+  **400**, not 1. Filtered column headings read "1 of 1,324" so the board never presents a
+  filtered set as the whole field.
+- **⚠ There are 22 duplicate names on the boards, including TWO "Ben Johns" (#1 US and #679
+  AU).** Search correctly returns both, which is why results must keep rank + flag + points
+  as disambiguators. Don't "de-duplicate" them.
+- /rankings filters client-side (rows are already in the payload; `useDeferredValue` keeps
+  the input responsive against 18,646 DOM nodes — **keep it**). /leaderboards filters
+  server-side via `?q=`/`?region=` on a plain **GET form**, so results are linkable and work
+  with JS off; every pagination and gender-tab link carries the filter, Clear drops it.
+- Controls are **opt-in via `filterable`** — the homepage and /athletes top-10 modules use the
+  same component and must not grow a search box over ten rows. Verified absent on both.
+- Verified on a real server at 1440px and 390px: 2,075 rows, zero horizontal overflow,
+  labelled controls, `aria-live` count, the `sr-only` WPR `<h1>` intact, and param hardening
+  (bad/uppercase/path-ish region, bad/negative/absurd page, `<script>` in `q`) all inert.
+
+### 2026-08-03 (pt. 5) — The /events filter bug (one bug, not three); UserWay; sponsors 8/4
+
+- **Sponsors → the 8/4 approved roster** (Wesley's, landed in parallel), which now supersedes
+  ppatour.com/sponsors — the live page trails it. **Silver is removed from the `PartnerTier`
+  union, not just emptied**, so `tier: "silver"` is a type error rather than a regression a
+  hand-edit can reintroduce. 30 partners: Carvana + 9 Platinum / 8 Gold / 12 Tour. Hertz and
+  Picklebalm off; MOJO, The Picklr, Zyia on. The two three-way identity conflicts flagged in
+  pt. 4 are resolved by naming both brand and mark — **AstraZeneca / Fasenra** and **AT Sports
+  Surfaces / Acrytech** — and Reign Storm → **STORM** to match its wordmark (asset renamed
+  with it). Rankings search/region shipped the same afternoon — see pt. 6.
+
+**⚠ THE /EVENTS FILTER BUG WAS ONE BUG, NOT THREE — AND `slug` IS NOT UNIQUE.**
+- Wesley reported three faults: Past + "The Tour 1,000+" showing sub-1,000 stops, Past +
+  "Challengers" showing Veolia Atlanta Championships, and filters going wrong after several
+  changes. All three were **`key={t.slug}`** on the event cards.
+- **Ten slugs carry multiple records because they are annual editions**: `carvana-mesa-cup`
+  for 2025 **and** 2026 **and** 2027, `pickleball-world-championships` 2025+2026, `ppa-finals`
+  2026+2027, and seven more. Verified all ten — **zero are true duplicates.** The data is
+  right; identity is **year + slug**, exactly what `eventHref` builds.
+- Duplicate keys ⇒ React can't reconcile ⇒ cards from the PREVIOUS filter state survive.
+  Measured: Past+Tour **counter 74 / DOM 77**; Past+Challengers **47 / 54**; the same state
+  after churn **47 / 47 clean**. That last one is why it read as "breaks when you change
+  filters repeatedly" — it's **sequence-dependent**. `shown.length` was always right; the DOM
+  was stale. **If a list of events ever renders wrong again, check the key first.**
+- Separately: **the "The Tour · 1,000+ Pts" option never checked points.** It excluded
+  international + challenger only, while `app/events/page.tsx` defines The Tour as
+  `tierKey !== "challenger" && tierPoints(e) >= 1000`. The label was a claim the code didn't
+  enforce. Same predicate both places now — which also drops the grid's international
+  exclusion (contrary to page.tsx and Connor's 7/23 ruling). **Past + The Tour 74 → 105.**
+- Method note: the first reproduction attempt counted `document.querySelectorAll('article')`
+  and so included the six "Next Six on Tour" cards above the grid, which made legitimate
+  upcoming stops look like filter leaks. **Scope to the grid's own section**; and the
+  counter-vs-rendered-card-count comparison is the measurement that actually finds this class
+  of bug.
+
+**UserWay (`YBUtdPKa3d`) — ported, deliberately outside the consent gate**
+- Closes the 8/1 launch-audit flag: UserWay (`YBUtdPKa3d`) runs on ppatour.com and this
+  rebuild didn't carry it. New `components/global/AccessibilityWidget.tsx`, mounted in
+  `app/layout.tsx` beside Vercel Analytics. Verified loading with **`localStorage` consent
+  key `null`** — i.e. it works for a visitor who never touched the banner.
+- **⚠ It is NOT in `MarketingTags.tsx`, on purpose.** Every tag there is gated on env +
+  production domain + cookie consent, and all three are wrong for an accessibility widget:
+  **gating it behind "Accept cookies" means a screen-reader user who clicks Decline loses
+  the one feature built for them**, and gating it to the production domain means nobody can
+  test accessibility on a preview. It stores the visitor's own a11y preferences —
+  functional, not tracking.
+- **Account ID hardcoded** with a `NEXT_PUBLIC_USERWAY_ACCOUNT` override (`=off` disables).
+  The repo default is env-gated-so-nothing-ships-on, which is right for session replay and
+  wrong here: shipping dark would mean it silently isn't there on launch day unless someone
+  remembers a Vercel var. `data-account` does survive next/script's `lazyOnload` path —
+  verified on the injected element, not assumed.
+- **⚠ The button floats bottom-left, and our bottom bars are full-width.** At 390px it
+  occupies x 13–57 and was **covering "We use cookies for analytics."** Fixed on OUR side —
+  `pl-16` below `sm` on `CookieBanner` and `StickyBuyBar` — rather than fighting UserWay's
+  generated DOM, which would break on their next release. Verified clear on both bars at
+  390px and 1440px; the buy bar's event name truncates slightly earlier on mobile, which is
+  the trade. **Re-check if either bar's padding is refactored.**
+- Bottom-left also keeps it clear of the **EventConcierge launcher** (`bottom-20 right-4`),
+  which is the other floating control on event pages.
+- `lazyOnload` so a ~100KB third-party bundle doesn't compete with the hero image.
+
 ### 2026-08-03 (pt. 4) — Sponsor wall: real tiers off the live site, all 29 marks, all linked
 - Wesley dropped the brand-asset zips (**Platinum / Gold / Tour Sponsors**) and then
   pointed at **ppatour.com/sponsors**, which is now the source of truth for tiers.
