@@ -242,8 +242,9 @@ export default async function RankingsPage() {
             Men&apos;s &amp; Women&apos;s Rankings
           </h2>
           <p className="mt-2 max-w-xl text-sm text-white/60">
-            The complete boards — every ranked pro, top to bottom. Click any
-            name to open that pro&apos;s profile.
+            The complete boards — every ranked pro, top to bottom. Search by
+            name or filter by region, and click any name to open that
+            pro&apos;s profile.
           </p>
           <div className="mt-6">
             {ranking.source === "unavailable" ? (
@@ -269,7 +270,9 @@ export default async function RankingsPage() {
                 </a>
               </div>
             ) : (
-              <RankingsBoard divisions={ranking.divisions} />
+              /* `filterable` — the name search + region filter. Only the full
+                 boards get it; the homepage/athletes top-10 modules don't. */
+              <RankingsBoard divisions={ranking.divisions} filterable />
             )}
           </div>
           <div className="mt-6 flex flex-wrap justify-center gap-3">

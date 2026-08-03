@@ -3,6 +3,12 @@ import { ATHLETES_CACHE_TAG } from "@/lib/cache-tags";
 import { type Division, type DivisionKey, divisionRankings } from "@/lib/home-content";
 import { pbGetJson } from "@/lib/pb-fetch";
 import { CURATED_TO_CANONICAL, getPublishedAthlete } from "@/lib/published-athletes";
+import {
+  isFiltering,
+  matchesPlayerName,
+  playerRegion,
+  type RegionFilter,
+} from "@/lib/ranking-filters";
 
 /**
  * Live rankings adapter — Pickleball.com Partner API.
@@ -54,9 +60,13 @@ export const FULL_PAGE_SIZE = 50;
 const REVALIDATE_SECONDS = 60 * 60 * 24;
 /**
  * The ONE page size every upstream board request uses, so all consumers share a
- * cache entry. Chosen so that it is a multiple of {@link FULL_PAGE_SIZE} (a
- * 50-row display page never straddles two upstream pages) and deep enough to
- * cover the 150-row scans the per-athlete lookups used to make on their own.
+ * cache entry. Deep enough to cover the 150-row scans the per-athlete lookups
+ * used to make on their own.
+ *
+ * It is also a multiple of {@link FULL_PAGE_SIZE}, which used to be load-bearing
+ * (a 50-row display page never straddled two upstream pages). It no longer is —
+ * {@link getRankingPage} paginates the assembled board, not a single upstream
+ * page — but keeping the relationship costs nothing.
  */
 const BOARD_PAGE_SIZE = 250;
 /** Runaway guard when paging the full board. */
@@ -123,10 +133,18 @@ export type RankingPage = {
   entries: RankingEntry[];
   page: number;
   pageSize: number;
+  /** Rows in the CURRENT result set — the match count when filtering. */
   total: number;
   totalPages: number;
+  /** Rows on the unfiltered board, so the page can say "12 of 1,324". */
+  boardTotal: number;
+  /** Whether a name/region filter narrowed this result. */
+  filtered: boolean;
   source: "live" | "fallback" | "unavailable";
 };
+
+/** Name search + region filter for a board. Both optional; both narrow. */
+export type RankingQuery = { q?: string; region?: RegionFilter };
 
 /** Shape of one entry in results.player_rankings we rely on. */
 type ApiPlayer = {
@@ -306,7 +324,8 @@ function unavailableResult(): RankingsResult {
 function unavailablePage(g: GenderQuery, page: number, pageSize: number): RankingPage {
   return {
     gender: g.key, label: g.label, entries: [],
-    page, pageSize, total: 0, totalPages: 0, source: "unavailable",
+    page, pageSize, total: 0, totalPages: 0, boardTotal: 0, filtered: false,
+    source: "unavailable",
   };
 }
 
@@ -320,8 +339,14 @@ function fallbackResult(): RankingsResult {
   return { divisions, source: "fallback" };
 }
 
-function fallbackPage(g: GenderQuery, page: number, pageSize: number): RankingPage {
-  const entries = fallbackEntries(g.key);
+function fallbackPage(
+  g: GenderQuery,
+  page: number,
+  pageSize: number,
+  query: RankingQuery = {},
+): RankingPage {
+  const all = fallbackEntries(g.key);
+  const entries = filterEntries(all, query);
   return {
     gender: g.key,
     label: g.label,
@@ -330,8 +355,31 @@ function fallbackPage(g: GenderQuery, page: number, pageSize: number): RankingPa
     pageSize,
     total: entries.length,
     totalPages: 1,
+    boardTotal: all.length,
+    filtered: isFiltering(query.q ?? "", query.region ?? "all"),
     source: "fallback",
   };
+}
+
+/**
+ * Apply the name search and region filter. Shared with the client board via
+ * lib/ranking-filters, so /rankings and /leaderboards agree on what matches.
+ *
+ * ⚠ Region is derived from `countryCode`, which the placeholder fallback rows
+ * do NOT carry — so in local dev without a PB_API_TOKEN every fallback player
+ * reads as "Rest of World". That's cosmetic (the fallback is 8 invented rows
+ * and must never ship to production) but don't verify the region filter against
+ * it; verify against live data.
+ */
+function filterEntries(entries: RankingEntry[], query: RankingQuery): RankingEntry[] {
+  const q = (query.q ?? "").trim();
+  const region = query.region ?? "all";
+  if (!isFiltering(q, region)) return entries;
+  return entries.filter(
+    (e) =>
+      matchesPlayerName(e.name, q) &&
+      (region === "all" || playerRegion(e.countryCode) === region),
+  );
 }
 
 /**
@@ -382,38 +430,84 @@ export async function getFullRankings(): Promise<RankingsResult> {
 }
 
 /**
- * One paginated page of a single gender board for the full /leaderboards page.
- * `page` is 1-indexed. Never throws — returns the placeholder fallback on error.
+ * One paginated page of a single gender board for /leaderboards, optionally
+ * narrowed by name search and/or region. `page` is 1-indexed. Never throws —
+ * returns the placeholder fallback on error.
  *
- * Served by slicing a shared {@link BOARD_PAGE_SIZE}-row page rather than asking
- * upstream for 50 rows: paging /leaderboards costs no extra upstream calls
- * within a block of five display pages, and the rows come from the same cache
- * entry /rankings and the athlete pages already populated. BOARD_PAGE_SIZE is a
- * multiple of FULL_PAGE_SIZE, so a display page never straddles two of them.
+ * ⚠ IT READS THE WHOLE BOARD, AND BOTH REASONS MATTER.
+ *
+ * 1. A name search has to be able to reach No. 1,300. Filtering the 50 rows
+ *    this page happens to be showing would only ever find someone you had
+ *    already scrolled to, which is the entire problem search exists to solve.
+ *
+ * 2. THE UNFILTERED TOTAL WAS WRONG, AND VISIBLY SO. This used to slice a
+ *    single cached {@link BOARD_PAGE_SIZE}-row page and report the API's
+ *    `total_records` as the total — but the mapper drops zero-point players
+ *    (42 of them on the men's board), so /leaderboards advertised **1,366
+ *    players and 28 pages when the board ends at 1,324 on page 27**. Page 28
+ *    rendered "No players on this page" in the tour's own standings. Adding the
+ *    filtered path is what surfaced it: the two code paths sat on the same
+ *    screen quoting different totals for the same board. Both now count only
+ *    rows that actually render.
+ *
+ * The cost of reading all of it is ~nothing: {@link boardAll} pages the shared
+ * Data Cache (24h, tagged) that /rankings — force-static, so built at deploy —
+ * has already populated for both genders, plus the module memo in front of it.
+ * Same number of upstream calls per day either way, because /rankings needs
+ * every page regardless.
  */
-export async function getRankingPage(genderKey: string, page: number): Promise<RankingPage> {
+export async function getRankingPage(
+  genderKey: string,
+  page: number,
+  query: RankingQuery = {},
+): Promise<RankingPage> {
   const g = RANKING_GENDERS.find((x) => x.key === genderKey) ?? RANKING_GENDERS[0];
-  const safePage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
-  if (!config().token) return fallbackPage(g, safePage, FULL_PAGE_SIZE);
+  const requested = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
+  if (!config().token) return fallbackPage(g, requested, FULL_PAGE_SIZE, query);
 
-  const offset = (safePage - 1) * FULL_PAGE_SIZE;
-  const board = await boardPage(g.gender, Math.floor(offset / BOARD_PAGE_SIZE) + 1);
+  const all = await boardAll(g.gender);
   // Configured but the call failed — say so, never print the demo rows.
-  if (!board) return unavailablePage(g, safePage, FULL_PAGE_SIZE);
+  if (all.length === 0) return unavailablePage(g, requested, FULL_PAGE_SIZE);
 
-  const start = offset % BOARD_PAGE_SIZE;
-  const entries = board.entries.slice(start, start + FULL_PAGE_SIZE);
-  if (entries.length === 0 && safePage === 1) return unavailablePage(g, safePage, FULL_PAGE_SIZE);
+  const rows = filterEntries(all, query);
+  const totalPages = Math.max(1, Math.ceil(rows.length / FULL_PAGE_SIZE));
+  // ⚠ Clamp, don't trust. Searching from page 27 would otherwise land on page 27
+  // of 1 and read empty for a query that actually matched.
+  const safePage = Math.min(requested, totalPages);
+  const from = (safePage - 1) * FULL_PAGE_SIZE;
+
   return {
     gender: g.key,
     label: g.label,
-    entries,
+    entries: rows.slice(from, from + FULL_PAGE_SIZE),
     page: safePage,
     pageSize: FULL_PAGE_SIZE,
-    total: board.total,
-    totalPages: Math.max(1, Math.ceil(board.total / FULL_PAGE_SIZE)),
+    total: rows.length,
+    totalPages,
+    boardTotal: all.length,
+    filtered: isFiltering(query.q ?? "", query.region ?? "all"),
     source: "live",
   };
+}
+
+/**
+ * How many players on the OTHER gender board match this query. Lets
+ * /leaderboards turn a zero-result page into "3 matches in Women's →" instead
+ * of a dead end — searching "waters" while sitting on the men's board is the
+ * single most likely way to get nothing back.
+ *
+ * Called only when the current board has no matches, so the common path still
+ * reads one board. Reads the shared cache, so it makes no upstream request of
+ * its own once /rankings or the other board has warmed it.
+ */
+export async function countRankingMatches(
+  genderKey: string,
+  query: RankingQuery,
+): Promise<number> {
+  const g = RANKING_GENDERS.find((x) => x.key === genderKey);
+  if (!g || !config().token) return 0;
+  if (!isFiltering(query.q ?? "", query.region ?? "all")) return 0;
+  return filterEntries(await boardAll(g.gender), query).length;
 }
 
 /* ---- per-athlete WPR ranking (by slug) ---- */
