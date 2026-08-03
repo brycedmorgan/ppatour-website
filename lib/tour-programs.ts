@@ -100,21 +100,41 @@ export const tourPrograms: TourProgram[] = [
     image: "/ppa/action-champ-sunday.jpg",
   },
   {
+    /**
+     * Front door for **Pickleball Vacations** (ppavacations.com), which is its
+     * own property — a real Stripe checkout with a room block read live from
+     * Jackalope. This site does not embed checkout, so this page sells the trip
+     * and hands off; it does not replicate the booking flow.
+     *
+     * ⚠ Trip facts are transcribed from that project's `src/lib/content.ts`
+     * (Club Med Turkoise, Dec 8–12 2026, the `included` list). **No price is
+     * quoted here on purpose** — pricing lives in `pricing.ts` over there and
+     * would go stale the moment it moved. Update the dates/resort here when the
+     * trip rolls over, or this page starts advertising a trip that has sailed.
+     */
     slug: "travel",
     label: "Travel",
-    eyebrow: "Hotel + Travel Partners",
-    headline: "Travel With the Tour",
+    eyebrow: "Pickleball Vacations",
+    headline: "Play the Islands With the Pros",
+    // Without this the About section repeats the hero headline and its first
+    // paragraph verbatim; setting it also makes the About body skip body[0].
+    sectionHeadline: "Turks & Caicos, December 8-12",
     body: [
-      "Tour partner hotels offer tournament-rate rooms at every tour stop, with priority booking for registered players and ticket holders.",
-      "Partner airlines and rental partners offer tournament-rate flights and ground transport into each host city, and on-site shuttles run from partner hotels to the venue.",
+      "Pickleball Vacations is the tour's own trip: an adults-only, all-inclusive week at Club Med Turkoise on Grace Bay, Turks & Caicos, December 8–12, 2026. Mornings are structured clinics with professional coaches, afternoons are yours.",
+      "Ten permanent courts, unlimited open play, all-inclusive dining, and ground transport from Providenciales (PLS). Hayden Patriquin is on the confirmed player list.",
+      "Separately, tour partner hotels offer tournament-rate rooms at every stop on the schedule, with priority booking for registered players and ticket holders.",
     ],
     bullets: [
-      { title: "Partner hotels", detail: "Tournament-rate rooms at every tour stop, walking distance or shuttle to the venue." },
-      { title: "Airline partners", detail: "Tournament-rate flights and priority booking into each host city." },
-      { title: "Ground transport", detail: "Rental rates and on-site shuttles included in partner bookings." },
-      { title: "Priority booking", detail: "Registered players and ticket holders book first." },
+      { title: "Clinics with the pros", detail: "Daily 8 AM–12 PM coaching, 8+ hours of instruction and on-court play." },
+      { title: "Ten permanent courts", detail: "Unlimited open play plus skill-based organized matchups." },
+      { title: "All-inclusive", detail: "Four nights, dining and beverages, resort amenities, Wi-Fi and taxes." },
+      { title: "Partner hotels on tour", detail: "Tournament-rate rooms at every stop, walking distance or shuttle to the venue." },
     ],
-    cta: { label: "See Partner Hotels", href: "/events" },
+    cta: {
+      label: "Explore the Trip",
+      href: "https://ppavacations.com/?utm_source=ppatour&utm_medium=website&utm_campaign=pickleball-vacations&utm_content=tour-travel-cta",
+      external: true,
+    },
     image: "/ppa/action-masters.jpg",
   },
   {

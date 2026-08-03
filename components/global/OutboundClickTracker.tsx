@@ -24,6 +24,11 @@ const PARTNER_HOSTS = [
   "play.google.com",
   "pickleballcentral.com",
   "pickleball.com",
+  // Pickleball Vacations — its own property with its own Stripe checkout, so
+  // the click off this site is the last thing we can measure. Both hostnames
+  // resolve to it; the nav uses one and /tour/travel the other.
+  "ppavacations.com",
+  "vacations.ppatour.com",
 ];
 
 function eventNameFor(host: string): string | null {
