@@ -35,6 +35,44 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-03 — Rankings hero rebalanced; legacy-sitemap orphans; Semrush baseline
+- **Rankings hero is two columns now** (`2ee9ef5`). Bryce: "balanced better up top… highlight the
+  breakout… use space better." The mark + copy ran down the left half and left the right half
+  empty, while the **50/35/15 split — the thing that explains what the ranking IS — sat underneath
+  as three bullets.** Copy left, weighting as a figure right.
+- **The figure is ONE horizontal stacked bar, not three meters** — these are parts of a single
+  composite score and three bars wouldn't say that. **Segment width IS the weight**, no
+  exaggerated scale, so singles reads as the sliver it is. Verified in the DOM: segments render at
+  exactly 50/35/15 of drawn width.
+- **⚠ Palette was computed, not chosen.** `ppa-blue-deep → ppa-blue → ppa-sky`, single-hue ramp,
+  heaviest darkest. All six checks pass on ppa-paper (worst adjacent ΔE 15.7 protan / 15.4 normal).
+  **Two brand colours were rejected by the validator, not by taste: `ppa-navy` fails the lightness
+  band (0.28) and chroma floor; `ppa-yellow` fails contrast at 1.21:1.** `ppa-sky` carries a
+  contrast WARN (1.89) which *obliges* the direct labels — **keep them if you restyle this.**
+- **⚠ The window-resize trap bit again** — `resize_window` reports success but the screenshot
+  viewport is decoupled from it, so mobile was verified as a **measured DOM test** (figure + every
+  row fit 358px, zero overflow), not a screenshot. Same lesson as 7/31 pt. 5.
+- **Legacy sitemap crawl** (`ea1f...`): post 812/812, ppa-blog 40/40, athlete 218/218, tournament
+  178/178 all resolve — that coverage is what protects the evergreen rankings. **But 10 of 37
+  `page-sitemap` URLs 404 here and all 10 are live 200s on ppatour.com today.** Redirected the
+  three obvious ones; **seven need a human and are listed in `docs/LAUNCH.md`.**
+  - **⚠ `/social-media-landing-page/` is the urgent one — if that's the live link-in-bio, every
+    social profile breaks on launch day.** `/vote/` is a Carvana-named award campaign; picking a
+    destination for a sponsor's page isn't ours to make.
+- **Semrush baseline recorded in LAUNCH.md.** Site Health 81% (+4%) but broken pages **16 (+15)**
+  and errors **53 (+24)**. **⚠ The audit is capped at 100 crawled pages on an 812-post site — that
+  score is a ~12% sample, not whole-site health.** Position Tracking has ppatour.com **#1 for
+  "when was pickleball invented" (6,600/mo)** and #1 for "dallas pickleball tournament".
+- **Pickleball Vacations: recommended NOT porting it.** It's a live Stripe checkout with room
+  inventory read from Jackalope, and the site's founding rule is content/discovery only —
+  commerce redirects out. It's already linked in the Events panel (`vacations.ppatour.com`, 200).
+  **The real find: that trip is 0 of 20 rooms, $0 against $102k, and `/tour/travel` is generic
+  hotel-partner copy that never mentions it.** Proposed making `/tour/travel` its front door with
+  a tracked outbound link. **Awaiting Bryce.**
+- **⚠ STILL UNSTARTED, biggest Wednesday risk: ISR.** `/rankings` served in **34.8s** on one pull
+  and every live-data page returns `no-store` + `x-vercel-cache: MISS` — no page-level
+  `revalidate` export anywhere, so each hit re-renders 2,033 rows at the origin. ~4 lines.
+
 ### 2026-08-01 — Launch audit: /rankings weight, bio scrape artifacts, analytics leak
 - **Audited the site as a fan, two days out from the Aug 5 launch.** Six findings; four are
   fixed and pushed (`36cf945`, `7ea2ef0`), two need a person.
