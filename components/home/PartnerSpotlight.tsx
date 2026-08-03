@@ -2,15 +2,23 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { partners } from "@/lib/home-content";
+import { logoPartnersInTierOrder } from "@/lib/home-content";
 
 /**
  * Auto-rotating partner highlight. Cycles through every tour partner with
  * their official logo, role, and a short note. Dots are clickable. Fade
  * animation respects prefers-reduced-motion (utility disabled in CSS).
  */
-// Only partners whose wordmark logo we hold rotate in the spotlight.
-const logoPartners = partners.filter((p) => p.logo);
+/**
+ * A partner needs a mark AND something written about them to hold a slide.
+ *
+ * This module is editorial — the note is the slide. The nine partners added
+ * from the 8/3 logo drop have artwork but no confirmed designation or copy, so
+ * featuring them here would rotate a logo over an empty half. They appear on
+ * the partner wall (where a logo-only card is the intended treatment) and join
+ * the rotation on their own the moment a note is written for them.
+ */
+const logoPartners = logoPartnersInTierOrder.filter((p) => p.note);
 
 export function PartnerSpotlight() {
   const [active, setActive] = useState(0);
@@ -48,7 +56,7 @@ export function PartnerSpotlight() {
         {/* Editorial block — the logo carries the name (Bryce, 7/28), so only
             the designation and the note are typed out. */}
         <div>
-          {!p.hideRole && (
+          {p.role && !p.hideRole && (
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-blue">
               {p.role}
             </p>

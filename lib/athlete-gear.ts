@@ -4,7 +4,12 @@
  *
  * We take the player's paddle string (from the published quick-info) and, when
  * the brand is an OFFICIAL PPA Tour partner we hold a site for (JOOLA, Six
- * Zero, Selkirk, …), return a UTM-tagged link straight to that partner's shop.
+ * Zero, Proton, …), return a UTM-tagged link straight to that partner's shop.
+ *
+ * Note this reads the live `partners` roster, so it self-corrects: when Selkirk
+ * came off the roster on 8/3, the ~15 athletes on Selkirk paddles stopped
+ * showing "Official Partner of the PPA Tour" beside their paddle — which is the
+ * right outcome, not a regression. Don't hardcode brand lists here.
  * Any other brand still shows the paddle name, but the CTA points to the tour's
  * official-partner directory instead of a competitor's store — never sending a
  * fan (or Braydn's sell-through) to gear we don't rep.

@@ -19,8 +19,14 @@ export function EventSponsors({ event }: { event: Tournament }) {
   const accent = event.brand?.accent ?? "#228be6";
   // The named partners on this event's own marquee: a title sponsor embedded
   // in the event name (e.g. "Veolia …", "Rate …") plus the presenting partner.
-  const titleSponsor = partners.find((p) =>
-    event.name.toLowerCase().startsWith(p.name.split(" ")[0].toLowerCase()),
+  //
+  // Matches the curated `eventNamePrefix` — NOT the partner's first word, which
+  // is what this used to do. That heuristic silently credited Pickleball
+  // Central as title partner of the "Pickleball World Championships".
+  const titleSponsor = partners.find(
+    (p) =>
+      p.eventNamePrefix &&
+      event.name.toLowerCase().startsWith(p.eventNamePrefix.toLowerCase()),
   );
   const marquee = [
     ...(titleSponsor ? [{ name: titleSponsor.name, role: `Title Partner · ${event.shortName}` }] : []),

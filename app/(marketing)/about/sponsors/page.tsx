@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { partners } from "@/lib/home-content";
+import { partnersByTier, titlePartner } from "@/lib/home-content";
+import { partnerLink } from "@/lib/partner-link";
 import { SponsorInquiryForm } from "@/components/marketing/SponsorInquiryForm";
 
 export const metadata: Metadata = {
@@ -88,16 +89,23 @@ const CASE_STUDIES = [
     role: "Presenting Partner",
     note: "Powering the tour sustainably — water, waste, and sustainability touchpoints at every Veolia-presenting stop, plus a featured branded segment integrated into every broadcast window.",
   },
-  {
-    partner: "Selkirk",
-    role: "Official Equipment Partner",
-    note: "Paddle of choice for a majority of the top-30 pros; on-site demo zones at every stop and the paddle-of-record marketing across the schedule.",
-  },
+  /**
+   * ⚠ The Selkirk case study was removed with Selkirk itself (8/3). Leaving it
+   * would have described an "Official Equipment Partner" activation on the very
+   * page that no longer lists that partner in any tier.
+   *
+   * That leaves two case studies in a three-column grid. A third would be good —
+   * but an activation write-up is a marketing claim about what a partner
+   * actually gets, so it needs to come from the sponsorship team, not be
+   * invented here.
+   */
 ];
 
 export default function SponsorsPage() {
-  const title = partners.find((p) => p.tier === "title")!;
-  const officials = partners.filter((p) => p.tier === "official");
+  const title = titlePartner!;
+  // Grouped, not a flat `tier === "official"` filter — that predicate used to
+  // mean "everyone but Carvana" and would now match Selkirk alone.
+  const groups = partnersByTier();
 
   return (
     <>
@@ -268,7 +276,15 @@ export default function SponsorsPage() {
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-blue">
             Title Partner
           </p>
-          <div className="relative isolate mt-3 overflow-hidden border border-ppa-line bg-white">
+          {/* Forwards to the title partner's own site like every other card —
+              this block was the one logo on the page still not clickable after
+              the Category Leaders grid was linked up. */}
+          <a
+            href={partnerLink(title).href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative isolate mt-3 block overflow-hidden border border-ppa-line bg-white transition-colors hover:border-ppa-blue"
+          >
             <div className="absolute inset-x-0 top-0 h-1 bg-ppa-blue" />
             <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_1.4fr] lg:items-center">
               <div className="flex h-28 items-center justify-start sm:h-32">
@@ -293,7 +309,7 @@ export default function SponsorsPage() {
                 </p>
               </div>
             </div>
-          </div>
+          </a>
         </div>
       </section>
 
@@ -306,45 +322,80 @@ export default function SponsorsPage() {
           <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
             Category Leaders
           </h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {officials.map((p) => (
+          {/* One block per tier. This is the page brands themselves open, so the
+              tier a partner sits in is the product being described — it can't be
+              flattened into one undifferentiated grid here. */}
+          {groups.map((g) => (
+            <div key={g.key} className="mt-8">
+              <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-blue">
+                {g.label}
+              </h3>
               <div
-                key={p.name}
-                className="flex flex-col overflow-hidden border border-ppa-line bg-white"
+                className={`mt-3 grid gap-4 sm:grid-cols-2 ${
+                  g.key === "tour" ? "lg:grid-cols-4" : "lg:grid-cols-3"
+                }`}
               >
-                <div className="flex h-24 items-center justify-center border-b border-ppa-line bg-white p-5">
-                  {p.logo ? (
-                    <Image
-                      src={p.logo}
-                      alt={p.name}
-                      width={p.logoWidth!}
-                      height={p.logoHeight!}
-                      className="max-h-full w-auto max-w-[180px] object-contain"
-                    />
-                  ) : (
-                    <span className="font-display text-xl uppercase text-ppa-navy">
-                      {p.name}
-                    </span>
-                  )}
-                </div>
-                {/* Logo card carries the name (Bryce, 7/28). Category Leaders
-                    show only the logo + the "Official ___ Partner" designation
-                    — no descriptive copy (Tyler, sponsors reformat). */}
-                <div className="flex flex-1 flex-col p-5">
-                  {!p.hideRole && (
-                    <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-blue">
-                      {p.role}
-                    </p>
-                  )}
-                  {!p.logo && (
-                    <p className="mt-1 font-display text-lg uppercase leading-[1.1] text-ppa-navy">
-                      {p.name}
-                    </p>
-                  )}
-                </div>
+                {g.items.map((p) => {
+                  const { href, external } = partnerLink(p);
+                  const showsRole = Boolean(p.role) && !p.hideRole;
+                  // Every card forwards to the partner's own site (UTM-tagged).
+                  // These were plain divs until 8/3 — the sponsors page showed
+                  // 29 logos and not one of them was clickable.
+                  const Card = external ? "a" : Link;
+                  return (
+                    <Card
+                      key={p.name}
+                      href={href}
+                      {...(external
+                        ? { target: "_blank", rel: "noopener noreferrer" }
+                        : {})}
+                      className="group flex flex-col overflow-hidden border border-ppa-line bg-white transition-colors hover:border-ppa-blue"
+                    >
+                      {/* The divider belongs to the footer, not the logo box — a
+                          card with nothing to say underneath was drawing a rule
+                          across itself and then dead space. */}
+                      <>
+                          <div
+                            className={`flex h-24 items-center justify-center bg-white p-5 ${
+                              showsRole ? "border-b border-ppa-line" : ""
+                            }`}
+                          >
+                            {p.logo ? (
+                              <Image
+                                src={p.logo}
+                                alt={p.name}
+                                width={p.logoWidth!}
+                                height={p.logoHeight!}
+                                sizes="180px"
+                                className="max-h-full w-auto max-w-[180px] object-contain"
+                              />
+                            ) : (
+                              // No mark — the name IS the card's mark here, so it
+                              // must NOT be repeated in the footer below.
+                              <span className="font-display text-xl uppercase text-ppa-navy">
+                                {p.name}
+                              </span>
+                            )}
+                          </div>
+                          {/* Category Leaders show only the logo + the
+                              "Official ___ Partner" designation — no descriptive
+                              copy (Tyler, sponsors reformat). Collapses entirely
+                              for a logo-only partner (Bryce 7/28: the logo IS
+                              the card) and for hideRole partners. */}
+                          {showsRole && (
+                            <div className="flex flex-1 flex-col p-5">
+                              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-blue">
+                                {p.role}
+                              </p>
+                            </div>
+                          )}
+                      </>
+                    </Card>
+                  );
+                })}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </section>
 

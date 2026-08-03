@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { partners } from "@/lib/home-content";
+import { footerPartners } from "@/lib/home-content";
+import { partnerLink } from "@/lib/partner-link";
 import { withUtm } from "@/lib/utm";
 import { InquiryForm } from "@/components/forms/InquiryForm";
 import { matchdayPrimary } from "@/lib/matchday";
@@ -243,26 +244,52 @@ export function SiteFooter() {
               </span>
             </Link>
           </div>
+          {/* Title partner + Platinum only. Each mark forwards to the partner's
+              own site like every other partner surface — these pointed at
+              /about/sponsors until 8/3, which made the footer the one place a
+              sponsor's logo didn't reach the sponsor. */}
           <div className="mt-4 flex flex-wrap items-center gap-2">
-            {partners
-              .filter((p) => p.logo)
-              .map((p) => (
-                <Link
+            {footerPartners.map((p) => {
+              const { href, external } = partnerLink(p);
+              // Designation appended only when we hold one — otherwise this
+              // read "Zimmer Biomet — undefined" on hover.
+              const label = p.role ? `${p.name} — ${p.role}` : p.name;
+              const inner = (
+                <Image
+                  src={p.logo!}
+                  alt={p.name}
+                  width={p.logoWidth!}
+                  height={p.logoHeight!}
+                  sizes="104px"
+                  className="max-h-6 w-auto max-w-[104px] object-contain"
+                />
+              );
+              const cls =
+                "flex h-12 items-center justify-center bg-white px-4 transition-opacity hover:opacity-85";
+              return external ? (
+                <a
                   key={p.name}
-                  href="/about/sponsors"
-                  title={`${p.name} — ${p.role}`}
-                  className="flex h-12 items-center justify-center bg-white px-4 transition-opacity hover:opacity-85"
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={label}
+                  className={cls}
                 >
-                  <Image
-                    src={p.logo!}
-                    alt={p.name}
-                    width={p.logoWidth!}
-                    height={p.logoHeight!}
-                    sizes="104px"
-                    className="max-h-6 w-auto max-w-[104px] object-contain"
-                  />
+                  {inner}
+                </a>
+              ) : (
+                <Link key={p.name} href={href} title={label} className={cls}>
+                  {inner}
                 </Link>
-              ))}
+              );
+            })}
+            {/* The strip now shows 9 of 29, so the rest need a way in. */}
+            <Link
+              href="/about/sponsors"
+              className="flex h-12 items-center px-3 text-[11px] font-bold uppercase tracking-[0.14em] text-white/55 transition-colors hover:text-white"
+            >
+              All Sponsors →
+            </Link>
           </div>
         </div>
 

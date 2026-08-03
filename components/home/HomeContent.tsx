@@ -27,7 +27,7 @@ import {
 } from "@/lib/placeholder-data";
 import {
   explainers,
-  partners,
+  logoPartnersInTierOrder,
   playersToWatch,
 } from "@/lib/home-content";
 // Server-only (pulls the migrated WP archive) — safe here because HomeContent
@@ -72,8 +72,10 @@ const LANES = [
   },
 ];
 
-// Only partners whose wordmark logo we hold scroll in the logo band.
-const MARQUEE_PARTNERS = partners.filter((p) => p.logo);
+// Only partners whose wordmark logo we hold scroll in the logo band, in billing
+// order so the title partner and Platinum tier lead the loop rather than
+// whatever position they happen to occupy in the roster array.
+const MARQUEE_PARTNERS = logoPartnersInTierOrder;
 
 const BROADCAST: { name: string; note: string; logo?: string }[] = [
   {
@@ -1106,7 +1108,7 @@ export async function HomeContent({
                 <div
                   key={idx}
                   className="flex h-10 shrink-0 items-center justify-center"
-                  title={`${p.name} — ${p.role}`}
+                  title={p.role ? `${p.name} — ${p.role}` : p.name}
                 >
                   <Image
                     src={p.logo!}
