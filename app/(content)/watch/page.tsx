@@ -15,6 +15,22 @@ import { withUtm } from "@/lib/utm";
 import { matchdayLinks } from "@/lib/matchday";
 
 /**
+ * ISR. ⚠ This page also server-prefetches the live ticker with `cache: no-store`
+ * (see the LiveScores boundary below), which opts the route out of static
+ * generation regardless of this value. Left in place deliberately: the
+ * prefetch is what gives the ticker data on first paint. If /watch needs to
+ * be CDN-cached under load, move that prefetch client-side — the component
+ * already polls /api/ticker, which is itself CDN-cached.
+ *
+ * Before this, every live-data page was rendered per request and served
+ * `cache-control: private, no-store` with `x-vercel-cache: MISS` — nothing
+ * reached the edge cache. /rankings was measured at a 34.8s TTFB on one pull
+ * with zero traffic. Data was already cached (lib/pb-fetch tags its fetches);
+ * what was uncached was the HTML.
+ */
+export const revalidate = 60;
+
+/**
  * Server-prefetch the live matches so the ticker's first paint already has
  * data — no post-hydration fetch wait. Streamed under its own Suspense
  * boundary so the rest of /watch renders immediately.

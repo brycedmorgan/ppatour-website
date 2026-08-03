@@ -4,6 +4,18 @@ import { ScheduleGrid } from "@/components/events/ScheduleGrid";
 import { getEvents } from "@/lib/events-api";
 import { tierPoints } from "@/lib/placeholder-data";
 
+/**
+ * ISR. Schedule + Tixr prices. Prices sync once a day; 5 minutes is far tighter
+ * than the data actually changes.
+ *
+ * Before this, every live-data page was rendered per request and served
+ * `cache-control: private, no-store` with `x-vercel-cache: MISS` — nothing
+ * reached the edge cache. /rankings was measured at a 34.8s TTFB on one pull
+ * with zero traffic. Data was already cached (lib/pb-fetch tags its fetches);
+ * what was uncached was the HTML.
+ */
+export const revalidate = 300;
+
 export const metadata: Metadata = {
   title: "Events",
   description:

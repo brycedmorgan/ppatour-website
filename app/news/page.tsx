@@ -10,6 +10,13 @@ import {
 } from "@/lib/pb-news";
 import { newsCategories, newsPage, searchNews, type NewsCard } from "@/lib/news";
 
+/**
+ * ⚠ No ISR here, deliberately. This page reads `searchParams` (page, category,
+ * q, source), which makes it dynamic no matter what `revalidate` says — a
+ * revalidate export would just be a comment that lies. The individual article
+ * pages ARE prerendered, and /api/search is CDN-cached, so the expensive parts
+ * are covered.
+ */
 const PAGE_SIZE = 24;
 
 type Search = {

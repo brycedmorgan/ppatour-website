@@ -5,6 +5,18 @@ import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
 import { getFullRankings } from "@/lib/rankings-api";
 
+/**
+ * ISR. The complete boards are ~2,000 rows. Rendering that per request is the
+ * expensive part, and rankings move on event results, not on the minute.
+ *
+ * Before this, every live-data page was rendered per request and served
+ * `cache-control: private, no-store` with `x-vercel-cache: MISS` — nothing
+ * reached the edge cache. /rankings was measured at a 34.8s TTFB on one pull
+ * with zero traffic. Data was already cached (lib/pb-fetch tags its fetches);
+ * what was uncached was the HTML.
+ */
+export const revalidate = 300;
+
 export const metadata: Metadata = {
   title: "World Pickleball Rankings",
   description:

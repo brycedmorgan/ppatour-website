@@ -11,6 +11,17 @@ import {
 } from "@/lib/published-athletes";
 import { curatedSlugFor, getRankings, getWprIndex } from "@/lib/rankings-api";
 
+/**
+ * ISR. 180-pro roster off the daily-refreshed athlete cache.
+ *
+ * Before this, every live-data page was rendered per request and served
+ * `cache-control: private, no-store` with `x-vercel-cache: MISS` — nothing
+ * reached the edge cache. /rankings was measured at a 34.8s TTFB on one pull
+ * with zero traffic. Data was already cached (lib/pb-fetch tags its fetches);
+ * what was uncached was the HTML.
+ */
+export const revalidate = 300;
+
 export const metadata: Metadata = {
   title: "Athletes",
   description:
