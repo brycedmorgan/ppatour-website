@@ -45,6 +45,24 @@ const cormorant = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   robots: SITE_INDEXABLE ? undefined : { index: false, follow: false },
+  /**
+   * Self-referencing canonical on every page, resolved against `metadataBase`
+   * (NEXT_PUBLIC_SITE_URL). The site emitted no canonical tag at all until now.
+   *
+   * That was survivable while it was noindex. It stopped being survivable the
+   * moment the cutover env vars went in: the site is live and indexable on
+   * ppatour-website.vercel.app while DNS still points ppatour.com at the old
+   * WordPress install, so without this Google is free to index the vercel.app
+   * hostname as the real one and we spend the launch competing with our own
+   * staging domain. With it, every page served from anywhere says "the
+   * canonical version of this is www.ppatour.com/<path>".
+   *
+   * `"./"` is relative — Next resolves it per-route against metadataBase, so
+   * this is one line rather than a canonical on 1,174 pages. A page that needs
+   * a different canonical (a syndicated article, say) overrides it in its own
+   * `alternates`.
+   */
+  alternates: { canonical: "./" },
   title: {
     default: "Carvana PPA Tour — The Pro Tour of Pickleball",
     template: "%s · Carvana PPA Tour",
