@@ -33,7 +33,6 @@ const TIER_STYLE: Record<PartnerTier, { cols: string; logo: string; box: string 
   title: { cols: "", logo: "", box: "" },
   platinum: { cols: "sm:grid-cols-2 lg:grid-cols-3", logo: "max-h-14", box: "min-h-[148px]" },
   gold: { cols: "sm:grid-cols-2 lg:grid-cols-3", logo: "max-h-12", box: "min-h-[132px]" },
-  silver: { cols: "sm:grid-cols-2 lg:grid-cols-3", logo: "max-h-11", box: "min-h-[124px]" },
   tour: { cols: "sm:grid-cols-2 lg:grid-cols-4", logo: "max-h-10", box: "min-h-[116px]" },
   official: { cols: "sm:grid-cols-2 lg:grid-cols-3", logo: "max-h-12", box: "min-h-[132px]" },
 };

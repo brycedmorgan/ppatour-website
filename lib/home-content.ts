@@ -188,32 +188,33 @@ export const explainers: Explainer[] = [
 /**
  * Partner tiers, in billing order.
  *
- * SOURCE OF TRUTH: ppatour.com/sponsors — Platinum, Gold, Silver, Tour Sponsors.
- * Reconciled against it on 8/3 (Wesley pointed at the live page).
+ * SOURCE OF TRUTH: marketing's approved roster ("New Sponsors Page Updates",
+ * 8/4) — Platinum, Gold, Tour Sponsors, with Carvana billed apart as title.
+ * That doc supersedes the 8/3 reconciliation against ppatour.com/sponsors,
+ * which is now BEHIND it: the live page still shows a Silver tier and still
+ * carries Hertz and Picklebalm, none of which survive the approved list.
  *
- * ⚠ Do NOT re-derive these from the brand-asset zips. That's how this was first
- * built and it was wrong in four ways: there is no Silver folder at all, and the
- * folders filed Pickleball Central, Tixr and PlaySight under tiers the live page
- * contradicts. The zips are the authority on ARTWORK, the live page on TIER.
+ * ⚠ SILVER IS GONE, by instruction ("There will be no 'Silver' tier moving
+ * forward"). Tixr and PlaySight, its only occupants besides Hertz, moved to
+ * Tour Sponsors. The key is removed from the union rather than left unused so
+ * that a future hand-edit can't quietly resurrect the tier — assigning
+ * `tier: "silver"` is now a type error, not a silent regression.
+ *
+ * ⚠ Do NOT re-derive tiers from the brand-asset zips. That's how this was first
+ * built and it was wrong in four ways. The zips are the authority on ARTWORK,
+ * the approved roster on TIER.
  *
  * `official` remains the fallback for a designated partner whose tier we can't
  * confirm. Currently EMPTY — `partnersByTier()` drops empty groups, so it
  * renders no heading. Kept for the next partner who turns up without a tier,
  * so nobody has to be dropped from the wall to be listed.
  */
-export type PartnerTier =
-  | "title"
-  | "platinum"
-  | "gold"
-  | "silver"
-  | "tour"
-  | "official";
+export type PartnerTier = "title" | "platinum" | "gold" | "tour" | "official";
 
 /** Non-title tiers in the order they're billed, with their wall headings. */
 export const PARTNER_TIERS: { key: PartnerTier; label: string }[] = [
   { key: "platinum", label: "Platinum Sponsors" },
   { key: "gold", label: "Gold Sponsors" },
-  { key: "silver", label: "Silver Sponsors" },
   { key: "tour", label: "Tour Sponsors" },
   { key: "official", label: "Official Partners" },
 ];
@@ -246,10 +247,13 @@ export type Partner = {
    * an event name began with the partner's first word, which was fine while the
    * roster was small and became wrong the moment Pickleball Central joined:
    * "Pickleball World Championships" starts with "Pickleball", so Worlds
-   * credited a title partner who doesn't sponsor it. Matching the full name
-   * doesn't work either — the Daytona event reads "Proton" while the partner is
-   * "Proton Sports". So it's data, not a heuristic: unset means this partner
-   * never titles an event, and nothing can be inferred about them.
+   * credited a title partner who doesn't sponsor it. Matching the full partner
+   * name is no more reliable — it depends entirely on how marketing happens to
+   * label a partner this month, and the 8/4 roster relabelled five of them
+   * (Proton Sports → Proton, Pickleball Central → PBC, PickleballTV → PBTV,
+   * Park Place Technologies → Park Place, Just Courts Design + Build → Just
+   * Courts). So it's data, not a heuristic: unset means this partner never
+   * titles an event, and nothing can be inferred about them.
    */
   eventNamePrefix?: string;
   /** Suppress the designation line and let the logo stand alone (Bryce, 7/28 —
@@ -270,16 +274,31 @@ export type Partner = {
    Tour. Each owns a category ("Official {X} of the PPA Tour"), which is what
    confers the value.
 
-   LOGOS + TIERS come from marketing's brand-asset drop of 8/3 (three zips:
+   TIERS + MEMBERSHIP come from marketing's approved roster ("New Sponsors Page
+   Updates", 8/4). LOGOS come from the brand-asset drop of 8/3 (three zips:
    Platinum Partner Logos / Gold Partner Logos / Tour Sponsors), imported and
    optimized by `scripts/import-sponsor-logos.mjs` — re-run that when partners
    refresh their art rather than hand-placing files. Every file is trimmed of
    dead margin and capped at 900px so the cards size optically; logoWidth /
    logoHeight below are the SHIPPED dimensions, not the source art's.
 
-   The drop also resolved the long-standing "10 partners with no mark" gap. Two
-   of those marks are the parent brand rather than the sponsoring brand — see
-   Fasenra and Acrytech, both flagged inline. */
+   ORDER: listed alphabetically within each tier, as instructed, with Carvana
+   billed apart from the Platinum block on title-partner status. The ordering is
+   ALSO enforced in `partnersByTier()`, so it survives the next hand-edit that
+   appends a partner to the end of a block — see the note there.
+
+   ⚠ THREE PARTNERS CAME OFF THE ROSTER with the 8/4 list: Hertz (was Silver),
+   Pickleball Tournaments (was Gold) and Picklebalm (was Tour). All three are on
+   ppatour.com/sponsors TODAY and all three were added from it on 8/3, so this is
+   the approved list disagreeing with the live page, not an omission on our side
+   — flagged back to marketing. Their marks stay on disk (hertz.webp,
+   pickleball-tournaments.png, picklebalm.png) and their importer jobs stay in
+   place, so re-adding any of them is a record here plus a tier.
+
+   ⚠ Two marks are the parent brand rather than the sponsoring brand. The 8/4
+   list resolves both by NAMING both brands — "AstraZeneca / Fasenra" and
+   "AT Sports Surfaces / Acrytech" — so the card no longer reads as a mismatch
+   between the mark and the name. Both still flagged inline on the URL question. */
 export const partners: Partner[] = [
   {
     name: "Carvana",
@@ -294,30 +313,17 @@ export const partners: Partner[] = [
     logoHeight: 197,
   },
 
-  /* ---- Platinum ---- */
+  /* ---- Platinum (alphabetical) ---- */
   {
-    name: "Veolia",
-    website: "https://www.veolianorthamerica.com",
-    eventNamePrefix: "Veolia",
-    role: "Official Sustainability Partner",
-    category: "Sustainability",
-    note: "Backing the marquee stops in Atlanta, Chicago, and the National Championships.",
+    name: "Ensure Max Protein",
+    website: "https://www.ensure.com",
+    role: "Official Nutrition Partner",
+    category: "Nutritional Beverage",
+    note: "Fueling the longest weekends on tour.",
     tier: "platinum",
-    hideRole: true,
-    logo: "/ppa/sponsors/veolia.png",
+    logo: "/ppa/sponsors/ensure.png",
     logoWidth: 900,
-    logoHeight: 222,
-  },
-  {
-    name: "JOOLA",
-    website: "https://www.joola.com",
-    role: "Official Paddle Partner",
-    category: "Paddle",
-    note: "Presenting partner of the PPA Finals and the gear behind a generation of pros.",
-    tier: "platinum",
-    logo: "/ppa/sponsors/joola.png",
-    logoWidth: 900,
-    logoHeight: 284,
+    logoHeight: 586,
   },
   {
     name: "Humana",
@@ -332,22 +338,48 @@ export const partners: Partner[] = [
     logoHeight: 176,
   },
   {
-    name: "Ensure Max Protein",
-    website: "https://www.ensure.com",
-    role: "Official Nutrition Partner",
-    category: "Nutritional Beverage",
-    note: "Fueling the longest weekends on tour.",
+    name: "JOOLA",
+    website: "https://www.joola.com",
+    role: "Official Paddle Partner",
+    category: "Paddle",
+    note: "Presenting partner of the PPA Finals and the gear behind a generation of pros.",
     tier: "platinum",
-    logo: "/ppa/sponsors/ensure.png",
+    logo: "/ppa/sponsors/joola.png",
     logoWidth: 900,
-    logoHeight: 586,
+    logoHeight: 284,
   },
   {
-    name: "Proton Sports",
+    /**
+     * ⚠ LIFE TIME AND LT PRO 48 ARE TWO RECORDS AGAIN — Life Time at Platinum,
+     * LT Pro 48 (Official Ball) under Tour Sponsors. That is what the 8/4
+     * approved list says, and it REVERSES the 8/3 merge on this repo, which had
+     * folded them into one Tour record on the reasoning that LT = Life Time and
+     * the ball is their product (ppatour.com/sponsors lists a single "Lifetime —
+     * Official Ball" under Tour). Marketing's list is the newer instruction and
+     * separates them, so they're separated. Flagged back for confirmation, since
+     * one partner billed in two tiers is exactly the shape of a copy/paste in a
+     * hand-written roster.
+     *
+     * No designation is printed here: the approved list gives Life Time none,
+     * and the Official Ball designation belongs to the LT Pro 48 record. Logo
+     * only, which is the standing treatment for a mark without a confirmed
+     * designation.
+     */
+    name: "Life Time",
+    website: "https://www.lifetime.life",
+    tier: "platinum",
+    logo: "/ppa/sponsors/life-time.webp",
+    logoWidth: 650,
+    logoHeight: 147,
+  },
+  {
+    // "Proton" per the 8/4 approved list (was "Proton Sports"). Side benefit:
+    // the Malibu Cup's curated presenter string is "Proton", so the marquee card
+    // on that event now resolves this record's mark by exact name.
+    name: "Proton",
     // Verified 7/28 (Conner Ogden: sponsor tiles were bouncing to a PPA page
     // instead of the sponsor).
     website: "https://protonsports.com",
-    // The Daytona stop is branded "Proton", not "Proton Sports".
     eventNamePrefix: "Proton",
     role: "Official Paddle Partner",
     category: "Paddle",
@@ -372,15 +404,39 @@ export const partners: Partner[] = [
     logoHeight: 126,
   },
   {
-    name: "Reign Storm",
+    /**
+     * STORM — renamed from "Reign Storm" per the 8/4 approved list.
+     *
+     * The mark needed no change: what we already ship was imported from the
+     * brand kit's `Storm-Primary-blk-Horizontal`, i.e. it has read STORM all
+     * along and only our record said Reign Storm. The file was renamed
+     * reign-storm.png → storm.png so nothing on disk contradicts the roster.
+     *
+     * Designation carried over unchanged — the approved list renames the brand,
+     * it doesn't restate categories.
+     */
+    name: "STORM",
     website: "https://www.reignstorm.com/en-us/",
     role: "Official Energy Drink Partner",
     category: "Energy Drink",
     note: "Fuel for the fans and the grind of a tour weekend.",
     tier: "platinum",
-    logo: "/ppa/sponsors/reign-storm.png",
+    logo: "/ppa/sponsors/storm.png",
     logoWidth: 900,
     logoHeight: 243,
+  },
+  {
+    name: "Veolia",
+    website: "https://www.veolianorthamerica.com",
+    eventNamePrefix: "Veolia",
+    role: "Official Sustainability Partner",
+    category: "Sustainability",
+    note: "Backing the marquee stops in Atlanta, Chicago, and the National Championships.",
+    tier: "platinum",
+    hideRole: true,
+    logo: "/ppa/sponsors/veolia.png",
+    logoWidth: 900,
+    logoHeight: 222,
   },
   {
     name: "Zimmer Biomet",
@@ -393,45 +449,57 @@ export const partners: Partner[] = [
     logoHeight: 238,
   },
 
-  /* ---- Gold ---- */
+  /* ---- Gold (alphabetical) ---- */
   {
-    name: "Rate",
-    website: "https://www.rate.com",
-    eventNamePrefix: "Rate",
-    role: "Official Mortgage Partner",
-    category: "Mortgage",
-    note: "Title partner of the Rate Las Vegas Open.",
-    tier: "gold",
-    logo: "/ppa/sponsors/rate.webp",
-    logoWidth: 900,
-    logoHeight: 366,
-  },
-  {
-    name: "Fasenra",
-    // ⚠ ppatour.com/sponsors links this partner to astrazeneca.com, not here.
-    // Kept on fasenra.com because that matches the name we display; switch if
-    // the record is renamed to AstraZeneca (see the logo note below).
+    /**
+     * "AstraZeneca / Fasenra" — the name marketing approved on 8/4, and it
+     * closes the flag this record has carried since the logo drop: the only art
+     * supplied is the ASTRAZENECA corporate mark (Fasenra is one of their drugs),
+     * so a card named Fasenra was showing an AstraZeneca wordmark. Naming both
+     * brands makes the mark and the record agree.
+     *
+     * ⚠ URL still open. Kept on fasenra.com — Wesley's 8/3 call, and it's the
+     * product site behind the Official Asthma Partner designation — while
+     * ppatour.com/sponsors links this partner to astrazeneca.com. One-line
+     * switch if marketing wants the corporate destination now that the mark and
+     * the name both lead with AstraZeneca.
+     *
+     * ⚠ Fasenra (not AstraZeneca) presents the National Championships, so that
+     * presenting credit still reads Fasenra in event copy. And at 575px this is
+     * the lowest-resolution mark we hold — both resolve by getting Fasenra art.
+     */
+    name: "AstraZeneca / Fasenra",
     website: "https://www.fasenra.com",
     role: "Official Asthma Partner",
     category: "Medicinal",
     note: "The tour's exclusive asthma partner.",
     tier: "gold",
-    /**
-     * ⚠ This is the ASTRAZENECA corporate mark, not a Fasenra mark — that is
-     * the only art in the Gold folder for this partner (Fasenra is one of their
-     * drugs). Wesley's call, 8/3: keep the partner as Fasenra and use the logo
-     * we have. It reads coherently because PartnerWall prints the designation
-     * and NOT the name wherever a logo exists, so the card shows the
-     * AstraZeneca mark over "Official Asthma Partner".
-     *
-     * Two things to watch: Fasenra presents the National Championships, so that
-     * presenting credit still says Fasenra in copy while the mark beside it says
-     * AstraZeneca; and at 575px this is the lowest-resolution file we hold.
-     * Both resolve by getting the Fasenra mark.
-     */
     logo: "/ppa/sponsors/astrazeneca.png",
     logoWidth: 575,
     logoHeight: 139,
+  },
+  {
+    /**
+     * "AT Sports Surfaces / Acrytech" — approved 8/4, and the same fix as
+     * AstraZeneca / Fasenra above: the supplied art reads "AT SPORTS — High
+     * Performance Sports Surfaces", so a card named Acrytech was showing a mark
+     * that said something else. Both names now appear.
+     *
+     * ⚠ THIS PARTNER HAS THREE NAMES and only two of them are here. Acry-Tech
+     * Coatings is what Conner verified on 7/28 and what we link to;
+     * ppatour.com/sponsors calls it "Court Surfaces/Tennis Paint" and links
+     * tennispaint.com. Staying on acrytech.com because a human on our side
+     * verified that destination. Worth one confirmation from marketing.
+     */
+    name: "AT Sports Surfaces / Acrytech",
+    website: "https://www.acrytech.com",
+    role: "Official Court Surface Partner",
+    category: "Court Surface",
+    note: "The surface underfoot at PPA Tour stops.",
+    tier: "gold",
+    logo: "/ppa/sponsors/at-sports.webp",
+    logoWidth: 900,
+    logoHeight: 655,
   },
   {
     name: "Holland America Line",
@@ -458,7 +526,42 @@ export const partners: Partner[] = [
     logoHeight: 179,
   },
   {
-    name: "Park Place Technologies",
+    // "Just Courts" per the 8/4 approved list (was "Just Courts Design + Build").
+    name: "Just Courts",
+    website: "https://justcourts.com/",
+    // ⚠ Listed with no designation on either the live page or the 8/4 approved
+    // list, so this card is intentionally logo-only.
+    tier: "gold",
+    logo: "/ppa/sponsors/just-courts.png",
+    logoWidth: 900,
+    logoHeight: 520,
+  },
+  {
+    /**
+     * MOJO Energy Pouches — new on the 8/4 approved list.
+     *
+     * ⚠ NO MARK YET. The list points at the brand-asset zips in Slack, which
+     * this machine doesn't have, and MOJO is not in the live site's media
+     * library either (checked 8/4 — no mojo* asset on ppatour.com/sponsors), so
+     * there was nothing to import. Renders as a wordmark card until the art
+     * lands: drop the file in public/ppa/sponsors and add logo/logoWidth/
+     * logoHeight. Same for The Picklr and Zyia below.
+     *
+     * No designation either — not stated on the approved list, and inventing
+     * one would put words in a sponsor's mouth on their own card.
+     *
+     * Destination verified 8/4: mojoenergypouches.com self-identifies as "MOJO
+     * ENERGY POUCHES | THE OFFICIAL WEBSITE". Not to be confused with mojo.com.
+     */
+    name: "MOJO Energy Pouches",
+    website: "https://mojoenergypouches.com",
+    tier: "gold",
+  },
+  {
+    // "Park Place" per the 8/4 approved list (was "Park Place Technologies").
+    // The supplied mark still reads Park Place Technologies; the name is never
+    // printed beside a logo, so it surfaces only as alt text and hover title.
+    name: "Park Place",
     website: "https://www.parkplacetechnologies.com",
     role: "Official Technology Partner",
     category: "Technology",
@@ -470,128 +573,28 @@ export const partners: Partner[] = [
     logoHeight: 520,
   },
   {
-    name: "Acrytech",
-    // Acry-Tech Coatings — verified 7/28 (Conner Ogden).
-    // ⚠ ppatour.com/sponsors calls this partner "Tennis Paint" and links to
-    // tennispaint.com. Likely the same company under a different brand; kept on
-    // acrytech.com because a human on our side verified it and it matches the
-    // name we display. Resolve alongside the name/logo question below.
-    website: "https://www.acrytech.com",
-    role: "Official Court Surface Partner",
-    category: "Court Surface",
-    note: "The surface underfoot at PPA Tour stops.",
+    name: "Rate",
+    website: "https://www.rate.com",
+    eventNamePrefix: "Rate",
+    role: "Official Mortgage Partner",
+    category: "Mortgage",
+    note: "Title partner of the Rate Las Vegas Open.",
     tier: "gold",
-    // ⚠ The supplied art reads "AT SPORTS — High Performance Sports Surfaces",
-    // not Acrytech. Wesley's call, 8/3: keep the partner name as Acrytech. Same
-    // situation as Fasenra above — the card shows the mark over the
-    // designation, never the typed name, so it doesn't contradict itself.
-    logo: "/ppa/sponsors/at-sports.webp",
+    logo: "/ppa/sponsors/rate.webp",
     logoWidth: 900,
-    logoHeight: 655,
+    logoHeight: 366,
   },
 
+  /* ---- Tour Sponsors (alphabetical) ---- */
   {
-    name: "PickleballTV",
-    website: "https://pickleballtv.com/",
-    role: "Official Broadcast Partner",
-    category: "Broadcast / Streaming",
-    note: "Every court, every match — the tour's streaming home.",
-    tier: "gold",
-    logo: "/ppa/sponsors/pbtv.webp",
-    logoWidth: 701,
-    logoHeight: 900,
-  },
-  {
-    name: "Pickleball Central",
-    // URL already verified in this codebase (the header Shop link and every
-    // athlete gear CTA point here).
-    website: "https://www.pickleballcentral.com",
-    role: "Official Store",
-    category: "Retail",
-    tier: "gold",
-    logo: "/ppa/sponsors/pickleball-central.png",
-    logoWidth: 900,
-    logoHeight: 102,
-  },
-  {
-    name: "Pickleball Tournaments",
-    // The registration platform the site already links every amateur CTA to.
-    website: "https://www.pickleballtournaments.com",
-    role: "Official Software",
-    category: "Tournament Software",
-    tier: "gold",
-    logo: "/ppa/sponsors/pickleball-tournaments.png",
-    logoWidth: 900,
-    logoHeight: 241,
-  },
-  {
-    name: "Just Courts Design + Build",
-    website: "https://justcourts.com/",
-    // ⚠ Listed on the live sponsors page with no designation printed, so this
-    // card is intentionally logo-only.
-    tier: "gold",
-    logo: "/ppa/sponsors/just-courts.png",
-    logoWidth: 900,
-    logoHeight: 520,
-  },
-
-  /* ---- Silver ---- */
-  {
-    name: "Tixr",
-    website: "https://www.tixr.com",
-    role: "Official Ticketing Partner",
-    category: "Ticketing",
-    note: "How fans get into every PPA Tour event.",
-    tier: "silver",
-    logo: "/ppa/sponsors/tixr.png",
-    logoWidth: 900,
-    logoHeight: 186,
-  },
-  {
-    name: "PlaySight",
-    website: "https://playsight.com/",
-    role: "Official AI Technology",
-    category: "AI Technology",
-    tier: "silver",
-    logo: "/ppa/sponsors/playsight.png",
-    logoWidth: 900,
-    logoHeight: 200,
-  },
-  {
-    name: "Hertz",
-    website: "https://www.hertz.com/rentacar/reservation/",
-    role: "Official Rental Car",
-    category: "Rental Car",
-    tier: "silver",
-    logo: "/ppa/sponsors/hertz.webp",
-    logoWidth: 381,
-    logoHeight: 136,
-  },
-
-  /* ---- Tour Sponsors ---- */
-  {
-    /**
-     * Life Time / LT Pro 48 — ONE partner, not two.
-     *
-     * The first pass had them as separate records in separate tiers: "LT Pro 48"
-     * (Tour, Official Ball) from the Tour Sponsors folder, and "Life Time"
-     * (Platinum) because the LIFE TIME wordmark sat in the Platinum folder. The
-     * live page lists a single "Lifetime — Official Ball" under Tour Sponsors,
-     * and LT stands for Life Time: the ball is their product.
-     *
-     * ⚠ Which mark to show is still open. Using the LT PRO48 ball mark because
-     * the designation is Official Ball; `life-time.webp` is still on disk, so
-     * switching to the parent wordmark is a one-line change.
-     */
-    name: "LT Pro 48",
-    website: "https://shop.lifetime.life/lt-pro-48-pickleball",
-    role: "Official Ball",
-    category: "Ball",
-    note: "The official ball of PPA Tour play.",
+    name: "Black Clover",
+    website: "https://blackcloverusa.com/",
+    role: "Official Apparel",
+    category: "Apparel",
     tier: "tour",
-    logo: "/ppa/sponsors/lt-pro48.png",
+    logo: "/ppa/sponsors/black-clover.png",
     logoWidth: 900,
-    logoHeight: 168,
+    logoHeight: 367,
   },
   {
     name: "DUPR",
@@ -606,16 +609,6 @@ export const partners: Partner[] = [
     logoHeight: 280,
   },
   {
-    name: "Black Clover",
-    website: "https://blackcloverusa.com/",
-    role: "Official Apparel",
-    category: "Apparel",
-    tier: "tour",
-    logo: "/ppa/sponsors/black-clover.png",
-    logoWidth: 900,
-    logoHeight: 367,
-  },
-  {
     name: "Engine",
     website: "https://engine.com/partner/ppa",
     role: "Official Travel Partner",
@@ -624,6 +617,20 @@ export const partners: Partner[] = [
     logo: "/ppa/sponsors/engine.png",
     logoWidth: 900,
     logoHeight: 310,
+  },
+  {
+    // The ball. Billed here under Tour; the Life Time parent brand is billed
+    // separately at Platinum — see the ⚠ on that record, this split is the one
+    // thing in the 8/4 list worth a second look.
+    name: "LT Pro 48",
+    website: "https://shop.lifetime.life/lt-pro-48-pickleball",
+    role: "Official Ball",
+    category: "Ball",
+    note: "The official ball of PPA Tour play.",
+    tier: "tour",
+    logo: "/ppa/sponsors/lt-pro48.png",
+    logoWidth: 900,
+    logoHeight: 168,
   },
   {
     name: "Mineragua",
@@ -646,29 +653,109 @@ export const partners: Partner[] = [
     logoHeight: 212,
   },
   {
-    name: "Picklebalm",
-    website: "https://picklebalm.com/",
-    role: "Official Topical Pain Reliever",
-    category: "Topical Pain Reliever",
+    // "PBC" per the 8/4 approved list, and Gold → Tour with the same rebill.
+    // ⚠ The name is the roster label, so it is also the image alt text and the
+    // footer hover title — "PBC" is less legible than "Pickleball Central" to a
+    // screen reader. Approved label wins; one word to change if that matters.
+    name: "PBC",
+    // URL already verified in this codebase (the header Shop link and every
+    // athlete gear CTA point here).
+    website: "https://www.pickleballcentral.com",
+    role: "Official Store",
+    category: "Retail",
     tier: "tour",
-    logo: "/ppa/sponsors/picklebalm.png",
-    logoWidth: 418,
-    logoHeight: 94,
+    logo: "/ppa/sponsors/pickleball-central.png",
+    logoWidth: 900,
+    logoHeight: 102,
+  },
+  {
+    // "PBTV" per the 8/4 approved list, and Gold → Tour with the same rebill.
+    // Same alt-text caveat as PBC above.
+    name: "PBTV",
+    website: "https://pickleballtv.com/",
+    role: "Official Broadcast Partner",
+    category: "Broadcast / Streaming",
+    note: "Every court, every match — the tour's streaming home.",
+    tier: "tour",
+    // ⚠ Square lockup, so a height-capped card renders it optically small
+    // beside the wordmarks. Still open: a horizontal PBTV lockup fixes it.
+    logo: "/ppa/sponsors/pbtv.webp",
+    logoWidth: 701,
+    logoHeight: 900,
+  },
+  {
+    // Silver → Tour. Silver no longer exists (8/4).
+    name: "PlaySight",
+    website: "https://playsight.com/",
+    role: "Official AI Technology",
+    category: "AI Technology",
+    tier: "tour",
+    logo: "/ppa/sponsors/playsight.png",
+    logoWidth: 900,
+    logoHeight: 200,
+  },
+  {
+    // New on the 8/4 list. No mark supplied — see the MOJO note above.
+    // Destination verified 8/4 (thepicklr.com; picklr.com is a parked domain).
+    name: "The Picklr",
+    website: "https://thepicklr.com",
+    tier: "tour",
+  },
+  {
+    // Silver → Tour. Silver no longer exists (8/4).
+    name: "Tixr",
+    website: "https://www.tixr.com",
+    role: "Official Ticketing Partner",
+    category: "Ticketing",
+    note: "How fans get into every PPA Tour event.",
+    tier: "tour",
+    logo: "/ppa/sponsors/tixr.png",
+    logoWidth: 900,
+    logoHeight: 186,
+  },
+  {
+    /**
+     * New on the 8/4 list. No mark supplied — see the MOJO note above.
+     *
+     * ⚠ Destination is the apparel brand ZYIA Active (zyiaactive.com, verified
+     * 8/4). NOT zyia.com, which resolves to an industrial flow-meter
+     * manufacturer — the obvious guess is the wrong company. Name kept exactly
+     * as approved ("Zyia"), which matters more than usual here: with no mark,
+     * this card prints its name.
+     */
+    name: "Zyia",
+    website: "https://zyiaactive.com",
+    tier: "tour",
   },
 
   /**
-   * ⚠ SELKIRK REMOVED, 8/3 (Wesley: "Remove selkirk for now").
+   * ⚠ PARTNERS REMOVED — records kept here so re-adding one is a paste, not a
+   * re-investigation. All four leave the `official` fallback tier empty, which
+   * is fine: `partnersByTier()` drops empty groups, so no heading renders.
    *
-   * They were on our exclusivity roster as Official Net Partner, but appear
-   * NOWHERE on ppatour.com/sponsors — not Platinum, Gold, Silver or Tour — and
-   * no mark came in the brand-asset drop. Absent from both sources is what a
-   * lapsed designation looks like, and "for now" is the operative phrase: if the
-   * deal is live, re-add them with a tier and a logo. The old record was
-   * `role: "Official Net Partner"`, `category: "Net"`,
+   * SELKIRK, 8/3 (Wesley: "Remove selkirk for now"). On our exclusivity roster
+   * as Official Net Partner but absent from ppatour.com/sponsors and from the
+   * brand-asset drop; still absent from the 8/4 approved list, which is a second
+   * source agreeing. `role: "Official Net Partner"`, `category: "Net"`,
    * `website: "https://www.selkirk.com"`.
    *
-   * This leaves the `official` fallback tier empty, which is fine —
-   * `partnersByTier()` drops empty groups, so no heading renders.
+   * The next three come off with the 8/4 approved list, and all three are still
+   * ON ppatour.com/sponsors today — so this is the approved roster disagreeing
+   * with the live page, which is worth one confirmation before launch:
+   *
+   * HERTZ — was Silver, `role: "Official Rental Car"`,
+   * `website: "https://www.hertz.com/rentacar/reservation/"`,
+   * `logo: "/ppa/sponsors/hertz.webp"` (381x136).
+   *
+   * PICKLEBALL TOURNAMENTS — was Gold, `role: "Official Software"`,
+   * `website: "https://www.pickleballtournaments.com"`,
+   * `logo: "/ppa/sponsors/pickleball-tournaments.png"` (900x241). Note the site
+   * still deep-links every amateur registration CTA to this platform; dropping
+   * the SPONSOR record doesn't touch those links.
+   *
+   * PICKLEBALM — was Tour, `role: "Official Topical Pain Reliever"`,
+   * `website: "https://picklebalm.com/"`,
+   * `logo: "/ppa/sponsors/picklebalm.png"` (418x94).
    */
 ];
 
@@ -676,8 +763,53 @@ export const partners: Partner[] = [
 export const titlePartner = partners.find((p) => p.tier === "title");
 
 /**
- * Partners grouped by billing tier in `PARTNER_TIERS` order, title partner
- * excluded, empty tiers dropped.
+ * Resolve a partner record from a name written somewhere else in the codebase —
+ * specifically an event's curated `presentedBy` string.
+ *
+ * ⚠ THIS EXISTS BECAUSE THE 8/4 RENAMES BROKE AN EXACT-MATCH LOOKUP. EventSponsors
+ * finds the presenting partner's mark with `partners.find(p => p.name === presentedBy)`,
+ * and the approved roster labels no longer line up with the presenter strings:
+ * Nationals is presented by "Fasenra" (roster: "AstraZeneca / Fasenra") and the
+ * Chicago Cup by "Storm" (roster: "STORM"). Both silently fell back to printing
+ * the typed name instead of showing the logo.
+ *
+ * Deliberately NOT the loose matching that caused the 8/3 Worlds bug. That was
+ * inferring a sponsorship *relationship* from a name prefix. Here the relationship
+ * is already asserted by curated event data; all this does is decide which roster
+ * row holds the artwork, and it only ever matches a full name or one whole
+ * slash-separated segment of a name ("AstraZeneca / Fasenra" → "AstraZeneca" or
+ * "Fasenra"). It cannot invent a credit: an unknown string still resolves to
+ * undefined, and the caller keeps its typed-name fallback.
+ */
+export function partnerByDisplayName(name: string): Partner | undefined {
+  const want = name.trim().toLowerCase();
+  return (
+    partners.find((p) => p.name.toLowerCase() === want) ??
+    partners.find((p) =>
+      p.name
+        .split("/")
+        .map((s) => s.trim().toLowerCase())
+        .includes(want),
+    )
+  );
+}
+
+/**
+ * Alphabetical within a tier — the ordering marketing asked for on 8/4 ("Within
+ * each level: list partners alphabetically").
+ *
+ * Case-insensitive so STORM doesn't sort ahead of Six Zero, and applied in code
+ * rather than trusted to the array's hand-maintained order: the roster is edited
+ * by hand under time pressure and the natural edit is to append a new partner to
+ * the end of its block, which would silently break the rule on the one page
+ * sponsors read. The array is kept in this order too, for whoever is reading it.
+ */
+const byName = (a: Partner, b: Partner) =>
+  a.name.localeCompare(b.name, "en", { sensitivity: "base" });
+
+/**
+ * Partners grouped by billing tier in `PARTNER_TIERS` order, alphabetical within
+ * each tier, title partner excluded, empty tiers dropped.
  *
  * Every surface that lists partners reads this rather than filtering `partners`
  * itself — before tiers existed the filters were `tier === "official"`, which
@@ -691,7 +823,7 @@ export function partnersByTier(): {
 }[] {
   return PARTNER_TIERS.map((t) => ({
     ...t,
-    items: partners.filter((p) => p.tier === t.key),
+    items: partners.filter((p) => p.tier === t.key).sort(byName),
   })).filter((g) => g.items.length > 0);
 }
 
@@ -703,7 +835,7 @@ export function partnersByTier(): {
 export const logoPartnersInTierOrder: Partner[] = [
   ...(titlePartner?.logo ? [titlePartner] : []),
   ...PARTNER_TIERS.flatMap((t) =>
-    partners.filter((p) => p.tier === t.key && p.logo),
+    partners.filter((p) => p.tier === t.key && p.logo).sort(byName),
   ),
 ];
 
@@ -714,6 +846,9 @@ export const logoPartnersInTierOrder: Partner[] = [
  * wrapping to several rows on every screen in the site and giving a Tour Sponsor
  * the same site-wide placement as the title partner. Top billing only; the full
  * directory is one click away via the "All Sponsors" link beside it.
+ *
+ * ⚠ This strip grew from 9 marks to 10 with the 8/4 roster (Life Time joined
+ * Platinum). It already wrapped to 5 rows at 390px at nine — worth a look.
  */
 export const footerPartners: Partner[] = logoPartnersInTierOrder.filter(
   (p) => p.tier === "title" || p.tier === "platinum",

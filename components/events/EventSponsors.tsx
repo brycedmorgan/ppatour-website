@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PartnerWall } from "@/components/global/PartnerWall";
-import { partners } from "@/lib/home-content";
+import { partnerByDisplayName, partners } from "@/lib/home-content";
 import type { Tournament } from "@/lib/placeholder-data";
 
 /**
@@ -52,7 +52,11 @@ export function EventSponsors({ event }: { event: Tournament }) {
         {marquee.length > 0 && (
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             {marquee.map((m) => {
-              const p = partners.find((x) => x.name === m.name);
+              // Resolver, not `x.name === m.name`: the 8/4 roster labels differ
+              // from the curated presenter strings ("Fasenra" vs "AstraZeneca /
+              // Fasenra", "Storm" vs "STORM"), and exact matching silently
+              // dropped those marks to a typed name.
+              const p = partnerByDisplayName(m.name);
               return (
                 <div
                   key={m.name}

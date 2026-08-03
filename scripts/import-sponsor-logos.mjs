@@ -41,7 +41,9 @@ const JOBS = [
   ["Gold Partner Logos", "joma-black-1536x381.png", "joma", "Joma"],
   ["Gold Partner Logos", "Park-Place-Technologies_Stacked_Color-final-1-1536x887.png", "park-place", "Park Place Technologies (stacked)"],
   ["Gold Partner Logos", "ATSports-Logo_Color.jpg", "at-sports", "AT Sports (the Acrytech record uses this)"],
-  ["Platinum Partner Logos/Platinum Partner Logos", "Storm-Primary-blk-Horizontal-1536x698.png", "reign-storm", "Reign Storm"],
+  // The art has always read STORM; only our record said "Reign Storm" until the
+  // 8/4 approved roster renamed the partner. Output slug follows the artwork.
+  ["Platinum Partner Logos/Platinum Partner Logos", "Storm-Primary-blk-Horizontal-1536x698.png", "storm", "STORM"],
   ["Tour Sponsors", "lt-pro48-rev.png", "lt-pro48", "LT PRO48"],
   ["Tour Sponsors", "tixr_logo.png", "tixr", "Tixr"],
 
@@ -68,10 +70,22 @@ const JOBS = [
  */
 const REMOTE_JOBS = [
   ["https://ppatour.com/wp-content/uploads/2024/07/JC_primary_positive.png", "just-courts", "Just Courts Design + Build"],
-  ["https://ppatour.com/wp-content/uploads/2025/01/pt-logo-primary.png", "pickleball-tournaments", "Pickleball Tournaments"],
-  ["https://ppatour.com/wp-content/uploads/2024/06/Hertz_logo.png", "hertz", "Hertz"],
-  ["https://ppatour.com/wp-content/uploads/2025/06/Picklebalm_Logo_Color_SPOT_PMS2129_PMS375.png", "picklebalm", "Picklebalm"],
+  // ⚠ The next three partners came OFF the roster with the 8/4 approved list
+  // (see the removal note in lib/home-content.ts). Their jobs stay so re-adding
+  // any of them needs no re-investigation of where the art lives; re-running the
+  // importer just writes three files nothing currently references.
+  ["https://ppatour.com/wp-content/uploads/2025/01/pt-logo-primary.png", "pickleball-tournaments", "Pickleball Tournaments (off roster 8/4)"],
+  ["https://ppatour.com/wp-content/uploads/2024/06/Hertz_logo.png", "hertz", "Hertz (off roster 8/4)"],
+  ["https://ppatour.com/wp-content/uploads/2025/06/Picklebalm_Logo_Color_SPOT_PMS2129_PMS375.png", "picklebalm", "Picklebalm (off roster 8/4)"],
 ];
+
+/**
+ * ⚠ STILL MISSING ART: MOJO Energy Pouches, The Picklr, Zyia — the three
+ * partners the 8/4 list adds. The zips live in a Slack message this machine
+ * doesn't have, and none of the three is in the live site's media library
+ * (checked 8/4), so there was no URL to add here. They render as wordmark cards
+ * until someone drops the files in and fills in logoWidth/logoHeight.
+ */
 
 mkdirSync(OUT, { recursive: true });
 
