@@ -11,6 +11,75 @@ export const metadata: Metadata = {
     "The World Pickleball Rankings — combined men's and women's standings, updated through the PPA Tour season.",
 };
 
+/**
+ * How the composite is weighted — the 50/35/15 split, as a figure.
+ *
+ * Part-to-whole with three parts, so it's one horizontal stacked bar rather
+ * than three separate meters: the point is that these sum to a single ranking,
+ * which three bars would not say. Segment width IS the weight — no exaggerated
+ * scale — so singles reads as the sliver it is.
+ *
+ * ⚠ Palette is `ppa-blue-deep → ppa-blue → ppa-sky`, a single-hue ramp in
+ * weight order (heaviest darkest). Validated, not eyeballed: all six checks
+ * pass against the ppa-paper surface (worst adjacent pair ΔE 15.7 protan /
+ * 15.4 normal). The brand navy FAILS the lightness and chroma floors and the
+ * yellow fails contrast at 1.21, so neither can carry a fill here.
+ *
+ * `ppa-sky` carries a contrast WARN (1.89 vs surface), which obliges visible
+ * labels — every segment is direct-labelled below, so identity never rests on
+ * colour alone. Keep those labels if you restyle this.
+ */
+const WEIGHTS = [
+  { label: "Men's / Women's Doubles", weight: 50, fill: "bg-ppa-blue-deep" },
+  { label: "Mixed Doubles", weight: 35, fill: "bg-ppa-blue" },
+  { label: "Singles", weight: 15, fill: "bg-ppa-sky" },
+] as const;
+
+function WeightingBreakout() {
+  return (
+    <figure className="m-0 border border-ppa-line bg-white p-5 sm:p-6">
+      <figcaption className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
+        How the ranking is weighted
+      </figcaption>
+
+      {/* The bar. `gap-[2px]` is the surface gap between segments — the paper
+          showing through is what separates them, not a border. */}
+      <div className="mt-4 flex h-3 w-full gap-[2px]" role="presentation">
+        {WEIGHTS.map((w, i) => (
+          <span
+            key={w.label}
+            style={{ width: `${w.weight}%` }}
+            className={`${w.fill} ${i === 0 ? "rounded-l-[4px]" : ""} ${
+              i === WEIGHTS.length - 1 ? "rounded-r-[4px]" : ""
+            }`}
+          />
+        ))}
+      </div>
+
+      <dl className="mt-5 space-y-3">
+        {WEIGHTS.map((w) => (
+          <div key={w.label} className="flex items-baseline gap-3">
+            <span className={`${w.fill} mt-1.5 size-2 shrink-0 rounded-[1px]`} />
+            <dt className="min-w-0 flex-1 text-sm font-bold text-ppa-navy">
+              {w.label}
+            </dt>
+            {/* Text tokens, never the series colour — the chip beside it
+                carries identity. */}
+            <dd className="font-display text-xl leading-none tabular-nums text-ppa-navy">
+              {w.weight}
+              <span className="text-sm text-ppa-navy/50">%</span>
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      <p className="mt-5 border-t border-ppa-line pt-3 text-xs leading-relaxed text-ppa-navy/50">
+        Weighted across the last 52 weeks of Carvana PPA Tour results.
+      </p>
+    </figure>
+  );
+}
+
 export default async function RankingsPage() {
   // 52-week World Pickleball Rankings — the COMPLETE boards, every ranked
   // pro in both genders (Connor: "all the way", no 25-row cap).
@@ -58,35 +127,28 @@ export default async function RankingsPage() {
               className="hidden h-9 w-auto sm:block lg:h-11"
             />
           </div>
-          <div className="mt-4 max-w-2xl space-y-3 text-sm leading-relaxed text-ppa-navy/60">
-            {/* Copy: Jeff + Nathan's audit doc, 7/27. */}
-            <p>
-              Designed to identify the top overall pickleball players in the
-              world, the World Pickleball Ranking is a composite ranking that
-              takes into account performance across all three disciplines:
-              men&apos;s/women&apos;s doubles, mixed doubles, and singles.
-            </p>
-            <p>
-              The World Pickleball Ranking is determined using a weighted
-              point system based on a combination of each player&apos;s Carvana
-              PPA Tour points earned in the last 52 weeks across all three
-              disciplines:
-            </p>
-            <ul className="space-y-1.5">
-              {[
-                ["Men's/Women's Doubles", "50%"],
-                ["Mixed Doubles", "35%"],
-                ["Singles", "15%"],
-              ].map(([event, weight]) => (
-                <li key={event} className="flex items-center gap-2.5">
-                  <span className="h-1.5 w-1.5 shrink-0 bg-ppa-blue" />
-                  <span className="text-ppa-navy/70">
-                    <span className="font-bold text-ppa-navy">{event}:</span>{" "}
-                    {weight}
-                  </span>
-                </li>
-              ))}
-            </ul>
+          {/* Copy left, the weighting as a figure right (Bryce, 8/3: "balanced
+              better up top… highlight the breakout… use space better"). The
+              hero used ~half the container and left the rest empty, while the
+              50/35/15 split — the thing that actually explains the ranking —
+              sat at the bottom as three bullets. */}
+          <div className="mt-6 grid gap-x-12 gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:items-start">
+            <div className="space-y-3 text-sm leading-relaxed text-ppa-navy/60">
+              {/* Copy: Jeff + Nathan's audit doc, 7/27. */}
+              <p>
+                Designed to identify the top overall pickleball players in the
+                world, the World Pickleball Ranking is a composite ranking that
+                takes into account performance across all three disciplines:
+                men&apos;s/women&apos;s doubles, mixed doubles, and singles.
+              </p>
+              <p>
+                It is determined using a weighted point system based on each
+                player&apos;s Carvana PPA Tour points earned in the last 52
+                weeks.
+              </p>
+            </div>
+
+            <WeightingBreakout />
           </div>
         </div>
       </section>
