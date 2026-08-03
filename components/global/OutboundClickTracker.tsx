@@ -29,6 +29,12 @@ const PARTNER_HOSTS = [
   // resolve to it; the nav uses one and /tour/travel the other.
   "ppavacations.com",
   "vacations.ppatour.com",
+  // PPA Pickleball Tour 2025 storefronts (/game). The click out is the only
+  // thing measurable — the purchase happens on the platform.
+  "store.steampowered.com",
+  "store.playstation.com",
+  "xbox.com",
+  "nintendo.com",
 ];
 
 function eventNameFor(host: string): string | null {

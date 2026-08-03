@@ -91,6 +91,28 @@ const LEGACY_REDIRECTS = [
   { source: "/opt-out-preferences", destination: "/about/privacy" },
   { source: "/content-policy", destination: "/about/terms" },
   { source: "/ppa-tour-event-inquiry-form", destination: "/about/host-tournament" },
+  /**
+   * The rest of the page-sitemap orphans, ruled on by Bryce 8/3. All were live
+   * 200s on ppatour.com and would have 404'd at cutover.
+   *
+   * `/vote/` was the Carvana Driving Pickleball Forward Award and
+   * `/ppa-survey-ticket-giveaway/` a campaign page — both expired, both go home
+   * rather than to a dead campaign. `/video-submission/` is retired "for now",
+   * so if the intake comes back it wants a real page, not this line.
+   */
+  { source: "/social-media-landing-page", destination: "/" },
+  { source: "/vote", destination: "/" },
+  { source: "/vote/thank-you", destination: "/" },
+  { source: "/ppa-survey-ticket-giveaway", destination: "/" },
+  { source: "/video-submission", destination: "/" },
+  { source: "/welcome-email", destination: "/" },
+  /**
+   * The video game page is the one orphan Bryce wanted KEPT, not redirected
+   * away — rebuilt at /game (short enough to say out loud on a broadcast) with
+   * the legacy URL forwarding into it so the existing links and search equity
+   * still land.
+   */
+  { source: "/ppa-pickleball-tour-video-game", destination: "/game" },
 
   // patterns
   // Articles briefly lived at /news/{slug}; fold those into the root URL so the
