@@ -315,6 +315,15 @@ const BRAND_BY_SLUG: Record<
   "proton-daytona-beach-open": { primary: "#003058", accent: "#2088e0", icon: "/ppa/badges/daytona.png" },
   "veolia-malibu-cup": { primary: "#003058", accent: "#e23a76", icon: "/ppa/badges/malibu.png" },
   "veolia-arizona-open": { primary: "#003058", accent: "#0078d0", icon: "/ppa/badges/arizona.png" },
+  "cape-coral-open": { primary: "#0a2540", accent: "#12a5a5", icon: "/ppa/badges/cape-coral.png" },
+  "greater-zion-cup-at-black-desert-resort": { primary: "#0e2a47", accent: "#c0451f", icon: "/ppa/badges/greater-zion.png" },
+  "carvana-mesa-cup": { primary: "#5b2d82", accent: "#7b4bab", icon: "/ppa/badges/mesa-cup.png" },
+  "minneapolis-indoor-open": { primary: "#0a2540", accent: "#2088e0", icon: "/ppa/badges/minneapolis.png" },
+  "newport-beach-open": { primary: "#0a7bc2", accent: "#0a7bc2", icon: "/ppa/badges/newport-beach.png" },
+  "carvana-pickleball-masters": { primary: "#1a7a3c", accent: "#1a7a3c", icon: "/ppa/badges/masters.png" },
+  "ppa-finals": { primary: "#0c2b44", accent: "#c9a227", icon: "/ppa/badges/ppa-finals.png" },
+  "sacramento-open": { primary: "#0a2540", accent: "#2088e0", icon: "/ppa/badges/sacramento.png" },
+  "texas-open": { primary: "#0a2540", accent: "#2088e0", icon: "/ppa/badges/texas.png" },
 };
 
 // Real commerce deep links per generated slug (verified against the live
