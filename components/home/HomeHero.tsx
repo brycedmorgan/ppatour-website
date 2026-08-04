@@ -36,22 +36,23 @@ import { withUtm } from "@/lib/utm";
 export type HeroVariant = "photo" | "video" | "zoom-parallax";
 
 /**
- * The Worlds Championship hype cut (Wesley, 8/4), pulled from
- * worlds.unitedpickleball.com and self-hosted. Real tour footage, so the video
- * option can finally be judged on its merits rather than on a game trailer.
+ * The National Championships launch film (Wesley, 8/4), self-hosted. Replaced
+ * the Worlds hype cut, which was a stand-in for judging the treatment.
+ * 1920x1080, 29.4s, landscape.
  *
- * ⚠ NOT SHIPPABLE AS-IS: 12.5 MB, 21s, 1280x720, ~5 Mbps, and it still carries
- * an audio track we never play. That is ~6x what a hero background should
- * weigh, on the page whose LCP two previous sessions were spent protecting. It
- * is fine for a decision page; it needs a compressed cut before it goes near
- * the real homepage. Target: 8-15s, no audio track, ~2 MB.
+ * ⚠ NOT SHIPPABLE AS-IS: 30 MB at ~8.5 Mbps, and it carries an audio track we
+ * never play. That is roughly 15x what a hero background should weigh, on the
+ * page whose LCP two previous sessions were spent protecting — and 2.4x the
+ * Worlds cut it replaced. Fine for a decision page; it needs a compressed cut
+ * before it goes near the real homepage. Target: 8-15s, no audio track, ~2 MB.
+ * There is no ffmpeg on this machine, so that cut has to come from someone who
+ * can re-encode.
  *
- * ⚠ IT SHIPPED moov-LAST and was re-laid-out to faststart here. Without that a
- * browser must download all 12.5 MB before the first frame appears, which for a
- * hero is a blank navy box on any slow connection. There is no ffmpeg on this
- * machine, so the atom was relocated and all 1,254 stco chunk offsets rewritten
- * directly (scratchpad/faststart.mjs) — a pure relocation, byte count
- * unchanged, no re-encode. Verified decoding in Chrome afterwards, because a
+ * ⚠ IT ARRIVED moov-LAST and was re-laid-out to faststart here. Without that a
+ * browser must download all 30 MB before the first frame appears — a blank hero
+ * on anything but a fast connection. The atom was relocated and all 1,764 stco
+ * chunk offsets rewritten (scratchpad/faststart.mjs): a pure relocation, byte
+ * count unchanged, no re-encode. Verified decoding afterwards, because a
  * mis-patched offset table yields a structurally valid file that will not play.
  *
  * ⚠ THIS IS THE ON/OFF SWITCH FOR THE VIDEO HERO (Wesley, 8/4: "have the video
@@ -60,7 +61,8 @@ export type HeroVariant = "photo" | "video" | "zoom-parallax";
  * its zoom-out and parallax. Nothing else needs to change, and no surface can
  * end up with an empty background.
  */
-const HERO_VIDEO: string | null = "/ppa/home/hero-worlds-hype.mp4";
+const HERO_VIDEO: string | null =
+  "/ppa/home/nc-pickleball-national-championships-video.mp4";
 
 /**
  * The still behind the zoom-out/parallax option, and the video's fallback layer.
