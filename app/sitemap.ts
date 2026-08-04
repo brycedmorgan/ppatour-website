@@ -82,6 +82,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.5,
     })),
+    /**
+     * Pickleball Vacations. High priority: it sells a $3,800–$6,400 room and,
+     * having just moved off its own subdomain, has no accumulated authority of
+     * its own — the sitemap is how the new URL gets found. /register, /success
+     * and the Punta Cana guest archive are all noindex and stay out.
+     */
+    {
+      url: url("/vacations"),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    },
     // Native articles + the 811 migrated WordPress posts. `lastModified`
     // matters here: these carry real publication dates going back to 2023, and
     // the 301s from their old root-level URLs need the new URL to look

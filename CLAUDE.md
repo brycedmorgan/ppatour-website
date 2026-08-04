@@ -168,6 +168,60 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   Same exposure as `lib/tv-schedule.ts`, which had already drifted twice
   ("PPA World Pickleball Championships", "Proton Florida Open" — both fixed this session).
   **A check asserting curated + TV names match the feed is ~20 lines and worth it.**
+### 2026-08-04 — Pickleball Vacations moved ONTO this site at /vacations
+- **Bryce: "I want PPA vacations built within the new ppa tour site."** It was a
+  standalone Next app on `vacations.ppatour.com` (`~/pickleball/PPA`). It now lives here —
+  marketing page, registration form, Stripe checkout, guest archive and all. **That repo is
+  archive-only from today.** Full runbook in [`docs/VACATIONS.md`](docs/VACATIONS.md).
+- **⚠ THIS IS THE SITE'S FIRST COMMERCE SURFACE.** The founding rule is "commerce redirects
+  out", and this is the deliberate exception, not drift. Checkout is still *hosted* by Stripe
+  — we create a Session and redirect — so no card data touches this app. Nothing else on the
+  site should read this as permission to embed a cart.
+- **⚠ FOUR CUTOVER STEPS ARE NOT CODE and the page looks fine without them**: live Stripe key,
+  **re-point the Stripe webhook to `/api/vacations/stripe-webhook`**, SendGrid + Sheets vars,
+  and the `vacations.ppatour.com` domain redirect. The webhook is the dangerous one — miss it
+  and payments still succeed while the guest gets no confirmation, no internal notification
+  and no sheet row. Verify the key with `/api/vacations/availability` → `"known": true`.
+- **The subdomain redirect must be path- AND query-preserving.** Punta Cana guests hold
+  `vacations.ppatour.com/success?session_id=cs_live_…` links. Root-level 301s for `/success`,
+  `/register`, `/trips`, `/trips/punta-cana` and `/travel` exist to catch exactly those —
+  verified single-hop with the query intact. All six sources checked against the 811 migrated
+  post slugs first; **zero collisions**.
+- **`/tour/travel` is gone** (301 → `/vacations`) and the Travel tour-program entry was
+  **deleted**, not repointed. It hand-transcribed the same trip facts, which is how it came
+  to advertise Club Med Turkoise with a CTA aimed at **`ppavacations.com` — a parked domain
+  nobody here owns** (verified: registrar lander, and it was live on the page). Tournament
+  hotels were its other half and already live on each event page's Where to Stay.
+  **`lib/vacations/content.ts` is now the only home for trip facts.**
+- **Built native, not ported 1:1.** Data + commerce libs came over nearly verbatim (they're
+  battle-tested); the UI was rebuilt in Gotham/PPA navy on this site's own section, rail and
+  reveal patterns, with the Vacations teal kept as a sub-brand accent — the same idea as an
+  event's `brand.accent`. New tokens `--color-vac-*` in globals.css, **scoped to /vacations;
+  `ppa-blue` stays the tour's CTA.** Hayden's card links through to `/athletes/hayden-patriquin`,
+  which is the whole point of it living here.
+- **⚠ A GROUP REVEAL NEEDS BOTH `data-reveal` AND `data-reveal-group`.** The first is what
+  the observer queries for; the second only does the child stagger. I shipped six groups with
+  just the latter and **every child sat at `opacity: 0`** — the stat band rendered as an empty
+  navy box. `HomeContent.tsx:702` is the one prior usage and carries both. **Caught by
+  rendering the page, not by building it** — tsc, eslint and `next build` were all clean.
+- **⚠ FULL-PAGE SCREENSHOTS LIE ON THIS PAGE.** The hero is `min-h-[78svh]`, so a tall
+  `--window-size` capture inflates the viewport unit and the hero balloons to 3,500px. Verified
+  instead with **CDP `Emulation.setDeviceMetricsOverride` + DOM measurement**
+  (`scratchpad/cdp.mjs`): at 1440×900 hero **702px**, at 390×844 hero **735px**,
+  **0 horizontal overflow and 0 elements stuck at opacity 0** on /vacations, /register and the
+  Punta Cana archive. Same lesson as 7/31 pt. 5.
+- **Found and dropped two 404s that are live today**: the Punta Cana guest archive lists
+  Archery and Kayaking tiles whose images were deleted on 7/17 when Turkoise replaced the trip.
+  Confirmed 404 on the standalone site. Ported without them.
+- Also fixed: stat-band `px-4` sat on the `gap-px bg-white/10` grid itself and painted a pale
+  strip down both outer edges (padding moved to a wrapper); the hero said "adults-only" twice
+  in adjacent lines; the checkout `fetch` now carries the trailing slash the other four forms
+  on this site use, so the POST doesn't take a 308 on the way in.
+- Deps added: `stripe`, `@sendgrid/mail`. Assets under `public/vacations/` (6.4 MB — the
+  ~13 MB of unused `.eps`/`.pdf` print formats were pruned on the way in).
+- **Next:** the four cutover steps · **open call for Bryce — the site-wide `StickyBuyBar`
+  pins a $25 ticket CTA to the bottom of a page selling a $3,800 room; suppressing it on
+  /vacations is one line** · roll Punta Cana's archive into a real trips index when trip 3 lands.
 
 ### 2026-08-03 (pt. 6) — Rankings search + region filter; a phantom leaderboard page killed
 - Wesley: add **search by name** and **filter by region** to /rankings and /leaderboards.

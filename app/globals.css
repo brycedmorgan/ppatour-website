@@ -61,6 +61,17 @@
   --color-ppa-live-deep: #c22318; /* live red — hover */
   --color-ppa-paper: #f3f5f7; /* light editorial body */
   --color-ppa-line: #d7dee4; /* light borders */
+
+  /* Pickleball Vacations — sub-brand accent. Carried over from the standalone
+     vacations.ppatour.com palette so the property keeps its own Caribbean
+     signature inside PPA navy, the same way an event's `brand.accent` skins an
+     event page. Use ONLY on /vacations — ppa-blue stays the tour's CTA. */
+  --color-vac-teal: #119fb2; /* accent / CTA on vacations pages */
+  --color-vac-teal-deep: #0c8ea0; /* CTA hover */
+  --color-vac-teal-bright: #29c0d1; /* highlights on dark */
+  --color-vac-teal-pale: #93e1ea; /* eyebrows, scarcity text on navy */
+  --color-vac-sand: #e7f3f5; /* tinted light section base */
+
   --font-display: var(--font-gotham), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-gotham), ui-sans-serif, system-ui, sans-serif;
 

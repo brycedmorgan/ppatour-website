@@ -24,11 +24,13 @@ const PARTNER_HOSTS = [
   "play.google.com",
   "pickleballcentral.com",
   "pickleball.com",
-  // Pickleball Vacations — its own property with its own Stripe checkout, so
-  // the click off this site is the last thing we can measure. Both hostnames
-  // resolve to it; the nav uses one and /tour/travel the other.
-  "ppavacations.com",
-  "vacations.ppatour.com",
+  // NOTE: vacations.ppatour.com is deliberately NOT here any more. Pickleball
+  // Vacations moved onto this site at /vacations (Aug 2026), so the funnel is
+  // internal now — page views and checkout starts beacon to Jackalope from
+  // lib/vacations/track.ts, which is strictly more than an outbound click ever
+  // told us. `ppavacations.com` is gone with it: it was never ours, it is a
+  // parked domain, and the /tour/travel CTA pointing at it is the bug this
+  // move fixed.
   // PPA Pickleball Tour 2025 storefronts (/game). The click out is the only
   // thing measurable — the purchase happens on the platform.
   "store.steampowered.com",

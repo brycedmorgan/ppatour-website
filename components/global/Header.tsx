@@ -38,7 +38,7 @@ const NAV_ITEMS: NavItem[] = [
       { label: "Senior Open", href: "/tour/senior" },
       { label: "State Championships", href: "/tour/state-championships" },
       { label: "PPA Camps", href: "/tour/camps" },
-      { label: "Travel", href: "/tour/travel" },
+      { label: "Vacations", href: "/vacations" },
       { label: "Hospitality", href: "/tour/hospitality" },
     ],
   },
@@ -203,10 +203,9 @@ function MegaPanelContent({
             <BigLink href="/news" label="Latest News" onNavigate={onNavigate} />
             <BigLink href="/events/volunteer" label="Volunteer" onNavigate={onNavigate} />
             <BigLink
-              href="https://vacations.ppatour.com/?utm_source=ppatour&utm_medium=website&utm_campaign=pickleball-vacations&utm_content=nav-events-panel"
+              href="/vacations"
               label="Pickleball Vacations"
               onNavigate={onNavigate}
-              external
             />
           </div>
         </div>

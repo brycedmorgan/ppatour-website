@@ -49,8 +49,31 @@ const LEGACY_REDIRECTS = [
   { source: "/junior-ppa-tour", destination: "/tour/junior" },
   { source: "/senior-open", destination: "/tour/senior" },
   { source: "/camps", destination: "/tour/camps" },
-  { source: "/travel", destination: "/tour/travel" },
   { source: "/hospitality", destination: "/tour/hospitality" },
+
+  /**
+   * Pickleball Vacations moved onto this site (Aug 2026) — it used to be a
+   * standalone Next app on vacations.ppatour.com. Both the legacy WordPress
+   * `/travel` URL and the tour-program page that fronted it now land on the
+   * real thing.
+   *
+   * ⚠ The subdomain itself must ALSO be redirected here, path- and
+   * query-preserving, and that is a Vercel domain setting rather than a line in
+   * this file: guests hold Stripe confirmation links of the form
+   * `vacations.ppatour.com/success?session_id=cs_live_…` in their inboxes, and
+   * Lainey's collateral prints the subdomain. The rules below give every one of
+   * those paths a destination once the domain points here. See docs/VACATIONS.md.
+   */
+  // Destinations carry the trailing slash on purpose: `trailingSlash: true`
+  // would otherwise add a SECOND 308 onto every one of these, and the guest
+  // confirmation links below are the ones paying for it.
+  { source: "/travel", destination: "/vacations/" },
+  { source: "/tour/travel", destination: "/vacations/" },
+  // Paths that existed on the standalone site, in its own URL shape.
+  { source: "/register", destination: "/vacations/register/" },
+  { source: "/success", destination: "/vacations/success/" },
+  { source: "/trips", destination: "/vacations/" },
+  { source: "/trips/punta-cana", destination: "/vacations/trips/punta-cana/" },
   // renamed staging-era event slugs
   { source: "/events/veolia-chicago-open", destination: "/events/2026/veolia-chicago-cup" },
   { source: "/events/carvana-mesa-cup", destination: "/events/2026/veolia-arizona-open" },
