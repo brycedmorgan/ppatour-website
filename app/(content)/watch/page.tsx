@@ -94,10 +94,11 @@ export const metadata: Metadata = {
  *   NBC   press coverage of the tour's broadcast history: "special events
  *         televised on NBC and ABC", which matches Bryce's Vegas recollection.
  *
- * ⚠ ABC turned up in that same NBC source and is NOT published here. One
- * summary line is enough to corroborate a claim the CMO already made; it is
- * not enough to put a fourth network's mark on the page on its own. Ask Bryce
- * before adding it.
+ *   ABC   surfaced in the same source as NBC ("special events televised on NBC
+ *         and ABC") and held back until Bryce confirmed it directly on 8/4.
+ *         One summary line was enough to corroborate a claim he had already
+ *         made about NBC; it was not enough to publish a network he had not
+ *         mentioned. He has now confirmed it, so it publishes.
  *
  * Deleting a row here is still the whole fix if any of this changes.
  */
@@ -115,6 +116,9 @@ const AS_SEEN_ON: {
   { name: "FOX", logo: "/ppa/networks/fox.svg", width: 1000, height: 422, className: "h-7 sm:h-8", confirmed: true },
   { name: "ESPN", logo: "/ppa/networks/espn.svg", width: 554, height: 137, className: "h-6 sm:h-7", confirmed: true },
   { name: "NBC", logo: "/ppa/networks/nbc.svg", width: 567, height: 559, className: "h-11 sm:h-12", confirmed: true },
+  // Square circle-mark like NBC's peacock, so it takes the same taller height
+  // rather than the wordmark height — otherwise it reads smaller than it is.
+  { name: "ABC", logo: "/ppa/networks/abc.svg", width: 1000, height: 1000, className: "h-10 sm:h-11", confirmed: true },
   // Stacked lockup (mark over wordmark), so it needs more height than the
   // wordmark-only marks to sit at the same optical weight.
   { name: "Tennis Channel", logo: "/ppa/networks/tennis-channel.svg", width: 130, height: 170, className: "h-12 sm:h-14", confirmed: true },
@@ -198,11 +202,13 @@ export default function WatchPage() {
               now the only edit needed — the grid re-flows itself. */}
           <div
             className={`mt-6 grid grid-cols-2 gap-px bg-white/15 sm:grid-cols-3 ${
-              confirmedNetworks.length >= 5
-                ? "lg:grid-cols-5"
-                : confirmedNetworks.length === 4
-                  ? "lg:grid-cols-4"
-                  : "lg:grid-cols-3"
+              confirmedNetworks.length >= 6
+                ? "lg:grid-cols-6"
+                : confirmedNetworks.length === 5
+                  ? "lg:grid-cols-5"
+                  : confirmedNetworks.length === 4
+                    ? "lg:grid-cols-4"
+                    : "lg:grid-cols-3"
             }`}
           >
             {confirmedNetworks.map((n) => (
