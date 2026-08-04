@@ -38,7 +38,7 @@ export type TvEvent = {
 
 export const tvSchedule: TvEvent[] = [
   {
-    name: "Veolia PPA National Championships",
+    name: "Veolia Pickleball National Championships",
     location: "Cary Tennis Park · Cary, NC",
     tier: "Major · 2,000",
     league: "PPA",

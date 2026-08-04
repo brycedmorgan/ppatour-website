@@ -126,7 +126,7 @@ export const newsArticles: NewsArticle[] = [
     body: [
       "The expanded calendar confirms the tour's tier structure at record scale: Worlds (3,000 points), Slams (2,000), Cups (1,500), Opens (1,000), and the Challenger series (125–500) that feeds the pipeline underneath.",
       "The player economics grow with it. The 2026 season carries $5,235,943 in combined prize money and appearance fees — $1,648,641 behind every Slam, $1,271,734 behind every Cup, and $1,063,327 behind every Open.",
-      "The marquee dates are set: the Veolia PPA National Championships run August 31 – September 6 at Cary Tennis Park, and the PPA World Pickleball Championships land at Brookhaven Country Club in Farmers Branch, Texas, November 3–8, carrying the season's only 3,000-point draw.",
+      "The marquee dates are set: the Veolia Pickleball National Championships run August 31 – September 6 at Cary Tennis Park, and the PPA World Pickleball Championships land at Brookhaven Country Club in Farmers Branch, Texas, November 3–8, carrying the season's only 3,000-point draw.",
       "Broadcast reach expands alongside the calendar. PickleballTV streams every round of every event, with Tennis Channel simulcasting marquee windows — including every remaining Championship Sunday this season.",
       "For amateurs, every added stop is also a playable one: each tournament runs amateur brackets across ages and skill levels on the same courts, the same week, as the pros.",
     ],
