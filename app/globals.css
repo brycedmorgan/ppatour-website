@@ -99,6 +99,63 @@
       transform: scale(1);
     }
   }
+  /**
+   * ── The hero zoom-out + parallax (Wesley, 8/4: "combine #4 and #5") ────────
+   *
+   * Two motions on one photo: it lands zoomed IN and eases out on a timer, AND
+   * it slides behind the page as you scroll. They were separate options before
+   * this; merging them is what the pair of keyframes below is for.
+   *
+   * ⚠ THEY ANIMATE DIFFERENT CSS PROPERTIES ON PURPOSE — `scale` here,
+   * `translate` below, NOT `transform` for both. Two animations targeting
+   * `transform` do not blend: the later one in the list wins the property
+   * outright and the other silently does nothing. The individual transform
+   * properties are separate longhands, so both apply and compose.
+   *
+   * ⚠ THE COMPOSED ORDER IS FIXED BY SPEC: translate -> rotate -> scale ->
+   * transform, applied right-to-left to the point. So `translate` sits OUTSIDE
+   * `scale`, and its percentage (of the element's own border box) is the real
+   * shift — it is NOT multiplied by the scale. That is the opposite of the old
+   * `transform: scale(S) translateY(P)` form, where the shift was S x P.
+   *
+   * ⚠ COVER CONSTRAINT: scaling by S about the centre leaves (S - 1) / 2 of
+   * overflow on each side, so the photo only covers its box while
+   * |P| <= (S - 1) / 2. The binding case is the END of the zoom, where S is at
+   * its smallest — check 1.24, never 1.50.
+   *
+   * ⚠ AND THAT IS THE WHOLE TENSION IN COMBINING THESE. Total drift can never
+   * exceed (S_end - 1) x height, so the scale the zoom SETTLES at IS the drift
+   * budget. Option 4 settled at 1.00 and therefore had no budget at all; option
+   * 5 held 1.36 and spent it on 147px of travel. Landing at 1.24 buys ~90px on
+   * a 450px hero (~180px at 900px) at the cost of a permanent 24% crop — the
+   * photo never reaches its full framing the way option 4's did. Moving either
+   * number moves the other; they are not independent knobs.
+   */
+  @keyframes ppa-hero-zoomout {
+    from {
+      scale: 1.5;
+    }
+    to {
+      scale: 1.24;
+    }
+  }
+  /**
+   * The parallax half: the photo slides DOWN as the page scrolls up, lagging
+   * the content so the hero reads as a layer rather than a backdrop.
+   *
+   * +/-10% against 12% of headroom at the settled scale of 1.24 — a 2% margin,
+   * ~9px on a 450px hero. Deliberately not spent to the last percent: an
+   * earlier pass ran a 4.1px margin, which measured as covered but sits inside
+   * the range where subpixel rounding can expose a hairline edge.
+   */
+  @keyframes ppa-hero-drift {
+    from {
+      translate: 0 -10%;
+    }
+    to {
+      translate: 0 10%;
+    }
+  }
   @keyframes ppa-marquee {
     from {
       transform: translateX(0);
@@ -141,6 +198,99 @@
 [style*="--font-event-serif"] .event-display {
   font-weight: 700;
   letter-spacing: 0.01em; /* uppercase serif wants a touch of tracking */
+}
+
+/**
+ * Hero zoom-out + parallax, in three tiers:
+ *   1. Default — the timed zoom-out alone, so every browser gets motion on load.
+ *   2. Scroll timelines (Chrome/Edge 115+, Safari 26) — the drift is ADDED on
+ *      top, so the photo both eases out and slides as you scroll.
+ *   3. Reduced motion — nothing moves.
+ *
+ * ⚠ CSS, not a scroll listener, and that is deliberate. A JS listener writing
+ * transforms runs on the main thread every frame, on the page whose LCP two
+ * previous sessions were spent protecting. `animation-timeline` is composited
+ * by the browser and costs nothing.
+ *
+ * `both` so the zoom holds at its settled scale instead of snapping back.
+ */
+.hero-zoom-parallax {
+  /* 16s, matching --animate-kenburns. Was 24s, which measured as only ~17px of
+     movement over a four-second look — too slow to register as motion at all. */
+  animation: ppa-hero-zoomout 16s cubic-bezier(0.2, 0.6, 0.4, 1) both;
+  /* Not `transform` — these animate the individual longhands. Overrides the
+     `will-change-transform` utility on the element (unlayered beats @layer). */
+  will-change: scale, translate;
+}
+@supports (animation-timeline: view()) {
+  /**
+   * ⚠ THE TIMELINE MUST BE NAMED AND DECLARED ON THE SECTION. The obvious
+   * `animation-timeline: view()` on the image is silently wrong: the hero
+   * section is `overflow-hidden`, which makes it a scroll container, so the
+   * timeline resolves against the SECTION rather than the page. The image never
+   * moves within it, progress pins at 100%, and the hero renders permanently
+   * static — measured exactly that, one identical transform across six scroll
+   * positions. Naming it on the section makes the SECTION the subject, measured
+   * against the document, and the image consumes it by name.
+   */
+  .hero-parallax-root {
+    view-timeline-name: --ppa-hero;
+    view-timeline-axis: block;
+  }
+  .hero-zoom-parallax {
+    /**
+     * ⚠ TWO ANIMATIONS, TWO TIMELINES, AND THE LISTS ARE POSITIONAL. The zoom
+     * keeps the document clock (`auto`); only the drift rides the view
+     * timeline. Get the order wrong between `animation`, `animation-timeline`
+     * and `animation-range` and the zoom silently becomes scroll-driven while
+     * the drift runs on a 16s clock — both still "work", both are wrong.
+     */
+    animation:
+      ppa-hero-zoomout 16s cubic-bezier(0.2, 0.6, 0.4, 1) both,
+      ppa-hero-drift linear both;
+    animation-timeline: auto, --ppa-hero;
+    /**
+     * ⚠ `exit`, not `entry`. The homepage hero sits at the TOP of the document,
+     * so its entry phase is already complete at scroll 0 — range it on `entry`
+     * and it loads part-finished with nowhere left to travel. `exit …` gives
+     * the slide as the hero is scrolled away, which is how a top-of-page hero
+     * is actually experienced.
+     *
+     * ⚠ THE END STOP IS THE SPEED CONTROL (Wesley, 8/4: "a little faster").
+     * The drift is scroll-linked, so its speed is travel-per-pixel-scrolled —
+     * and the honest way to raise that is to shorten the scroll distance, not
+     * to enlarge the movement. Ending at `exit 55%` packs the same ~90px into
+     * ~248px of scroll instead of ~450px: 0.36 px/px, about 1.8x the old rate,
+     * at zero cost.
+     *
+     * The alternative — a bigger drift — is NOT free. Travel is capped at
+     * (S_end - 1) x height by the cover constraint, so more drift means raising
+     * the scale the zoom settles at, which is permanent crop on every visitor.
+     * Speed here is worth more than amplitude, so the scale stays at 1.24.
+     *
+     * Past 55% the photo is parked at +10% while the last ~200px of the hero
+     * finishes leaving the screen. Deliberate, and not visible in practice.
+     */
+    animation-range: normal, exit 0% exit 55%;
+  }
+}
+/**
+ * Preview-only: <HeroBackgroundToggle> flips this attribute on the hero section
+ * to choose which background shows. Both layers stay mounted — the still sits
+ * underneath as the video's fallback, so hiding the video reveals it already
+ * running rather than swapping one element for another.
+ */
+[data-hero-bg="still"] .hero-video-layer {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-zoom-parallax {
+    animation: none;
+    /* Both longhands, not `transform` — that would reset neither of them. */
+    scale: none;
+    translate: none;
+  }
 }
 
 /* Image scrims — navy-tinted rgba so they render predictably across browsers. */

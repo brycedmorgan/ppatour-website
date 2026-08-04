@@ -1,13 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
-import { Countdown } from "@/components/motion/Countdown";
-import { withUtm } from "@/lib/utm";
 import { PartnerSpotlight } from "@/components/home/PartnerSpotlight";
 import { PartnerWall } from "@/components/global/PartnerWall";
+import { HomeHero, type HeroVariant } from "@/components/home/HomeHero";
 import { ScoreRail } from "@/components/home/ScoreRail";
 import { ScoresBracketToggle } from "@/components/live/ScoresBracketToggle";
-import { WatchLiveButton } from "@/components/live/WatchLiveButton";
 import { ATLANTA_EVENT_ID } from "@/lib/bracket-sample";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
 import { getRankings } from "@/lib/rankings-api";
@@ -195,9 +193,18 @@ async function lastCompletedChampions(): Promise<{ event: Tournament; champions:
 export async function HomeContent({
   live = false,
   liveEvent,
+  heroVariant = "photo",
+  heroToggle = false,
 }: {
   live?: boolean;
   liveEvent?: LiveEvent;
+  /**
+   * Hero treatment. `photo` (the live default) is the next event's own venue
+   * shot; the alternatives are under review — see /hero-preview.
+   */
+  heroVariant?: HeroVariant;
+  /** Preview only: render the in-hero background switcher. */
+  heroToggle?: boolean;
 }) {
   const next = getNextTournament();
   const countdown = daysUntil(next.startDate);
@@ -401,229 +408,18 @@ export async function HomeContent({
         }}
       />
       {/* ── Hero (event lead) ───────────────────────────────── */}
-      {/* Hero trimmed 58svh → 50svh (Bryce 7/28) to buy height for the taller
-          audience callouts below. Video hero drops into this same slot. */}
-      <section className="relative isolate flex min-h-[50svh] flex-col justify-end overflow-hidden bg-ppa-navy text-white">
-        <Image
-          src={next.image}
-          alt={next.name}
-          fill
-          priority
-          quality={65}
-          sizes="100vw"
-          className="animate-kenburns will-change-transform object-cover object-[center_60%] motion-reduce:animate-none"
-        />
-        {/* Left-weighted scrim so the venue reads on the right (Hannah, 7/28). */}
-        <div className="absolute inset-0 scrim-hero-left" />
-        <div className="absolute inset-0 scrim-side" />
-        {/* Soften the header→hero seam: navy fades down into the hero image. */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-32 bg-gradient-to-b from-ppa-navy to-transparent" />
-
-        {/* Floating event crest removed (Bryce 7/28: the Nationals mark
-            hovering over the hero "doesn't make a whole lot of sense there").
-            The hero photo + headline already name the event. Kept on /live,
-            where the crest identifies which tournament is on. */}
-
-        {/* Live tournament crest — same hero slot/treatment as the homepage. */}
-        {live && liveEvent?.logo && (
-          <div
-            className="pointer-events-none absolute right-4 top-16 z-[2] block motion-safe:animate-rise sm:right-8 sm:top-20 lg:right-24"
-            style={{ animationDelay: "120ms" }}
-          >
-            <Image
-              src={liveEvent.logo}
-              alt=""
-              width={562}
-              height={702}
-              className="h-24 w-auto rounded drop-shadow-[0_4px_22px_rgba(2,49,85,0.65)] sm:h-44 lg:h-64"
-            />
-          </div>
-        )}
-
-        {/* Floating "Featured Event" card removed on the homepage (Bryce 7/28:
-            redundant — the hero itself is that event). Retained in live mode,
-            where it carries the LIVE NOW label. */}
-        {live && (
-          <div className="pointer-events-none absolute bottom-6 right-4 z-[2] hidden flex-col items-end bg-ppa-navy-deep/70 px-3.5 py-2.5 backdrop-blur-sm md:flex lg:right-8">
-            <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-ppa-sky">
-              Live Now
-            </span>
-            <span className="mt-0.5 font-display text-sm uppercase leading-tight text-white">
-              {ev.name}
-            </span>
-            <span className="mt-0.5 text-[10px] uppercase tracking-wide text-white/65">
-              {formatDateRange(ev.startDate, ev.endDate, true)} · {ev.venue}
-            </span>
-          </div>
-        )}
-
-        <div className="relative mx-auto w-full max-w-6xl px-4 pb-7 pt-16">
-          <div
-            className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em] motion-safe:animate-rise"
-            style={{ animationDelay: "80ms" }}
-          >
-            {live ? (
-              <>
-                <span className="flex items-center gap-1.5 bg-ppa-live px-2 py-0.5">
-                  <span className="size-1.5 animate-pulse rounded-full bg-white" />
-                  Live Now
-                </span>
-                <span className="text-white/70">
-                  {ev.city}, {ev.state}
-                </span>
-                <span className="text-white/25">/</span>
-                <span className="text-ppa-yellow">Matches in progress</span>
-              </>
-            ) : (
-              <>
-                <span className="bg-ppa-blue px-2 py-0.5">Next Event</span>
-                {/* Dave Rogers 7/27: "I would like to click on Cary, NC and see
-                    where that is" — goes to the event's Plan Your Trip guide. */}
-                <Link
-                  href={`${eventHref(next)}#travel`}
-                  className="text-white/70 underline-offset-4 transition-colors hover:text-white hover:underline"
-                >
-                  {next.city}, {next.state}
-                </Link>
-                <span className="text-white/25">/</span>
-                <span className="text-ppa-yellow">
-                  <Countdown
-                    targetIso={next.startDate}
-                    fallback={`${countdown} ${countdown === 1 ? "Day" : "Days"} Out`}
-                  />
-                </span>
-              </>
-            )}
-          </div>
-
-          <h1
-            className="mt-3 max-w-[18ch] font-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98] motion-safe:animate-rise"
-            style={{ animationDelay: "160ms" }}
-          >
-            {/* Hero headline shows the full event name (e.g. "Veolia Pickleball
-                National Championships"); in live mode it's the live event's name.
-                The short form stays on the scores-band chip below. */}
-            {live ? ev.name : next.name}
-          </h1>
-
-          <div
-            className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold uppercase tracking-wide text-white/75 motion-safe:animate-rise"
-            style={{ animationDelay: "240ms" }}
-          >
-            <span>{formatDateRange(ev.startDate, ev.endDate)}</span>
-            <span className="text-white/25">|</span>
-            <span>{ev.venue}</span>
-            <span className="text-white/25">|</span>
-            {/* Dave Rogers 7/27: "I would like to click on 2,000 rankings
-                points and find out what that means." */}
-            {live ? (
-              <span className="text-ppa-yellow">▶ Live on PickleballTV</span>
-            ) : (
-              <Link
-                href="/about/how-it-works"
-                className="text-ppa-yellow underline-offset-4 transition-colors hover:underline"
-              >
-                {tierPoints(next).toLocaleString()} Ranking Points
-              </Link>
-            )}
-          </div>
-
-          <div
-            className="mt-5 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap motion-safe:animate-rise"
-            style={{ animationDelay: "320ms" }}
-          >
-            {live ? (
-              <>
-                <WatchLiveButton className="group flex h-11 items-center justify-center gap-1.5 bg-ppa-live px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:bg-ppa-live-deep active:scale-[0.98]">
-                  ▶ Watch Live
-                  <span
-                    aria-hidden
-                    className="transition-transform duration-300 group-hover:translate-x-0.5"
-                  >
-                    →
-                  </span>
-                </WatchLiveButton>
-                <Link
-                  href="/watch"
-                  className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98]"
-                >
-                  Scores & Brackets
-                </Link>
-                <Link
-                  href="/events"
-                  className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98]"
-                >
-                  Explore the Event
-                </Link>
-              </>
-            ) : (
-              <>
-                {/* No Tixr listing yet -> the CTA becomes the event page, not a
-                    ticket link. See lib/tixr-price-index.ts. */}
-                <a
-                  href={
-                    next.ticketsOnSale
-                      ? withUtm(next.ticketsUrl, {
-                          campaign: next.eventCode ?? next.slug,
-                          content: "home-hero-buy-tickets",
-                        })
-                      : eventHref(next)
-                  }
-                  target={next.ticketsOnSale ? "_blank" : undefined}
-                  rel={next.ticketsOnSale ? "noopener noreferrer" : undefined}
-                  className="group flex h-11 items-center justify-center gap-1.5 bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:bg-ppa-blue-deep active:scale-[0.98]"
-                >
-                  {next.ticketsOnSale
-                    ? `Buy Tickets — From $${next.ticketPriceFrom}`
-                    : "Event Details"}
-                  <span
-                    aria-hidden
-                    className="transition-transform duration-300 group-hover:translate-x-0.5"
-                  >
-                    →
-                  </span>
-                </a>
-                <a
-                  href={withUtm(next.registerUrl, {
-                    campaign: next.eventCode ?? next.slug,
-                    content: "home-hero-register",
-                  })}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex h-11 items-center justify-center gap-1.5 border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98]"
-                >
-                  Register to Play
-                  <span
-                    aria-hidden
-                    className="transition-transform duration-300 group-hover:translate-x-0.5"
-                  >
-                    ↗
-                  </span>
-                </a>
-                <Link
-                  href={eventHref(next)}
-                  className="group flex h-11 items-center justify-center gap-1.5 border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98]"
-                >
-                  Explore the Event
-                  <span
-                    aria-hidden
-                    className="transition-transform duration-300 group-hover:translate-x-0.5"
-                  >
-                    →
-                  </span>
-                </Link>
-                <Link
-                  href="/watch"
-                  className="hidden h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98] sm:flex"
-                >
-                  ▶ How to Watch
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-        <div className="relative h-1 bg-ppa-blue" />
-      </section>
+      {/* Extracted to <HomeHero> so /hero-preview can render this WHOLE page
+          with a different hero treatment. Adopting one is a change to the
+          `heroVariant` default above — nothing here needs touching. */}
+      <HomeHero
+        variant={heroVariant}
+        toggle={heroToggle}
+        next={next}
+        ev={ev}
+        countdown={countdown}
+        live={live}
+        liveEvent={liveEvent}
+      />
 
       {/* ── Next on Tour (Bryce 7/28: text links + arrows, directly above the
              five callouts — next three stops, then the three after that) ── */}
