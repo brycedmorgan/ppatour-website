@@ -35,6 +35,64 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-03 (pt. 7) — Full tournament names: `shortName` deleted; a homepage viewport bug
+- Jeff Watson, 15:43 in #ppa-website-crew: **"we need to call every tournament by their
+  full name please - in every instance"** (Veolia Pickleball National Championships, Veolia
+  Chicago Cup, Carvana Pickleball Masters). Bryce escalated it off a Nationals meta
+  description. Wesley: *"We need it to not be the short names."*
+- **The data was already right — `name` has always carried the full sponsored name and
+  already matched Jeff verbatim.** The bug was that **`shortName` is what rendered**, in 54
+  places: the event `<h1>`, `<title>`, the OG card, /watch, the concierge, every ticket CTA.
+- **⚠ WHAT `shortName` WAS ACTUALLY FOR.** Of the 20 main-tour stops, 12 differed, and
+  **8 of those 12 existed only to strip the title sponsor** — Veolia Pickleball National
+  Championships → National Championships, Rate Las Vegas Open → Las Vegas Open, Carvana Mesa
+  Cup → Mesa Cup. **We were removing Veolia / Carvana / Rate / Proton from the `<h1>`, the
+  browser tab and the OG card of the events they pay to title.** A sponsor-billing bug
+  dressed as a copy-style preference. The other four were ordinary abbreviation.
+- **Deleted from the type, not bypassed** — all 54 sites became type errors, so no surface
+  could quietly keep the old behaviour. `Tournament.name` documents why it must not return.
+- **⚠ NAMES COME FROM THE CURATED TABLE, NOT THE FEED — Wesley's first instinct was "use the
+  API" and the measurement reversed it.** Checked all 220 `ppa_tournaments` rows: **the API
+  contradicts Jeff on two of his own three examples** — it sends *"Veolia **PPA** National
+  Championships"* and *"Carvana Pickleball Masters **Powered by Invited**"*. It also isn't
+  self-consistent year to year (*"Veolia Texas Open"* in 2026, bare *"Texas Open"* in 2027),
+  and **3 of the 20 stops aren't in it at all** (Proton Daytona, Texas Open 2027, PPA Open).
+  `CURATED_ALIASES` already existed to paper over exactly those two. **Curated wins.**
+  Uncurated events still fall back to `cleanTitle(apiTitle)`, already their full name.
+- **`lib/tv-schedule.ts` is a THIRD hand-typed name list and two entries had drifted** on the
+  same slug — "PPA World Pickleball Championships" and "Proton Florida Open". Fixed.
+  `broadcast.ts` is keyed by slug only. ⚠ **Nothing prevents this drifting again** — a check
+  asserting every slug-bearing TV entry matches the curated name is worth ~20 lines.
+- The `-live` route had a **hardcoded `<title>` of "National Championships — Live"** — the
+  only true leak the sweep found. OG font sizing was a two-step tuned for short names
+  (`>18 ? 68 : 84`); **10 of 20 names now exceed 18 chars, longest is 40**, so it's graduated
+  at 34/26/18. **Cards were rendered and looked at, not assumed.**
+- **⚠ THE REAL BUG THIS TURNED UP: the homepage Next on Tour grid dragged the whole page's
+  layout viewport from 390 to 453 at an emulated 390px device.** It measured **436px inside a
+  358px container**. Cause: **a `<li>` is a grid item, so it defaults to `min-width: auto`
+  and the column floors at content-based minimum — which meant the `min-w-0` + `truncate`
+  already on the name span never got to apply.** One `min-w-0` on the `li`.
+  - **Only caught by measuring the DEPLOYED site as a baseline (390) and diffing the local
+    build (453).** Worth repeating: for any change that lengthens text, the live site is a
+    free pre-change control.
+- Verified on a real prod build: **491 full-name renders vs 6 bare, and all 6 are correct** —
+  "Indoor National Championships" and the 2023 "Biofreeze USA Pickleball National
+  Championships" are *different events*, the bare "Daytona Beach Open" rows are the 2023/24/25
+  editions that genuinely had no Proton billing, and one is a YouTube video title from the
+  feed. **Zero horizontal overflow across 9 pages at a true 390px.** Slugs unchanged → no URLs
+  moved. tsc + build (1,175 pages) clean; eslint at its existing 8-error baseline.
+- **⚠ TWO METHOD TRAPS, both cost real time:**
+  - **`pkill -f "next start"` does not kill the server on Windows.** Three verification runs
+    silently reported the OLD build before I checked the port and saw `EADDRINUSE` in the
+    server log. **Check `netstat -ano | grep :PORT` and `Stop-Process -Id` instead.** Same
+    family as the 7/29 stale-`public/` gotcha.
+  - Mobile measurement is **CDP `Emulation.setDeviceMetricsOverride`**, never `--window-size`
+    (7/31 pt. 5). No puppeteer in this repo — **Node 24 ships a global `WebSocket`, so you can
+    drive Chrome over CDP with zero dependencies.**
+- **Left for a human:** prose now reads *"Watch Veolia Pickleball National Championships
+  Back"* / *"Why … Matters"* / *"How … Finished"*. Grammatically clumsy but deliberately NOT
+  reworded — Jeff said every instance, and rewriting published copy isn't a refactor's call.
+
 ### 2026-08-03 (pt. 6) — Rankings search + region filter; a phantom leaderboard page killed
 - Wesley: add **search by name** and **filter by region** to /rankings and /leaderboards.
   His framing on search was the right one — *"all 2,000 at once" doesn't help anyone find a
