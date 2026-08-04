@@ -20,8 +20,19 @@ function titleFromSlug(slug: string): string {
     .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
+/**
+ * ⚠ `junior` is excluded: it has its own route at /tour/junior, which is far
+ * richer than this template can express and which wins at request time anyway.
+ * Leaving it here just prerendered a second, dead copy of the page. The entry
+ * STAYS in lib/tour-programs.ts — nav, sitemap, site search and the other five
+ * programs' cross-links all read that list.
+ */
+const HAS_OWN_ROUTE = new Set(["junior"]);
+
 export function generateStaticParams() {
-  return tourPrograms.map((p) => ({ slug: p.slug }));
+  return tourPrograms
+    .filter((p) => !HAS_OWN_ROUTE.has(p.slug))
+    .map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
