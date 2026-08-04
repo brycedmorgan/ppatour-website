@@ -478,7 +478,7 @@ const SCHEDULE: RawEvent[] = [
   // Wesley, 8/3: names come from the API. The feed registers this as "Veolia PPA
   // National Championships", not "…Pickleball…". Slug pinned so the URL, brand,
   // guide, broadcast, gallery and MAJOR_SLUGS keys all still resolve.
-  { name: "Veolia PPA National Championships", slug: "veolia-pickleball-national-championships", start: "2026-08-31", end: "2026-09-06", city: "Cary", state: "NC", venue: "Cary Tennis Park", type: "ppa", tier: "slam", image: "/ppa/nationals-drone-champcourt.jpg" },
+  { name: "Veolia Pickleball National Championships", slug: "veolia-pickleball-national-championships", start: "2026-08-31", end: "2026-09-06", city: "Cary", state: "NC", venue: "Cary Tennis Park", type: "ppa", tier: "slam", image: "/ppa/nationals-drone-champcourt.jpg" },
 
   // September 2026
   { name: "PPA Asia 1000 Kuala Lumpur Cup", start: "2026-09-09", end: "2026-09-13", city: "Kuala Lumpur", state: "Malaysia", type: "international", country: "Asia" },
