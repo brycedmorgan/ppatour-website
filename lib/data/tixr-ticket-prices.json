@@ -1,12 +1,12 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-08-02T14:23:10Z",
+  "generated_at": "2026-08-04T15:15:32Z",
   "event_count": 61,
-  "ticket_type_count": 864,
+  "ticket_type_count": 891,
   "series_breakdown": {
-    "Major League Pickleball": 15,
-    "PPA Challenger Series": 5,
+    "Major League Pickleball": 16,
+    "PPA Challenger Series": 4,
     "PPA Tour": 41
   },
   "field_notes": {
@@ -16,75 +16,6 @@
     "status": "Tixr event publication status."
   },
   "events": [
-    {
-      "event_id": "170002",
-      "name": "Amway Major League Pickleball Orlando",
-      "series": "Major League Pickleball",
-      "status": "PUBLISHED",
-      "start_date": "2026-07-30",
-      "end_date": "2026-08-03",
-      "venue": {
-        "name": "ESPN Wide World of Sports Complex",
-        "city": "Orlando",
-        "state": "FL"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/amway-major-league-pickleball-orlando-170002",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Pickleball Vacations",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        }
-      ]
-    },
-    {
-      "event_id": "166227",
-      "name": "PPA Challenger Series - Wisconsin",
-      "series": "PPA Challenger Series",
-      "status": "PUBLISHED",
-      "start_date": "2026-07-31",
-      "end_date": "2026-08-03",
-      "venue": {
-        "name": "Lake Hallie Pickleball",
-        "city": "Lake Hallie",
-        "state": "WI"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/ppa-challenger-series-wisconsin-166227",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Friday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 15,
-          "all_in_price": 19.55
-        },
-        {
-          "name": "Saturday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 15,
-          "all_in_price": 19.55
-        },
-        {
-          "name": "Sunday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 15,
-          "all_in_price": 19.55
-        },
-        {
-          "name": "Weekend Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        }
-      ]
-    },
     {
       "event_id": "169289",
       "name": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
@@ -199,21 +130,21 @@
           "all_in_price": 896.79
         },
         {
-          "name": "Friday Platinum Lounge",
+          "name": "Friday VIP Platinum Lounge",
           "category": "MISCELLANEOUS",
           "sale_state": "OPEN",
           "base_price": 300,
           "all_in_price": 329.54
         },
         {
-          "name": "Saturday Platinum Lounge",
+          "name": "Saturday VIP Platinum Lounge",
           "category": "MISCELLANEOUS",
           "sale_state": "OPEN",
           "base_price": 300,
           "all_in_price": 329.54
         },
         {
-          "name": "Sunday Platinum Lounge",
+          "name": "Sunday VIP Platinum Lounge",
           "category": "MISCELLANEOUS",
           "sale_state": "OPEN",
           "base_price": 300,
@@ -388,6 +319,20 @@
           "all_in_price": 0
         },
         {
+          "name": "Saturday Evening",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Morning",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
           "name": "Sunday",
           "category": "GA",
           "sale_state": "SOLD_OUT",
@@ -520,14 +465,14 @@
       "currency": "USD",
       "tickets": [
         {
-          "name": "North Box Suites",
+          "name": "Saturday North Box Suites",
           "category": "BOOTH",
           "sale_state": "OPEN",
           "base_price": 6000,
           "all_in_price": 6488.22
         },
         {
-          "name": "South Box Suites",
+          "name": "Saturday South Box Suites",
           "category": "BOOTH",
           "sale_state": "OPEN",
           "base_price": 5000,
@@ -555,60 +500,278 @@
           "all_in_price": 30.35
         },
         {
-          "name": "Courtside",
+          "name": "Saturday Full Day Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 91.83
+          "base_price": 90,
+          "all_in_price": 102.64
         },
         {
-          "name": "Courtside Reserved*",
+          "name": "Saturday Full Day Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Saturday Full Day Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 110,
+          "all_in_price": 124.25
+        },
+        {
+          "name": "Saturday Full Day Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
           "base_price": 120,
           "all_in_price": 135.05
         },
         {
-          "name": "Courtside*",
+          "name": "Saturday Full Day Courtside Reserved",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 70,
-          "all_in_price": 81.03
+          "base_price": 160,
+          "all_in_price": 178.27
         },
         {
-          "name": "Courtside**",
+          "name": "Saturday Full Day Reserved VIP",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 60,
-          "all_in_price": 70.23
+          "base_price": 250,
+          "all_in_price": 275.51
         },
         {
-          "name": "Courtside***",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 50,
-          "all_in_price": 57.36
-        },
-        {
-          "name": "Reserved VIP",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 300,
-          "all_in_price": 329.54
-        },
-        {
-          "name": "Reserved VIP*",
+          "name": "Saturday Full Day Reserved VIP",
           "category": "STANDARD",
           "sale_state": "OPEN",
           "base_price": 275,
           "all_in_price": 302.53
         },
         {
-          "name": "Reserved VIP**",
+          "name": "Saturday Full Day Reserved VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        }
+      ],
+      "parent_event_id": "183665"
+    },
+    {
+      "event_id": "201735",
+      "name": "Major League Pickleball Newport Beach - Saturday Evening Session",
+      "series": "Major League Pickleball",
+      "status": "PUBLISHED",
+      "start_date": "2026-08-15",
+      "end_date": "2026-08-16",
+      "venue": {
+        "name": "Newport Beach Tennis and Pickleball Club",
+        "city": "Newport Beach",
+        "state": "CA"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-newport-beach-saturday-evening-session-201735",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Saturday North Box Suites",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 6000,
+          "all_in_price": 6488.22
+        },
+        {
+          "name": "Saturday South Box Suites",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 5000,
+          "all_in_price": 5407.75
+        },
+        {
+          "name": "GOVX Tickets",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Saturday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Saturday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 70,
+          "all_in_price": 81.03
+        },
+        {
+          "name": "Saturday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Saturday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 90,
+          "all_in_price": 102.64
+        },
+        {
+          "name": "Saturday Evening Courtside Reserved",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 120,
+          "all_in_price": 135.05
+        },
+        {
+          "name": "Saturday Evening Reserved VIP",
           "category": "STANDARD",
           "sale_state": "OPEN",
           "base_price": 250,
           "all_in_price": 275.51
+        },
+        {
+          "name": "Saturday Evening Reserved VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 275,
+          "all_in_price": 302.53
+        },
+        {
+          "name": "Saturday Evening Reserved VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        }
+      ],
+      "parent_event_id": "183665"
+    },
+    {
+      "event_id": "201733",
+      "name": "Major League Pickleball Newport Beach - Saturday Morning Session",
+      "series": "Major League Pickleball",
+      "status": "PUBLISHED",
+      "start_date": "2026-08-15",
+      "end_date": "2026-08-15",
+      "venue": {
+        "name": "Newport Beach Tennis and Pickleball Club",
+        "city": "Newport Beach",
+        "state": "CA"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-newport-beach-saturday-morning-session-201733",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Saturday North Box Suites",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 6000,
+          "all_in_price": 6488.22
+        },
+        {
+          "name": "Saturday South Box Suites",
+          "category": "BOOTH",
+          "sale_state": "OPEN",
+          "base_price": 5000,
+          "all_in_price": 5407.75
+        },
+        {
+          "name": "GOVX Tickets",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Saturday Morning Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Saturday Morning Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 70,
+          "all_in_price": 81.03
+        },
+        {
+          "name": "Saturday Morning Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Saturday Morning Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 90,
+          "all_in_price": 102.64
+        },
+        {
+          "name": "Saturday Morning Courtside Reserved",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 120,
+          "all_in_price": 135.05
+        },
+        {
+          "name": "Saturday Morning Reserved VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 250,
+          "all_in_price": 275.51
+        },
+        {
+          "name": "Saturday Morning Reserved VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 275,
+          "all_in_price": 302.53
+        },
+        {
+          "name": "Saturday Morning Reserved VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
         }
       ],
       "parent_event_id": "183665"
@@ -1353,6 +1516,13 @@
           "all_in_price": 0
         },
         {
+          "name": "Saturday: Wave Pilates (9am)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 0,
+          "all_in_price": 0
+        },
+        {
           "name": "Semifinals - Men's and Women's Doubles",
           "category": "GA",
           "sale_state": "SOLD_OUT",
@@ -1388,6 +1558,13 @@
           "all_in_price": 24.95
         },
         {
+          "name": "Thursday: Wave Pilates (9am)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 0,
+          "all_in_price": 0
+        },
+        {
           "name": "Tuesday Grounds Pass",
           "category": "GA",
           "sale_state": "OPEN",
@@ -1409,6 +1586,13 @@
           "all_in_price": 167.47
         },
         {
+          "name": "Tuesday: Wave Pilates (5pm)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 0,
+          "all_in_price": 0
+        },
+        {
           "name": "Wednesday Grounds Pass",
           "category": "GA",
           "sale_state": "OPEN",
@@ -1428,6 +1612,13 @@
           "sale_state": "OPEN",
           "base_price": 80,
           "all_in_price": 91.83
+        },
+        {
+          "name": "Wednesday: Wave Pilates (9am)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 0,
+          "all_in_price": 0
         },
         {
           "name": "Weeklong Grounds Pass",
@@ -3003,8 +3194,8 @@
         {
           "name": "Sunday Courtside",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 100,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 113.44
         },
         {

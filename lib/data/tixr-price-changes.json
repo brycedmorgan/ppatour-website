@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-02T14:23:10Z",
+  "updated_at": "2026-08-04T15:15:32Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -373,6 +373,273 @@
         "from": "HIDE",
         "to": "OPEN"
       }
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_added",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "ticket": "Friday VIP Platinum Lounge",
+      "base_price": 300,
+      "all_in_price": 329.54
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_added",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "ticket": "Saturday VIP Platinum Lounge",
+      "base_price": 300,
+      "all_in_price": 329.54
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_added",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "ticket": "Sunday VIP Platinum Lounge",
+      "base_price": 300,
+      "all_in_price": 329.54
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_removed",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "ticket": "Friday Platinum Lounge"
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_removed",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "ticket": "Saturday Platinum Lounge"
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_removed",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "ticket": "Sunday Platinum Lounge"
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_added",
+      "event_id": "183665",
+      "event": "Major League Pickleball Newport Beach - Playoffs",
+      "ticket": "Saturday Evening",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_added",
+      "event_id": "183665",
+      "event": "Major League Pickleball Newport Beach - Playoffs",
+      "ticket": "Saturday Morning",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_added",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "Saturday North Box Suites",
+      "base_price": 6000,
+      "all_in_price": 6488.22
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_added",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "Saturday South Box Suites",
+      "base_price": 5000,
+      "all_in_price": 5407.75
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_added",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "Saturday Full Day Courtside",
+      "base_price": 120,
+      "all_in_price": 135.05
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_added",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "Saturday Full Day Courtside Reserved",
+      "base_price": 160,
+      "all_in_price": 178.27
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_added",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "Saturday Full Day Reserved VIP",
+      "base_price": 300,
+      "all_in_price": 329.54
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_removed",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "North Box Suites"
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_removed",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "South Box Suites"
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_removed",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "Courtside"
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_removed",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "Courtside Reserved*"
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_removed",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "Courtside*"
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_removed",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "Courtside**"
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_removed",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "Courtside***"
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_removed",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "Reserved VIP"
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_removed",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "Reserved VIP*"
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_removed",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "Reserved VIP**"
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "event_added",
+      "event_id": "201735",
+      "event": "Major League Pickleball Newport Beach - Saturday Evening Session"
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "event_added",
+      "event_id": "201733",
+      "event": "Major League Pickleball Newport Beach - Saturday Morning Session"
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_added",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Saturday: Wave Pilates (9am)",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_added",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Thursday: Wave Pilates (9am)",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_added",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Tuesday: Wave Pilates (5pm)",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "ticket_added",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Wednesday: Wave Pilates (9am)",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "price_change",
+      "event_id": "195032",
+      "event": "PPA Mesa Sunday - Championships",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": 100,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 113.44,
+        "to": 113.44
+      }
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "availability_change",
+      "event_id": "195032",
+      "event": "PPA Mesa Sunday - Championships",
+      "ticket": "Sunday Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "event_removed",
+      "event_id": "170002",
+      "event": "Amway Major League Pickleball Orlando"
+    },
+    {
+      "at": "2026-08-04T15:15:32Z",
+      "type": "event_removed",
+      "event_id": "166227",
+      "event": "PPA Challenger Series - Wisconsin"
     }
   ]
 }
