@@ -24,7 +24,7 @@ import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 export const metadata: Metadata = {
   title: "PPA Pickleball Tour 2025 — The Official Video Game",
   description:
-    "Play as Ben Johns, Anna Leigh Waters and 14 more PPA pros. Career mode, real venues, singles and doubles. Out now on Steam, PlayStation, Xbox and Nintendo Switch.",
+    "Play as Ben Johns, Anna Leigh Waters and 14 more PPA pros. Career mode, real venues, singles and doubles. $29.99 on Steam, PlayStation, Xbox and Nintendo Switch.",
   openGraph: {
     title: "PPA Pickleball Tour 2025 — The Official Video Game",
     description:
@@ -32,6 +32,21 @@ export const metadata: Metadata = {
     images: ["/ppa/game/ppa-pickleball-tour-2025-video-game.webp"],
   },
 };
+
+/**
+ * Price and release, looked up from the storefronts themselves 2026-08-04:
+ * Steam's appdetails API ($29.99, released 16 Jul 2024) and the Nintendo store
+ * page ($29.99, released 26 Jul 2024). Both agree on price, which is why the
+ * page states a flat $29.99 rather than "from".
+ *
+ * ⚠ PlayStation and Xbox prices were NOT independently verified — those two
+ * stores don't expose a public price endpoint. If one ever differs, this line
+ * is the thing to change, and it should become "from $29.99".
+ *
+ * Developer and publisher are both FarSight Studios.
+ */
+const PRICE = "$29.99";
+const RELEASED = "July 2024";
 
 /** Verified 2026-08-03: all four return 200. */
 const STORES = [
@@ -151,7 +166,10 @@ export default function GamePage() {
             <p className="mt-4 max-w-xl text-base leading-relaxed text-white/70">
               Sixteen real PPA Tour pros. A career mode that takes you from
               rookie to world No. 1. Real venues, real brands, singles and
-              doubles. Out now on four platforms.
+              doubles.
+            </p>
+            <p className="mt-3 text-sm text-white/55">
+              {PRICE} · Released {RELEASED} · Developed by FarSight Studios
             </p>
             <div className="mt-7">
               <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-yellow">
@@ -239,8 +257,8 @@ export default function GamePage() {
             Get the Game
           </h2>
           <p className="mt-3 max-w-xl text-sm leading-relaxed text-ppa-navy/65">
-            PPA Pickleball Tour 2025 is out now on PC, PlayStation 5, Xbox
-            Series X|S and Nintendo Switch.
+            {PRICE} on PC, PlayStation 5, Xbox Series X|S and Nintendo Switch.
+            Released {RELEASED}, developed and published by FarSight Studios.
           </p>
           <div className="mt-6">
             <StoreButtons />
