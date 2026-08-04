@@ -51,14 +51,36 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   dressed as a copy-style preference. The other four were ordinary abbreviation.
 - **Deleted from the type, not bypassed** — all 54 sites became type errors, so no surface
   could quietly keep the old behaviour. `Tournament.name` documents why it must not return.
-- **⚠ NAMES COME FROM THE CURATED TABLE, NOT THE FEED — Wesley's first instinct was "use the
-  API" and the measurement reversed it.** Checked all 220 `ppa_tournaments` rows: **the API
-  contradicts Jeff on two of his own three examples** — it sends *"Veolia **PPA** National
-  Championships"* and *"Carvana Pickleball Masters **Powered by Invited**"*. It also isn't
-  self-consistent year to year (*"Veolia Texas Open"* in 2026, bare *"Texas Open"* in 2027),
-  and **3 of the 20 stops aren't in it at all** (Proton Daytona, Texas Open 2027, PPA Open).
-  `CURATED_ALIASES` already existed to paper over exactly those two. **Curated wins.**
-  Uncurated events still fall back to `cleanTitle(apiTitle)`, already their full name.
+- **⚠ NAMES COME FROM THE FEED. Wesley's call, after seeing the measurement: "use the API
+  names only."** Checked all 220 `ppa_tournaments` rows first, because **the API contradicts
+  Jeff on two of his own three examples.** Three stops changed:
+  - Veolia Pickleball National Championships → **Veolia PPA National Championships**
+  - Carvana Pickleball Masters → **Carvana Pickleball Masters Powered by Invited**
+  - Greater Zion Cup at Black Desert Resort → **Greater Zion Cup** (*shorter* — the feed
+    drops the resort)
+  14 were already identical; **3 aren't in the feed at all** (Proton Daytona, Texas Open 2027,
+  PPA Open) and keep curated names, as does everything when the API is unreachable.
+- **⚠ THE FEED IS NOT SELF-CONSISTENT YEAR TO YEAR, and /events proves it on one screen:** it
+  names the **2026** Zion stop *"Greater Zion Cup at Black Desert Resort"* and the **2027** one
+  *"Greater Zion Cup"*. Same for Texas (*"Veolia Texas Open"* 2026, bare *"Texas Open"* 2027)
+  and Sacramento. **Both strings are the feed's own — that is now the site's behaviour by
+  design. If a name reads wrong, fix it in the feed, not here.**
+- **⚠ FLIPPING THE MAPPER WAS NOT ENOUGH, AND THIS IS THE TRAP.** `resolveEvent` checks
+  `tournaments` (curated) FIRST, so a curated event never reaches the API record — the mapper
+  change alone did nothing on the page that matters most. Worse, the **homepage hero, Next on
+  Tour strip, header panel, `-live` route and EVERY OG card read the curated list directly**
+  (`getMainTourEvents()` / `tournaments`), so a mapper-only fix would have left the event page
+  disagreeing with the homepage. **Half-applied here is worse than not applied.**
+  - Fixed on both sides: the mapper prefers the feed title, `resolveEvent` overlays the live
+    name onto the curated record (keeping `defendingChampions`, the one field the API path
+    doesn't carry), **and the three curated ROWS were renamed to mirror the feed** so the
+    sync surfaces agree without an async refactor.
+- **⚠ NEW `RawEvent.slug` — RENAMING AN EVENT USED TO SILENTLY MOVE ITS URL.** `buildSchedule`
+  derived the slug from the name, so changing a name would have repointed the page and
+  orphaned `BRAND_BY_SLUG`, `COMMERCE_BY_SLUG`, `GALLERY_BY_SLUG`, event-guides, broadcast,
+  venue-photos, `MAJOR_SLUGS`, the sitemap and every inbound link. The three renamed rows pin
+  their original slug. **Verified: 28 event URLs byte-identical before and after.**
+  `CURATED_ALIASES` still does the reverse mapping and all three still resolve.
 - **`lib/tv-schedule.ts` is a THIRD hand-typed name list and two entries had drifted** on the
   same slug — "PPA World Pickleball Championships" and "Proton Florida Open". Fixed.
   `broadcast.ts` is keyed by slug only. ⚠ **Nothing prevents this drifting again** — a check
@@ -89,9 +111,17 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   - Mobile measurement is **CDP `Emulation.setDeviceMetricsOverride`**, never `--window-size`
     (7/31 pt. 5). No puppeteer in this repo — **Node 24 ships a global `WebSocket`, so you can
     drive Chrome over CDP with zero dependencies.**
-- **Left for a human:** prose now reads *"Watch Veolia Pickleball National Championships
-  Back"* / *"Why … Matters"* / *"How … Finished"*. Grammatically clumsy but deliberately NOT
-  reworded — Jeff said every instance, and rewriting published copy isn't a refactor's call.
+- **Left for a human:** prose now reads *"Watch Veolia PPA National Championships Back"* /
+  *"Why … Matters"* / *"How … Finished"*. Grammatically clumsy but deliberately NOT reworded —
+  Jeff said every instance, and rewriting published copy isn't a refactor's call.
+  Also **`lib/news-articles.ts` still says "Veolia Pickleball National Championships"** in
+  Dylan's published copy — left alone under the 7/29 content-approval ruling. **Flag it to
+  him**; it's now the only place on the site using the retired spelling.
+- **⚠ The feed is now the source of truth for names, so a rename upstream reaches the site
+  with no code change — but the three curated ROWS are a HAND-MIRROR of it and will drift.**
+  Same exposure as `lib/tv-schedule.ts`, which had already drifted twice
+  ("PPA World Pickleball Championships", "Proton Florida Open" — both fixed this session).
+  **A check asserting curated + TV names match the feed is ~20 lines and worth it.**
 
 ### 2026-08-03 (pt. 6) — Rankings search + region filter; a phantom leaderboard page killed
 - Wesley: add **search by name** and **filter by region** to /rankings and /leaderboards.

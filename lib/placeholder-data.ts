@@ -276,6 +276,15 @@ export function eventHref(t: Pick<Tournament, "startDate" | "slug">): string {
 
 type RawEvent = {
   name: string;
+  /**
+   * Explicit slug, ONLY for events whose display name would otherwise repoint
+   * their URL. The slug is normally `kebab(name)`, which means renaming an event
+   * silently moves its page and orphans every key that hangs off the slug —
+   * BRAND_BY_SLUG, COMMERCE_BY_SLUG, GALLERY_BY_SLUG, event-guides, broadcast,
+   * venue-photos, MAJOR_SLUGS, the sitemap and any inbound link. Set this to the
+   * ORIGINAL slug when you change a name. See the three feed-aligned names below.
+   */
+  slug?: string;
   start: string;
   end: string;
   city: string;
@@ -384,7 +393,7 @@ const PRESENTER_BY_SLUG: Record<string, string> = {
 /** Expand the compact schedule into Tournament records with unique slugs. */
 function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
   return raws.map((r, i) => {
-    let slug = kebab(r.name);
+    let slug = r.slug ?? kebab(r.name);
     if (seen.has(slug)) slug = `${slug}-${r.start}`;
     seen.add(slug);
 
@@ -465,7 +474,11 @@ const SCHEDULE: RawEvent[] = [
   { name: "PPA Canada 250 Vancouver", start: "2026-08-19", end: "2026-08-23", city: "Vancouver", state: "Canada", type: "international", country: "Canada" },
   { name: "PPA Asia 500 China Open 2", start: "2026-08-20", end: "2026-08-23", city: "Shenzhen", state: "China", type: "international", country: "Asia" },
   { name: "Atlanta PPA Challenger", start: "2026-08-28", end: "2026-08-30", city: "Peachtree City", state: "GA", type: "challenger" },
-  { name: "Veolia Pickleball National Championships", start: "2026-08-31", end: "2026-09-06", city: "Cary", state: "NC", venue: "Cary Tennis Park", type: "ppa", tier: "slam", image: "/ppa/nationals-drone-champcourt.jpg" },
+  // ⚠ Name mirrors the ppa_tournaments feed, slug is pinned to the original.
+  // Wesley, 8/3: names come from the API. The feed registers this as "Veolia PPA
+  // National Championships", not "…Pickleball…". Slug pinned so the URL, brand,
+  // guide, broadcast, gallery and MAJOR_SLUGS keys all still resolve.
+  { name: "Veolia PPA National Championships", slug: "veolia-pickleball-national-championships", start: "2026-08-31", end: "2026-09-06", city: "Cary", state: "NC", venue: "Cary Tennis Park", type: "ppa", tier: "slam", image: "/ppa/nationals-drone-champcourt.jpg" },
 
   // September 2026
   { name: "PPA Asia 1000 Kuala Lumpur Cup", start: "2026-09-09", end: "2026-09-13", city: "Kuala Lumpur", state: "Malaysia", type: "international", country: "Asia" },
@@ -496,7 +509,8 @@ const SCHEDULE: RawEvent[] = [
 
   // January 2027
   { name: "PPA Italy 125 Brescia", start: "2027-01-05", end: "2027-01-09", city: "Brescia", state: "Italy", type: "international", country: "Europe" },
-  { name: "Carvana Pickleball Masters", start: "2027-01-11", end: "2027-01-17", city: "Rancho Mirage", state: "CA", venue: "Hyatt Regency Indian Wells", type: "ppa", tier: "slam" },
+  // ⚠ Feed name + pinned slug — see the Nationals note above.
+  { name: "Carvana Pickleball Masters Powered by Invited", slug: "carvana-pickleball-masters", start: "2027-01-11", end: "2027-01-17", city: "Rancho Mirage", state: "CA", venue: "Hyatt Regency Indian Wells", type: "ppa", tier: "slam" },
   { name: "Minneapolis Indoor Open", start: "2027-01-18", end: "2027-01-24", city: "Lakeville", state: "MN", venue: "Life Time — Lakeville", type: "ppa", tier: "open" },
   { name: "PPA Spain P125", start: "2027-01-27", end: "2027-01-31", city: "TBA", state: "Spain", type: "international", country: "Europe" },
 
@@ -511,7 +525,10 @@ const SCHEDULE: RawEvent[] = [
   { name: "Texas Open", start: "2027-03-08", end: "2027-03-14", city: "Dallas", state: "TX", venue: "The Courts of McKinney", type: "ppa", tier: "open" },
   { name: "PPA Australia 250 Sydney Finals", start: "2027-03-17", end: "2027-03-21", city: "Sydney", state: "Australia", type: "international", country: "Australia" },
   { name: "PPA Spain P500", start: "2027-03-17", end: "2027-03-21", city: "TBA", state: "Spain", type: "international", country: "Europe" },
-  { name: "Greater Zion Cup at Black Desert Resort", start: "2027-03-22", end: "2027-03-28", city: "St. George", state: "UT", venue: "Black Desert Resort", type: "ppa", tier: "cup" },
+  // ⚠ Feed name + pinned slug. NOTE this one is SHORTER than what we had — the
+  // feed drops "at Black Desert Resort". Flagged to Jeff; if the resort should
+  // stay, the fix belongs in the feed, not here.
+  { name: "Greater Zion Cup", slug: "greater-zion-cup-at-black-desert-resort", start: "2027-03-22", end: "2027-03-28", city: "St. George", state: "UT", venue: "Black Desert Resort", type: "ppa", tier: "cup" },
 
   // April 2027
   { name: "PPA Open", start: "2027-04-05", end: "2027-04-11", city: "TBD", state: "", type: "ppa", tier: "open" },

@@ -262,14 +262,29 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
 
   return {
     slug,
-    // The CURATED spelling wins, and that is deliberate: the feed's own titles
-    // disagree with the names the tour uses. Measured 8/3 against all 220 rows —
-    // it sends "Veolia PPA National Championships" and "Carvana Pickleball
-    // Masters Powered by Invited", and it isn't self-consistent year to year
-    // ("Veolia Texas Open" in 2026, bare "Texas Open" in 2027). CURATED_ALIASES
-    // exists to reconcile exactly those. Events we don't curate fall back to the
-    // cleaned feed title, which is already their full name.
-    name: curated?.name ?? name,
+    // ⚠ THE FEED'S TITLE WINS. Wesley, 8/3: use the API names only — the feed is
+    // the tour's own system of record, so an event is called whatever it is
+    // registered as, and a rename there reaches the site without a code change.
+    //
+    // This is a REVERSAL of the earlier `curated?.name ?? name`, and it is a
+    // visible one on three stops. Measured against all 220 rows:
+    //   Veolia Pickleball National Championships -> Veolia PPA National Championships
+    //   Carvana Pickleball Masters               -> Carvana Pickleball Masters Powered by Invited
+    //   Greater Zion Cup at Black Desert Resort  -> Greater Zion Cup
+    // The last one is SHORTER than the curated spelling — the feed drops the
+    // resort. Flagged to Jeff; if any of these read wrong the fix belongs in the
+    // feed, not here.
+    //
+    // Curated stays the fallback for the two cases the feed can't answer: stops
+    // absent from it (Proton Daytona Beach Open, Texas Open 2027, PPA Open) and
+    // every event when the API is unreachable and we serve `buildSchedule`.
+    //
+    // ⚠ SLUGS ARE UNAFFECTED AND MUST STAY THAT WAY. `base` above is
+    // `curated?.slug ?? kebab(name)`, so the curated slug still wins and URLs
+    // don't move. Do NOT "tidy" this by renaming the curated ROWS to match —
+    // buildSchedule derives the slug from the curated name, so that would
+    // silently repoint every event URL, brand, guide, broadcast and photo key.
+    name: name || curated?.name || "",
     city: curated?.city ?? (t.venue_city || ""),
     state: curated?.state ?? (t.venue_state || ""),
     venue: curated?.venue ?? (t.venue_name || t.venue_city || ""),

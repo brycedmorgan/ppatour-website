@@ -61,9 +61,21 @@ type Params = { params: Promise<{ year: string; slug: string }> };
  */
 async function resolveEvent(year: string, slug: string): Promise<Tournament | null> {
   const match = (x: Tournament) => x.slug === slug && eventYear(x) === year;
-  const t = tournaments.find(match) ?? (await getEvents()).events.find(match) ?? null;
+  const curated = tournaments.find(match) ?? null;
+  const live = (await getEvents()).events.find(match) ?? null;
+  const t = curated ?? live;
   if (!t || t.tierKey === "challenger") return null;
-  return t;
+
+  // ⚠ The curated record still WINS for everything except the name — it is the
+  // only source of `defendingChampions`, and it carries the hand-authored
+  // content this page is built on. But Wesley, 8/3: names come from the API.
+  // So overlay just the name when the feed has this event.
+  //
+  // This overlay is required, not belt-and-braces: `mapTournament` sets the
+  // feed's name, but a curated event never reaches that record here — curated
+  // is checked first — so without this the API name would silently never
+  // appear on the one page that matters most.
+  return live?.name && live.name !== t.name ? { ...t, name: live.name } : t;
 }
 
 export async function generateStaticParams() {
