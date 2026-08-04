@@ -35,6 +35,55 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-04 (pt. 2) — Gold Prize Grid cut; a RED BUILD nobody noticed; invented presenters
+- **Gold Prize Grid removed from event pages** (Bryce, photo of the Nationals page). Deleted the
+  component rather than unmounting it, so nothing can re-import it. It rendered on **two** surfaces
+  that drift silently — the event page and `NationalsLive.tsx`. `GOLD_GRID` / `goldGridTotal` stay
+  in placeholder-data with a ⚠ note that nothing renders them. Purse is untouched: `TIER_PRIZE`
+  still carries the hero, quick facts and What's at Stake. Side effect: this cleared the last
+  literal 🥇🥈🥉 off an event page, closing Hannah's 7/28 medal-terminology flag.
+- **⚠ PRODUCTION WAS RED FOR ~20 MINUTES AND IT LOOKED FINE FROM OUTSIDE.** Builds failed from
+  `76257b2` (VB Open / Mojo) onward; **three deploys errored before mine landed** and the live site
+  kept serving the last good build, so nobody noticed. **If a push seems not to have taken effect,
+  check the deployment state before re-pushing — a green site is not a green build.**
+  - Cause: `short: "Virginia Beach Open"` set on a `RawEvent`. **`shortName` was deleted from the
+    type on 8/3 precisely so it could not return** — the type refused to compile, which is the
+    design working.
+  - **⚠ AND THE COMPILE ERROR WAS THE ONLY THING STOPPING A WORSE BUG.** `slug = r.slug ?? kebab(name)`,
+    so the rename would have moved the page to `/events/2026/mojo-energy-pouches-virginia-beach-open`
+    and orphaned BRAND_BY_SLUG, venue-photos, tv-schedule, broadcast, event-guides,
+    defending-champions.json, watch-angles.json, news-articles, the sitemap and every inbound link.
+    **Pinning `slug` on ANY rename is not optional.** Verified: URL byte-identical, Mojo name renders.
+- **⚠ WE WERE INVENTING PRESENTING PARTNERS — 6 of 10 were fabricated.**
+  `presentedBy: PRESENTER_BY_SLUG[slug] ?? sponsor`, where `sponsor` is whichever of
+  Veolia/Carvana/Rate/Proton the **name starts with**. So an event's **title** sponsor was published
+  as its **presenting** partner — two different deals at two different prices. It produced the
+  self-referential "Proton Daytona Beach Open presented by Proton" and "Carvana Mesa Cup presented
+  by Carvana". Bryan Renahan flagged three; the bug was structural.
+  - **Fixed in BOTH builders.** `lib/events-api.ts` carried the identical fallback and **/events is
+    feed-driven** — curated-only would have left the page that matters still crediting the wrong
+    partner. Same trap as the 8/3 name pass. **PRESENTER_BY_SLUG is now the only source**; unlisted
+    means nothing renders. 10 → 5, all genuine. Arizona Open → **AT Sports** (Veolia is title).
+  - Two nobody flagged were wrong the same way but **hand-typed on the records**, so the fallback fix
+    missed them: Carvana Utah Open and Veolia Kansas City Cup. Removed separately.
+- **Cincinnati has no venue** (Bryan: "should not have Lindner Family Tennis Center listed anywhere").
+  Row drops `venue` and falls back to the city; the trip guide's mapQuery, getting-there and parking
+  copy were all written around that venue (Mason, Gate A, "the tennis center") and were **reduced to
+  what is true without one rather than re-pointed at an invented replacement**. Verified 0 Lindner.
+- **"MAIN GATE · BOX OFFICE" overflowed its box on every event page** (Bryan, screenshot). It is the
+  only long label drawn *inside* a filled rect. Box 180→230, tracking 2→1.5 to match GUEST SERVICES.
+  **Measured with `getComputedTextLength()`, not estimated: 180.1px in 230px.** Longest in-box label
+  on the map — re-measure if reworded.
+- **Deliberately NOT touched: tournament names and badges.** Tyler was mid-flight on those (4 commits
+  in an hour) and concurrent edits to the same rows are what broke the build. Checked instead:
+  Nationals reads "Veolia Pickleball National Championships" on **both** homepage and /events, so the
+  split Tyler flagged in #60 is already resolved and **no feed-name override is needed**.
+- Verified live on production, not just locally: Cincinnati 0 Lindner, Mesa Cup 0 presenters,
+  Arizona 10× AT Sports. Slack recap sent to #ppa-website-crew by Bryce.
+- **Next:** Connor's hero still needs an asset (he wants "exciting"; current drone shot is too much
+  grass) · Zyia is the last sponsor with no mark · Jeff's Dropbox headshot misspellings (e.g. Cason
+  Campbell) · Vacations cutover is Bryce's, shortly.
+
 ### 2026-08-04 — How Pro Pickleball Works rebuilt from Jeff's doc; five stale stop counts
 - **Source: Jeff Watson's "How Pro Pickleball Works" doc** (#ppa-website-crew, 8/3). **Every
   comment thread on it is RESOLVED, Connor Pardoe's included — the numbers are approved, not
