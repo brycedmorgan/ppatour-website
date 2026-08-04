@@ -78,11 +78,28 @@ export const metadata: Metadata = {
  * treatment typed the names in Gotham, which read as placeholder), and the PBTV
  * banner is its own block underneath.
  *
- * ⚠ CBS, FOX and FS1/FS2 are confirmed in `lib/broadcast.ts` (transcribed from
- * the Championship Court sheet). ESPN and NBC are NOT in any broadcast sheet
- * we hold — they came from Connor's brief. Confirm with Adam Friedman before
- * launch; deleting a row here is the whole fix if either is wrong. This matters
- * more now that we publish their actual trademarks rather than the name in type.
+ * ── Why each of these publishes ────────────────────────────────────────────
+ * CBS, FOX and FS1/FS2 are in `lib/broadcast.ts`, transcribed from the
+ * Championship Court sheet.
+ *
+ * ESPN and NBC were withheld for a week because they appear in NO broadcast
+ * sheet we hold — they came from Connor's brief, and publishing a network's
+ * trademark to claim coverage we cannot evidence is not a thing to guess at.
+ * Cleared 2026-08-04 by Bryce (President/CMO) — "we have been on ESPN and NBC,
+ * NBC was a Vegas event, ESPN was during the Super Bowl one year" — and
+ * corroborated independently rather than taken on memory alone:
+ *   ESPN  the tour's own release "PPA Welcomes ESPN as the Exclusive
+ *         Broadcaster", a live PPA Tour page on espn.com/watch, and ESPN /
+ *         ESPN2 / ESPN3 across the published broadcast schedules.
+ *   NBC   press coverage of the tour's broadcast history: "special events
+ *         televised on NBC and ABC", which matches Bryce's Vegas recollection.
+ *
+ * ⚠ ABC turned up in that same NBC source and is NOT published here. One
+ * summary line is enough to corroborate a claim the CMO already made; it is
+ * not enough to put a fourth network's mark on the page on its own. Ask Bryce
+ * before adding it.
+ *
+ * Deleting a row here is still the whole fix if any of this changes.
  */
 const AS_SEEN_ON: {
   name: string;
@@ -96,8 +113,8 @@ const AS_SEEN_ON: {
 }[] = [
   { name: "CBS", logo: "/ppa/networks/cbs.svg", width: 1000, height: 447, className: "h-9 sm:h-10", confirmed: true },
   { name: "FOX", logo: "/ppa/networks/fox.svg", width: 1000, height: 422, className: "h-7 sm:h-8", confirmed: true },
-  { name: "ESPN", logo: "/ppa/networks/espn.svg", width: 554, height: 137, className: "h-6 sm:h-7", confirmed: false },
-  { name: "NBC", logo: "/ppa/networks/nbc.svg", width: 567, height: 559, className: "h-11 sm:h-12", confirmed: false },
+  { name: "ESPN", logo: "/ppa/networks/espn.svg", width: 554, height: 137, className: "h-6 sm:h-7", confirmed: true },
+  { name: "NBC", logo: "/ppa/networks/nbc.svg", width: 567, height: 559, className: "h-11 sm:h-12", confirmed: true },
   // Stacked lockup (mark over wordmark), so it needs more height than the
   // wordmark-only marks to sit at the same optical weight.
   { name: "Tennis Channel", logo: "/ppa/networks/tennis-channel.svg", width: 130, height: 170, className: "h-12 sm:h-14", confirmed: true },
@@ -144,9 +161,9 @@ const BROADCAST = [
 ];
 
 /**
- * Only networks confirmed in a broadcast sheet publish. ESPN/NBC stay out
- * until Adam Friedman confirms them (launch item 10) — flip `confirmed: true`
- * in AS_SEEN_ON to publish a mark.
+ * Only networks we can stand behind publish. All five are cleared as of
+ * 2026-08-04 (see AS_SEEN_ON above for what each one rests on). Flip a mark's
+ * `confirmed` to false to pull it; the grid re-flows its column count itself.
  */
 const confirmedNetworks = AS_SEEN_ON.filter((n) => n.confirmed);
 
