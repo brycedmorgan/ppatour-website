@@ -158,6 +158,21 @@ const LEGACY_REDIRECTS = [
   // 9 links using it point at athletes who do have a page here.
   { source: "/pro/:slug", destination: "/athletes/:slug" },
   { source: "/tournament/:path*", destination: "/events" },
+
+  /**
+   * The two PPA Blog posts not carried over (Bryce, 8/4 — the only two with no
+   * `blog-category` in WordPress). Both are live 200s on ppatour.com today, so
+   * without these they become brand-new 404s the moment DNS moves. 301'd to
+   * /blog rather than dropped: same topic, and a relevant index keeps whatever
+   * links and equity they hold instead of throwing it away.
+   *
+   * ⚠ These must sit ABOVE nothing and BELOW nothing in particular, but they
+   * MUST outlive the import: `DROPPED` in scripts/import-wp-blog.mjs is what
+   * keeps the posts out, and these two lines are what keeps their URLs alive.
+   * Delete one without the other and the pair stops making sense.
+   */
+  { source: "/ppa-blog/pickleball-kitchen-rules-what-you-should-know", destination: "/blog" },
+  { source: "/ppa-blog/is-pickleball-an-olympic-sport", destination: "/blog" },
 ];
 
 const nextConfig: NextConfig = {

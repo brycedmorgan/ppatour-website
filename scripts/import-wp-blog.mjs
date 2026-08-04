@@ -86,6 +86,26 @@ const SECTION_ORDER = [
   "pickleball-players",
 ];
 
+/**
+ * Posts NOT carried over. Bryce's call, 2026-08-04 — these two are the only
+ * entries with no `blog-category` in WordPress, and rather than assign them a
+ * section they are dropped.
+ *
+ * ⚠ THIS LIST LIVES IN THE IMPORTER, NOT IN THE JSON. The importer is
+ * re-runnable and reads WordPress live, so deleting the records from
+ * lib/data/blog-posts.json alone would silently resurrect them on the next run
+ * — the same trap the byline map in import-wp-posts.mjs documents.
+ *
+ * ⚠ AND A DROPPED POST STILL NEEDS A DESTINATION. Both are live 200s on
+ * ppatour.com today, so at cutover they become new 404s unless something
+ * catches them. `LEGACY_REDIRECTS` in next.config.ts 301s each to /blog —
+ * removing a page is not the same as pretending it never had a URL.
+ */
+const DROPPED = new Set([
+  "pickleball-kitchen-rules-what-you-should-know",
+  "is-pickleball-an-olympic-sport",
+]);
+
 /* ─────────────────────────── helpers ─────────────────────────── */
 
 const NAMED = {
@@ -217,7 +237,12 @@ const out = [];
 const assets = new Map();
 const warnings = [];
 
+const dropped = [];
 for (const p of posts.slice(0, LIMIT)) {
+  if (DROPPED.has(p.slug)) {
+    dropped.push(p.slug);
+    continue;
+  }
   const title = decode(p.title?.rendered || "");
   const terms = (p["blog-category"] || []).map((id) => sectionById[id]).filter(Boolean);
   const sections = SECTION_ORDER.filter((s) => terms.some((t) => t.slug === s)).concat(
@@ -343,6 +368,15 @@ const tally = (key) =>
     .sort((a, b) => b[1] - a[1]);
 
 console.log(`\nimported ${out.length} blog posts\n`);
+if (dropped.length) {
+  console.log(`dropped (see DROPPED): ${dropped.join(", ")}`);
+  console.log("  → each needs a 301 in next.config.ts, or it 404s at cutover\n");
+}
+for (const s of DROPPED) {
+  if (!dropped.includes(s)) {
+    console.warn(`⚠ DROPPED lists "${s}" but WordPress returned no such post — stale entry?`);
+  }
+}
 console.log("section:");
 for (const [k, n] of tally("blogCategory")) console.log(`   ${String(n).padStart(3)}  ${k}`);
 console.log("\nbyline:");
