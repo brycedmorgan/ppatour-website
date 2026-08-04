@@ -389,11 +389,26 @@ const COMMERCE_BY_SLUG: Record<string, { tickets?: string; register?: string }> 
 
 // Presenting sponsors that differ from the name-prefix heuristic (per the
 // official badge artwork: title sponsor lives in the name, presenter below).
+/**
+ * Presenting partners, by slug. THE ONLY SOURCE of "Presented by" on the site —
+ * an event not listed here has no presenting partner and must not display one.
+ *
+ * ⚠ This used to fall back to `SPONSORS.find(s => name.startsWith(s))`, which
+ * quietly presented an event's own TITLE sponsor as its PRESENTING partner —
+ * two different deals sold at two different prices. It fabricated six of the
+ * ten presenters on the site, including "Proton Daytona Beach Open presented by
+ * Proton" and "Carvana Mesa Cup presented by Carvana". Bryan Renahan flagged
+ * three of them on 8/4 ("Veolia Arizona Open is presented by AT Sports, not
+ * Veolia. Veolia is title, AT Sports is presenting" · Masters and Mesa Cup
+ * "does not have a presenting partner, only Carvana as title"). Don't
+ * reintroduce the fallback — an unlisted event showing nothing is correct.
+ */
 const PRESENTER_BY_SLUG: Record<string, string> = {
   "veolia-pickleball-national-championships": "Fasenra",
   "rate-las-vegas-open": "JOOLA",
   "veolia-chicago-cup": "Storm",
   "veolia-malibu-cup": "Proton",
+  "veolia-arizona-open": "AT Sports",
 };
 
 /** Expand the compact schedule into Tournament records with unique slugs. */
@@ -411,7 +426,6 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
             // 125) — rank by that so only the true 1,000+ stops reach The Tour.
             (tierFromName(r.name) ?? "open")
           : r.tier!;
-    const sponsor = SPONSORS.find((s) => r.name.startsWith(s));
 
     return {
       slug,
@@ -436,7 +450,7 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
       // Challenger tier reads 500 for all of them otherwise.
       points: tier === "challenger" ? (pointsFromName(r.name) ?? undefined) : undefined,
       prizeMoney: r.type === "international" ? "$100,000" : TIER_PRIZE[tier],
-      presentedBy: PRESENTER_BY_SLUG[slug] ?? sponsor,
+      presentedBy: PRESENTER_BY_SLUG[slug],
       // Main-tour cards lead with venue scenes; Challengers/international
       // keep action shots (their cards are the smaller treatments).
       // The event's OWN venue photography wins (synced from Jackalope), then a
@@ -539,7 +553,10 @@ const SCHEDULE: RawEvent[] = [
   // April 2027
   { name: "PPA Open", start: "2027-04-05", end: "2027-04-11", city: "TBD", state: "", type: "ppa", tier: "open" },
   { name: "Sacramento Open", start: "2027-04-05", end: "2027-04-11", city: "Sacramento", state: "CA", venue: "Life Time — Arden", type: "ppa", tier: "open" },
-  { name: "Cincinnati Open", start: "2027-04-12", end: "2027-04-18", city: "Cincinnati", state: "OH", venue: "Lindner Family Tennis Center", type: "ppa", tier: "open" },
+  // No venue: Bryan Renahan, 8/4 — "Cincy should not have Lindner Family Tennis
+  // Center listed anywhere. No venue for now." Falls back to the city until a
+  // venue is confirmed; don't re-add one without him.
+  { name: "Cincinnati Open", start: "2027-04-12", end: "2027-04-18", city: "Cincinnati", state: "OH", type: "ppa", tier: "open" },
   { name: "PPA Spain P250", start: "2027-04-21", end: "2027-04-25", city: "TBA", state: "Spain", type: "international", country: "Europe" },
   { name: "Atlanta Pickleball Championships", start: "2027-04-26", end: "2027-05-02", city: "Atlanta", state: "GA", venue: "Life Time — Peachtree Corners", type: "ppa", tier: "slam" },
 
@@ -569,7 +586,6 @@ const PAST_EVENTS: Tournament[] = ([
     status: "completed",
     tierKey: "open",
     prizeMoney: "$150,000",
-    presentedBy: "Carvana",
     image: "/ppa/action-singles.jpg",
     season: "2025-2026",
   },
@@ -587,7 +603,6 @@ const PAST_EVENTS: Tournament[] = ([
     status: "completed",
     tierKey: "cup",
     prizeMoney: "$1,271,734",
-    presentedBy: "Veolia",
     image: "/ppa/action-mxd.jpg",
     season: "2025-2026",
   },

@@ -258,7 +258,6 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     curated?.tierKey ??
     (isChallenger ? "challenger" : inferTier(name, eventDays(startDate, endDate)));
   const status = mapStatus(t.tournament_status);
-  const sponsor = SPONSORS.find((s) => name.startsWith(s));
 
   return {
     slug,
@@ -312,7 +311,9 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     // Challenger tier reads 500 for all of them otherwise.
     points: tier === "challenger" ? (pointsFromName(name) ?? undefined) : undefined,
     prizeMoney: curated?.prizeMoney ?? TIER_PRIZE[tier],
-    presentedBy: curated?.presentedBy ?? sponsor,
+    // Curated-only: see PRESENTER_BY_SLUG. Never infer a presenter from the
+    // title sponsor in the name — that fabricated 6 of 10 presenters (8/4).
+    presentedBy: curated?.presentedBy,
     // Venue scenes for main-tour cards, action shots for the smaller
     // Challenger/international treatments (see docs/VENUE-ASSETS.md).
     // The event's own venue photography (synced from Jackalope) leads, then

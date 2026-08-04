@@ -69,17 +69,21 @@ export const eventGuides: Record<string, EventGuide> = {
       { name: "William B. Umstead Park", tag: "Outdoors", note: "Trails between Cary + Raleigh" },
     ],
   },
+  // ⚠ Venue deliberately unnamed — Bryan Renahan, 8/4: "Cincy should not have
+  // Lindner Family Tennis Center listed anywhere. No venue for now." The
+  // getting-there and parking copy was written around that venue (Mason, Gate
+  // A, "the tennis center"), so it's been reduced to what's true without one.
+  // Restore specifics only when the real venue is confirmed.
   "veolia-cincinnati-cup": {
-    mapQuery: "Lindner Family Tennis Center, Mason, OH",
+    mapQuery: "Cincinnati, OH",
     airport: "CVG",
-    airportNote: "Cincinnati/N. Kentucky · ~40 min to venue",
+    airportNote: "Cincinnati/N. Kentucky International",
     gettingThere:
-      "Fly into CVG and drive 40 minutes north to Mason. A rental is the easy call — the venue and hotels are spread across the suburbs.",
+      "Fly into CVG. A rental car is the easy call — the host hotels are spread across the metro. Venue details are still to be announced.",
     parking:
-      "Free on-site parking at the tennis center. Accessible drop-off at Gate A; lots open 8:00 AM.",
+      "Parking details publish with the venue announcement.",
     hotels: [
-      { name: "Great Wolf Lodge Mason", tag: "Family", note: "5 min · indoor water park" },
-      { name: "21c Museum Hotel", tag: "Boutique", note: "Downtown · 35 min, art-hotel" },
+      { name: "21c Museum Hotel", tag: "Boutique", note: "Downtown art-hotel" },
     ],
     dining: [
       { name: "Montgomery Inn", tag: "Ribs", note: "Cincinnati's famous BBQ" },
@@ -87,7 +91,7 @@ export const eventGuides: Record<string, EventGuide> = {
       { name: "Skyline Chili", tag: "Icon", note: "Cincinnati-style chili" },
     ],
     doing: [
-      { name: "Kings Island", tag: "Thrills", note: "Coasters next door in Mason" },
+      { name: "Kings Island", tag: "Thrills", note: "Coasters ~30 min north in Mason" },
       { name: "Cincinnati Riverfront", tag: "Outdoors", note: "Smale Park + Roebling Bridge" },
     ],
   },

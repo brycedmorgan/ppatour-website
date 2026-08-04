@@ -135,12 +135,16 @@ export function VenueMap({ venue }: { venue: string }) {
           <Badge x={150} y={306} n={5} />
 
           {/* 6 · Main gate + box office */}
-          <rect x="40" y="404" width="180" height="40" fill="#0c2b44" />
-          <text x="130" y="428" textAnchor="middle" fontSize="11" fontWeight="700" fill="#ffffff" letterSpacing="2">
+          {/* ⚠ Box widened 180 -> 230 and tracking dropped to 1.5 to match #8:
+              "MAIN GATE · BOX OFFICE" is 22 characters and overflowed the old
+              box on every event page (Bryan Renahan, 8/4). It is the longest
+              in-box label on the map — re-measure if it's ever reworded. */}
+          <rect x="40" y="404" width="230" height="40" fill="#0c2b44" />
+          <text x="155" y="428" textAnchor="middle" fontSize="11" fontWeight="700" fill="#ffffff" letterSpacing="1.5">
             MAIN GATE · BOX OFFICE
           </text>
           <Badge x={50} y={412} n={6} />
-          <path d="M 130 404 L 118 388 L 142 388 Z" fill="#e7e700" />
+          <path d="M 155 404 L 143 388 L 167 388 Z" fill="#e7e700" />
 
           {/* 7 · Parking */}
           <rect x="40" y="296" width="80" height="88" fill="#d7dee4" />
