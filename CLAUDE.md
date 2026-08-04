@@ -35,6 +35,52 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-04 — How Pro Pickleball Works rebuilt from Jeff's doc; five stale stop counts
+- **Source: Jeff Watson's "How Pro Pickleball Works" doc** (#ppa-website-crew, 8/3). **Every
+  comment thread on it is RESOLVED, Connor Pardoe's included — the numbers are approved, not
+  drafted.** Two of his rulings are baked in: **show only the Gold contract prize grid**
+  ("Id only show gold here") and **there is no third-place match** ("we are just getting rid
+  of the 3rd, both teams get paid for 4th").
+- **⚠ THE OLD PAGE WASN'T JUST THIN, IT WAS WRONG.** It listed **only two Majors** (there are
+  four), called the **PPA Finals a "bonus"** rather than a 2,000-point event, and said **"the
+  majors pay double"** when Worlds is 3,000. It had nothing on contracts, the WPR weighting,
+  Current Seed, draws, byes or prize money — most of what a fan actually wants.
+- Four sections behind jump links: **Who Is a Pro** (contract-first, three routes in,
+  Gold/Standard/Futures + the Top-25 promotion, Legacy, ITPs and the 8-events-in-a-year path
+  back) · **Rankings & Current Seed** · **Tournaments & Draws** · **Points & Prize Money**.
+- **The 50/35/15 figure is ONE stacked bar, not three meters** — parts of a single composite
+  score, so segment width IS the weight. Same validated `ppa-blue-deep → ppa-blue → ppa-sky`
+  ramp as the 8/3 /rankings hero, **labels outside the bar because `ppa-sky` carries a
+  contrast WARN.** Don't restyle without re-reading that entry.
+- **Jeff flags WPR vs Current Seed as the thing that "trips up new fans"** — it gets its own
+  panel, because the two numbers do different jobs (WPR = entry + byes, Current Seed =
+  per-discipline seeding, combined across a doubles team).
+- **URL deliberately unchanged.** `/about/how-it-works` is linked from the header, footer,
+  /about, /rankings, the homepage, /about/history, the sitemap and site search — only the H1
+  and `<title>` changed. Prize-grid CTA deep-links the next stop's `#stakes` (verified to
+  exist on both the event page and NationalsLive). **Each wide table scrolls in its own
+  `overflow-x-auto`** so the page body never scrolls sideways.
+- **⚠ /about HAD FIVE STALE STOP COUNTS, IN FOUR FORMATS — and a grep for "18" found three.**
+  It claimed **18** tour stops in five places while `getMainTourEvents()` returns **20**, a
+  regression against the 7/29 sitewide normalization. Two were `18`, **two were spelled
+  "eighteen"** (including the H2 *"One Race. Eighteen Stops."*), one was in the metadata
+  description. **The spelled-out ones were only caught by diffing RENDERED TEXT, not source —
+  when normalizing a number, search the output, not the code.** All five now derive from
+  `getMainTourEvents()`, as do the season opener and closer, so **no event name is typed on
+  that page any more** — which also cleared the retired "Veolia Pickleball National
+  Championships" spelling the 8/3 change left behind, and "the majors pay double".
+  - The old comment called the count *"TBD, 18 shown provisionally"* (Tyler, 7/30). Deriving
+    settles it permanently.
+- **⚠ The doc uses medal language** — "gold-medal matches", "no bronze-medal matches" — which
+  brushes against **Hannah's 7/28 ruling to drop medal terminology sitewide**. Kept Jeff's
+  wording because it names match *formats*, not player achievements (hers targeted rank chips
+  and career stats). **Flagged, not resolved** — if she's firm, it's two strings.
+- **⚠ STANDING INSTRUCTION (Wesley, 8/4): never audit or flag old `/news` articles.** They sit
+  behind the content-approval gate and are Dylan's. Several carry retired terminology and
+  superseded figures; that is knowingly accepted. Fix non-article surfaces and say nothing.
+- Verified on a real prod build: tsc + build clean, eslint at its 8-error baseline, **zero
+  horizontal overflow across 9 pages at a true 390px**, rendered at 1440 and 390.
+
 ### 2026-08-03 (pt. 7) — Full tournament names: `shortName` deleted; a homepage viewport bug
 - Jeff Watson, 15:43 in #ppa-website-crew: **"we need to call every tournament by their
   full name please - in every instance"** (Veolia Pickleball National Championships, Veolia
