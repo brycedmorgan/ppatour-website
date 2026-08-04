@@ -240,6 +240,12 @@ export const SPONSORS = ["Veolia", "Carvana", "Rate", "Proton"];
  * across the five pro divisions (distinct from the prize+fees headline in
  * TIER_PRIZE). Real 2026 grid totals from ppatour.com/how-it-works
  * (Bryce, 7/15). PPA Finals runs its own $628k grid — see GOLD_GRID_BY_SLUG.
+ *
+ * ⚠ NOTHING RENDERS THIS TODAY. The GoldPrizeGrid component that displayed it
+ * on the event page and the -live route was removed 8/4 (Bryce). The data is
+ * kept because the totals are real and verified; if the grid comes back, it
+ * reads from here. The purse a fan sees now is TIER_PRIZE (prize + appearance
+ * fees) in the hero, quick facts and What's at Stake.
  */
 export const GOLD_GRID: Record<EventTier, string> = {
   worlds: "$1,024,400",

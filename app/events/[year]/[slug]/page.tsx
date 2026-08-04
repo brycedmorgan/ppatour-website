@@ -8,7 +8,6 @@ import { EventConcierge } from "@/components/events/EventConcierge";
 import { EventTabNav } from "@/components/events/EventTabNav";
 import { FirstServeCountdown } from "@/components/events/FirstServeCountdown";
 import { EventGallery } from "@/components/events/EventGallery";
-import { GoldPrizeGrid } from "@/components/events/GoldPrizeGrid";
 import { EventSponsors } from "@/components/events/EventSponsors";
 import { RegisteredCount } from "@/components/events/RegisteredCount";
 import { VenueMap } from "@/components/events/VenueMap";
@@ -759,11 +758,6 @@ export default async function EventPage({ params }: Params) {
                 <p className="mt-1 text-xs text-ppa-navy/55">{s.note}</p>
               </div>
             ))}
-          </div>
-
-          {/* Gold Prize Grid — clickable, "biggest & best" (Connor 7/23) */}
-          <div data-reveal className="mt-4">
-            <GoldPrizeGrid t={t} accent={t.brand?.accent ?? "#228be6"} />
           </div>
 
           <div className="mt-6 flex flex-wrap gap-4">

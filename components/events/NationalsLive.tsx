@@ -9,7 +9,6 @@ import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { EventConcierge } from "@/components/events/EventConcierge";
 import { EventTabNav } from "@/components/events/EventTabNav";
 import { EventGallery } from "@/components/events/EventGallery";
-import { GoldPrizeGrid } from "@/components/events/GoldPrizeGrid";
 import { VenueMap } from "@/components/events/VenueMap";
 import { VolunteerModalButton } from "@/components/events/VolunteerModalButton";
 import { ScoresBoard } from "@/components/live/ScoresBoard";
@@ -750,11 +749,6 @@ export function NationalsLive({
                 <p className="mt-1 text-xs text-ppa-navy/55">{s.note}</p>
               </div>
             ))}
-          </div>
-
-          {/* Gold Prize Grid — clickable, "biggest & best" (Connor 7/23) */}
-          <div className="mt-4">
-            <GoldPrizeGrid t={t} accent={t.brand?.accent ?? "#228be6"} />
           </div>
 
           <div className="mt-6 flex flex-wrap gap-4">
