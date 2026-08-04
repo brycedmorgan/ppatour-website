@@ -24,6 +24,13 @@ const PRO_TOUR_LINKS: FooterLink[] = [
   { label: "How It Works", href: "/about/how-it-works" },
   { label: "Player Handbook", href: "/about/player-handbook" },
   { label: "Tournament History", href: "/about/history" },
+  /**
+   * The PPA Blog — how to play, scoring, gear, terminology. Sits beside How It
+   * Works because it answers the same beginner question one level down, and a
+   * site-wide link is what gives 39 evergreen pages an internal path in from
+   * every route rather than only from /news.
+   */
+  { label: "Pickleball Blog", href: "/blog" },
 ];
 
 const PPA_LINKS: FooterLink[] = [

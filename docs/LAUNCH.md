@@ -109,6 +109,19 @@ caught before it reaches the domain.
 Crawled all five ppatour.com sitemaps against this build on 2026-08-02.
 Coverage is otherwise excellent — **post 812, ppa-blog 40, athlete 218 and
 tournament 178 all resolve** — but 10 of the 37 `page-sitemap` URLs 404 here,
+
+> ⚠ **CORRECTION, 2026-08-04.** The "ppa-blog 40/40 resolve" line above was
+> true and useless. Those 40 URLs resolved because `next.config.ts` redirected
+> `/ppa-blog/:slug*` to `/news` — a 301 to a 200. **The 39 posts themselves had
+> never been imported** (`import-wp-posts.mjs` pulls `post_type=post`; `ppa-blog`
+> is a separate post type), so the tour's best-ranking evergreen pages were
+> being collapsed into one index, which Google reads as a soft 404. Hannah Johns
+> caught it. Fixed: `scripts/import-wp-blog.mjs`, `app/ppa-blog/[slug]`,
+> `app/blog`, both redirects deleted.
+>
+> **The lesson for every future coverage check: a status-code crawl cannot see a
+> wrong destination.** Compare content, or at minimum assert the final URL after
+> redirects matches the source path.
 and **all 10 return 200 on ppatour.com today**. Three had an obvious home and
 are now redirected (`/opt-out-preferences`, `/content-policy`,
 `/ppa-tour-event-inquiry-form`). These seven do not:

@@ -38,6 +38,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/rankings",
     "/leaderboards",
     "/news",
+    "/blog",
     "/about",
     "/about/sponsors",
     "/about/how-it-works",
@@ -92,12 +93,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
      * /register, /success and the Punta Cana guest archive are noindex and
      * always stay out.
      */
-    // Native articles + the 811 migrated WordPress posts. `lastModified`
-    // matters here: these carry real publication dates going back to 2023, and
-    // the 301s from their old root-level URLs need the new URL to look
-    // authoritative to crawlers.
+    /**
+     * Native articles, the 811 migrated WordPress posts, and the 39 PPA Blog
+     * posts. `lastModified` matters here: these carry real publication dates
+     * going back to 2023, and the 301s from their old root-level URLs need the
+     * new URL to look authoritative to crawlers.
+     *
+     * ⚠ `n.href`, never `/${n.slug}` — blog posts live under `/ppa-blog/` and
+     * hardcoding the root shape would have listed 39 URLs that 404.
+     *
+     * (Pickleball Vacations is deliberately held out above until Stripe lands.)
+     */
     ...allNews().map((n) => ({
-      url: url(`/${n.slug}`),
+      url: url(n.href),
       lastModified: new Date(n.publishedAt),
       changeFrequency: "monthly" as const,
       priority: 0.6,

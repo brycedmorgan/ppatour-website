@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# WordPress import scratch — review CSVs, media manifests, warning logs.
+# The import payload itself (lib/data/*-posts.json) IS committed.
+.wp-import/

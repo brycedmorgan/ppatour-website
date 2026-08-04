@@ -41,7 +41,17 @@ import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
-const POSTS = path.join(ROOT, "lib/data/news-posts.json");
+/**
+ * Both migrated archives. blog-posts.json joined the sweep on 2026-08-04 when
+ * the 39 PPA Blog posts were imported — their 64 assets sit under the same
+ * doomed ppatour.com/wp-content paths as everything else and die at cutover
+ * identically. Same map, same blob store, same `resolveAsset()` on the render
+ * side; nothing else in this script had to change.
+ */
+const POST_FILES = [
+  path.join(ROOT, "lib/data/news-posts.json"),
+  path.join(ROOT, "lib/data/blog-posts.json"),
+];
 const MAP = path.join(ROOT, "lib/data/wp-media-map.json");
 /**
  * Upstream URLs that return 404 on the WordPress site itself — already-broken
@@ -97,7 +107,7 @@ const DOOMED_HOSTS = new Set(["ppatour.com", "www.ppatour.com"]);
  * `featured`).
  */
 function inventory() {
-  const posts = JSON.parse(readFileSync(POSTS, "utf8"));
+  const posts = POST_FILES.flatMap((f) => JSON.parse(readFileSync(f, "utf8")));
   const assets = new Map(); // url -> { url, kind, posts:Set }
   const note = (url, kind, slug) => {
     if (!url) return;

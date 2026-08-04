@@ -7,20 +7,32 @@ import type { NextConfig } from "next";
  * cutover (none of these paths exist here). Sources: page-sitemap.xml,
  * athlete-sitemap.xml, tournament-sitemap.xml on the live site (Jul 2026).
  *
- * Blog posts need NO redirect: `app/[slug]` serves them at the same root URL
+ * Posts need NO redirect: `app/[slug]` serves them at the same root URL
  * WordPress used, so ppatour.com/some-post-slug keeps working byte-for-byte
  * after cutover. (An earlier pass mapped each post to /news/{slug} and shipped
  * 811 redirects; both are gone.) Verified: none of the 826 slugs collides with a
  * route segment, a public/ path, or a redirect source below — and Next matches
  * static segments before the dynamic `[slug]`, so /events, /athletes and friends
  * always win.
+ *
+ * ⚠ NOR DO THE 39 PPA BLOG POSTS, AND TWO REDIRECTS WERE DELETED HERE ON
+ * 2026-08-04 TO MAKE THAT TRUE. `/ppa-blog/:slug*` → `/news` and `/blog` →
+ * `/news` collapsed the tour's best-ranking evergreen pages ("how to play
+ * pickleball", "pickleball scoring guide", "what is an erne") into one index,
+ * which Google reads as a soft 404 and drops. The posts were never imported —
+ * `import-wp-posts.mjs` pulls post_type=post only, and ppa-blog is a separate
+ * post type with its own taxonomy and its own sitemap. `app/ppa-blog/[slug]`
+ * and `app/blog` now serve both paths for real. Flagged by Hannah Johns.
+ *
+ * ⚠ The 8/3 legacy-sitemap crawl reported "ppa-blog 40/40 resolve" while this
+ * was broken. It checked status codes, and a 301 to /news is a 200. **A
+ * coverage check that does not compare CONTENT cannot see a wrong destination.**
  */
 const LEGACY_REDIRECTS = [
   // sections
   { source: "/schedule", destination: "/events" },
   { source: "/player-rankings", destination: "/rankings" },
   { source: "/player-rankings-table", destination: "/rankings" },
-  { source: "/blog", destination: "/news" },
   // about
   { source: "/pro-tour", destination: "/about/pro-tour" },
   { source: "/what-is-pickleball", destination: "/about/what-is-pickleball" },
@@ -146,7 +158,6 @@ const LEGACY_REDIRECTS = [
   // 9 links using it point at athletes who do have a page here.
   { source: "/pro/:slug", destination: "/athletes/:slug" },
   { source: "/tournament/:path*", destination: "/events" },
-  { source: "/ppa-blog/:slug*", destination: "/news" },
 ];
 
 const nextConfig: NextConfig = {

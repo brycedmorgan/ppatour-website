@@ -15,7 +15,13 @@
  */
 
 import { publishedArticles, type NewsArticle } from "@/lib/news-articles";
-import { getWpPost, wpPostSummaries, type WpPost } from "@/lib/wp-news";
+import {
+  getWpPost,
+  wpBlogSummaries,
+  wpPostSummaries,
+  type WpPost,
+  type WpPostType,
+} from "@/lib/wp-news";
 import { resolveAsset } from "@/lib/wp-media";
 import { postPlainText } from "@/lib/news-html";
 import { athletes, getAthlete } from "@/lib/athletes";
@@ -41,8 +47,23 @@ export type NewsCard = {
   source: NewsSource;
   /** Originating WP editorial series, or null for native articles. */
   series: string | null;
+  /**
+   * "ppa-blog" for the 39 evergreen posts, which live under `/ppa-blog/` and
+   * must NOT also be served at the root. Native articles and the 811 migrated
+   * posts are both "post".
+   */
+  postType: WpPostType;
   eventSlug?: string;
 };
+
+/**
+ * The URL prefix each archive keeps. These are the paths WordPress served and
+ * Google indexed — `trailingSlash: true` makes them byte-identical — so this
+ * is a preservation rule, not a routing preference. See next.config.ts.
+ */
+export function newsHref(slug: string, postType: WpPostType): string {
+  return postType === "ppa-blog" ? `/ppa-blog/${slug}` : `/${slug}`;
+}
 
 /** Native articles carry no year in their display date; the site is 2026. */
 const NATIVE_YEAR = 2026;
@@ -126,6 +147,7 @@ function nativeToCard(a: NewsArticle): NewsCard {
     displayDate: displayDateFromIso(publishedAt),
     source: "native",
     series: null,
+    postType: "post",
     eventSlug: a.eventSlug,
   };
 }
@@ -138,11 +160,12 @@ function wpToCard(p: {
   author: string;
   publishedAt: string;
   series: string | null;
+  postType: WpPostType;
   image: { url: string; alt: string } | null;
 }): NewsCard {
   return {
     slug: p.slug,
-    href: `/${p.slug}`,
+    href: newsHref(p.slug, p.postType),
     category: p.category,
     title: cleanTitle(p.title),
     dek: cleanDek(p.dek),
@@ -153,6 +176,7 @@ function wpToCard(p: {
     displayDate: displayDateFromIso(p.publishedAt),
     source: "wordpress",
     series: p.series,
+    postType: p.postType,
   };
 }
 
@@ -228,6 +252,70 @@ export function getNewsDetail(slug: string): NewsDetail | undefined {
 /** Every renderable slug — generateStaticParams and the sitemap. */
 export function allNewsSlugs(): string[] {
   return allNews().map((n) => n.slug);
+}
+
+/* ─────────────────────────── the PPA Blog ─────────────────────────── */
+
+/**
+ * The 39 evergreen instructional posts, newest first.
+ *
+ * They are deliberately ALSO in `allNews()` — one archive for search, the
+ * sitemap and related posts — but they carry their own URL prefix and their
+ * own index at /blog, because that is how WordPress published them and how
+ * they are indexed. "how to play pickleball" and "pickleball scoring guide"
+ * are among the best-ranking pages the tour owns.
+ */
+export function allBlog(): NewsCard[] {
+  return wpBlogSummaries().map(wpToCard);
+}
+
+/**
+ * Posts served at the ROOT — everything except the blog. `app/[slug]` is the
+ * catch-all for unknown root paths, so handing it a blog slug would publish
+ * the same article at two URLs and split its own ranking.
+ */
+export function rootNews(): NewsCard[] {
+  return allNews().filter((n) => n.postType !== "ppa-blog");
+}
+
+export type BlogSection = { slug: string; label: string; count: number };
+
+/**
+ * Sections present in the blog archive, in the importer's chip order.
+ *
+ * ⚠ Two posts carry no `blog-category` in WordPress (Pickleball Kitchen Rules,
+ * Is Pickleball an Olympic Sport?). They are reachable in "All" and through
+ * search, and are deliberately not assigned a section here — inventing a
+ * taxonomy for someone else's editorial is not this file's call.
+ */
+export function blogSections(): BlogSection[] {
+  const counts = new Map<string, number>();
+  for (const p of wpBlogSummaries()) {
+    for (const s of p.blogCategories ?? []) counts.set(s, (counts.get(s) ?? 0) + 1);
+  }
+  return [...counts.entries()].map(([slug, count]) => ({
+    slug,
+    label: blogSectionLabel(slug),
+    count,
+  }));
+}
+
+/** "pickleball-learning" → "Learning". WP prefixes every term with the sport. */
+export function blogSectionLabel(slug: string): string {
+  return slug
+    .replace(/^pickleball-/, "")
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+/** One section's posts, or the whole archive when `section` is null. */
+export function blogPage(section: string | null): NewsCard[] {
+  const all = wpBlogSummaries();
+  const pool = section
+    ? all.filter((p) => (p.blogCategories ?? []).includes(section))
+    : all;
+  return pool.map(wpToCard);
 }
 
 /**
