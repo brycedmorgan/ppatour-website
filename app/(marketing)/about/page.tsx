@@ -2,21 +2,35 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
+import { getMainTourEvents } from "@/lib/placeholder-data";
+
+/**
+ * ⚠ DERIVED, not typed. The stop count was "18 provisionally / TBD" here while
+ * the 7/29 ruling had already normalized it sitewide off `getMainTourEvents()`,
+ * which returns 20 — so /about disagreed with /events and the homepage. Reading
+ * the function settles the TBD permanently and can't drift when the calendar
+ * changes. Season opener/closer come from the same sorted list, which also
+ * stops this page hardcoding an event name (it was still carrying the retired
+ * "Veolia Pickleball National Championships" spelling after the 8/3 change).
+ */
+const SEASON = getMainTourEvents();
+const seasonStopCount = SEASON.length;
+const seasonOpener = SEASON[0]?.name ?? "the season opener";
+const seasonCloser = SEASON[SEASON.length - 1]?.name ?? "the PPA Finals";
 
 export const metadata: Metadata = {
   title: "About",
-  description:
-    "About the Carvana PPA Tour — the premier professional pickleball tour — 18 stops a year and the best players in the world, all chasing one points race.",
+  description: `About the Carvana PPA Tour — the premier professional pickleball tour — ${seasonStopCount} stops a year and the best players in the world, all chasing one points race.`,
 };
 
 /**
  * Stat band rebuilt with Tyler's figures (7/30). The prior band was pulled
- * (Connor, 7/29) because the purse/stops weren't owned numbers; these come from
- * Tyler and still want a final confirm — total stop count is TBD (18 shown
- * provisionally), attendance intentionally omitted.
+ * (Connor, 7/29) because the purse/stops weren't owned numbers. Prize money and
+ * countries are still Tyler's and want a final confirm; the stop count is now
+ * derived (see above) rather than provisional.
  */
 const STATS = [
-  { n: "18", label: "Tour Stops", note: "Each worth 1,000+ ranking points" },
+  { n: String(seasonStopCount), label: "Tour Stops", note: "Each worth 1,000+ ranking points" },
   { n: "$30M+", label: "Prize Money", note: "Across the season" },
   { n: "12", label: "Countries", note: "A growing international footprint" },
 ];
@@ -70,8 +84,9 @@ export default function AboutPage() {
             The Pro Tour of America&apos;s Fastest-Growing Sport
           </h1>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/75 sm:text-base">
-            The Carvana PPA Tour is the professional pickleball circuit — 18
-            tour stops per year, the best players in the world, sold-out venues,
+            The Carvana PPA Tour is the professional pickleball circuit —{" "}
+            {seasonStopCount} tour stops per year, the best players in the
+            world, sold-out venues,
             and the greatest community in sports. The Carvana PPA Tour engages
             and amplifies fans, partners and pickleball communities worldwide by
             showcasing the best pickleball players competing for the sport&apos;s
@@ -120,13 +135,20 @@ export default function AboutPage() {
                   marquee venues, national TV windows, and a unified place to
                   follow every match.
                 </p>
+                {/* ⚠ Stop count and the season's first/last event are DERIVED,
+                    not typed. This paragraph had drifted three ways at once:
+                    "18 tour stops" (getMainTourEvents() returns 20 — a
+                    regression against the 7/29 sitewide normalization), "the
+                    majors pay double" (Worlds is 3,000, so it's triple), and it
+                    still named the retired "Veolia Pickleball National
+                    Championships" spelling after the 8/3 feed-name change. */}
                 <p>
-                  18 tour stops cover every region of the country, plus a
-                  growing international footprint. Each tournament carries 1,000+
-                  ranking points; the majors pay double. The season begins in
-                  August with the Veolia Pickleball National Championships and
-                  ends in May with the PPA Finals, where all season
-                  championships are decided.
+                  {seasonStopCount} tour stops cover every region of the
+                  country, plus a growing international footprint. Each
+                  tournament carries 1,000+ ranking points; the Majors pay
+                  2,000, and Worlds pays 3,000. The season begins in August with
+                  the {seasonOpener} and ends in May with the {seasonCloser},
+                  where all season championships are decided.
                 </p>
                 <p>
                   Off the court, the Carvana PPA Tour is a part of Pickleball
@@ -173,13 +195,18 @@ export default function AboutPage() {
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 The Season
               </p>
+              {/* ⚠ Derived. This heading and paragraph both spelled the count
+                  out as "eighteen", which is why a find on "18" missed them —
+                  there were FIVE stale stop counts on this page, in four
+                  different formats. All read `seasonStopCount` now. */}
               <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-                One Race. Eighteen Stops. Five Divisions.
+                One Race. {seasonStopCount} Stops. Five Divisions.
               </h2>
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
-                The Carvana PPA Tour runs eighteen tour stops — majors, cups, and
-                opens — across every region of the country, ending at the PPA
-                Finals. Each tournament runs five pro divisions (men&apos;s and
+                The Carvana PPA Tour runs {seasonStopCount} tour stops — majors,
+                cups, and opens — across every region of the country, ending at
+                the PPA Finals. Each tournament runs five pro divisions
+                (men&apos;s and
                 women&apos;s singles, men&apos;s and women&apos;s doubles, and
                 mixed doubles) plus a deep amateur and junior bracket. Every
                 result moves a player up or down the season-long points race.
