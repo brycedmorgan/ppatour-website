@@ -540,12 +540,10 @@ export const partners: Partner[] = [
     /**
      * MOJO Energy Pouches — new on the 8/4 approved list.
      *
-     * ⚠ NO MARK YET. The list points at the brand-asset zips in Slack, which
-     * this machine doesn't have, and MOJO is not in the live site's media
-     * library either (checked 8/4 — no mojo* asset on ppatour.com/sponsors), so
-     * there was nothing to import. Renders as a wordmark card until the art
-     * lands: drop the file in public/ppa/sponsors and add logo/logoWidth/
-     * logoHeight. Same for The Picklr and Zyia below.
+     * Mark landed 8/4 from the brand kit Bryce sent. Horizontal full-colour
+     * SVG, taken straight from `Color Logos/SVG/` — true vector, no embedded
+     * raster. The kit also ships stacked, black, white and reversed cuts if a
+     * dark surface ever needs one.
      *
      * No designation either — not stated on the approved list, and inventing
      * one would put words in a sponsor's mouth on their own card.
@@ -556,6 +554,9 @@ export const partners: Partner[] = [
     name: "MOJO Energy Pouches",
     website: "https://mojoenergypouches.com",
     tier: "gold",
+    logo: "/ppa/sponsors/mojo.svg",
+    logoWidth: 249,
+    logoHeight: 47,
   },
   {
     // "Park Place" per the 8/4 approved list (was "Park Place Technologies").
@@ -695,11 +696,21 @@ export const partners: Partner[] = [
     logoHeight: 200,
   },
   {
-    // New on the 8/4 list. No mark supplied — see the MOJO note above.
-    // Destination verified 8/4 (thepicklr.com; picklr.com is a parked domain).
+    /**
+     * Destination verified 8/4 (thepicklr.com; picklr.com is a parked domain).
+     *
+     * Mark landed 8/4. ⚠ The kit ships BLACK and WHITE only, no colour cut, so
+     * the black horizontal lockup is the one that works on the light sponsor
+     * card. If a Picklr mark is ever needed on navy, use
+     * "Picklr Lockup Horizontal White" from the same kit rather than filtering
+     * this one.
+     */
     name: "The Picklr",
     website: "https://thepicklr.com",
     tier: "tour",
+    logo: "/ppa/sponsors/picklr.svg",
+    logoWidth: 2225,
+    logoHeight: 500,
   },
   {
     // Silver → Tour. Silver no longer exists (8/4).
@@ -722,6 +733,10 @@ export const partners: Partner[] = [
      * manufacturer — the obvious guess is the wrong company. Name kept exactly
      * as approved ("Zyia"), which matters more than usual here: with no mark,
      * this card prints its name.
+     *
+     * ⚠ STILL THE ONLY PARTNER WITHOUT ART. MOJO and The Picklr were supplied
+     * on 8/4 and are in; no Zyia link came with them. Drop the file in
+     * public/ppa/sponsors and add logo/logoWidth/logoHeight.
      */
     name: "Zyia",
     website: "https://zyiaactive.com",
