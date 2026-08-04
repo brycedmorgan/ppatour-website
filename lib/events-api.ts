@@ -128,6 +128,7 @@ function findCurated(apiSlug: string): Tournament | null {
 const NAME_OVERRIDE_BY_SLUG: Record<string, string> = {
   "veolia-pickleball-national-championships": "Veolia Pickleball National Championships",
   "virginia-beach-open": "Mojo Energy Pouches Virginia Beach Open",
+  "atlanta-pickleball-championships": "Pickleball Players Championships",
 };
 
 /* ---- field inference ---- */

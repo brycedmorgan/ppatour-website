@@ -558,7 +558,7 @@ const SCHEDULE: RawEvent[] = [
   // venue is confirmed; don't re-add one without him.
   { name: "Cincinnati Open", start: "2027-04-12", end: "2027-04-18", city: "Cincinnati", state: "OH", type: "ppa", tier: "open" },
   { name: "PPA Spain P250", start: "2027-04-21", end: "2027-04-25", city: "TBA", state: "Spain", type: "international", country: "Europe" },
-  { name: "Atlanta Pickleball Championships", start: "2027-04-26", end: "2027-05-02", city: "Atlanta", state: "GA", venue: "Life Time — Peachtree Corners", type: "ppa", tier: "slam" },
+  { name: "Pickleball Players Championships", slug: "atlanta-pickleball-championships", start: "2027-04-26", end: "2027-05-02", city: "Atlanta", state: "GA", venue: "Life Time — Peachtree Corners", type: "ppa", tier: "slam" },
 
   // May 2027
   { name: "PPA Spain P500 Barcelona", start: "2027-05-05", end: "2027-05-09", city: "Barcelona", state: "Spain", type: "international", country: "Europe" },
