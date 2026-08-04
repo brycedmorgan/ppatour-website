@@ -59,7 +59,7 @@ const SEASON_OPTIONS: { value: SeasonKey; label: string }[] = [
 
 function matchesQuery(t: Tournament, q: string): boolean {
   if (!q) return true;
-  const hay = `${t.name} ${t.shortName} ${t.city} ${t.state} ${t.venue}`.toLowerCase();
+  const hay = `${t.name} ${t.name} ${t.city} ${t.state} ${t.venue}`.toLowerCase();
   return q
     .toLowerCase()
     .split(/\s+/)
@@ -269,7 +269,7 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
                   <span className="absolute left-3 top-3 block h-20 w-[42px] overflow-hidden rounded drop-shadow-md transition-transform duration-500 group-hover:scale-105">
                     <Image
                       src={t.brand.icon}
-                      alt={`${t.shortName} badge`}
+                      alt={`${t.name} badge`}
                       fill
                       sizes="42px"
                       className="object-contain"
@@ -299,7 +299,7 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
                       href={href}
                       className="mt-0.5 block font-display text-lg uppercase leading-[1.05] text-white after:absolute after:inset-0"
                     >
-                      {t.shortName}
+                      {t.name}
                     </Link>
                   ) : (
                     <a
@@ -308,7 +308,7 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
                       rel="noopener noreferrer"
                       className="mt-0.5 block font-display text-lg uppercase leading-[1.05] text-white after:absolute after:inset-0"
                     >
-                      {t.shortName}
+                      {t.name}
                     </a>
                   )}
                   <p className="mt-1 text-xs text-white/60">

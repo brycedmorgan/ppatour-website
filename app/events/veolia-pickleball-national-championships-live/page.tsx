@@ -12,7 +12,7 @@ import { buildTicketGrid } from "@/lib/ticket-grid";
  * real event page.
  */
 export const metadata: Metadata = {
-  title: "National Championships — Live",
+  title: "Veolia Pickleball National Championships — Live",
   description:
     "Live coverage of the Veolia Pickleball National Championships — counting down to first serve, then live scores, order of play, and how to watch.",
   robots: { index: false, follow: false },

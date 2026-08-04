@@ -146,7 +146,20 @@ export default async function Image({
           </div>
           <div
             style={{
-              fontSize: t.shortName.length > 18 ? 68 : 84,
+              // Graduated, because the card now carries the FULL sponsored name.
+              // The old two-step (>18 ? 68 : 84) was tuned for short names like
+              // "Mesa Cup"; 10 of the 20 main-tour names are now over 18 chars
+              // and the longest is 40 ("Veolia Pickleball National
+              // Championships"), which set at 68 ran to three lines and pushed
+              // the purse line off the card. Rendered and eyeballed at each step.
+              fontSize:
+                t.name.length > 34
+                  ? 48
+                  : t.name.length > 26
+                    ? 56
+                    : t.name.length > 18
+                      ? 68
+                      : 84,
               maxWidth: 1080,
               fontWeight: 900,
               color: "#ffffff",
@@ -155,7 +168,7 @@ export default async function Image({
               textTransform: "uppercase",
             }}
           >
-            {t.shortName}
+            {t.name}
           </div>
           <div
             style={{

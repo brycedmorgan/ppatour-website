@@ -10,7 +10,8 @@ import { useEffect, useRef, useState } from "react";
  */
 
 export type ConciergeFacts = {
-  shortName: string;
+  /** Full event name, title sponsor included — see Tournament.name. */
+  name: string;
   city: string;
   state: string;
   venue: string;
@@ -50,7 +51,7 @@ const INTENTS: Intent[] = [
     answer: (f) =>
       f.ticketFrom == null || !f.ticketsUrl
         ? {
-            text: `Tickets for ${f.shortName} aren't on sale yet — we haven't announced pricing for this stop. Keep an eye on this page and we'll post them as soon as they're live.`,
+            text: `Tickets for ${f.name} aren't on sale yet — we haven't announced pricing for this stop. Keep an eye on this page and we'll post them as soon as they're live.`,
           }
         : {
             text: `Tickets start at $${f.ticketFrom} for a grounds pass (all outer courts, all day). Reserved Championship Court seating and Championship Sunday run higher — grab them early, finals sessions go first.`,
@@ -61,7 +62,7 @@ const INTENTS: Intent[] = [
   {
     test: /schedule|time|when|gate|start|first serve|hours|session/i,
     answer: (f) => ({
-      text: `${f.shortName} runs ${f.dates}. Gates open ${f.gates} — about an hour before first serve each day. Finals move to a late-morning start for the broadcast window. The full order of play is on this page under "Order of Play."`,
+      text: `${f.name} runs ${f.dates}. Gates open ${f.gates} — about an hour before first serve each day. Finals move to a late-morning start for the broadcast window. The full order of play is on this page under "Order of Play."`,
     }),
   },
   {
@@ -127,7 +128,7 @@ const INTENTS: Intent[] = [
   {
     test: /defend|champion|who won|stake|points/i,
     answer: (f) => ({
-      text: `Defending champions and the players to watch are listed under "Players" on this page — and "What's at Stake" covers the points and purse on the line at ${f.shortName}.`,
+      text: `Defending champions and the players to watch are listed under "Players" on this page — and "What's at Stake" covers the points and purse on the line at ${f.name}.`,
     }),
   },
 ];
@@ -200,7 +201,7 @@ export function EventConcierge({ facts }: { facts: ConciergeFacts }) {
             Event Concierge
           </p>
           <p className="font-display text-sm uppercase leading-tight">
-            {facts.shortName}
+            {facts.name}
           </p>
         </div>
 
@@ -210,7 +211,7 @@ export function EventConcierge({ facts }: { facts: ConciergeFacts }) {
         >
           {msgs.length === 0 && (
             <p className="text-xs leading-relaxed text-ppa-navy/55">
-              Hi! Ask me anything about {facts.shortName} — tickets, schedule,
+              Hi! Ask me anything about {facts.name} — tickets, schedule,
               parking, where to stay, how to watch, or playing in the amateur
               draw.
             </p>

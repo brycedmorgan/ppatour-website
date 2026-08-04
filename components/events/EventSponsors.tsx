@@ -29,7 +29,7 @@ export function EventSponsors({ event }: { event: Tournament }) {
       event.name.toLowerCase().startsWith(p.eventNamePrefix.toLowerCase()),
   );
   const marquee = [
-    ...(titleSponsor ? [{ name: titleSponsor.name, role: `Title Partner · ${event.shortName}` }] : []),
+    ...(titleSponsor ? [{ name: titleSponsor.name, role: `Title Partner · ${event.name}` }] : []),
     ...(event.presentedBy && event.presentedBy !== titleSponsor?.name
       ? [{ name: event.presentedBy, role: "Presenting Partner" }]
       : []),
@@ -45,7 +45,7 @@ export function EventSponsors({ event }: { event: Tournament }) {
           </p>
         </div>
         <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-          Powering {event.shortName}
+          Powering {event.name}
         </h2>
 
         {/* Event marquee partners */}
@@ -103,7 +103,7 @@ export function EventSponsors({ event }: { event: Tournament }) {
           The Official Partners of the PPA Tour
         </p>
         <div className="mt-3">
-          <PartnerWall accentVar={accent} eventName={event.shortName} />
+          <PartnerWall accentVar={accent} eventName={event.name} />
         </div>
 
         {/* Become-a-sponsor CTA — the lead hook */}
@@ -113,7 +113,7 @@ export function EventSponsors({ event }: { event: Tournament }) {
               Want to be a sponsor?
             </p>
             <p className="mt-1 text-sm text-white/65">
-              Put your brand courtside at {event.shortName} — and in front of
+              Put your brand courtside at {event.name} — and in front of
               the fastest-growing sport in America.
             </p>
           </div>

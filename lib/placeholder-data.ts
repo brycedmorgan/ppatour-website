@@ -66,8 +66,19 @@ export const MAIN_TOUR_MIN_POINTS = 1000;
 
 export type Tournament = {
   slug: string;
+  /**
+   * The event's FULL name, title sponsor included — "Veolia Pickleball National
+   * Championships", never "National Championships".
+   *
+   * ⚠ There is deliberately no `shortName`. It used to exist and it was rendered
+   * in 54 places, which meant the site stripped the title sponsor off the `<h1>`,
+   * the `<title>` and the OG share card of the events those sponsors pay to
+   * title — 8 of the 12 abbreviations existed for no other reason. Jeff Watson,
+   * 8/3: "we need to call every tournament by their full name — in every
+   * instance." Don't reintroduce it; abbreviate at the call site if a specific
+   * piece of chrome genuinely can't fit.
+   */
   name: string;
-  shortName: string;
   city: string;
   state: string;
   venue: string;
@@ -265,7 +276,6 @@ export function eventHref(t: Pick<Tournament, "startDate" | "slug">): string {
 
 type RawEvent = {
   name: string;
-  short: string;
   start: string;
   end: string;
   city: string;
@@ -391,7 +401,6 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
     return {
       slug,
       name: r.name,
-      shortName: r.short,
       city: r.city,
       state: r.state,
       venue: r.venue ?? r.city,
@@ -443,77 +452,77 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
 // 2026–27 season, chronological.
 const SCHEDULE: RawEvent[] = [
   // July 2026
-  { name: "PPA Australia 250 Melbourne", short: "Melbourne", start: "2026-07-15", end: "2026-07-19", city: "Melbourne", state: "Australia", type: "international", country: "Australia" },
-  { name: "Macon PPA Challenger", short: "Macon Challenger", start: "2026-07-17", end: "2026-07-19", city: "Macon", state: "GA", type: "challenger" },
-  { name: "PPA Italy 125 Portoroz", short: "Portoroz", start: "2026-07-22", end: "2026-07-26", city: "Portoroz", state: "Italy", type: "international", country: "Europe" },
-  { name: "PPA Asia 500 Singapore Open", short: "Singapore Open", start: "2026-07-23", end: "2026-07-26", city: "Singapore", state: "", type: "international", country: "Asia" },
-  { name: "Wisconsin PPA Challenger", short: "Wisconsin Challenger", start: "2026-07-31", end: "2026-08-02", city: "Lake Hallie", state: "WI", type: "challenger" },
+  { name: "PPA Australia 250 Melbourne", start: "2026-07-15", end: "2026-07-19", city: "Melbourne", state: "Australia", type: "international", country: "Australia" },
+  { name: "Macon PPA Challenger", start: "2026-07-17", end: "2026-07-19", city: "Macon", state: "GA", type: "challenger" },
+  { name: "PPA Italy 125 Portoroz", start: "2026-07-22", end: "2026-07-26", city: "Portoroz", state: "Italy", type: "international", country: "Europe" },
+  { name: "PPA Asia 500 Singapore Open", start: "2026-07-23", end: "2026-07-26", city: "Singapore", state: "", type: "international", country: "Asia" },
+  { name: "Wisconsin PPA Challenger", start: "2026-07-31", end: "2026-08-02", city: "Lake Hallie", state: "WI", type: "challenger" },
 
   // August 2026
-  { name: "PPA Asia 500 Ho Chi Minh City Open", short: "Ho Chi Minh Open", start: "2026-08-06", end: "2026-08-09", city: "Ho Chi Minh City", state: "Vietnam", type: "international", country: "Asia" },
-  { name: "PPA Australia Gold Coast", short: "Gold Coast", start: "2026-08-13", end: "2026-08-16", city: "Gold Coast", state: "Australia", type: "international", country: "Australia" },
-  { name: "Seattle PPA Challenger", short: "Seattle Challenger", start: "2026-08-14", end: "2026-08-16", city: "Seattle", state: "WA", type: "challenger" },
-  { name: "PPA Canada 250 Vancouver", short: "Vancouver 250", start: "2026-08-19", end: "2026-08-23", city: "Vancouver", state: "Canada", type: "international", country: "Canada" },
-  { name: "PPA Asia 500 China Open 2", short: "China Open", start: "2026-08-20", end: "2026-08-23", city: "Shenzhen", state: "China", type: "international", country: "Asia" },
-  { name: "Atlanta PPA Challenger", short: "Atlanta Challenger", start: "2026-08-28", end: "2026-08-30", city: "Peachtree City", state: "GA", type: "challenger" },
-  { name: "Veolia Pickleball National Championships", short: "National Championships", start: "2026-08-31", end: "2026-09-06", city: "Cary", state: "NC", venue: "Cary Tennis Park", type: "ppa", tier: "slam", image: "/ppa/nationals-drone-champcourt.jpg" },
+  { name: "PPA Asia 500 Ho Chi Minh City Open", start: "2026-08-06", end: "2026-08-09", city: "Ho Chi Minh City", state: "Vietnam", type: "international", country: "Asia" },
+  { name: "PPA Australia Gold Coast", start: "2026-08-13", end: "2026-08-16", city: "Gold Coast", state: "Australia", type: "international", country: "Australia" },
+  { name: "Seattle PPA Challenger", start: "2026-08-14", end: "2026-08-16", city: "Seattle", state: "WA", type: "challenger" },
+  { name: "PPA Canada 250 Vancouver", start: "2026-08-19", end: "2026-08-23", city: "Vancouver", state: "Canada", type: "international", country: "Canada" },
+  { name: "PPA Asia 500 China Open 2", start: "2026-08-20", end: "2026-08-23", city: "Shenzhen", state: "China", type: "international", country: "Asia" },
+  { name: "Atlanta PPA Challenger", start: "2026-08-28", end: "2026-08-30", city: "Peachtree City", state: "GA", type: "challenger" },
+  { name: "Veolia Pickleball National Championships", start: "2026-08-31", end: "2026-09-06", city: "Cary", state: "NC", venue: "Cary Tennis Park", type: "ppa", tier: "slam", image: "/ppa/nationals-drone-champcourt.jpg" },
 
   // September 2026
-  { name: "PPA Asia 1000 Kuala Lumpur Cup", short: "Kuala Lumpur", start: "2026-09-09", end: "2026-09-13", city: "Kuala Lumpur", state: "Malaysia", type: "international", country: "Asia" },
-  { name: "PPA Canada 125 Vancouver", short: "Vancouver 125", start: "2026-09-10", end: "2026-09-13", city: "Vancouver", state: "Canada", type: "international", country: "Canada" },
-  { name: "Veolia Arizona Open", short: "Arizona Open", start: "2026-09-14", end: "2026-09-20", city: "Mesa", state: "AZ", venue: "Arizona Athletic Grounds", type: "ppa", tier: "open" },
-  { name: "Grand Rapids PPA Challenger", short: "Grand Rapids Challenger", start: "2026-09-18", end: "2026-09-20", city: "Rockford", state: "MI", type: "challenger" },
-  { name: "PPA Spain P250 Barcelona", short: "Barcelona P250", start: "2026-09-23", end: "2026-09-27", city: "Barcelona", state: "Spain", type: "international", country: "Europe" },
-  { name: "Charlotte PPA Challenger", short: "Charlotte Challenger", start: "2026-09-25", end: "2026-09-27", city: "Charlotte", state: "NC", type: "challenger" },
-  { name: "Rate Las Vegas Open", short: "Las Vegas Open", start: "2026-09-28", end: "2026-10-04", city: "Las Vegas", state: "NV", venue: "Darling Tennis Center", type: "ppa", tier: "open" },
+  { name: "PPA Asia 1000 Kuala Lumpur Cup", start: "2026-09-09", end: "2026-09-13", city: "Kuala Lumpur", state: "Malaysia", type: "international", country: "Asia" },
+  { name: "PPA Canada 125 Vancouver", start: "2026-09-10", end: "2026-09-13", city: "Vancouver", state: "Canada", type: "international", country: "Canada" },
+  { name: "Veolia Arizona Open", start: "2026-09-14", end: "2026-09-20", city: "Mesa", state: "AZ", venue: "Arizona Athletic Grounds", type: "ppa", tier: "open" },
+  { name: "Grand Rapids PPA Challenger", start: "2026-09-18", end: "2026-09-20", city: "Rockford", state: "MI", type: "challenger" },
+  { name: "PPA Spain P250 Barcelona", start: "2026-09-23", end: "2026-09-27", city: "Barcelona", state: "Spain", type: "international", country: "Europe" },
+  { name: "Charlotte PPA Challenger", start: "2026-09-25", end: "2026-09-27", city: "Charlotte", state: "NC", type: "challenger" },
+  { name: "Rate Las Vegas Open", start: "2026-09-28", end: "2026-10-04", city: "Las Vegas", state: "NV", venue: "Darling Tennis Center", type: "ppa", tier: "open" },
 
   // October 2026
-  { name: "Veolia Chicago Cup", short: "Chicago Cup", start: "2026-10-05", end: "2026-10-11", city: "Chicago", state: "IL", venue: "Life Time — Northbrook", type: "ppa", tier: "cup" },
-  { name: "Sarasota PPA Challenger", short: "Sarasota Challenger", start: "2026-10-09", end: "2026-10-11", city: "Englewood", state: "FL", type: "challenger" },
-  { name: "Virginia Beach Open", short: "Virginia Beach Open", start: "2026-10-12", end: "2026-10-18", city: "Virginia Beach", state: "VA", venue: "Virginia Beach Sports Center", type: "ppa", tier: "open" },
-  { name: "PPA 1500 Australia Pickleball Open", short: "Australia Open", start: "2026-10-13", end: "2026-10-18", city: "Australia", state: "", type: "international", country: "Australia" },
-  { name: "PPA Asia 1500 Hong Kong Slam", short: "Hong Kong", start: "2026-10-19", end: "2026-10-25", city: "Hong Kong", state: "China", type: "international", country: "Asia" },
-  { name: "PPA Canada 125 Ottawa", short: "Ottawa", start: "2026-10-22", end: "2026-10-25", city: "Ottawa", state: "Canada", type: "international", country: "Canada" },
+  { name: "Veolia Chicago Cup", start: "2026-10-05", end: "2026-10-11", city: "Chicago", state: "IL", venue: "Life Time — Northbrook", type: "ppa", tier: "cup" },
+  { name: "Sarasota PPA Challenger", start: "2026-10-09", end: "2026-10-11", city: "Englewood", state: "FL", type: "challenger" },
+  { name: "Virginia Beach Open", start: "2026-10-12", end: "2026-10-18", city: "Virginia Beach", state: "VA", venue: "Virginia Beach Sports Center", type: "ppa", tier: "open" },
+  { name: "PPA 1500 Australia Pickleball Open", start: "2026-10-13", end: "2026-10-18", city: "Australia", state: "", type: "international", country: "Australia" },
+  { name: "PPA Asia 1500 Hong Kong Slam", start: "2026-10-19", end: "2026-10-25", city: "Hong Kong", state: "China", type: "international", country: "Asia" },
+  { name: "PPA Canada 125 Ottawa", start: "2026-10-22", end: "2026-10-25", city: "Ottawa", state: "Canada", type: "international", country: "Canada" },
 
   // November 2026
-  { name: "Pickleball World Championships", short: "World Championships", start: "2026-11-02", end: "2026-11-08", city: "Farmers Branch", state: "TX", venue: "Brookhaven Country Club", type: "ppa", tier: "worlds" },
-  { name: "PPA Spain P125", short: "Spain P125", start: "2026-11-11", end: "2026-11-15", city: "TBA", state: "Spain", type: "international", country: "Europe" },
-  { name: "Proton Daytona Beach Open", short: "Daytona Beach Open", start: "2026-11-16", end: "2026-11-22", city: "Holly Hill", state: "FL", venue: "Pictona at Holly Hill", type: "ppa", tier: "open" },
-  { name: "PPA Canada 125 Toronto", short: "Toronto 125", start: "2026-11-26", end: "2026-11-29", city: "Toronto", state: "Canada", type: "international", country: "Canada" },
-  { name: "Veolia Malibu Cup", short: "Malibu Cup", start: "2026-11-30", end: "2026-12-06", city: "Malibu", state: "CA", venue: "Pepperdine University", type: "ppa", tier: "cup" },
+  { name: "Pickleball World Championships", start: "2026-11-02", end: "2026-11-08", city: "Farmers Branch", state: "TX", venue: "Brookhaven Country Club", type: "ppa", tier: "worlds" },
+  { name: "PPA Spain P125", start: "2026-11-11", end: "2026-11-15", city: "TBA", state: "Spain", type: "international", country: "Europe" },
+  { name: "Proton Daytona Beach Open", start: "2026-11-16", end: "2026-11-22", city: "Holly Hill", state: "FL", venue: "Pictona at Holly Hill", type: "ppa", tier: "open" },
+  { name: "PPA Canada 125 Toronto", start: "2026-11-26", end: "2026-11-29", city: "Toronto", state: "Canada", type: "international", country: "Canada" },
+  { name: "Veolia Malibu Cup", start: "2026-11-30", end: "2026-12-06", city: "Malibu", state: "CA", venue: "Pepperdine University", type: "ppa", tier: "cup" },
 
   // December 2026
-  { name: "PPA Australia 125 New South Wales", short: "New South Wales", start: "2026-12-11", end: "2026-12-13", city: "New South Wales", state: "Australia", type: "international", country: "Australia" },
+  { name: "PPA Australia 125 New South Wales", start: "2026-12-11", end: "2026-12-13", city: "New South Wales", state: "Australia", type: "international", country: "Australia" },
 
   // January 2027
-  { name: "PPA Italy 125 Brescia", short: "Brescia", start: "2027-01-05", end: "2027-01-09", city: "Brescia", state: "Italy", type: "international", country: "Europe" },
-  { name: "Carvana Pickleball Masters", short: "Pickleball Masters", start: "2027-01-11", end: "2027-01-17", city: "Rancho Mirage", state: "CA", venue: "Hyatt Regency Indian Wells", type: "ppa", tier: "slam" },
-  { name: "Minneapolis Indoor Open", short: "Minneapolis Open", start: "2027-01-18", end: "2027-01-24", city: "Lakeville", state: "MN", venue: "Life Time — Lakeville", type: "ppa", tier: "open" },
-  { name: "PPA Spain P125", short: "Spain P125", start: "2027-01-27", end: "2027-01-31", city: "TBA", state: "Spain", type: "international", country: "Europe" },
+  { name: "PPA Italy 125 Brescia", start: "2027-01-05", end: "2027-01-09", city: "Brescia", state: "Italy", type: "international", country: "Europe" },
+  { name: "Carvana Pickleball Masters", start: "2027-01-11", end: "2027-01-17", city: "Rancho Mirage", state: "CA", venue: "Hyatt Regency Indian Wells", type: "ppa", tier: "slam" },
+  { name: "Minneapolis Indoor Open", start: "2027-01-18", end: "2027-01-24", city: "Lakeville", state: "MN", venue: "Life Time — Lakeville", type: "ppa", tier: "open" },
+  { name: "PPA Spain P125", start: "2027-01-27", end: "2027-01-31", city: "TBA", state: "Spain", type: "international", country: "Europe" },
 
   // February 2027
-  { name: "Cape Coral Open", short: "Cape Coral Open", start: "2027-02-01", end: "2027-02-07", city: "Cape Coral", state: "FL", venue: "Cape Coral Racquet Club", type: "ppa", tier: "open" },
-  { name: "Carvana Mesa Cup", short: "Mesa Cup", start: "2027-02-15", end: "2027-02-21", city: "Mesa", state: "AZ", venue: "Bell Bank Park", type: "ppa", tier: "cup" },
-  { name: "PPA Australia 125 Melbourne", short: "Melbourne 125", start: "2027-02-18", end: "2027-02-21", city: "Melbourne", state: "Australia", type: "international", country: "Australia" },
-  { name: "PPA Spain P250", short: "Spain P250", start: "2027-02-24", end: "2027-02-28", city: "TBA", state: "Spain", type: "international", country: "Europe" },
+  { name: "Cape Coral Open", start: "2027-02-01", end: "2027-02-07", city: "Cape Coral", state: "FL", venue: "Cape Coral Racquet Club", type: "ppa", tier: "open" },
+  { name: "Carvana Mesa Cup", start: "2027-02-15", end: "2027-02-21", city: "Mesa", state: "AZ", venue: "Bell Bank Park", type: "ppa", tier: "cup" },
+  { name: "PPA Australia 125 Melbourne", start: "2027-02-18", end: "2027-02-21", city: "Melbourne", state: "Australia", type: "international", country: "Australia" },
+  { name: "PPA Spain P250", start: "2027-02-24", end: "2027-02-28", city: "TBA", state: "Spain", type: "international", country: "Europe" },
 
   // March 2027
-  { name: "Newport Beach Open", short: "Newport Beach Open", start: "2027-03-02", end: "2027-03-07", city: "Newport Beach", state: "CA", venue: "Tennis Club at Newport Beach", type: "ppa", tier: "open" },
-  { name: "Texas Open", short: "Texas Open", start: "2027-03-08", end: "2027-03-14", city: "Dallas", state: "TX", venue: "The Courts of McKinney", type: "ppa", tier: "open" },
-  { name: "PPA Australia 250 Sydney Finals", short: "Sydney Finals", start: "2027-03-17", end: "2027-03-21", city: "Sydney", state: "Australia", type: "international", country: "Australia" },
-  { name: "PPA Spain P500", short: "Spain P500", start: "2027-03-17", end: "2027-03-21", city: "TBA", state: "Spain", type: "international", country: "Europe" },
-  { name: "Greater Zion Cup at Black Desert Resort", short: "Greater Zion Cup", start: "2027-03-22", end: "2027-03-28", city: "St. George", state: "UT", venue: "Black Desert Resort", type: "ppa", tier: "cup" },
+  { name: "Newport Beach Open", start: "2027-03-02", end: "2027-03-07", city: "Newport Beach", state: "CA", venue: "Tennis Club at Newport Beach", type: "ppa", tier: "open" },
+  { name: "Texas Open", start: "2027-03-08", end: "2027-03-14", city: "Dallas", state: "TX", venue: "The Courts of McKinney", type: "ppa", tier: "open" },
+  { name: "PPA Australia 250 Sydney Finals", start: "2027-03-17", end: "2027-03-21", city: "Sydney", state: "Australia", type: "international", country: "Australia" },
+  { name: "PPA Spain P500", start: "2027-03-17", end: "2027-03-21", city: "TBA", state: "Spain", type: "international", country: "Europe" },
+  { name: "Greater Zion Cup at Black Desert Resort", start: "2027-03-22", end: "2027-03-28", city: "St. George", state: "UT", venue: "Black Desert Resort", type: "ppa", tier: "cup" },
 
   // April 2027
-  { name: "PPA Open", short: "PPA Open", start: "2027-04-05", end: "2027-04-11", city: "TBD", state: "", type: "ppa", tier: "open" },
-  { name: "Sacramento Open", short: "Sacramento Open", start: "2027-04-05", end: "2027-04-11", city: "Sacramento", state: "CA", venue: "Life Time — Arden", type: "ppa", tier: "open" },
-  { name: "Cincinnati Open", short: "Cincinnati Open", start: "2027-04-12", end: "2027-04-18", city: "Cincinnati", state: "OH", venue: "Lindner Family Tennis Center", type: "ppa", tier: "open" },
-  { name: "PPA Spain P250", short: "Spain P250", start: "2027-04-21", end: "2027-04-25", city: "TBA", state: "Spain", type: "international", country: "Europe" },
-  { name: "Atlanta Pickleball Championships", short: "Atlanta Championships", start: "2027-04-26", end: "2027-05-02", city: "Atlanta", state: "GA", venue: "Life Time — Peachtree Corners", type: "ppa", tier: "slam" },
+  { name: "PPA Open", start: "2027-04-05", end: "2027-04-11", city: "TBD", state: "", type: "ppa", tier: "open" },
+  { name: "Sacramento Open", start: "2027-04-05", end: "2027-04-11", city: "Sacramento", state: "CA", venue: "Life Time — Arden", type: "ppa", tier: "open" },
+  { name: "Cincinnati Open", start: "2027-04-12", end: "2027-04-18", city: "Cincinnati", state: "OH", venue: "Lindner Family Tennis Center", type: "ppa", tier: "open" },
+  { name: "PPA Spain P250", start: "2027-04-21", end: "2027-04-25", city: "TBA", state: "Spain", type: "international", country: "Europe" },
+  { name: "Atlanta Pickleball Championships", start: "2027-04-26", end: "2027-05-02", city: "Atlanta", state: "GA", venue: "Life Time — Peachtree Corners", type: "ppa", tier: "slam" },
 
   // May 2027
-  { name: "PPA Spain P500 Barcelona", short: "Barcelona P500", start: "2027-05-05", end: "2027-05-09", city: "Barcelona", state: "Spain", type: "international", country: "Europe" },
-  { name: "PPA Finals", short: "PPA Finals", start: "2027-05-10", end: "2027-05-16", city: "San Clemente", state: "CA", venue: "Life Time — Rancho San Clemente", type: "ppa", tier: "slam" },
+  { name: "PPA Spain P500 Barcelona", start: "2027-05-05", end: "2027-05-09", city: "Barcelona", state: "Spain", type: "international", country: "Europe" },
+  { name: "PPA Finals", start: "2027-05-10", end: "2027-05-16", city: "San Clemente", state: "CA", venue: "Life Time — Rancho San Clemente", type: "ppa", tier: "slam" },
 ];
 
 // Recent completed events — power the /events Past tab + Season filter.
@@ -526,7 +535,6 @@ const PAST_EVENTS: Tournament[] = ([
   {
     slug: "carvana-utah-open",
     name: "Carvana Utah Open",
-    shortName: "Utah Open",
     city: "Salt Lake City",
     state: "UT",
     venue: "Liberty Park Courts",
@@ -545,7 +553,6 @@ const PAST_EVENTS: Tournament[] = ([
   {
     slug: "veolia-kansas-city-cup",
     name: "Veolia Kansas City Cup",
-    shortName: "Kansas City Cup",
     city: "Overland Park",
     state: "KS",
     venue: "Chicken N Pickle — Overland Park",
@@ -564,7 +571,6 @@ const PAST_EVENTS: Tournament[] = ([
   {
     slug: "orlando-open",
     name: "Orlando Open",
-    shortName: "Orlando Open",
     city: "Orlando",
     state: "FL",
     venue: "USTA National Campus",
@@ -582,7 +588,6 @@ const PAST_EVENTS: Tournament[] = ([
   {
     slug: "los-angeles-slam",
     name: "Los Angeles Slam",
-    shortName: "LA Slam",
     city: "Los Angeles",
     state: "CA",
     venue: "Dignity Health Sports Park",
@@ -600,7 +605,6 @@ const PAST_EVENTS: Tournament[] = ([
   {
     slug: "atlanta-ppa-challenger",
     name: "Atlanta PPA Challenger",
-    shortName: "Atlanta Challenger",
     city: "Atlanta",
     state: "GA",
     venue: "Atlanta Athletic Club",
@@ -618,7 +622,6 @@ const PAST_EVENTS: Tournament[] = ([
   {
     slug: "newport-beach-open",
     name: "Newport Beach Open",
-    shortName: "Newport Open",
     city: "Newport Beach",
     state: "CA",
     venue: "Tennis Club at Newport Beach",
@@ -636,7 +639,6 @@ const PAST_EVENTS: Tournament[] = ([
   {
     slug: "dallas-slam",
     name: "Dallas Open",
-    shortName: "Dallas Open",
     city: "Dallas",
     state: "TX",
     venue: "Brookhaven Country Club",
@@ -654,7 +656,6 @@ const PAST_EVENTS: Tournament[] = ([
   {
     slug: "phoenix-cup",
     name: "Phoenix Cup",
-    shortName: "Phoenix Cup",
     city: "Phoenix",
     state: "AZ",
     venue: "Bell Bank Park",
@@ -672,7 +673,6 @@ const PAST_EVENTS: Tournament[] = ([
   {
     slug: "miami-open",
     name: "Miami Open",
-    shortName: "Miami Open",
     city: "Miami",
     state: "FL",
     venue: "Miami Beach Tennis Center",
@@ -800,7 +800,7 @@ export function getTickerState(): TickerState {
   const next = getNextTournament();
   return {
     mode: "NEXT",
-    tournamentName: next.shortName,
+    tournamentName: next.name,
     eventDate: next.startDate,
     eventSlug: next.slug,
   };

@@ -125,7 +125,7 @@ export function StickyBuyBar() {
           >
             {featured
               ? `${teamLabel(featured.teams[0])} vs ${teamLabel(featured.teams[1])}`
-              : next.shortName}
+              : next.name}
           </span>
           {!live && (
             <span className="hidden shrink-0 text-xs text-white/55 md:inline">

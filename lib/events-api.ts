@@ -262,8 +262,14 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
 
   return {
     slug,
+    // The CURATED spelling wins, and that is deliberate: the feed's own titles
+    // disagree with the names the tour uses. Measured 8/3 against all 220 rows —
+    // it sends "Veolia PPA National Championships" and "Carvana Pickleball
+    // Masters Powered by Invited", and it isn't self-consistent year to year
+    // ("Veolia Texas Open" in 2026, bare "Texas Open" in 2027). CURATED_ALIASES
+    // exists to reconcile exactly those. Events we don't curate fall back to the
+    // cleaned feed title, which is already their full name.
     name: curated?.name ?? name,
-    shortName: curated?.shortName ?? name,
     city: curated?.city ?? (t.venue_city || ""),
     state: curated?.state ?? (t.venue_state || ""),
     venue: curated?.venue ?? (t.venue_name || t.venue_city || ""),

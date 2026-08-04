@@ -206,7 +206,7 @@ function eventDoc(t: Tournament) {
     },
     title: norm(t.name),
     meta: norm(
-      `${t.shortName ?? ""} ${t.city} ${t.state} ${t.venue} ${tier} ${t.presentedBy ?? ""} ${dates} event tournament tickets`,
+      `${t.name ?? ""} ${t.city} ${t.state} ${t.venue} ${tier} ${t.presentedBy ?? ""} ${dates} event tournament tickets`,
     ),
     body: norm(guideText),
   };

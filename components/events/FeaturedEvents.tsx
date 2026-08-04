@@ -74,7 +74,7 @@ export function FeaturedEvents({
                   <span className="absolute left-4 top-4 block h-28 w-[60px] overflow-hidden rounded drop-shadow-lg transition-transform duration-500 group-hover:scale-105">
                     <Image
                       src={t.brand.icon}
-                      alt={`${t.shortName} badge`}
+                      alt={`${t.name} badge`}
                       fill
                       sizes="60px"
                       className="object-contain"
@@ -104,7 +104,7 @@ export function FeaturedEvents({
                     href={eventHref(t)}
                     className="mt-1 block font-display text-2xl uppercase leading-[1.02] text-white after:absolute after:inset-0"
                   >
-                    {t.shortName}
+                    {t.name}
                   </Link>
                   <p className="mt-1.5 text-xs text-white/70">
                     {formatDateRange(t.startDate, t.endDate, true)}

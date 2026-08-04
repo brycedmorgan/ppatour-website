@@ -331,7 +331,7 @@ export default function WatchPage() {
             </p>
           </div>
           <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
-            {next.shortName}
+            {next.name}
           </h2>
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold uppercase tracking-wide text-white/75">
             <span>{formatDateRange(next.startDate, next.endDate)}</span>

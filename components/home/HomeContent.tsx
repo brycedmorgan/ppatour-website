@@ -206,7 +206,7 @@ export async function HomeContent({
   // In live mode, use real tournament data when provided (falls back to the
   // placeholder next event so the non-live homepage is unaffected).
   const ev = {
-    name: liveEvent?.name ?? next.shortName,
+    name: liveEvent?.name ?? next.name,
     city: liveEvent?.city ?? next.city,
     state: liveEvent?.state ?? next.state,
     venue: liveEvent?.venue ?? next.venue,
@@ -258,7 +258,7 @@ export async function HomeContent({
             {/* The band must SAY which event it covers (Connor, 7/20). */}
             {(() => {
               const chip = !live && latestChampions ? latestChampions.event : ev;
-              const name = !live && latestChampions ? latestChampions.event.shortName : ev.name;
+              const name = !live && latestChampions ? latestChampions.event.name : ev.name;
               return (
                 <p className="mt-3 inline-flex flex-wrap items-center gap-x-2 gap-y-1 border-l-2 border-ppa-blue bg-ppa-paper px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/70">
                   {name}
@@ -652,12 +652,19 @@ export async function HomeContent({
 
           <ul className="mt-4 grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
             {upNext.map((t, i) => (
+              // ⚠ `min-w-0` is load-bearing, not tidying. A grid item defaults
+              // to `min-width: auto`, so the column floors at the row's
+              // content-based minimum and the `min-w-0` + `truncate` on the
+              // name span below never gets to apply. With the FULL sponsored
+              // names this grid measured 436px inside a 358px container and
+              // dragged the whole homepage's layout viewport from 390 to 453 at
+              // a 390px emulated device. Verified back to 390 with this on.
               <li
                 key={t.slug}
                 className={
                   i >= 3
-                    ? "border-t border-ppa-line/70 lg:border-t-0"
-                    : undefined
+                    ? "min-w-0 border-t border-ppa-line/70 lg:border-t-0"
+                    : "min-w-0"
                 }
               >
                 <Link
@@ -670,7 +677,7 @@ export async function HomeContent({
                         i < 3 ? "text-base" : "text-sm text-ppa-navy/75"
                       }`}
                     >
-                      {t.shortName}
+                      {t.name}
                     </span>
                     <span className="mt-0.5 block text-[11px] uppercase tracking-wide text-ppa-navy/50">
                       {formatDateRange(t.startDate, t.endDate)} · {t.city},{" "}
@@ -953,7 +960,7 @@ export async function HomeContent({
                       href={eventHref(t)}
                       className="mt-0.5 block font-display text-lg uppercase leading-[1.05] text-white after:absolute after:inset-0"
                     >
-                      {t.shortName}
+                      {t.name}
                     </Link>
                     <p className="mt-1 text-xs text-white/60">
                       {formatDateRange(t.startDate, t.endDate)} · {t.city}

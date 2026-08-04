@@ -263,7 +263,7 @@ export function NationalsLive({
   ];
 
   const conciergeFacts = {
-    shortName: t.shortName,
+    name: t.name,
     city: t.city,
     state: t.state,
     venue: t.venue,
@@ -401,7 +401,7 @@ export function NationalsLive({
               />
             )}
             <h1 className="max-w-[18ch] event-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98]">
-              {t.shortName}
+              {t.name}
             </h1>
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold uppercase tracking-wide text-white/75">
@@ -551,7 +551,7 @@ export function NationalsLive({
       </section>
 
       {/* Floating event nav */}
-      <EventTabNav tabs={TABS} eventName={t.shortName} icon={t.brand?.icon} />
+      <EventTabNav tabs={TABS} eventName={t.name} icon={t.brand?.icon} />
 
       {/* Champions — leads the completed state */}
       {isCompleted && <ChampionsBanner eventId={ATLANTA_EVENT_ID} />}
@@ -708,7 +708,7 @@ export function NationalsLive({
             </p>
           </div>
           <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-            Why {t.shortName} Matters
+            Why {t.name} Matters
           </h2>
           <p className="mt-3 max-w-2xl text-sm text-ppa-navy/60">
             A {eventTierLabel(t)} title is worth{" "}
@@ -787,13 +787,13 @@ export function NationalsLive({
               </p>
             </div>
             <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
-              Inside {t.shortName}
+              Inside {t.name}
             </h2>
             <p className="mt-3 max-w-xl text-sm text-white/60">
               Real photos from the grounds — slide through and see what a
               day here actually looks like.
             </p>
-            <EventGallery images={t.gallery} eventName={t.shortName} />
+            <EventGallery images={t.gallery} eventName={t.name} />
           </div>
         </section>
       )}
@@ -1406,7 +1406,7 @@ export function NationalsLive({
                   </p>
                 </div>
                 <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-                  {completed ? `Relive ${t.shortName}` : `The ${t.shortName} Story So Far`}
+                  {completed ? `Relive ${t.name}` : `The ${t.name} Story So Far`}
                 </h2>
               </div>
               <Link
@@ -1511,7 +1511,7 @@ export function NationalsLive({
                   {c.note}
                 </p>
                 {"modal" in c && c.modal ? (
-                  <VolunteerModalButton label={c.cta} eventName={t.shortName} />
+                  <VolunteerModalButton label={c.cta} eventName={t.name} />
                 ) : c.external ? (
                   <a
                     href={c.href}
@@ -1661,7 +1661,7 @@ export function NationalsLive({
                   <span className="absolute left-3 top-3 block h-16 w-[34px] overflow-hidden rounded drop-shadow-md transition-transform duration-500 group-hover:scale-105">
                     <Image
                       src={o.brand.icon}
-                      alt={`${o.shortName} badge`}
+                      alt={`${o.name} badge`}
                       fill
                       sizes="34px"
                       className="object-contain"
@@ -1673,7 +1673,7 @@ export function NationalsLive({
                     {eventTierShort(o)} · {tierPoints(o).toLocaleString()}
                   </p>
                   <p className="mt-0.5 font-display text-base uppercase leading-[1.05]">
-                    {o.shortName}
+                    {o.name}
                   </p>
                   <p className="mt-1 text-xs text-white/60">
                     {formatDateRange(o.startDate, o.endDate, true)} · {o.city}

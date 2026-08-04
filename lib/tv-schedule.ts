@@ -224,7 +224,7 @@ export const tvSchedule: TvEvent[] = [
     ],
   },
   {
-    name: "PPA World Pickleball Championships",
+    name: "Pickleball World Championships",
     location: "Brookhaven Country Club · Farmers Branch, TX",
     // Worlds is a Major — the biggest one (Bryce, 7/29) — not its own tier.
     tier: "Major · 3,000",
@@ -249,7 +249,7 @@ export const tvSchedule: TvEvent[] = [
     ],
   },
   {
-    name: "Proton Florida Open",
+    name: "Proton Daytona Beach Open",
     location: "Pictona at Holly Hill · Daytona Beach, FL",
     tier: "Open · 1,000",
     league: "PPA",

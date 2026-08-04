@@ -235,7 +235,7 @@ function MegaPanelContent({
                   )}
                   <span className="min-w-0">
                     <span className="block text-sm font-bold text-ppa-navy transition-colors group-hover/stop:text-ppa-blue">
-                      {t.shortName}
+                      {t.name}
                     </span>
                     <span className="mt-0.5 block truncate text-xs text-ppa-navy/50">
                       {eventTierShort(t)} · {formatDateRange(t.startDate, t.endDate)} · {t.city}
@@ -253,7 +253,7 @@ function MegaPanelContent({
               href={eventHref(next)}
               image={next.image}
               eyebrow={`${eventTierShort(next)} · ${next.city}, ${next.state}`}
-              title={next.shortName}
+              title={next.name}
               // Same gate as every other ticket surface: an unlisted (or
               // held-back) stop must not advertise a price here. `ticketPriceFrom`
               // falls back to the tier table when there's no Tixr listing, so

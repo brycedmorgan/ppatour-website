@@ -225,7 +225,7 @@ export default async function ArticlePage({ params }: Params) {
                 rel="noopener noreferrer"
                 className="flex h-10 items-center bg-ppa-blue px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-ppa-blue-deep active:scale-[0.98]"
               >
-                See It Live — {next.shortName} Tickets
+                See It Live — {next.name} Tickets
               </a>
               <Link
                 href="/watch/tv"
