@@ -492,7 +492,7 @@ const SCHEDULE: RawEvent[] = [
   // October 2026
   { name: "Veolia Chicago Cup", start: "2026-10-05", end: "2026-10-11", city: "Chicago", state: "IL", venue: "Life Time — Northbrook", type: "ppa", tier: "cup" },
   { name: "Sarasota PPA Challenger", start: "2026-10-09", end: "2026-10-11", city: "Englewood", state: "FL", type: "challenger" },
-  { name: "Virginia Beach Open", start: "2026-10-12", end: "2026-10-18", city: "Virginia Beach", state: "VA", venue: "Virginia Beach Sports Center", type: "ppa", tier: "open" },
+  { name: "Mojo Energy Pouches Virginia Beach Open", short: "Virginia Beach Open", start: "2026-10-12", end: "2026-10-18", city: "Virginia Beach", state: "VA", venue: "Virginia Beach Sports Center", type: "ppa", tier: "open" },
   { name: "PPA 1500 Australia Pickleball Open", start: "2026-10-13", end: "2026-10-18", city: "Australia", state: "", type: "international", country: "Australia" },
   { name: "PPA Asia 1500 Hong Kong Slam", start: "2026-10-19", end: "2026-10-25", city: "Hong Kong", state: "China", type: "international", country: "Asia" },
   { name: "PPA Canada 125 Ottawa", start: "2026-10-22", end: "2026-10-25", city: "Ottawa", state: "Canada", type: "international", country: "Canada" },
