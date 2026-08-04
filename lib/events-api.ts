@@ -117,6 +117,19 @@ function findCurated(apiSlug: string): Tournament | null {
   return curatedBySlug.get(CURATED_ALIASES[apiSlug] ?? apiSlug) ?? null;
 }
 
+/**
+ * Per-event NAME overrides that win over the feed title (Tyler, 8/4). The feed
+ * is normally the system of record ("the feed's title wins" — see the note in
+ * `enrich`), but it lags the on-site branding for these stops, so the site was
+ * showing an outdated name on the /events cards. Keyed by the RESOLVED (curated)
+ * slug. Remove a row the moment the feed matches — this is a stopgap, not a new
+ * source of truth, and it does NOT touch slugs/URLs.
+ */
+const NAME_OVERRIDE_BY_SLUG: Record<string, string> = {
+  "veolia-pickleball-national-championships": "Veolia Pickleball National Championships",
+  "virginia-beach-open": "Mojo Energy Pouches Virginia Beach Open",
+};
+
 /* ---- field inference ---- */
 
 /**
@@ -284,7 +297,7 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     // don't move. Do NOT "tidy" this by renaming the curated ROWS to match —
     // buildSchedule derives the slug from the curated name, so that would
     // silently repoint every event URL, brand, guide, broadcast and photo key.
-    name: name || curated?.name || "",
+    name: NAME_OVERRIDE_BY_SLUG[slug] ?? (name || curated?.name || ""),
     city: curated?.city ?? (t.venue_city || ""),
     state: curated?.state ?? (t.venue_state || ""),
     venue: curated?.venue ?? (t.venue_name || t.venue_city || ""),
