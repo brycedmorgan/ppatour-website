@@ -731,16 +731,28 @@ export const partners: Partner[] = [
      * ⚠ Destination is the apparel brand ZYIA Active (zyiaactive.com, verified
      * 8/4). NOT zyia.com, which resolves to an industrial flow-meter
      * manufacturer — the obvious guess is the wrong company. Name kept exactly
-     * as approved ("Zyia"), which matters more than usual here: with no mark,
-     * this card prints its name.
+     * as approved ("Zyia"), which matters more than usual here.
      *
-     * ⚠ STILL THE ONLY PARTNER WITHOUT ART. MOJO and The Picklr were supplied
-     * on 8/4 and are in; no Zyia link came with them. Drop the file in
-     * public/ppa/sponsors and add logo/logoWidth/logoHeight.
+     * ⚠ STOPGAP MARK, NOT A SUPPLIED ONE. No Zyia brand kit came with the MOJO
+     * and Picklr links, so Bryce said grab it from their site for now. This is
+     * their own `zyia-logo.svg` off zyiaactive.com — true vector, 7 paths, no
+     * embedded raster, so it is at least the real artwork rather than a
+     * screenshot or a favicon (favicons were already rejected once for this
+     * page as too low-quality to sit beside the 2048px wordmarks).
+     *
+     * ⚠ ONE ALTERATION: their file is filled #FFFFFF for a dark header and is
+     * invisible on this light card, so the fill is recoloured to near-black.
+     * That is not an invented treatment — zyiaactive.com's own favicon
+     * ("BlackMoon") is pure black, so black is a mark Zyia already uses.
+     * Still, REPLACE THIS with the real kit when it arrives; a scraped mark is
+     * a placeholder, and if their brand guide says otherwise theirs wins.
      */
     name: "Zyia",
     website: "https://zyiaactive.com",
     tier: "tour",
+    logo: "/ppa/sponsors/zyia.svg",
+    logoWidth: 110,
+    logoHeight: 65,
   },
 
   /**
