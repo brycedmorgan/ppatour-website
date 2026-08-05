@@ -84,15 +84,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     })),
     /**
-     * Pickleball Vacations — HELD OUT until Stripe keys land on this project.
-     * The page is noindex for now (see app/vacations/page.tsx) because Register
-     * → checkout 503s without STRIPE_SECRET_KEY, and real bookings still run on
-     * the intact vacations.ppatour.com. Re-add this entry (priority 0.8) the
-     * moment Stripe is configured so the new URL gets found.
-     *
-     * /register, /success and the Punta Cana guest archive are noindex and
-     * always stay out.
+     * Pickleball Vacations — indexed as of 8/5, Stripe configured (secret key +
+     * webhook live). /register, /success and the Punta Cana guest archive stay
+     * noindex and out of the sitemap.
      */
+    {
+      url: url("/vacations"),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    },
     /**
      * Native articles, the 811 migrated WordPress posts, and the 39 PPA Blog
      * posts. `lastModified` matters here: these carry real publication dates

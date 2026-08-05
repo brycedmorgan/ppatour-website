@@ -36,12 +36,6 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Pickleball Vacations — Play the Islands With the Pros",
   description: `${trip.destination}, ${trip.location} · ${trip.datesLabel}. An adults-only, all-inclusive week of clinics with PPA pros, ten permanent courts, and Grace Bay. ${trip.adultsOnly}.`,
-  // Held noindex until Stripe keys land on this project (STRIPE_SECRET_KEY /
-  // STRIPE_WEBHOOK_SECRET). Until then the page renders but Register → checkout
-  // 503s, so we keep it out of Google rather than surface a dead funnel; real
-  // bookings still run on the intact vacations.ppatour.com. Revert (drop this
-  // line + re-add to app/sitemap.ts) the moment Stripe is configured.
-  robots: { index: false, follow: true },
   openGraph: {
     title: "Pickleball Vacations — Play the Islands With the Pros",
     description: `${trip.destination} · ${trip.datesLabel}`,
