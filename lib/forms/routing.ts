@@ -113,6 +113,30 @@ export const FORM_ROUTING: Record<string, FormRouting> = {
     replyToSubmitter: true,
     cioEvent: "fan_opt_in",
   },
+  /**
+   * Sponsorship inquiry (/about/sponsors).
+   *
+   * ⚠ NOT SERVED BY /api/form-submit. It has its own route because it also
+   * forwards to the Jackalope sales pipeline, where it becomes a deal under
+   * Leads — the only form on the site that does. `/api/sponsor-inquiry` reads
+   * this entry for the inbox, subject and sheet tab so the destination lives in
+   * the same table as every other form rather than in the route handler.
+   *
+   * There is deliberately no `FORM_SCHEMAS.sponsorship`, which is what stops
+   * /api/form-submit accepting `formType=sponsorship` — that route requires both
+   * a schema and a routing entry.
+   *
+   * Added 8/5 (Wesley): keep the Jackalope forward, add the notification email
+   * and the sheet row. Before this the form had neither, so a sponsorship lead —
+   * the highest-value submission on the site — was captured in exactly one place.
+   */
+  sponsorship: {
+    notifyTo: () => inbox("FORM_INBOX_SPONSORSHIP"),
+    subject: (d) =>
+      `New submission from PPATour.com — Sponsorship Inquiry (${d.company || "Company"})`,
+    sheetTab: "Sponsorship",
+    replyToSubmitter: true,
+  },
   newsletter: {
     notifyTo: () => inbox("FORM_INBOX_NEWSLETTER"),
     subject: () => "New newsletter signup — ppatour.com",

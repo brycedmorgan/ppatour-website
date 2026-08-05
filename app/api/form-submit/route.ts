@@ -3,6 +3,7 @@ import { FORM_SCHEMAS, type FormField, formNeedsTurnstile } from "@/lib/forms/sc
 import { FORM_ROUTING } from "@/lib/forms/routing";
 import { appendToSheet } from "@/lib/google-sheet";
 import { cioIdentifyAndTrack } from "@/lib/customerio";
+import { localTimestamp, sendFormNotification } from "@/lib/forms/notify";
 
 /**
  * Generic form submission endpoint. One route serves every inquiry/application
@@ -19,8 +20,12 @@ import { cioIdentifyAndTrack } from "@/lib/customerio";
  * Degrades gracefully: unset env (local dev) → submission logged, returns ok.
  * The sheet append is best-effort so a Sheets outage never loses a lead the
  * team was emailed about.
+ *
+ * The notification email itself lives in lib/forms/notify.ts, shared with
+ * /api/sponsor-inquiry — that form has its own route because it also forwards to
+ * the Jackalope sales pipeline, and a second copy of the template and sender
+ * address is the kind of duplication that drifts.
  */
-const FROM = "Carvana PPA Tour <info@ppatour.com>";
 
 type Raw = Record<string, unknown>;
 
@@ -62,27 +67,6 @@ function display(field: FormField, v: unknown): string {
   if (Array.isArray(v)) return v.map(String).join(", ");
   if (field.type === "consent") return v === "1" ? "Agreed" : "";
   return String(v).trim();
-}
-
-function esc(s: unknown): string {
-  return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
-
-function emailBody(heading: string, rows: [string, string][], submittedAt: string): string {
-  const tr = rows
-    .map(
-      ([k, v]) =>
-        `<tr><td style="padding:6px 14px 6px 0;color:#5b6472;white-space:nowrap;vertical-align:top;">${esc(k)}</td><td style="padding:6px 0;color:#101d33;">${esc(v) || "—"}</td></tr>`,
-    )
-    .join("");
-  return `<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#101d33;">
-    <h2 style="margin:0 0 4px;">${esc(heading)}</h2>
-    <p style="margin:0 0 16px;color:#5b6472;">Submitted on ppatour.com.</p>
-    <table cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-      <tr><td style="padding:6px 14px 6px 0;color:#5b6472;white-space:nowrap;">Submitted</td><td style="padding:6px 0;color:#101d33;">${esc(submittedAt)}</td></tr>
-      ${tr}
-    </table>
-  </div>`;
 }
 
 export async function POST(request: Request) {
@@ -134,11 +118,7 @@ export async function POST(request: Request) {
   }
 
   const submittedAt = new Date().toISOString();
-  const submittedAtLocal = new Date(submittedAt).toLocaleString("en-US", {
-    timeZone: "America/Denver",
-    dateStyle: "long",
-    timeStyle: "short",
-  });
+  const submittedAtLocal = localTimestamp(submittedAt);
 
   // Flat record for storage + email rows for every visible field.
   const record: Record<string, string> = { submittedAt };
@@ -159,28 +139,28 @@ export async function POST(request: Request) {
   const submitterName = `${record.firstName ?? ""} ${record.lastName ?? record.name ?? ""}`.trim();
   const notifyTo = typeof routing.notifyTo === "function" ? routing.notifyTo(record) : routing.notifyTo;
 
-  const apiKey = process.env.CUSTOMERIO_APP_API_KEY;
-  if (notifyTo && apiKey) {
-    const replyTo = routing.replyToSubmitter && submitterEmail ? `${submitterName || "Submitter"} <${submitterEmail}>` : undefined;
-    const emailRes = await fetch("https://api.customer.io/v1/send/email", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        to: notifyTo,
-        identifiers: { email: notifyTo.split(",")[0].trim() },
-        from: FROM,
-        ...(replyTo ? { reply_to: replyTo } : {}),
-        subject: routing.subject(record),
-        body: emailBody(schema.heading, rows, submittedAtLocal),
-      }),
+  if (notifyTo) {
+    const result = await sendFormNotification({
+      to: notifyTo,
+      subject: routing.subject(record),
+      heading: schema.heading,
+      rows,
+      submittedAtLocal,
+      replyTo:
+        routing.replyToSubmitter && submitterEmail
+          ? `${submitterName || "Submitter"} <${submitterEmail}>`
+          : undefined,
+      label: `form-submit:${formType}`,
     });
-    if (!emailRes.ok) {
-      const detail = await emailRes.text().catch(() => "");
-      console.error(`[form-submit:${formType}] email send failed`, emailRes.status, detail);
+    // Unchanged behaviour: a configured-but-rejected send fails the request, an
+    // unconfigured one (local dev) does not. The sheet row is already written
+    // either way, which is why "skipped" is safe to continue past.
+    if (result === "failed") {
       return NextResponse.json({ error: "Could not submit" }, { status: 502 });
     }
-  } else if (notifyTo) {
-    console.warn(`[form-submit:${formType}] CUSTOMERIO_APP_API_KEY unset — email skipped (sheet ${sheetOk ? "ok" : "failed"})`);
+    if (result === "skipped") {
+      console.warn(`[form-submit:${formType}] sheet ${sheetOk ? "ok" : "failed"}`);
+    }
   }
 
   // 3) Marketing sync — best-effort.
