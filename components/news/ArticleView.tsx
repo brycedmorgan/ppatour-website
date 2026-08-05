@@ -46,6 +46,64 @@ function linkifyPlayers(text: string, players: Athlete[]) {
   });
 }
 
+/**
+ * How many players the rail shows before folding the rest behind a disclosure.
+ *
+ * Detection means a season wrap or a Championship Sunday recap can legitimately
+ * name thirty-plus pros. Measured across the archive the rail is 7 names at the
+ * median but reaches 37, and an unbounded list turns the sidebar into a page of
+ * its own beside a three-paragraph story. Ten is a full sticky column at 1440.
+ */
+const RAIL_VISIBLE = 10;
+
+function PlayerRow({ p, rank }: { p: NewsPlayer; rank: { rank: number } | undefined }) {
+  return (
+    <Link
+      href={`/athletes/${p.slug}`}
+      className="group flex items-center gap-3 bg-white p-3 transition-colors hover:bg-ppa-paper"
+    >
+      <span className="relative flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-ppa-navy-deep">
+        {p.headshot ? (
+          <Image
+            src={p.headshot}
+            alt={p.name}
+            fill
+            sizes="44px"
+            className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          /* The majority state below the curated roster — a designed initials
+             chip, not a broken image slot. */
+          <span className="font-display text-xs uppercase tracking-wide text-ppa-sky">
+            {playerInitials(p.name)}
+          </span>
+        )}
+      </span>
+      <span className="flex min-w-0 flex-col">
+        <span className="truncate font-display text-sm uppercase leading-tight text-ppa-navy transition-colors group-hover:text-ppa-blue">
+          {p.name}
+        </span>
+        {/* Rank comes from the live WPR board, never from `bestRank` — see the
+            note where liveRanks is built. Falls back to the division alone when
+            a player isn't on the board (common for the archive's deeper
+            names). */}
+        {(rank || p.division) && (
+          <span className="truncate text-[10px] font-bold uppercase tracking-[0.1em] text-ppa-blue">
+            {rank ? `No. ${rank.rank} · ` : ""}
+            {p.division}
+          </span>
+        )}
+      </span>
+      <span
+        aria-hidden
+        className="ml-auto text-xs text-ppa-blue opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:opacity-100"
+      >
+        →
+      </span>
+    </Link>
+  );
+}
+
 export async function ArticleView({ detail }: { detail: NewsDetail }) {
   const { card } = detail;
   const related = relatedNews(card.slug, card.category, 3);
@@ -217,52 +275,30 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
                   </p>
                 </div>
                 <div className="mt-4 flex flex-col gap-px border border-ppa-line bg-ppa-line">
-                  {featured.map((p) => (
-                    <Link
-                      key={p.slug}
-                      href={`/athletes/${p.slug}`}
-                      className="group flex items-center gap-3 bg-white p-3 transition-colors hover:bg-ppa-paper"
-                    >
-                      <span className="relative flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-ppa-navy-deep">
-                        {p.headshot ? (
-                          <Image
-                            src={p.headshot}
-                            alt={p.name}
-                            fill
-                            sizes="44px"
-                            className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                          />
-                        ) : (
-                          /* The majority state below the curated roster — a
-                             designed initials chip, not a broken image slot. */
-                          <span className="font-display text-xs uppercase tracking-wide text-ppa-sky">
-                            {playerInitials(p.name)}
-                          </span>
-                        )}
-                      </span>
-                      <span className="flex min-w-0 flex-col">
-                        <span className="truncate font-display text-sm uppercase leading-tight text-ppa-navy transition-colors group-hover:text-ppa-blue">
-                          {p.name}
-                        </span>
-                        {/* Rank comes from the live WPR board, never from
-                            `bestRank` — see the note where liveRanks is built.
-                            Falls back to the division alone when a player isn't
-                            on the board (common for the archive's deeper names). */}
-                        {(liveRanks[p.slug] || p.division) && (
-                          <span className="truncate text-[10px] font-bold uppercase tracking-[0.1em] text-ppa-blue">
-                            {liveRanks[p.slug] ? `No. ${liveRanks[p.slug].rank} · ` : ""}
-                            {p.division}
-                          </span>
-                        )}
-                      </span>
-                      <span
-                        aria-hidden
-                        className="ml-auto text-xs text-ppa-blue opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:opacity-100"
-                      >
-                        →
-                      </span>
-                    </Link>
+                  {featured.slice(0, RAIL_VISIBLE).map((p) => (
+                    <PlayerRow key={p.slug} p={p} rank={liveRanks[p.slug]} />
                   ))}
+                  {/* Native <details> so the overflow is reachable with no JS
+                      and lands in the page for search engines either way. */}
+                  {featured.length > RAIL_VISIBLE && (
+                    <details className="group/more bg-white">
+                      <summary className="cursor-pointer list-none px-3 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-blue marker:hidden hover:text-ppa-navy">
+                        {featured.length - RAIL_VISIBLE} more player
+                        {featured.length - RAIL_VISIBLE === 1 ? "" : "s"}
+                        <span
+                          aria-hidden
+                          className="ml-1 inline-block transition-transform group-open/more:rotate-90"
+                        >
+                          ›
+                        </span>
+                      </summary>
+                      <div className="flex flex-col gap-px border-t border-ppa-line bg-ppa-line">
+                        {featured.slice(RAIL_VISIBLE).map((p) => (
+                          <PlayerRow key={p.slug} p={p} rank={liveRanks[p.slug]} />
+                        ))}
+                      </div>
+                    </details>
+                  )}
                 </div>
                 <p className="mt-2 text-[11px] text-ppa-navy/45">
                   Full bios, rankings, and match history →{" "}

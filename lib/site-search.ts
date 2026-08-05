@@ -21,6 +21,7 @@ import { searchNews, type NewsCard } from "@/lib/news";
 import { athletes } from "@/lib/athletes";
 import { CURATED_TO_CANONICAL, publishedAthletes } from "@/lib/published-athletes";
 import { eventGuides } from "@/lib/event-guides";
+import { eventSearchText } from "@/lib/event-search";
 import { getEvents } from "@/lib/events-api";
 import {
   eventHref,
@@ -205,9 +206,10 @@ function eventDoc(t: Tournament) {
       href: eventHref(t),
     },
     title: norm(t.name),
-    meta: norm(
-      `${t.name ?? ""} ${t.city} ${t.state} ${t.venue} ${tier} ${t.presentedBy ?? ""} ${dates} event tournament tickets`,
-    ),
+    // Shared with the /events grid so the two surfaces can't disagree about
+    // what an event is findable by — state names, metro aliases, points and
+    // month all come from `eventSearchText`.
+    meta: norm(`${eventSearchText(t)} ${dates} event tournament tickets`),
     body: norm(guideText),
   };
 }

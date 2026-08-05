@@ -191,6 +191,16 @@ export function renderPostHtml(html: string, players: LinkablePlayer[] = []): st
     ? new RegExp(`(${linkable.map((p) => escapeRe(p.name)).join("|")})`, "g")
     : null;
   const slugOf = new Map(linkable.map((p) => [p.name, p.slug]));
+  /**
+   * ⚠ FIRST MENTION ONLY, per player.
+   *
+   * The rail is now driven by names detected in the copy rather than by
+   * WordPress tags alone, so a Championship Sunday recap can carry thirty-plus
+   * linkable players — and linking every occurrence turned a stats wrap into a
+   * wall of blue. One link the first time a player is named is the newsroom
+   * convention and it is what the reader needs; the rail carries the rest.
+   */
+  const linked = new Set<string>();
 
   const out: string[] = [];
   let dropDepth = 0; // inside a DROP_TREE element
@@ -210,9 +220,9 @@ export function renderPostHtml(html: string, players: LinkablePlayer[] = []): st
       if (nameRe && anchorDepth === 0 && text.trim()) {
         text = text.replace(nameRe, (match) => {
           const slug = slugOf.get(match);
-          return slug
-            ? `<a href="/athletes/${slug}" class="${CLASSES.a}">${match}</a>`
-            : match;
+          if (!slug || linked.has(slug)) return match;
+          linked.add(slug);
+          return `<a href="/athletes/${slug}" class="${CLASSES.a}">${match}</a>`;
         });
       }
       out.push(text);

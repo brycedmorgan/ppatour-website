@@ -24,7 +24,8 @@ import {
 } from "@/lib/wp-news";
 import { resolveAsset } from "@/lib/wp-media";
 import { postPlainText } from "@/lib/news-html";
-import { athletes, getAthlete } from "@/lib/athletes";
+import { getAthlete } from "@/lib/athletes";
+import { detectAthleteMentions } from "@/lib/article-players";
 import { getPublishedAthlete, publishedProfileSlug } from "@/lib/published-athletes";
 
 export type NewsSource = "native" | "wordpress";
@@ -368,23 +369,41 @@ function toNewsPlayer(canonicalSlug: string): NewsPlayer | null {
 }
 
 /**
- * The "Players in This Story" rail. Native articles keep their auto-detection
- * over the body text; WP posts use the athlete slugs the importer resolved from
- * WordPress's player categories.
+ * The "Players in This Story" rail — every athlete the story names who has a
+ * profile to send the reader to.
+ *
+ * Two sources, in this order:
+ *  1. Explicit tags. WordPress's player categories on a migrated post, or the
+ *     `players` array on a native article. Editorial intent, so it leads.
+ *  2. Names detected in the headline, dek and body (`lib/article-players.ts`),
+ *     ranked by how often the piece says them.
+ *
+ * ⚠ TAGS ALONE WERE NOT ENOUGH, WHICH IS THE WHOLE POINT OF THE UNION. Only
+ * 385 of 811 migrated posts carry any tag; another 218 name a published
+ * athlete with no tag at all, and 314 of the tagged ones name athletes the
+ * tags omit. The header of `lib/article-players.ts` has the measurements and
+ * the reason the detector reads our published roster rather than the ranking
+ * board.
  */
 export function newsPlayersFor(detail: NewsDetail): NewsPlayer[] {
-  if (detail.source === "wordpress") {
-    return detail.post.players
-      .map(toNewsPlayer)
-      .filter((p): p is NewsPlayer => p !== null);
+  const tagged =
+    detail.source === "wordpress" ? detail.post.players : (detail.article.players ?? []);
+  const text =
+    detail.source === "wordpress"
+      ? `${detail.post.title} ${detail.post.dek} ${postPlainText(detail.post.bodyHtml)}`
+      : [detail.card.title, detail.article.dek, ...detail.article.body].join(" ");
+
+  // `toNewsPlayer` resolves both to the slug the profile route prerenders, so
+  // a tag and a mention of the same person collapse to one entry.
+  const ordered: NewsPlayer[] = [];
+  const seen = new Set<string>();
+  for (const slug of [...tagged, ...detectAthleteMentions(text).map((m) => m.slug)]) {
+    const player = toNewsPlayer(slug);
+    if (!player || seen.has(player.slug)) continue;
+    seen.add(player.slug);
+    ordered.push(player);
   }
-  const a = detail.article;
-  const mentioned = athletes
-    .filter((p) => [a.dek, ...a.body].some((t) => t.includes(p.name)))
-    .map((p) => p.slug);
-  return [...new Set([...(a.players ?? []), ...mentioned])]
-    .map(toNewsPlayer)
-    .filter((p): p is NewsPlayer => p !== null);
+  return ordered;
 }
 
 /**

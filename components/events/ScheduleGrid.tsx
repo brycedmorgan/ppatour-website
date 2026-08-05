@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useDeferredValue, useMemo, useState } from "react";
+import { eventMatcher } from "@/lib/event-search";
 import {
   formatDateRange,
   tierPoints,
@@ -57,15 +58,6 @@ const SEASON_OPTIONS: { value: SeasonKey; label: string }[] = [
   { value: "2022", label: "2022" },
 ];
 
-function matchesQuery(t: Tournament, q: string): boolean {
-  if (!q) return true;
-  const hay = `${t.name} ${t.name} ${t.city} ${t.state} ${t.venue}`.toLowerCase();
-  return q
-    .toLowerCase()
-    .split(/\s+/)
-    .every((term) => hay.includes(term));
-}
-
 function FilterSelect<T extends string>({
   value,
   onChange,
@@ -114,8 +106,15 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
     if (v !== "past") setSeason("all");
   }
 
+  // The query lags the input by a frame under load so typing stays responsive
+  // against the full past+upcoming board — same treatment /rankings gives its
+  // 2,000-row search box.
+  const deferredQuery = useDeferredValue(query);
+
   const shown = useMemo(() => {
-    const q = query.trim();
+    // Parsed once per query, not once per event — the matcher closes over the
+    // terms and only the haystack build runs per row.
+    const matches = eventMatcher(deferredQuery.trim());
     const list = events.filter((t) => {
       const inTime = time === "past" ? t.status === "completed" : t.status !== "completed";
       if (!inTime) return false;
@@ -149,10 +148,10 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
       // Season (Past only)
       if (time === "past" && season !== "all" && t.season !== season) return false;
 
-      return matchesQuery(t, q);
+      return matches(t);
     });
     return time === "past" ? list.reverse() : list;
-  }, [events, query, time, type, tier, country, season]);
+  }, [events, deferredQuery, time, type, tier, country, season]);
 
   return (
     <>
@@ -176,7 +175,7 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search events, cities, venues…"
+            placeholder="Search by event, city, state, venue, month…"
             className="h-10 w-full border border-ppa-line bg-white pl-9 pr-3 text-sm text-ppa-navy outline-none placeholder:text-ppa-navy/35 focus:border-ppa-blue"
           />
         </div>
