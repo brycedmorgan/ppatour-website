@@ -83,16 +83,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     })),
     /**
-     * Pickleball Vacations. High priority: it sells a $3,800–$6,400 room and,
-     * having just moved off its own subdomain, has no accumulated authority of
-     * its own — the sitemap is how the new URL gets found. /register, /success
-     * and the Punta Cana guest archive are all noindex and stay out.
+     * Pickleball Vacations — HELD OUT until Stripe keys land on this project.
+     * The page is noindex for now (see app/vacations/page.tsx) because Register
+     * → checkout 503s without STRIPE_SECRET_KEY, and real bookings still run on
+     * the intact vacations.ppatour.com. Re-add this entry (priority 0.8) the
+     * moment Stripe is configured so the new URL gets found.
+     *
+     * /register, /success and the Punta Cana guest archive are noindex and
+     * always stay out.
      */
-    {
-      url: url("/vacations"),
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    },
     // Native articles + the 811 migrated WordPress posts. `lastModified`
     // matters here: these carry real publication dates going back to 2023, and
     // the 301s from their old root-level URLs need the new URL to look
