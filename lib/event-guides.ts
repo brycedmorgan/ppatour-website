@@ -24,11 +24,48 @@ export type EventGuide = {
   airport: string;
   airportNote: string;
   gettingThere: string;
-  parking: string;
   hotels: Place[];
   dining: Place[];
   doing: Place[];
+  /**
+   * ⚠ NO `parking` FIELD, DELIBERATELY. Parking is not trip-guide colour — it is
+   * an operational detail the event team finalizes per venue, and every surface
+   * must read it through `parkingFor()` below so an unfinalized stop can only
+   * ever publish the approved holding line. Removed from the type (not just left
+   * unset) so a hand-edit can't quietly put invented copy back on a page.
+   */
 };
+
+/**
+ * The approved copy for any stop whose parking isn't finalized yet.
+ * Verbatim from the event team's 8/5 request — don't reword it.
+ */
+export const PARKING_TBA =
+  "Parking information will be posted closer to the event date. Please check back for updates.";
+
+/**
+ * Finalized, event-team-supplied parking details, keyed by tournament slug.
+ * A stop appears here ONLY once its details are confirmed; everything else
+ * renders `PARKING_TBA`.
+ *
+ * ⚠ 8/5: Cary is the only finalized stop. The 17 other stops previously carried
+ * hand-written parking copy — free/paid claims, "$10/day", "$20/day or free with
+ * a Reserved+ ticket", shuttle and transit details — none of it sourced from the
+ * event team. All 18 strings were deleted rather than gated, so the only way to
+ * publish parking again is to paste the real details in here.
+ *
+ * ⚠ CARY'S LINE BELOW PREDATES THE ASANA SUBMISSION and has not been reconciled
+ * against it — replace it with the submitted text verbatim.
+ */
+const PARKING_BY_SLUG: Record<string, string> = {
+  "veolia-pickleball-national-championships":
+    "Free on-site parking at Cary Tennis Park; ADA + drop-off at the main gate. Lots open 8:00 AM.",
+};
+
+/** Parking copy for an event page — finalized details, or the holding line. */
+export function parkingFor(slug: string): string {
+  return PARKING_BY_SLUG[slug] ?? PARKING_TBA;
+}
 
 export const eventGuides: Record<string, EventGuide> = {
   "veolia-pickleball-national-championships": {
@@ -37,8 +74,6 @@ export const eventGuides: Record<string, EventGuide> = {
     airportNote: "Raleigh-Durham · ~15 min to venue",
     gettingThere:
       "RDU is only 15 minutes away — the easiest fly-in on tour. Stay in Cary near the courts, or downtown Raleigh for nightlife.",
-    parking:
-      "Free on-site parking at Cary Tennis Park; ADA + drop-off at the main gate. Lots open 8:00 AM.",
     hotels: [
       {
         name: "Holiday Inn Raleigh-Durham Airport",
@@ -71,8 +106,8 @@ export const eventGuides: Record<string, EventGuide> = {
   },
   // ⚠ Venue deliberately unnamed — Bryan Renahan, 8/4: "Cincy should not have
   // Lindner Family Tennis Center listed anywhere. No venue for now." The
-  // getting-there and parking copy was written around that venue (Mason, Gate
-  // A, "the tennis center"), so it's been reduced to what's true without one.
+  // getting-there copy was written around that venue (Mason, Gate A, "the
+  // tennis center"), so it's been reduced to what's true without one.
   // Restore specifics only when the real venue is confirmed.
   "veolia-cincinnati-cup": {
     mapQuery: "Cincinnati, OH",
@@ -80,8 +115,6 @@ export const eventGuides: Record<string, EventGuide> = {
     airportNote: "Cincinnati/N. Kentucky International",
     gettingThere:
       "Fly into CVG. A rental car is the easy call — the host hotels are spread across the metro. Venue details are still to be announced.",
-    parking:
-      "Parking details publish with the venue announcement.",
     hotels: [
       { name: "21c Museum Hotel", tag: "Boutique", note: "Downtown art-hotel" },
     ],
@@ -101,8 +134,6 @@ export const eventGuides: Record<string, EventGuide> = {
     airportNote: "Harry Reid Intl · ~20 min to venue",
     gettingThere:
       "LAS is 20 minutes from the courts and walkable to the Strip's hotels. No car needed — rideshare covers the whole trip.",
-    parking:
-      "Free on-site parking all week. Strip hotels run rideshare pickup zones; budget 25 min on Championship Sunday.",
     hotels: [
       {
         name: "JW Marriott Las Vegas Resort & Spa",
@@ -145,8 +176,6 @@ export const eventGuides: Record<string, EventGuide> = {
     airportNote: "O'Hare · ~20 min to venue",
     gettingThere:
       "O'Hare is 20 minutes from Northbrook on the North Shore. Stay in the suburbs near the courts, or downtown and reverse-commute out.",
-    parking:
-      "Free on-site lots. The Metra Northbrook stop is a short rideshare; downtown fans can train up.",
     hotels: [
       {
         name: "DoubleTree Chicago-North Shore",
@@ -185,8 +214,6 @@ export const eventGuides: Record<string, EventGuide> = {
     airportNote: "Norfolk Intl · ~25 min to venue",
     gettingThere:
       "Fly into ORF, 25 minutes from the oceanfront. The Sports Center is two blocks from the boardwalk — walk to the courts from most hotels.",
-    parking:
-      "Convention Center garage adjacent · $10/day. Most oceanfront hotels are a 10-min walk.",
     hotels: [
       {
         name: "Hampton Inn Virginia Beach Oceanfront South",
@@ -214,8 +241,6 @@ export const eventGuides: Record<string, EventGuide> = {
     airportNote: "Daytona Beach Intl · ~10 min · or MCO ~70 min",
     gettingThere:
       "DAB is 10 minutes away; Orlando (MCO) is an easy hour for more flight options. Pictona is one of the country's premier pickleball complexes.",
-    parking:
-      "Free on-site parking at Pictona, with shaded courts and a clubhouse. Lots open 8:00 AM.",
     hotels: [
       { name: "Hard Rock Hotel Daytona Beach", tag: "Oceanfront", note: "On the sand · 10 min" },
       { name: "The Shores Resort & Spa", tag: "Resort", note: "Daytona Beach Shores" },
@@ -236,8 +261,6 @@ export const eventGuides: Record<string, EventGuide> = {
     airportNote: "LAX · ~50 min up the PCH",
     gettingThere:
       "Fly into LAX and drive the Pacific Coast Highway 50 minutes north — the commute is half the vacation. A car is essential in Malibu.",
-    parking:
-      "Limited on-site parking; reserve a spot or use the Cross Creek shuttle. Rideshare drop-off at the club gate.",
     hotels: [
       { name: "Malibu Beach Inn", tag: "Beachfront", note: "On Carbon Beach · tour rate" },
       { name: "Calamigos Guest Ranch", tag: "Resort", note: "In the hills · spa + pool" },
@@ -258,8 +281,6 @@ export const eventGuides: Record<string, EventGuide> = {
     airportNote: "Palm Springs Intl · ~25 min to venue",
     gettingThere:
       "PSP lands you 25 minutes from the desert resorts. A car helps for Joshua Tree day trips, but resort shuttles cover the venue.",
-    parking:
-      "Resort valet + self-park on-site. Shaded cabanas and misters throughout the grounds.",
     hotels: [
       { name: "Parker Palm Springs", tag: "Design Icon", note: "Mid-century desert glamour" },
       { name: "Ritz-Carlton, Rancho Mirage", tag: "Resort Luxury", note: "Cliffside · tour rate" },
@@ -280,8 +301,6 @@ export const eventGuides: Record<string, EventGuide> = {
     airportNote: "Minneapolis-St. Paul · ~25 min to venue",
     gettingThere:
       "MSP is 25 minutes north of Lakeville. A January indoor stop — rent a car and keep the coat handy between the hotel and the courts.",
-    parking:
-      "Free indoor-adjacent parking at Life Time Lakeville; heated drop-off at the main doors.",
     hotels: [
       { name: "Hyatt Regency Minneapolis", tag: "City Base", note: "Skyway-connected downtown" },
       { name: "Hotel Ivy, Luxury Collection", tag: "Boutique", note: "Downtown landmark" },
@@ -302,8 +321,6 @@ export const eventGuides: Record<string, EventGuide> = {
     airportNote: "Southwest Florida Intl · ~30 min to venue",
     gettingThere:
       "Fly into RSW (Fort Myers), 30 minutes from Cape Coral's canals. A car opens up the Gulf beaches and Sanibel.",
-    parking:
-      "Free on-site parking at the racquet club; shaded courts and Gulf breezes.",
     hotels: [
       { name: "Westin Cape Coral at Marina Village", tag: "Waterfront", note: "Marina views · tour rate" },
       { name: "The Westin Fort Myers", tag: "Resort", note: "20 min · riverfront" },
@@ -324,8 +341,6 @@ export const eventGuides: Record<string, EventGuide> = {
     airportNote: "Sky Harbor · ~20 min to venue",
     gettingThere:
       "PHX Sky Harbor is 20 minutes from Bell Bank Park. Rent a car for easy hops to Scottsdale and the desert.",
-    parking:
-      "Free on-site parking across Bell Bank Park's 320 acres. Misting stations + shade on the concourse.",
     hotels: [
       {
         name: "Four Points by Sheraton Mesa Gateway",
@@ -362,8 +377,6 @@ export const eventGuides: Record<string, EventGuide> = {
     airportNote: "John Wayne / OC · ~10 min to venue",
     gettingThere:
       "SNA (Orange County) is 10 minutes away — the cushiest fly-in on the calendar. LAX is 60 if you need more flights.",
-    parking:
-      "On-site + nearby structure parking; harbor rideshare drop-off. Bike the boardwalk if you stay close.",
     hotels: [
       { name: "Balboa Bay Resort", tag: "Waterfront", note: "On the harbor · tour rate" },
       { name: "Lido House, Autograph Collection", tag: "Boutique", note: "Walk to the peninsula" },
@@ -384,8 +397,6 @@ export const eventGuides: Record<string, EventGuide> = {
     airportNote: "DFW Intl · ~35 min to McKinney",
     gettingThere:
       "DFW and Love Field both serve the metroplex; the Courts of McKinney sit about 35 minutes north. Rent a car — north Dallas is built for it, and downtown is an easy hop.",
-    parking:
-      "Complimentary club parking with valet on finals weekend. Lots open 8:00 AM.",
     hotels: [
       { name: "The Joule", tag: "City Luxury", note: "Downtown · rooftop pool" },
       { name: "Hotel Crescent Court", tag: "Official Tour Hotel", note: "Uptown · tour rate" },
@@ -406,8 +417,6 @@ export const eventGuides: Record<string, EventGuide> = {
     airportNote: "St. George Regional · ~20 min · or LAS ~2 hr",
     gettingThere:
       "SGU is 20 minutes out; many fly into Las Vegas and make the scenic 2-hour desert drive. Black Desert is a brand-new resort venue.",
-    parking:
-      "On-site resort parking + valet. Shaded courts framed by black-lava fairways.",
     hotels: [
       { name: "Black Desert Resort", tag: "On-Site", note: "Stay at the venue · tour rate" },
       { name: "Inn on the Cliff", tag: "Views", note: "Boutique above St. George" },
@@ -428,8 +437,6 @@ export const eventGuides: Record<string, EventGuide> = {
     airportNote: "Sacramento Intl · ~20 min to venue",
     gettingThere:
       "SMF is 20 minutes from the courts. Spring in the capital — wine country and Tahoe are both easy day trips with a car.",
-    parking:
-      "On-site club parking; downtown fans can light-rail in. Lots open 8:00 AM.",
     hotels: [
       { name: "The Citizen Hotel, Autograph Collection", tag: "Boutique", note: "Downtown landmark" },
       { name: "Kimpton Sawyer", tag: "City", note: "On the Downtown Commons" },
@@ -450,8 +457,6 @@ export const eventGuides: Record<string, EventGuide> = {
     airportNote: "Hartsfield-Jackson · ~35 min to venue",
     gettingThere:
       "Fly into ATL, the world's busiest airport, with nonstops from nearly everywhere. The venue sits 35 minutes north in Peachtree Corners.",
-    parking:
-      "On-site lots open daily at 8:00 AM — $20/day, or free with a Reserved+ ticket. Overflow shuttle every 15 min.",
     hotels: [
       { name: "Le Méridien Atlanta Perimeter", tag: "Official Tour Hotel", note: "15 min · tour rate + shuttle" },
       { name: "Hyatt Regency Atlanta", tag: "City Base", note: "Downtown · 30 min, near the BeltLine" },
@@ -472,8 +477,6 @@ export const eventGuides: Record<string, EventGuide> = {
     airportNote: "John Wayne / OC · ~30 min to venue",
     gettingThere:
       "Fly into SNA (Orange County), 30 minutes up the coast — or LAX/SAN within 90. The finale sits between the surf and the hills.",
-    parking:
-      "On-site lots + beach-trail overflow with shuttle. Reserve finals-weekend parking ahead.",
     hotels: [
       { name: "Ritz-Carlton, Laguna Niguel", tag: "5-Star", note: "Clifftop · 15 min north" },
       { name: "San Clemente Cove Resort", tag: "Coastal", note: "Walk to the pier" },
@@ -494,8 +497,6 @@ export const eventGuides: Record<string, EventGuide> = {
     airportNote: "DFW Intl · ~15 min to venue",
     gettingThere:
       "DFW lands you 15 minutes from the venue — the easiest fly-in on the calendar. Love Field is 20 min south. Rent a car; the metroplex is built for it.",
-    parking:
-      "Club parking on-site with finals-weekend valet. Lots open 8:00 AM; expect premium lots to fill early on Sunday.",
     hotels: [
       {
         name: "Sheraton Dallas by the Galleria",

@@ -35,6 +35,14 @@ export type TournamentDetails = {
   /** Ranking points parsed from the sanction level, e.g. "PPA 2000" → 2000. */
   points: number;
   courts: number;
+  /**
+   * ⚠ NOT RENDERED ANYWHERE, AND DON'T START WITHOUT ASKING. This is the
+   * registration platform's parking blurb, which is not the same thing as the
+   * event team's finalized parking details — and per their 8/5 request, only
+   * stops with finalized details publish any (`parkingFor()` in
+   * lib/event-guides.ts is the one gate). Putting this on a page would route
+   * around that gate for every event in the feed.
+   */
   parking: string;
 };
 

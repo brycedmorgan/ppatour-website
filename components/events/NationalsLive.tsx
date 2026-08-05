@@ -15,7 +15,7 @@ import { ChampionsBanner } from "@/components/live/ChampionsBanner";
 import { BracketPanel } from "@/components/live/BracketPanel";
 import { ATLANTA_EVENT_ID } from "@/lib/bracket-sample";
 import { getBroadcast } from "@/lib/broadcast";
-import { getEventGuide } from "@/lib/event-guides";
+import { getEventGuide, parkingFor } from "@/lib/event-guides";
 import { getEventSchedule } from "@/lib/event-schedule";
 import { playersToWatch } from "@/lib/home-content";
 import { getArticlesForEvent } from "@/lib/news-articles";
@@ -214,6 +214,9 @@ export function NationalsLive({
   const broadcastDays = days.filter((d) => d.live);
   const broadcast = getBroadcast(t.slug);
   const guide = getEventGuide(t.slug);
+  // Same single source as app/events/[year]/[slug]/page.tsx — finalized details
+  // for this stop, or the approved holding line.
+  const parking = parkingFor(t.slug);
   const realSchedule = getEventSchedule(t.slug);
   const mapQuery = guide?.mapQuery ?? `${t.venue}, ${t.city}, ${t.state}`;
 
@@ -279,7 +282,7 @@ export function NationalsLive({
       campaign: t.eventCode ?? t.slug,
       content: "event-concierge-register",
     }),
-    parking: guide?.parking,
+    parking,
     airport: guide ? `${guide.airport} (${guide.airportNote})` : undefined,
     hotels: guide?.hotels.map((h) => h.name) ?? [],
     dining: guide?.dining.map((d) => d.name) ?? [],
@@ -1140,7 +1143,7 @@ export function NationalsLive({
                 },
                 {
                   k: "Parking & Shuttle",
-                  v: guide?.parking ?? "On-site lots open with the gates; ADA and rideshare drop-off at the main gate. Official parking map published event week.",
+                  v: parking,
                 },
                 {
                   k: "What to Bring",
@@ -1222,7 +1225,7 @@ export function NationalsLive({
                   Parking & Access
                 </p>
                 <p className="mt-3 text-sm leading-relaxed text-ppa-navy/65">
-                  {guide.parking}
+                  {parking}
                 </p>
               </div>
             </div>

@@ -20,7 +20,7 @@
 import { searchNews, type NewsCard } from "@/lib/news";
 import { athletes } from "@/lib/athletes";
 import { CURATED_TO_CANONICAL, publishedAthletes } from "@/lib/published-athletes";
-import { eventGuides } from "@/lib/event-guides";
+import { eventGuides, parkingFor } from "@/lib/event-guides";
 import { eventSearchText } from "@/lib/event-search";
 import { getEvents } from "@/lib/events-api";
 import {
@@ -192,7 +192,7 @@ function eventDoc(t: Tournament) {
         guide.airport,
         guide.airportNote,
         guide.gettingThere,
-        guide.parking,
+        parkingFor(t.slug),
         ...guide.hotels.map((h) => h.name),
         ...guide.dining.map((h) => h.name),
         ...guide.doing.map((h) => h.name),

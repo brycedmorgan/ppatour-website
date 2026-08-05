@@ -26,7 +26,12 @@ export type ConciergeFacts = {
   ticketFrom: number | null;
   ticketsUrl: string | null;
   registerUrl: string;
-  parking?: string;
+  /**
+   * Always supplied — `parkingFor(slug)` returns the event team's finalized
+   * details or the approved holding line, so the concierge never has to invent
+   * a parking answer. Required (not optional) so it can't silently go missing.
+   */
+  parking: string;
   airport?: string;
   hotels: string[];
   dining: string[];
@@ -68,7 +73,7 @@ const INTENTS: Intent[] = [
   {
     test: /park|shuttle|drive|car\b/i,
     answer: (f) => ({
-      text: f.parking ?? `Parking details for ${f.venue} are published event week — on-site lots open with the gates, with ADA and drop-off at the main gate.`,
+      text: f.parking,
     }),
   },
   {

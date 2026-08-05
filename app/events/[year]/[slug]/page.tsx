@@ -24,7 +24,7 @@ import { playerInitials, playerPhoto, playerProfileHref } from "@/lib/player-pho
 import { getPlaylistVideos } from "@/lib/youtube";
 import { Countdown } from "@/components/motion/Countdown";
 import { getBroadcast } from "@/lib/broadcast";
-import { getEventGuide } from "@/lib/event-guides";
+import { getEventGuide, parkingFor } from "@/lib/event-guides";
 import { getEventSchedule } from "@/lib/event-schedule";
 import { getEvents } from "@/lib/events-api";
 import { getArticlesForEvent } from "@/lib/news-articles";
@@ -208,6 +208,9 @@ export default async function EventPage({ params }: Params) {
   const broadcastDays = days.filter((d) => d.live);
   const broadcast = getBroadcast(t.slug);
   const guide = getEventGuide(t.slug);
+  // Finalized details for this stop, or the approved holding line. Every parking
+  // surface on the page (and the concierge) reads this one value.
+  const parking = parkingFor(t.slug);
   const realSchedule = getEventSchedule(t.slug);
   const mapQuery = guide?.mapQuery ?? `${t.venue}, ${t.city}, ${t.state}`;
   // Hotels published from Jackalope (Kristen's live blocks) override the static
@@ -351,7 +354,7 @@ export default async function EventPage({ params }: Params) {
       campaign: t.eventCode ?? t.slug,
       content: "event-concierge-register",
     }),
-    parking: guide?.parking,
+    parking,
     airport: guide ? `${guide.airport} (${guide.airportNote})` : undefined,
     hotels: guide?.hotels.map((h) => h.name) ?? [],
     dining: guide?.dining.map((d) => d.name) ?? [],
@@ -1146,7 +1149,7 @@ export default async function EventPage({ params }: Params) {
                 },
                 {
                   k: "Parking & Shuttle",
-                  v: guide?.parking ?? "On-site lots open with the gates; ADA and rideshare drop-off at the main gate. Official parking map published event week.",
+                  v: parking,
                 },
                 {
                   k: "What to Bring",
@@ -1230,7 +1233,7 @@ export default async function EventPage({ params }: Params) {
                   Parking & Access
                 </p>
                 <p className="mt-3 text-sm leading-relaxed text-ppa-navy/65">
-                  {guide.parking}
+                  {parking}
                 </p>
               </div>
             </div>
