@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { SITE_URL } from "@/lib/site";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -48,8 +47,17 @@ import { matchdayPrimary } from "@/lib/matchday";
 import { admissionTiersFor, ticketsOnSale } from "@/lib/tixr-prices";
 import { buildTicketGrid } from "@/lib/ticket-grid";
 import { TicketGrid } from "@/components/events/TicketGrid";
+import { buildEventJsonLd } from "@/lib/event-schema";
+import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 
 type Params = { params: Promise<{ year: string; slug: string }> };
+
+/** Shared by generateMetadata and the on-page SportsEvent JSON-LD so the meta
+ *  description and the structured-data description never drift. */
+function eventMetaDescription(t: Tournament): string {
+  const where = t.state ? `${t.city}, ${t.state}` : t.city;
+  return `${eventTierLabel(t)} · ${formatDateRange(t.startDate, t.endDate, true)} · ${where} · ${t.prizeMoney} total payout. Schedule, players, tickets, trip guide, and how to watch.`;
+}
 
 /**
  * Resolve an event for its detail page by year + slug: a curated record wins
@@ -98,17 +106,21 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { year, slug } = await params;
   const t = await resolveEvent(year, slug);
   if (!t) return { title: "Event" };
-  const where = t.state ? `${t.city}, ${t.state}` : t.city;
-  const description = `${eventTierLabel(t)} · ${formatDateRange(t.startDate, t.endDate, true)} · ${where} · ${t.prizeMoney} prize purse. Schedule, players, tickets, trip guide, and how to watch.`;
+  const description = eventMetaDescription(t);
+  // No `openGraph.images` / `twitter.images` here on purpose: the file-based
+  // `opengraph-image.tsx` in this folder generates the designed 1200×630 event
+  // card, and Next appends file-convention images to whatever is set in
+  // metadata. Setting a raw off-ratio photo here emitted a SECOND og:image that
+  // competed with (and on most scrapers preceded) the designed card. Let the
+  // file convention be the single source of the share card.
   return {
     title: t.name,
     description,
     openGraph: {
       title: `${t.name} — Carvana PPA Tour`,
       description,
-      images: [t.image],
     },
-    twitter: { card: "summary_large_image", images: [t.image] },
+    twitter: { card: "summary_large_image" },
   };
 }
 
@@ -235,6 +247,7 @@ export default async function EventPage({ params }: Params) {
    * price and no ticket link anywhere on the page — see lib/tixr-prices.ts.
    */
   const onSale = ticketsOnSale(t.ticketsUrl);
+  const description = eventMetaDescription(t);
   /**
    * Where a premium parking pass is bought — the event's own Tixr page, since
    * there is no pass-specific listing. Null when tickets aren't on sale, which
@@ -395,46 +408,19 @@ export default async function EventPage({ params }: Params) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "SportsEvent",
-            name: t.name,
-            sport: "Pickleball",
-            startDate: t.startDate,
-            endDate: t.endDate,
-            eventStatus: "https://schema.org/EventScheduled",
-            eventAttendanceMode:
-              "https://schema.org/MixedEventAttendanceMode",
-            location: {
-              "@type": "Place",
-              name: t.venue,
-              address: t.state ? `${t.city}, ${t.state}` : t.city,
-            },
-            image: `${SITE_URL}${t.image}`,
-            url: `${SITE_URL}${eventHref(t)}`,
-            organizer: {
-              "@type": "Organization",
-              name: "Carvana PPA Tour",
-              url: SITE_URL,
-            },
-            // Only claim an offer when tickets are actually for sale. This block
-            // published `price: t.ticketPriceFrom` — which falls back to the tier
-            // table when there is no listing — as an InStock Offer, so an event
-            // whose own page correctly read "Tickets Coming Soon" was still
-            // feeding Google a $39 buyable offer and a Tixr link for a rich
-            // result. Omitting `offers` entirely is the honest signal.
-            ...(onSale
-              ? {
-                  offers: {
-                    "@type": "Offer",
-                    url: t.ticketsUrl,
-                    price: t.ticketPriceFrom,
-                    priceCurrency: "USD",
-                    availability: "https://schema.org/InStock",
-                  },
-                }
-              : {}),
-          }),
+          __html: JSON.stringify(buildEventJsonLd(t, { onSale, description })),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbJsonLd([
+              { name: "Home", path: "/" },
+              { name: "Events", path: "/events/" },
+              { name: t.name, path: `${eventHref(t)}/` },
+            ]),
+          ),
         }}
       />
       {/* Hero */}
@@ -519,7 +505,7 @@ export default async function EventPage({ params }: Params) {
             </span>
             <span className="text-white/25">|</span>
             <span className="text-ppa-yellow">
-              {completed ? "🏆 Champions crowned" : `${t.prizeMoney} On the Line`}
+              {completed ? "🏆 Champions crowned" : `${t.prizeMoney} Total Payout`}
             </span>
           </div>
           <div className="mt-5 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap">
@@ -610,21 +596,20 @@ export default async function EventPage({ params }: Params) {
 
       {/* Overview — quick facts (right below the hero) */}
       <section id="overview" className="scroll-mt-[120px] bg-ppa-navy-deep text-white">
-        <div className="mx-auto grid w-full max-w-6xl grid-cols-2 px-4 sm:grid-cols-4">
+        <div className="mx-auto grid w-full max-w-6xl grid-cols-1 divide-y divide-white/10 px-4 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
           {[
             { k: "Dates", v: formatDateRange(t.startDate, t.endDate, true) },
             { k: "Venue", v: t.venue },
-            { k: "Prize Purse", v: t.prizeMoney, accent: true },
             { k: eventTierLabel(t), v: `${tierPoints(t).toLocaleString()} Pts` },
-          ].map((f, i) => (
+          ].map((f) => (
             <div
               key={f.k}
-              className={`px-4 py-5 ${i % 2 === 1 ? "border-l border-white/10" : ""} ${i >= 2 ? "border-t border-white/10 sm:border-t-0" : ""} ${i === 2 ? "sm:border-l" : ""}`}
+              className="px-4 py-5 sm:first:pl-0 sm:last:pr-0"
             >
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
                 {f.k}
               </p>
-              <p className={`mt-1 font-display text-base uppercase ${f.accent ? "text-ppa-yellow" : "text-white"}`}>
+              <p className="mt-1 font-display text-base uppercase text-white">
                 {f.v}
               </p>
             </div>
@@ -756,7 +741,7 @@ export default async function EventPage({ params }: Params) {
             in every division — enough to reshuffle the season-long points
             race in one weekend. The tour puts{" "}
             <span className="font-bold text-ppa-navy">{t.prizeMoney}</span>{" "}
-            in prize purse behind this event, with every top seed chasing
+            in total payouts behind this event, with every top seed chasing
             the title.
           </p>
 
@@ -768,7 +753,7 @@ export default async function EventPage({ params }: Params) {
                 note: "Per division title — toward the season race",
               },
               {
-                k: "Prize Purse",
+                k: "Total Payout",
                 v: t.prizeMoney,
                 note: "Across five pro divisions, incl. appearance fees",
               },

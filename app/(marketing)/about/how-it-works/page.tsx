@@ -3,7 +3,6 @@ import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { ExplainerVideos } from "@/components/video/ExplainerVideos";
 import { EXPLAINER_SERIES, HOW_IT_WORKS_VIDEOS } from "@/lib/explainer-videos";
-import { eventHref, getMainTourEvents } from "@/lib/placeholder-data";
 
 /**
  * How Pro Pickleball Works.
@@ -146,12 +145,6 @@ function SectionHead({ eyebrow, title }: { eyebrow: string; title: string }) {
 }
 
 export default function HowItWorksPage() {
-  // Deep-link the prize-grid CTA at the next real stop, so it lands on a page
-  // whose What's at Stake section is actually populated. Falls back to the
-  // calendar if the schedule is somehow empty.
-  const nextStop = getMainTourEvents()[0];
-  const prizeGridHref = nextStop ? `${eventHref(nextStop)}#stakes` : "/events";
-
   return (
     <>
       {/* ---------------------------------------------------------- Hero */}
@@ -757,13 +750,6 @@ export default function HowItWorksPage() {
                 </tbody>
               </table>
             </div>
-
-            <Link
-              href={prizeGridHref}
-              className="mt-5 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue"
-            >
-              See the full prize grid for an event →
-            </Link>
           </div>
         </div>
       </section>

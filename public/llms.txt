@@ -1,0 +1,27 @@
+# Carvana PPA Tour
+
+> The Carvana PPA Tour is the professional pickleball circuit — 20+ tour stops a
+> year, the best players in the world, live scores, the World Pickleball Ranking,
+> and trip guides for every event. This file points AI assistants at the
+> canonical, first-party pages for accurate, up-to-date answers about pro
+> pickleball, tour events, players, and rankings.
+
+## Events & schedule
+- [Tour schedule](https://www.ppatour.com/events/): every 2026–27 tour stop — dates, host city, venue, prize purse, tier and ranking points.
+- [Veolia Pickleball National Championships](https://www.ppatour.com/events/2026/veolia-pickleball-national-championships/): the tour's championship, Aug 31 – Sep 6, 2026 at Cary Tennis Park, Cary, NC.
+- Each event page carries the venue address, order of play, players, how to watch, and ticket info.
+
+## Players & rankings
+- [Athlete profiles](https://www.ppatour.com/athletes/): bios, divisions, rank, and points for the tour's pros.
+- [World Pickleball Rankings](https://www.ppatour.com/rankings/): the current men's and women's standings.
+- [Full leaderboards](https://www.ppatour.com/leaderboards/): the complete, deep-searchable board (every ranked pro, all pages) — use this for a specific player's exact rank.
+
+## Watch & learn
+- [How pro pickleball works](https://www.ppatour.com/about/how-it-works/): contracts, the ranking system, draws, seeds, points, and prize money.
+- [What is pickleball](https://www.ppatour.com/about/what-is-pickleball/): the basics, rules, and scoring.
+- [Where to watch](https://www.ppatour.com/watch/): broadcast windows and streaming (PickleballTV, Tennis Channel).
+- [News](https://www.ppatour.com/news/): recaps, features, and analysis.
+
+## About
+- Operated by the Carvana PPA Tour (Professional Pickleball Association). Title partner: Carvana.
+- Canonical domain: https://www.ppatour.com

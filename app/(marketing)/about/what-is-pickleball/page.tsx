@@ -46,6 +46,25 @@ const GROWTH = [
 export default function WhatIsPickleballPage() {
   return (
     <>
+      {/* FAQPage — built verbatim from the on-page Q&A (schema must reflect
+          visible content). Google restricts FAQ *rich results* to gov/health
+          sites now, so this is chiefly for AI answer engines (ChatGPT/Grok/
+          Perplexity), which parse FAQPage to pull clean Q&A. Featured snippets
+          come from the content structure itself, not this markup. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: BASICS.map((item) => ({
+              "@type": "Question",
+              name: item.q,
+              acceptedAnswer: { "@type": "Answer", text: item.a },
+            })),
+          }),
+        }}
+      />
       {/* Header */}
       <section className="bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">

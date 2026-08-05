@@ -397,27 +397,9 @@ export async function HomeContent({
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "SportsOrganization",
-            name: "Carvana PPA Tour",
-            alternateName: "Professional Pickleball Association",
-            sport: "Pickleball",
-            url: "https://ppatour-website.vercel.app",
-            logo: "https://ppatour-website.vercel.app/ppa/logos/ppa-horizontal-blue.svg",
-            sameAs: [
-              "https://www.instagram.com/ppatour",
-              "https://x.com/ppatour",
-              "https://www.youtube.com/channel/UCSP6HlrMmRqogym2aHBPHpw",
-              "https://www.tiktok.com/@officialppatour",
-              "https://www.facebook.com/OfficialPPATour",
-            ],
-          }),
-        }}
-      />
+      {/* SportsOrganization + WebSite JSON-LD now lives site-wide in app/layout.tsx
+          (off SITE_URL, not the old hardcoded vercel.app domain), so every page
+          carries the publisher identity — not just the homepage. */}
       {/* ── Hero (event lead) ───────────────────────────────── */}
       {/* Extracted to <HomeHero> so /hero-preview can render this WHOLE page
           with a different hero treatment. Adopting one is a change to the

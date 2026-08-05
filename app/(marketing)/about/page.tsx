@@ -32,7 +32,7 @@ export const metadata: Metadata = {
  */
 const STATS = [
   { n: String(seasonStopCount), label: "Tour Stops", note: "Each worth 1,000+ ranking points" },
-  { n: "$30M+", label: "Prize Money", note: "Across the season" },
+  { n: "$30M+", label: "Total Payout", note: "To pro athletes" },
   { n: "12", label: "Countries", note: "A growing international footprint" },
 ];
 

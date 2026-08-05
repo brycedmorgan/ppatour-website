@@ -79,10 +79,61 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    site: "@PPAtour",
+    creator: "@PPAtour",
     title: "Carvana PPA Tour",
     description:
       "The Pro Tour of Pickleball — live scores, the points race, and every tour stop.",
   },
+};
+
+/**
+ * Site-wide structured data — the publisher identity every page carries.
+ *
+ * - `SportsOrganization` was previously emitted ONLY on the homepage
+ *   (`HomeContent`) and, worse, hardcoded `ppatour-website.vercel.app` — so the
+ *   org entity pointed at the staging domain and no interior page carried it at
+ *   all. It lives here now, once, off `SITE_URL`.
+ * - `WebSite` + `SearchAction` claims the sitelinks search box: the `/search`
+ *   route already exists, so this is nearly free.
+ * - `@id` refs tie the two nodes together (and let per-page schema reference the
+ *   org later without redefining it).
+ */
+const SITE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SportsOrganization",
+      "@id": `${SITE_URL}/#organization`,
+      name: "Carvana PPA Tour",
+      alternateName: "Professional Pickleball Association",
+      sport: "Pickleball",
+      url: SITE_URL,
+      logo: `${SITE_URL}/ppa/logos/ppa-horizontal-blue.svg`,
+      sameAs: [
+        "https://www.instagram.com/ppatour",
+        "https://x.com/ppatour",
+        "https://www.youtube.com/channel/UCSP6HlrMmRqogym2aHBPHpw",
+        "https://www.tiktok.com/@officialppatour",
+        "https://www.facebook.com/OfficialPPATour",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: "Carvana PPA Tour",
+      publisher: { "@id": `${SITE_URL}/#organization` },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${SITE_URL}/search/?q={search_term_string}`,
+        },
+        "query-input": "required name=search_term_string",
+      },
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -101,6 +152,10 @@ export default function RootLayout({
         suppressHydrationWarning
         className="flex min-h-full flex-col bg-ppa-paper font-sans text-ppa-navy"
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(SITE_JSON_LD) }}
+        />
         <TopBar />
         <main className="flex-1">{children}</main>
         <SiteFooter />

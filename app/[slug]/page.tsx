@@ -43,15 +43,17 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return {
     title: card.title,
     description,
+    // No `images` here: the folder's file-based opengraph-image.tsx generates
+    // the branded article card, and Next appends it to whatever metadata sets —
+    // a raw `images` entry produced a second, competing og:image tag.
     openGraph: {
       title,
       description,
-      images: card.image ? [card.image] : undefined,
       type: "article",
       publishedTime: card.publishedAt,
       authors: [card.author],
     },
-    twitter: { card: "summary_large_image", images: card.image ? [card.image] : undefined },
+    twitter: { card: "summary_large_image" },
   };
 }
 

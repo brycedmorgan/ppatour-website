@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { SITE_URL } from "@/lib/site";
+import { buildEventJsonLd } from "@/lib/event-schema";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -329,36 +329,15 @@ export function NationalsLive({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "SportsEvent",
-            name: t.name,
-            sport: "Pickleball",
-            startDate: t.startDate,
-            endDate: t.endDate,
-            eventStatus: "https://schema.org/EventScheduled",
-            eventAttendanceMode:
-              "https://schema.org/MixedEventAttendanceMode",
-            location: {
-              "@type": "Place",
-              name: t.venue,
-              address: t.state ? `${t.city}, ${t.state}` : t.city,
-            },
-            image: `${SITE_URL}${t.image}`,
-            url: `${SITE_URL}/events/${t.slug}-live`,
-            organizer: {
-              "@type": "Organization",
-              name: "Carvana PPA Tour",
-              url: SITE_URL,
-            },
-            offers: {
-              "@type": "Offer",
-              url: t.ticketsUrl,
-              price: t.ticketPriceFrom,
-              priceCurrency: "USD",
-              availability: "https://schema.org/InStock",
-            },
-          }),
+          // Same shared builder as the real event page — no more silent drift
+          // between the two, and `offers` is now guarded on the honest on-sale
+          // signal instead of being published unconditionally.
+          __html: JSON.stringify(
+            buildEventJsonLd(t, {
+              onSale: !!t.ticketsOnSale,
+              description: `${eventTierLabel(t)} · ${formatDateRange(t.startDate, t.endDate, true)} · ${t.state ? `${t.city}, ${t.state}` : t.city} · ${t.prizeMoney} total payout. Live scores, schedule, players, and how to watch.`,
+            }),
+          ),
         }}
       />
       {/* Hero */}
@@ -441,7 +420,7 @@ export function NationalsLive({
                 ? "🏆 Champions crowned"
                 : isLive
                   ? "▶ Live on PickleballTV"
-                  : `${t.prizeMoney} On the Line`}
+                  : `${t.prizeMoney} Total Payout`}
             </span>
           </div>
           <div className="mt-5 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap">
@@ -628,21 +607,20 @@ export function NationalsLive({
 
       {/* Overview — quick facts */}
       <section id="overview" className="scroll-mt-[120px] bg-ppa-navy-deep text-white">
-        <div className="mx-auto grid w-full max-w-6xl grid-cols-2 px-4 sm:grid-cols-4">
+        <div className="mx-auto grid w-full max-w-6xl grid-cols-1 divide-y divide-white/10 px-4 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
           {[
             { k: "Dates", v: formatDateRange(t.startDate, t.endDate, true) },
             { k: "Venue", v: t.venue },
-            { k: "Prize Money & Fees", v: t.prizeMoney, accent: true },
             { k: eventTierLabel(t), v: `${tierPoints(t).toLocaleString()} Pts` },
-          ].map((f, i) => (
+          ].map((f) => (
             <div
               key={f.k}
-              className={`px-4 py-5 ${i % 2 === 1 ? "border-l border-white/10" : ""} ${i >= 2 ? "border-t border-white/10 sm:border-t-0" : ""} ${i === 2 ? "sm:border-l" : ""}`}
+              className="px-4 py-5 sm:first:pl-0 sm:last:pr-0"
             >
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
                 {f.k}
               </p>
-              <p className={`mt-1 font-display text-base uppercase ${f.accent ? "text-ppa-yellow" : "text-white"}`}>
+              <p className="mt-1 font-display text-base uppercase text-white">
                 {f.v}
               </p>
             </div>
@@ -744,7 +722,7 @@ export function NationalsLive({
             in every division — enough to reshuffle the season-long points
             race in one weekend. The tour puts{" "}
             <span className="font-bold text-ppa-navy">{t.prizeMoney}</span>{" "}
-            in prize purse behind this event, with every top seed chasing
+            in total payouts behind this event, with every top seed chasing
             the title.
           </p>
 
@@ -756,7 +734,7 @@ export function NationalsLive({
                 note: "Per division title — toward the season race",
               },
               {
-                k: "Prize Money & Fees",
+                k: "Total Payout",
                 v: t.prizeMoney,
                 note: "Across five pro divisions, incl. appearance fees",
               },

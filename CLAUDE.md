@@ -42,6 +42,96 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-05 (pt. 21) — SEO deep pass: event PostalAddress, site-wide schema, OG dedupe, llms.txt
+
+- Bryce: "serious SEO pass — local events on Google, featured snippets, ChatGPT, Grok. Check OG cards,
+  schema, speed." Audited via 3 parallel agents (structured data / OG / crawlability), then shipped.
+- **⚠ CRAWLABILITY IS ALREADY GREEN — confirmed live `curl https://www.ppatour.com/robots.txt` →
+  `Allow: /` + sitemap.** All AI crawlers (GPTBot, OAI-SearchBot, ChatGPT-User, PerplexityBot, Google-
+  Extended…) permitted via the single `*` rule; content is SSR/SSG so JS-less fetchers read it. Grok has
+  no distinct UA (pulls X + general web) — nothing to configure. **Nothing was blocking anything.**
+- **Biggest lever — event `SportsEvent` schema was Google-weak and is now fixed** (new shared
+  `lib/event-schema.ts`, called by BOTH the event page AND `NationalsLive` — kills the drift the repo
+  keeps warning about):
+  - `location.address` was the bare string `"Cary, NC"` → now a real **`PostalAddress`**. New
+    `lib/venue-locations.ts` holds **web-verified** street+zip for Cary/Vegas/VB/Northbrook (+ Mesa
+    locality/postal, street left off — two published addresses, wouldn't guess). Uncurated venues fall
+    back to city/state/country off the record — **valid PostalAddress, zero fabrication**, never a
+    street it doesn't know. This is THE local-events-carousel requirement.
+  - Added `description` + `image` as an array; **`offers` now guarded on `onSale` in both files** (the
+    `-live` twin was publishing an unconditional InStock Offer — the exact drift the log flagged). No
+    `validFrom` invented.
+  - ⚠ dates are still **date-only** (`2026-08-31`, no time/offset) — `dateOnly()` truncates at source.
+    Google accepts date-only; adding first-serve time + tz offset is the one remaining event-schema
+    upgrade, deferred (needs a real per-event first-serve time, not an invented one).
+- **`SportsOrganization` was homepage-only AND hardcoded `ppatour-website.vercel.app`** (pointed the org
+  entity at staging). Moved site-wide into `app/layout.tsx` off `SITE_URL`, added a **`WebSite` +
+  `SearchAction`** (sitelinks box; `/search` already exists), removed the stale block from `HomeContent`.
+- **OG cards had a real bug: competing `og:image` tags.** Events/news/blog set BOTH a file-based
+  `opengraph-image.tsx` (the designed 1200×630 card) AND a raw off-ratio photo via `openGraph.images`
+  — Next emits both, raw photo undermined the card. Removed the raw `images` from all three →
+  **verified single `og:image` per page.** Also: `twitter.site`/`creator` = `@PPAtour` site-wide, and
+  fixed the event card's brand-icon (`height` only → explicit `width`+`objectFit`, Satori "no width"
+  risk).
+- **BreadcrumbList** (new `lib/breadcrumbs.ts`) on event + athlete pages; **FAQPage** on
+  `/about/what-is-pickleball` (verbatim from the on-page Q&A — mainly for AI engines, since Google
+  restricts FAQ rich results to gov/health); **Person** enriched (gender, absolute image, org `@id` ref).
+- **`public/llms.txt`** added — points ChatGPT/Grok/Perplexity at schedule, athletes, rankings
+  (→ /leaderboards for deep ranks), how-it-works. **robots.ts** re-adds `Disallow` for /live, the -live
+  demo, /brackets, /hero-preview (log claimed it shipped; it wasn't in the tree). **sitemap** gains
+  /game + /watch/tv.
+- **Verified on a real build (green) + dev render:** home carries Org+WebSite; event page carries
+  SportsEvent w/ full PostalAddress (2727 Louis Stephens Dr, 27519, US) + Offer + BreadcrumbList, single
+  og:image; Malibu (uncurated) falls back to Malibu/CA/US; athlete has Person+gender+breadcrumb;
+  what-is-pickleball has FAQPage×4; llms.txt 200. tsc + eslint clean.
+- **⚠ FOUND, NOT FIXED — needs Bryce/security call, NOT SEO:** the `proxy.ts` HTTP Basic-auth gate the
+  log says protects /live + the `-live` demo **does not exist in the tree**, so both are **publicly
+  reachable** (noindex only). The `-live` route shows **Atlanta's** scores under the Nationals name.
+  Robots now disallows them, but that's crawlers, not humans. With Nationals imminent this wants a real
+  decision (restore the Basic-auth gate + set `PREVIEW_PASSWORD`, or accept they're public).
+- **Speed:** not re-measured this pass — prior work (pt.15) has it: desktop ~99, mobile LCP ~4.2s, and
+  the one measured unshipped lever is deferring the 4 below-fold callout-rail images (−1s mobile LCP).
+  Left for a deliberate, measured change, not bundled into an SEO push.
+- **Deferred / flagged (not blockers):** tailored athlete OG card (currently the raw square headshot —
+  no competing-tag bug, just not a designed card); unique meta descriptions on ~7 title-only pages
+  (tour/[slug], about/[slug], privacy, terms, player-handbook, integrity, intl-ambassadors); first-serve
+  time+tz on event dates.
+- **⚠ NOT committed/pushed** — sits on top of pt.19's uncommitted "Total Payout" changes. Awaiting
+  Bryce's go (a push deploys to prod, then he resubmits GSC himself).
+
+### 2026-08-05 (pt. 20) — Connor's site walkthrough: "prize money/purse" → "Total Payout" everywhere
+
+- Connor walked the new site with Bryce (transcript + two screenshots). His notes and what shipped:
+- **`/about` stat trio** (`app/(marketing)/about/page.tsx`): `$30M+ · "Prize Money" · "Across the
+  season"` → **`"Total Payout" · "To pro athletes"`**. ⚠ His reason: **"across the season" implies
+  it's the PPA season, but $30M+ INCLUDES MLP** — so the note had to go vague, not tie the number to
+  the PPA calendar. Same reason the label is "Total Payout", never prize money.
+- **`/about/how-it-works`**: deleted the **"See the full prize grid for an event →"** link — Connor
+  clicked it, it deep-linked to a random event page's `#stakes` ("doesn't make any sense... get rid
+  of that whole thing"). Removed the `nextStop`/`prizeGridHref` consts and the now-unused
+  `eventHref`/`getMainTourEvents` import with it. The $30M/Gold-grid section itself he approved — left
+  as-is.
+- **Event page purse shown TWICE** — hero ("$X On the Line") **and** the overview quick-facts bar
+  ("Prize Purse $X"). Connor: "why have it twice?" Fixed in BOTH `app/events/[year]/[slug]/page.tsx`
+  **and** `components/events/NationalsLive.tsx` (they drift silently — standing rule):
+  - **Hero** keeps the big yellow number (the "calculated"-looking exact figure he liked — "keep the
+    exact number, reverse-math into it"), relabeled `$1,648,641 **Total Payout**` (was "On the Line").
+  - **Overview bar dropped the purse cell** → now Dates / Venue / Points (3 cells). ⚠ Grid went
+    `sm:grid-cols-4` (index-math borders) → `grid-cols-1 sm:grid-cols-3` with `divide-*` borders, so
+    it's count-agnostic. Removed the `accent` field → dropped the `f.accent` ternary (was a tsc error
+    otherwise).
+  - **"What's at Stake" stat + prose + meta description** also relabeled purse→Total Payout for
+    consistency ("prize purse" reads as the term he's moving off).
+- **Verified rendered** at 1440 + 375: hero reads "TOTAL PAYOUT" once, overview bar 3 clean cells,
+  **0 "Prize Purse"/"On the Line"/"Prize Money" left on the event page**, no horizontal overflow. tsc
+  clean; eslint clean on the changed files (the lone `NationalsLive:192` set-state-in-effect is the
+  documented pre-existing baseline).
+- **⚠ NOT committed/pushed** — a push auto-deploys and Connor was mid-walkthrough (no-deploy-during-
+  demos rule). Awaiting Bryce's go.
+- **Open from the same transcript (data, not code): "who's defending" / defending points** on event
+  pages — Connor loves it, it's not wired yet. Jason's team pushed an API update 8/5 that should feed
+  it; that's the next build once the feed lands.
+
 ### 2026-08-05 (pt. 19) — Cary's real parking lands: free lot is OFF-site, and the old line said on-site
 
 - Wesley pasted the event team's submitted copy. **It contradicts the line the site was publishing**

@@ -100,8 +100,16 @@ export default async function Image({
                 borderRadius: 6,
               }}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={icon} alt="" style={{ height: 84 }} />
+              {/* Explicit width + objectFit: Satori can render an img with no
+                  width as nothing (see app/opengraph-image.tsx). A square box
+                  with contain fits any brand mark without distorting it. */}
+              <img
+                src={icon}
+                alt=""
+                width={84}
+                height={84}
+                style={{ height: 84, width: 84, objectFit: "contain" }}
+              />
             </div>
           )}
         </div>

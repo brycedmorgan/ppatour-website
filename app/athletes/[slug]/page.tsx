@@ -24,6 +24,7 @@ import { getDivisionRanks } from "@/lib/division-rankings";
 import { getAthleteVideoData } from "@/lib/athlete-videos";
 import { AthleteVideos } from "@/components/athletes/AthleteVideos";
 import { resolveGear } from "@/lib/athlete-gear";
+import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -271,6 +272,8 @@ export default async function AthletePage({ params }: Params) {
       : []),
   ];
 
+  const gender = genderFromDivisions(a.divisions ?? []);
+
   return (
     <>
       <script
@@ -282,17 +285,33 @@ export default async function AthletePage({ params }: Params) {
             name: a.name,
             jobTitle: "Professional Pickleball Player",
             nationality: a.country,
-            image: a.headshot,
+            ...(gender ? { gender } : {}),
+            // Absolute URL — Google prefers a fully-qualified image in structured
+            // data; a curated headshot is a /public path, a live one is already
+            // absolute.
+            image: a.headshot.startsWith("/")
+              ? `${SITE_URL}${a.headshot}`
+              : a.headshot,
             url: `${SITE_URL}/athletes/${a.slug}`,
             // Reconciled, not raw — this is structured data Google reads, so it
             // must not publish a title count the page itself contradicts.
             description: bioParagraphs.join(" "),
-            memberOf: {
-              "@type": "Organization",
-              name: "Carvana PPA Tour",
-              url: SITE_URL,
-            },
+            // Reference the site-wide org node (app/layout.tsx) by @id instead of
+            // redefining it, so the two never disagree.
+            memberOf: { "@id": `${SITE_URL}/#organization` },
           }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbJsonLd([
+              { name: "Home", path: "/" },
+              { name: "Athletes", path: "/athletes/" },
+              { name: a.name, path: `/athletes/${a.slug}/` },
+            ]),
+          ),
         }}
       />
       {/* Hero */}
