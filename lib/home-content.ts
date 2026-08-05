@@ -8,7 +8,6 @@
  * homepage newsroom grid now renders real posts from `lib/news.ts` instead.
  */
 
-import { publishedArticles } from "@/lib/news-articles";
 
 export type RaceEntry = {
   rank: number;
@@ -930,20 +929,14 @@ export const footerPartners: Partner[] = logoPartnersInTierOrder.filter(
  * `lib/ticker-api.ts` / `lib/scores-api.ts`.
  */
 
-export type NewsItem = {
-  category: string;
-  title: string;
-  date: string;
-  href: string;
-};
-
-/** PPA Tour's own newsroom — APPROVED articles only (drafts never surface). */
-export const news: NewsItem[] = publishedArticles.map((a) => ({
-  category: a.category,
-  title: a.title,
-  date: a.date,
-  href: `/${a.slug}`,
-}));
+/**
+ * ⚠ `news` / `NewsItem` deleted 8/5, same reasoning as `matches` above. It
+ * projected the native demo articles into homepage cards and had no importers
+ * left — the newsroom grid reads `allNews()` in `lib/news.ts`, which carries
+ * the 811 human-written WordPress posts. Left in place it would have been an
+ * empty array sitting under a "PPA Tour's own newsroom" comment, i.e. an
+ * invitation to refill it by hand. Deleted so it cannot be imported back.
+ */
 
 /**
  * Coverage from Pickleball.com is fetched live in lib/pb-news.ts and linked

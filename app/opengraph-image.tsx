@@ -75,7 +75,9 @@ export default async function OpengraphImage() {
         >
           {logo && (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={logo} alt="" style={{ height: 42, width: "auto" }} />
+            // Satori needs explicit numeric dimensions — "auto" renders nothing.
+            // Logo is 700x74 (ratio 9.46), so 400x42 keeps it exact.
+            <img src={logo} alt="" width={400} height={42} />
           )}
         </div>
 

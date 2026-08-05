@@ -198,6 +198,35 @@ const LEGACY_REDIRECTS = [
    */
   { source: "/ppa-blog/pickleball-kitchen-rules-what-you-should-know", destination: "/blog" },
   { source: "/ppa-blog/is-pickleball-an-olympic-sport", destination: "/blog" },
+
+  /**
+   * The 12 native demo articles, removed 8/5 (Bryce) — see the header of
+   * `lib/news-articles.ts`. They were AI-written editorial about real, named
+   * pros, and they were live and in the sitemap on an indexable site from 8/3,
+   * so their URLs may be crawled. Sent to the newsroom index rather than left
+   * to 404: the archive they belonged to still exists and is full of real
+   * posts.
+   *
+   * ⚠ Verified against all 848 migrated slugs before adding — redirects are
+   * matched BEFORE filesystem routes, so a collision here would take a real
+   * WordPress article off the site. Zero collisions. Re-run that check if any
+   * source below is ever reworded.
+   *
+   * The other 3 articles from that file needed no rule: they were `draft` and
+   * never rendered a URL at all.
+   */
+  { source: "/vegas-final-five-stats", destination: "/news/" },
+  { source: "/atlanta-draw-decoded", destination: "/news/" },
+  { source: "/rookie-class-rankings", destination: "/news/" },
+  { source: "/race-report-spring-swing", destination: "/news/" },
+  { source: "/record-25-event-season", destination: "/news/" },
+  { source: "/atlanta-court-surface", destination: "/news/" },
+  { source: "/two-game-comeback-strategy", destination: "/news/" },
+  { source: "/junior-ppa-pipeline", destination: "/news/" },
+  { source: "/top-10-drop-shots-vegas", destination: "/news/" },
+  { source: "/2026-rule-changes", destination: "/news/" },
+  { source: "/ranking-points-explained", destination: "/news/" },
+  { source: "/day-in-the-life-on-tour", destination: "/news/" },
 ];
 
 const nextConfig: NextConfig = {
