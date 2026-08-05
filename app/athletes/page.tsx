@@ -3,6 +3,7 @@ import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { AthleteRoster, type RosterAthlete } from "@/components/athletes/AthleteRoster";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
+import { resolveAthleteSlugs } from "@/lib/athlete-slugs";
 import { getAthlete } from "@/lib/athletes";
 import {
   CURATED_TO_CANONICAL,
@@ -38,15 +39,27 @@ export default async function AthletesPage() {
   const wprIndex = await getWprIndex();
   // Standings board: top 10 of each gender's World Pickleball Ranking.
   const standings = await getRankings();
+  /**
+   * Any published slug the WPR board says is a duplicate of another profile.
+   * This grid is built from the scrape, so a WordPress `-2` slug used to win
+   * here outright: it rendered the only card for that athlete, missed the
+   * `wprIndex` lookup (rank 0, no headshot — the index is keyed by the API
+   * slug), and pointed at the thinner of the two pages. Empty when the board is
+   * unavailable — see lib/athlete-slugs.ts.
+   */
+  const { toCanonical } = await resolveAthleteSlugs();
 
   // Full roster: every published athlete, enriched with live WPR data. Curated
   // headshots win (local studio crops); otherwise the API cutout; else initials.
-  const roster: RosterAthlete[] = publishedAthletes.map((p) => {
-    const wpr = wprIndex[p.slug];
-    const curated = getAthlete(CURATED_TO_CANONICAL[p.slug] ?? p.slug) ?? getAthlete(p.slug);
+  const cards: RosterAthlete[] = publishedAthletes.map((p) => {
+    // Live data is keyed by the canonical slug, so resolve BEFORE looking it up.
+    const canonical = toCanonical[p.slug] ?? p.slug;
+    const wpr = wprIndex[canonical];
+    const curated =
+      getAthlete(CURATED_TO_CANONICAL[canonical] ?? canonical) ?? getAthlete(canonical);
     return {
       // Prefer a curated shorthand page when one exists (richer, local headshot).
-      slug: curatedSlugFor(p.slug) ?? p.slug,
+      slug: curatedSlugFor(canonical) ?? canonical,
       name: p.name,
       headshot: curated?.headshot ?? wpr?.image ?? "",
       country: p.country || wpr?.country || "",
@@ -57,6 +70,24 @@ export default async function AthletesPage() {
       divisions: p.divisions,
     };
   });
+
+  /**
+   * One card per profile. Two scraped records can resolve to the same athlete
+   * (the four WordPress duplicates did), and the winner is the card carrying
+   * live rank — i.e. the one the board actually knows — so the primary profile
+   * is what shows, never the duplicate. Order is otherwise preserved.
+   */
+  const roster: RosterAthlete[] = [];
+  const seen = new Map<string, number>();
+  for (const card of cards) {
+    const at = seen.get(card.slug);
+    if (at === undefined) {
+      seen.set(card.slug, roster.length);
+      roster.push(card);
+    } else if (card.rank > 0 && roster[at].rank === 0) {
+      roster[at] = card;
+    }
+  }
 
   return (
     <>

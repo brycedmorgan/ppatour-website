@@ -149,6 +149,31 @@ const LEGACY_REDIRECTS = [
    */
   { source: "/ppa-pickleball-tour-video-game", destination: "/game" },
 
+  /**
+   * Duplicate athlete profiles (2026-08-05). WordPress mints a `-2` slug for a
+   * second post under an existing name, and four of those came through the
+   * profile scrape as real pages on this site — each one alongside the canonical
+   * page and each one WINNING on /athletes, since the roster grid is built from
+   * the scrape. Fixed in `lib/data/published-athletes.json`; these keep the URLs
+   * alive, because they are live 200s on ppatour.com today AND have been served
+   * here, so both indexes point at them.
+   *
+   * ⚠ `luana-stanciu-1` is deliberately absent. The suffix is not the test:
+   * that IS the Partner API's canonical slug for her (world No. 91, and there is
+   * no `luana-stanciu` on the board), so redirecting it would break the page.
+   * Same for `/athlete/ben-johns-3` — a different, real player. See
+   * lib/athlete-slugs.ts.
+   */
+  // Destinations carry the trailing slash for the same reason the vacations
+  // rules above do: `trailingSlash: true` would otherwise stack a second 308 on
+  // top of each 301.
+  { source: "/athletes/elsie-hendershot-2", destination: "/athletes/elsie-hendershot/" },
+  { source: "/athletes/danna-funaro-2", destination: "/athletes/danna-funaro/" },
+  { source: "/athletes/ella-cosma-2", destination: "/athletes/ella-cosma/" },
+  { source: "/athletes/edward-perez-2", destination: "/athletes/edward-perez/" },
+  // The legacy `/athlete/{slug}` form chains through the `/athlete/:slug` rule
+  // below into the four above.
+
   // patterns
   // Articles briefly lived at /news/{slug}; fold those into the root URL so the
   // two paths don't compete for the same content.

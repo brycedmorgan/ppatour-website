@@ -1140,7 +1140,7 @@
   },
   {
     "name": "Danna Funaro",
-    "slug": "danna-funaro-2",
+    "slug": "danna-funaro",
     "url": "https://ppatour.com/athlete/danna-funaro-2/",
     "country": "USA",
     "divisions": [
@@ -1302,7 +1302,11 @@
     "slug": "edward-perez",
     "url": "https://ppatour.com/athlete/edward-perez/",
     "country": "USA",
-    "divisions": [],
+    "divisions": [
+      "Men's Doubles",
+      "Men's Mixed Doubles",
+      "Men's Singles"
+    ],
     "quick_info": {
       "resides": "Charlotte, NC",
       "dob": "1998-04-25",
@@ -1314,28 +1318,8 @@
     "bio": "Edward Perez: Professional Pickleball Player on the PPA Tour Edward Perez is a professional pickleball player competing on the PPA Tour in men's singles, men's doubles, and mixed doubles. He has established himself as a notable competitor in the rapidly growing sport of professional pickleball. Background & Career Edward Perez discovered pickleball in 2021, playing with his dad and friends at the local park. Starting from the ground up, he steadily improved his game, working his way into high-level competition. Once he caught the pickleball bug, he set a goal to become a professional player. After dedicating himself to the sport and competing in professional tournaments over the past few years, Edward is thrilled with how far he has come and eager for what’s ahead. Edward Perez brings a competitive edge to every match on the PPA Tour . He continues to develop his game and compete at the highest level of professional pickleball. Competes on the PPA Tour professional circuit Competitor in men’s singles, men’s doubles, and mixed doubles Part of the growing roster of professional athletes in Major League Pickleball (MLP) and the PPA Tour"
   },
   {
-    "name": "Edward Perez",
-    "slug": "edward-perez-2",
-    "url": "https://ppatour.com/athlete/edward-perez-2/",
-    "country": "USA",
-    "divisions": [
-      "Men's Doubles",
-      "Men's Mixed Doubles",
-      "Men's Singles"
-    ],
-    "quick_info": {
-      "resides": null,
-      "dob": null,
-      "height": null,
-      "plays": null,
-      "turned_pro": null,
-      "paddle": null
-    },
-    "bio": "Edward Perez discovered pickleball in 2021, playing with his dad and friends at the local park. Starting from the ground up, he steadily improved his game, working his way into high-level competition. Once he caught the pickleball bug, he set a goal to become a professional player. After dedicating himself to the sport and competing in professional tournaments over the past few years, Edward is thrilled with how far he has come and eager for what’s ahead."
-  },
-  {
     "name": "Ella Cosma",
-    "slug": "ella-cosma-2",
+    "slug": "ella-cosma",
     "url": "https://ppatour.com/athlete/ella-cosma-2/",
     "country": "USA",
     "divisions": [
@@ -1375,7 +1359,7 @@
   },
   {
     "name": "Elsie Hendershot",
-    "slug": "elsie-hendershot-2",
+    "slug": "elsie-hendershot",
     "url": "https://ppatour.com/athlete/elsie-hendershot-2/",
     "country": "USA",
     "divisions": [

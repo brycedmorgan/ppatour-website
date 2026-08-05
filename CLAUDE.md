@@ -35,6 +35,56 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-05 (pt. 8) — Duplicate athlete profiles: four of them, and the suffix is not the test
+- Wesley: two Elsie Hendershot pages (`/athletes/elsie-hendershot` and `…-2`), kill the duplicate,
+  audit the rest, and **"make sure the non-duplicated page is what shows if this happens again."**
+- **Cause: WordPress, via the profile scrape.** WP mints a `-2` slug for a second post under an
+  existing name, and `lib/data/published-athletes.json` carries the WP slug — but that field is
+  supposed to BE the Partner API's `player_slug`, because that join is what puts rank, points and
+  headshot on a profile. **Four duplicates shipped**: `elsie-hendershot-2`, `danna-funaro-2`,
+  `ella-cosma-2`, `edward-perez-2`.
+- **⚠ AND THE DUPLICATE WON, WHICH IS WHAT WESLEY SAW.** /athletes builds its grid from the scrape,
+  so the `-2` record rendered the *only* card for that athlete, **missed every live lookup** (all
+  keyed by the API slug → rank 0, no headshot) and linked to the thinner of the two pages. The
+  canonical page existed in parallel (minted from the API roster) with the live rank but **no bio**.
+  Two half-pages per athlete, and the worse one was the one you could reach.
+- **⚠ THE NUMERIC SUFFIX IS NOT THE TEST — a "strip the -N" rule breaks real people.** Verified
+  against both full boards (2,075 ranked pros):
+  - **`luana-stanciu-1` IS the API's canonical slug** for world No. 91. There is no
+    `luana-stanciu` on the board. Stripping her suffix would have broken the page. **Left alone.**
+  - **`ben-johns-3` (No. 682) and `patrick-smith-10` (No. 1192) are real, different players**, both
+    on the board in their own right (the two Ben Johnses were already noted 8/3). Collapsing by
+    name would delete a person.
+  - So the arbiter is **the board, never the string**: a slug is a duplicate only when the board
+    doesn't list it AND lists **exactly one** player with that name. "Exactly one" is what protects
+    the Ben Johnses — a name the board carries twice is ambiguous, and ambiguity is left alone.
+- **Fixed in the data** (179 records now, 0 duplicate slugs, 0 duplicate names). Ranks confirmed
+  live on each canonical page: Elsie **83**, Danna **142**, Ella **117**, Edward Perez **90**, and
+  Luana still **91**. The two Edward Perez records were one person — **the `-2` bio was a verbatim
+  subset of the primary's** and `divisions` was the only field it added, so it was folded in.
+  `url` still records the real source page (provenance for the imported bio; nothing links it).
+- **Runtime net, because the next scrape will do this again**: new `lib/athlete-slugs.ts` resolves
+  published slugs against the WPR index. /athletes resolves BEFORE the live lookup, dedupes to one
+  card per profile and **keeps the card carrying a live rank** — i.e. the one the board knows —
+  and the profile route mints no page for a duplicate, `permanentRedirect`s it to the canonical,
+  and reads the duplicate record's bio onto the canonical page so the survivor is the COMPLETE
+  page rather than one of two halves. **Verified by putting duplicates back in**: `ella-cosma-2`
+  and a second Edward Perez collapsed to one card each; **`danna-funaro-7`, which no redirect rule
+  has ever heard of, 308'd to `danna-funaro` off the runtime net alone.**
+- **⚠ It degrades to a no-op on purpose.** No token, a 429, or an athlete outside the top 250 of
+  their board → empty map → today's behaviour. A duplicate surviving is a worse page; a wrong
+  rewrite is a **wrong person**, so the fallback has to be "change nothing". `npm run
+  athletes:audit` (new, `scripts/audit-athlete-slugs.mjs`) is the check that sees what render time
+  can't — dupe slugs/names in the file, suffix siblings, and every slug against the live boards.
+  It fails the run on the first three classes and lists the genuine same-name pairs as FYI.
+- Four 301s (308s, as every rule in that table is) keep the retired URLs alive — they were live
+  200s on ppatour.com **and** have been served here, so both indexes point at them.
+- **⚠ FOUND, NOT FIXED — the boards themselves list ~20 players TWICE**, same slug, two ranks:
+  `euan-rajanthiran` #500 **and** #501, `cobi-gibson` #1250/#1297, `alex-chanthaphaeng` #745/#751
+  and more. That is upstream feed data, and it means **/rankings and /leaderboards each render a
+  duplicate row** for those players. Deduping the board changes ranks and counts, which is
+  Connor's call, not a cleanup. Listed by `npm run athletes:audit` section 4.
+
 ### 2026-08-05 (pt. 7) — /watch: the Live Now band is hidden unless something is live
 - Wesley: "on /watch, we need to have the live now section hidden unless we are actually live."
   It was unconditional, so out of competition the page published a **"LIVE NOW · Scores &

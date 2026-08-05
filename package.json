@@ -10,7 +10,8 @@
     "prebuild": "node scripts/sync-wp-media.mjs --verify",
     "verify:media": "node scripts/sync-wp-media.mjs --verify",
     "tixr:sync": "node scripts/sync-tixr-prices.mjs",
-    "tixr:audit": "node scripts/audit-tixr-mapping.mjs"
+    "tixr:audit": "node scripts/audit-tixr-mapping.mjs",
+    "athletes:audit": "node scripts/audit-athlete-slugs.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

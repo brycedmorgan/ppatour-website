@@ -12,6 +12,23 @@
  * Facts", "Background & Career", "Playing Style", "Career Highlights",
  * "Related Articles") mashed inline and, in some cases, duplicated text. We
  * clean them at module load into de-duplicated narrative paragraphs.
+ *
+ * ⚠ `slug` MUST be the API's `player_slug`, and the scrape does not guarantee
+ * it. WordPress hands a second post for an existing name a `-2` slug, and four
+ * of those reached the JSON and shipped as duplicate pages — /athletes read the
+ * scrape, so `elsie-hendershot-2` rendered the only Elsie Hendershot card,
+ * missed every live lookup (they key on the API slug, so rank 0 and no
+ * headshot), and pointed at the thinner of her two pages. Corrected here in the
+ * data, each against the live board: `elsie-hendershot`, `danna-funaro`,
+ * `ella-cosma`, and `edward-perez` (whose duplicate was folded into the primary
+ * record — its bio was a verbatim subset, and `divisions` was the one field it
+ * added).
+ *
+ * ⚠ `luana-stanciu-1` KEEPS ITS SUFFIX. That is the API's own canonical slug
+ * for her — there is no `luana-stanciu` on either board — so "strip the -N" is
+ * exactly the wrong rule. `lib/athlete-slugs.ts` explains the test that works
+ * (the board, not the string) and enforces it at render time;
+ * `scripts/audit-athlete-slugs.mjs` checks the file itself.
  */
 
 import raw from "@/lib/data/published-athletes.json";

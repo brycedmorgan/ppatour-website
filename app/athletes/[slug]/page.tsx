@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/site";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { permanentRedirect, redirect } from "next/navigation";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
+import { resolveAthleteSlugs } from "@/lib/athlete-slugs";
 import { athletes, getAthlete } from "@/lib/athletes";
 import {
   ageFromDob,
@@ -28,10 +29,18 @@ type Params = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
   const roster = await getWprRoster().catch(() => []);
+  // A scraped slug the board says duplicates another profile mints no page of
+  // its own — it redirects to the canonical one instead (see the page body).
+  const { toCanonical } = await resolveAthleteSlugs().catch(() => ({
+    toCanonical: {} as Record<string, string>,
+  }));
   const slugs = new Set(athletes.map((a) => a.slug));
   // Every published profile gets a page (keyed by its canonical slug, unless we
   // have a curated shorthand that collapses to the same person).
-  for (const p of publishedAthletes) slugs.add(curatedSlugFor(p.slug) ?? p.slug);
+  for (const p of publishedAthletes) {
+    const canonical = toCanonical[p.slug] ?? p.slug;
+    slugs.add(curatedSlugFor(canonical) ?? canonical);
+  }
   for (const p of roster) slugs.add(curatedSlugFor(p.slug) ?? p.slug);
   return [...slugs].map((slug) => ({ slug }));
 }
@@ -49,7 +58,14 @@ function genderFromDivisions(divisions: string[]): "male" | "female" | undefined
  */
 async function loadAthlete(slug: string) {
   const curated = getAthlete(slug);
-  const published = getPublishedAthlete(slug);
+  /**
+   * The scrape can key a profile under a duplicate slug the board doesn't use
+   * (WordPress `-2` posts). When it does, the canonical page still reads that
+   * record's bio and quick facts, so the surviving profile is the complete one
+   * — bio AND live rank — rather than one of two half-pages.
+   */
+  const { publishedKeyFor } = await resolveAthleteSlugs();
+  const published = getPublishedAthlete(slug) ?? getPublishedAthlete(publishedKeyFor[slug] ?? "");
   const api = await getWprPlayerBySlug(slug);
   if (!curated && !published && !api) return null;
 
@@ -154,6 +170,15 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 export default async function AthletePage({ params }: Params) {
   const { slug } = await params;
+  /**
+   * A duplicate profile URL never renders — it forwards to the canonical one,
+   * so one athlete is one page and inbound links to the duplicate keep working.
+   * The four known WordPress duplicates are 301'd in next.config (they were
+   * live URLs); this catches any the next scrape introduces.
+   */
+  const { toCanonical } = await resolveAthleteSlugs();
+  if (toCanonical[slug]) permanentRedirect(`/athletes/${toCanonical[slug]}`);
+
   const a = await loadAthlete(slug);
   /**
    * Unknown slug → the roster index, not a 404. `loadAthlete` only returns null
