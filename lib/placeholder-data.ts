@@ -298,6 +298,19 @@ type RawEvent = {
   venue?: string;
   type: "ppa" | "challenger" | "international";
   tier?: EventTier;
+  /**
+   * Exact ranking points, hand-set. Only needed on Challengers: the
+   * international stops state their level in the title ("PPA Canada 125
+   * Ottawa") so `pointsFromName` reads it, but a U.S. Challenger is just
+   * "Seattle PPA Challenger" — no number anywhere — so it used to fall
+   * through to the flat `challenger` tier default and publish 500.
+   *
+   * ⚠ Events team, 8/5: 250 is the CEILING for the Challenger series; the
+   * 500 the site was showing is a number the tour does not award. The four
+   * stops they confirmed carry it below. The rest still read the 500
+   * default — set this on each one as its real level is confirmed.
+   */
+  points?: number;
   country?: Tournament["country"];
   image?: string;
 };
@@ -480,8 +493,11 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
       eventCode: eventCode({ city: r.city, state: r.state, endDate: r.end }),
       tierKey: tier,
       // Sub-1,000 stops keep their real level (125 / 250 / 500) — the flat
-      // Challenger tier reads 500 for all of them otherwise.
-      points: tier === "challenger" ? (pointsFromName(r.name) ?? undefined) : undefined,
+      // Challenger tier reads 500 for all of them otherwise. A hand-set
+      // `points` wins over the name parse: U.S. Challengers state no number
+      // in their title, so the parse can never answer for them.
+      points:
+        tier === "challenger" ? (r.points ?? pointsFromName(r.name) ?? undefined) : undefined,
       prizeMoney: r.type === "international" ? "$100,000" : TIER_PRIZE[tier],
       presentedBy: PRESENTER_BY_SLUG[slug],
       // Main-tour cards lead with venue scenes; Challengers/international
@@ -523,10 +539,10 @@ const SCHEDULE: RawEvent[] = [
   // August 2026
   { name: "PPA Asia 500 Ho Chi Minh City Open", start: "2026-08-06", end: "2026-08-09", city: "Ho Chi Minh City", state: "Vietnam", type: "international", country: "Asia" },
   { name: "PPA Australia Gold Coast", start: "2026-08-13", end: "2026-08-16", city: "Gold Coast", state: "Australia", type: "international", country: "Australia" },
-  { name: "Seattle PPA Challenger", start: "2026-08-14", end: "2026-08-16", city: "Seattle", state: "WA", type: "challenger" },
+  { name: "Seattle PPA Challenger", start: "2026-08-14", end: "2026-08-16", city: "Seattle", state: "WA", type: "challenger", points: 250 },
   { name: "PPA Canada 250 Vancouver", start: "2026-08-19", end: "2026-08-23", city: "Vancouver", state: "Canada", type: "international", country: "Canada" },
   { name: "PPA Asia 500 China Open 2", start: "2026-08-20", end: "2026-08-23", city: "Shenzhen", state: "China", type: "international", country: "Asia" },
-  { name: "Atlanta PPA Challenger", start: "2026-08-28", end: "2026-08-30", city: "Peachtree City", state: "GA", type: "challenger" },
+  { name: "Atlanta PPA Challenger", start: "2026-08-28", end: "2026-08-30", city: "Peachtree City", state: "GA", type: "challenger", points: 125 },
   // ⚠ Name mirrors the ppa_tournaments feed, slug is pinned to the original.
   // Wesley, 8/3: names come from the API. The feed registers this as "Veolia PPA
   // National Championships", not "…Pickleball…". Slug pinned so the URL, brand,
@@ -537,7 +553,7 @@ const SCHEDULE: RawEvent[] = [
   { name: "PPA Asia 1000 Kuala Lumpur Cup", start: "2026-09-09", end: "2026-09-13", city: "Kuala Lumpur", state: "Malaysia", type: "international", country: "Asia" },
   { name: "PPA Canada 125 Vancouver", start: "2026-09-10", end: "2026-09-13", city: "Vancouver", state: "Canada", type: "international", country: "Canada" },
   { name: "Veolia Arizona Open", start: "2026-09-14", end: "2026-09-20", city: "Mesa", state: "AZ", venue: "Arizona Athletic Grounds", type: "ppa", tier: "open" },
-  { name: "Grand Rapids PPA Challenger", start: "2026-09-18", end: "2026-09-20", city: "Rockford", state: "MI", type: "challenger" },
+  { name: "Grand Rapids PPA Challenger", start: "2026-09-18", end: "2026-09-20", city: "Rockford", state: "MI", type: "challenger", points: 250 },
   // ⚠ PPA SPAIN PUBLISHES BARCELONA ONLY. Wesley, 8/5, on the PPA Europe
   // announcement: "we should probably remove the dates (aside from Barcelona) as
   // event dates and locations are subject to change." The 5/27 release listed
@@ -553,7 +569,7 @@ const SCHEDULE: RawEvent[] = [
   // back when the feed carries it or the event team confirms date + venue —
   // one line each, in month order.
   { name: "PPA Spain P250 Barcelona", start: "2026-09-23", end: "2026-09-27", city: "Barcelona", state: "Spain", type: "international", country: "Europe" },
-  { name: "Charlotte PPA Challenger", start: "2026-09-25", end: "2026-09-27", city: "Charlotte", state: "NC", type: "challenger" },
+  { name: "Charlotte PPA Challenger", start: "2026-09-25", end: "2026-09-27", city: "Charlotte", state: "NC", type: "challenger", points: 125 },
   { name: "Rate Las Vegas Open", start: "2026-09-28", end: "2026-10-04", city: "Las Vegas", state: "NV", venue: "Darling Tennis Center", type: "ppa", tier: "open" },
 
   // October 2026
@@ -698,6 +714,12 @@ const PAST_EVENTS: Tournament[] = ([
     registerUrl: REGISTER,
     status: "completed",
     tierKey: "challenger",
+    // ⚠ LOAD-BEARING FOR THE UPCOMING AUG 28 ATLANTA STOP, NOT JUST THIS ROW.
+    // The feed titles that event "Atlanta PPA Challenger", which kebabs to
+    // THIS record's slug — the SCHEDULE row took `-2026-08-28` as the dupe
+    // suffix — so `findCurated` hands the live event this record's points.
+    // Both are set to 125 (events team, 8/5); keep them in step.
+    points: 125,
     prizeMoney: "$25,000",
     image: "/ppa/action-mxd.jpg",
     season: "2025-2026",

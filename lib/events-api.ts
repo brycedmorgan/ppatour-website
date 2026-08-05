@@ -330,7 +330,16 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     tierKey: tier,
     // Sub-1,000 stops keep their real level (125 / 250 / 500) — the flat
     // Challenger tier reads 500 for all of them otherwise.
-    points: tier === "challenger" ? (pointsFromName(name) ?? undefined) : undefined,
+    //
+    // ⚠ THE CURATED VALUE HAS TO COME FIRST, AND /events IS WHY. The feed
+    // carries NO points field (verified against all 220 rows — the only
+    // adjacent key is `skill_levels`), and a U.S. Challenger states no
+    // number in its title, so `pointsFromName` can never answer for one.
+    // Without the curated overlay this line would keep publishing 500 on
+    // the feed-driven /events grid while the curated list said 250 — the
+    // same half-applied split as the 8/3 name pass.
+    points:
+      tier === "challenger" ? (curated?.points ?? pointsFromName(name) ?? undefined) : undefined,
     prizeMoney: curated?.prizeMoney ?? TIER_PRIZE[tier],
     // Curated-only: see PRESENTER_BY_SLUG. Never infer a presenter from the
     // title sponsor in the name — that fabricated 6 of 10 presenters (8/4).
