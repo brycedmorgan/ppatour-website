@@ -29,6 +29,19 @@ import type { NextConfig } from "next";
  * coverage check that does not compare CONTENT cannot see a wrong destination.**
  */
 const LEGACY_REDIRECTS = [
+  /**
+   * Consolidate the old standalone Pickleball Vacations app: everything on
+   * vacations.ppatour.com moves to www.ppatour.com, path + query preserved.
+   * FIRST so it wins on that host in one hop. Punta Cana/Turks guests hold
+   * `vacations.ppatour.com/success?session_id=cs_live_…` links; the query rides
+   * through, and the www-side `/success → /vacations/success/` rule below adds
+   * the prefix. Only fires for that exact host, so www/apex are unaffected.
+   */
+  {
+    source: "/:path*",
+    has: [{ type: "host" as const, value: "vacations.ppatour.com" }],
+    destination: "https://www.ppatour.com/:path*",
+  },
   // sections
   { source: "/schedule", destination: "/events" },
   { source: "/player-rankings", destination: "/rankings" },

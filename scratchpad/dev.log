@@ -1,0 +1,21 @@
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://localhost:3210
+- Network:       http://192.168.68.100:3210
+- Environments: .env.local
+✓ Ready in 192ms
+
+ GET /championship-sunday-standout-stats-from-the-toys-r-us-ppa-finals/ 200 in 1634ms (next.js: 1339ms, generate-params: 208ms, application-code: 296ms)
+ GET /partners-nominated-for-best-episodic-series-at-tribeca-x/ 200 in 42ms (next.js: 1950µs, generate-params: 907µs, application-code: 40ms)
+ GET /championship-sunday-standout-stats-from-the-toys-r-us-ppa-finals/ 200 in 55ms (next.js: 3ms, generate-params: 1550µs, application-code: 51ms)
+ GET /events/ 200 in 249ms (next.js: 142ms, application-code: 106ms)
+ GET /events/ 200 in 93ms (next.js: 1372µs, application-code: 92ms)
+[browser] Image with src "/ppa/event-melbourne.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+ GET /championship-sunday-standout-stats-from-the-veolia-atlanta-pickleball-championships-2/ 200 in 54ms (next.js: 2ms, generate-params: 1146µs, application-code: 51ms)
+ GET /partners-nominated-for-best-episodic-series-at-tribeca-x/ 200 in 49ms (next.js: 901µs, generate-params: 12µs, application-code: 48ms)
+ GET /blog/ 200 in 241ms (next.js: 175ms, application-code: 66ms)
+ GET /search/?q=washington 200 in 249ms (next.js: 169ms, application-code: 80ms)
+ GET /search/?q=seattle 200 in 33ms (next.js: 1105µs, application-code: 32ms)
+ GET /news/ 200 in 261ms (next.js: 159ms, application-code: 101ms)
+ GET /122-shot-rally-in-sacramento/ 200 in 41ms (next.js: 2ms, generate-params: 1137µs, application-code: 39ms)
+ GET /a-summer-to-remember-recapping-the-2026-joola-pops-summer-tour/ 200 in 46ms (next.js: 3ms, generate-params: 1298µs, application-code: 43ms)

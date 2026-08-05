@@ -1,0 +1,125 @@
+
+> ppatour-website@0.1.0 prebuild
+> node scripts/sync-wp-media.mjs --verify
+
+referenced assets : 1791
+dead upstream     : 3 (404 on WP itself, links unwrapped)
+rehosted          : 1788 of 1788 (100.0%)
+still on WP       : 0
+
+GATE: PASS — no post depends on the WordPress install.
+
+> ppatour-website@0.1.0 build
+> next build
+
+▲ Next.js 16.2.6 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 2.1s
+  Running TypeScript ...
+  Finished TypeScript in 4.1s ...
+  Collecting page data using 17 workers ...
+  Generating static pages using 17 workers (0/1117) ...
+  Generating static pages using 17 workers (279/1117) 
+  Generating static pages using 17 workers (558/1117) 
+  Generating static pages using 17 workers (837/1117) 
+✓ Generating static pages using 17 workers (1117/1117) in 2.1s
+  Finalizing page optimization ...
+
+Route (app)                                                          Revalidate  Expire
+┌ ○ /                                                                        1m      1y
+├ ○ /_not-found
+├ ● /[slug]
+│ ├ /a-summer-to-remember-recapping-the-2026-joola-pops-summer-tour
+│ ├ /pickleball-inc-and-pickleball-world-cup-unite
+│ ├ /partners-nominated-for-best-episodic-series-at-tribeca-x
+│ └ [+808 more paths]
+├ ƒ /-/opengraph-image
+├ ○ /about
+├ ƒ /about/[slug]
+├ ○ /about/ambassadors
+├ ○ /about/careers
+├ ○ /about/contact
+├ ○ /about/history                                                           1d      1y
+├ ○ /about/host-tournament
+├ ○ /about/how-it-works
+├ ○ /about/integrity
+├ ○ /about/international-ambassadors
+├ ○ /about/player-handbook
+├ ○ /about/privacy
+├ ○ /about/private-events
+├ ○ /about/pro-tour
+├ ○ /about/sponsors
+├ ○ /about/terms
+├ ○ /about/what-is-pickleball
+├ ƒ /api/athlete-videos
+├ ƒ /api/brackets
+├ ƒ /api/form-submit
+├ ƒ /api/form-upload
+├ ƒ /api/lead-capture
+├ ƒ /api/revalidate-athletes
+├ ƒ /api/revalidate-content
+├ ƒ /api/revalidate-events
+├ ƒ /api/scores
+├ ƒ /api/search
+├ ƒ /api/sponsor-inquiry
+├ ƒ /api/ticker
+├ ƒ /api/vacations/availability
+├ ƒ /api/vacations/checkout
+├ ƒ /api/vacations/stripe-webhook
+├ ƒ /api/volunteer-apply
+├ ○ /athletes                                                                5m      1y
+├ ● /athletes/[slug]
+│ ├ /athletes/ben-johns
+│ ├ /athletes/anna-leigh-waters
+│ ├ /athletes/federico-staksrud
+│ └ [+178 more paths]
+├ ○ /blog
+├ ƒ /brackets
+├ ○ /events                                                                  5m      1y
+├ ● /events/[year]/[slug]                                                    5m      1y
+│ ├ /events/2026/ppa-australia-gold-coast                                    5m      1y
+│ ├ /events/2026/veolia-pickleball-national-championships                    5m      1y
+│ ├ /events/2026/ppa-asia-1000-kuala-lumpur-cup                              5m      1y
+│ └ [+29 more paths]
+├ ƒ /events/-/-/opengraph-image
+├ ○ /events/veolia-pickleball-national-championships-live
+├ ○ /events/volunteer
+├ ○ /game
+├ ○ /hero-preview                                                            1m      1y
+├ ○ /icon.svg
+├ ƒ /leaderboards
+├ ○ /live                                                                    5m      1y
+├ ƒ /news
+├ ○ /opengraph-image
+├ ○ /opt-in
+├ ○ /play
+├ ● /ppa-blog/[slug]
+│ ├ /ppa-blog/anna-leigh-waters-on-pickleball-drilling-vs-rec-play
+│ ├ /ppa-blog/what-to-keep-in-your-pickleball-tournament-bag
+│ ├ /ppa-blog/how-often-does-calling-a-time-out-work
+│ └ [+34 more paths]
+├ ƒ /ppa-blog/-/opengraph-image
+├ ○ /rankings                                                                5m      1y
+├ ○ /robots.txt
+├ ƒ /search
+├ ○ /sitemap.xml
+├ ● /tour/[slug]
+│ ├ /tour/state-championships
+│ ├ /tour/camps
+│ └ /tour/hospitality
+├ ○ /tour/junior
+├ ○ /tour/senior                                                             1d      1y
+├ ○ /vacations                                                              30s      1y
+├ ƒ /vacations/register
+├ ƒ /vacations/success
+├ ○ /vacations/trips/punta-cana
+├ ○ /watch                                                                   1m      1y
+└ ○ /watch/tv
+
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+
