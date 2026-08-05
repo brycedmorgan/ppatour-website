@@ -1116,7 +1116,7 @@ export default async function EventPage({ params }: Params) {
                   alt={`${t.venue} — the grounds`}
                   fill
                   sizes="(min-width: 1024px) 55vw, 100vw"
-                  className="object-cover will-change-transform"
+                  className="object-cover will-change-transform transform-gpu"
                 />
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-ppa-navy/90 via-ppa-navy/25 to-transparent p-5 pt-16">
                   <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/65">
