@@ -412,12 +412,14 @@ export const partners: Partner[] = [
     category: "Paddle",
     note: "Performance gear built for the demands of the pro game.",
     tier: "platinum",
-    // Kept from the earlier import: the 8/3 drop shipped the identical 320x126
-    // file, so re-importing would have gained nothing. This is the one mark
-    // we hold below display resolution — worth asking for a bigger one.
-    logo: "/ppa/sponsors/six-zero.jpg",
-    logoWidth: 320,
-    logoHeight: 126,
+    // Rasterized from Six Zero's own vector wordmark (their site's
+    // six-zero-logo.svg), recoloured to near-black for the white card at 1000px
+    // wide. Replaces the old 320x126 JPEG, which was below display resolution
+    // AND a stacked lockup whose primary wordmark read small next to JOOLA's
+    // single line — Six Zero rendered visibly smaller in the Platinum grid.
+    logo: "/ppa/sponsors/six-zero.png",
+    logoWidth: 1000,
+    logoHeight: 260,
   },
   {
     /**
