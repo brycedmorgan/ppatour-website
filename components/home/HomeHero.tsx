@@ -126,26 +126,36 @@ export function HomeHero({
   const showVideo = (variant === "video" || toggle) && HERO_VIDEO !== null;
   const showStill = variant === "video" || variant === "zoom-parallax" || toggle;
 
+  /**
+   * Hero height, and it is NOT global (Wesley, 8/4: "I only want this change on
+   * the hero-preview page for now").
+   *
+   * The live homepage renders `photo` and keeps 50svh — the height Bryce
+   * trimmed it to on 7/28 to buy room for the audience callouts below. Only the
+   * treatments under review go taller, because a video and a big aerial both
+   * need more room than a texture-behind-the-text photo did.
+   *
+   * ⚠ Tied to the VARIANT, not to a preview flag, so the height travels with
+   * whichever treatment gets adopted — flipping `heroVariant` on the homepage
+   * can't leave the new hero stuck at the old cramped height. If 58 turns out
+   * to be wrong for the callouts, change it here, not per page.
+   *
+   * ⚠ Both class strings are written out in full because Tailwind scans source
+   * text — an interpolated `min-h-[${n}svh]` would produce no CSS at all.
+   *
+   * 58 and not more: event-page heroes are 62svh and the homepage should not
+   * out-shout the event it points at.
+   */
+  const heightClass = variant === "photo" ? "min-h-[50svh]" : "min-h-[58svh]";
+
   return (
     <>
       {/* ── Hero (event lead) ───────────────────────────────── */}
-      {/**
-        * Height: 58svh.
-        *
-        * ⚠ THIS REVERSES A DELIBERATE CHANGE, so don't "fix" it back without
-        * asking. Bryce trimmed the hero 58svh → 50svh on 7/28 to buy height for
-        * the taller audience callouts below it. Wesley asked for it back on 8/4
-        * while reviewing the new hero treatments — a video and a big aerial both
-        * want more room than a texture-behind-the-text photo did.
-        *
-        * 58 rather than more: event-page heroes are 62svh, and the homepage
-        * should not out-shout the event it is pointing at.
-        *
-        * Safe for the parallax — the drift and the cover constraint are both
-        * expressed as percentages of this element, so they scale with it and the
-        * px-per-px scroll rate is unchanged. Verified after the change, not
-        * assumed.
-        */}
+      {/* Height comes from `heightClass` above — 50svh live, 58svh for the
+          treatments under review. Safe for the parallax either way: the drift
+          and the cover constraint are both percentages of this element, so they
+          scale with it and the px-per-px scroll rate is unchanged. Measured, not
+          assumed — travel 90 → 104.4px, cover margin 9.0 → 10.4px. */}
       {/* ⚠ `hero-parallax-root` declares the NAMED view timeline the background
           image consumes, and it has to sit on this element. The section is
           `overflow-hidden`, which makes it its own scroll container — a bare
@@ -153,7 +163,7 @@ export function HomeHero({
           section, pin at 100% and render static. See globals.css. */}
       <section
         data-hero-bg={toggle ? "video" : undefined}
-        className={`relative isolate flex min-h-[58svh] flex-col justify-end overflow-hidden bg-ppa-navy text-white${
+        className={`relative isolate flex ${heightClass} flex-col justify-end overflow-hidden bg-ppa-navy text-white${
           showStill ? " hero-parallax-root" : ""
         }`}
       >
