@@ -35,6 +35,38 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-04 (pt. 4) — Launch-night prep: pushing main would have RED-BUILT the launch
+- **Bryce launches ppatour.com tonight.** Asked to confirm tracking/cookies are in place,
+  keep vacations.ppatour.com intact until Stripe, and noindex /vacations. Shipped green +
+  verified live on production (`6504d08`). **Blog work held back — see below.**
+- **⚠ THE PLANNED "push main" WOULD HAVE RED-BUILT THE LAUNCH.** Four unpushed 8/4 pt.3 blog
+  commits (now on branch `blog-work-hold`) reference **57 blog images still on ppatour.com**
+  never synced to Blob; `prebuild` runs `sync-wp-media.mjs --verify` which **exits 1** on them.
+  Verified: gate exit 1 with the blog commits, exit 0 without. Origin/main's prod deploys are
+  green precisely *because* they lack these commits. **Pushing as approved would have failed the
+  build and shipped nothing on launch night.** (This is the pt.3 blog work — its own log entries
+  live on `blog-work-hold`, not here, since the reset reverted CLAUDE.md too.)
+- **Only the two launch-safe changes went to main**, rebased clean onto origin (gate green):
+  - **/vacations noindex + out of the sitemap** until Stripe lands (`robots:{index:false}` in
+    `app/vacations/page.tsx`, entry removed from `app/sitemap.ts`). Page renders, checkout 503s,
+    real bookings still run on the intact subdomain. **Revert both when Stripe is configured.**
+  - **Six Zero logo parity** — old `six-zero.jpg` was a 320×126 stacked lockup rendering visibly
+    smaller than JOOLA/Proton in the Platinum grid (a sponsor flagged it to Bryce). Replaced with
+    a 1000px PNG rasterized (sharp) from Six Zero's own vector wordmark (`six-zero-logo.svg`),
+    recoloured near-black. Verified live: png 200, old jpg 404.
+- **⚠ TO SHIP THE BLOG WORK: needs `BLOB_READ_WRITE_TOKEN` (not on this machine).** `vercel env
+  pull` → `node scripts/sync-wp-media.mjs` (sync mode — uploads 57 assets + rewrites
+  `wp-media-map.json`) → commit the map → rebase/merge `blog-work-hold` → push. Gate goes green
+  after the sync. Dry run (pt.3): 60 assets, 0 failures, 6.9MB → 3.7MB.
+- **Tracking audit (Bryce's actual ask): all verified firing on prod** — GA4 `G-NKVE1BRLK7`
+  (Consent Mode v2, denied-by-default), Meta Pixel, cookie banner (Accept/Decline flips both
+  live), outbound-click conversions, Vercel Analytics + Speed Insights, UserWay. `SITE_INDEXABLE=
+  true` already set (known since pt.3); fine since launch is tonight, canonicals → www.ppatour.com.
+- **Open for Bryce:** secondary GA4 `G-VFNFRP66Z5` env var unset → that property goes dark at
+  cutover · **"Is Proton still a thing?"** — if no longer a sponsor, pull from the Platinum roster
+  in `home-content.ts` (business call) · old.ppatour.com fallback = a Cloudflare + WordPress-
+  siteurl job (all DNS on Cloudflare; not a launch blocker).
+
 ### 2026-08-04 (pt. 2) — Gold Prize Grid cut; a RED BUILD nobody noticed; invented presenters
 - **Gold Prize Grid removed from event pages** (Bryce, photo of the Nationals page). Deleted the
   component rather than unmounting it, so nothing can re-import it. It rendered on **two** surfaces
