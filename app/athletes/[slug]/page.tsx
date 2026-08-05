@@ -26,6 +26,24 @@ import { AthleteVideos } from "@/components/athletes/AthleteVideos";
 import { resolveGear } from "@/lib/athlete-gear";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 
+/**
+ * ⚠ EQUIPMENT IS HIDDEN ON ATHLETE PAGES (Wesley, 8/5: "can we hide their
+ * equipment for now?"). Flip to `true` to bring it back — that is the whole
+ * operation, and it restores both surfaces together.
+ *
+ * ONE FLAG COVERS TWO PLACES, WHICH IS THE POINT. The athlete page publishes a
+ * pro's paddle twice: the "In the Bag" section (paddle + "Buy This Paddle")
+ * and the "Paddle" row in the Quick Info sidebar. Both read the same
+ * `quickInfo.paddle` string, so hiding only the section would have left the
+ * equipment published a few hundred pixels further up the same page.
+ *
+ * A switch, not a deletion — unlike the Gold Prize Grid (8/4) or the invented
+ * parking copy (8/5), nothing here is wrong or fabricated and "for now" is
+ * explicitly temporary. `lib/athlete-gear.ts` and its Pickleball Central
+ * routing (Connor, 7/29: never the manufacturer) stay intact and untouched.
+ */
+const SHOW_EQUIPMENT: boolean = false;
+
 type Params = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
@@ -238,7 +256,9 @@ export default async function AthletePage({ params }: Params) {
     { label: "Height", value: stats?.height ?? qi?.height ?? "" },
     { label: "Plays", value: stats?.handed ? `${stats.handed}-handed` : qi?.plays ?? "" },
     { label: "Turned Pro", value: stats?.turnedPro ?? a.turnedPro ?? "" },
-    { label: "Paddle", value: qi?.paddle ?? "" },
+    // Gated with the "In the Bag" section below — see SHOW_EQUIPMENT. The rest
+    // of Quick Info (Resides / Age / Height / Plays / Turned Pro) is untouched.
+    ...(SHOW_EQUIPMENT ? [{ label: "Paddle", value: qi?.paddle ?? "" }] : []),
   ].filter((f) => f.value);
 
   // `divRanks` still tells us which boards the athlete sits on, which is what
@@ -570,8 +590,8 @@ export default async function AthletePage({ params }: Params) {
       )}
 
       {/* In the Bag — the athlete's paddle + a shop link (official partners
-          only; Connor's "link to gear"). */}
-      {gear && (
+          only; Connor's "link to gear"). Hidden for now — see SHOW_EQUIPMENT. */}
+      {SHOW_EQUIPMENT && gear && (
         <section className="bg-ppa-navy text-white">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/50">
