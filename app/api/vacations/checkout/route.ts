@@ -67,7 +67,11 @@ export async function POST(req: NextRequest) {
   // key on the client. When that key is set we serve an embedded session (return
   // client_secret); until then we fall back to the hosted redirect, so deploying
   // this can never break the working checkout.
-  const embedded = !!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+  // TEMP (8/5): forced to hosted to restore checkout. The account's default
+  // Stripe API version renamed `ui_mode: "embedded"` → `"embedded_page"`, which
+  // errored the session create. Re-enable embedded once getStripe pins an
+  // apiVersion that matches @stripe/react-stripe-js. Publishable key stays set.
+  const embedded = false && !!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 
   try {
     const stripe = getStripe();

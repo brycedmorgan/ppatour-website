@@ -385,18 +385,54 @@ export function Header() {
 
   // Warm the mega-panel featured images so the first open doesn't flash
   // a navy card while the photo lazy-loads.
+  //
+  // ⚠ TWO GATES, AND BOTH ARE LOAD-BEARING — this effect used to run bare on
+  // every page load and cost six image requests each time.
+  //
+  // ① `lg`, because the mega panels DO NOT EXIST below it. The trigger nav is
+  //    `hidden … lg:flex` and mobile gets the drawer (`lg:hidden`) instead, so
+  //    `megaOpen` can never be set on a phone — every one of those six requests
+  //    was unreachable UI, on the viewport least able to afford them. Matches
+  //    Tailwind's `lg` (64rem); if that nav's breakpoint moves, move this too.
+  // ② Idle, because these are PREFETCHES FOR A HOVER THAT MAY NEVER HAPPEN and
+  //    they were firing on mount, i.e. straight into the hero's LCP window.
+  //    `next.image` is frequently the same photo the homepage hero is painting
+  //    (at its own `quality={65}`, so the optimizer treats it as a separate
+  //    variant and it downloads twice) — warming it early made the warmup
+  //    compete with the image it was racing.
+  //
+  // Deliberately still eager-on-idle rather than on first hover: the whole
+  // point is that the panel opens instantly, and a hover-triggered fetch is
+  // just the flash this exists to prevent.
   useEffect(() => {
-    const paths = [
-      getNextTournament().image,
-      "/ppa/action-singles.jpg",
-      "/ppa/action-mxd.jpg",
-    ];
-    for (const path of paths) {
-      for (const w of [384, 640]) {
-        const img = new window.Image();
-        img.src = `/_next/image?url=${encodeURIComponent(path)}&w=${w}&q=75`;
+    if (!window.matchMedia("(min-width: 64rem)").matches) return;
+
+    const warm = () => {
+      const paths = [
+        getNextTournament().image,
+        "/ppa/action-singles.jpg",
+        "/ppa/action-mxd.jpg",
+      ];
+      for (const path of paths) {
+        // FeatureCard renders `sizes="320px"`, so 384 covers DPR1 and 640 DPR2.
+        // Quality is omitted there, i.e. next/image's default 75 — these must
+        // stay in lockstep or the warmup caches a variant the panel never asks
+        // for and the flash comes back with the requests still paid for.
+        for (const w of [384, 640]) {
+          const img = new window.Image();
+          img.src = `/_next/image?url=${encodeURIComponent(path)}&w=${w}&q=75`;
+        }
       }
+    };
+
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(warm, { timeout: 3000 });
+      return () => window.cancelIdleCallback(id);
     }
+    // Safari has no requestIdleCallback — a timeout still gets the warmup out
+    // of the critical path, which is the part that matters.
+    const id = window.setTimeout(warm, 2000);
+    return () => window.clearTimeout(id);
   }, []);
 
   return (
