@@ -574,10 +574,15 @@ export const partners: Partner[] = [
      */
     name: "MOJO Energy Pouches",
     website: "https://mojoenergypouches.com",
+    // Designation confirmed by Bryce at launch (8/5): Official Partner.
+    role: "Official Partner",
     tier: "gold",
-    logo: "/ppa/sponsors/mojo.svg",
-    logoWidth: 249,
-    logoHeight: 47,
+    // Rasterized from the brand-kit SVG — the wordmark (.cls-3) was #fff (the
+    // reversed cut) so it was invisible on the white card; recoloured to
+    // near-black, colour underline kept. next/image can't serve .svg (400).
+    logo: "/ppa/sponsors/mojo.png",
+    logoWidth: 1000,
+    logoHeight: 188,
   },
   {
     // "Park Place" per the 8/4 approved list (was "Park Place Technologies").
@@ -731,9 +736,11 @@ export const partners: Partner[] = [
     // Designation supplied 8/4 (Wesley: "Picklr = Official partner").
     role: "Official Partner",
     tier: "tour",
-    logo: "/ppa/sponsors/picklr.svg",
-    logoWidth: 2225,
-    logoHeight: 500,
+    // Rasterized from the SVG — next/image returns 400 for .svg, so the mark
+    // was rendering as an empty card.
+    logo: "/ppa/sponsors/picklr.png",
+    logoWidth: 900,
+    logoHeight: 202,
   },
   {
     // Silver → Tour. Silver no longer exists (8/4).
@@ -775,9 +782,11 @@ export const partners: Partner[] = [
     // Designation supplied 8/4 (Wesley: "Zyia = Official partner").
     role: "Official Partner",
     tier: "tour",
-    logo: "/ppa/sponsors/zyia.svg",
-    logoWidth: 110,
-    logoHeight: 65,
+    // Rasterized from the SVG — next/image returns 400 for .svg, so the mark
+    // was rendering as an empty card.
+    logo: "/ppa/sponsors/zyia.png",
+    logoWidth: 700,
+    logoHeight: 413,
   },
 
   /**
