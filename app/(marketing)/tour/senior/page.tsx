@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { SeniorRankings } from "@/components/marketing/SeniorRankings";
 import { partners } from "@/lib/home-content";
 import { partnerLink } from "@/lib/partner-link";
+import { getSeniorRankings } from "@/lib/senior-rankings";
 import { withUtm } from "@/lib/utm";
 
 /**
@@ -29,12 +31,17 @@ import { withUtm } from "@/lib/utm";
  * live page's, unchanged. The table itself is labelled by points (PPA 2000 /
  * 1500 / 1000), which is what the live page does and is tier-name-neutral.
  *
- * ⚠ NO RANKINGS BOARD. The live page embeds a live senior leaderboard ("The
- * Rank / The Race") fed by its own WordPress endpoint, which this rebuild has no
- * grant for — `lib/rankings-api.ts` reaches the PRO boards only. A hand-typed
- * snapshot is the trap this repo keeps paying for, so the section says where the
- * standings live instead of showing a copy that starts rotting immediately.
- * Wire it up when the senior board is available from the partner API.
+ * ⚠ THE RANKINGS BOARD IS LIVE, off `bracket_level_id=3` on the same
+ * partner_rankings endpoint the pro boards use (Wesley supplied the parameters,
+ * 8/4). All six senior divisions, ~540 ranked players, refreshed daily by the
+ * existing athletes cron. Read the header of lib/senior-rankings.ts before
+ * touching it — the two "division" params mean different things, `age_limit`
+ * must be EMPTY, and the 50-and-over floor is NOT enforced upstream.
+ *
+ * ⚠ Only "The Rank" (the 52-week rolling ranking) is shipped. The live page also
+ * has a "The Race" tab, which is the same six calls with `race=true` — one
+ * constant in the adapter, but it doubles the boards on the page and needs a
+ * layout decision, so it is deliberately left off rather than half-built.
  */
 
 /** PPA-sanctioned event search — where a senior actually registers. */
@@ -90,6 +97,7 @@ const SPLIT = [
 
 const SECTIONS = [
   { id: "about", label: "About" },
+  { id: "rankings", label: "Rankings" },
   { id: "register", label: "How to Register" },
   { id: "points", label: "Senior Points" },
   { id: "prize-money", label: "Prize Money" },
@@ -126,7 +134,26 @@ function SectionHead({ eyebrow, title }: { eyebrow: string; title: string }) {
   );
 }
 
-export default function SeniorOpenPage() {
+/**
+ * ISR daily. The senior boards are recomputed on the tour's side well under
+ * that, and the fetches behind them are tagged so the existing athletes cron
+ * refreshes them on the same schedule as every other ranking on the site.
+ *
+ * ⚠ `force-static` IS LOAD-BEARING, NOT BELT-AND-BRACES. Adding the rankings
+ * fetch flipped this route from ○ to ƒ in the build output. Same cause as
+ * / and /rankings on 8/3: `lib/pb-fetch` retries a 429 with `cache: "no-store"`,
+ * and one no-store fetch opts the whole route out of static generation — so
+ * whether this page is CDN-cacheable came down to whether partner_rankings
+ * happened to throttle us mid-build. It throttles readily; a plain loop over
+ * these six boards 429s today. Nothing here reads cookies, headers or
+ * searchParams, so nothing is lost by pinning it.
+ */
+export const revalidate = 86400;
+export const dynamic = "force-static";
+
+export default async function SeniorOpenPage() {
+  const rankings = await getSeniorRankings();
+
   // Read the sponsors off the live roster rather than typing their names and
   // marks here: the roster already carries the artwork, the outbound URL and the
   // designation, and it is resynced when designations renew or lapse.
@@ -237,25 +264,28 @@ export default function SeniorOpenPage() {
             </ul>
           </div>
 
-          {/* Where the standings live. See the note at the top of this file on
-              why there is no board embedded here. */}
-          <div className="mt-4 border border-ppa-line bg-white p-5">
-            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
-              Senior Standings
+        </div>
+      </section>
+
+      {/* -------------------------------------------------------- Rankings */}
+      <section id="rankings" className="scroll-mt-24 bg-white">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <SectionHead eyebrow="Standings" title="Humana Senior Open Rankings" />
+          <p className="mt-3 max-w-2xl text-sm text-ppa-navy/55">
+            The 52-week rolling ranking for players 50 and over, by division.
+            Points come from Humana Senior Open finishes at Carvana PPA Tour
+            stops.
+          </p>
+          {rankings.source === "live" ? (
+            <SeniorRankings boards={rankings.boards} />
+          ) : (
+            /* Configured but the call failed, or no token. Say so — never print
+               invented rows on a rankings surface (7/29). */
+            <p className="mt-6 border border-ppa-line bg-ppa-paper px-4 py-10 text-center text-sm text-ppa-navy/55">
+              Senior rankings are unavailable right now. Please check back
+              shortly.
             </p>
-            <p className="mt-1.5 text-sm leading-relaxed text-ppa-navy/70">
-              Senior Open rank and race standings are kept on the tournament
-              platform alongside each event&apos;s draws and results.
-            </p>
-            <a
-              href={REGISTER}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 inline-block text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-blue hover:text-ppa-blue-deep"
-            >
-              Find a PPA event ↗
-            </a>
-          </div>
+          )}
         </div>
       </section>
 
