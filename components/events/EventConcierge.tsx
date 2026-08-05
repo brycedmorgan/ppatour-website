@@ -33,6 +33,13 @@ export type ConciergeFacts = {
    * May carry newlines (labelled blocks + an address); the bubble renders them.
    */
   parking: string;
+  /**
+   * The event's Tixr page, where a premium parking pass is bought. Null when
+   * tickets aren't on sale — same rule as `ticketsUrl` above, so the concierge
+   * can't hand out a Tixr link for a stop we're not selling. Carries its own UTM
+   * content so a parking click doesn't report as a ticket click.
+   */
+  parkingPassUrl: string | null;
   airport?: string;
   hotels: string[];
   dining: string[];
@@ -75,6 +82,12 @@ const INTENTS: Intent[] = [
     test: /park|shuttle|drive|car\b/i,
     answer: (f) => ({
       text: f.parking,
+      // Only when the copy actually mentions a pass to buy — most stops' parking
+      // answer is the holding line, and a Tixr button under that would imply a
+      // pass exists.
+      ...(f.parkingPassUrl && /premium parking/i.test(f.parking)
+        ? { href: f.parkingPassUrl, hrefLabel: "Premium parking on Tixr" }
+        : {}),
     }),
   },
   {

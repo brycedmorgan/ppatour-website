@@ -236,6 +236,18 @@ export default async function EventPage({ params }: Params) {
    */
   const onSale = ticketsOnSale(t.ticketsUrl);
   /**
+   * Where a premium parking pass is bought — the event's own Tixr page, since
+   * there is no pass-specific listing. Null when tickets aren't on sale, which
+   * leaves "Tixr" as plain text in the parking copy rather than handing out a
+   * Tixr link for a stop we're deliberately not selling.
+   */
+  const parkingPassUrl = onSale
+    ? withUtm(t.ticketsUrl, {
+        campaign: t.eventCode ?? t.slug,
+        content: "event-parking-premium",
+      })
+    : null;
+  /**
    * Per-day pricing, when Tixr sells this stop day by day (it sells most of them
    * as a week-long parent listing plus one listing per finals day). Null for stops
    * with only a single flat listing — those keep the tier cards below.
@@ -358,6 +370,7 @@ export default async function EventPage({ params }: Params) {
     // Flattened from the same source the page renders — the chat bubble can't
     // render blocks, but it must not answer with a shorter/different arrangement.
     parking: parkingText(t.slug),
+    parkingPassUrl,
     airport: guide ? `${guide.airport} (${guide.airportNote})` : undefined,
     hotels: guide?.hotels.map((h) => h.name) ?? [],
     dining: guide?.dining.map((d) => d.name) ?? [],
@@ -1152,7 +1165,12 @@ export default async function EventPage({ params }: Params) {
                 },
                 {
                   k: "Parking & Shuttle",
-                  v: <ParkingDetails sections={parking} />,
+                  v: (
+                    <ParkingDetails
+                      sections={parking}
+                      ticketsUrl={parkingPassUrl}
+                    />
+                  ),
                 },
                 {
                   k: "What to Bring",
@@ -1238,6 +1256,7 @@ export default async function EventPage({ params }: Params) {
                 </p>
                 <ParkingDetails
                   sections={parking}
+                  ticketsUrl={parkingPassUrl}
                   className="mt-3 text-sm leading-relaxed text-ppa-navy/65"
                 />
               </div>

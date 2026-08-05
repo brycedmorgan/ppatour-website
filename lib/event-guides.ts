@@ -46,6 +46,14 @@ export type ParkingSection = {
   /** Omitted for the single-paragraph holding line, which has nothing to label. */
   heading?: string;
   body: string[];
+  /**
+   * Substring of `body` to render as a link to the event's Tixr page, where the
+   * pass is sold. Purely a rendering hint: `ParkingDetails` only linkifies it if
+   * the caller passes a URL, and the caller only passes one when tickets are on
+   * sale — so a stop with tickets held back keeps the words as plain text rather
+   * than routing around the hold. `parkingText()` never links anything.
+   */
+  ticketLinkText?: string;
 };
 
 /**
@@ -91,6 +99,10 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
         "Limited on-site premium parking is available for purchase. A premium parking pass allows you to park on-site at the tournament venue.",
         "Premium parking must be purchased in advance through Tixr. Parking passes will not be sold at the lot.",
       ],
+      // ⚠ Links to the event's ticket page, which is where the pass lives — there
+      // is no separate parking URL, and no parking SKU in the Tixr snapshot, so
+      // the destination is the event, not a pass-specific listing.
+      ticketLinkText: "Tixr",
     },
     {
       heading: "ADA Parking",

@@ -16,6 +16,7 @@ import { BracketPanel } from "@/components/live/BracketPanel";
 import { ATLANTA_EVENT_ID } from "@/lib/bracket-sample";
 import { getBroadcast } from "@/lib/broadcast";
 import { getEventGuide, parkingFor, parkingText } from "@/lib/event-guides";
+import { ticketsOnSale } from "@/lib/tixr-prices";
 import { ParkingDetails } from "@/components/events/ParkingDetails";
 import { getEventSchedule } from "@/lib/event-schedule";
 import { playersToWatch } from "@/lib/home-content";
@@ -218,6 +219,19 @@ export function NationalsLive({
   // Same single source as app/events/[year]/[slug]/page.tsx — finalized details
   // for this stop, or the approved holding line.
   const parking = parkingFor(t.slug);
+  /**
+   * ⚠ THE ONLY `ticketsOnSale` GATE IN THIS FILE. Everything else here — the two
+   * hero CTAs, the tickets section — prints "Buy Tickets" unconditionally, which
+   * is the drift flagged on 7/31 pt. 4 and still open. Don't read this as the
+   * file being gated; it isn't. It's here so the premium-parking link can't hand
+   * out a Tixr URL for a stop whose tickets are deliberately held back.
+   */
+  const parkingPassUrl = ticketsOnSale(t.ticketsUrl)
+    ? withUtm(t.ticketsUrl, {
+        campaign: t.eventCode ?? t.slug,
+        content: "event-parking-premium",
+      })
+    : null;
   const realSchedule = getEventSchedule(t.slug);
   const mapQuery = guide?.mapQuery ?? `${t.venue}, ${t.city}, ${t.state}`;
 
@@ -285,6 +299,7 @@ export function NationalsLive({
     }),
     // Flattened from the same source the page renders — see the event page.
     parking: parkingText(t.slug),
+    parkingPassUrl,
     airport: guide ? `${guide.airport} (${guide.airportNote})` : undefined,
     hotels: guide?.hotels.map((h) => h.name) ?? [],
     dining: guide?.dining.map((d) => d.name) ?? [],
@@ -1145,7 +1160,12 @@ export function NationalsLive({
                 },
                 {
                   k: "Parking & Shuttle",
-                  v: <ParkingDetails sections={parking} />,
+                  v: (
+                    <ParkingDetails
+                      sections={parking}
+                      ticketsUrl={parkingPassUrl}
+                    />
+                  ),
                 },
                 {
                   k: "What to Bring",
@@ -1229,6 +1249,7 @@ export function NationalsLive({
                 </p>
                 <ParkingDetails
                   sections={parking}
+                  ticketsUrl={parkingPassUrl}
                   className="mt-3 text-sm leading-relaxed text-ppa-navy/65"
                 />
               </div>

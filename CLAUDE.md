@@ -64,10 +64,26 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   chat bubble and the search index — flattened from the same source, so the chatbot cannot answer with
   a shorter or differently-arranged version. **The bubble needed `whitespace-pre-line`** or it would
   have delivered the whole four-block answer as one line.
-- **⚠ NOT LINKED, DELIBERATELY: "purchased in advance through Tixr."** There is **no parking SKU in the
-  Tixr snapshot** (grepped `tixr-ticket-prices.json`), so pointing it at the event's ticket URL would
-  publish a guess about where a pass is sold. Text only until someone confirms the listing. One-word
-  edit: the submission wrote "TIXR", the site writes "Tixr" everywhere else.
+- **"Purchased in advance through Tixr" IS a link — Wesley's call, to the event's own Tixr URL.** I
+  had left it as text because there is **no parking SKU in the Tixr snapshot** (grepped
+  `tixr-ticket-prices.json`), so the destination is the event listing, not a pass-specific one; he
+  chose that explicitly. One-word edit: the submission wrote "TIXR", the site writes "Tixr".
+  - **`ticketLinkText` on a section names the substring to linkify — the URL comes from the caller**,
+    because the Tixr URL lives on the `Tournament`, not in the guide data, and it has to be
+    `withUtm`-tagged per event. New content tag **`event-parking-premium`**, not the ticket one, so a
+    parking click doesn't report as a ticket click. Verified live: **2 anchors on the event page and 2
+    on `-live`**, carrying `utm_campaign=0926-PPA-CARY-NC-USA&utm_content=event-parking-premium`.
+  - **⚠ GATED ON `ticketsOnSale`, WHICH IS THE POINT.** No URL → the word stays plain text, so a stop
+    whose tickets are **held back by hand** (`TICKETS_HIDDEN` — Cincinnati and Cape Coral 2027, both
+    confirmed `onSale: false`) can't get a Tixr link smuggled onto it through the parking copy. That is
+    the same leak class as the three ungated ones found on 7/31 pt. 4. **No page exercises it today**
+    (neither hidden stop has finalized parking), so it is a guard, not a tested path.
+  - **⚠ THIS ADDED THE ONLY `ticketsOnSale` GATE IN `NationalsLive.tsx`.** Its two hero CTAs and its
+    tickets section still print "Buy Tickets" unconditionally (7/31 pt. 4, still open). **Don't read
+    the file as gated** — there's a note on the new const saying exactly that.
+  - Concierge gets `parkingPassUrl` too, and attaches a **"Premium parking on Tixr"** button only when
+    the answer actually mentions premium parking — under the holding line a Tixr button would imply a
+    pass exists. Verified: **Rate Las Vegas Open renders 0 anchors** and only the holding line.
 - Verified on real pages on a clean dev server: **Nationals renders all four headings in both spots**
   with the address line breaks intact and the accordion row as a `div` not a `p`; **Rate Las Vegas
   Open renders the holding line and nothing else**. `parkingFor` returns 4 sections for Cary and
