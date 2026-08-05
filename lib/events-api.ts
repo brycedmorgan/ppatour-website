@@ -21,6 +21,7 @@
 import { eventCode } from "@/lib/event-code";
 import {
   type EventTier,
+  brandForSlug,
   GENERIC_IMAGES,
   getAllEvents,
   kebab,
@@ -343,7 +344,10 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
         ? VENUE_IMAGES[index % VENUE_IMAGES.length]
         : GENERIC_IMAGES[index % GENERIC_IMAGES.length]),
     gallery: venueGalleryFor(slug).length ? venueGalleryFor(slug) : curated?.gallery,
-    brand: curated?.brand,
+    // Fall back to the badge-by-slug when the matched curated record has no
+    // brand (e.g. a past-season duplicate that won the slug), so events like
+    // the 2027 Newport Beach Open still get their crest.
+    brand: curated?.brand ?? brandForSlug(slug),
     region: isUsOrg ? undefined : "international",
     country: isUsOrg ? undefined : inferCountry(t.organization_name, t.venue_country),
     season: status === "completed" ? inferSeason(startDate) : undefined,

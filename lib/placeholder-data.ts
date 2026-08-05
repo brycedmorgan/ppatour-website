@@ -329,6 +329,14 @@ const BRAND_BY_SLUG: Record<
   "atlanta-pickleball-championships": { primary: "#0a2540", accent: "#e8825a", icon: "/ppa/badges/players-championships.png" },
 };
 
+/** Brand (colors + badge icon) for a generated slug, or undefined. Exposed so the
+ *  feed adapter can attach a badge even when the curated record it matched has
+ *  none of its own — e.g. a past-season duplicate that won the slug collision
+ *  (2025 Newport Beach Open vs the 2027 upcoming stop). */
+export function brandForSlug(slug: string) {
+  return BRAND_BY_SLUG[slug];
+}
+
 // Real commerce deep links per generated slug (verified against the live
 // ppatour.com schedule buttons + HTTP-checked, Jul 2026). Anything not listed
 // falls back to the group listing / registration home until its page exists.
