@@ -256,11 +256,23 @@ export type Partner = {
    * titles an event, and nothing can be inferred about them.
    */
   eventNamePrefix?: string;
-  /** Suppress the designation line and let the logo stand alone (Bryce, 7/28 —
-      "we do not need to type out the partner names next to their logos when
-      the logo itself makes it obvious"). Set where the written designation
-      added nothing: Veolia and Humana. The partner name is never printed
-      beside a logo anywhere; this hides the ROLE line too. */
+  /**
+   * Suppress the designation line and let the logo stand alone (Bryce, 7/28 —
+   * "we do not need to type out the partner names next to their logos when the
+   * logo itself makes it obvious"). The partner NAME is never printed beside a
+   * logo anywhere; this hides the ROLE line too.
+   *
+   * ⚠ NOTHING SETS THIS TODAY. Veolia and Humana were the only two, and both
+   * had it removed on 8/4 when Wesley supplied designations to show under each
+   * partner ("Humana = Official human care partner", "Veolia = Official
+   * Sustainability Partner"). That is a deliberate reversal of the 7/28
+   * treatment for those two, not drift.
+   *
+   * Kept rather than deleted because it is a real editorial lever and the
+   * roster is hand-maintained — a partner may again arrive whose designation
+   * adds nothing beside their mark. A partner with no confirmed designation
+   * needs no flag at all: leave `role` unset and the card is logo-only.
+   */
   hideRole?: boolean;
   /** Real wordmark logo path + intrinsic pixel dimensions (when we have the
       brand-kit file). Partners without a mark yet render as designation cards
@@ -326,13 +338,15 @@ export const partners: Partner[] = [
     logoHeight: 586,
   },
   {
+    // Designation restored 8/4 (Wesley: "Humana = Official human care partner").
+    // It was already the right string, just suppressed by `hideRole` — see the
+    // note on that field.
     name: "Humana",
     website: "https://www.humana.com",
     role: "Official Human Care Partner",
     category: "Insurance",
     note: "Keeping players and fans moving, on the court and off it.",
     tier: "platinum",
-    hideRole: true,
     logo: "/ppa/sponsors/humana.webp",
     logoWidth: 900,
     logoHeight: 176,
@@ -360,13 +374,15 @@ export const partners: Partner[] = [
      * one partner billed in two tiers is exactly the shape of a copy/paste in a
      * hand-written roster.
      *
-     * No designation is printed here: the approved list gives Life Time none,
-     * and the Official Ball designation belongs to the LT Pro 48 record. Logo
-     * only, which is the standing treatment for a mark without a confirmed
-     * designation.
+     * ⚠ Designation added 8/4 (Wesley: "Life Time = PPA Host facility"). Note
+     * it is NOT the Official Ball designation — that one belongs to the LT Pro
+     * 48 record, which is the same company billed separately under Tour
+     * Sponsors. Two records, two different designations, on purpose.
      */
     name: "Life Time",
     website: "https://www.lifetime.life",
+    role: "PPA Host Facility",
+    category: "Host Facility",
     tier: "platinum",
     logo: "/ppa/sponsors/life-time.webp",
     logoWidth: 650,
@@ -426,6 +442,8 @@ export const partners: Partner[] = [
     logoHeight: 243,
   },
   {
+    // Designation restored 8/4 (Wesley: "Veolia = Official Sustainability
+    // Partner"). Already the right string, just suppressed by `hideRole`.
     name: "Veolia",
     website: "https://www.veolianorthamerica.com",
     eventNamePrefix: "Veolia",
@@ -433,7 +451,6 @@ export const partners: Partner[] = [
     category: "Sustainability",
     note: "Backing the marquee stops in Atlanta, Chicago, and the National Championships.",
     tier: "platinum",
-    hideRole: true,
     logo: "/ppa/sponsors/veolia.png",
     logoWidth: 900,
     logoHeight: 222,
@@ -529,8 +546,10 @@ export const partners: Partner[] = [
     // "Just Courts" per the 8/4 approved list (was "Just Courts Design + Build").
     name: "Just Courts",
     website: "https://justcourts.com/",
-    // ⚠ Listed with no designation on either the live page or the 8/4 approved
-    // list, so this card is intentionally logo-only.
+    // Designation supplied 8/4 (Wesley: "Just courts = Official partner").
+    // Was logo-only until then — neither the live page nor the 8/4 approved
+    // list carried one.
+    role: "Official Partner",
     tier: "gold",
     logo: "/ppa/sponsors/just-courts.png",
     logoWidth: 900,
@@ -707,6 +726,8 @@ export const partners: Partner[] = [
      */
     name: "The Picklr",
     website: "https://thepicklr.com",
+    // Designation supplied 8/4 (Wesley: "Picklr = Official partner").
+    role: "Official Partner",
     tier: "tour",
     logo: "/ppa/sponsors/picklr.svg",
     logoWidth: 2225,
@@ -749,6 +770,8 @@ export const partners: Partner[] = [
      */
     name: "Zyia",
     website: "https://zyiaactive.com",
+    // Designation supplied 8/4 (Wesley: "Zyia = Official partner").
+    role: "Official Partner",
     tier: "tour",
     logo: "/ppa/sponsors/zyia.svg",
     logoWidth: 110,

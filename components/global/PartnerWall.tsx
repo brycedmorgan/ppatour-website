@@ -208,11 +208,12 @@ function PartnerCard({
             </p>
           )}
           {/* Name prints ONLY when we have no mark to show. A partner with a
-              mark but no confirmed designation gets a logo-only card — same
-              treatment Veolia and Humana already get via `hideRole`, because
+              mark but no confirmed designation gets a logo-only card, because
               the standing ruling (Bryce, 7/28) is that the logo IS the card and
               we never type a partner's name beside their own mark. The image
-              `alt` carries the name for assistive tech. */}
+              `alt` carries the name for assistive tech.
+              (`hideRole` does the same to the designation line, but nothing
+              sets it since 8/4 — see the field's note in lib/home-content.ts.) */}
           {!p.logo && (
             <p className="mt-1 font-display text-lg uppercase leading-[1.05] text-ppa-navy">
               {p.name}
