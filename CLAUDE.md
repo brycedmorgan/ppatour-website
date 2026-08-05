@@ -32,15 +32,13 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   presented it as a peer category, and they're fixed.
 - **Ad inventory on ppatour.com is off the table for now** (Bryce, 7/29). Don't build
   slots, don't ask again.
-- **No pro's family or private life on their profile — all pros, not just the one who
-  gets flagged.** Wesley, 8/5, starting from Jack Sock's bio ("Sock welcomed his first
-  child alongside his wife Laura"). Spouses, partners, marital status and the athlete's
-  own children are stripped by `isPersonalLife()` in `lib/published-athletes.ts`, which
-  runs inside `cleanBio` (every scraped bio) and via `redactPersonalLife()` on the
-  profile page's curated fallback. "Personal Life" / "Personal" are STOP headers.
-  **Siblings, upbringing and hobbies deliberately stay** — see the ⚠ notes in that file
-  before touching the regexes; three sentences about *fellow pros* ("his twin brother
-  Yates", "her twin sister") were lost to a looser first draft.
+- **Family details are removed from Jack Sock's bio ONLY — this is not a site-wide rule.**
+  Wesley, 8/5: *"Only Jack Sock needed that info removed… no need to worry about this in the
+  future."* His wife/child sentences are deleted from `lib/data/published-athletes.json`;
+  nothing in code redacts anything. A roster-wide `isPersonalLife()` rule in `cleanBio` was
+  built, shipped and then **reverted at his direction** — it had stripped 24 sentences from
+  20 other pros (spouses, children, Tyler Loong's daughters, Tyson McGuffin's family). **Don't
+  re-implement it, and don't "fix" the other 21 profiles that mention a spouse or child.**
 
 ## Session Log
 
@@ -197,50 +195,46 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - **Next:** replace Cary's line with the Asana text · the event team can add stops one entry at a
   time in `PARKING_BY_SLUG` as details land.
 
-### 2026-08-05 (pt. 13) — No family details on any pro's profile (started at Jack Sock)
+### 2026-08-05 (pt. 13) — Jack Sock's family details removed; the roster-wide rule REVERTED
 
-- Wesley: remove the wife/personal info from Jack Sock's profile, then **"follow this rule going
-  forward with all pros."** Both done — the second is a rule in the bio cleaner, not a data pass.
-- **Jack Sock's raw bio said it three times** ("Away from the court, Sock welcomed his first child
-  alongside his wife Laura in November 2023") — once inline in Background & Early Career, once
-  closing Career Highlights, once under an "Off the Court" header. `cleanBio`'s de-dupe collapsed
-  them, so it rendered once, as the last sentence of his bio. Removed from
-  `lib/data/published-athletes.json` **and** now caught by the rule below, so a re-scrape can't
-  bring it back.
-- **The rule: `isPersonalLife()` in `lib/published-athletes.ts`**, applied per sentence inside
-  `cleanBio` (all 179 scraped bios) and exported as `redactPersonalLife()` for the profile page's
-  **curated fallback** — `app/athletes/[slug]/page.tsx` was assembling `curated?.bio` with no
-  cleaner at all, so the rule would have had a hole for any pro without a scraped record.
-  **Sentences are dropped whole, never rewritten** — same discipline as `lib/bio-live.ts`.
-- **Measured across all 179, diffing every rendered sentence before vs after: 24 removed on 20
-  athletes, 0 added, 0 bios emptied.** Every removal read back and confirmed to be family content
-  (spouse names, children's names, marital status).
-- **⚠ THE POSSESSIVE TIE IS THE WHOLE TEST FOR CHILDREN, AND A LOOSE GAP MATCH IS THE BUG.** Bare
-  "kids"/"children" is ordinary pickleball vocabulary — "coaching adults, teens, and children",
-  "volunteering his time teaching kids pickleball", "the kids are the future of the sport". So the
-  words allowed between a possessive and the noun are a **whitelist** (counts + age adjectives),
-  because `\w+{0,3}` there reads "his time teaching kids" as family and deletes a coaching line.
-- **⚠ AND THE FIRST DRAFT DELETED THREE SENTENCES ABOUT OTHER PROS.** `twins?` in the child nouns
-  matched **"his twin brother Yates"** (Hunter Johnson's ATP ranking + 13 ITF titles) and **"her
-  twin sister"** on *both* Kawamoto profiles — Jade is Jackie's doubles partner. `twins` is now
-  plural-only; "twin" survives as a modifier. **Caught by reading all 29 removals, not by the
-  count.** Siblings and upbringing are out of scope on purpose ("the sixth of eight children",
-  "the middle child of seven siblings" both stay), as are hobbies.
-- **⚠ FIVE REMOVALS TOOK A CAREER FACT WITH THEM**, because the source sentence carries both and we
-  don't author replacement prose: brooke-buckner's start date (Oct 2020), lina-padegimaite's
-  training regimen, **lindsey-newman winning Nationals 2021 while pregnant**, tina-pisnik's move to
-  Chicago, martin-emmrich's tennis background + how he started. Recovering those is an editor
-  rewriting the sentence in the source data. **Flagged to Wesley; his call.**
-- "Personal Life" / "Personal" moved from `KEEP_ORDER` to `STOP_HEADERS`. Zero raw bios carry
-  either header today and there are **zero standalone capitalised "Personal" strings** in the 179
-  bios, so the bare form can't truncate a bio mid-prose — they're there for the next scrape.
-- **Deliberately left: Quick Info still shows Resides / Age (from DOB) / Height / Plays / Turned
-  Pro.** Those are the same stat fields on all 179 profiles; blanking them for one pro makes his
-  page inconsistent with every other. Flagged rather than decided here.
-- Verified: `tsc` clean, eslint clean on both changed files, JSON parses at 179 records, and a
-  sweep of every rendered bio + headline + tagline (published *and* curated) returns zero
-  personal-life matches. No re-scrape script exists in the repo, so `cleanBio` is the only path
-  these bios take into the site.
+- **What stands: a two-word data edit, and nothing else.** Wesley asked for the wife/personal info
+  off Jack Sock's profile. His raw bio said it three times ("Away from the court, Sock welcomed his
+  first child alongside his wife Laura in November 2023") — inline in Background & Early Career,
+  closing Career Highlights, and under an "Off the Court" header — and `cleanBio`'s de-dupe
+  collapsed them, so it rendered once, as the last sentence of his bio. All three are deleted from
+  `lib/data/published-athletes.json`, along with the emptied "Off the Court" section.
+- **⚠ I THEN GENERALISED IT, AND THAT WAS WRONG.** On *"follow this rule going forward with all
+  pros"* I built `isPersonalLife()` into `cleanBio` plus a `redactPersonalLife()` export for the
+  profile page's curated fallback, shipped it (`6168100`), and it **stripped 24 sentences from 20
+  other pros** — Tyler Loong's daughters, Tyson McGuffin's family, the Emmrichs, Lindsey Newman.
+  Wesley: *"revert back the changes to everyone but Jack Sock… Only Jack Sock needed that info
+  removed."* Reverted in full; verified all 179 rendered bios are **byte-identical to the
+  pre-rule baseline**, with Sock's removal the only difference. **Don't rebuild it, and don't
+  tidy the other 21 profiles that mention a spouse or child** — see Standing rulings.
+- **⚠ THE LESSON IS THE SCOPE, NOT THE REGEX.** "Follow this rule for all pros" read to me as
+  "redact all pros"; it meant "this is the standing answer when a pro asks". A privacy edit to one
+  athlete's own bio is a **content decision per athlete**, and the pros whose bios mention their
+  families put them there. A code rule applied to 179 profiles at once is not the cautious version
+  of a one-athlete edit — it is a much larger change wearing the same clothes. **Ask before turning
+  one person's request into a roster-wide sweep.**
+- Kept only as a record of what the deleted rule cost, in case anyone proposes it again: the
+  possessive tie was the whole test for children (bare "kids"/"children" is ordinary pickleball
+  vocabulary — "coaching adults, teens, and children", "volunteering his time teaching kids
+  pickleball"), `twins?` matched **"his twin brother Yates"** and **"her twin sister"** and deleted
+  three sentences about *fellow pros*, and five removals took a career fact with them (including
+  **Lindsey Newman winning Nationals 2021 while pregnant**). None of that ships now.
+- **Quick Info is untouched and confirmed fine** (Wesley): Resides / Age / Height / Plays / Turned
+  Pro still render on all 179 profiles, Sock's included.
+- **⚠ TWO GIT TRAPS, both from this repo's own history, both hit in one session.** `git add <paths>`
+  followed by a bare `git commit` **committed 11 of a parallel session's staged files** — the index
+  is global, so path-limited staging buys nothing. Use `git commit -- <paths>`. And `git pull
+  --rebase` with their 11 dirty files would have autostashed work that overlapped upstream's own
+  changes to `lib/site-search.ts` — the same autostash collision that produced the duplicated
+  pt.10/pt.11 entries still marked "NEEDS A HUMAN PASS" above. Pushed from a throwaway
+  `git worktree` instead, then `reset --soft` local main; their tree was never touched.
+- **⚠ CLAUDE.md still carries TWO entries numbered pt. 12** (a committed "Article player rail" and
+  an in-flight "pickleball.com rail"), plus a pt. 14 from a parallel session that my doc commit
+  carried because it shared the file. Numbering wants the human pass already flagged.
 
 ### 2026-08-05 (pt. 12) — The pickleball.com rail is curatable: picks lead, recency fills
 
