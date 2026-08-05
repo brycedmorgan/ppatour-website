@@ -147,11 +147,45 @@ export function EventConcierge({ facts }: { facts: ConciergeFacts }) {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const launcherRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const el = scrollRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [msgs, open]);
+
+  /**
+   * Dismissal (Wesley, 8/4: it "needs to have a close button and close if the
+   * user clicks outside of its container"). Three ways out, all only wired up
+   * while the panel is open so a closed widget costs the page nothing:
+   * the × in the panel header, a click anywhere outside, and Escape.
+   *
+   * ⚠ `pointerdown`, not `click`. A click fires on release, so dragging a text
+   * selection that happens to end outside the panel would dismiss it, and on
+   * touch the delay is noticeable. Pointerdown also beats the launcher's own
+   * click — hence the ref check covering the WHOLE widget, launcher included,
+   * without which tapping the launcher to close would fire this first, close the
+   * panel, and then the launcher's toggle would immediately reopen it.
+   */
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      // Send focus back where it came from, or it lands on <body>.
+      launcherRef.current?.focus();
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
 
   function ask(q: string) {
     const question = q.trim();
@@ -172,27 +206,36 @@ export function EventConcierge({ facts }: { facts: ConciergeFacts }) {
 
   return (
     /**
-     * ⚠ ANCHORED OFF THE BOTTOM CHROME, NOT A FIXED `bottom-20` (Wesley, 8/4:
-     * "Ask about this event and buy tickets bottom banner overlap"). Three
-     * things pin to the bottom edge on an event page and the launcher is the
-     * only one that wasn't accounting for the other two. Measured at 390px:
-     * launcher `bottom-20` put its lower edge at y 764, while the cookie banner
-     * (40px) stacked under the sticky buy bar (56px) put the bar's top edge at
-     * y 748 — a 16px overlap, and worse once the banner wraps to two lines.
+     * ⚠ IT RIDES THE BOTTOM CHROME RATHER THAN CLEARING ITS WORST CASE (Wesley,
+     * 8/4: the launcher "needs to stay at the bottom of the page and then slide
+     * up when that bottom CTA with tickets pops up").
      *
-     * `--cookie-banner-h` is published by CookieBanner (0px once dismissed) and
-     * `--buy-bar-h` by globals.css, so the launcher clears whatever is actually
-     * down there and keeps a constant 1.5rem gap instead of moving as the buy
-     * bar slides in and out on scroll.
+     * `bottom` sits just above the cookie banner — that one is either there or
+     * not, it doesn't animate. The buy bar DOES: it slides in past 480px of
+     * scroll and back out above it, so reserving its height in `bottom` left the
+     * launcher hovering a bar's height above nothing for the whole first screen.
+     * Instead the widget is translated up by `--buy-bar-visible-h`, which
+     * StickyBuyBar publishes as 0px or the bar's height, and the transform is
+     * transitioned on the bar's own curve and duration so the two move together.
+     *
+     * ⚠ Transform, not an animated `bottom`. `bottom` animates off the main
+     * thread's layout path; a transform is composited, and this rides a scroll
+     * handler on the page whose LCP two sessions were spent protecting.
+     *
+     * This replaced a hard-coded `bottom-20`, which measured a 16px overlap with
+     * the buy bar at 390px — the bug that started this.
      */
     <div
+      ref={rootRef}
       style={{
-        bottom: "calc(var(--cookie-banner-h, 0px) + var(--buy-bar-h) + 1.5rem)",
+        bottom: "calc(var(--cookie-banner-h, 0px) + 1rem)",
+        transform: "translateY(calc(-1 * var(--buy-bar-visible-h, 0px)))",
       }}
-      className="fixed right-4 z-40"
+      className="fixed right-4 z-40 transition-transform duration-500 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none"
     >
       {/* Launcher */}
       <button
+        ref={launcherRef}
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
@@ -216,12 +259,30 @@ export function EventConcierge({ facts }: { facts: ConciergeFacts }) {
         }`}
       >
         <div className="bg-ppa-navy px-4 py-3 text-white">
-          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-ppa-sky">
-            Event Concierge
-          </p>
-          <p className="font-display text-sm uppercase leading-tight">
-            {facts.name}
-          </p>
+          <div className="flex items-start gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-ppa-sky">
+                Event Concierge
+              </p>
+              <p className="font-display text-sm uppercase leading-tight">
+                {facts.name}
+              </p>
+            </div>
+            {/* The conventional affordance. Click-outside and Escape also close
+                it, but neither is discoverable and neither exists on a phone,
+                where "outside" is whatever page content the panel is covering. */}
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                launcherRef.current?.focus();
+              }}
+              aria-label="Close the event concierge"
+              className="-mr-1 -mt-1 flex size-8 shrink-0 items-center justify-center text-lg leading-none text-white/60 transition-colors hover:text-white"
+            >
+              <span aria-hidden>×</span>
+            </button>
+          </div>
         </div>
 
         <div

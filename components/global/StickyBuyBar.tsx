@@ -74,6 +74,41 @@ export function StickyBuyBar() {
     };
   }, [rotation.length]);
 
+  /**
+   * The full-page brackets view has its own bottom-pinned horizontal scrollbar;
+   * don't let this bar sit on top of it.
+   *
+   * ⚠ THE TRAILING SLASH IS THE WHOLE FIX. This read `pathname === "/brackets"`,
+   * but next.config sets `trailingSlash: true`, so `usePathname()` returns
+   * "/brackets/" and the guard had never once fired — the bar has been sitting on
+   * the bracket scrollbar this whole time. Found while wiring
+   * `--buy-bar-visible-h`, by checking the suppressed path rather than assuming
+   * it worked. Compare both forms so it survives the config being flipped back.
+   */
+  const suppressed = pathname === "/brackets" || pathname === "/brackets/";
+
+  /**
+   * Publish how much bottom edge this bar is actually covering right now, so
+   * other bottom-fixed chrome can ride it up and down instead of permanently
+   * reserving space for it.
+   *
+   * ⚠ VISIBLE height, not `--buy-bar-h`. That token is the bar's fixed height
+   * and is always 3.5rem; this is 0px whenever the bar is slid off-screen, hidden
+   * on /brackets, or unmounted. The event concierge launcher sits on this
+   * (Wesley, 8/4: it "needs to stay at the bottom of the page and then slide up
+   * when that bottom CTA with tickets pops up") — anchoring it to the fixed
+   * token instead left it floating a bar's height above nothing for the whole
+   * first screen, before the bar has scrolled in.
+   */
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty(
+      "--buy-bar-visible-h",
+      visible && !suppressed ? "var(--buy-bar-h)" : "0px",
+    );
+    return () => root.style.setProperty("--buy-bar-visible-h", "0px");
+  }, [visible, suppressed]);
+
   const featured = rotation.length > 0 ? rotation[index % rotation.length] : undefined;
   const live = Boolean(featured);
   // Unlisted on Tixr -> the bar points at the event page, not a ticket link.
@@ -86,9 +121,7 @@ export function StickyBuyBar() {
         })
       : eventHref(next);
 
-  // The full-page brackets view has its own bottom-pinned horizontal scrollbar;
-  // don't let this bar sit on top of it.
-  if (pathname === "/brackets") return null;
+  if (suppressed) return null;
 
   return (
     <div
