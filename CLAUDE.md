@@ -35,6 +35,69 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-05 (pt. 11) — Demo newsroom removed; the mobile-LCP theory was wrong, twice
+
+- **Bryce is announcing the launch in Slack** and asked for (a) real speed/SEO numbers to quote and
+  (b) the newsroom editorial gone. Both done; the numbers are not what I first told him.
+- **THE 15 NATIVE DEMO ARTICLES ARE GONE.** `newsArticles` in `lib/news-articles.ts` is now `[]`.
+  They were AI-written editorial about **real, named pros** — fine as a demo, wrong on the site the
+  whole company was about to be sent to. (pt. 9's commit had already drafted the worst 3; this
+  removes all 15, published included.)
+  - **⚠ THIS DID NOT EMPTY THE NEWSROOM, which is the whole reason it was safe.** /news, search,
+    the homepage rail and the sitemap read `lib/news.ts`, which merges natives with the **811
+    migrated WP posts + 37 PPA Blog entries** — every one human-written. Verified live: /news
+    renders 24 article links, zero demo slugs, a real WP post still 200s.
+  - **12 redirects added** (`next.config.ts`) — the published slugs were live and in the sitemap on
+    an indexable site since 8/3, so they 301 to `/news/` rather than 404. **Verified all 12
+    sources against all 848 migrated slugs first: zero collisions.** Redirects match BEFORE
+    filesystem routes, so a collision would have taken a real article off the site. The 3 draft
+    slugs needed no rule — they never rendered a URL.
+  - **Event-page Coverage is now dark everywhere** (`newsForEvent()` is native-only). Every call
+    site already guarded on `coverage.length > 0`, verified on three event pages — no empty
+    heading. Mapping the 322 WP posts that carry an event category onto this site's event slugs
+    is what lights it back up.
+  - Also deleted `news`/`NewsItem` from `lib/home-content.ts` — dead (no importers) and would have
+    been an empty array under a "PPA Tour's own newsroom" comment, i.e. an invitation to refill it
+    by hand. Same reasoning as the pt. 9 `matches` deletion.
+- **⚠ SWEPT INTO SOMEONE ELSE'S COMMIT AGAIN.** All of the above is in **`7fe2b19` "OG card:
+  explicit logo dimensions so Satori renders the mark"** — a parallel session ran `git commit -a`
+  mid-edit. Nothing is lost, the deploy is **READY** and prod is verified, but that message
+  describes none of it. **Third occurrence** (7/31 pt.3, 8/5 pt.6). If you are looking for when the
+  newsroom was emptied, it is that commit.
+- **⚠ THE MOBILE-LCP DIAGNOSIS I GAVE BRYCE WAS WRONG, AND SO WAS THE SECOND ONE.** Recorded
+  because both are plausible enough to be re-attempted:
+  - **The Ken Burns animation is NOT the cause.** Removed `animate-kenburns` +
+    `will-change-transform` from the homepage hero, rebuilt, 3 runs: median LCP **4.19s vs 4.19s**.
+    Zero difference. Reverted.
+  - **Neither is fetch priority.** Next 16 **deprecates `priority`** in favour of `preload`, and it
+    emits a preload link but **no `fetchpriority`** — Chrome fetches the hero at **Low**. Looked
+    like the answer (1.7s of simulated "load delay"). Adding `fetchPriority="high"` +
+    `loading="eager"`: median LCP **4.19s → 4.33s**, i.e. nothing. Reverted rather than ship a
+    no-op under a comment claiming a fix.
+  - **⚠ MEASURE ON THE LOCAL BUILD, NOT PRODUCTION.** Five prod runs gave LCP **3.03–5.85s** (median
+    3.91) — the spread is bigger than any fix. The same page locally sits at 4.04–4.42s. Prod is
+    unusable as a control; a single Lighthouse run against it means nothing.
+  - **What the evidence actually points at: page weight.** Mobile is **1.47 MB / 110 requests**, of
+    which **817 KB is images**, and **the hero photo alone is downloaded 4× for 235 KB** —
+    `/ppa/nationals-championship-court.jpg` at q=65 *and* q=75, w=384/640/750, because several
+    components render the same photo with different `quality`/`sizes`. Unifying quality is the
+    first cheap win. **Not attempted — unmeasured, and launch day is the wrong time.**
+- **Real numbers, measured (local Lighthouse, median of 3–5):** desktop **perf 99 / SEO 100**,
+  LCP 0.9s, CLS 0.001. Mobile **perf ~78–86 / SEO 100**, LCP ~4.2s. Server response 20ms.
+  **There is no honest "before" number** — ppatour.com already serves this site and no old host
+  survives (`old.` `legacy.` `wp.` `staging.` all dead); Lighthouse against a Wayback snapshot
+  measures Wayback. CrUX History (weekly p75, 25 weeks, free API key) is the only real source.
+- **⚠ FOUND, NOT FIXED — a launch claim with no feature behind it.** Bryce's draft says a player
+  profile shows the recent news around that player's name. **It does not, and never did:** there is
+  no athlete→news module anywhere (`app/athletes/[slug]/page.tsx` imports none), and Ben Johns' live
+  profile contains **zero** `/news` references. The interlinking that exists is the reverse —
+  `newsPlayersFor()` puts a "Players in This Story" rail on *article* pages. **Unrelated to the
+  removal above.** It is buildable: the WP importer already resolved athlete slugs onto each post
+  (`WpPost.players`), so this is inverting an index that exists, not new data.
+- **Next:** decide on the player→news rail before that claim goes out · unify the hero photo's
+  `quality` across its consumers and re-measure mobile LCP · CrUX key if Bryce wants a real
+  before/after · `priority` is deprecated repo-wide (event pages, NationalsLive), worth one sweep.
+
 ### 2026-08-05 (pt. 10) — LAUNCH DAY: ppatour.com cut over to the new site + post-launch fixes
 - **ppatour.com is LIVE on this site.** Bryce did the Cloudflare cutover (TXT ownership verify to
   move the domain off the old Vercel account, then apex + www CNAME → `92c7d0fad773651c.vercel-dns-016.com`,
