@@ -38,6 +38,7 @@ import {
   tierPoints,
   eventTierShort,
   tierBadgeClass,
+  whyItMattersHeading,
   type Tournament,
   tournaments,
 } from "@/lib/placeholder-data";
@@ -723,7 +724,8 @@ export default async function EventPage({ params }: Params) {
             </p>
           </div>
           <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-            Why {t.name} Matters
+            {/* Verb agrees with the name — see whyItMattersHeading. */}
+            {whyItMattersHeading(t.name)}
           </h2>
           <p className="mt-3 max-w-2xl text-sm text-ppa-navy/60">
             A {eventTierLabel(t)} title is worth{" "}

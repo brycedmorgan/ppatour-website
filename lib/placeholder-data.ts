@@ -820,6 +820,46 @@ export function eventTierLabel(t: Pick<Tournament, "slug" | "name" | "tierKey">)
   return isMajor(t) ? "PPA Major" : tierLabel(t);
 }
 
+/* ---- event names in prose ---- */
+
+/**
+ * Does this event's name take a PLURAL verb? "The Championships matter", not
+ * "matters".
+ *
+ * ⚠ This exists because event names go into templated sentences and 8/3 made
+ * `name` the full sponsored name in all of them. "Why {name} Matters" is correct
+ * for the Rate Las Vegas Open and wrong for the Veolia Pickleball National
+ * Championships, and the same template renders both — so the verb has to agree
+ * with the name rather than being hard-coded either way.
+ *
+ * Only "Championships" and "Finals" are treated as plural, and both are
+ * unambiguous. "Masters" is deliberately NOT: a Masters is a single tournament
+ * and takes a singular verb, the same way golf's does ("The Masters is").
+ */
+export function eventTakesPluralVerb(name: string): boolean {
+  return /\b(championships|finals)\s*$/i.test(name);
+}
+
+/**
+ * The event name with a definite article, for prose. Idempotent — a name that
+ * already starts with "The" (the feed sends "The Carvana Masters Powered by
+ * Invited") doesn't get a second one.
+ */
+export function eventNameWithThe(name: string): string {
+  const n = name.trim();
+  return /^the\s/i.test(n) ? n : `The ${n}`;
+}
+
+/**
+ * "Why The Veolia Pickleball National Championships Matter" / "Why The Rate Las
+ * Vegas Open Matters" — the What's at Stake heading, agreeing with the name.
+ * Requested 8/5; it read "Why {name} Matters" for every stop, which the 8/3
+ * full-name change had left ungrammatical on the four Championships events.
+ */
+export function whyItMattersHeading(name: string): string {
+  return `Why ${eventNameWithThe(name)} ${eventTakesPluralVerb(name) ? "Matter" : "Matters"}`;
+}
+
 /**
  * Main-tour events only (1,000+ points, domestic, upcoming), chronological.
  * The single source of truth for the homepage — Challengers, international,

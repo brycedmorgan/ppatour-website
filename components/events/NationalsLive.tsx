@@ -26,6 +26,7 @@ import {
   eventTierLabel,
   tierPoints,
   eventTierShort,
+  whyItMattersHeading,
   tournaments,
 } from "@/lib/placeholder-data";
 import { withUtm, withCampaign } from "@/lib/utm";
@@ -709,7 +710,9 @@ export function NationalsLive({
             </p>
           </div>
           <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-            Why {t.name} Matters
+            {/* Verb agrees with the name — see whyItMattersHeading. Kept in step
+                with app/events/[year]/[slug]/page.tsx. */}
+            {whyItMattersHeading(t.name)}
           </h2>
           <p className="mt-3 max-w-2xl text-sm text-ppa-navy/60">
             A {eventTierLabel(t)} title is worth{" "}
