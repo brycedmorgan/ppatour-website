@@ -3,8 +3,8 @@ import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
-import { LiveScoreTicker } from "@/components/live/LiveScoreTicker";
 import { TvGuide } from "@/components/watch/TvGuide";
+import { WatchLiveNow } from "@/components/watch/WatchLiveNow";
 import { fetchLiveTicker } from "@/lib/ticker-api";
 import {
   daysUntil,
@@ -16,7 +16,7 @@ import { matchdayLinks } from "@/lib/matchday";
 
 /**
  * ISR. ⚠ This page also server-prefetches the live ticker with `cache: no-store`
- * (see the LiveScores boundary below), which opts the route out of static
+ * (see the LiveNowBand boundary below), which opts the route out of static
  * generation regardless of this value. Left in place deliberately: the
  * prefetch is what gives the ticker data on first paint. If /watch needs to
  * be CDN-cached under load, move that prefetch client-side — the component
@@ -33,7 +33,7 @@ export const revalidate = 60;
 /**
  * ⚠ Deliberately NOT `force-static`, unlike / and /rankings.
  *
- * The LiveScores boundary below server-prefetches the ticker with
+ * The LiveNowBand boundary below server-prefetches the ticker with
  * `cache: "no-store"`, so this route renders per request (`ƒ /watch` in the
  * build log). Pinning it static would cache that first payload for up to a
  * minute, and a stale score on the page whose whole job is live scores is a
@@ -46,20 +46,17 @@ export const revalidate = 60;
  */
 
 /**
- * Server-prefetch the live matches so the ticker's first paint already has
- * data — no post-hydration fetch wait. Streamed under its own Suspense
- * boundary so the rest of /watch renders immediately.
+ * Server-prefetch the live matches so the band's first paint already has data —
+ * no post-hydration fetch wait, and no flash of a Live Now heading that then
+ * removes itself. Streamed under its own Suspense boundary so the rest of
+ * /watch renders immediately.
+ *
+ * WatchLiveNow renders nothing at all unless a match is in progress, so this
+ * whole subtree can be absent from the page.
  */
-async function LiveScores() {
+async function LiveNowBand() {
   const initialData = await fetchLiveTicker();
-  return (
-    <LiveScoreTicker
-      showDate={false}
-      transparent
-      visibleCards={3}
-      initialData={initialData}
-    />
-  );
+  return <WatchLiveNow initialData={initialData} />;
 }
 
 export const metadata: Metadata = {
@@ -308,33 +305,13 @@ export default function WatchPage() {
         </div>
       </section>
 
-      {/* Live now — scoreboard rail */}
-      <section className="bg-white">
-        <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <div className="flex items-center gap-2.5">
-                <span className="h-2 w-2 bg-ppa-blue" />
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
-                  Live Now
-                </p>
-              </div>
-              <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-                Scores & Brackets
-              </h2>
-            </div>
-          </div>
-          <div className="mt-6">
-            {/* Same live cards + data as the /live broadcast ticker, on a
-                transparent backdrop with 3 full cards and no date badge.
-                Matches are server-prefetched (LiveScores) for a fast first
-                paint; the client hook keeps polling from there. */}
-            <Suspense fallback={<div className="h-[120px]" />}>
-              <LiveScores />
-            </Suspense>
-          </div>
-        </div>
-      </section>
+      {/* Live now — scoreboard rail. The band (heading included) is hidden
+          unless a match is actually in progress, so the fallback reserves no
+          height: on a normal day /watch goes straight from the TV guide to the
+          next broadcast. See components/watch/WatchLiveNow.tsx. */}
+      <Suspense fallback={null}>
+        <LiveNowBand />
+      </Suspense>
 
       {/* Next event broadcast */}
       <section className="relative isolate overflow-hidden bg-ppa-navy text-white">

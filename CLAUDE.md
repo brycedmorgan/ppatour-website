@@ -35,6 +35,36 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-05 (pt. 7) — /watch: the Live Now band is hidden unless something is live
+- Wesley: "on /watch, we need to have the live now section hidden unless we are actually live."
+  It was unconditional, so out of competition the page published a **"LIVE NOW · Scores &
+  Brackets" heading over three permanently-spinning skeleton cards**. The ticker holding its
+  loading state when nothing is live is correct behaviour (it refuses to fabricate matches —
+  7/31) but under a heading that claims live it reads as broken. **Same class of bug the 8/1
+  audit fixed on /live**, one surface over.
+- New `components/watch/WatchLiveNow.tsx` owns the heading + rail and **returns null unless a
+  match has `status === "live"`**. Finals and up-next rows arrive in the same ±1-day feed
+  window and neither makes the label true; once one match IS live the rail shows the whole
+  window (live → up next → final), which is the point of the section.
+- **The gate is client-side, on the cards' own 15s poll**, so the band appears by itself at
+  first serve on a tab that was already open, and retires when the last match finishes. The
+  server prefetch is kept and seeds it, so there's no flash of a heading that then removes
+  itself — and the `Suspense fallback` is now `null`, not a 120px spacer, or the reserved gap
+  would outlive the section it was reserving for.
+- **⚠ It owns the hook and passes the matches DOWN** via a new `matches` prop on
+  `LiveScoreTicker` (controlled mode: render these, don't poll). Nesting two `useLiveTicker`
+  calls would have doubled /watch's polling **and let the heading claim live over an empty
+  rail** for a tick. Uncontrolled callers (`TopBar` on /live) are untouched.
+- Verified both branches through a real Next server, not just a build: with the live feed
+  empty (dev feed reports `hasActiveMatches: true` for PPA but returns **0 rows** in the
+  window) /watch renders **0 "Live Now", 0 "Scores & Brackets"** and goes straight from the TV
+  guide to Next Broadcast; with a live match seeded into the prefetch the band returns with
+  **real cards and exactly one pulsing live dot**, no skeletons. tsc + eslint clean.
+- **⚠ Method: a stale `next dev` on :3111 served the OLD code and answered 200 for a page I
+  thought I'd just changed** — it showed the band still present. Second helping of the 8/3
+  Windows port trap. `next dev` also refuses to start twice for one repo dir, so **check
+  `Get-NetTCPConnection -LocalPort N -State Listen` and use the server that owns the dir.**
+
 ### 2026-08-05 (pt. 6) — The real PBTV brand kit lands; /pbtv re-skinned off the guide, not a guess
 - **Bob Whyley sent the PBTV brand kit** (Dropbox, 36MB) — the asset chased since 7/30 and the
   thing `_pbtv/HANDOFF.md` named as the blocker on this page. Both guides + every logo format.

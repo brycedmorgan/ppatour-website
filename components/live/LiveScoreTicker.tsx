@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import type { TickerResult } from "@/lib/ticker-api";
+import type { TickerMatch, TickerResult } from "@/lib/ticker-api";
 import { useLiveTicker } from "@/components/live/use-live-ticker";
 import { MatchCard, MatchCardSkeleton } from "@/components/live/MatchCard";
 
@@ -85,6 +85,7 @@ export function LiveScoreTicker({
   transparent = false,
   visibleCards = 4,
   initialData,
+  matches,
 }: {
   /** Month/day badge on the left (the /live broadcast header). */
   showDate?: boolean;
@@ -98,11 +99,20 @@ export function LiveScoreTicker({
   visibleCards?: 3 | 4;
   /** Server-prefetched matches so the first paint skips the fetch wait. */
   initialData?: TickerResult;
+  /**
+   * Controlled mode: render exactly these matches and don't poll. For a host
+   * that already reads the ticker itself — /watch hides its whole Live Now band
+   * when nothing is in progress (WatchLiveNow) — so the page keeps one poll and
+   * the host's gate can never disagree with what the rail is showing.
+   */
+  matches?: TickerMatch[];
 } = {}) {
-  const { ordered, loaded } = useLiveTicker({ initialData });
+  const self = useLiveTicker({ initialData, enabled: matches === undefined });
+  const ordered = matches ?? self.ordered;
   // No live matches (still loading, or nothing live right now) → keep the
   // loading animation rather than showing fabricated placeholder cards.
-  const showCards = loaded && ordered.length > 0;
+  // Controlled mode has nothing to wait for.
+  const showCards = (matches !== undefined || self.loaded) && ordered.length > 0;
 
   // Card width tuned so N cards show with a sliver of the next.
   const cardW = `${visibleCards === 3 ? "w-[31%]" : "w-[23%]"} shrink-0`;
@@ -139,7 +149,7 @@ export function LiveScoreTicker({
       cancelAnimationFrame(id);
       window.removeEventListener("resize", update);
     };
-  }, [ordered, loaded]);
+  }, [ordered, showCards]);
 
   return (
     <div className={`flex items-stretch ${transparent ? "" : "bg-ppa-navy"}`}>
