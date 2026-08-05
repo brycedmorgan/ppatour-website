@@ -35,6 +35,26 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-05 (pt. 5) — Blog work now SHIPPED: 57 images synced to Blob, gate green
+- **Bryce grabbed `BLOB_READ_WRITE_TOKEN` from the Vercel Blob dashboard** (Storage →
+  ppatour-website-media → `.env.local` tab) into `~/pickleball/ppatour-website/.env.local`
+  (gitignored). That unblocked the whole thing — see pt.4 for why it was blocking.
+- **Integrated the held blog work onto main** by cherry-picking the two *code* commits
+  (`8c6a0cd`, `cfa2615`) — skipped the two session-log-only commits to avoid CLAUDE.md clashes.
+  One conflict, in `app/sitemap.ts`: resolved to keep BOTH — /vacations stays out (Stripe hold)
+  AND blog posts emit via `n.href`.
+- **Ran `node scripts/sync-wp-media.mjs`: 57 blog assets, 0 failed, 6.7MB → 3.5MB.** Gate now
+  **PASS, 1788/1788 (100%), 0 still on WordPress**. Full build green, pushed (`e6644d9`),
+  deploy ● Ready.
+- **Verified live on prod:** `/blog` + `/ppa-blog/{slug}` 200 with real `<h1>`, and **every post
+  image resolves to `…public.blob.vercel-storage.com`, zero `ppatour.com/wp-content` left** — the
+  39 evergreen SEO posts (Hannah's) now survive the domain cutover.
+- **`blog-work-hold` branch deleted** — its content is on main now (the two log-only commits were
+  intentionally dropped; their history is captured here). `.env.local` left in place for future
+  media syncs (gitignored).
+- **⚠ Cutover reminder unchanged:** when ppatour.com points here, re-run `sync-wp-media.mjs`
+  once more if any new posts landed, and remember `/vacations` is still noindex until Stripe.
+
 ### 2026-08-04 (pt. 4) — Launch-night prep: pushing main would have RED-BUILT the launch
 - **Bryce launches ppatour.com tonight.** Asked to confirm tracking/cookies are in place,
   keep vacations.ppatour.com intact until Stripe, and noindex /vacations. Shipped green +
