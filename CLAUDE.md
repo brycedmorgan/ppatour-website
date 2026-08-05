@@ -35,6 +35,61 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-05 (pt. 12) — Article player rail reads the story; /events search reads the map
+- Bryce's two pre-launch asks: (1) an article that mentions a player should pull that player's
+  profile into the right rail, "we had this at one point, make it real"; (2) /events search must
+  be "truly smart" — **searching "Washington" should find the Seattle PPA Challenger.** Both
+  shipped (`eb220d2`), verified on a real production build.
+- **The rail was real, not demo data — it was just half-blind.** It read ONLY WordPress's player
+  categories. Measured on the live archive: **385 of 811 posts carry a tag**; another **218 name a
+  published athlete with no tag at all** (a Ben Johns story with no way to reach Ben Johns); and
+  **314 of the tagged ones name additional athletes the tags omit**, so even a tagged article
+  under-reported its own cast. New `lib/article-players.ts` detects mentions in headline + dek +
+  body and unions them **behind** the tags (editorial intent still leads). **385 → 603 posts
+  (47.5% → 74.4%) now render a rail; 218 gain one they never had.** Cost 0.10ms/post.
+- **⚠ THE ROSTER IS OUR 179 PUBLISHED PROFILES, NEVER THE WPR BOARD — and that is the whole safety
+  argument.** The board carries 2,075 players and ~22 duplicate names, including **two Ben Johnses
+  (No. 1 and No. 682)**. Detecting against it would publish a linked headshot of the **wrong human
+  being** on a story about the right one. The published + curated roster has **zero duplicate
+  names** (verified), and every entry has a bio worth landing on. One name → two profiles → link
+  **neither**; that's the 8/5 pt.8 "ambiguity is left alone" ruling applied to prose, and it's the
+  guard that keeps this true as the roster grows.
+- **Matching is boundary-safe, not `includes`.** Lookarounds on letters/numbers, so `Ben Johns'
+  partner` matches and **`Ben Johnson` never resolves to Ben Johns**. Accent-folded both ways
+  (`Estee` finds *Estée Widdershoven*), case-insensitive so ALL-CAPS headlines count, and both
+  spellings of an aliased pro collapse to one row (*Hurricane Tyra Black* / *Tyra Black* →
+  `/athletes/tyra-black`, the slug the route actually prerenders). 12/12 on a boundary test suite.
+- **Rail caps at 10 with a native `<details>` expander.** Detection means a Championship Sunday
+  recap legitimately names thirty-plus pros — median 7, **max 38**, 295 posts over 10. Unbounded,
+  the sidebar becomes longer than the story.
+- **⚠ Body linkification is now FIRST MENTION ONLY, per player** (`lib/news-html.ts`). With the
+  bigger cast, linking every occurrence turned a stats wrap into a wall of blue. Verified on the
+  Finals recap: **13 in the rail (10 + 3), 12 body links, zero repeats.**
+- **⚠ THE SEARCH BUG WAS `state`, AND IT'S OVERLOADED.** The haystack was `name city state venue`
+  and **`state` holds the POSTAL CODE** — so "Seattle, WA" was unreachable by the word
+  "Washington", and so was every one of the 50 states. But the same field carries a **COUNTRY name
+  on international stops** ("Australia", "Italy", "China"), so the expansion is a lookup that only
+  fires on a known two-letter US code, never a transform applied to the field.
+- New `lib/event-search.ts` also adds **curated metro aliases** (Farmers Branch → Dallas/DFW, Cary
+  → Raleigh/RDU/Triangle, Rancho Mirage → Palm Springs, Lakeville → Twin Cities), region words,
+  tier + points vocabulary ("major", the retired "slam", 1500, 125), and month/year. Matching does
+  accent folding, a singular fallback, and **length-gated typo tolerance** — `las vagas`,
+  `virgina beach`, `cincinatti`, `challanger` all land. **⚠ The gate is 5 characters**: below that,
+  edit-distance-1 makes "cup" match "cap"/"cut"/"cub" and the search finds everything.
+- **Shared with site-wide search** (`lib/site-search.ts` now reads `eventSearchText`) so /search
+  and /events can never disagree about what an event is findable by. `/search?q=washington` returns
+  the Seattle stop too.
+- Verified in a **real headless browser over CDP**, not just unit-level: 11 queries typed through
+  React's native value setter, and **the counter equals the DOM card count on every one** — the
+  8/3 duplicate-key measurement, re-run, still clean. "Washington" → 1 event, the right one.
+- **⚠ Method note: a parallel session's newsroom commits landed on the rebase and touched
+  `lib/news.ts` (49 lines).** Rebuilt on the merged HEAD rather than trusting the pre-rebase build
+  — 1,118 pages green, tsc clean, eslint at its 8-error baseline. Same trap as 8/4 pt.2.
+- **Next:** detection currently ignores `playerNames` (WP player categories with no profile here) —
+  those could render as plain text in the rail so the story's full cast is visible · the ~20
+  players the WPR board lists twice still make /rankings render duplicate rows (8/5 pt.8, Connor's
+  call) · metro aliases are a hand-curated list, so a new suburban venue needs a line.
+
 ### 2026-08-05 (pt. 11) — Demo newsroom removed; the mobile-LCP theory was wrong, twice
 
 - **Bryce is announcing the launch in Slack** and asked for (a) real speed/SEO numbers to quote and
