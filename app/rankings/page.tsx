@@ -321,9 +321,17 @@ export default async function RankingsPage() {
             </Link>
             {/* Hannah 7/28: people still search for a pro's singles/doubles/
                 mixed ranking. If we don't answer that query, someone else
-                outranks us for it. */}
+                outranks us for it.
+
+                ⚠ The trailing params are Wesley's, 8/5 — they open the board
+                already on Current Seed rather than on pickleball.com's default
+                view, which is the number this link exists to answer. Keep the
+                UTMs ahead of them: `utm_content` is how this link is told apart
+                from the other pickleball.com exits in GA4. The host is
+                apex, not `www.` — `PARTNER_HOSTS` matches both, so
+                `partner_click` still fires (OutboundClickTracker). */}
             <a
-              href="https://www.pickleball.com/rankings?utm_source=ppatour&utm_medium=website&utm_campaign=rankings&utm_content=event-specific-standings"
+              href="https://pickleball.com/rankings?utm_source=ppatour&utm_medium=website&utm_campaign=rankings&utm_content=event-specific-standings&ranking_type=currentSeed&page=1&gender=F&type=1"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex h-11 items-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-white hover:text-ppa-navy"
