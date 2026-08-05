@@ -109,6 +109,9 @@ const CURATED_ALIASES: Record<string, string> = {
   "veolia-ppa-national-championships": "veolia-pickleball-national-championships",
   "greater-zion-cup": "greater-zion-cup-at-black-desert-resort",
   "carvana-pickleball-masters-powered-by-invited": "carvana-pickleball-masters",
+  // The feed lists Atlanta under its event name; map it to our curated record so
+  // the name, logo, and event page all attach (Tyler, 8/4).
+  "pickleball-players-championships": "atlanta-pickleball-championships",
 };
 
 const curatedBySlug = new Map<string, Tournament>(getAllEvents().map((t) => [t.slug, t]));
