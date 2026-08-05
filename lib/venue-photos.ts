@@ -90,18 +90,16 @@ const HERO_OVERRIDE_BY_EVENT_SLUG: Record<string, string> = {
   // ⚠ virginia-beach-open is the one that DISPLACES REAL VENUE PHOTOGRAPHY: it
   // used to point at /ppa/venues/pickleball-vb-va/featured-vb.jpg, which is now
   // unreferenced (still on disk). Restoring it is one line.
+  //
+  // ⚠ AND THIS KEY ONLY REACHES THE LIVE PAGE BECAUSE OF AN ALIAS. The feed
+  // titles this stop "Mojo Energy Pouches Virginia Beach Open", and
+  // `mapTournament` kebabs the feed title when no curated record matches, so
+  // the live event rendered under `mojo-energy-pouches-virginia-beach-open` and
+  // this override — plus the badge, guide and venue gallery — never fired.
+  // Fixed upstream in #69, which aliases that slug back to the curated record.
+  // A second key here was carrying it in the meantime and has been removed.
+  // If the alias is ever dropped, this pin goes silently dead again.
   "virginia-beach-open": "/ppa/events/virginia-beach-open.jpg",
-  // ⚠ AND IT NEEDS A SECOND KEY, WHICH IS A SYMPTOM, NOT A STYLE CHOICE. The
-  // feed titles this stop "Mojo Energy Pouches Virginia Beach Open", and
-  // `mapTournament` kebabs the feed title when no curated record matches — but
-  // the curated row pins `slug: "virginia-beach-open"`, so the lookup misses and
-  // the live event renders under `mojo-energy-pouches-virginia-beach-open`.
-  // A single `virginia-beach-open` key would therefore have changed NOTHING on
-  // the live /events page. The real fix is a CURATED_ALIASES entry in
-  // lib/events-api.ts, which also reattaches the brand, guide, parking, tickets
-  // and gallery this event is currently missing — but that MOVES A LIVE URL, so
-  // it is flagged rather than done here. Drop this key when the alias lands.
-  "mojo-energy-pouches-virginia-beach-open": "/ppa/events/virginia-beach-open.jpg",
   "atlanta-ppa-challenger": "/ppa/events/atlanta-ppa-challenger.jpg",
   "charlotte-ppa-challenger": "/ppa/events/charlotte-ppa-challenger.jpg",
   "cape-coral-open": "/ppa/events/cape-coral-open.jpg",
