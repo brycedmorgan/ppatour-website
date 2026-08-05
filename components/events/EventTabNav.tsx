@@ -39,6 +39,15 @@ export function EventTabNav({
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState<string>("");
+  // Whether the rail is scrolled hard against each end — drives both the edge
+  // fade and which arrow is on screen. Two booleans rather than one object so
+  // React can bail out of the re-render; this is set from a scroll listener.
+  const [atStart, setAtStart] = useState(true);
+  const [atEnd, setAtEnd] = useState(true);
+  // Is there enough hidden to be worth an arrow at all? A rail that overruns by
+  // a few pixels of fractional layout would otherwise offer a control that
+  // scrolls almost nothing and then vanishes, which reads as a glitch.
+  const [scrollable, setScrollable] = useState(false);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
 
@@ -122,6 +131,72 @@ export function EventTabNav({
     }
   }, [active]);
 
+  /**
+   * Track how far the rail is scrolled, so the fade and the arrows only appear
+   * on the side that actually has hidden tabs.
+   *
+   * ⚠ THE RAIL OVERFLOWS ON DESKTOP, NOT JUST ON A PHONE, AND IT MORE THAN
+   * DOUBLES ONCE YOU SCROLL. Measured at 1440: 1,150px of tabs in a 921px rail
+   * (229px hidden), and once the first slot swaps "Overview" for the event's
+   * full name + mark — 391px for the National Championships — it is 1,442px in
+   * the same 921px, i.e. **521px hidden**, precisely when this bar is the only
+   * nav on screen because the site chrome has slid away. A phone swipes; a
+   * mouse has no horizontal wheel, so before this the last tabs (Sponsors,
+   * Tickets) were unreachable unless you happened to scroll far enough down the
+   * page for the active-tab centering below to drag them into view.
+   *
+   * `scrolled` is a dependency because that name swap changes `scrollWidth`
+   * without changing the rail's own box, so the ResizeObserver never fires for it.
+   */
+  useEffect(() => {
+    const rail = scrollerRef.current;
+    if (!rail) return;
+    const update = () => {
+      const max = rail.scrollWidth - rail.clientWidth;
+      // 1px of slack: fractional layout widths mean scrollLeft rarely lands
+      // exactly on 0 or on max, and a permanently-lit arrow that does nothing
+      // is worse than no arrow.
+      setAtStart(rail.scrollLeft <= 1);
+      setAtEnd(rail.scrollLeft >= max - 1);
+      setScrollable(max > 24);
+    };
+    update();
+    rail.addEventListener("scroll", update, { passive: true });
+    const ro = new ResizeObserver(update);
+    ro.observe(rail);
+    return () => {
+      rail.removeEventListener("scroll", update);
+      ro.disconnect();
+    };
+  }, [tabs, scrolled]);
+
+  /** Arrow click: about two-thirds of a screenful, so a tab is never skipped. */
+  function nudge(dir: 1 | -1) {
+    const rail = scrollerRef.current;
+    if (!rail) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    rail.scrollBy({
+      left: dir * rail.clientWidth * 0.66,
+      behavior: reduced ? "auto" : "smooth",
+    });
+  }
+
+  // Fade the tabs out over the last 2.5rem of whichever edge has more behind
+  // it. This is the half that fixes "I didn't know there was more" — the rail
+  // hides its scrollbar, so without it a cut-off tab just looks like the end.
+  const fade = `linear-gradient(to right, ${
+    atStart ? "black 0" : "transparent 0, black 2.5rem"
+  }, ${atEnd ? "black 100%" : "black calc(100% - 2.5rem), transparent 100%"})`;
+
+  /**
+   * Pointer-only affordance, so `aria-hidden` + untabbable ON PURPOSE: Tab
+   * already reaches every link in the rail and the browser scrolls each one
+   * into view as it focuses, so exposing these would add two dead stops in the
+   * middle of the nav that do nothing a keyboard user needs.
+   */
+  const arrowClass =
+    "absolute top-1/2 hidden size-8 -translate-y-1/2 items-center justify-center rounded-full bg-ppa-paper text-sm text-ppa-navy shadow-[0_2px_10px_rgba(7,34,58,0.22)] ring-1 ring-ppa-line transition hover:bg-white hover:text-[var(--event-accent,#228be6)] active:scale-95 lg:flex";
+
   const rest = tabs.filter((t) => t.id !== "overview");
 
   const tabClass = (id: string) =>
@@ -139,8 +214,10 @@ export function EventTabNav({
       }`}
     >
       <div className="mx-auto flex max-w-6xl items-center gap-2 px-4">
+        <div className="relative flex min-w-0 flex-1 items-center">
         <div
           ref={scrollerRef}
+          style={{ maskImage: fade, WebkitMaskImage: fade }}
           className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
         {scrolled ? (
@@ -184,6 +261,32 @@ export function EventTabNav({
             {tab.label}
           </a>
         ))}
+        </div>
+
+        {/* Rendered only when there is something to reach, so the arrow is
+            never a control that does nothing. */}
+        {scrollable && !atStart && (
+          <button
+            type="button"
+            aria-hidden
+            tabIndex={-1}
+            onClick={() => nudge(-1)}
+            className={`${arrowClass} left-0`}
+          >
+            ←
+          </button>
+        )}
+        {scrollable && !atEnd && (
+          <button
+            type="button"
+            aria-hidden
+            tabIndex={-1}
+            onClick={() => nudge(1)}
+            className={`${arrowClass} right-0`}
+          >
+            →
+          </button>
+        )}
         </div>
         {ticketsUrl && (
           <a
