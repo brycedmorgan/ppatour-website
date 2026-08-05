@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
+import { ExplainerVideos } from "@/components/video/ExplainerVideos";
+import { EXPLAINER_SERIES, RANKINGS_VIDEOS } from "@/lib/explainer-videos";
 import { getFullRankings } from "@/lib/rankings-api";
 
 /**
@@ -179,6 +181,42 @@ export default async function RankingsPage() {
             </div>
 
             <WeightingBreakout />
+          </div>
+        </div>
+      </section>
+
+      {/* Understand the ranking — the explainer videos.
+
+          Wesley, 8/5: above the board AND above the Current No. 1's, so it sits
+          directly under the hero — the hero explains what the WPR is, and these
+          two videos are the long form of that same explanation.
+
+          White, matching the Current No. 1's section directly below it (his
+          call, 8/5). The two light sections read as one continuous band rather
+          than as separate stripes — so the hero hands off to a single pale
+          stretch, then the navy board.
+
+          ⚠ The iframe still only mounts on click (see ExplainerVideos). That
+          matters more here than anywhere: this is the first thing below the hero
+          on a ~2MB document, and eager players would land squarely on this
+          page's LCP. */}
+      <section id="explained" className="scroll-mt-24 bg-white">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <div className="flex items-center gap-2.5">
+            <span className="h-2 w-2 bg-ppa-blue" />
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
+              {EXPLAINER_SERIES}
+            </p>
+          </div>
+          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+            Understand the Rankings
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ppa-navy/60">
+            Where the World Pickleball Ranking came from, and how the tour&apos;s
+            points feed it.
+          </p>
+          <div className="mt-6">
+            <ExplainerVideos videos={RANKINGS_VIDEOS} />
           </div>
         </div>
       </section>

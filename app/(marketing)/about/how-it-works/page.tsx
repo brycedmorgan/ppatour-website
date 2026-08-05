@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
+import { ExplainerVideos } from "@/components/video/ExplainerVideos";
+import { EXPLAINER_SERIES, HOW_IT_WORKS_VIDEOS } from "@/lib/explainer-videos";
 import { eventHref, getMainTourEvents } from "@/lib/placeholder-data";
 
 /**
@@ -181,6 +183,23 @@ export default function HowItWorksPage() {
                 {s.label}
               </a>
             ))}
+            {/* The videos sit at the foot of a long page, so without this the
+                only way to reach them is to scroll the whole explainer.
+
+                Filled rather than a fifth outline pill, and kept OUT of
+                SECTIONS: those four are the page's sections, this is a jump to
+                media of a different kind. Matching the pills exactly would bury
+                it as "another heading" — the whole ask was quick access. Same
+                box model as the pills so the row still lines up. */}
+            <a
+              href="#watch"
+              className="inline-flex items-center gap-1.5 border border-ppa-blue bg-ppa-blue px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition-colors hover:border-ppa-blue-deep hover:bg-ppa-blue-deep"
+            >
+              <svg viewBox="0 0 24 24" className="size-2.5" fill="currentColor" aria-hidden>
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              Watch the Videos
+            </a>
           </nav>
         </div>
       </section>
@@ -757,6 +776,35 @@ export default function HowItWorksPage() {
             disciplines, and the tournaments, byes, points and prize money all
             follow from how well you play. One system, one path to the top.
           </p>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------- The video series */}
+      {/* Bottom of the page (his call, 8/5), as the last content block before
+          the CTAs and the email capture — so it closes the explainer rather
+          than delaying it.
+
+          Paper, and using the page's own SectionHead, so it sits in the same
+          white/paper alternation as the four sections above it (…points-and-money
+          paper → closing line white → this paper → navy CTAs) instead of
+          introducing a surface of its own.
+
+          ⚠ `id="watch"` IS LOAD-BEARING — the filled "Watch the Videos" button
+          in the hero jump nav targets it, which is the only quick way to reach
+          the foot of a page this long. Renaming the id silently breaks that
+          button into a no-op scroll. It stays out of the SECTIONS array on
+          purpose (those four are the explainer's own sections; this is a coda),
+          so the button is hand-written up there rather than mapped. */}
+      <section id="watch" className="scroll-mt-24 bg-ppa-paper">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <SectionHead eyebrow={EXPLAINER_SERIES} title="Watch: The Tour Explained" />
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ppa-navy/60">
+            Four short videos covering everything on this page — the contracts,
+            the World Pickleball Rankings, the calendar and the points.
+          </p>
+          <div className="mt-6">
+            <ExplainerVideos videos={HOW_IT_WORKS_VIDEOS} />
+          </div>
         </div>
       </section>
 
