@@ -80,7 +80,42 @@ const HERO_OVERRIDE_BY_EVENT_SLUG: Record<string, string> = {
   "veolia-arizona-open": "/ppa/venues/aag-mesa/featured-mesa-cup.jpg",
   "rate-las-vegas-open": "/ppa/venues/lv-summerlin/featured-vegas-cup.jpg",
   "veolia-chicago-cup": "/ppa/venues/lt-northbrook/featured-aerial.jpg",
-  "virginia-beach-open": "/ppa/venues/pickleball-vb-va/featured-vb.jpg",
+  // Wesley, 8/5 — five stops pinned to chosen action photography. ⚠ ALL FIVE ARE
+  // PLAYER ACTION SHOTS, not venue/aerial art, which is a deliberate exception to
+  // Connor's 7/20 rule (events lead with the venue). Three of them were on a
+  // GENERIC_IMAGES action photo already, so the pin only replaces an
+  // index-cycled shot with a chosen one; the two notes below are the exceptions.
+  // Galleries are untouched throughout — this is the card/hero/OG image only.
+  //
+  // ⚠ virginia-beach-open is the one that DISPLACES REAL VENUE PHOTOGRAPHY: it
+  // used to point at /ppa/venues/pickleball-vb-va/featured-vb.jpg, which is now
+  // unreferenced (still on disk). Restoring it is one line.
+  "virginia-beach-open": "/ppa/events/virginia-beach-open.jpg",
+  // ⚠ AND IT NEEDS A SECOND KEY, WHICH IS A SYMPTOM, NOT A STYLE CHOICE. The
+  // feed titles this stop "Mojo Energy Pouches Virginia Beach Open", and
+  // `mapTournament` kebabs the feed title when no curated record matches — but
+  // the curated row pins `slug: "virginia-beach-open"`, so the lookup misses and
+  // the live event renders under `mojo-energy-pouches-virginia-beach-open`.
+  // A single `virginia-beach-open` key would therefore have changed NOTHING on
+  // the live /events page. The real fix is a CURATED_ALIASES entry in
+  // lib/events-api.ts, which also reattaches the brand, guide, parking, tickets
+  // and gallery this event is currently missing — but that MOVES A LIVE URL, so
+  // it is flagged rather than done here. Drop this key when the alias lands.
+  "mojo-energy-pouches-virginia-beach-open": "/ppa/events/virginia-beach-open.jpg",
+  "atlanta-ppa-challenger": "/ppa/events/atlanta-ppa-challenger.jpg",
+  "charlotte-ppa-challenger": "/ppa/events/charlotte-ppa-challenger.jpg",
+  "cape-coral-open": "/ppa/events/cape-coral-open.jpg",
+  // ⚠ Two editions share this slug (the completed Mar 2026 stop and the Mar 2027
+  // one), so both carry this photo. Correct — same event, and the override is
+  // keyed by slug, not by year.
+  "greater-zion-cup-at-black-desert-resort": "/ppa/events/greater-zion-cup.jpg",
+  // Wesley, 8/5. ⚠ This is an ACTION shot, not Seattle venue photography — a
+  // Jack Sock singles point (Sacramento Open quarterfinals). Correct treatment
+  // for a Challenger: they have no Jackalope venue library, so the alternative
+  // is GENERIC_IMAGES, which is the same class of photo picked by calendar
+  // index instead of on purpose. Do NOT read this as a venue/aerial and do NOT
+  // reuse it as one; if Seattle's own venue art ever lands, replace it here.
+  "seattle-ppa-challenger": "/ppa/events/seattle-ppa-challenger.jpg",
 };
 
 /**

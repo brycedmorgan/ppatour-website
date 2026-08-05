@@ -68,16 +68,28 @@ const REACH = [
  *   - `nationals-action-2.jpg` leads with FRANKLIN apparel and a Franklin
  *     paddle. Franklin isn't a partner at all, and three brands (JOOLA, Proton,
  *     Six Zero) are each sold an "Official Paddle Partner" designation here.
- * What ships shows Carvana, Veolia, Proton and Storm — all current — plus PBTV
- * on the Broadcast tile. The Digital tile carries Storm's older "Reign Storm"
- * lockup because that's the branding that was on court when it was shot; same
- * partner, and historical marks in photography are facts (the 8/3 ruling on
- * past event names). Swap if marketing would rather show only current lockups.
+ * What ships shows Carvana, Veolia and Proton — all current — plus PBTV on the
+ * Broadcast tile.
+ *
+ * DIGITAL was replaced on 8/5 (Wesley) and the same signage test picked which
+ * photo of the seven candidates could take it. Five were disqualified on the
+ * rule above, not on looks: two led with SELKIRK (off the roster since 8/3), one
+ * with FRANKLIN (never a partner), one carried a TOYS "R" US tent — the sponsor
+ * Connor asked us to keep off the site — and one had VIZZY HARD SELTZER as the
+ * largest wordmark in frame, a non-partner alcohol brand on the page that sells
+ * category exclusivity. What ships carries only Humana (current Official
+ * Healthcare Partner) and PBstar apparel, which no tile category is sold against.
+ *
+ * ⚠ The tile is aspect-[4/5] with object-cover, so it CENTER-CROPS to 53% of the
+ * photo's width and the "Humana." wordmark reads as "nana." That is cosmetic —
+ * the tile is chosen for what is NOT in it. If marketing wants the mark legible,
+ * the fix is a pre-cropped 4:5 file, not object-position (that class is shared by
+ * all eight tiles).
  */
 const WAYS_TO_PARTNER = [
   { label: "IP Rights", image: "/ppa/nationals-crowd-branded.jpg" },
   { label: "Experiential", image: "/ppa/nationals-crowd-fans.jpg" },
-  { label: "Digital", image: "/ppa/action-mxd.jpg" },
+  { label: "Digital", image: "/ppa/sponsor-humana-board.jpg" },
   { label: "Hospitality", image: "/ppa/nationals-crowd-stadium.jpg" },
   { label: "Retail", image: "/ppa/nationals-crowd-1.jpg" },
   { label: "On-Site", image: "/ppa/sponsor-carvana-boards.jpg" },
