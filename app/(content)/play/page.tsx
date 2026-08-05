@@ -46,7 +46,10 @@ const CATEGORIES = [
   {
     label: "State Championships",
     href: "/tour/state-championships",
-    blurb: "Your state's biggest amateur stage — qualifiers and finals.",
+    // Kept in step with the approved series copy in lib/tour-programs.ts. It
+    // used to read "qualifiers and finals", which is a structure the series
+    // doesn't actually describe — see the note on that entry.
+    blurb: "Amateur championships in all 50 states — win yours and you're in at Worlds.",
   },
   {
     label: "PPA Camps",

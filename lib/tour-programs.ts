@@ -76,21 +76,53 @@ export const tourPrograms: TourProgram[] = [
     image: "/ppa/action-md-final.jpg",
   },
   {
+    /**
+     * ⚠ APPROVED COPY (Wesley, 8/5: "got approval from Tanner and team"). Treat
+     * the wording here as signed off — don't rewrite it for house style without
+     * going back to them.
+     *
+     * ⚠ IT IS A TITLED SERIES NOW: the **2026 Powerball Pickleball State
+     * Championship Series**. Powerball is the title sponsor, which is why the
+     * name leads the page. The nav `label` stays the short "State Championships"
+     * because it sits in a dropdown beside five siblings; the full name carries
+     * the H1.
+     *
+     * ⚠ WHAT THE OLD COPY GOT WRONG, so none of it comes back:
+     *   - It sent state champions to "priority entry into the National
+     *     Championships". They get AUTOMATIC QUALIFICATION into the Champions
+     *     Division brackets of the **Pickleball World Championships** — a
+     *     different event and a stronger claim.
+     *   - It invented "Brackets from 2.5 through 5.0+" and "qualifier weekends".
+     *     The approved copy says all ages and skill levels competing within
+     *     their respective divisions, and names no bracket numbers.
+     *   - It located Worlds "in Dallas". The 2026 Worlds is at Brookhaven Country
+     *     Club, Farmers Branch TX. The approved copy names no city, so neither
+     *     does this.
+     *
+     * ⚠ "Gold medalists" brushes against Hannah's 7/28 ruling to drop medal
+     * terminology sitewide. Kept, because here it names the QUALIFICATION
+     * MECHANISM in copy a sponsor has approved — you win gold in your state, you
+     * are in at Worlds — not a career stat on a player page, which is what that
+     * ruling targeted. Flagged rather than resolved; if she is firm it is one
+     * sentence, and it needs Tanner's side to agree.
+     */
     slug: "state-championships",
     label: "State Championships",
-    eyebrow: "Your State's Biggest Amateur Stage",
-    headline: "Every State, One Title",
+    eyebrow: "All 50 States · 55+ Events",
+    headline: "2026 Powerball Pickleball State Championship Series",
+    sectionHeadline: "Where Community, Competition, and Championship Dreams Collide",
     body: [
-      "The PPA State Championships are the most competitive single-state amateur events in pickleball — qualifier weekends in every state, with the top seeds competing in the Champion's Division at the Pickleball World Championships in Dallas.",
-      "Brackets are open by age and skill, and State Champions earn priority entry into the National Championships.",
+      "The Powerball Pickleball State Championship Series is more than just a tournament, it's a nationwide celebration of America's fastest-growing sport. Spanning all 50 states with 55+ events, the series gives amateur players of all ages and skill levels the opportunity to compete within their respective divisions in each state's amateur championship.",
+      "Gold medalists in each state, who earn the title of state champion, receive automatic qualification into the Champions Division brackets of the Pickleball World Championships, where they compete against medalists from other State Championship events.",
+      "Join the movement. From local courts in your hometown to the grand stage of the Pickleball World Championships, we're showcasing the best players in each state's amateur championship tournament in the country.",
     ],
     bullets: [
-      { title: "Every state, every year", detail: "Qualifiers and State Finals across all 50 states." },
-      { title: "Open to all skill levels", detail: "Brackets from 2.5 through 5.0+." },
-      { title: "Path to Nationals", detail: "State Champions get priority registration at the National Championships." },
-      { title: "Community + competition", detail: "The largest pickleball weekend in your state, every year." },
+      { title: "All 50 states", detail: "55+ events across the country, from local courts to the national stage." },
+      { title: "Every age and skill level", detail: "Amateur players compete within their respective divisions at each state's amateur championship." },
+      { title: "State champion status", detail: "Gold medalists in each state earn the title of state champion." },
+      { title: "A place at the World Championships", detail: "State champions qualify automatically for the Champions Division brackets at the Pickleball World Championships." },
     ],
-    cta: { label: "Find Your State", href: REGISTER_PPA, external: true },
+    cta: { label: "Find a Tournament Near You", href: REGISTER_PPA, external: true },
     image: "/ppa/action-mxd.jpg",
   },
   {
