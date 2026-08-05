@@ -73,6 +73,10 @@ export function venuePhotosFor(slug: string): VenuePhoto[] {
  * event that shares the same venue), pin it here. Gallery is unaffected.
  */
 const HERO_OVERRIDE_BY_EVENT_SLUG: Record<string, string> = {
+  // Bryce's call: the packed championship-court crowd shot leads Nationals —
+  // more powerful than the top-down aerial. Overrides the synced Cary aerial
+  // for the hero, homepage card and OG share image; gallery is unaffected.
+  "veolia-pickleball-national-championships": "/ppa/nationals-championship-court.jpg",
   "veolia-arizona-open": "/ppa/venues/aag-mesa/featured-mesa-cup.jpg",
   "rate-las-vegas-open": "/ppa/venues/lv-summerlin/featured-vegas-cup.jpg",
   "veolia-chicago-cup": "/ppa/venues/lt-northbrook/featured-aerial.jpg",
