@@ -35,6 +35,54 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-05 (pt. 6) — The real PBTV brand kit lands; /pbtv re-skinned off the guide, not a guess
+- **Bob Whyley sent the PBTV brand kit** (Dropbox, 36MB) — the asset chased since 7/30 and the
+  thing `_pbtv/HANDOFF.md` named as the blocker on this page. Both guides + every logo format.
+- **⚠ THE PAGE WAS THE WRONG COLOUR AND THE WRONG SHAPE, and not by a little.** The concept was
+  built pre-kit as deep-green ground (`#06160E`) with an optic-lime accent (`#C8F250`). **PBTV is
+  a GREYSCALE brand with one muted green** — main colours are grey `#828C96`, green `#508250`,
+  black, white; secondary taupe/mid-grey/slate. **Not one value in the old palette survived.**
+  Re-skinned to the guide: black ground, white ink, `#828C96` for secondary text, `#508250`
+  reserved for CTAs and the live-bug accent.
+- **Every pair was contrast-checked on black before it shipped**, not eyeballed: green 4.65:1 ·
+  grey 6.14:1 · white-on-green 4.52:1 — all AA for normal text. **`#626262` measured 3.44:1, so
+  it holds LINES and never type** (the small supporting text that used to sit on it moved to the
+  main grey). The one colour NOT in the guide is the `--live` red; PBTV has no red, and it stays
+  as a functional broadcast-status colour with a comment saying so.
+- **Real vector logos replace two 66KB base64 PNGs.** The kit's PDFs are Illustrator vector, so
+  they were **converted to true SVG** (a small PDF-path→SVG converter — content streams inflate
+  to plain `m/l/c/h` ops). **⚠ The first pass silently dropped the `l` glyphs** — straight-sided
+  letters are drawn as `re` rectangles, which the converter was discarding as clip rects, so the
+  wordmark read "pickeba tv". Caught by RENDERING it, not by reading the output. **Page 160KB → 31KB.**
+- **⚠ THE ONE JUDGEMENT CALL: display type is now uppercase condensed.** PBTV's headline face is
+  **Prohibition** and every frame in the guide reads TOURNAMENT / TONIGHT / COMING UP. The page
+  was all-lowercase Framer-spare. Changed, and flagged in the CSS — three rules revert it.
+  **⚠ Prohibition, Avenir and All Round Gothic are licensed DESKTOP faces and the kit shipped no
+  webfonts**, so the stack names the real faces first (Avenir Next ships on every Mac and iPhone)
+  and falls back to Oswald — which is the face the 2023 Visual Language moodboard itself specified.
+  To make it exact, licence the two webfonts and self-host.
+- **Three real bugs found while re-skinning, all pre-existing:**
+  - **No `<meta charset>` at all** — every em dash rendered as `â€"` unless the server happened to
+    send a charset header. The page's correctness was depending on infrastructure it doesn't control.
+  - **87px of horizontal overflow at 390px.** The header had NO mobile treatment — four text links
+    plus the pill never fit. Below 720px the section links drop (the footer nav carries the same
+    five anchors) and the logo + "watch live" stay.
+  - **`.hero`, `.stage` and `.join` are each ALSO `.wrap`** and carry a `padding` SHORTHAND, which
+    resets `.wrap`'s `0 24px` gutter to zero. Invisible above ~1128px because the centred max-width
+    hides it; at 390px the headline sat flush against the screen edge. `padding-block` fixes it.
+- **Verified with CDP device metrics at 390/768/1440** (never `--window-size` — this repo's log
+  records why): **0px horizontal overflow at all three**, 0 elements stuck at opacity 0, 0 broken
+  images. Dead canvas block removed (its `getElementById('court')` returned null on every load).
+- **⚠ A PARALLEL SESSION IS COMMITTING WITH `git commit -a` AND SWEPT THIS WORK UP.** The three
+  PBTV brand SVGs landed inside `1be38f4` and a mid-edit `index.html` inside `667157c` — both
+  titled "Nationals hero". Nothing is lost and the final state is correct, but those commit
+  messages do not describe their contents. Same trap as the 7/31 pt.3 entry. `cc6cbdb` is the
+  clean remainder.
+- **Next:** licence + self-host Prohibition and Avenir (the only thing between this and exact) ·
+  the FAST-platform logos (Xumo/Philo/TCL/LG/CW) are still Simple-Icons-or-nothing — 9 of 14
+  tiles are text-only · the kit ships **no combination lockup file**, only a picture of one in
+  the guide, so ask Bob for it before it goes on anything printed.
+
 ### 2026-08-05 (pt. 5) — Blog work now SHIPPED: 57 images synced to Blob, gate green
 - **Bryce grabbed `BLOB_READ_WRITE_TOKEN` from the Vercel Blob dashboard** (Storage →
   ppatour-website-media → `.env.local` tab) into `~/pickleball/ppatour-website/.env.local`
