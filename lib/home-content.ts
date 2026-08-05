@@ -337,12 +337,12 @@ export const partners: Partner[] = [
     logoHeight: 586,
   },
   {
-    // Designation restored 8/4 (Wesley: "Humana = Official human care partner").
-    // It was already the right string, just suppressed by `hideRole` — see the
-    // note on that field.
+    // Designation restored 8/4 (Wesley: "Humana = Official human care partner"),
+    // then changed to "Healthcare" on 8/5 at Humana's own request, forwarded by
+    // Wesley. Their wording, not ours — don't "correct" it back to Human Care.
     name: "Humana",
     website: "https://www.humana.com",
-    role: "Official Human Care Partner",
+    role: "Official Healthcare Partner",
     category: "Insurance",
     note: "Keeping players and fans moving, on the court and off it.",
     tier: "platinum",
