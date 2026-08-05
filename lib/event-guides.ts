@@ -37,6 +37,18 @@ export type EventGuide = {
 };
 
 /**
+ * One labelled block of an event's parking details, as the event team submits
+ * them (General / Premium / ADA / Rideshare). `body` is one entry per
+ * paragraph; entries may carry newlines (an address block) and every renderer
+ * honours them via `whitespace-pre-line`.
+ */
+export type ParkingSection = {
+  /** Omitted for the single-paragraph holding line, which has nothing to label. */
+  heading?: string;
+  body: string[];
+};
+
+/**
  * The approved copy for any stop whose parking isn't finalized yet.
  * Verbatim from the event team's 8/5 request — don't reword it.
  */
@@ -54,17 +66,62 @@ export const PARKING_TBA =
  * event team. All 18 strings were deleted rather than gated, so the only way to
  * publish parking again is to paste the real details in here.
  *
- * ⚠ CARY'S LINE BELOW PREDATES THE ASANA SUBMISSION and has not been reconciled
- * against it — replace it with the submitted text verbatim.
+ * ⚠ EVERY STRING BELOW IS THE EVENT TEAM'S OWN WORDING, PASTED VERBATIM. Don't
+ * tighten it for the layout, and don't add a fact the submission doesn't state
+ * (a shuttle frequency, a premium price, a pass link) — that is exactly the
+ * fabricated-operations bug the 8/5 pass deleted 18 strings to close.
  */
-const PARKING_BY_SLUG: Record<string, string> = {
-  "veolia-pickleball-national-championships":
-    "Free on-site parking at Cary Tennis Park; ADA + drop-off at the main gate. Lots open 8:00 AM.",
+const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
+  // Cary, 8/5 — the event team's submitted copy. ⚠ This REPLACED an earlier
+  // hand-written line that said parking was free ON-SITE; the real arrangement
+  // is free OFF-SITE with a shuttle, and on-site is paid.
+  "veolia-pickleball-national-championships": [
+    {
+      heading: "General Parking",
+      body: [
+        "Free off-site parking is available Monday–Sunday, with complimentary shuttle service to and from the venue.",
+        "Off-Site Parking Location:\nPhillips Farms\n6800 Good Hope Church Rd.\nCary, NC 27519",
+        "Shuttles will begin approximately one hour before the first matches each day and continue until one hour after the final match concludes.",
+        "Estimated Shuttle Hours: 6:30 AM – 10:00 PM",
+      ],
+    },
+    {
+      heading: "Premium Parking",
+      body: [
+        "Limited on-site premium parking is available for purchase. A premium parking pass allows you to park on-site at the tournament venue.",
+        "Premium parking must be purchased in advance through Tixr. Parking passes will not be sold at the lot.",
+      ],
+    },
+    {
+      heading: "ADA Parking",
+      body: [
+        "A limited number of ADA parking spaces are available on-site. Once ADA parking is full, guests may park in the complimentary off-site lot. At least one ADA-accessible shuttle will operate each day between the off-site lot and the venue.",
+        "Guests may also be dropped off at the venue's main entrance.",
+      ],
+    },
+    {
+      heading: "Rideshare",
+      body: [
+        "Uber, Lyft, and other rideshare services may pick up and drop off passengers at the tournament venue.",
+      ],
+    },
+  ],
 };
 
-/** Parking copy for an event page — finalized details, or the holding line. */
-export function parkingFor(slug: string): string {
-  return PARKING_BY_SLUG[slug] ?? PARKING_TBA;
+/** Parking details for an event page — finalized sections, or the holding line. */
+export function parkingFor(slug: string): ParkingSection[] {
+  return PARKING_BY_SLUG[slug] ?? [{ body: [PARKING_TBA] }];
+}
+
+/**
+ * The same details flattened to plain text, for surfaces that can't render
+ * blocks — the concierge's chat answer and the search index. Derived from the
+ * one source above so it can never disagree with the page.
+ */
+export function parkingText(slug: string): string {
+  return parkingFor(slug)
+    .map((s) => [s.heading, ...s.body].filter(Boolean).join("\n"))
+    .join("\n\n");
 }
 
 export const eventGuides: Record<string, EventGuide> = {

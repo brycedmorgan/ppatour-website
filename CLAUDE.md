@@ -42,6 +42,62 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-05 (pt. 19) — Cary's real parking lands: free lot is OFF-site, and the old line said on-site
+
+- Wesley pasted the event team's submitted copy. **It contradicts the line the site was publishing**
+  (pt. 14's ⚠ "PREDATES THE ASANA SUBMISSION" — now closed): we said *"Free on-site parking at Cary
+  Tennis Park"*; the real arrangement is **free OFF-site at Phillips Farms, 6800 Good Hope Church Rd,
+  with a complimentary shuttle**, and **on-site is paid premium, bought in advance through Tixr**. So
+  the one hand-written string that survived the 18-string purge was **sending every general-admission
+  guest to the wrong lot** at the tour's biggest event.
+- **`PARKING_BY_SLUG` now holds `ParkingSection[]`, not a string** — the submission is four labelled
+  blocks (General / Premium / ADA / Rideshare) with an address, and a single `<p>` collapses all of it
+  into one run-on line. `body` is one entry per paragraph and **entries may carry newlines** (the
+  address is one entry), rendered with `whitespace-pre-line` so **the text stays verbatim rather than
+  being re-punctuated to fit the layout**. The gate is unchanged in shape: unlisted slug → `PARKING_TBA`,
+  and that path renders as one heading-less paragraph, byte-identical to before.
+- **⚠ NEW `components/events/ParkingDetails.tsx` IS SHARED BY BOTH PAGES ON PURPOSE.** The event page
+  and `NationalsLive` render the same KBYG accordion and the same Plan-Your-Trip card from separate
+  files and have drifted repeatedly (pt. 14, 7/31 pt. 2, 8/4 pt. 2). Parking is the one place a drift
+  means **one of the two pages sends people to a different lot**, so all four spots go through it.
+- **Two surfaces can't render blocks, so they read a derived `parkingText(slug)`** — the concierge's
+  chat bubble and the search index — flattened from the same source, so the chatbot cannot answer with
+  a shorter or differently-arranged version. **The bubble needed `whitespace-pre-line`** or it would
+  have delivered the whole four-block answer as one line.
+- **⚠ NOT LINKED, DELIBERATELY: "purchased in advance through Tixr."** There is **no parking SKU in the
+  Tixr snapshot** (grepped `tixr-ticket-prices.json`), so pointing it at the event's ticket URL would
+  publish a guess about where a pass is sold. Text only until someone confirms the listing. One-word
+  edit: the submission wrote "TIXR", the site writes "Tixr" everywhere else.
+- Verified on real pages on a clean dev server: **Nationals renders all four headings in both spots**
+  with the address line breaks intact and the accordion row as a `div` not a `p`; **Rate Las Vegas
+  Open renders the holding line and nothing else**. `parkingFor` returns 4 sections for Cary and
+  **exactly `PARKING_TBA` for Vegas / Cincinnati / PPA Open / Chicago**; all five deleted sentinels
+  ("On-site lots open with the gates", "published event week", "$20/day", "Reserved+", "Free on-site
+  parking") are absent. `/search?q=` finds Nationals by **phillips / rideshare / shuttle**. tsc clean;
+  eslint clean bar NationalsLive's documented set-state-in-effect baseline.
+- **⚠ "Jest worker encountered 2 child process exceptions" ON EVERY EVENT PAGE WAS A POISONED `.next`,
+  NOT A CODE BUG — AND THE DIAGNOSIS IS THE REUSABLE PART.** Wesley hit it in the browser mid-session.
+  - **It is the `static-paths-worker`**, which `next dev` forks to run `generateStaticParams`
+    (`next-dev-server.js:112`, `maxRetries: 1`). So the 500 hits **only routes with
+    `generateStaticParams` whose params aren't already cached** — `/events/[year]/[slug]`,
+    `/tour/[slug]`, `/athletes/<uncached-slug>` — while `/`, `/watch`, `/rankings`, the `-live` route,
+    every `/about/*` page **and `/athletes/ben-johns` (cached params) all served 200**. That split is
+    what identifies the worker; it is not "the dev server is down".
+  - **Cause: `.next` held a production build from 13:07–13:09 AND a Turbopack dev tree from 13:12
+    onward.** The worker resolves pages through the manifests in `distDir`, and a mixed prod/dev
+    `.next` makes that load fail, so the child dies before it can report anything useful.
+  - **Ruled out first, in this order:** restored the **committed** `page.tsx` and re-requested — still
+    500 · `/tour/[slug]` 500s too and imports **none** of the changed files · the two deleted libs
+    (`article-players`, `event-search`) have **zero importers** · all three compiled page bundles
+    `require()` cleanly · and the data behind the event page's `generateStaticParams` runs in
+    **0 ms / 10 MB** under `tsx`, so it is not an OOM or a throw in params.
+  - **Fix: stop the servers, `rm -rf .next`, restart `next dev`.** Ready in 383ms, and every route
+    above now 200s. **⚠ Don't run `next build` and `next dev` against the same `.next` —** that is
+    what did it, and the failure mode looks like a mystery crash in your own page.
+  - **The stale `next start` on :3111 is GONE** (killed with the rest — it had been serving a
+    day-old bundle and misleading verification runs since 8/5 pt. 7). **:3000 is now the only server**,
+    started this session, owning the repo dir.
+
 ### 2026-08-05 (pt. 18) — /rankings paginates, 50 a page — Connor's "all the way" is REVERSED
 
 - Wesley: *"add pagination to the /rankings page. 50 per page. have the loading animation appear when
@@ -301,6 +357,8 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   into `TournamentDetails.parking`. NOTHING RENDERS IT** — verified, `/brackets` and `/live` read
   only `name`. Left in place with a ⚠: it's the platform's blurb, not the event team's finalized
   details, and rendering it would route around the gate for every event in the feed.
+- **✅ CLOSED 8/5 pt. 19 — and the submitted copy CONTRADICTED our line: free parking is OFF-site with
+  a shuttle, on-site is paid. The note below is kept as the record of what was published until then.**
 - **⚠ CARY'S LINE ON THE SITE PREDATES THE ASANA SUBMISSION and is NOT reconciled against it.**
   The Asana connector isn't authorized in this session, so the submitted text couldn't be read.
   It still says *"Free on-site parking at Cary Tennis Park; ADA + drop-off at the main gate. Lots

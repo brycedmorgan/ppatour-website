@@ -24,7 +24,8 @@ import { playerInitials, playerPhoto, playerProfileHref } from "@/lib/player-pho
 import { getPlaylistVideos } from "@/lib/youtube";
 import { Countdown } from "@/components/motion/Countdown";
 import { getBroadcast } from "@/lib/broadcast";
-import { getEventGuide, parkingFor } from "@/lib/event-guides";
+import { getEventGuide, parkingFor, parkingText } from "@/lib/event-guides";
+import { ParkingDetails } from "@/components/events/ParkingDetails";
 import { getEventSchedule } from "@/lib/event-schedule";
 import { getEvents } from "@/lib/events-api";
 import { getArticlesForEvent } from "@/lib/news-articles";
@@ -354,7 +355,9 @@ export default async function EventPage({ params }: Params) {
       campaign: t.eventCode ?? t.slug,
       content: "event-concierge-register",
     }),
-    parking,
+    // Flattened from the same source the page renders — the chat bubble can't
+    // render blocks, but it must not answer with a shorter/different arrangement.
+    parking: parkingText(t.slug),
     airport: guide ? `${guide.airport} (${guide.airportNote})` : undefined,
     hotels: guide?.hotels.map((h) => h.name) ?? [],
     dining: guide?.dining.map((d) => d.name) ?? [],
@@ -1149,7 +1152,7 @@ export default async function EventPage({ params }: Params) {
                 },
                 {
                   k: "Parking & Shuttle",
-                  v: parking,
+                  v: <ParkingDetails sections={parking} />,
                 },
                 {
                   k: "What to Bring",
@@ -1180,9 +1183,10 @@ export default async function EventPage({ params }: Params) {
                       ▾
                     </span>
                   </summary>
-                  <p className="px-4 pb-4 text-sm leading-relaxed text-ppa-navy/70">
+                  {/* A div, not a p: the parking row renders labelled blocks. */}
+                  <div className="px-4 pb-4 text-sm leading-relaxed text-ppa-navy/70">
                     {row.v}
-                  </p>
+                  </div>
                 </details>
               ))}
             </div>
@@ -1232,9 +1236,10 @@ export default async function EventPage({ params }: Params) {
                 <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-blue">
                   Parking & Access
                 </p>
-                <p className="mt-3 text-sm leading-relaxed text-ppa-navy/65">
-                  {parking}
-                </p>
+                <ParkingDetails
+                  sections={parking}
+                  className="mt-3 text-sm leading-relaxed text-ppa-navy/65"
+                />
               </div>
             </div>
 

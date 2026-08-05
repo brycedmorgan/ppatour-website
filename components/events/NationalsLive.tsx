@@ -15,7 +15,8 @@ import { ChampionsBanner } from "@/components/live/ChampionsBanner";
 import { BracketPanel } from "@/components/live/BracketPanel";
 import { ATLANTA_EVENT_ID } from "@/lib/bracket-sample";
 import { getBroadcast } from "@/lib/broadcast";
-import { getEventGuide, parkingFor } from "@/lib/event-guides";
+import { getEventGuide, parkingFor, parkingText } from "@/lib/event-guides";
+import { ParkingDetails } from "@/components/events/ParkingDetails";
 import { getEventSchedule } from "@/lib/event-schedule";
 import { playersToWatch } from "@/lib/home-content";
 import { getArticlesForEvent } from "@/lib/news-articles";
@@ -282,7 +283,8 @@ export function NationalsLive({
       campaign: t.eventCode ?? t.slug,
       content: "event-concierge-register",
     }),
-    parking,
+    // Flattened from the same source the page renders — see the event page.
+    parking: parkingText(t.slug),
     airport: guide ? `${guide.airport} (${guide.airportNote})` : undefined,
     hotels: guide?.hotels.map((h) => h.name) ?? [],
     dining: guide?.dining.map((d) => d.name) ?? [],
@@ -1143,7 +1145,7 @@ export function NationalsLive({
                 },
                 {
                   k: "Parking & Shuttle",
-                  v: parking,
+                  v: <ParkingDetails sections={parking} />,
                 },
                 {
                   k: "What to Bring",
@@ -1174,9 +1176,10 @@ export function NationalsLive({
                       ▾
                     </span>
                   </summary>
-                  <p className="px-4 pb-4 text-sm leading-relaxed text-ppa-navy/70">
+                  {/* A div, not a p: the parking row renders labelled blocks. */}
+                  <div className="px-4 pb-4 text-sm leading-relaxed text-ppa-navy/70">
                     {row.v}
-                  </p>
+                  </div>
                 </details>
               ))}
             </div>
@@ -1224,9 +1227,10 @@ export function NationalsLive({
                 <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-blue">
                   Parking & Access
                 </p>
-                <p className="mt-3 text-sm leading-relaxed text-ppa-navy/65">
-                  {parking}
-                </p>
+                <ParkingDetails
+                  sections={parking}
+                  className="mt-3 text-sm leading-relaxed text-ppa-navy/65"
+                />
               </div>
             </div>
 

@@ -27,9 +27,10 @@ export type ConciergeFacts = {
   ticketsUrl: string | null;
   registerUrl: string;
   /**
-   * Always supplied — `parkingFor(slug)` returns the event team's finalized
+   * Always supplied — `parkingText(slug)` returns the event team's finalized
    * details or the approved holding line, so the concierge never has to invent
    * a parking answer. Required (not optional) so it can't silently go missing.
+   * May carry newlines (labelled blocks + an address); the bubble renders them.
    */
   parking: string;
   airport?: string;
@@ -304,7 +305,10 @@ export function EventConcierge({ facts }: { facts: ConciergeFacts }) {
           {msgs.map((m, i) => (
             <div
               key={i}
-              className={`max-w-[85%] px-3 py-2 text-xs leading-relaxed motion-safe:animate-fade ${
+              // whitespace-pre-line: the parking answer is the event team's
+              // multi-block copy (headings + an address) — without this it
+              // collapses into one run-on line.
+              className={`max-w-[85%] whitespace-pre-line px-3 py-2 text-xs leading-relaxed motion-safe:animate-fade ${
                 m.role === "user"
                   ? "self-end bg-ppa-blue text-white"
                   : "self-start border border-ppa-line bg-white text-ppa-navy"
