@@ -44,6 +44,65 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-05 (pt. 15) — "The site is too slow": it isn't Vercel, and it isn't the homepage
+
+- Bryce: *"the new site is too slow. Is it vercel?"* **No.** Measured: TTFB 100–160ms,
+  `x-vercel-cache: HIT` on the HTML, 55 KB HTML + 241 KB JS brotli, zero long tasks,
+  interactive at 387ms. Every route sampled is 0.13–1.09s TTFB. **The platform is fine.**
+- **⚠ MY FIRST DIAGNOSIS WAS WRONG AND IS THE MOST REUSABLE THING HERE.** I read
+  `/_next/image` URLs out of the HTML, saw **55 of 85 at `w=3840`**, and reported ~5 MB of
+  oversized images. **That is the fallback `src` attribute, which next/image always sets to
+  the LARGEST srcset candidate.** The browser picks from `srcSet`+`sizes` and never fetches
+  it. `sizes` is set correctly everywhere on this site (140px/170px avatars, real vw
+  expressions on cards) and the srcSets are complete. **Real desktop homepage: 1.19 MB / 70
+  requests fully scrolled.** Parse the HTML to find *candidates*; only a browser tells you
+  *downloads*.
+- **The real problem is mobile on a slow connection, and it reproduces the pt. 11 number
+  exactly.** At 390×844 DPR3, 4× CPU, 1.6 Mbps / 150ms RTT: **mobile LCP 4,228ms** (desktop
+  is ~720ms at 10 Mbps). LCP element is the hero, `nationals-championship-court.jpg`
+  w=1200 q=65, **159 KB** — but it lands at 4.2s, i.e. it is **bandwidth-starved, not big**.
+- **SHIPPED: the header's mega-panel image warmup is now gated to desktop + idle**
+  (`components/global/Header.tsx`, swept into `dc02f93`). It warmed 3 photos × 2 widths on
+  **every page load, unconditionally**. The mega panels **do not exist below `lg`** — the
+  trigger nav is `hidden lg:flex`, mobile gets the drawer — so all six requests were for
+  unreachable UI on the viewport least able to afford them, and they fired on mount, into
+  the hero's LCP window. One of the three IS the hero photo, warmed at q=75 while the hero
+  renders q=65, so the optimizer treats it as a second variant and downloads it twice.
+  - Measured both sides on local prod builds: **mobile 98 → 91 requests, 1314 → 1153 KB,
+    image bytes 684 → 501 KB** — and 501 is exactly 684 minus the 183 KB of warmup.
+    **Desktop still fires 6/6, same variants: the feature is intact.**
+  - **⚠ IT DOES NOT MOVE LCP. 4,228ms before and after.** It is a bandwidth/battery saving.
+    Do not let it get described as an LCP fix — that is how pt. 11's two wrong claims happened.
+- **⚠ FOUND AND MEASURED, NOT FIXED — this is the actual mobile-LCP lever.** The four
+  below-fold callout-rail photos (`watch-broadcast-desk` / `tickets-worlds-crowd` /
+  `follow-finals-crowd` / `play-amateur-court`, ~290 KB at w=828 q=75) **starve the hero**.
+  Blocking them outright via CDP: **LCP 4,232 → 3,172ms (−1,060ms, −25%)**.
+  - **`fetchPriority="low"` on them was tried and REVERTED.** It does emit (React passes it
+    through camelCase, which HTML parses fine) but measured **4,212ms — a no-op**, because
+    they are already `loading="lazy"` and Chrome already schedules lazy images at low
+    priority. **Third disproved LCP theory in this repo; do not re-attempt it.**
+  - What is left to try: not rendering them until the rail is near-viewport, or cutting
+    their bytes (q=65, smaller `sizes`). **Both unmeasured — measure before claiming.**
+  - ⚠ `loading="lazy"` is a *visibility* heuristic, not a *bandwidth* one. Chrome's
+    viewport-distance threshold is generous and widens on slow connections, which is why
+    below-fold images compete with the LCP element at all.
+- **Two reusable harnesses committed**: `scratchpad/cdp-lcp.mjs` (median-of-N mobile LCP,
+  `KBPS`/`RTT` env overrides) and `scratchpad/cdp-warmup.mjs` (request/byte accounting).
+  They encode three traps that each cost real time here: **CDP device metrics, never
+  `--window-size`** (7/31 pt. 5); **`Network.setCacheDisabled`** or a persisted profile
+  reports every image as 0 bytes; and **byte counts must come from `loadingFinished` keyed
+  by `requestId`** — `responseReceived`'s `encodedDataLength` is headers-only and reported
+  a 1.1 MB page as 31 KB.
+- **⚠ FOURTH `git commit -a` SWEEP, and this one is worth knowing about.** A parallel
+  session committed the Stripe **payments HOTFIX `dc02f93`** while my Header change and five
+  scratchpad scripts were in the tree, and pushed it. Nothing is lost and the gate is in
+  HEAD, but that commit message describes none of it — **if you are looking for when the
+  warmup was gated, it is the hosted-checkout hotfix.** (Prior: 7/31 pt.3, 8/5 pt.6, 8/5 pt.11.)
+- **Next:** the callout-rail deferral is the only measured 1-second win on the table ·
+  re-run `cdp-lcp.mjs` against prod once CrUX has real-user mobile data · the hero at
+  w=1200/DPR3 is 159 KB and a scrimmed Ken Burns background may not need 3× resolution,
+  worth one measured attempt.
+
 ### 2026-08-05 (pt. 14) — Parking: only Cary publishes details; the other 17 stops' copy DELETED
 
 - Event team's request, forwarded by Wesley: **Cary is the only stop with finalized parking**
