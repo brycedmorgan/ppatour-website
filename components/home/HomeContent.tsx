@@ -4,7 +4,6 @@ import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { PartnerSpotlight } from "@/components/home/PartnerSpotlight";
 import { PartnerWall } from "@/components/global/PartnerWall";
 import { HomeHero, type HeroVariant } from "@/components/home/HomeHero";
-import { ScoreRail } from "@/components/home/ScoreRail";
 import { ScoresBracketToggle } from "@/components/live/ScoresBracketToggle";
 import { ATLANTA_EVENT_ID } from "@/lib/bracket-sample";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
@@ -233,30 +232,47 @@ export async function HomeContent({
   // Next six tour stops for the "Next on Tour" strip above the callouts.
   const upNext = getMainTourEvents().slice(0, 6);
 
-  // Hannah 7/28: rankings matter more to a visitor than latest champions, so
-  // off-season the rankings board takes the block right under the callouts and
-  // champions drop below it. During a live event the scores rail still leads —
-  // nothing outranks live pickleball.
-  const scoresSection = (
+  /**
+   * Hannah 7/28: rankings matter more to a visitor than latest champions, so
+   * off-season the rankings board takes the block right under the callouts and
+   * champions drop below it. During a live event the scores rail still leads —
+   * nothing outranks live pickleball.
+   *
+   * ⚠ TWO STATES, NEVER THREE. Live → the real bracket/scores. Not live → the
+   * champions of the last completed stop. Not live and no champions → the whole
+   * band is OMITTED.
+   *
+   * There used to be a third branch, and it published fiction: when
+   * `lastCompletedChampions()` came back null — a transient `getEvents()` or
+   * `getScores()` failure, i.e. the 429s this codebase has been fighting since
+   * 7/31 — the band fell through to `<ScoreRail />`, which rendered the
+   * hand-authored `matches` placeholder from lib/home-content: invented players
+   * (Jade Rau, Priya Anand, Bricker/Hartman) with a pulsing red LIVE chip, under
+   * a "Live & Latest" heading, on the homepage, out of season. That is exactly
+   * the failure the 7/29 rankings ruling exists to prevent — an API blip must
+   * never turn into made-up data that looks completely plausible. The component
+   * and the placeholder array are both deleted, so it cannot come back.
+   */
+  const scoresSection = !live && !latestChampions ? null : (
     <>
         {/* ── Live & Latest scores ───────────────────────────── */}
         <section className="bg-white">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <SectionHead
-                label={live ? "Live Now" : latestChampions ? "Champions" : "Scores"}
-                title={live || !latestChampions ? "Live & Latest" : "Latest Champions"}
+                label={live ? "Live Now" : "Champions"}
+                title={live ? "Live & Latest" : "Latest Champions"}
                 pulse={live}
               />
               {/* In the champions state "Full Results" moves down beside the
                   tournament name — Dave Rogers 7/27: over here on the right it
                   gets missed. */}
-              {!latestChampions && (
+              {live && (
                 <Link
-                  href={live ? `/brackets?event=${ATLANTA_EVENT_ID}` : "/watch"}
+                  href={`/brackets?event=${ATLANTA_EVENT_ID}`}
                   className="group text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
                 >
-                  {live ? "View Full Bracket" : "Full Scores & Brackets"}{" "}
+                  View Full Bracket{" "}
                   <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
                 </Link>
               )}
@@ -338,14 +354,7 @@ export async function HomeContent({
                   </div>
                 ))}
               </div>
-            ) : (
-              <div className="mt-4">
-                <ScoreRail />
-                <p className="mt-3 text-[11px] uppercase tracking-[0.12em] text-ppa-navy/35">
-                  Drag or swipe to browse
-                </p>
-              </div>
-            )}
+            ) : null}
           </div>
         </section>
     </>

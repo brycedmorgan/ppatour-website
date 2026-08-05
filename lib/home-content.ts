@@ -915,91 +915,18 @@ export const footerPartners: Partner[] = logoPartnersInTierOrder.filter(
   (p) => p.tier === "title" || p.tier === "platinum",
 );
 
-export type MatchSide = {
-  name: string;
-  /** Game scores in order; empty until a match starts. */
-  games: number[];
-  winner?: boolean;
-};
-
-export type Match = {
-  id: string;
-  division: string;
-  round: string;
-  status: "live" | "final" | "upcoming";
-  /** Court name (live/final) or start time (upcoming). */
-  detail: string;
-  sides: [MatchSide, MatchSide];
-};
-
-export const matches: Match[] = [
-  {
-    id: "ws-sf",
-    division: "Women's Singles",
-    round: "Semifinal",
-    status: "live",
-    detail: "Stadium Court",
-    sides: [
-      { name: "Jade Rau", games: [11, 7] },
-      { name: "Priya Anand", games: [8, 6] },
-    ],
-  },
-  {
-    id: "md-qf",
-    division: "Men's Doubles",
-    round: "Quarterfinal",
-    status: "live",
-    detail: "Court 2",
-    sides: [
-      { name: "Bricker / Hartman", games: [9, 11, 4] },
-      { name: "Reyes / Tanaka", games: [11, 6, 3] },
-    ],
-  },
-  {
-    id: "xd-sf",
-    division: "Mixed Doubles",
-    round: "Semifinal",
-    status: "final",
-    detail: "Stadium Court",
-    sides: [
-      { name: "Marín / Frost", games: [11, 11], winner: true },
-      { name: "Bricker / Boyd", games: [9, 7] },
-    ],
-  },
-  {
-    id: "wd-qf",
-    division: "Women's Doubles",
-    round: "Quarterfinal",
-    status: "final",
-    detail: "Court 3",
-    sides: [
-      { name: "Safdar / Boyd", games: [11, 9, 11], winner: true },
-      { name: "Rau / Anand", games: [6, 11, 8] },
-    ],
-  },
-  {
-    id: "ms-sf",
-    division: "Men's Singles",
-    round: "Semifinal",
-    status: "upcoming",
-    detail: "4:30 PM ET",
-    sides: [
-      { name: "Diego Marín", games: [] },
-      { name: "Tomás Reyes", games: [] },
-    ],
-  },
-  {
-    id: "ws-final",
-    division: "Women's Singles",
-    round: "Final",
-    status: "upcoming",
-    detail: "6:00 PM ET",
-    sides: [
-      { name: "Hannah Boyd", games: [] },
-      { name: "Naomi Frost", games: [] },
-    ],
-  },
-];
+/**
+ * ⚠ The `matches` placeholder was DELETED on 2026-08-05, along with the
+ * `Match`/`MatchSide` types and `components/home/ScoreRail.tsx`, its only
+ * consumer. It held six hand-authored matches between invented players (Jade
+ * Rau, Priya Anand, Bricker/Hartman), two of them flagged `status: "live"` with
+ * a pulsing LIVE chip — and the homepage rendered it as the FALLBACK whenever
+ * `lastCompletedChampions()` returned null, i.e. whenever the events or scores
+ * API blipped. So an upstream 429 published fabricated live scores under a "Live
+ * & Latest" heading, out of season. Deleted rather than left unused so nothing
+ * can import it back; the band is omitted instead. Real live scores come from
+ * `lib/ticker-api.ts` / `lib/scores-api.ts`.
+ */
 
 export type NewsItem = {
   category: string;

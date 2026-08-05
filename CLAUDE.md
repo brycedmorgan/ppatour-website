@@ -35,6 +35,38 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-05 (pt. 9) — The homepage was publishing FABRICATED live scores on an API blip
+- Wesley: *"sometimes the 'latest champions' section on the home page shows the live scores instead
+  even if we are not live."* It is worse than a wrong section: **the scores it showed were invented.**
+- **Root cause.** The band had THREE states, and the third was fiction. `live` → real bracket;
+  `latestChampions` → the last completed stop's champions; **neither → `<ScoreRail />`**, which
+  rendered the hand-authored `matches` placeholder from `lib/home-content.ts` — six matches between
+  **players who do not exist** (Jade Rau, Priya Anand, Bricker/Hartman, Reyes/Tanaka), **two of them
+  `status: "live"` with a pulsing red LIVE chip**, under a *"Live & Latest"* heading, on the
+  homepage, out of season.
+- **⚠ THE TRIGGER IS AN UPSTREAM BLIP, WHICH IS WHY IT WAS INTERMITTENT.**
+  `lastCompletedChampions()` returns null when `getEvents()` or any of its four `getScores()` calls
+  fails — i.e. **the same partner-API 429s this repo has been fighting since 7/31**. So the homepage's
+  answer to "we couldn't reach the scores API" was to invent scores. Exactly what the 7/29 rankings
+  ruling exists to stop: made-up data that looks completely plausible is worse than no data.
+- **Fixed: two states, never three.** Not live and no champions → **the whole band is omitted** and
+  the homepage runs rankings → newsroom. Same call as the /watch Live Now band earlier today (pt. 7).
+- **Deleted, not unmounted** (the 8/4 Gold Prize Grid precedent): `components/home/ScoreRail.tsx`
+  and the `matches` / `Match` / `MatchSide` placeholders. ScoreRail was the array's only consumer,
+  so nothing can import the fake scores back; a ⚠ note sits where the array was. Also dropped the
+  now-dead `!latestChampions` label/link branches — the header said *"Live & Latest"* + linked
+  *"Full Scores & Brackets"* only in that impossible state.
+- Verified all three states on a real server by forcing each: **champions available** → 15 sections,
+  "Latest Champions" + Full Results; **champions unavailable** → **14 sections, zero fabricated
+  players, zero `bg-ppa-live` chips**, rankings and newsroom intact; **live** → 15 sections,
+  "Live Now" + "Live & Latest" + View Full Bracket → `/brackets?event=`. tsc clean, eslint at its
+  8-error baseline.
+- **⚠ FOUND, NOT FIXED — `/` hardcodes `<HomeContent />`, i.e. `live={false}` forever.** Only
+  `/live` passes `live`. So during a real tournament the homepage band shows Latest Champions, not
+  live scores, while the site-wide ScoreTicker and StickyBuyBar DO flip themselves (`getTickerState`).
+  Wiring the homepage to the same source is a behaviour decision, not a cleanup — and it is the
+  opposite direction from what was asked here, so it stays flagged.
+
 ### 2026-08-05 (pt. 8) — Duplicate athlete profiles: four of them, and the suffix is not the test
 - Wesley: two Elsie Hendershot pages (`/athletes/elsie-hendershot` and `…-2`), kill the duplicate,
   audit the rest, and **"make sure the non-duplicated page is what shows if this happens again."**

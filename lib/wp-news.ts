@@ -16,7 +16,7 @@
  * every post body. NEVER import this module (or anything re-exporting its
  * heavy accessors) from a file with "use client" — the whole archive would be
  * bundled into browser JS. `components/events/NationalsLive.tsx`,
- * `PartnerSpotlight`, `PointsRace` and `ScoreRail` are client components, and
+ * `PartnerSpotlight` and `PointsRace` are client components, and
  * `lib/home-content.ts` is in their import graph, which is exactly why the WP
  * archive is NOT merged into `lib/home-content.ts` or `lib/news-articles.ts`.
  * Client components must receive posts as props from a server parent.
