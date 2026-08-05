@@ -133,7 +133,9 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "hartman-bricker-chicago-upset",
-    status: "published",
+    // Drafted at launch (Bryce, 8/5): fabricated match coverage with invented
+    // players. Draft removes it from /news and event pages via the filter below.
+    status: "draft",
     eventSlug: "veolia-chicago-cup",
     category: "Recap",
     title: "Hartman & Bricker Take Down Top Seeds in Chicago",
@@ -152,7 +154,8 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "anand-singles-run",
-    status: "published",
+    // Drafted at launch (Bryce, 8/5): invented player, fabricated streak.
+    status: "draft",
     eventSlug: "virginia-beach-open",
     category: "Feature",
     title: "Anand's Singles Run Continues Into Virginia Beach",
@@ -190,7 +193,8 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     slug: "safdar-repeat-finals",
-    status: "published",
+    // Drafted at launch (Bryce, 8/5): fabricated stats about a real athlete.
+    status: "draft",
     category: "Profile",
     title: "Mehvish Safdar on Repeat Final Appearances",
     date: "Apr 30",
