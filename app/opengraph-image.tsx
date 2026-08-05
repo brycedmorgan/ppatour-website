@@ -6,9 +6,10 @@ export const size = OG_SIZE;
 export const contentType = "image/png";
 
 export default async function OpengraphImage() {
-  const [fonts, bg] = await Promise.all([
+  const [fonts, bg, logo] = await Promise.all([
     ogFonts(),
-    ogImageData("/ppa/nationals-drone-stadium.jpg"),
+    ogImageData("/ppa/nationals-championship-court.jpg"),
+    ogImageData("/ppa/logos/ppa-horizontal-white.png"),
   ]);
 
   return new ImageResponse(
@@ -51,26 +52,31 @@ export default async function OpengraphImage() {
           }}
         />
 
+        {/* Top scrim so the white logo reads over a bright sky in the photo. */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "42%",
+            backgroundImage:
+              "linear-gradient(to bottom, rgba(7,34,58,0.6), rgba(7,34,58,0))",
+          }}
+        />
+
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            gap: 16,
-            padding: "44px 56px 0",
+            padding: "46px 56px 0",
             position: "relative",
           }}
         >
-          <div style={{ width: 52, height: 8, background: "#228be6" }} />
-          <div
-            style={{
-              fontSize: 24,
-              fontWeight: 900,
-              letterSpacing: 6,
-              color: "#ffffff",
-            }}
-          >
-            CARVANA PPA TOUR
-          </div>
+          {logo && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={logo} alt="" style={{ height: 42, width: "auto" }} />
+          )}
         </div>
 
         <div

@@ -408,7 +408,7 @@ export default function HowItWorksPage() {
                 <p className="mt-1.5 text-sm leading-relaxed text-ppa-navy/65">
                   A separate, discipline-by-discipline number — your best 14
                   results in <em>just</em> singles, <em>just</em> mixed, or{" "}
-                  <em>just</em> gender doubles. Used to seed each individual
+                  <em>just</em>{" "}gender doubles. Used to seed each individual
                   event so matchups stay fair. In doubles and mixed, a
                   team&apos;s two rankings are combined.
                 </p>
