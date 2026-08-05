@@ -1319,10 +1319,14 @@ export function NationalsLive({
         </section>
       )}
 
-      {/* Players + Divisions + Champions */}
+      {/* Players + Divisions + Champions.
+          ⚠ Kept in step with app/events/[year]/[slug]/page.tsx — these two render
+          the same event and drift silently. Full-width stacked blocks with the
+          player cards running across, and no champions block when there are none
+          to show (Wesley, 8/5). */}
       <section id="players" className="scroll-mt-[120px] bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <div className="grid gap-10 lg:grid-cols-[1fr_1fr]">
+          <div className="grid gap-10">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 Players to Watch
@@ -1330,12 +1334,15 @@ export function NationalsLive({
               <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
                 In the Draw
               </h2>
-              <div className="mt-5 flex flex-col gap-px border border-ppa-line bg-ppa-line">
+              {/* border-b/r on the grid + border-l/t on each card, so a row that
+                  doesn't fill leaves no grey ghost cell. See the note in
+                  app/events/[year]/[slug]/page.tsx. */}
+              <div className="mt-5 grid border-b border-r border-ppa-line sm:grid-cols-2 lg:grid-cols-3">
                 {playersToWatch.map((p) => (
                   <Link
                     key={p.slug}
                     href={`/athletes/${p.slug}`}
-                    className="group flex items-center gap-3 bg-white p-3 transition-colors hover:bg-ppa-paper"
+                    className="group flex items-center gap-3 border-l border-t border-ppa-line bg-white p-3 transition-colors hover:bg-ppa-paper"
                   >
                     <div className="relative size-14 shrink-0 overflow-hidden rounded-full bg-ppa-navy-deep">
                       <Image
@@ -1377,30 +1384,29 @@ export function NationalsLive({
                   </li>
                 ))}
               </ul>
-              <p className="mt-5 text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
-                Defending Champions
-              </p>
-              {t.defendingChampions && t.defendingChampions.length > 0 ? (
-                <div className="mt-2 border-t border-ppa-line">
-                  {t.defendingChampions.map((c) => (
-                    <div
-                      key={c.division}
-                      className="flex items-center justify-between gap-3 border-b border-ppa-line py-2.5"
-                    >
-                      <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/45">
-                        {c.division}
-                      </span>
-                      <span className="font-display text-sm uppercase text-ppa-navy">
-                        {c.name}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="mt-2 border-t border-ppa-line py-3 text-sm text-ppa-navy/50">
-                  No titles to defend — this stop crowns its first champions
-                  this year.
-                </p>
+              {/* No champions, no heading — the placeholder this replaced said
+                  only that it had nothing to say. */}
+              {t.defendingChampions && t.defendingChampions.length > 0 && (
+                <>
+                  <p className="mt-5 text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
+                    Defending Champions
+                  </p>
+                  <div className="mt-2 border-t border-ppa-line">
+                    {t.defendingChampions.map((c) => (
+                      <div
+                        key={c.division}
+                        className="flex items-center justify-between gap-3 border-b border-ppa-line py-2.5"
+                      >
+                        <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/45">
+                          {c.division}
+                        </span>
+                        <span className="font-display text-sm uppercase text-ppa-navy">
+                          {c.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </>
               )}
             </div>
           </div>

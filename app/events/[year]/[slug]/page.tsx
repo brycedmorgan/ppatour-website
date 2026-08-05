@@ -319,7 +319,12 @@ export default async function EventPage({ params }: Params) {
           { id: "venue", label: "Venue Guide" },
         ]),
     ...(guide && !completed ? [{ id: "travel", label: "Plan Your Trip" }] : []),
-    ...(completed ? [] : [{ id: "players", label: "Players" }]),
+    // Must match the #players section's own condition exactly — the section is
+    // now also skipped when there is neither a published draw nor a prior-year
+    // champion, and a tab pointing at an absent anchor scrolls nowhere.
+    ...(!completed && (watchPicks.length > 0 || defendingChampions.length > 0)
+      ? [{ id: "players", label: "Players" }]
+      : []),
     ...(completed ? [] : [{ id: "involved", label: "Get Involved" }]),
     ...(coverage.length > 0 ? [{ id: "coverage", label: "Coverage" }] : []),
     { id: "sponsors", label: "Sponsors" },
@@ -1315,15 +1320,21 @@ export default async function EventPage({ params }: Params) {
         </section>
       )}
 
-      {/* Players + Divisions + Champions (upcoming/live only) */}
-      {!completed && (
+      {/* Players + Champions (upcoming/live only).
+          ⚠ Both blocks can be empty — no published draw AND no prior-year event —
+          and with the champions placeholder gone that would render an empty grey
+          band. Gate the section on having something to put in it. */}
+      {!completed && (watchPicks.length > 0 || defendingChampions.length > 0) && (
       <section id="players" className="scroll-mt-[120px] bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <div
-            className={
-              watchPicks.length > 0 ? "grid gap-10 lg:grid-cols-[1fr_1fr]" : "grid gap-10"
-            }
-          >
+          {/**
+           * ⚠ FULL WIDTH, STACKED BLOCKS — NOT TWO COLUMNS (Wesley, 8/5: make
+           * Players to Watch "full-width and have the player cards lay
+           * horizontal instead of stacking"). Each block now spans the container
+           * and its cards run across it, so the three picks sit side by side
+           * instead of in a narrow half-width column.
+           */}
+          <div className="grid gap-10">
             {/* Only rendered once the draw is published — before that we have no
                 entry list, and generic picks are what made every event page show
                 the same three players. See lib/players-to-watch.ts. */}
@@ -1337,7 +1348,18 @@ export default async function EventPage({ params }: Params) {
               <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
                 {field.published ? "In the Draw" : "Ones to Watch"}
               </h2>
-              <div className="mt-5 flex flex-col gap-px border border-ppa-line bg-ppa-line">
+              {/**
+               * Three picks (the picker's `limit`), so three across on desktop,
+               * two from sm, stacked on a phone.
+               *
+               * ⚠ `border-b border-r` here + `border-l border-t` on each card,
+               * NOT the `gap-px` over `bg-ppa-line` trick used elsewhere. Once
+               * this is a grid rather than a single column, a row that doesn't
+               * fill leaves the line colour showing through as a grey ghost cell
+               * — three cards in two columns at sm does exactly that. Same
+               * reasoning and same classes as PartnerWall.
+               */}
+              <div className="mt-5 grid border-b border-r border-ppa-line sm:grid-cols-2 lg:grid-cols-3">
                 {watchPicks.map((p) => {
                   // A card can hold more than one player — triple-crown winners
                   // share a box rather than taking a slot each.
@@ -1388,12 +1410,15 @@ export default async function EventPage({ params }: Params) {
                     <Link
                       key={key}
                       href={href}
-                      className="group flex items-start gap-3 bg-white p-3 transition-colors hover:bg-ppa-paper"
+                      className="group flex items-start gap-3 border-l border-t border-ppa-line bg-white p-3 transition-colors hover:bg-ppa-paper"
                     >
                       {card}
                     </Link>
                   ) : (
-                    <div key={key} className="group flex items-start gap-3 bg-white p-3">
+                    <div
+                      key={key}
+                      className="group flex items-start gap-3 border-l border-t border-ppa-line bg-white p-3"
+                    >
                       {card}
                     </div>
                   );
@@ -1415,6 +1440,23 @@ export default async function EventPage({ params }: Params) {
             </div>
             )}
 
+            {/**
+             * ⚠ NO CHAMPIONS, NO SECTION (Wesley, 8/5: "if we can't find any
+             * defending champions, just hide the section all together").
+             *
+             * This replaced an honest-but-pointless placeholder — "No titles to
+             * defend, this stop crowns its first champions this year" — which
+             * rendered as a half-width column containing one grey sentence on
+             * every stop with no mapped prior-year event. Measured before the
+             * change: Arizona, Chicago and the National Championships all showed
+             * it. A heading that exists only to say it has nothing to say is
+             * worse than no heading.
+             *
+             * Note the completed case was ALREADY covered: the whole section is
+             * gated on `!completed` further up, so a finished event never renders
+             * any of this.
+             */}
+            {defendingChampions.length > 0 && (
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 Last Season
@@ -1422,10 +1464,15 @@ export default async function EventPage({ params }: Params) {
               <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
                 Defending Champions
               </h2>
-              {defendingChampions.length > 0 ? (
-                <div className="mt-5 flex flex-col gap-px border border-ppa-line bg-ppa-line">
+                {/* Five divisions in three columns leaves a short final row, so
+                    the same border pattern as the picks grid above — see the
+                    note there. */}
+                <div className="mt-5 grid border-b border-r border-ppa-line sm:grid-cols-2 lg:grid-cols-3">
                   {defendingChampions.map((c) => (
-                    <div key={c.division} className="bg-white p-3">
+                    <div
+                      key={c.division}
+                      className="border-l border-t border-ppa-line bg-white p-3"
+                    >
                       <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
                         {c.division}
                       </span>
@@ -1475,16 +1522,8 @@ export default async function EventPage({ params }: Params) {
                     </div>
                   ))}
                 </div>
-              ) : (
-                // Every stop that hits this state has no prior-year event at
-                // all (see scripts/gen-defending-champions.mjs), so don't imply
-                // champions are pending — there are none to defend.
-                <p className="mt-5 border border-ppa-line bg-white p-3 text-sm text-ppa-navy/50">
-                  No titles to defend — this stop crowns its first champions
-                  this year.
-                </p>
-              )}
             </div>
+            )}
           </div>
         </div>
       </section>
