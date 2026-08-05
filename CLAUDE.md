@@ -32,9 +32,169 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   presented it as a peer category, and they're fixed.
 - **Ad inventory on ppatour.com is off the table for now** (Bryce, 7/29). Don't build
   slots, don't ask again.
+- **No pro's family or private life on their profile — all pros, not just the one who
+  gets flagged.** Wesley, 8/5, starting from Jack Sock's bio ("Sock welcomed his first
+  child alongside his wife Laura"). Spouses, partners, marital status and the athlete's
+  own children are stripped by `isPersonalLife()` in `lib/published-athletes.ts`, which
+  runs inside `cleanBio` (every scraped bio) and via `redactPersonalLife()` on the
+  profile page's curated fallback. "Personal Life" / "Personal" are STOP headers.
+  **Siblings, upbringing and hobbies deliberately stay** — see the ⚠ notes in that file
+  before touching the regexes; three sentences about *fellow pros* ("his twin brother
+  Yates", "her twin sister") were lost to a looser first draft.
 
 ## Session Log
 
+### 2026-08-05 (pt. 14) — Parking: only Cary publishes details; the other 17 stops' copy DELETED
+
+- Event team's request, forwarded by Wesley: **Cary is the only stop with finalized parking**
+  (submitted via Asana); every other tournament page should hold off and read exactly
+  *"Parking information will be posted closer to the event date. Please check back for updates."*
+- **⚠ THE COPY THAT WAS THERE WAS OURS, NOT THE EVENT TEAM'S — AND IT QUOTED PRICES.** All 18
+  guides in `lib/event-guides.ts` carried hand-written parking prose from the 5/21 build, including
+  **"$20/day, or free with a Reserved+ ticket"** (Atlanta), **"Convention Center garage · $10/day"**
+  (Virginia Beach), plus free-parking claims, a Metra stop, a "Cross Creek shuttle" and valet
+  promises. Same class as the fabricated-scores and fabricated-presenter bugs: plausible, specific,
+  operational, and unsourced.
+- **Deleted, not gated** (the ScoreRail / Gold Prize Grid precedent). A `TICKETS_HIDDEN`-style
+  switch would have left 17 invented strings one line away from republishing. All 18 removed;
+  **`parking` is gone from the `EventGuide` type**, so — the `shortName` precedent — every call
+  site became a type error rather than quietly keeping its old behaviour.
+- **One gate: `parkingFor(slug)`** in `lib/event-guides.ts` → `PARKING_BY_SLUG[slug] ?? PARKING_TBA`.
+  `PARKING_BY_SLUG` holds Cary alone. Adding a stop's real details is one entry; there is no path
+  that publishes anything else.
+- **⚠ AND IT KILLED TWO FABRICATED FALLBACKS, WHICH WERE THE WORSE HALF.** The event page and
+  `NationalsLive` both read `guide?.parking ?? "On-site lots open with the gates; ADA and rideshare
+  drop-off at the main gate. Official parking map published event week."`, and the **concierge**
+  answered `"Parking details for {venue} are published event week — on-site lots open with the
+  gates…"`. So a stop with **no guide at all** (ppa-open, cincinnati-open) still published invented
+  gate-and-ADA logistics, and the chatbot did it in the first person. Both gone; `ConciergeFacts.parking`
+  is now **required**, not optional, so it can't fall back to prose again.
+- Six surfaces now on the one source: KBYG "Parking & Shuttle" + Plan Your Trip "Parking & Access"
+  on the event page **and** on `NationalsLive` (they drift silently — same rule as always), the
+  concierge facts, and the search index.
+- **⚠ `lib/tournament-api.ts` maps the registration feed's `LocationOfEvent_ParkingInformation`
+  into `TournamentDetails.parking`. NOTHING RENDERS IT** — verified, `/brackets` and `/live` read
+  only `name`. Left in place with a ⚠: it's the platform's blurb, not the event team's finalized
+  details, and rendering it would route around the gate for every event in the feed.
+- **⚠ CARY'S LINE ON THE SITE PREDATES THE ASANA SUBMISSION and is NOT reconciled against it.**
+  The Asana connector isn't authorized in this session, so the submitted text couldn't be read.
+  It still says *"Free on-site parking at Cary Tennis Park; ADA + drop-off at the main gate. Lots
+  open 8:00 AM"* — our wording, for the one event that now has real details. **Paste the submitted
+  copy in verbatim before telling the team it's done.**
+- Verified against the running dev server, per page, not by grep alone: **Cary 5 hits of its own
+  copy / 0 holding line; the `-live` route 2 / 0; Vegas, Chicago, Virginia Beach, Malibu, Mesa,
+  Atlanta 0 / 5; cincinnati-open + ppa-open (no guide) 0 / 3** — and **zero occurrences of any of
+  the 19 deleted sentinels, including both fabricated fallbacks**, across all ten pages. Confirmed
+  the copy lands in the KBYG accordion, the Plan Your Trip card and the concierge payload.
+  `tsc` clean; eslint on the six changed files shows only NationalsLive's pre-existing
+  set-state-in-effect baseline error.
+- **⚠ `npm run build` IS RED IN THE WORKING TREE, AND NOT FROM THIS WORK.** A parallel session's
+  untracked `components/video/ExplainerVideos.tsx` fails to parse (JSX at :93) and `/rankings`
+  imports it. That's why verification ran against `next dev` on :3000 — **which already owned the
+  repo dir; `next dev` refuses a second instance, and :3111 is a stale `next start` serving an old
+  bundle.** Don't push until that file compiles.
+- **Next:** replace Cary's line with the Asana text · the event team can add stops one entry at a
+  time in `PARKING_BY_SLUG` as details land.
+
+### 2026-08-05 (pt. 13) — No family details on any pro's profile (started at Jack Sock)
+
+- Wesley: remove the wife/personal info from Jack Sock's profile, then **"follow this rule going
+  forward with all pros."** Both done — the second is a rule in the bio cleaner, not a data pass.
+- **Jack Sock's raw bio said it three times** ("Away from the court, Sock welcomed his first child
+  alongside his wife Laura in November 2023") — once inline in Background & Early Career, once
+  closing Career Highlights, once under an "Off the Court" header. `cleanBio`'s de-dupe collapsed
+  them, so it rendered once, as the last sentence of his bio. Removed from
+  `lib/data/published-athletes.json` **and** now caught by the rule below, so a re-scrape can't
+  bring it back.
+- **The rule: `isPersonalLife()` in `lib/published-athletes.ts`**, applied per sentence inside
+  `cleanBio` (all 179 scraped bios) and exported as `redactPersonalLife()` for the profile page's
+  **curated fallback** — `app/athletes/[slug]/page.tsx` was assembling `curated?.bio` with no
+  cleaner at all, so the rule would have had a hole for any pro without a scraped record.
+  **Sentences are dropped whole, never rewritten** — same discipline as `lib/bio-live.ts`.
+- **Measured across all 179, diffing every rendered sentence before vs after: 24 removed on 20
+  athletes, 0 added, 0 bios emptied.** Every removal read back and confirmed to be family content
+  (spouse names, children's names, marital status).
+- **⚠ THE POSSESSIVE TIE IS THE WHOLE TEST FOR CHILDREN, AND A LOOSE GAP MATCH IS THE BUG.** Bare
+  "kids"/"children" is ordinary pickleball vocabulary — "coaching adults, teens, and children",
+  "volunteering his time teaching kids pickleball", "the kids are the future of the sport". So the
+  words allowed between a possessive and the noun are a **whitelist** (counts + age adjectives),
+  because `\w+{0,3}` there reads "his time teaching kids" as family and deletes a coaching line.
+- **⚠ AND THE FIRST DRAFT DELETED THREE SENTENCES ABOUT OTHER PROS.** `twins?` in the child nouns
+  matched **"his twin brother Yates"** (Hunter Johnson's ATP ranking + 13 ITF titles) and **"her
+  twin sister"** on *both* Kawamoto profiles — Jade is Jackie's doubles partner. `twins` is now
+  plural-only; "twin" survives as a modifier. **Caught by reading all 29 removals, not by the
+  count.** Siblings and upbringing are out of scope on purpose ("the sixth of eight children",
+  "the middle child of seven siblings" both stay), as are hobbies.
+- **⚠ FIVE REMOVALS TOOK A CAREER FACT WITH THEM**, because the source sentence carries both and we
+  don't author replacement prose: brooke-buckner's start date (Oct 2020), lina-padegimaite's
+  training regimen, **lindsey-newman winning Nationals 2021 while pregnant**, tina-pisnik's move to
+  Chicago, martin-emmrich's tennis background + how he started. Recovering those is an editor
+  rewriting the sentence in the source data. **Flagged to Wesley; his call.**
+- "Personal Life" / "Personal" moved from `KEEP_ORDER` to `STOP_HEADERS`. Zero raw bios carry
+  either header today and there are **zero standalone capitalised "Personal" strings** in the 179
+  bios, so the bare form can't truncate a bio mid-prose — they're there for the next scrape.
+- **Deliberately left: Quick Info still shows Resides / Age (from DOB) / Height / Plays / Turned
+  Pro.** Those are the same stat fields on all 179 profiles; blanking them for one pro makes his
+  page inconsistent with every other. Flagged rather than decided here.
+- Verified: `tsc` clean, eslint clean on both changed files, JSON parses at 179 records, and a
+  sweep of every rendered bio + headline + tagline (published *and* curated) returns zero
+  personal-life matches. No re-scrape script exists in the repo, so `cleanBio` is the only path
+  these bios take into the site.
+
+### 2026-08-05 (pt. 12) — The pickleball.com rail is curatable: picks lead, recency fills
+
+- Wesley: *"how are we deciding which articles show there?"* → nothing was deciding. The homepage
+  rail was the **4 newest** articles in pickleball.com's PPA Tour subcategory, full stop. He wants
+  their editorial picks in it: *"have it be something they just send my way and we add manually for
+  now. If they only give me 3 featured articles, we just pull the most recent to fill it out."*
+- **New `lib/pb-featured.ts` is the one file to edit** — paste slugs or full article URLs. Picks
+  lead in the order written, recency fills the rest, so 3 picks in a 4-card rail = 3 chosen + 1
+  newest. `getFeaturedPickleballNews()` in `lib/pb-news.ts` does the work; the homepage is the only
+  caller. **An empty list is byte-identical to the old pure-recency behaviour** (verified on the
+  rendered page, not just reasoned about).
+- **⚠ THE API CANNOT FILTER FOR US — DON'T GO LOOKING AGAIN.** Probed live: `tag`, `tags`,
+  `tag_uuid`, `news_tag_uuid`, `is_featured`, `featured`, `author_full_name` and `slug` are **all
+  silently ignored**, each returning the unfiltered 1,446 rows — the same trap `category=PPA` sets
+  (see the `pb-news.ts` header). `search` is the **only** parameter that genuinely filters.
+- **⚠ AND THAT IS WHY A PASTED SLUG WORKS AT ALL.** `search` word-matches loosely enough to survive
+  the slug→title round trip: `ben-johns-is-back-wins-gold-in-mens-singles` → `"ben johns back wins"`
+  returns **exactly that article out of 1,446**, despite the slug dropping the apostrophe in "men's"
+  and the comma after "back". So **a pick of any age resolves in one request** — it does not have to
+  be recent. The match is then **confirmed on the slug, never on the search rank**, so a loose match
+  can't drop the wrong article into a curated slot.
+- **⚠ TWO UPSTREAM FIXES EXIST AND BOTH ARE CLOSED. Recorded because they look attractive:**
+  - **Their CMS already has a featured window** (`date_start_show_on_featured` /
+    `date_end_show_on_featured`, unused on all 246 newest PPA rows). **Wesley ruled it out — it
+    drives placement on pickleball.com, so populating it for our rail would change their site.**
+    **Don't propose it again.**
+  - **`news_tags_uuids` is populated** (median 6 tags/article, 159 distinct across those 246) but
+    **`/v2/data/news_tags` is 403** for our token, so a tag is an opaque UUID — and it lives in
+    their CMS too, i.e. same objection.
+- **Fails safe, deliberately.** An unresolvable slug (typo, pulled article) is **skipped silently
+  and recency takes the slot** — no dead card on the homepage, per the standing "no data beats wrong
+  data" rule. All picks bad → pure recency. Feed unreachable → the rail is omitted as before.
+- **⚠ PICKS DELIBERATELY BYPASS THE SUBCATEGORY GATE.** The automatic half stays locked to the PPA
+  Tour subcategory so nothing off-tour leaks in, but a pick was chosen by a person — if they send a
+  People or Culture piece about a tour pro, honouring it is the point. Still gated on `is_active` +
+  `is_blog`, so never a draft or a blog post.
+- **Verified 7 cases against the live API** (empty list, 3 old picks, a bad slug among good ones,
+  all-bad, more picks than slots, duplicates, URL/`?utm_`/`#anchor`/`www.`/trailing-slash parsing),
+  then **on the real rendered homepage**: two seeded picks came back 1st and 2nd with the two newest
+  filling, and reverting to empty returned the exact recency baseline. tsc + eslint clean.
+- **In-repo is the interim BY CHOICE (Wesley): every pick goes through git.** Agreed next step if
+  approved is a Jackalope-managed list exposed as a public JSON feed, read under ISR — the
+  `lib/published-hotels.ts` shape. **Only the array changes**; the resolver, ordering, fill and
+  fail-safe are source-agnostic and should stay that way.
+- **⚠ /news IS UNTOUCHED** and still runs on pure recency + date interleaving, which is correct —
+  it sorts everything by date, so an editorial order would be discarded there anyway. If picks
+  should also be pinned on /news that is a separate decision.
+- **⚠ METHOD, third helping of the same trap:** two `next dev` servers were already listening (3000,
+  3111) and **`next dev` refuses a second instance for one repo dir** — my :3222 attempt died with
+  *"Another next dev server is already running… PID 39232 … Dir: …\ppatour-website"*. **:3000 owned
+  this dir**, so that was the only server that could have my changes. Also **`&` inside a Bash call
+  orphans the server** — it reported ready, then vanished. Skipped the full `next build` rather than
+  have it fight the running dev server: the risk it would catch is a static-generation opt-out, and
+  the new fetch reuses the verified `revalidate: 600` options with no `no-store`.
 ### 2026-08-05 (pt. 12) — Article player rail reads the story; /events search reads the map
 - Bryce's two pre-launch asks: (1) an article that mentions a player should pull that player's
   profile into the right rail, "we had this at one point, make it real"; (2) /events search must
@@ -188,6 +348,108 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   (guests hold `/success?session_id=cs_live_…` links; new-site 301 map adds the `/vacations` prefix).
   It still serves the old standalone app (76.76.21.21). Also: confirm the `rk_live_` key has
   Checkout-Sessions *write* scope (one manual Reserve click on /vacations).
+<!-- ⚠ CONCURRENT-SESSION COLLISION, 8/5 — NEEDS A HUMAN PASS.
+     Two sessions wrote the log at once. The two entries ABOVE (demo newsroom
+     removed; LAUNCH DAY cutover) were committed to main. The two BELOW were
+     uncommitted in the working tree and were preserved verbatim through a
+     rebase autostash. Both pairs claim (pt. 10) and (pt. 11), so the numbering
+     is duplicated — whoever owns these entries should renumber. Nothing was
+     lost; a copy is also in `git stash list` as "autostash". -->
+
+### 2026-08-05 (pt. 11) — No fabricated scores left anywhere; the two live PREVIEWS get a password
+- Wesley, on the pt. 9 note: *"make sure this is fixed… before Nationals that rail needs wiring to
+  the real scores API"* — plus **password-protect /live and make it non-crawlable.**
+- **The rail he named was already closed in pt. 9 and verified again here**: `ScoreRail.tsx` is gone
+  from HEAD, the `matches` array is gone, **nothing imports it**, and the band renders
+  `ScoresBracketToggle` against a real tournament UUID resolved from the feed (pt. 10).
+- **⚠ BUT THE SAME BUG HAD A TWIN, AND IT WAS STILL THERE: `getLiveTickerState()`** — a hardcoded
+  *"Ben Johns vs Federico Staksrud · 11–9, 9–11, 8–6 · Championship Court"* that `ScoreTicker`
+  rendered whenever the pathname was `/live`. Two named players and a scoreline never played, in the
+  site-wide ticker. It happened to be unreachable (on /live, `TopBar` renders the real
+  `LiveScoreTicker`, not `ScoreTicker`) but it was a **loaded gun aimed exactly at the open chrome
+  question** — making the ticker live-aware would have wired it straight into fiction. **Deleted**;
+  the LIVE markup stays with a note pointing at `lib/ticker-api.ts`. **There is now no fabricated
+  score anywhere in the codebase that any surface can render.**
+- **⚠ THE ROUTES THAT WOULD ACTUALLY LIE DURING NATIONALS ARE THE TWO PREVIEWS, AND ONE IS WORSE
+  THAN /live.** `/events/veolia-pickleball-national-championships-live` **counts down to first serve
+  20 seconds after page load** by design and then reads the **Atlanta** test event's scores, bracket
+  and champions — `ATLANTA_EVENT_ID`, hardcoded in `NationalsLive.tsx` — under the National
+  Championships' name. Public, and `noindex` keeps it out of search but not out of the address bar.
+- **Both now sit behind HTTP Basic auth** in a new **`proxy.ts`** — ⚠ **not `middleware.ts`: the
+  middleware file convention is deprecated in Next 16 and renamed to `proxy`** (checked the bundled
+  docs first, per AGENTS.md; a `middleware.ts` would have been silently ignored).
+  - **Fails closed.** No `PREVIEW_PASSWORD` → 401 for everyone. **Deliberately no fallback password:
+    this repo is public on GitHub**, so a committed default is no gate. Local dev is exempt on
+    `NODE_ENV` so nobody needs setup to work on the previews. **Wesley/Bryce must set
+    `PREVIEW_PASSWORD` in Vercel** — runbook entry added to docs/LAUNCH.md.
+  - Verified against the real dev server with the exemption disabled: **no credentials 401, wrong
+    password 401, wrong user 401, correct credentials pass** (/live then 307s to /watch, the -live
+    demo 200s), and `/`, `/watch`, the real event page all stay open. Raw headers checked with curl,
+    not PowerShell — `WWW-Authenticate` + `Cache-Control: no-store` + `X-Robots-Tag` all present, so
+    a browser prompts and no CDN can hold the page. Bare `/live` takes Next's trailing-slash 308 and
+    lands on the gate; it never serves content.
+- **Not crawlable, three ways:** each route's own `noindex` metadata, a new `Disallow` list in
+  `app/robots.ts` (verified by rendering the production branch — `Allow: /` plus both paths; locally
+  robots is `Disallow: /` because the site isn't indexable, which is why the check had to force the
+  env), and the 401 itself. Neither is in the sitemap and nothing links to them.
+- **⚠ THE KNOCK-ON I ALMOST SHIPPED: `/brackets` defaulted its "Back to Event" link to the -live
+  route**, and the homepage's live band links to /brackets **without** a `back` param — so during an
+  event every visitor's back button would have hit a password prompt. Default is now `/watch`, and
+  the homepage passes its own `back`.
+- **⚠ STILL FAKE, DELIBERATELY LEFT: `LiveBar` marquees "Live · Round of 64 · Veolia Atlanta
+  Pickleball Championships" from two constants.** It renders on /live only, which is now gated, so
+  it is an internal-preview artifact rather than a public claim — and the round genuinely isn't
+  knowable without the API. It becomes real work the moment the chrome question is answered, because
+  that is the component that would go site-wide.
+
+### 2026-08-05 (pt. 10) — The homepage goes live by itself when the hero countdown hits zero
+- Wesley: *"adjust the home page to transition to a 'live' state when the countdown on the hero hits
+  zero. the page will reflect what we built on /live when it is in live state."*
+- **`/` hardcoded `<HomeContent />`, i.e. `live={false}` forever** (flagged in pt. 9). The live
+  variant existed and was good — LIVE NOW hero, scores leading the page — but the ONLY way to see it
+  was the `/live` preview. Now `HomeContent` derives it: `live` is an optional override, and with
+  nothing passed it comes from the calendar. `/live` still forces it, which is its whole job.
+- **New `isEventRunning()` in placeholder-data, and the parse is the point.** It reads
+  `${iso}T00:00:00` — **no zone, local midnight — exactly as `components/motion/Countdown` does**,
+  so the page flips at the instant the clock a visitor is watching reads zero, not a few hours either
+  side. End is the END of the final day, so a Sunday final is still live on Sunday afternoon.
+  Verified against a frozen clock at nine instants: **`23:59:59.999` on Aug 30 → next; `00:00:00` on
+  Aug 31 → LIVE; Sep 6 23:59:59 → LIVE; Sep 7 00:00:01 → next**; missing/partial/garbage dates all
+  false.
+- **⚠ THE TRAP THAT WOULD HAVE MADE THIS A REAL BUG: the live band's tournament id was
+  `ATLANTA_EVENT_ID`, hardcoded.** Harmless while only /live could reach the live state — and
+  **exactly wrong the moment the homepage flips itself**: on Aug 31 the homepage would have published
+  the Veolia **Atlanta** Championships' finished bracket as Nationals' live scores. The id now comes
+  from the event on screen. Verified: the live homepage links
+  `/brackets?event=b177c3be-…` (Nationals, from the feed) and **the Atlanta UUID appears nowhere**.
+- **⚠ AND CURATED ROWS CARRY NO `tournamentUuid` — only feed-built ones do**, while
+  `getNextTournament()` reads the curated list. So the id is looked up by slug and **can legitimately
+  come back null** (feed down, or one of the three stops that aren't in it). Hence two separate
+  flags: `live` drives the hero off the calendar alone (no feed needed — that is what was asked),
+  `showLiveScores` additionally requires a resolved tournament and drives the band, its heading and
+  the section order. No id → live hero, champions band. **A live shell over an empty scoreboard, or
+  over another event's bracket, is worse than no band** — same rule as pt. 9.
+- `/live`'s private `isRunning` is **deleted** in favour of the shared helper; it parsed the start as
+  UTC midnight, so two definitions of "is the tour on right now" disagreed by hours. It now passes
+  its event id explicitly rather than everyone sharing the Atlanta constant.
+- **⚠ THE 60s ISR IS NOW LOAD-BEARING.** `/` is `force-static` + `revalidate = 60`, so at first serve
+  the client countdown reads zero up to a minute before the server-rendered page flips. Noted in
+  `app/page.tsx` — **don't lengthen `revalidate` without thinking about that morning.**
+- Verified by forcing a running window: hero LIVE NOW + "Matches in progress", no "Days Out",
+  **scores band ahead of the rankings**, real bracket id; then reverted and confirmed the normal
+  state (Next Event + countdown, Latest Champions under the rankings, zero bracket links) and that
+  **/live still 307s to /watch** off the shared check. tsc clean, eslint at its 8-error baseline.
+- **⚠ STILL PATHNAME-GATED, NEEDS A DECISION (the other half of "reflect /live"):** the site chrome
+  does NOT follow. `TopBar` swaps in the broadcast stack (LiveBar + LiveScoreTicker) only when
+  `usePathname() === "/live"`, and `StickyBuyBar`'s live state is gated the same way — so during
+  Nationals the homepage body will be live while the bar above it still says "Next Event" and the bar
+  below still says "Buy Tickets" (measured: both strings present in the forced-live render).
+  Two reasons it is not done here: those are client components, so flipping them means computing
+  liveness after mount to avoid a hydration mismatch (the `Countdown` pattern), and LiveBar/ticker
+  hardcode Atlanta's crest and href so they need the running event's wired in. **And the real
+  question is commercial: StickyBuyBar is mounted site-wide, so making it live-aware turns the
+  tour's #1 ticket CTA into "Watch Live" on every page for the duration of an event.** That is
+  Bryce's call, not a cleanup.
 
 ### 2026-08-05 (pt. 9) — The homepage was publishing FABRICATED live scores on an API blip
 - Wesley: *"sometimes the 'latest champions' section on the home page shows the live scores instead
