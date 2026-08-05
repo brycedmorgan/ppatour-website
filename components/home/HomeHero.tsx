@@ -129,8 +129,23 @@ export function HomeHero({
   return (
     <>
       {/* ── Hero (event lead) ───────────────────────────────── */}
-      {/* Hero trimmed 58svh → 50svh (Bryce 7/28) to buy height for the taller
-          audience callouts below. Video hero drops into this same slot. */}
+      {/**
+        * Height: 58svh.
+        *
+        * ⚠ THIS REVERSES A DELIBERATE CHANGE, so don't "fix" it back without
+        * asking. Bryce trimmed the hero 58svh → 50svh on 7/28 to buy height for
+        * the taller audience callouts below it. Wesley asked for it back on 8/4
+        * while reviewing the new hero treatments — a video and a big aerial both
+        * want more room than a texture-behind-the-text photo did.
+        *
+        * 58 rather than more: event-page heroes are 62svh, and the homepage
+        * should not out-shout the event it is pointing at.
+        *
+        * Safe for the parallax — the drift and the cover constraint are both
+        * expressed as percentages of this element, so they scale with it and the
+        * px-per-px scroll rate is unchanged. Verified after the change, not
+        * assumed.
+        */}
       {/* ⚠ `hero-parallax-root` declares the NAMED view timeline the background
           image consumes, and it has to sit on this element. The section is
           `overflow-hidden`, which makes it its own scroll container — a bare
@@ -138,7 +153,7 @@ export function HomeHero({
           section, pin at 100% and render static. See globals.css. */}
       <section
         data-hero-bg={toggle ? "video" : undefined}
-        className={`relative isolate flex min-h-[50svh] flex-col justify-end overflow-hidden bg-ppa-navy text-white${
+        className={`relative isolate flex min-h-[58svh] flex-col justify-end overflow-hidden bg-ppa-navy text-white${
           showStill ? " hero-parallax-root" : ""
         }`}
       >
