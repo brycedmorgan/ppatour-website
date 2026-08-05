@@ -538,6 +538,20 @@ const SCHEDULE: RawEvent[] = [
   { name: "PPA Canada 125 Vancouver", start: "2026-09-10", end: "2026-09-13", city: "Vancouver", state: "Canada", type: "international", country: "Canada" },
   { name: "Veolia Arizona Open", start: "2026-09-14", end: "2026-09-20", city: "Mesa", state: "AZ", venue: "Arizona Athletic Grounds", type: "ppa", tier: "open" },
   { name: "Grand Rapids PPA Challenger", start: "2026-09-18", end: "2026-09-20", city: "Rockford", state: "MI", type: "challenger" },
+  // ⚠ PPA SPAIN PUBLISHES BARCELONA ONLY. Wesley, 8/5, on the PPA Europe
+  // announcement: "we should probably remove the dates (aside from Barcelona) as
+  // event dates and locations are subject to change." The 5/27 release listed
+  // seven Spanish stops with dates but a location for only two, and the other
+  // five rows were hand-typed off that table — a date and a `city: "TBA"` for
+  // events nobody has committed to a week or a venue for. All five are DELETED,
+  // not blanked, so there is no half-filled row for a future edit to complete
+  // from the release. The release's own table was updated to match (the five
+  // dates now read TBA there too — see scripts/wp-body-edits.mjs).
+  //
+  // `ppa_tournaments` agrees: PPA Tour Spain has exactly one real row in the
+  // feed, this opener (Registration Open, venue Sant Joan Despí). Add a stop
+  // back when the feed carries it or the event team confirms date + venue —
+  // one line each, in month order.
   { name: "PPA Spain P250 Barcelona", start: "2026-09-23", end: "2026-09-27", city: "Barcelona", state: "Spain", type: "international", country: "Europe" },
   { name: "Charlotte PPA Challenger", start: "2026-09-25", end: "2026-09-27", city: "Charlotte", state: "NC", type: "challenger" },
   { name: "Rate Las Vegas Open", start: "2026-09-28", end: "2026-10-04", city: "Las Vegas", state: "NV", venue: "Darling Tennis Center", type: "ppa", tier: "open" },
@@ -552,7 +566,9 @@ const SCHEDULE: RawEvent[] = [
 
   // November 2026
   { name: "Pickleball World Championships", start: "2026-11-02", end: "2026-11-08", city: "Farmers Branch", state: "TX", venue: "Brookhaven Country Club", type: "ppa", tier: "worlds" },
-  { name: "PPA Spain P125", start: "2026-11-11", end: "2026-11-15", city: "TBA", state: "Spain", type: "international", country: "Europe" },
+  // ⚠ A PPA Spain P125 sat here (11–15 Nov) on the strength of the 5/27 release
+  // alone, with no city. Deleted 8/5 with the other four unconfirmed Spanish
+  // stops — see the note on the Barcelona opener above before re-adding one.
   { name: "Proton Daytona Beach Open", start: "2026-11-16", end: "2026-11-22", city: "Holly Hill", state: "FL", venue: "Pictona at Holly Hill", type: "ppa", tier: "open" },
   { name: "PPA Canada 125 Toronto", start: "2026-11-26", end: "2026-11-29", city: "Toronto", state: "Canada", type: "international", country: "Canada" },
   { name: "Veolia Malibu Cup", start: "2026-11-30", end: "2026-12-06", city: "Malibu", state: "CA", venue: "Pepperdine University", type: "ppa", tier: "cup" },
@@ -565,19 +581,16 @@ const SCHEDULE: RawEvent[] = [
   // ⚠ Feed name + pinned slug — see the Nationals note above.
   { name: "Carvana Pickleball Masters Powered by Invited", slug: "carvana-pickleball-masters", start: "2027-01-11", end: "2027-01-17", city: "Rancho Mirage", state: "CA", venue: "Hyatt Regency Indian Wells", type: "ppa", tier: "slam" },
   { name: "Minneapolis Indoor Open", start: "2027-01-18", end: "2027-01-24", city: "Lakeville", state: "MN", venue: "Life Time — Lakeville", type: "ppa", tier: "open" },
-  { name: "PPA Spain P125", start: "2027-01-27", end: "2027-01-31", city: "TBA", state: "Spain", type: "international", country: "Europe" },
 
   // February 2027
   { name: "Cape Coral Open", start: "2027-02-01", end: "2027-02-07", city: "Cape Coral", state: "FL", venue: "Cape Coral Racquet Club", type: "ppa", tier: "open" },
   { name: "Carvana Mesa Cup", start: "2027-02-15", end: "2027-02-21", city: "Mesa", state: "AZ", venue: "Bell Bank Park", type: "ppa", tier: "cup" },
   { name: "PPA Australia 125 Melbourne", start: "2027-02-18", end: "2027-02-21", city: "Melbourne", state: "Australia", type: "international", country: "Australia" },
-  { name: "PPA Spain P250", start: "2027-02-24", end: "2027-02-28", city: "TBA", state: "Spain", type: "international", country: "Europe" },
 
   // March 2027
   { name: "Newport Beach Open", start: "2027-03-02", end: "2027-03-07", city: "Newport Beach", state: "CA", venue: "Tennis Club at Newport Beach", type: "ppa", tier: "open" },
   { name: "Texas Open", start: "2027-03-08", end: "2027-03-14", city: "Dallas", state: "TX", venue: "The Courts of McKinney", type: "ppa", tier: "open" },
   { name: "PPA Australia 250 Sydney Finals", start: "2027-03-17", end: "2027-03-21", city: "Sydney", state: "Australia", type: "international", country: "Australia" },
-  { name: "PPA Spain P500", start: "2027-03-17", end: "2027-03-21", city: "TBA", state: "Spain", type: "international", country: "Europe" },
   // ⚠ Feed name + pinned slug. NOTE this one is SHORTER than what we had — the
   // feed drops "at Black Desert Resort". Flagged to Jeff; if the resort should
   // stay, the fix belongs in the feed, not here.
@@ -590,7 +603,6 @@ const SCHEDULE: RawEvent[] = [
   // Center listed anywhere. No venue for now." Falls back to the city until a
   // venue is confirmed; don't re-add one without him.
   { name: "Cincinnati Open", start: "2027-04-12", end: "2027-04-18", city: "Cincinnati", state: "OH", type: "ppa", tier: "open" },
-  { name: "PPA Spain P250", start: "2027-04-21", end: "2027-04-25", city: "TBA", state: "Spain", type: "international", country: "Europe" },
   { name: "Pickleball Players Championships", slug: "atlanta-pickleball-championships", start: "2027-04-26", end: "2027-05-02", city: "Atlanta", state: "GA", venue: "Life Time — Peachtree Corners", type: "ppa", tier: "slam" },
 
   // May 2027

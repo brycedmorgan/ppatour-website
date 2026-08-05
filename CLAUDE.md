@@ -44,6 +44,48 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-05 (pt. 16) — PPA Spain: only Barcelona keeps a date; five hand-typed stops DELETED
+
+- Wesley, pointing at the 5/27 release: *"As we just announced PPA Europe, we should probably remove
+  the dates (aside from Barcelona) as event dates and locations are subject to change."* His calls
+  when asked: strip the dates from **the release's own table**, **delete** the unconfirmed calendar
+  rows, and **leave Italy alone**.
+- **⚠ THE FEED ONLY EVER KNEW ABOUT BARCELONA.** Queried `ppa_tournaments` live: PPA Tour Spain has
+  **two rows — the P250 Barcelona opener** (Registration Open, venue **Sant Joan Despí**) and the
+  junk-filtered *"PPA Spain: Template"*. So all seven stops on the site came from the release, typed
+  by hand, and since `/events` is feed-driven **six of them only ever rendered in the curated
+  fallback** (API unreachable) — verified on the running server: /events shows the one feed row.
+- **Five rows deleted from `SCHEDULE`** (Nov 11–15, Jan 27–31, Feb 24–28, Mar 17–21, Apr 21–25) —
+  each was a date **plus `city: "TBA"`**, i.e. a stop with neither a week nor a venue behind it.
+  Deleted rather than blanked, per the parking/ScoreRail precedent: a half-filled row is an
+  invitation to complete it from the release. A ⚠ note sits on the Barcelona opener and at the
+  November slot. **Nothing referenced the five slugs** (grepped) so nothing was orphaned.
+- **Both Barcelona rows keep their dates** — the literal reading of "aside from Barcelona", since
+  the release names Barcelona for the Sept opener *and* the **May 5–9, 2027 P500**. ⚠ **Only the
+  opener is in the feed**; the May stop stands on the release alone. One entry removes it too.
+- **⚠ THE RELEASE'S TABLE WAS THE HALF THAT ACTUALLY PUBLISHED THE DATES**, and it renders at the
+  root URL Wesley sent (`/ppa-tour-announces-ppa-spain-international-expansion/`). Its Date column
+  gave all seven; the five TBA-location rows now read **TBA in both columns**, levels kept, and the
+  lead-in *"Dates for the seven-tournament slate are as follows"* → *"The seven-tournament slate is
+  as follows"*. The prose "begins Sept. 23-27 in Barcelona" and the SEO description are untouched.
+- **⚠ AND A JSON-ONLY EDIT WOULD HAVE SILENTLY REVERTED.** `scripts/import-wp-posts.mjs` is
+  **re-runnable and rewrites `lib/data/news-posts.json` wholesale** — the same trap its own BYLINES
+  map documents, and the same class as `sync-tixr-prices.mjs` putting hidden tickets back on sale
+  (7/31). So the edit lives in **new `scripts/wp-body-edits.mjs`** (literal find/replace per slug,
+  applied by the importer *before* the asset scan) and was applied to today's JSON **through that
+  same module**. It is **idempotent, and a `find` that stops matching THROWS** rather than no-oping
+  — negative-tested both ways. Body edits there are deletions/rewordings only, never new facts.
+- **⚠ This is an edit to a published press release, which the 8/4 standing instruction puts in
+  Dylan's lane.** Done only because Wesley asked for it directly and chose that scope explicitly.
+- Verified on the dev server that owns the repo dir (:3000 — **:3111 is still a stale `next start`**):
+  the article's table renders 2 dates + 5 TBA rows, /events carries no withdrawn stop, **no other
+  post republishes any of the five dates**, `tsc` clean apart from a parallel session's missing
+  `@stripe/*` deps, eslint clean on all three changed files.
+- **Next:** if PPA Europe supersedes the PPA Spain branding, the two remaining rows and the release's
+  title/prose are the places that still say "PPA Spain" · **the Italy stops (Portoroz, Brescia) are
+  also ours, not the feed's** — one feed row exists for Italy, so they're the same exposure with real
+  city names · add Spanish stops back one line at a time as the feed or the event team confirms them.
+
 ### 2026-08-05 (pt. 15) — "The site is too slow": it isn't Vercel, and it isn't the homepage
 
 - Bryce: *"the new site is too slow. Is it vercel?"* **No.** Measured: TTFB 100–160ms,

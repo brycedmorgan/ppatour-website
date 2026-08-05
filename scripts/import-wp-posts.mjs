@@ -31,6 +31,8 @@ import { writeFile, mkdir } from "node:fs/promises";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
+import { applyBodyEdits } from "./wp-body-edits.mjs";
+
 const WP = process.env.WP_BASE_URL || "https://ppatour.com";
 const API = `${WP}/wp-json/wp/v2`;
 const ROOT = path.resolve(import.meta.dirname, "..");
@@ -287,7 +289,10 @@ for (const p of posts.slice(0, LIMIT)) {
   // event: label only — event pages come from a live API, resolved separately
   const eventCat = terms.filter(isEventCat)[0] ?? null;
 
-  const html = p.content?.rendered || "";
+  // Curated corrections (scripts/wp-body-edits.mjs) are applied BEFORE the
+  // asset/embed scan below, so an edit that drops an image doesn't queue that
+  // image for rehosting. Throws if an edit no longer matches — see that file.
+  const html = applyBodyEdits(p.slug, p.content?.rendered || "");
   if (stripTags(html).length < 50) warnings.push(`${p.slug}: body is empty or near-empty in WP`);
   const inline = [];
   for (const m of html.matchAll(IMG_RE)) inline.push(m[1]);
