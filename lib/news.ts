@@ -145,7 +145,7 @@ function nativeToCard(a: NewsArticle): NewsCard {
     image: a.image,
     imageAlt: "",
     imagePosition: a.imagePosition,
-    author: HOUSE_BYLINE,
+    author: a.author || HOUSE_BYLINE,
     publishedAt,
     displayDate: displayDateFromIso(publishedAt),
     source: "native",

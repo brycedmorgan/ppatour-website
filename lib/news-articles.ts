@@ -38,6 +38,12 @@ export type NewsArticle = {
    * unaffected and already show faces, so this deliberately does NOT touch them.
    */
   imagePosition?: string;
+  /**
+   * Byline override. Unset falls back to the "PPA Tour" house byline, which is
+   * right for anything the newsroom writes itself — set this only when a named
+   * person actually authored the piece (e.g. comms issuing a press release).
+   */
+  author?: string;
   whyItMatters: string;
   /** Ties coverage to a tour stop — event pages render these under "Coverage". */
   eventSlug?: string;
@@ -123,6 +129,9 @@ export const newsArticles: NewsArticle[] = [
     image: "/ppa/action-mxd-ppa-finals.jpg",
     /* Wesley, 8/5 — the centred hero crop cut both faces off. */
     imagePosition: "0 10%",
+    /* Wesley, 8/5. He is the release's author and its media contact, so the
+       byline is accurate rather than decorative. */
+    author: "Jeff Watson",
     whyItMatters:
       "One number, one global standard. The World Pickleball Rankings decide event entries, byes for the top players and teams, and who fills the eight-player fields at the season-ending PPA Finals.",
     body: [
