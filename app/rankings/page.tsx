@@ -5,7 +5,7 @@ import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
 import { ExplainerVideos } from "@/components/video/ExplainerVideos";
 import { EXPLAINER_SERIES, RANKINGS_VIDEOS } from "@/lib/explainer-videos";
-import { getFullRankings } from "@/lib/rankings-api";
+import { FULL_PAGE_SIZE, getRankings } from "@/lib/rankings-api";
 
 /**
  * ISR. The complete boards are ~2,000 rows. Rendering that per request is the
@@ -113,9 +113,23 @@ function WeightingBreakout() {
 }
 
 export default async function RankingsPage() {
-  // 52-week World Pickleball Rankings — the COMPLETE boards, every ranked
-  // pro in both genders (Connor: "all the way", no 25-row cap).
-  const ranking = await getFullRankings();
+  /**
+   * 52-week World Pickleball Rankings, {@link FULL_PAGE_SIZE} rows a page.
+   *
+   * ⚠ THE BOARDS ARE PAGINATED NOW, WHICH REVERSES CONNOR'S "ALL THE WAY".
+   * Wesley asked for it directly on 8/5 ("add pagination to the /rankings page.
+   * 50 per page"), knowing that ruling — this is the same call the 8/3 pt. 4
+   * session built, measured (DOM 18,646 → 1,292, HTML 2.04 → 0.88 MB) and then
+   * reverted for lack of it. **Don't re-revert it on the strength of the old
+   * note.** Every ranked pro is still reachable — by paging, by the name search
+   * (which runs against the whole board, not the page), and on /leaderboards.
+   *
+   * The server renders page 1 of each board and the rest arrives from
+   * /api/rankings after load, so the search can reach No. 1,300 without the
+   * ~2,000 rows of markup that made this page 2.10 MB. See `useFullBoards` and
+   * `usePagedBoards` in RankingsBoard.
+   */
+  const ranking = await getRankings(FULL_PAGE_SIZE);
 
   // Current No. 1's: the top man + top woman.
   const leaders = ranking.divisions
@@ -284,36 +298,15 @@ export default async function RankingsPage() {
             name or filter by region, and click any name to open that
             pro&apos;s profile.
           </p>
-          <div className="mt-6">
-            {ranking.source === "unavailable" ? (
-              /* Say the board is down rather than print numbers we invented.
-                 The demo dataset used to land here on any API hiccup and read
-                 as real — Fed at 9,840 when he is on 10,895 (7/29). */
-              <div className="border border-ppa-line bg-white px-4 py-12 text-center">
-                <p className="font-display text-lg uppercase text-ppa-navy">
-                  Rankings are temporarily unavailable
-                </p>
-                <p className="mx-auto mt-2 max-w-md text-sm text-ppa-navy/55">
-                  We couldn&apos;t reach the World Pickleball Rankings feed just now. Rather
-                  than show numbers that might be out of date, we&apos;ve left this blank —
-                  please check back shortly.
-                </p>
-                <a
-                  href="https://www.pickleball.com/rankings"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-5 inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
-                >
-                  View on Pickleball.com ↗
-                </a>
-              </div>
-            ) : (
-              /* `filterable` — the name search + region filter. Only the full
-                 boards get it; the homepage/athletes top-10 modules don't. */
-              <RankingsBoard divisions={ranking.divisions} filterable />
-            )}
-          </div>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
+
+          {/* Section links, above the search rather than under the board
+              (Wesley, 8/5). At the foot they sat below 50 rows and a paginator,
+              so "See Full Leaderboard" — the way to a linkable, deep-pageable
+              view of this same data — was the last thing you could reach.
+              ⚠ Left-aligned, not centred as they were: they now sit directly
+              under left-aligned copy, and a centred row there reads as a
+              misalignment rather than as a deliberate footer. */}
+          <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/leaderboards"
               className="inline-flex h-11 items-center bg-ppa-blue px-8 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
@@ -343,6 +336,47 @@ export default async function RankingsPage() {
             >
               How Points Work
             </Link>
+          </div>
+
+          <div className="mt-6">
+            {ranking.source === "unavailable" ? (
+              /* Say the board is down rather than print numbers we invented.
+                 The demo dataset used to land here on any API hiccup and read
+                 as real — Fed at 9,840 when he is on 10,895 (7/29). */
+              <div className="border border-ppa-line bg-white px-4 py-12 text-center">
+                <p className="font-display text-lg uppercase text-ppa-navy">
+                  Rankings are temporarily unavailable
+                </p>
+                <p className="mx-auto mt-2 max-w-md text-sm text-ppa-navy/55">
+                  We couldn&apos;t reach the World Pickleball Rankings feed just now. Rather
+                  than show numbers that might be out of date, we&apos;ve left this blank —
+                  please check back shortly.
+                </p>
+                <a
+                  href="https://www.pickleball.com/rankings"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-5 inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
+                >
+                  View on Pickleball.com ↗
+                </a>
+              </div>
+            ) : (
+              /* `filterable` — the name search + region filter. Only the full
+                 boards get it; the homepage/athletes top-10 modules don't.
+                 `fullBoardsUrl` makes these rows a seed: the rest of both
+                 boards arrives after load.
+
+                 ⚠ The trailing slash is load-bearing — `trailingSlash: true`
+                 in next.config, so `/api/rankings` 308s and the board would
+                 wait out a redirect before the fetch even starts. */
+              <RankingsBoard
+                divisions={ranking.divisions}
+                filterable
+                fullBoardsUrl="/api/rankings/"
+                pageSize={FULL_PAGE_SIZE}
+              />
+            )}
           </div>
 
           {/* Bryce, 7/31: put Be the Best "by the rankings stuff as well" — and

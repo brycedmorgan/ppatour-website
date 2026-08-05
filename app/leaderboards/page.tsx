@@ -1,7 +1,15 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { RankingPager } from "@/components/rankings/RankingPager";
 import { RankingTable } from "@/components/rankings/RankingTable";
-import { REGION_OPTIONS, toRegionFilter } from "@/lib/ranking-filters";
+import { RankingTableSkeleton } from "@/components/rankings/RankingTableSkeleton";
+import {
+  isFiltering,
+  REGION_OPTIONS,
+  type RegionFilter,
+  toRegionFilter,
+} from "@/lib/ranking-filters";
 import { countRankingMatches, getRankingPage, RANKING_GENDERS } from "@/lib/rankings-api";
 
 export const metadata: Metadata = {
@@ -12,18 +20,17 @@ export const metadata: Metadata = {
 
 type SearchParams = { gender?: string; page?: string; q?: string; region?: string };
 
-/** Windowed page list with ellipses, e.g. [1, "…", 5, 6, 7, "…", 27]. */
-function pageList(current: number, total: number): (number | "…")[] {
-  const wanted = new Set([1, total, current, current - 1, current + 1]);
-  const sorted = [...wanted].filter((p) => p >= 1 && p <= total).sort((a, b) => a - b);
-  const out: (number | "…")[] = [];
-  let prev = 0;
-  for (const p of sorted) {
-    if (p - prev > 1) out.push("…");
-    out.push(p);
-    prev = p;
-  }
-  return out;
+/**
+ * Search + region live in the URL, not in component state, so a result is
+ * linkable and the page keeps working with JS off (the controls are a plain GET
+ * form). Every gender tab and pagination link therefore has to carry them
+ * forward — dropping them silently would reset the search on any click.
+ */
+function hrefFor(g: string, p: number, q: string, region: RegionFilter) {
+  const params = new URLSearchParams({ gender: g, page: String(p) });
+  if (q) params.set("q", q);
+  if (region !== "all") params.set("region", region);
+  return `/leaderboards?${params}`;
 }
 
 export default async function LeaderboardsPage({
@@ -36,41 +43,21 @@ export default async function LeaderboardsPage({
   const requestedPage = Number.parseInt(sp.page ?? "1", 10);
   const q = (sp.q ?? "").trim();
   const region = toRegionFilter(sp.region);
-  const query = { q, region };
-
-  const data = await getRankingPage(
-    genderKey,
-    Number.isFinite(requestedPage) ? requestedPage : 1,
-    query,
-  );
-
-  const { page, totalPages, total, pageSize, filtered, boardTotal } = data;
 
   /**
-   * Search + region live in the URL, not in component state, so a result is
-   * linkable and the page keeps working with JS off (the controls are a plain
-   * GET form). Every gender tab and pagination link therefore has to carry them
-   * forward — dropping them silently would reset the search on any click.
+   * ⚠ NOTHING IS AWAITED FROM HERE DOWN — that is the point.
+   *
+   * The standings live behind a <Suspense> boundary rather than being awaited
+   * at the top of the page. `getRankingPage` reads the WHOLE board before it can
+   * slice 50 rows (it has to: a name search must be able to reach No. 1,300, and
+   * the unfiltered total has to count rows that actually render — see its doc
+   * comment), and this route is dynamic on searchParams, so every hit paid for
+   * that assembly before a single byte left the server.
+   *
+   * Now the shell — heading, search form, gender tabs — streams immediately and
+   * the table swaps in behind a skeleton when it's ready. The controls are usable
+   * while it loads, which is what makes this more than a cosmetic change.
    */
-  const href = (g: string, p: number) => {
-    const params = new URLSearchParams({ gender: g, page: String(p) });
-    if (q) params.set("q", q);
-    if (region !== "all") params.set("region", region);
-    return `/leaderboards?${params}`;
-  };
-
-  const rangeStart = total === 0 ? 0 : (page - 1) * pageSize + 1;
-  const rangeEnd = Math.min(page * pageSize, total || page * pageSize);
-
-  // Only when this board came up empty — see countRankingMatches.
-  const otherGender = RANKING_GENDERS.find((g) => g.key !== genderKey);
-  const otherMatches =
-    filtered && total === 0 && otherGender
-      ? await countRankingMatches(otherGender.key, query)
-      : 0;
-
-  const regionLabel = REGION_OPTIONS.find((o) => o.value === region)?.label;
-
   return (
     <section className="min-h-[70svh] bg-ppa-navy text-white">
       <div className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -92,14 +79,13 @@ export default async function LeaderboardsPage({
             ← Rankings overview
           </Link>
         </div>
+        {/* ⚠ The counts that used to live here ("Showing 1–50 of 1,324") moved
+            down next to the table, inside the streaming boundary. They describe
+            a result set we haven't read yet, so leaving them up here would have
+            held the whole shell — including the search box — behind the board. */}
         <p className="mt-3 max-w-xl text-sm text-white/60">
-          The complete World Pickleball Rankings.{" "}
-          {filtered
-            ? total > 0 &&
-              `${total.toLocaleString()} match${total === 1 ? "" : "es"} of ${boardTotal.toLocaleString()} ranked ${data.label.toLowerCase()}${
-                totalPages > 1 ? ` — showing ${rangeStart}–${rangeEnd}.` : "."
-              }`
-            : total > 0 && `Showing ${rangeStart}–${rangeEnd} of ${total.toLocaleString()}.`}
+          The complete World Pickleball Rankings — every ranked pro, searchable
+          by name and filterable by region.
         </p>
 
         {/*
@@ -160,7 +146,9 @@ export default async function LeaderboardsPage({
               >
                 Search
               </button>
-              {filtered && (
+              {/* Derived from the URL, not from the result set — so the shell
+                  can render it without waiting on the board. */}
+              {isFiltering(q, region) && (
                 <Link
                   href={`/leaderboards?gender=${genderKey}&page=1`}
                   className="inline-flex h-10 items-center border border-white/25 px-4 text-xs font-bold uppercase tracking-[0.12em] text-white/70 transition-colors hover:bg-white hover:text-ppa-navy"
@@ -177,7 +165,7 @@ export default async function LeaderboardsPage({
           {RANKING_GENDERS.map((g) => (
             <Link
               key={g.key}
-              href={href(g.key, 1)}
+              href={hrefFor(g.key, 1, q, region)}
               aria-current={g.key === genderKey ? "page" : undefined}
               className={`px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition-colors ${
                 g.key === genderKey
@@ -190,101 +178,129 @@ export default async function LeaderboardsPage({
           ))}
         </div>
 
-        {/* Standings */}
-        <div className="mt-6">
-          {data.entries.length > 0 ? (
-            <RankingTable entries={data.entries} />
-          ) : (
-            <div className="border border-white/10 px-4 py-10 text-center">
-              <p className="text-sm text-white/55">
-                {filtered
-                  ? [
-                      `No ranked ${data.label.toLowerCase()}`,
-                      q ? ` match “${q}”` : " match",
-                      region !== "all" ? ` in ${regionLabel}` : "",
-                      ".",
-                    ].join("")
-                  : "No players on this page."}
-              </p>
-              {/* A correct search that happens to be on the wrong board is the
-                  most likely zero-result — say where the matches are. */}
-              {otherMatches > 0 && otherGender && (
-                <Link
-                  href={href(otherGender.key, 1)}
-                  className="mt-3 inline-block text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-sky underline-offset-4 hover:underline"
-                >
-                  {otherMatches} {otherMatches === 1 ? "match" : "matches"} in{" "}
-                  {otherGender.label} →
-                </Link>
-              )}
-            </div>
-          )}
-        </div>
+        {/* Standings — the streaming boundary.
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <nav
-            className="mt-6 flex flex-wrap items-center justify-center gap-1.5"
-            aria-label="Leaderboard pages"
-          >
-            {page > 1 ? (
-              <Link
-                href={href(genderKey, page - 1)}
-                aria-label="Previous page"
-                className="inline-flex h-10 items-center border border-white/25 px-4 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-white hover:text-ppa-navy"
-              >
-                ← Prev
-              </Link>
-            ) : (
-              <span className="inline-flex h-10 items-center px-4 text-xs font-bold uppercase tracking-[0.12em] text-white/25">
-                ← Prev
-              </span>
-            )}
-
-            {pageList(page, totalPages).map((p, i) =>
-              p === "…" ? (
-                <span
-                  key={`gap-${i}`}
-                  className="inline-flex h-10 w-6 items-center justify-center text-xs text-white/40"
-                >
-                  …
-                </span>
-              ) : p === page ? (
-                <span
-                  key={p}
-                  aria-current="page"
-                  className="inline-flex h-10 min-w-10 items-center justify-center bg-white px-2 text-xs font-bold tabular-nums text-ppa-navy"
-                >
-                  {p}
-                </span>
-              ) : (
-                <Link
-                  key={p}
-                  href={href(genderKey, p)}
-                  aria-label={`Page ${p}`}
-                  className="inline-flex h-10 min-w-10 items-center justify-center border border-white/20 px-2 text-xs font-bold tabular-nums text-white/70 transition-colors hover:bg-white hover:text-ppa-navy"
-                >
-                  {p}
-                </Link>
-              ),
-            )}
-
-            {page < totalPages ? (
-              <Link
-                href={href(genderKey, page + 1)}
-                aria-label="Next page"
-                className="inline-flex h-10 items-center border border-white/25 px-4 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-white hover:text-ppa-navy"
-              >
-                Next →
-              </Link>
-            ) : (
-              <span className="inline-flex h-10 items-center px-4 text-xs font-bold uppercase tracking-[0.12em] text-white/25">
-                Next →
-              </span>
-            )}
-          </nav>
-        )}
+            `key` re-arms the fallback on every new query: without it a
+            client-side navigation to page 2 (or a new search) would sit on the
+            previous page's rows with no sign anything was happening, which is
+            the same "did that click work?" problem this change exists to fix. */}
+        <Suspense
+          key={`${genderKey}:${requestedPage}:${q}:${region}`}
+          fallback={<LeaderboardSkeleton />}
+        >
+          <LeaderboardResults
+            genderKey={genderKey}
+            requestedPage={requestedPage}
+            q={q}
+            region={region}
+          />
+        </Suspense>
       </div>
     </section>
+  );
+}
+
+/** Reserves the table's space while the board is being assembled. */
+function LeaderboardSkeleton() {
+  return (
+    <div className="mt-6">
+      <p className="mb-3 h-4 text-[11px] font-bold uppercase tracking-[0.12em] text-white/40">
+        Loading the board…
+      </p>
+      {/* A full page is 50 rows; 12 is enough to fill a viewport without laying
+          out 50 placeholders we're about to throw away. */}
+      <RankingTableSkeleton rows={12} label="Loading the leaderboard" />
+    </div>
+  );
+}
+
+/**
+ * The result set: count line, table, pagination. Everything here needs the
+ * board, so it all lives inside the one boundary — a second Suspense around the
+ * pagination would only mean two skeletons resolving a millisecond apart.
+ */
+async function LeaderboardResults({
+  genderKey,
+  requestedPage,
+  q,
+  region,
+}: {
+  genderKey: string;
+  requestedPage: number;
+  q: string;
+  region: RegionFilter;
+}) {
+  const query = { q, region };
+  const data = await getRankingPage(
+    genderKey,
+    Number.isFinite(requestedPage) ? requestedPage : 1,
+    query,
+  );
+
+  const { page, totalPages, total, pageSize, filtered, boardTotal } = data;
+  const href = (g: string, p: number) => hrefFor(g, p, q, region);
+
+  const rangeStart = total === 0 ? 0 : (page - 1) * pageSize + 1;
+  const rangeEnd = Math.min(page * pageSize, total || page * pageSize);
+
+  // Only when this board came up empty — see countRankingMatches.
+  const otherGender = RANKING_GENDERS.find((g) => g.key !== genderKey);
+  const otherMatches =
+    filtered && total === 0 && otherGender
+      ? await countRankingMatches(otherGender.key, query)
+      : 0;
+
+  const regionLabel = REGION_OPTIONS.find((o) => o.value === region)?.label;
+
+  return (
+    <>
+      {/* What's on screen, in the same slot the skeleton's line occupied. */}
+      <p className="mb-3 mt-6 h-4 text-[11px] font-bold uppercase tracking-[0.12em] text-white/45">
+        {total === 0
+          ? ""
+          : filtered
+            ? `${total.toLocaleString()} match${total === 1 ? "" : "es"} of ${boardTotal.toLocaleString()} ranked ${data.label.toLowerCase()}${
+                totalPages > 1 ? ` — showing ${rangeStart}–${rangeEnd}` : ""
+              }`
+            : `Showing ${rangeStart}–${rangeEnd} of ${total.toLocaleString()}`}
+      </p>
+
+      {data.entries.length > 0 ? (
+        <RankingTable entries={data.entries} />
+      ) : (
+        <div className="border border-white/10 px-4 py-10 text-center">
+          <p className="text-sm text-white/55">
+            {filtered
+              ? [
+                  `No ranked ${data.label.toLowerCase()}`,
+                  q ? ` match “${q}”` : " match",
+                  region !== "all" ? ` in ${regionLabel}` : "",
+                  ".",
+                ].join("")
+              : "No players on this page."}
+          </p>
+          {/* A correct search that happens to be on the wrong board is the
+              most likely zero-result — say where the matches are. */}
+          {otherMatches > 0 && otherGender && (
+            <Link
+              href={href(otherGender.key, 1)}
+              className="mt-3 inline-block text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-sky underline-offset-4 hover:underline"
+            >
+              {otherMatches} {otherMatches === 1 ? "match" : "matches"} in{" "}
+              {otherGender.label} →
+            </Link>
+          )}
+        </div>
+      )}
+
+      {/* Pagination. Shared with the /rankings board — see RankingPager for why
+          it is one component and how it stays link-based (and JS-free) here. */}
+      <RankingPager
+        page={page}
+        totalPages={totalPages}
+        hrefFor={(p) => href(genderKey, p)}
+        label="Leaderboard pages"
+      />
+    </>
   );
 }

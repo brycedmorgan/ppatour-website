@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import type { RankingEntry } from "@/lib/rankings-api";
+import type { BoardEntry } from "@/lib/rankings-api";
 
 /** Shared standings table (dark section). Presentational — no state. */
 
@@ -42,7 +42,7 @@ function fmtPrize(n: number): string {
  *    **all ~2,000 circle-flag SVGs eagerly** on first paint — the single
  *    biggest reason DOMContentLoaded was 14s.
  */
-function Avatar({ entry, size }: { entry: RankingEntry; size: number }) {
+function Avatar({ entry, size }: { entry: BoardEntry; size: number }) {
   const flag = flagUrl(entry.countryCode);
   return (
     <span
@@ -100,7 +100,7 @@ function RankBadge({ rank, tied }: { rank: number; tied: boolean }) {
   );
 }
 
-export function RankingTable({ entries }: { entries: RankingEntry[] }) {
+export function RankingTable({ entries }: { entries: BoardEntry[] }) {
   // Prize shows only when the feed carries it (currently $0 across the board).
   const showPrize = entries.some((e) => e.prizeMoney > 0);
   const gridTemplate = ["2.5rem", "1fr", "5rem", showPrize ? "5.5rem" : null]

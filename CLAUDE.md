@@ -42,6 +42,132 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-05 (pt. 18) — /rankings paginates, 50 a page — Connor's "all the way" is REVERSED
+
+- Wesley: *"add pagination to the /rankings page. 50 per page. have the loading animation appear when
+  they change pages and then scroll them to the top of the rankings."* All three shipped.
+- **⚠ THIS REVERSES A STANDING RULING, DELIBERATELY. DO NOT RE-REVERT IT.** Connor's "all the way"
+  (no cap) is why **8/3 pt. 4 built this exact feature, measured it (DOM 18,646 → 1,292, HTML 2.04 →
+  0.88 MB) and then threw the diff away.** Wesley asked for it directly knowing that. Every ranked pro
+  is still reachable three ways: paging, the name search (which runs against the **whole** board, not
+  the page), and /leaderboards. The note is on `app/rankings/page.tsx` where the next person will hit it.
+- **⚠ EACH BOARD PAGES INDEPENDENTLY, AND THE DATA FORCES IT.** Men's is 1,324 rows (27 pages),
+  women's 751 (16). Both are on screen together above `lg`, so a shared page number would put the
+  women's board on an **empty page 17** while the men's is mid-field. Verified: men's on page 2 while
+  women's sits on page 1, and switching mobile tabs **remembers each board's page** rather than
+  resetting it.
+- **⚠ THE LOADING ANIMATION IS A REAL `useTransition` PENDING STATE, NOT A TIMER.** Paging is a slice
+  of rows already in memory (pt. 17 fetches the whole board so search can reach No. 1,300), so there
+  is no request to wait on — a spinner on a `setTimeout` would have been theatre, and this repo does
+  not ship states that misdescribe what is happening. What it does cost is the commit: 50 rows with 50
+  `next/image` avatars. **Measured on the dev build: ~127ms unthrottled, ~1,809ms at 4× CPU** — so it
+  is plainly visible on desktop and unmissable on a phone, which is who needs it.
+- **`scroll-mt-28` is measured, not guessed.** The sticky `.site-chrome` is **100px**; 112px clears it
+  with 12px to spare. Confirmed the board's top edge lands at **exactly 112px** from the viewport top
+  after a page change (scrollY 3,874 → 1,582). `scrollIntoView` honours `scroll-margin`, and the
+  scroll fires **before** the transition commits so the click moves the page immediately — the
+  skeleton is what fills the gap. `prefers-reduced-motion` drops the smooth behaviour.
+- **⚠ A NEW FILTER MUST RESET EVERY BOARD TO PAGE 1.** Narrowing 1,324 rows to three while sitting on
+  page 12 renders an empty board for a search that matched — the same bug as the /leaderboards page
+  clamp (8/3 pt. 6). There is a clamp in `view()` as well, so a stale page can't outlive its board.
+  Verified: searching "a" from page 2 → both boards page 1, "Showing 1–50 of 1,085" / "1–50 of 668".
+- **The seed is now `getRankings(FULL_PAGE_SIZE)` — 50 a board, so page 1 is complete in the HTML**
+  (it was 25). Free: `boardTop` slices the same cached 250-row page-1 response, so no extra upstream
+  call. ⚠ **The pager is absent from the server HTML on purpose** — at seed time a board has exactly
+  one page, so it appears when the full board lands, under the skeleton that says so.
+- **⚠ `isChanging` is gated on `isPending` AND the board key.** If a transition commits inside one
+  frame React may never surface a pending render, leaving the "which board is changing" key set
+  forever — harmless *only* because the skeleton requires both.
+- **New `components/rankings/RankingPager.tsx` is shared by both pages**, and carries **no
+  `"use client"` and no hooks** on purpose: it renders on the server for /leaderboards (where paging
+  must keep working with JS off, as `<Link>`s) and compiles into the client bundle for RankingsBoard
+  (as `<button>`s). `pageList` had been duplicated; two windowing rules for the same boards is this
+  repo's most familiar bug in its most invisible form. `FULL_PAGE_SIZE` is now documented as the page
+  size for **both** pages — verified /leaderboards is byte-for-byte unchanged across page 1 / 5 / 27 /
+  clamped-99999 / women page 2 / a single-page filtered result.
+- Verified over CDP at 1440 and 390: **100 rows on screen (50 a board) instead of 2,075**, "Showing
+  1–50 of 1,324" and "1–50 of 751", Next → "Showing 51–100" with the first rank badge reading **51**,
+  zero horizontal overflow at either width. tsc + eslint clean. Also fixed the mobile tab counts,
+  which read "Men· 1324" — every other count on the page is locale-formatted.
+- **The four section links moved from the foot of the section to above the search** (Wesley, same
+  afternoon). Pagination is what made the old spot wrong: they sat below 50 rows *and* a paginator, so
+  "See Full Leaderboard" — the route to the linkable, deep-pageable view of the same data — was the
+  last thing on the section. **Left-aligned now, not centred**: they sit directly under left-aligned
+  copy, where a centred row reads as a misalignment rather than as a deliberate footer. Verified the
+  row's left edge matches the `<h2>`'s to the pixel (153px at 1440, 16px at 390) and the order is
+  h2 → links → search → board → Be the Best at both widths, no overflow. ⚠ At 390 the four buttons
+  stack to **4 lines (~210px)**, so the board now starts that much lower on a phone; a 2-col grid
+  below `sm` would halve it if it bothers anyone.
+- **Next:** the pager only appears after the client fetch lands, so on a very slow connection page 1
+  sits alone for a moment — seeding two pages would fix it and doubles the HTML, probably not worth it
+  · /rankings still has no `?page=` (it is `force-static`, so a deep link would render page 1 and
+  jump); /leaderboards is the linkable view and already carries page, search and region.
+
+### 2026-08-05 (pt. 17) — /rankings ships 50 rows, not 2,075; /leaderboards streams its table
+
+- Wesley: *"can we have the page load without it having to get the full rankings table loaded?
+  Add a loading animation to the box and have it load post page load."* Both pages now do, by two
+  **different** mechanisms, because they had two different problems.
+- **⚠ /rankings WAS NEVER SLOW TO SERVE — IT WAS TOO BIG TO PARSE.** Measured on prod: `x-vercel-cache:
+  HIT`, **2.10 MB of HTML / 116 KB brotli / 2,075 `wpr-row-link`s**, 18,646 DOM nodes. The data is a
+  24h cache hit and the HTML is a CDN hit; the document itself is the cost. So streaming would have
+  bought nothing there (`force-static` resolves Suspense at build anyway) — the fix is to stop
+  shipping the rows.
+  - Page now renders `getRankings()` — **the top 25 of each board, 50 rows** — and `RankingsBoard`'s
+    new `useFullBoards` fetches the rest from **new `/api/rankings/`** after mount. Measured live:
+    **491 KB raw → 51 KB brotli for all 2,075 players**, against the 116 KB of brotli'd HTML it
+    replaces, and it arrives *after* first paint instead of in front of it.
+  - **⚠ THE SEED IS THE WHOLE SAFETY ARGUMENT.** Fetching into an empty box would trade a slow page
+    for a blank one — nothing for a crawler, nothing with JS off, and the top of the standings (what
+    almost everyone came for) behind a round trip. `/leaderboards` still renders a complete board
+    server-side for anything that needs it whole.
+  - **Fails back to the seed, never to nothing.** Blocked `/api/rankings/` over CDP: **50 rows stay**,
+    skeleton retires, line reads "Showing the top 25 — the full board didn't load", **Retry** offered
+    and verified to recover the full 2,075.
+  - **⚠ THREE COUNTS HAD TO BE GATED ON `loading` OR THEY'D HAVE LIED.** `isFullBoard` is
+    `entries.length > 10`, which the 25-row seed trips — so the header would have read **"50 ranked
+    players"** on a page whose own copy promises every ranked pro. Same for the mobile tab counts and
+    the desktop column count. While loading they say "Loading…", and a search mid-load reads
+    "N so far — loading the full board…" rather than answering a correct query with the seed.
+  - **⚠ THE TRAILING SLASH IS LOAD-BEARING.** `trailingSlash: true`, so `fetch("/api/rankings")` eats
+    a 308 before the board even starts. Verified one clean 200 in the CDP network log.
+  - `startTransition` around the swap: committing 2,000 rows urgently locks the main thread right
+    after load, i.e. a slow page traded for a janky one.
+  - **New `BoardEntry` (a `Pick` of `RankingEntry`) is the wire shape** — `eventsPlayed`, `country`
+    and `image` are rendered by nothing and were being paid for 2,075 times (`image` is a second copy
+    of `headshot`'s URL). A `RankingEntry` satisfies it structurally, so every server-rendered caller
+    is untouched.
+- **/leaderboards was the opposite: small HTML, slow TTFB.** It is 50 rows, but `getRankingPage`
+  reads the WHOLE board before it can slice them (it must — search has to reach No. 1,300, and the
+  totals have to count rows that render), and the route is dynamic on searchParams, so every hit paid
+  for that before a single byte left. Now the results sit behind a **`<Suspense>`** boundary.
+  **Stream-observed: shell + search form + skeleton at +2ms, rows at +1493ms.** Previously that 1.5s
+  was TTFB with nothing on screen.
+  - **⚠ The "Showing 1–50 of 1,324" line MOVED down next to the table** — it describes a result set we
+    haven't read, so leaving it under the `<h1>` would have held the whole shell, search box included,
+    behind the board. The Clear button now derives from `isFiltering(q, region)` (the URL) instead of
+    `data.filtered`, for the same reason.
+  - `key` on the boundary so paging/searching re-arms the fallback; without it a click sits on the
+    previous page's rows with no sign anything happened.
+- Skeletons reuse **`.wpr-row` + the same `--wpr-cols`** so placeholders land on the grid the real
+  rows will — a CLS decision, not a styling one. On /rankings the skeleton is a **tail** (no header,
+  no top border) under the seed rows, so the two read as one continuous board.
+- Verified over CDP against the dev server that owns the repo dir (**:3000 — :3111 is still the stale
+  `next start`**): 50 rows + 2 skeletons + "Loading the full board…" at 1.2s → **2,075 rows, 0
+  skeletons, "2,075 ranked players"**; searching **"duckworth" returns No. 400**, which only the full
+  board can answer. Zero horizontal overflow at 1440 and 390, zero elements stuck at opacity 0.
+  /leaderboards swept across default / page 27 / page 99999 (clamps) / wrong-board search (the
+  "2 matches in Women →" link intact) / region filter / no match. Homepage + /athletes top-10 modules
+  **unchanged: 20 rows, no skeleton** — `fullBoardsUrl` is opt-in. tsc + eslint clean.
+- **⚠ `npm run build` NOT RUN, deliberately:** `next dev` owns `.next` on :3000 and a build would
+  fight it. The risk a build would catch here is a static-generation opt-out, and /rankings keeps its
+  `force-static` + `revalidate = 300` with a *smaller* server fetch than before. **Confirm the
+  post-change HTML size on the deploy.**
+- **Next:** /rankings' `revalidate = 300` and the API's `s-maxage=300` are deliberately the same
+  number — change them together or the seed and the full board can disagree · the full board is still
+  2,075 rows of DOM once it lands, so if that commit ever shows up in INP the next lever is
+  virtualising the list, not shrinking the payload again.
+
 ### 2026-08-05 (pt. 16) — PPA Spain: only Barcelona keeps a date; five hand-typed stops DELETED
 
 - Wesley, pointing at the 5/27 release: *"As we just announced PPA Europe, we should probably remove

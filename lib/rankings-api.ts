@@ -54,7 +54,12 @@ const WORLD_DIVISION_TYPE = 8;
 const RACE = false;
 /** Rows shown in the /rankings preview. */
 export const TOP_COUNT = 25;
-/** Rows per page on the full /leaderboards page. */
+/**
+ * Rows per page on the full standings — /leaderboards AND the paginated board
+ * on /rankings. ⚠ Keep it one constant: the two pages show the same boards, and
+ * "page 7" meaning different rows depending on which one you are looking at is
+ * the kind of drift this repo keeps paying for.
+ */
 export const FULL_PAGE_SIZE = 50;
 /** Cache the upstream response for a day; the `rank=<today>` param also rolls it. */
 const REVALIDATE_SECONDS = 60 * 60 * 24;
@@ -109,6 +114,63 @@ export type RankingDivision = {
   short: string;
   entries: RankingEntry[];
 };
+
+/**
+ * The fields the standings table actually renders — the wire shape for the
+ * complete boards.
+ *
+ * ⚠ THIS IS A PAYLOAD TYPE, NOT A CONVENIENCE. /rankings no longer ships ~2,000
+ * rows of HTML; it seeds the top {@link TOP_COUNT} of each board and fetches the
+ * rest from /api/rankings after load. That response carries every ranked pro, so
+ * a field nobody renders is paid for ~2,000 times. `eventsPlayed`, `country` and
+ * `image` are all dead weight there — `image` in particular is a second copy of
+ * a CDN URL we already have in `headshot`.
+ *
+ * A {@link RankingEntry} satisfies this structurally, so every existing
+ * server-rendered caller keeps working unchanged; only the wire is slimmed, by
+ * {@link toBoardDivisions}.
+ */
+export type BoardEntry = Pick<
+  RankingEntry,
+  | "rank"
+  | "isTied"
+  | "slug"
+  | "name"
+  | "points"
+  | "prizeMoney"
+  | "countryCode"
+  | "headshot"
+  | "profileUrl"
+  | "hasLocalProfile"
+>;
+
+export type BoardDivision = {
+  key: string;
+  label: string;
+  short: string;
+  entries: BoardEntry[];
+};
+
+/** Strip a full board down to {@link BoardEntry} for the wire. */
+export function toBoardDivisions(divisions: RankingDivision[]): BoardDivision[] {
+  return divisions.map((d) => ({
+    key: d.key,
+    label: d.label,
+    short: d.short,
+    entries: d.entries.map((e) => ({
+      rank: e.rank,
+      isTied: e.isTied,
+      slug: e.slug,
+      name: e.name,
+      points: e.points,
+      prizeMoney: e.prizeMoney,
+      countryCode: e.countryCode,
+      headshot: e.headshot,
+      profileUrl: e.profileUrl,
+      hasLocalProfile: e.hasLocalProfile,
+    })),
+  }));
+}
 
 export type RankingsResult = {
   divisions: RankingDivision[];
@@ -383,17 +445,23 @@ function filterEntries(entries: RankingEntry[], query: RankingQuery): RankingEnt
 }
 
 /**
- * Top rows of both gender boards for the /rankings preview. Safe to call from
- * server components; never throws — returns the placeholder fallback on error.
+ * Top rows of both gender boards. Safe to call from server components; never
+ * throws — returns the placeholder fallback on error.
+ *
+ * `count` costs nothing to raise up to {@link BOARD_PAGE_SIZE}: every value
+ * slices the same cached page-1 response, so asking for 50 makes no extra
+ * upstream request. /rankings asks for {@link FULL_PAGE_SIZE} so its first
+ * paginated page is complete in the HTML; the homepage and /athletes modules
+ * take the {@link TOP_COUNT} default.
  */
-export async function getRankings(): Promise<RankingsResult> {
+export async function getRankings(count: number = TOP_COUNT): Promise<RankingsResult> {
   if (!config().token) return fallbackResult();
 
   /* One board failing must not take the other down with it, and NEITHER may be
      replaced by the demo data — see the note on RankingsResult.source. */
   const divisions = await Promise.all(
     RANKING_GENDERS.map(async (g) => {
-      const entries = (await boardTop(g.gender, TOP_COUNT)) ?? [];
+      const entries = (await boardTop(g.gender, count)) ?? [];
       return { key: g.key, label: g.label, short: g.short, entries };
     }),
   );
