@@ -113,6 +113,9 @@ const CURATED_ALIASES: Record<string, string> = {
   // The feed lists Atlanta under its event name; map it to our curated record so
   // the name, logo, and event page all attach (Tyler, 8/4).
   "pickleball-players-championships": "atlanta-pickleball-championships",
+  // The feed renamed VB Open to include the Mojo title sponsor; map its new
+  // slug back to our curated record so the badge + venue photo re-attach.
+  "mojo-energy-pouches-virginia-beach-open": "virginia-beach-open",
 };
 
 const curatedBySlug = new Map<string, Tournament>(getAllEvents().map((t) => [t.slug, t]));
