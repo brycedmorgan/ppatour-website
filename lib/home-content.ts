@@ -354,7 +354,7 @@ export const partners: Partner[] = [
   {
     name: "JOOLA",
     website: "https://www.joola.com",
-    role: "Official Paddle Partner",
+    role: "Official Platinum Partner",
     category: "Paddle",
     note: "Presenting partner of the PPA Finals and the gear behind a generation of pros.",
     tier: "platinum",
@@ -381,7 +381,9 @@ export const partners: Partner[] = [
      */
     name: "Life Time",
     website: "https://www.lifetime.life",
-    role: "PPA Host Facility",
+    // Bryce, 8/5: the four Platinum partners carry "Official Platinum Partner"
+    // as their designation (JOOLA, Proton, Six Zero, Life Time).
+    role: "Official Platinum Partner",
     category: "Host Facility",
     tier: "platinum",
     logo: "/ppa/sponsors/life-time.webp",
@@ -397,7 +399,7 @@ export const partners: Partner[] = [
     // instead of the sponsor).
     website: "https://protonsports.com",
     eventNamePrefix: "Proton",
-    role: "Official Paddle Partner",
+    role: "Official Platinum Partner",
     category: "Paddle",
     note: "Engineering the paddles behind the tour's hardest hitters.",
     tier: "platinum",
@@ -408,7 +410,7 @@ export const partners: Partner[] = [
   {
     name: "Six Zero",
     website: "https://sixzeropickleball.com",
-    role: "Official Paddle Partner",
+    role: "Official Platinum Partner",
     category: "Paddle",
     note: "Performance gear built for the demands of the pro game.",
     tier: "platinum",

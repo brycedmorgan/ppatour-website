@@ -74,6 +74,8 @@ const LANES = [
 // whatever position they happen to occupy in the roster array.
 const MARQUEE_PARTNERS = logoPartnersInTierOrder;
 
+// Real network marks (PNG — next/image 400s on SVG). Each renders at its own
+// size on a transparent field, no white chip.
 const BROADCAST: { name: string; note: string; logo?: string }[] = [
   {
     name: "PickleballTV",
@@ -82,11 +84,11 @@ const BROADCAST: { name: string; note: string; logo?: string }[] = [
   },
   {
     name: "Tennis Channel",
-    logo: "/ppa/networks/tennis-channel.svg",
+    logo: "/ppa/networks/tennis-channel.png",
     note: "Featured rounds & Championship Sunday on national TV",
   },
-  { name: "FOX & FS1", note: "Marquee finals on national television" },
-  { name: "MATCHDAY App", note: "Live scores, brackets, and match alerts" },
+  { name: "FOX & FS1", logo: "/ppa/networks/fox.png", note: "Marquee finals on national television" },
+  { name: "MATCHDAY App", logo: "/ppa/networks/matchday.png", note: "Live scores, brackets, and match alerts" },
 ];
 
 function SectionHead({
@@ -963,13 +965,13 @@ export async function HomeContent({
             {BROADCAST.map((b) => (
               <div key={b.name} className="flex flex-col bg-ppa-paper p-5">
                 {b.logo ? (
-                  <span className="flex h-9 w-fit items-center rounded bg-white px-2.5">
+                  <span className="flex h-12 w-fit items-center">
                     <Image
                       src={b.logo}
                       alt={b.name}
-                      width={120}
-                      height={36}
-                      className="h-5 w-auto object-contain"
+                      width={240}
+                      height={96}
+                      className="h-11 w-auto max-w-[160px] object-contain object-left"
                     />
                   </span>
                 ) : (

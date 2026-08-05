@@ -88,12 +88,14 @@ const HOW_TO_WATCH: {
   },
   {
     name: "Tennis Channel",
-    logo: "/ppa/networks/tennis-channel.svg",
+    // PNG, not SVG — next/image 400s on SVG.
+    logo: "/ppa/networks/tennis-channel.png",
     note: "Featured rounds and Championship Sunday on national television.",
     detail: "Check local listings",
   },
   {
     name: "MATCHDAY App",
+    logo: "/ppa/networks/matchday.png",
     note: "Live scores, brackets, order of play, and match alerts.",
     detail: "iOS · Android",
     href: matchdayPrimary("event-watch-matchday"),
