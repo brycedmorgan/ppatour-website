@@ -1,0 +1,4319 @@
+[
+ {
+  "endDate": "2026-05-10",
+  "startDate": "2026-05-04",
+  "name": "PPA Finals",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Christopher Haworth",
+    "runnerUp": "John Lucian Goins",
+    "third": ""
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Kate Fahey",
+    "runnerUp": "Brooke Buckner",
+    "third": ""
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Gabriel Tardio",
+    "runnerUp": "Federico Staksrud / Andrei Daescu",
+    "third": ""
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Bright / Anna Leigh Waters",
+    "runnerUp": "Rachel Rohrabacher / Parris Todd",
+    "third": ""
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Rachel Rohrabacher / Christian Alshon",
+    "third": ""
+   }
+  ],
+  "uuid": "d7806c39-89b0-4692-970c-b73a835fa60a",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-2026-ppa-finals"
+ },
+ {
+  "endDate": "2026-05-03",
+  "startDate": "2026-04-27",
+  "name": "Veolia Atlanta Pickleball Championships",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Christopher Haworth",
+    "runnerUp": "Tama Shimabukuro",
+    "third": "Connor Garnett"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Kate Fahey",
+    "third": "Kaitlyn Christian"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Gabriel Tardio / Ben Johns",
+    "runnerUp": "Connor Garnett / Roscoe Bellamy",
+    "third": "Federico Staksrud / Andrei Daescu"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Tyra Hurricane Black / Jorja Johnson",
+    "third": "Catherine Parenteau / Rachel Rohrabacher"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Anna Bright / Hayden Patriquin",
+    "third": "Rachel Rohrabacher / Christian Alshon"
+   }
+  ],
+  "uuid": "92d37566-5850-40a3-8aad-7217276dc586",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-2026-veolia-atlanta-pickleball-championships"
+ },
+ {
+  "endDate": "2026-04-19",
+  "startDate": "2026-04-13",
+  "name": "Fasenra Sacramento Open presented by Zimmer Biomet",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Zane Ford",
+    "third": "Roscoe Bellamy"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Kate Fahey",
+    "runnerUp": "Kaitlyn Christian",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Gabriel Tardio / Ben Johns",
+    "runnerUp": "CJ Klinger / JW Johnson",
+    "third": "Andrei Daescu / Federico Staksrud"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Parris Todd / Rachel Rohrabacher",
+    "runnerUp": "Tyra Hurricane Black / Jorja Johnson",
+    "third": "Cailyn Campbell / Tina Pisnik"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Tyra Hurricane Black / Eric Oncins",
+    "runnerUp": "Jorja Johnson / JW Johnson",
+    "third": "Parris Todd / Andrei Daescu"
+   }
+  ],
+  "uuid": "239b912c-544e-4175-8730-0e0ddca8790e",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-2026-sacramento-open"
+ },
+ {
+  "endDate": "2026-03-29",
+  "startDate": "2026-03-23",
+  "name": "Greater Zion Cup at Black Desert Resort",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Christopher Haworth",
+    "runnerUp": "Federico Staksrud",
+    "third": "John Lucian Goins"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Kate Fahey",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Gabriel Tardio",
+    "runnerUp": "Hayden Patriquin / Christian Alshon",
+    "third": "JW Johnson / CJ Klinger"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Kate Fahey / Parris Todd",
+    "third": "Catherine Parenteau / Rachel Rohrabacher"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Anna Bright / Hayden Patriquin",
+    "third": "Jorja Johnson / JW Johnson"
+   }
+  ],
+  "uuid": "e107a760-8d9c-4642-bae4-aff460bbf35a",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-greater-zion-cup-at-black-desert-resort"
+ },
+ {
+  "endDate": "2026-03-15",
+  "startDate": "2026-03-09",
+  "name": "Veolia Texas Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Christopher Haworth",
+    "third": "Zane Ford"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Kate Fahey",
+    "third": "Kaitlyn Christian"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Gabriel Tardio / Ben Johns",
+    "runnerUp": "Andrei Daescu / Federico Staksrud",
+    "third": "Jaume Martinez Vich / Jay Devilliers"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Alix Truong / Parris Todd",
+    "third": "Catherine Parenteau / Rachel Rohrabacher"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Anna Bright / Hayden Patriquin",
+    "third": "Parris Todd / Andrei Daescu"
+   }
+  ],
+  "uuid": "a007e41a-7907-4a6f-8d37-9a153aed01ec",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-veolia-texas-open"
+ },
+ {
+  "endDate": "2026-03-08",
+  "startDate": "2026-03-02",
+  "name": "SXY Newport Beach Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Hunter Johnson",
+    "runnerUp": "Federico Staksrud",
+    "third": "Christian Alshon"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Lea Jansen",
+    "third": "Brooke Buckner"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Gabriel Tardio",
+    "runnerUp": "Christian Alshon / Hayden Patriquin",
+    "third": "Federico Staksrud / Andrei Daescu"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Bright / Anna Leigh Waters",
+    "runnerUp": "Rachel Rohrabacher / Parris Todd",
+    "third": "Tina Pisnik / Lacy Schneemann"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Tina Pisnik / Eric Oncins",
+    "third": "Jorja Johnson / JW Johnson"
+   }
+  ],
+  "uuid": "48b7ff7c-01d8-437c-ba94-b37f2f6e02db",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-2026-newport-beach-open"
+ },
+ {
+  "endDate": "2026-02-22",
+  "startDate": "2026-02-16",
+  "name": "Carvana Mesa Cup",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Christopher Haworth",
+    "runnerUp": "Ben Johns",
+    "third": "Christian Alshon"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Kate Fahey",
+    "third": "Brooke Buckner"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Gabriel Tardio / Ben Johns",
+    "runnerUp": "Hayden Patriquin / Christian Alshon",
+    "third": "Andrei Daescu / Federico Staksrud"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Bright / Anna Leigh Waters",
+    "runnerUp": "Jorja Johnson / Tyra Hurricane Black",
+    "third": "Lacy Schneemann / Tina Pisnik"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Bright / Hayden Patriquin",
+    "runnerUp": "Anna Leigh Waters / Ben Johns",
+    "third": "Tyra Hurricane Black / Andrei Daescu"
+   }
+  ],
+  "uuid": "fc07fe03-0caa-4cb1-a71f-845438129aa5",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-2026-carvana-mesa-cup"
+ },
+ {
+  "endDate": "2026-02-15",
+  "startDate": "2026-02-09",
+  "name": "Zimmer Biomet Cape Coral Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Hunter Johnson",
+    "third": "Christian Alshon"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Kaitlyn Christian",
+    "runnerUp": "Genie Bouchard",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Gabriel Tardio",
+    "runnerUp": "JW Johnson / CJ Klinger",
+    "third": "Christian Alshon / Hayden Patriquin"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Bright / Anna Leigh Waters",
+    "runnerUp": "Jackie Kawamoto / Jade Kawamoto",
+    "third": "Tyra Hurricane Black / Jorja Johnson"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Anna Bright / Hayden Patriquin",
+    "third": "Rachel Rohrabacher / Christian Alshon"
+   }
+  ],
+  "uuid": "4133fecd-bede-49e5-af91-34a31f36fdf4",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-2026-zimmer-biomet-cape-coral-open"
+ },
+ {
+  "endDate": "2026-01-25",
+  "startDate": "2026-01-19",
+  "name": "Pickleball Central Indoor National Championships",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Hunter Johnson",
+    "runnerUp": "Christopher Haworth",
+    "third": "Roscoe Bellamy"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Parris Todd",
+    "runnerUp": "Lea Jansen",
+    "third": "Kaitlyn Christian"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Andrei Daescu / Gabriel Tardio",
+    "runnerUp": "Christian Alshon / Hayden Patriquin",
+    "third": "Eric Oncins / Dylan Frazier"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Parris Todd / Tyra Hurricane Black",
+    "third": "Meghan Dizon / Lacy Schneemann"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Tyra Hurricane Black / Christian Alshon",
+    "runnerUp": "Anna Bright / Hayden Patriquin",
+    "third": "Parris Todd / Andrei Daescu"
+   }
+  ],
+  "uuid": "a87739fb-9ea8-4572-9944-ec10f355b9c0",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-indoor-national-championships"
+ },
+ {
+  "endDate": "2026-01-18",
+  "startDate": "2026-01-12",
+  "name": "The Carvana Masters Powered by Invited",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Christopher Haworth",
+    "runnerUp": "Jack Sock",
+    "third": "Roscoe Bellamy"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Kate Fahey",
+    "third": "Liz Truluck"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Gabriel Tardio",
+    "runnerUp": "Christian Alshon / Hayden Patriquin",
+    "third": "CJ Klinger / JW Johnson"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Jackie Kawamoto / Jade Kawamoto",
+    "third": "Jorja Johnson / Tyra Hurricane Black"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Anna Bright / Hayden Patriquin",
+    "third": "Tina Pisnik / Noe Khlif"
+   }
+  ],
+  "uuid": "8ab37b28-af20-44e9-845d-0beae3e388d8",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-carvana-ppa-masters-powered-by-invited"
+ },
+ {
+  "endDate": "2025-12-21",
+  "startDate": "2025-12-16",
+  "name": "Florida Dairy Farmers Daytona Beach Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Christopher Haworth",
+    "runnerUp": "Gabriel Joseph",
+    "third": "Rafael Lenhard"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Catherine Parenteau",
+    "runnerUp": "Katerina Stewart",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Augustus Ge / JW Johnson",
+    "runnerUp": "Riley Newman / Noe Khlif",
+    "third": "Eric Oncins / Dylan Frazier"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Jorja Johnson",
+    "runnerUp": "Tyra Hurricane Black / Catherine Parenteau",
+    "third": "Meghan Dizon / Tina Pisnik"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Jorja Johnson / JW Johnson",
+    "runnerUp": "Kaitlyn Christian / Andrei Daescu",
+    "third": "Callie Smith / Jay Devilliers"
+   }
+  ],
+  "uuid": "1259f4ea-2fc6-40d2-b172-c89bd3e5caae",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-daytona-beach-open-1"
+ },
+ {
+  "endDate": "2025-11-23",
+  "startDate": "2025-11-18",
+  "name": "Veolia Lakeland Open presented by Six Zero",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Roscoe Bellamy",
+    "runnerUp": "Hunter Johnson",
+    "third": "Noe Khlif"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Chao Yi Wang",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Gabriel Tardio / Ben Johns",
+    "runnerUp": "Andrei Daescu / Christian Alshon",
+    "third": "JW Johnson / CJ Klinger"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Jade Kawamoto / Jackie Kawamoto",
+    "third": "Kate Fahey / Tina Pisnik"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Jorja Johnson / JW Johnson",
+    "third": "Anna Bright / Eric Oncins"
+   }
+  ],
+  "uuid": "1c44e440-c1a5-486e-9b26-3d42740f4d31",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-veolia-lakeland-open"
+ },
+ {
+  "endDate": "2025-11-09",
+  "startDate": "2025-11-03",
+  "name": "Jenius Bank Pickleball World Championships",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Christopher Haworth",
+    "third": "Hunter Johnson"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Kate Fahey",
+    "third": "Brooke Buckner"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Hayden Patriquin / Federico Staksrud",
+    "runnerUp": "JW Johnson / CJ Klinger",
+    "third": "Christian Alshon / Andrei Daescu"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Parris Todd / Catherine Parenteau",
+    "third": "Jorja Johnson / Tyra Hurricane Black"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Jorja Johnson / JW Johnson",
+    "third": "Anna Bright / Hayden Patriquin"
+   }
+  ],
+  "uuid": "f02fa839-68e0-46d5-8b93-dc266f201a4e",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/2025-pickleball-world-championships"
+ },
+ {
+  "endDate": "2025-10-26",
+  "startDate": "2025-10-20",
+  "name": "Rate Vegas Cup presented by Holland America",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Roscoe Bellamy",
+    "third": "Hunter Johnson"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Genie Bouchard",
+    "third": "Kate Fahey"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Gabriel Tardio / Ben Johns",
+    "runnerUp": "Andrei Daescu / Christian Alshon",
+    "third": "Federico Staksrud / Hayden Patriquin"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Parris Todd / Tyra Hurricane Black",
+    "third": "Catherine Parenteau / Jade Kawamoto"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Jessie Irvine / Gabriel Tardio",
+    "third": "Jorja Johnson / JW Johnson"
+   }
+  ],
+  "uuid": "3d0b0b9c-82d2-4103-b0f9-8795aed25297",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-rate-vegas-cup"
+ },
+ {
+  "endDate": "2025-10-12",
+  "startDate": "2025-10-06",
+  "name": "Fasenra Virginia Beach Cup presented by Joola",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Christopher Haworth",
+    "runnerUp": "Christian Alshon",
+    "third": ""
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Brooke Buckner",
+    "third": ""
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Gabriel Tardio / Ben Johns",
+    "runnerUp": "CJ Klinger / JW Johnson",
+    "third": ""
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Rachel Rohrabacher / Jorja Johnson",
+    "third": "Catherine Parenteau / Jade Kawamoto"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Jorja Johnson / JW Johnson",
+    "third": ""
+   }
+  ],
+  "uuid": "2b3050b3-8f87-45b5-bf44-0f056c1bd305",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-fasenra-virginia-beach-cup-presented-by-joola"
+ },
+ {
+  "endDate": "2025-09-28",
+  "startDate": "2025-09-24",
+  "name": "Pickleball Central Sacramento Vintage Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Gabriel Joseph",
+    "third": "Christopher Haworth"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Kate Fahey",
+    "runnerUp": "Genie Bouchard",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Dylan Frazier / JW Johnson",
+    "runnerUp": "Augustus Ge / James Ignatowich",
+    "third": "Andrei Daescu / Collin Johns"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Lacy Schneemann / Etta Tuionetoa",
+    "runnerUp": "Jessie Irvine / Callie Smith",
+    "third": "Lea Jansen / Brooke Buckner"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Jorja Johnson / JW Johnson",
+    "runnerUp": "Kate Fahey / Dylan Frazier",
+    "third": "Jessie Irvine / Gabriel Tardio"
+   }
+  ],
+  "uuid": "64bbc71e-f0e2-425a-97f5-4a45ac47ee3e",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-pickleball-central-sacramento-vintage-open-1"
+ },
+ {
+  "endDate": "2025-09-14",
+  "startDate": "2025-09-08",
+  "name": "Veolia Cincinnati Showcase presented by Six Zero",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Christian Alshon",
+    "runnerUp": "Connor Garnett",
+    "third": "Hunter Johnson"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Kate Fahey",
+    "third": "Catherine Parenteau"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Gabriel Tardio / Ben Johns",
+    "runnerUp": "Christian Alshon / Andrei Daescu",
+    "third": "CJ Klinger / JW Johnson"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Jackie Kawamoto / Jade Kawamoto",
+    "runnerUp": "Jorja Johnson / Tyra Hurricane Black",
+    "third": "Anna Leigh Waters / Anna Bright"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Anna Bright / Andrei Daescu",
+    "third": "Jorja Johnson / JW Johnson"
+   }
+  ],
+  "uuid": "1f96bd4a-2cab-4b70-8dce-96ab62f9d29b",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-veolia-cincinnati-showcase-presented-by-six-zero"
+ },
+ {
+  "endDate": "2025-08-31",
+  "startDate": "2025-08-27",
+  "name": "Walgreens Open at the Las Vegas Strip",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "John Lucian Goins",
+    "runnerUp": "Hunter Johnson",
+    "third": "Jaume Martinez Vich"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Kaitlyn Christian",
+    "runnerUp": "Kate Fahey",
+    "third": "Brooke Buckner"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Gabriel Tardio / Ben Johns",
+    "runnerUp": "Andrei Daescu / Christian Alshon",
+    "third": "Federico Staksrud / Hayden Patriquin"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Tyra Hurricane Black / Jorja Johnson",
+    "runnerUp": "Catherine Parenteau / Parris Todd",
+    "third": "Anna Bright / Anna Leigh Waters"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Tyra Hurricane Black / Hayden Patriquin",
+    "third": "Anna Bright / Federico Staksrud"
+   }
+  ],
+  "uuid": "a043cc4a-5889-4dd2-9888-9a0dbffed893",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-open-at-the-las-vegas-strip"
+ },
+ {
+  "endDate": "2025-08-10",
+  "startDate": "2025-08-05",
+  "name": "Veolia Bristol Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "John Lucian Goins",
+    "runnerUp": "Gabriel Joseph",
+    "third": "Christian Alshon"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Parris Todd",
+    "runnerUp": "Kaitlyn Christian",
+    "third": "Brooke Buckner"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Gabriel Tardio",
+    "runnerUp": "Jaume Martinez Vich / Matt Wright",
+    "third": "Riley Newman / Jay Devilliers"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Rachel Rohrabacher / Jorja Johnson",
+    "third": "Parris Todd / Tyra Hurricane Black"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Jorja Johnson / JW Johnson",
+    "third": "Anna Bright / Andrei Daescu"
+   }
+  ],
+  "uuid": "82b1a95d-a818-4412-b84b-db1c52f3143c",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-bristol-open-2025"
+ },
+ {
+  "endDate": "2025-06-22",
+  "startDate": "2025-06-16",
+  "name": "Select Medical Orange County Cup 2025",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Hunter Johnson",
+    "runnerUp": "Federico Staksrud",
+    "third": "Connor Garnett"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Judit Castillo"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Gabriel Tardio",
+    "runnerUp": "Federico Staksrud / Hayden Patriquin",
+    "third": "JW Johnson / CJ Klinger"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Bright / Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau / Rachel Rohrabacher",
+    "third": "Parris Todd / Tyra Hurricane Black"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Jorja Johnson / JW Johnson",
+    "third": "Anna Bright / Hayden Patriquin"
+   }
+  ],
+  "uuid": "6721a195-d4c9-480e-b5d5-957a7a4870b2",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-select-medical-orange-county-cup-2025"
+ },
+ {
+  "endDate": "2025-05-18",
+  "startDate": "2025-05-12",
+  "name": "Veolia Atlanta Pickleball Championships",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Connor Garnett",
+    "third": "Hunter Johnson"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Kate Fahey",
+    "third": "Parris Todd"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "JW Johnson / CJ Klinger",
+    "runnerUp": "Ben Johns / Gabriel Tardio",
+    "third": "Andrei Daescu / Christian Alshon"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Bright / Anna Leigh Waters",
+    "runnerUp": "Rachel Rohrabacher / Catherine Parenteau",
+    "third": "Parris Todd / Tyra Hurricane Black"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Etta Tuionetoa / Christian Alshon",
+    "third": "Jorja Johnson / JW Johnson"
+   }
+  ],
+  "uuid": "9c61faee-196b-4c55-9ba0-e99b641f93bf",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-veolia-atlanta-pickleball-championships"
+ },
+ {
+  "endDate": "2025-04-06",
+  "startDate": "2025-04-01",
+  "name": "Veolia North Carolina Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Gabriel Tardio",
+    "runnerUp": "Roscoe Bellamy",
+    "third": "Federico Staksrud"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Kate Fahey",
+    "runnerUp": "Parris Todd",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Gabriel Tardio / Ben Johns",
+    "runnerUp": "Federico Staksrud / Hayden Patriquin",
+    "third": "Eric Oncins / Dylan Frazier"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Jorja Johnson / Tyra Hurricane Black",
+    "runnerUp": "Anna Leigh Waters / Catherine Parenteau",
+    "third": "Jade Kawamoto / Jackie Kawamoto"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Jorja Johnson / JW Johnson",
+    "runnerUp": "Anna Leigh Waters / Ben Johns",
+    "third": "Anna Bright / Federico Staksrud"
+   }
+  ],
+  "uuid": "4575ae49-0a16-4906-b8cd-def7795b034b",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-veolia-north-carolina-open"
+ },
+ {
+  "endDate": "2025-03-30",
+  "startDate": "2025-03-25",
+  "name": "Black Desert Resort Red Rock Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Hunter Johnson",
+    "runnerUp": "Jack Sock",
+    "third": "Connor Garnett"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Parris Todd",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Andrei Daescu / Christian Alshon",
+    "runnerUp": "Hayden Patriquin / Federico Staksrud",
+    "third": "CJ Klinger / JW Johnson"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Catherine Parenteau / Anna Leigh Waters",
+    "runnerUp": "Allyce Jones / Etta Tuionetoa",
+    "third": "Rachel Rohrabacher / Parris Todd"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Parris Todd / Dekel Bar",
+    "runnerUp": "Catherine Parenteau / Christian Alshon",
+    "third": "Jorja Johnson / JW Johnson"
+   }
+  ],
+  "uuid": "bd8ef132-a848-4ff8-ba4f-cb06b0f203d3",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-black-desert-resort-red-rock-open"
+ },
+ {
+  "endDate": "2025-03-16",
+  "startDate": "2025-03-12",
+  "name": "CIBC Texas Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Christian Alshon",
+    "runnerUp": "Federico Staksrud",
+    "third": "Jaume Martinez Vich"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Kate Fahey",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Gabriel Tardio / Ben Johns",
+    "runnerUp": "Christian Alshon / Federico Staksrud",
+    "third": "Pablo Tellez / Hayden Patriquin"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Tyra Hurricane Black / Parris Todd",
+    "runnerUp": "Etta Tuionetoa / Callie Smith",
+    "third": "Rachel Rohrabacher / Anna Bright"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Jorja Johnson / JW Johnson",
+    "third": "Anna Bright / Hayden Patriquin"
+   }
+  ],
+  "uuid": "3e4dfb79-372b-4e49-805e-aff3ebdb469f",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-cibc-texas-open-2025"
+ },
+ {
+  "endDate": "2025-03-09",
+  "startDate": "2025-03-05",
+  "name": "Veolia Cape Coral Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Christian Alshon",
+    "runnerUp": "Jaume Martinez Vich",
+    "third": "John Lucian Goins"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Lea Jansen",
+    "third": "Kate Fahey"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Andrei Daescu",
+    "runnerUp": "Christian Alshon / Federico Staksrud",
+    "third": "CJ Klinger / JW Johnson"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Catherine Parenteau / Anna Leigh Waters",
+    "runnerUp": "Rachel Rohrabacher / Anna Bright",
+    "third": "Allyce Jones / Tyra Hurricane Black"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Anna Bright / JW Johnson",
+    "third": "Catherine Parenteau / Christian Alshon"
+   }
+  ],
+  "uuid": "923b6d24-15ac-4ed0-860b-f83b52863e3e",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-veolia-cape-coral-open"
+ },
+ {
+  "endDate": "2025-02-23",
+  "startDate": "2025-02-17",
+  "name": "Carvana Mesa Cup",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Hunter Johnson",
+    "third": "Federico Staksrud"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Brooke Buckner",
+    "third": "Kate Fahey"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Christian Alshon / Andrei Daescu",
+    "runnerUp": "Ben Johns / Gabriel Tardio",
+    "third": "Pablo Tellez / Dylan Frazier"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Rachel Rohrabacher / Anna Bright",
+    "third": "Vivian Glozman / Jorja Johnson"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Jorja Johnson / JW Johnson",
+    "runnerUp": "Anna Bright / Dekel Bar",
+    "third": "Anna Leigh Waters / Ben Johns"
+   }
+  ],
+  "uuid": "c19054b4-056e-474a-993c-46091b3f397e",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-carvana-mesa-cup"
+ },
+ {
+  "endDate": "2025-02-09",
+  "startDate": "2025-02-05",
+  "name": "Proton Tucson Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Hunter Johnson",
+    "runnerUp": "Christian Alshon",
+    "third": "Dylan Frazier"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Parris Todd",
+    "runnerUp": "Kaitlyn Christian",
+    "third": "Kate Fahey"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Andrei Daescu / Christian Alshon",
+    "runnerUp": "Gabriel Tardio / JW Johnson",
+    "third": "Ben Johns / Hayden Patriquin"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Rachel Rohrabacher / Anna Bright",
+    "third": "Tyra Hurricane Black / Parris Todd"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Tyra Hurricane Black / Christian Alshon",
+    "third": "Kate Fahey / Dylan Frazier"
+   }
+  ],
+  "uuid": "6e284f6f-ef45-43cf-a09a-eff88f9ce391",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-proton-tucson-open"
+ },
+ {
+  "endDate": "2025-02-02",
+  "startDate": "2025-01-30",
+  "name": "Proton Australia Pickleball Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Gabriel Tardio",
+    "runnerUp": "Tyson McGuffin",
+    "third": "Quang Duong"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Kaitlyn Christian",
+    "runnerUp": "Somer Dalla-Bona",
+    "third": "Andie Dikosavljevic"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Tyson McGuffin / Gabriel Tardio",
+    "runnerUp": "Quang Duong / CJ Klinger",
+    "third": "Collin Johns / Jay Devilliers"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Vivian Glozman / Lacy Schneemann",
+    "runnerUp": "Allyce Jones / Tyra Hurricane Black",
+    "third": "Jessie Irvine / Alix Truong"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Lacy Schneemann / Tyson McGuffin",
+    "runnerUp": "Jessie Irvine / Gabriel Tardio",
+    "third": "Allyce Jones / Jay Devilliers"
+   }
+  ],
+  "uuid": "a26c60b0-a00a-49cd-b93e-9fa2ac32f433",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-australia-pickleball-open"
+ },
+ {
+  "endDate": "2025-01-12",
+  "startDate": "2025-01-06",
+  "name": "The Masters",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Jaume Martinez Vich",
+    "third": "Tyson McGuffin"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Kaitlyn Christian",
+    "third": "Catherine Parenteau"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Collin Johns / Ben Johns",
+    "runnerUp": "Hayden Patriquin / Federico Staksrud",
+    "third": "Christian Alshon / Andrei Daescu"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Rachel Rohrabacher / Anna Bright",
+    "third": "Tyra Hurricane Black / Jorja Johnson"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Catherine Parenteau / Federico Staksrud",
+    "third": "Tyra Hurricane Black / Christian Alshon"
+   }
+  ],
+  "uuid": "2a35d3a1-bb1a-474b-9986-897a09de73b1",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-masters"
+ },
+ {
+  "endDate": "2024-12-22",
+  "startDate": "2024-12-18",
+  "name": "Daytona Beach Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Zane Ford",
+    "third": "Michael Loyd"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Kaitlyn Christian",
+    "runnerUp": "Dominique Schaefer",
+    "third": "Mary Brascia"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Andrei Daescu / CJ Klinger",
+    "runnerUp": "Pablo Tellez / Dekel Bar",
+    "third": "Hayden Patriquin / Federico Staksrud"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Leigh Waters",
+    "runnerUp": "Tyra Hurricane Black / Jorja Johnson",
+    "third": "Jackie Kawamoto / Anna Bright"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Jorja Johnson / Hayden Patriquin",
+    "runnerUp": "Tina Pisnik / Andrei Daescu",
+    "third": "Anna Bright / Dekel Bar"
+   }
+  ],
+  "uuid": "796cbe85-b541-4ab1-870e-0c4498087745",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-daytona-beach-open-presented-by-roar"
+ },
+ {
+  "endDate": "2024-12-08",
+  "startDate": "2024-12-04",
+  "name": "CIBC PPA Finals",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Hunter Johnson",
+    "runnerUp": "Connor Garnett",
+    "third": ""
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Parris Todd",
+    "third": ""
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Federico Staksrud / Hayden Patriquin",
+    "runnerUp": "JW Johnson / Gabriel Tardio",
+    "third": ""
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Catherine Parenteau / Anna Leigh Waters",
+    "runnerUp": "Rachel Rohrabacher / Anna Bright",
+    "third": ""
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Catherine Parenteau / Christian Alshon",
+    "third": ""
+   }
+  ],
+  "uuid": "2e5f903e-93e3-4463-a85c-c08ef65b62dd",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-cibc-the-finals"
+ },
+ {
+  "endDate": "2024-11-17",
+  "startDate": "2024-11-13",
+  "name": "Veolia Milwaukee Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Hunter Johnson",
+    "runnerUp": "Federico Staksrud",
+    "third": "Adam Harvey"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Kate Fahey",
+    "runnerUp": "Chao Yi Wang",
+    "third": "Parris Todd"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Gabriel Tardio / Federico Staksrud",
+    "runnerUp": "CJ Klinger / James Ignatowich",
+    "third": "Andrei Daescu / Pablo Tellez"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Rachel Rohrabacher / Anna Bright",
+    "runnerUp": "Jade Kawamoto / Jackie Kawamoto",
+    "third": "Tyra Hurricane Black / Allyce Jones"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Bright / Dylan Frazier",
+    "runnerUp": "Jessie Irvine / Gabriel Tardio",
+    "third": "Meghan Dizon / Andrei Daescu"
+   }
+  ],
+  "uuid": "7cf26ebf-54ec-4342-8293-a9c0025af28e",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-veolia-milwaukee-open"
+ },
+ {
+  "endDate": "2024-11-10",
+  "startDate": "2024-11-04",
+  "name": "Lapiplasty® Pickleball World Championships",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Michael Loyd",
+    "third": "Hunter Johnson"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Kate Fahey",
+    "third": "Salome Devidze"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Riley Newman / Hayden Patriquin",
+    "runnerUp": "Pablo Tellez / Dekel Bar",
+    "third": "Matt Wright / Federico Staksrud"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Rachel Rohrabacher / Anna Bright",
+    "runnerUp": "Anna Leigh Waters / Catherine Parenteau",
+    "third": "Allyce Jones / Tyra Hurricane Black"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Etta Tuionetoa / Christian Alshon",
+    "third": "Rachel Rohrabacher / Federico Staksrud"
+   }
+  ],
+  "uuid": "4b073aa7-e67f-43f4-9fcb-cab0fff733fe",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/2024-lapiplasty-pickleball-world-championships"
+ },
+ {
+  "endDate": "2024-10-13",
+  "startDate": "2024-10-09",
+  "name": "Rate Championships",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Quang Duong",
+    "runnerUp": "Connor Garnett",
+    "third": "Federico Staksrud"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Kate Fahey",
+    "runnerUp": "Brooke Buckner",
+    "third": "Catherine Parenteau"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Collin Johns / Ben Johns",
+    "runnerUp": "JW Johnson / Dylan Frazier",
+    "third": "Federico Staksrud / Matt Wright"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Catherine Parenteau / Anna Leigh Waters",
+    "runnerUp": "Rachel Rohrabacher / Anna Bright",
+    "third": "Lea Jansen / Lucy Kovalova"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Jorja Johnson / JW Johnson",
+    "third": "Etta Tuionetoa / Christian Alshon"
+   }
+  ],
+  "uuid": "068f6d56-97d9-42c9-87f5-54c2e7d3040f",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-guaranteed-rate-las-vegas-open"
+ },
+ {
+  "endDate": "2024-10-06",
+  "startDate": "2024-09-30",
+  "name": "Stratusphere Gin Virginia Beach Cup",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Hunter Johnson",
+    "third": "Jaume Martinez Vich"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Brooke Buckner",
+    "third": "Kate Fahey"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Federico Staksrud / Hayden Patriquin",
+    "runnerUp": "Ben Johns / Collin Johns",
+    "third": "JW Johnson / Dylan Frazier"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Catherine Parenteau / Anna Leigh Waters",
+    "runnerUp": "Anna Bright / Rachel Rohrabacher",
+    "third": "Mari Humberg / Jorja Johnson"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Jorja Johnson / JW Johnson",
+    "third": "Jackie Kawamoto / Riley Newman"
+   }
+  ],
+  "uuid": "e36b4125-8164-4cf8-a6bf-09bd0019619b",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-stratusphere-gin-virginia-beach-cup"
+ },
+ {
+  "endDate": "2024-09-15",
+  "startDate": "2024-09-09",
+  "name": "CIBC Atlanta Slam",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Hunter Johnson",
+    "runnerUp": "Connor Garnett",
+    "third": "Federico Staksrud"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Parris Todd",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Tyson McGuffin / Jaume Martinez Vich",
+    "third": "JW Johnson / Dylan Frazier"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Rachel Rohrabacher / Anna Bright",
+    "runnerUp": "Anna Leigh Waters / Catherine Parenteau",
+    "third": "Lacy Schneemann / Jackie Kawamoto"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Catherine Parenteau / Christian Alshon",
+    "third": "Jorja Johnson / JW Johnson"
+   }
+  ],
+  "uuid": "1c186bb9-a8fd-40e9-988b-118e2f10b62c",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-cibc-atlanta-slam"
+ },
+ {
+  "endDate": "2024-09-01",
+  "startDate": "2024-08-26",
+  "name": "Las Vegas Pickleball Cup",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Dylan Frazier",
+    "third": "Jaume Martinez Vich"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Kate Fahey",
+    "third": "Salome Devidze"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Gabriel Tardio / Andrei Daescu",
+    "runnerUp": "Dekel Bar / Zane Navratil",
+    "third": "Christian Alshon / Riley Newman"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Catherine Parenteau / Anna Leigh Waters",
+    "runnerUp": "Parris Todd / Tyra Hurricane Black",
+    "third": "Rachel Rohrabacher / Jorja Johnson"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Catherine Parenteau / Riley Newman",
+    "third": "Jorja Johnson / JW Johnson"
+   }
+  ],
+  "uuid": "dd85421f-87b4-483b-ae78-646424be9fbe",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-las-vegas-pickleball-cup"
+ },
+ {
+  "endDate": "2024-08-25",
+  "startDate": "2024-08-21",
+  "name": "Picklr Utah Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Connor Garnett",
+    "third": "Hunter Johnson"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Kate Fahey",
+    "runnerUp": "Kaitlyn Christian",
+    "third": "Chao Yi Wang"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Andrei Daescu / Gabriel Tardio",
+    "runnerUp": "James Ignatowich / Matt Wright",
+    "third": "Augustus Ge / Federico Staksrud"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Rachel Rohrabacher / Anna Bright",
+    "runnerUp": "Mari Humberg / Jorja Johnson",
+    "third": "Meghan Dizon / Etta Tuionetoa"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Jessie Irvine / Gabriel Tardio",
+    "runnerUp": "Anna Bright / James Ignatowich",
+    "third": "Mary Brascia / Jaume Martinez Vich"
+   }
+  ],
+  "uuid": "970d08db-a426-424e-8d45-b7a9ee13b08b",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-picklr-utah-open"
+ },
+ {
+  "endDate": "2024-08-18",
+  "startDate": "2024-08-14",
+  "name": "IHG Hotels & Resorts Bristol Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Federico Staksrud",
+    "third": "Tyson McGuffin"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Brooke Buckner",
+    "runnerUp": "Kaitlyn Christian",
+    "third": "Chao Yi Wang"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Quang Duong / Christian Alshon",
+    "runnerUp": "Ben Johns / Collin Johns",
+    "third": "Jay Devilliers / Pablo Tellez"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Rachel Rohrabacher / Anna Bright",
+    "third": "Vivian Glozman / Jorja Johnson"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Anna Bright / Christian Alshon",
+    "third": "Jackie Kawamoto / Jaume Martinez Vich"
+   }
+  ],
+  "uuid": "044c0e1e-d894-49be-9f5e-4b40ccd49781",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-bristol-open"
+ },
+ {
+  "endDate": "2024-08-11",
+  "startDate": "2024-08-07",
+  "name": "Selkirk Kansas City Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Connor Garnett",
+    "runnerUp": "Tyson McGuffin",
+    "third": "Christopher Haworth"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Brooke Buckner",
+    "runnerUp": "Kate Fahey",
+    "third": "Mari Humberg"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Federico Staksrud / Gabriel Tardio",
+    "runnerUp": "JW Johnson / Dylan Frazier",
+    "third": "Christian Alshon / Hayden Patriquin"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Jade Kawamoto / Lacy Schneemann",
+    "third": "Mari Humberg / Jorja Johnson"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Jorja Johnson / JW Johnson",
+    "third": "Catherine Parenteau / Federico Staksrud"
+   }
+  ],
+  "uuid": "14798b52-0c02-4eb7-99c1-5e7103d67a1f",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-selkirk-kansas-city-open"
+ },
+ {
+  "endDate": "2024-06-30",
+  "startDate": "2024-06-24",
+  "name": "Select Medical Orange County Cup",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Christopher Haworth",
+    "runnerUp": "Federico Staksrud",
+    "third": "Ben Johns"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Judit Castillo"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Dylan Frazier / JW Johnson",
+    "runnerUp": "Hayden Patriquin / Pablo Tellez",
+    "third": "Dekel Bar / Tyson McGuffin"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Catherine Parenteau / Anna Leigh Waters",
+    "runnerUp": "Tina Pisnik / Jessie Irvine",
+    "third": "Tyra Hurricane Black / Parris Todd"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Catherine Parenteau / Christian Alshon",
+    "third": "Jorja Johnson / JW Johnson"
+   }
+  ],
+  "uuid": "5f38269d-d0c2-4e53-83ba-46ca5aa9872f",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-select-medical-orange-county-cup"
+ },
+ {
+  "endDate": "2024-06-09",
+  "startDate": "2024-06-05",
+  "name": "Veolia Sacramento Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "JW Johnson",
+    "third": "Quang Duong"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Brooke Buckner"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Federico Staksrud / Hayden Patriquin",
+    "runnerUp": "JW Johnson / Dylan Frazier",
+    "third": "Tyson McGuffin / Dekel Bar"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Rachel Rohrabacher / Anna Bright",
+    "third": "Jorja Johnson / Tyra Hurricane Black"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Anna Bright / James Ignatowich",
+    "third": "Jorja Johnson / JW Johnson"
+   }
+  ],
+  "uuid": "de8a09d6-6688-44d8-b764-8bfec574ecf9",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-veolia-sacramento-open"
+ },
+ {
+  "endDate": "2024-06-02",
+  "startDate": "2024-05-29",
+  "name": "CIBC Texas Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Christopher Haworth",
+    "third": "Federico Staksrud"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Lea Jansen",
+    "runnerUp": "Salome Devidze",
+    "third": "Catherine Parenteau"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Dylan Frazier / JW Johnson",
+    "runnerUp": "Matt Wright / Dekel Bar",
+    "third": "Jaume Martinez Vich / Tyson McGuffin"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Catherine Parenteau / Anna Leigh Waters",
+    "runnerUp": "Lucy Kovalova / Callie Smith",
+    "third": "Meghan Dizon / Etta Tuionetoa"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Jorja Johnson / JW Johnson",
+    "third": "Anna Bright / Tyson McGuffin"
+   }
+  ],
+  "uuid": "f6a44544-a7db-40ef-bf14-2718b612bfc2",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-cibc-texas-open"
+ },
+ {
+  "endDate": "2024-05-19",
+  "startDate": "2024-05-13",
+  "name": "Vizzy Atlanta Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Federico Staksrud",
+    "third": "Christian Alshon"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Parris Todd",
+    "third": "Salome Devidze"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Dylan Frazier / JW Johnson",
+    "runnerUp": "Matt Wright / Federico Staksrud",
+    "third": "Tyson McGuffin / Dekel Bar"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Catherine Parenteau / Anna Leigh Waters",
+    "runnerUp": "Andrea Koop / Jade Kawamoto",
+    "third": "Lea Jansen / Callie Smith"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Anna Bright / James Ignatowich",
+    "third": "Jorja Johnson / JW Johnson"
+   }
+  ],
+  "uuid": "a30bcb3a-ee0f-4164-bc85-35fbdfe510c0",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-vizzy-atlanta-slam"
+ },
+ {
+  "endDate": "2024-04-28",
+  "startDate": "2024-04-24",
+  "name": "Selkirk Red Rock Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Jack Sock",
+    "third": "Christian Alshon"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Mary Brascia",
+    "runnerUp": "Lea Jansen",
+    "third": "Kaitlyn Christian"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Dylan Frazier / JW Johnson",
+    "runnerUp": "Andrei Daescu / Gabriel Tardio",
+    "third": "Tyson McGuffin / Dekel Bar"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Tina Pisnik / Lea Jansen",
+    "runnerUp": "Anna Bright / Callie Smith",
+    "third": "Allyce Jones / Tyra Hurricane Black"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Etta Tuionetoa / Ben Johns",
+    "runnerUp": "Anna Bright / James Ignatowich",
+    "third": "Alix Truong / Connor Garnett"
+   }
+  ],
+  "uuid": "d9e98d4d-2dad-4915-95fa-d8f301c49c8b",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-selkirk-red-rock-open"
+ },
+ {
+  "endDate": "2024-04-21",
+  "startDate": "2024-04-17",
+  "name": "Veolia LA Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Connor Garnett",
+    "runnerUp": "Federico Staksrud",
+    "third": "Roscoe Bellamy"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Brooke Buckner",
+    "runnerUp": "Lauren Stratman",
+    "third": "Kaitlyn Christian"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Tyson McGuffin / Jaume Martinez Vich",
+    "third": "Travis Rettenmaier / Zane Navratil"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Rachel Rohrabacher / Anna Bright",
+    "runnerUp": "Vivian Glozman / Lacy Schneemann",
+    "third": "Etta Tuionetoa / Meghan Dizon"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Vivienne David / Thomas Wilson",
+    "runnerUp": "Anna Bright / Ben Johns",
+    "third": "Tina Pisnik / Collin Johns"
+   }
+  ],
+  "uuid": "00c4a0ca-c3f9-468b-b97a-bb022335ccf4",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-veolia-la-open"
+ },
+ {
+  "endDate": "2024-04-14",
+  "startDate": "2024-04-10",
+  "name": "Veolia Houston Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Quang Duong",
+    "third": "Jaume Martinez Vich"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Lea Jansen",
+    "runnerUp": "Samantha Parker",
+    "third": "Lacy Schneemann"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Collin Johns / Ben Johns",
+    "runnerUp": "Federico Staksrud / Pablo Tellez",
+    "third": "Thomas Wilson / Dekel Bar"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Bright / Rachel Rohrabacher",
+    "runnerUp": "Jackie Kawamoto / Vivienne David",
+    "third": "Tina Pisnik / Lea Jansen"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Etta Tuionetoa / Ben Johns",
+    "runnerUp": "Tina Pisnik / Dekel Bar",
+    "third": "Jackie Kawamoto / Christian Alshon"
+   }
+  ],
+  "uuid": "3b283897-4f46-415a-abea-2737d26a9c21",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-veolia-houston-open"
+ },
+ {
+  "endDate": "2024-04-07",
+  "startDate": "2024-04-01",
+  "name": "Fanatics Sportsbook North Carolina Cup",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Federico Staksrud",
+    "third": "Connor Garnett"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Augustus Ge / Jaume Martinez Vich",
+    "third": "Federico Staksrud / Pablo Tellez"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Catherine Parenteau / Anna Leigh Waters",
+    "runnerUp": "Lacy Schneemann / Vivienne David",
+    "third": "Parris Todd / Tyra Hurricane Black"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Tina Pisnik / Dekel Bar",
+    "third": "Vivienne David / Thomas Wilson"
+   }
+  ],
+  "uuid": "e127a7a0-2fa6-4c82-9054-e4cc4343932f",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-north-carolina-cup"
+ },
+ {
+  "endDate": "2024-03-17",
+  "startDate": "2024-03-13",
+  "name": "Veolia Austin Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Federico Staksrud",
+    "third": ""
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Judit Castillo",
+    "runnerUp": "Kaitlyn Christian",
+    "third": ""
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Andrei Daescu / Matt Wright",
+    "runnerUp": "Christian Alshon / Zane Navratil",
+    "third": ""
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Rachel Rohrabacher / Anna Bright",
+    "runnerUp": "Catherine Parenteau / Anna Leigh Waters",
+    "third": ""
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Bright / Andrei Daescu",
+    "runnerUp": "Anna Leigh Waters / Ben Johns",
+    "third": ""
+   }
+  ],
+  "uuid": "f3082b63-bea9-47c6-8554-6e7fa6fb72d5",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-austin-tx"
+ },
+ {
+  "endDate": "2024-03-10",
+  "startDate": "2024-03-06",
+  "name": "Pickleball Central Indoor USA Championships",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Connor Garnett",
+    "third": "Christian Alshon"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Salome Devidze",
+    "runnerUp": "Parris Todd",
+    "third": "Catherine Parenteau"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Christian Alshon / Thomas Wilson",
+    "runnerUp": "Connor Garnett / Tyler Loong",
+    "third": "Hayden Patriquin / Callan Dawson"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Bright / Rachel Rohrabacher",
+    "runnerUp": "Callie Smith / Lucy Kovalova",
+    "third": "Parris Todd / Tyra Hurricane Black"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Vivienne David / Thomas Wilson",
+    "runnerUp": "Rachel Rohrabacher / Federico Staksrud",
+    "third": "Lea Jansen / Hayden Patriquin"
+   }
+  ],
+  "uuid": "cfc270b2-59e0-4b68-ae6f-9504e63c89e7",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-lakeville-mn"
+ },
+ {
+  "endDate": "2024-02-25",
+  "startDate": "2024-02-20",
+  "name": "Carvana Mesa Arizona Cup",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Federico Staksrud",
+    "third": "Connor Garnett"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Mary Brascia",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "JW Johnson / Dylan Frazier",
+    "runnerUp": "Gabriel Tardio / Andrei Daescu",
+    "third": "Riley Newman / Thomas Wilson"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Etta Tuionetoa / Meghan Dizon",
+    "third": "Mari Humberg / Jorja Johnson"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Vivienne David / Thomas Wilson",
+    "third": "Jorja Johnson / JW Johnson"
+   }
+  ],
+  "uuid": "08e9832a-d061-4e90-aaac-453eda53a50d",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-mesa-az"
+ },
+ {
+  "endDate": "2024-02-04",
+  "startDate": "2024-01-31",
+  "name": "Desert Ridge Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Jaume Martinez Vich",
+    "third": "Jay Devilliers"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Mary Brascia",
+    "third": "Kaitlyn Christian"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Dekel Bar / Tyson McGuffin",
+    "third": "Erik Lange / Zane Navratil"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Catherine Parenteau / Anna Leigh Waters",
+    "runnerUp": "Etta Tuionetoa / Meghan Dizon",
+    "third": "Rachel Rohrabacher / Anna Bright"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Anna Bright / James Ignatowich",
+    "third": "Vivienne David / Thomas Wilson"
+   }
+  ],
+  "uuid": "3692157a-7dbf-45c1-a449-0a19923fb90b",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-phoenix-az"
+ },
+ {
+  "endDate": "2024-01-14",
+  "startDate": "2024-01-09",
+  "name": "The Masters",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Dylan Frazier",
+    "runnerUp": "Federico Staksrud",
+    "third": "Jack Sock"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Brooke Buckner"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Collin Johns / Ben Johns",
+    "runnerUp": "Riley Newman / Thomas Wilson",
+    "third": "Federico Staksrud / Pablo Tellez"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Rachel Rohrabacher / Anna Bright",
+    "third": "Etta Tuionetoa / Meghan Dizon"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Anna Bright / James Ignatowich",
+    "third": "Vivienne David / Thomas Wilson"
+   }
+  ],
+  "uuid": "ef4961bd-7c82-4c60-8181-ec81e778ce68",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-palm-springs-ca"
+ },
+ {
+  "endDate": "2023-12-03",
+  "name": "CIBC PPA Finals",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Benjamin Johns",
+    "runnerUp": "Christian Alshon",
+    "third": "Federico Staksrud"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Irina Tereschenko"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Benjamin Johns / Collin Johns",
+    "runnerUp": "Thomas Wilson / Riley Newman",
+    "third": "James Ignatowich / Matt Wright"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Vivienne David / Anna Bright",
+    "third": "Lucy Kovalova / Callie Smith"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Benjamin Johns",
+    "runnerUp": "Jorja Johnson / James Johnson",
+    "third": "Anna Bright / James Ignatowich"
+   }
+  ],
+  "resultsUrl": "https://pickleballbrackets.com/ptplg.aspx?eid=4e8cc433-e6f5-467f-a932-77cb6378036a"
+ },
+ {
+  "endDate": "2023-11-19",
+  "name": "Hertz Gold Cup",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Benjamin Johns",
+    "runnerUp": "Tyson McGuffin",
+    "third": "Connor Garnett"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Salome Devidze",
+    "runnerUp": "Lacy Schneemann",
+    "third": "Lauren Stratman"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Dylan Frazier / James Johnson",
+    "runnerUp": "Christian Alshon / Connor Garnett",
+    "third": "Tyler Loong / Darrian Young"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Lucia Kovalova / Callie Smith",
+    "third": "Jade Kawamoto / Lacy Schneemann"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Benjamin Johns",
+    "runnerUp": "Jorja Johnson / James Johnson",
+    "third": "Vivienne David / Thomas Wilson"
+   }
+  ],
+  "resultsUrl": "https://pickleballbrackets.com/ptplg.aspx?eid=ff4629c5-a182-4da2-948b-b525a29d52fc"
+ },
+ {
+  "endDate": "2023-11-12",
+  "name": "Biofreeze USA Pickleball National Championships",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "James Johnson",
+    "runnerUp": "Jaume Martinez Vich",
+    "third": "Christopher Haworth"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Judit Castillo"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Collin Johns / Benjamin Johns",
+    "runnerUp": "Dylan Frazier / James Johnson",
+    "third": "Riley Newman / Christian Alshon"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Maggie Brascia / Mary Brascia",
+    "third": "Anna Bright / Jade Kawamoto"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Benjamin Johns",
+    "runnerUp": "Anna Bright / James Ignatowich",
+    "third": "Jorja Johnson / James Johnson"
+   }
+  ],
+  "resultsUrl": "https://pickleballbrackets.com/ptplg.aspx?eid=d5f27818-54dd-4de5-b443-e64e656c5209"
+ },
+ {
+  "endDate": "2023-10-08",
+  "name": "Guaranteed Rate PPA Championships Presented by Thorlo",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Aanik Lohani",
+    "third": "JW Johnson"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Dominique Schaefer"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "JW Johnson / Dylan Frazier",
+    "third": "Pablo Tellez / Federico Staksrud"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Callie Jo Smith / Lucy Kovalova",
+    "third": "Allyce Jones / Etta Wright"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Anna Bright / James Ignatowich",
+    "third": "Vivienne David / Thomas Wilson"
+   }
+  ],
+  "resultsUrl": "https://pickleballbrackets.com/ptplg.aspx?eid=f0d6daed-334d-4404-893b-e34f9d6d4089"
+ },
+ {
+  "endDate": "2023-09-10",
+  "name": "Baird Wealth Management Cincinnati Open Presented by Vizzy",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Ben Johns",
+    "third": "Tyson McGuffin"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Rachel Rohrabacher"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "JW Johnson / Dylan Frazier",
+    "third": "Tyson McGuffin / James Ignatowich"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Jackie Kawamoto / Jade Kawamoto",
+    "third": "Anna Bright / Meghan Dizon"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Vivienne David / Thomas Wilson",
+    "third": "Anna Bright / James Ignatowich"
+   }
+  ],
+  "resultsUrl": "https://pickleballbrackets.com/ptplg.aspx?eid=3e92acf9-54e7-4d77-bc64-d981ff715152"
+ },
+ {
+  "endDate": "2023-08-27",
+  "name": "Vulcan Kansas City Open Presented by Chicken N Pickle",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Tyson McGuffin",
+    "third": "Federico Staksrud"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Jorja Johnson"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Matt Wright",
+    "runnerUp": "JW Johnson / Dylan Frazier",
+    "third": "Tyson McGuffin / James Ignatowich"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Anna Bright / Meghan Dizon",
+    "third": "Andrea Koop / Jade Kawamoto"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Jessie Irvine / Riley Newman",
+    "third": "Jade Kawamoto / Travis Rettenmaier"
+   }
+  ],
+  "resultsUrl": "https://pickleballbrackets.com/ptplg.aspx?eid=3de4e385-5deb-4765-928d-9773a8cd6fb6"
+ },
+ {
+  "endDate": "2023-08-19",
+  "name": "Vulcan Tournament of Champions",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Tyson McGuffin",
+    "runnerUp": "Connor Garnett",
+    "third": "Federico Staksrud"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Catherine Parenteau",
+    "runnerUp": "Salome Devidze",
+    "third": "Lauren Stratman"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Tyson McGuffin / James Ignatowich",
+    "runnerUp": "Riley Newman / AJ Koller",
+    "third": "Christian Alshon / Connor Garnett"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Catherine Parenteau / Parris Todd",
+    "runnerUp": "Callie Smith / Allyce Jones",
+    "third": "Anna Bright / Hurricane Black"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Tyson McGuffin / Catherine Parenteau",
+    "runnerUp": "Patrick Smith / Tina Pisnik",
+    "third": "Riley Newman / Jessie Irvine"
+   }
+  ],
+  "resultsUrl": "https://pickleballbrackets.com/ptplg.aspx?eid=8dee33c0-681f-4a3d-a6f6-69a181434d41"
+ },
+ {
+  "endDate": "2023-08-06",
+  "name": "The Takeya Showcase Presented by Best Day Brewing",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Gabriel Joseph",
+    "runnerUp": "Federico Staksrud",
+    "third": "JW Johnson"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Hurricane Black",
+    "runnerUp": "Yana Newell",
+    "third": "Lauren Stratman"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "JW Johnson / Dylan Frazier",
+    "runnerUp": "Ben Johns / Collin Johns",
+    "third": "Julian Arnold / Thomas Wilson"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Callie Smith / Lucy Kovalova",
+    "third": "Allyce Jones / Hurricane Black"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "JW Johnson / Jorja Johnson",
+    "third": "James Ignatowich / Anna Bright"
+   }
+  ],
+  "resultsUrl": "https://pickleballbrackets.com/ptplg.aspx?eid=71a558d1-4ba5-4f3c-9188-659020bec1ee"
+ },
+ {
+  "endDate": "2023-07-30",
+  "name": "Baird Wealth Management Seattle Open Presented by Holland America Line",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Federico Staksrud",
+    "third": "Connor Garnett"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Lea Jansen",
+    "third": "Yana Newell"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "JW Johnson / Dylan Frazier",
+    "runnerUp": "Pablo Tellez / Federico Staksrud",
+    "third": "Patrick Smith / DJ Young"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Jackie Kawamoto / Vivienne David",
+    "third": "Yana Newell / Lauren Stratman"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "James Ignatowich / Anna Bright",
+    "third": "Riley Newman / Lindsey Newman"
+   }
+  ],
+  "resultsUrl": "https://pickleballbrackets.com/ptplg.aspx?eid=9a802ff9-9365-4d63-a7de-251c5291cabc"
+ },
+ {
+  "endDate": "2023-07-16",
+  "name": "OH SNAP! Denver Open Presented by Vizzy",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Christian Alshon",
+    "third": "Jaume Martinez Vich"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Irina Tereschenko",
+    "third": "Judit Castillo"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Pablo Tellez / Federico Staksrud",
+    "third": "Callan Dawson / Hayden Patriquin"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Lacy Schneemann / Vivienne David",
+    "third": "Lucy Kovalova / Lea Jansen"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "Matt Wright / Lucy Kovalova",
+    "third": "Connor Garnett / Etta Wright"
+   }
+  ],
+  "resultsUrl": "https://pickleballbrackets.com/ptplg.aspx?eid=2b11cf57-a30f-4578-adf9-651633645157"
+ },
+ {
+  "endDate": "2023-06-11",
+  "name": "Select Medical Orange County Cup Presented by Intralinks",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Tyson McGuffin",
+    "runnerUp": "Connor Garnett",
+    "third": "Collin Shick"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Judit Castillo"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Riley Newman / Matt Wright",
+    "third": "Tyson McGuffin / James Ignatowich"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Irina Tereschenko / Etta Wright",
+    "third": "Callie Smith / Lucy Kovalova"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "Tyson McGuffin / Catherine Parenteau",
+    "third": "James Ignatowich / Anna Bright"
+   }
+  ],
+  "resultsUrl": "https://pickleballbrackets.com/ptplg.aspx?eid=bdbb6c52-74e1-42e9-a448-421b8fa9f12f"
+ },
+ {
+  "endDate": "2023-06-04",
+  "name": "Selkirk Texas Open Presented by CIBC",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Jaume Martinez Vich",
+    "third": "Tyson McGuffin"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Lea Jansen",
+    "third": "N / A"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "JW Johnson / Dylan Frazier",
+    "third": "Riley Newman / Matt Wright"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Meghan Dizon / Etta Wright",
+    "third": "Anna Bright / Lacy Schneemann"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "Riley Newman / Lindsey Newman",
+    "third": "N / A"
+   }
+  ]
+ },
+ {
+  "endDate": "2023-05-21",
+  "name": "Acrytech Atlanta Open Presented by Vizzy",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "JW Johnson",
+    "runnerUp": "Connor Garnett",
+    "third": "Jake Kusmider"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Mary Brascia",
+    "third": "N / A"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Riley Newman / Matt Wright",
+    "third": "JW Johnson / Dylan Frazier"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Jorja Johnson / Vivienne David",
+    "third": "Catherine Parenteau / Parris Todd"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "Riley Newman / Parris Todd",
+    "third": "Tyson McGuffin / Catherine Parenteau"
+   }
+  ]
+ },
+ {
+  "endDate": "2023-05-07",
+  "name": "OS1st North Carolina Open Presented by Intralinks",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Tyson McGuffin",
+    "third": "Christian Alshon"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Lea Jansen",
+    "third": "Salome Devidze"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Riley Newman / Matt Wright",
+    "runnerUp": "JW Johnson / Dylan Frazier",
+    "third": "Travis Rettenmaier / Steve Deakin"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Yana Grechkina / Lauren Stratman",
+    "third": "Jessie Irvine / Jackie Kawamoto"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Jack Sock / Anna Leigh Waters",
+    "runnerUp": "Riley Newman / Allyce Jones",
+    "third": "Tyson McGuffin / Catherine Parenteau"
+   }
+  ]
+ },
+ {
+  "endDate": "2023-04-23",
+  "name": "OGIO Newport Beach Doubles Shootout Presented by Vizzy",
+  "divisions": [
+   {
+    "division": "Men's Doubles",
+    "champion": "JW Johnson / Dylan Frazier",
+    "runnerUp": "Riley Newman / Matt Wright",
+    "third": "Federico Staksrud / Pablo Tellez"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Callie Smith / Lucy Kovalova",
+    "runnerUp": "Anna Bright / Andrea Koop",
+    "third": "Yana Grechkina / Lauren Stratman"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "JW Johnson / Jorja Johnson",
+    "runnerUp": "Tyson McGuffin / Lacy Schneemann",
+    "third": "Ben Johns / Andrea Koop"
+   }
+  ]
+ },
+ {
+  "endDate": "2023-04-08",
+  "name": "Selkirk Red Rock Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Tyson McGuffin",
+    "runnerUp": "Pablo Tellez",
+    "third": "Jay Devilliers"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Catherine Parenteau",
+    "runnerUp": "Salome Devidze",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Tyson McGuffin / Brendon Long",
+    "runnerUp": "Dekel Bar / Collin Johns",
+    "third": "Riley Newman / James Ignatowich"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Etta Wright / Meghan Dizon",
+    "runnerUp": "Lea Jansen / Allyce Jones",
+    "third": "Callie Smith / Lucy Kovalova"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "James Ignatowich / Anna Bright",
+    "runnerUp": "AJ Koller / Jessie Irvine",
+    "third": "Zane Navratil / Susannah Barr"
+   }
+  ]
+ },
+ {
+  "endDate": "2023-03-19",
+  "name": "ONIX Austin Showdown Powered by Invited",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Federico Staksrud",
+    "third": "Christian Alshon"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Allyce Jones"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Riley Newman / Matt Wright",
+    "third": "JW Johnson / Dylan Frazier"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Vivienne David / Meghan Dizon",
+    "third": "Catherine Parenteau / Jorja Johnson"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "James Ignatowich / Anna Bright",
+    "third": "JW Johnson / Jorja Johnson"
+   }
+  ]
+ },
+ {
+  "endDate": "2023-03-12",
+  "name": "Red Clay Hot Sauce Florida Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Collin Shick",
+    "third": "Pablo Tellez"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Catherine Parenteau",
+    "runnerUp": "Lea Jansen",
+    "third": "Salome Devidze"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Julian Arnold / Thomas Wilson",
+    "third": "JW Johnson / Dylan Frazier"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Jade Kawamoto / Lacy Schneemann",
+    "third": "Lea Jansen / Allyce Jones"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "Tyson McGuffin / Catherine Parenteau",
+    "third": "Jay Devilliers / Jessie Irvine"
+   }
+  ]
+ },
+ {
+  "endDate": "2023-02-26",
+  "name": "Vulcan Indoor National Championships Presented by Life Time",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "James Ignatowich",
+    "runnerUp": "JW Johnson",
+    "third": "Jay Devilliers"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Catherine Parenteau",
+    "runnerUp": "Lea Jansen",
+    "third": "Salome Devidze"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "JW Johnson / Dylan Frazier",
+    "runnerUp": "Federico Staksrud / Pablo Tellez",
+    "third": "Riley Newman / Matt Wright"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Lucy Kovalova / Callie Smith",
+    "runnerUp": "Lea Jansen / Allyce Jones",
+    "third": "Yana Grechkina / Etta Wright"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "James Ignatowich / Catherine Parenteau",
+    "runnerUp": "Julian Arnold / Lauren Stratman",
+    "third": "Dylan Frazier / Callie Smith"
+   }
+  ]
+ },
+ {
+  "endDate": "2023-02-19",
+  "name": "Carvana Arizona Grand Slam Presented by Hyundai",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Jay Devilliers",
+    "third": "James Ignatowich"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Lea Jansen",
+    "third": "Salome Devidze"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Riley Newman / Matt Wright",
+    "third": "JW Johnson / Dylan Frazier"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Jessie Irvine / Jackie Kawamoto",
+    "third": "Lea Jansen / Allyce Jones"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Riley Newman / Anna Bright",
+    "runnerUp": "JW Johnson / Jorja Johnson",
+    "third": "Thomas Wilson / Vivienne David"
+   }
+  ]
+ },
+ {
+  "endDate": "2023-02-05",
+  "name": "JW Marriott Desert Ridge Open Powered by Foot Solutions",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Federico Staksrud",
+    "third": "Julian Arnold"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Riley Newman / Matt Wright",
+    "third": "JW Johnson / Dylan Frazier"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Lea Jansen / Allyce Jones",
+    "third": "Anna Bright / Vivienne David"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "Matt Wright / Lucy Kovalova",
+    "third": "Riley Newman / Anna Bright"
+   }
+  ]
+ },
+ {
+  "endDate": "2023-01-15",
+  "name": "Hyundai Masters",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Federico Staksrud",
+    "third": "Dylan Frazier"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Lea Jansen",
+    "third": "Catherine Parenteau"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Riley Newman / Matt Wright",
+    "third": ""
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Lucy Kovalova / Callie Smith",
+    "third": ""
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "Riley Newman / Jessie Irvine",
+    "third": "Thomas Wilson / Vivienne David"
+   }
+  ],
+  "note": "Rained Out"
+ },
+ {
+  "endDate": "2022-12-15",
+  "name": "bubly Team Championships",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-12-01",
+  "name": "Hertz National Championship",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Ryan Sherry",
+    "third": "Tyson McGuffin"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Salome Devidze",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Riley Newman / Matt Wright",
+    "third": "Tyson McGuffin / Jay Devilliers"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Catherine Parenteau",
+    "runnerUp": "Lea Jansen / Jackie Kawamoto",
+    "third": "Callie Smith / Lucy Kovalova"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "Riley Newman / Catherine Parenteau",
+    "third": "Tyler Loong / Anna Bright"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-11-17",
+  "name": "Takeya Showcase",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Tyson McGuffin",
+    "third": "Julian Arnold"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Catherine Parenteau",
+    "runnerUp": "Salome Devidze",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Riley Newman / Matt Wright",
+    "runnerUp": "Ben Johns / Collin Johns",
+    "third": "Tyler Loong / Callan Dawson"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Vivienne David / Andrea Koop",
+    "runnerUp": "Irina Tereschenko / Etta Wright",
+    "third": "Anna Bright / Parris Todd"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "AJ Koller / Andrea Koop",
+    "runnerUp": "Matt Wright / Lucy Kovalova",
+    "third": "Dylan Frazier / Anna Bright"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-11-03",
+  "name": "Baird Wealth Management Texas Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Tyson McGuffin",
+    "runnerUp": "Ben Johns",
+    "third": "Julian Arnold"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Lea Jansen",
+    "third": "Catherine Parenteau"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Riley Newman / Matt Wright",
+    "third": "Steve Deakin / James Ignatowich"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Leigh Waters",
+    "runnerUp": "Jessie Irvine / Anna Bright",
+    "third": "Catherine Parenteau / Lea Jansen"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "Riley Newman / Catherine Parenteau",
+    "third": "Travis Rettenmaier / Etta Wright"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-10-20",
+  "name": "n2grate DC Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Jay Devilliers",
+    "third": "Tyson McGuffin"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Riley Newman / Matt Wright",
+    "third": "Tyler Loong / Callan Dawson"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Callie Smith / Lucy Kovalova",
+    "runnerUp": "Anna Leigh Waters / Leigh Waters",
+    "third": "Catherine Parenteau / Lea Jansen"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "Matt Wright / Lucy Kovalova",
+    "third": "Riley Newman / Catherine Parenteau"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-10-13",
+  "name": "Texas Round Up",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Riley Newman / Brandon French",
+    "runnerUp": "Tyson McGuffin / Jay Devilliers",
+    "third": "Tyler Loong / Callan Dawson"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Jessie Irvine / Lea Jansen",
+    "runnerUp": "Catherine Parenteau / Meghan Dizon",
+    "third": "Rachel Rettger / Shelby Bates"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Riley Newman / Catherine Parenteau",
+    "runnerUp": "Jay Devilliers / Jessie Irvine",
+    "third": "Tyson McGuffin / Lea Jansen"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-10-06",
+  "name": "PPA Championships",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "JW Johnson",
+    "third": "Dylan Frazier"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Salome Devidze"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Riley Newman / Matt Wright",
+    "runnerUp": "Ben Johns / Collin Johns",
+    "third": "JW Johnson / Dekel Bar"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Leigh Waters",
+    "runnerUp": "Anna Bright / Parris Todd",
+    "third": "Callie Smith / Lucy Kovalova"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "JW Johnson / Catherine Parenteau",
+    "third": "Riley Newman / Lindsey Newman"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-09-15",
+  "name": "Peachtree Classic",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "JW Johnson",
+    "runnerUp": "Julian Arnold",
+    "third": "Ben Johns"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Callie Smith",
+    "third": "Anna Bright"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Riley Newman / Matt Wright",
+    "third": "JW Johnson / Dylan Frazier"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Leigh Waters",
+    "runnerUp": "Jessie Irvine / Anna Bright",
+    "third": "Callie Smith / Lucy Kovalova"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "Riley Newman / Catherine Parenteau",
+    "third": "Jay Devilliers / Jessie Irvine"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-09-08",
+  "name": "Baird Wealth Management Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Tyson McGuffin",
+    "runnerUp": "Hunter Johnson",
+    "third": "Yates Johnson"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Lea Jansen",
+    "third": "Salome Devidze"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Tyson McGuffin / Jay Devilliers",
+    "third": "Tyler Loong / Callan Dawson"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Jessie Irvine / Anna Bright",
+    "runnerUp": "Catherine Parenteau / Lea Jansen",
+    "third": "Jade Kawamoto / Jackie Kawamoto"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "Jay Devilliers / Jessie Irvine",
+    "third": "Thomas Wilson / Yana Grechkina"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-08-17",
+  "name": "Tournament of Champions",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Dylan Frazier",
+    "third": "Hunter Johnson"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Lea Jansen",
+    "third": "Irina Tereschenko"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Riley Newman / Matt Wright",
+    "runnerUp": "Ben Johns / Collin Johns",
+    "third": "Tyler Loong / Callan Dawson"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Leigh Waters",
+    "runnerUp": "Callie Smith / Lucy Kovalova",
+    "third": "Susannah Barr / Vivienne David"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "AJ Koller / Callie Smith",
+    "third": "Jay Devilliers / Jessie Irvine"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-08-12",
+  "name": "Sketchers Invitational Summer Championships",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-08-05",
+  "name": "Selkirk Labs Showdown Pro Invitational",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "N / A",
+    "runnerUp": "N / A",
+    "third": "N / A"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "N / A",
+    "runnerUp": "N / A",
+    "third": "N / A"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Jay Devilliers",
+    "runnerUp": "Tyson McGuffin / Ben Newell",
+    "third": "N / A"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Callie Smith",
+    "runnerUp": "Lucy Kovalova / Jessie Irvine",
+    "third": "N / A"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Jessie Irvine",
+    "runnerUp": "Matt Wright / Callie Smith",
+    "third": "N / A"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-06-09",
+  "name": "Select Medical Orange County Cup",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "JW Johnson",
+    "runnerUp": "Tyson McGuffin",
+    "third": "James Ignatowich"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Parris Todd",
+    "runnerUp": "Anna Leigh Waters",
+    "third": "Callie Smith"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Riley Newman / Matt Wright",
+    "runnerUp": "AJ Koller / Collin Johns",
+    "third": "JW Johnson / Dylan Frazier"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Callie Smith / Lucy Kovalova",
+    "runnerUp": "Anna Leigh Waters / Leigh Waters",
+    "third": "Lea Jansen / Catherine Parenteau"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "JW Johnson / Anna Leigh Waters",
+    "runnerUp": "Matt Wright / Lucy Kovalova",
+    "third": "AJ Koller / Callie Smith"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-05-18",
+  "name": "Atlanta Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Federico Staksrud",
+    "runnerUp": "Rafa Hewett",
+    "third": "James Ignatowich"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Riley Newman / Matt Wright",
+    "runnerUp": "Ben Johns / Collin Johns",
+    "third": "Dekel Bar / JW Johnson"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Callie Smith / Lucy Kovalova",
+    "runnerUp": "Anna Leigh Waters / Leigh Waters",
+    "third": "Jessie Irvine / Anna Bright"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Riley Newman / Catherine Parenteau",
+    "runnerUp": "Matt Wright / Lucy Kovalova",
+    "third": "JW Johnson / Simone Jardim"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-05-08",
+  "name": "North Carolina Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ryan Sherry",
+    "runnerUp": "Julian Arnold",
+    "third": "Tyson McGuffin"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Catherine Parenteau",
+    "runnerUp": "Lea Jansen",
+    "third": "Callie Smith"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Riley Newman / Matt Wright",
+    "runnerUp": "Tyson McGuffin / Tyler Loong",
+    "third": "Chuck Taylor / Callan Dawson"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Catherine Parenteau / Lea Jansen",
+    "runnerUp": "Callie Smith / Lucy Kovalova",
+    "third": "Meghan Dizon / Allyce Jones"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Riley Newman / Catherine Parenteau",
+    "runnerUp": "Matt Wright / Lucy Kovalova",
+    "third": "Julian Arnold / Jessie Irvine"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-04-03",
+  "name": "Red Rock Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Tyson McGuffin",
+    "third": "Jay Devilliers"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Lea Jansen",
+    "third": "Anna Bright"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Riley Newman / AJ Koller",
+    "third": "Tyler Loong / Callan Dawson"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Leigh Waters",
+    "runnerUp": "Callie Smith / Lucy Kovalova",
+    "third": "Lauren Stratman / Susannah Barr"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "Riley Newman / Catherine Parenteau",
+    "third": "Jay Devilliers / Jessie Irvine"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-03-24",
+  "name": "Pickleball Central Austin Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Tyson McGuffin",
+    "third": "Jay Devilliers"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Callie Smith"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Riley Newman / Matt Wright",
+    "third": "Tyson McGuffin / Jay Devilliers"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Leigh Waters",
+    "runnerUp": "Callie Smith / Lucy Kovalova",
+    "third": "Andrea Koop / Jorja Johnson"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Riley Newman / Catherine Parenteau",
+    "runnerUp": "Matt Wright / Lucy Kovalova",
+    "third": "Jay Devilliers / Jessie Irvine"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-03-10",
+  "name": "Riverland Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "JW Johnson",
+    "runnerUp": "Tyson McGuffin",
+    "third": "Ben Johns"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Lea Jansen",
+    "third": "Jorja Johnson"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Riley Newman / Matt Wright",
+    "runnerUp": "JW Johnson / Dylan Frazier",
+    "third": "Tyson McGuffin / Jay Devilliers"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Leigh Waters",
+    "runnerUp": "Catherine Parenteau / Jessie Irvine",
+    "third": "Callie Smith / Andrea Koop"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "Jay Devilliers / Jessie Irvine",
+    "third": "Matt Wright / Lucy Kovalova"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-02-24",
+  "name": "Ororo Indoor National Championships",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Tyson McGuffin",
+    "runnerUp": "Jay Devilliers",
+    "third": "Thomas Wilson"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Callie Smith",
+    "third": "Irina Tereschenko"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "AJ Koller / Thomas Wilson",
+    "third": "Riley Newman / Matt Wright"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Callie Smith / Lucy Kovalova",
+    "runnerUp": "Anna Leigh Waters / Leigh Waters",
+    "third": "Catherine Parenteau / Jessie Irvine"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "Jay Devilliers / Jessie Irvine",
+    "third": "Riley Newman / Catherine Parenteau"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-02-16",
+  "name": "Foot Solutions Arizona Grand Slam",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Tyson McGuffin",
+    "third": "JW Johnson"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Riley Newman / Matt Wright",
+    "third": "AJ Koller / Tyler Loong"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Callie Smith / Lucy Kovalova",
+    "runnerUp": "Catherine Parenteau / Jessie Irvine",
+    "third": "Anna Leigh Waters / Leigh Waters"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "Tyson McGuffin / Lauren Stratman",
+    "third": "AJ Koller / Callie Smith"
+   }
+  ]
+ },
+ {
+  "endDate": "2022-01-25",
+  "name": "Carvana Desert Ridge Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "JW Johnson",
+    "runnerUp": "Tyson McGuffin",
+    "third": "Ben Johns"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Callie Smith"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Riley Newman / Matt Wright",
+    "third": "JW Johnson / Dylan Frazier"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Callie Smith / Lucy Kovalova",
+    "runnerUp": "Catherine Parenteau / Jessie Irvine",
+    "third": "Anna Leigh Waters / Leigh Waters"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Anna Leigh Waters",
+    "runnerUp": "Jay Devilliers / Jessie Irvine",
+    "third": "Riley Newman / Catherine Parenteau"
+   }
+  ]
+ },
+ {
+  "endDate": "2021-11-11",
+  "name": "Hyundai Masters",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Tyson McGuffin",
+    "third": "JW Johnson"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Lea Jansen",
+    "third": "Catherine Parenteau"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Matt Wright",
+    "runnerUp": "Riley Newman / Tyson McGuffin",
+    "third": "Dekel Bar / Erik Lange"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Catherine Parenteau / Jessie Irvine",
+    "runnerUp": "Irina Tereschenko / Lauren Stratman",
+    "third": "Lea Jansen / Vivienne David"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Matt Wright / Lucy Kovalova",
+    "runnerUp": "Riley Newman / Lindsey Newman",
+    "third": "Tyson McGuffin / Anna Leigh Waters"
+   }
+  ]
+ },
+ {
+  "endDate": "2021-10-21",
+  "name": "PPA Championships",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Zane Navratil",
+    "runnerUp": "Tyson McGuffin",
+    "third": "Jay Devilliers"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Catherine Parenteau",
+    "runnerUp": "Anna Leigh Waters",
+    "third": "Callie Smith"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Dekel Bar / Adam Stone",
+    "runnerUp": "Riley Newman / Tyson McGuffin",
+    "third": "Ben Johns / Matt Wright"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Catherine Parenteau / Jessie Irvine",
+    "runnerUp": "Anna Leigh Waters / Leigh Waters",
+    "third": "Callie Smith / Corrine Carr"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Jay Devilliers / Jessie Irvine",
+    "runnerUp": "Riley Newman / Lindsey Newman",
+    "third": "Matt Wright / Lucy Kovalova"
+   }
+  ]
+ },
+ {
+  "endDate": "2021-09-30",
+  "name": "Texas Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Zane Navratil",
+    "runnerUp": "JW Johnson",
+    "third": "Tyson McGuffin"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Lea Jansen",
+    "third": "Catherine Parenteau"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Matt Wright",
+    "runnerUp": "Riley Newman / Tyson McGuffin",
+    "third": "Steve Deakin / Joey Farias"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Simone Jardim / Lucy Kovalova",
+    "runnerUp": "Anna Leigh Waters / Leigh Waters",
+    "third": "Andrea Koop / Lauren Stratman"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Tyson McGuffin / Callie Smith",
+    "runnerUp": "Jay Devilliers / Jessie Irvine",
+    "third": "JW Johnson / Anna Leigh Waters"
+   }
+  ]
+ },
+ {
+  "endDate": "2021-09-21",
+  "name": "Las Vegas Pickleball Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "N / A",
+    "runnerUp": "N / A",
+    "third": "N / A"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "N / A",
+    "runnerUp": "N / A",
+    "third": "N / A"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Riley Newman / AJ Koller",
+    "runnerUp": "Ben Johns / Collin Johns",
+    "third": "Dekel Bar / Rob Nunnery"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Simone Jardim / Catherine Parenteau",
+    "runnerUp": "Jessie Irvine / Lindsey Newman",
+    "third": "Lea Jansen / Irina Tereschenko"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "AJ Koller / Jessie Irvine",
+    "runnerUp": "Tyler Loong / Catherine Parenteau",
+    "third": "Dekel Bar / Lea Jansen"
+   }
+  ]
+ },
+ {
+  "endDate": "2021-09-09",
+  "name": "Orlando Cup",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Tyson McGuffin",
+    "third": "JW Johnson"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Lea Jansen",
+    "third": "Callie Smith"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Matt Wright",
+    "runnerUp": "AJ Koller / JW Johnson",
+    "third": "Dekel Bar / Adam Stone"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Leigh Waters",
+    "runnerUp": "Simone Jardim / Lucy Kovalova",
+    "third": "Catherine Parenteau / Jessie Irvine"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Riley Newman / Catherine Parenteau",
+    "runnerUp": "Jay Devilliers / Jessie Irvine",
+    "third": "Matt Wright / Lucy Kovalova"
+   }
+  ]
+ },
+ {
+  "endDate": "2021-08-10",
+  "name": "Rocky Mountain Championships",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Tyson McGuffin",
+    "third": "Dekel Bar"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Lea Jansen",
+    "runnerUp": "Callie Smith",
+    "third": "Irina Tereschenko"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Matt Wright / Kyle Yates",
+    "third": "Riley Newman / Tyson McGuffin"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Catherine Parenteau / Jessie Irvine",
+    "runnerUp": "Simone Jardim / Lucy Kovalova",
+    "third": "Lea Jansen / Lauren Stratman"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Simone Jardim",
+    "runnerUp": "Matt Wright / Lucy Kovalova",
+    "third": "Riley Newman / Catherine Parenteau"
+   }
+  ]
+ },
+ {
+  "endDate": "2021-08-05",
+  "name": "Takeya Showcase",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Jay Devilliers",
+    "third": "Dekel Bar"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Lea Jansen"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Matt Wright",
+    "runnerUp": "Riley Newman / Tyson McGuffin",
+    "third": "Dekel Bar / Adam Stone"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Simone Jardim / Lucy Kovalova",
+    "runnerUp": "Callie Smith / Irina Tereschenko",
+    "third": "Anna Leigh Waters / Leigh Waters"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Matt Wright / Lucy Kovalova",
+    "runnerUp": "Ben Johns / Simone Jardim",
+    "third": "Riley Newman / Catherine Parenteau"
+   }
+  ]
+ },
+ {
+  "endDate": "2021-06-24",
+  "name": "Orange County Cup",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Jay Devilliers",
+    "third": "Tyson McGuffin"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Lea Jansen",
+    "runnerUp": "Anna Leigh Waters",
+    "third": "Callie Smith"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Riley Newman / Tyson McGuffin",
+    "third": "Jay Devilliers / Patrick Smith"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Simone Jardim / Lucy Kovalova",
+    "runnerUp": "Anna Leigh Waters / Leigh Waters",
+    "third": "Catherine Parenteau / Callie Smith"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Simone Jardim",
+    "runnerUp": "Matt Wright / Lucy Kovalova",
+    "third": "Riley Newman / Lindsey Newman"
+   }
+  ]
+ },
+ {
+  "endDate": "2021-05-20",
+  "name": "Atlanta Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Tyson McGuffin",
+    "third": "Jay Devilliers"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Catherine Parenteau",
+    "runnerUp": "Lea Jansen",
+    "third": "Callie Smith"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Riley Newman / Tyson McGuffin",
+    "runnerUp": "Jay Devilliers / Patrick Smith",
+    "third": "Ben Johns / Collin Johns"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Simone Jardim / Lucy Kovalova",
+    "runnerUp": "Anna Leigh Waters / Leigh Waters",
+    "third": "Catherine Parenteau / Callie Smith"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Simone Jardim",
+    "runnerUp": "Matt Wright / Lucy Kovalova",
+    "third": "Tyson McGuffin / Anna Leigh Waters"
+   }
+  ]
+ },
+ {
+  "endDate": "2021-04-02",
+  "name": "Newport Beach Doubles Shootout",
+  "divisions": [
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Riley Newman / Tyson McGuffin",
+    "third": "Matt Wright / Dekel Bar"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Simone Jardim / Lucy Kovalova",
+    "runnerUp": "Catherine Parenteau / Callie Smith",
+    "third": "Jessie Irvine / Irina Tereschenko"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Simone Jardim",
+    "runnerUp": "Riley Newman / Lindsey Newman",
+    "third": "Matt Wright / Lucy Kovalova"
+   }
+  ]
+ },
+ {
+  "endDate": "2021-03-10",
+  "name": "Red Rock Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Dekel Bar",
+    "third": "Tyson McGuffin"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Catherine Parenteau",
+    "runnerUp": "Irina Tereschenko",
+    "third": "Callie Smith"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Dekel Bar",
+    "runnerUp": "Matt Wright / Jeff Warnick",
+    "third": "Tyson McGuffin / Callan Dawson"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Simone Jardim / Lucy Kovalova",
+    "runnerUp": "Callie Smith / Irina Tereschenko",
+    "third": "Catherine Parenteau / Jessie Irvine"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Simone Jardim",
+    "runnerUp": "Jeff Warnick / Jessie Irvine",
+    "third": "Matt Wright / Lucy Kovalova"
+   }
+  ]
+ },
+ {
+  "endDate": "2021-02-25",
+  "name": "Simone Jardim Florida Grand Slam",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Zane Navratil",
+    "third": "Jay Devilliers"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Simone Jardim",
+    "runnerUp": "Catherine Parenteau",
+    "third": "Callie Smith"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Matt Wright / Steve Deakin",
+    "runnerUp": "Dekel Bar / Adam Stone",
+    "third": "Ben Johns / Collin Johns"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Simone Jardim / Lucy Kovalova",
+    "runnerUp": "Catherine Parenteau / Callie Smith",
+    "third": "Jessie Irvine / Irina Tereschenko"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Simone Jardim",
+    "runnerUp": "Matt Wright / Lucy Kovalova",
+    "third": "Tyson McGuffin / Leigh Waters"
+   }
+  ]
+ },
+ {
+  "endDate": "2021-02-16",
+  "name": "Foot Solutions Arizona Grand Slam",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Zane Navratil",
+    "third": "Jay Devilliers"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Simone Jardim",
+    "runnerUp": "Michelle Esquivel",
+    "third": "Vivienne David"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Collin Johns",
+    "runnerUp": "Jay Devilliers / Patrick Smith",
+    "third": "Tyler Loong / Spencer Smith"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Simone Jardim / Lucy Kovalova",
+    "runnerUp": "Catherine Parenteau / Callie Smith",
+    "third": "Lea Jansen / Lauren Stratman"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Simone Jardim",
+    "runnerUp": "Matt Wright / Lucy Kovalova",
+    "third": "Riley Newman / Lindsey Newman"
+   }
+  ]
+ },
+ {
+  "endDate": "2021-01-27",
+  "name": "Jigsaw Invitational",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   }
+  ]
+ },
+ {
+  "endDate": "2020-10-22",
+  "name": "PPA Championships",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Dekel Bar",
+    "third": "Zane Navratil"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Simone Jardim",
+    "runnerUp": "Irina Tereschenko",
+    "third": "Michelle Esquivel"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Matt Wright",
+    "runnerUp": "Dekel Bar / Adam Stone",
+    "third": "Jeff Warnick / Callan Dawson"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Simone Jardim / Lucy Kovalova",
+    "runnerUp": "Jessie Irvine / Irina Tereschenko",
+    "third": "Catherine Parenteau / Lauren Stratman"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Simone Jardim",
+    "runnerUp": "Jeff Warnick / Jessie Irvine",
+    "third": "Riley Newman / Catherine Parenteau"
+   }
+  ]
+ },
+ {
+  "endDate": "2020-09-30",
+  "name": "Texas Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Tyson McGuffin",
+    "third": "Jay Devilliers"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Simone Jardim",
+    "runnerUp": "Irina Tereschenko",
+    "third": "Catherine Parenteau"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Simone Jardim / Lucy Kovalova",
+    "runnerUp": "Catherine Parenteau / Corrine Carr",
+    "third": "Jessie Irvine / Irina Tereschenko"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Simone Jardim",
+    "runnerUp": "Matt Wright / Lucy Kovalova",
+    "third": "Tyson McGuffin / Callie Smith"
+   }
+  ]
+ },
+ {
+  "endDate": "2020-09-17",
+  "name": "Atlanta Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Tyson McGuffin",
+    "third": "Zane Navratil"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Simone Jardim",
+    "runnerUp": "Irina Tereschenko",
+    "third": "Lauren Stratman"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Riley Newman / Tyson McGuffin",
+    "runnerUp": "Ben Johns / Matt Wright",
+    "third": "Collin Johns / Zane Affleck"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Simone Jardim / Lucy Kovalova",
+    "runnerUp": "Catherine Parenteau / Corrine Carr",
+    "third": "Jessie Irvine / Irina Tereschenko"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Simone Jardim",
+    "runnerUp": "Matt Wright / Lucy Kovalova",
+    "third": "Steve Deakin / Catherine Parenteau"
+   }
+  ]
+ },
+ {
+  "endDate": "2020-08-13",
+  "name": "The Showcase",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Gabriel Joseph",
+    "third": "Tyson McGuffin"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Simone Jardim",
+    "runnerUp": "Michelle Esquivel",
+    "third": "Corrine Carr"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Riley Newman / Tyson McGuffin",
+    "runnerUp": "Callan Dawson / DJ Young",
+    "third": "Ben Johns / Matt Wright"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Simone Jardim / Lucy Kovalova",
+    "runnerUp": "Jessie Irvine / Lindsey Newman",
+    "third": "Callie Smith / Irina Tereschenko"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Simone Jardim",
+    "runnerUp": "Jeff Warnick / Jessie Irvine",
+    "third": "Matt Wright / Lucy Kovalova"
+   }
+  ]
+ },
+ {
+  "endDate": "2020-08-01",
+  "name": "Margaritaville Underground",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Exhibition",
+    "runnerUp": "Exhibition",
+    "third": "Exhibition"
+   }
+  ]
+ },
+ {
+  "endDate": "2020-02-13",
+  "name": "Mesa Grand Slam",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Ben Johns",
+    "runnerUp": "Tyson McGuffin",
+    "third": "Tyler Loong"
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Irina Tereschenko",
+    "runnerUp": "Michelle Esquivel",
+    "third": "Cammy MacGregor"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Matt Wright",
+    "runnerUp": "Adam Stone / Collin Johns",
+    "third": "Riley Newman / Tyson McGuffin"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Simone Jardim / Lucy Kovalova",
+    "runnerUp": "Anna Leigh Waters / Leigh Waters",
+    "third": "Catherine Parenteau / Andrea Koop"
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Ben Johns / Simone Jardim",
+    "runnerUp": "Matt Wright / Lucy Kovalova",
+    "third": "Riley Newman / Lindsey Newman"
+   }
+  ]
+ }
+]

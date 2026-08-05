@@ -421,7 +421,10 @@ export default async function EventPage({ params }: Params) {
           sizes="100vw"
           className="animate-kenburns will-change-transform object-cover object-center motion-reduce:animate-none"
         />
-        <div className="absolute inset-0 scrim-hero" />
+        {/* Event-hero scrim: .scrim-hero plus an even veil below lg, where the
+            badge and a wrapped four-line event name sit in the thin part of the
+            gradient. Mirrored in NationalsLive.tsx — the two heroes drift. */}
+        <div className="absolute inset-0 scrim-hero-event" />
         {/* Soften the header→hero seam: navy fades down into the hero image. */}
         <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-32 bg-gradient-to-b from-ppa-navy to-transparent" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-10 pt-20">

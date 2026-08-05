@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Tab = { id: string; label: string };
 
@@ -16,6 +16,12 @@ type Tab = { id: string; label: string };
  * Tickets CTA — owns the top edge all the way down. Implemented by stamping
  * `data-event-nav-scrolled` on <html>; globals.css translates `.site-chrome`
  * out, and the bar's own `top` collapses 4rem → 0.
+ *
+ * The bar also tracks WHICH section you are in and marks that tab (Wesley,
+ * 8/4). It follows you down nine sections, and without this it was a row of
+ * identical links that never told you where you were — which is most of what a
+ * sticky nav is for on a phone, where only three or four tabs are on screen at
+ * once and the rest are off to the right.
  */
 export function EventTabNav({
   tabs,
@@ -32,13 +38,58 @@ export function EventTabNav({
   ticketPriceFrom?: number;
 }) {
   const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState<string>("");
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLElement>(null);
 
+  /**
+   * One scroll listener drives both the collapse and the active section,
+   * coalesced into a rAF: this runs on every scroll event on the page whose LCP
+   * two previous sessions were spent protecting, so it must not do layout work
+   * per event.
+   *
+   * The active section is the LAST one whose top has passed under the bar — not
+   * the one most in view. That is what matches the visitor's sense of "where am
+   * I": a heading that has just slid under the sticky bar is the section you are
+   * reading, even when the next one is already creeping up from the bottom.
+   */
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 420);
-    onScroll();
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      setScrolled(window.scrollY > 420);
+
+      const bar = navRef.current;
+      // A little below the bar's own bottom edge, so a heading counts as
+      // "reached" the moment it tucks behind it rather than a beat later.
+      const line = (bar?.getBoundingClientRect().bottom ?? 64) + 8;
+      let current = "";
+      for (const tab of tabs) {
+        const el = document.getElementById(tab.id);
+        if (!el) continue;
+        if (el.getBoundingClientRect().top <= line) current = tab.id;
+        else break;
+      }
+      // Past the end of the document the last section is the answer even if its
+      // top never crossed the line (a short final section can't scroll that far).
+      if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 2) {
+        const last = tabs.at(-1);
+        if (last && document.getElementById(last.id)) current = last.id;
+      }
+      setActive(current);
+    };
+    const onScroll = () => {
+      if (frame === 0) frame = requestAnimationFrame(measure);
+    };
+    measure();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [tabs]);
 
   // Hide the site chrome while the event bar owns the top edge; always clean
   // up on unmount so other routes get their header back.
@@ -49,16 +100,49 @@ export function EventTabNav({
     return () => root.removeAttribute("data-event-nav-scrolled");
   }, [scrolled]);
 
+  /**
+   * Keep the marked tab on screen inside the horizontal rail. At 390px only
+   * three or four of the nine tabs fit, so marking one the visitor can't see is
+   * no better than marking none.
+   *
+   * ⚠ `scrollLeft` on the rail, NOT `scrollIntoView`. That would also scroll the
+   * nearest scrollable ANCESTOR — the page — and fight the scroll position the
+   * visitor is actually setting.
+   */
+  useEffect(() => {
+    const rail = scrollerRef.current;
+    if (!rail || !active) return;
+    const el = rail.querySelector<HTMLElement>(`[data-tab="${active}"]`);
+    if (!el) return;
+    const target = el.offsetLeft - (rail.clientWidth - el.offsetWidth) / 2;
+    const max = rail.scrollWidth - rail.clientWidth;
+    const next = Math.max(0, Math.min(target, max));
+    if (Math.abs(next - rail.scrollLeft) > 4) {
+      rail.scrollTo({ left: next, behavior: "smooth" });
+    }
+  }, [active]);
+
   const rest = tabs.filter((t) => t.id !== "overview");
+
+  const tabClass = (id: string) =>
+    `shrink-0 border-b-2 px-3 py-3 text-[11px] font-bold uppercase tracking-[0.12em] transition-colors ${
+      active === id
+        ? "border-[var(--event-accent,#228be6)] text-[var(--event-accent,#228be6)]"
+        : "border-transparent text-ppa-navy/55 hover:text-[var(--event-accent,#228be6)]"
+    }`;
 
   return (
     <nav
+      ref={navRef}
       className={`sticky z-40 border-b border-ppa-line bg-ppa-paper/95 backdrop-blur transition-[top] duration-300 ease-out ${
         scrolled ? "top-0" : "top-16"
       }`}
     >
       <div className="mx-auto flex max-w-6xl items-center gap-2 px-4">
-        <div className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div
+          ref={scrollerRef}
+          className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
         {scrolled ? (
           <button
             type="button"
@@ -82,7 +166,9 @@ export function EventTabNav({
         ) : (
           <a
             href="#overview"
-            className="shrink-0 px-3 py-3 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/55 transition-colors hover:text-[var(--event-accent,#228be6)]"
+            data-tab="overview"
+            aria-current={active === "overview" ? "true" : undefined}
+            className={tabClass("overview")}
           >
             Overview
           </a>
@@ -91,7 +177,9 @@ export function EventTabNav({
           <a
             key={tab.id}
             href={`#${tab.id}`}
-            className="shrink-0 px-3 py-3 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/55 transition-colors hover:text-[var(--event-accent,#228be6)]"
+            data-tab={tab.id}
+            aria-current={active === tab.id ? "true" : undefined}
+            className={tabClass(tab.id)}
           >
             {tab.label}
           </a>

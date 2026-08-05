@@ -53,6 +53,36 @@ function divisionLabel(row) {
   return who && what ? `${who} ${what}` : null;
 }
 
+/**
+ * ⚠ A DIVISION CAN HAVE MORE THAN ONE MEDAL-BEARING PRO DRAW, AND THE FIRST IS
+ * NOT ALWAYS THE CHAMPIONSHIP.
+ *
+ * The 2026 PPA Finals runs an open "Pro Main Draw" (single elimination off a
+ * Monday qualifier) AND a "Pro Top 8 Ranked" invitational round-robin. The
+ * invitational is the Finals. Taking the first Pro row would name Tama
+ * Shimabukuro & Yuta Funemizu the 2026 men's doubles champions instead of Ben
+ * Johns & Gabriel Tardio, in all five divisions.
+ *
+ * This file is currently unaffected — its one Finals mapping is the 2024 CIBC
+ * The Finals, which ran a single round-robin draw per division, so the committed
+ * defending-champions.json is right. The guard is here because the moment
+ * PRIOR_YEAR maps the 2027 Finals to the 2026 one, it would not be.
+ *
+ * Kept in step with scripts/gen-tournament-history.mjs and
+ * lib/tournament-history.ts, which share this rule.
+ */
+const CHAMPIONSHIP_DRAW = /\btop\s*\d+\b|\bchampionship\b|\binvitational\b/i;
+const BY_INVITATION = /by\s+invitation/i;
+
+function pickChampionshipDraw(rows) {
+  if (rows.length === 1) return rows[0];
+  return (
+    rows.find(
+      (r) => CHAMPIONSHIP_DRAW.test(r.Title ?? "") || BY_INVITATION.test(r.SubTitle ?? ""),
+    ) ?? rows[0]
+  );
+}
+
 async function podium(base, token, uuid) {
   const res = await fetch(`${base}/v1/pb_data/json?sp_name=API_v2_Tourney_GetEvents`, {
     method: "POST",
@@ -62,21 +92,22 @@ async function podium(base, token, uuid) {
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const json = await res.json();
 
-  const found = new Map();
+  // Collect candidates per division, then choose — see pickChampionshipDraw.
+  // Pro only: the feed also carries Amateur/Junior, and every division has a
+  // medal-less qualifier row that would render blank.
+  const byDivision = new Map();
   for (const row of json.payload ?? []) {
-    // Pro main draws only: the feed also carries Amateur/Junior, and every
-    // division has a medal-less qualifier row that would render blank.
     if (row.BracketLevelTitle !== "Pro") continue;
     if (row.NoMedalWasAwarded) continue;
-    const gold = (row.GoldTeamName ?? "").trim();
-    if (!gold) continue;
+    if (!(row.GoldTeamName ?? "").trim()) continue;
     const division = divisionLabel(row);
-    if (!division || found.has(division)) continue;
-    found.set(division, gold);
+    if (!division) continue;
+    if (!byDivision.has(division)) byDivision.set(division, []);
+    byDivision.get(division).push(row);
   }
-  return DIVISION_ORDER.filter((d) => found.has(d)).map((d) => ({
+  return DIVISION_ORDER.filter((d) => byDivision.has(d)).map((d) => ({
     division: d,
-    name: found.get(d),
+    name: (pickChampionshipDraw(byDivision.get(d)).GoldTeamName ?? "").trim(),
   }));
 }
 

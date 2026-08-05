@@ -171,13 +171,32 @@ export function EventConcierge({ facts }: { facts: ConciergeFacts }) {
   }
 
   return (
-    <>
+    /**
+     * ⚠ ANCHORED OFF THE BOTTOM CHROME, NOT A FIXED `bottom-20` (Wesley, 8/4:
+     * "Ask about this event and buy tickets bottom banner overlap"). Three
+     * things pin to the bottom edge on an event page and the launcher is the
+     * only one that wasn't accounting for the other two. Measured at 390px:
+     * launcher `bottom-20` put its lower edge at y 764, while the cookie banner
+     * (40px) stacked under the sticky buy bar (56px) put the bar's top edge at
+     * y 748 — a 16px overlap, and worse once the banner wraps to two lines.
+     *
+     * `--cookie-banner-h` is published by CookieBanner (0px once dismissed) and
+     * `--buy-bar-h` by globals.css, so the launcher clears whatever is actually
+     * down there and keeps a constant 1.5rem gap instead of moving as the buy
+     * bar slides in and out on scroll.
+     */
+    <div
+      style={{
+        bottom: "calc(var(--cookie-banner-h, 0px) + var(--buy-bar-h) + 1.5rem)",
+      }}
+      className="fixed right-4 z-40"
+    >
       {/* Launcher */}
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="fixed bottom-20 right-4 z-40 flex h-11 items-center gap-2 bg-ppa-blue px-4 text-[11px] font-bold uppercase tracking-[0.12em] text-white shadow-[0_12px_32px_-8px_rgba(7,34,58,0.5)] transition hover:bg-ppa-blue-deep active:scale-[0.97]"
+        className="flex h-11 items-center gap-2 bg-ppa-blue px-4 text-[11px] font-bold uppercase tracking-[0.12em] text-white shadow-[0_12px_32px_-8px_rgba(7,34,58,0.5)] transition hover:bg-ppa-blue-deep active:scale-[0.97]"
       >
         <span
           aria-hidden
@@ -188,9 +207,9 @@ export function EventConcierge({ facts }: { facts: ConciergeFacts }) {
         {open ? "Close" : "Ask about this event"}
       </button>
 
-      {/* Panel */}
+      {/* Panel — absolute so a closed panel never pushes the launcher around. */}
       <div
-        className={`fixed bottom-[8.25rem] right-4 z-40 flex w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden border border-ppa-line bg-white shadow-[0_24px_56px_-12px_rgba(7,34,58,0.45)] transition-all duration-300 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${
+        className={`absolute bottom-[calc(100%+0.75rem)] right-0 flex w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden border border-ppa-line bg-white shadow-[0_24px_56px_-12px_rgba(7,34,58,0.45)] transition-all duration-300 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${
           open
             ? "visible translate-y-0 opacity-100"
             : "invisible translate-y-3 opacity-0"
@@ -277,6 +296,6 @@ export function EventConcierge({ facts }: { facts: ConciergeFacts }) {
           </button>
         </form>
       </div>
-    </>
+    </div>
   );
 }

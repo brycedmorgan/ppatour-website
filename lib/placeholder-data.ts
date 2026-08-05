@@ -307,7 +307,20 @@ const BRAND_BY_SLUG: Record<
   string,
   { primary: string; accent: string; icon?: string; font?: "cormorant" }
 > = {
-  "veolia-pickleball-national-championships": { primary: "#023155", accent: "#C1272D", icon: "/ppa/badges/nationals.png", font: "cormorant" },
+  /**
+   * ⚠ NATIONALS NO LONGER OPTS INTO THE DISPLAY SERIF (Wesley, 8/4: the Events
+   * "heading font [is] not matching the rest of the site"). It was the only
+   * event that did, added 7/20 off the Nationals brand guide, and it swapped the
+   * face on the H1 AND every section H2 — so measured at 1440px the whole page
+   * rendered Cormorant 700 while all 19 other event pages and every other page
+   * on the site rendered Gotham 900. That is what read as inconsistent.
+   *
+   * The mechanism is intact, not deleted: `font` below and `.event-display` in
+   * globals.css still work, and with nothing opting in `.event-display` is
+   * byte-for-byte `.font-display`. Don't set `font` again without a ruling —
+   * turning it on for one event is what caused this.
+   */
+  "veolia-pickleball-national-championships": { primary: "#023155", accent: "#C1272D", icon: "/ppa/badges/nationals.png" },
   "rate-las-vegas-open": { primary: "#003058", accent: "#2088e0", icon: "/ppa/badges/las-vegas.png" },
   "veolia-chicago-cup": { primary: "#003058", accent: "#c8102e", icon: "/ppa/badges/chicago.png" },
   "virginia-beach-open": { primary: "#003058", accent: "#0078d0", icon: "/ppa/badges/virginia-beach.png" },

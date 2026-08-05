@@ -349,7 +349,10 @@ export function NationalsLive({
           sizes="100vw"
           className="animate-kenburns will-change-transform object-cover object-center motion-reduce:animate-none"
         />
-        <div className="absolute inset-0 scrim-hero" />
+        {/* Kept in step with app/events/[year]/[slug]/page.tsx — see the note on
+            `.scrim-hero-event` in globals.css. These two heroes render the same
+            event and drift silently. */}
+        <div className="absolute inset-0 scrim-hero-event" />
         {/* Soften the header→hero seam: navy fades down into the hero image. */}
         <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-32 bg-gradient-to-b from-ppa-navy to-transparent" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-10 pt-20">

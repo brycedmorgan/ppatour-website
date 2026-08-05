@@ -163,12 +163,18 @@ export function AthleteRoster({ athletes }: { athletes: RosterAthlete[] }) {
             label="Ranking"
             value={range}
             onChange={setRange}
+            // ⚠ "Top 25", not "Top 25 Each" (Wesley, 8/4). The filter is a rank
+            // cutoff applied to each gender's board, and "Each" was there to say
+            // so — but the Gender control sits right beside it, so a visitor who
+            // has already narrowed to Women reads "Each" as counting something
+            // they've just filtered away. The count line below states exactly
+            // which board(s) the cutoff ran against instead, where there's room
+            // to be precise.
             options={[
               { value: "all", label: "Everyone" },
-              // Per BOARD, not overall — see the count line below the controls.
-              { value: "10", label: "Top 10 Each" },
-              { value: "25", label: "Top 25 Each" },
-              { value: "50", label: "Top 50 Each" },
+              { value: "10", label: "Top 10" },
+              { value: "25", label: "Top 25" },
+              { value: "50", label: "Top 50" },
             ]}
           />
           <Select
@@ -190,7 +196,14 @@ export function AthleteRoster({ athletes }: { athletes: RosterAthlete[] }) {
           answers the separate "how many pros are on here?" question. */}
       <p className="mt-5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/45">
         Showing {shown.length} of {athletes.length} pros
-        {range !== "all" && ` · top ${range} of each world ranking board`}
+        {range !== "all" &&
+          ` · top ${range} of ${
+            gender === "male"
+              ? "the men's world ranking"
+              : gender === "female"
+                ? "the women's world ranking"
+                : "each world ranking board"
+          }`}
       </p>
 
       {shown.length === 0 ? (

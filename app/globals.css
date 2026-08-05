@@ -343,6 +343,42 @@
     );
   }
 }
+/* Event hero (Wesley, 8/4: "might need to have an opacity over the whole hero
+   on mobile screens").
+
+   .scrim-hero on its own is bottom-weighted — 0.97 at the foot down to 0.08 at
+   the top — which is right on desktop, where the content column is a band across
+   the lower third and the top of the photo is empty sky. On a phone the same
+   content fills nearly the whole hero: the tier badge and countdown sit at the
+   top, and a full sponsored event name ("Veolia Pickleball National
+   Championships") wraps to four lines through the middle. All of that white type
+   lands where the gradient has thinned to 0.08-0.55, over an aerial of a sunlit
+   court.
+
+   So below lg the gradient gets an even veil UNDER it — the gradient still does
+   the heavy lifting at the foot where the CTA is, and the veil is what carries
+   the badge and the headline. Above lg nothing changes. */
+.scrim-hero-event {
+  background:
+    linear-gradient(
+      to top,
+      rgba(7, 34, 58, 0.97) 0%,
+      rgba(7, 34, 58, 0.55) 42%,
+      rgba(7, 34, 58, 0.08) 100%
+    ),
+    rgba(7, 34, 58, 0.52);
+}
+@media (min-width: 1024px) {
+  .scrim-hero-event {
+    background: linear-gradient(
+      to top,
+      rgba(7, 34, 58, 0.97) 0%,
+      rgba(7, 34, 58, 0.55) 42%,
+      rgba(7, 34, 58, 0.08) 100%
+    );
+  }
+}
+
 .scrim-card {
   background: linear-gradient(
     to top,
@@ -422,6 +458,23 @@ html[data-motion="on"] [data-reveal-group] > * {
 html[data-motion="on"] [data-reveal-group].is-revealed > * {
   opacity: 1;
   transform: none;
+}
+
+/**
+ * Height of the site-wide sticky buy bar (StickyBuyBar's `h-14`).
+ *
+ * Bottom-fixed chrome that has to sit ABOVE the buy bar stacks off this plus
+ * `--cookie-banner-h` (which CookieBanner publishes, and sets to 0px once the
+ * banner is dismissed). Today the only such thing is the event page's concierge
+ * launcher, which was hard-coded to `bottom-20` and measured 16px INTO the buy
+ * bar at 390px with the cookie banner still up.
+ *
+ * ⚠ Keep in step with StickyBuyBar's `h-14`. Declared here rather than measured
+ * at runtime on purpose: the bar slides out of view on scroll, and anything
+ * measuring its live box would drift up and down the screen with it.
+ */
+:root {
+  --buy-bar-h: 3.5rem;
 }
 
 :root {

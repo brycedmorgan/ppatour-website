@@ -43,22 +43,34 @@ export const tourPrograms: TourProgram[] = [
     cta: { label: "Register a Junior Player", href: REGISTER_PPA, external: true },
     image: "/ppa/action-singles.jpg",
   },
+  /**
+   * ⚠ THIS ENTRY NO LONGER RENDERS A PAGE — /tour/senior is its own route, same
+   * as `junior`. It stays because nav, the sitemap, site search and the other
+   * programs' cross-link grids read this list, and `senior` is in that route's
+   * HAS_OWN_ROUTE set so no dead duplicate is prerendered.
+   *
+   * ⚠ THE COPY BELOW WAS INVENTED AND IS NOW CORRECTED TO ppatour.com/senior-open/
+   * (Wesley, 8/4). It used to state age brackets "50+, 55+, 60+, 65+, 70+, 75+",
+   * skill brackets "3.5, 4.0, 4.5, 5.0", and a "Senior Nationals ... at the
+   * Pickleball World Championships in Dallas". The live page states none of
+   * those. It is also the **Humana** Senior Open — a sponsored program, which is
+   * why the page has a sponsor section. Keep this in step with that route.
+   */
   {
     slug: "senior",
     label: "Senior Open",
     eyebrow: "For Players 50+",
-    headline: "Seniors Competition at Every Tournament",
-    sectionHeadline: "Top Competition Exclusive to Seniors at Every Carvana PPA Tour Stop",
+    headline: "Humana Senior Open",
+    sectionHeadline: "Top Competition for Players 50 and Over at Carvana PPA Tour Stops",
     body: [
-      "The Senior Open is the PPA's dedicated 50+ amateur circuit — separate brackets, separate seedings, and national rankings that run all season.",
-      "The PPA values senior pickleball competition and is thrilled to provide dedicated brackets at every Carvana PPA Tour destination.",
-      "Senior divisions are split by age (50+, 55+, 60+, 65+, 70+, 75+) and skill (3.5, 4.0, 4.5, 5.0), with singles, doubles, and mixed doubles at every tour stop.",
+      "The Humana Senior Open events bring together the best players aged 50 and older, showcasing their skills and passion for the game. These competitions are held as part of the Carvana PPA Tour, adding an extra layer of action and camaraderie to the tour stops.",
+      "Brackets run in singles, doubles and mixed doubles, on the same grounds and in the same week as the pros.",
     ],
     bullets: [
-      { title: "Age brackets", detail: "50+, 55+, 60+, 65+, 70+, 75+ in every tournament." },
-      { title: "Skill brackets", detail: "3.5, 4.0, 4.5, 5.0 — find your level, play your match." },
-      { title: "Senior Nationals", detail: "Top seniors compete for the season-end title in each age and skill bracket at the Pickleball World Championships in Dallas." },
-      { title: "Same venues, same weekends", detail: "Play alongside the pro tour at every tour stop." },
+      { title: "Who plays", detail: "Players 50 and older, at Carvana PPA Tour stops." },
+      { title: "Events", detail: "Singles, doubles and mixed doubles." },
+      { title: "Senior points", detail: "Points are awarded per division and scale with the tournament tier." },
+      { title: "Prize money", detail: "Every division pays out, from a pool set by the size of its field." },
     ],
     cta: { label: "Register for a Senior Bracket", href: REGISTER_PPA, external: true },
     image: "/ppa/action-md-final.jpg",

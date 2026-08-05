@@ -667,14 +667,32 @@ export async function HomeContent({
                   height={16}
                 />
               </div>
-              <div className="mt-3 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-2 lg:grid-cols-4">
+              {/**
+               * ⚠ SWIPE RAIL BELOW sm, GRID FROM sm UP (Wesley, 8/4: "make
+               * pickleball.com a carousel on mobile"). As a stacked grid these
+               * four cards each ran full-width with a 16:9 image, so the row was
+               * roughly four screens of somebody else's headlines sitting between
+               * our newsroom and the schedule. Same treatment as the five
+               * homepage callouts (7/31) and the event gallery.
+               *
+               * Cards are 68vw so the NEXT ONE ALWAYS PEEKS — that peek is the
+               * only affordance saying "swipe", so don't widen it to 100vw.
+               *
+               * ⚠ `bg-ppa-line` is `sm:` ONLY. It is the hairline trick for the
+               * `gap-px` grid, and on the rail the element also carries `px-4`
+               * (to bleed full-width while keeping the first card on the content
+               * margin) — a line-coloured background under horizontal padding
+               * paints a pale strip down both outer edges. That exact pairing put
+               * one down the /vacations stat band on 8/4.
+               */}
+              <div className="-mx-4 mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-px sm:overflow-visible sm:border sm:border-ppa-line sm:bg-ppa-line sm:px-0 sm:pb-0 lg:grid-cols-4 [&::-webkit-scrollbar]:hidden">
                 {ecosystem.map((e) => (
                   <a
                     key={e.url}
                     href={e.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex flex-col bg-white transition-colors hover:bg-ppa-paper"
+                    className="group flex w-[68vw] shrink-0 snap-start flex-col border border-ppa-line bg-white transition-colors hover:bg-ppa-paper sm:w-auto sm:shrink sm:border-0"
                   >
                     <span className="relative block aspect-[16/9] overflow-hidden bg-ppa-navy-deep">
                       {e.imageUrl && (
@@ -682,7 +700,7 @@ export async function HomeContent({
                           src={e.imageUrl}
                           alt={e.imageAlt}
                           fill
-                          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 68vw"
                           className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
                         />
                       )}

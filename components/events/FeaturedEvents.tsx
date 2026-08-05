@@ -40,7 +40,18 @@ export function FeaturedEvents({
             {kicker}
           </p>
         </div>
-        <Heading className="mt-2 font-display text-2xl uppercase leading-[1.02] sm:text-3xl">
+        {/* A page H1 takes the site's top heading step, a section H2 the one
+            below it. Same component serves both, so the size follows the level:
+            as an H2 on the homepage this is text-2xl/3xl like every other
+            section heading, and as the /events H1 it is text-3xl/4xl. Measured
+            at 1440px before this, /events rendered its H1 at 30px above a 36px
+            H2 — the page's own title was a step SMALLER than the heading under
+            it, which is what read as out of keeping with the rest of the site. */}
+        <Heading
+          className={`mt-2 font-display uppercase leading-[1.02] ${
+            Heading === "h1" ? "text-3xl sm:text-4xl" : "text-2xl sm:text-3xl"
+          }`}
+        >
           {title}
         </Heading>
         {subtitle && (
