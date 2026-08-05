@@ -10,6 +10,7 @@ import {
   ageFromDob,
   getPublishedAthlete,
   publishedAthletes,
+  redactPersonalLife,
   turnedProYear,
 } from "@/lib/published-athletes";
 import {
@@ -73,12 +74,16 @@ async function loadAthlete(slug: string) {
   const divisions = published?.divisions.length
     ? published.divisions
     : (curated?.divisions ?? []);
+  /**
+   * Published bios are redacted in `cleanBio`; the curated fallback is not, so it
+   * goes through the same rule here. No pro's family details, whatever the source.
+   */
   const bio: string[] = published?.bio.length
     ? published.bio
-    : [
+    : redactPersonalLife([
         curated?.bio ??
           `${name} is a professional pickleball player ranked among the world's best in the Carvana PPA Tour's World Pickleball Rankings.`,
-      ];
+      ]);
 
   return {
     slug,

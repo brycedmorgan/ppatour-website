@@ -148,8 +148,6 @@ const KEEP_ORDER = [
   "Notable Achievements",
   "Notable Results",
   "Achievements",
-  "Personal Life",
-  "Personal",
 ];
 /**
  * Everything from one of these to the end of the bio is dropped.
@@ -159,12 +157,21 @@ const KEEP_ORDER = [
  * as prose — 13 published pages ended with sentences like "Frequently Asked
  * Questions About Kate Fahey Is Kate Fahey on the PPA Tour? Yes, Kate Fahey is
  * a professional pickleball player…". It is never body copy; stop at it.
+ *
+ * ⚠ "Personal Life" / "Personal" moved here from KEEP_ORDER (Wesley, 8/5 — see
+ * {@link isPersonalLife}). A whole section about a pro's private life is exactly
+ * what we don't publish. No raw bio carries either header today (verified: 0
+ * matches, and 0 occurrences of a standalone capitalised "Personal" anywhere in
+ * the 179 bios, so the bare form can't truncate a bio mid-prose) — they are here
+ * for the NEXT scrape, which is the whole point of fixing this in code.
  */
 const STOP_HEADERS = [
   "Related Articles",
   "Frequently Asked Questions",
   "Off the Court",
   "Off Court",
+  "Personal Life",
+  "Personal",
 ];
 
 /**
@@ -192,6 +199,104 @@ const BOUNDARY_HEADERS = ["Major League Pickleball"];
 const ALL_HEADERS = ["Quick Facts", ...KEEP_ORDER, ...STOP_HEADERS];
 const PLAIN_HEADERS = ALL_HEADERS.filter((h) => !BOUNDARY_HEADERS.includes(h));
 const STOP = new Set(STOP_HEADERS);
+
+/* ---------------- personal-life redaction ---------------- */
+
+/**
+ * Spouses, partners and marital status. These are never on-court facts, so the
+ * whole sentence goes. `fianc` / `pregnan` / `divorc` / `widow` are matched as
+ * stems because no other English word starts that way, which saves spelling out
+ * fiance/fiancé/fiancée.
+ *
+ * ⚠ "partner" is deliberately absent. On this site it means DOUBLES partner.
+ */
+const RELATIONSHIP =
+  /\b(?:wife|wives|husband|husbands|spouse|spouses|girlfriend|boyfriend|newlywed\w*|marriage|married|wedding)\b|\bfianc|\bdivorc|\bwidow|\bpregnan/i;
+
+/**
+ * Adjectives and counts that legitimately sit between a possessive and a family
+ * noun ("their two young daughters", "the couple's two-year-old daughter").
+ *
+ * ⚠ THIS IS A WHITELIST ON PURPOSE, and a generic `\w+{0,3}` in its place is the
+ * bug it exists to prevent: "volunteering his time teaching kids pickleball"
+ * puts two ordinary words between "his" and "kids", so a loose gap match reads
+ * a coaching sentence as a family one and deletes it.
+ */
+const CHILD_MODIFIER =
+  /(?:\d+|two|three|four|five|six|seven|eight|twin|young|younger|youngest|old|older|oldest|eldest|little|new|newborn|adult|beautiful|proud|step|year|years|month|months|old)/
+    .source;
+
+/**
+ * ⚠ `twins` IS PLURAL-ONLY, and singular "twin" must never be a noun here.
+ * Three sentences were lost to `twins?` before this was tightened, and all three
+ * were about FELLOW PROS: Hunter Johnson's ATP ranking and ITF titles won
+ * alongside "his twin brother Yates", and both Kawamotos' tennis careers with
+ * "her twin sister" — who is also her doubles partner. Siblings are not in scope
+ * (see {@link isPersonalLife}); "twin" survives only as a modifier, so "their
+ * twin daughters" still matches on "daughters".
+ */
+const CHILD_NOUN = /(?:sons?|daughters?|child|children|kids?|bab(?:y|ies)|twins)/.source;
+
+/**
+ * Children, but ONLY when possessed by the athlete or their spouse.
+ *
+ * ⚠ The possessive tie is the entire test, because the bare nouns are ordinary
+ * pickleball vocabulary. Verified against all 179 raw bios — these all stay, and
+ * a rule without the tie deleted every one of them:
+ *   · "coaching adults, teens, and children for over three years"
+ *   · "volunteering his time teaching kids pickleball"
+ *   · "enjoys traveling, cooking, working with kids"
+ *   · "'the kids are the future of the sport,' and I truly believe this"
+ * Upbringing with nobody named also stays ("the sixth of eight children", "the
+ * middle child of seven siblings") — no possessive, so no match.
+ */
+const OWN_CHILDREN = new RegExp(
+  [
+    // "his son", "her youngest daughter", "their two young daughters", "Maja's two kids"
+    `\\b(?:his|her|their|our|my|[A-Z][a-z]+['’]s)\\s+(?:${CHILD_MODIFIER}[\\s-]+){0,3}${CHILD_NOUN}\\b`,
+    // "the birth of her son", "welcomed his first child"
+    `\\bbirth of (?:his|her|their|my)\\b`,
+    // "the mother of two children", "the proud parents of two daughters"
+    `\\b(?:mother|father|parents|dad|mom|stepmother|stepfather)\\s+(?:of|to)\\s+(?:(?:${CHILD_MODIFIER})[\\s-]+){0,3}${CHILD_NOUN}\\b`,
+    `\\bexpecting (?:a|an|his|her|their)\\b`,
+    `\\bgrandchild`,
+  ].join("|"),
+);
+
+/**
+ * True when a sentence is about a pro's private life rather than their
+ * pickleball. Wesley, 8/5: don't publish family details — the ask started with
+ * Jack Sock's bio ("Sock welcomed his first child alongside his wife Laura"),
+ * and applies to every pro.
+ *
+ * ⚠ SENTENCES ARE DROPPED WHOLE, NEVER REWRITTEN. Same rule as `lib/bio-live.ts`
+ * — we substitute or remove, we do not author prose. So a sentence that carries
+ * a career fact AND a family detail loses both, and there are five of those
+ * across the roster (brooke-buckner's start date, lina-padegimaite's training,
+ * lindsey-newman's 2021 Nationals win, tina-pisnik's move to Chicago, and
+ * martin-emmrich's tennis background + how he started). Recovering those means
+ * an editor rewriting the sentence in the source data — the alternative is this
+ * cleaner inventing sentences, which is worse.
+ */
+function isPersonalLife(s: string): boolean {
+  return RELATIONSHIP.test(s) || OWN_CHILDREN.test(s);
+}
+
+/**
+ * Strip personal-life sentences from already-assembled paragraphs.
+ *
+ * Scraped bios are redacted inside {@link cleanBio}, so this exists for the
+ * OTHER bios the profile page can render: the hand-written curated ones in
+ * `lib/athletes.ts` (clean today, but nothing stopped the next hand-edit) and
+ * any future source. `/athletes/[slug]` runs its fallback bio through this so
+ * the rule holds for every pro, not just the 179 with a scraped profile.
+ */
+export function redactPersonalLife(paragraphs: string[]): string[] {
+  return paragraphs
+    .map((p) => splitSentences(p).filter((s) => !isPersonalLife(s)))
+    .filter((kept) => kept.length > 0)
+    .map((kept) => tidy(kept.join(" ")));
+}
 
 const norm = (s: string | null | undefined) => (s || "").replace(/\s+/g, " ").trim();
 
@@ -344,6 +449,9 @@ function cleanBio(rawBio: string | null, name: string): { headline: string | nul
       const wasAnswer = dropAnswer;
       dropAnswer = false;
       if (wasAnswer && isBoilerplateAnswer(s)) continue;
+
+      // Spouses, children, marital status — never published. See isPersonalLife.
+      if (isPersonalLife(s)) continue;
 
       const k = dedupeKey(s);
       // Drop dupes, tiny fragments, and leftover "Paddle:" boilerplate
