@@ -10,7 +10,6 @@ import { FirstServeCountdown } from "@/components/events/FirstServeCountdown";
 import { EventGallery } from "@/components/events/EventGallery";
 import { EventSponsors } from "@/components/events/EventSponsors";
 import { RegisteredCount } from "@/components/events/RegisteredCount";
-import { VenueMap } from "@/components/events/VenueMap";
 import { VolunteerModalButton } from "@/components/events/VolunteerModalButton";
 import { BookGroupRateLink } from "@/components/events/BookGroupRateLink";
 import { publishedHotelsFor } from "@/lib/published-hotels";
@@ -1103,13 +1102,31 @@ export default async function EventPage({ params }: Params) {
             Your Day at {t.venue}
           </h2>
           <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
-            Find your way around the grounds, then check the essentials —
-            gates, parking, and what to bring.
+            Get the lay of the land, then check the essentials — gates,
+            parking, and what to bring.
           </p>
 
           <div className="mt-6 grid gap-10 lg:grid-cols-[1.5fr_1fr]">
-            <div data-reveal>
-              <VenueMap venue={t.venue} />
+            {/* A real aerial of the grounds (venue photo, aerial-first), not an
+                illustrative map. Always resolves: gallery photo → event hero. */}
+            <div data-reveal className="self-start">
+              <div className="relative aspect-[4/3] overflow-hidden border border-ppa-line bg-ppa-navy">
+                <Image
+                  src={t.gallery?.[1] ?? t.gallery?.[0] ?? t.image}
+                  alt={`${t.venue} — the grounds`}
+                  fill
+                  sizes="(min-width: 1024px) 55vw, 100vw"
+                  className="object-cover"
+                />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-ppa-navy/90 via-ppa-navy/25 to-transparent p-5 pt-16">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/65">
+                    The Grounds
+                  </p>
+                  <p className="mt-0.5 event-display text-lg uppercase leading-tight text-white sm:text-xl">
+                    {t.venue}
+                  </p>
+                </div>
+              </div>
             </div>
 
             <div data-reveal className="flex flex-col gap-px border border-ppa-line bg-ppa-line">
