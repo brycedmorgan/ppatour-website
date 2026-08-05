@@ -19,6 +19,7 @@ import {
   type Traveler,
 } from "@/lib/vacations/registration";
 import { trip } from "@/lib/vacations/content";
+import { VacationsEmbeddedCheckout } from "@/components/vacations/VacationsEmbeddedCheckout";
 
 const inputCls =
   "w-full border border-ppa-line bg-white px-4 py-3 text-sm text-ppa-navy placeholder:text-ppa-navy/35 transition focus:border-vac-teal focus:outline-none focus:ring-2 focus:ring-vac-teal/25";
@@ -69,6 +70,9 @@ export function RegistrationForm({
   ]);
   const [errors, setErrors] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  // Set once the server returns an embedded-checkout session; when present we
+  // render Stripe's payment form in place of this form instead of redirecting.
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
 
   const option = PRICING[occupancy];
   const count = option.travelers;
@@ -110,7 +114,13 @@ export function RegistrationForm({
         setSubmitting(false);
         return;
       }
-      if (data.url) {
+      if (data.clientSecret) {
+        // Embedded: swap this form for Stripe's in-page payment form.
+        track("checkout_start", { occupancy });
+        setClientSecret(data.clientSecret as string);
+        setSubmitting(false);
+      } else if (data.url) {
+        // Hosted fallback (publishable key not set): redirect to Stripe.
         // Beacon before the redirect — sendBeacon survives the unload.
         track("checkout_start", { occupancy });
         window.location.href = data.url as string;
@@ -122,6 +132,21 @@ export function RegistrationForm({
       setErrors(["Network error. Please check your connection and try again."]);
       setSubmitting(false);
     }
+  }
+
+  // Embedded Checkout takes over once we have a session — same page, our chrome.
+  if (clientSecret) {
+    return (
+      <div>
+        <h2 className="font-display text-xl uppercase leading-tight text-ppa-navy">
+          Complete your payment
+        </h2>
+        <p className="mb-6 mt-1 text-sm text-ppa-navy/55">
+          Secured by Stripe. Your card details never touch our servers.
+        </p>
+        <VacationsEmbeddedCheckout clientSecret={clientSecret} />
+      </div>
+    );
   }
 
   return (

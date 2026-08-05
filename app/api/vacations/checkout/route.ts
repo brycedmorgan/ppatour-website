@@ -62,12 +62,20 @@ export async function POST(req: NextRequest) {
     metadata[`traveler${n}_skill`] = t.skillLevel;
   });
 
+  // Embedded Checkout renders the payment form inside our own /vacations page
+  // instead of redirecting to Stripe's hosted page — but it needs the publishable
+  // key on the client. When that key is set we serve an embedded session (return
+  // client_secret); until then we fall back to the hosted redirect, so deploying
+  // this can never break the working checkout.
+  const embedded = !!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+
   try {
     const stripe = getStripe();
     const lead = payload.travelers[0];
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
+      ...(embedded ? { ui_mode: "embedded" as const } : {}),
       customer_email: lead.email,
       line_items: [
         {
@@ -87,11 +95,19 @@ export async function POST(req: NextRequest) {
       // Trailing slashes are deliberate: next.config sets `trailingSlash: true`,
       // so the bare path would cost every paying guest a 308 on the way back
       // from Stripe.
-      success_url: `${origin}/vacations/success/?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/vacations/register/?occupancy=${payload.occupancy}&canceled=1`,
+      ...(embedded
+        ? {
+            return_url: `${origin}/vacations/success/?session_id={CHECKOUT_SESSION_ID}`,
+          }
+        : {
+            success_url: `${origin}/vacations/success/?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${origin}/vacations/register/?occupancy=${payload.occupancy}&canceled=1`,
+          }),
     });
 
-    return NextResponse.json({ url: session.url });
+    return NextResponse.json(
+      embedded ? { clientSecret: session.client_secret } : { url: session.url },
+    );
   } catch (err) {
     const detail = err instanceof Error ? err.message : "Unknown error";
     const notConfigured = detail.includes("STRIPE_SECRET_KEY");
