@@ -35,6 +35,42 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-05 (pt. 10) — LAUNCH DAY: ppatour.com cut over to the new site + post-launch fixes
+- **ppatour.com is LIVE on this site.** Bryce did the Cloudflare cutover (TXT ownership verify to
+  move the domain off the old Vercel account, then apex + www CNAME → `92c7d0fad773651c.vercel-dns-016.com`,
+  DNS-only). Verified end to end: SSL good, apex→www 308, legacy 301s land (`/schedule`→`/events`,
+  `/athlete/x`→`/athletes/x`), blog images serve from Blob, GA4 firing, **MX/email untouched** (still Google).
+- **⚠ THE PLANNED "push main" WOULD HAVE RED-BUILT THE LAUNCH** (pt.4/5 detail): the blog commits
+  referenced 57 images still on ppatour.com; `prebuild` gate exits 1. Held them on a branch, shipped
+  launch-safe subset, then Bryce's Blob token unblocked the media sync (57 assets → Blob) and the blog
+  work shipped clean.
+- **Fixes shipped after launch (all live + verified):**
+  - **Nationals hero** → the packed championship-court crowd shot (`nationals-championship-court.jpg`),
+    pinned via `HERO_OVERRIDE_BY_EVENT_SLUG` (venueHeroFor wins over the record's `image`).
+  - **Placeholder VenueMap deleted** → real venue aerial in the "At the Venue" slot on event pages +
+    NationalsLive. **⚠ fill-image-behind-overlay needs `animate-kenburns` (a real transform) to paint —
+    `will-change`/`transform-gpu` alone (2D identity matrix) does NOT force the layer.**
+  - **Sponsor logos**: MOJO/Picklr/Zyia were `.svg` → **`next/image` 400s SVG *via the optimizer proxy*,
+    but renders a plain `<img src>` SVG fine** (that's why /watch's network SVGs were NOT broken — verify
+    before "fixing"). Rasterized to PNG. MOJO's SVG was the reversed (white) cut → recoloured. **JOOLA,
+    Proton, Six Zero, Life Time → "Official Platinum Partner"** (Bryce).
+  - **Broadcast "Where to Watch"** (homepage): real FOX + Tennis Channel + MatchDay (App Store icon)
+    marks, bigger, white chips removed. Event-page cards kept the chip (dark bg).
+  - **3 fabricated /news articles drafted** (Hartman/Bricker, Priya Anand, Safdar-about-a-real-pro) —
+    Bryce approved. 3 real-name/invented-stat ones flagged to **Dillon Segur** (d.segur@ppatour.com) via
+    a Gmail draft, for him + Dylan to rewrite. **⚠ the homepage `matches` array is placeholder — pt.9
+    covers the live-scores exposure.**
+  - **Vacations LIVE on the new site**: Bryce set `STRIPE_SECRET_KEY` (a restricted `rk_live_` key) +
+    re-pointed the webhook to `/api/vacations/stripe-webhook` + `STRIPE_WEBHOOK_SECRET`. Flipped
+    `/vacations` back to indexed + into the sitemap. availability `known:true`.
+  - **OG share card**: crowd hero bg + real `ppa-horizontal-white` logo top-left. **⚠ Satori needs
+    explicit numeric `width`/`height` on `<img>` — `width:"auto"` renders nothing.**
+  - `/about/how-it-works`: forced the space in "just gender doubles" with `{" "}` (JSX collapsed it).
+- **⚠ OPEN (Bryce's): redirect `vacations.ppatour.com` → www.ppatour.com, path+query preserving**
+  (guests hold `/success?session_id=cs_live_…` links; new-site 301 map adds the `/vacations` prefix).
+  It still serves the old standalone app (76.76.21.21). Also: confirm the `rk_live_` key has
+  Checkout-Sessions *write* scope (one manual Reserve click on /vacations).
+
 ### 2026-08-05 (pt. 9) — The homepage was publishing FABRICATED live scores on an API blip
 - Wesley: *"sometimes the 'latest champions' section on the home page shows the live scores instead
   even if we are not live."* It is worse than a wrong section: **the scores it showed were invented.**
