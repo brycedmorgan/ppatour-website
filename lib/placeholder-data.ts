@@ -324,6 +324,9 @@ const BRAND_BY_SLUG: Record<
   "ppa-finals": { primary: "#0c2b44", accent: "#c9a227", icon: "/ppa/badges/ppa-finals.png" },
   "sacramento-open": { primary: "#0a2540", accent: "#2088e0", icon: "/ppa/badges/sacramento.png" },
   "texas-open": { primary: "#0a2540", accent: "#2088e0", icon: "/ppa/badges/texas.png" },
+  // Temporary: the Players Championships (Atlanta) has no portrait badge card yet,
+  // so the primary logo is set on a white card to match the badge set (Tyler, 8/4).
+  "atlanta-pickleball-championships": { primary: "#0a2540", accent: "#e8825a", icon: "/ppa/badges/players-championships.png" },
 };
 
 // Real commerce deep links per generated slug (verified against the live
