@@ -72,7 +72,10 @@
   @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,91,76,.5)}70%{box-shadow:0 0 0 8px rgba(255,91,76,0)}100%{box-shadow:0 0 0 0 rgba(255,91,76,0)}}
 
   /* hero — one plain statement, then the product */
-  .hero{padding:92px 0 28px}
+  /* ⚠ .hero/.stage/.join are ALSO .wrap, so a `padding` SHORTHAND here resets
+     .wrap's 0 24px gutter to zero. Above ~1128px the centred max-width hides it;
+     at 390px the headline sat flush against the screen edge. Use padding-block. */
+  .hero{padding-block:92px 28px}
   /* ⚠ THE ONE JUDGEMENT CALL IN THIS PASS. The page was all-lowercase geometric
      (a stand-in chosen before we had the kit). PBTV's actual display face is
      Prohibition — condensed, UPPERCASE — and every frame in the guide reads that
@@ -92,7 +95,7 @@
   .btn-g:hover{border-color:rgba(255,255,255,.28)}
 
   /* the product: full-width live channel */
-  .stage{padding:16px 0 8px}
+  .stage{padding-block:16px 8px}
   .player{display:block;position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);aspect-ratio:16/8;
     background:#000000;box-shadow:0 50px 120px -50px rgba(0,0,0,.85)}
   .player canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -182,7 +185,7 @@
   .player .scrub span{position:absolute;left:0;top:0;bottom:0;width:63%;background:var(--green);box-shadow:0 0 12px 0 rgba(80,130,80,.7)}
   .player .scrub span::after{content:"";position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 10px 1px rgba(80,130,80,.9)}
   /* subscribe + follow */
-  .join{display:grid;grid-template-columns:1fr;gap:46px;padding:14px 0}
+  .join{display:grid;grid-template-columns:1fr;gap:46px;padding-block:14px}
   @media(min-width:820px){.join{grid-template-columns:1.25fr 1fr;gap:64px;align-items:start}}
   .jlab{font-family:var(--display);font-size:clamp(1.65rem,3.2vw,2.3rem);font-weight:500;letter-spacing:.01em;text-transform:uppercase;margin:0}
   .jsub{color:var(--muted);margin:12px 0 22px;font-size:15px;max-width:44ch}
