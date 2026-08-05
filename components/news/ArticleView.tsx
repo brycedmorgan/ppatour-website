@@ -86,6 +86,10 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
             priority
             sizes="100vw"
             className="object-cover object-center"
+            /* Per-article anchor, inline because the value is data — a dynamic
+               Tailwind class would not survive the JIT scan. Unset on every
+               other article, so `object-center` above still wins there. */
+            style={card.imagePosition ? { objectPosition: card.imagePosition } : undefined}
           />
         )}
         <div className={`absolute inset-0 ${card.image ? "scrim-hero" : "bg-ppa-navy-deep"}`} />

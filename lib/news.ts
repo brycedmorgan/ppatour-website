@@ -54,6 +54,8 @@ export type NewsCard = {
    */
   postType: WpPostType;
   eventSlug?: string;
+  /** Hero-only `object-position` override; unset = `object-center`. Native only. */
+  imagePosition?: string;
 };
 
 /**
@@ -142,6 +144,7 @@ function nativeToCard(a: NewsArticle): NewsCard {
     dek: cleanDek(a.dek),
     image: a.image,
     imageAlt: "",
+    imagePosition: a.imagePosition,
     author: HOUSE_BYLINE,
     publishedAt,
     displayDate: displayDateFromIso(publishedAt),
