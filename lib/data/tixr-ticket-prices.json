@@ -1,9 +1,9 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-08-04T15:15:32Z",
+  "generated_at": "2026-08-05T16:06:07Z",
   "event_count": 61,
-  "ticket_type_count": 891,
+  "ticket_type_count": 896,
   "series_breakdown": {
     "Major League Pickleball": 16,
     "PPA Challenger Series": 4,
@@ -1803,14 +1803,21 @@
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 156.66
+          "all_in_price": 135.05
         },
         {
           "name": "Thursday Courtside+",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 135.05
+          "all_in_price": 156.66
+        },
+        {
+          "name": "Thursday Grandstand (Round of 16)",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
         },
         {
           "name": "Thursday On Court VIP",
@@ -1932,6 +1939,13 @@
           "name": "Friday Evening Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Friday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
           "base_price": 60,
           "all_in_price": 70.23
         },
@@ -1943,11 +1957,11 @@
           "all_in_price": 91.83
         },
         {
-          "name": "Friday Evening Courtside",
+          "name": "Friday Evening Courtside+",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 46.56
+          "all_in_price": 135.05
         },
         {
           "name": "Friday Evening Courtside+",
@@ -1957,11 +1971,11 @@
           "all_in_price": 156.66
         },
         {
-          "name": "Friday Evening Courtside+",
+          "name": "Friday Evening Grandstand (Men's and Women's Doubles Quarterfinals)",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 135.05
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
         },
         {
           "name": "Friday Evening On Court VIP",
@@ -2115,6 +2129,13 @@
           "all_in_price": 156.66
         },
         {
+          "name": "Friday Morning Grandstand (Singles & Mxd Doubles Quarterfinals)",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
           "name": "Friday Morning On Court VIP",
           "category": "STANDARD",
           "sale_state": "HIDE",
@@ -2261,8 +2282,8 @@
         {
           "name": "Saturday Evening Courtside+",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 160,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 178.27
         },
         {
@@ -2405,22 +2426,22 @@
         {
           "name": "Saturday Morning Courtside+",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 199.88
+          "sale_state": "OPEN",
+          "base_price": 160,
+          "all_in_price": 178.27
         },
         {
           "name": "Saturday Morning Courtside+",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 178.27
+          "sale_state": "OPEN",
+          "base_price": 180,
+          "all_in_price": 199.88
         },
         {
           "name": "Saturday Morning On Court VIP",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 400,
           "all_in_price": 437.59
         },
         {
@@ -2566,6 +2587,13 @@
           "sale_state": "OPEN",
           "base_price": 220,
           "all_in_price": 243.1
+        },
+        {
+          "name": "Sunday Grandstand (Bronze Medal Matches)",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
         },
         {
           "name": "Sunday On Court VIP",
@@ -4478,6 +4506,13 @@
           "sale_state": "SOLD_OUT",
           "base_price": null,
           "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.69
         },
         {
           "name": "Weeklong Courtside Bleacher",

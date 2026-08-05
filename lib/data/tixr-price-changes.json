@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-04T15:15:32Z",
+  "updated_at": "2026-08-05T16:06:07Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -640,6 +640,185 @@
       "type": "event_removed",
       "event_id": "166227",
       "event": "PPA Challenger Series - Wisconsin"
+    },
+    {
+      "at": "2026-08-05T16:06:07Z",
+      "type": "price_change",
+      "event_id": "184767",
+      "event": "Veolia Pickleball National Championships Thursday - Round of 16",
+      "ticket": "Thursday Courtside+",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 135.05,
+        "to": 156.66
+      }
+    },
+    {
+      "at": "2026-08-05T16:06:07Z",
+      "type": "ticket_added",
+      "event_id": "184767",
+      "event": "Veolia Pickleball National Championships Thursday - Round of 16",
+      "ticket": "Thursday Grandstand (Round of 16)",
+      "base_price": 40,
+      "all_in_price": 46.56
+    },
+    {
+      "at": "2026-08-05T16:06:07Z",
+      "type": "price_change",
+      "event_id": "184766",
+      "event": "Veolia Pickleball National Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening Courtside",
+      "base_price": {
+        "from": null,
+        "to": 80
+      },
+      "all_in_price": {
+        "from": 46.56,
+        "to": 91.83
+      }
+    },
+    {
+      "at": "2026-08-05T16:06:07Z",
+      "type": "availability_change",
+      "event_id": "184766",
+      "event": "Veolia Pickleball National Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening Courtside",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-08-05T16:06:07Z",
+      "type": "price_change",
+      "event_id": "184766",
+      "event": "Veolia Pickleball National Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening Courtside+",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 135.05,
+        "to": 156.66
+      }
+    },
+    {
+      "at": "2026-08-05T16:06:07Z",
+      "type": "ticket_added",
+      "event_id": "184766",
+      "event": "Veolia Pickleball National Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening Grandstand (Men's and Women's Doubles Quarterfinals)",
+      "base_price": 40,
+      "all_in_price": 46.56
+    },
+    {
+      "at": "2026-08-05T16:06:07Z",
+      "type": "ticket_added",
+      "event_id": "184765",
+      "event": "Veolia Pickleball National Championships Friday Morning - Singles and Mxd Doubles Quarterfinals",
+      "ticket": "Friday Morning Grandstand (Singles & Mxd Doubles Quarterfinals)",
+      "base_price": 40,
+      "all_in_price": 46.56
+    },
+    {
+      "at": "2026-08-05T16:06:07Z",
+      "type": "price_change",
+      "event_id": "184764",
+      "event": "Veolia Pickleball National Championships Saturday Evening - Men's and Women's Doubles Semifinals",
+      "ticket": "Saturday Evening Courtside+",
+      "base_price": {
+        "from": 160,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 178.27,
+        "to": 178.27
+      }
+    },
+    {
+      "at": "2026-08-05T16:06:07Z",
+      "type": "availability_change",
+      "event_id": "184764",
+      "event": "Veolia Pickleball National Championships Saturday Evening - Men's and Women's Doubles Semifinals",
+      "ticket": "Saturday Evening Courtside+",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-05T16:06:07Z",
+      "type": "price_change",
+      "event_id": "184762",
+      "event": "Veolia Pickleball National Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning Courtside+",
+      "base_price": {
+        "from": null,
+        "to": 180
+      },
+      "all_in_price": {
+        "from": 178.27,
+        "to": 199.88
+      }
+    },
+    {
+      "at": "2026-08-05T16:06:07Z",
+      "type": "availability_change",
+      "event_id": "184762",
+      "event": "Veolia Pickleball National Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning Courtside+",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-08-05T16:06:07Z",
+      "type": "price_change",
+      "event_id": "184762",
+      "event": "Veolia Pickleball National Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning On Court VIP",
+      "base_price": {
+        "from": null,
+        "to": 400
+      },
+      "all_in_price": {
+        "from": 437.59,
+        "to": 437.59
+      }
+    },
+    {
+      "at": "2026-08-05T16:06:07Z",
+      "type": "availability_change",
+      "event_id": "184762",
+      "event": "Veolia Pickleball National Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning On Court VIP",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-08-05T16:06:07Z",
+      "type": "ticket_added",
+      "event_id": "184760",
+      "event": "Veolia Pickleball National Championships Sunday - Championships",
+      "ticket": "Sunday Grandstand (Bronze Medal Matches)",
+      "base_price": 40,
+      "all_in_price": 46.56
+    },
+    {
+      "at": "2026-08-05T16:06:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "2026 World Pickleball Championships",
+      "ticket": "Weeklong Grounds Pass",
+      "base_price": 100,
+      "all_in_price": 113.69
     }
   ]
 }
