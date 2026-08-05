@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
+import { FeatureVideo } from "@/components/video/FeatureVideo";
 import { getMainTourEvents } from "@/lib/placeholder-data";
 
 /**
@@ -120,6 +121,37 @@ export default function AboutPage() {
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="grid gap-10 lg:grid-cols-3">
             <div className="lg:col-span-2">
+              {/* The brand film, at the top of the story column (Wesley, 8/5).
+
+                  Deliberately bare — no eyebrow, no heading of its own. It sits
+                  inside the column, directly above "Our Story", and a second
+                  eyebrow/heading pair stacked immediately above that one reads
+                  as two competing section openings in the same column. The
+                  film's own title card says BE THE BEST, so it identifies
+                  itself; the full YouTube title goes to the player (iframe
+                  title + pre-play accessible name).
+
+                  ⚠ `sizes` is the COLUMN's width, not the viewport's: at lg+
+                  this is col-span-2 of a 3-col grid inside max-w-6xl with
+                  gap-10, i.e. ~733px, not 100vw. Left at a viewport-width
+                  expression it would pull a candidate roughly 1.5× wider than
+                  anything that renders.
+
+                  Title is the real YouTube title, read from the oEmbed endpoint
+                  (`youtube.com/oembed?url=…`) rather than typed off the video —
+                  the same rule `lib/explainer-videos.ts` documents.
+                  `maxresdefault` was confirmed present for this id (1024×576 on
+                  this one, not the usual 1280×720). It is deliberately NOT in
+                  that file: this is the brand film, not part of the "PPA Tour
+                  Explained" series those four belong to. */}
+              <div className="mb-10">
+                <FeatureVideo
+                  id="ZTaup6Q_Ep0"
+                  title="BE THE BEST. | The New Era of the Carvana PPA Tour"
+                  sizes="(min-width: 1024px) 733px, calc(100vw - 2rem)"
+                />
+              </div>
+
               <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
                 Our Story
               </p>
