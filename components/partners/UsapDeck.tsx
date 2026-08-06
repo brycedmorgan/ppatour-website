@@ -575,7 +575,7 @@ const NETWORKS = [
   { src: "/ppa/networks/fox.svg", alt: "FOX" },
   { src: "/ppa/networks/cbs.svg", alt: "CBS" },
   { src: "/ppa/networks/tennis-channel.svg", alt: "Tennis Channel" },
-  { src: "/ppa/networks/pickleballtv-white.svg", alt: "Pickleball.tv", dark: true },
+  { src: "/ppa/networks/pbtv.png", alt: "PickleballTV" },
 ];
 
 function ScaleSlide({ active }: { active: boolean }) {
@@ -605,7 +605,7 @@ function ScaleSlide({ active }: { active: boolean }) {
       <div className="usap-networks">
         <span className="usap-networks-cap">Seen on</span>
         {NETWORKS.map((n) => (
-          <span className={`usap-net-chip ${n.dark ? "usap-net-chip--dark" : ""}`} key={n.alt}>
+          <span className="usap-net-chip" key={n.alt}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={n.src} alt={n.alt} />
           </span>
@@ -931,11 +931,11 @@ body[data-deck="usap"] [class*="uw-s12-"]{ display:none !important; }
 .usap-date em{display:block;font-style:normal;color:#7690b6}
 
 /* quote */
-.usap-quote-body{max-width:24ch}
+.usap-quote-body{max-width:min(94%,1040px)}
 .usap-quote-body blockquote{font-family:var(--font-gotham);font-weight:900;text-transform:uppercase;
-  line-height:1;letter-spacing:-.02em;font-size:clamp(36px,6.4vw,92px);margin:0;text-wrap:balance}
+  line-height:1.02;letter-spacing:-.02em;font-size:clamp(30px,5vw,62px);margin:0;text-wrap:balance;max-width:16ch}
 .usap-attrib{text-transform:uppercase;letter-spacing:.14em;font-size:clamp(11px,1.25vw,15px);color:#9FB4D6;
-  margin-top:clamp(20px,3.2vh,32px);line-height:1.6;max-width:46ch}
+  margin-top:clamp(18px,2.8vh,28px);line-height:1.6;max-width:52ch}
 
 /* lanes */
 .usap-lanes{display:grid;grid-template-columns:1fr auto 1fr;gap:0;margin-top:clamp(22px,3.4vh,42px);align-items:stretch}
