@@ -43,9 +43,19 @@ function pbcSearch(paddle: string): string {
   );
 }
 
-export function resolveGear(paddle: string | null | undefined): GearLink | null {
+/**
+ * @param paddle     what we display, verbatim from the broadcast masterlist
+ * @param searchTerm what to look up at Pickleball Central, when it differs from
+ *                   the display string (one pro is listed with two paddles in a
+ *                   single cell, and searching for both finds no product).
+ */
+export function resolveGear(
+  paddle: string | null | undefined,
+  searchTerm?: string | null,
+): GearLink | null {
   if (!paddle || !paddle.trim()) return null;
   const lc = paddle.toLowerCase();
+  const query = searchTerm?.trim() || paddle;
 
   // Match the paddle brand to an official partner we can send traffic to.
   const partner = partners.find(
@@ -61,13 +71,13 @@ export function resolveGear(paddle: string | null | undefined): GearLink | null 
       // Pickleball Central for now, not directly to the manufacturers" — Ben
       // Johns' paddle was sending fans to joola.com. PBC is our retail partner
       // and every one of these paddles is sold there.
-      href: pbcSearch(paddle),
+      href: pbcSearch(query),
       external: true,
       brandHref: withUtm(partner.website, {
         campaign: "athlete-gear",
         content: `paddle-${contentSlug}`,
       }),
-      pbcHref: pbcSearch(paddle),
+      pbcHref: pbcSearch(query),
     };
   }
 
@@ -77,9 +87,9 @@ export function resolveGear(paddle: string | null | undefined): GearLink | null 
   return {
     paddle,
     brand: null,
-    href: pbcSearch(paddle),
+    href: pbcSearch(query),
     external: true,
     brandHref: null,
-    pbcHref: pbcSearch(paddle),
+    pbcHref: pbcSearch(query),
   };
 }

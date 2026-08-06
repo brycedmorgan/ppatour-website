@@ -11,7 +11,9 @@
     "verify:media": "node scripts/sync-wp-media.mjs --verify",
     "tixr:sync": "node scripts/sync-tixr-prices.mjs",
     "tixr:audit": "node scripts/audit-tixr-mapping.mjs",
-    "athletes:audit": "node scripts/audit-athlete-slugs.mjs"
+    "athletes:audit": "node scripts/audit-athlete-slugs.mjs",
+    "paddles:import": "node scripts/import-paddles.mjs",
+    "paddles:report": "node scripts/import-paddles.mjs --report"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

@@ -42,6 +42,66 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-05 (pt. 22) — Paddles come from the broadcast masterlist; 88 pros show none
+
+- Wesley sent the event team's **"Pro Paddles Broadcast - Masterlist"** CSV: *"add paddles based off
+  this csv. if they are not in this csv, then that player does not show a paddle."* Shipped, and
+  **equipment is back ON** (`SHOW_EQUIPMENT`, switched off in pt. 20) — the instruction only means
+  anything if listed pros show one.
+- **⚠ WHAT IT REPLACED IS THE POINT: the paddle was coming from the 2024 PROFILE SCRAPE.**
+  `published-athletes.json`'s `quick_info.paddle` had a paddle for **108 pros**, nobody maintains it,
+  and **49 of those are not in the masterlist at all** — i.e. the site was publishing a brand
+  endorsement, on the athlete's own page and on a "Buy This Paddle" button, for relationships that
+  may have ended two seasons ago. `lib/athlete-paddles.ts` carries a ⚠ saying never to fall back to
+  that field; it stays in the JSON only because it arrived with the scrape.
+- **92 pros / 97 slugs get a paddle; 88 of our 180 profiles get none**, and none is the correct,
+  quiet outcome — the Quick Info row and the whole "In the Bag" section drop out together.
+- **⚠ THE HARD PART IS THE NAMES, AND EVERY RULE REFUSES RATHER THAN GUESSES.** The masterlist is a
+  broadcast document, not a roster: misspellings (*Federico Stakstrud*, *Ella Cosmos*, *Jay
+  Devillers*), short forms (*Augie Ge* → Augustus Ge, *L.W. Kong* → Lingwei Kong, *Gabe Joseph* →
+  Gabriel Joseph), and **rows that are a bare surname** (*Caruso*, *Bhatia*, *Mackinnon*).
+  `scripts/import-paddles.mjs` resolves in four passes — verified alias → exact → misspelling (edit
+  distance ≤2, and only with one clear winner) → surname (only when exactly one athlete can own it).
+  **76 land on an exact name; 17 on something looser and those are PRINTED for a human to read.**
+  - **⚠ A SHARED FIRST LETTER IS NOT A MATCH.** The first cut of the given-name test allowed it and
+    read *"Zoey Wang"* as **Chao Yi Wang** — a different person. It now requires a shared **prefix
+    of 3+ characters** (Gabe/Gabriel, Augie/Augustus, Chris/Christopher), which still rejects Zoey.
+  - **⚠ AMBIGUITY IS LEFT ALONE**, per the 8/5 pt. 8 duplicate-profile ruling. *"Bhatia"* is Armaan
+    **or** Aryaan; *"M. Alhouni"* is Mohaned **or** Mota. A paddle endorsement on the wrong brother
+    is worse than none, and these are commercial claims. **21 rows unresolved, all listed on stdout.**
+- **⚠ ONE PRO CAN HOLD TWO SLUGS AND BOTH RENDER A PAGE**, so the paddle is written against every
+  slug that person can appear under. Name-grouping alone missed the ones the two rosters spell
+  differently — the curated roster says **Tyra Black**, the scrape says **Hurricane Tyra Black** —
+  which would have left `/athletes/tyra-black` bare while `hurricane-tyra-black` carried it. Fixed by
+  **reading `CURATED_TO_CANONICAL` out of lib/published-athletes.ts** rather than keeping a second
+  list that can drift from it. Verified on both pages for Tyra Black, Paris/Parris Todd,
+  Megan/Meghan Dizon, Gabe/Gabriel Tardio and Augie/Augustus Ge.
+- **⚠ ONLY OFFICIAL-PARTNER BRANDS ARE RE-SPELLED, AND IT IS FUNCTIONAL, NOT COSMETIC.**
+  `athlete-gear` decides the "Official Partner of the PPA Tour" line by matching the paddle string
+  against the live `partners` roster. The CSV writes **"SixZero"**; the partner is **"Six Zero"**, so
+  left verbatim those four pros would have silently lost the badge. Every other brand keeps the event
+  team's spelling. Verified: badge on Callie Smith + Jay Devilliers (Six Zero) and Ben Johns (JOOLA),
+  absent on Anna Leigh Waters (Franklin).
+- **⚠ THE RETAIL LINK IS NOT ALWAYS THE DISPLAY STRING.** One row lists two paddles in a single cell
+  (*"TORNAZO, PRO-BLADE 2"*) and searching Pickleball Central for both returns **no product** — a
+  "Buy This Paddle" button that finds nothing. `resolveGear` now takes an optional `searchTerm`;
+  Christopher Haworth's page **displays both, links `Luzz TORNAZO`**. Verified in the rendered href.
+- Both scripts guard themselves: the curated-roster regex over `lib/athletes.ts` **throws** below 30
+  matches and the `CURATED_TO_CANONICAL` parse throws below 3 pairs, because a silent drop there
+  looks exactly like "that pro isn't in the CSV". `npm run paddles:report` resolves and writes
+  nothing; `npm run paddles:import` rewrites the JSON.
+- Verified against real pages on the dev server, not by grep: 10 cases pass — listed pro, non-partner
+  brand, both slugs of a dual-slug pro, the two-paddle cell, **Eric Oncins and Lindsey Newman showing
+  no equipment anywhere**, plus five unlisted pros confirmed clean of "In the Bag" and "Buy This
+  Paddle". tsc + eslint clean.
+- **⚠ FIVE THINGS NEED THE EVENT TEAM, NOT CODE:** *Eric Oncins* has **two rows with two different
+  paddles** (Engage X2 16mm vs Alpha Pro 14mm) so he shows none · *Lindsey Newman* is in the CSV with
+  **every equipment column blank** · *Bhatia* and *M. Alhouni* need a **first name** · *Zoey Wang* may
+  or may not be Chao Yi Wang and **nobody should guess**. The fix for all five is a better CSV row.
+- **Next:** 16 more masterlist rows are pros we publish no profile for (Albie Huang, Nicole Conard,
+  Zoe Weil…) — they resolve to nothing today and would light up for free if those profiles are ever
+  added · thickness and model # are parsed but not displayed, if anyone wants them on the page.
+
 ### 2026-08-05 (pt. 21) — SEO deep pass: event PostalAddress, site-wide schema, OG dedupe, llms.txt
 
 - Bryce: "serious SEO pass — local events on Google, featured snippets, ChatGPT, Grok. Check OG cards,

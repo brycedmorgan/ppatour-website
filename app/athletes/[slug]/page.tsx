@@ -24,25 +24,28 @@ import { getDivisionRanks } from "@/lib/division-rankings";
 import { getAthleteVideoData } from "@/lib/athlete-videos";
 import { AthleteVideos } from "@/components/athletes/AthleteVideos";
 import { resolveGear } from "@/lib/athlete-gear";
+import { paddleFor } from "@/lib/athlete-paddles";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 
 /**
- * ⚠ EQUIPMENT IS HIDDEN ON ATHLETE PAGES (Wesley, 8/5: "can we hide their
- * equipment for now?"). Flip to `true` to bring it back — that is the whole
- * operation, and it restores both surfaces together.
+ * Equipment is back ON, now that it has a source worth publishing (Wesley,
+ * 8/5). It was switched off earlier the same day because the only paddle data
+ * the site had was the 2024 profile scrape.
+ *
+ * ⚠ THE REAL GATE IS NOW THE DATA, NOT THIS FLAG. A pro shows a paddle only if
+ * the event team's broadcast masterlist lists them — 88 of our 180 profiles
+ * are not in it and correctly render no equipment anywhere on the page. See
+ * `lib/athlete-paddles.ts`; in particular, do NOT reintroduce the old
+ * `quickInfo.paddle` fallback, which is the stale data this replaced.
  *
  * ONE FLAG COVERS TWO PLACES, WHICH IS THE POINT. The athlete page publishes a
  * pro's paddle twice: the "In the Bag" section (paddle + "Buy This Paddle")
- * and the "Paddle" row in the Quick Info sidebar. Both read the same
- * `quickInfo.paddle` string, so hiding only the section would have left the
- * equipment published a few hundred pixels further up the same page.
- *
- * A switch, not a deletion — unlike the Gold Prize Grid (8/4) or the invented
- * parking copy (8/5), nothing here is wrong or fabricated and "for now" is
- * explicitly temporary. `lib/athlete-gear.ts` and its Pickleball Central
- * routing (Connor, 7/29: never the manufacturer) stay intact and untouched.
+ * and the "Paddle" row in the Quick Info sidebar. Both read the same record, so
+ * gating only the section would leave the equipment published a few hundred
+ * pixels further up the same page. Flipping this to `false` still hides
+ * equipment site-wide if that is ever wanted again.
  */
-const SHOW_EQUIPMENT: boolean = false;
+const SHOW_EQUIPMENT: boolean = true;
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -250,15 +253,23 @@ export default async function AthletePage({ params }: Params) {
   // Structured quick facts from the published profile (skip empty values).
   const qi = a.quickInfo;
   const ageVal = stats?.age ?? a.age;
+  /**
+   * ⚠ Read once, here, and used by BOTH equipment surfaces — the Quick Info row
+   * just below and the "In the Bag" section further down. They drifted onto
+   * different sources once before; a pro must never show a paddle in one and
+   * not the other.
+   */
+  const paddleRecord = SHOW_EQUIPMENT ? paddleFor(a.slug) : null;
   const quickFacts: { label: string; value: string }[] = [
     { label: "Resides", value: stats?.hometown ?? qi?.resides ?? "" },
     { label: "Age", value: ageVal != null ? String(ageVal) : "" },
     { label: "Height", value: stats?.height ?? qi?.height ?? "" },
     { label: "Plays", value: stats?.handed ? `${stats.handed}-handed` : qi?.plays ?? "" },
     { label: "Turned Pro", value: stats?.turnedPro ?? a.turnedPro ?? "" },
-    // Gated with the "In the Bag" section below — see SHOW_EQUIPMENT. The rest
-    // of Quick Info (Resides / Age / Height / Plays / Turned Pro) is untouched.
-    ...(SHOW_EQUIPMENT ? [{ label: "Paddle", value: qi?.paddle ?? "" }] : []),
+    // Empty when the masterlist doesn't list this pro, and `.filter` below
+    // drops the row entirely — so an unlisted athlete shows no Paddle line at
+    // all rather than a blank one. The rest of Quick Info is untouched.
+    { label: "Paddle", value: paddleRecord?.paddle ?? "" },
   ].filter((f) => f.value);
 
   // `divRanks` still tells us which boards the athlete sits on, which is what
@@ -273,8 +284,13 @@ export default async function AthletePage({ params }: Params) {
       ] as const).filter(([, m]) => m.gold + m.silver + m.bronze > 0)
     : [];
 
-  // Player's paddle → official-partner gear link (Connor's "link to gear").
-  const gear = resolveGear(a.quickInfo?.paddle ?? null);
+  /**
+   * Player's paddle → official-partner gear link (Connor's "link to gear").
+   *
+   * ⚠ Source is the event team's broadcast masterlist, NOT `quickInfo.paddle`.
+   * Null for any pro the masterlist doesn't list, which hides both surfaces.
+   */
+  const gear = resolveGear(paddleRecord?.paddle ?? null, paddleRecord?.searchTerm ?? null);
 
   // Broadcast-style stat strip under the hero — the marquee numbers up front so
   // rank + hardware read instantly (only render what we actually have).
@@ -590,7 +606,8 @@ export default async function AthletePage({ params }: Params) {
       )}
 
       {/* In the Bag — the athlete's paddle + a shop link (official partners
-          only; Connor's "link to gear"). Hidden for now — see SHOW_EQUIPMENT. */}
+          only; Connor's "link to gear"). Absent entirely for a pro the
+          broadcast masterlist doesn't list, which is most of the roster. */}
       {SHOW_EQUIPMENT && gear && (
         <section className="bg-ppa-navy text-white">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
