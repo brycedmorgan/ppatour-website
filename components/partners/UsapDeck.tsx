@@ -229,15 +229,11 @@ function PpaLogo({ className }: { className?: string }) {
   // eslint-disable-next-line @next/next/no-img-element
   return <img src="/ppa/logos/ppa-horizontal-white.svg" alt="Carvana PPA Tour" className={className} />;
 }
-// Pickleball Inc is the deck's "our side" identity (parent company), rendered as
-// a wordmark. ⚠ TEXT STAND-IN for the official Pickleball Inc logo — swap for the
-// real mark when the asset lands.
-function PbIncMark({ className }: { className?: string }) {
-  return (
-    <span className={`usap-pbinc ${className ?? ""}`} aria-label="Pickleball Inc">
-      Pickleball<em>Inc</em>
-    </span>
-  );
+// The deck's "our side" brand mark: pickleball.com (Pickleball Inc's flagship
+// brand). It's a purple wordmark, so it rides on a white plate like the USAP logo.
+function PbComLogo({ className }: { className?: string }) {
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src="/ppa/ecosystem/pickleball-com-lockup.svg" alt="Pickleball.com" className={className} />;
 }
 
 /* ─────────────────────────── slide 1 — title ─────────────────────────── */
@@ -253,8 +249,8 @@ function TitleSlide() {
             <UsapLogo className="usap-plate-logo" />
           </span>
           <span className="usap-x">×</span>
-          <span className="usap-plate usap-plate--dark">
-            <PbIncMark />
+          <span className="usap-plate usap-plate--light">
+            <PbComLogo className="usap-plate-logo usap-pbcom" />
           </span>
         </div>
         <h1 className="usap-title-h1">
@@ -334,8 +330,8 @@ function LanesSlide() {
           <span>THE&nbsp;LINE</span>
         </div>
         <div className="usap-lane">
-          <span className="usap-plate usap-plate--dark usap-plate--sm">
-            <PbIncMark />
+          <span className="usap-plate usap-plate--light usap-plate--sm">
+            <PbComLogo className="usap-plate-logo usap-pbcom" />
           </span>
           <h3 className="usap-accent-sky">Commercialization</h3>
           <ul className="usap-dots" data-tone="sky">
@@ -577,8 +573,8 @@ function UnlockSlide() {
           Pickleball&rsquo;s <span className="usap-accent-sky">commercial arm.</span>
         </h2>
         <div className="usap-unlock-flow">
-          <span className="usap-plate usap-plate--dark usap-plate--sm">
-            <PbIncMark />
+          <span className="usap-plate usap-plate--light usap-plate--sm">
+            <PbComLogo className="usap-plate-logo usap-pbcom" />
           </span>
           <span className="usap-flow-arrow" aria-hidden>→</span>
           <span className="usap-plate usap-plate--light usap-plate--sm">
@@ -836,7 +832,9 @@ function CloseSlide() {
             <UsapLogo className="usap-plate-logo" />
           </span>
           <span className="usap-x usap-x--sm">×</span>
-          <PbIncMark className="usap-signoff-pbinc" />
+          <span className="usap-plate usap-plate--light usap-plate--sm">
+            <PbComLogo className="usap-plate-logo usap-pbcom" />
+          </span>
         </div>
       </div>
     </>
@@ -979,6 +977,9 @@ body[data-deck="usap"] [class*="uw-s12-"]{ display:none !important; }
 .usap-plate--bare{padding:0;background:none;box-shadow:none;margin-bottom:clamp(16px,2.4vh,28px)}
 .usap-plate-logo{height:clamp(36px,4.2vw,62px);width:auto;display:block}
 .usap-plate--sm .usap-plate-logo{height:clamp(28px,2.8vw,38px)}
+/* pickleball.com is a long horizontal wordmark — cap it shorter so it balances the USAP emblem */
+.usap-pbcom{height:clamp(22px,2.6vw,40px)}
+.usap-plate--sm .usap-pbcom{height:clamp(16px,1.8vw,25px)}
 .usap-plate-logo--lg{height:clamp(58px,7.5vw,116px)}
 
 .usap-title-foot{display:flex;flex-wrap:wrap;gap:clamp(20px,4vw,60px);align-items:flex-end;
