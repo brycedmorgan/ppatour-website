@@ -225,10 +225,6 @@ function UsapLogo({ className }: { className?: string }) {
   // eslint-disable-next-line @next/next/no-img-element
   return <img src="/ppa/partners/usa-pickleball-logo.png" alt="USA Pickleball" className={className} />;
 }
-function PpaLogo({ className }: { className?: string }) {
-  // eslint-disable-next-line @next/next/no-img-element
-  return <img src="/ppa/logos/ppa-horizontal-white.svg" alt="Carvana PPA Tour" className={className} />;
-}
 // The deck's "our side" brand mark: pickleball.com (Pickleball Inc's flagship
 // brand). It's a purple wordmark, so it rides on a white plate like the USAP logo.
 function PbComLogo({ className }: { className?: string }) {
@@ -367,15 +363,24 @@ function TheirLaneSlide() {
               <UsapLogo className="usap-plate-logo usap-plate-logo--lg" />
             </span>
             <h2 className="usap-dark-ink">
-              Steward of
-              <br />
-              the <span style={{ color: USAP_RED }}>game.</span>
+              Steward of the <span style={{ color: USAP_RED }}>game.</span>
             </h2>
             <p className="usap-lede usap-lede--ink">
               USA Pickleball stays focused on what only a national governing body can do — the highest calling in the
-              sport, and the one seat no one else can hold. Not a smaller job. The essential one, done without the
-              distraction of running a commercial business.
+              sport, and the one seat no one else can hold. Not a smaller job. The essential one.
             </p>
+            <div className="usap-serves">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/ppa/partners/usa-pickleball-serves-logo.png"
+                alt="USA Pickleball Serves"
+                className="usap-serves-logo"
+              />
+              <p className="usap-serves-note">
+                Their charitable arm growing the game at the grassroots — a mission the Pickleball Inc engine can help{" "}
+                <strong>push and fund</strong>.
+              </p>
+            </div>
           </div>
           <ul className="usap-capsule usap-capsule--light" data-tone="red">
             <li>
@@ -399,6 +404,18 @@ function TheirLaneSlide() {
 
 /* ─────────────────────────── slide 4 — who is pickleball inc ─────────────────────────── */
 
+// The Pickleball Inc brand family, shown as logos on white chips (the colored
+// marks need a light ground to read on the dark photo).
+const BRANDS = [
+  { src: "/ppa/logos/ppa-horizontal-blue.svg", alt: "Carvana PPA Tour" },
+  { src: "/ppa/partners/mlp.png", alt: "Major League Pickleball" },
+  { src: "/ppa/networks/pbtv.png", alt: "PickleballTV" },
+  { src: "/ppa/ecosystem/pickleball-com-lockup.svg", alt: "Pickleball.com" },
+  { src: "/ppa/sponsors/pickleball-central.png", alt: "Pickleball Central" },
+  { src: "/ppa/sponsors/dupr.webp", alt: "DUPR" },
+  { src: "/ppa/sponsors/picklr.svg", alt: "The Picklr" },
+];
+
 function WhoSlide() {
   return (
     <>
@@ -407,25 +424,21 @@ function WhoSlide() {
       <div className="usap-wrap">
         <Eyebrow no="03">Who We Are</Eyebrow>
         <h2>
-          The home of all
-          <br />
-          things <span className="usap-accent-sky">pickleball.</span>
+          The home of all things <span className="usap-accent-sky">pickleball.</span>
         </h2>
         <p className="usap-lede">
           Pickleball Inc is the company that built the modern professional sport — one aligned business spanning the
-          pro tours, media and broadcast, commerce, technology, and the courts the game is played on.
+          pro tours, media, commerce, technology, and the courts the game is played on.
         </p>
-        <div className="usap-ourmarks">
-          <PpaLogo className="usap-mark-ppa" />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/pbtv/brand/pbtv-wordmark-white.svg" alt="Pickleball.tv" className="usap-mark-sm" />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/ppa/ecosystem/pickleball-com-mark-white.svg" alt="Pickleball.com" className="usap-mark-sm" />
+        <div className="usap-brands">
+          {BRANDS.map((b) => (
+            <span className="usap-brand-chip" key={b.alt}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={b.src} alt={b.alt} />
+            </span>
+          ))}
         </div>
-        <p className="usap-family">
-          PPA Tour · Major League Pickleball · PickleballTV · Pickleball.com · Pickleball Tournaments · Pickleball
-          Central · DUPR · Just Courts
-        </p>
+        <p className="usap-family">Plus Pickleball Tournaments, Pickleball Wholesale &amp; Just Courts</p>
       </div>
     </>
   );
@@ -1028,6 +1041,12 @@ body[data-deck="usap"] [class*="uw-s12-"]{ display:none !important; }
 .usap-capsule--light{background:#fff;box-shadow:0 16px 50px rgba(11,27,48,.12)}
 .usap-capsule--light li{color:#0b1b30}
 .usap-capsule--light li span{color:#5a6b82}
+/* USA Pickleball Serves — on the light lane slide */
+.usap-serves{display:flex;align-items:center;gap:clamp(14px,1.8vw,24px);margin-top:clamp(16px,2.4vh,26px);
+  border-top:1px solid rgba(11,27,48,.12);padding-top:clamp(14px,2vh,20px)}
+.usap-serves-logo{height:clamp(40px,4.6vw,60px);width:auto;flex:0 0 auto}
+.usap-serves-note{margin:0;font-size:clamp(12px,1.3vw,16px);line-height:1.35;color:#41536b}
+.usap-serves-note strong{color:${USAP_RED};font-weight:700}
 
 /* our marks */
 .usap-ourmarks{display:flex;align-items:center;gap:clamp(18px,2.6vw,34px);margin-bottom:clamp(18px,2.6vh,28px);flex-wrap:wrap}
@@ -1070,7 +1089,11 @@ body[data-deck="usap"] [class*="uw-s12-"]{ display:none !important; }
 .usap-card p{margin:.65em 0 0;font-size:clamp(13px,1.4vw,17px);color:#B7C6E0;line-height:1.4}
 
 /* who — brand family */
-.usap-family{margin:clamp(14px,2vh,20px) 0 0;font-size:clamp(11px,1.2vw,14px);letter-spacing:.06em;
+.usap-brands{display:flex;flex-wrap:wrap;gap:clamp(8px,1.1vw,14px);margin-top:clamp(20px,3vh,34px)}
+.usap-brand-chip{display:inline-flex;align-items:center;justify-content:center;background:#fff;border-radius:9px;
+  height:clamp(44px,5vw,60px);padding:0 clamp(12px,1.5vw,20px)}
+.usap-brand-chip img{height:clamp(22px,2.7vw,32px);width:auto;max-width:clamp(96px,12vw,160px);object-fit:contain;display:block}
+.usap-family{margin:clamp(12px,1.8vh,18px) 0 0;font-size:clamp(11px,1.2vw,14px);letter-spacing:.06em;
   color:#7690b6;text-transform:uppercase;font-weight:600}
 
 /* business units */
