@@ -19,7 +19,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * red (#C8102E) as the shared thread, PPA blue/sky for our side.
  */
 
-const SLIDES = 11;
+const SLIDES = 16;
 const USAP_RED = "#C8102E";
 
 type Dir = 1 | -1;
@@ -118,27 +118,42 @@ export function UsapDeck() {
         <LanesSlide />
       </Slide>
       <Slide index={3} active={i} dir={dir}>
-        <TheirLaneSlide />
+        <WhoSlide />
       </Slide>
       <Slide index={4} active={i} dir={dir}>
-        <OurLaneSlide />
+        <UnitsSlide />
       </Slide>
       <Slide index={5} active={i} dir={dir}>
         <ScaleSlide active={i === 5} />
       </Slide>
       <Slide index={6} active={i} dir={dir}>
-        <PathwaySlide />
+        <ApolloSlide active={i === 6} />
       </Slide>
       <Slide index={7} active={i} dir={dir}>
-        <WhyWinsSlide />
+        <PlanSlide />
       </Slide>
       <Slide index={8} active={i} dir={dir}>
-        <HorizonSlide />
+        <UnlockSlide />
       </Slide>
       <Slide index={9} active={i} dir={dir}>
-        <QuoteSlide />
+        <TheirLaneSlide />
       </Slide>
       <Slide index={10} active={i} dir={dir}>
+        <PathwaySlide />
+      </Slide>
+      <Slide index={11} active={i} dir={dir}>
+        <TwoFuturesSlide />
+      </Slide>
+      <Slide index={12} active={i} dir={dir}>
+        <WhyWinsSlide />
+      </Slide>
+      <Slide index={13} active={i} dir={dir}>
+        <HorizonSlide />
+      </Slide>
+      <Slide index={14} active={i} dir={dir}>
+        <QuoteSlide />
+      </Slide>
+      <Slide index={15} active={i} dir={dir}>
         <CloseSlide />
       </Slide>
 
@@ -334,7 +349,7 @@ function TheirLaneSlide() {
     <>
       <div className="usap-lightbg" />
       <div className="usap-wrap usap-wrap--light">
-        <Eyebrow no="03" red>
+        <Eyebrow no="09" red>
           USA Pickleball&rsquo;s Lane
         </Eyebrow>
         <div className="usap-split">
@@ -348,7 +363,8 @@ function TheirLaneSlide() {
               the <span style={{ color: USAP_RED }}>game.</span>
             </h2>
             <p className="usap-lede usap-lede--ink">
-              USA Pickleball stays focused on what only a national governing body can do — and does it without the
+              USA Pickleball stays focused on what only a national governing body can do — the highest calling in the
+              sport, and the one seat no one else can hold. Not a smaller job. The essential one, done without the
               distraction of running a commercial business.
             </p>
           </div>
@@ -372,47 +388,177 @@ function TheirLaneSlide() {
   );
 }
 
-/* ─────────────────────────── slide 5 — our lane ─────────────────────────── */
+/* ─────────────────────────── slide 4 — who is pickleball inc ─────────────────────────── */
 
-function OurLaneSlide() {
+function WhoSlide() {
+  return (
+    <>
+      <div className="usap-bg" style={{ backgroundImage: "url(/ppa/nationals-crowd-branded.jpg)" }} />
+      <div className="usap-scrim usap-scrim--left" />
+      <div className="usap-wrap">
+        <Eyebrow no="03">Who We Are</Eyebrow>
+        <h2>
+          The home of all
+          <br />
+          things <span className="usap-accent-sky">pickleball.</span>
+        </h2>
+        <p className="usap-lede">
+          Pickleball Inc is the company that built the modern professional sport — one aligned business spanning the
+          pro tours, media and broadcast, commerce, technology, and the courts the game is played on.
+        </p>
+        <div className="usap-ourmarks">
+          <PpaLogo className="usap-mark-ppa" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/pbtv/brand/pbtv-wordmark-white.svg" alt="Pickleball.tv" className="usap-mark-sm" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/ppa/ecosystem/pickleball-com-mark-white.svg" alt="Pickleball.com" className="usap-mark-sm" />
+        </div>
+        <p className="usap-family">
+          PPA Tour · Major League Pickleball · PickleballTV · Pickleball.com · Pickleball Tournaments · Pickleball
+          Central · DUPR · Just Courts
+        </p>
+      </div>
+    </>
+  );
+}
+
+/* ─────────────────────────── slide 5 — business units ─────────────────────────── */
+
+const UNITS = [
+  {
+    k: "Professional & Amateur Play",
+    tone: "sky",
+    body: "The PPA Tour, Major League Pickleball, and PickleballTV — the events and the broadcast that carry the sport.",
+    stat: "35+ events a year · $30M to pro athletes",
+  },
+  {
+    k: "Media & Technology",
+    tone: "sky",
+    body: "Pickleball.com, Pickleball Tournaments, Leagues and Clubs — the digital backbone the whole sport runs on.",
+    stat: "95%+ of U.S. tournaments · 2.9M+ matches run",
+  },
+  {
+    k: "Consumer & Retail",
+    tone: "red",
+    body: "Pickleball Central and Pickleball Wholesale — the #1 specialty retailer and supplier in the sport.",
+    stat: "1M+ orders shipped · 100+ pro shops",
+  },
+  {
+    k: "Courts, Facilities & Ratings",
+    tone: "red",
+    body: "Just Courts, DUPR, and facility partners — where the game gets built, played, and rated nationwide.",
+    stat: "DUPR — the sport's rating standard",
+  },
+];
+
+function UnitsSlide() {
   return (
     <div className="usap-wrap">
-      <Eyebrow no="04">Pickleball Inc&rsquo;s Lane</Eyebrow>
-      <div className="usap-split">
-        <ul className="usap-capsule" data-tone="sky">
-          <li>
-            Events &amp; live experiences<span>PPA Tour &amp; MLP — pro pickleball&rsquo;s biggest stage</span>
-          </li>
-          <li>
-            Media &amp; broadcast<span>Pickleball.tv and a national broadcast footprint</span>
-          </li>
-          <li>
-            Sponsorship &amp; partnerships<span>A proven engine bringing brands to the sport</span>
-          </li>
-          <li>
-            Technology, membership &amp; fans<span>The digital home of the pickleball fan</span>
-          </li>
-        </ul>
-        <div>
-          <div className="usap-ourmarks">
-            <PpaLogo className="usap-mark-ppa" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/pbtv/brand/pbtv-wordmark-white.svg" alt="Pickleball.tv" className="usap-mark-sm" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/ppa/ecosystem/pickleball-com-mark-white.svg" alt="Pickleball.com" className="usap-mark-sm" />
+      <Eyebrow no="04">The Company</Eyebrow>
+      <h2 className="usap-h2-center">Four businesses, one sport.</h2>
+      <div className="usap-units">
+        {UNITS.map((u) => (
+          <div className="usap-unit" key={u.k} data-tone={u.tone}>
+            <div className="usap-unit-k">{u.k}</div>
+            <p className="usap-unit-body">{u.body}</p>
+            <div className="usap-unit-stat">{u.stat}</div>
           </div>
-          <h2>
-            Engine of
-            <br />
-            the <span className="usap-accent-sky">game.</span>
-          </h2>
-          <p className="usap-lede">
-            Pickleball Inc does what it has already proven it can do at national scale — and puts that machine to work
-            behind the governing body.
-          </p>
-        </div>
+        ))}
       </div>
     </div>
+  );
+}
+
+/* ─────────────────────────── slide 7 — apollo ─────────────────────────── */
+
+function ApolloSlide({ active }: { active: boolean }) {
+  return (
+    <>
+      <div className="usap-bg" style={{ backgroundImage: "url(/ppa/nationals-drone-stadium.jpg)" }} />
+      <div className="usap-scrim usap-scrim--left" />
+      <div className="usap-wrap">
+        <Eyebrow no="06">The Backing</Eyebrow>
+        <div className="usap-apollo">
+          <div className="usap-apollo-num">
+            $<CountUp to={225} dp={0} run={active} />M
+          </div>
+          <div>
+            <h2>Backed to build,
+              <br />
+              not to flip.</h2>
+            <p className="usap-lede">
+              Led by <strong>Apollo Sports Capital</strong> in 2026 — one of the largest institutional investments in
+              the history of the sport. Patient, long-term capital with the balance sheet to invest{" "}
+              <strong>behind</strong> a partnership, for decades, not quarters.
+            </p>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ─────────────────────────── slide 8 — five-year plan ─────────────────────────── */
+
+const PILLARS = [
+  { step: "01", lvl: "Grow the game", note: "Turn 24.3M American players into tens of millions of engaged fans." },
+  { step: "02", lvl: "Build the media business", note: "More live hours, more rights, PBTV scaled to a mass audience." },
+  { step: "03", lvl: "Unify the sport", note: "One governing body, one commercial engine, one calendar." },
+  { step: "04", lvl: "Go global", note: "One international pathway toward the Olympic Games." },
+];
+
+function PlanSlide() {
+  return (
+    <div className="usap-wrap">
+      <Eyebrow no="07">Where We&rsquo;re Headed</Eyebrow>
+      <h2 className="usap-h2-center">The five-year plan.</h2>
+      <div className="usap-ladder">
+        {PILLARS.map((p, idx) => (
+          <div className="usap-rung" key={p.lvl} data-peak={idx === PILLARS.length - 1}>
+            <span className="usap-rung-step">{p.step}</span>
+            <span className="usap-rung-lvl">{p.lvl}</span>
+            <p>{p.note}</p>
+          </div>
+        ))}
+      </div>
+      <p className="usap-lede usap-lede--center">
+        Every pillar points the same way — toward one connected sport, from the local court to a true World
+        Championship.
+      </p>
+    </div>
+  );
+}
+
+/* ─────────────────────────── slide 9 — the unlock (pivot) ─────────────────────────── */
+
+function UnlockSlide() {
+  return (
+    <>
+      <div className="usap-bg" style={{ backgroundImage: "url(/ppa/action-mxd-ppa-finals.jpg)" }} />
+      <div className="usap-scrim" />
+      <div className="usap-wrap">
+        <Eyebrow no="08">The Unlock</Eyebrow>
+        <h2>
+          This engine becomes USA
+          <br />
+          Pickleball&rsquo;s <span className="usap-accent-sky">commercial arm.</span>
+        </h2>
+        <div className="usap-unlock-flow">
+          <span className="usap-plate usap-plate--dark usap-plate--sm">
+            <PpaLogo className="usap-plate-logo" />
+          </span>
+          <span className="usap-flow-arrow" aria-hidden>→</span>
+          <span className="usap-plate usap-plate--light usap-plate--sm">
+            <UsapLogo className="usap-plate-logo" />
+          </span>
+        </div>
+        <p className="usap-lede">
+          Everything you&rsquo;ve just seen — the events, the media, the sponsorship machine, the technology, the
+          retail — pointed <strong>behind the governing body</strong>. USA Pickleball governs. Pickleball Inc powers
+          it. One aligned front instead of two competing ones.
+        </p>
+      </div>
+    </>
   );
 }
 
@@ -481,7 +627,7 @@ const RUNGS = [
 function PathwaySlide() {
   return (
     <div className="usap-wrap">
-      <Eyebrow no="06">One Competitive Pathway</Eyebrow>
+      <Eyebrow no="10">One Competitive Pathway</Eyebrow>
       <h2 className="usap-h2-center">One ladder every player can climb.</h2>
       <div className="usap-ladder">
         {RUNGS.map((r, idx) => (
@@ -499,7 +645,44 @@ function PathwaySlide() {
   );
 }
 
-/* ─────────────────────────── slide 8 — why it wins ─────────────────────────── */
+/* ─────────────────────────── slide 12 — two futures ─────────────────────────── */
+
+function TwoFuturesSlide() {
+  return (
+    <div className="usap-wrap">
+      <Eyebrow no="11">The Fork</Eyebrow>
+      <h2 className="usap-h2-center">One sport, or two of everything.</h2>
+      <div className="usap-futures">
+        <div className="usap-future usap-future--yes">
+          <div className="usap-future-tag usap-accent-sky">Unified</div>
+          <ul>
+            <li>One governing body, one commercial partner</li>
+            <li>One calendar, one membership, one story</li>
+            <li>Players, sponsors, and fans all pulling together</li>
+            <li>Every dollar and every hour compounds</li>
+          </ul>
+        </div>
+        <div className="usap-future usap-future--no">
+          <div className="usap-future-tag" style={{ color: USAP_RED }}>
+            Divided
+          </div>
+          <ul>
+            <li>Two amateur governing bodies competing</li>
+            <li>Split sponsors, split players, duplicated events</li>
+            <li>The same audience fought over twice</li>
+            <li>Energy that cancels itself out</li>
+          </ul>
+        </div>
+      </div>
+      <p className="usap-lede usap-lede--center">
+        Two amateur bodies chasing the same players only amplifies division. Unification is the one path where the
+        whole sport wins.
+      </p>
+    </div>
+  );
+}
+
+/* ─────────────────────────── slide 13 — why it wins ─────────────────────────── */
 
 const CARDS = [
   {
@@ -522,7 +705,7 @@ const CARDS = [
 function WhyWinsSlide() {
   return (
     <div className="usap-wrap">
-      <Eyebrow no="07">Why It Wins</Eyebrow>
+      <Eyebrow no="12">Why It Wins</Eyebrow>
       <h2 className="usap-h2-center">One ecosystem the whole sport feels.</h2>
       <div className="usap-cards">
         {CARDS.map((c) => (
@@ -546,7 +729,7 @@ function HorizonSlide() {
       <div className="usap-bg" style={{ backgroundImage: "url(/ppa/nationals-drone-sunset.jpg)" }} />
       <div className="usap-scrim usap-scrim--left" />
       <div className="usap-wrap">
-        <Eyebrow no="08">The Horizon</Eyebrow>
+        <Eyebrow no="13">The Horizon</Eyebrow>
         <h2>
           From a first game to
           <br />
@@ -570,7 +753,7 @@ function QuoteSlide() {
       <div className="usap-bg" style={{ backgroundImage: "url(/ppa/action-champ-sunday.jpg)" }} />
       <div className="usap-scrim" />
       <div className="usap-wrap usap-quote-body">
-        <Eyebrow no="09">The Case</Eyebrow>
+        <Eyebrow no="14">The Case</Eyebrow>
         <blockquote>
           Better for the sport <span style={{ color: USAP_RED }}>together</span> than apart.
         </blockquote>
@@ -597,7 +780,7 @@ function CloseSlide() {
       <div className="usap-bg" style={{ backgroundImage: "url(/ppa/nationals-championship-court.jpg)" }} />
       <div className="usap-scrim" />
       <div className="usap-wrap">
-        <Eyebrow no="10">Let&rsquo;s Build It</Eyebrow>
+        <Eyebrow no="15">Let&rsquo;s Build It</Eyebrow>
         <h1 className="usap-close-h1">
           Let&rsquo;s build it
           <br />
@@ -826,6 +1009,47 @@ body[data-deck="usap"] [class*="uw-s12-"]{ display:none !important; }
   font-size:clamp(20px,2.3vw,30px);color:#4DC1EF}
 .usap-card p{margin:.65em 0 0;font-size:clamp(13px,1.4vw,17px);color:#B7C6E0;line-height:1.4}
 
+/* who — brand family */
+.usap-family{margin:clamp(14px,2vh,20px) 0 0;font-size:clamp(11px,1.2vw,14px);letter-spacing:.06em;
+  color:#7690b6;text-transform:uppercase;font-weight:600}
+
+/* business units */
+.usap-units{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,2vw,22px);margin-top:clamp(24px,4vh,44px)}
+.usap-unit{border:1px solid rgba(159,180,214,.2);border-radius:16px;padding:clamp(18px,2.2vw,28px);
+  background:linear-gradient(180deg, rgba(255,255,255,.035), transparent);position:relative}
+.usap-unit[data-tone="sky"]{border-left:3px solid #4DC1EF}
+.usap-unit[data-tone="red"]{border-left:3px solid ${USAP_RED}}
+.usap-unit-k{font-family:var(--font-gotham);font-weight:900;text-transform:uppercase;letter-spacing:-.01em;
+  font-size:clamp(17px,1.9vw,25px);line-height:1.02}
+.usap-unit-body{margin:.6em 0 0;font-size:clamp(12px,1.3vw,16px);color:#B7C6E0;line-height:1.38}
+.usap-unit-stat{margin-top:.85em;font-size:clamp(11px,1.15vw,13px);letter-spacing:.06em;color:#E7C079;font-weight:600}
+
+/* apollo */
+.usap-apollo{display:grid;grid-template-columns:auto 1fr;gap:clamp(24px,4vw,56px);align-items:center;margin-top:clamp(16px,2.6vh,26px)}
+.usap-apollo-num{font-family:var(--font-gotham);font-weight:900;line-height:.86;letter-spacing:-.03em;
+  font-size:clamp(72px,12vw,180px);color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
+.usap-apollo h2{font-size:clamp(26px,3.6vw,50px)}
+.usap-apollo .usap-lede{margin-top:clamp(14px,2.2vh,22px)}
+@media (max-width:860px){.usap-apollo{grid-template-columns:1fr;gap:12px}}
+
+/* unlock flow */
+.usap-unlock-flow{display:flex;align-items:center;gap:clamp(16px,2.4vw,32px);margin-top:clamp(20px,3.2vh,32px)}
+.usap-flow-arrow{font-family:var(--font-gotham);font-weight:900;font-size:clamp(28px,3.6vw,48px);color:#E7C079;line-height:1}
+
+/* two futures */
+.usap-futures{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.4vw,26px);margin-top:clamp(24px,4vh,44px)}
+.usap-future{border-radius:18px;padding:clamp(20px,2.6vw,32px)}
+.usap-future--yes{background:linear-gradient(180deg, rgba(77,193,239,.1), rgba(77,193,239,.02));border:1px solid rgba(77,193,239,.4)}
+.usap-future--no{background:linear-gradient(180deg, rgba(200,16,46,.08), transparent);border:1px solid rgba(200,16,46,.32)}
+.usap-future-tag{font-family:var(--font-gotham);font-weight:900;text-transform:uppercase;letter-spacing:-.01em;
+  font-size:clamp(20px,2.4vw,32px);margin-bottom:.7em}
+.usap-future ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.6em}
+.usap-future li{position:relative;padding-left:1.3em;font-size:clamp(13px,1.4vw,18px);line-height:1.32;color:#C4D2E8}
+.usap-future li::before{position:absolute;left:0;top:-.02em;font-weight:700}
+.usap-future--yes li::before{content:"+";color:#4DC1EF}
+.usap-future--no li::before{content:"–";color:${USAP_RED}}
+@media (max-width:860px){.usap-futures{grid-template-columns:1fr}}
+
 /* close */
 .usap-close-h1{font-size:clamp(48px,9vw,140px)}
 .usap-steps{display:flex;flex-wrap:wrap;gap:clamp(16px,2.2vw,24px);margin-top:clamp(28px,4.4vh,48px)}
@@ -862,6 +1086,7 @@ body[data-deck="usap"] [class*="uw-s12-"]{ display:none !important; }
   .usap-split{grid-template-columns:1fr;gap:24px}
   .usap-stats{grid-template-columns:repeat(2,1fr)}
   .usap-cards{grid-template-columns:1fr}
+  .usap-units{grid-template-columns:1fr}
 }
 @media (max-width:600px){
   .usap-hint,.usap-top-tag{display:none}
