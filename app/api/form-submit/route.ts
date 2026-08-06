@@ -4,6 +4,7 @@ import { FORM_ROUTING } from "@/lib/forms/routing";
 import { appendToSheet } from "@/lib/google-sheet";
 import { cioIdentifyAndTrack } from "@/lib/customerio";
 import { localTimestamp, sendFormNotification } from "@/lib/forms/notify";
+import { postFormToSlack } from "@/lib/forms/slack";
 
 /**
  * Generic form submission endpoint. One route serves every inquiry/application
@@ -15,7 +16,9 @@ import { localTimestamp, sendFormNotification } from "@/lib/forms/notify";
  *      verified info@ppatour.com sender, reply-to = submitter where allowed).
  *      Skipped when the form has no `notifyTo` (list-only signups).
  *   2. A durable row in the Google Sheet (system of record, one tab per form).
- *   3. Customer.io identify+event for marketing-relevant forms (optional).
+ *   3. A Slack mirror to the forms channel — every form except the newsletters
+ *      and `reporting` (see lib/forms/slack.ts for why that one is excluded).
+ *   4. Customer.io identify+event for marketing-relevant forms (optional).
  *
  * Degrades gracefully: unset env (local dev) → submission logged, returns ok.
  * The sheet append is best-effort so a Sheets outage never loses a lead the
@@ -134,7 +137,19 @@ export async function POST(request: Request) {
   // 1) Durable record — best-effort.
   const sheetOk = await appendToSheet(routing.sheetTab, record);
 
-  // 2) Notification email (if the form routes to an inbox).
+  // 2) Slack mirror — best-effort, and BEFORE the email on purpose: the email
+  //    path below can fail the request, and a Customer.io outage shouldn't also
+  //    cost the channel its copy. Excluded forms (reporting, newsletters) and an
+  //    unset webhook both no-op inside postFormToSlack.
+  await postFormToSlack({
+    formType,
+    heading: schema.heading,
+    rows,
+    submittedAtLocal,
+    label: `form-submit:${formType}`,
+  });
+
+  // 3) Notification email (if the form routes to an inbox).
   const submitterEmail = typeof body.email === "string" ? body.email.trim() : "";
   const submitterName = `${record.firstName ?? ""} ${record.lastName ?? record.name ?? ""}`.trim();
   const notifyTo = typeof routing.notifyTo === "function" ? routing.notifyTo(record) : routing.notifyTo;
@@ -163,7 +178,7 @@ export async function POST(request: Request) {
     }
   }
 
-  // 3) Marketing sync — best-effort.
+  // 4) Marketing sync — best-effort.
   if (routing.cioEvent && submitterEmail) {
     await cioIdentifyAndTrack(
       submitterEmail,

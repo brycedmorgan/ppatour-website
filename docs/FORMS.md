@@ -13,8 +13,9 @@ Next.js route handler.
 /api/form-submit  (app/api/form-submit/route.ts)
         │  validate against lib/forms/schema.ts
         ├─► 1. Google Sheet append   (lib/google-sheet.ts)      ← system of record
-        ├─► 2. Notification email     (Customer.io transactional) ← routed inbox, reply-to = submitter
-        └─► 3. Customer.io identify   (optional, marketing forms)
+        ├─► 2. Slack mirror           (lib/forms/slack.ts)        ← visibility only, best-effort
+        ├─► 3. Notification email     (Customer.io transactional) ← routed inbox, reply-to = submitter
+        └─► 4. Customer.io identify   (optional, marketing forms)
 ```
 
 - **Email notification** — Customer.io transactional send from the verified
@@ -25,6 +26,9 @@ Next.js route handler.
 - **Durable record** — one row appended to a Google Sheet, one tab per form.
   This is the "spreadsheet of all submissions." Best-effort: a Sheets outage
   never fails a request the team was already emailed about.
+- **Slack mirror** — a copy of the submission posted to the forms channel, for
+  visibility while the pipeline is being verified. Best-effort and never fails a
+  request; see below for which forms are excluded.
 - **Marketing sync** — only when a form sets `cioEvent` in routing.
 
 Degrades gracefully: with no env configured (local dev) submissions are logged
@@ -52,6 +56,7 @@ drift.
 | `TURNSTILE_SECRET_KEY` | anti-spam (server verify) | Cloudflare Turnstile secret; unset → verification skipped |
 | `FORM_INBOX_*` | notification routing | **Required in production** — see below |
 | `FORM_NOTIFY_ALWAYS` | notification routing | Optional. Copied on **every** form notification, on top of the routed inbox — see below |
+| `FORM_SLACK_WEBHOOK_URL` | Slack mirror | Optional. Incoming-webhook URL for #website-form-submissions — see below. Unset → no Slack post |
 
 ### Notification inboxes (`FORM_INBOX_*`)
 
@@ -111,6 +116,49 @@ FORM_NOTIFY_ALWAYS=someone@ppatour.com
   isn't an address appended to sixteen `FORM_INBOX_*` vars.
 - ⚠ Set it in **Production and Preview** if preview submissions should be seen
   too; the address is a real person's inbox, so preview/test traffic lands there.
+
+## Slack mirror (`FORM_SLACK_WEBHOOK_URL`)
+
+Every non-newsletter submission also posts to **#website-form-submissions**
+(private). Added 8/6 (Wesley) to watch the pipeline end to end.
+Implementation: `lib/forms/slack.ts`.
+
+```
+FORM_SLACK_WEBHOOK_URL=https://hooks.slack.com/services/T…/B…/…
+```
+
+- **Best-effort, always.** The sheet is the system of record and the routed
+  inbox is how the team is actually notified — this is a third copy. Every
+  failure (outage, revoked webhook, rate limit, 5s timeout) is logged and
+  swallowed, and the post runs **before** the email so a Customer.io outage
+  doesn't also cost the channel its copy.
+- **Excluded forms:** `newsletter`, `newsletter-junior` (list signups — they'd
+  bury real submissions) and ⚠ **`reporting`**.
+- ⚠ **`reporting` is excluded deliberately** — it's the integrity form:
+  anonymous-capable, the only form that never sets a reply-to, routed to the
+  integrity inbox alone. A Slack channel is a durable searchable copy whose
+  membership can widen later without anyone revisiting it. Removing it from
+  `SLACK_EXCLUDED_FORMS` is a decision about who may read misconduct reports,
+  not a cleanup.
+- Long values are truncated (700 chars each, 6 section blocks max) and the
+  truncation is **stated in the message** rather than silent — the email and the
+  sheet always hold the full submission.
+- **To stop:** unset the variable and redeploy.
+
+### Creating the webhook
+
+1. <https://api.slack.com/apps> → **Create New App** → *From scratch* →
+   name it e.g. "PPA Website Forms", pick the Pickleball Inc workspace.
+2. **Incoming Webhooks** → toggle **On** → **Add New Webhook to Workspace**.
+3. Pick **#website-form-submissions**. Because it's a **private** channel it
+   only appears if the app is in it — if it's missing, run
+   `/invite @PPA Website Forms` in the channel first, then retry.
+4. Copy the `https://hooks.slack.com/services/…` URL into
+   `FORM_SLACK_WEBHOOK_URL` in Vercel (Production + Preview) and redeploy.
+
+⚠ The webhook URL is a bearer credential — anyone holding it can post to the
+channel. It goes in Vercel's env store, never in a tracked file. Rotate it by
+deleting the webhook in the Slack app config and adding a new one.
 
 ## Cloudflare Turnstile (anti-spam)
 

@@ -1,14 +1,16 @@
 import { NextResponse } from "next/server";
 import { FORM_ROUTING } from "@/lib/forms/routing";
 import { localTimestamp, sendFormNotification } from "@/lib/forms/notify";
+import { postFormToSlack } from "@/lib/forms/slack";
 import { appendToSheet } from "@/lib/google-sheet";
 
 /**
- * Sponsorship inquiry endpoint (/about/sponsors). Fans out three ways:
+ * Sponsorship inquiry endpoint (/about/sponsors). Fans out four ways:
  *
  *   1. A durable row in the Google Sheet, tab "Sponsorship" (best-effort).
- *   2. A notification email to FORM_INBOX_SPONSORSHIP, reply-to the submitter.
- *   3. A forward to the internal Jackalope sales app (server-to-server,
+ *   2. A Slack mirror to the forms channel (best-effort).
+ *   3. A notification email to FORM_INBOX_SPONSORSHIP, reply-to the submitter.
+ *   4. A forward to the internal Jackalope sales app (server-to-server,
  *      shared-secret header), where it lands as a deal under Leads.
  *
  * ⚠ THE ORDER IS THE POINT (Wesley, 8/5: keep the Jackalope forward, add the
@@ -91,7 +93,17 @@ export async function POST(request: Request) {
   // 1) Durable record — best-effort, and first, so nothing below can lose it.
   const sheetOk = await appendToSheet(ROUTING.sheetTab, record);
 
-  // 2) Notification email. Non-fatal on its own: the row is already written and
+  // 2) Slack mirror — best-effort, and before both the email and the Jackalope
+  //    forward, either of which can fail this request.
+  await postFormToSlack({
+    formType: "sponsorship",
+    heading: "Sponsorship Inquiry",
+    rows,
+    submittedAtLocal: localTimestamp(submittedAt),
+    label: "sponsor-inquiry",
+  });
+
+  // 3) Notification email. Non-fatal on its own: the row is already written and
   //    the Jackalope forward below is still the primary destination, so a mail
   //    outage must not fail a lead that reached the pipeline.
   const notifyTo =
@@ -113,7 +125,7 @@ export async function POST(request: Request) {
     }
   }
 
-  // 3) Jackalope sales pipeline — unchanged, including the 502 on failure.
+  // 4) Jackalope sales pipeline — unchanged, including the 502 on failure.
   const secret = process.env.LEAD_HOOK_SECRET;
   if (!secret) {
     // Not configured (previews today) — the sheet row and the email above still

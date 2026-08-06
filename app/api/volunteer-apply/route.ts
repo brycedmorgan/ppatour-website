@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cioIdentifyAndTrack } from "@/lib/customerio";
 import { notifyRecipients } from "@/lib/forms/notify";
+import { postFormToSlack } from "@/lib/forms/slack";
 
 /**
  * Volunteer application endpoint. Each submission is emailed to the
@@ -60,8 +61,13 @@ function esc(s: unknown): string {
     .replace(/>/g, "&gt;");
 }
 
-function emailBody(a: Application, applicationDate: string): string {
-  const rows: [string, string][] = [
+/**
+ * The application as label/value pairs. Shared by the email body and the Slack
+ * mirror so the channel and the inbox can't show different versions of one
+ * application.
+ */
+function applicationRows(a: Application, applicationDate: string): [string, string][] {
+  return [
     ["Application Date", new Date(applicationDate).toLocaleString("en-US", { timeZone: "America/Denver", dateStyle: "long", timeStyle: "short" })],
     ["Name", `${a.firstName} ${a.lastName}`],
     ["Date of Birth", a.dob ?? ""],
@@ -76,7 +82,10 @@ function emailBody(a: Application, applicationDate: string): string {
       "Photo ID · sole-discretion acceptance · 2-shift minimum · waiver and release (all checked)",
     ],
   ];
-  const tr = rows
+}
+
+function emailBody(a: Application, applicationDate: string): string {
+  const tr = applicationRows(a, applicationDate)
     .map(
       ([k, v]) =>
         `<tr><td style="padding:6px 14px 6px 0;color:#5b6472;white-space:nowrap;vertical-align:top;">${esc(k)}</td><td style="padding:6px 0;color:#101d33;">${esc(v)}</td></tr>`,
@@ -128,6 +137,21 @@ export async function POST(request: Request) {
       application_date: applicationDate,
     },
   ).catch(() => {});
+
+  // Slack mirror — best-effort, and BEFORE the Customer.io key check below:
+  // that check returns early, so posting after it would mean no Slack copy in
+  // any environment where email isn't configured.
+  await postFormToSlack({
+    formType: "volunteer",
+    heading: "Volunteer Application",
+    rows: applicationRows(payload, applicationDate),
+    submittedAtLocal: new Date(applicationDate).toLocaleString("en-US", {
+      timeZone: "America/Denver",
+      dateStyle: "long",
+      timeStyle: "short",
+    }),
+    label: "volunteer-apply",
+  });
 
   const apiKey = process.env.CUSTOMERIO_APP_API_KEY;
   if (!apiKey) {
