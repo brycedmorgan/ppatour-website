@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-05T16:06:07Z",
+  "updated_at": "2026-08-06T15:06:14Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -819,6 +819,130 @@
       "ticket": "Weeklong Grounds Pass",
       "base_price": 100,
       "all_in_price": 113.69
+    },
+    {
+      "at": "2026-08-06T15:06:14Z",
+      "type": "ticket_added",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Saturday: Wave Movement - Mat Pilates Class (9am)",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-06T15:06:14Z",
+      "type": "ticket_added",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Thursday: Wave Movement - Mat Pilates Class (9am)",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-06T15:06:14Z",
+      "type": "ticket_added",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Tuesday: Wave Movement - Mat Pilates Class (5pm)",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-06T15:06:14Z",
+      "type": "ticket_added",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Wednesday: Wave Movement - Mat Pilates Class (9am)",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-06T15:06:14Z",
+      "type": "ticket_added",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Friday Premium Parking",
+      "base_price": 50,
+      "all_in_price": 57.36
+    },
+    {
+      "at": "2026-08-06T15:06:14Z",
+      "type": "ticket_added",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Saturday Premium Parking",
+      "base_price": null,
+      "all_in_price": 57.36
+    },
+    {
+      "at": "2026-08-06T15:06:14Z",
+      "type": "ticket_added",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Sunday Premium Parking",
+      "base_price": null,
+      "all_in_price": 57.36
+    },
+    {
+      "at": "2026-08-06T15:06:14Z",
+      "type": "ticket_added",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Thursday Premium Parking",
+      "base_price": null,
+      "all_in_price": 57.36
+    },
+    {
+      "at": "2026-08-06T15:06:14Z",
+      "type": "ticket_added",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Tuesday Premium Parking",
+      "base_price": 50,
+      "all_in_price": 57.36
+    },
+    {
+      "at": "2026-08-06T15:06:14Z",
+      "type": "ticket_added",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Wednesday Premium Parking",
+      "base_price": 50,
+      "all_in_price": 57.36
+    },
+    {
+      "at": "2026-08-06T15:06:14Z",
+      "type": "ticket_removed",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Saturday: Wave Pilates (9am)"
+    },
+    {
+      "at": "2026-08-06T15:06:14Z",
+      "type": "ticket_removed",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Thursday: Wave Pilates (9am)"
+    },
+    {
+      "at": "2026-08-06T15:06:14Z",
+      "type": "ticket_removed",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Tuesday: Wave Pilates (5pm)"
+    },
+    {
+      "at": "2026-08-06T15:06:14Z",
+      "type": "ticket_removed",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Wednesday: Wave Pilates (9am)"
+    },
+    {
+      "at": "2026-08-06T15:06:14Z",
+      "type": "event_added",
+      "event_id": "202083",
+      "event": "Canes Night at the Veolia Pickleball National Championships"
     }
   ]
 }

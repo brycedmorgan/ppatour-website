@@ -1,13 +1,13 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-08-05T16:06:07Z",
-  "event_count": 61,
-  "ticket_type_count": 896,
+  "generated_at": "2026-08-06T15:06:14Z",
+  "event_count": 62,
+  "ticket_type_count": 920,
   "series_breakdown": {
     "Major League Pickleball": 16,
     "PPA Challenger Series": 4,
-    "PPA Tour": 41
+    "PPA Tour": 42
   },
   "field_notes": {
     "base_price": "Face value set by the organizer (USD). null when the tier is sold out / not on public sale.",
@@ -1516,7 +1516,7 @@
           "all_in_price": 0
         },
         {
-          "name": "Saturday: Wave Pilates (9am)",
+          "name": "Saturday: Wave Movement - Mat Pilates Class (9am)",
           "category": "GA",
           "sale_state": "OPEN",
           "base_price": 0,
@@ -1558,7 +1558,7 @@
           "all_in_price": 24.95
         },
         {
-          "name": "Thursday: Wave Pilates (9am)",
+          "name": "Thursday: Wave Movement - Mat Pilates Class (9am)",
           "category": "GA",
           "sale_state": "OPEN",
           "base_price": 0,
@@ -1586,7 +1586,7 @@
           "all_in_price": 167.47
         },
         {
-          "name": "Tuesday: Wave Pilates (5pm)",
+          "name": "Tuesday: Wave Movement - Mat Pilates Class (5pm)",
           "category": "GA",
           "sale_state": "OPEN",
           "base_price": 0,
@@ -1614,7 +1614,7 @@
           "all_in_price": 91.83
         },
         {
-          "name": "Wednesday: Wave Pilates (9am)",
+          "name": "Wednesday: Wave Movement - Mat Pilates Class (9am)",
           "category": "GA",
           "sale_state": "OPEN",
           "base_price": 0,
@@ -1626,6 +1626,48 @@
           "sale_state": "OPEN",
           "base_price": 100,
           "all_in_price": 113.44
+        },
+        {
+          "name": "Friday Premium Parking",
+          "category": "PARKING",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Saturday Premium Parking",
+          "category": "PARKING",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Sunday Premium Parking",
+          "category": "PARKING",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Thursday Premium Parking",
+          "category": "PARKING",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Tuesday Premium Parking",
+          "category": "PARKING",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Wednesday Premium Parking",
+          "category": "PARKING",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
         },
         {
           "name": "Thursday-Sunday Courtside",
@@ -1684,6 +1726,150 @@
           "all_in_price": 1301.96
         }
       ]
+    },
+    {
+      "event_id": "202083",
+      "name": "Canes Night at the Veolia Pickleball National Championships",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-09-03",
+      "end_date": "2026-09-04",
+      "venue": {
+        "name": "Cary Tennis Center",
+        "city": "Cary",
+        "state": "NC"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/canes-night-at-the-veolia-pickleball-national-championships-202083",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Canes Night Courtside (Humana Championship Court)",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Canes Night Courtside (Humana Championship Court)",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Canes Night Courtside (Humana Championship Court)",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Canes Night Courtside+ (Humana Championship Court)",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Canes Night Courtside+ (Humana Championship Court)",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Canes Night Grandstand",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Canes Night On Court VIP (Humana Championship Court)",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 221.49
+        },
+        {
+          "name": "Canes Night VIP (Humana Championship Court)",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 200,
+          "all_in_price": 221.49
+        },
+        {
+          "name": "Canes Night VIP (Humana Championship Court)",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 200,
+          "all_in_price": 221.49
+        }
+      ],
+      "parent_event_id": "184656"
     },
     {
       "event_id": "184767",
@@ -6026,8 +6212,8 @@
       "name": "Veolia PPA Malibu",
       "series": "PPA Tour",
       "status": "PUBLISHED",
-      "start_date": "2026-11-30",
-      "end_date": "2026-12-07",
+      "start_date": "2026-12-14",
+      "end_date": "2026-12-20",
       "venue": {
         "name": "Pepperdine University",
         "city": "Malibu",
