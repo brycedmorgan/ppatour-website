@@ -143,6 +143,9 @@ export async function POST(request: Request) {
   //    unset webhook both no-op inside postFormToSlack.
   await postFormToSlack({
     formType,
+    // Contact routes to a channel by its Inquiry Topic, the same field
+    // routing.ts routes the email inbox by. Ignored for every other form.
+    topic: record.topic,
     heading: schema.heading,
     rows,
     submittedAtLocal,

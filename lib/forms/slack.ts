@@ -12,10 +12,15 @@
  * sheet already holds and the team was already emailed about. Nothing in this
  * file returns a status any caller acts on beyond logging.
  *
- * ⚠ WEBHOOK URL LIVES IN ENV. A Slack incoming-webhook URL is a bearer
- * credential — anyone holding it can post to the channel — and this repo is
- * public, so it is `FORM_SLACK_WEBHOOK_URL` and never a literal here. Same rule
- * as the FORM_INBOX_* addresses in ./routing.ts.
+ * Transport is `chat.postMessage` with a bot token, so one credential can reach
+ * any channel and routing is a channel ID per destination (see below). An
+ * incoming webhook is bound to a single channel at creation, so it survives only
+ * as the no-token fallback.
+ *
+ * ⚠ BOTH CREDENTIALS LIVE IN ENV. A bot token and a webhook URL are each a
+ * bearer credential, and this repo is public, so they are
+ * `FORM_SLACK_BOT_TOKEN` / `FORM_SLACK_WEBHOOK_URL` and never literals here.
+ * Same rule as the FORM_INBOX_* addresses in ./routing.ts.
  *
  * Server-only.
  */
@@ -40,6 +45,72 @@ const SLACK_EXCLUDED_FORMS = new Set(["reporting", "newsletter", "newsletter-jun
 /** Whether a form's submissions are mirrored to Slack. */
 export function formPostsToSlack(formType: string): boolean {
   return !SLACK_EXCLUDED_FORMS.has(formType);
+}
+
+/**
+ * ⚠ CHANNELS ARE NAMED BY DESTINATION, NOT BY FORM — and that is the point.
+ *
+ * Both tables below hold an ENV VAR NAME, and two routes that share a channel
+ * name the SAME variable. Wesley, 8/6: "some per-forms will be the same as a
+ * contact topic (for example: contact topic sponsorship and the specific
+ * sponsorship form will be in the same channel)." Storing a channel ID per
+ * route would mean the same ID written twice, and this repo's most familiar bug
+ * is two hand-kept copies of one fact drifting apart (event names in three
+ * lists, the presenter fallback in both builders). One variable, one channel.
+ *
+ * The names deliberately mirror the FORM_INBOX_* set in ./routing.ts, so
+ * FORM_SLACK_CHANNEL_SPONSORSHIP is visibly the Slack counterpart of
+ * FORM_INBOX_SPONSORSHIP.
+ *
+ * Values are channel IDs (`C…`), not names: a channel can be renamed without
+ * breaking routing, and a name lookup is an extra API call per submission.
+ */
+
+/** Contact form → channel, by Inquiry Topic. Keys match ./schema.ts verbatim. */
+const CONTACT_CHANNEL_ENV: Record<string, string> = {
+  "Pickleball Brackets/Tournaments": "FORM_SLACK_CHANNEL_SUPPORT",
+  Registrations: "FORM_SLACK_CHANNEL_REGISTRATIONS",
+  Tickets: "FORM_SLACK_CHANNEL_TICKETING",
+  "PBTV/Broadcasting": "FORM_SLACK_CHANNEL_BROADCAST",
+  "Public Relations": "FORM_SLACK_CHANNEL_PR",
+  Sponsorship: "FORM_SLACK_CHANNEL_SPONSORSHIP",
+  Marketing: "FORM_SLACK_CHANNEL_MARKETING",
+  "PPA Challenger": "FORM_SLACK_CHANNEL_CHALLENGER",
+  Other: "FORM_SLACK_CHANNEL_MARKETING",
+};
+
+/**
+ * Every other form → channel. `sponsorship` names the same variable as the
+ * contact topic above, so both land in one place by construction.
+ */
+const FORM_CHANNEL_ENV: Record<string, string> = {
+  sponsorship: "FORM_SLACK_CHANNEL_SPONSORSHIP",
+  careers: "FORM_SLACK_CHANNEL_CAREERS",
+  hospitality: "FORM_SLACK_CHANNEL_HOSPITALITY",
+  "host-tournament": "FORM_SLACK_CHANNEL_EVENTS",
+  "event-inquiry": "FORM_SLACK_CHANNEL_EVENTS",
+  "private-event": "FORM_SLACK_CHANNEL_PRIVATE_EVENTS",
+  ambassador: "FORM_SLACK_CHANNEL_AMBASSADOR",
+  volunteer: "FORM_SLACK_CHANNEL_VOLUNTEER",
+  "opt-in": "FORM_SLACK_CHANNEL_OPT_IN",
+};
+
+/**
+ * Resolve the destination channel: contact topic first, then the form, then
+ * `FORM_SLACK_CHANNEL_DEFAULT`.
+ *
+ * ⚠ EVERY LEVEL FALLS BACK RATHER THAN DROPPING. An unmapped topic, an unset
+ * variable or a topic the schema gains later all land in the default channel —
+ * a submission in the wrong-but-monitored channel is recoverable; one that goes
+ * nowhere looks exactly like a form that isn't working. Same reasoning as the
+ * `inbox()` fallback in ./routing.ts.
+ */
+function resolveChannel(formType: string, topic?: string): string | undefined {
+  const key =
+    (formType === "contact" && topic ? CONTACT_CHANNEL_ENV[topic] : undefined) ??
+    FORM_CHANNEL_ENV[formType];
+  const routed = key ? process.env[key]?.trim() : "";
+  return routed || process.env.FORM_SLACK_CHANNEL_DEFAULT?.trim() || undefined;
 }
 
 /**
@@ -86,9 +157,9 @@ function chunk(lines: string[]): string[] {
 export type SlackResult = "posted" | "skipped" | "failed";
 
 /**
- * Post a submission to the forms channel. Returns:
+ * Post a submission to its channel. Returns:
  *   "posted"  — Slack accepted it.
- *   "skipped" — excluded form, or FORM_SLACK_WEBHOOK_URL unset (local dev).
+ *   "skipped" — excluded form, or no transport configured (local dev).
  *   "failed"  — configured but rejected/unreachable. Callers log, never fail.
  *
  * The `rows` are the same label/value pairs the notification email renders, so
@@ -97,6 +168,8 @@ export type SlackResult = "posted" | "skipped" | "failed";
 export async function postFormToSlack(opts: {
   /** Routing key, e.g. "careers". Checked against the exclusion set. */
   formType: string;
+  /** Contact form's Inquiry Topic, which picks the channel. Ignored otherwise. */
+  topic?: string;
   /** Human title, e.g. "Careers Application". */
   heading: string;
   rows: [string, string][];
@@ -106,10 +179,32 @@ export async function postFormToSlack(opts: {
 }): Promise<SlackResult> {
   if (!formPostsToSlack(opts.formType)) return "skipped";
 
+  const token = process.env.FORM_SLACK_BOT_TOKEN;
+  const channel = resolveChannel(opts.formType, opts.topic);
   const webhook = process.env.FORM_SLACK_WEBHOOK_URL;
-  if (!webhook) {
-    console.warn(`[${opts.label}] FORM_SLACK_WEBHOOK_URL unset — Slack post skipped`);
-    return "skipped";
+
+  /**
+   * ⚠ THE WEBHOOK IS A FALLBACK, NOT A SECOND ROUTE. An incoming webhook is
+   * bound to one channel at creation, so it cannot honour any of the routing
+   * above — with no bot token, everything lands in that one channel, which is
+   * exactly the behaviour before per-topic routing existed. Warned, because
+   * "my sponsorship posts stopped going to the sponsorship channel" should be
+   * answerable from the logs.
+   */
+  if (!token || !channel) {
+    if (!webhook) {
+      console.warn(
+        `[${opts.label}] no FORM_SLACK_BOT_TOKEN/channel and no FORM_SLACK_WEBHOOK_URL — Slack post skipped`,
+      );
+      return "skipped";
+    }
+    if (!token) {
+      console.warn(`[${opts.label}] FORM_SLACK_BOT_TOKEN unset — posting to the webhook's channel`);
+    } else {
+      console.warn(
+        `[${opts.label}] no channel resolved (set FORM_SLACK_CHANNEL_DEFAULT) — posting to the webhook's channel`,
+      );
+    }
   }
 
   const lines = opts.rows
@@ -139,21 +234,52 @@ export async function postFormToSlack(opts: {
     },
   ];
 
+  // `text` is the notification/fallback line (push notifications, screen
+  // readers, and any client that can't render blocks).
+  const message = { text: `New submission — ${opts.heading}`, blocks };
+  const viaApi = Boolean(token && channel);
+
   try {
-    const res = await fetch(webhook, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      // `text` is the notification/fallback line (push notifications, screen
-      // readers, and any client that can't render blocks).
-      body: JSON.stringify({ text: `New submission — ${opts.heading}`, blocks }),
-      // ⚠ A hanging Slack must not hold the visitor's request open. The email
-      // and the sheet are already done by the time this runs.
-      signal: AbortSignal.timeout(5000),
-    });
+    const res = await fetch(
+      viaApi ? "https://slack.com/api/chat.postMessage" : webhook!,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": viaApi ? "application/json; charset=utf-8" : "application/json",
+          ...(viaApi ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(viaApi ? { channel, ...message } : message),
+        // ⚠ A hanging Slack must not hold the visitor's request open. The email
+        // and the sheet are already done by the time this runs.
+        signal: AbortSignal.timeout(5000),
+      },
+    );
+
     if (!res.ok) {
       const detail = await res.text().catch(() => "");
       console.error(`[${opts.label}] Slack post failed`, res.status, detail);
       return "failed";
+    }
+
+    /**
+     * ⚠ chat.postMessage ANSWERS 200 WHEN IT REFUSES. `channel_not_found`,
+     * `not_in_channel` and `invalid_auth` all come back as HTTP 200 with
+     * `{ok:false, error}` — so checking res.ok alone would report every
+     * misrouted or uninvited channel as a successful post, and the failure
+     * would only ever show up as a channel that stays empty. Webhooks are the
+     * opposite (plain-text "ok" body), hence the guard on `viaApi`.
+     */
+    if (viaApi) {
+      const data = (await res.json().catch(() => null)) as
+        | { ok?: boolean; error?: string }
+        | null;
+      if (!data?.ok) {
+        console.error(
+          `[${opts.label}] Slack rejected the post to ${channel}:`,
+          data?.error ?? "unparseable response",
+        );
+        return "failed";
+      }
     }
     return "posted";
   } catch (err) {

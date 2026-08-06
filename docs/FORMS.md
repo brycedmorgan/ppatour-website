@@ -56,7 +56,9 @@ drift.
 | `TURNSTILE_SECRET_KEY` | anti-spam (server verify) | Cloudflare Turnstile secret; unset → verification skipped |
 | `FORM_INBOX_*` | notification routing | **Required in production** — see below |
 | `FORM_NOTIFY_ALWAYS` | notification routing | Optional. Copied on **every** form notification, on top of the routed inbox — see below |
-| `FORM_SLACK_WEBHOOK_URL` | Slack mirror | Optional. Incoming-webhook URL for #website-form-submissions — see below. Unset → no Slack post |
+| `FORM_SLACK_BOT_TOKEN` | Slack mirror | Optional. Bot token (`chat:write`) — required for per-topic/per-form channels |
+| `FORM_SLACK_CHANNEL_*` | Slack mirror | Optional. Channel ID per destination — see below |
+| `FORM_SLACK_WEBHOOK_URL` | Slack mirror | Fallback only. Single-channel; used when no bot token is set |
 
 ### Notification inboxes (`FORM_INBOX_*`)
 
@@ -117,15 +119,55 @@ FORM_NOTIFY_ALWAYS=someone@ppatour.com
 - ⚠ Set it in **Production and Preview** if preview submissions should be seen
   too; the address is a real person's inbox, so preview/test traffic lands there.
 
-## Slack mirror (`FORM_SLACK_WEBHOOK_URL`)
+## Slack mirror
 
-Every non-newsletter submission also posts to **#website-form-submissions**
-(private). Added 8/6 (Wesley) to watch the pipeline end to end.
-Implementation: `lib/forms/slack.ts`.
+Every non-newsletter submission also posts to Slack — by default
+**#website-form-submissions** (private), or to a per-topic / per-form channel
+where one is configured. Added 8/6 (Wesley). Implementation: `lib/forms/slack.ts`.
 
 ```
-FORM_SLACK_WEBHOOK_URL=https://hooks.slack.com/services/T…/B…/…
+FORM_SLACK_BOT_TOKEN=xoxb-…            # chat:write (+ chat:write.public)
+FORM_SLACK_CHANNEL_DEFAULT=C0BNBKP0B99 # #website-form-submissions
 ```
+
+### Channel routing
+
+Resolution order: **contact Inquiry Topic → form → `FORM_SLACK_CHANNEL_DEFAULT`**.
+Every level falls back rather than dropping, so an unmapped topic or an unset
+variable lands in the default channel — a submission in the wrong-but-monitored
+channel is recoverable, one that goes nowhere looks like a broken form.
+
+⚠ **Routes that share a channel name the SAME variable**, so one channel is one
+ID in one place. `FORM_SLACK_CHANNEL_SPONSORSHIP` serves both the contact topic
+*Sponsorship* and the sponsorship form; `FORM_SLACK_CHANNEL_EVENTS` serves both
+event forms. Moving that channel is one edit, and the two routes cannot drift
+apart. Values are channel **IDs** (`C…`) so a rename doesn't break routing.
+
+| Var | Routes |
+|---|---|
+| `FORM_SLACK_CHANNEL_SUPPORT` | Contact → *Pickleball Brackets/Tournaments* |
+| `FORM_SLACK_CHANNEL_REGISTRATIONS` | Contact → *Registrations* |
+| `FORM_SLACK_CHANNEL_TICKETING` | Contact → *Tickets* |
+| `FORM_SLACK_CHANNEL_BROADCAST` | Contact → *PBTV/Broadcasting* |
+| `FORM_SLACK_CHANNEL_PR` | Contact → *Public Relations* |
+| `FORM_SLACK_CHANNEL_SPONSORSHIP` | Contact → *Sponsorship* **and** the sponsorship form |
+| `FORM_SLACK_CHANNEL_MARKETING` | Contact → *Marketing*, *Other*, any unmapped topic |
+| `FORM_SLACK_CHANNEL_CHALLENGER` | Contact → *PPA Challenger* |
+| `FORM_SLACK_CHANNEL_CAREERS` | Careers |
+| `FORM_SLACK_CHANNEL_HOSPITALITY` | Hospitality |
+| `FORM_SLACK_CHANNEL_EVENTS` | Host-a-tournament RFP **and** Event inquiry |
+| `FORM_SLACK_CHANNEL_PRIVATE_EVENTS` | Private/sponsored event |
+| `FORM_SLACK_CHANNEL_AMBASSADOR` | Ambassador |
+| `FORM_SLACK_CHANNEL_VOLUNTEER` | Volunteer |
+| `FORM_SLACK_CHANNEL_OPT_IN` | Fan opt-in |
+
+The names mirror the `FORM_INBOX_*` set above, so each channel is visibly the
+counterpart of the inbox that gets the same submission by email.
+
+⚠ **`chat.postMessage` answers HTTP 200 when it refuses** — `channel_not_found`,
+`not_in_channel` and `invalid_auth` all arrive as `{ok:false, error}`. The code
+checks the body, so those log an error rather than reporting a phantom success.
+If a channel stays empty, the Vercel log names the Slack error.
 
 - **Best-effort, always.** The sheet is the system of record and the routed
   inbox is how the team is actually notified — this is a third copy. Every
@@ -145,20 +187,28 @@ FORM_SLACK_WEBHOOK_URL=https://hooks.slack.com/services/T…/B…/…
   sheet always hold the full submission.
 - **To stop:** unset the variable and redeploy.
 
-### Creating the webhook
+### Setting up the bot token
 
-1. <https://api.slack.com/apps> → **Create New App** → *From scratch* →
-   name it e.g. "PPA Website Forms", pick the Pickleball Inc workspace.
-2. **Incoming Webhooks** → toggle **On** → **Add New Webhook to Workspace**.
-3. Pick **#website-form-submissions**. Because it's a **private** channel it
-   only appears if the app is in it — if it's missing, run
-   `/invite @PPA Website Forms` in the channel first, then retry.
-4. Copy the `https://hooks.slack.com/services/…` URL into
-   `FORM_SLACK_WEBHOOK_URL` in Vercel (Production + Preview) and redeploy.
+1. <https://api.slack.com/apps> → the **PPA Website Forms** app →
+   **OAuth & Permissions** → **Bot Token Scopes** → add **`chat:write`** and
+   **`chat:write.public`**.
+2. **Install to Workspace** (reinstall if it's already installed — new scopes
+   need it) → copy the **Bot User OAuth Token** (`xoxb-…`).
+3. Set `FORM_SLACK_BOT_TOKEN` in Vercel (Production + Preview) and redeploy.
+4. `/invite @PPA Website Forms` in every **private** destination channel.
+   `chat:write.public` covers public channels without joining; private ones
+   always require the invite, and without it the post fails `not_in_channel`.
 
-⚠ The webhook URL is a bearer credential — anyone holding it can post to the
-channel. It goes in Vercel's env store, never in a tracked file. Rotate it by
-deleting the webhook in the Slack app config and adding a new one.
+⚠ The bot token is a bearer credential — it goes in Vercel's env store, never in
+a tracked file. Rotate from the same OAuth page.
+
+### The webhook fallback (`FORM_SLACK_WEBHOOK_URL`)
+
+An incoming webhook is bound to **one channel at creation**, so it cannot honour
+any routing. It is kept only as the no-token fallback: with `FORM_SLACK_BOT_TOKEN`
+unset, every form posts to that single channel — the behaviour from before
+routing existed — and a warning is logged saying so. Once the token is in, the
+webhook is unused and can be deleted from both Vercel and the Slack app.
 
 ## Cloudflare Turnstile (anti-spam)
 
