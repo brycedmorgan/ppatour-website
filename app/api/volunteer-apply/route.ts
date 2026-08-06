@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { cioIdentifyAndTrack } from "@/lib/customerio";
+import { notifyRecipients } from "@/lib/forms/notify";
 
 /**
  * Volunteer application endpoint. Each submission is emailed to the
@@ -12,6 +13,13 @@ import { cioIdentifyAndTrack } from "@/lib/customerio";
  *                                (local dev) submissions are logged only.
  *   VOLUNTEER_APPLICATIONS_TO  — recipient override for testing; defaults
  *                                to the volunteer team inbox.
+ *   FORM_NOTIFY_ALWAYS         — copied on every form notification site-wide.
+ *
+ * ⚠ This route builds its own send rather than going through
+ * lib/forms/notify.ts (its body carries a different lead-in and an Application
+ * Date row). It still imports `notifyRecipients` so the always-copied list can't
+ * silently miss the one form that doesn't share the helper — which is exactly
+ * how "I'm getting every form except that one" happens.
  */
 const APPLICATIONS_TO =
   process.env.VOLUNTEER_APPLICATIONS_TO ?? "hailey.lunt@pickleball.com";
@@ -129,6 +137,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   }
 
+  // Resolved per request, not at import: the routed inbox stays first (it is the
+  // Customer.io identifier) and FORM_NOTIFY_ALWAYS is appended.
+  const to = notifyRecipients(APPLICATIONS_TO);
+
   const res = await fetch("https://api.customer.io/v1/send/email", {
     method: "POST",
     headers: {
@@ -136,8 +148,8 @@ export async function POST(request: Request) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      to: APPLICATIONS_TO,
-      identifiers: { email: APPLICATIONS_TO },
+      to,
+      identifiers: { email: to.split(",")[0].trim() },
       from: FROM,
       reply_to: `${payload.firstName} ${payload.lastName} <${payload.email}>`,
       subject: `New volunteer application — ${payload.firstName} ${payload.lastName}`,

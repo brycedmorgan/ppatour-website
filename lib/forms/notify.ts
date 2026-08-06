@@ -54,6 +54,63 @@ export function localTimestamp(iso: string): string {
   });
 }
 
+/**
+ * Addresses copied on EVERY form notification, on top of the form's own routed
+ * inbox. Comma-separated, from `FORM_NOTIFY_ALWAYS`.
+ *
+ * ⚠ ENV, NOT SOURCE — same rule as the `FORM_INBOX_*` vars in
+ * lib/forms/routing.ts. This repo is public, so a staff address written here is
+ * published permanently in git history and scrapeable.
+ *
+ * Added 8/6 (Wesley) so one person can watch every form's notification land and
+ * confirm delivery. Deliberately ONE variable rather than appending an address
+ * to each of the sixteen `FORM_INBOX_*` vars: that would be sixteen edits to add
+ * and sixteen to remove, and the ones nobody remembered to revert would keep
+ * sending forever. This is one line to unset when the watching is done.
+ *
+ * Read at call time, not at import, so setting it in Vercel takes effect on the
+ * next request rather than needing a cold start to be reasoned about.
+ */
+function alwaysNotified(): string[] {
+  return (process.env.FORM_NOTIFY_ALWAYS ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+/**
+ * Merge a form's routed inbox with the always-notified list.
+ *
+ * ⚠ THE ROUTED INBOX STAYS FIRST. `sendFormNotification` derives the Customer.io
+ * identifier from the first address, so reordering would attribute every form's
+ * send to the observer instead of the destination inbox.
+ *
+ * ⚠ AND AN EMPTY `to` STAYS EMPTY. A form with no inbox (newsletter-junior is
+ * list-only, matching the live site) must not start emailing because someone set
+ * this var — callers already skip the send when there is no routed inbox, and
+ * this keeps that true if one ever stops checking.
+ *
+ * Dedupe is case-insensitive, so an address that is already on the routed list
+ * doesn't receive two copies of the same submission.
+ */
+export function notifyRecipients(to: string): string {
+  const routed = to
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (routed.length === 0) return "";
+
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const addr of [...routed, ...alwaysNotified()]) {
+    const key = addr.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(addr);
+  }
+  return out.join(", ");
+}
+
 export type NotifyResult = "sent" | "skipped" | "failed";
 
 /**
@@ -63,8 +120,10 @@ export type NotifyResult = "sent" | "skipped" | "failed";
  *               error; the caller decides whether that should fail the request.
  *   "failed"  — configured but the send was rejected.
  *
- * `to` may be a comma-separated list. The Customer.io identifier has to be a
- * single address, so it takes the first one — the whole list still receives it.
+ * `to` may be a comma-separated list, and `FORM_NOTIFY_ALWAYS` is appended to it
+ * (see notifyRecipients). The Customer.io identifier has to be a single address,
+ * so it takes the first one — the routed inbox — and the whole list still
+ * receives the email.
  */
 export async function sendFormNotification(opts: {
   to: string;
@@ -83,12 +142,18 @@ export async function sendFormNotification(opts: {
     return "skipped";
   }
 
+  const to = notifyRecipients(opts.to);
+  if (!to) {
+    console.warn(`[${opts.label}] no recipients — email skipped`);
+    return "skipped";
+  }
+
   const res = await fetch("https://api.customer.io/v1/send/email", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      to: opts.to,
-      identifiers: { email: opts.to.split(",")[0].trim() },
+      to,
+      identifiers: { email: to.split(",")[0].trim() },
       from: FROM,
       ...(opts.replyTo ? { reply_to: opts.replyTo } : {}),
       subject: opts.subject,

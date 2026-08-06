@@ -51,6 +51,7 @@ drift.
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | anti-spam (client widget) | Cloudflare Turnstile site key; unset → widget hidden, no check |
 | `TURNSTILE_SECRET_KEY` | anti-spam (server verify) | Cloudflare Turnstile secret; unset → verification skipped |
 | `FORM_INBOX_*` | notification routing | **Required in production** — see below |
+| `FORM_NOTIFY_ALWAYS` | notification routing | Optional. Copied on **every** form notification, on top of the routed inbox — see below |
 
 ### Notification inboxes (`FORM_INBOX_*`)
 
@@ -87,6 +88,29 @@ tracked file.
 
 `newsletter-junior` intentionally has **no** inbox (list-only, matching the live
 site).
+
+### Copying one person on everything (`FORM_NOTIFY_ALWAYS`)
+
+Set `FORM_NOTIFY_ALWAYS` to a comma-separated list and those addresses are added
+to **every** form notification, on top of whatever inbox the form already routes
+to. Added 8/6 (Wesley) to watch delivery across all forms at once.
+
+```
+FORM_NOTIFY_ALWAYS=someone@ppatour.com
+```
+
+- Applies to all three routes that email: `/api/form-submit` (every form in
+  `FORM_ROUTING`), `/api/sponsor-inquiry`, and `/api/volunteer-apply`.
+- The routed inbox stays **first** — `sendFormNotification` derives the
+  Customer.io identifier from the first address, so the send is still attributed
+  to the destination inbox, not the observer.
+- Dedupe is case-insensitive: someone already on a form's `FORM_INBOX_*` list
+  gets one copy of that form, not two.
+- A form with no inbox still sends nothing — `newsletter-junior` stays silent.
+- **To stop:** unset the variable and redeploy. One line, which is the reason it
+  isn't an address appended to sixteen `FORM_INBOX_*` vars.
+- ⚠ Set it in **Production and Preview** if preview submissions should be seen
+  too; the address is a real person's inbox, so preview/test traffic lands there.
 
 ## Cloudflare Turnstile (anti-spam)
 
