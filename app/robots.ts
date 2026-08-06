@@ -19,6 +19,8 @@ export default function robots(): MetadataRoute.Robots {
         "/events/veolia-pickleball-national-championships-live/",
         "/brackets/",
         "/hero-preview/",
+        // Private partnership deck — noindex on the page too; nothing links here.
+        "/partners/",
       ],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
