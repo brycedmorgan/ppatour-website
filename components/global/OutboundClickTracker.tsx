@@ -31,6 +31,11 @@ const PARTNER_HOSTS = [
   // told us. `ppavacations.com` is gone with it: it was never ours, it is a
   // parked domain, and the /tour/travel CTA pointing at it is the bug this
   // move fixed.
+  // PPA Tour Asia's own site. Their stops used to link to
+  // pickleballtournaments.com, so those clicks counted as `register_click`;
+  // without this line, repointing them at ppatour-asia.com (Wade, 8/6) would
+  // have silently stopped counting the sister-tour handoff altogether.
+  "ppatour-asia.com",
   // PPA Pickleball Tour 2025 storefronts (/game). The click out is the only
   // thing measurable — the purchase happens on the platform.
   "store.steampowered.com",

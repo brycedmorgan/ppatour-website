@@ -198,12 +198,22 @@ function eventDoc(t: Tournament) {
         ...guide.doing.map((h) => h.name),
       ].join(" ")
     : "";
+  // ⚠ A LINK-OUT EVENT MUST NOT GET `eventHref` — that route 404s for anything
+  // with no internal page (the Challengers and the international sister tours),
+  // so searching "macao" or "hong kong" returned a dead result. Same guard
+  // ScheduleGrid carries; search was missed. The Asia stops now resolve to the
+  // Asia tour's own page (lib/asia-tour-links.ts).
+  const internal = t.hasInternalPage !== false;
+  const href = internal ? eventHref(t) : t.externalUrl ?? t.registerUrl ?? t.ticketsUrl;
   return {
     hit: {
       group: "Events" as const,
       title: t.name,
       meta: `${tier} · ${t.city}, ${t.state} · ${dates}`,
-      href: eventHref(t),
+      href,
+      // Marks the result "↗" and opens it in a new tab, the same as every other
+      // off-site hit — a result that leaves ppatour.com should say so.
+      external: !internal,
     },
     title: norm(t.name),
     // Shared with the /events grid so the two surfaces can't disagree about

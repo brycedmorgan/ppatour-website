@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { EventConcierge } from "@/components/events/EventConcierge";
@@ -67,7 +67,13 @@ function eventMetaDescription(t: Tournament): string {
  * Returns null for unknown events, challengers, and international stops (which
  * all link out to their details_url instead).
  */
-async function resolveEvent(year: string, slug: string): Promise<Tournament | null> {
+type Resolved =
+  | { kind: "internal"; event: Tournament }
+  /** An event that lives on someone else's site — see the gate below. */
+  | { kind: "link-out"; event: Tournament; href: string | null }
+  | null;
+
+async function resolveEvent(year: string, slug: string): Promise<Resolved> {
   const match = (x: Tournament) => x.slug === slug && eventYear(x) === year;
   const curated = tournaments.find(match) ?? null;
   const live = (await getEvents()).events.find(match) ?? null;
@@ -83,7 +89,54 @@ async function resolveEvent(year: string, slug: string): Promise<Tournament | nu
   // feed's name, but a curated event never reaches that record here — curated
   // is checked first — so without this the API name would silently never
   // appear on the one page that matters most.
-  return live?.name && live.name !== t.name ? { ...t, name: live.name } : t;
+  const event = live?.name && live.name !== t.name ? { ...t, name: live.name } : t;
+
+  /**
+   * ⚠ THIS GATE WAS MISSING, AND THE DOC COMMENT ABOVE HAS CLAIMED IT SINCE
+   * THE FILE WAS WRITTEN. Only `tierKey === "challenger"` was checked, so every
+   * NON-challenger international stop — the Asia and Australia 1,000/1,500s —
+   * rendered a full, hand-authored PPA event page under our name. Measured
+   * 8/6 against the live feed: 36 such URLs served 200.
+   *
+   * They are not thin pages, they are wrong ones. `/events/2026/ppa-asia-1000-
+   * leapmotor-kuala-lumpur-cup-2026` published a **$1,063,327 prize purse**
+   * (our Open-tier figure, applied to someone else's tournament), a templated
+   * Order of Play with invented gate and first-serve times, "Tennis Channel ·
+   * PBTV" and "FOX · PBTV" broadcast windows for a Malaysian event, a Know
+   * Before You Go / parking / where-to-stay block, and a Register to Play CTA.
+   * Same class as the fabricated presenters (8/4) and the fabricated parking
+   * fallbacks (8/5 pt. 14): plausible, specific, operational, and unsourced.
+   *
+   * A link-out event now goes where its card goes — the tour that runs it.
+   * `redirect` is TEMPORARY (307) on purpose: real internal pages for the
+   * international 1,000+ stops are a live roadmap item (Connor, 7/23), and a
+   * 308 would sit in browser caches long after we build them.
+   */
+  if (event.hasInternalPage === false) {
+    return {
+      kind: "link-out",
+      event,
+      href: deepLink(event.externalUrl) ?? deepLink(event.registerUrl) ?? null,
+    };
+  }
+  return { kind: "internal", event };
+}
+
+/**
+ * A URL only counts as a destination if it names the event. `registerUrl` falls
+ * back to the bare `pickleballtournaments.com/` homepage for stops with no
+ * listing (two Australia rows today), and bouncing someone off our URL onto a
+ * platform homepage is the "wrong page beats no page" trade this repo keeps
+ * refusing — the Chicago hotel link was dropped for the same reason (7/29).
+ * Those 404 instead.
+ */
+function deepLink(url: string | undefined): string | undefined {
+  if (!url) return undefined;
+  try {
+    return new URL(url).pathname.replace(/\/+$/, "") ? url : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 export async function generateStaticParams() {
@@ -97,15 +150,24 @@ export async function generateStaticParams() {
     seen.add(key);
     params.push({ year, slug: t.slug });
   };
-  for (const t of tournaments) if (t.tierKey !== "challenger") add(t);
+  // ⚠ `hasInternalPage !== false`, matching the gate in resolveEvent — without
+  // it this prerendered a page for every curated international stop, which is
+  // the other half of the 36 fabricated event pages. `!== false` rather than a
+  // truthiness test because PAST_EVENTS (all U.S.) leave the field unset, and
+  // the card components read an unset field as internal.
+  for (const t of tournaments) {
+    if (t.tierKey !== "challenger" && t.hasInternalPage !== false) add(t);
+  }
   for (const e of events) if (e.hasInternalPage) add(e);
   return params;
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { year, slug } = await params;
-  const t = await resolveEvent(year, slug);
-  if (!t) return { title: "Event" };
+  const resolved = await resolveEvent(year, slug);
+  // A link-out event redirects, so it never renders this metadata.
+  if (resolved?.kind !== "internal") return { title: "Event" };
+  const t = resolved.event;
   const description = eventMetaDescription(t);
   // No `openGraph.images` / `twitter.images` here on purpose: the file-based
   // `opengraph-image.tsx` in this folder generates the designed 1200×630 event
@@ -213,8 +275,16 @@ function buildSchedule(startIso: string, endIso: string): Day[] {
 
 export default async function EventPage({ params }: Params) {
   const { year, slug } = await params;
-  const t = await resolveEvent(year, slug);
-  if (!t) notFound();
+  const resolved = await resolveEvent(year, slug);
+  if (!resolved) notFound();
+  if (resolved.kind === "link-out") {
+    // The tour that runs it owns the page. No URL for it (nothing in the feed,
+    // nothing curated) → 404, because a stub of our own is what this gate
+    // exists to stop.
+    if (!resolved.href) notFound();
+    redirect(resolved.href);
+  }
+  const t = resolved.event;
 
   const countdown = daysUntil(t.startDate);
   const days = buildSchedule(t.startDate, t.endDate);

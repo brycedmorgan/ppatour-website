@@ -15,6 +15,7 @@
  * live calendar + real event art via the CMS / API.
  */
 
+import { asiaTourUrlForCuratedSlug } from "@/lib/asia-tour-links";
 import { venueGalleryFor, venueHeroFor } from "@/lib/venue-photos";
 import { ticketPriceFrom, ticketsOnSale } from "@/lib/tixr-price-index";
 
@@ -517,6 +518,12 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
       brand: BRAND_BY_SLUG[slug],
       region: r.type === "international" ? ("international" as const) : undefined,
       country: r.country,
+      // The PPA Tour Asia stops link to the Asia tour's own event page (Wade,
+      // 8/6). This is the fallback path — when the API is unreachable these
+      // cards would otherwise fall through to `registerUrl`, which for an
+      // unlisted stop is the bare pickleballtournaments.com homepage. Undefined
+      // for every non-Asia event, which leaves that behaviour exactly as it was.
+      externalUrl: asiaTourUrlForCuratedSlug(slug),
       // Only U.S. PPA stops get a rich internal page; Challengers and the
       // international sister tours link out. Stated EXPLICITLY (not left
       // undefined) because the card components treat `!== false` as internal —

@@ -61,6 +61,20 @@ export function FeaturedEvents({
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {events.map((t) => {
             const days = daysUntil(t.startDate);
+            /**
+             * ⚠ THIS BAND CAN HOLD A LINK-OUT EVENT, AND IT WAS 404ing.
+             * "Next Six on Tour" is every upcoming stop worth 1,000+ points,
+             * U.S. AND international (Connor, 7/23) — so a PPA Tour Asia 1000
+             * or 1500 stop legitimately lands here (the Leapmotor Kuala Lumpur
+             * Cup, Sep 9–13, does today). Those stops have no internal page, and
+             * this card linked to `eventHref` unconditionally, which 404s for
+             * them. Same bug ScheduleGrid fixed on 7/27; this component was
+             * built later and never got the guard.
+             */
+            const internal = t.hasInternalPage !== false;
+            const href = internal
+              ? eventHref(t)
+              : t.externalUrl ?? t.registerUrl ?? t.ticketsUrl;
             return (
               <article
                 key={t.slug}
@@ -111,12 +125,23 @@ export function FeaturedEvents({
                   <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/60">
                     {t.presentedBy ? `Presented by ${t.presentedBy}` : "PPA Tour"}
                   </p>
-                  <Link
-                    href={eventHref(t)}
-                    className="mt-1 block font-display text-2xl uppercase leading-[1.02] text-white after:absolute after:inset-0"
-                  >
-                    {t.name}
-                  </Link>
+                  {internal ? (
+                    <Link
+                      href={href}
+                      className="mt-1 block font-display text-2xl uppercase leading-[1.02] text-white after:absolute after:inset-0"
+                    >
+                      {t.name}
+                    </Link>
+                  ) : (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 block font-display text-2xl uppercase leading-[1.02] text-white after:absolute after:inset-0"
+                    >
+                      {t.name}
+                    </a>
+                  )}
                   <p className="mt-1.5 text-xs text-white/70">
                     {formatDateRange(t.startDate, t.endDate, true)}
                   </p>
@@ -125,12 +150,12 @@ export function FeaturedEvents({
                     {t.city ? ` · ${t.city}${t.state ? `, ${t.state}` : ""}` : ""}
                   </p>
                   <span className="mt-4 inline-flex h-9 items-center gap-1.5 bg-ppa-blue px-4 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors group-hover:bg-ppa-blue-deep">
-                    Explore the Event
+                    {internal ? "Explore the Event" : "Event Details"}
                     <span
                       aria-hidden
                       className="transition-transform duration-300 group-hover:translate-x-0.5"
                     >
-                      →
+                      {internal ? "→" : "↗"}
                     </span>
                   </span>
                 </div>

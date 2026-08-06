@@ -42,6 +42,78 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-06 — PPA Tour Asia links to its own site; 36 fabricated event pages found behind it
+
+- Wade (PPA Tour Asia), emailed to Jeff and forwarded by Wesley: our calendar links their stops out
+  to *"the Pickleball Tournaments website to PPA Tour holding page"* — send the **upcoming and
+  completed** events to `ppatour-asia.com/tournament/{year}/{event}/` instead. 17 events, done.
+- **New `lib/asia-tour-links.ts` is the whole table**, one row per event, and the join was checked
+  against the live feed rather than typed off the email: **16 of Wade's 17 are in `ppa_tournaments`
+  under the "PPA Tour Asia" org**, and all 17 destinations were requested with a browser UA —
+  **17× 200, page titles matching his event names**. URLs are written with `www.` because the apex
+  301s and a card click shouldn't spend a redirect.
+- **⚠ THE KEY IS THE FEED'S OWN `details_url` PERMALINK, NOT OUR DERIVED SLUG.** Our slug is
+  recomputed from the feed title on every fetch, so an upstream rename would silently un-map the
+  event; the pickleballtournaments permalink is exactly what we're replacing and survives a title
+  edit. A second key, `curatedSlug`, covers the API-unreachable fallback — the two paths build
+  different slugs for the same stop (feed `ppa-asia-500-leapmotor-singapore-open-2026` vs curated
+  `ppa-asia-500-singapore-open`), and the fallback would otherwise send those cards to the bare
+  pickleballtournaments homepage.
+- **It fails safe and the audit is what makes that honest.** An unmatched event keeps its old link —
+  fine, but silent, and this repo's recurring bug is a stopgap map drifting out from under a feed
+  (`NAME_OVERRIDE_BY_SLUG`, the Tixr sync). **`npm run asia:audit`** reports both directions: rows
+  matching no feed event, and "PPA Tour Asia" feed events with no row. **Negative-tested** — renaming
+  one row's key produced both errors and exit 1; restoring it returned exit 0. `--check` also pings
+  the 17 destinations. ⚠ It uses `process.exitCode`, not `process.exit()`, which tripped a libuv
+  assertion on Windows and exited **127 on a clean pass**.
+- **⚠ THE ASK UNCOVERED SOMETHING BIGGER: 36 URLs WERE SERVING A FABRICATED PPA EVENT PAGE FOR
+  EVENTS WE DON'T RUN.** `resolveEvent` gated on `tierKey === "challenger"` only — **its own doc
+  comment has always claimed it returns null for international stops, and the code never did it.**
+  So every non-challenger Asia/Australia stop rendered the full hand-authored page:
+  `/events/2026/ppa-asia-1000-leapmotor-kuala-lumpur-cup-2026` published a **$1,063,327 prize purse**
+  (our Open-tier figure on someone else's tournament), a templated Order of Play with invented gate
+  and first-serve times, **"Tennis Channel · PBTV" and "FOX · PBTV" windows for a Malaysian event**,
+  Know Before You Go / parking / where-to-stay, and a Register to Play CTA. Same class as the
+  fabricated presenters (8/4) and the fabricated parking fallbacks (8/5 pt. 14).
+  - Gated now, in `resolveEvent` **and** in `generateStaticParams` (the curated loop was prerendering
+    its half). A link-out event **redirects to where its card goes** — Asia stops to ppatour-asia.com.
+  - **⚠ `redirect` (307), NOT `permanentRedirect`.** Real internal pages for the international 1,000+
+    stops are a live roadmap item (Connor, 7/23); a 308 would sit in browser caches long after.
+  - **⚠ A URL ONLY COUNTS IF IT NAMES THE EVENT.** `registerUrl` falls back to the bare
+    pickleballtournaments homepage, so two Australia rows would have bounced people from our URL onto
+    a platform home page. `deepLink()` requires a path; those two **404**. Same call as dropping the
+    dead Chicago hotel href (7/29) — no page beats the wrong page.
+  - Measured before and after: **36 of 85 candidate international URLs served 200 → 34 now redirect
+    (12 to ppatour-asia.com), 2 404.** Every U.S. page re-checked and unchanged (Nationals, Vegas,
+    Arizona, VB, four past stops, the `-live` route).
+- **Two link surfaces were sending these events to a 404 and are fixed with it:**
+  - **`FeaturedEvents` — the "Next Six on Tour" band — linked every card with `eventHref`
+    unconditionally.** That band is 1,000+ points **including international** (Connor, 7/23), so the
+    **Leapmotor Kuala Lumpur Cup sits in it today** and its card pointed at a page that only existed
+    because of the bug above. ScheduleGrid got this guard on 7/27; this component was written later
+    and never did.
+  - **Site search did the same** for every link-out event — "macao", "hong kong", and every
+    Challenger returned a dead result. Event hits now carry `external`, so they open in a new tab
+    with the "↗" every other off-site hit gets.
+- **`ppatour-asia.com` added to `PARTNER_HOSTS`.** These clicks used to land on
+  pickleballtournaments and count as `register_click`; without the line, repointing them would have
+  **silently stopped measuring the sister-tour handoff**.
+- **⚠ THE HONG KONG SLAM (Oct 19–25) IS NOT IN THE FEED AT ALL**, so it does not render on /events
+  today — the page is feed-driven and only the curated list carries it. Its row is written and its
+  curated slug redirects correctly; it lights up for free the moment the Asia team registers it.
+  Same exposure as the PPA Spain stops (8/5 pt. 16). **Worth telling Wade.**
+- **Left alone deliberately:** `registerUrl` still points at pickleballtournaments for these stops —
+  registration genuinely happens there, and it is the fail-safe the card falls back to · **"PPA Asia
+  125 Malaysia Tomaz Cup"** is run by *MSPL Sports*, not PPA Tour Asia, and is not on Wade's list, so
+  it keeps its platform link · Wade lists Macao as May 27–31 and Hangzhou as Oct/Nov where the feed
+  says May 28–31 and Dec 3–6 — **their page owns their dates; we only link to it.**
+- Verified on the dev server that owns the repo dir (:3000): **16/16 Asia events resolve through
+  site search**, **16 Asia URLs in the /events grid props** (past events only enter the DOM after the
+  client filter, so this was read out of the decoded flight payload), the Next Six band renders
+  **5 internal cards + the Asia stop linking out with "Event Details ↗"**, and the curated-fallback
+  lookup resolves **5/5** with non-Asia slugs and malformed URLs returning undefined. tsc clean;
+  eslint clean bar the pre-existing unused `SPONSORS` import in events-api.
+
 ### 2026-08-05 (pt. 22) — Paddles come from the broadcast masterlist; 88 pros show none
 
 - Wesley sent the event team's **"Pro Paddles Broadcast - Masterlist"** CSV: *"add paddles based off

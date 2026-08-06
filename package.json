@@ -12,6 +12,7 @@
     "tixr:sync": "node scripts/sync-tixr-prices.mjs",
     "tixr:audit": "node scripts/audit-tixr-mapping.mjs",
     "athletes:audit": "node scripts/audit-athlete-slugs.mjs",
+    "asia:audit": "node scripts/audit-asia-links.mjs",
     "paddles:import": "node scripts/import-paddles.mjs",
     "paddles:report": "node scripts/import-paddles.mjs --report"
   },

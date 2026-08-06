@@ -18,6 +18,7 @@
  * on any problem so the page always renders.
  */
 
+import { asiaTourUrlForDetailsUrl } from "@/lib/asia-tour-links";
 import { eventCode } from "@/lib/event-code";
 import {
   type EventTier,
@@ -364,7 +365,12 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     country: isUsOrg ? undefined : inferCountry(t.organization_name, t.venue_country),
     season: status === "completed" ? inferSeason(startDate) : undefined,
     tournamentUuid: t.tournament_uuid,
-    externalUrl: t.details_url || undefined,
+    // ⚠ THE ASIA TOUR'S OWN PAGE WINS OVER THE FEED'S `details_url`. Wade (PPA
+    // Tour Asia) via Wesley, 8/6: their stops were linking to a
+    // pickleballtournaments.com holding page; they publish a real page per
+    // tournament. Unlisted events are untouched — see lib/asia-tour-links.ts,
+    // which fails safe back to this URL and has an audit script for the drift.
+    externalUrl: asiaTourUrlForDetailsUrl(t.details_url) ?? (t.details_url || undefined),
     // US main-tour + curated events get a rich internal page; challengers and
     // international sister-tour stops link out to their details_url instead.
     hasInternalPage: !isChallenger && (isUsOrg || Boolean(curated)),
