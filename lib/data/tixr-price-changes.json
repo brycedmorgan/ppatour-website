@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-06T15:06:14Z",
+  "updated_at": "2026-08-07T14:06:10Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -943,6 +943,58 @@
       "type": "event_added",
       "event_id": "202083",
       "event": "Canes Night at the Veolia Pickleball National Championships"
+    },
+    {
+      "at": "2026-08-07T14:06:10Z",
+      "type": "price_change",
+      "event_id": "183676",
+      "event": "Major League Pickleball Newport Beach - Sunday",
+      "ticket": "Courtside***",
+      "base_price": {
+        "from": 50,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 57.36,
+        "to": 57.36
+      }
+    },
+    {
+      "at": "2026-08-07T14:06:10Z",
+      "type": "availability_change",
+      "event_id": "183676",
+      "event": "Major League Pickleball Newport Beach - Sunday",
+      "ticket": "Courtside***",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-07T14:06:10Z",
+      "type": "price_change",
+      "event_id": "169802",
+      "event": "Major League Pickleball New York Finals- Session 2",
+      "ticket": "Courtside Session 2",
+      "base_price": {
+        "from": 80,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 92.05,
+        "to": 35.83
+      }
+    },
+    {
+      "at": "2026-08-07T14:06:10Z",
+      "type": "availability_change",
+      "event_id": "169802",
+      "event": "Major League Pickleball New York Finals- Session 2",
+      "ticket": "Courtside Session 2",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
     }
   ]
 }

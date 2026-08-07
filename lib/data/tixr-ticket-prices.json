@@ -1,7 +1,7 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-08-06T15:06:14Z",
+  "generated_at": "2026-08-07T14:06:10Z",
   "event_count": 62,
   "ticket_type_count": 920,
   "series_breakdown": {
@@ -857,8 +857,8 @@
         {
           "name": "Courtside***",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 50,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 57.36
         },
         {
@@ -1130,13 +1130,6 @@
           "name": "Courtside Session 2",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 30,
-          "all_in_price": 35.83
-        },
-        {
-          "name": "Courtside Session 2",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 40,
           "all_in_price": 46.66
         },
@@ -1153,6 +1146,13 @@
           "sale_state": "OPEN",
           "base_price": 80,
           "all_in_price": 92.05
+        },
+        {
+          "name": "Courtside Session 2",
+          "category": "STANDARD",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 35.83
         },
         {
           "name": "VIP Session 2",
@@ -3401,8 +3401,8 @@
         {
           "name": "Sunday Courtside",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 80,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 91.83
         },
         {
