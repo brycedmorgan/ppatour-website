@@ -96,7 +96,8 @@
 
   /* the product: full-width live channel */
   .stage{padding-block:16px 8px}
-  .player{display:block;position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);aspect-ratio:16/8;
+  /* 16/9 now that the frame holds the real broadcast player, not a mock */
+  .player{display:block;position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);aspect-ratio:16/9;
     background:#000000;box-shadow:0 50px 120px -50px rgba(0,0,0,.85)}
   .player canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
   .player iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
@@ -132,8 +133,18 @@
   .more{color:var(--muted);font-size:13px;margin:18px 0 0}
 
   /* schedule */
+  .daytabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:14px;margin-bottom:6px;scrollbar-width:none}
+  .daytabs::-webkit-scrollbar{display:none}
+  .daytabs button{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:64px;padding:10px 12px;
+    background:var(--panel);border:1px solid var(--line2);border-radius:12px;color:var(--muted);cursor:pointer;
+    font-family:var(--sans);transition:border-color .2s,background .2s,color .2s}
+  .daytabs button:hover{border-color:var(--line)}
+  .daytabs button.on{background:var(--green);border-color:var(--green);color:#FFFFFF}
+  .daytabs .dw{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+  .daytabs .dn{font-family:var(--display);font-size:22px;font-weight:600;line-height:1}
+  .daytabs .dm{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
   .scroll{overflow-x:auto}
-  table.epg{width:100%;border-collapse:collapse;min-width:600px}
+  table.epg{width:100%;border-collapse:collapse;min-width:520px}
   table.epg td{padding:16px 14px;border-top:1px solid var(--line2);vertical-align:middle}
   table.epg tr:hover td{background:rgba(255,255,255,.02)}
   .day{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap;letter-spacing:.03em}
@@ -214,7 +225,7 @@
 
 <main>
   <div class="wrap hero">
-    <p class="onair"><span class="dot"></span>on air now — MLP Chicago finals</p>
+    <p class="onair"><span class="dot"></span><span id="onair-line">on air now — 24/7 pro pickleball</span></p>
     <h1>pro pickleball,<br>always on.</h1>
   </div>
   <div class="wrap">
@@ -227,7 +238,10 @@
 
   <div class="wrap stage" id="live" data-reveal>
     <div class="player">
-      <iframe src="https://stream.pickleballtv.com/player?self-link=https%3A%2F%2Fzapp-pbtv.web.app%2Fjw%2Fmedia%2FVHkNpfd6%3FdisablePlayNext%3Dfalse%26withErrors%3Dfalse&amp;screen-id=f1b31e8d-ce68-487b-b019-bc29d197ef94" title="PickleballTV — Live" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+      <!-- The SAME JW Player embed pickleballtv.com runs on its own homepage
+           (media wp8rMulw / player 4cEjt3sm → the Amagi 24/7 FAST channel).
+           This is the real live feed, not a mock. -->
+      <iframe src="https://cdn.jwplayer.com/players/wp8rMulw-4cEjt3sm.html" title="PickleballTV — Live" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen></iframe>
     </div>
   </div>
 
@@ -253,27 +267,12 @@
   </div></section>
 
   <section id="schedule" data-reveal><div class="wrap">
-    <p class="lab"><b>coming up this week.</b> live matches and fresh episodes — all times et.</p>
-    <div class="scroll"><table class="epg"><tbody>
-      <tr><td class="day">sun · jul 26</td><td class="time">7:00 PM</td>
-        <td class="prog"><b>MLP Chicago — Championship</b><span>Major League Pickleball · Finals</span></td>
-        <td><span class="tg l"><span class="dot"></span>live</span></td><td class="net2">FS1 · PBTV</td></tr>
-      <tr><td class="day">mon · jul 27</td><td class="time">4:30 PM</td>
-        <td class="prog"><b>MLP Champions Series — Chicago</b><span>senior-level premiere</span></td>
-        <td><span class="tg s">show</span></td><td class="net2">PBTV</td></tr>
-      <tr><td class="day">mon · jul 27</td><td class="time">7:00 PM</td>
-        <td class="prog"><b>Picklers — Jared Paul</b><span>player-feature series</span></td>
-        <td><span class="tg s">show</span></td><td class="net2">PBTV</td></tr>
-      <tr><td class="day">tue · jul 28</td><td class="time">7:00 PM</td>
-        <td class="prog"><b>Brighter Pickleball: On Tour</b><span>new episode</span></td>
-        <td><span class="tg s">show</span></td><td class="net2">PBTV</td></tr>
-      <tr><td class="day">wed · jul 29</td><td class="time">7:00 PM</td>
-        <td class="prog"><b>Shock &amp; Awe — Grand Rapids, Pt. 2</b><span>trick-shot &amp; highlight show</span></td>
-        <td><span class="tg s">show</span></td><td class="net2">PBTV</td></tr>
-      <tr><td class="day">thu · sep 3</td><td class="time">11:30 AM</td>
-        <td class="prog"><b>PPA National Championships — Cary</b><span>Slam · round of 16 → championship sunday</span></td>
-        <td><span class="tg l">live</span></td><td class="net2">Tennis Channel · PBTV</td></tr>
-    </tbody></table></div>
+    <p class="lab"><b>coming up on pickleballtv.</b> the real broadcast schedule — all times eastern.</p>
+    <!-- The guide below is the LIVE channel's actual EPG, captured from
+         pickleballtv.com's own schedule block. Update by re-pulling that page;
+         don't hand-type programming. -->
+    <div class="daytabs" id="daytabs" role="tablist" aria-label="Schedule days"></div>
+    <div class="scroll"><table class="epg"><tbody id="epgbody"></tbody></table></div>
   </div></section>
 
   <section id="shows" data-reveal><div class="wrap">
@@ -312,17 +311,69 @@
 </div></footer>
 
 <script>
+  /* Every show below is on this week's real EPG — nothing invented.
+     The "when" chip names the FORMAT, not a made-up air slot. */
   const shows=[
-    {t:'partners',d:'the doubles duos behind the game — a feature documentary',w:'documentary'},
-    {t:'picklers',d:'one pro, one story',w:'mondays 7p'},
-    {t:'brighter pickleball: on tour',d:'inside the season, week by week',w:'tuesdays 7p'},
-    {t:'shock & awe',d:'the wildest shots on tour',w:'wednesdays 7p'},
-    {t:'mlp champions series',d:'the legends bracket, taped courtside',w:'mondays 4:30p'},
-    {t:'hot shots',d:'every top shot from ppa & mlp play',w:'quarterly'}
+    {t:'partners',d:"pickleball's first reality docuseries",w:'docuseries'},
+    {t:'beyond the courts: la xtreme',d:'inside an mlp team — powered by organics ocean',w:'docuseries'},
+    {t:'brighter pickleball: on tour',d:'inside the season, week by week',w:'weekly'},
+    {t:'shock and awe',d:'the wildest shots on tour — season 2, presented by heat controller',w:'season 2'},
+    {t:'pickleballers podcast',d:'the voices of the tour, long-form',w:'podcast'},
+    {t:'mlp championship series',d:'the legends bracket, taped courtside',w:'series'},
+    {t:'my pickleball life',d:'one player, one life in the game',w:'series'},
+    {t:'pbtv hot shots',d:'every top shot from ppa & mlp play',w:'highlights'}
   ];
   const o=document.getElementById('orig');
-  shows.forEach(s=>{const a=document.createElement('a');a.href='#';
+  shows.forEach(s=>{const a=document.createElement('a');a.href='#schedule';
     a.innerHTML=`<span class="ttl">${s.t}</span><span class="desc">${s.d}</span><span class="when">${s.w}</span>`;o.appendChild(a);});
+
+  /* ── Real EPG (captured 8/7/26 from pickleballtv.com) ─────────────── */
+  const EPG=[
+{"month":"Aug","day":"07","rows":[{"time":"2:00 AM","live":false,"title":"Partners: Pickleball's First Reality Docuseries","sub":"Episode 1"},{"time":"2:30 AM","live":false,"title":"Beyond The Courts: LA Xtreme - Powered by Organics Ocean","sub":"Episode 1"},{"time":"3:00 AM","live":false,"title":"Shock and Awe Season 2 presented by Heat Controller","sub":"Episode 8"},{"time":"3:30 AM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 15 - MLP Dallas"},{"time":"4:00 AM","live":true,"title":"PPA Tour Pickleball","sub":"PPA Asia Ho Chi Minh: R16 and Quarterfinals"},{"time":"6:00 AM","live":true,"title":"PPA Tour Pickleball","sub":"PPA Asia Ho Chi Minh: R16 and Quarterfinals"},{"time":"9:00 AM","live":false,"title":"Pickleballers Podcast","sub":"Featuring JW Johnson and Jorja Johnson"},{"time":"10:30 AM","live":false,"title":"2025 MLP Finals NYC","sub":"Finals - Encore"},{"time":"2:00 PM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 14 - PPA Finals"},{"time":"2:30 PM","live":false,"title":"Shock and Awe Season 2 presented by Heat Controller","sub":"Episode 8"},{"time":"3:00 PM","live":true,"title":"Major League Pickleball","sub":"MLP Dallas Playoffs 2026: Round 1 - Day 1"},{"time":"9:00 PM","live":true,"title":"PPA Tour Pickleball","sub":"PPA Asia Ho Chi Minh: Semifinals"}]},
+{"month":"Aug","day":"08","rows":[{"time":"2:00 AM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 14 - PPA Finals"},{"time":"2:30 AM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 15 - MLP Dallas"},{"time":"3:00 AM","live":false,"title":"Beyond The Courts: LA Xtreme - Powered by Organics Ocean","sub":"Episode 1"},{"time":"3:30 AM","live":false,"title":"Partners: Pickleball's First Reality Docuseries","sub":"Episode 2"},{"time":"4:00 AM","live":true,"title":"PPA Tour Pickleball","sub":"PPA Asia Ho Chi Minh: Semifinals"},{"time":"6:00 AM","live":true,"title":"PPA Tour Pickleball","sub":"PPA Asia Ho Chi Minh: Semifinals"},{"time":"7:00 AM","live":false,"title":"Major League Pickleball","sub":"MLP Dallas Playoffs 2026: Round 1 - Day 1"},{"time":"12:00 PM","live":true,"title":"Major League Pickleball","sub":"MLP Dallas Playoffs 2026: Round 1 - Day 2"},{"time":"8:00 PM","live":false,"title":"Major League Pickleball","sub":"MLP Dallas Playoffs 2026: Round 1 - Day 2"},{"time":"9:00 PM","live":true,"title":"PPA Tour Pickleball","sub":"PPA Asia Ho Chi Minh: Bronze"}]},
+{"month":"Aug","day":"09","rows":[{"time":"1:00 AM","live":false,"title":"Shock and Awe Season 2 presented by Heat Controller","sub":"Episode 8"},{"time":"1:30 AM","live":false,"title":"Partners: Pickleball's First Reality Docuseries","sub":"Episode 1"},{"time":"2:00 AM","live":false,"title":"Pickleballers Podcast","sub":"Featuring Dave Fleming"},{"time":"3:00 AM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 13 - Atlanta"},{"time":"3:30 AM","live":false,"title":"Shock and Awe Season 2 presented by Heat Controller","sub":"Episode 8"},{"time":"4:00 AM","live":true,"title":"PPA Tour Pickleball","sub":"PPA Asia Ho Chi Minh: Gold"},{"time":"6:00 AM","live":true,"title":"PPA Tour Pickleball","sub":"PPA Asia Ho Chi Minh: Gold"},{"time":"8:00 AM","live":false,"title":"Major League Pickleball","sub":"MLP Dallas Playoffs 2026: Round 1 - Day 2"},{"time":"12:00 PM","live":true,"title":"Major League Pickleball","sub":"MLP Dallas Playoffs 2026: Round 1 - Day 3"},{"time":"8:00 PM","live":false,"title":"Partners: Pickleball's First Reality Docuseries","sub":"Episode 3"},{"time":"8:30 PM","live":false,"title":"Major League Pickleball","sub":"MLP Dallas Playoffs 2026: Round 1 - Day 3"}]},
+{"month":"Aug","day":"10","rows":[{"time":"4:30 AM","live":false,"title":"Major League Pickleball","sub":"MLP Dallas Playoffs 2026: Round 1 - Day 3"},{"time":"6:00 AM","live":false,"title":"Major League Pickleball","sub":"MLP Dallas Playoffs 2026: Round 1 - Day 3"},{"time":"9:00 AM","live":false,"title":"PPA Tour Pickleball","sub":"PPA Asia Ho Chi Minh: Bronze"},{"time":"11:30 AM","live":false,"title":"PPA Tour Pickleball","sub":"PPA Asia Ho Chi Minh: Gold"},{"time":"2:30 PM","live":false,"title":"PPA Tour Pickleball","sub":"PPA Asia Ho Chi Minh: Gold"},{"time":"4:00 PM","live":false,"title":"Shock and Awe Season 2 presented by Heat Controller","sub":"Episode 8"},{"time":"4:30 PM","live":false,"title":"MLP Championship Series","sub":"MLP Championship Series: Chicago Teambattle"},{"time":"6:30 PM","live":false,"title":"Partners: Pickleball's First Reality Docuseries","sub":"Episode 3"},{"time":"7:00 PM","live":false,"title":"Pickleballers Podcast","sub":"Featuring Brooke Buckner"},{"time":"8:00 PM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 15 - MLP Dallas"},{"time":"8:30 PM","live":false,"title":"Shock and Awe Season 2 presented by Heat Controller","sub":"Episode 7"},{"time":"9:00 PM","live":false,"title":"Shock and Awe Season 2 presented by Heat Controller","sub":"Episode 8"},{"time":"9:30 PM","live":false,"title":"Major League Pickleball","sub":"MLP Dallas Playoffs 2026: Round 1 - Day 3"}]},
+{"month":"Aug","day":"11","rows":[{"time":"4:30 AM","live":false,"title":"Pickleballers Podcast","sub":"Featuring Hurricane Tyra Black"},{"time":"5:30 AM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 14 - PPA Finals"},{"time":"6:00 AM","live":false,"title":"Beyond The Courts: LA Xtreme - Powered by Organics Ocean","sub":"Episode 1"},{"time":"6:30 AM","live":false,"title":"MLP Championship Series","sub":"MLP Championship Series: Chicago Teambattle"},{"time":"8:30 AM","live":false,"title":"Major League Pickleball","sub":"MLP Dallas Playoffs 2026: Round 1 - Day 3"},{"time":"3:30 PM","live":false,"title":"Beyond The Courts: LA Xtreme - Powered by Organics Ocean","sub":"Episode 1"},{"time":"4:00 PM","live":false,"title":"Partners: Pickleball's First Reality Docuseries","sub":"Episode 2"},{"time":"4:30 PM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 14 - PPA Finals"},{"time":"5:00 PM","live":false,"title":"MLP Championship Series","sub":"MLP Championship Series: Chicago Teambattle"},{"time":"7:00 PM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 16 - MLP Columbus"},{"time":"7:30 PM","live":false,"title":"Shock and Awe Season 2 presented by Heat Controller","sub":"Episode 8"},{"time":"8:00 PM","live":false,"title":"Pickleballers Podcast","sub":"Featuring Tama Shimabukuro"},{"time":"8:30 PM","live":false,"title":"Partners: Pickleball's First Reality Docuseries","sub":"Episode 3"},{"time":"9:00 PM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 16 - MLP Columbus"},{"time":"9:30 PM","live":false,"title":"Major League Pickleball","sub":"MLP Orlando 2026: Super Sunday"},{"time":"11:30 PM","live":false,"title":"Major League Pickleball","sub":"MLP Orlando 2026: Super Sunday"}]},
+{"month":"Aug","day":"12","rows":[{"time":"1:30 AM","live":false,"title":"Major League Pickleball","sub":"MLP Orlando 2026: Super Sunday"},{"time":"4:30 AM","live":false,"title":"Pickleballers Podcast","sub":"Featuring Matt Wright"},{"time":"5:30 AM","live":false,"title":"Partners: Pickleball's First Reality Docuseries","sub":"Episode 2"},{"time":"6:00 AM","live":false,"title":"Partners: Pickleball's First Reality Docuseries","sub":"Episode 3"},{"time":"6:30 AM","live":false,"title":"Shock and Awe Season 2 presented by Heat Controller","sub":"Episode 8"},{"time":"7:00 AM","live":false,"title":"Partners: Pickleball's First Reality Docuseries","sub":"Episode 2"},{"time":"7:30 AM","live":false,"title":"Beyond The Courts: LA Xtreme - Powered by Organics Ocean","sub":"Episode 1"},{"time":"8:00 AM","live":false,"title":"MLP Championship Series","sub":"MLP Championship Series: Chicago Teambattle"},{"time":"10:00 AM","live":false,"title":"Pickleballers Podcast","sub":"Featuring Hannah Johns"},{"time":"11:00 AM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 15 - MLP Dallas"},{"time":"11:30 AM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 16 - MLP Columbus"},{"time":"12:00 PM","live":false,"title":"Pickleballers Podcast","sub":"Featuring Brooke Buckner"},{"time":"1:00 PM","live":false,"title":"My Pickleball Life","sub":"Episode 9"},{"time":"1:30 PM","live":false,"title":"PBTV Hot Shots","sub":"Episode 5"},{"time":"2:00 PM","live":false,"title":"MLP Championship Series","sub":"MLP Championship Series: Chicago Teambattle"},{"time":"4:00 PM","live":false,"title":"Major League Pickleball","sub":"MLP St. Petersburg: Day 3"},{"time":"5:30 PM","live":false,"title":"Major League Pickleball","sub":"MLP St. Petersburg: Day 4"},{"time":"7:00 PM","live":false,"title":"Shock and Awe Season 2 presented by Heat Controller","sub":"Episode 8"},{"time":"7:30 PM","live":false,"title":"Pickleballers Podcast","sub":"Featuring Roscoe Bellamy"},{"time":"8:30 PM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 16 - MLP Columbus"},{"time":"9:00 PM","live":false,"title":"Beyond The Courts: LA Xtreme - Powered by Organics Ocean","sub":"Episode 1"},{"time":"9:30 PM","live":false,"title":"Major League Pickleball","sub":"MLP Dallas 2026: Super Monday"},{"time":"11:30 PM","live":false,"title":"Major League Pickleball","sub":"MLP Dallas 2026: Super Monday"}]},
+{"month":"Aug","day":"13","rows":[{"time":"2:00 AM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 16 - MLP Columbus"},{"time":"2:30 AM","live":false,"title":"Shock and Awe Season 2 presented by Heat Controller","sub":"Episode 8"},{"time":"3:00 AM","live":false,"title":"Pickleballers Podcast","sub":"Featuring JW Johnson and Jorja Johnson"},{"time":"4:00 AM","live":false,"title":"Major League Pickleball","sub":"MLP Dallas 2026: Super Monday"},{"time":"6:00 AM","live":false,"title":"Pickleballers Podcast","sub":"Featuring Danni-Elle Townsend"},{"time":"7:00 AM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 15 - MLP Dallas"},{"time":"7:30 AM","live":false,"title":"Partners: Pickleball's First Reality Docuseries","sub":"Episode 3"},{"time":"8:00 AM","live":false,"title":"2025 MLP Finals NYC","sub":"Finals - Encore"},{"time":"11:30 AM","live":false,"title":"Shock and Awe Season 2 presented by Heat Controller","sub":"Episode 7"},{"time":"12:00 PM","live":false,"title":"Shock and Awe Season 2 presented by Heat Controller","sub":"Episode 8"},{"time":"12:30 PM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 16 - MLP Columbus"},{"time":"1:00 PM","live":false,"title":"Pickleballers Podcast","sub":"Featuring Vivienne David"},{"time":"2:00 PM","live":false,"title":"MLP Championship Series","sub":"MLP Championship Series: Chicago Teambattle"},{"time":"4:00 PM","live":false,"title":"Major League Pickleball","sub":"MLP Dallas 2026: Super Monday"},{"time":"7:00 PM","live":false,"title":"Pickleballers Podcast","sub":"Featuring Leigh Waters"},{"time":"8:00 PM","live":false,"title":"Shock and Awe Season 2 presented by Heat Controller","sub":"Episode 8"},{"time":"8:30 PM","live":false,"title":"Beyond The Courts: LA Xtreme - Powered by Organics Ocean","sub":"Episode 1"},{"time":"9:00 PM","live":false,"title":"Major League Pickleball","sub":"MLP Austin 2026: Day 3"},{"time":"11:00 PM","live":false,"title":"Major League Pickleball","sub":"MLP Austin 2026: Super Sunday"}]},
+{"month":"Aug","day":"14","rows":[{"time":"12:30 AM","live":false,"title":"Major League Pickleball","sub":"MLP Austin 2026: Super Sunday"},{"time":"2:00 AM","live":false,"title":"Partners: Pickleball's First Reality Docuseries","sub":"Episode 2"},{"time":"2:30 AM","live":false,"title":"Partners: Pickleball's First Reality Docuseries","sub":"Episode 3"},{"time":"3:00 AM","live":true,"title":"PPA Tour Pickleball","sub":"PPA Asia Ho Chi Minh: Gold"},{"time":"5:00 AM","live":false,"title":"PPA Tour Pickleball","sub":"PPA Asia Ho Chi Minh: Gold"},{"time":"6:00 AM","live":false,"title":"PPA Tour Pickleball","sub":"PPA Asia Ho Chi Minh: Gold"},{"time":"7:00 AM","live":false,"title":"Partners: Pickleball's First Reality Docuseries","sub":"Episode 1"},{"time":"7:30 AM","live":false,"title":"Pickleballers Podcast","sub":"Featuring Connor Pardoe"},{"time":"9:00 AM","live":false,"title":"Partners: Pickleball's First Reality Docuseries","sub":"Episode 2"},{"time":"9:30 AM","live":false,"title":"Major League Pickleball","sub":"MLP Dallas 2026: Day 3"},{"time":"11:30 AM","live":false,"title":"MLP Championship Series","sub":"MLP Championship Series: Chicago Teambattle"},{"time":"1:30 PM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 16 - MLP Columbus"},{"time":"2:00 PM","live":false,"title":"2025 MLP Finals NYC","sub":"Finals - Encore"},{"time":"4:30 PM","live":false,"title":"Shock and Awe Season 2 presented by Heat Controller","sub":"Episode 8"},{"time":"5:00 PM","live":true,"title":"Major League Pickleball","sub":"MLP Newport Beach Playoffs 2026: QF - Day 1"},{"time":"9:00 PM","live":false,"title":"Major League Pickleball","sub":"MLP Newport Beach Playoffs 2026: QF - Day 1"}]},
+{"month":"Aug","day":"15","rows":[{"time":"1:00 AM","live":false,"title":"Major League Pickleball","sub":"MLP Newport Beach Playoffs 2026: QF - Day 1"},{"time":"5:00 AM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 15 - MLP Dallas"},{"time":"5:30 AM","live":false,"title":"Brighter Pickleball: On Tour","sub":"Episode 16 - MLP Columbus"}]}
+  ];
+  const MONTH_NUM={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+  const DOW=['sun','mon','tue','wed','thu','fri','sat'];
+  const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  function minutes(t){const m=/(\d+):(\d+) (AM|PM)/.exec(t);let h=+m[1]%12;if(m[3]==='PM')h+=12;return h*60+ +m[2];}
+  // "now" in Eastern time, since the guide is published in ET
+  function nowET(){const p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric',hour12:false}).formatToParts(new Date());
+    const g=k=>+p.find(x=>x.type===k).value;return {month:g('month')-1,day:g('day'),min:g('hour')%24*60+g('minute')};}
+  const tabs=document.getElementById('daytabs'),body=document.getElementById('epgbody');
+  const et=nowET();
+  let current=EPG.findIndex(d=>MONTH_NUM[d.month]===et.month&&+d.day===et.day);
+  if(current<0)current=0;
+  function render(i){
+    body.innerHTML=EPG[i].rows.map(r=>
+      `<tr><td class="time">${r.time}</td>
+       <td class="prog"><b>${esc(r.title)}</b><span>${esc(r.sub)}</span></td>
+       <td>${r.live?'<span class="tg l"><span class="dot"></span>live</span>':'<span class="tg s">show</span>'}</td></tr>`).join('');
+    [...tabs.children].forEach((b,j)=>b.classList.toggle('on',j===i));
+  }
+  EPG.forEach((d,i)=>{
+    const dt=new Date(2026,MONTH_NUM[d.month],+d.day);
+    const b=document.createElement('button');b.type='button';b.setAttribute('role','tab');
+    b.innerHTML=`<span class="dw">${DOW[dt.getDay()]}</span><span class="dn">${+d.day}</span><span class="dm">${d.month.toLowerCase()}</span>`;
+    b.addEventListener('click',()=>render(i));tabs.appendChild(b);
+  });
+  render(current);
+  // on-air line: the most recent program at or before now (ET), today
+  (function(){
+    const el=document.getElementById('onair-line');if(!el)return;
+    const today=EPG.findIndex(d=>MONTH_NUM[d.month]===et.month&&+d.day===et.day);
+    if(today<0)return;
+    let on=null;
+    for(const r of EPG[today].rows){if(minutes(r.time)<=et.min)on=r;else break;}
+    if(!on&&today>0)on=EPG[today-1].rows[EPG[today-1].rows.length-1];
+    if(on)el.textContent='on air now — '+on.title+(on.sub?': '+on.sub:'');
+  })();
 
   document.documentElement.classList.add('js');
   (function(){
