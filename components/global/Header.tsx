@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { EventMark } from "@/components/events/EventMark";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -221,16 +220,15 @@ function MegaPanelContent({
                   className="group/stop flex items-center gap-3"
                 >
                   {t.brand?.icon ? (
-                    <EventMark
-                      brand={t.brand}
-                      name=""
-                      variant="row"
-                      // The navy tile is for the transparent crests only — a
-                      // feed mark brings its own background and EventMark sets
-                      // it on a white chip, so a navy one behind it would read
-                      // as a dark border on three sides.
-                      className={t.brand.iconWide ? "" : "bg-ppa-navy shadow-sm ring-1 ring-ppa-navy/10"}
-                    />
+                    <span className="relative block h-14 w-9 shrink-0 overflow-hidden rounded bg-ppa-navy shadow-sm ring-1 ring-ppa-navy/10">
+                      <Image
+                        src={t.brand.icon}
+                        alt=""
+                        fill
+                        sizes="36px"
+                        className="object-contain p-px"
+                      />
+                    </span>
                   ) : (
                     <span className="h-14 w-9 shrink-0 rounded bg-ppa-navy/5" />
                   )}

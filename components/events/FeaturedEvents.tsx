@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { EventMark } from "@/components/events/EventMark";
 import Link from "next/link";
 import {
   daysUntil,
@@ -96,12 +95,17 @@ export function FeaturedEvents({
                   style={{ backgroundColor: "var(--event-accent)" }}
                 />
 
-                <EventMark
-                  brand={t.brand}
-                  name={t.name}
-                  variant="cardLg"
-                  className="absolute left-4 top-4 drop-shadow-lg transition-transform duration-500 group-hover:scale-105"
-                />
+                {t.brand?.icon && (
+                  <span className="absolute left-4 top-4 block h-28 w-[60px] overflow-hidden rounded drop-shadow-lg transition-transform duration-500 group-hover:scale-105">
+                    <Image
+                      src={t.brand.icon}
+                      alt={`${t.name} badge`}
+                      fill
+                      sizes="60px"
+                      className="object-contain"
+                    />
+                  </span>
+                )}
 
                 <div className="absolute right-3 top-3 flex flex-col items-end gap-1">
                   <span className={`${tierBadgeClass(t)} px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] whitespace-nowrap`}>

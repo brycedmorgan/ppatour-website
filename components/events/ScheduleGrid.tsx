@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { EventMark } from "@/components/events/EventMark";
 import Link from "next/link";
 import { useDeferredValue, useMemo, useState } from "react";
 import { eventMatcher } from "@/lib/event-search";
@@ -266,12 +265,15 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
                 />
                 <div className="absolute inset-0 scrim-card" />
                 {t.brand?.icon ? (
-                  <EventMark
-                    brand={t.brand}
-                    name={t.name}
-                    variant="card"
-                    className="absolute left-3 top-3 drop-shadow-md transition-transform duration-500 group-hover:scale-105"
-                  />
+                  <span className="absolute left-3 top-3 block h-20 w-[42px] overflow-hidden rounded drop-shadow-md transition-transform duration-500 group-hover:scale-105">
+                    <Image
+                      src={t.brand.icon}
+                      alt={`${t.name} badge`}
+                      fill
+                      sizes="42px"
+                      className="object-contain"
+                    />
+                  </span>
                 ) : (
                   <span className="absolute left-3 top-2 font-display text-2xl leading-none text-white/30">
                     {String(i + 1).padStart(2, "0")}

@@ -123,16 +123,6 @@ export type Tournament = {
     primary: string;
     accent: string;
     icon?: string;
-    /**
-     * The mark is a LANDSCAPE lockup carrying its own opaque background, not a
-     * portrait crest on transparency — every mark the API serves in `logo_url`
-     * is (600x315), and so is every synced file in public/ppa/badges.
-     * `EventMark` reads this to pick the box and to set the mark on a white
-     * chip. ⚠ Set it whenever you point `icon` at a wide file: without it the
-     * mark lands in a 42x80 portrait slot at 42x22, which is the same outcome
-     * as having no logo at all.
-     */
-    iconWide?: boolean;
     /** Opt-in display serif for the event page (echoes the event's wordmark). */
     font?: "cormorant";
   };
@@ -154,9 +144,7 @@ export type Tournament = {
    * API events (international sister tours) link out to {@link externalUrl}.
    */
   hasInternalPage?: boolean;
-  /** API `logo_url` — the event's mark as the feed serves it. Also folded into
-   *  `brand.icon` by the mapper, which is what actually renders; see
-   *  `brandWithFeedMark` in lib/events-api.ts. */
+  /** API `logo_url` (square event mark), when available. */
   logoUrl?: string;
   /** Where this record came from — the live API or the curated fallback. */
   source?: "api" | "curated";
@@ -329,17 +317,10 @@ type RawEvent = {
 };
 
 // Badge-matched brand colors + icons per event (keyed by generated slug).
-/**
- * ⚠ THE ICON FILES HERE ARE SYNCED FROM THE FEED — DON'T HAND-EDIT THEM.
- * `npm run marks:sync` rewrites every file below from the tournament feed's own
- * `logo_url`, because the event team changes an event's artwork upstream and
- * this table is what the surfaces that can't see the feed read from: the
- * header's Events dropdown and the generated OG share cards. Before that, a
- * logo update reached /events and the event pages while those two kept showing
- * whatever art was last committed — which is what happened to PPA Finals on
- * 8/6. `npm run marks:check` reports drift without writing.
- */
-const BRAND_BY_SLUG: Record<string, NonNullable<Tournament["brand"]>> = {
+const BRAND_BY_SLUG: Record<
+  string,
+  { primary: string; accent: string; icon?: string; font?: "cormorant" }
+> = {
   /**
    * ⚠ NATIONALS NO LONGER OPTS INTO THE DISPLAY SERIF (Wesley, 8/4: the Events
    * "heading font [is] not matching the rest of the site"). It was the only
@@ -353,26 +334,26 @@ const BRAND_BY_SLUG: Record<string, NonNullable<Tournament["brand"]>> = {
    * byte-for-byte `.font-display`. Don't set `font` again without a ruling —
    * turning it on for one event is what caused this.
    */
-  "veolia-pickleball-national-championships": { primary: "#023155", accent: "#C1272D", icon: "/ppa/badges/nationals.png", iconWide: true },
-  "rate-las-vegas-open": { primary: "#003058", accent: "#2088e0", icon: "/ppa/badges/las-vegas.png", iconWide: true },
-  "veolia-chicago-cup": { primary: "#003058", accent: "#c8102e", icon: "/ppa/badges/chicago.png", iconWide: true },
-  "virginia-beach-open": { primary: "#003058", accent: "#0078d0", icon: "/ppa/badges/virginia-beach.png", iconWide: true },
-  "pickleball-world-championships": { primary: "#182068", accent: "#007838", icon: "/ppa/badges/worlds.png", iconWide: true },
-  "proton-daytona-beach-open": { primary: "#003058", accent: "#2088e0", icon: "/ppa/badges/daytona.png", iconWide: true },
-  "veolia-malibu-cup": { primary: "#003058", accent: "#e23a76", icon: "/ppa/badges/malibu.png", iconWide: true },
-  "veolia-arizona-open": { primary: "#003058", accent: "#0078d0", icon: "/ppa/badges/arizona.png", iconWide: true },
-  "cape-coral-open": { primary: "#0a2540", accent: "#12a5a5", icon: "/ppa/badges/cape-coral.png", iconWide: true },
-  "greater-zion-cup-at-black-desert-resort": { primary: "#0e2a47", accent: "#c0451f", icon: "/ppa/badges/greater-zion.png", iconWide: true },
-  "carvana-mesa-cup": { primary: "#5b2d82", accent: "#7b4bab", icon: "/ppa/badges/mesa-cup.png", iconWide: true },
-  "minneapolis-indoor-open": { primary: "#0a2540", accent: "#2088e0", icon: "/ppa/badges/minneapolis.png", iconWide: true },
-  "newport-beach-open": { primary: "#0a7bc2", accent: "#0a7bc2", icon: "/ppa/badges/newport-beach.png", iconWide: true },
-  "carvana-pickleball-masters": { primary: "#1a7a3c", accent: "#1a7a3c", icon: "/ppa/badges/masters.png", iconWide: true },
-  "ppa-finals": { primary: "#0c2b44", accent: "#c9a227", icon: "/ppa/badges/ppa-finals.png", iconWide: true },
-  "sacramento-open": { primary: "#0a2540", accent: "#2088e0", icon: "/ppa/badges/sacramento.png", iconWide: true },
+  "veolia-pickleball-national-championships": { primary: "#023155", accent: "#C1272D", icon: "/ppa/badges/nationals.png" },
+  "rate-las-vegas-open": { primary: "#003058", accent: "#2088e0", icon: "/ppa/badges/las-vegas.png" },
+  "veolia-chicago-cup": { primary: "#003058", accent: "#c8102e", icon: "/ppa/badges/chicago.png" },
+  "virginia-beach-open": { primary: "#003058", accent: "#0078d0", icon: "/ppa/badges/virginia-beach.png" },
+  "pickleball-world-championships": { primary: "#182068", accent: "#007838", icon: "/ppa/badges/worlds.png" },
+  "proton-daytona-beach-open": { primary: "#003058", accent: "#2088e0", icon: "/ppa/badges/daytona.png" },
+  "veolia-malibu-cup": { primary: "#003058", accent: "#e23a76", icon: "/ppa/badges/malibu.png" },
+  "veolia-arizona-open": { primary: "#003058", accent: "#0078d0", icon: "/ppa/badges/arizona.png" },
+  "cape-coral-open": { primary: "#0a2540", accent: "#12a5a5", icon: "/ppa/badges/cape-coral.png" },
+  "greater-zion-cup-at-black-desert-resort": { primary: "#0e2a47", accent: "#c0451f", icon: "/ppa/badges/greater-zion.png" },
+  "carvana-mesa-cup": { primary: "#5b2d82", accent: "#7b4bab", icon: "/ppa/badges/mesa-cup.png" },
+  "minneapolis-indoor-open": { primary: "#0a2540", accent: "#2088e0", icon: "/ppa/badges/minneapolis.png" },
+  "newport-beach-open": { primary: "#0a7bc2", accent: "#0a7bc2", icon: "/ppa/badges/newport-beach.png" },
+  "carvana-pickleball-masters": { primary: "#1a7a3c", accent: "#1a7a3c", icon: "/ppa/badges/masters.png" },
+  "ppa-finals": { primary: "#0c2b44", accent: "#c9a227", icon: "/ppa/badges/ppa-finals.png" },
+  "sacramento-open": { primary: "#0a2540", accent: "#2088e0", icon: "/ppa/badges/sacramento.png" },
   "texas-open": { primary: "#0a2540", accent: "#2088e0", icon: "/ppa/badges/texas.png" },
   // Temporary: the Players Championships (Atlanta) has no portrait badge card yet,
   // so the primary logo is set on a white card to match the badge set (Tyler, 8/4).
-  "atlanta-pickleball-championships": { primary: "#0a2540", accent: "#e8825a", icon: "/ppa/badges/players-championships.png", iconWide: true },
+  "atlanta-pickleball-championships": { primary: "#0a2540", accent: "#e8825a", icon: "/ppa/badges/players-championships.png" },
 };
 
 /** Brand (colors + badge icon) for a generated slug, or undefined. Exposed so the

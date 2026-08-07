@@ -1,8 +1,7 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { EventMark } from "@/components/events/EventMark";
-import type { Tournament } from "@/lib/placeholder-data";
 
 type Tab = { id: string; label: string };
 
@@ -27,16 +26,13 @@ type Tab = { id: string; label: string };
 export function EventTabNav({
   tabs,
   eventName,
-  brand,
+  icon,
   ticketsUrl,
   ticketPriceFrom,
 }: {
   tabs: Tab[];
   eventName: string;
-  /** The event's brand, for its mark in the collapsed first slot. Takes the
-   *  whole object rather than an icon URL because the mark's SHAPE decides its
-   *  box — see EventMark. */
-  brand?: Tournament["brand"];
+  icon?: string;
   /** Buy Tickets CTA (UTM-tagged) pinned to the right edge of the bar. */
   ticketsUrl?: string;
   ticketPriceFrom?: number;
@@ -231,7 +227,15 @@ export function EventTabNav({
             className="flex shrink-0 items-center gap-2 py-2 pr-4 text-left motion-safe:animate-fade"
             aria-label={`${eventName} — back to top`}
           >
-            <EventMark brand={brand} name="" variant="bar" />
+            {icon && (
+              <Image
+                src={icon}
+                alt=""
+                width={20}
+                height={54}
+                className="h-7 w-auto"
+              />
+            )}
             <span className="font-display text-sm uppercase leading-none text-[var(--event-primary,#0c2b44)]">
               {eventName}
             </span>

@@ -266,11 +266,6 @@ const nextConfig: NextConfig = {
       // is served here.
       { protocol: "https", hostname: "cdn.pickleball.com" },
       { protocol: "https", hostname: "www.pickleball.com" },
-      // Event marks served by the tournament platform (`logo_url` on every
-      // `ppa_tournaments` row). The feed is the system of record for an event's
-      // artwork — see `brandWithFeedMark` in lib/events-api.ts. Without this
-      // line next/image refuses the URL and every event loses its mark.
-      { protocol: "https", hostname: "cdn.pickleballbrackets.com" },
       // Rehosted media for the 811 migrated WordPress posts (Vercel Blob store
       // `ppatour-website-media`). This is the permanent home.
       {

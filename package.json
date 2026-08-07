@@ -14,9 +14,7 @@
     "athletes:audit": "node scripts/audit-athlete-slugs.mjs",
     "asia:audit": "node scripts/audit-asia-links.mjs",
     "paddles:import": "node scripts/import-paddles.mjs",
-    "paddles:report": "node scripts/import-paddles.mjs --report",
-    "marks:sync": "node scripts/sync-event-marks.mjs",
-    "marks:check": "node scripts/sync-event-marks.mjs --check"
+    "paddles:report": "node scripts/import-paddles.mjs --report"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

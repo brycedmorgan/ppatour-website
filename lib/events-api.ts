@@ -126,34 +126,6 @@ function findCurated(apiSlug: string): Tournament | null {
 }
 
 /**
- * Brand colors from the curated record, event MARK from the feed.
- *
- * The two halves have different owners: the colors are a site design decision
- * (they tint the accent bar, the section markers and the CTAs, and were sampled
- * to sit on this site's navy), while the mark is the event team's artwork and
- * changes when they change it upstream. Splitting them is what lets a logo
- * update reach the site with no code change.
- *
- * ⚠ Only the URL is trusted, never a guess about what is behind it. An empty
- * `logo_url` keeps the curated mark, and an event with no curated brand at all
- * still gets one so its mark can render — the defaults mirror the component
- * fallbacks (`--event-primary` / `--event-accent`).
- */
-function brandWithFeedMark(
-  brand: Tournament["brand"],
-  logoUrl: string | undefined,
-): Tournament["brand"] {
-  if (!logoUrl) return brand;
-  return {
-    primary: brand?.primary ?? "#0c2b44",
-    accent: brand?.accent ?? "#228be6",
-    font: brand?.font,
-    icon: logoUrl,
-    iconWide: true,
-  };
-}
-
-/**
  * Per-event NAME overrides that win over the feed title (Tyler, 8/4). The feed
  * is normally the system of record ("the feed's title wins" — see the note in
  * `enrich`), but it lags the on-site branding for these stops, so the site was
@@ -385,24 +357,10 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
         ? VENUE_IMAGES[index % VENUE_IMAGES.length]
         : GENERIC_IMAGES[index % GENERIC_IMAGES.length]),
     gallery: venueGalleryFor(slug).length ? venueGalleryFor(slug) : curated?.gallery,
-    /**
-     * ⚠ THE FEED'S OWN MARK WINS OVER OUR BADGE FILE (Wesley, 8/7). Until now
-     * `logo_url` was mapped onto `Tournament.logoUrl` and NOTHING RENDERED IT —
-     * every event mark on the site came from the hand-maintained
-     * `BRAND_BY_SLUG` table, so the event team updating a logo on the API
-     * changed nothing here. That is what happened to PPA Finals: updated
-     * upstream 8/6, still serving the old crest. Colors still come from the
-     * curated brand; only the mark moves.
-     *
-     * Fails back to the badge, never to nothing: no `logo_url`, no curated
-     * match, or an unreachable API all land on the file we ship. And the feed
-     * marks are the CURRENT branding — they carry the title sponsor and the
-     * points tier ("Veolia Chicago Cup · PPA 1500"), which the crests didn't.
-     */
     // Fall back to the badge-by-slug when the matched curated record has no
     // brand (e.g. a past-season duplicate that won the slug), so events like
-    // the 2027 Newport Beach Open still get their mark.
-    brand: brandWithFeedMark(curated?.brand ?? brandForSlug(slug), t.logo_url),
+    // the 2027 Newport Beach Open still get their crest.
+    brand: curated?.brand ?? brandForSlug(slug),
     region: isUsOrg ? undefined : "international",
     country: isUsOrg ? undefined : inferCountry(t.organization_name, t.venue_country),
     season: status === "completed" ? inferSeason(startDate) : undefined,
