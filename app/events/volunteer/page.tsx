@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { VolunteerApplicationForm } from "@/components/volunteer/VolunteerApplicationForm";
+import { getEvents } from "@/lib/events-api";
+import { tierPoints } from "@/lib/placeholder-data";
 
 export const metadata: Metadata = {
   title: "Volunteer",
@@ -195,7 +197,33 @@ function SectionEyebrow({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function VolunteerPage() {
+export default async function VolunteerPage() {
+  // Feed the application's "which tournament?" picker with the live upcoming
+  // schedule, sorted by date. Falls back to an empty list if the feed is down —
+  // the picker simply hides rather than blocking the application.
+  //
+  // Scoped to the domestic main PPA Tour only — the 1,000+ point stops, no
+  // Challengers, no international series. Same "The Tour" predicate the events
+  // page uses (region + tierKey + points), since that's where volunteering runs.
+  const { events } = await getEvents();
+  const tournaments = Array.from(
+    new Set(
+      events
+        .filter(
+          (t) =>
+            t.status !== "completed" &&
+            t.region !== "international" &&
+            t.tierKey !== "challenger" &&
+            tierPoints(t) >= 1000,
+        )
+        .sort((a, b) => a.startDate.localeCompare(b.startDate))
+        .map((t) => {
+          const loc = [t.city, t.state].filter(Boolean).join(", ");
+          return loc ? `${t.name} — ${loc}` : t.name;
+        }),
+    ),
+  );
+
   return (
     <>
       {/* Hero */}
@@ -381,7 +409,7 @@ export default function VolunteerPage() {
             team reviews every application and follows up by email.
           </p>
           <div className="mt-6 max-w-3xl">
-            <VolunteerApplicationForm />
+            <VolunteerApplicationForm tournaments={tournaments} />
           </div>
           <p className="mt-4 text-xs text-ppa-navy/45">
             Questions about volunteering? Reach the team at{" "}

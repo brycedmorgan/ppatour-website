@@ -59,10 +59,19 @@ function Field({
 
 export function VolunteerApplicationForm({
   embedded = false,
+  tournaments,
+  eventName,
 }: {
   /** Drop the form's own card border/background when it already sits inside a
    *  chrome'd container (e.g. the event-page modal). */
   embedded?: boolean;
+  /** Upcoming tour stops for the "which tournament?" picker on the standalone
+   *  volunteer page. Ignored when `eventName` is set (the event is already
+   *  known). */
+  tournaments?: string[];
+  /** When the form is opened from a specific event (the event-page modal), the
+   *  tournament is fixed to this name — the picker collapses to a locked field. */
+  eventName?: string;
 } = {}) {
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">(
     "idle",
@@ -81,6 +90,7 @@ export function VolunteerApplicationForm({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          tournament: data.get("tournament"),
           firstName: data.get("firstName"),
           lastName: data.get("lastName"),
           dob: data.get("dob"),
@@ -121,6 +131,37 @@ export function VolunteerApplicationForm({
 
   return (
     <form onSubmit={onSubmit} className={formCls}>
+      {eventName ? (
+        // Applying from a specific event page — the tournament is fixed.
+        <div className="mb-4">
+          <span className={labelCls}>
+            Tournament<span className="text-ppa-blue"> *</span>
+          </span>
+          <div className="flex h-11 w-full items-center border border-ppa-line bg-ppa-paper px-3.5 text-base text-ppa-navy sm:text-sm">
+            {eventName}
+          </div>
+          <input type="hidden" name="tournament" value={eventName} />
+        </div>
+      ) : tournaments && tournaments.length > 0 ? (
+        <div className="mb-4">
+          <Field label="Which tournament would you like to volunteer at?" required>
+            <select name="tournament" required defaultValue="" className={inputCls}>
+              <option value="" disabled>
+                Select a tournament
+              </option>
+              {tournaments.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+              <option value="No preference — open to any tournament">
+                No preference — open to any tournament
+              </option>
+            </select>
+          </Field>
+        </div>
+      ) : null}
+
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="First Name" required>
           <input name="firstName" required className={inputCls} autoComplete="given-name" />

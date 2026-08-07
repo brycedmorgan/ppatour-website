@@ -27,6 +27,7 @@ const APPLICATIONS_TO =
 const FROM = "Carvana PPA Tour <info@ppatour.com>";
 
 type Application = {
+  tournament?: string;
   firstName?: string;
   lastName?: string;
   dob?: string;
@@ -69,6 +70,7 @@ function esc(s: unknown): string {
 function applicationRows(a: Application, applicationDate: string): [string, string][] {
   return [
     ["Application Date", new Date(applicationDate).toLocaleString("en-US", { timeZone: "America/Denver", dateStyle: "long", timeStyle: "short" })],
+    ["Tournament", a.tournament || "—"],
     ["Name", `${a.firstName} ${a.lastName}`],
     ["Date of Birth", a.dob ?? ""],
     ["Address", `${a.street}, ${a.city}, ${a.state} ${a.zip}`],
@@ -132,6 +134,7 @@ export async function POST(request: Request) {
     },
     "volunteer_application",
     {
+      tournament: payload.tournament ?? "",
       shirt_size: payload.shirtSize,
       heard_about: payload.heardAbout ?? "",
       application_date: applicationDate,

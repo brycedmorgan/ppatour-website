@@ -86,7 +86,7 @@ export function VolunteerModalButton({
 
             {/* Scrollable body */}
             <div className="min-h-0 flex-1 overflow-y-auto">
-              <VolunteerApplicationForm embedded />
+              <VolunteerApplicationForm embedded eventName={eventName} />
 
               <p className="border-t border-ppa-line px-6 pb-6 text-xs text-ppa-navy/50">
                 Want the full rundown — requirements, perks, and FAQs?{" "}
