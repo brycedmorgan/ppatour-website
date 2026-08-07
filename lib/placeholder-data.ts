@@ -348,6 +348,23 @@ const BRAND_BY_SLUG: Record<
   "minneapolis-indoor-open": { primary: "#0a2540", accent: "#2088e0", icon: "/ppa/badges/minneapolis.png" },
   "newport-beach-open": { primary: "#0a7bc2", accent: "#0a7bc2", icon: "/ppa/badges/newport-beach.png" },
   "carvana-pickleball-masters": { primary: "#1a7a3c", accent: "#1a7a3c", icon: "/ppa/badges/masters.png" },
+  /**
+   * ⚠ THE ONLY ENTRY HERE WHOSE ARTWORK COMES FROM THE API, NOT FROM OUR BADGE
+   * SET (Wesley, 8/7). The event team updated the Finals logo upstream on
+   * 2026-08-06 and the site kept showing the old crest, because nothing here
+   * reads the feed — this table is the sole source of every event mark. The
+   * file is the `logo_url` on the feed's "PPA Tour: 2027 PPA Finals" row,
+   * trimmed of the flat white margin the CMS bakes in:
+   *   cdn.pickleballbrackets.com/uploads/Clubs/80f17003-…/943158d1-…_Logo.png
+   *
+   * ⚠ IT IS A LOCAL COPY ON PURPOSE, NOT THE URL. Pointing `icon` at the CDN
+   * would strip the mark off the event's OG share card — `ogImageData` in
+   * lib/og.ts reads from the filesystem and returns null for anything else —
+   * and it would not self-update regardless: the filename carries a timestamp,
+   * so the next upstream change mints a different URL rather than replacing
+   * this one. Re-run the same trim against the row's current `logo_url` when
+   * the artwork changes again.
+   */
   "ppa-finals": { primary: "#0c2b44", accent: "#c9a227", icon: "/ppa/badges/ppa-finals.png" },
   "sacramento-open": { primary: "#0a2540", accent: "#2088e0", icon: "/ppa/badges/sacramento.png" },
   "texas-open": { primary: "#0a2540", accent: "#2088e0", icon: "/ppa/badges/texas.png" },
