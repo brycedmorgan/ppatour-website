@@ -42,6 +42,36 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-07 — /pbtv: real live stream + real EPG, sendable today (`cf858cc`, `2692cb4`)
+
+- **Bryce's ask: mirror the live pickleballtv.com and pull in the TV feature, ship today.**
+  Both live at ppatour-website.vercel.app/pbtv/ (also serves at ppatour.com/pbtv).
+- **The player is now the REAL 24/7 feed** — the exact JW Player embed pickleballtv.com
+  runs on its own homepage (`cdn.jwplayer.com/players/wp8rMulw-4cEjt3sm.html`, the Amagi
+  FAST channel). Found by reading their homepage's script tags; the JW delivery API
+  (`cdn.jwplayer.com/v2/media/wp8rMulw`) confirms the HLS source. The old iframe pointed
+  at a different media id (`VHkNpfd6`) via stream.pickleballtv.com. Aspect 16/8 → 16/9.
+- **Schedule = the channel's actual Aug 7–15 EPG**, scraped from the live site's DOM
+  (WP ACF block, server-rendered, all 9 day-panes present in HTML). Day-tabbed like the
+  real site; today auto-selected via ET date; LIVE rows badged. ⚠ Static snapshot —
+  goes stale after Aug 15; re-pull the same way (the data + a note live in index.html).
+- **Hero on-air line is computed** from the EPG in America/New_York, replacing the stale
+  hardcoded "MLP Chicago finals" (a July event). Falls back to generic copy pre-2am.
+- **Shows list = the real current originals** (Partners, Beyond The Courts: LA Xtreme,
+  Brighter Pickleball, Shock and Awe S2, Pickleballers Podcast, MLP Championship Series,
+  My Pickleball Life, PBTV Hot Shots) — every one on this week's real EPG; the "when"
+  chip names the format, never an invented air slot (the old list had fake weekly slots).
+- **OG card added** (`/pbtv/og.png`, 1200×630, wordmark + LIVE bug on brand black) + og/
+  twitter meta — the standing OG-before-send rule; the page had none. ⚠ og:image/og:url
+  are absolute on ppatour-website.vercel.app — update if the page moves hosts (Bryce
+  plans to move the project from the Pickleball HQ Vercel team to gull-stack).
+- Verified with headless CDP at 1440 + 390 on the DEPLOYED url: 0 overflow both widths,
+  9 tabs, tab-switch renders the right rows, 5/5 reveals reach opacity 1 on a scroll
+  pass, og.png 200. (The Browser pane reported `clientWidth: 0` again — hidden-pane
+  artifact; CDP was the truth path, per the standing lesson.)
+- Method note: this session ran from the ~/Documents Claude setup; the repo wasn't on
+  this machine, so it's now cloned at `~/Documents/pickleball/ppatour-website`.
+
 ### 2026-08-06 — PPA Tour Asia links to its own site; 36 fabricated event pages found behind it
 
 - Wade (PPA Tour Asia), emailed to Jeff and forwarded by Wesley: our calendar links their stops out
