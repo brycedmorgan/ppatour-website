@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { NationalsLive } from "@/components/events/NationalsLive";
 import { tournaments } from "@/lib/placeholder-data";
+import { getEvents } from "@/lib/events-api";
 import { buildTicketGrid } from "@/lib/ticket-grid";
 
 /**
@@ -32,7 +33,7 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function Page() {
+export default async function Page() {
   // NationalsLive is a client component, so the grid is built here on the server
   // and passed down — lib/ticket-grid.ts reads the full price snapshot and must
   // never be imported into the browser bundle.
@@ -41,5 +42,16 @@ export default function Page() {
     ? buildTicketGrid(event.ticketsUrl, event.startDate, event.endDate)
     : null;
 
-  return <NationalsLive ticketGrid={ticketGrid} />;
+  /**
+   * The event's mark, as the feed serves it today. Resolved here for the same
+   * reason the ticket grid is: the component is a client component and cannot
+   * await the API. Falls back to the curated crest when the feed is unreachable
+   * or doesn't carry this event — never to nothing.
+   */
+  const live = (await getEvents()).events.find((t) => t.slug === BASE_SLUG);
+  const liveMark = live?.brand?.icon
+    ? { icon: live.brand.icon, iconWide: live.brand.iconWide }
+    : null;
+
+  return <NationalsLive ticketGrid={ticketGrid} liveMark={liveMark} />;
 }

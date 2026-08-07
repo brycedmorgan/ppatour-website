@@ -4,6 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { EventConcierge } from "@/components/events/EventConcierge";
+import { EventMark } from "@/components/events/EventMark";
 import { EventTabNav } from "@/components/events/EventTabNav";
 import { FirstServeCountdown } from "@/components/events/FirstServeCountdown";
 import { EventGallery } from "@/components/events/EventGallery";
@@ -89,7 +90,21 @@ async function resolveEvent(year: string, slug: string): Promise<Resolved> {
   // feed's name, but a curated event never reaches that record here — curated
   // is checked first — so without this the API name would silently never
   // appear on the one page that matters most.
-  const event = live?.name && live.name !== t.name ? { ...t, name: live.name } : t;
+  //
+  // ⚠ THE EVENT MARK IS THE SECOND FIELD TO NEED THIS OVERLAY, FOR THE SAME
+  // REASON (Wesley, 8/7). `mapTournament` now prefers the feed's `logo_url`
+  // over our badge file, but a curated event never reaches that record here, so
+  // wiring the mapper alone left the feed's logo on the /events grid and the
+  // OLD crest on the event's own page — the two disagreeing about the same
+  // event, which is worse than either alone. Colors stay curated: they were
+  // sampled to sit on this site's navy, and only the artwork is the event
+  // team's to change.
+  const name = live?.name && live.name !== t.name ? live.name : t.name;
+  const brand =
+    live?.brand?.icon && live.brand.icon !== t.brand?.icon
+      ? { ...(t.brand ?? live.brand), icon: live.brand.icon, iconWide: live.brand.iconWide }
+      : t.brand;
+  const event = name !== t.name || brand !== t.brand ? { ...t, name, brand } : t;
 
   /**
    * ⚠ THIS GATE WAS MISSING, AND THE DOC COMMENT ABOVE HAS CLAIMED IT SINCE
@@ -539,29 +554,25 @@ export default async function EventPage({ params }: Params) {
           </div>
           <div className="mt-3 flex items-center gap-4">
             {/**
-             * width/height must match the real badge ratio. They were 133x364
-             * (0.365) while every file in public/ppa/badges is ~0.545 — e.g.
-             * arizona.png is 726x1333. With `w-auto` the browser reserves space
-             * from the declared ratio, then relays out to the intrinsic one once
-             * the image loads, so the badge jumped ~50% wider on load and shoved
-             * the H1 beside it. 720x1320 is exact for 6 of the 8 badges and
-             * within 2% of the other two.
+             * ⚠ THE DECLARED-RATIO TRAP THAT LIVED HERE IS GONE WITH THE MARKUP,
+             * NOT FORGOTTEN. This was `width={720} height={1320}` + `w-auto`:
+             * when those numbers disagreed with the real file the browser
+             * reserved space from the declared ratio and relaid out on load, so
+             * the badge jumped ~50% wider and shoved the H1 sideways. Keeping it
+             * correct meant every mark had to share one ratio — impossible now
+             * that the artwork comes from the feed. EventMark draws into a FIXED
+             * box, so there is no declared ratio left to be wrong.
              *
              * `priority` because this sits in the hero above the fold, and Next
              * flagged it as the LCP element on /events/2026/veolia-arizona-open.
              */}
-            {t.brand?.icon && (
-              <Image
-                src={t.brand.icon}
-                alt=""
-                width={720}
-                height={1320}
-                priority
-                sizes="(min-width: 640px) 96px, 62px"
-                className="h-28 w-auto shrink-0 rounded-md drop-shadow-[0_4px_18px_rgba(2,49,85,0.55)] motion-safe:animate-rise sm:h-44"
-                style={{ animationDelay: "120ms" }}
-              />
-            )}
+            <EventMark
+              brand={t.brand}
+              name=""
+              variant="hero"
+              priority
+              className="drop-shadow-[0_4px_18px_rgba(2,49,85,0.55)] motion-safe:animate-rise"
+            />
             <h1 className="max-w-[18ch] event-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98]">
               {t.name}
             </h1>
@@ -655,7 +666,7 @@ export default async function EventPage({ params }: Params) {
       <EventTabNav
         tabs={TABS}
         eventName={t.name}
-        icon={t.brand?.icon}
+        brand={t.brand}
         ticketsUrl={
           completed || !onSale
             ? undefined
@@ -1911,17 +1922,12 @@ export default async function EventPage({ params }: Params) {
                   className="object-cover grayscale-[30%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
                 />
                 <div className="absolute inset-0 scrim-card" />
-                {o.brand?.icon && (
-                  <span className="absolute left-3 top-3 block h-16 w-[34px] overflow-hidden rounded drop-shadow-md transition-transform duration-500 group-hover:scale-105">
-                    <Image
-                      src={o.brand.icon}
-                      alt={`${o.name} badge`}
-                      fill
-                      sizes="34px"
-                      className="object-contain"
-                    />
-                  </span>
-                )}
+                <EventMark
+                  brand={o.brand}
+                  name={o.name}
+                  variant="card"
+                  className="absolute left-3 top-3 drop-shadow-md transition-transform duration-500 group-hover:scale-105"
+                />
                 <div className="relative p-4 text-white">
                   <p>
                     <span

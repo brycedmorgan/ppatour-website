@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { buildEventJsonLd } from "@/lib/event-schema";
 import Image from "next/image";
+import { EventMark } from "@/components/events/EventMark";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
@@ -163,6 +164,7 @@ function buildSchedule(startIso: string, endIso: string): Day[] {
 
 export function NationalsLive({
   ticketGrid = null,
+  liveMark = null,
 }: {
   /**
    * Built on the server by the route (lib/ticket-grid.ts reads the 200KB price
@@ -170,11 +172,29 @@ export function NationalsLive({
    * on sale or is withheld, in which case the flat tier cards below apply.
    */
   ticketGrid?: TicketGridData | null;
+  /**
+   * The event's mark as the FEED currently serves it, resolved on the server
+   * (this is a client component and can't await `getEvents`).
+   *
+   * ⚠ WITHOUT THIS PROP THIS PAGE SHOWS A DIFFERENT LOGO FROM THE EVENT'S OWN
+   * PAGE. Both read the curated `tournaments` record, but /events/[year]/[slug]
+   * overlays the live mark onto it (see `resolveEvent`) and this file cannot,
+   * so wiring the feed left the real Nationals page on the new mark and this
+   * one on the old crest — measured 8/7, before the prop existed. These two
+   * files rendering the same event differently is this repo's most familiar bug.
+   */
+  liveMark?: { icon: string; iconWide?: boolean } | null;
 } = {}) {
   const baseEvent = tournaments.find((x) => x.slug === BASE_SLUG);
   if (!baseEvent) notFound();
   // Same event; the hero + live sections flip on once first serve arrives.
-  const t = { ...baseEvent, status: "live" as const };
+  const t = {
+    ...baseEvent,
+    status: "live" as const,
+    brand: liveMark
+      ? { ...(baseEvent.brand ?? { primary: "#0c2b44", accent: "#228be6" }), ...liveMark }
+      : baseEvent.brand,
+  };
 
   // Lifecycle clock. `target` = first serve, `endTarget` = tournament over.
   // Resolved on mount (needs the URL); until then it renders the countdown.
@@ -388,21 +408,16 @@ export function NationalsLive({
             </span>
           </div>
           <div className="mt-3 flex items-center gap-4">
-            {/* Same badge, same fix as the event hero: 133x364 declared a 0.365
-                ratio against real files at ~0.545, so it relaid out ~50% wider
-                once loaded. Above the fold here too, hence `priority`. */}
-            {t.brand?.icon && (
-              <Image
-                src={t.brand.icon}
-                alt=""
-                width={720}
-                height={1320}
-                priority
-                sizes="(min-width: 640px) 96px, 62px"
-                className="h-28 w-auto shrink-0 rounded-md drop-shadow-[0_4px_18px_rgba(2,49,85,0.55)] motion-safe:animate-rise sm:h-44"
-                style={{ animationDelay: "120ms" }}
-              />
-            )}
+            {/* Same mark, same component as the event hero — deliberately, since
+                these two files render the same event from the same data and have
+                drifted repeatedly. Above the fold here too, hence `priority`. */}
+            <EventMark
+              brand={t.brand}
+              name=""
+              variant="hero"
+              priority
+              className="drop-shadow-[0_4px_18px_rgba(2,49,85,0.55)] motion-safe:animate-rise"
+            />
             <h1 className="max-w-[18ch] event-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98]">
               {t.name}
             </h1>
@@ -554,7 +569,7 @@ export function NationalsLive({
       </section>
 
       {/* Floating event nav */}
-      <EventTabNav tabs={TABS} eventName={t.name} icon={t.brand?.icon} />
+      <EventTabNav tabs={TABS} eventName={t.name} brand={t.brand} />
 
       {/* Champions — leads the completed state */}
       {isCompleted && <ChampionsBanner eventId={ATLANTA_EVENT_ID} />}
@@ -1688,17 +1703,12 @@ export function NationalsLive({
                   className="object-cover grayscale-[30%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
                 />
                 <div className="absolute inset-0 scrim-card" />
-                {o.brand?.icon && (
-                  <span className="absolute left-3 top-3 block h-16 w-[34px] overflow-hidden rounded drop-shadow-md transition-transform duration-500 group-hover:scale-105">
-                    <Image
-                      src={o.brand.icon}
-                      alt={`${o.name} badge`}
-                      fill
-                      sizes="34px"
-                      className="object-contain"
-                    />
-                  </span>
-                )}
+                <EventMark
+                  brand={o.brand}
+                  name={o.name}
+                  variant="card"
+                  className="absolute left-3 top-3 drop-shadow-md transition-transform duration-500 group-hover:scale-105"
+                />
                 <div className="relative p-4 text-white">
                   <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/55">
                     {eventTierShort(o)} · {tierPoints(o).toLocaleString()}
