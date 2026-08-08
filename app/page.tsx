@@ -1,4 +1,21 @@
+import type { Metadata } from "next";
 import { HomeContent } from "@/components/home/HomeContent";
+import { SITE_URL } from "@/lib/site";
+
+/**
+ * ⚠ Homepage canonical must be pinned ABSOLUTELY.
+ *
+ * The root layout sets a self-referencing `alternates: { canonical: "./" }` for
+ * every page. That relative "./" resolves correctly on every route EXCEPT the
+ * index: on `/` Next resolved it to `https://www.ppatour.com/index/` — a URL
+ * that also returns 200, so we were telling Google the canonical version of our
+ * single most-trafficked page was a duplicate that nobody links to. Overriding
+ * it here with the absolute site root is the one-line fix; every other page
+ * keeps inheriting the layout default.
+ */
+export const metadata: Metadata = {
+  alternates: { canonical: SITE_URL },
+};
 
 /**
  * ISR. Homepage. The live score rail and countdown are client-polled, so a 60s
