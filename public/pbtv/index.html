@@ -75,6 +75,10 @@
   }
   .pill{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px;padding:9px 16px;border-radius:100px;
     background:var(--green);color:#FFFFFF;transition:transform .15s,box-shadow .2s}
+  /* ⚠ .nlinks a (0,1,1) beats .pill (0,1,0), which painted the header CTA's text
+     in --muted grey on the green pill. Bryce flagged it. Keep this override. */
+  .nlinks a.pill{color:#FFFFFF}
+  .nlinks a.pill:hover{color:#FFFFFF}
   .pill:hover{box-shadow:0 8px 24px -8px rgba(80,130,80,.55)}
   .pill:active{transform:translateY(1px)}
   .dot{width:7px;height:7px;border-radius:50%;background:var(--live);animation:pulse 1.8s infinite}
@@ -129,17 +133,22 @@
   .lab{font-size:15px;color:var(--muted);text-transform:lowercase;margin:0 0 26px;font-weight:500;letter-spacing:-.01em}
   .lab b{color:var(--ink);font-weight:600}
 
-  /* how to watch — clear platform grid */
+  /* how to watch — big real marks, no typed-out names (Bryce, 8/8).
+     Default treatment is the broadcast white-knockout (brightness(0) invert(1)
+     works on ANY transparent-bg mark). youtube-tv + tcl are PRE-whitened SVGs
+     (play-badge triangle / boxed letters die under a blanket filter) and carry
+     .raw. Stacked marks (.tall) get more height or they read half-size. */
   .plats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
   @media(min-width:620px){.plats{grid-template-columns:repeat(4,1fr)}}
   @media(min-width:900px){.plats{grid-template-columns:repeat(7,1fr)}}
-  .plt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;text-align:center;min-height:82px;padding:14px 8px;
-    border:1px solid var(--line2);border-radius:12px;background:var(--panel);color:var(--ink);
-    font-weight:600;font-size:12.5px;letter-spacing:-.01em;line-height:1.2;transition:border-color .2s,background .2s,transform .12s}
-  .plt .lg{height:22px;width:auto;opacity:.92}
-  .plt span{color:var(--muted)}
+  .plt{display:flex;align-items:center;justify-content:center;min-height:96px;padding:18px 14px;
+    border:1px solid var(--line2);border-radius:12px;background:var(--panel);
+    transition:border-color .2s,background .2s,transform .12s}
+  .plt img{height:28px;width:auto;max-width:82%;object-fit:contain;filter:brightness(0) invert(1);opacity:.9;transition:opacity .2s}
+  .plt img.raw{filter:none}
+  .plt img.tall{height:48px}
   .plt:hover{border-color:var(--line);background:#141414;transform:translateY(-2px)}
-  .plt:hover span{color:var(--ink)}
+  .plt:hover img{opacity:1}
   .more{color:var(--muted);font-size:13px;margin:18px 0 0}
 
   /* schedule */
@@ -166,13 +175,43 @@
   .tg.s{color:var(--muted);border:1px solid var(--line)}
   .net2{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
 
-  /* originals — typographic list, restrained */
-  .orig{border-top:1px solid var(--line2)}
-  .orig a{display:flex;align-items:baseline;gap:20px;padding:22px 4px;border-bottom:1px solid var(--line2);transition:background .2s;flex-wrap:wrap}
-  .orig a:hover{background:rgba(255,255,255,.02)}
-  .orig .ttl{font-family:var(--display);font-size:clamp(1.35rem,2.7vw,1.9rem);font-weight:500;letter-spacing:.01em;text-transform:uppercase;min-width:min(46%,320px)}
-  .orig .desc{color:var(--muted);font-size:14.5px;flex:1;min-width:180px}
-  .orig .when{font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.06em;white-space:nowrap;text-transform:uppercase}
+  /* originals — card grid with the channel's own key art, each card opens the
+     show's page. Art files are PBTV's real 16:9 show badges pulled from their
+     CDN (dh7h3upxwg7do.cloudfront.net) — never invent show art. */
+  .orig{display:grid;grid-template-columns:1fr;gap:14px}
+  @media(min-width:620px){.orig{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:980px){.orig{grid-template-columns:repeat(4,1fr)}}
+  .orig a{display:flex;flex-direction:column;border:1px solid var(--line2);border-radius:14px;overflow:hidden;background:var(--panel);
+    transition:border-color .2s,background .2s,transform .12s}
+  .orig a:hover{border-color:var(--line);background:#141414;transform:translateY(-2px)}
+  .orig .art{aspect-ratio:16/9;width:100%;object-fit:cover;display:block;background:#141414}
+  .orig .meta{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .orig .ttl{font-family:var(--display);font-size:1.15rem;font-weight:500;letter-spacing:.01em;text-transform:uppercase;line-height:1.15}
+  .orig .desc{color:var(--muted);font-size:13px;line-height:1.45;flex:1}
+  .orig .when{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:4px}
+
+  /* the app tease — CSS phone, honest "in development" label */
+  .app{display:grid;grid-template-columns:1fr;gap:44px;align-items:center}
+  @media(min-width:820px){.app{grid-template-columns:1.2fr 1fr}}
+  .app .chips{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 0}
+  .chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+    border:1px solid var(--line);padding:6px 12px;border-radius:100px;white-space:nowrap}
+  .chip.g{color:#FFFFFF;background:var(--green);border-color:var(--green)}
+  .phone{width:min(270px,72vw);margin:0 auto;aspect-ratio:9/19;border-radius:38px;border:1px solid var(--line);
+    background:#0A0A0A;box-shadow:0 40px 90px -40px rgba(0,0,0,.9),inset 0 0 0 6px #000;position:relative;overflow:hidden;padding:22px 14px}
+  .phone::before{content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);width:84px;height:22px;border-radius:12px;background:#000;border:1px solid var(--line2)}
+  .phone .p-logo{height:14px;margin:22px auto 14px;display:block}
+  .phone .p-live{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line2)}
+  .phone .p-live img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+  .phone .p-live .lv{position:absolute;top:8px;left:8px;font-size:9px;padding:3px 8px}
+  .phone .p-row{display:flex;align-items:center;gap:9px;padding:9px 4px;border-bottom:1px solid var(--line2)}
+  .phone .p-row .t{font-family:var(--mono);font-size:9px;color:var(--muted);white-space:nowrap}
+  .phone .p-row .n{font-size:10.5px;font-weight:600;line-height:1.25}
+  .phone .p-row .n span{display:block;font-weight:400;color:var(--muted);font-size:9px}
+  .phone .p-tabs{position:absolute;left:14px;right:14px;bottom:12px;display:flex;justify-content:space-around;
+    font-family:var(--mono);font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);
+    border-top:1px solid var(--line2);padding-top:10px;background:#0A0A0A}
+  .phone .p-tabs b{color:var(--green);font-weight:600}
 
   footer{border-top:1px solid var(--line2);padding:44px 0 60px}
   .foot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;color:var(--faint);font-size:13px}
@@ -229,6 +268,7 @@
     <a href="#schedule">schedule</a>
     <a href="#shows">shows</a>
     <a href="#watch">where to watch</a>
+    <a href="#app">the app</a>
     <a class="pill" href="#live"><span class="dot"></span>watch live</a>
   </nav>
 </div></header>
@@ -258,20 +298,20 @@
   <section id="watch" data-reveal><div class="wrap">
     <p class="lab"><b>how to watch.</b> always free — on 14+ platforms, no subscription, no cable login.</p>
     <div class="plats">
-      <a class="plt" href="#"><span>Prime Video</span></a>
-      <a class="plt" href="#"><svg class="lg" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><path d="M16.34 9.853l-2.254 2.254v-2.26H12.13v5.744h1.957v-2.33l2.353 2.33h2.46l-2.988-2.99 2.477-2.476v3.411c0 1.133.679 2.177 2.393 2.177.815 0 1.56-.462 1.922-.88l.88.759H24v-5.74h-1.951v3.718c-.22.384-.528.627-1.002.627-.482 0-.703-.286-.703-1.198V9.853zm-4.591 2.869A3.004 3.004 0 1 1 8.738 9.73a2.997 2.997 0 0 1 3.011 2.99m-3.011-1.57c-.518 0-.956.704-.956 1.572 0 .867.438 1.57.956 1.57.528 0 .968-.702.968-1.57 0-.869-.438-1.572-.968-1.572zm-2.206 4.447H4.313L2.55 13.153h-.594v2.44H0V8.26h2.8c1.616 0 2.935 1.1 2.935 2.45 0 .826-.505 1.562-1.273 2.013l2.07 2.875m-2.75-4.888A1.226 1.226 0 0 0 2.56 9.478h-.604v2.453h.605a1.225 1.225 0 0 0 1.22-1.221Z"/></svg><span>Roku</span></a>
-      <a class="plt" href="#"><svg class="lg" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><path d="M21.794 10.609h-.618v3.286h-.607v-3.286h-.617v-.504h1.842v.504zm.135-.504h.649l.202 1.703c.057.488.11.908.172 1.484h.026c.057-.576.114-.986.17-1.484l.208-1.703H24l-.623 3.784h-.82l-.628-3.784zm-15.758.38a.796.796 0 0 0-.555-.561c-.493-.13-2.465-.13-2.465-.13s-1.973 0-2.466.13a.787.787 0 0 0-.555.56C0 10.977 0 12 0 12s0 1.028.13 1.516a.794.794 0 0 0 .56.56c.488.13 2.46.13 2.46.13s1.973 0 2.466-.13a.806.806 0 0 0 .56-.555c.13-.493.13-1.516.13-1.516s-.005-1.028-.135-1.52zm-3.649 2.46v-1.89l1.64.945-1.64.945zm6.629.867a.652.652 0 0 1-.265-.395 2.703 2.703 0 0 1-.078-.706v-.4a2.383 2.383 0 0 1 .093-.716.724.724 0 0 1 .28-.394.943.943 0 0 1 .504-.125c.203 0 .369.042.493.125.13.098.229.233.27.394.062.234.094.472.083.716v.4c.005.239-.02.478-.083.711a.7.7 0 0 1-.27.395c-.124.083-.296.124-.508.124-.218-.005-.395-.046-.52-.13zm.7-.436c.037-.089.052-.24.052-.442v-.856a1.376 1.376 0 0 0-.052-.436.189.189 0 0 0-.181-.14.183.183 0 0 0-.177.14c-.041.14-.057.29-.052.436v.861c0 .203.016.353.052.442.02.083.094.14.182.135a.183.183 0 0 0 .176-.14zm8.88-.66v.14c0 .135.006.265.016.4a.373.373 0 0 0 .068.192.2.2 0 0 0 .156.062.2.2 0 0 0 .192-.109c.036-.072.052-.192.057-.363l.534.036a.56.56 0 0 1 .006.1c0 .253-.068.445-.208.57-.14.125-.337.187-.592.187-.306 0-.519-.099-.643-.29s-.187-.489-.187-.894v-.482c0-.416.062-.717.192-.909.13-.192.348-.285.654-.285.213 0 .379.041.493.12.12.088.207.217.244.363.052.223.078.456.067.685v.472l-1.048.005zm.079-1.162a.367.367 0 0 0-.063.192 5.48 5.48 0 0 0-.015.405v.197h.457v-.197c0-.135-.006-.27-.021-.405a.373.373 0 0 0-.068-.192.174.174 0 0 0-.145-.057.169.169 0 0 0-.145.057zm-11.175 1.11l-.706-2.559h.618l.249 1.158c.062.285.109.53.14.732h.02c.022-.146.068-.384.14-.727l.26-1.163h.618l-.716 2.56v1.23H7.64v-1.23h-.005zm4.905-1.536v2.767h-.488L12 13.557h-.016c-.13.255-.332.384-.596.384-.182 0-.317-.062-.405-.181-.089-.12-.13-.307-.13-.566v-2.066h.623v2.03a.659.659 0 0 0 .041.264.137.137 0 0 0 .135.078.28.28 0 0 0 .156-.052.281.281 0 0 0 .109-.124v-2.196h.623zm3.192 0v2.767h-.488l-.052-.338h-.016c-.13.255-.332.384-.596.384-.182 0-.317-.062-.405-.181-.089-.12-.13-.307-.13-.566v-2.066h.623v2.03a.659.659 0 0 0 .041.264.137.137 0 0 0 .135.078.28.28 0 0 0 .156-.052.281.281 0 0 0 .109-.124v-2.196h.623zm-1.5-.52h-.618v3.287h-.607v-3.286h-.618v-.504h1.843v.504zm3.56.961c-.036-.171-.098-.3-.181-.379a.508.508 0 0 0-.348-.12.56.56 0 0 0-.322.1.635.635 0 0 0-.228.254h-.005V9.965h-.597v3.93h.514l.062-.26h.015a.531.531 0 0 0 .218.223.69.69 0 0 0 .322.083.502.502 0 0 0 .467-.29c.099-.192.15-.499.15-.909v-.436a4.861 4.861 0 0 0-.067-.737zm-.57 1.127c0 .155-.006.316-.026.472a.508.508 0 0 1-.084.244.195.195 0 0 1-.155.072.257.257 0 0 1-.14-.036.3.3 0 0 1-.104-.109v-1.567a.425.425 0 0 1 .109-.187.224.224 0 0 1 .166-.073c.057 0 .114.026.145.073.042.078.068.16.073.249.015.166.02.332.02.498l-.005.364z"/></svg><span>YouTube TV</span></a>
-      <a class="plt" href="#"><svg class="lg" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><path d="M19.8166 10.2808l.0459 2.6934h-.023l-.7793-2.6934h-1.2837v3.3925h.8481l-.0458-2.785h.023l.8366 2.785h1.2264v-3.3925zm-16.149 0l-.6418 3.427h.9284l.4699-3.1175h.0229l.4585 3.1174h.9169l-.6304-3.4269zm5.1805 0l-.424 2.6132h-.023l-.424-2.6132H6.5788l-.0688 3.427h.8596l.023-3.0832h.0114l.573 3.0831h.8711l.5731-3.083h.023l.0228 3.083h.8596l-.0802-3.4269zm-7.2664 2.4527c.0343.0802.0229.1949.0114.2522-.0229.1146-.1031.2292-.3324.2292-.2177 0-.3438-.126-.3438-.3095v-.3323H0v.2636c0 .7679.6074.9971 1.2493.9971.6189 0 1.1346-.2178 1.2149-.7794.0458-.298.0114-.4928 0-.5616-.1605-.722-1.467-.9283-1.5588-1.3295-.0114-.0688-.0114-.1375 0-.1834.023-.1146.1032-.2292.3095-.2292.2063 0 .321.126.321.3095v.2063h.8595v-.2407c0-.745-.6762-.8596-1.1576-.8596-.6074 0-1.1117.2063-1.2034.7564-.023.149-.0344.2866.0114.4585.1376.7106 1.364.9169 1.5358 1.3524m11.152 0c.0343.0803.0228.1834.0114.2522-.023.1146-.1032.2292-.3324.2292-.2178 0-.3438-.126-.3438-.3095v-.3323h-.917v.2636c0 .7564.596.9857 1.2379.9857.6189 0 1.1232-.2063 1.2034-.7794.0459-.298.0115-.4814 0-.5616-.1375-.7106-1.4327-.9284-1.5243-1.318-.0115-.0688-.0115-.1376 0-.1835.0229-.1146.1031-.2292.3094-.2292.1948 0 .321.126.321.3095v.2063h.848v-.2407c0-.745-.6647-.8596-1.146-.8596-.6075 0-1.1004.1948-1.192.7564-.023.149-.023.2866.0114.4585.1376.7106 1.341.9054 1.513 1.3524m2.8882.4585c.2407 0 .3094-.1605.3323-.2522.0115-.0343.0115-.0917.0115-.126v-2.533h.871v2.4642c0 .0688 0 .1948-.0114.2292-.0573.6419-.5616.8482-1.192.8482-.6303 0-1.1346-.2063-1.192-.8482 0-.0344-.0114-.1604-.0114-.2292v-2.4642h.871v2.533c0 .0458 0 .0916.0115.126 0 .0917.0688.2522.3095.2522m7.1518-.0344c.2522 0 .3324-.1605.3553-.2522.0115-.0343.0115-.0917.0115-.126v-.4929h-.3553v-.5043H24v.917c0 .0687 0 .1145-.0115.2292-.0573.6303-.596.8481-1.2034.8481-.6075 0-1.1461-.2178-1.2034-.8481-.0115-.1147-.0115-.1605-.0115-.2293v-1.444c0-.0574.0115-.172.0115-.2293.0802-.6419.596-.8482 1.2034-.8482s1.1347.2063 1.2034.8482c.0115.1031.0115.2292.0115.2292v.1146h-.8596v-.1948s0-.0803-.0115-.1261c-.0114-.0802-.0802-.2521-.3438-.2521-.2521 0-.321.1604-.3438.2521-.0115.0458-.0115.1032-.0115.1605v1.5702c0 .0458 0 .0916.0115.126 0 .0917.0917.2522.3323.2522"/></svg><span>Samsung TV Plus</span></a>
-      <a class="plt" href="#"><span>LG Channels</span></a>
-      <a class="plt" href="#"><svg class="lg" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><path d="M10.898 16.705H9.114v-.29c-.265.196-.656.416-1.32.416-2.158 0-2.996-1.167-2.996-3.43V9.809h1.783v3.592c-.006.616 0 1.778 1.284 1.778 1.241 0 1.248-1.1 1.248-1.765V9.809h1.783v6.896zM4.101 7.207c-1.961-.216-2.407.233-2.763.7-.316.413-.357.988-.357 1.401v.501H0v1.652h.999v5.244h1.783v-5.244h1.346V9.809h-1.31v-.465c0-.474.38-.533.571-.521l.392.018.32-1.634zM24 13.257c0-1.984-1.594-3.592-3.561-3.592-.835 0-1.603.29-2.21.775.384.44.677.965.85 1.543a1.707 1.707 0 0 1 1.337-.666c.975 0 1.765.86 1.765 1.922 0 1.061-.79 1.922-1.765 1.922-.969 0-1.757-.851-1.765-1.904 0-.913-.332-1.747-.878-2.381a3.447 3.447 0 0 0-2.617-1.211c-.651 0-1.261.183-1.783.502V7.259l-1.783.35v9.097h1.783v-.288c.522.319 1.132.432 1.783.432a3.42 3.42 0 0 0 2.176-.781 4.215 4.215 0 0 1-.876-1.537c-.321.429-.8.702-1.336.702-.965 0-1.747-.884-1.747-1.975s.782-1.975 1.747-1.975c.965 0 1.748.885 1.748 1.976 0 1.984 1.6 3.591 3.566 3.591C22.4 16.849 24 15.241 24 13.257"/></svg><span>Fubo</span></a>
-      <a class="plt" href="#"><span>Xumo Play</span></a>
-      <a class="plt" href="#"><span>The CW</span></a>
-      <a class="plt" href="#"><svg class="lg" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><path d="M3.987 8.409c-.96 0-1.587.28-2.12.933v-.72H0v8.88s.038.018.127.037c.138.03.821.187 1.331-.249.441-.377.542-.814.542-1.318v-1.283c.533.573 1.147.813 2 .813 1.84 0 3.253-1.493 3.253-3.48 0-2.12-1.36-3.613-3.266-3.613Zm16.748 5.595.406.591c.391.614.894.906 1.492.908.621-.012 1.064-.562 1.226-.755 0 0-.307-.27-.686-.72-.517-.614-1.214-1.755-1.24-1.803l-1.198 1.779Zm-3.205-1.955c0-2.08-1.52-3.64-3.52-3.64s-3.467 1.587-3.467 3.573a3.48 3.48 0 0 0 3.507 3.52c1.413 0 2.626-.84 3.253-2.293h-2.04l-.093.093c-.427.4-.72.533-1.227.533-.787 0-1.373-.506-1.453-1.266h4.986c.04-.214.054-.307.054-.52Zm-7.671-.219c0 .769.11 1.701.868 2.722l.056.069c-.306.526-.742.88-1.248.88-.399 0-.814-.211-1.138-.579a2.177 2.177 0 0 1-.538-1.441V6.409H9.86l-.001 5.421Zm9.283 3.46h-2.39l2.247-3.332-2.247-3.335h2.39l2.248 3.335-2.248 3.332Zm1.593-1.286Zm-17.162-.342c-.933 0-1.68-.773-1.68-1.72s.76-1.666 1.68-1.666c.92 0 1.68.733 1.68 1.68 0 .946-.733 1.706-1.68 1.706Zm18.361-1.974L24 8.622h-2.391l-.87 1.293 1.195 1.773Zm-9.404-.466c.16-.706.72-1.133 1.493-1.133.773 0 1.373.467 1.507 1.133h-3Z"/></svg><span>Plex</span></a>
-      <a class="plt" href="#"><span>MyFree DIRECTV</span></a>
-      <a class="plt" href="#"><span>Philo</span></a>
-      <a class="plt" href="#"><span>Local Now</span></a>
-      <a class="plt" href="#"><span>Fire TV</span></a>
-      <a class="plt" href="#"><span>TCL tv+</span></a>
+      <a class="plt" href="#" aria-label="Prime Video"><img src="/pbtv/platforms/prime-video.svg" alt="Prime Video"></a>
+      <a class="plt" href="#" aria-label="Roku"><img src="/pbtv/platforms/roku.svg" alt="Roku"></a>
+      <a class="plt" href="#" aria-label="YouTube TV"><img class="raw" src="/pbtv/platforms/youtube-tv.svg" alt="YouTube TV"></a>
+      <a class="plt" href="#" aria-label="Samsung TV Plus"><img class="tall" src="/pbtv/platforms/samsung-tv-plus.svg" alt="Samsung TV Plus"></a>
+      <a class="plt" href="#" aria-label="LG Channels"><img src="/pbtv/platforms/lg.svg" alt="LG Channels"></a>
+      <a class="plt" href="#" aria-label="Fubo"><img src="/pbtv/platforms/fubo.svg" alt="Fubo"></a>
+      <a class="plt" href="#" aria-label="Xumo Play"><img src="/pbtv/platforms/xumo.svg" alt="Xumo Play"></a>
+      <a class="plt" href="#" aria-label="The CW"><img src="/pbtv/platforms/the-cw.svg" alt="The CW"></a>
+      <a class="plt" href="#" aria-label="Plex"><img src="/pbtv/platforms/plex.svg" alt="Plex"></a>
+      <a class="plt" href="#" aria-label="MyFree DIRECTV"><img src="/pbtv/platforms/directv.svg" alt="MyFree DIRECTV"></a>
+      <a class="plt" href="#" aria-label="Philo"><img src="/pbtv/platforms/philo.svg" alt="Philo"></a>
+      <a class="plt" href="#" aria-label="Local Now"><img class="tall" src="/pbtv/platforms/local-now.png" alt="Local Now"></a>
+      <a class="plt" href="#" aria-label="Fire TV"><img src="/pbtv/platforms/fire-tv.png" alt="Fire TV"></a>
+      <a class="plt" href="#" aria-label="TCL tv+"><img class="raw" src="/pbtv/platforms/tcl.svg" alt="TCL tv+"></a>
     </div>
     <p class="more">plus Tennis Channel &amp; Sinclair broadcast stations. more platforms launching soon.</p>
   </div></section>
@@ -286,8 +326,33 @@
   </div></section>
 
   <section id="shows" data-reveal><div class="wrap">
-    <p class="lab"><b>more to watch.</b> original series, only on pbtv.</p>
+    <p class="lab"><b>more to watch.</b> original series, only on pbtv — tap a show for its page.</p>
     <div class="orig" id="orig"></div>
+  </div></section>
+
+  <section id="app" data-reveal><div class="wrap app">
+    <div>
+      <p class="jlab">the channel, in your pocket.</p>
+      <p class="jsub">the pickleballtv app is in development — sign in, watch every match live, follow your favorite pros, and get a nudge before first serve. same channel, zero cost.</p>
+      <div class="chips">
+        <span class="chip g">in development</span>
+        <span class="chip">iOS</span>
+        <span class="chip">Android</span>
+        <span class="chip">sign in &amp; watch</span>
+        <span class="chip">match alerts</span>
+      </div>
+    </div>
+    <div class="phone" aria-hidden="true">
+      <img class="p-logo" src="/pbtv/brand/pbtv-wordmark-white.svg" alt="">
+      <div class="p-live">
+        <img src="/pbtv/shows/art/partners.jpg" alt="">
+        <span class="lv"><span class="dot"></span>live</span>
+      </div>
+      <div class="p-row"><span class="t">3:00 PM</span><span class="n">Major League Pickleball<span>MLP Dallas Playoffs</span></span></div>
+      <div class="p-row"><span class="t">9:00 PM</span><span class="n">PPA Tour Pickleball<span>PPA Asia Ho Chi Minh</span></span></div>
+      <div class="p-row"><span class="t">10:30 PM</span><span class="n">Shock and Awe<span>Season 2 · Episode 8</span></span></div>
+      <div class="p-tabs"><b>watch</b><span>guide</span><span>shows</span><span>account</span></div>
+    </div>
   </div></section>
   <section id="join" data-reveal><div class="wrap join">
     <div class="jcol">
@@ -313,7 +378,7 @@
 </main>
 
 <footer><div class="wrap">
-  <nav class="fnav"><a href="#live">watch live</a><a href="#schedule">schedule</a><a href="#shows">shows</a><a href="#watch">where to watch</a><a href="#">subscribe</a></nav>
+  <nav class="fnav"><a href="#live">watch live</a><a href="#schedule">schedule</a><a href="#shows">shows</a><a href="#watch">where to watch</a><a href="#app">the app</a><a href="#join">subscribe</a></nav>
 </div><div class="wrap foot">
   <img class="logo-mark" src="/pbtv/brand/pbtv-mark-white.svg" alt="PickleballTV" width="23" height="30">
   <span class="concept">design concept · not the live site</span>
@@ -322,20 +387,22 @@
 
 <script>
   /* Every show below is on this week's real EPG — nothing invented.
-     The "when" chip names the FORMAT, not a made-up air slot. */
+     Art = PBTV's own 16:9 show badges (their CDN). Each card opens the show's
+     page under /pbtv/shows/<slug>/. The "when" chip names the FORMAT, never a
+     made-up air slot. */
   const shows=[
-    {t:'partners',d:"pickleball's first reality docuseries",w:'docuseries'},
-    {t:'beyond the courts: la xtreme',d:'inside an mlp team — powered by organics ocean',w:'docuseries'},
-    {t:'brighter pickleball: on tour',d:'inside the season, week by week',w:'weekly'},
-    {t:'shock and awe',d:'the wildest shots on tour — season 2, presented by heat controller',w:'season 2'},
-    {t:'pickleballers podcast',d:'the voices of the tour, long-form',w:'podcast'},
-    {t:'mlp championship series',d:'the legends bracket, taped courtside',w:'series'},
-    {t:'my pickleball life',d:'one player, one life in the game',w:'series'},
-    {t:'pbtv hot shots',d:'every top shot from ppa & mlp play',w:'highlights'}
+    {s:'partners',t:'partners',d:"pickleball's first reality docuseries",w:'docuseries'},
+    {s:'beyond-the-courts',t:'beyond the courts: la xtreme',d:'inside an mlp team — powered by organics ocean',w:'docuseries'},
+    {s:'brighter-pickleball',t:'brighter pickleball: on tour',d:'inside the season, week by week',w:'weekly'},
+    {s:'shock-and-awe',t:'shock and awe',d:'the wildest shots on tour — season 2, presented by heat controller',w:'season 2'},
+    {s:'pickleballers-podcast',t:'pickleballers podcast',d:'the voices of the tour, long-form',w:'podcast'},
+    {s:'mlp-championship-series',t:'mlp championship series',d:'the legends bracket, taped courtside',w:'series'},
+    {s:'my-pickleball-life',t:'my pickleball life',d:'one player, one life in the game',w:'series'},
+    {s:'pbtv-hot-shots',t:'pbtv hot shots',d:'every top shot from ppa & mlp play',w:'highlights'}
   ];
   const o=document.getElementById('orig');
-  shows.forEach(s=>{const a=document.createElement('a');a.href='#schedule';
-    a.innerHTML=`<span class="ttl">${s.t}</span><span class="desc">${s.d}</span><span class="when">${s.w}</span>`;o.appendChild(a);});
+  shows.forEach(s=>{const a=document.createElement('a');a.href=`/pbtv/shows/${s.s}/`;
+    a.innerHTML=`<img class="art" src="/pbtv/shows/art/${s.s}.jpg" alt="" loading="lazy"><span class="meta"><span class="ttl">${s.t}</span><span class="desc">${s.d}</span><span class="when">${s.w}</span></span>`;o.appendChild(a);});
 
   /* ── Real EPG (captured 8/7/26 from pickleballtv.com) ─────────────── */
   const EPG=[

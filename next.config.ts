@@ -299,6 +299,8 @@ const nextConfig: NextConfig = {
       beforeFiles: [
         { source: "/app-tour", destination: "/app-tour/index.html" },
         { source: "/pbtv", destination: "/pbtv/index.html" },
+        // Per-show pages under the same static deck (public/pbtv/shows/<slug>/).
+        { source: "/pbtv/shows/:slug", destination: "/pbtv/shows/:slug/index.html" },
       ],
       afterFiles: [],
       fallback: [],

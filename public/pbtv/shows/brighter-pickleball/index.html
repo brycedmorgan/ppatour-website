@@ -1,0 +1,124 @@
+<meta charset="utf-8">
+<title>Brighter Pickleball: On Tour — PickleballTV</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="The season, week by week — every stop, storyline and champion, recapped from inside the tour.">
+<meta name="robots" content="noindex">
+<meta property="og:title" content="Brighter Pickleball: On Tour — only on PickleballTV">
+<meta property="og:description" content="The season, week by week — every stop, storyline and champion, recapped from inside the tour.">
+<meta property="og:image" content="https://ppatour-website.vercel.app/pbtv/shows/art/brighter-pickleball.jpg">
+<meta property="og:type" content="video.tv_show">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/pbtv/brand/pbtv-mark-black.svg" media="(prefers-color-scheme:light)">
+<link rel="icon" href="/pbtv/brand/pbtv-mark-white.svg" media="(prefers-color-scheme:dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Nunito+Sans:wght@400;600;700;900&display=swap">
+<style>
+  /* PBTV brand tokens — same system as /pbtv/index.html (Bob Whyley kit, 8/5) */
+  :root{--bg:#000;--panel:#0E0E0E;--line:rgba(255,255,255,.14);--line2:rgba(255,255,255,.08);
+    --ink:#FFF;--muted:#828C96;--faint:#626262;--green:#508250;--live:#FF5B4C;
+    --display:"Prohibition","Oswald","Avenir Next Condensed","Haettenschweiler",Impact,sans-serif;
+    --sans:"Avenir Next","Avenir","Nunito Sans",ui-sans-serif,system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;letter-spacing:-.01em}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  header{position:sticky;top:0;z-index:20;background:rgba(0,0,0,.72);backdrop-filter:blur(16px);border-bottom:1px solid var(--line2)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .logo-lock{height:24px;width:auto;display:block}
+  .nlinks{display:flex;gap:24px;align-items:center}
+  .nlinks a{font-size:14px;color:var(--muted);transition:color .2s}
+  .nlinks a:hover{color:var(--ink)}
+  .pill{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px;padding:9px 16px;border-radius:100px;background:var(--green)}
+  .nlinks a.pill,.nlinks a.pill:hover{color:#FFF}
+  .dot{width:7px;height:7px;border-radius:50%;background:#FFF}
+  @media(max-width:720px){.nav{height:60px}.nlinks a:not(.pill){display:none}.logo-lock{height:20px}}
+  .hero{display:grid;grid-template-columns:1fr;gap:40px;padding-block:56px 30px}
+  @media(min-width:820px){.hero{grid-template-columns:.62fr 1fr;gap:56px;align-items:start}}
+  /* 9:16 poster slot — a labelled placeholder frame. The 16:9 badge inside is
+     PBTV's real art cropped to fill; swap the <img> when vertical art lands. */
+  /* ⚠ width must be EXPLICIT: as a grid item, margin:0 auto defeats the default
+     stretch, and with only absolute children the box collapses to 2px. */
+  .poster{position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;border:1px dashed var(--line);background:var(--panel);width:min(100%,340px);margin:0 auto}
+  .poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85}
+  .poster .scr{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.72) 78%)}
+  .poster .tag{position:absolute;left:14px;right:14px;bottom:14px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+    border:1px dashed var(--line);border-radius:10px;padding:8px 10px;text-align:center;background:rgba(0,0,0,.55)}
+  .chip{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:6px 12px;border-radius:100px;margin:0 0 18px;white-space:nowrap}
+  h1{font-family:var(--display);font-size:clamp(2.2rem,5.5vw,3.8rem);line-height:.95;letter-spacing:.005em;margin:0 0 18px;font-weight:600;text-transform:uppercase}
+  .desc{color:var(--muted);font-size:clamp(1rem,1.5vw,1.15rem);line-height:1.6;max-width:52ch;margin:0 0 26px}
+  .acts{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 8px}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:14.5px;padding:12px 20px;border-radius:100px;transition:transform .15s,box-shadow .2s,border-color .2s}
+  .btn-l{background:var(--green);color:#FFF}
+  .btn-l:hover{box-shadow:0 10px 30px -8px rgba(80,130,80,.55)}
+  .btn-g{border:1px solid var(--line);color:var(--ink)}
+  .btn-g:hover{border-color:rgba(255,255,255,.28)}
+  .btn .dot{background:#FFF;animation:pulse 1.8s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.4)}70%{box-shadow:0 0 0 7px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+  section{padding:44px 0 80px}
+  .lab{font-size:15px;color:var(--muted);text-transform:lowercase;margin:0 0 20px;font-weight:500}
+  .lab b{color:var(--ink);font-weight:600}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;min-width:460px}
+  td{padding:14px;border-top:1px solid var(--line2);vertical-align:middle}
+  tr:hover td{background:rgba(255,255,255,.02)}
+  .day{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
+  .time{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .prog{font-size:14.5px;font-weight:600}
+  .more{color:var(--muted);font-size:13px;margin:16px 0 0}
+  .more a{color:var(--ink);border-bottom:1px solid var(--line)}
+  footer{border-top:1px solid var(--line2);padding:36px 0 52px}
+  .foot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;color:var(--faint);font-size:13px}
+  .logo-mark{height:38px;width:auto;display:block}
+  .concept{font-family:var(--mono);font-size:11px;letter-spacing:.08em;border:1px dashed var(--line);padding:5px 11px;border-radius:100px;color:var(--muted)}
+</style>
+
+<header><div class="wrap nav">
+  <a href="/pbtv/" aria-label="PickleballTV — home"><img class="logo-lock" src="/pbtv/brand/pbtv-wordmark-white.svg" alt="PickleballTV" width="127" height="22"></a>
+  <nav class="nlinks">
+    <a href="/pbtv/#shows">all shows</a>
+    <a href="/pbtv/#schedule">schedule</a>
+    <a class="pill" href="/pbtv/#live"><span class="dot"></span>watch live</a>
+  </nav>
+</div></header>
+
+<main>
+  <div class="wrap hero">
+    <div class="poster">
+      <img src="/pbtv/shows/art/brighter-pickleball.jpg" alt="Brighter Pickleball: On Tour key art">
+      <div class="scr"></div>
+      <div class="tag">9:16 key art — placeholder<br>final poster from pbtv</div>
+    </div>
+    <div>
+      <span class="chip">weekly · only on pbtv</span>
+      <h1>Brighter Pickleball: On Tour</h1>
+      <p class="desc">The season, week by week — every stop, storyline and champion, recapped from inside the tour.</p>
+      <div class="acts">
+        <a class="btn btn-l" href="/pbtv/#live"><span class="dot"></span>watch live now</a>
+        <a class="btn btn-g" href="/pbtv/#shows">all shows</a>
+      </div>
+    </div>
+  </div>
+
+  <section><div class="wrap">
+    <p class="lab"><b>this week on pbtv.</b> all times eastern.</p>
+    <div class="scroll"><table><tbody>
+      <tr><td class="day">fri · aug 7</td><td class="time">3:30 AM</td><td class="prog">Episode 15 - MLP Dallas</td></tr>
+      <tr><td class="day">fri · aug 7</td><td class="time">2:00 PM</td><td class="prog">Episode 14 - PPA Finals</td></tr>
+      <tr><td class="day">sat · aug 8</td><td class="time">2:00 AM</td><td class="prog">Episode 14 - PPA Finals</td></tr>
+      <tr><td class="day">sat · aug 8</td><td class="time">2:30 AM</td><td class="prog">Episode 15 - MLP Dallas</td></tr>
+      <tr><td class="day">sun · aug 9</td><td class="time">3:00 AM</td><td class="prog">Episode 13 - Atlanta</td></tr>
+      <tr><td class="day">mon · aug 10</td><td class="time">8:00 PM</td><td class="prog">Episode 15 - MLP Dallas</td></tr>
+      <tr><td class="day">tue · aug 11</td><td class="time">5:30 AM</td><td class="prog">Episode 14 - PPA Finals</td></tr>
+      <tr><td class="day">tue · aug 11</td><td class="time">4:30 PM</td><td class="prog">Episode 14 - PPA Finals</td></tr>
+    </tbody></table></div>
+    <p class="more">+ 11 more airings this week — see the <a href="/pbtv/#schedule">full guide</a>.</p>
+  </div></section>
+</main>
+
+<footer><div class="wrap foot">
+  <a href="/pbtv/"><img class="logo-mark" src="/pbtv/brand/pbtv-mark-white.svg" alt="PickleballTV" width="23" height="30"></a>
+  <span class="concept">design concept · not the live site</span>
+  <span>© 2026 PickleballTV</span>
+</div></footer>
