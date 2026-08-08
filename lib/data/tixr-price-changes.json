@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07T14:06:10Z",
+  "updated_at": "2026-08-08T13:37:53Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -994,6 +994,162 @@
       "sale_state": {
         "from": "OPEN",
         "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-08T13:37:53Z",
+      "type": "price_change",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "ticket": "3 Day Box Suites",
+      "base_price": {
+        "from": 14500,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 15705.92,
+        "to": 15705.92
+      }
+    },
+    {
+      "at": "2026-08-08T13:37:53Z",
+      "type": "availability_change",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "ticket": "3 Day Box Suites",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-08T13:37:53Z",
+      "type": "price_change",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "ticket": "Friday Box Suites",
+      "base_price": {
+        "from": 4500,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 4877.97,
+        "to": 4877.97
+      }
+    },
+    {
+      "at": "2026-08-08T13:37:53Z",
+      "type": "availability_change",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "ticket": "Friday Box Suites",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-08T13:37:53Z",
+      "type": "price_change",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "ticket": "Saturday Box Suites",
+      "base_price": {
+        "from": 4500,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 4877.97,
+        "to": 4877.97
+      }
+    },
+    {
+      "at": "2026-08-08T13:37:53Z",
+      "type": "availability_change",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "ticket": "Saturday Box Suites",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-08T13:37:53Z",
+      "type": "price_change",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "ticket": "Sunday Box Suites",
+      "base_price": {
+        "from": 4500,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 4877.97,
+        "to": 4877.97
+      }
+    },
+    {
+      "at": "2026-08-08T13:37:53Z",
+      "type": "availability_change",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "ticket": "Sunday Box Suites",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-08T13:37:53Z",
+      "type": "price_change",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "ticket": "Friday Grounds Pass",
+      "base_price": {
+        "from": 25,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 30.35,
+        "to": 30.35
+      }
+    },
+    {
+      "at": "2026-08-08T13:37:53Z",
+      "type": "availability_change",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "ticket": "Friday Grounds Pass",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "CLOSED"
+      }
+    },
+    {
+      "at": "2026-08-08T13:37:53Z",
+      "type": "price_change",
+      "event_id": "166387",
+      "event": "2026 Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning Courtside Chair",
+      "base_price": {
+        "from": 180,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 200.33,
+        "to": 200.33
+      }
+    },
+    {
+      "at": "2026-08-08T13:37:53Z",
+      "type": "availability_change",
+      "event_id": "166387",
+      "event": "2026 Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning Courtside Chair",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
       }
     }
   ]
