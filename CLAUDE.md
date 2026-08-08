@@ -42,6 +42,17 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-08 (pt. 2) — /pbtv split out to its own project: Gull-Stack/pickleballtv
+
+- **The PBTV concept is now CANONICAL in its own repo** (`Gull-Stack/pickleballtv`,
+  local `~/Documents/pickleball/pickleballtv/`), live at **pickleballtv.vercel.app**
+  on the gull-stack Vercel team — its own project so it can take a real domain if
+  the PBTV team wants to publish. Paths de-prefixed (`/pbtv/...` → `/...`), og hosts
+  retargeted, show-page generator moved with it (`scripts/build-shows.mjs`).
+- **`public/pbtv/` here still serves at ppatour.com/pbtv but is FROZEN** — port
+  changes to the new repo, not here. If it causes confusion later, replace this
+  copy with a redirect page to the new host.
+
 ### 2026-08-08 — /pbtv round 2: show pages, real platform logos, app tease (`0fb747e`)
 
 - **Bryce's four notes, all shipped + verified live:** white text on the header CTA ·
