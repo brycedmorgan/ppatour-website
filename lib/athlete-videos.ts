@@ -11,6 +11,16 @@
  * Highlight links are timestamped broadcast URLs (youtube.com/live/{id}?t=…),
  * normalized here to a video id + start second for a clean embed.
  * Never throws — returns null/[] on any problem. Cached 1h.
+ *
+ * ⚠ QUALITY RANKING (Connor, 8/7): the raw feed leads with whatever clip the
+ * highlight API returns first, which is often a low-view cell-phone capture
+ * (rain-delay side courts, etc.) rather than the produced broadcast match. Two
+ * levers fix that, both degrade to the old behaviour if unavailable:
+ *   1. Clips within a tournament are re-ordered by YouTube view count (and
+ *      official-PPA-channel priority) so the most-watched produced match leads.
+ *      Needs YOUTUBE_API_KEY; with no key the feed keeps its original order.
+ *   2. The DEFAULT tournament is the player's marquee event (Worlds → majors →
+ *      cups → opens), not simply their most recent one.
  */
 import { pbGetJson } from "@/lib/pb-fetch";
 import { ATHLETES_CACHE_TAG } from "@/lib/cache-tags";
@@ -27,6 +37,7 @@ export type AthleteVideo = {
   matchup: string;
   tournament: string;
   thumbnail: string;
+  views?: number; // YouTube view count, when the stats lookup succeeds
 };
 export type AthleteVideoData = {
   tournaments: VideoTournament[];
@@ -81,6 +92,118 @@ function parseYouTube(link: string): { id: string; start: number } | null {
   }
 }
 
+/**
+ * Tier score for picking a player's marquee event as the dropdown default.
+ * Worlds is the biggest broadcast, then majors/nationals, cups/finals, opens.
+ */
+function tournamentRank(title: string): number {
+  const t = title.toLowerCase();
+  if (/\bworld/.test(t)) return 5;
+  if (/\bnational|\bmasters|\bmajor|\bchampionship/.test(t)) return 4;
+  if (/\bcup\b|\bfinals\b/.test(t)) return 3;
+  if (/\bopen\b/.test(t)) return 2;
+  return 1;
+}
+
+/**
+ * The default tournament is the player's highest-tier event; ties break to the
+ * most recent (the list arrives most-recent-first). Falls back to the first row.
+ */
+function pickDefaultTournament(tournaments: VideoTournament[]): string {
+  let best = tournaments[0];
+  let bestRank = tournamentRank(best.title);
+  for (const t of tournaments) {
+    const r = tournamentRank(t.title);
+    if (r > bestRank) {
+      best = t;
+      bestRank = r;
+    }
+  }
+  return best.uuid;
+}
+
+type YtStat = { views: number; channelId: string };
+
+/**
+ * Official PPA broadcast channels (comma-separated YouTube channel IDs in
+ * PPA_YT_CHANNEL_IDS). Clips from these lead regardless of raw view count, so a
+ * produced broadcast beats a viral courtside phone clip. Empty = view-count only.
+ */
+function officialChannelIds(): Set<string> {
+  return new Set(
+    (process.env.PPA_YT_CHANNEL_IDS || "")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean),
+  );
+}
+
+/**
+ * YouTube Data API v3 view counts + channel for a set of video ids (50 per
+ * call). No key or any failure → empty map, and ranking degrades to feed order.
+ */
+async function fetchYouTubeStats(ids: string[]): Promise<Map<string, YtStat>> {
+  const out = new Map<string, YtStat>();
+  const key = process.env.YOUTUBE_API_KEY;
+  const unique = [...new Set(ids)];
+  if (!key || unique.length === 0) return out;
+  for (let i = 0; i < unique.length; i += 50) {
+    const batch = unique.slice(i, i + 50);
+    try {
+      const res = await fetch(
+        `https://www.googleapis.com/youtube/v3/videos?part=statistics,snippet&id=${batch.join(
+          ",",
+        )}&key=${key}`,
+        {
+          signal: AbortSignal.timeout(TIMEOUT_MS),
+          next: { revalidate: REVALIDATE_S, tags: [ATHLETES_CACHE_TAG] },
+        },
+      );
+      if (!res.ok) continue;
+      const json = (await res.json()) as {
+        items?: Array<{ id: string; statistics?: { viewCount?: string }; snippet?: { channelId?: string } }>;
+      };
+      for (const it of json.items ?? []) {
+        out.set(it.id, {
+          views: Number(it.statistics?.viewCount ?? 0) || 0,
+          channelId: it.snippet?.channelId ?? "",
+        });
+      }
+    } catch {
+      // ignore — a missing batch just means those clips keep feed order
+    }
+  }
+  return out;
+}
+
+/**
+ * Re-order clips so the highest-quality produced match leads: official-channel
+ * clips first, then by view count, stable within ties. Stamps `views` for the
+ * UI. No stats (no key / API down) → the original order is returned unchanged.
+ */
+async function rankByQuality(videos: AthleteVideo[]): Promise<AthleteVideo[]> {
+  if (videos.length < 2) return videos;
+  const stats = await fetchYouTubeStats(videos.map((v) => v.id));
+  if (stats.size === 0) return videos;
+  const official = officialChannelIds();
+  return videos
+    .map((v, i) => {
+      const s = stats.get(v.id);
+      return {
+        v: s ? { ...v, views: s.views } : v,
+        i,
+        views: s?.views ?? 0,
+        isOfficial: s ? official.has(s.channelId) : false,
+      };
+    })
+    .sort((a, b) => {
+      if (a.isOfficial !== b.isOfficial) return a.isOfficial ? -1 : 1;
+      if (b.views !== a.views) return b.views - a.views;
+      return a.i - b.i;
+    })
+    .map((r) => r.v);
+}
+
 async function fetchTournaments(slug: string): Promise<VideoTournament[]> {
   const { token, base } = config();
   if (!token) return [];
@@ -123,7 +246,7 @@ async function fetchHighlights(slug: string, uuid: string): Promise<AthleteVideo
       thumbnail: `https://i.ytimg.com/vi/${yt.id}/hqdefault.jpg`,
     });
   }
-  return out;
+  return rankByQuality(out);
 }
 
 const tourCache = new Map<string, { value: VideoTournament[]; expires: number }>();
@@ -149,7 +272,7 @@ export async function getAthleteVideosFor(slug: string, uuid: string): Promise<A
 export async function getAthleteVideoData(slug: string): Promise<AthleteVideoData | null> {
   const tournaments = await cachedTournaments(slug);
   if (!tournaments.length) return null;
-  const tournamentUuid = tournaments[0].uuid;
+  const tournamentUuid = pickDefaultTournament(tournaments);
   const videos = await getAthleteVideosFor(slug, tournamentUuid);
   return { tournaments, tournamentUuid, videos };
 }

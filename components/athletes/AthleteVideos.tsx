@@ -4,6 +4,14 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import type { AthleteVideo, VideoTournament } from "@/lib/athlete-videos";
 
+/** "1.2M views" / "34K views" — compact, only when a count is known. */
+function formatViews(n?: number): string | null {
+  if (!n || n < 1) return null;
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M views`;
+  if (n >= 1_000) return `${Math.round(n / 1_000)}K views`;
+  return `${n} views`;
+}
+
 /**
  * Athlete highlight gallery: a tournament dropdown + a grid of highlight clips
  * (matchup + thumbnail) that open in a lightbox at their broadcast timestamp.
@@ -117,8 +125,10 @@ export function AthleteVideos({
                   <p className="line-clamp-2 text-[13px] font-semibold leading-snug text-ppa-navy">
                     {v.matchup}
                   </p>
-                  {v.tournament && (
-                    <p className="mt-1 text-[11px] text-ppa-navy/45">{v.tournament}</p>
+                  {(v.tournament || formatViews(v.views)) && (
+                    <p className="mt-1 text-[11px] text-ppa-navy/45">
+                      {[v.tournament, formatViews(v.views)].filter(Boolean).join(" · ")}
+                    </p>
                   )}
                 </div>
               </button>
