@@ -1,4 +1,5 @@
 import { VacationsTrack } from "@/components/vacations/VacationsTrack";
+import { TravelMonetization } from "@/components/vacations/TravelMonetization";
 
 /**
  * Vacations sits inside the tour site but keeps its own funnel telemetry —
@@ -13,6 +14,7 @@ export default function VacationsLayout({
   return (
     <>
       <VacationsTrack />
+      <TravelMonetization />
       {children}
     </>
   );
