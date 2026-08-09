@@ -10,14 +10,16 @@ import { ANALYTICS_ENABLED, CONSENT_KEY, CONSENT_EVENT } from "@/lib/analytics";
  * into affiliate links and injects Travelpayouts' own travel widgets where
  * visitors click most. `emrldtp.com` is Travelpayouts' own serving domain
  * (emrldtp = Emerald + TP); the account is encoded in the file name
- * (NTYwMzU0 = base64 "560354") and the `?t=` param.
+ * (NTYwMzU0 = base64 "560354") and the `?t=` param, and the marker (762317) is
+ * bound to that Emerald project in Bryce's Travelpayouts dashboard.
  *
- * ── Why this is NOT in the root layout / MarketingTags ────────────────────
- * Scoped to /vacations DELIBERATELY. Bryce's call (8/9): Emerald runs on the
- * travel pages only, so its injected widgets never appear on the sports pages
- * — which would be the "ad inventory on ppatour.com" the 7/29 ruling put off
- * the table. Mounted in app/vacations/layout.tsx, the same place VacationsTrack
- * lives, so it can never leak site-wide.
+ * ── Deliberately NOT in the root layout ───────────────────────────────────
+ * Mounted only on the TRAVEL surfaces — the /vacations pages (vacations layout)
+ * and the /events tournament pages (events [year]/[slug] layout), where the
+ * Trip Builder's flights/hotels/cars booking flow lives. Kept off the pure
+ * sports pages (homepage, rankings, athletes) so its injected widgets never
+ * become the "ad inventory on ppatour.com" the 7/29 ruling put off the table.
+ * Scope is Bryce's call (8/9): tournament pages + vacations.
  *
  * ── Gated exactly like the other third-party tags ─────────────────────────
  *   - not the production domain -> nothing loads (ANALYTICS_ENABLED, from

@@ -1,5 +1,5 @@
 import { VacationsTrack } from "@/components/vacations/VacationsTrack";
-import { TravelMonetization } from "@/components/vacations/TravelMonetization";
+import { TravelMonetization } from "@/components/global/TravelMonetization";
 
 /**
  * Vacations sits inside the tour site but keeps its own funnel telemetry —
