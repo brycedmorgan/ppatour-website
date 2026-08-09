@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-08T13:37:53Z",
+  "updated_at": "2026-08-09T13:40:49Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -1147,6 +1147,84 @@
       "event_id": "166387",
       "event": "2026 Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
       "ticket": "Saturday Morning Courtside Chair",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-09T13:40:49Z",
+      "type": "price_change",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "ticket": "Saturday Grounds Pass",
+      "base_price": {
+        "from": 25,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 30.35,
+        "to": 30.35
+      }
+    },
+    {
+      "at": "2026-08-09T13:40:49Z",
+      "type": "availability_change",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper",
+      "ticket": "Saturday Grounds Pass",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "CLOSED"
+      }
+    },
+    {
+      "at": "2026-08-09T13:40:49Z",
+      "type": "price_change",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Friday Premium Parking",
+      "base_price": {
+        "from": 50,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 57.36,
+        "to": 57.36
+      }
+    },
+    {
+      "at": "2026-08-09T13:40:49Z",
+      "type": "availability_change",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Friday Premium Parking",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-09T13:40:49Z",
+      "type": "price_change",
+      "event_id": "166396",
+      "event": "2026 Pickleball World Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening Courtside Chair",
+      "base_price": {
+        "from": 150,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 167.84,
+        "to": 167.84
+      }
+    },
+    {
+      "at": "2026-08-09T13:40:49Z",
+      "type": "availability_change",
+      "event_id": "166396",
+      "event": "2026 Pickleball World Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening Courtside Chair",
       "sale_state": {
         "from": "OPEN",
         "to": "HIDE"

@@ -1,7 +1,7 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-08-08T13:37:53Z",
+  "generated_at": "2026-08-09T13:40:49Z",
   "event_count": 62,
   "ticket_type_count": 920,
   "series_breakdown": {
@@ -104,8 +104,8 @@
         {
           "name": "Saturday Grounds Pass",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 25,
+          "sale_state": "CLOSED",
+          "base_price": null,
           "all_in_price": 30.35
         },
         {
@@ -1630,8 +1630,8 @@
         {
           "name": "Friday Premium Parking",
           "category": "PARKING",
-          "sale_state": "OPEN",
-          "base_price": 50,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 57.36
         },
         {
@@ -5362,8 +5362,8 @@
         {
           "name": "Friday Evening Courtside Chair",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 150,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 167.84
         },
         {
