@@ -16,6 +16,8 @@ export const trip = {
   destination: "Club Med Turkoise",
   location: "Providenciales, Turks & Caicos",
   datesLabel: "December 8–12, 2026",
+  /** Day 1 of the itinerary. Each `itinerary` day's date is derived from this. */
+  startIso: "2026-12-08",
   nights: 4,
   airportCode: "PLS",
   airportName: "Providenciales International Airport",

@@ -62,6 +62,19 @@ const SectionLabel = ({
   </div>
 );
 
+/**
+ * Itinerary day N (0-indexed) as "Dec 8", derived from trip.startIso so the
+ * dates can never drift from the day count. Parsed component-wise and built as
+ * a local date, so no timezone can roll it back a day.
+ */
+function itineraryDate(startIso: string, offset: number): string {
+  const [y, m, d] = startIso.split("-").map(Number);
+  return new Date(y, m - 1, d + offset).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+}
+
 export default async function VacationsPage() {
   const availability = await getAvailability();
   const options: Occupancy[] = ["single", "double"];
@@ -353,16 +366,16 @@ export default async function VacationsPage() {
                 className="flex flex-col bg-ppa-navy p-6"
                 style={{ "--reveal-delay": `${i * 70}ms` } as React.CSSProperties}
               >
-                <p className="font-display text-4xl leading-none text-white/15">
-                  {String(i + 1).padStart(2, "0")}
+                <p className="font-display text-3xl leading-none text-white">
+                  {itineraryDate(trip.startIso, i)}
                 </p>
                 <p className="mt-3 text-[11px] font-bold uppercase tracking-[0.16em] text-vac-teal-pale">
                   {day.day}
                 </p>
-                <p className="mt-1 font-display text-base uppercase leading-tight">
+                <p className="mt-1 min-h-[4rem] font-display text-base uppercase leading-tight">
                   {day.title}
                 </p>
-                <ul className="mt-4 flex flex-col gap-3 border-t border-white/12 pt-4">
+                <ul className="mt-2 flex flex-col gap-3 border-t border-white/12 pt-4">
                   {day.events.map((ev, j) => (
                     <li key={j} className="text-xs leading-relaxed">
                       {ev.time && (
