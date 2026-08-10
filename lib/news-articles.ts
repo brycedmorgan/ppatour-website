@@ -83,6 +83,69 @@ export type NewsArticle = {
  */
 export const newsArticles: NewsArticle[] = [
   /**
+   * ⚠ SPONSORED PARTNER ANNOUNCEMENT, not editorial — Six Zero's own signing
+   * copy, supplied by Hannah Johns (PPA comms) on Aug 10 with a request to
+   * publish the same day. Same class as Jeff Watson's press release below: it
+   * is neither AI-written nor unreviewed, so the 7/20 approval gate (which
+   * exists to stop AI copy going live) does not apply — it ships
+   * `status: "published"`. Flagged to Dylan all the same.
+   *
+   * ⚠ IT IS SPONSORED CONTENT AND IS LABELLED AS SUCH, three ways: the
+   * "Partner News" category, the "Six Zero" byline (the brand authored it), and
+   * the closing disclosure line in `body`. Do not strip any of the three — a
+   * sponsored announcement presented as tour reporting is the thing the label
+   * prevents.
+   *
+   * ⚠ THE TWO QUOTES ARE REAL AND ATTRIBUTED (Cailyn Campbell; Dale Young,
+   * Founder of Six Zero) — verbatim from the supplied release. Do not reword
+   * them. The stats are the brand's own claim (three PPA bronze medals across
+   * all three disciplines; Hard Eights MLP team; age 16); left as supplied.
+   *
+   * ⚠ NO "Official Paddle Partner" DESIGNATION IS CLAIMED. The disclosure says
+   * "an official partner of the PPA Tour" only — Six Zero's Platinum status is
+   * confirmed, but the exclusive paddle-partner label is contested (JOOLA /
+   * Proton / Six Zero all carry it) and the live sponsors page designates none
+   * of them. Don't upgrade the wording.
+   *
+   * Both Campbell siblings have profiles, so the "Players in This Story" rail
+   * resolves them by name detection (they're in published-athletes.json). They
+   * are NOT in the curated `lib/athletes.ts`, so the body linkifier does not
+   * link them inline — the rail is the link surface here.
+   */
+  {
+    slug: "cailyn-campbell-signs-with-six-zero",
+    status: "published",
+    category: "Partner News",
+    title: "Six Zero Signs 16-Year-Old Rising Star Cailyn Campbell",
+    date: "Aug 10",
+    /* Cailyn at the kitchen line with the Coral Pro — the one paddle the story
+       is about, and clearly in frame. Landscape 3:2 original (5585×3723)
+       encoded to 2400×1600 (524KB, in line with the other heroes); the hero
+       renders `sizes="100vw"`. Her head sits near the top of the frame, so the
+       3.6:1 hero crop is anchored up to keep her face and the paddle. Supplied
+       by Six Zero via Hannah; ArticleView renders the hero with alt="". */
+    image: "/ppa/six-zero-cailyn-campbell.jpg",
+    imagePosition: "50% 25%",
+    /* Six Zero authored the announcement; the byline doubles as the sponsored
+       disclosure. */
+    author: "Six Zero",
+    players: ["cailyn-campbell", "cason-campbell"],
+    dek: "Six Zero has signed 16-year-old PPA Tour standout Cailyn Campbell — one of the sport's brightest rising young stars — with the Coral Pro paddle in her hand for both singles and doubles.",
+    whyItMatters:
+      "At 16, Campbell already owns three PPA bronze medals across all three disciplines and plays for the Hard Eights in MLP. Six Zero, an official PPA Tour partner, is investing in the next generation of the pro game.",
+    body: [
+      "Six Zero has welcomed Cailyn Campbell to its family of players. At just 16 years old, Campbell is already making a name for herself on the professional pickleball scene and has quickly become one of the brightest rising young stars in the sport.",
+      "Before pickleball, she played competitive tennis. Everything changed when her older brother, Cason Campbell — who also competes on the PPA Tour — needed someone to practice with. What started as helping her brother quickly turned into a passion, and before long, a professional career.",
+      "Today, Campbell competes on the PPA Tour and is a member of the Hard Eights MLP team. She has already earned three professional PPA bronze medals across women's singles, women's doubles, and mixed doubles, competing alongside and against some of the best players in the world.",
+      "While her results speak for themselves, it was her attitude that stood out to the brand. Campbell plays with confidence, works hard, and is always looking for ways to improve — a mindset Six Zero says fits perfectly with what the company is all about.",
+      "“I'm beyond excited to join the Six Zero family! I'm pretty paddle picky, so I never wanted to partner with a company unless I truly loved what I was playing with. The Coral Pro is the first paddle I've used that gives me everything I want for both singles and doubles. From the moment I connected with the Six Zero team, they've welcomed me with open arms and made me feel like family. I can't wait to represent this brand!”",
+      "Finding the right paddle wasn't something Campbell took lightly, and Six Zero says the Coral Pro gives her the confidence she wants every time she steps on court. When she's not competing, you'll probably find her searching for the best matcha in whatever city she's visiting, fitting in another workout, or spending time with family and friends.",
+      "“We're incredibly excited to have Cailyn join the Six Zero family,” said Dale Young, Founder of Six Zero. “What impressed us most wasn't just her results, it was her character. She's driven, humble, and loves the process of getting better. Those are the kinds of people we want representing Six Zero, and we're looking forward to supporting her as she continues to grow.”",
+      "Six Zero says it's proud to be part of Campbell's journey and can't wait to see what the future holds. She's only getting started.",
+      "This announcement is sponsored content supplied by Six Zero, an official partner of the PPA Tour.",
+    ],
+  },
+  /**
    * ⚠ OFFICIAL PRESS RELEASE, not editorial — Jeff Watson's comms copy
    * (DALLAS, Aug 5 2026), supplied by Wesley. Both quotes are REAL and
    * attributed: Connor Pardoe (Founder/CEO) and Jeff Watson (SVP Marketing &
