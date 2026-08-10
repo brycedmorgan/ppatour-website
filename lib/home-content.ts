@@ -570,11 +570,11 @@ export const partners: Partner[] = [
      * No designation either — not stated on the approved list, and inventing
      * one would put words in a sponsor's mouth on their own card.
      *
-     * Destination verified 8/4: mojoenergypouches.com self-identifies as "MOJO
-     * ENERGY POUCHES | THE OFFICIAL WEBSITE". Not to be confused with mojo.com.
+     * Destination updated 8/10 (Tyler): grabmojo.com is the link the sponsor
+     * wants the card to point to, replacing the 8/4 mojoenergypouches.com.
      */
     name: "MOJO Energy Pouches",
-    website: "https://mojoenergypouches.com",
+    website: "https://grabmojo.com/",
     // Designation confirmed by Bryce at launch (8/5): Official Partner.
     role: "Official Partner",
     tier: "gold",
