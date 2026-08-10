@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T13:40:49Z",
+  "updated_at": "2026-08-10T14:15:09Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -1229,6 +1229,38 @@
         "from": "OPEN",
         "to": "HIDE"
       }
+    },
+    {
+      "at": "2026-08-10T14:15:09Z",
+      "type": "price_change",
+      "event_id": "184760",
+      "event": "Veolia Pickleball National Championships Sunday - Championships",
+      "ticket": "Sunday Courtside+",
+      "base_price": {
+        "from": 220,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 243.1,
+        "to": 243.1
+      }
+    },
+    {
+      "at": "2026-08-10T14:15:09Z",
+      "type": "availability_change",
+      "event_id": "184760",
+      "event": "Veolia Pickleball National Championships Sunday - Championships",
+      "ticket": "Sunday Courtside+",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-10T14:15:09Z",
+      "type": "event_removed",
+      "event_id": "169289",
+      "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper"
     }
   ]
 }
