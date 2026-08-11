@@ -12,9 +12,6 @@ import { RegisteredCount } from "@/components/events/RegisteredCount";
 import { VolunteerModalButton } from "@/components/events/VolunteerModalButton";
 import { BookGroupRateLink } from "@/components/events/BookGroupRateLink";
 import { publishedHotelsFor } from "@/lib/published-hotels";
-import { TripBuilder } from "@/components/events/TripBuilder";
-import type { TripEvent } from "@/lib/trip";
-import { buildTripEvent } from "@/lib/trip-event";
 import { ResultsPanel } from "@/components/live/ResultsPanel";
 import { ChampionsBanner } from "@/components/live/ChampionsBanner";
 import { ReplayGallery } from "@/components/live/ReplayGallery";
@@ -353,11 +350,6 @@ export default async function EventPage({ params }: Params) {
         content: "event-parking-premium",
       })
     : null;
-  /**
-   * The serializable event context the Trip Builder wizard needs — built by the
-   * shared helper so the on-page wizard and the emailed plan can't drift.
-   */
-  const tripEvent: TripEvent = await buildTripEvent(t);
   /**
    * Per-day pricing, when Tixr sells this stop day by day (it sells most of them
    * as a week-long parent listing plus one listing per finals day). Null for stops
@@ -1314,19 +1306,6 @@ export default async function EventPage({ params }: Params) {
               Where to land, where to stay, where to eat, and what to do
               between sessions — the full tour-stop getaway.
             </p>
-
-            {/* Interactive Trip Builder — the guided way in. The static guide
-                below is the full reference for anyone who'd rather browse. */}
-            <div className="mt-6">
-              <TripBuilder event={tripEvent} />
-            </div>
-
-            <div className="mt-8 flex items-center gap-2.5">
-              <span className="h-2 w-2 bg-[var(--event-accent)]" />
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
-                The Full Guide
-              </p>
-            </div>
 
             {/* Getting there + parking */}
             <div className="mt-6 grid gap-4 sm:grid-cols-2">

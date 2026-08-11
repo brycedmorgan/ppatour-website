@@ -66,6 +66,14 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   tsc clean; eslint on the two files shows only the pre-existing `NationalsLive:213` baseline.
 - **⚠ Shipped via a clean worktree off origin/main** — the main working tree held unrelated
   uncommitted vacations/trip-builder work; only the two schedule files were committed.
+- **⚠ FIRST ATTEMPT (`5230cd3`) RED-BUILT THE DEPLOY — the lesson is the tooling.** I built the
+  patch with `git diff -- page.tsx`, which returns **every** uncommitted change to that file, not
+  just mine — so it swept in the parallel session's Trip Builder imports (`@/components/events/
+  TripBuilder`, `@/lib/trip-event`) whose supporting files are uncommitted on origin/main. Turbopack
+  failed `Module not found`. Prod never moved (stayed on the prior READY build). Fixed forward
+  (`<sha>`) by `git checkout <clean-base> -- <files>` in a fresh worktree and re-applying ONLY the
+  buildSchedule edit. **Never patch a file from `git diff` when the working tree has other sessions'
+  uncommitted work in that same file — re-derive from the committed base instead.**
 
 ### 2026-08-08 (pt. 2) — /pbtv split out to its own project: Gull-Stack/pickleballtv
 
