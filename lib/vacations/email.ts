@@ -1,9 +1,46 @@
 import sgMail from "@sendgrid/mail";
 import { trip } from "./content";
 import type { ParsedBooking } from "./booking";
+import { flightSearchUrl } from "@/lib/affiliate";
 
 const REPLY_TO = trip.contactEmail; // vacations@pickleball.com
 const BRAND = "Pickleball Vacations";
+
+/**
+ * Destination → nearest airport for the "book your flights" upsell. Airfare is
+ * the guest's own arrangement (the package covers ground transfers only — see
+ * content.ts), so a marker-tagged flight search earns us affiliate commission
+ * on a booking the guest has to make anyway.
+ */
+const DEST_AIRPORT: Record<string, { code: string; label: string }> = {
+  "Club Med Turkoise": { code: "PLS", label: "Providenciales (PLS)" },
+  "Club Med Punta Cana": { code: "PUJ", label: "Punta Cana (PUJ)" },
+};
+
+function airportFor(dest?: string): { code: string; label: string } | null {
+  if (!dest) return null;
+  for (const [name, ap] of Object.entries(DEST_AIRPORT)) {
+    if (dest.includes(name) || dest.includes(ap.code)) return ap;
+  }
+  return null;
+}
+
+/** Marker-tagged flight-search CTA for the confirmation email; "" if no airport. */
+function flightBlock(b: ParsedBooking): string {
+  const ap = airportFor(b.destination);
+  if (!ap) return "";
+  const url = flightSearchUrl({
+    destIata: ap.code,
+    departDate: "",
+    returnDate: "",
+    passengers: b.travelers.length,
+  });
+  return `
+      <div style="margin:20px 0;padding:18px;background:#eefbfd;border:1px solid #b7e7ee;">
+        <p style="margin:0 0 10px;font-size:15px;line-height:1.5;"><strong>Now book your flights.</strong> Airfare into ${ap.label} is on you, so lock in a good fare early — then send your details to your trip coordinator for your airport transfers.</p>
+        <a href="${url}" style="display:inline-block;background:#0c8ea0;color:#fff;text-decoration:none;font-size:13px;font-weight:bold;padding:11px 20px;">Search flights to ${ap.label} &#8594;</a>
+      </div>`;
+}
 
 type EmailResult = { customer: boolean; internal: boolean; skipped?: boolean };
 
@@ -52,6 +89,7 @@ function customerHtml(b: ParsedBooking): string {
         <tr><td style="padding:6px 0;color:#5b6c77;">Total paid</td><td style="padding:6px 0;text-align:right;font-weight:bold;color:#0c8ea0;">${b.amountFormatted}</td></tr>
       </table>
       <p style="font-size:15px;line-height:1.6;"><strong>Next step:</strong> our trip coordinator will reach out to collect your flight details so we can arrange your round-trip airport transfers.</p>
+      ${flightBlock(b)}
       <p style="font-size:15px;line-height:1.6;">Questions? Just reply to this email or reach us at <a href="mailto:${REPLY_TO}" style="color:#0c8ea0;">${REPLY_TO}</a>.</p>
       <p style="font-size:15px;line-height:1.6;margin-top:24px;">See you on the courts,<br/>The ${BRAND} Team</p>
     </div>
@@ -67,6 +105,14 @@ function customerText(b: ParsedBooking): string {
     `Total paid: ${b.amountFormatted}`,
     ``,
     `Next step: our trip coordinator will reach out to collect your flight details for your airport transfers.`,
+    ...(airportFor(b.destination)
+      ? [
+          ``,
+          `Book your flights: airfare into ${airportFor(b.destination)!.label} is on you — search fares here: ${flightSearchUrl(
+            { destIata: airportFor(b.destination)!.code, departDate: "", returnDate: "", passengers: b.travelers.length },
+          )}`,
+        ]
+      : []),
     `Questions? ${REPLY_TO}`,
   ].join("\n");
 }
