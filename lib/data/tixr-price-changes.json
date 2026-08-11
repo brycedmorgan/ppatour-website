@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-10T14:15:09Z",
+  "updated_at": "2026-08-11T14:12:01Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -1261,6 +1261,32 @@
       "type": "event_removed",
       "event_id": "169289",
       "event": "Major League Pickleball Playoffs - Dallas, presented by EisnerAmper"
+    },
+    {
+      "at": "2026-08-11T14:12:01Z",
+      "type": "price_change",
+      "event_id": "183676",
+      "event": "Major League Pickleball Newport Beach - Sunday",
+      "ticket": "Courtside**",
+      "base_price": {
+        "from": 60,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 70.23,
+        "to": 70.23
+      }
+    },
+    {
+      "at": "2026-08-11T14:12:01Z",
+      "type": "availability_change",
+      "event_id": "183676",
+      "event": "Major League Pickleball Newport Beach - Sunday",
+      "ticket": "Courtside**",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
     }
   ]
 }

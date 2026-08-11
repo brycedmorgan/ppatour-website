@@ -1,7 +1,7 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-08-10T14:15:09Z",
+  "generated_at": "2026-08-11T14:12:01Z",
   "event_count": 61,
   "ticket_type_count": 903,
   "series_breakdown": {
@@ -714,8 +714,8 @@
         {
           "name": "Courtside**",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 60,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 70.23
         },
         {
@@ -5830,13 +5830,6 @@
         {
           "name": "Sunday Courtside Bleacher",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 92.03
-        },
-        {
-          "name": "Sunday Courtside Bleacher",
-          "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
           "all_in_price": 57.48
@@ -5847,6 +5840,13 @@
           "sale_state": "HIDE",
           "base_price": null,
           "all_in_price": 113.69
+        },
+        {
+          "name": "Sunday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 92.03
         },
         {
           "name": "Sunday Courtside Bleacher",
