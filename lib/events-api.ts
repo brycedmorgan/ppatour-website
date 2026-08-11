@@ -117,6 +117,15 @@ const CURATED_ALIASES: Record<string, string> = {
   // The feed renamed VB Open to include the Mojo title sponsor; map its new
   // slug back to our curated record so the badge + venue photo re-attach.
   "mojo-energy-pouches-virginia-beach-open": "virginia-beach-open",
+  // ⚠ WITHOUT THIS LINE THE BARCELONA OPENER GETS NO CURATED RECORD, AND SO NO
+  // PHOTO. The feed titles it "PPA TOUR SPAIN - P250 BARCELONA OPEN" where we
+  // carry "PPA Spain P250 Barcelona", so the derived slugs differ and
+  // `findCurated` missed — leaving the one PPA Spain stop that IS in the feed
+  // (i.e. the only one /events renders) falling through to VENUE_IMAGES and
+  // publishing the Melbourne skyline on a Barcelona card. Same shape as the Mojo
+  // line above, and the same class of drift as the Asia stops (8/6), where the
+  // feed and curated paths built two different slugs for one event.
+  "ppa-tour-spain-p250-barcelona-open": "ppa-spain-p250-barcelona",
 };
 
 const curatedBySlug = new Map<string, Tournament>(getAllEvents().map((t) => [t.slug, t]));
@@ -373,7 +382,16 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     externalUrl: asiaTourUrlForDetailsUrl(t.details_url) ?? (t.details_url || undefined),
     // US main-tour + curated events get a rich internal page; challengers and
     // international sister-tour stops link out to their details_url instead.
-    hasInternalPage: !isChallenger && (isUsOrg || Boolean(curated)),
+    //
+    // ⚠ A CURATED RECORD ONLY GRANTS A PAGE IF IT CLAIMS ONE. This read
+    // `isUsOrg || Boolean(curated)`, i.e. merely RECOGNIZING an event promoted it
+    // to an internal page — so adding the Barcelona alias above, purely to attach
+    // its photo, flipped a PPA Tour Spain stop to `hasInternalPage: true` and sent
+    // its /events card at our own URL instead of the tour that runs it. The
+    // curated row already answers this question explicitly (`r.type === "ppa"`),
+    // for exactly the reason the 8/6 gate note gives, so ask it rather than
+    // inferring from its existence. `isUsOrg` is untouched, so no US stop moves.
+    hasInternalPage: !isChallenger && (isUsOrg || curated?.hasInternalPage === true),
     logoUrl: t.logo_url || undefined,
     source: "api",
   };

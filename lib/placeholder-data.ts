@@ -592,7 +592,14 @@ const SCHEDULE: RawEvent[] = [
   // feed, this opener (Registration Open, venue Sant Joan Despí). Add a stop
   // back when the feed carries it or the event team confirms date + venue —
   // one line each, in month order.
-  { name: "PPA Spain P250 Barcelona", start: "2026-09-23", end: "2026-09-27", city: "Barcelona", state: "Spain", type: "international", country: "Europe" },
+  //
+  // ⚠ BOTH BARCELONA ROWS PIN THEIR OWN PHOTO, AND THE REASON IS THE ONE IN THE
+  // VENUE_IMAGES NOTE ABOVE. With no `image`, an international stop falls back to
+  // `VENUE_IMAGES[i % 3]` — Melbourne / Macao / Gold Coast — so the P250 card was
+  // illustrated with Macao and the P500 with the Gold Coast, and the FEED row (the
+  // one /events actually serves) drew Melbourne. Same bug Bryce flagged on 7/28
+  // when Las Vegas was showing the Brisbane skyline, one continent over.
+  { name: "PPA Spain P250 Barcelona", start: "2026-09-23", end: "2026-09-27", city: "Barcelona", state: "Spain", type: "international", country: "Europe", image: "/ppa/event-barcelona.jpg" },
   { name: "Charlotte PPA Challenger", start: "2026-09-25", end: "2026-09-27", city: "Charlotte", state: "NC", type: "challenger", points: 125 },
   { name: "Rate Las Vegas Open", start: "2026-09-28", end: "2026-10-04", city: "Las Vegas", state: "NV", venue: "Darling Tennis Center", type: "ppa", tier: "open" },
 
@@ -646,7 +653,8 @@ const SCHEDULE: RawEvent[] = [
   { name: "Pickleball Players Championships", slug: "atlanta-pickleball-championships", start: "2027-04-26", end: "2027-05-02", city: "Atlanta", state: "GA", venue: "Life Time — Peachtree Corners", type: "ppa", tier: "slam" },
 
   // May 2027
-  { name: "PPA Spain P500 Barcelona", start: "2027-05-05", end: "2027-05-09", city: "Barcelona", state: "Spain", type: "international", country: "Europe" },
+  // Photo pinned for the same reason as the September opener — see that note.
+  { name: "PPA Spain P500 Barcelona", start: "2027-05-05", end: "2027-05-09", city: "Barcelona", state: "Spain", type: "international", country: "Europe", image: "/ppa/event-barcelona.jpg" },
   { name: "PPA Finals", start: "2027-05-10", end: "2027-05-16", city: "San Clemente", state: "CA", venue: "Life Time — Rancho San Clemente", type: "ppa", tier: "slam" },
 ];
 
