@@ -35,12 +35,19 @@ export type GearLink = {
   pbcHref: string;
 };
 
-/** Pickleball Central product search for a paddle (BigCommerce search route). */
-function pbcSearch(paddle: string): string {
-  return withUtm(
-    `https://www.pickleballcentral.com/search.php?search_query=${encodeURIComponent(paddle)}`,
-    { campaign: "athlete-gear", content: "paddle-pickleball-central" },
-  );
+/**
+ * The Pickleball Central destination for a paddle. `pinnedUrl` (an exact product
+ * page set per player in Jackalope) wins over the BigCommerce search route.
+ * `content` carries the UTM placement — per-player (`paddle:<slug>`) when we know the
+ * slug, so PBC's Shopify/GA4 (and our own GA4 partner_click) can attribute the click
+ * to a specific pro; a static fallback otherwise.
+ */
+function pbcLink(paddle: string, content: string, pinnedUrl?: string | null): string {
+  const base =
+    pinnedUrl && pinnedUrl.trim()
+      ? pinnedUrl.trim()
+      : `https://www.pickleballcentral.com/search.php?search_query=${encodeURIComponent(paddle)}`;
+  return withUtm(base, { campaign: "athlete-gear", content });
 }
 
 /**
@@ -48,14 +55,19 @@ function pbcSearch(paddle: string): string {
  * @param searchTerm what to look up at Pickleball Central, when it differs from
  *                   the display string (one pro is listed with two paddles in a
  *                   single cell, and searching for both finds no product).
+ * @param opts.slug      the player's slug — makes the PBC click per-player-attributable
+ * @param opts.pbcUrl    a pinned exact PBC product URL (Jackalope override) — wins over search
  */
 export function resolveGear(
   paddle: string | null | undefined,
   searchTerm?: string | null,
+  opts?: { slug?: string; pbcUrl?: string | null },
 ): GearLink | null {
   if (!paddle || !paddle.trim()) return null;
   const lc = paddle.toLowerCase();
   const query = searchTerm?.trim() || paddle;
+  const pbcContent = opts?.slug ? `paddle:${opts.slug}` : "paddle-pickleball-central";
+  const pbcSearch = (q: string) => pbcLink(q, pbcContent, opts?.pbcUrl);
 
   // Match the paddle brand to an official partner we can send traffic to.
   const partner = partners.find(

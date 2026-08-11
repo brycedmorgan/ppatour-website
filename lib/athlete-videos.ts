@@ -24,6 +24,7 @@
  */
 import { pbGetJson } from "@/lib/pb-fetch";
 import { ATHLETES_CACHE_TAG } from "@/lib/cache-tags";
+import { playerOverrideFor } from "@/lib/player-overrides";
 
 const TIMEOUT_MS = 8000;
 const TTL_MS = 60 * 60 * 1000;
@@ -269,10 +270,35 @@ export async function getAthleteVideosFor(slug: string, uuid: string): Promise<A
   return value;
 }
 
-export async function getAthleteVideoData(slug: string): Promise<AthleteVideoData | null> {
+/**
+ * A hand-pinned "Featured match" (Jackalope → Pro Player Central → Paddles & Watch)
+ * as an AthleteVideo, or null. This overrides the automatic ranking as the lead clip,
+ * and is the only fix for players whose highlight feed is empty (Connor, 8/7).
+ */
+async function featuredVideoFor(name: string): Promise<AthleteVideo | null> {
+  const ov = await playerOverrideFor(name);
+  if (!ov?.featuredMatchUrl) return null;
+  const yt = parseYouTube(ov.featuredMatchUrl);
+  if (!yt) return null;
+  return {
+    id: yt.id,
+    start: yt.start,
+    matchup: "Featured match",
+    tournament: "",
+    thumbnail: `https://i.ytimg.com/vi/${yt.id}/hqdefault.jpg`,
+  };
+}
+
+export async function getAthleteVideoData(slug: string, name?: string): Promise<AthleteVideoData | null> {
   const tournaments = await cachedTournaments(slug);
-  if (!tournaments.length) return null;
+  const featured = name ? await featuredVideoFor(name) : null;
+  if (!tournaments.length) {
+    // No highlight feed for this player — a pinned featured match is the only clip to show.
+    return featured ? { tournaments: [], tournamentUuid: "", videos: [featured] } : null;
+  }
   const tournamentUuid = pickDefaultTournament(tournaments);
-  const videos = await getAthleteVideosFor(slug, tournamentUuid);
+  const ranked = await getAthleteVideosFor(slug, tournamentUuid);
+  // A pinned match leads and de-dupes itself out of the ranked list.
+  const videos = featured ? [featured, ...ranked.filter((v) => v.id !== featured.id)] : ranked;
   return { tournaments, tournamentUuid, videos };
 }

@@ -24,6 +24,7 @@ import { getDivisionRanks } from "@/lib/division-rankings";
 import { getAthleteVideoData } from "@/lib/athlete-videos";
 import { AthleteVideos } from "@/components/athletes/AthleteVideos";
 import { resolveGear } from "@/lib/athlete-gear";
+import { playerOverrideFor } from "@/lib/player-overrides";
 import { paddleFor } from "@/lib/athlete-paddles";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 
@@ -232,7 +233,7 @@ export default async function AthletePage({ params }: Params) {
     slug,
     a.gender === "male" || a.gender === "female" ? a.gender : null,
   );
-  const videoData = await getAthleteVideoData(slug);
+  const videoData = await getAthleteVideoData(slug, a.name);
 
   const boardLabel =
     a.gender === "female" ? "Women's" : a.gender === "male" ? "Men's" : null;
@@ -260,6 +261,17 @@ export default async function AthletePage({ params }: Params) {
    * not the other.
    */
   const paddleRecord = SHOW_EQUIPMENT ? paddleFor(a.slug) : null;
+  /**
+   * Jackalope (Pro Player Central → Paddles) is the LIVE source of truth for what's in
+   * the bag — the paddle a pro edits there shows here within the ISR window. It WINS over
+   * the static broadcast masterlist (`paddleRecord`), which stays as the fallback for a
+   * pro the feed doesn't cover or when the feed is unreachable. Also carries the paddle
+   * photo and the pinned "Buy This Paddle" URL. One fetch, used by both equipment surfaces.
+   */
+  const liveOverride = SHOW_EQUIPMENT ? await playerOverrideFor(a.name) : null;
+  const effPaddle = liveOverride?.paddle ?? paddleRecord?.paddle ?? null;
+  const effSearchTerm = liveOverride?.searchTerm ?? paddleRecord?.searchTerm ?? null;
+  const paddleImage = liveOverride?.image ?? null;
   const quickFacts: { label: string; value: string }[] = [
     { label: "Resides", value: stats?.hometown ?? qi?.resides ?? "" },
     { label: "Age", value: ageVal != null ? String(ageVal) : "" },
@@ -269,7 +281,7 @@ export default async function AthletePage({ params }: Params) {
     // Empty when the masterlist doesn't list this pro, and `.filter` below
     // drops the row entirely — so an unlisted athlete shows no Paddle line at
     // all rather than a blank one. The rest of Quick Info is untouched.
-    { label: "Paddle", value: paddleRecord?.paddle ?? "" },
+    { label: "Paddle", value: effPaddle ?? "" },
   ].filter((f) => f.value);
 
   // `divRanks` still tells us which boards the athlete sits on, which is what
@@ -290,7 +302,12 @@ export default async function AthletePage({ params }: Params) {
    * ⚠ Source is the event team's broadcast masterlist, NOT `quickInfo.paddle`.
    * Null for any pro the masterlist doesn't list, which hides both surfaces.
    */
-  const gear = resolveGear(paddleRecord?.paddle ?? null, paddleRecord?.searchTerm ?? null);
+  // Per-player override from Jackalope: an exact PBC product URL (pinned by Dillon/Liv)
+  // wins over search, and the slug makes every PBC click attributable to this pro in GA4.
+  const gear = resolveGear(effPaddle, effSearchTerm, {
+    slug: a.slug,
+    pbcUrl: liveOverride?.pbcUrl ?? null,
+  });
 
   // Broadcast-style stat strip under the hero — the marquee numbers up front so
   // rank + hardware read instantly (only render what we actually have).
@@ -618,18 +635,32 @@ export default async function AthletePage({ params }: Params) {
               {a.name}&apos;s Gear
             </h2>
             <div className="mt-6 flex flex-col gap-6 border border-white/12 bg-ppa-navy-deep p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
-                  Paddle
-                </p>
-                <p className="mt-1 font-display text-2xl uppercase leading-tight sm:text-3xl">
-                  {gear.paddle}
-                </p>
-                {gear.brand && (
-                  <p className="mt-2 text-xs font-medium text-ppa-sky">
-                    Official Partner of the PPA Tour
-                  </p>
+              <div className="flex items-center gap-5">
+                {/* Paddle photo — og:image from the linked Pickleball Central page,
+                    pulled live from Jackalope. Plain <img> (external BigCommerce CDN,
+                    variable host) so it needs no next/image domain config. */}
+                {paddleImage && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={paddleImage}
+                    alt={`${gear.paddle} paddle`}
+                    loading="lazy"
+                    className="h-24 w-24 shrink-0 rounded-md bg-white object-contain p-1.5 sm:h-28 sm:w-28"
+                  />
                 )}
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
+                    Paddle
+                  </p>
+                  <p className="mt-1 font-display text-2xl uppercase leading-tight sm:text-3xl">
+                    {gear.paddle}
+                  </p>
+                  {gear.brand && (
+                    <p className="mt-2 text-xs font-medium text-ppa-sky">
+                      Official Partner of the PPA Tour
+                    </p>
+                  )}
+                </div>
               </div>
               {/* Conner Ogden 7/27: link the pro's paddle so a fan can buy the
                   same one. Connor 7/29: that link is ALWAYS Pickleball Central
