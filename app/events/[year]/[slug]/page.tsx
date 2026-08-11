@@ -12,6 +12,9 @@ import { RegisteredCount } from "@/components/events/RegisteredCount";
 import { VolunteerModalButton } from "@/components/events/VolunteerModalButton";
 import { BookGroupRateLink } from "@/components/events/BookGroupRateLink";
 import { publishedHotelsFor } from "@/lib/published-hotels";
+import { TripBuilder } from "@/components/events/TripBuilder";
+import type { TripEvent } from "@/lib/trip";
+import { buildTripEvent } from "@/lib/trip-event";
 import { ResultsPanel } from "@/components/live/ResultsPanel";
 import { ChampionsBanner } from "@/components/live/ChampionsBanner";
 import { ReplayGallery } from "@/components/live/ReplayGallery";
@@ -225,6 +228,22 @@ type Day = {
   live?: string;
 };
 
+// Progression draw — the format the pros play at every stop (Dillon Segur,
+// 8/10: "All pros use progression draw all the time"). The whole field advances
+// one round per day into Championship Sunday, instead of undifferentiated "Pro
+// main draw" days. Rounds are named by distance from the final so this holds for
+// any event length: a smaller 1,000-point Open simply enters the ladder later
+// than a full 64-draw. Nationals carries its own override in lib/event-schedule.ts;
+// this template is every other stop — opens, cups and slams.
+const PRO_ROUNDS = [
+  "Championship Sunday — Finals", // fromEnd 0
+  "Pro semifinals", //               fromEnd 1
+  "Pro quarterfinals", //            fromEnd 2
+  "Pro round of 16", //              fromEnd 3
+  "Pro round of 32", //              fromEnd 4
+  "Pro round of 64", //              fromEnd 5
+];
+
 function buildSchedule(startIso: string, endIso: string): Day[] {
   const start = new Date(`${startIso}T00:00:00`);
   const end = new Date(`${endIso}T00:00:00`);
@@ -237,6 +256,7 @@ function buildSchedule(startIso: string, endIso: string): Day[] {
     let gates = "9:00 AM";
     let firstServe = "10:00 AM";
     let live: string | undefined;
+    const fromEnd = last - i;
     if (i === 0) {
       label = "Amateur & junior brackets";
       gates = "8:00 AM";
@@ -245,18 +265,21 @@ function buildSchedule(startIso: string, endIso: string): Day[] {
       label = "Senior Open + pro qualifying";
       gates = "8:00 AM";
       firstServe = "9:00 AM";
-    } else if (i === last) {
-      label = "Championship Sunday — Finals";
+    } else if (fromEnd === 0) {
+      label = PRO_ROUNDS[0];
       gates = "10:00 AM";
       firstServe = "11:00 AM";
       live = "FOX · PBTV";
-    } else if (i === last - 1) {
-      label = "Pro semifinals";
+    } else if (fromEnd === 1 || fromEnd === 2) {
+      label = PRO_ROUNDS[fromEnd];
       live = "Tennis Channel · PBTV";
-    } else if (i === last - 2) {
-      label = "Pro quarterfinals";
-      live = "Tennis Channel · PBTV";
+    } else if (fromEnd <= 5) {
+      // Round of 16 / 32 / 64, streamed on PBTV.
+      label = PRO_ROUNDS[fromEnd];
+      live = "PBTV";
     } else {
+      // Longer lead-in than a 64-draw ladder — earliest pro rounds still stream.
+      label = PRO_ROUNDS[5];
       live = "PBTV";
     }
     days.push({
@@ -330,6 +353,11 @@ export default async function EventPage({ params }: Params) {
         content: "event-parking-premium",
       })
     : null;
+  /**
+   * The serializable event context the Trip Builder wizard needs — built by the
+   * shared helper so the on-page wizard and the emailed plan can't drift.
+   */
+  const tripEvent: TripEvent = await buildTripEvent(t);
   /**
    * Per-day pricing, when Tixr sells this stop day by day (it sells most of them
    * as a week-long parent listing plus one listing per finals day). Null for stops
@@ -1286,6 +1314,19 @@ export default async function EventPage({ params }: Params) {
               Where to land, where to stay, where to eat, and what to do
               between sessions — the full tour-stop getaway.
             </p>
+
+            {/* Interactive Trip Builder — the guided way in. The static guide
+                below is the full reference for anyone who'd rather browse. */}
+            <div className="mt-6">
+              <TripBuilder event={tripEvent} />
+            </div>
+
+            <div className="mt-8 flex items-center gap-2.5">
+              <span className="h-2 w-2 bg-[var(--event-accent)]" />
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
+                The Full Guide
+              </p>
+            </div>
 
             {/* Getting there + parking */}
             <div className="mt-6 grid gap-4 sm:grid-cols-2">

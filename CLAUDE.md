@@ -42,6 +42,31 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-11 — Order of Play is now a PROGRESSION DRAW on every pro stop
+
+- Dillon Segur, Slack DM 8/10 (photo of the Vegas `/events` Order of Play): *"the dates are
+  wrong. It is the old way not progression draw."* Bryce: all pros play progression draw every
+  stop, so the NC/Nationals schedule shape is the schedule for every 1,000+ event (opens, cups,
+  slams). Fixed and pushed.
+- **Root cause:** `buildSchedule()` — the templated Order of Play used by every event with no
+  `lib/event-schedule.ts` override (everything except Nationals) — emitted the OLD compressed
+  format: two undifferentiated **"Pro main draw"** days, then QF, SF, Finals. Vegas showed Sep 30 +
+  Oct 1 "Pro main draw".
+- **Fix:** rewrote `buildSchedule()` to name each pro day by distance from the final off a
+  `PRO_ROUNDS` ladder (Championship Sunday → SF → QF → R16 → R32 → R64). The field advances one
+  round per day, so a 7-day Open reads **R32 → R16 → QF → SF → Championship Sunday**; a shorter stop
+  enters the ladder later. Lead-in days (amateur, senior+quali) and TV assignments (Finals FOX·PBTV,
+  SF/QF Tennis Channel·PBTV, earlier rounds PBTV) unchanged.
+- **⚠ Changed in BOTH copies** — `app/events/[year]/[slug]/page.tsx` and `components/events/
+  NationalsLive.tsx` carry identical `buildSchedule()` and drift silently; kept in lockstep.
+  Nationals is **untouched** — it renders through its own progression override in
+  `lib/event-schedule.ts` (R64→Championship).
+- **Verified on the running dev server**, not just grep: Vegas Open, Chicago Cup and Mesa Cup all
+  render R32→…→Championship Sunday with zero "Pro main draw"; Nationals still R64→Championship.
+  tsc clean; eslint on the two files shows only the pre-existing `NationalsLive:213` baseline.
+- **⚠ Shipped via a clean worktree off origin/main** — the main working tree held unrelated
+  uncommitted vacations/trip-builder work; only the two schedule files were committed.
+
 ### 2026-08-08 (pt. 2) — /pbtv split out to its own project: Gull-Stack/pickleballtv
 
 - **The PBTV concept is now CANONICAL in its own repo** (`Gull-Stack/pickleballtv`,

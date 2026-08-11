@@ -113,6 +113,21 @@ type Day = {
   live?: string;
 };
 
+// Progression draw — the format the pros play at every stop (Dillon Segur,
+// 8/10: "All pros use progression draw all the time"). The whole field advances
+// one round per day into Championship Sunday, instead of undifferentiated "Pro
+// main draw" days. Rounds are named by distance from the final so this holds for
+// any event length. Kept identical to app/events/[year]/[slug]/page.tsx — the two
+// schedule builders drift silently otherwise.
+const PRO_ROUNDS = [
+  "Championship Sunday — Finals", // fromEnd 0
+  "Pro semifinals", //               fromEnd 1
+  "Pro quarterfinals", //            fromEnd 2
+  "Pro round of 16", //              fromEnd 3
+  "Pro round of 32", //              fromEnd 4
+  "Pro round of 64", //              fromEnd 5
+];
+
 function buildSchedule(startIso: string, endIso: string): Day[] {
   const start = new Date(`${startIso}T00:00:00`);
   const end = new Date(`${endIso}T00:00:00`);
@@ -125,6 +140,7 @@ function buildSchedule(startIso: string, endIso: string): Day[] {
     let gates = "9:00 AM";
     let firstServe = "10:00 AM";
     let live: string | undefined;
+    const fromEnd = last - i;
     if (i === 0) {
       label = "Amateur & junior brackets";
       gates = "8:00 AM";
@@ -133,18 +149,21 @@ function buildSchedule(startIso: string, endIso: string): Day[] {
       label = "Senior Open + pro qualifying";
       gates = "8:00 AM";
       firstServe = "9:00 AM";
-    } else if (i === last) {
-      label = "Championship Sunday — Finals";
+    } else if (fromEnd === 0) {
+      label = PRO_ROUNDS[0];
       gates = "10:00 AM";
       firstServe = "11:00 AM";
       live = "FOX · PBTV";
-    } else if (i === last - 1) {
-      label = "Pro semifinals";
+    } else if (fromEnd === 1 || fromEnd === 2) {
+      label = PRO_ROUNDS[fromEnd];
       live = "Tennis Channel · PBTV";
-    } else if (i === last - 2) {
-      label = "Pro quarterfinals";
-      live = "Tennis Channel · PBTV";
+    } else if (fromEnd <= 5) {
+      // Round of 16 / 32 / 64, streamed on PBTV.
+      label = PRO_ROUNDS[fromEnd];
+      live = "PBTV";
     } else {
+      // Longer lead-in than a 64-draw ladder — earliest pro rounds still stream.
+      label = PRO_ROUNDS[5];
       live = "PBTV";
     }
     days.push({
