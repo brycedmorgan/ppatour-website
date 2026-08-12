@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-11T14:12:01Z",
+  "updated_at": "2026-08-12T14:13:24Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -1286,6 +1286,281 @@
       "sale_state": {
         "from": "OPEN",
         "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "price_change",
+      "event_id": "183669",
+      "event": "Major League Pickleball Newport Beach - Friday",
+      "ticket": "North Box Suites",
+      "base_price": {
+        "from": 5000,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 5407.75,
+        "to": 5407.75
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "availability_change",
+      "event_id": "183669",
+      "event": "Major League Pickleball Newport Beach - Friday",
+      "ticket": "North Box Suites",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "price_change",
+      "event_id": "183665",
+      "event": "Major League Pickleball Newport Beach - Playoffs",
+      "ticket": "Friday- Sunday North Box Suites",
+      "base_price": {
+        "from": 16550,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 17887.18,
+        "to": 17887.18
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "availability_change",
+      "event_id": "183665",
+      "event": "Major League Pickleball Newport Beach - Playoffs",
+      "ticket": "Friday- Sunday North Box Suites",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "price_change",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "Saturday North Box Suites",
+      "base_price": {
+        "from": 6000,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 6488.22,
+        "to": 6488.22
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "availability_change",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "Saturday North Box Suites",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "price_change",
+      "event_id": "183676",
+      "event": "Major League Pickleball Newport Beach - Sunday",
+      "ticket": "North Box Suites",
+      "base_price": {
+        "from": 6000,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 6488.22,
+        "to": 6488.22
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "availability_change",
+      "event_id": "183676",
+      "event": "Major League Pickleball Newport Beach - Sunday",
+      "ticket": "North Box Suites",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "price_change",
+      "event_id": "169802",
+      "event": "Major League Pickleball New York Finals- Session 2",
+      "ticket": "Courtside Session 2",
+      "base_price": {
+        "from": null,
+        "to": 80
+      },
+      "all_in_price": {
+        "from": 35.83,
+        "to": 92.05
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "availability_change",
+      "event_id": "169802",
+      "event": "Major League Pickleball New York Finals- Session 2",
+      "ticket": "Courtside Session 2",
+      "sale_state": {
+        "from": "SOLD_OUT",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "price_change",
+      "event_id": "184764",
+      "event": "Veolia Pickleball National Championships Saturday Evening - Men's and Women's Doubles Semifinals",
+      "ticket": "Saturday Evening Courtside+",
+      "base_price": {
+        "from": null,
+        "to": 160
+      },
+      "all_in_price": {
+        "from": 178.27,
+        "to": 178.27
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "availability_change",
+      "event_id": "184764",
+      "event": "Veolia Pickleball National Championships Saturday Evening - Men's and Women's Doubles Semifinals",
+      "ticket": "Saturday Evening Courtside+",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "price_change",
+      "event_id": "184762",
+      "event": "Veolia Pickleball National Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning Courtside+",
+      "base_price": {
+        "from": 180,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 199.88,
+        "to": 178.27
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "availability_change",
+      "event_id": "184762",
+      "event": "Veolia Pickleball National Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning Courtside+",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "price_change",
+      "event_id": "184762",
+      "event": "Veolia Pickleball National Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning On Court VIP",
+      "base_price": {
+        "from": 400,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 437.59,
+        "to": 437.59
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "availability_change",
+      "event_id": "184762",
+      "event": "Veolia Pickleball National Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning On Court VIP",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "price_change",
+      "event_id": "184760",
+      "event": "Veolia Pickleball National Championships Sunday - Championships",
+      "ticket": "Sunday Courtside+",
+      "base_price": {
+        "from": null,
+        "to": 220
+      },
+      "all_in_price": {
+        "from": 243.1,
+        "to": 243.1
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "availability_change",
+      "event_id": "184760",
+      "event": "Veolia Pickleball National Championships Sunday - Championships",
+      "ticket": "Sunday Courtside+",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "price_change",
+      "event_id": "195032",
+      "event": "PPA Mesa Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "base_price": {
+        "from": null,
+        "to": 500
+      },
+      "all_in_price": {
+        "from": 383.56,
+        "to": 545.63
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "availability_change",
+      "event_id": "195032",
+      "event": "PPA Mesa Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-08-12T14:13:24Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "2026 Pickleball World Championships Sunday - Championships",
+      "ticket": "Sunday Courtside Bleacher",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 57.48,
+        "to": 92.03
       }
     }
   ]
