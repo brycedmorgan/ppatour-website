@@ -591,8 +591,9 @@ export default function HowItWorksPage() {
               <li className="flex min-w-0 gap-2.5">
                 <span className="mt-2 size-1.5 shrink-0 bg-ppa-blue" />
                 <span>
-                  Every match apart from gold-medal matches at Majors and the PPA
-                  Finals is <strong className="font-semibold text-ppa-navy">best 2 of 3 games</strong>.
+                  Every match apart from doubles and mixed doubles gold medal
+                  matches at Majors and the PPA Finals is{" "}
+                  <strong className="font-semibold text-ppa-navy">best 2 of 3 games</strong>.
                 </span>
               </li>
               <li className="flex min-w-0 gap-2.5">
