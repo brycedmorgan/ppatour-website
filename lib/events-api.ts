@@ -148,6 +148,43 @@ const NAME_OVERRIDE_BY_SLUG: Record<string, string> = {
   "atlanta-pickleball-championships": "Pickleball Players Championships",
 };
 
+/**
+ * Stops that take their VENUE from the feed instead of the curated row (Bryan
+ * Renahan → Wesley, 8/12: Virginia Beach was publishing "Virginia Beach Sports
+ * Center" when the tour plays at "Pickleball Virginia Beach" — two different
+ * buildings ~2 miles apart, so the map was wrong with it).
+ *
+ * ⚠ WHY THIS IS A LIST AND NOT A RULE. The obvious version — "prefer the feed
+ * whenever the curated row names no venue" — cannot be used: `buildSchedule`
+ * defaults `venue` to the CITY, so a row with no venue is indistinguishable
+ * from one venued at its city name, and the feed still answers for it. Applied
+ * blanket, that would republish "Lindner Family Tennis Center" on the
+ * Cincinnati stops, which Bryan banned outright on 8/4 (the 2027 row's
+ * `venue_name` is literally "TBD"). So opting in is per event, by hand.
+ *
+ * ⚠ AND IT IS A LIST AND NOT A HARDCODED STRING BECAUSE THE POINT IS TO STOP
+ * OWNING THIS FIELD. Typing "Pickleball Virginia Beach" into the curated row
+ * would fix today's page and leave the next rename stale in exactly the same
+ * way. Listed here, a correction made in PB Tournaments reaches the site on its
+ * own — venue, quick facts, venue guide, map, concierge and search together.
+ *
+ * Keyed by the RESOLVED (curated) slug. The curated row stays the fallback for
+ * when the API is unreachable.
+ */
+const VENUE_FROM_FEED = new Set<string>(["virginia-beach-open"]);
+
+/**
+ * ⚠ EXPORTED BECAUSE THE MAPPER IS ONLY HALF THE SITE. The event page's
+ * `resolveEvent` checks the CURATED list first and a curated event never
+ * reaches `mapTournament`, so wiring this here alone fixed the /events cards
+ * and left the event's own page — the one that matters most — still showing
+ * the old venue. That is the exact trap the 8/3 name change hit. Both paths
+ * read this one predicate so they cannot disagree about the same event.
+ */
+export function takesVenueFromFeed(slug: string): boolean {
+  return VENUE_FROM_FEED.has(slug);
+}
+
 /* ---- field inference ---- */
 
 /**
@@ -317,7 +354,11 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     name: NAME_OVERRIDE_BY_SLUG[slug] ?? (name || curated?.name || ""),
     city: curated?.city ?? (t.venue_city || ""),
     state: curated?.state ?? (t.venue_state || ""),
-    venue: curated?.venue ?? (t.venue_name || t.venue_city || ""),
+    // ⚠ Curated wins by default — see VENUE_FROM_FEED for the exceptions and
+    // for why this isn't inverted wholesale.
+    venue: VENUE_FROM_FEED.has(slug)
+      ? t.venue_name || curated?.venue || t.venue_city || ""
+      : curated?.venue ?? (t.venue_name || t.venue_city || ""),
     startDate,
     endDate,
     // Tixr first, then whatever the curated record says, then the tier table.

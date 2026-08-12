@@ -606,7 +606,16 @@ const SCHEDULE: RawEvent[] = [
   // October 2026
   { name: "Veolia Chicago Cup", start: "2026-10-05", end: "2026-10-11", city: "Chicago", state: "IL", venue: "Life Time — Northbrook", type: "ppa", tier: "cup" },
   { name: "Sarasota PPA Challenger", start: "2026-10-09", end: "2026-10-11", city: "Englewood", state: "FL", type: "challenger" },
-  { name: "Mojo Energy Pouches Virginia Beach Open", slug: "virginia-beach-open", start: "2026-10-12", end: "2026-10-18", city: "Virginia Beach", state: "VA", venue: "Virginia Beach Sports Center", type: "ppa", tier: "open" },
+  // ⚠ NO VENUE ON PURPOSE — THIS STOP TAKES ITS VENUE FROM THE FEED. Bryan
+  // Renahan, 8/12: "The venue for Virginia Beach is wrong. Should be 'Pickleball
+  // Virginia Beach'." It read "Virginia Beach Sports Center", hand-typed here in
+  // May, and `mapTournament` resolves `curated?.venue ?? t.venue_name` — so our
+  // typo outranked the feed, which has had `venue_name: "Pickleball Virginia
+  // Beach"` on all three editions (2024, 2025, 2026) the whole time. Two
+  // genuinely different buildings ~2 miles apart, so the map was wrong too.
+  // The opt-in lives in VENUE_FROM_FEED (lib/events-api.ts); re-adding a venue
+  // here silently overrides PB Tournaments again.
+  { name: "Mojo Energy Pouches Virginia Beach Open", slug: "virginia-beach-open", start: "2026-10-12", end: "2026-10-18", city: "Virginia Beach", state: "VA", type: "ppa", tier: "open" },
   { name: "PPA 1500 Australia Pickleball Open", start: "2026-10-13", end: "2026-10-18", city: "Australia", state: "", type: "international", country: "Australia" },
   { name: "PPA Asia 1500 Hong Kong Slam", start: "2026-10-19", end: "2026-10-25", city: "Hong Kong", state: "China", type: "international", country: "Asia" },
   { name: "PPA Canada 125 Ottawa", start: "2026-10-22", end: "2026-10-25", city: "Ottawa", state: "Canada", type: "international", country: "Canada" },

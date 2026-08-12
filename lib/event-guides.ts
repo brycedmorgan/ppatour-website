@@ -19,8 +19,18 @@ export type Place = {
 };
 
 export type EventGuide = {
-  /** Map query — venue + city + state. Drives the Google Maps embed. */
-  mapQuery: string;
+  /**
+   * Map query — venue + city + state. Drives the Google Maps embed.
+   *
+   * ⚠ OPTIONAL, AND OMITTING IT IS THE SAFER DEFAULT. Both event pages fall
+   * back to `${t.venue}, ${t.city}, ${t.state}`, and `t.venue` comes from the
+   * `ppa_tournaments` feed for any stop listed in VENUE_FROM_FEED — so leaving
+   * this unset keeps the pin on whatever venue the tour is actually registered
+   * at. Setting it pins the map to a hand-typed building that a feed rename
+   * can't reach, which is exactly how Virginia Beach ended up mapping to the
+   * wrong facility (8/12).
+   */
+  mapQuery?: string;
   airport: string;
   airportNote: string;
   gettingThere: string;
@@ -277,12 +287,20 @@ export const eventGuides: Record<string, EventGuide> = {
       { name: "Millennium Park & The Bean", tag: "City", note: "Downtown · 40 min" },
     ],
   },
+  // ⚠ No `mapQuery` — the pin derives from the feed's venue (see the type note).
+  // It was "Virginia Beach Sports Center, VA", the wrong building.
+  //
+  // ⚠ And the getting-there copy was written around that wrong venue: it said
+  // "The Sports Center is two blocks from the boardwalk — walk to the courts
+  // from most hotels." Pickleball Virginia Beach is ~2 miles inland on S
+  // Birdneck Rd, so that sentence sent guests walking to the wrong place. Cut
+  // back to what's true without venue-specific logistics, the same call as
+  // Cincinnati above. The event team owns the replacement line.
   "virginia-beach-open": {
-    mapQuery: "Virginia Beach Sports Center, VA",
     airport: "ORF",
     airportNote: "Norfolk Intl · ~25 min to venue",
     gettingThere:
-      "Fly into ORF, 25 minutes from the oceanfront. The Sports Center is two blocks from the boardwalk — walk to the courts from most hotels.",
+      "Fly into ORF, about 25 minutes from the oceanfront. Most guests stay at the beach and drive over to the courts.",
     hotels: [
       {
         name: "Hampton Inn Virginia Beach Oceanfront South",
