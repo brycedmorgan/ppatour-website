@@ -1,5 +1,3 @@
-import { carSearchUrl, flightSearchUrl, hotelSearchUrl } from "@/lib/affiliate";
-
 /**
  * Trip Builder domain logic — the intent-first flow a fan walks to turn a tour
  * stop into a booked weekend: watch, play (camps or a tournament), and travel
@@ -271,28 +269,14 @@ export function assembleTrip(event: TripEvent, sel: TripSelection): PlanAction[]
   }
 
   if (sel.travel === "fly") {
+    // Informational only — no booking link (Travelpayouts removed). Ready for a
+    // future direct-brand link (CJ / Engine) to slot back in as `href`/`cta`.
     actions.push({
       id: "travel",
-      title: "Book your flight",
-      sub: `${sel.from ? `${sel.from} ` : ""}to ${dest}, ${dateRange}`,
+      title: "Flying in",
+      sub: `${sel.from ? `From ${sel.from} — f` : "F"}ly into ${dest}, ${dateRange}`,
       // Real proximity, straight from the event guide (e.g. "RDU · ~15 min to venue").
       note: event.airportNote,
-      href: flightSearchUrl({
-        originIata: sel.from,
-        destIata: dest,
-        departDate: event.startDate,
-        returnDate: event.endDate,
-        passengers: sel.party,
-      }),
-      cta: "Search flights",
-    });
-    // Rental car only makes sense for fly-ins — drivers already have one.
-    actions.push({
-      id: "car",
-      title: "Rent a car",
-      sub: `Pick up at ${dest} for the weekend`,
-      href: carSearchUrl({ location: dest, pickUp: event.startDate, dropOff: event.endDate }),
-      cta: "Search rental cars",
     });
   } else if (sel.travel === "drive") {
     actions.push({
@@ -306,25 +290,17 @@ export function assembleTrip(event: TripEvent, sel: TripSelection): PlanAction[]
     });
   }
 
+  // Official group-rate hotels only — direct partner links, never affiliate.
+  // When a stop has none, the "Where to Stay" full guide below the builder covers it.
   const officialHotels = event.hotels.filter((h) => h.href);
-  actions.push({
-    id: "stay",
-    title: "Book your hotel",
-    sub: officialHotels.length ? "Official hotels have a group rate — book direct." : undefined,
-    note: event.airportNote ? `Venue is ${event.airportNote.replace(/^[^·]*·\s*/, "")}` : undefined,
-    links: [
-      ...officialHotels.map((h) => ({ label: h.name, href: h.href as string, meta: h.note })),
-      {
-        label: "More stays near the venue",
-        href: hotelSearchUrl({
-          location: `${event.city}, ${event.state}`,
-          checkIn: event.startDate,
-          checkOut: event.endDate,
-          guests: sel.party,
-        }),
-      },
-    ],
-  });
+  if (officialHotels.length) {
+    actions.push({
+      id: "stay",
+      title: "Book your hotel",
+      sub: "Official hotels have a group rate — book direct.",
+      links: officialHotels.map((h) => ({ label: h.name, href: h.href as string, meta: h.note })),
+    });
+  }
 
   for (const slug of sel.watchPros) {
     const pro = event.pros.find((p) => p.slug === slug);

@@ -536,7 +536,8 @@ function TravelStep({
           <Icon name="plane" className="size-6 text-[var(--event-accent)]" />
           <span className="mt-2 font-display text-sm uppercase text-ppa-navy">Flying</span>
           <span className="mt-1 text-xs text-ppa-navy/55">
-            We&apos;ll pull fares into {event.airport ?? event.city}
+            {event.airport ?? event.city}
+            {event.airportNote ? ` · ${event.airportNote}` : ""}
           </span>
         </ChoiceCard>
         <ChoiceCard selected={state.travel === "drive"} onClick={() => set({ travel: "drive" })}>
