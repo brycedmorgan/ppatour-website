@@ -356,6 +356,9 @@ export default async function AthletePage({ params }: Params) {
   // wins over search, and the slug makes every PBC click attributable to this pro in GA4.
   const gear = resolveGear(effPaddle, effSearchTerm, {
     slug: a.slug,
+    // The manufacturer on its own, so an unpinned paddle can fall back to that
+    // brand's page on Pickleball Central rather than a generic one.
+    brand: paddleUpdate?.brand ?? liveOverride?.brand ?? null,
     // A pending update can pin its own buy URL — MEHAU is not sold on PBC, so a
     // PBC search would be a buy button that finds nothing. It also has to drop
     // the feed's pinned URL, which points at the superseded paddle.

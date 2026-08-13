@@ -16,6 +16,7 @@
  */
 import { partners } from "@/lib/home-content";
 import { paddleTerm } from "@/lib/paddle-images";
+import { pbcDestination } from "@/lib/pbc-links";
 import { withUtm } from "@/lib/utm";
 
 export type GearLink = {
@@ -38,7 +39,17 @@ export type GearLink = {
 
 /**
  * The buy destination for a paddle. `pinnedUrl` (an exact product page set per
- * player in Jackalope) wins over the BigCommerce search route.
+ * player in Jackalope) wins over everything.
+ *
+ * ⚠ THIS NO LONGER FALLS BACK TO `search.php?search_query=`, AND MUST NOT AGAIN.
+ * That route renders an EMPTY page on PBC's storefront — header, nothing,
+ * footer — for every query tried, so "Buy This Paddle" was a dead end for the
+ * 110 of 127 pros with no pinned URL. It answers 200 with the products sitting
+ * in a Searchanise JSON blob, so a status check calls it healthy and only a
+ * browser shows that nothing paints. `lib/pbc-links.ts` owns the replacement
+ * ladder, and every page it can return has been loaded and confirmed to render
+ * products with prices.
+ *
  * `content` carries the UTM placement — per-player (`paddle:<slug>`) when we know the
  * slug, so PBC's Shopify/GA4 (and our own GA4 partner_click) can attribute the click
  * to a specific pro; a static fallback otherwise.
@@ -51,11 +62,12 @@ export type GearLink = {
  * NOT counted as a `partner_click`, because only partner hosts are tracked
  * (components/global/OutboundClickTracker.tsx) and these brands aren't partners.
  */
-function pbcLink(paddle: string, content: string, pinnedUrl?: string | null): string {
-  const base =
-    pinnedUrl && pinnedUrl.trim()
-      ? pinnedUrl.trim()
-      : `https://www.pickleballcentral.com/search.php?search_query=${encodeURIComponent(paddle)}`;
+function pbcLink(
+  paddle: string,
+  content: string,
+  opts?: { brand?: string | null; slug?: string | null; pinnedUrl?: string | null },
+): string {
+  const base = pbcDestination(paddle, opts?.brand, opts?.slug, opts?.pinnedUrl);
   // `term` = the paddle model, so the brand can count clicks per PADDLE across
   // every player who plays it. `content` stays per-player, which is the cut we
   // read. Both travel on the same link; neither replaces the other.
@@ -67,7 +79,9 @@ function pbcLink(paddle: string, content: string, pinnedUrl?: string | null): st
  * @param searchTerm what to look up at Pickleball Central, when it differs from
  *                   the display string (one pro is listed with two paddles in a
  *                   single cell, and searching for both finds no product).
- * @param opts.slug      the player's slug — makes the PBC click per-player-attributable
+ * @param opts.slug      the player's slug — makes the PBC click per-player-attributable,
+ *                       and picks the right product for a signature colourway
+ * @param opts.brand     the manufacturer on its own, when we have it
  * @param opts.pbcUrl    a pinned exact product URL (Jackalope override, or a
  *                       pending paddle update) — wins over the PBC search. Named
  *                       for the feed's own field; it may be a brand store when
@@ -76,13 +90,14 @@ function pbcLink(paddle: string, content: string, pinnedUrl?: string | null): st
 export function resolveGear(
   paddle: string | null | undefined,
   searchTerm?: string | null,
-  opts?: { slug?: string; pbcUrl?: string | null },
+  opts?: { slug?: string; brand?: string | null; pbcUrl?: string | null },
 ): GearLink | null {
   if (!paddle || !paddle.trim()) return null;
   const lc = paddle.toLowerCase();
   const query = searchTerm?.trim() || paddle;
   const pbcContent = opts?.slug ? `paddle:${opts.slug}` : "paddle-pickleball-central";
-  const pbcSearch = (q: string) => pbcLink(q, pbcContent, opts?.pbcUrl);
+  const pbcSearch = (q: string) =>
+    pbcLink(q, pbcContent, { brand: opts?.brand, slug: opts?.slug, pinnedUrl: opts?.pbcUrl });
 
   // Match the paddle brand to an official partner we can send traffic to.
   const partner = partners.find(
