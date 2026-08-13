@@ -42,6 +42,54 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-13 (pt. 2) — Adam Harvey is on a MEHAU; the paddle-update layer retires itself
+
+- Event team via Wesley: put Adam Harvey on the **"MEHAU S5 AIRPOOM™ Aerodynamic Pickleball Paddle"**,
+  *"It isn't on PBC but they've provided this link"* — `mehaupickleball.com/products/mehau-s5-airpoom-…`
+  (verified 200 with a browser UA). Live on his profile.
+- **⚠ THE OBVIOUS EDIT WOULD HAVE DONE NOTHING, AND THAT IS THE POINT OF THIS ENTRY.** Since 8/13 pt. 1
+  the paddle on a profile comes from **Jackalope (Pro Player Central → Paddles & Watch)** via
+  `lib/player-overrides.ts`, and the feed **wins over** the static broadcast masterlist. The feed still
+  says **Luzz PRO-CANNON** for him (checked live: `manufacturer: "Luzz"`, `pbcUrl: null`), so an edit to
+  `lib/athlete-paddles.ts` or the masterlist CSV would have been overwritten at render and the page would
+  have kept publishing Luzz. **Neither paddle source is editable from this repo.**
+- **New `lib/paddle-updates.ts` is a stopgap layer that wins over BOTH — and it expires by itself.** Each
+  row names the paddle it replaces in **`supersedes`**, and applies **only while that is still the
+  effective paddle**. The moment Jackalope says anything else — the real fix, or a later change nobody
+  told us about — the row stops matching and the feed is back in charge. A hardcoded paddle that outlives
+  the data it was patching is a **stale brand endorsement**, which is exactly what the masterlist replaced
+  `quickInfo.paddle` to stop (8/5 pt. 21). Every row here is therefore **also an open ticket**:
+  **ask Dillon Segur / Liv Borski to make this edit in Jackalope, then delete the row.**
+- **⚠ AN UPDATE DROPS THE FEED'S PHOTO AND ITS PINNED URL WITH IT.** Both describe the paddle the feed
+  names — under an update that is the OLD one — so `paddleImageFor` gets `null` and `resolveGear` gets the
+  update's own `buyUrl`. Verified this actually matters: **there IS a curated cut-out for `luzz pro cannon`**
+  in `lib/paddle-images.ts`, and the CUTOUTS map is keyed on the paddle NAME, so the new name simply
+  misses and he renders **no photo** — correct, rather than a Luzz paddle beside a MEHAU headline.
+  Same reason `paddleBrand` (the Product node's `brand`) prefers the update: the feed's brand is "Luzz".
+- **⚠ THE BUY LINK IS THE BRAND'S OWN STORE, WHICH IS A FIRST.** Connor's 7/29 rule is that "Buy This
+  Paddle" always goes to Pickleball Central, never the manufacturer — but **PBC does not carry this
+  paddle**, and a PBC search that returns no product is a button that finds nothing (same call as
+  Christopher Haworth's two-paddle cell on 8/5, and as dropping the dead Chicago hotel href on 7/29).
+  It rides the existing pinned-URL path (`opts.pbcUrl`), so nothing new was invented. Two consequences,
+  noted on `pbcLink`: **nothing visible says "Pickleball Central"** (the button reads "Buy This Paddle"),
+  and **the click is NOT counted** — `mehaupickleball.com` is not in `PARTNER_HOSTS` and was deliberately
+  left out, because MEHAU is not a PPA partner and a `partner_click` would misreport it.
+- The **meta description** goes through the same layer — it appends "Plays the …" from the paddle sources,
+  so leaving it out would have put Luzz in the Google snippet under a page that says MEHAU.
+- Verified on a real page, not by grep: `/athletes/adam-harvey/` renders the MEHAU name in the callout
+  heading answer, the buy button points at the MEHAU product URL with
+  `utm_content=paddle:adam-harvey`, **zero occurrences of "Luzz" or "PRO-CANNON" anywhere on the page
+  including the Product/FAQ JSON-LD**, and no paddle image. Controls unchanged: **Ben Johns still resolves
+  to a PBC search** and **Anna Leigh Waters' cut-out still renders**. tsc + eslint clean.
+- **⚠ METHOD, AND IT NEARLY COST SOMEONE ELSE'S WORK:** the repo dir on this machine was **51 commits
+  behind origin/main** with ~35 files of parallel-session edits in the tree, and the athlete page there
+  predates the whole live-override system. This work was done in a **throwaway `git worktree` off
+  origin/main** (the 8/5 pt. 13 pattern). Two traps inside that: `git checkout -- <file>` in the stale
+  repo **destroyed a parallel session's uncommitted `lib/athlete-gear.ts`** (restored verbatim from the
+  copy read at session start — but `git checkout --` is not an undo for *your* edits when someone else
+  has edits in the same file), and **Turbopack refuses a `node_modules` junction pointing outside the
+  project root**, so the worktree needs its own `npm install` before `next dev` will start.
+
 ### 2026-08-13 — "In the Bag" moves under Quick Info: cut-out paddle, per-paddle UTM, Product + FAQ schema
 
 - Bryce, from Anna Leigh Waters' live profile: he likes the callout, it is in the wrong place. Move it

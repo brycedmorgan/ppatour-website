@@ -37,11 +37,19 @@ export type GearLink = {
 };
 
 /**
- * The Pickleball Central destination for a paddle. `pinnedUrl` (an exact product
- * page set per player in Jackalope) wins over the BigCommerce search route.
+ * The buy destination for a paddle. `pinnedUrl` (an exact product page set per
+ * player in Jackalope) wins over the BigCommerce search route.
  * `content` carries the UTM placement — per-player (`paddle:<slug>`) when we know the
  * slug, so PBC's Shopify/GA4 (and our own GA4 partner_click) can attribute the click
  * to a specific pro; a static fallback otherwise.
+ *
+ * ⚠ A PINNED URL IS NOT ALWAYS PICKLEBALL CENTRAL, despite the field names. PBC
+ * does not carry every paddle on the roster (MEHAU, 8/13), and a PBC search that
+ * returns no product is a buy button that finds nothing — so a brand's own
+ * product page is allowed here. Two consequences: nothing visible says
+ * "Pickleball Central" (the button reads "Buy This Paddle"), and the click is
+ * NOT counted as a `partner_click`, because only partner hosts are tracked
+ * (components/global/OutboundClickTracker.tsx) and these brands aren't partners.
  */
 function pbcLink(paddle: string, content: string, pinnedUrl?: string | null): string {
   const base =
@@ -60,7 +68,10 @@ function pbcLink(paddle: string, content: string, pinnedUrl?: string | null): st
  *                   the display string (one pro is listed with two paddles in a
  *                   single cell, and searching for both finds no product).
  * @param opts.slug      the player's slug — makes the PBC click per-player-attributable
- * @param opts.pbcUrl    a pinned exact PBC product URL (Jackalope override) — wins over search
+ * @param opts.pbcUrl    a pinned exact product URL (Jackalope override, or a
+ *                       pending paddle update) — wins over the PBC search. Named
+ *                       for the feed's own field; it may be a brand store when
+ *                       PBC doesn't carry the paddle. See `pbcLink`.
  */
 export function resolveGear(
   paddle: string | null | undefined,

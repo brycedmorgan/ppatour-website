@@ -27,6 +27,7 @@ import { resolveGear } from "@/lib/athlete-gear";
 import { paddleImageFor } from "@/lib/paddle-images";
 import { playerOverrideFor } from "@/lib/player-overrides";
 import { paddleFor } from "@/lib/athlete-paddles";
+import { paddleUpdateFor } from "@/lib/paddle-updates";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 
 /**
@@ -190,7 +191,10 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
    */
   if (SHOW_EQUIPMENT) {
     const override = await playerOverrideFor(a.name);
-    const paddle = override?.paddle ?? paddleFor(slug)?.paddle ?? null;
+    const known = override?.paddle ?? paddleFor(slug)?.paddle ?? null;
+    // Same pending-update layer the page body uses, or the snippet would name
+    // the old paddle under a page that names the new one.
+    const paddle = paddleUpdateFor(slug, known)?.paddle ?? known;
     const line = paddle ? ` Plays the ${paddle}.` : "";
     if (line && description.length + line.length <= 300) description += line;
   }
@@ -285,15 +289,32 @@ export default async function AthletePage({ params }: Params) {
    * photo and the pinned "Buy This Paddle" URL. One fetch, used by both equipment surfaces.
    */
   const liveOverride = SHOW_EQUIPMENT ? await playerOverrideFor(a.name) : null;
-  const effPaddle = liveOverride?.paddle ?? paddleRecord?.paddle ?? null;
-  const effSearchTerm = liveOverride?.searchTerm ?? paddleRecord?.searchTerm ?? null;
+  const knownPaddle = liveOverride?.paddle ?? paddleRecord?.paddle ?? null;
+  /**
+   * A paddle change the event team sent to the website before it reached
+   * Jackalope. Wins over both sources, but only while the paddle it was written
+   * to replace is still the one above — see lib/paddle-updates.ts. Null is the
+   * normal case for every pro.
+   */
+  const paddleUpdate = SHOW_EQUIPMENT ? paddleUpdateFor(a.slug, knownPaddle) : null;
+  const effPaddle = paddleUpdate?.paddle ?? knownPaddle;
+  const effSearchTerm =
+    paddleUpdate?.searchTerm ?? liveOverride?.searchTerm ?? paddleRecord?.searchTerm ?? null;
   /**
    * The paddle photo for the callout. Prefers a curated transparent cut-out
    * (public/ppa/paddles) so the paddle sits ON the card rather than inside a
    * white box; falls back to the feed's scraped product photo, which gets a
    * white plate behind it because it may carry its own background.
    */
-  const paddleImage = paddleImageFor(effPaddle, liveOverride?.image, a.slug);
+  const paddleImage = paddleImageFor(
+    effPaddle,
+    // ⚠ The feed's photo belongs to the paddle the feed names. Under a pending
+    // update that is the OLD paddle, so it is dropped rather than shown beside
+    // the new one — the curated cut-out map is keyed on the paddle name and
+    // simply misses, which is the correct "no photo" outcome.
+    paddleUpdate ? null : liveOverride?.image,
+    a.slug,
+  );
   const quickFacts: { label: string; value: string }[] = [
     { label: "Resides", value: stats?.hometown ?? qi?.resides ?? "" },
     { label: "Age", value: ageVal != null ? String(ageVal) : "" },
@@ -335,7 +356,10 @@ export default async function AthletePage({ params }: Params) {
   // wins over search, and the slug makes every PBC click attributable to this pro in GA4.
   const gear = resolveGear(effPaddle, effSearchTerm, {
     slug: a.slug,
-    pbcUrl: liveOverride?.pbcUrl ?? null,
+    // A pending update can pin its own buy URL — MEHAU is not sold on PBC, so a
+    // PBC search would be a buy button that finds nothing. It also has to drop
+    // the feed's pinned URL, which points at the superseded paddle.
+    pbcUrl: paddleUpdate ? paddleUpdate.buyUrl ?? null : liveOverride?.pbcUrl ?? null,
   });
   /**
    * ⚠ ONE STRING, RENDERED IN THE CALLOUT AND QUOTED BY THE FAQPage JSON-LD.
@@ -346,7 +370,7 @@ export default async function AthletePage({ params }: Params) {
    */
   const gearAnswer = gear ? `${a.name} plays the ${gear.paddle}.` : null;
   /** Who makes it, for the Product node. Feed field first, partner match second. */
-  const paddleBrand = liveOverride?.brand ?? gear?.brand ?? null;
+  const paddleBrand = paddleUpdate?.brand ?? liveOverride?.brand ?? gear?.brand ?? null;
   /** Stable @id for the paddle's Product node, so Person.owns can point at it. */
   const paddleNodeId = `${SITE_URL}/athletes/${a.slug}#paddle`;
   /** Structured data wants an absolute image URL; a curated cut-out is a /public path. */
