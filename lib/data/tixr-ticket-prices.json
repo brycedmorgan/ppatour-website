@@ -1,13 +1,13 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-08-12T14:13:24Z",
-  "event_count": 61,
-  "ticket_type_count": 903,
+  "generated_at": "2026-08-13T14:15:01Z",
+  "event_count": 62,
+  "ticket_type_count": 907,
   "series_breakdown": {
     "Major League Pickleball": 15,
     "PPA Challenger Series": 4,
-    "PPA Tour": 42
+    "PPA Tour": 43
   },
   "field_notes": {
     "base_price": "Face value set by the organizer (USD). null when the tier is sold out / not on public sale.",
@@ -409,15 +409,15 @@
           "name": "Saturday Full Day Reserved VIP",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 275,
-          "all_in_price": 302.53
+          "base_price": 300,
+          "all_in_price": 329.54
         },
         {
           "name": "Saturday Full Day Reserved VIP",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 300,
-          "all_in_price": 329.54
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 302.53
         }
       ],
       "parent_event_id": "183665"
@@ -1288,8 +1288,8 @@
         {
           "name": "Courtside Session 5",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 170,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 189.53
         },
         {
@@ -1853,14 +1853,14 @@
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 135.05
+          "all_in_price": 156.66
         },
         {
           "name": "Thursday Courtside+",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 156.66
+          "all_in_price": 135.05
         },
         {
           "name": "Thursday Grandstand (Round of 16)",
@@ -2009,15 +2009,15 @@
         {
           "name": "Friday Evening Courtside+",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 120,
           "all_in_price": 135.05
         },
         {
           "name": "Friday Evening Courtside+",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 140,
           "all_in_price": 156.66
         },
         {
@@ -2169,14 +2169,14 @@
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 135.05
+          "all_in_price": 156.66
         },
         {
           "name": "Friday Morning Courtside+",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 156.66
+          "all_in_price": 135.05
         },
         {
           "name": "Friday Morning Grandstand (Singles & Mxd Doubles Quarterfinals)",
@@ -2476,15 +2476,15 @@
         {
           "name": "Saturday Morning Courtside+",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 199.88
+          "sale_state": "OPEN",
+          "base_price": 140,
+          "all_in_price": 156.66
         },
         {
           "name": "Saturday Morning Courtside+",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 160,
           "all_in_price": 178.27
         },
         {
@@ -3265,8 +3265,8 @@
         {
           "name": "Sunday Courtside",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 80,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 91.83
         },
         {
@@ -3299,6 +3299,51 @@
         }
       ],
       "parent_event_id": "195027"
+    },
+    {
+      "event_id": "190874",
+      "name": "PPA Challenger Series - Charlotte",
+      "series": "PPA Challenger Series",
+      "status": "PUBLISHED",
+      "start_date": "2026-09-25",
+      "end_date": "2026-09-27",
+      "venue": {
+        "name": "Peak Time Pickleball",
+        "city": "Charlotte",
+        "state": "NC"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-challenger-series-charlotte-190874",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Weekend Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        }
+      ]
     },
     {
       "event_id": "195857",
@@ -4100,51 +4145,6 @@
       ]
     },
     {
-      "event_id": "171536",
-      "name": "PPA Challenger Series - Sarasota",
-      "series": "PPA Challenger Series",
-      "status": "PUBLISHED",
-      "start_date": "2026-10-09",
-      "end_date": "2026-10-12",
-      "venue": {
-        "name": "Englewood Sports Complex ",
-        "city": "Englewood",
-        "state": "FL"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/ppa-challenger-series-sarasota-171536",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Friday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 15,
-          "all_in_price": 19.55
-        },
-        {
-          "name": "Saturday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 15,
-          "all_in_price": 19.55
-        },
-        {
-          "name": "Sunday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 15,
-          "all_in_price": 19.55
-        },
-        {
-          "name": "Weekend Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        }
-      ]
-    },
-    {
       "event_id": "176326",
       "name": "PPA Virginia Beach",
       "series": "PPA Tour",
@@ -4254,8 +4254,8 @@
           "name": "Saturday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 60,
-          "all_in_price": 70.23
+          "base_price": 80,
+          "all_in_price": 91.83
         },
         {
           "name": "Saturday Grounds Pass",
@@ -4338,8 +4338,8 @@
           "name": "Weeklong Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 170,
-          "all_in_price": 189.08
+          "base_price": 200,
+          "all_in_price": 221.49
         },
         {
           "name": "Weeklong Grounds Pass",
@@ -6068,6 +6068,51 @@
           "sale_state": "AVAIL_SOON",
           "base_price": null,
           "all_in_price": 869.77
+        }
+      ]
+    },
+    {
+      "event_id": "203020",
+      "name": "PPA Daytona Beach",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-11-16",
+      "end_date": "2026-11-23",
+      "venue": {
+        "name": "Pictona at Holly Hill",
+        "city": "Daytona Beach",
+        "state": "FL"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-daytona-beach-203020",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Courtside*",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "On Court VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
         }
       ]
     },
