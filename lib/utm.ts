@@ -7,15 +7,28 @@
 type UtmParams = {
   campaign: string;
   content: string;
+  /**
+   * The PRODUCT the click is for, when the link sells a specific thing.
+   *
+   * `utm_content` is the placement (which page, which player, which button) and
+   * that is what our own reporting keys on. A partner reading their side of the
+   * handoff wants the opposite cut: every click on THEIR product, across all the
+   * placements. Paddle links set this to the model slug so Pickleball Central —
+   * and through them the paddle brand — can count "how many did ppatour.com
+   * send us" per model rather than per player. Omitted everywhere else, so no
+   * existing link changes.
+   */
+  term?: string;
 };
 
 /** Append PPA attribution UTMs to an outbound commerce URL. */
-export function withUtm(baseUrl: string, { campaign, content }: UtmParams): string {
+export function withUtm(baseUrl: string, { campaign, content, term }: UtmParams): string {
   const url = new URL(baseUrl);
   url.searchParams.set("utm_source", "ppatour");
   url.searchParams.set("utm_medium", "website");
   url.searchParams.set("utm_campaign", campaign);
   url.searchParams.set("utm_content", content);
+  if (term) url.searchParams.set("utm_term", term);
   return url.toString();
 }
 

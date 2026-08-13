@@ -24,6 +24,7 @@ import { getDivisionRanks } from "@/lib/division-rankings";
 import { getAthleteVideoData } from "@/lib/athlete-videos";
 import { AthleteVideos } from "@/components/athletes/AthleteVideos";
 import { resolveGear } from "@/lib/athlete-gear";
+import { paddleImageFor } from "@/lib/paddle-images";
 import { playerOverrideFor } from "@/lib/player-overrides";
 import { paddleFor } from "@/lib/athlete-paddles";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
@@ -39,12 +40,12 @@ import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
  * `lib/athlete-paddles.ts`; in particular, do NOT reintroduce the old
  * `quickInfo.paddle` fallback, which is the stale data this replaced.
  *
- * ONE FLAG COVERS TWO PLACES, WHICH IS THE POINT. The athlete page publishes a
- * pro's paddle twice: the "In the Bag" section (paddle + "Buy This Paddle")
- * and the "Paddle" row in the Quick Info sidebar. Both read the same record, so
- * gating only the section would leave the equipment published a few hundred
- * pixels further up the same page. Flipping this to `false` still hides
- * equipment site-wide if that is ever wanted again.
+ * The page now publishes a pro's paddle in ONE place — the "In the Bag" callout
+ * under Quick Info (8/13). It used to also print a "Paddle" row inside Quick
+ * Info itself, which is why this flag exists in two spots historically; see the
+ * note in `quickFacts`. Flipping this to `false` still hides equipment
+ * site-wide if that is ever wanted again, and it is also read by
+ * `generateMetadata` so the paddle drops out of the search snippet with it.
  */
 const SHOW_EQUIPMENT: boolean = true;
 
@@ -177,7 +178,22 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
    * as public — it is what Google and every social card show. Prefers the real
    * sourced bio, falls back to divisions and country.
    */
-  const description = athleteDescription(a);
+  let description = athleteDescription(a);
+  /**
+   * Append the paddle when we know it and it fits.
+   *
+   * "What paddle does <pro> use" is a real search, and the meta description is
+   * the snippet Google shows against it — the fact belongs in the snippet, not
+   * only in the page body. Same source as the In the Bag callout, so the two
+   * cannot disagree. Skipped when the bio sentence is already long, rather than
+   * truncating a sourced sentence to make room for it.
+   */
+  if (SHOW_EQUIPMENT) {
+    const override = await playerOverrideFor(a.name);
+    const paddle = override?.paddle ?? paddleFor(slug)?.paddle ?? null;
+    const line = paddle ? ` Plays the ${paddle}.` : "";
+    if (line && description.length + line.length <= 300) description += line;
+  }
   const images = a.headshot ? [a.headshot] : [];
   return {
     title: a.name,
@@ -271,17 +287,30 @@ export default async function AthletePage({ params }: Params) {
   const liveOverride = SHOW_EQUIPMENT ? await playerOverrideFor(a.name) : null;
   const effPaddle = liveOverride?.paddle ?? paddleRecord?.paddle ?? null;
   const effSearchTerm = liveOverride?.searchTerm ?? paddleRecord?.searchTerm ?? null;
-  const paddleImage = liveOverride?.image ?? null;
+  /**
+   * The paddle photo for the callout. Prefers a curated transparent cut-out
+   * (public/ppa/paddles) so the paddle sits ON the card rather than inside a
+   * white box; falls back to the feed's scraped product photo, which gets a
+   * white plate behind it because it may carry its own background.
+   */
+  const paddleImage = paddleImageFor(effPaddle, liveOverride?.image, a.slug);
   const quickFacts: { label: string; value: string }[] = [
     { label: "Resides", value: stats?.hometown ?? qi?.resides ?? "" },
     { label: "Age", value: ageVal != null ? String(ageVal) : "" },
     { label: "Height", value: stats?.height ?? qi?.height ?? "" },
     { label: "Plays", value: stats?.handed ? `${stats.handed}-handed` : qi?.plays ?? "" },
     { label: "Turned Pro", value: stats?.turnedPro ?? a.turnedPro ?? "" },
-    // Empty when the masterlist doesn't list this pro, and `.filter` below
-    // drops the row entirely — so an unlisted athlete shows no Paddle line at
-    // all rather than a blank one. The rest of Quick Info is untouched.
-    { label: "Paddle", value: effPaddle ?? "" },
+    /**
+     * ⚠ NO "Paddle" ROW HERE ANY MORE (8/13). It used to sit at the foot of this
+     * list, which was fine while the "In the Bag" callout was a full-width band
+     * much further down the page. The callout now renders directly beneath this
+     * table, so the row printed the identical string about 100px above a block
+     * that says it bigger, with the paddle photo and the buy link. One of the
+     * two had to go and the callout is strictly more.
+     *
+     * The gate is unchanged: both surfaces key off `effPaddle`, so a pro neither
+     * paddle source lists still shows no equipment anywhere.
+     */
   ].filter((f) => f.value);
 
   // `divRanks` still tells us which boards the athlete sits on, which is what
@@ -308,6 +337,24 @@ export default async function AthletePage({ params }: Params) {
     slug: a.slug,
     pbcUrl: liveOverride?.pbcUrl ?? null,
   });
+  /**
+   * ⚠ ONE STRING, RENDERED IN THE CALLOUT AND QUOTED BY THE FAQPage JSON-LD.
+   * Structured data has to match what a person reads on the page — two
+   * separately-worded sentences is how that quietly stops being true. It states
+   * only what the paddle sources say: who, and which paddle. No specs, no claim
+   * about a contract beyond the partner badge the roster already earns.
+   */
+  const gearAnswer = gear ? `${a.name} plays the ${gear.paddle}.` : null;
+  /** Who makes it, for the Product node. Feed field first, partner match second. */
+  const paddleBrand = liveOverride?.brand ?? gear?.brand ?? null;
+  /** Stable @id for the paddle's Product node, so Person.owns can point at it. */
+  const paddleNodeId = `${SITE_URL}/athletes/${a.slug}#paddle`;
+  /** Structured data wants an absolute image URL; a curated cut-out is a /public path. */
+  const paddleImageAbs = paddleImage
+    ? paddleImage.src.startsWith("/")
+      ? `${SITE_URL}${paddleImage.src}`
+      : paddleImage.src
+    : null;
 
   // Broadcast-style stat strip under the hero — the marquee numbers up front so
   // rank + hardware read instantly (only render what we actually have).
@@ -352,9 +399,73 @@ export default async function AthletePage({ params }: Params) {
             // Reference the site-wide org node (app/layout.tsx) by @id instead of
             // redefining it, so the two never disagree.
             memberOf: { "@id": `${SITE_URL}/#organization` },
+            /**
+             * The paddle, as a Product this person owns. `owns` is schema.org's
+             * own answer to "what equipment does this athlete use", so an engine
+             * can join athlete → paddle → brand without parsing prose. The node
+             * is defined once, here, and referenced by @id from the Product
+             * block below rather than described twice.
+             */
+            ...(gear ? { owns: { "@id": paddleNodeId } } : {}),
           }),
         }}
       />
+      {/**
+       * Product node for the paddle.
+       *
+       * ⚠ NO `offers`, DELIBERATELY. We do not hold the price — the buy link is
+       * a Pickleball Central search or product page and the price is theirs, not
+       * ours. Publishing an Offer means publishing a price and availability, and
+       * this repo has already shipped one fabricated `InStock` offer off a
+       * fallback number (7/31). Name, brand, image and the page we send buyers
+       * to are all facts we hold; that is what goes in.
+       */}
+      {gear && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Product",
+              "@id": paddleNodeId,
+              name: gear.paddle,
+              category: "Pickleball Paddle",
+              // The manufacturer from the feed's own field, falling back to the
+              // partner match. Never split off the display string — a model name
+              // can lead with a word that isn't the brand.
+              ...(paddleBrand ? { brand: { "@type": "Brand", name: paddleBrand } } : {}),
+              ...(paddleImageAbs ? { image: paddleImageAbs } : {}),
+              url: gear.pbcHref,
+            }),
+          }}
+        />
+      )}
+      {/**
+       * FAQPage for the one question this page is the best answer to on the
+       * internet: what paddle does this pro play? Google restricts FAQ rich
+       * results to gov/health sites, so this is aimed at the AI engines that
+       * read structured data straight (see public/llms.txt) — and the question
+       * and answer below are the exact strings rendered in the In the Bag
+       * callout, which is what makes it legitimate rather than a violation.
+       */}
+      {gear && gearAnswer && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: [
+                {
+                  "@type": "Question",
+                  name: `What paddle does ${a.name} use?`,
+                  acceptedAnswer: { "@type": "Answer", text: gearAnswer },
+                },
+              ],
+            }),
+          }}
+        />
+      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -538,6 +649,91 @@ export default async function AthletePage({ params }: Params) {
               >
                 Full World Rankings →
               </Link>
+
+              {/**
+               * In the Bag — the athlete's paddle + the buy link.
+               *
+               * ⚠ IT LIVES HERE, DIRECTLY UNDER QUICK INFO, NOT IN ITS OWN
+               * FULL-WIDTH SECTION (Bryce, 8/13). The paddle is a quick fact
+               * about the player, and it was previously a whole navy band sitting
+               * between the career stats and the highlights — a long way from the
+               * "Paddle" row in Quick Info that states the same thing.
+               *
+               * The heading is written as the question people actually search
+               * ("what paddle does X use") and the line under it answers it in a
+               * sentence. That copy is what the FAQPage JSON-LD at the top of
+               * this page quotes, so the two must stay in step — structured data
+               * has to match visible text or it is a violation, not an
+               * optimisation.
+               *
+               * Absent entirely for a pro the paddle sources don't list, which is
+               * most of the roster.
+               */}
+              {SHOW_EQUIPMENT && gear && (
+                <div className="mt-8">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
+                    In the Bag
+                  </p>
+                  <div className="mt-3 border border-ppa-navy/10 bg-ppa-navy text-white">
+                    <div className="flex items-center gap-4 p-4">
+                      {paddleImage && (
+                        <div className="flex h-32 w-20 shrink-0 items-center justify-center">
+                          {paddleImage.cutout ? (
+                            <Image
+                              src={paddleImage.src}
+                              alt={`${gear.paddle} pickleball paddle`}
+                              width={paddleImage.width}
+                              height={paddleImage.height}
+                              sizes="80px"
+                              className="h-full w-auto object-contain drop-shadow-[0_6px_14px_rgba(0,0,0,0.45)]"
+                            />
+                          ) : (
+                            /* Scraped product photo from an external BigCommerce
+                               host — plain <img> (variable host, no next/image
+                               domain config) and on a white plate, since it may
+                               ship its own background. */
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={paddleImage.src}
+                              alt={`${gear.paddle} pickleball paddle`}
+                              loading="lazy"
+                              className="h-full w-full rounded-md bg-white object-contain p-1.5"
+                            />
+                          )}
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        <h2 className="font-display text-base uppercase leading-tight sm:text-lg">
+                          What paddle does {a.name} use?
+                        </h2>
+                        <p className="mt-1.5 text-sm leading-snug text-white/80">
+                          {gearAnswer}
+                        </p>
+                        {gear.brand && (
+                          <p className="mt-2 text-[11px] font-medium text-ppa-sky">
+                            Official Partner of the PPA Tour
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    {/* Conner Ogden 7/27: link the pro's paddle so a fan can buy the
+                        same one. Connor 7/29: that link is ALWAYS Pickleball Central
+                        for now — never the manufacturer. The partner brand is still
+                        named above; only the destination changed.
+                        The href carries utm_term=<paddle model> so the brand can
+                        count what ppatour.com sells them per paddle — see
+                        lib/paddle-images.ts → paddleTerm. */}
+                    <a
+                      href={gear.pbcHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex h-12 items-center justify-center bg-ppa-blue px-5 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
+                    >
+                      Buy This Paddle ↗
+                    </a>
+                  </div>
+                </div>
+              )}
             </aside>
           </div>
         </div>
@@ -618,65 +814,6 @@ export default async function AthletePage({ params }: Params) {
 
             {/* DUPR section removed — Connor 7/29: "let's also not show DUPR."
                 Third-party rating; the tour's own number is the WPR. */}
-          </div>
-        </section>
-      )}
-
-      {/* In the Bag — the athlete's paddle + a shop link (official partners
-          only; Connor's "link to gear"). Absent entirely for a pro the
-          broadcast masterlist doesn't list, which is most of the roster. */}
-      {SHOW_EQUIPMENT && gear && (
-        <section className="bg-ppa-navy text-white">
-          <div className="mx-auto w-full max-w-6xl px-4 py-12">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/50">
-              In the Bag
-            </p>
-            <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] sm:text-3xl">
-              {a.name}&apos;s Gear
-            </h2>
-            <div className="mt-6 flex flex-col gap-6 border border-white/12 bg-ppa-navy-deep p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
-              <div className="flex items-center gap-5">
-                {/* Paddle photo — og:image from the linked Pickleball Central page,
-                    pulled live from Jackalope. Plain <img> (external BigCommerce CDN,
-                    variable host) so it needs no next/image domain config. */}
-                {paddleImage && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={paddleImage}
-                    alt={`${gear.paddle} paddle`}
-                    loading="lazy"
-                    className="h-24 w-24 shrink-0 rounded-md bg-white object-contain p-1.5 sm:h-28 sm:w-28"
-                  />
-                )}
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
-                    Paddle
-                  </p>
-                  <p className="mt-1 font-display text-2xl uppercase leading-tight sm:text-3xl">
-                    {gear.paddle}
-                  </p>
-                  {gear.brand && (
-                    <p className="mt-2 text-xs font-medium text-ppa-sky">
-                      Official Partner of the PPA Tour
-                    </p>
-                  )}
-                </div>
-              </div>
-              {/* Conner Ogden 7/27: link the pro's paddle so a fan can buy the
-                  same one. Connor 7/29: that link is ALWAYS Pickleball Central
-                  for now — never the manufacturer. The partner brand is still
-                  named above; only the destination changed. */}
-              <div className="flex shrink-0 flex-col gap-2.5 sm:flex-row sm:items-center">
-                <a
-                  href={gear.pbcHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex h-12 shrink-0 items-center justify-center bg-ppa-blue px-7 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
-                >
-                  Buy This Paddle ↗
-                </a>
-              </div>
-            </div>
           </div>
         </section>
       )}

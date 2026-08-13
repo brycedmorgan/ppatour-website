@@ -71,6 +71,10 @@ export function OutboundClickTracker() {
       const params = {
         placement: url.searchParams.get("utm_content") ?? "untagged",
         campaign: url.searchParams.get("utm_campaign") ?? "untagged",
+        // The product, when the link sells one (paddle links set utm_term to the
+        // model slug). Lets our own GA4 answer "which paddle sold" without
+        // waiting on Pickleball Central's report.
+        item: url.searchParams.get("utm_term") ?? "none",
         destination: url.hostname,
         link_url: url.origin + url.pathname,
         page_path: window.location.pathname,

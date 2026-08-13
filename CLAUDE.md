@@ -42,6 +42,72 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-13 — "In the Bag" moves under Quick Info: cut-out paddle, per-paddle UTM, Product + FAQ schema
+
+- Bryce, from Anna Leigh Waters' live profile: he likes the callout, it is in the wrong place. Move it
+  **directly under the Quick Info block**, give it a **transparent PNG of the paddle**, add **UTM tracking
+  so the manufacturer can see what we sell**, and **schema so we rank for this**. All four shipped.
+- **The section is gone; it is a card in the aside now.** It used to be a full-width navy band between
+  By the Numbers and Highlights. **⚠ The "Paddle" row was ALSO deleted from Quick Info** — with the
+  callout now ~100px below that table, the row printed the identical string above a block that says it
+  bigger, with a photo and a buy button. Both surfaces still gate on the same `effPaddle`, so a pro
+  neither paddle source lists shows no equipment anywhere (verified: Lindsey Newman renders none).
+- **⚠ THE HEADING IS THE SEARCH QUERY, AND THAT IS WHAT MAKES THE SCHEMA LEGAL.** The card reads
+  *"What paddle does Anna Leigh Waters use?"* / *"Anna Leigh Waters plays the Franklin C45 Hybrid."*
+  Those exact strings are the `FAQPage` Q&A — one `gearAnswer` const feeds both, because two separately
+  worded sentences is how structured data quietly stops matching the page. Google restricts FAQ rich
+  results to gov/health, so this is aimed at the AI engines (`public/llms.txt`); the ranking lever for
+  Google is the visible H2 plus the **paddle now appended to the meta description** ("Plays the …",
+  skipped when the bio sentence is already long).
+- **Also `Product` + `Person.owns`.** New Product node (`#paddle` @id) carries name, brand, image and the
+  buy URL; the Person node points at it with `owns`, which is schema.org's own answer to "what equipment
+  does this athlete use". **⚠ NO `offers` — deliberately.** We do not hold the price; publishing one
+  means publishing availability too, and this repo already shipped a fabricated `InStock` offer off a
+  fallback number (7/31 pt. 4). Brand comes from the feed's own `manufacturer` field (new
+  `PlayerOverride.brand`), **never** by splitting the first word off the display string.
+- **UTM: `utm_term=<paddle model>` is the new part.** `utm_content` stays per-player (`paddle:<slug>`) —
+  that is our cut. A brand wants the opposite one: every click on THEIR paddle across all placements.
+  Both ride the same link. `withUtm` gained an optional `term`, unused everywhere else, so no existing
+  link changed. `OutboundClickTracker` now reports it as `item` on the `partner_click` event, so our own
+  GA4 can answer "which paddle sold" without waiting on Pickleball Central's report. Verified live:
+  Ben Johns → `joola-perseus-pro-v`, Haworth's two-paddle cell → `luzz-tornazo` (first model only,
+  thickness stripped).
+- **Paddle photography is a knockout pipeline, not a scrape.** `scripts/import-paddle-image.mjs` takes a
+  PBC product URL, pulls the og:image at 1280px, **flood-fills the background from the borders**, trims
+  to content and writes a 480px PNG. **⚠ Flood fill, NOT a white threshold** — a threshold punches holes
+  through every white mark on the paddle face ("Franklin", the 14MM stamp, the UPA-A cert). 6 assets in
+  `public/ppa/paddles/`, 62–156 KB each.
+- **⚠ AND THE SCRIPT NOW REFUSES A SOURCE IT CAN'T CUT OUT, BECAUSE THE FIRST PASS FAILED SILENTLY.**
+  The CRBN TruFoam Barrage 4 listing leads with a lifestyle shot on an orange backdrop — flood fill
+  found no white, wrote a fully opaque rectangle, and the card would have published someone else's art
+  direction as a paddle photo. Caught by rendering a contact sheet, not by reading output. It now
+  throws when under 20% of the canvas was background (negative-tested: CRBN exits 1, the six good ones
+  still pass), and those 4 pros correctly render the callout with no image.
+- **⚠ A MODEL NAME IS NOT ALWAYS ENOUGH TO PICK A PHOTO.** JOOLA sells the Perseus Pro V 16mm as a Ben
+  Johns, a Simone Jardim and a Rally Rocket paddle, and **10 pros play "Perseus Pro V 16mm" with no
+  colourway recorded anywhere**. Filing one photo under the model would put Ben Johns' paddle on nine
+  other profiles. So `lib/paddle-images.ts` has a **BY_SLUG map for signature paddles** (Ben Johns,
+  Anna Bright) alongside the model map, and ambiguous models — Six Zero Coral (6 cuts), CRBN — are
+  deliberately left with no photo. Feed `image` stays the fallback and gets a white plate; a curated
+  cut-out renders bare on the navy card.
+- **Coverage today: 17 of 126 feed paddles get a model-level photo, +2 signature.** The blocker is data,
+  not code: **the feed's `pbcUrl` and `image` fields are null for all 127 rows**. If Dillon/Liv fill in
+  `pbcUrl` in Jackalope, the exact product — and therefore the right colourway — resolves per player and
+  another ~40 pros light up with no code change. **That is the ask to send.**
+- Verified on the dev server per page, not by grep: Ben Johns + Anna Bright (signature paddle, JOOLA
+  partner badge), Eric Oncins (Engage X2 — the live feed resolved the two-row masterlist conflict that
+  used to show him none), Christopher Haworth (two-paddle cell, links the first), Lindsey Newman (no
+  callout at all). CDP at 1440 and 390: card 358px wide on a phone, **zero horizontal overflow**.
+  tsc + eslint clean; **full `next build` green, 182 athlete pages**, and the built static HTML carries
+  the question, the `utm_term` and the optimized PNG.
+- **⚠ NOT committed/pushed.** A push auto-deploys to production ppatour.com and the tree holds parallel
+  uncommitted vacations / Trip Builder / Order-of-Play work. Awaiting Bryce's go.
+- **Two things for a human:** ALW's paddle is the **Franklin C45 Hybrid**, not the "FS Max Dynasty" Bryce
+  remembered — the live Jackalope feed is the source and it says C45 Hybrid · her meta description reads
+  *"Women's Singles, Women's Singles, Mixed Doubles"*, a **duplicate division in the published-athletes
+  data** (pre-existing, not touched — it is a data edit, and 178 other profiles may have it too).
+
+
 ### 2026-08-11 — Order of Play is now a PROGRESSION DRAW on every pro stop
 
 - Dillon Segur, Slack DM 8/10 (photo of the Vegas `/events` Order of Play): *"the dates are

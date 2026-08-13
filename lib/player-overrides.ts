@@ -29,6 +29,17 @@ const REVALIDATE_S = 300;
 export type PlayerOverride = {
   paddle: string | null;
   searchTerm: string | null;
+  /**
+   * The manufacturer, on its own, as the feed states it.
+   *
+   * ⚠ NOT the same thing as `GearLink.brand`, which is only set when the paddle
+   * brand is an official PPA partner — that field answers "does this pro earn
+   * the partner badge". This one answers "who makes this paddle", which is what
+   * the Product structured data needs. Null for a pro the feed doesn't cover;
+   * never guessed by splitting the display string, because a model name can
+   * lead with a word that isn't the brand.
+   */
+  brand: string | null;
   image: string | null;
   featuredMatchUrl: string | null;
   pbcUrl: string | null;
@@ -61,7 +72,10 @@ const BRAND_DISPLAY: Record<string, string> = {
 
 /** Build the display paddle + PBC search term from the feed's brand/model, applying the
  *  same brand-display + model-already-has-brand rules the static importer uses. */
-function buildPaddle(mfr?: string | null, model?: string | null): { paddle: string; searchTerm: string } | null {
+function buildPaddle(
+  mfr?: string | null,
+  model?: string | null,
+): { paddle: string; searchTerm: string; brand: string } | null {
   const m = (model || "").trim();
   const rawBrand = (mfr || "").trim();
   if (!m || !rawBrand) return null;
@@ -71,7 +85,7 @@ function buildPaddle(mfr?: string | null, model?: string | null): { paddle: stri
   const paddle = (modelHasBrand ? m : `${brand} ${m}`).replace(/\s+/g, " ").trim();
   const firstModel = m.split(",")[0];
   const searchTerm = (modelHasBrand ? firstModel : `${brand} ${firstModel}`).replace(/\s+/g, " ").trim();
-  return { paddle, searchTerm };
+  return { paddle, searchTerm, brand };
 }
 
 /** Lowercase, strip accents + punctuation, collapse whitespace — for name matching. */
@@ -113,6 +127,7 @@ async function fetchOverrides(): Promise<Map<string, PlayerOverride>> {
       map.set(key, {
         paddle: built?.paddle ?? null,
         searchTerm: built?.searchTerm ?? null,
+        brand: built?.brand ?? null,
         image,
         featuredMatchUrl,
         pbcUrl,

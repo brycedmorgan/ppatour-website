@@ -15,6 +15,7 @@
  * fan (or Braydn's sell-through) to gear we don't rep.
  */
 import { partners } from "@/lib/home-content";
+import { paddleTerm } from "@/lib/paddle-images";
 import { withUtm } from "@/lib/utm";
 
 export type GearLink = {
@@ -47,7 +48,10 @@ function pbcLink(paddle: string, content: string, pinnedUrl?: string | null): st
     pinnedUrl && pinnedUrl.trim()
       ? pinnedUrl.trim()
       : `https://www.pickleballcentral.com/search.php?search_query=${encodeURIComponent(paddle)}`;
-  return withUtm(base, { campaign: "athlete-gear", content });
+  // `term` = the paddle model, so the brand can count clicks per PADDLE across
+  // every player who plays it. `content` stays per-player, which is the cut we
+  // read. Both travel on the same link; neither replaces the other.
+  return withUtm(base, { campaign: "athlete-gear", content, term: paddleTerm(paddle) });
 }
 
 /**
