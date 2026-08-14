@@ -1,13 +1,13 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-08-13T14:15:01Z",
-  "event_count": 62,
-  "ticket_type_count": 907,
+  "generated_at": "2026-08-14T14:08:22Z",
+  "event_count": 66,
+  "ticket_type_count": 964,
   "series_breakdown": {
     "Major League Pickleball": 15,
     "PPA Challenger Series": 4,
-    "PPA Tour": 43
+    "PPA Tour": 47
   },
   "field_notes": {
     "base_price": "Face value set by the organizer (USD). null when the tier is sold out / not on public sale.",
@@ -169,6 +169,27 @@
           "all_in_price": 0
         },
         {
+          "name": "LA Mad DROPS Seating Friday",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 0,
+          "all_in_price": 0
+        },
+        {
+          "name": "LA Mad DROPS Seating Saturday",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 0,
+          "all_in_price": 0
+        },
+        {
+          "name": "LA Mad DROPS Seating Sunday",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 0,
+          "all_in_price": 0
+        },
+        {
           "name": "Pickleball Vacations",
           "category": "GA",
           "sale_state": "SOLD_OUT",
@@ -205,6 +226,27 @@
         },
         {
           "name": "Thursday",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "VIP Row H 1-10 Friday",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "VIP Row H 1-10 Saturday",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "VIP Row H 1-10 Sunday",
           "category": "GA",
           "sale_state": "SOLD_OUT",
           "base_price": null,
@@ -355,6 +397,13 @@
           "sale_state": "SOLD_OUT",
           "base_price": null,
           "all_in_price": 0
+        },
+        {
+          "name": "Saturday Full Day VIP Lounge Access",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 250,
+          "all_in_price": 275.51
         },
         {
           "name": "Saturday Grounds Pass",
@@ -691,6 +740,13 @@
           "all_in_price": 30.35
         },
         {
+          "name": "Sunday VIP Lounge Access",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 250,
+          "all_in_price": 275.51
+        },
+        {
           "name": "Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
@@ -735,8 +791,8 @@
         {
           "name": "Reserved VIP*",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 275,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 302.53
         },
         {
@@ -1157,13 +1213,6 @@
           "name": "Courtside Session 4",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 30,
-          "all_in_price": 35.83
-        },
-        {
-          "name": "Courtside Session 4",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 60,
           "all_in_price": 70.39
         },
@@ -1180,6 +1229,13 @@
           "sale_state": "OPEN",
           "base_price": 100,
           "all_in_price": 113.71
+        },
+        {
+          "name": "Courtside Session 4",
+          "category": "STANDARD",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 35.83
         },
         {
           "name": "VIP Session 4",
@@ -2169,14 +2225,14 @@
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 156.66
+          "all_in_price": 135.05
         },
         {
           "name": "Friday Morning Courtside+",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 135.05
+          "all_in_price": 156.66
         },
         {
           "name": "Friday Morning Grandstand (Singles & Mxd Doubles Quarterfinals)",
@@ -3265,8 +3321,8 @@
         {
           "name": "Sunday Courtside",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 80,
           "all_in_price": 91.83
         },
         {
@@ -4062,8 +4118,8 @@
           "name": "Sunday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 91.83
+          "base_price": 100,
+          "all_in_price": 113.44
         },
         {
           "name": "Sunday Grounds Pass",
@@ -4125,8 +4181,8 @@
           "name": "Weeklong Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 220,
-          "all_in_price": 243.1
+          "base_price": 240,
+          "all_in_price": 264.71
         },
         {
           "name": "Weeklong Grounds Pass",
@@ -4254,8 +4310,8 @@
           "name": "Saturday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 91.83
+          "base_price": 100,
+          "all_in_price": 113.44
         },
         {
           "name": "Saturday Grounds Pass",
@@ -4275,8 +4331,8 @@
           "name": "Sunday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 91.83
+          "base_price": 100,
+          "all_in_price": 113.44
         },
         {
           "name": "Sunday Grounds Pass",
@@ -4338,8 +4394,8 @@
           "name": "Weeklong Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 200,
-          "all_in_price": 221.49
+          "base_price": 260,
+          "all_in_price": 286.32
         },
         {
           "name": "Weeklong Grounds Pass",
@@ -4352,8 +4408,8 @@
           "name": "Weeklong VIP",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 800,
-          "all_in_price": 869.77
+          "base_price": 900,
+          "all_in_price": 977.82
         }
       ]
     },
@@ -4910,8 +4966,8 @@
         {
           "name": "Wednesday Courtside Chair",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 100,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 113.69
         },
         {
@@ -5273,8 +5329,8 @@
           "name": "Friday Full Day Box Suite",
           "category": "BOOTH",
           "sale_state": "OPEN",
-          "base_price": 5000,
-          "all_in_price": 5420.12
+          "base_price": 5500,
+          "all_in_price": 5961.59
         },
         {
           "name": "Championships",
@@ -5589,8 +5645,8 @@
           "name": "Saturday Full Day Box Suite",
           "category": "BOOTH",
           "sale_state": "OPEN",
-          "base_price": 5000,
-          "all_in_price": 5420.12
+          "base_price": 6000,
+          "all_in_price": 6503.07
         },
         {
           "name": "Championships",
@@ -5747,8 +5803,8 @@
           "name": "Sunday Box Suite",
           "category": "BOOTH",
           "sale_state": "OPEN",
-          "base_price": 5000,
-          "all_in_price": 5420.12
+          "base_price": 7500,
+          "all_in_price": 8127.48
         },
         {
           "name": "Pickleball Vacations",
@@ -6115,6 +6171,421 @@
           "all_in_price": 113.44
         }
       ]
+    },
+    {
+      "event_id": "203187",
+      "name": "PPA Daytona Beach Thursday - Round of 16",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-11-19",
+      "end_date": "2026-11-20",
+      "venue": {
+        "name": "Pictona at Holly Hill",
+        "city": "Daytona Beach",
+        "state": "FL"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-daytona-beach-thursday-round-of-16-203187",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Thursday On Court VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        }
+      ],
+      "parent_event_id": "178517"
+    },
+    {
+      "event_id": "203184",
+      "name": "PPA Daytona Beach Friday - Quarterfinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-11-20",
+      "end_date": "2026-11-21",
+      "venue": {
+        "name": "Pictona at Holly Hill",
+        "city": "Daytona Beach",
+        "state": "FL"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-daytona-beach-friday-quarterfinals-203184",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Friday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 70,
+          "all_in_price": 81.03
+        },
+        {
+          "name": "Friday On Court VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Friday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        }
+      ],
+      "parent_event_id": "178517"
+    },
+    {
+      "event_id": "203182",
+      "name": "PPA Daytona Beach Saturday - Semifinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-11-21",
+      "end_date": "2026-11-22",
+      "venue": {
+        "name": "Pictona at Holly Hill",
+        "city": "Daytona Beach",
+        "state": "FL"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-daytona-beach-saturday-semifinals-203182",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Saturday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 70,
+          "all_in_price": 81.03
+        },
+        {
+          "name": "Saturday On Court VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Saturday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        }
+      ],
+      "parent_event_id": "178517"
+    },
+    {
+      "event_id": "203167",
+      "name": "PPA Daytona Beach Sunday - Championships",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-11-22",
+      "end_date": "2026-11-23",
+      "venue": {
+        "name": "Pictona at Holly Hill",
+        "city": "Daytona Beach",
+        "state": "FL"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-daytona-beach-sunday-championships-203167",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 70,
+          "all_in_price": 81.03
+        },
+        {
+          "name": "Sunday On Court VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        }
+      ],
+      "parent_event_id": "178517"
     },
     {
       "event_id": "176502",

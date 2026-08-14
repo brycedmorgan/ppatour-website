@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13T14:15:01Z",
+  "updated_at": "2026-08-14T14:08:22Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -1744,6 +1744,330 @@
       "type": "event_removed",
       "event_id": "171536",
       "event": "PPA Challenger Series - Sarasota"
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "ticket_added",
+      "event_id": "183665",
+      "event": "Major League Pickleball Newport Beach - Playoffs",
+      "ticket": "LA Mad DROPS Seating Friday",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "ticket_added",
+      "event_id": "183665",
+      "event": "Major League Pickleball Newport Beach - Playoffs",
+      "ticket": "LA Mad DROPS Seating Saturday",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "ticket_added",
+      "event_id": "183665",
+      "event": "Major League Pickleball Newport Beach - Playoffs",
+      "ticket": "LA Mad DROPS Seating Sunday",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "ticket_added",
+      "event_id": "183665",
+      "event": "Major League Pickleball Newport Beach - Playoffs",
+      "ticket": "VIP Row H 1-10 Friday",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "ticket_added",
+      "event_id": "183665",
+      "event": "Major League Pickleball Newport Beach - Playoffs",
+      "ticket": "VIP Row H 1-10 Saturday",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "ticket_added",
+      "event_id": "183665",
+      "event": "Major League Pickleball Newport Beach - Playoffs",
+      "ticket": "VIP Row H 1-10 Sunday",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "ticket_added",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "Saturday Full Day VIP Lounge Access",
+      "base_price": 250,
+      "all_in_price": 275.51
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "ticket_added",
+      "event_id": "183676",
+      "event": "Major League Pickleball Newport Beach - Sunday",
+      "ticket": "Sunday VIP Lounge Access",
+      "base_price": 250,
+      "all_in_price": 275.51
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "price_change",
+      "event_id": "183676",
+      "event": "Major League Pickleball Newport Beach - Sunday",
+      "ticket": "Reserved VIP*",
+      "base_price": {
+        "from": 275,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 302.53,
+        "to": 302.53
+      }
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "availability_change",
+      "event_id": "183676",
+      "event": "Major League Pickleball Newport Beach - Sunday",
+      "ticket": "Reserved VIP*",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "price_change",
+      "event_id": "169803",
+      "event": "Major League Pickleball New York Finals - Saturday: Session 4",
+      "ticket": "Courtside Session 4",
+      "base_price": {
+        "from": 100,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 113.71,
+        "to": 35.83
+      }
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "availability_change",
+      "event_id": "169803",
+      "event": "Major League Pickleball New York Finals - Saturday: Session 4",
+      "ticket": "Courtside Session 4",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "price_change",
+      "event_id": "184765",
+      "event": "Veolia Pickleball National Championships Friday Morning - Singles and Mxd Doubles Quarterfinals",
+      "ticket": "Friday Morning Courtside+",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 135.05,
+        "to": 156.66
+      }
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": 80,
+        "to": 100
+      },
+      "all_in_price": {
+        "from": 91.83,
+        "to": 113.44
+      }
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Weeklong Courtside",
+      "base_price": {
+        "from": 220,
+        "to": 240
+      },
+      "all_in_price": {
+        "from": 243.1,
+        "to": 264.71
+      }
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "price_change",
+      "event_id": "176326",
+      "event": "PPA Virginia Beach",
+      "ticket": "Saturday Courtside",
+      "base_price": {
+        "from": 80,
+        "to": 100
+      },
+      "all_in_price": {
+        "from": 91.83,
+        "to": 113.44
+      }
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "price_change",
+      "event_id": "176326",
+      "event": "PPA Virginia Beach",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": 80,
+        "to": 100
+      },
+      "all_in_price": {
+        "from": 91.83,
+        "to": 113.44
+      }
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "price_change",
+      "event_id": "176326",
+      "event": "PPA Virginia Beach",
+      "ticket": "Weeklong Courtside",
+      "base_price": {
+        "from": 200,
+        "to": 260
+      },
+      "all_in_price": {
+        "from": 221.49,
+        "to": 286.32
+      }
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "price_change",
+      "event_id": "176326",
+      "event": "PPA Virginia Beach",
+      "ticket": "Weeklong VIP",
+      "base_price": {
+        "from": 800,
+        "to": 900
+      },
+      "all_in_price": {
+        "from": 869.77,
+        "to": 977.82
+      }
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "price_change",
+      "event_id": "166402",
+      "event": "2026 Pickleball World Championships Wednesday - Round of 32",
+      "ticket": "Wednesday Courtside Chair",
+      "base_price": {
+        "from": 100,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 113.69,
+        "to": 113.69
+      }
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "availability_change",
+      "event_id": "166402",
+      "event": "2026 Pickleball World Championships Wednesday - Round of 32",
+      "ticket": "Wednesday Courtside Chair",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "price_change",
+      "event_id": "166397",
+      "event": "2026 Pickleball World Championships Friday Morning - Singles and Mxd Double Quarterfinals",
+      "ticket": "Friday Full Day Box Suite",
+      "base_price": {
+        "from": 5000,
+        "to": 5500
+      },
+      "all_in_price": {
+        "from": 5420.12,
+        "to": 5961.59
+      }
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "price_change",
+      "event_id": "166387",
+      "event": "2026 Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Full Day Box Suite",
+      "base_price": {
+        "from": 5000,
+        "to": 6000
+      },
+      "all_in_price": {
+        "from": 5420.12,
+        "to": 6503.07
+      }
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "2026 Pickleball World Championships Sunday - Championships",
+      "ticket": "Sunday Box Suite",
+      "base_price": {
+        "from": 5000,
+        "to": 7500
+      },
+      "all_in_price": {
+        "from": 5420.12,
+        "to": 8127.48
+      }
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "event_added",
+      "event_id": "203187",
+      "event": "PPA Daytona Beach Thursday - Round of 16"
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "event_added",
+      "event_id": "203184",
+      "event": "PPA Daytona Beach Friday - Quarterfinals"
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "event_added",
+      "event_id": "203182",
+      "event": "PPA Daytona Beach Saturday - Semifinals"
+    },
+    {
+      "at": "2026-08-14T14:08:22Z",
+      "type": "event_added",
+      "event_id": "203167",
+      "event": "PPA Daytona Beach Sunday - Championships"
     }
   ]
 }
