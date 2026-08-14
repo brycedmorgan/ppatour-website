@@ -483,6 +483,39 @@ function fallback(): { events: Tournament[]; source: "fallback" } {
 }
 
 /**
+ * Fold in the curated stops the tour has ANNOUNCED but not yet registered, so
+ * they appear on /events (which renders this list) ahead of having a feed row.
+ *
+ * ⚠ THE OPT-IN IS PER EVENT AND THE MEASUREMENT IS WHY. 23 curated upcoming
+ * events are absent from the live feed, and merging them all would be wrong
+ * twice over: most are international sister-tour stops that belong to the tour
+ * that runs them, and two — `newport-beach-open-2027-03-02` and
+ * `atlanta-ppa-challenger-2026-08-28` — are SECOND EDITIONS that carry a
+ * date-suffixed slug precisely because the feed already lists the same event
+ * under the bare one. Adding those back would render Newport Beach and the
+ * Atlanta Challenger twice on the same grid. So only `detailsComingSoon` rows
+ * come in, and only when the feed has not published them yet.
+ *
+ * Re-sorted chronologically so the merged stop lands in its real calendar
+ * position rather than at the end of the grid.
+ *
+ * ⚠ THE DE-DUPE IS BY SLUG, SO A FEED TITLE THAT DERIVES A DIFFERENT SLUG WILL
+ * RENDER THE STOP TWICE. The feed already carries past Texas Opens as
+ * "CIBC Texas Open - 2025", i.e. `cibc-texas-open-2025` — if the 2027 edition
+ * arrives titled like that, `live` will not contain `texas-open` and both cards
+ * appear. Add a CURATED_ALIASES entry mapping the feed slug onto the curated
+ * one (the fix the Barcelona opener needed on 8/6) and drop the flag.
+ */
+function withComingSoon(events: Tournament[]): Tournament[] {
+  const live = new Set(events.map((e) => e.slug));
+  const pending = getAllEvents().filter((t) => t.detailsComingSoon && !live.has(t.slug));
+  if (pending.length === 0) return events;
+  return [...events, ...pending.map((t) => ({ ...t, source: "curated" as const }))].sort((a, b) =>
+    a.startDate.localeCompare(b.startDate),
+  );
+}
+
+/**
  * Every tour event from the API (quality-gated, mapped, curated-enriched),
  * chronological. Falls back to the curated list if the API is unconfigured,
  * errors, or returns nothing. Safe to call from server components.
@@ -510,7 +543,7 @@ export async function getEvents(): Promise<{ events: Tournament[]; source: "live
       .map((t, i) => mapTournament(t, seen, i));
 
     if (events.length === 0) return fallback();
-    return { events, source: "live" };
+    return { events: withComingSoon(events), source: "live" };
   } catch {
     return fallback();
   }

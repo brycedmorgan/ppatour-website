@@ -222,7 +222,13 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
         <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {shown.map((t, i) => {
             const completed = t.status === "completed";
-            const internal = t.hasInternalPage !== false;
+            // ⚠ Checked FIRST, and it is a THIRD state. An announced stop with
+            // no page yet has nowhere to go at all — unlike a link-out, which
+            // goes to the tour that runs it. Folded into the `internal` pair
+            // below it would render an <a> with an undefined href: a card that
+            // looks clickable and does nothing.
+            const comingSoon = t.detailsComingSoon === true;
+            const internal = !comingSoon && t.hasInternalPage !== false;
             // Link-out events must never fall back to eventHref — that route
             // 404s for anything without an internal page (Conner Ogden's
             // broken-link report, 7/27).
@@ -293,7 +299,13 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
                   <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/55">
                     {t.presentedBy ? `Presented by ${t.presentedBy}` : "PPA Tour"}
                   </p>
-                  {internal ? (
+                  {comingSoon ? (
+                    // No anchor at all — not a disabled one. The card is a
+                    // billboard until this event has somewhere to send people.
+                    <p className="mt-0.5 block font-display text-lg uppercase leading-[1.05] text-white">
+                      {t.name}
+                    </p>
+                  ) : internal ? (
                     <Link
                       href={href}
                       className="mt-0.5 block font-display text-lg uppercase leading-[1.05] text-white after:absolute after:inset-0"
@@ -311,8 +323,17 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
                     </a>
                   )}
                   <p className="mt-1 text-xs text-white/60">
-                    {formatDateRange(t.startDate, t.endDate, true)} · {t.city}
-                    {t.state ? `, ${t.state}` : ""}
+                    {formatDateRange(t.startDate, t.endDate, true)} ·{" "}
+                    {/* A city of "TBD" reads as a typo next to real ones; say
+                        what is actually true instead. */}
+                    {comingSoon && t.city === "TBD" ? (
+                      "Location TBD"
+                    ) : (
+                      <>
+                        {t.city}
+                        {t.state ? `, ${t.state}` : ""}
+                      </>
+                    )}
                   </p>
                   <span className="mt-3 flex items-center justify-between gap-3">
                     <span
@@ -321,21 +342,36 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
                         t.brand ? "group-hover:brightness-90" : "bg-ppa-blue group-hover:bg-ppa-blue-deep"
                       }`}
                     >
-                      {internal ? (completed ? "View Event" : "Event Guide") : "Details"}
-                      <span
-                        aria-hidden
-                        className="transition-transform duration-300 group-hover:translate-x-0.5"
-                      >
-                        {internal ? "→" : "↗"}
+                      {comingSoon
+                        ? "Details Coming Soon"
+                        : internal
+                          ? completed
+                            ? "View Event"
+                            : "Event Guide"
+                          : "Details"}
+                      {/* No arrow when there is nowhere to go — the arrow is
+                          the affordance that says this card is a link. */}
+                      {!comingSoon && (
+                        <span
+                          aria-hidden
+                          className="transition-transform duration-300 group-hover:translate-x-0.5"
+                        >
+                          {internal ? "→" : "↗"}
+                        </span>
+                      )}
+                    </span>
+                    {/* Suppressed while details are pending: "Tickets soon"
+                        beside "Details Coming Soon" says the same thing twice,
+                        and tickets are the smaller of the two unknowns. */}
+                    {!comingSoon && (
+                      <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-yellow">
+                        {completed
+                          ? "Completed"
+                          : t.ticketsOnSale
+                            ? `From $${t.ticketPriceFrom}`
+                            : "Tickets soon"}
                       </span>
-                    </span>
-                    <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-yellow">
-                      {completed
-                        ? "Completed"
-                        : t.ticketsOnSale
-                          ? `From $${t.ticketPriceFrom}`
-                          : "Tickets soon"}
-                    </span>
+                    )}
                   </span>
                 </div>
               </article>

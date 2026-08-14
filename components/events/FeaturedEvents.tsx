@@ -71,7 +71,15 @@ export function FeaturedEvents({
              * them. Same bug ScheduleGrid fixed on 7/27; this component was
              * built later and never got the guard.
              */
-            const internal = t.hasInternalPage !== false;
+            /**
+             * ⚠ And the same guard for an announced stop with no page YET —
+             * a third state, checked first. The Texas Open (Mar 2027) is a
+             * 1,000-point tour stop, so it is eligible for this band and will
+             * enter it as the calendar advances; without this the card would
+             * link at a route that deliberately does not exist.
+             */
+            const comingSoon = t.detailsComingSoon === true;
+            const internal = !comingSoon && t.hasInternalPage !== false;
             const href = internal
               ? eventHref(t)
               : t.externalUrl ?? t.registerUrl ?? t.ticketsUrl;
@@ -125,7 +133,11 @@ export function FeaturedEvents({
                   <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/60">
                     {t.presentedBy ? `Presented by ${t.presentedBy}` : "PPA Tour"}
                   </p>
-                  {internal ? (
+                  {comingSoon ? (
+                    <p className="mt-1 block font-display text-2xl uppercase leading-[1.02] text-white">
+                      {t.name}
+                    </p>
+                  ) : internal ? (
                     <Link
                       href={href}
                       className="mt-1 block font-display text-2xl uppercase leading-[1.02] text-white after:absolute after:inset-0"
@@ -146,17 +158,24 @@ export function FeaturedEvents({
                     {formatDateRange(t.startDate, t.endDate, true)}
                   </p>
                   <p className="text-xs text-white/60">
-                    {t.venue}
-                    {t.city ? ` · ${t.city}${t.state ? `, ${t.state}` : ""}` : ""}
+                    {comingSoon && t.city === "TBD"
+                      ? "Location TBD"
+                      : `${t.venue}${t.city ? ` · ${t.city}${t.state ? `, ${t.state}` : ""}` : ""}`}
                   </p>
                   <span className="mt-4 inline-flex h-9 items-center gap-1.5 bg-ppa-blue px-4 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors group-hover:bg-ppa-blue-deep">
-                    {internal ? "Explore the Event" : "Event Details"}
-                    <span
-                      aria-hidden
-                      className="transition-transform duration-300 group-hover:translate-x-0.5"
-                    >
-                      {internal ? "→" : "↗"}
-                    </span>
+                    {comingSoon
+                      ? "Details Coming Soon"
+                      : internal
+                        ? "Explore the Event"
+                        : "Event Details"}
+                    {!comingSoon && (
+                      <span
+                        aria-hidden
+                        className="transition-transform duration-300 group-hover:translate-x-0.5"
+                      >
+                        {internal ? "→" : "↗"}
+                      </span>
+                    )}
                   </span>
                 </div>
               </article>

@@ -23,12 +23,12 @@ export type EventGuide = {
    * Map query — venue + city + state. Drives the Google Maps embed.
    *
    * ⚠ OPTIONAL, AND OMITTING IT IS THE SAFER DEFAULT. Both event pages fall
-   * back to `${t.venue}, ${t.city}, ${t.state}`, and `t.venue` comes from the
-   * `ppa_tournaments` feed for any stop listed in VENUE_FROM_FEED — so leaving
-   * this unset keeps the pin on whatever venue the tour is actually registered
-   * at. Setting it pins the map to a hand-typed building that a feed rename
-   * can't reach, which is exactly how Virginia Beach ended up mapping to the
-   * wrong facility (8/12).
+   * back to `${t.venue}, ${t.city}, ${t.state}`, and `t.venue` now comes from
+   * the `ppa_tournaments` feed (see `resolveVenue` in lib/events-api.ts) — so
+   * leaving this unset keeps the pin on whatever venue the tour is actually
+   * registered at. Setting it pins the map to a hand-typed building that a feed
+   * rename can't reach, which is exactly how Virginia Beach ended up mapping to
+   * the wrong facility (8/12).
    */
   mapQuery?: string;
   airport: string;
@@ -489,26 +489,19 @@ export const eventGuides: Record<string, EventGuide> = {
       { name: "Crystal Cove State Park", tag: "Beach", note: "Tide pools + coastal trails" },
     ],
   },
-  "texas-open": {
-    mapQuery: "The Courts of McKinney, McKinney, TX",
-    airport: "DFW",
-    airportNote: "DFW Intl · ~35 min to McKinney",
-    gettingThere:
-      "DFW and Love Field both serve the metroplex; the Courts of McKinney sit about 35 minutes north. Rent a car — north Dallas is built for it, and downtown is an easy hop.",
-    hotels: [
-      { name: "The Joule", tag: "City Luxury", note: "Downtown · rooftop pool" },
-      { name: "Hotel Crescent Court", tag: "Official Tour Hotel", note: "Uptown · tour rate" },
-    ],
-    dining: [
-      { name: "Pecan Lodge", tag: "BBQ", note: "Brisket worth the line" },
-      { name: "Uchi", tag: "Sushi", note: "Uptown tasting menu" },
-      { name: "Whataburger", tag: "Icon", note: "The Texas late-night classic" },
-    ],
-    doing: [
-      { name: "Dallas Arboretum", tag: "Outdoors", note: "66 acres on White Rock Lake" },
-      { name: "Reunion Tower", tag: "Views", note: "GeO-Deck over the skyline" },
-    ],
-  },
+  // ⚠ THE TEXAS OPEN GUIDE IS DELETED, NOT EMPTIED — the 2027 stop's location
+  // is TBD (Wesley, 8/13) and this guide was a full Dallas/McKinney itinerary:
+  // a map pinned to The Courts of McKinney, DFW drive times, an "Official Tour
+  // Hotel" in Uptown, restaurants. None of it is confirmed for this edition.
+  //
+  // ⚠ AND IT WAS NOT INERT WHILE THE EVENT HAD NO PAGE. `lib/site-search.ts`
+  // folds guide text — hotels, dining, airport, getting-there — into the event's
+  // search body, so this content was reachable by search even though nothing
+  // linked to the event. Leaving it "for later" meant publishing a location we
+  // had just said we don't know.
+  //
+  // Restore from git history when the venue is confirmed — and check the hotel
+  // is still an official block before republishing that tag.
   "greater-zion-cup": {
     mapQuery: "Black Desert Resort, Ivins, UT",
     airport: "SGU",

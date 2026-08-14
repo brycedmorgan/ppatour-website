@@ -83,6 +83,22 @@ async function resolveEvent(year: string, slug: string): Promise<Resolved> {
   const t = curated ?? live;
   if (!t || t.tierKey === "challenger") return null;
 
+  /**
+   * ⚠ ANNOUNCED, BUT NO PAGE YET — 404, and deliberately NOT a redirect.
+   *
+   * This page is a template: give it any event record and it publishes a purse
+   * from the tier table, a templated Order of Play with gate and first-serve
+   * times, broadcast windows, a trip guide and a Register to Play CTA. For the
+   * Texas Open — announced with the location still TBD — every one of those
+   * would be invented, which is the same failure as the 36 fabricated
+   * international pages (8/6) and the fabricated parking fallbacks (8/5).
+   *
+   * There is nowhere to send people either: no venue, no ticket listing, no
+   * registration page. The card on /events says "Details Coming Soon" and the
+   * URL 404s until the flag comes off, which is the honest pair.
+   */
+  if (t.detailsComingSoon) return null;
+
   // ⚠ The curated record still WINS for everything except the name — it is the
   // only source of `defendingChampions`, and it carries the hand-authored
   // content this page is built on. But Wesley, 8/3: names come from the API.
@@ -170,6 +186,11 @@ export async function generateStaticParams() {
   // the other half of the 36 fabricated event pages. `!== false` rather than a
   // truthiness test because PAST_EVENTS (all U.S.) leave the field unset, and
   // the card components read an unset field as internal.
+  //
+  // This also covers `detailsComingSoon` without naming it: `buildSchedule`
+  // derives `hasInternalPage: r.type === "ppa" && !r.detailsComingSoon`, so an
+  // announced-but-unplaced stop is already excluded here. Keep those two in
+  // step — if the derivation changes, this loop needs the flag explicitly.
   for (const t of tournaments) {
     if (t.tierKey !== "challenger" && t.hasInternalPage !== false) add(t);
   }

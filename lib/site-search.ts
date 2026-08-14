@@ -260,6 +260,11 @@ export async function searchSite(query: string): Promise<SiteSearchResult> {
     /* keep the curated list */
   }
   const eventScored = eventSource
+    // ⚠ An announced-but-unplaced stop has no destination — its page 404s by
+    // design and there is no off-site page either — and every search result
+    // must go somewhere. It rejoins the index the moment it gets a real page.
+    // Its card on /events is how people find it until then.
+    .filter((t) => !t.detailsComingSoon)
     .map(eventDoc)
     .map((d) => ({ item: d.hit as SearchHit, s: score(terms, d.title, d.meta, d.body) }))
     .filter((x) => x.s > 0);

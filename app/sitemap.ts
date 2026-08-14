@@ -68,8 +68,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Only events that actually have an internal page. Challengers and
     // international sister-tour stops link out to pickleballtournaments.com,
     // so their /events/[year]/[slug] URLs 404 — keep them out of the sitemap.
+    // ⚠ `detailsComingSoon` stops 404 for the same reason (announced, no page
+    // yet), so listing one would submit a deliberate 404 to Google.
     ...tournaments
-      .filter((t) => t.tierKey !== "challenger" && t.region !== "international")
+      .filter(
+        (t) =>
+          t.tierKey !== "challenger" && t.region !== "international" && !t.detailsComingSoon,
+      )
       .map((t) => ({
         url: url(eventHref(t)),
         changeFrequency: "weekly" as const,

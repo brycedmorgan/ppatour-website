@@ -144,6 +144,27 @@ export type Tournament = {
    * API events (international sister tours) link out to {@link externalUrl}.
    */
   hasInternalPage?: boolean;
+  /**
+   * Announced, but nothing to send anyone to yet: the card renders on /events
+   * with "Details Coming Soon" and is NOT a link — no internal page, no
+   * link-out. Wesley, 8/13, adding the Texas Open before its venue is set.
+   *
+   * ⚠ THIS IS A THIRD STATE, NOT A FLAVOUR OF `hasInternalPage: false`. A
+   * link-out event has somewhere to go (the sister tour that runs it) and is
+   * rendered as an `<a target="_blank">` with a "↗". This one has nowhere, and
+   * the two must not be confused: `hasInternalPage: false` with no URL
+   * silently produces `<a href={undefined}>`, i.e. a card that looks clickable
+   * and does nothing. Every link surface checks this flag FIRST.
+   *
+   * ⚠ AND IT IS WHAT PUTS THE EVENT ON /events AT ALL. That page renders the
+   * live feed, so a curated stop the feed has never heard of does not appear
+   * (the 8/6 Hong Kong note). `getEvents` merges the flagged ones back in.
+   *
+   * Clearing the flag is the whole of "give it a real page": the event then
+   * takes the normal curated path, links to /events/[year]/[slug] and joins
+   * the search index.
+   */
+  detailsComingSoon?: boolean;
   /** API `logo_url` (square event mark), when available. */
   logoUrl?: string;
   /** Where this record came from — the live API or the curated fallback. */
@@ -314,6 +335,8 @@ type RawEvent = {
   points?: number;
   country?: Tournament["country"];
   image?: string;
+  /** See {@link Tournament.detailsComingSoon}. */
+  detailsComingSoon?: boolean;
 };
 
 // Badge-matched brand colors + icons per event (keyed by generated slug).
@@ -546,7 +569,11 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
       // undefined) because the card components treat `!== false` as internal —
       // when the events API is unreachable and we serve this curated list,
       // undefined sent ~28 cards to /events/{year}/{slug} 404s.
-      hasInternalPage: r.type === "ppa",
+      // ⚠ A "details coming soon" stop has NO page, whatever its type. Without
+      // this it would be `hasInternalPage: true` (it is a `ppa` row) and every
+      // card would link to a route that must not exist yet.
+      hasInternalPage: r.type === "ppa" && !r.detailsComingSoon,
+      detailsComingSoon: r.detailsComingSoon,
     };
   });
 }
@@ -606,15 +633,18 @@ const SCHEDULE: RawEvent[] = [
   // October 2026
   { name: "Veolia Chicago Cup", start: "2026-10-05", end: "2026-10-11", city: "Chicago", state: "IL", venue: "Life Time — Northbrook", type: "ppa", tier: "cup" },
   { name: "Sarasota PPA Challenger", start: "2026-10-09", end: "2026-10-11", city: "Englewood", state: "FL", type: "challenger" },
-  // ⚠ NO VENUE ON PURPOSE — THIS STOP TAKES ITS VENUE FROM THE FEED. Bryan
-  // Renahan, 8/12: "The venue for Virginia Beach is wrong. Should be 'Pickleball
-  // Virginia Beach'." It read "Virginia Beach Sports Center", hand-typed here in
-  // May, and `mapTournament` resolves `curated?.venue ?? t.venue_name` — so our
-  // typo outranked the feed, which has had `venue_name: "Pickleball Virginia
-  // Beach"` on all three editions (2024, 2025, 2026) the whole time. Two
-  // genuinely different buildings ~2 miles apart, so the map was wrong too.
-  // The opt-in lives in VENUE_FROM_FEED (lib/events-api.ts); re-adding a venue
-  // here silently overrides PB Tournaments again.
+  // ⚠ NO VENUE ON PURPOSE. Bryan Renahan, 8/12: "The venue for Virginia Beach is
+  // wrong. Should be 'Pickleball Virginia Beach'." It read "Virginia Beach Sports
+  // Center", hand-typed here in May, and back then the mapper resolved
+  // `curated?.venue ?? t.venue_name` — so our typo outranked the feed, which has
+  // had `venue_name: "Pickleball Virginia Beach"` on all three editions (2024,
+  // 2025, 2026) the whole time. Two genuinely different buildings ~2 miles
+  // apart, so the map was wrong with it.
+  //
+  // The feed now wins for every stop (`resolveVenue`, lib/events-api.ts), so
+  // this line is no longer what makes it work — but leave it off anyway: a
+  // curated venue is the fallback when the API is unreachable, and typing one
+  // here would be re-adopting a field we deliberately stopped owning.
   { name: "Mojo Energy Pouches Virginia Beach Open", slug: "virginia-beach-open", start: "2026-10-12", end: "2026-10-18", city: "Virginia Beach", state: "VA", type: "ppa", tier: "open" },
   { name: "PPA 1500 Australia Pickleball Open", start: "2026-10-13", end: "2026-10-18", city: "Australia", state: "", type: "international", country: "Australia" },
   { name: "PPA Asia 1500 Hong Kong Slam", start: "2026-10-19", end: "2026-10-25", city: "Hong Kong", state: "China", type: "international", country: "Asia" },
@@ -645,7 +675,21 @@ const SCHEDULE: RawEvent[] = [
 
   // March 2027
   { name: "Newport Beach Open", start: "2027-03-02", end: "2027-03-07", city: "Newport Beach", state: "CA", venue: "Tennis Club at Newport Beach", type: "ppa", tier: "open" },
-  { name: "Texas Open", start: "2027-03-08", end: "2027-03-14", city: "Dallas", state: "TX", venue: "The Courts of McKinney", type: "ppa", tier: "open" },
+  // ⚠ ANNOUNCED, LOCATION NOT SET. Wesley, 8/13: Texas Open, March 8-14 2027,
+  // "Location: TBD", on /events but with no page of its own and no link out.
+  //
+  // ⚠ THE ROW ALREADY EXISTED AND SAID "Dallas, TX · The Courts of McKinney" —
+  // a venue and a city nobody has confirmed for this edition, carried over from
+  // the May build. It never showed on /events (the feed has no row for this
+  // stop, and that page renders the feed), but /events/2027/texas-open WAS
+  // prerendered and reachable, publishing that location plus a templated Order
+  // of Play, a $1,063,327 purse and a Dallas trip guide. Same class as the 36
+  // fabricated international pages (8/6). `detailsComingSoon` closes the page
+  // and puts the card on /events instead.
+  //
+  // When the venue is confirmed: set `city`/`state`/`venue`, drop the flag, and
+  // restore a trip guide (the Dallas one is deleted — see lib/event-guides.ts).
+  { name: "Texas Open", start: "2027-03-08", end: "2027-03-14", city: "TBD", state: "", type: "ppa", tier: "open", detailsComingSoon: true },
   { name: "PPA Australia 250 Sydney Finals", start: "2027-03-17", end: "2027-03-21", city: "Sydney", state: "Australia", type: "international", country: "Australia" },
   // ⚠ Feed name + pinned slug. NOTE this one is SHORTER than what we had — the
   // feed drops "at Black Desert Resort". Flagged to Jeff; if the resort should
