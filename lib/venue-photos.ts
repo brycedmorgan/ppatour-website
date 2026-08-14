@@ -114,6 +114,19 @@ const HERO_OVERRIDE_BY_EVENT_SLUG: Record<string, string> = {
   // index instead of on purpose. Do NOT read this as a venue/aerial and do NOT
   // reuse it as one; if Seattle's own venue art ever lands, replace it here.
   "seattle-ppa-challenger": "/ppa/events/seattle-ppa-challenger.jpg",
+  // Wesley, 8/14 — the tour's own photography for these two stops, replacing
+  // index-cycled GENERIC_IMAGES action shots that had nothing to do with either
+  // event. Both are packed-stadium crowd shots at the event itself:
+  //   texas-open  TEXAS OPEN_CROWD_SEMIS-3      (blue court, semifinals)
+  //   atlanta     ATL SLAM_CROWD_MXD QTRS-26    (green court, mixed quarters —
+  //               the venue scoreboard reads ATLANTA CHAMPIONSHIP)
+  //
+  // ⚠ TEXAS OPEN'S 2027 LOCATION IS TBD (8/13) AND THIS PHOTO DOES NOT CHANGE
+  // THAT. It is a scene from a past edition, the same way every other card here
+  // is, and the card still reads "Location TBD" — but do not let it become the
+  // reason someone "confirms" a venue. The venue comes from the feed.
+  "texas-open": "/ppa/events/texas-open.jpg",
+  "atlanta-pickleball-championships": "/ppa/events/atlanta-pickleball-championships.jpg",
 };
 
 /**
