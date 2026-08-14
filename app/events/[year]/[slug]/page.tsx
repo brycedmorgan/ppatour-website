@@ -29,7 +29,7 @@ import { getBroadcast } from "@/lib/broadcast";
 import { getEventGuide, parkingFor, parkingText } from "@/lib/event-guides";
 import { ParkingDetails } from "@/components/events/ParkingDetails";
 import { getEventSchedule } from "@/lib/event-schedule";
-import { getEvents, takesVenueFromFeed } from "@/lib/events-api";
+import { getEvents } from "@/lib/events-api";
 import { getArticlesForEvent } from "@/lib/news-articles";
 import {
   daysUntil,
@@ -93,14 +93,17 @@ async function resolveEvent(year: string, slug: string): Promise<Resolved> {
   // is checked first — so without this the API name would silently never
   // appear on the one page that matters most.
   //
-  // ⚠ THE VENUE IS THE SECOND FIELD TO NEED THIS OVERLAY (Bryan Renahan, 8/12).
-  // Opt-in per event via `takesVenueFromFeed`, NOT for the whole calendar —
-  // most stops are curated on purpose, and Cincinnati must keep showing no
-  // venue whatever the feed says. Without this line the /events card and this
-  // page would name two different buildings for the same tournament, which is
-  // the trap the 8/3 name change hit: wiring the mapper alone is half the site.
+  // ⚠ THE VENUE IS THE SECOND FIELD TO NEED THIS OVERLAY (Wesley, 8/13), and it
+  // is the same trap the name hit: wiring `mapTournament` alone fixes the
+  // /events cards and leaves THIS page — the one that matters most — on the old
+  // venue, so the two disagree about the same tournament.
+  //
+  // No policy lives here. `live.venue` is already the answer `resolveVenue`
+  // settled (feed first, curated when the feed can't answer), so this only has
+  // to prefer the live record. `|| t.venue` covers the stop the feed has never
+  // heard of and the API being unreachable.
   const name = live?.name && live.name !== t.name ? live.name : t.name;
-  const venue = takesVenueFromFeed(t.slug) && live?.venue ? live.venue : t.venue;
+  const venue = live?.venue || t.venue;
   const event = name !== t.name || venue !== t.venue ? { ...t, name, venue } : t;
 
   /**

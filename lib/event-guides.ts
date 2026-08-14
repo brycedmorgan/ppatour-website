@@ -249,8 +249,11 @@ export const eventGuides: Record<string, EventGuide> = {
       { name: "Red Rock Canyon", tag: "Outdoors", note: "20 min · hikes + scenic drive" },
     ],
   },
+  // ⚠ No mapQuery — it derives from the feed's venue, which registers this stop
+  // as "Life Time North Shore Sport & Racquetball". Still in Northbrook, so the
+  // getting-there line below stands. The pin used to be typed here and so could
+  // not follow a rename.
   "veolia-chicago-cup": {
-    mapQuery: "Life Time Northbrook, IL",
     airport: "ORD",
     airportNote: "O'Hare · ~20 min to venue",
     gettingThere:
@@ -342,8 +345,10 @@ export const eventGuides: Record<string, EventGuide> = {
       { name: "Daytona Beach Boardwalk", tag: "Beach", note: "Pier, rides, and the sand" },
     ],
   },
+  // ⚠ No mapQuery — the feed names the courts, not just the campus
+  // ("Pepperdine University - Ralphs-Straus Tennis Center"), which is a better
+  // pin than the "Pepperdine University, Malibu, CA" this used to carry.
   "veolia-malibu-cup": {
-    mapQuery: "Pepperdine University, Malibu, CA",
     airport: "LAX",
     airportNote: "LAX · ~50 min up the PCH",
     gettingThere:
@@ -402,8 +407,9 @@ export const eventGuides: Record<string, EventGuide> = {
       { name: "Walker Art Center", tag: "Culture", note: "Sculpture garden + galleries" },
     ],
   },
+  // ⚠ No mapQuery — this one only ever pinned the CITY, so the map never showed
+  // the courts at all. The feed registers the stop at "The Courts, Cape Coral".
   "cape-coral-open": {
-    mapQuery: "Cape Coral, FL",
     airport: "RSW",
     airportNote: "Southwest Florida Intl · ~30 min to venue",
     gettingThere:
@@ -422,12 +428,16 @@ export const eventGuides: Record<string, EventGuide> = {
       { name: "Sanibel Island", tag: "Beach", note: "Shelling + lighthouse · 45 min" },
     ],
   },
+  // ⚠ THE VENUE WAS RENAMED AND WE HADN'T NOTICED. Bell Bank Park is now
+  // Arizona Athletic Grounds — the feed says so, and our own Arizona Open row
+  // has used the new name for the same site all along. The pin and the
+  // getting-there line both still said Bell Bank Park. The pin now derives; the
+  // sentence names no venue, so it can't go stale on the next rename.
   "carvana-mesa-cup": {
-    mapQuery: "Bell Bank Park, Mesa, AZ",
     airport: "PHX",
     airportNote: "Sky Harbor · ~20 min to venue",
     gettingThere:
-      "PHX Sky Harbor is 20 minutes from Bell Bank Park. Rent a car for easy hops to Scottsdale and the desert.",
+      "PHX Sky Harbor is 20 minutes from the venue. Rent a car for easy hops to Scottsdale and the desert.",
     hotels: [
       {
         name: "Four Points by Sheraton Mesa Gateway",
@@ -458,8 +468,9 @@ export const eventGuides: Record<string, EventGuide> = {
       { name: "Usery Mountain Park", tag: "Outdoors", note: "Desert hikes at sunrise" },
     ],
   },
+  // ⚠ No mapQuery — the club's registered name is "The Tennis and Pickleball
+  // Club at Newport Beach"; this pinned the older "Tennis Club at Newport Beach".
   "newport-beach-open": {
-    mapQuery: "Tennis Club at Newport Beach, CA",
     airport: "SNA",
     airportNote: "John Wayne / OC · ~10 min to venue",
     gettingThere:

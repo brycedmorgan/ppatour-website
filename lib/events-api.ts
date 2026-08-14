@@ -149,40 +149,81 @@ const NAME_OVERRIDE_BY_SLUG: Record<string, string> = {
 };
 
 /**
- * Stops that take their VENUE from the feed instead of the curated row (Bryan
- * Renahan → Wesley, 8/12: Virginia Beach was publishing "Virginia Beach Sports
- * Center" when the tour plays at "Pickleball Virginia Beach" — two different
- * buildings ~2 miles apart, so the map was wrong with it).
+ * ⚠ VENUES COME FROM THE FEED (Wesley, 8/13), the same ruling names got on 8/3.
+ * `ppa_tournaments` is the tour's own system of record: an event plays wherever
+ * it is registered as playing, and a venue corrected there now reaches the site
+ * with no code change — hero, quick facts, venue guide, the map pin, the
+ * concierge and search all at once.
  *
- * ⚠ WHY THIS IS A LIST AND NOT A RULE. The obvious version — "prefer the feed
- * whenever the curated row names no venue" — cannot be used: `buildSchedule`
- * defaults `venue` to the CITY, so a row with no venue is indistinguishable
- * from one venued at its city name, and the feed still answers for it. Applied
- * blanket, that would republish "Lindner Family Tennis Center" on the
- * Cincinnati stops, which Bryan banned outright on 8/4 (the 2027 row's
- * `venue_name` is literally "TBD"). So opting in is per event, by hand.
+ * This reverses `curated?.venue ?? t.venue_name`, which is how Virginia Beach
+ * came to publish "Virginia Beach Sports Center" for two seasons while the feed
+ * said "Pickleball Virginia Beach" (Bryan Renahan, 8/12 — two different
+ * buildings ~2 miles apart, so the map was wrong with it). Hand-typed in May,
+ * outranking the feed, and nothing could correct it but a commit.
  *
- * ⚠ AND IT IS A LIST AND NOT A HARDCODED STRING BECAUSE THE POINT IS TO STOP
- * OWNING THIS FIELD. Typing "Pickleball Virginia Beach" into the curated row
- * would fix today's page and leave the next rename stale in exactly the same
- * way. Listed here, a correction made in PB Tournaments reaches the site on its
- * own — venue, quick facts, venue guide, map, concierge and search together.
- *
- * Keyed by the RESOLVED (curated) slug. The curated row stays the fallback for
- * when the API is unreachable.
+ * ⚠ MEASURED BEFORE IT SHIPPED: 21 of the 27 events the feed and the curated
+ * calendar both carry disagreed. Most were us being stale — Mesa still said
+ * "Bell Bank Park" (renamed Arizona Athletic Grounds), the Masters said "Hyatt
+ * Regency Indian Wells" where the feed AND our own venue-photo library say
+ * Mission Hills, and five Challengers named only their city. Those are the win.
+ * The rest is what the two guards below exist for.
  */
-const VENUE_FROM_FEED = new Set<string>(["virginia-beach-open"]);
+const VENUE_PLACEHOLDER = /^(tba|tbd|n\.?\/?a\.?|none|unknown|test)$/i;
 
 /**
- * ⚠ EXPORTED BECAUSE THE MAPPER IS ONLY HALF THE SITE. The event page's
- * `resolveEvent` checks the CURATED list first and a curated event never
- * reaches `mapTournament`, so wiring this here alone fixed the /events cards
- * and left the event's own page — the one that matters most — still showing
- * the old venue. That is the exact trap the 8/3 name change hit. Both paths
- * read this one predicate so they cannot disagree about the same event.
+ * Events where the CURATED venue still wins because the feed's is demonstrably
+ * wrong — a misspelling, not a rename we're behind on.
+ *
+ * ⚠ EVERY LINE HERE IS A BUG REPORT, NOT A PREFERENCE, AND THE REAL FIX IS
+ * UPSTREAM. Correct the row in PB Tournaments and delete the line; the feed
+ * takes over on the next revalidate. Do NOT add a stop here because the feed's
+ * spelling is merely uglier than ours — "Life Time Arden" for our "Life Time —
+ * Arden" is the feed being plain, not wrong, and it is allowed through on
+ * purpose. The whole point of this change is to stop owning this field.
  */
-export function takesVenueFromFeed(slug: string): boolean {
-  return VENUE_FROM_FEED.has(slug);
+const VENUE_CURATED_WINS: Record<string, string> = {
+  // Feed: "Cary Tennis Center". The Town of Cary's own facility is Cary Tennis
+  // Park (carync.gov). Wrong on the flagship event, 18 days out.
+  "veolia-pickleball-national-championships": "Cary Tennis Center",
+  // Feed: "Life Time Peach Tree Corners". Peachtree Corners is one word — it is
+  // the name of the city the club is in.
+  "atlanta-pickleball-championships": "Life Time Peach Tree Corners",
+  // Feed: "Lifetime Lakeville". The brand is two words, "Life Time", as the
+  // feed itself writes it on Arden, Rancho San Clemente and North Shore.
+  "minneapolis-indoor-open": "Lifetime Lakeville",
+};
+
+/**
+ * The venue an event actually plays at: the feed's, unless it can't answer.
+ *
+ * ⚠ TWO GUARDS, AND BOTH ARE LOAD-BEARING RATHER THAN DEFENSIVE:
+ *
+ * 1. A PLACEHOLDER IS NOT AN ANSWER. Cincinnati 2027's `venue_name` is the
+ *    literal string "TBD", and publishing "Venue: TBD" is worse than the city
+ *    we show today — worse still because Bryan banned naming a Cincinnati venue
+ *    outright on 8/4, and this is the field that would have crept one back in.
+ * 2. THE CITY IS NOT A VENUE. Some rows repeat the city in `venue_name`, which
+ *    carries no information the card doesn't already print, so a curated venue
+ *    beats it.
+ *
+ * Falling back to the curated row is also what keeps every stop the feed has
+ * never heard of working — the international sister-tour stops, Texas Open 2027,
+ * PPA Open — and what the site serves when the API is unreachable.
+ */
+export function resolveVenue(
+  slug: string,
+  curatedVenue: string | undefined,
+  feedVenue: string | undefined,
+  feedCity: string | undefined,
+): string {
+  const curated = (curatedVenue ?? "").trim();
+  const feed = (feedVenue ?? "").trim();
+  const city = (feedCity ?? "").trim();
+
+  if (VENUE_CURATED_WINS[slug] && curated) return curated;
+  if (!feed || VENUE_PLACEHOLDER.test(feed)) return curated || city;
+  if (feed.toLowerCase() === city.toLowerCase() && curated) return curated;
+  return feed;
 }
 
 /* ---- field inference ---- */
@@ -354,11 +395,9 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     name: NAME_OVERRIDE_BY_SLUG[slug] ?? (name || curated?.name || ""),
     city: curated?.city ?? (t.venue_city || ""),
     state: curated?.state ?? (t.venue_state || ""),
-    // ⚠ Curated wins by default — see VENUE_FROM_FEED for the exceptions and
-    // for why this isn't inverted wholesale.
-    venue: VENUE_FROM_FEED.has(slug)
-      ? t.venue_name || curated?.venue || t.venue_city || ""
-      : curated?.venue ?? (t.venue_name || t.venue_city || ""),
+    // ⚠ The feed's venue wins — see `resolveVenue` for the two guards and for
+    // the three events whose feed row is wrong enough to override.
+    venue: resolveVenue(slug, curated?.venue, t.venue_name, t.venue_city),
     startDate,
     endDate,
     // Tixr first, then whatever the curated record says, then the tier table.
