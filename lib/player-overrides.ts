@@ -11,6 +11,10 @@
  *     instead of a PBC search.
  *   - featuredMatchUrl — a pinned YouTube match the athlete's "Watch" section leads with,
  *     for players whose highlight feed is empty or full of low-quality clips (Connor, 8/7).
+ *   - heroImage — the full-bleed action shot behind the profile hero (see lib/athlete-heroes.ts).
+ *     ⚠ Null for every pro today: Jackalope's photo library is keyed by VENUE, not by player,
+ *     so nothing over there can name a hero yet. The field is wired so that tagging heroes to
+ *     players in Jackalope lights up all 179 profiles with no code change here.
  *
  * Jackalope keys players by NAME (there is no slug over there), so this matches on a
  * normalized name. Fetched server-side under 5-min ISR; empty/unreachable → no
@@ -43,6 +47,13 @@ export type PlayerOverride = {
   image: string | null;
   featuredMatchUrl: string | null;
   pbcUrl: string | null;
+  /**
+   * ⚠ NOT the same field as `image`, which is the PADDLE photo. This is a photo of the
+   * ATHLETE — the profile hero. Two image fields on one record is a footgun, so they are
+   * never defaulted to each other: a paddle cut-out stretched across a player's hero band
+   * is a worse page than the plain navy one.
+   */
+  heroImage: string | null;
 };
 
 type FeedPaddle = {
@@ -52,6 +63,7 @@ type FeedPaddle = {
   pbcUrl?: string | null;
   image?: string | null;
   featuredMatchUrl?: string | null;
+  heroImage?: string | null;
 };
 
 /**
@@ -122,8 +134,9 @@ async function fetchOverrides(): Promise<Map<string, PlayerOverride>> {
       const featuredMatchUrl = (p.featuredMatchUrl || "").trim() || null;
       const pbcUrl = (p.pbcUrl || "").trim() || null;
       const image = (p.image || "").trim() || null;
+      const heroImage = (p.heroImage || "").trim() || null;
       // Nothing worth overriding with → skip (leaves the static fallback in place).
-      if (!built && !featuredMatchUrl && !pbcUrl && !image) continue;
+      if (!built && !featuredMatchUrl && !pbcUrl && !image && !heroImage) continue;
       map.set(key, {
         paddle: built?.paddle ?? null,
         searchTerm: built?.searchTerm ?? null,
@@ -131,6 +144,7 @@ async function fetchOverrides(): Promise<Map<string, PlayerOverride>> {
         image,
         featuredMatchUrl,
         pbcUrl,
+        heroImage,
       });
     }
   } catch {

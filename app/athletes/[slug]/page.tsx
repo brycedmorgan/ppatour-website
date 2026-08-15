@@ -25,6 +25,7 @@ import { getAthleteVideoData } from "@/lib/athlete-videos";
 import { AthleteVideos } from "@/components/athletes/AthleteVideos";
 import { resolveGear } from "@/lib/athlete-gear";
 import { paddleImageFor } from "@/lib/paddle-images";
+import { athleteHeroFor } from "@/lib/athlete-heroes";
 import { playerOverrideFor } from "@/lib/player-overrides";
 import { paddleFor } from "@/lib/athlete-paddles";
 import { paddleUpdateFor } from "@/lib/paddle-updates";
@@ -288,7 +289,15 @@ export default async function AthletePage({ params }: Params) {
    * pro the feed doesn't cover or when the feed is unreachable. Also carries the paddle
    * photo and the pinned "Buy This Paddle" URL. One fetch, used by both equipment surfaces.
    */
-  const liveOverride = SHOW_EQUIPMENT ? await playerOverrideFor(a.name) : null;
+  /**
+   * ⚠ Fetched unconditionally, then narrowed — `heroImage` is NOT equipment and must not
+   * disappear if `SHOW_EQUIPMENT` is ever switched off again (it was, on 8/5 pt. 20).
+   * The fetch is memoized + ISR-cached, so reading it here costs nothing extra.
+   */
+  const override = await playerOverrideFor(a.name);
+  const liveOverride = SHOW_EQUIPMENT ? override : null;
+  /** The full-bleed action shot behind the hero. Null → the plain navy band. */
+  const hero = athleteHeroFor(a.slug, override?.heroImage);
   const knownPaddle = liveOverride?.paddle ?? paddleRecord?.paddle ?? null;
   /**
    * A paddle change the event team sent to the website before it reached
@@ -507,6 +516,42 @@ export default async function AthletePage({ params }: Params) {
       />
       {/* Hero */}
       <section className="relative isolate overflow-hidden bg-ppa-navy text-white">
+        {/* Full-bleed action shot, when this pro has one. The scrim is what makes the
+            hero work as a hero rather than a photo with text on it: the name, the rank
+            chip and the stat strip all have to stay legible over whatever the photo is
+            doing, and these crops vary wildly (court blue, night black, crowd). */}
+        {hero && (
+          <div aria-hidden className="absolute inset-0 -z-10">
+            {hero.src.startsWith("/") ? (
+              <Image
+                src={hero.src}
+                alt=""
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover"
+                style={{ objectPosition: hero.position ?? "50% 30%" }}
+              />
+            ) : (
+              /* Feed-supplied hero from a host next/image has no remotePattern for —
+                 plain <img>, same call as the scraped paddle photo below. */
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={hero.src}
+                alt=""
+                className="absolute inset-0 h-full w-full object-cover"
+                style={{ objectPosition: hero.position ?? "50% 30%" }}
+              />
+            )}
+            {/* ⚠ `.scrim-hero` — the house scrim, NOT a hand-rolled Tailwind gradient.
+                The first pass stacked `bg-ppa-navy/72` under a second gradient and the
+                two multiplied out to ~0.79–1.0 alpha: the photo loaded, painted, and was
+                invisible. This one is bottom-weighted (0.97 at the foot → 0.08 at the
+                top), which matches where the hero puts its content — name and portrait
+                sit on the floor of the band, the top half is free to be photograph. */}
+            <div className="absolute inset-0 scrim-hero" />
+          </div>
+        )}
         {/* soft brand glow behind the portrait for depth */}
         <div
           aria-hidden
@@ -568,6 +613,11 @@ export default async function AthletePage({ params }: Params) {
                 7/29. Divisions still drive gender inference and the rankings
                 board lookup, they're just not printed. */}
           </div>
+          {hero?.credit && (
+            <span className="pointer-events-none absolute bottom-2 right-4 text-[10px] uppercase tracking-[0.14em] text-white/40">
+              {hero.credit}
+            </span>
+          )}
         </div>
 
         {/* Broadcast-style stat strip — marquee numbers up front */}

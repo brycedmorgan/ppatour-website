@@ -42,6 +42,63 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-14 — Athlete profiles get a hero image slot; Anna Leigh Waters is the first
+
+- Bryce, from ALW's live profile: *"we need a hero image here. Should we set that within Jackalope
+  or manually?"* Answer built both ways — **the slot is code, the photo is data, and the data can
+  come from Jackalope.** Hero renders on `/athletes/[slug]`; ALW is the first one filled.
+- **⚠ THERE WAS NO HERO SLOT AT ALL BEFORE THIS.** The hero was a flat `bg-ppa-navy` band with the
+  224px square studio headshot. Nothing on the page could accept a photo, so "set it in Jackalope"
+  was not an available answer to Bryce's question — it needed the slot first.
+- **⚠ AND JACKALOPE STILL CANNOT NAME ONE, WHICH IS THE REAL ASK.** Its Brand Photo Library
+  (`ziff/brand-photos.js`, ~1,900 rows) is keyed by **VENUE**, not by player: the 53 `type:'athletes'`
+  rows are all captioned "Player walk-in" and filed under `mission-hills-ca`, `mckinney-tx`, … So
+  `PlayerOverride.heroImage` is **wired and reads null for all 179 pros today**. Tagging heroes to
+  players in Jackalope's Pro Player Central lights the whole roster up **with no code change here**.
+- **Two sources, in order** (`lib/athlete-heroes.ts` → `athleteHeroFor(slug, feedHero)`): the live
+  Jackalope field first, then a curated in-repo `HEROES_BY_SLUG` fallback, then null. **Null is the
+  normal case and renders exactly the navy band the page has always had** — verified on Ben Johns.
+- **⚠ A HERO IS NEVER DERIVED, INFERRED OR DEFAULTED.** No falling back to the headshot, no picking
+  an event photo from the venue library by city. A wide action shot behind a player's name reads as
+  *"this is them"*, and across 179 profiles that is a claim about a person — same rule as the
+  8/5 paddle-endorsement and article-player-rail work. One curated entry per pro, or nothing.
+- **⚠ `heroImage` IS A SECOND IMAGE FIELD ON `PlayerOverride` AND IT IS NOT `image`.** `image` is the
+  PADDLE photo. They are never defaulted to each other; a paddle cut-out stretched across a hero band
+  is a worse page than the plain navy one. Both are documented on the type.
+- **⚠ THE OVERRIDE FETCH MOVED OUT FROM UNDER `SHOW_EQUIPMENT`.** It was
+  `SHOW_EQUIPMENT ? await playerOverrideFor(a.name) : null`, and a hero is not equipment — that flag
+  was switched **off** once already (8/5 pt. 20). Now fetched unconditionally into `override` and
+  narrowed to `liveOverride` for the paddle surfaces. Costs nothing: the fetch is memoized + ISR-cached.
+- **⚠ THE FIRST SCRIM MADE THE PHOTO INVISIBLE, AND IT LOOKED LIKE A BROKEN IMAGE.** A hand-rolled
+  `bg-ppa-navy/72` under a second `from-ppa-navy via-…/55` gradient multiplied out to **~0.79–1.0
+  alpha** — the image loaded (`naturalWidth` 806), painted, sat at opacity 1 in the right rect, and
+  showed nothing. **Diagnosed by measuring the element, not by re-reading the JSX.** Replaced with
+  the house **`.scrim-hero`** from globals.css (0.97 at the foot → 0.08 at the top), which is already
+  contrast-tuned and matches where this hero puts its content: name and portrait on the floor of the
+  band, top half free to be photograph. **Don't hand-roll a scrim on this site — there are four.**
+- **Absolute feed URLs render as a plain `<img>`**, not `next/image` — a Jackalope Blob host has no
+  `remotePattern` and the optimizer would 400 it. Same call as the scraped paddle photo.
+- **ALW's photo is `public/ppa/action-waters-bright.jpg`** — real PPA capture, her mid-backhand at the
+  kitchen line, cropped `52% 22%`. **⚠ It is a doubles shot and Anna Bright is in frame on the right
+  at desktop widths**; `object-cover` on a 1512×462 band can only crop vertically, so no crop removes
+  her. Mobile (390) frames ALW alone and reads better. A solo ALW action shot is a straight swap of
+  one `src` — worth asking the photo team for one.
+- **Verified over CDP at a true 390 and 1440** (`scratchpad/cdp-hero.mjs` — ⚠ the extension's
+  `resize_window` reported success and left the layout viewport at 1512, the 7/31 pt. 5 trap again):
+  **zero horizontal overflow at both**, hero image loaded and filling the section exactly, and
+  **ben-johns renders no hero** at either width. tsc + eslint clean on all three changed files.
+- **⚠ SHIPPED FROM A CLEAN WORKTREE OFF origin/main, AND THAT IS NOT CEREMONY HERE.** The repo dir
+  held **47 dirty files** of parallel vacations / SEO work and local `main` was **42 commits behind**
+  origin. The hero was written against the stale page, so copying that file up would have **deleted
+  the entire `lib/paddle-updates.ts` pending-paddle layer** (8/13 pt. 2, Adam Harvey / MEHAU) that a
+  parallel session had already pushed. Only the three hero hunks were re-applied on top of origin's
+  version — **51 insertions, 1 deletion, `paddleUpdateFor` intact** — and nothing else in the dirty
+  tree was touched.
+- **Next:** the ask to Dillon Segur / Liv Borski — a `heroImage` field **and per-player photo tagging**
+  in Pro Player Central, same shape as the outstanding `pbcUrl` ask from 8/13 · fill `HEROES_BY_SLUG`
+  for the marquee pros in the meantime, one line each · ask the photo team for a **solo ALW action
+  shot** to replace the doubles frame.
+
 ### 2026-08-13 (pt. 2) — Adam Harvey is on a MEHAU; the paddle-update layer retires itself
 
 - Event team via Wesley: put Adam Harvey on the **"MEHAU S5 AIRPOOM™ Aerodynamic Pickleball Paddle"**,
