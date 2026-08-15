@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-14T14:08:22Z",
+  "updated_at": "2026-08-15T13:22:46Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -2068,6 +2068,89 @@
       "type": "event_added",
       "event_id": "203167",
       "event": "PPA Daytona Beach Sunday - Championships"
+    },
+    {
+      "at": "2026-08-15T13:22:46Z",
+      "type": "ticket_added",
+      "event_id": "183665",
+      "event": "Major League Pickleball Newport Beach - Playoffs",
+      "ticket": "3 Day VIP Lounge Access",
+      "base_price": 800,
+      "all_in_price": 869.77
+    },
+    {
+      "at": "2026-08-15T13:22:46Z",
+      "type": "ticket_added",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday",
+      "ticket": "Saturday Full Day Courtside SRO",
+      "base_price": 40,
+      "all_in_price": 46.56
+    },
+    {
+      "at": "2026-08-15T13:22:46Z",
+      "type": "ticket_added",
+      "event_id": "183676",
+      "event": "Major League Pickleball Newport Beach - Sunday",
+      "ticket": "Sunday Courtside SRO",
+      "base_price": 40,
+      "all_in_price": 46.56
+    },
+    {
+      "at": "2026-08-15T13:22:46Z",
+      "type": "ticket_added",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Thursday: Free Youth Clinic",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-15T13:22:46Z",
+      "type": "price_change",
+      "event_id": "197214",
+      "event": "PPA Las Vegas Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "base_price": {
+        "from": 350,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 383.56,
+        "to": 383.56
+      }
+    },
+    {
+      "at": "2026-08-15T13:22:46Z",
+      "type": "availability_change",
+      "event_id": "197214",
+      "event": "PPA Las Vegas Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-15T13:22:46Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "2026 Pickleball World Championships Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 546.87,
+        "to": 384.43
+      }
+    },
+    {
+      "at": "2026-08-15T13:22:46Z",
+      "type": "event_removed",
+      "event_id": "183669",
+      "event": "Major League Pickleball Newport Beach - Friday"
     }
   ]
 }

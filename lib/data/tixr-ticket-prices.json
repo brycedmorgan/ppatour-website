@@ -1,11 +1,11 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-08-14T14:08:22Z",
-  "event_count": 66,
-  "ticket_type_count": 964,
+  "generated_at": "2026-08-15T13:22:46Z",
+  "event_count": 65,
+  "ticket_type_count": 955,
   "series_breakdown": {
-    "Major League Pickleball": 15,
+    "Major League Pickleball": 14,
     "PPA Challenger Series": 4,
     "PPA Tour": 47
   },
@@ -16,115 +16,6 @@
     "status": "Tixr event publication status."
   },
   "events": [
-    {
-      "event_id": "183669",
-      "name": "Major League Pickleball Newport Beach - Friday",
-      "series": "Major League Pickleball",
-      "status": "PUBLISHED",
-      "start_date": "2026-08-14",
-      "end_date": "2026-08-15",
-      "venue": {
-        "name": "Newport Beach Tennis and Pickleball Club",
-        "city": "Newport Beach",
-        "state": "CA"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-newport-beach-friday-183669",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "North Box Suites",
-          "category": "BOOTH",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 5407.75
-        },
-        {
-          "name": "South Box Suites",
-          "category": "BOOTH",
-          "sale_state": "OPEN",
-          "base_price": 4500,
-          "all_in_price": 4867.51
-        },
-        {
-          "name": "Friday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 25,
-          "all_in_price": 30.35
-        },
-        {
-          "name": "GOVX Tickets",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Pickleball Vacations",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 91.83
-        },
-        {
-          "name": "Courtside Reserved*",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 120,
-          "all_in_price": 135.05
-        },
-        {
-          "name": "Courtside*",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 70,
-          "all_in_price": 81.03
-        },
-        {
-          "name": "Courtside**",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 60,
-          "all_in_price": 70.23
-        },
-        {
-          "name": "Courtside***",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 50,
-          "all_in_price": 57.36
-        },
-        {
-          "name": "Reserved VIP",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 300,
-          "all_in_price": 329.54
-        },
-        {
-          "name": "Reserved VIP*",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 275,
-          "all_in_price": 302.53
-        },
-        {
-          "name": "Reserved VIP**",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 250,
-          "all_in_price": 275.51
-        }
-      ],
-      "parent_event_id": "183665"
-    },
     {
       "event_id": "183665",
       "name": "Major League Pickleball Newport Beach - Playoffs",
@@ -153,6 +44,13 @@
           "sale_state": "SOLD_OUT",
           "base_price": null,
           "all_in_price": 17887.18
+        },
+        {
+          "name": "3 Day VIP Lounge Access",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 800,
+          "all_in_price": 869.77
         },
         {
           "name": "Friday",
@@ -397,6 +295,13 @@
           "sale_state": "SOLD_OUT",
           "base_price": null,
           "all_in_price": 0
+        },
+        {
+          "name": "Saturday Full Day Courtside SRO",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
         },
         {
           "name": "Saturday Full Day VIP Lounge Access",
@@ -731,6 +636,13 @@
           "sale_state": "SOLD_OUT",
           "base_price": null,
           "all_in_price": 0
+        },
+        {
+          "name": "Sunday Courtside SRO",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
         },
         {
           "name": "Sunday Grounds Pass",
@@ -1458,6 +1370,13 @@
         },
         {
           "name": "Thursday: Family Night",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 0,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday: Free Youth Clinic",
           "category": "GA",
           "sale_state": "OPEN",
           "base_price": 0,
@@ -3973,8 +3892,8 @@
         {
           "name": "Sunday VIP",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 350,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 383.56
         }
       ],
@@ -5922,13 +5841,6 @@
           "name": "Sunday VIP",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 350,
-          "all_in_price": 384.43
-        },
-        {
-          "name": "Sunday VIP",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 400,
           "all_in_price": 438.58
         },
@@ -5938,6 +5850,13 @@
           "sale_state": "HIDE",
           "base_price": null,
           "all_in_price": 546.87
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 384.43
         }
       ],
       "parent_event_id": "166345"
