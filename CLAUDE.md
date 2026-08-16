@@ -78,11 +78,23 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   band, top half free to be photograph. **Don't hand-roll a scrim on this site — there are four.**
 - **Absolute feed URLs render as a plain `<img>`**, not `next/image` — a Jackalope Blob host has no
   `remotePattern` and the optimizer would 400 it. Same call as the scraped paddle photo.
-- **ALW's photo is `public/ppa/action-waters-bright.jpg`** — real PPA capture, her mid-backhand at the
-  kitchen line, cropped `52% 22%`. **⚠ It is a doubles shot and Anna Bright is in frame on the right
-  at desktop widths**; `object-cover` on a 1512×462 band can only crop vertically, so no crop removes
-  her. Mobile (390) frames ALW alone and reads better. A solo ALW action shot is a straight swap of
-  one `src` — worth asking the photo team for one.
+- **ALW's photo is `public/ppa/heroes/anna-leigh-waters.jpg`** — the Carvana Masters women's doubles
+  final, supplied by Bryce the same evening. She is the sole subject at both breakpoints. It replaced
+  a first pass on `action-waters-bright.jpg`, which put **Anna Bright in frame on the right at desktop
+  widths** and could not be cropped out (`object-cover` on a wide band only crops vertically). That
+  file stays — the homepage, `tour-programs` and `placeholder-data` all still use it.
+- **⚠ ATTRIBUTION CAME FROM PROVENANCE, NOT FROM LOOKING AT THE FRAME.** The source is named
+  `THE MASTERS_ALW X AB_WD FINAL-3.jpg` and Bryce sent it; the corroborating tell is the **JOOLA
+  paddle at the left edge**, which is the partner's — ALW plays a Franklin, Bright a JOOLA. Most tour
+  photography is doubles and both women in a PPA women's final are frequently blonde, so "identify
+  the face and publish it" is precisely how the wrong athlete lands on someone's own page. Heroes now
+  live in `public/ppa/heroes/<slug>.jpg` so the pairing is legible from the filesystem.
+- **⚠ `position` IS MEASURED AND HAS TO SERVE TWO OPPOSITE CROPS.** `53% 52%`: desktop shows the full
+  width and slices ~48% of the height, so **Y** frames head-to-hips; at 390×502 the scaled image is
+  754×502, the height fits exactly, and **only X does anything** — 53% centres her. A crop tuned on
+  one breakpoint alone will lose the player on the other.
+- Encoded to the house standard measured off the existing files: **2048×1365, mozjpeg q64, 163 KB**
+  from a 6456×4304 / 1.67 MB original (`action-waters-bright.jpg` is 2048×1365 / 280 KB).
 - **Verified over CDP at a true 390 and 1440** (`scratchpad/cdp-hero.mjs` — ⚠ the extension's
   `resize_window` reported success and left the layout viewport at 1512, the 7/31 pt. 5 trap again):
   **zero horizontal overflow at both**, hero image loaded and filling the section exactly, and

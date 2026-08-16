@@ -29,14 +29,34 @@ export type AthleteHero = {
 };
 
 /**
- * ⚠ ONE ENTRY PER PRO, AND THE PHOTO MUST BE OF THAT PRO. `action-waters-bright.jpg`
- * is Anna Leigh Waters and Anna Bright against Parenteau/Jardim — Waters is the
- * player at the kitchen line, upper-left of centre, which is what `position` frames.
+ * ⚠ ONE ENTRY PER PRO, AND THE PHOTO MUST BE OF THAT PRO — a hero is the one image on
+ * the site that asserts "this is them". Files live in `public/ppa/heroes/` named for the
+ * slug, so the pairing is legible from the filesystem and a mismatch is obvious.
+ *
+ * ⚠ AND MOST TOUR PHOTOGRAPHY IS DOUBLES, so "who is this" is a real question rather than
+ * a formality. Attribute from provenance — the source filename, or the person who sent
+ * it — never from looking at the frame and deciding. Both women in a PPA women's doubles
+ * final are blonde often enough that a confident guess is exactly how the wrong athlete's
+ * face ends up on someone's own page.
+ *
+ * Source encode: 2048px wide, mozjpeg q64, matching `public/ppa/action-waters-bright.jpg`
+ * (2048x1365, 280 KB) and Wesley's event photography.
  */
 const HEROES_BY_SLUG: Record<string, AthleteHero> = {
+  /**
+   * "THE MASTERS_ALW X AB_WD FINAL-3" — the Carvana Masters women's doubles final,
+   * supplied by Bryce 8/15. ALW is the player in frame; her partner Anna Bright is out
+   * of shot bar the JOOLA paddle at the left edge, which is the corroborating tell (ALW
+   * plays a Franklin, Bright a JOOLA).
+   *
+   * ⚠ `position` is measured, not eyeballed, and it has to serve two very different
+   * crops. Desktop shows the full width and slices ~48% of the height, so Y frames her
+   * head through her hips. Mobile is the opposite: at 390x502 the scaled image is
+   * 754x502, so the height fits exactly and only X does any work — 53% centres her.
+   */
   "anna-leigh-waters": {
-    src: "/ppa/action-waters-bright.jpg",
-    position: "52% 22%",
+    src: "/ppa/heroes/anna-leigh-waters.jpg",
+    position: "53% 52%",
     credit: "PPA Tour",
   },
 };
