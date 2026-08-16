@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-15T13:22:46Z",
+  "updated_at": "2026-08-16T13:23:17Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -2151,6 +2151,24 @@
       "type": "event_removed",
       "event_id": "183669",
       "event": "Major League Pickleball Newport Beach - Friday"
+    },
+    {
+      "at": "2026-08-16T13:23:17Z",
+      "type": "event_removed",
+      "event_id": "183673",
+      "event": "Major League Pickleball Newport Beach - Saturday"
+    },
+    {
+      "at": "2026-08-16T13:23:17Z",
+      "type": "event_removed",
+      "event_id": "201735",
+      "event": "Major League Pickleball Newport Beach - Saturday Evening Session"
+    },
+    {
+      "at": "2026-08-16T13:23:17Z",
+      "type": "event_removed",
+      "event_id": "201733",
+      "event": "Major League Pickleball Newport Beach - Saturday Morning Session"
     }
   ]
 }
