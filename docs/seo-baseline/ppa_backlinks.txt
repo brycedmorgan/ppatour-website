@@ -1,0 +1,2 @@
+ascore;total;domains_num;urls_num;ips_num;follows_num;nofollows_num;texts_num;images_num;forms_num;frames_num
+44;51496;4058;37100;4074;44943;6513;46356;5062;0;18

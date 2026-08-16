@@ -1,0 +1,16 @@
+domain;domain_ascore;backlinks_num
+brubakers.us;16;9421
+pickleballtelevision.com;6;7123
+flywheelsites.com;39;7071
+mailora.ai;2;1567
+pickleballunit.com;2;1377
+qzyhtek.com;2;1306
+unitedpickleball.com;28;1279
+pickleball.com;37;1044
+sfapickleball.org;17;1018
+pickleball-research.com;2;974
+bairdwealth.com;44;784
+dinkpoint.com;2;654
+prospect-central.blogspot.com;17;451
+esad.edu.br;4;371
+pickle-times.com;8;325

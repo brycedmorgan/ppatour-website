@@ -1,0 +1,16 @@
+Domain;Competitor Relevance;Common Keywords;Organic Keywords;Organic Traffic;Organic Cost;Adwords Keywords
+picklewave.com;0.60;946;4863;1591;97;0
+pickleball.com;0.50;1700;16906;26025;7918;0
+majorleaguepickleball.co;0.38;691;4315;24454;56637;0
+pickleballtournaments.com;0.32;726;22646;44498;8147;28
+thedinkpickleball.com;0.26;613;8227;7360;3487;0
+thekitchenpickle.com;0.19;565;6267;13259;6550;0
+theapp.global;0.18;217;965;2619;6407;0
+usapickleball.org;0.18;808;10420;121586;48946;0
+11pickles.com;0.17;210;1814;871;147;0
+dupr.com;0.15;386;4357;42024;17997;0
+unitedpickleball.com;0.13;177;853;1420;474;0
+paddletek.com;0.10;354;4302;17631;15774;9
+pickleballmax.com;0.10;129;1818;294;107;0
+justpaddles.com;0.10;447;10896;25526;12090;7
+playpickleball.com;0.09;695;32620;51153;12046;0

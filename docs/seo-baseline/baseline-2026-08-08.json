@@ -1,0 +1,98 @@
+{
+  "domain": "ppatour.com",
+  "canonical_host": "www.ppatour.com",
+  "snapshot_date": "2026-08-08",
+  "source": "SEMrush Analytics API (db=us) + Vercel Web Analytics",
+  "note": "Day-zero baseline for the Next.js rebuild (launched ~2026-08-04). SEMrush organic figures still reflect the pre-rebuild index; use this as the anchor to measure the migration's effect over the next 4-8 weeks.",
+  "semrush_us": {
+    "semrush_rank": 32350,
+    "organic_keywords": 11918,
+    "organic_traffic_monthly": 66522,
+    "organic_traffic_value_usd_monthly": 46296,
+    "paid_keywords": 0
+  },
+  "authority": {
+    "authority_score": 44,
+    "total_backlinks": 51496,
+    "referring_domains": 4058,
+    "referring_ips": 4074,
+    "follow_links": 44943,
+    "nofollow_links": 6513
+  },
+  "trend_organic_keywords": {
+    "2025-03": 46000,
+    "2026-02": 46039,
+    "2026-05": 24910,
+    "2026-06": 12892,
+    "2026-07": 11713,
+    "2026-08-current": 11918
+  },
+  "trend_organic_traffic": {
+    "2025-03": 106950,
+    "2026-02": 75835,
+    "2026-05": 62334,
+    "2026-06": 62900,
+    "2026-07": 62703,
+    "2026-08-current": 66522
+  },
+  "top_organic_keywords_by_traffic_share": [
+    {"kw": "ppa tour", "pos": 1, "volume": 18100, "traffic_pct": 21.76},
+    {"kw": "ppa pickleball", "pos": 1, "volume": 4400, "traffic_pct": 5.29},
+    {"kw": "ppa tour schedule", "pos": 1, "volume": 2400, "traffic_pct": 2.88},
+    {"kw": "anna leigh waters", "pos": 2, "volume": 22200, "traffic_pct": 1.00},
+    {"kw": "pickleball rankings", "pos": 1, "volume": 2400, "traffic_pct": 0.89},
+    {"kw": "pickleball televised", "pos": 3, "volume": 5400, "traffic_pct": 0.52},
+    {"kw": "ppa", "pos": 3, "volume": 49500, "traffic_pct": 0.59},
+    {"kw": "professional pickleball", "pos": 1, "volume": 1600, "traffic_pct": 0.31}
+  ],
+  "top_organic_competitors": [
+    {"domain": "pickleball.com", "common_kw": 1700, "org_kw": 16906},
+    {"domain": "pickleballtournaments.com", "common_kw": 726, "org_kw": 22646},
+    {"domain": "usapickleball.org", "common_kw": 808, "org_kw": 10420, "org_traffic": 121586},
+    {"domain": "playpickleball.com", "common_kw": 695, "org_kw": 32620, "org_traffic": 51153},
+    {"domain": "dupr.com", "common_kw": 386, "org_kw": 4357, "org_traffic": 42024},
+    {"domain": "thedinkpickleball.com", "common_kw": 613, "org_kw": 8227}
+  ],
+  "vercel_web_analytics_since_launch_aug4_8": {
+    "visitors": 21818,
+    "pageviews": 65673,
+    "top_routes": [
+      {"route": "/athletes/[slug]", "visitors": 6001, "pageviews": 15336},
+      {"route": "/rankings", "visitors": 4722, "pageviews": 11015},
+      {"route": "/", "visitors": 4242, "pageviews": 6226},
+      {"route": "/events", "visitors": 4225, "pageviews": 6707},
+      {"route": "/events/[year]/[slug]", "visitors": 2293, "pageviews": 3654},
+      {"route": "/leaderboards", "visitors": 1142, "pageviews": 3069}
+    ],
+    "traffic_sources": {
+      "direct_or_untagged": 11232,
+      "google_organic": 10671,
+      "google_app": 392,
+      "bing": 248,
+      "duckduckgo": 216,
+      "facebook_total": 187,
+      "instagram_total": 211,
+      "thedinkpickleball_referral": 105
+    },
+    "custom_cta_events": "NONE — no track() instrumentation exists"
+  },
+  "analytics_stack_live": {
+    "ga4": "G-NKVE1BRLK7 (direct gtag, live)",
+    "vercel_web_analytics": "live",
+    "vercel_speed_insights": "live",
+    "microsoft_clarity": "CODED but NOT enabled (NEXT_PUBLIC_CLARITY_ID unset in prod)",
+    "hotjar": "coded, not enabled",
+    "tiktok_pixel": "coded, not enabled",
+    "meta_pixel": "not present"
+  },
+  "technical_findings": {
+    "www_canonicalization": "OK — non-www 308 -> www",
+    "old_url_redirects": "OK — /athlete/ -> /athletes/, /schedule/ -> /events/, /player-rankings/ -> /rankings/ all 200 (equity preserved) BUT via 2-3 hop chains",
+    "sitemap": "OK — 1091 urls, all new patterns, no old paths, referenced in robots.txt",
+    "robots_txt": "OK — clean, sensible disallows",
+    "schema": "STRONG — SportsOrganization+WebSite+SearchAction global; Person+Breadcrumb on athletes; SportsEvent+Place+Offer on event detail",
+    "homepage_canonical_bug": "BUG — homepage / emits canonical https://www.ppatour.com/index/ (should be /). Source: app/layout.tsx:66 alternates.canonical './'. /index/ also returns 200 (duplicate). Only the homepage is affected.",
+    "old_tournament_urls": "/tournament/YYYY/slug/ redirect to /events/ index (fallback, not to matched event detail)",
+    "og_title_fallback": "events/rankings/ use generic og:title instead of page-specific"
+  }
+}
