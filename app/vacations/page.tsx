@@ -78,6 +78,10 @@ function itineraryDate(startIso: string, offset: number): string {
 export default async function VacationsPage() {
   const availability = await getAvailability();
   const options: Occupancy[] = ["single", "double"];
+  // Closed if the static launch flag is set OR Lainey flipped the trip to
+  // "Sold out" in Jackalope (or the block genuinely ran out). One boolean so
+  // the hero, pricing header and closing CTA can't disagree with the cards.
+  const bookingClosed = soldOut.active || !availability.bookingOpen;
 
   return (
     <>
@@ -130,11 +134,11 @@ export default async function VacationsPage() {
           </div>
 
           <p className="mt-5 text-sm font-bold uppercase tracking-[0.12em] text-vac-teal-pale">
-            {soldOut.active ? soldOut.nextTrip : trip.lineup}
+            {bookingClosed ? soldOut.nextTrip : trip.lineup}
           </p>
 
           <div className="mt-7 flex flex-wrap gap-3">
-            {soldOut.active ? (
+            {bookingClosed ? (
               <a
                 href={soldOut.mailto}
                 className="inline-flex h-12 items-center bg-vac-teal px-7 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-vac-teal-deep"
@@ -577,12 +581,12 @@ export default async function VacationsPage() {
       <section id="rooms" className="scroll-mt-24 bg-white">
         <div className="mx-auto w-full max-w-5xl px-4 py-14 sm:py-20">
           <div data-reveal>
-            <SectionLabel>{soldOut.active ? soldOut.badge : "Reserve"}</SectionLabel>
+            <SectionLabel>{bookingClosed ? soldOut.badge : "Reserve"}</SectionLabel>
             <h2 className="mt-3 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-4xl">
-              {soldOut.active ? soldOut.headline : "Choose your room"}
+              {bookingClosed ? soldOut.headline : "Choose your room"}
             </h2>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-ppa-navy/65 sm:text-base">
-              {soldOut.active ? (
+              {bookingClosed ? (
                 soldOut.message
               ) : (
                 <>
@@ -592,7 +596,7 @@ export default async function VacationsPage() {
                 </>
               )}
             </p>
-            {soldOut.active && (
+            {bookingClosed && (
               <a
                 href={soldOut.mailto}
                 className="mt-6 inline-flex h-12 items-center bg-vac-teal px-7 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-vac-teal-deep"
@@ -832,13 +836,13 @@ export default async function VacationsPage() {
             className="mx-auto h-12 w-auto"
           />
           <h2 className="mt-7 font-display text-2xl uppercase leading-[1.02] sm:text-4xl">
-            {soldOut.active ? soldOut.headline : "Four nights. Ten courts. One island."}
+            {bookingClosed ? soldOut.headline : "Four nights. Ten courts. One island."}
           </h2>
           <p className="mt-4 text-sm text-white/70 sm:text-base">
             {trip.destination} · {trip.datesLabel} · {trip.location}
           </p>
           <div className="mt-7 flex flex-wrap justify-center gap-3">
-            {soldOut.active ? (
+            {bookingClosed ? (
               <a
                 href={soldOut.mailto}
                 className="inline-flex h-12 items-center bg-vac-teal px-8 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-vac-teal-deep"

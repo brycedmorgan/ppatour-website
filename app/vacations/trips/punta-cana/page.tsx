@@ -3,18 +3,34 @@ import Image from "next/image";
 import Link from "next/link";
 import { PhotoCarousel } from "@/components/vacations/PhotoCarousel";
 import { logo } from "@/lib/vacations/content";
+import { formatUSD, type Occupancy } from "@/lib/vacations/pricing";
+import { getTripConfig } from "@/lib/vacations/trip-config";
+import { getAvailabilityFor } from "@/lib/vacations/capacity";
 import { puntaCana as pc } from "@/lib/vacations/trips/punta-cana";
 
 /**
- * ARCHIVED TRIP — Club Med Punta Cana (Sept 8–12, 2026). Sold out and kept
- * live so registered guests can still look up the resort, pros, itinerary and
- * travel details. No booking CTA anywhere on this page.
+ * Club Med Punta Cana (Sept 8–12, 2026), the inaugural trip. Normally sold out
+ * and kept live so registered guests can look up the resort, pros, itinerary
+ * and travel details — but the booking section at the top re-opens on its own
+ * the moment Lainey sets the trip back to "On sale" in Jackalope with a room
+ * left in the block (e.g. a cancellation freeing a double). Booking, price and
+ * status all come from the same Jackalope plan the active trip reads.
  */
 export const metadata: Metadata = {
   title: `${pc.trip.destination} — Pickleball Vacations`,
   description: `Guest information for the inaugural Pickleball Vacations trip: ${pc.trip.destination}, ${pc.trip.datesLabel}.`,
   robots: { index: false, follow: true },
 };
+
+/**
+ * Room availability + on-sale status are read from Jackalope (via Stripe) at
+ * request time. 60s ISR keeps the page on the CDN; a re-opened room shows up
+ * within a minute of Lainey saving in Jackalope, and the /register + checkout
+ * routes re-read live and are the real gate.
+ */
+export const revalidate = 60;
+
+const cfg = getTripConfig("punta-cana");
 
 const SectionLabel = ({
   children,
@@ -35,7 +51,13 @@ const SectionLabel = ({
   </div>
 );
 
-export default function PuntaCanaArchivePage() {
+export default async function PuntaCanaArchivePage() {
+  const availability = await getAvailabilityFor(cfg);
+  const bookable = (Object.keys(cfg.pricing) as Occupancy[]).filter(
+    (id) => !availability.options[id].soldOut
+  );
+  const bookingOpen = availability.bookingOpen && bookable.length > 0;
+
   return (
     <>
       {/* Hero */}
@@ -64,7 +86,15 @@ export default function PuntaCanaArchivePage() {
             className="mt-5 h-12 w-auto sm:h-14"
           />
           <div className="mt-6 flex flex-wrap items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em]">
-            <span className="bg-white px-3 py-1.5 text-ppa-navy">Sold Out</span>
+            <span
+              className={`px-3 py-1.5 ${
+                bookingOpen
+                  ? "bg-vac-teal text-white"
+                  : "bg-white text-ppa-navy"
+              }`}
+            >
+              {bookingOpen ? "Booking Open" : "Sold Out"}
+            </span>
             <span className="border border-white/25 px-3 py-1.5 text-white/85">
               {pc.trip.datesLabel}
             </span>
@@ -78,6 +108,104 @@ export default function PuntaCanaArchivePage() {
           </p>
         </div>
       </section>
+
+      {/* Booking — appears only while Jackalope has the trip on sale with a
+          room left. This is the "booking & payment" section guests land on
+          when they open the page; everything below it is unchanged. */}
+      {bookingOpen && (
+        <section id="book" className="border-b border-ppa-line bg-white">
+          <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:py-16">
+            <SectionLabel>Now Booking</SectionLabel>
+            <h2 className="mt-3 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+              A room just opened
+            </h2>
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-ppa-navy/65 sm:text-base">
+              A spot has come free for {pc.trip.destination} · {pc.trip.datesLabel}.
+              Rooms are held under a fixed resort block — when it&apos;s booked,
+              this closes again.
+            </p>
+
+            <div className="mt-8 grid gap-5 sm:max-w-2xl sm:grid-cols-2">
+              {bookable.map((id) => {
+                const opt = cfg.pricing[id];
+                const rooms = availability.options[id];
+                const showScarcity = availability.known && rooms.left > 0;
+                const featured = id === "double";
+                return (
+                  <div
+                    key={id}
+                    className={`flex flex-col p-6 ${
+                      featured
+                        ? "bg-ppa-navy text-white"
+                        : "border border-ppa-line bg-white text-ppa-navy"
+                    }`}
+                  >
+                    <h3 className="font-display text-lg uppercase leading-tight">
+                      {opt.label}
+                    </h3>
+                    <p
+                      className={`mt-2 text-sm ${
+                        featured ? "text-white/65" : "text-ppa-navy/60"
+                      }`}
+                    >
+                      {opt.blurb}
+                    </p>
+                    <div className="mt-5 flex flex-wrap items-baseline gap-x-3">
+                      <span
+                        className={`font-display text-4xl ${
+                          featured ? "text-vac-teal-pale" : "text-ppa-navy"
+                        }`}
+                      >
+                        {formatUSD(opt.total)}
+                      </span>
+                      {opt.perPersonNote && (
+                        <span
+                          className={`text-sm ${
+                            featured ? "text-white/60" : "text-ppa-navy/55"
+                          }`}
+                        >
+                          {opt.perPersonNote}
+                        </span>
+                      )}
+                    </div>
+                    {showScarcity && (
+                      <p
+                        className={`mt-3 text-sm font-bold ${
+                          featured ? "text-vac-teal-pale" : "text-vac-teal-deep"
+                        }`}
+                      >
+                        Only {rooms.left} {rooms.left === 1 ? "room" : "rooms"} left
+                      </p>
+                    )}
+                    <div className="mt-auto pt-6">
+                      <Link
+                        href={`/vacations/register/?trip=${cfg.slug}&occupancy=${id}`}
+                        className={`block px-6 py-3.5 text-center text-xs font-bold uppercase tracking-[0.14em] transition-colors ${
+                          featured
+                            ? "bg-vac-teal text-white hover:bg-vac-teal-deep"
+                            : "bg-ppa-navy text-white hover:bg-ppa-navy-deep"
+                        }`}
+                      >
+                        Reserve {opt.label}
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <p className="mt-6 text-sm text-ppa-navy/60">
+              Questions before you book?{" "}
+              <a
+                href={`mailto:${cfg.contactEmail}`}
+                className="font-bold text-vac-teal-deep underline-offset-4 hover:underline"
+              >
+                {cfg.contactEmail}
+              </a>
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* Guest notice */}
       <section className="bg-vac-teal">

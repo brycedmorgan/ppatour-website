@@ -17,6 +17,8 @@ export type RegistrationPayload = {
   occupancy: Occupancy;
   bedType?: BedType;
   travelers: Traveler[];
+  /** Trip slug (see trip-config.ts). Absent means the active trip. */
+  trip?: string;
 };
 
 export const GENDER_OPTIONS = [

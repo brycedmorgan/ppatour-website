@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getStripe } from "@/lib/vacations/stripe";
-import { PRICING } from "@/lib/vacations/pricing";
 import {
   validateRegistration,
   type RegistrationPayload,
 } from "@/lib/vacations/registration";
-import { trip } from "@/lib/vacations/content";
-import { getAvailability } from "@/lib/vacations/capacity";
+import { getTripConfig } from "@/lib/vacations/trip-config";
+import { getAvailabilityFor } from "@/lib/vacations/capacity";
 
 // Stripe's Node SDK — not the edge runtime.
 export const runtime = "nodejs";
@@ -24,18 +23,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: errors[0], errors }, { status: 400 });
   }
 
-  const option = PRICING[payload.occupancy];
+  // Which trip is being booked. Absent `trip` = the active trip, so every
+  // existing link keeps working; Punta Cana links carry `trip=punta-cana` and
+  // resolve to its own destination, price and dates.
+  const cfg = getTripConfig(payload.trip);
+  const option = cfg.pricing[payload.occupancy];
   const origin = req.headers.get("origin") ?? req.nextUrl.origin;
 
-  // Hard stop at the contracted room block. The pricing cards already hide a
-  // sold-out option, but the client is not the gate — someone deep-linking
-  // /vacations/register?occupancy=single would otherwise book room 11 and put
-  // Lainey over what the resort agreed to hold.
-  const availability = await getAvailability();
-  if (availability.known && availability.options[payload.occupancy].soldOut) {
+  // Hard stop at the contracted room block AND Lainey's on-sale switch. The
+  // pricing cards already hide a closed option, but the client is not the gate:
+  // someone deep-linking /vacations/register?occupancy=single would otherwise
+  // book room 11, or book a trip she's flipped to Sold Out in Jackalope.
+  const availability = await getAvailabilityFor(cfg);
+  const optionClosed =
+    availability.known && availability.options[payload.occupancy].soldOut;
+  if (!availability.bookingOpen || optionClosed) {
     return NextResponse.json(
       {
-        error: `${option.label} is fully booked for ${trip.destination}. Email ${trip.contactEmail} and we'll add you to the waiting list.`,
+        error: `${option.label} is fully booked for ${cfg.destination}. Email ${cfg.contactEmail} and we'll add you to the waiting list.`,
         soldOut: true,
       },
       { status: 409 }
@@ -45,9 +50,9 @@ export async function POST(req: NextRequest) {
   // Flatten traveler details into Stripe metadata for the organizer.
   const metadata: Record<string, string> = {
     occupancy: option.label,
-    nights: String(trip.nights),
-    destination: trip.destination,
-    dates: trip.datesLabel,
+    nights: String(cfg.nights),
+    destination: cfg.destination,
+    dates: cfg.datesLabel,
   };
   if (payload.bedType) metadata.bed_type = payload.bedType;
   payload.travelers.forEach((t, i) => {
@@ -88,8 +93,8 @@ export async function POST(req: NextRequest) {
             currency: "usd",
             unit_amount: option.amountCents,
             product_data: {
-              name: `Pickleball Vacations — ${trip.destination}`,
-              description: `${option.label} · ${trip.datesLabel} · ${trip.nights} nights`,
+              name: `Pickleball Vacations — ${cfg.destination}`,
+              description: `${option.label} · ${cfg.datesLabel} · ${cfg.nights} nights`,
             },
           },
         },
@@ -105,7 +110,7 @@ export async function POST(req: NextRequest) {
           }
         : {
             success_url: `${origin}/vacations/success/?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${origin}/vacations/register/?occupancy=${payload.occupancy}&canceled=1`,
+            cancel_url: `${origin}/vacations/register/?trip=${cfg.slug}&occupancy=${payload.occupancy}&canceled=1`,
           }),
     });
 

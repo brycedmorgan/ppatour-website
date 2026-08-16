@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { formatUSD, isOccupancy, type Occupancy } from "@/lib/vacations/pricing";
 import {
-  PRICING,
-  formatUSD,
-  isOccupancy,
-  type Occupancy,
-} from "@/lib/vacations/pricing";
+  DEFAULT_TRIP,
+  type TripPricingOption,
+} from "@/lib/vacations/trip-config";
 import { track } from "@/lib/vacations/track";
 import {
   BED_OPTIONS,
@@ -18,7 +17,6 @@ import {
   type BedType,
   type Traveler,
 } from "@/lib/vacations/registration";
-import { trip } from "@/lib/vacations/content";
 import { VacationsEmbeddedCheckout } from "@/components/vacations/VacationsEmbeddedCheckout";
 
 const inputCls =
@@ -46,11 +44,23 @@ export function RegistrationForm({
   // server and passed down — the form can't reach Stripe itself, and a deep
   // link to a full room type shouldn't land on a bookable form.
   soldOutOptions = [],
+  // The trip being booked. Defaults to the active trip so the form never
+  // renders without prices; the register page always passes the resolved one.
+  tripSlug = DEFAULT_TRIP.slug,
+  destination = DEFAULT_TRIP.destination,
+  datesLabel = DEFAULT_TRIP.datesLabel,
+  nights = DEFAULT_TRIP.nights,
+  pricing = DEFAULT_TRIP.pricing,
 }: {
   soldOutOptions?: Occupancy[];
+  tripSlug?: string;
+  destination?: string;
+  datesLabel?: string;
+  nights?: number;
+  pricing?: Record<Occupancy, TripPricingOption>;
 }) {
   const isGone = (id: Occupancy) =>
-    !!PRICING[id].soldOut || soldOutOptions.includes(id);
+    !!pricing[id].soldOut || soldOutOptions.includes(id);
 
   const params = useSearchParams();
   const occParam = params.get("occupancy");
@@ -74,7 +84,7 @@ export function RegistrationForm({
   // render Stripe's payment form in place of this form instead of redirecting.
   const [clientSecret, setClientSecret] = useState<string | null>(null);
 
-  const option = PRICING[occupancy];
+  const option = pricing[occupancy];
   const count = option.travelers;
 
   const updateTraveler = (i: number, key: keyof Traveler, value: string) =>
@@ -88,6 +98,7 @@ export function RegistrationForm({
       occupancy,
       bedType: occupancy === "double" ? bedType || undefined : undefined,
       travelers: travelers.slice(0, count),
+      trip: tripSlug,
     };
     const errs = validateRegistration(payload);
     if (errs.length > 0) {
@@ -109,20 +120,21 @@ export function RegistrationForm({
       if (!res.ok) {
         // 409 = the last room went while this form was open. Worth its own
         // event: a blocked checkout is demand we captured and couldn't fill.
-        if (res.status === 409) track("checkout_blocked", { occupancy });
+        if (res.status === 409)
+          track("checkout_blocked", { occupancy, trip: destination });
         setErrors([data.error ?? "Something went wrong. Please try again."]);
         setSubmitting(false);
         return;
       }
       if (data.clientSecret) {
         // Embedded: swap this form for Stripe's in-page payment form.
-        track("checkout_start", { occupancy });
+        track("checkout_start", { occupancy, trip: destination });
         setClientSecret(data.clientSecret as string);
         setSubmitting(false);
       } else if (data.url) {
         // Hosted fallback (publishable key not set): redirect to Stripe.
         // Beacon before the redirect — sendBeacon survives the unload.
-        track("checkout_start", { occupancy });
+        track("checkout_start", { occupancy, trip: destination });
         window.location.href = data.url as string;
       } else {
         setErrors(["Could not start checkout. Please try again."]);
@@ -185,7 +197,7 @@ export function RegistrationForm({
           </legend>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             {(["single", "double"] as Occupancy[]).map((id) => {
-              const o = PRICING[id];
+              const o = pricing[id];
               const active = occupancy === id;
               const gone = isGone(id);
               return (
@@ -385,9 +397,9 @@ export function RegistrationForm({
             Your Reservation
           </p>
           <h3 className="mt-3 font-display text-xl uppercase leading-tight">
-            {trip.destination}
+            {destination}
           </h3>
-          <p className="text-sm text-white/60">{trip.datesLabel}</p>
+          <p className="text-sm text-white/60">{datesLabel}</p>
 
           <dl className="mt-6 space-y-3 border-t border-white/15 pt-6 text-sm">
             <div className="flex justify-between gap-4">
@@ -406,7 +418,7 @@ export function RegistrationForm({
             )}
             <div className="flex justify-between gap-4">
               <dt className="text-white/65">Nights</dt>
-              <dd className="font-medium">{trip.nights}</dd>
+              <dd className="font-medium">{nights}</dd>
             </div>
           </dl>
 

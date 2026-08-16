@@ -1,4 +1,4 @@
-import { trip } from "./content";
+import { tripDestinationForPath } from "./trip-config";
 
 /**
  * Funnel beacons into Jackalope (`/api/public/vac-event`), where the paid half
@@ -35,15 +35,21 @@ function sessionId(): string {
   }
 }
 
-export function track(event: VacEvent, extra: { occupancy?: string } = {}) {
+export function track(
+  event: VacEvent,
+  extra: { occupancy?: string; trip?: string } = {}
+) {
   if (typeof window === "undefined") return;
+  const { trip: tripOverride, ...rest } = extra;
   const payload = JSON.stringify({
     event,
-    trip: trip.destination,
+    // The register page carries its trip in `?trip=`, so its beacons pass the
+    // destination explicitly; page views fall back to the path.
+    trip: tripOverride ?? tripDestinationForPath(window.location.pathname),
     path: window.location.pathname,
     referrer: document.referrer || null,
     sid: sessionId(),
-    ...extra,
+    ...rest,
   });
 
   try {
