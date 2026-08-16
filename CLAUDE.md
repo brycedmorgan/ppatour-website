@@ -42,6 +42,41 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-16 — Punta Cana books again at $4,800; the dirty tree is gone
+
+- **Bryce confirmed the Punta Cana double at $4,800**, which is the single thing the 8/7 work had
+  been waiting on for nine days. Shipped, live, verified on production.
+- **⚠ MERGING THE PARKED BRANCH WOULD HAVE UNDONE BRYCE'S 8/14 DECISION.** The 8/7 work predates the
+  Travelpayouts removal (`44b2590`), so it still carried **`lib/affiliate.ts`**, the
+  **`TravelMonetization` mount in `app/vacations/layout.tsx`**, and a **flight/hotel/car upsell in
+  `lib/vacations/email.ts`**. A merge or rebase resurrects all three. Only the nine Punta Cana files
+  were re-applied onto current main; `email.ts` and `layout.tsx` were **skipped entirely** because
+  their whole delta was the killed feature. Verified live: **zero affiliate strings on either page.**
+- Eight of the nine files were untouched on origin and copied straight across. Only
+  `app/vacations/page.tsx` needed hand-merging — one derived `bookingClosed` flag plus 8 call sites,
+  and the result is **byte-identical to the parked version**, so nothing was lost in the re-apply.
+- **⚠ PRICES ARE IN CONFIG, ROOMS COME FROM JACKALOPE, AND THE SPLIT IS THE POINT.** A stale room
+  count risks a one-room oversell; a wrong price charges a card. `lib/vacations/trip-config.ts` holds
+  $2,800 single / $4,800 double / $2,400pp, and the **Stripe line item reads the same config object
+  the page renders**, so displayed and charged cannot drift.
+- **Verified on production, not by status code:** Punta Cana publishes **$4,800 + $2,400pp, "Booking
+  Open", "Only 1 room left"**, and the **Single card is correctly absent** (all 10 sold). Turks
+  unchanged at $3,200 / $3,800 / $6,400. Full `next build` green; the page is now static + 30s ISR
+  instead of a frozen archive.
+- **THE WORKING TREE HAD 47 DIRTY FILES AND IS NOW EMPTY.** Categorised against origin first: 11 were
+  byte-identical to work a parallel session had already pushed from a worktree; `pbc-links.ts` and
+  `athlete-gear.ts` were **older drafts than what shipped in `3d16dc7`**; `TravelMonetization.tsx` and
+  the event `layout.tsx` were **orphans origin had deliberately deleted**. All dropped. The four
+  promo-capture scripts and `docs/seo-baseline` (the 8/8 SEMrush control) were committed.
+- **⚠ THE PARKED BRANCH IS DELETED, LOCALLY AND ON ORIGIN.** Leaving it would have left a
+  merge-shaped trap that silently restores Travelpayouts. Its Punta Cana content is on main; its
+  affiliate code is nowhere.
+- **⚠ Player "playing next" is NOT buildable on today's access.** `lib/event-field.ts` only names
+  players once a draw publishes (event week) and **there is no entry-list endpoint we are authorized
+  for** — the live Nationals page proves it, rendering "Ones to Watch" ×2 and "In the Draw" ×0.
+  Forward schedule needs **`PT_API_TOKEN` + `PT_API_BASE_URL`** from Jason, still absent from every
+  Vercel environment. Same blocker as registered-player counts (`lib/registrations.ts`, 7/20 #10).
+
 ### 2026-08-14 — Athlete profiles get a hero image slot; Anna Leigh Waters is the first
 
 - Bryce, from ALW's live profile: *"we need a hero image here. Should we set that within Jackalope
