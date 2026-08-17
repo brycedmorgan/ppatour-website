@@ -1,10 +1,6 @@
 {
-  "generated_at": "2026-08-16T13:23:17Z",
+  "generated_at": "2026-08-17T13:32:09Z",
   "prices": {
-    "166228": {
-      "from": 15,
-      "onSale": true
-    },
     "166229": {
       "from": 15,
       "onSale": true
@@ -98,14 +94,6 @@
       "onSale": true
     },
     "181370": {
-      "from": 25,
-      "onSale": true
-    },
-    "183665": {
-      "from": 13000,
-      "onSale": true
-    },
-    "183676": {
       "from": 25,
       "onSale": true
     },

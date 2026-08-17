@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T13:23:17Z",
+  "updated_at": "2026-08-17T13:32:09Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -2169,6 +2169,24 @@
       "type": "event_removed",
       "event_id": "201733",
       "event": "Major League Pickleball Newport Beach - Saturday Morning Session"
+    },
+    {
+      "at": "2026-08-17T13:32:09Z",
+      "type": "event_removed",
+      "event_id": "183665",
+      "event": "Major League Pickleball Newport Beach - Playoffs"
+    },
+    {
+      "at": "2026-08-17T13:32:09Z",
+      "type": "event_removed",
+      "event_id": "166228",
+      "event": "PPA Challenger Series - Seattle"
+    },
+    {
+      "at": "2026-08-17T13:32:09Z",
+      "type": "event_removed",
+      "event_id": "183676",
+      "event": "Major League Pickleball Newport Beach - Sunday"
     }
   ]
 }
