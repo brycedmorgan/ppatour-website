@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { BoardEntry } from "@/lib/rankings-api";
+import { FollowChip } from "@/components/app/FollowChip";
 
 /** Shared standings table (dark section). Presentational — no state. */
 
@@ -24,6 +25,17 @@ function fmtPoints(n: number): string {
 
 function fmtPrize(n: number): string {
   return `$${Math.round(n).toLocaleString()}`;
+}
+
+/**
+ * Our own profile slug for a ranked player.
+ *
+ * ⚠ Only meaningful when `hasLocalProfile` is true. For the other ~1,850 ranked
+ * pros `profileUrl` points off-site, and a follow whose slug we cannot open
+ * would put a dead name in the fan's You tab.
+ */
+function profileSlug(e: BoardEntry): string {
+  return e.profileUrl.replace(/\/$/, "").split("/").pop() || e.slug;
 }
 
 /**
@@ -103,6 +115,16 @@ function RankBadge({ rank, tied }: { rank: number; tied: boolean }) {
 export function RankingTable({ entries }: { entries: BoardEntry[] }) {
   // Prize shows only when the feed carries it (currently $0 across the board).
   const showPrize = entries.some((e) => e.prizeMoney > 0);
+  /**
+   * ⚠ FOLLOW CHIPS ARE CAPPED, AND THE CAP IS A PAYLOAD DECISION, NOT A TASTE
+   * ONE. `pageSize` is optional on RankingsBoard, so this table renders 10 rows
+   * on /athletes, 50 a page on /rankings — and the COMPLETE ~2,035-row board
+   * where paging is off. A client component per row is fine at 50 and reckless
+   * at 2,035, on the page that was already measured at 4.06 MB of HTML. Self
+   * -limiting here rather than threading a prop, so no future caller can
+   * accidentally switch it on for the full board.
+   */
+  const showFollow = entries.length <= 100;
   const gridTemplate = ["2.5rem", "1fr", "5rem", showPrize ? "5.5rem" : null]
     .filter(Boolean)
     .join(" ");
@@ -139,6 +161,12 @@ export function RankingTable({ entries }: { entries: BoardEntry[] }) {
             <span className="wpr-name">
               {e.name}
             </span>
+            {/* ⚠ Inside `.wpr-player`, not beside it. `.wpr-row` is a grid whose
+                columns come from `--wpr-cols`; a fifth child would land in the
+                points column and shift every number one place right. */}
+            {showFollow && e.hasLocalProfile && (
+              <FollowChip slug={profileSlug(e)} name={e.name} className="ml-auto size-7" />
+            )}
           </span>
           <span className="wpr-pts">
             {fmtPoints(e.points)}

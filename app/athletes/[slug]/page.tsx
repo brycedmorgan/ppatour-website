@@ -24,6 +24,7 @@ import { getDivisionRanks } from "@/lib/division-rankings";
 import { getAthleteVideoData } from "@/lib/athlete-videos";
 import { AthleteVideos } from "@/components/athletes/AthleteVideos";
 import { FollowButton } from "@/components/app/FollowButton";
+import { FollowChip } from "@/components/app/FollowChip";
 import { resolveGear } from "@/lib/athlete-gear";
 import { paddleImageFor } from "@/lib/paddle-images";
 import { athleteHeroFor } from "@/lib/athlete-heroes";
@@ -944,6 +945,11 @@ export default async function AthletePage({ params }: Params) {
                     fill
                     sizes="(min-width: 640px) 25vw, 50vw"
                     className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <FollowChip
+                    slug={o.slug}
+                    name={o.name}
+                    className="absolute bottom-2 right-2"
                   />
                 </div>
                 <div className="p-3 text-white">

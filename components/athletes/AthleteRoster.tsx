@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { FollowChip } from "@/components/app/FollowChip";
 
 export type RosterAthlete = {
   slug: string;
@@ -268,6 +269,13 @@ export function AthleteRoster({ athletes }: { athletes: RosterAthlete[] }) {
                     className="absolute right-2 top-2 size-6 rounded-full ring-1 ring-white"
                   />
                 )}
+                {/* Follow without opening the profile. Bottom-right so it never
+                    sits under the rank chip or the flag. */}
+                <FollowChip
+                  slug={a.slug}
+                  name={a.name}
+                  className="absolute bottom-2 right-2"
+                />
               </div>
               <div className="flex flex-1 flex-col border-t border-ppa-line p-3">
                 <p className="font-display text-base uppercase leading-tight text-ppa-navy transition-colors group-hover:text-ppa-blue">
