@@ -3,17 +3,23 @@
 import Link from "next/link";
 import { useState } from "react";
 import { tvSchedule } from "@/lib/tv-schedule";
+import {
+  channelLabel,
+  isFoxChannel,
+  matchesFilter,
+  type ChannelFilter,
+} from "@/lib/tv-channels";
 
-type Filter = "all" | "Tennis Channel" | "PBTV";
-
-const FILTERS: { key: Filter; label: string }[] = [
+const FILTERS: { key: ChannelFilter; label: string }[] = [
   { key: "all", label: "All Broadcasts" },
   { key: "Tennis Channel", label: "Tennis Channel" },
+  // FS1 + FS2 under one pill — FOX splits its windows across both networks.
+  { key: "FOX", label: "FOX Sports" },
   { key: "PBTV", label: "PickleballTV" },
 ];
 
 export function TvScheduleList() {
-  const [filter, setFilter] = useState<Filter>("all");
+  const [filter, setFilter] = useState<ChannelFilter>("all");
 
   const events = tvSchedule
     .map((e) => ({
@@ -21,10 +27,7 @@ export function TvScheduleList() {
       days: e.days
         .map((d) => ({
           ...d,
-          windows:
-            filter === "all"
-              ? d.windows
-              : d.windows.filter((w) => w.channel === filter),
+          windows: d.windows.filter((w) => matchesFilter(w.channel, filter)),
         }))
         .filter((d) => d.windows.length > 0),
     }))
@@ -52,6 +55,12 @@ export function TvScheduleList() {
           All times ET
         </span>
       </div>
+
+      {!events.length && (
+        <p className="mt-6 border border-ppa-line bg-white p-5 text-sm text-ppa-navy/55">
+          No remaining windows on that channel this season.
+        </p>
+      )}
 
       <div className="mt-6 flex flex-col gap-8">
         {events.map((e) => (
@@ -96,7 +105,11 @@ export function TvScheduleList() {
                 <div
                   key={`${d.date}-${w.channel}-${wi}`}
                   className={`grid grid-cols-[6rem_1fr] items-center gap-x-3 gap-y-0.5 border-b border-ppa-line px-4 py-2.5 last:border-b-0 sm:grid-cols-[6rem_1fr_10rem_9rem] ${
-                    w.channel === "Tennis Channel" ? "bg-ppa-blue/5" : "bg-white"
+                    w.channel === "Tennis Channel"
+                      ? "bg-ppa-blue/5"
+                      : isFoxChannel(w.channel)
+                        ? "bg-ppa-yellow/10"
+                        : "bg-white"
                   }`}
                 >
                   <span className="font-display text-sm uppercase text-ppa-blue">
@@ -110,15 +123,25 @@ export function TvScheduleList() {
                   </span>
                   <span className="text-sm font-semibold text-ppa-navy">
                     {w.round}
+                    {/* A tape window is a replay — saying so is the difference
+                        between "watch this now" and "this already happened." */}
+                    {w.tape && (
+                      <span className="ml-2 align-middle text-[10px] font-bold uppercase tracking-[0.12em] text-ppa-navy/45">
+                        Replay
+                      </span>
+                    )}
                   </span>
                   <span
                     className={`text-[11px] font-bold uppercase tracking-[0.1em] ${
                       w.channel === "Tennis Channel"
                         ? "text-ppa-blue"
-                        : "text-ppa-navy/55"
+                        : isFoxChannel(w.channel)
+                          ? "text-ppa-navy"
+                          : "text-ppa-navy/55"
                     }`}
                   >
-                    {w.channel === "Tennis Channel" ? "📺 Tennis Channel" : "PickleballTV"}
+                    {w.channel === "Tennis Channel" ? "📺 " : ""}
+                    {channelLabel(w.channel)}
                   </span>
                   <span className="text-left text-sm font-bold tabular-nums text-ppa-navy sm:text-right">
                     {w.window}

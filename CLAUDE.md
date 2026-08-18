@@ -42,6 +42,91 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-18 — Broadcast schedule to the 8/13 sheet: FOX Sports arrives on the site
+
+- Wesley sent the **"2026 PPA/MLP Broadcast Schedule (Championship Court) — as of 8/13/26"** sheet with
+  four changes: FS2 + FS1 windows on Arizona, FS1/FS2/TC on Chicago, **MLP Cup's TC windows gone**, and
+  Malibu's dates + TC windows adjusted. All four shipped, in both files that carry broadcast data.
+- **⚠ FS1 AND FS2 ARE NEW CHANNELS ON THIS SITE.** `TvWindow["channel"]` was `"PBTV" | "Tennis Channel"`
+  and is now a four-way union. **8 FOX windows**: Arizona FS2 Fri + Sat and FS1 Sun; Chicago FS1 Thu +
+  Sun and FS2 Fri + Sat.
+- **⚠ TWO RENDER BUGS WOULD HAVE PUBLISHED EVERY FOX WINDOW UNDER PICKLEBALLTV'S NAME.** `/watch/tv`
+  hardcoded `channel === "Tennis Channel" ? "📺 Tennis Channel" : "PickleballTV"`, so all 8 new rows
+  would have printed **PickleballTV** beside a FOX window — a broadcast window credited to the wrong
+  network, on the page whose only job is telling people where to watch. And **the filter pills were
+  `all | Tennis Channel | PBTV`, so those 8 windows were unreachable by any filter** — the same class as
+  the /events points filter when the sub-1,000 stops had no reachable option.
+  - Fixed in new **`lib/tv-channels.ts`**, which owns the label map and the filter predicate for **both**
+    `TvGuide` (/watch) and the client list (/watch/tv). `CHANNEL_LABEL` is a `Record<TvWindow["channel"],
+    string>`, so **adding a channel to the union is now a type error until it has a label.** New
+    **FOX Sports pill** groups FS1 + FS2, since FOX splits windows across both networks.
+  - Filter matrix unit-tested: every channel reachable by **exactly one** pill, FOX matches FS1/FS2 only.
+- **⚠ THE PBTV WINDOWS MOVED TOO, WHICH THE NOTE DIDN'T MENTION — and that is the half a "just add the
+  FOX rows" edit would have missed.** Arizona Sat 12–8 → **12–9** and Sun 1–7 → **2–7**; Chicago Thu
+  11–7 → **11–6**, Fri 11–7 → **11–8**, Sun 11–5 → **11–5:30**. The FOX windows are **additional
+  coverage, not simulcasts** — they start where the PBTV window ends, so Arizona's Championship Sunday
+  now runs **2PM–9PM across PBTV then FS1**. A FOX row is never a duplicate of the row above it.
+- **Arizona has NO Tennis Channel window at all** (PBTV + FOX only). **Chicago's TC is now Thu–Sun / 16h**
+  — Thursday was new; the site had Fri–Sun.
+- **MLP Cup is PBTV-only**; both TC windows deleted. ⚠ The sheet names it **"MLP Nations Cup"** — kept as
+  "MLP Cup" to match the rest of the site, since **event names come from the PPA feed, not this sheet**
+  (8/3 standing ruling) and MLP has no feed row. **Wesley's open question — whether MLP belongs on
+  ppatour.com at all — is one block in `lib/tv-schedule.ts`**, the only MLP row in the file; there is a
+  note on it saying so.
+- **✅ MALIBU'S DATES ARE NOW CONFIRMED BY A SECOND SOURCE, AND ITS TC WINDOWS HAD INDEED CHANGED.** The
+  8/17 +14-day shift (Dec 1–6 → Dec 15–20) was made off the feed alone and carried a ⚠ saying the six TC
+  windows were an unverified assumption. The sheet independently lists **12/15–12/20** — and the windows
+  moved: they were 3–9PM Thu/Fri and 3–7PM Sat/Sun, now a uniform **3:30–6:30PM Wed–Sat with Sunday
+  2:30–5:30PM (15h)**. **Wednesday is new** — TC carries five days here, not four.
+- **⚠ `lib/broadcast.ts` FEEDS THE EVENT PAGES AND IS A SEPARATE TRANSCRIPTION OF THE SAME SHEET.** Updating
+  only `tv-schedule.ts` would have left /watch and the event pages disagreeing. Three fixes there:
+  - Chicago and Malibu reconciled; Chicago was also **missing its RD 64 / RD 32 days** entirely.
+  - **`veolia-arizona-open` had NO ENTRY**, so its event page rendered the generic templated table with
+    invented round/channel rows. It now carries the sheet's 7 real windows.
+  - **⚠ TWO MLP "Premier Pool Play" ROWS WERE FILED UNDER `virginia-beach-open`** — flagged 7/26 as
+    "stray rows that look misplaced" and now wrong twice over: wrong event, and the TC window they
+    carried is off the sheet. Deleted; VB renders 7 slots, zero "Premier Pool Play".
+- **A tape window is now labelled.** Chicago's Sat FS2 window is **9–11PM on a day whose play ends at
+  6PM** — a replay. New optional `tape` on `TvWindow` renders **"Replay"**; `broadcast.ts` already had
+  `type: "TAPE"` and the event page already printed "(Tape)". A replay presented as live coverage sends
+  someone to a finished match.
+- **⚠ THE HOUR TOTALS IN THE DOCBLOCK ARE COMPUTED, NOT TYPED — and the one it inherited was wrong.**
+  The file claimed **Cary 23h** of TC; summing the windows gives **22h**. My own first draft said Malibu
+  17.5h; it is **15h**. Both corrected off a script that reduces the actual windows.
+- **New `scripts/audit-tv-schedule.mjs` — `node scripts/audit-tv-schedule.mjs` (or pass a saved CSV).**
+  It **pulls the live sheet** and checks two things that have both failed for real: every window in
+  `tv-schedule.ts` against the sheet, and **`broadcast.ts` in lockstep with `tv-schedule.ts`** (the drift
+  that hit 7/26 and the VB rows above). Exits 1 on mismatch. **Negative-tested** — changing one FS1
+  window from 7PM to 8PM produced both a sheet mismatch and a lockstep failure; reverting returned exit 0.
+  It **reports, never rewrites**: a window is a commitment to a broadcast partner, and the sheet's event
+  names deliberately do not drive the site's. ⚠ **Not wired into package.json** — a parallel session has
+  that file staged and modified.
+- **Verified by machine and then on rendered pages, not by reading the diff:** the audit passes **68/68
+  windows across 9 events** and **8/8 slugs in lockstep**; `/watch/tv` renders **68 windows** with the
+  exact per-event channel mix (Arizona 4 PBTV/1 FS1/2 FS2/**0 TC**, Chicago 6/4 TC/2 FS1/2 FS2, MLP 3
+  PBTV/**0 TC**, Malibu 6/**5 TC**), all four filter pills present, one "Replay"; `/watch` chips read
+  **PickleballTV · FS1 · FS2** for Arizona and **PickleballTV · Tennis Channel · FS1 · FS2** for Chicago;
+  and the four affected event pages 200 with correct tables. **Controls unchanged: Nationals 4 TC, Vegas
+  1, VB 3, Worlds 1 (Wed Pro-Am), Daytona PBTV-only.** tsc + eslint clean on all five changed files.
+  - ⚠ Two "failures" in my first render pass were **my measurement, not the data** — the first event block
+    swallowed the intro copy and filter pills, the last swallowed the footer, and the event page renders
+    `platform` and `· secondary` as separate text nodes so every TC row counted as PBTV. **Scope a count
+    to the actual table row before believing it.**
+- **⚠ `npm run build` NOT RUN, deliberately** — a `next dev` owns :3000 and `.next`, and running a build
+  against the same `.next` is what produced the "Jest worker" mystery of 8/5 pt. 19. Verification ran
+  against that dev server, which owns this repo dir.
+- **⚠ FOUND, NOT FIXED — the event pages' "how to watch" cards never mention FOX, and one of them is now
+  demonstrably wrong.** `HOW_TO_WATCH` is a module-level constant (PickleballTV · Tennis Channel ·
+  MATCHDAY) rendered identically on **every** event page. So the Arizona Open page publishes a **Tennis
+  Channel** card reading *"Featured rounds and Championship Sunday on national television"* for an event
+  with **zero TC windows**, while its actual FS1 Championship Sunday window appears in the table with no
+  card at all. Making those cards derive from the event's own windows is a real change, not a cleanup —
+  and there is **no FS1/FS2 mark in `public/ppa/networks/`** (only `fox.svg`), so it needs an asset too.
+- **Next:** confirm with Adam Friedman / the production team that **Chicago's four FOX windows are the
+  final count** (the note described them as two adds, and the sheet header still reads 8/13) · decide the
+  MLP question · derive `HOW_TO_WATCH` per event and get FS1/FS2 marks · the sheet ends **Dec 20, 2026**,
+  so Cincinnati and the 2027 stops still carry older transcriptions.
+
 ### 2026-08-16 — Punta Cana books again at $4,800; the dirty tree is gone
 
 - **Bryce confirmed the Punta Cana double at $4,800**, which is the single thing the 8/7 work had

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { tvSchedule, type TvEvent } from "@/lib/tv-schedule";
+import { tvSchedule, type TvEvent, type TvWindow } from "@/lib/tv-schedule";
+import { channelLabel } from "@/lib/tv-channels";
 
 /**
  * The TV guide — one block per upcoming event, day by day, channel by channel.
@@ -10,18 +11,38 @@ import { tvSchedule, type TvEvent } from "@/lib/tv-schedule";
  * /watch/tv keeps its own filterable client list for the whole season.
  */
 
-const CHANNEL_STYLE: Record<string, string> = {
+type Channel = TvWindow["channel"];
+
+/**
+ * Badge colours, and there are TWO maps because the same badge renders on both
+ * grounds: the "Watch on" chips sit on the navy event header, the per-row badges
+ * sit on white. A navy FOX badge is invisible on the header, a white one is
+ * invisible on the rows — so neither map can serve both.
+ */
+const CHANNEL_BADGE: Record<Channel, string> = {
   "Tennis Channel": "bg-ppa-yellow text-ppa-navy",
   PBTV: "bg-ppa-blue text-white",
+  FS1: "bg-ppa-navy text-white",
+  FS2: "bg-ppa-navy/75 text-white",
 };
 
-/** Distinct channels carrying an event, PBTV first. */
-function channelsFor(event: TvEvent): string[] {
-  const seen = new Set<string>();
+const CHANNEL_CHIP: Record<Channel, string> = {
+  "Tennis Channel": "bg-ppa-yellow text-ppa-navy",
+  PBTV: "bg-ppa-blue text-white",
+  FS1: "bg-white text-ppa-navy",
+  FS2: "bg-white/85 text-ppa-navy",
+};
+
+/** Streaming first, then TV in the order a viewer would scan for it. */
+const CHANNEL_ORDER: Channel[] = ["PBTV", "Tennis Channel", "FS1", "FS2"];
+
+/** Distinct channels carrying an event, in a fixed order. */
+function channelsFor(event: TvEvent): Channel[] {
+  const seen = new Set<Channel>();
   for (const day of event.days) {
     for (const w of day.windows) seen.add(w.channel);
   }
-  return [...seen].sort((a) => (a === "PBTV" ? -1 : 1));
+  return CHANNEL_ORDER.filter((c) => seen.has(c));
 }
 
 /** Total scheduled hours can't be derived from the free-text windows, so the
@@ -90,10 +111,10 @@ export function TvGuide({ limit }: { limit?: number }) {
                   <span
                     key={c}
                     className={`px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] ${
-                      CHANNEL_STYLE[c] ?? "bg-white/15 text-white"
+                      CHANNEL_CHIP[c] ?? "bg-white/15 text-white"
                     }`}
                   >
-                    {c === "PBTV" ? "PickleballTV" : c}
+                    {channelLabel(c)}
                   </span>
                 ))}
               </div>
@@ -119,14 +140,20 @@ export function TvGuide({ limit }: { limit?: number }) {
                     <span className="ml-2 text-xs tabular-nums text-ppa-navy/45">
                       {w.window}
                     </span>
+                    {/* Tape windows are replays — don't let one read as live. */}
+                    {w.tape && (
+                      <span className="ml-2 text-[10px] font-bold uppercase tracking-[0.12em] text-ppa-navy/40">
+                        Replay
+                      </span>
+                    )}
                   </span>
                   <span>
                     <span
                       className={`inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] ${
-                        CHANNEL_STYLE[w.channel] ?? "bg-ppa-navy text-white"
+                        CHANNEL_BADGE[w.channel] ?? "bg-ppa-navy text-white"
                       }`}
                     >
-                      {w.channel === "PBTV" ? "PickleballTV" : w.channel}
+                      {channelLabel(w.channel)}
                     </span>
                   </span>
                 </div>
