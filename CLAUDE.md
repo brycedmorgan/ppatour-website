@@ -42,6 +42,39 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-18 (pt. 2) — Follows + push are LIVE; only the draw alert fires
+
+- **Push works end to end on production.** `/api/push/status` reports
+  `{ready:true, store:true, sender:true}`, and a POST/DELETE round trip against
+  `/api/push/subscribe` created the table, wrote a row and removed it. Neon resource
+  **`ppatour-fanapp`** on the Pickleball HQ team, connected to ppatour-website; VAPID
+  keys set on Production. ⚠ **Preview has no VAPID keys** — the CLI loops on
+  `git_branch_required`. Previews therefore report `ready:false`, which is the correct
+  safe state, not a bug to chase.
+- **Follows are device-local. No login, no PII** (Bryce's call). A row is a push
+  endpoint plus a list of slugs. `components/app/follows.ts` owns the device copy;
+  `/api/push/subscribe` holds the routing table the sender reads.
+- **Only `draw` fires.** `PUSH_ALERTS` gates all four; `lib/push-alerts.ts` explains the
+  asymmetry — an alert nobody gets costs nothing, an alert too many people get costs
+  the notification permission permanently. `/api/push/status` serves the enabled list
+  and the Following screen renders THAT, so the screen cannot promise an unsent alert.
+  Cron is every 15 min.
+- **⚠ `lib/player-match.ts` returns null on ambiguity, always.** The feeds carry names,
+  not ids, and there are two Ben Johnses. A bad match here is a notification about the
+  wrong person on a stranger's lock screen.
+- **Outbound links stay in the app** (`AppLinkRouter`). All 33 files' worth of
+  `target="_blank"` commerce links would have handed a Tixr checkout to Safari as a
+  separate app with no way back. Same-window navigation gets the iOS Done button /
+  Android Custom Tab instead.
+- **⚠ The first Neon provision landed on the GULL-STACK team**, not Pickleball HQ — the
+  CLI's default scope, not the project's. Deleted within a minute and re-created with
+  `--scope bryce-pickleballs-projects`. Pass the scope explicitly next time.
+- **Next:** on-site "Today at the event" — one route, `/events/<year>/<slug>/today`, on
+  the WEBSITE not just the app. Live courts + order of play + gates + directions are
+  buildable now; eight ops fields per event (map, parking, gates, will call, food,
+  shuttle, ADA, one note) need a named owner. Nationals (Aug 31, Cary) is the pilot and
+  the only stop with finalized parking.
+
 ### 2026-08-18 — The site is now an installable app: shell, tab bar, always-on score bar
 
 - **ppatour.com installs to a home screen.** `app/manifest.ts` + `public/app-icons/`

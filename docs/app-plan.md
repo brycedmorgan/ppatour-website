@@ -13,7 +13,8 @@ data-ownership job, not a rewrite.
 2. **In the app, the score bar owns the bottom edge.** `StickyBuyBar`, the
    tour's #1 ticket CTA, stands down inside an installed window and is untouched
    on the web. Website sells tickets; app follows the tour.
-3. **On-site content owner — TBD.** Still the one thing blocking Phase 4.
+3. **On-site content owner — TBD.** Still the one thing blocking Phase 4, now
+   narrowed to a specific eight-field form (see Phase 4).
 4. **Live scores are not blocked.** The feed is already on the site (Wesley has
    it implemented); no new access to chase.
 
@@ -48,17 +49,45 @@ match every 5s off `/api/ticker` — the same feed as the header ticker, so the
 two cannot disagree. With nothing live it shows the next tour stop rather than
 vanishing. Web is unchanged.
 
-**Phase 3 — follow list.** "My players" and "my events", localStorage first, no
-login. This is where the app beats the site.
+**Phase 3 — follow list + alerts. ✅ SHIPPED 8/18.** Follow buttons on athlete
+profiles, a "You" tab (`/following`), device-local follows with no account, and
+web push off a Neon store (`ppatour-fanapp`) + VAPID keys on Production. Four
+alerts built; `PUSH_ALERTS` fires only `draw` on day one. See
+`lib/push-alerts.ts` for why, and the 8/18 pt. 2 session log for the operational
+details.
 
-**Phase 4 — on-site event mode (the real work).** Geofence or event-week
-detection flips the app into venue mode for, say, the North Carolina Open: site
-map, parking and gates, today's order of play by court, shuttles, food, will
-call, accessibility. **None of this data exists in structured form.** It has to
-be authored per event, by the pod that runs the event, in Jackalope on the
-event-code spine, then published to ppatour.com through the existing
-`/api/revalidate-events` hook. Code is maybe a week. Getting one owner per event
-to fill the form is the actual project.
+**Phase 4 — "Today at the event" (next).** One route, `/events/<year>/<slug>/today`,
+on the **website**, not app-only — the app's Event tab points at it and it becomes
+the top of the event page during event week. Ordered for someone standing at the
+gate, which is not how a website usually orders things:
+
+1. **Right now** — what is on which court (`/api/scores` already carries court +
+   live status).
+2. **Today's play** — gates, first serve, round, amateur sessions
+   (`lib/event-schedule.ts`, transcribed for Nationals).
+3. **Getting in** — address + directions (`lib/venue-locations.ts`), parking,
+   will call, bag policy.
+4. **Watching** — what is streaming, where.
+
+1, 2 and half of 3 are buildable with data we already have. The rest is **eight
+fields per event** a human must supply: venue map image, parking (where / cost /
+maps link), gate + bag policy, will call, food, shuttle or rideshare drop, ADA
+entrance, one know-before-you-go note. Authored in Jackalope on the event-code
+spine, published through the existing revalidate hook. Eight is the cap on
+purpose — a longer form does not get filled.
+
+⚠ **A blank field renders as nothing, never as a guess.** On 8/5 hand-written
+parking copy was deleted from all 18 event pages because it quoted unsourced
+prices ("$20/day, or free with a Reserved+ ticket"). Wrong on-site information
+does not read as a typo; it sends someone to a lot that is not there.
+
+**Pilot: Nationals, Cary, Aug 31 – Sep 6** — the only stop with a real
+transcribed order of play AND the only stop with finalized parking. Everywhere
+else would ship with six of eight fields empty.
+
+**Not doing: GPS geofencing.** "You are at the venue" costs a location
+permission prompt, and permissions cannot be asked for twice. Event week is
+signal enough to promote the view.
 
 **Phase 5 — store presence and push.** A Capacitor or Expo shell around the web
 app, plus native push, so notifications work on iOS reliably and we get store
