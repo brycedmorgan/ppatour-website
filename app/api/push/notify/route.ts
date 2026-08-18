@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { alertEnabled } from "@/lib/push-alerts";
 import { getEvents } from "@/lib/events-api";
 import { getEventField } from "@/lib/event-field";
 import { slugsForNames } from "@/lib/player-match";
@@ -14,12 +15,14 @@ import { eventHref } from "@/lib/placeholder-data";
 import { getPublishedAthlete } from "@/lib/published-athletes";
 
 /**
- * The alert sender. One cron, four alerts (Bryce picked all four on 8/18):
+ * The alert sender. One cron, four alerts, and only the ones named in
+ * `PUSH_ALERTS` actually fire — see lib/push-alerts.ts for why day one ships
+ * with just the draw alert:
  *
- *   1. A followed pro's DRAW IS PUBLISHED.
- *   2. A followed pro is ON COURT NOW.
- *   3. A followed pro's MATCH IS FINAL.
- *   4. A TOUR STOP STARTS THIS WEEK (everyone, not per-player).
+ *   1. A followed pro's DRAW IS PUBLISHED.        (on)
+ *   2. A followed pro is ON COURT NOW.            (built, off)
+ *   3. A followed pro's MATCH IS FINAL.           (built, off)
+ *   4. A TOUR STOP STARTS THIS WEEK.              (built, off)
  *
  * ⚠ WHY #1 IS BUILDABLE AND "WHERE DOES MY PRO PLAY NEXT" IS NOT. We have no
  * player→events endpoint, so before a draw drops nobody can honestly say who is
@@ -121,7 +124,7 @@ export async function GET(request: Request) {
     if (t.status === "completed") continue;
     const days = daysUntil(t.startDate);
 
-    if (days >= 0 && days <= WEEK_AHEAD_DAYS) {
+    if (alertEnabled("week") && days >= 0 && days <= WEEK_AHEAD_DAYS) {
       const key = `week:${t.slug}`;
       everyone = everyone ?? (await allSubscribers());
       const subs = everyone;
@@ -136,7 +139,7 @@ export async function GET(request: Request) {
       }
     }
 
-    if (days >= -3 && days <= DRAW_WINDOW_DAYS && t.tournamentUuid) {
+    if (alertEnabled("draw") && days >= -3 && days <= DRAW_WINDOW_DAYS && t.tournamentUuid) {
       const field = await getEventField(t.tournamentUuid);
       if (field.published && field.players.length > 0) {
         const slugs = slugsForNames(field.players.map((p) => p.name));
@@ -155,9 +158,11 @@ export async function GET(request: Request) {
   }
 
   // 2 + 3 — live and final, from the score ticker.
+  if (alertEnabled("live") || alertEnabled("final")) {
   const ticker = await fetchLiveTicker();
   for (const m of ticker.matches) {
     if (m.status !== "live" && m.status !== "final") continue;
+    if (!alertEnabled(m.status)) continue;
     const slugs = slugsForNames(matchNames(m));
     if (slugs.length === 0) continue;
 
@@ -174,6 +179,7 @@ export async function GET(request: Request) {
       tag: `match:${m.id}`,
     }));
     if (devices > 0) sent.push({ alert: m.status, key, devices });
+  }
   }
 
   return NextResponse.json({ ok: true, sent, at: new Date().toISOString() });

@@ -19,7 +19,7 @@
     },
     {
       "path": "/api/push/notify",
-      "schedule": "*/5 * * * *"
+      "schedule": "*/15 * * * *"
     }
   ]
 }

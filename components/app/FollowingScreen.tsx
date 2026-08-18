@@ -18,13 +18,11 @@ import {
  * unprompted permission sheet is how an app earns a permanent Denied, and
  * Denied cannot be reversed from code on any platform. Here the fan has just
  * followed somebody, so the ask has an obvious reason.
+ *
+ * ⚠ The list of alerts is SERVED, not hard-coded. Only some of the four are
+ * switched on (see lib/push-alerts.ts), and a screen that lists an alert the
+ * sender will not send is a promise broken on someone's lock screen.
  */
-const ALERTS = [
-  "Their draw is published",
-  "They are on court now",
-  "Their match is final",
-  "A tour stop starts this week",
-];
 
 export function FollowingScreen() {
   const { follows, toggle } = useFollows();
@@ -32,12 +30,16 @@ export function FollowingScreen() {
   const [busy, setBusy] = useState(false);
   /** null = still asking the server whether alerts can actually be delivered. */
   const [deliverable, setDeliverable] = useState<boolean | null>(null);
+  const [alerts, setAlerts] = useState<string[]>([]);
 
   useEffect(() => {
     setPermission(permissionState());
     fetch("/api/push/status")
       .then((r) => r.json())
-      .then((d: { ready?: boolean }) => setDeliverable(Boolean(d.ready)))
+      .then((d: { ready?: boolean; alerts?: string[] }) => {
+        setDeliverable(Boolean(d.ready));
+        setAlerts(Array.isArray(d.alerts) ? d.alerts : []);
+      })
       .catch(() => setDeliverable(false));
   }, []);
 
@@ -65,7 +67,7 @@ export function FollowingScreen() {
               {granted ? "Alerts are on" : "Alerts are off"}
             </p>
             <ul className="mt-2 space-y-1 text-xs leading-relaxed text-white/50">
-              {ALERTS.map((a) => (
+              {alerts.map((a) => (
                 <li key={a}>· {a}</li>
               ))}
             </ul>

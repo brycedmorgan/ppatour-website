@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { ALERT_LABEL, enabledAlerts } from "@/lib/push-alerts";
 import { pushSendConfigured } from "@/lib/push-send";
 import { pushStoreConfigured } from "@/lib/push-store";
 
@@ -22,5 +23,13 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   const store = pushStoreConfigured();
   const sender = pushSendConfigured();
-  return NextResponse.json({ ready: store && sender, store, sender });
+  return NextResponse.json({
+    ready: store && sender,
+    store,
+    sender,
+    // The Following screen lists these verbatim, so it can only ever promise
+    // an alert that actually fires. Adding one to PUSH_ALERTS updates the copy
+    // on the fan's screen with no deploy.
+    alerts: enabledAlerts().map((a) => ALERT_LABEL[a]),
+  });
 }
