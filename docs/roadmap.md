@@ -20,6 +20,14 @@ there Stripe hosts the checkout.
 | MLP per-player timeline | Endpoint approved, awaiting their push | `team_leagues_rosters` going live (DATA-ASKS §6) |
 | "Playing next" on profiles | Not started | Player→events endpoint (DATA-ASKS §5) |
 
+## The fan app
+
+ppatour.com is installable as of 8/18 — manifest, app shell, always-on score
+bar. The full plan, the decisions behind it and what is still blocked live in
+[`app-plan.md`](app-plan.md). Next up there: a service worker for offline, an
+install prompt, a follow list, then the on-site event mode (blocked on an
+owner per event, not on code).
+
 ## Next — buildable today, no external dependency
 
 1. **Add `team_leagues_rosters` to Jackalope's probe** (`lib/pbapi.js`

@@ -4,21 +4,18 @@ Scoping brief, 2026-08-18. Bryce asked what it would take. Short answer: most of
 the content already ships on the site, so this is 80% a product-shell and
 data-ownership job, not a rewrite.
 
-## The decision that comes before any code
+## Decisions — Bryce, 2026-08-18
 
-**MATCHDAY already exists in both app stores.** "MATCHDAY by Pickleball Inc.",
-iOS `id6755119460`, Android `com.cc.pbpulse.app`, seller Christopher Cantino,
-landing page pblfg.com (see `lib/matchday.ts`). A second Pickleball Inc. fan app
-splits the install base and the reviews. Pick one:
-
-- **A — Fold in.** ppatour.com becomes the installable web app (scores /
-  standings / schedule / on-site mode). MATCHDAY stays the store app and we feed
-  it, or it absorbs the event-day experience.
-- **B — Take it over.** We own MATCHDAY's roadmap and point it at our APIs.
-- **C — Ship ours anyway.** Only defensible if MATCHDAY is being wound down.
-
-Everything below assumes we build the web app first, which is true under all
-three options.
+1. **We ship our own app, MATCHDAY keeps running.** "MATCHDAY by Pickleball
+   Inc." (iOS `id6755119460`, Android `com.cc.pbpulse.app`, seller Christopher
+   Cantino) stays where it is. Bryce: *"different funnel"* — MATCHDAY is its own
+   audience, ours is the tour's own fans coming off ppatour.com.
+2. **In the app, the score bar owns the bottom edge.** `StickyBuyBar`, the
+   tour's #1 ticket CTA, stands down inside an installed window and is untouched
+   on the web. Website sells tickets; app follows the tour.
+3. **On-site content owner — TBD.** Still the one thing blocking Phase 4.
+4. **Live scores are not blocked.** The feed is already on the site (Wesley has
+   it implemented); no new access to chase.
 
 ## What already exists
 
@@ -30,21 +27,26 @@ three options.
 | Brackets | `/brackets`, `BracketView.tsx`, `/api/brackets` |
 | Event travel content | `lib/event-guides.ts` (hotels, city picks), `lib/venue-locations.ts` (verified street addresses) |
 
-What does **not** exist: any `manifest.ts`, service worker, icon set, or
-app-shell navigation. There is no installable app today.
+What did **not** exist before 8/18: any manifest, icon set, or app-shell
+navigation. Phase 1 and 2 below closed that; there is still no service worker
+and no store presence.
 
 ## Phases
 
-**Phase 1 — make it installable (small).** `app/manifest.ts`, icon set from
-`app/icon.svg`, theme color, service worker for the offline shell. Detect
-`display-mode: standalone` and swap site chrome for an app shell: bottom tab bar
-(Live · Rankings · Schedule · Event · Me), no marketing header, no cookie
-banner. Add to Home Screen prompt on mobile.
+**Phase 1 — make it installable. ✅ SHIPPED 8/18** (`app/manifest.ts`,
+`components/app/`). Add to Home Screen opens a standalone window with a
+five-tab bottom bar — Home · Live · Rankings · Schedule · Event — and no
+marketing footer, cookie banner or accessibility launcher. Detection is
+`display-mode: standalone`, iOS's `navigator.standalone`, then the manifest's
+own `?source=pwa`, because older iOS reports neither inside a home-screen
+window. Still open: a service worker for offline, and an in-page install
+prompt.
 
-**Phase 2 — the persistent score bar.** Promote `LiveBar` from `/live` to every
-route, driven by the ticker's "is a partner live" signal. The roadmap already
-flags this as a commercial call, not a cleanup: it competes with `StickyBuyBar`,
-the tour's #1 ticket CTA. Decide which one wins during an event.
+**Phase 2 — the persistent score bar. ✅ SHIPPED 8/18**
+(`components/app/AppScoreBar.tsx`). Always on, every route, cycling every live
+match every 5s off `/api/ticker` — the same feed as the header ticker, so the
+two cannot disagree. With nothing live it shows the next tour stop rather than
+vanishing. Web is unchanged.
 
 **Phase 3 — follow list.** "My players" and "my events", localStorage first, no
 login. This is where the app beats the site.
@@ -66,11 +68,12 @@ Tixr by deep link.
 
 ## Blockers that are not engineering time
 
-1. **MATCHDAY overlap** — strategic, above.
-2. **No live push feed.** `/api/scores` is polled per division on a 30s cache.
-   "Anna Leigh just took game 1" needs a webhook or a delta endpoint from the
-   Pickleball.com API team (Jason Santerre writes the spec, Kenan Hasanovic
-   says whether it is built).
+1. ~~MATCHDAY overlap~~ — settled 8/18, both apps run.
+2. ~~Live score feed~~ — settled 8/18, we already have it. Note the shape it
+   is in: polling on a 30s cache, which is right for a bar that redraws while
+   you look at it. A *notification* ("Anna Leigh just took game 1") is a
+   different job and needs somewhere to run the poll when the app is closed.
+   That is Phase 5, not a data ask.
 3. **No player→events endpoint.** Same blocker as "playing next" on athlete
    profiles (`docs/DATA-ASKS.md` §5). Without it, "follow a player and get
    notified when they play" cannot be built honestly.
