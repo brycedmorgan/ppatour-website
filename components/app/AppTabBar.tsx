@@ -2,17 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CalendarDays, Home, MapPin, Radio, Trophy } from "lucide-react";
+import { CalendarDays, Home, MapPin, Radio, Star, Trophy } from "lucide-react";
 import { eventHref, getNextTournament } from "@/lib/placeholder-data";
 
 /**
- * The app's primary navigation: five tabs pinned to the bottom edge, shown only
- * inside an installed window (see `AppChrome`).
+ * The app's primary navigation, pinned to the bottom edge and shown only inside
+ * an installed window (see `AppChrome`).
  *
- * The five are Bryce's three asks plus a home: scores, then standings and
- * schedule, then the event you are standing at. The Event tab points at the
- * next tour stop until the on-site experience exists — a tab that leads
- * somewhere real beats a tab that leads to "coming soon".
+ * Bryce's three asks plus a home and a you: scores, then standings and
+ * schedule, then the event you are standing at, then the pros you follow. The
+ * Event tab points at the next tour stop until the on-site experience exists —
+ * a tab that leads somewhere real beats a tab that leads to "coming soon".
  */
 const TABS = [
   { href: "/", label: "Home", icon: Home, match: (p: string) => p === "/" },
@@ -40,7 +40,13 @@ export function AppTabBar() {
     icon: MapPin,
     match: (p: string) => p.startsWith("/events/") && p !== "/events/",
   };
-  const tabs = [...TABS, eventTab];
+  const youTab = {
+    href: "/following/",
+    label: "You",
+    icon: Star,
+    match: (p: string) => p.startsWith("/following"),
+  };
+  const tabs = [...TABS, eventTab, youTab];
 
   return (
     <nav

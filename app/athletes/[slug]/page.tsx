@@ -23,6 +23,7 @@ import { reconcileBio } from "@/lib/bio-live";
 import { getDivisionRanks } from "@/lib/division-rankings";
 import { getAthleteVideoData } from "@/lib/athlete-videos";
 import { AthleteVideos } from "@/components/athletes/AthleteVideos";
+import { FollowButton } from "@/components/app/FollowButton";
 import { resolveGear } from "@/lib/athlete-gear";
 import { paddleImageFor } from "@/lib/paddle-images";
 import { athleteHeroFor } from "@/lib/athlete-heroes";
@@ -597,6 +598,9 @@ export default async function AthletePage({ params }: Params) {
             <h1 className="mt-3 font-display text-[clamp(2.25rem,6.5vw,4.25rem)] uppercase leading-[0.92]">
               {a.name}
             </h1>
+            {/* App only — see the component for why the website has no follow
+                button. */}
+            <FollowButton slug={a.slug} name={a.name} />
             {/* The yellow tagline line is gone — Hannah Johns (item 8) and Dave
                 Fleming, 29 Jul: "odd and incorrect", both asked to pull them.
                 They were subjective editorial claims ("the tour's most complete

@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { AppLinkRouter } from "@/components/app/AppLinkRouter";
 import { AppScoreBar } from "@/components/app/AppScoreBar";
 import { AppTabBar } from "@/components/app/AppTabBar";
+import { RegisterServiceWorker } from "@/components/app/RegisterServiceWorker";
 import { useAppMode } from "@/components/app/use-app-mode";
 
 /**
@@ -28,6 +29,7 @@ export function AppChrome() {
   return (
     <>
       <AppLinkRouter />
+      <RegisterServiceWorker />
       {/* Suspense: useLiveTicker reads useSearchParams (?partner=). */}
       <Suspense fallback={null}>
         <AppScoreBar />
