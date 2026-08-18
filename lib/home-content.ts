@@ -646,6 +646,53 @@ export const partners: Partner[] = [
     logoWidth: 900,
     logoHeight: 310,
   },
+  /**
+   * Journavx — added 8/18 (Wesley). Vertex's non-opioid pain treatment.
+   *
+   * ⚠ `role` IS THE GENERIC "Official Partner", BY INSTRUCTION (Wesley, 8/18),
+   * and it is deliberately NOT a category. Every other designation in this tier
+   * names what the partner owns — "Official Travel Partner", "Official Rating" —
+   * because the category is the thing that carries the value. This one doesn't,
+   * because nobody has confirmed one yet. That makes it safe to publish and safe
+   * to upgrade: replace the string when marketing settles the category. Don't
+   * invent one in the meantime, and don't read this row as precedent for a
+   * category-less designation on a partner who has one.
+   *
+   * ⚠ TOUR TIER BY INSTRUCTION, NOT BY INFERENCE (Wesley, 8/18: "It needs to be
+   * in the tour sponsors section"). It first went in as `official`, which was an
+   * empty tier — and because `partnersByTier()` drops empty tiers, that single
+   * row was what made an "Official Partners" heading appear on the wall for the
+   * first time. Moving it here removes that heading again. If a later partner is
+   * ever assigned `official`, expect the heading to reappear; that is the tier
+   * working, not a regression.
+   *
+   * ⚠ THE MARK IS A PRESCRIPTION-DRUG LOCKUP, NOT A WORDMARK: it reads
+   * "JOURNAVX® (suzetrigine) 50mg tablet", because a prescription drug has to be
+   * presented with its generic name and dosage form. It ships exactly as the
+   * sponsor supplied it. Don't crop the second line to make it sit taller on the
+   * card, don't recolour it, don't knock the white background out — see the
+   * fuller note on its job in scripts/import-sponsor-logos.mjs. (The white
+   * background is fine here: ten shipped marks are opaque.)
+   *
+   * ⚠ `website` IS THE HEALTHCARE-PROFESSIONAL SITE, exactly as supplied. The
+   * patient-facing journavx.com exists too — both resolve to the same Vertex
+   * edge host — so a fan clicking this card lands on a clinician portal. That is
+   * a decision for the sponsor, not for us to quietly "fix": pharma legal picks
+   * these destinations. Confirm which one this card should point at.
+   *
+   * ⚠ `eventNamePrefix` deliberately unset ("Not sure"). Unset means this
+   * partner never titles an event, which is the safe default — the field exists
+   * because inferring it once credited a title sponsor who wasn't one.
+   */
+  {
+    name: "Journavx",
+    website: "https://www.journavxhcp.com/",
+    role: "Official Partner",
+    tier: "tour",
+    logo: "/ppa/sponsors/journavx.png",
+    logoWidth: 900,
+    logoHeight: 256,
+  },
   {
     // The ball. Billed here under Tour; the Life Time parent brand is billed
     // separately at Platinum — see the ⚠ on that record, this split is the one
@@ -819,6 +866,7 @@ export const partners: Partner[] = [
    * `website: "https://picklebalm.com/"`,
    * `logo: "/ppa/sponsors/picklebalm.png"` (418x94).
    */
+
 ];
 
 /** The title partner (Carvana) — top billing, rendered apart from the tiers. */

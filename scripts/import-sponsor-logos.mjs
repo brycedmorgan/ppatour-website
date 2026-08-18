@@ -61,6 +61,21 @@ const JOBS = [
   // wrong: ppatour.com/sponsors lists it as a Gold sponsor (Official Broadcast
   // Partner), so it belongs on the wall like any other.
   ["Tour Sponsors", "03_PBTV_logo_Color_rgb1.png", "pbtv", "PickleballTV"],
+
+  /**
+   * Journavx, added 8/18. Supplied loose in Downloads rather than in a zip, so
+   * the directory component is empty.
+   *
+   * ⚠ THIS IS A PRESCRIPTION-DRUG LOCKUP, NOT A WORDMARK. The art reads
+   * "JOURNAVX® (suzetrigine) 50mg tablet" — brand name, generic name and dosage
+   * form together, which is how a prescription drug is required to be presented
+   * in advertising. The file is the sponsor's own approved web-inclusion asset
+   * (its name says so). So it ships EXACTLY as supplied: whitespace trimmed and
+   * scaled, and nothing else. Do not crop off the generic name or the dose, do
+   * not recolour it, and do not knock out its white background — every one of
+   * those edits changes a regulated claim, not a logo.
+   */
+  ["", "Website Logo Inclusion_Journavx_R_Logo_RGB (1).jpg", "journavx", "Journavx (suzetrigine) 50mg tablet"],
 ];
 
 /**
@@ -107,8 +122,27 @@ const ALL = [
   })),
 ];
 
+/**
+ * Optional slug filter: `node scripts/import-sponsor-logos.mjs journavx`.
+ *
+ * ⚠ Added 8/18 because there was no way to import ONE partner. A bare run does
+ * all 30 jobs, which rewrites every shipped asset (churning bytes for marks
+ * nobody touched) and throws on the three 8/3 zips that are long gone from
+ * Downloads. Filtering keeps a new sponsor to a one-file diff.
+ */
+const only = process.argv.slice(2).filter((a) => !a.startsWith("-"));
+const QUEUE = only.length ? ALL.filter((j) => only.includes(j.slug)) : ALL;
+if (only.length) {
+  const missing = only.filter((s) => !ALL.some((j) => j.slug === s));
+  if (missing.length) {
+    console.error(`No job for: ${missing.join(", ")}`);
+    process.exit(2);
+  }
+  console.log(`Importing only: ${QUEUE.map((j) => j.slug).join(", ")}\n`);
+}
+
 const results = [];
-for (const job of ALL) {
+for (const job of QUEUE) {
   const { slug, label } = job;
   try {
     const src = await job.get();
