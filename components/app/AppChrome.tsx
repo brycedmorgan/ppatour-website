@@ -1,13 +1,15 @@
 "use client";
 
 import { Suspense } from "react";
+import { AppLinkRouter } from "@/components/app/AppLinkRouter";
 import { AppScoreBar } from "@/components/app/AppScoreBar";
 import { AppTabBar } from "@/components/app/AppTabBar";
 import { useAppMode } from "@/components/app/use-app-mode";
 
 /**
- * Everything that only exists inside the installed app: the always-on score bar
- * and the bottom tab bar.
+ * Everything that only exists inside the installed app: the always-on score bar,
+ * the bottom tab bar, and the outbound-link router that keeps a Tixr checkout
+ * from stranding the fan in Safari.
  *
  * Mounted once in the root layout. In a browser tab it renders nothing and
  * costs one `matchMedia` read — the site is unchanged for the 99% of traffic
@@ -25,6 +27,7 @@ export function AppChrome() {
 
   return (
     <>
+      <AppLinkRouter />
       {/* Suspense: useLiveTicker reads useSearchParams (?partner=). */}
       <Suspense fallback={null}>
         <AppScoreBar />
