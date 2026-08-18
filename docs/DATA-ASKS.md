@@ -307,3 +307,61 @@ the bracket feed if a roster is needed.
 Also confirm whether one call returns all disciplines or one call per
 `divisionType` is required — that is the difference between ~400 and ~830 calls
 per event's worth of players.
+
+## 5. Player → events entered ("where does this pro play next") — Kenan / Jason — ASKED 2026-08-16, OPEN
+
+The ask that unlocks **"Playing next: <event>" on all 179 athlete profiles**, and
+registered counts on event pages as a side effect.
+
+**⚠ FIRST, THE CORRECTION THAT MATTERS: there is no separate credential to chase.**
+`lib/registrations.ts` reads `PT_API_TOKEN` / `PT_API_BASE_URL`, which are set in
+no Vercel environment and never will be. The pipe is `api.pickleball.com` under a
+**`/v2/jackalope/*`** namespace using the **`PB_API_TOKEN` we already hold**, in
+both ppatour-website and Jackalope. Do not raise a ticket for "PT API access";
+we have access. What is missing is one endpoint.
+
+**What we already have, live:**
+- `/v2/jackalope/tournaments` — registration transactions per tournament,
+  carrying `email` (Jackalope `registrations.js` consumes it)
+- `/v2/data/ppa_tournaments` — the tournament catalogue
+- Six `team_leagues_*` endpoints (MLP), live 2026-08-06
+
+**What is missing — Jason's own 7/22 spec, third Pickleball Tournaments bullet:**
+
+> *Players and all the events they are in* — Attendee Event ID, User ID, Event ID,
+> Event Code, Tournament ID, Tournament Code, Did Play, Registration Status
+> (In Event / Waitlist / Lottery)
+
+Nothing we hold maps a **player** to the **events they have entered**. Kenan
+replied "we will start working on this as soon as possible" on 7/22; build status
+is still unconfirmed as of 8/17.
+
+**⚠ WHY WE CANNOT FAKE IT IN THE MEANTIME.** `lib/event-field.ts` only names
+players once a **draw publishes — typically event week**, and there is no
+entry-list endpoint we are allowlisted for. The event page already encodes this:
+the heading reads `field.published ? "In the Draw" : "Ones to Watch"`, and the
+live Nationals page today renders **"Ones to Watch" ×2, "In the Draw" ×0**. A
+pre-draw pick is a storyline, not a statement that a pro is entered. Do not
+invert the field feed into a schedule.
+
+**Thread:** Slack group DM `C0BKZLY7YQG` — Jason Santerre, Kenan Hasanovic,
+Kenan Dzafic, Caleb Bender, Indir Karabegovic. Asked 2026-08-16; Jason replied
+"looking good" 8/17 but did not answer build status.
+
+## 6. MLP per-player timeline — `team_leagues_rosters` — APPROVED 2026-08-16, awaiting push
+
+Kenan Dzafic built `GET /jackalope/team_leagues_rosters` on 8/7 returning
+`user_uuid + team_uuid + season_uuid + team_league_uuid` (384 rows on dev) and
+said it ships "Monday when you give the okay". The okay was given 8/16.
+
+Joined with `team_leagues_scheduled_events` + `team_leagues_scheduled_event_teams`
+this yields a **per-pro MLP timeline** — user → team → that team's scheduled
+events. That is the MLP half of ask 5, and it needs no further access.
+
+**⚠ WE CANNOT DETECT IT GOING LIVE.** Jackalope's `TEAM_LEAGUE_ENDPOINTS` in
+`lib/pbapi.js` lists only the six 8/6 endpoints, and `pbTeamLeague()` throws on
+any name not in that array. Add `team_leagues_rosters` to it or the probe stays
+blind and Slack remains the only signal.
+
+**⚠ Supersedes the stale note that Team Leagues has no player→team link.** That
+was true on 8/6 and stopped being true on 8/7.
