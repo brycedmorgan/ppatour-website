@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-17T13:32:09Z",
+  "updated_at": "2026-08-18T13:35:12Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -2187,6 +2187,217 @@
       "type": "event_removed",
       "event_id": "183676",
       "event": "Major League Pickleball Newport Beach - Sunday"
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "price_change",
+      "event_id": "184765",
+      "event": "Veolia Pickleball National Championships Friday Morning - Singles and Mxd Doubles Quarterfinals",
+      "ticket": "Friday Morning Courtside+",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 156.66,
+        "to": 135.05
+      }
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "price_change",
+      "event_id": "184760",
+      "event": "Veolia Pickleball National Championships Sunday - Championships",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": null,
+        "to": 140
+      },
+      "all_in_price": {
+        "from": 113.44,
+        "to": 156.66
+      }
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "availability_change",
+      "event_id": "184760",
+      "event": "Veolia Pickleball National Championships Sunday - Championships",
+      "ticket": "Sunday Courtside",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "price_change",
+      "event_id": "166404",
+      "event": "2026 Pickleball World Championships Tuesday - Round of 64",
+      "ticket": "Tuesday Box Suite",
+      "base_price": {
+        "from": 2500,
+        "to": 3000
+      },
+      "all_in_price": {
+        "from": 2712.76,
+        "to": 3254.23
+      }
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "price_change",
+      "event_id": "166397",
+      "event": "2026 Pickleball World Championships Friday Morning - Singles and Mxd Double Quarterfinals",
+      "ticket": "Friday Full Day Box Suite",
+      "base_price": {
+        "from": 5500,
+        "to": 6000
+      },
+      "all_in_price": {
+        "from": 5961.59,
+        "to": 6503.07
+      }
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "Championships",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "Quarterfinals",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "Register Here",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "Round of 16",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "Semifinals",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "Tuesday Grounds Pass",
+      "base_price": 25,
+      "all_in_price": 30.35
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "Wednesday Grounds Pass",
+      "base_price": 25,
+      "all_in_price": 30.35
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "Weeklong Grounds Pass",
+      "base_price": 100,
+      "all_in_price": 113.44
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "Thursday-Sunday Courtside",
+      "base_price": 200,
+      "all_in_price": 221.49
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "Thursday-Sunday On Court VIP",
+      "base_price": 900,
+      "all_in_price": 977.82
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "Thursday-Sunday VIP",
+      "base_price": 800,
+      "all_in_price": 869.77
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "ticket_removed",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "Courtside"
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "ticket_removed",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "Courtside*"
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "ticket_removed",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "On Court VIP"
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "ticket_removed",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "VIP"
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "ticket_removed",
+      "event_id": "203167",
+      "event": "PPA Daytona Beach Sunday - Championships",
+      "ticket": "Championships"
+    },
+    {
+      "at": "2026-08-18T13:35:12Z",
+      "type": "event_removed",
+      "event_id": "178517",
+      "event": "PPA Daytona Beach"
     }
   ]
 }
