@@ -60,7 +60,7 @@ export function CookieBanner() {
   if (!visible) return null;
 
   return (
-    <div ref={ref} className="fixed inset-x-0 bottom-0 z-40 bg-ppa-navy text-white">
+    <div ref={ref} className="cookie-banner fixed inset-x-0 bottom-0 z-40 bg-ppa-navy text-white">
       {/* `pl-16` below sm keeps this clear of the UserWay accessibility button,
           which floats bottom-left over whatever bar is pinned there. Measured at
           390px: the button occupies x 13–57, and at `px-4` the notice started at

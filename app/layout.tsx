@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -12,6 +12,7 @@ import { OutboundClickTracker } from "@/components/global/OutboundClickTracker";
 import { MetaPixel } from "@/components/global/MetaPixel";
 import { MarketingTags } from "@/components/global/MarketingTags";
 import { AccessibilityWidget } from "@/components/global/AccessibilityWidget";
+import { AppChrome } from "@/components/app/AppChrome";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_INDEXABLE, SITE_URL } from "@/lib/site";
@@ -43,6 +44,17 @@ const cormorant = localFont({
   src: [{ path: "./fonts/CormorantGaramond.woff2", style: "normal" }],
 });
 
+/**
+ * `viewport-fit=cover` + the navy theme colour are what make an installed
+ * window look like an app rather than a web page in a frame: the status bar
+ * and the home-indicator area paint brand navy instead of white, and the app
+ * chrome can then use `env(safe-area-inset-*)` to stay clear of both.
+ */
+export const viewport: Viewport = {
+  themeColor: "#0c2b44",
+  viewportFit: "cover",
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   robots: SITE_INDEXABLE ? undefined : { index: false, follow: false },
@@ -64,6 +76,21 @@ export const metadata: Metadata = {
    * `alternates`.
    */
   alternates: { canonical: "./" },
+  /**
+   * iOS Add to Home Screen. Safari ignores the manifest's `display` and
+   * `short_name` — these three keys are what give the installed icon its name
+   * and open it without Safari's chrome. `startupImage` is deliberately unset;
+   * without a full set of per-device splash screens iOS just shows navy, which
+   * is the right first frame anyway.
+   */
+  appleWebApp: {
+    capable: true,
+    title: "PPA Tour",
+    statusBarStyle: "black-translucent",
+  },
+  icons: {
+    apple: "/app-icons/apple-touch-icon.png",
+  },
   title: {
     default: "Carvana PPA Tour — The Pro Tour of Pickleball",
     template: "%s · Carvana PPA Tour",
@@ -164,6 +191,8 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <StickyBuyBar />
         </Suspense>
+        {/* Installed-app chrome — renders nothing in a browser tab. */}
+        <AppChrome />
         <CookieBanner />
         <ScrollReveal />
         <Analytics />

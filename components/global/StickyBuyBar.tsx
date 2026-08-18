@@ -12,6 +12,7 @@ import {
   useLiveTicker,
 } from "@/components/live/use-live-ticker";
 import { withUtm } from "@/lib/utm";
+import { useAppMode } from "@/components/app/use-app-mode";
 
 // Cross-fade timing: hold each match this long, then fade over FADE_MS.
 const HOLD_MS = 5000;
@@ -27,6 +28,13 @@ const FADE_MS = 500;
  */
 export function StickyBuyBar() {
   const [visible, setVisible] = useState(false);
+  /**
+   * ⚠ The buy bar stands down inside the installed app. Bryce, 8/18: in the fan
+   * app the score bar owns the bottom edge. Two funnels — the website sells
+   * tickets, the app follows the tour — and they do not share one bar. On the
+   * web this is always false and nothing here changes.
+   */
+  const isApp = useAppMode();
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 480);
@@ -85,7 +93,7 @@ export function StickyBuyBar() {
    * `--buy-bar-visible-h`, by checking the suppressed path rather than assuming
    * it worked. Compare both forms so it survives the config being flipped back.
    */
-  const suppressed = pathname === "/brackets" || pathname === "/brackets/";
+  const suppressed = isApp || pathname === "/brackets" || pathname === "/brackets/";
 
   /**
    * Publish how much bottom edge this bar is actually covering right now, so

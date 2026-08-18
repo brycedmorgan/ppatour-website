@@ -145,7 +145,7 @@ function LinkGroup({
 
 export function SiteFooter() {
   return (
-    <footer className="bg-ppa-navy text-white">
+    <footer className="site-footer bg-ppa-navy text-white">
       <div className="mx-auto w-full max-w-6xl px-4 py-14">
         {/* Top row — logo + social */}
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">

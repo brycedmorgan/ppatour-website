@@ -477,6 +477,38 @@ html[data-motion="on"] [data-reveal-group].is-revealed > * {
   --buy-bar-h: 3.5rem;
 }
 
+/**
+ * Installed-app chrome (components/app/AppChrome.tsx).
+ *
+ * `--app-tabbar-h` is the bottom tab bar's height; the score bar stacks on top
+ * of it. Both are `fixed`, so app mode pads the page bottom by their combined
+ * height plus the home-indicator inset — without it the last row of every page
+ * sits under the tab bar and cannot be tapped.
+ *
+ * The hidden items are web furniture that has no place in an app window: the
+ * marketing footer (the tab bar replaces it), the cookie banner (it would cover
+ * the score bar), and the UserWay launcher (it floats bottom-left, straight
+ * onto the first tab; `.uwy` is the class its own script gives that
+ * launcher, confirmed in the DOM, not guessed). The buy bar stands down in
+ * code, not here — see StickyBuyBar.
+ */
+:root {
+  --app-tabbar-h: 3.25rem;
+  --app-scorebar-h: 2.75rem;
+}
+
+[data-app-mode="standalone"] body {
+  padding-bottom: calc(
+    var(--app-tabbar-h) + var(--app-scorebar-h) + env(safe-area-inset-bottom)
+  );
+}
+
+[data-app-mode="standalone"] .site-footer,
+[data-app-mode="standalone"] .cookie-banner,
+[data-app-mode="standalone"] .uwy {
+  display: none !important;
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
