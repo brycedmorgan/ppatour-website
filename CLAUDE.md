@@ -42,6 +42,42 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-19 — "At the event": the on-site screen ships, on the website
+
+- **New route `/events/<year>/<slug>/today`.** The app's Event tab points there, the
+  event page hero links there, and it is a URL a fan can text from the parking lot.
+  Bryce: the on-site experience "should be on the site too", not app-only.
+- **The order is the feature.** Courts in play → today's order of play → getting here →
+  parking → the ops facts → watching. A marketing page leads with the event; someone at
+  the gate needs the opposite, and nothing above the fold sells anything.
+- **⚠ "Today" is decided on the DEVICE, not the server.** The tour runs Cary to Las
+  Vegas, the page is prerendered, and a server in UTC calls Championship Sunday
+  "Monday" from 8pm Pacific. The phone at the venue is already in the venue's timezone.
+  Pre-hydration it renders the whole week — never a wrong day.
+- **⚠ `t.tournamentUuid` is API-sourced ONLY, and `resolveEvent` lets the CURATED record
+  win** — so it is absent on every hand-authored stop, Nationals included. The Today
+  page looks the UUID up from the live feed itself. Deliberately NOT added to
+  `resolveEvent`'s overlay: that record also feeds results, brackets and the registered
+  count on the event page, and handing those a UUID they have never had is a behaviour
+  change to a live page.
+- **`lib/onsite.ts` holds only the five facts nothing else answers** — venue map, entry,
+  bag policy, will call, food, one note. Parking / ADA / shuttle / rideshare are already
+  the event team's verbatim copy in `event-guides`; order of play is in
+  `event-schedule`. A second answer to an operational question is how somebody walks to
+  the wrong place. Blank fields render nothing.
+- **`resolveEvent` moved verbatim to `lib/resolve-event.ts`** so both routes share one
+  set of gates. Those gates are the difference between an event page and the 36
+  fabricated ones (8/6) — a second copy would have drifted.
+- **OWNER: Haley Brezec has Nationals' on-site content** (Bryce, 8/19). Cary already has
+  parking, ADA, shuttle and rideshare sourced, so her list is **five fields, not eight**.
+- **⚠ Live courts cannot be verified locally** — `.env.local` has no `PB_API_TOKEN`, so
+  `getEvents()` falls back to curated records with no UUID and the section says "Live
+  courts appear here once the tournament feed is live". Production is the only honest
+  check; the two empty states are worded differently on purpose so the deployed page
+  tells you which case it is in.
+- **Next:** Haley's five fields · the Jackalope authoring form so she is not editing a
+  TypeScript file · first live test is Nationals, Aug 31.
+
 ### 2026-08-18 (pt. 2) — Follows + push are LIVE; only the draw alert fires
 
 - **Push works end to end on production.** `/api/push/status` reports

@@ -56,7 +56,12 @@ alerts built; `PUSH_ALERTS` fires only `draw` on day one. See
 `lib/push-alerts.ts` for why, and the 8/18 pt. 2 session log for the operational
 details.
 
-**Phase 4 — "Today at the event" (next).** One route, `/events/<year>/<slug>/today`,
+**Phase 4 — "Today at the event". ✅ SHIPPED 8/19** at
+`/events/<year>/<slug>/today`; owner for Nationals is **Haley Brezec**, and her
+list is five fields because Cary's parking/ADA/shuttle/rideshare are already
+sourced. Original scoping below.
+
+**Phase 4 (as scoped).** One route, `/events/<year>/<slug>/today`,
 on the **website**, not app-only — the app's Event tab points at it and it becomes
 the top of the event page during event week. Ordered for someone standing at the
 gate, which is not how a website usually orders things:
