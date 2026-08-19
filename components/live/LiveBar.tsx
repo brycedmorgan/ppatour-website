@@ -1,9 +1,27 @@
-import { WatchLiveButton } from "@/components/live/WatchLiveButton";
+"use client";
 
-// Placeholder live context (swap for scoring-API data once wired).
-const LIVE_ROUND = "Round of 64";
-const LIVE_TOURNAMENT = "Veolia Atlanta Pickleball Championships";
-const PHRASE = `Live · ${LIVE_ROUND} · ${LIVE_TOURNAMENT}`;
+import { WatchLiveButton } from "@/components/live/WatchLiveButton";
+import { pickFeaturedMatch, useLiveTicker } from "@/components/live/use-live-ticker";
+
+/**
+ * What the marquee says, built from what is actually on.
+ *
+ * ⚠ IT USED TO BE TWO CONSTANTS: "Round of 64" and "Veolia Atlanta Pickleball
+ * Championships" — the April test event — scrolling across the top of the live
+ * page no matter which tournament was running, or whether one was. A marquee
+ * naming the wrong tournament is a broadcast-grade error: it is the single line
+ * on the page whose whole job is saying what you are watching.
+ *
+ * Every part is dropped when the feed doesn't know it, and the "Live ·" prefix
+ * appears only when a match is genuinely in progress — an up-next window gets
+ * the tournament name without the claim.
+ */
+function marqueePhrase(round: string | undefined, tournament: string | undefined, live: boolean) {
+  const parts = [live ? "Live" : null, round || null, tournament || null].filter(Boolean);
+  // Nothing known yet (first paint, or the feed is unreachable): say the one
+  // thing that is true on this route rather than inventing a round.
+  return parts.length > 0 ? parts.join(" · ") : "Live scores";
+}
 
 const SOCIAL = [
   {
@@ -29,8 +47,16 @@ const SOCIAL = [
 ];
 
 export function LiveBar() {
+  const { ordered, tournament } = useLiveTicker();
+  const featured = pickFeaturedMatch(ordered);
+  const phrase = marqueePhrase(
+    featured?.round,
+    tournament?.title,
+    featured?.status === "live",
+  );
+
   // Repeat + duplicate so the marquee loops seamlessly (animate-marquee → -50%).
-  const items = Array.from({ length: 6 }, () => PHRASE);
+  const items = Array.from({ length: 6 }, () => phrase);
 
   return (
     <div className="border-t border-white/10 bg-ppa-navy">

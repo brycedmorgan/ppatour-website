@@ -44,7 +44,8 @@ export function StickyBuyBar() {
   }, []);
 
   const pathname = usePathname();
-  const isLive = pathname === "/live";
+  // See TopBar: trailingSlash: true means this route is "/live/".
+  const isLive = pathname === "/live" || pathname === "/live/";
   const { ordered } = useLiveTicker({ enabled: isLive });
   const next = getNextTournament();
 

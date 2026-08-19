@@ -5,7 +5,6 @@ import { PartnerSpotlight } from "@/components/home/PartnerSpotlight";
 import { PartnerWall } from "@/components/global/PartnerWall";
 import { HomeHero, type HeroVariant } from "@/components/home/HomeHero";
 import { ScoresBracketToggle } from "@/components/live/ScoresBracketToggle";
-import { ATLANTA_EVENT_ID } from "@/lib/bracket-sample";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
 import { getRankings } from "@/lib/rankings-api";
 import { getEvents } from "@/lib/events-api";
@@ -15,8 +14,10 @@ import {
   daysUntil,
   eventHref,
   formatDateRange,
-  getMainTourEvents,
   getNextTournament,
+  getRemainingTourEvents,
+  isTournamentLive,
+  nowMs,
   tierPoints,
   eventTierShort,
   tierBadgeClass,
@@ -128,22 +129,11 @@ function SectionHead({
 }
 
 /**
- * The homepage body. `live` renders the active-tournament variant (used by
- * /live): the hero swaps its Next-Event countdown for a LIVE state and the
- * scores heading pulses. The global ticker + sticky bar flip to LIVE on the
- * /live route independently (see ScoreTicker / StickyBuyBar).
+ * The homepage body. Rendered by app/page.tsx (the real homepage) and by
+ * app/live/page.tsx (the same page under a shifted clock, to rehearse the live
+ * state before the tournament). Nothing about the live state is passed in — see
+ * `clockOffsetMs` and `isLive` below.
  */
-export type LiveEvent = {
-  name: string;
-  city: string;
-  state: string;
-  venue: string;
-  startDate: string;
-  endDate: string;
-  ticketsUrl: string;
-  /** Tournament crest for the hero badge (same slot as the homepage). */
-  logo?: string;
-};
 
 /** Champion headshot (roster photo, else an initials chip) for the light
  *  homepage champions band. */
@@ -192,13 +182,24 @@ async function lastCompletedChampions(): Promise<{ event: Tournament; champions:
 }
 
 export async function HomeContent({
-  live = false,
-  liveEvent,
+  clockOffsetMs = 0,
   heroVariant = "photo",
   heroToggle = false,
 }: {
-  live?: boolean;
-  liveEvent?: LiveEvent;
+  /**
+   * Preview only: milliseconds to add to this render's clock.
+   *
+   * ⚠ THIS IS THE ONLY PREVIEW KNOB, AND IT IS DELIBERATELY THE ONLY ONE. It
+   * used to be a `live` boolean plus a live-event record plus an event override
+   * plus a first-serve timestamp — four props /live set by hand, which meant the
+   * preview proved the live LAYOUT renders and nothing whatsoever about whether
+   * the page would flip on the day. Shifting the clock instead leaves every
+   * decision below to the same code production runs: which event is next,
+   * whether it is live, what the countdown reads, when it switches back.
+   *
+   * 0 in production, i.e. the wall clock. See app/live/page.tsx.
+   */
+  clockOffsetMs?: number;
   /**
    * Hero treatment. `photo` (the live default) is the next event's own venue
    * shot; the alternatives are under review — see /hero-preview.
@@ -207,23 +208,66 @@ export async function HomeContent({
   /** Preview only: render the in-hero background switcher. */
   heroToggle?: boolean;
 }) {
-  const next = getNextTournament();
-  const countdown = daysUntil(next.startDate);
+  // Every date-derived decision on this page reads this one value, so the hero,
+  // the countdown, the strips and the live check can never disagree about what
+  // time it is. `clockOffsetMs` is 0 everywhere except the /live harness.
+  const now = nowMs(clockOffsetMs);
+  const next = getNextTournament(now);
+  const countdown = daysUntil(next.startDate, now);
+
+  /**
+   * ⚠ THE HOMEPAGE FLIPS ITSELF, OFF THE CALENDAR — no deploy, no data edit.
+   *
+   * `getNextTournament()` returns the stop being played right now if there is
+   * one, so `isTournamentLive` on it is the whole switch: the page goes live at
+   * the instant the hero countdown reaches zero (both read local midnight of the
+   * start date — see the note on startOfEvent) and stays live through the END of
+   * the final day. Once that passes, the same selector advances to the next stop
+   * and the page is back in its Next-Event state, counting down again.
+   *
+   * ⚠ THE 60s ISR IS LOAD-BEARING NOW. `/` is `force-static` +
+   * `revalidate = 60` (app/page.tsx), so at first serve the client countdown can
+   * read zero up to a minute before the server-rendered shell flips. Don't
+   * lengthen that number without thinking about that morning.
+   */
+  const isLive = isTournamentLive(next, now);
   // World Pickleball Rankings — same live data as /rankings.
   const wpr = await getRankings();
-  // In live mode, use real tournament data when provided (falls back to the
-  // placeholder next event so the non-live homepage is unaffected).
+  // In live mode /live can hand us API-sourced detail; under the auto-flip
+  // `next` IS the running event, so the fallbacks are the normal path.
   const ev = {
-    name: liveEvent?.name ?? next.name,
-    city: liveEvent?.city ?? next.city,
-    state: liveEvent?.state ?? next.state,
-    venue: liveEvent?.venue ?? next.venue,
-    startDate: liveEvent?.startDate ?? next.startDate,
-    endDate: liveEvent?.endDate ?? next.endDate,
+    name: next.name,
+    city: next.city,
+    state: next.state,
+    venue: next.venue,
+    startDate: next.startDate,
+    endDate: next.endDate,
   };
   // Off-season/between-events homepage: no live scores make sense, so lead with
   // the most recent tour stop's champions instead.
-  const latestChampions = live ? null : await lastCompletedChampions();
+  const latestChampions = isLive ? null : await lastCompletedChampions();
+
+  /**
+   * The PB tournament UUID for the live scores + bracket panel.
+   *
+   * ⚠ THIS IS WHY THERE ARE TWO FLAGS AND NOT ONE. `isLive` comes off the
+   * calendar alone and needs no feed, which is what makes the hero flip
+   * reliable. The scores band additionally needs the running event's UUID — and
+   * curated rows don't carry one (only feed-built events do), so this can
+   * legitimately come back undefined: feed down, 429, or a stop the feed has
+   * never heard of.
+   *
+   * ⚠ AND IT MUST NEVER FALL BACK TO `ATLANTA_EVENT_ID`, which is what the two
+   * call sites below used to be hardcoded to. That is the April test event, and
+   * it is FINISHED — so the moment this page could flip itself, a hardcode there
+   * would publish Atlanta's completed bracket as Nationals' live scores, under
+   * Nationals' name. No id → no band. A live shell over another event's bracket
+   * is worse than no band at all, same ruling as the fabricated-scores fix.
+   */
+  const liveEventId = isLive
+    ? (await getEvents()).events.find((e) => e.slug === next.slug)?.tournamentUuid
+    : undefined;
+  const showLiveScores = isLive && Boolean(liveEventId);
   // Live pickleball.com coverage. Empty until the API grant lands, in which case
   // the rail is omitted rather than showing the invented headlines it replaced.
   const ecosystem = (await getPickleballNews(4)).articles;
@@ -232,7 +276,7 @@ export async function HomeContent({
   // /watch, so the homepage carried no link into an actual article.
   const [leadPost, ...secondaryPosts] = allNews().slice(0, 5);
   // Next six tour stops for the "Next on Tour" strip above the callouts.
-  const upNext = getMainTourEvents().slice(0, 6);
+  const upNext = getRemainingTourEvents(now).slice(0, 6);
 
   /**
    * Hannah 7/28: rankings matter more to a visitor than latest champions, so
@@ -255,23 +299,23 @@ export async function HomeContent({
    * never turn into made-up data that looks completely plausible. The component
    * and the placeholder array are both deleted, so it cannot come back.
    */
-  const scoresSection = !live && !latestChampions ? null : (
+  const scoresSection = !showLiveScores && !latestChampions ? null : (
     <>
         {/* ── Live & Latest scores ───────────────────────────── */}
         <section className="bg-white">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <SectionHead
-                label={live ? "Live Now" : "Champions"}
-                title={live ? "Live & Latest" : "Latest Champions"}
-                pulse={live}
+                label={showLiveScores ? "Live Now" : "Champions"}
+                title={showLiveScores ? "Live & Latest" : "Latest Champions"}
+                pulse={showLiveScores}
               />
               {/* In the champions state "Full Results" moves down beside the
                   tournament name — Dave Rogers 7/27: over here on the right it
                   gets missed. */}
-              {live && (
+              {showLiveScores && (
                 <Link
-                  href={`/brackets?event=${ATLANTA_EVENT_ID}`}
+                  href={`/brackets?event=${liveEventId}`}
                   className="group text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
                 >
                   View Full Bracket{" "}
@@ -282,8 +326,9 @@ export async function HomeContent({
 
             {/* The band must SAY which event it covers (Connor, 7/20). */}
             {(() => {
-              const chip = !live && latestChampions ? latestChampions.event : ev;
-              const name = !live && latestChampions ? latestChampions.event.name : ev.name;
+              const chip = !showLiveScores && latestChampions ? latestChampions.event : ev;
+              const name =
+                !showLiveScores && latestChampions ? latestChampions.event.name : ev.name;
               return (
                 <p className="mt-3 inline-flex flex-wrap items-center gap-x-2 gap-y-1 border-l-2 border-ppa-blue bg-ppa-paper px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/70">
                   {name}
@@ -291,7 +336,7 @@ export async function HomeContent({
                     {formatDateRange(chip.startDate, chip.endDate, true)} · {chip.city}
                     {chip.state ? `, ${chip.state}` : ""}
                   </span>
-                  {!live && latestChampions && (
+                  {!showLiveScores && latestChampions && (
                     <Link
                       href={eventHref(latestChampions.event)}
                       className="group text-ppa-blue hover:text-ppa-navy"
@@ -309,11 +354,11 @@ export async function HomeContent({
               );
             })()}
 
-            {live ? (
+            {showLiveScores ? (
               <div className="mt-4">
                 {/* The section's "View Full Bracket" link opens the full-page
                     bracket, so the in-panel link is omitted (no expandHref). */}
-                <ScoresBracketToggle eventId={ATLANTA_EVENT_ID} light />
+                <ScoresBracketToggle eventId={liveEventId!} light />
               </div>
             ) : latestChampions ? (
               <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -410,8 +455,8 @@ export async function HomeContent({
         next={next}
         ev={ev}
         countdown={countdown}
-        live={live}
-        liveEvent={liveEvent}
+        live={isLive}
+        clockOffsetMs={clockOffsetMs}
       />
 
       {/* ── Next on Tour (Bryce 7/28: text links + arrows, directly above the
@@ -537,7 +582,7 @@ export async function HomeContent({
           150K fans bar "isn't doing anything" — lead with the next event). */}
 
       {/* Order flips off-season — see the note on scoresSection. */}
-      {live ? (
+      {showLiveScores ? (
         <>
           {scoresSection}
           {rankingsSection}
@@ -736,7 +781,7 @@ export async function HomeContent({
           </div>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {getMainTourEvents()
+            {getRemainingTourEvents(now)
               .slice(0, 6)
               .map((t, i) => (
                 <article

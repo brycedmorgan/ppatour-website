@@ -76,15 +76,34 @@ type ApiMatch = {
   streamingServices?: { liveUrl?: string; archivedUrl?: string }[];
 };
 
+/**
+ * ⚠ THE TICKER READS PRODUCTION NOW, AND THE DEV INSTANCE IS OPT-IN.
+ *
+ * This used to be `PB_API_DEV_TOKEN || PB_API_TOKEN` — dev preferred whenever
+ * those vars happened to be present. That made this the ONLY module on the site
+ * reading api.pickleballdev.net; scores-api, brackets-api and tournament-api all
+ * read production. The consequence was silent and total: with the dev vars set,
+ * production reported PPA Asia live with 47 matches while the dev instance
+ * returned 0 for the same window — so the site-wide ticker read "Next Event"
+ * through a live tournament and the /live rail sat on its spinner. Nothing
+ * errored; an empty window and "nothing is on" are the same response.
+ *
+ * Opt in with `PB_TICKER_SOURCE=dev` when you genuinely need the ticker pointed
+ * at a rehearsal tournament on the dev instance. Anything else — including the
+ * dev vars being set for other reasons — gets production.
+ *
+ * ⚠ CHECK VERCEL. If PB_API_DEV_URL / PB_API_DEV_TOKEN are set in the production
+ * environment, the live site's ticker has been reading the dev instance too.
+ */
 function config() {
-  // The ticker runs against the dev instance (separate token + URL). Falls back
-  // to the production creds if the dev vars aren't set yet.
-  const token = process.env.PB_API_DEV_TOKEN || process.env.PB_API_TOKEN;
+  const useDev = process.env.PB_TICKER_SOURCE === "dev";
+  const token =
+    (useDev ? process.env.PB_API_DEV_TOKEN : undefined) ?? process.env.PB_API_TOKEN;
   const base = (
-    process.env.PB_API_DEV_URL ||
-    process.env.PB_API_BASE_URL ||
+    (useDev ? process.env.PB_API_DEV_URL : undefined) ??
+    process.env.PB_API_BASE_URL ??
     "https://api.pickleball.com"
-  ).replace(/\/$/, "");
+  ).replace(/[/]$/, "");
   return { token, base };
 }
 

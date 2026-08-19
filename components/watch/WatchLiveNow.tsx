@@ -47,14 +47,12 @@ export function WatchLiveNow({ initialData }: { initialData: TickerResult }) {
         </div>
         <div className="mt-6">
           {/* Same live cards + data as the /live broadcast ticker, on a
-              transparent backdrop with 3 full cards and no date badge.
-              Controlled off this component's hook — the rail doesn't poll. */}
-          <LiveScoreTicker
-            showDate={false}
-            transparent
-            visibleCards={3}
-            matches={ordered}
-          />
+              transparent backdrop with no date badge. Controlled off this
+              component's hook — the rail doesn't poll.
+              ⚠ The card count used to be pinned here (`visibleCards={3}`); it
+              is a viewport media query now, so this page and the broadcast
+              header can't disagree about how many matchups fit. */}
+          <LiveScoreTicker showDate={false} transparent matches={ordered} />
         </div>
       </div>
     </section>

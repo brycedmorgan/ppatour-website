@@ -98,7 +98,7 @@ export function HomeHero({
   ev,
   countdown,
   live = false,
-  liveEvent,
+  clockOffsetMs = 0,
   priority = true,
 }: {
   variant?: HeroVariant;
@@ -108,7 +108,8 @@ export function HomeHero({
   ev: Ev;
   countdown: number;
   live?: boolean;
-  liveEvent?: { logo?: string } | undefined;
+  /** Preview only: milliseconds added to the countdown's clock. See Countdown. */
+  clockOffsetMs?: number;
   priority?: boolean;
 }) {
   /**
@@ -220,91 +221,66 @@ export function HomeHero({
         {/* Soften the header→hero seam: navy fades down into the hero image. */}
         <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-32 bg-gradient-to-b from-ppa-navy to-transparent" />
 
-        {/* Floating event crest removed (Bryce 7/28: the Nationals mark
-            hovering over the hero "doesn't make a whole lot of sense there").
-            The hero photo + headline already name the event. Kept on /live,
-            where the crest identifies which tournament is on. */}
-
-        {/* Live tournament crest — same hero slot/treatment as the homepage. */}
-        {live && liveEvent?.logo && (
-          <div
-            className="pointer-events-none absolute right-4 top-16 z-[2] block motion-safe:animate-rise sm:right-8 sm:top-20 lg:right-24"
-            style={{ animationDelay: "120ms" }}
-          >
-            <Image
-              src={liveEvent.logo}
-              alt=""
-              width={562}
-              height={702}
-              className="h-24 w-auto rounded drop-shadow-[0_4px_22px_rgba(2,49,85,0.65)] sm:h-44 lg:h-64"
-            />
-          </div>
-        )}
-
-        {/* Floating "Featured Event" card removed on the homepage (Bryce 7/28:
-            redundant — the hero itself is that event). Retained in live mode,
-            where it carries the LIVE NOW label. */}
-        {live && (
-          <div className="pointer-events-none absolute bottom-6 right-4 z-[2] hidden flex-col items-end bg-ppa-navy-deep/70 px-3.5 py-2.5 backdrop-blur-sm md:flex lg:right-8">
-            <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-ppa-sky">
-              Live Now
-            </span>
-            <span className="mt-0.5 font-display text-sm uppercase leading-tight text-white">
-              {ev.name}
-            </span>
-            <span className="mt-0.5 text-[10px] uppercase tracking-wide text-white/65">
-              {formatDateRange(ev.startDate, ev.endDate, true)} · {ev.venue}
-            </span>
-          </div>
-        )}
+        {/* ⚠ NOTHING FLOATS OVER THIS HERO IN EITHER STATE, AND BOTH REMOVALS
+            WERE ASKED FOR. Bryce, 7/28, took the event crest and the "Featured
+            Event" card off the homepage hero — the mark "doesn't make a whole
+            lot of sense there" and the card is redundant, since the hero IS that
+            event. Both survived as live-mode exceptions until Wesley, 8/19:
+            "the logo image in the top right shouldn't show anymore… make all
+            other content match the current home page hero." The LIVE NOW badge
+            in the eyebrow is what marks the state now. */}
 
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-7 pt-16">
           <div
             className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em] motion-safe:animate-rise"
             style={{ animationDelay: "80ms" }}
           >
+            {/* ⚠ ONE ROW, NOT TWO BRANCHES. The live and next-event heroes used
+                to be separate markup and had drifted: live lost the city link and
+                said its own thing in the last slot. Only the badge and that last
+                slot differ now, so they cannot drift again. */}
             {live ? (
-              <>
-                <span className="flex items-center gap-1.5 bg-ppa-live px-2 py-0.5">
-                  <span className="size-1.5 animate-pulse rounded-full bg-white" />
-                  Live Now
-                </span>
-                <span className="text-white/70">
-                  {ev.city}, {ev.state}
-                </span>
-                <span className="text-white/25">/</span>
-                <span className="text-ppa-yellow">Matches in progress</span>
-              </>
+              <span className="flex items-center gap-1.5 bg-ppa-live px-2 py-0.5">
+                <span className="size-1.5 animate-pulse rounded-full bg-white" />
+                Live Now
+              </span>
             ) : (
-              <>
-                <span className="bg-ppa-blue px-2 py-0.5">Next Event</span>
-                {/* Dave Rogers 7/27: "I would like to click on Cary, NC and see
-                    where that is" — goes to the event's Plan Your Trip guide. */}
-                <Link
-                  href={`${eventHref(next)}#travel`}
-                  className="text-white/70 underline-offset-4 transition-colors hover:text-white hover:underline"
-                >
-                  {next.city}, {next.state}
-                </Link>
-                <span className="text-white/25">/</span>
-                <span className="text-ppa-yellow">
-                  <Countdown
-                    targetIso={next.startDate}
-                    fallback={`${countdown} ${countdown === 1 ? "Day" : "Days"} Out`}
-                  />
-                </span>
-              </>
+              <span className="bg-ppa-blue px-2 py-0.5">Next Event</span>
             )}
+            {/* Dave Rogers 7/27: "I would like to click on Cary, NC and see
+                where that is" — goes to the event's Plan Your Trip guide. */}
+            <Link
+              href={`${eventHref(next)}#travel`}
+              className="text-white/70 underline-offset-4 transition-colors hover:text-white hover:underline"
+            >
+              {next.city}, {next.state}
+            </Link>
+            <span className="text-white/25">/</span>
+            <span className="text-ppa-yellow">
+              {live ? (
+                /* ⚠ THE ONE PLACE THE LIVE HERO STILL DEPARTS FROM THE HOMEPAGE,
+                   and it has to. The countdown clamps at zero, so a literal match
+                   would print "0D : 0H : 0M : 0S" beside a LIVE NOW badge for the
+                   whole tournament. */
+                "Matches in progress"
+              ) : (
+                <Countdown
+                  targetIso={next.startDate}
+                  offsetMs={clockOffsetMs}
+                  fallback={`${countdown} ${countdown === 1 ? "Day" : "Days"} Out`}
+                />
+              )}
+            </span>
           </div>
 
           <h1
             className="mt-3 max-w-[18ch] font-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98] motion-safe:animate-rise"
             style={{ animationDelay: "160ms" }}
           >
-            {/* Hero headline shows the full event name (e.g. "Veolia Pickleball
-                National Championships"); in live mode it's the live event's name.
-                The short form stays on the scores-band chip below. */}
-            {live ? ev.name : next.name}
+            {/* The full event name — "Veolia Pickleball National Championships",
+                never the short form (Jeff Watson, 8/3). The short form stays on
+                the scores-band chip below. */}
+            {next.name}
           </h1>
 
           <div
@@ -316,17 +292,15 @@ export function HomeHero({
             <span>{ev.venue}</span>
             <span className="text-white/25">|</span>
             {/* Dave Rogers 7/27: "I would like to click on 2,000 rankings
-                points and find out what that means." */}
-            {live ? (
-              <span className="text-ppa-yellow">▶ Live on PickleballTV</span>
-            ) : (
-              <Link
-                href="/about/how-it-works"
-                className="text-ppa-yellow underline-offset-4 transition-colors hover:underline"
-              >
-                {tierPoints(next).toLocaleString()} Ranking Points
-              </Link>
-            )}
+                points and find out what that means." Shown in both states — the
+                live hero used to swap it for a "▶ Live on PickleballTV" line, but
+                Watch Live is already the hero's first button. */}
+            <Link
+              href="/about/how-it-works"
+              className="text-ppa-yellow underline-offset-4 transition-colors hover:underline"
+            >
+              {tierPoints(next).toLocaleString()} Ranking Points
+            </Link>
           </div>
 
           <div

@@ -9,9 +9,21 @@ import { useEffect, useState } from "react";
  */
 export function Countdown({
   targetIso,
+  offsetMs = 0,
   fallback,
 }: {
   targetIso: string;
+  /**
+   * Preview only: milliseconds to add to the clock.
+   *
+   * ⚠ IT SHIFTS *NOW*, IT DOES NOT MOVE THE TARGET. /live's harness needs the
+   * countdown and the server's live check to agree about what time it is, and
+   * they only do that if both read the same shifted clock against the same real
+   * first-serve date. Moving the target instead would make the countdown reach
+   * zero at a moment the server had no opinion about. Nothing on the production
+   * homepage passes this, so it is 0 and this is the wall clock.
+   */
+  offsetMs?: number;
   fallback: string;
 }) {
   const [now, setNow] = useState<number | null>(null);
@@ -29,7 +41,7 @@ export function Countdown({
   if (now === null) return <>{fallback}</>;
 
   const target = new Date(`${targetIso}T00:00:00`).getTime();
-  const diff = Math.max(0, target - now);
+  const diff = Math.max(0, target - (now + offsetMs));
   const days = Math.floor(diff / 86_400_000);
   const hours = Math.floor((diff % 86_400_000) / 3_600_000);
   const mins = Math.floor((diff % 3_600_000) / 60_000);

@@ -78,12 +78,32 @@ function ArrowButton({ dir, onClick }: { dir: "left" | "right"; onClick: () => v
   );
 }
 
+/**
+ * How many matchups the rail shows, by viewport (Wesley, 8/19):
+ *
+ *   < 778      1        778 – 1079   2        1080 – 1399   3        ≥ 1400   4
+ *
+ * ⚠ CSS, NOT A PROP, AND NOT A RESIZE LISTENER. This was `visibleCards?: 3 | 4`
+ * — a fixed count each caller picked, so the /live header showed four cards
+ * whether the viewport was 1600px or 800px, squeezing four unreadable slivers
+ * onto a laptop. A JS breakpoint would also mean the first paint is wrong until
+ * hydration measures the window. Media queries get it right on the server.
+ *
+ * ⚠ AND THE WIDTHS INTENTIONALLY DON'T ADD UP TO 100%. Each leaves ~8–12% for a
+ * sliver of the next card, which is the only thing telling a reader the rail
+ * scrolls — same reason the homepage callout rail sits at 68vw (7/31 pt.5).
+ */
+const CARD_WIDTHS =
+  "w-[88%] min-[778px]:w-[46%] min-[1080px]:w-[31%] min-[1400px]:w-[23%]";
+
+/** Enough placeholders to fill the widest layout; the rest scroll off. */
+const SKELETON_COUNT = 4;
+
 export function LiveScoreTicker({
   showDate = true,
   logo,
   logoHref,
   transparent = false,
-  visibleCards = 4,
   initialData,
   matches,
 }: {
@@ -95,8 +115,7 @@ export function LiveScoreTicker({
   logoHref?: string;
   /** Drop the navy backdrop so cards sit on the host section. */
   transparent?: boolean;
-  /** How many full cards fit before the rail scrolls. */
-  visibleCards?: 3 | 4;
+
   /** Server-prefetched matches so the first paint skips the fetch wait. */
   initialData?: TickerResult;
   /**
@@ -114,8 +133,7 @@ export function LiveScoreTicker({
   // Controlled mode has nothing to wait for.
   const showCards = (matches !== undefined || self.loaded) && ordered.length > 0;
 
-  // Card width tuned so N cards show with a sliver of the next.
-  const cardW = `${visibleCards === 3 ? "w-[31%]" : "w-[23%]"} shrink-0`;
+  const cardW = `${CARD_WIDTHS} shrink-0`;
 
   // Arrow-button scrolling (native swipe still works on touch).
   const railRef = useRef<HTMLDivElement>(null);
@@ -153,10 +171,14 @@ export function LiveScoreTicker({
 
   return (
     <div className={`flex items-stretch ${transparent ? "" : "bg-ppa-navy"}`}>
-      {showDate && <DateBadge logo={logo} logoHref={logoHref} />}
+      {/* ⚠ The crest defaults to the LIVE tournament's own logo from the feed.
+          TopBar used to hand this a hardcoded Veolia Atlanta crest and event
+          link, so the broadcast header credited a finished April test event
+          whatever was actually on. A caller can still override both. */}
+      {showDate && <DateBadge logo={logo ?? self.tournament?.logo ?? undefined} logoHref={logoHref} />}
 
-      {/* Match cards — width tuned so `visibleCards` show with a sliver of
-          the next. Arrow buttons scroll; native swipe still works on touch. */}
+      {/* Match cards — see CARD_WIDTHS for how many show at each viewport.
+          Arrow buttons scroll; native swipe still works on touch. */}
       <div className="relative min-w-0 flex-1">
         {showCards && !edges.start && <ArrowButton dir="left" onClick={() => scrollByDir(-1)} />}
         {showCards && !edges.end && <ArrowButton dir="right" onClick={() => scrollByDir(1)} />}
@@ -168,7 +190,7 @@ export function LiveScoreTicker({
           {showCards
             ? ordered.map((m) => <MatchCard key={m.id} m={m} className={cardW} />)
             : // Loading / no-live state — spinner in each card.
-              Array.from({ length: visibleCards }).map((_, i) => (
+              Array.from({ length: SKELETON_COUNT }).map((_, i) => (
                 <MatchCardSkeleton key={`sk-${i}`} className={cardW} />
               ))}
         </div>

@@ -2,7 +2,13 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import type { TickerMatch, TickerResult, TickerTeam } from "@/lib/ticker-api";
+import { getNextTournament, isTournamentLive, nowMs } from "@/lib/placeholder-data";
+import type {
+  TickerMatch,
+  TickerResult,
+  TickerTeam,
+  TickerTournament,
+} from "@/lib/ticker-api";
 
 /**
  * Shared live-ticker data source. Fetches real match data from /api/ticker
@@ -40,6 +46,12 @@ export function useLiveTicker({
   // Seed from server-fetched data (when a page prefetches it) so the first
   // paint already has matches instead of waiting for the post-hydration fetch.
   const [matches, setMatches] = useState<TickerMatch[]>(initialData?.matches ?? []);
+  // Which tournament these matches belong to. The site chrome names it — the
+  // /live marquee used to carry a hardcoded "Veolia Atlanta Pickleball
+  // Championships" instead, which is a claim about which event is on.
+  const [tournament, setTournament] = useState<TickerTournament | null>(
+    initialData?.tournament ?? null,
+  );
   const [loaded, setLoaded] = useState(Boolean(initialData));
 
   useEffect(() => {
@@ -53,6 +65,7 @@ export function useLiveTicker({
         const data = (await res.json()) as TickerResult;
         if (!active) return;
         setMatches(data.matches);
+        setTournament(data.tournament);
       } catch {
         // keep last-known on transient errors
       } finally {
@@ -72,7 +85,7 @@ export function useLiveTicker({
     return [...matches].sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
   }, [enabled, matches]);
 
-  return { ordered, loaded };
+  return { ordered, loaded, tournament: enabled ? tournament : null };
 }
 
 /** The single match to feature in a compact surface: the first live one, else
@@ -117,4 +130,57 @@ export function formatMatchScore(m: TickerMatch): string {
     cells.push(`${a ?? 0}–${b ?? 0}`);
   }
   return cells.join(", ");
+}
+
+/**
+ * Preview only: the `?offset=` milliseconds /live pins in the URL to shift the
+ * clock. 0 everywhere else, which is the wall clock.
+ */
+export function usePreviewClockOffset(): number {
+  const searchParams = useSearchParams();
+  const raw = Number(searchParams.get("offset"));
+  return Number.isFinite(raw) ? raw : 0;
+}
+
+/**
+ * Is a tour stop being played at this moment — the same calendar check the
+ * homepage flips on (`isTournamentLive`), evaluated client-side so the site
+ * chrome can follow it.
+ *
+ * ⚠ THIS EXISTS BECAUSE THE CHROME USED TO KEY OFF THE PATHNAME. TopBar showed
+ * the broadcast stack — marquee plus the big score rail — whenever the URL was
+ * /live, so previewing `?in=30` put the full live chrome on screen thirty
+ * seconds BEFORE the page it sits above went live. The countdown was still
+ * running underneath it.
+ *
+ * ⚠ AND IT READS THE SIMULATED CLOCK, WHICH IS THE ONLY WAY A PREVIEW CAN BE
+ * COHERENT. The score feed answers for right now and cannot pretend it is a
+ * different day, so during a simulation the chrome is driven by the calendar
+ * (which can) and `simulating` lets consumers suppress feed-driven state until
+ * the simulated clock crosses first serve. In production the offset is 0 and
+ * this is simply "is the tour on".
+ *
+ * Re-evaluated every second so the chrome flips at the boundary on its own,
+ * with no reload.
+ */
+export function useTourIsLive(): { live: boolean; simulating: boolean; now: number } {
+  const offsetMs = usePreviewClockOffset();
+  // Seeded during render (not after mount) so the server and the first client
+  // paint agree — otherwise the chrome would visibly swap height on every page
+  // load during a tournament.
+  const [now, setNow] = useState(() => nowMs(offsetMs));
+
+  useEffect(() => {
+    // Interval only — no immediate resync. Setting state straight in the effect
+    // body is what `react-hooks/set-state-in-effect` is there to stop, and the
+    // SSR seed is at most a second stale, which the first tick corrects.
+    const id = window.setInterval(() => setNow(nowMs(offsetMs)), 1_000);
+    return () => window.clearInterval(id);
+  }, [offsetMs]);
+
+  return {
+    live: isTournamentLive(getNextTournament(now), now),
+    simulating: offsetMs !== 0,
+    now,
+  };
 }

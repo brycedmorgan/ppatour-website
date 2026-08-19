@@ -1000,54 +1000,145 @@ export function getAllEvents(): Tournament[] {
   return [...tournaments].sort((a, b) => a.startDate.localeCompare(b.startDate));
 }
 
-/** Next upcoming main-tour event, chronologically. */
-export function getNextTournament(): Tournament {
-  const main = getMainTourEvents();
-  return main.find((t) => t.status !== "completed") ?? main[0];
-}
-
-export type TickerState =
-  | {
-      mode: "LIVE";
-      court: string;
-      players: [string, string];
-      score: string;
-      watchUrl: string;
-    }
-  | {
-      mode: "NEXT";
-      tournamentName: string;
-      eventDate: string;
-      eventSlug: string;
-    };
+/* ---- is it on right now? ---- */
 
 /**
- * Selection logic for the site-wide ticker (§9.1). With placeholder data
- * there is no live event, so this always returns NEXT mode. Once the scoring
- * API is wired, query live matches first and return LIVE mode if any exist.
+ * ⚠ EVERY WINDOW ON THIS SITE IS PARSED AS LOCAL MIDNIGHT, DELIBERATELY.
+ * `new Date(`${iso}T00:00:00`)` — no zone — is exactly what
+ * components/motion/Countdown and `daysUntil` below do, so the homepage flips
+ * to its live state at the instant the clock a visitor is watching reads zero,
+ * not a few hours either side of it. Parsing these as UTC instead is a silent
+ * timezone bug that only shows up as "the site went live at 8pm".
  */
-export function getTickerState(): TickerState {
-  const next = getNextTournament();
+/**
+ * The clock every date-derived surface reads.
+ *
+ * ⚠ IT IS A PARAMETER, NOT A GLOBAL, AND THAT IS WHAT MAKES THE FLIP TESTABLE.
+ * Pass nothing and it is the wall clock — that is production, unchanged. Pass a
+ * shifted value (only /live does) and the SAME code answers "is it live yet" for
+ * a different moment, so the preview exercises the real selector rather than a
+ * forced `live` flag that proves nothing about what will happen on the day.
+ *
+ * Keeping `Date.now()` behind a function also keeps `react-hooks/purity` happy
+ * at the call sites, which are component bodies.
+ */
+function clock(now?: number): number {
+  return now ?? Date.now();
+}
+
+/**
+ * The current time, shifted by a preview offset. `nowMs()` is the wall clock.
+ *
+ * Server components call this instead of `Date.now()` directly so
+ * `react-hooks/purity` stays satisfied, and so there is exactly one place a
+ * render's notion of "now" comes from.
+ */
+export function nowMs(offsetMs = 0): number {
+  return Date.now() + offsetMs;
+}
+
+function startOfEvent(t: Tournament): number {
+  return new Date(t.startDate + "T00:00:00").getTime();
+}
+
+/** The END of the final day, not its midnight boundary — a Sunday final is
+ *  still live on Sunday afternoon. */
+function endOfEvent(t: Tournament): number {
+  return new Date(t.endDate + "T00:00:00").getTime() + 24 * 60 * 60 * 1000;
+}
+
+/** Is this event being played right now? `now` overrides the clock (preview). */
+export function isTournamentLive(t: Tournament, now?: number): boolean {
+  const start = startOfEvent(t);
+  const end = endOfEvent(t);
+  if (!Number.isFinite(start) || !Number.isFinite(end)) return false;
+  const at = clock(now);
+  return at >= start && at < end;
+}
+
+/** Has the final day of this event passed? */
+export function hasTournamentEnded(t: Tournament, now?: number): boolean {
+  const end = endOfEvent(t);
+  return Number.isFinite(end) && clock(now) >= end;
+}
+
+/** First serve, as an epoch — the moment the homepage goes live. */
+export function firstServeMs(t: Tournament): number {
+  return startOfEvent(t);
+}
+
+/** The end of the final day — the moment the homepage goes back to Next Event. */
+export function lastPointMs(t: Tournament): number {
+  return endOfEvent(t);
+}
+
+/**
+ * The season's main-tour stops that have NOT finished yet — the currently
+ * running one first, if there is one, then everything still to come.
+ *
+ * ⚠ THIS IS NOT `getMainTourEvents()` AND MUST NOT REPLACE IT. That one is the
+ * SEASON: /about counts it ("One Race. Twenty Stops.") and reads its first and
+ * last rows as the opener and closer, so filtering finished stops out of it
+ * would make the tour advertise fewer stops every week as the season ran.
+ * This one is "what is still ahead", which is what the homepage hero, the Next
+ * on Tour strip and the header panel actually want.
+ *
+ * ⚠ AND IT IS FILTERED ON THE END DATE, NOT THE START. An event that has begun
+ * but not finished is the CURRENT event and has to stay at the head of this
+ * list — it is what the hero puts on screen while it is live.
+ */
+export function getRemainingTourEvents(now?: number): Tournament[] {
+  return getMainTourEvents().filter((t) => !hasTournamentEnded(t, now));
+}
+
+/**
+ * The event the site points people at: the one being played right now, or the
+ * next one up.
+ *
+ * ⚠ THIS USED TO BE `main.find((t) => t.status !== "completed")`, AND `status`
+ * IS HAND-SET — every row `buildSchedule` produces is hardcoded "upcoming"
+ * (see it above). So this returned the same event forever: it did not advance
+ * when a tournament finished, which is why the homepage countdown would have
+ * sat at `0D : 0H : 0M : 0S` through Nationals and every week after it until
+ * somebody edited the data by hand. Dates decide now, and the calendar already
+ * holds them.
+ *
+ * Falls back to the last stop of the season once the whole calendar is behind
+ * us, which is the only honest answer when there is no next event — never
+ * `undefined`, because ~8 surfaces read this and every one of them would
+ * crash.
+ */
+export function getNextTournament(now?: number): Tournament {
+  const main = getMainTourEvents();
+  return getRemainingTourEvents(now)[0] ?? main[main.length - 1] ?? main[0];
+}
+
+/**
+ * State for the site-wide ScoreTicker's fallback: the next stop on the calendar.
+ *
+ * ⚠ THERE IS NO "LIVE" VARIANT HERE ANY MORE, AND IT MUST NOT COME BACK. This
+ * was a two-arm union, and the LIVE arm was filled by `getLiveTickerState()` —
+ * a hardcoded "Ben Johns vs Federico Staksrud · 11–9, 9–11, 8–6 · Championship
+ * Court" that was never played, sitting one `usePathname()` comparison away from
+ * the bar that renders above every page on the site. Live scores now come from
+ * `/api/ticker` (real `homepage_score_ticker` data, see components/live/
+ * use-live-ticker), and this type is only the not-live case.
+ */
+export type TickerState = {
+  tournamentName: string;
+  eventDate: string;
+  eventSlug: string;
+};
+
+/** The next stop, for the ticker's not-live state. `now` shifts the clock
+ *  (preview only) so /live's harness doesn't name a different event in the bar
+ *  than the page beneath it is showing. */
+export function getTickerState(now?: number): TickerState {
+  const next = getNextTournament(now);
   return {
-    mode: "NEXT",
     tournamentName: next.name,
     eventDate: next.startDate,
     eventSlug: next.slug,
-  };
-}
-
-/**
- * Demo LIVE ticker state for the `/live` preview — shows how the site chrome
- * looks during an active tournament. Replace with real scoring-API data once
- * that lands (see getTickerState). Not used on the real homepage.
- */
-export function getLiveTickerState(): TickerState {
-  return {
-    mode: "LIVE",
-    court: "Championship Court",
-    players: ["Ben Johns", "Federico Staksrud"],
-    score: "11–9, 9–11, 8–6",
-    watchUrl: "/watch",
   };
 }
 
@@ -1081,10 +1172,9 @@ export function formatDateRange(startIso: string, endIso: string, withYear = fal
 }
 
 /** Whole days from now until the given ISO date (floored at 0). */
-export function daysUntil(iso: string): number {
+export function daysUntil(iso: string, now?: number): number {
   const target = new Date(`${iso}T00:00:00`).getTime();
-  const now = Date.now();
-  return Math.max(0, Math.ceil((target - now) / 86_400_000));
+  return Math.max(0, Math.ceil((target - clock(now)) / 86_400_000));
 }
 
 /**

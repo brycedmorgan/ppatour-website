@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import {
   formatDateRange,
-  getMainTourEvents,
   getNextTournament,
+  getRemainingTourEvents,
   eventTierShort,
   eventHref,
 } from "@/lib/placeholder-data";
@@ -191,7 +191,10 @@ function MegaPanelContent({
 
   if (menu === "Events") {
     const next = getNextTournament();
-    const upcoming = getMainTourEvents().slice(0, 5);
+    // Still-to-come stops, not the whole season — a finished tournament sitting
+    // at the top of the nav panel's "Upcoming" list is the same staleness the
+    // homepage countdown had.
+    const upcoming = getRemainingTourEvents().slice(0, 5);
     return (
       <div className="grid grid-cols-[1fr_1.3fr_20rem] gap-10">
         <div className={col} style={delay(0)}>

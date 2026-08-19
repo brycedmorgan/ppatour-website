@@ -30,6 +30,16 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 /**
+ * ⚠ AND THIS NUMBER IS NOW LOAD-BEARING, NOT JUST A CACHE KNOB. The homepage
+ * derives its own live state from the calendar (HomeContent's `isLive`), so this
+ * is the resolution of that flip: at first serve the client countdown can read
+ * zero up to 60 seconds before the server-rendered shell swaps to LIVE NOW, and
+ * the same lag applies when the final day ends and the page returns to
+ * Next-Event mode. A longer window is a longer stretch of a stale homepage on the
+ * two mornings of the season anyone is watching it.
+ */
+
+/**
  * ⚠ Same story as /rankings: this built Static locally and **Dynamic in
  * production** (`ƒ /` in the Vercel build log). With `PB_API_TOKEN` present the
  * rankings fetch really runs, and a 429 retry inside `lib/pb-fetch` uses
