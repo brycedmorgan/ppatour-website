@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T13:35:12Z",
+  "updated_at": "2026-08-19T13:36:22Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -2398,6 +2398,211 @@
       "type": "event_removed",
       "event_id": "178517",
       "event": "PPA Daytona Beach"
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "price_change",
+      "event_id": "169802",
+      "event": "Major League Pickleball New York Finals- Session 2",
+      "ticket": "Courtside Session 2",
+      "base_price": {
+        "from": 80,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 92.05,
+        "to": 35.83
+      }
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "availability_change",
+      "event_id": "169802",
+      "event": "Major League Pickleball New York Finals- Session 2",
+      "ticket": "Courtside Session 2",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "price_change",
+      "event_id": "169804",
+      "event": "Major League Pickleball New York Finals - Saturday: Session 3",
+      "ticket": "Courtside Session 3",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 92.05,
+        "to": 35.83
+      }
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "availability_change",
+      "event_id": "169804",
+      "event": "Major League Pickleball New York Finals - Saturday: Session 3",
+      "ticket": "Courtside Session 3",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "ticket_added",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Canes Night",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "ticket_added",
+      "event_id": "202083",
+      "event": "Canes Night at the Veolia Pickleball National Championships",
+      "ticket": "Canes Night Courtside",
+      "base_price": null,
+      "all_in_price": 46.56
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "ticket_added",
+      "event_id": "202083",
+      "event": "Canes Night at the Veolia Pickleball National Championships",
+      "ticket": "Canes Night On Court VIP",
+      "base_price": null,
+      "all_in_price": 221.49
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "ticket_added",
+      "event_id": "202083",
+      "event": "Canes Night at the Veolia Pickleball National Championships",
+      "ticket": "Canes Night VIP",
+      "base_price": null,
+      "all_in_price": 221.49
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "ticket_removed",
+      "event_id": "202083",
+      "event": "Canes Night at the Veolia Pickleball National Championships",
+      "ticket": "Canes Night Courtside (Humana Championship Court)"
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "ticket_removed",
+      "event_id": "202083",
+      "event": "Canes Night at the Veolia Pickleball National Championships",
+      "ticket": "Canes Night Courtside+ (Humana Championship Court)"
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "ticket_removed",
+      "event_id": "202083",
+      "event": "Canes Night at the Veolia Pickleball National Championships",
+      "ticket": "Canes Night On Court VIP (Humana Championship Court)"
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "ticket_removed",
+      "event_id": "202083",
+      "event": "Canes Night at the Veolia Pickleball National Championships",
+      "ticket": "Canes Night VIP (Humana Championship Court)"
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "2026 Pickleball World Championships Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "base_price": {
+        "from": null,
+        "to": 500
+      },
+      "all_in_price": {
+        "from": 384.43,
+        "to": 546.87
+      }
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "availability_change",
+      "event_id": "166349",
+      "event": "2026 Pickleball World Championships Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "GovX Discount",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "JOOLA 2-Day PPA 3.0/4.0 Level Camp",
+      "base_price": 370,
+      "all_in_price": 405.17
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "King of the Court (3.0-3.5)",
+      "base_price": 15,
+      "all_in_price": 19.55
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "King of the Court (4.0-4.5)",
+      "base_price": 15,
+      "all_in_price": 19.55
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "Pickleball Vacations",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "Play with the Pro’s (3.0-3.5)",
+      "base_price": 50,
+      "all_in_price": 57.36
+    },
+    {
+      "at": "2026-08-19T13:36:22Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "Play with the Pro’s (4.0-4.5)",
+      "base_price": 50,
+      "all_in_price": 57.36
     }
   ]
 }

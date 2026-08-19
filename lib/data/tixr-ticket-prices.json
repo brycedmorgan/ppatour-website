@@ -1,9 +1,9 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-08-18T13:35:12Z",
+  "generated_at": "2026-08-19T13:36:22Z",
   "event_count": 58,
-  "ticket_type_count": 853,
+  "ticket_type_count": 861,
   "series_breakdown": {
     "Major League Pickleball": 9,
     "PPA Challenger Series": 3,
@@ -261,13 +261,6 @@
           "name": "Courtside Session 2",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 30,
-          "all_in_price": 35.83
-        },
-        {
-          "name": "Courtside Session 2",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 40,
           "all_in_price": 46.66
         },
@@ -284,6 +277,13 @@
           "sale_state": "OPEN",
           "base_price": 80,
           "all_in_price": 92.05
+        },
+        {
+          "name": "Courtside Session 2",
+          "category": "STANDARD",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 35.83
         },
         {
           "name": "VIP Session 2",
@@ -365,13 +365,6 @@
           "name": "Courtside Session 3",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 30,
-          "all_in_price": 35.83
-        },
-        {
-          "name": "Courtside Session 3",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 45,
           "all_in_price": 52.08
         },
@@ -388,6 +381,13 @@
           "sale_state": "HIDE",
           "base_price": null,
           "all_in_price": 92.05
+        },
+        {
+          "name": "Courtside Session 3",
+          "category": "STANDARD",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 35.83
         },
         {
           "name": "VIP Session 3",
@@ -583,6 +583,13 @@
       "url": "https://www.tixr.com/groups/ppa/events/veolia-pickleball-national-championships-184656",
       "currency": "USD",
       "tickets": [
+        {
+          "name": "Canes Night",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
         {
           "name": "Championships",
           "category": "GA",
@@ -944,35 +951,35 @@
           "all_in_price": 0
         },
         {
-          "name": "Canes Night Courtside (Humana Championship Court)",
+          "name": "Canes Night Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
           "base_price": 40,
           "all_in_price": 46.56
         },
         {
-          "name": "Canes Night Courtside (Humana Championship Court)",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Canes Night Courtside (Humana Championship Court)",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Canes Night Courtside+ (Humana Championship Court)",
+          "name": "Canes Night Courtside",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
           "all_in_price": 46.56
         },
         {
-          "name": "Canes Night Courtside+ (Humana Championship Court)",
+          "name": "Canes Night Courtside",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Canes Night Courtside",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Canes Night Courtside",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
@@ -986,24 +993,24 @@
           "all_in_price": 46.56
         },
         {
-          "name": "Canes Night On Court VIP (Humana Championship Court)",
+          "name": "Canes Night On Court VIP",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
           "all_in_price": 221.49
         },
         {
-          "name": "Canes Night VIP (Humana Championship Court)",
+          "name": "Canes Night VIP",
           "category": "STANDARD",
           "sale_state": "OPEN",
           "base_price": 200,
           "all_in_price": 221.49
         },
         {
-          "name": "Canes Night VIP (Humana Championship Court)",
+          "name": "Canes Night VIP",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 200,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 221.49
         }
       ],
@@ -5113,14 +5120,14 @@
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 113.69
+          "all_in_price": 70.37
         },
         {
           "name": "Sunday Courtside Bleacher",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 70.37
+          "all_in_price": 113.69
         },
         {
           "name": "Sunday Courtside Bleacher",
@@ -5140,22 +5147,22 @@
           "name": "Sunday VIP",
           "category": "STANDARD",
           "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 384.43
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
           "base_price": 400,
           "all_in_price": 438.58
         },
         {
           "name": "Sunday VIP",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 500,
           "all_in_price": 546.87
-        },
-        {
-          "name": "Sunday VIP",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 384.43
         }
       ],
       "parent_event_id": "166345"
@@ -5181,6 +5188,55 @@
           "sale_state": "SOLD_OUT",
           "base_price": null,
           "all_in_price": 0
+        },
+        {
+          "name": "GovX Discount",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 370,
+          "all_in_price": 405.17
+        },
+        {
+          "name": "King of the Court (3.0-3.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "King of the Court (4.0-4.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 15,
+          "all_in_price": 19.55
+        },
+        {
+          "name": "Pickleball Vacations",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Play with the Pro’s (3.0-3.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Play with the Pro’s (4.0-4.5)",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
         },
         {
           "name": "Quarterfinals",
