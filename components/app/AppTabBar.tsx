@@ -35,7 +35,10 @@ export function AppTabBar() {
   const pathname = usePathname() || "/";
   const next = getNextTournament();
   const eventTab = {
-    href: eventHref(next),
+    // Straight to the on-site screen — courts, today's play, gates, parking.
+    // The app's Event tab is for someone who is at the tournament, or about to
+    // be; the marketing page is one tap back from there.
+    href: `${eventHref(next)}/today`,
     label: "Event",
     icon: MapPin,
     match: (p: string) => p.startsWith("/events/") && p !== "/events/",
