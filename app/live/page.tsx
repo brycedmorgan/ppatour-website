@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { HomeContent } from "@/components/home/HomeContent";
 import { LivePreviewClock } from "@/components/live/LivePreviewClock";
+import { getEvents } from "@/lib/events-api";
+import { fetchLiveTicker } from "@/lib/ticker-api";
 import {
   firstServeMs,
   getAllEvents,
@@ -47,6 +49,11 @@ export const metadata: Metadata = {
  *   /live?at=2026-09-02 pretend it is that date (or datetime).
  *   /live?event=<slug>  aim ?in= / ?ends= at a specific stop instead of the
  *                       next one.
+ *
+ * The Live Now band is pointed at whichever tournament is genuinely running
+ * (see `runningTournament`), so the scores and bracket in a preview are real
+ * even though the hero is rehearsing a stop that has not started — and the band
+ * names that tournament rather than the one on the hero.
  *
  * ⚠ SIMULATION IS OPT-IN VIA A QUERY PARAM, AND THAT IS THE WHOLE GATE. With no
  * param the clock is not shifted at all and this behaves as it always did. When
@@ -99,6 +106,40 @@ function parseAt(raw: string | undefined): number | null {
  */
 function offsetFor(boundary: number, secs: number): number {
   return boundary - secs * 1_000 - Date.now();
+}
+
+/** Loose title match — the events feed trims titles (`cleanTitle`) and the
+ *  score ticker does not, so compare on letters and digits alone. */
+function sameTournament(a: string, b: string): boolean {
+  const key = (v: string) => v.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const x = key(a);
+  const y = key(b);
+  return x.length > 0 && y.length > 0 && (x === y || x.includes(y) || y.includes(x));
+}
+
+/**
+ * The tournament actually being played right now.
+ *
+ * ⚠ THIS IS WHY THE PREVIEW CAN BE TESTED AGAINST REAL SCORES. A shifted clock
+ * puts a FUTURE stop on the hero — Nationals, say — and a future stop has no
+ * scores, no bracket and no players, so the Live Now band renders an empty
+ * shell however correct the plumbing is. Meanwhile a real tournament usually IS
+ * running somewhere on the tour. Pointing the band at that one turns the
+ * preview into a live test.
+ *
+ * ⚠ THE TICKER CANNOT ANSWER THIS ALONE. `homepage_score_ticker` carries the
+ * tournament's TITLE but no tournament UUID (its rows' `eventUuid` is the
+ * division), and the band needs a UUID — so the title is joined against the
+ * events feed, which has both. A miss returns undefined and the band falls back
+ * to the stop on the hero, i.e. today's behaviour.
+ */
+async function runningTournament(): Promise<Tournament | undefined> {
+  const title = (await fetchLiveTicker()).tournament?.title;
+  if (!title) return undefined;
+  const { events } = await getEvents();
+  const match = events.find((e) => sameTournament(e.name, title));
+  // No UUID means no bracket to show, so it is no use as an override.
+  return match?.tournamentUuid ? match : undefined;
 }
 
 export default async function LivePage({
@@ -156,7 +197,7 @@ export default async function LivePage({
 
   return (
     <>
-      <HomeContent clockOffsetMs={offset} />
+      <HomeContent clockOffsetMs={offset} liveEventOverride={await runningTournament()} />
       {simulating && (
         <LivePreviewClock
           offsetMs={offset}

@@ -183,6 +183,7 @@ async function lastCompletedChampions(): Promise<{ event: Tournament; champions:
 
 export async function HomeContent({
   clockOffsetMs = 0,
+  liveEventOverride,
   heroVariant = "photo",
   heroToggle = false,
 }: {
@@ -200,6 +201,19 @@ export async function HomeContent({
    * 0 in production, i.e. the wall clock. See app/live/page.tsx.
    */
   clockOffsetMs?: number;
+  /**
+   * Preview only: the tournament whose scores and bracket the Live Now band
+   * should show — the one genuinely being played, not the one on the hero.
+   *
+   * ⚠ THE PRODUCTION HOMEPAGE DOES NOT NEED THIS AND MUST NOT START PASSING IT.
+   * There, the stop on the hero IS the running tournament, so resolving the
+   * UUID from its own slug (below) is correct by construction. The preview is
+   * the only place the two can differ: it shifts the clock to a tournament that
+   * has not happened, which has no scores to show, while a real one is
+   * genuinely underway somewhere on the tour. /live passes that real one so the
+   * band can be tested against live data.
+   */
+  liveEventOverride?: Tournament;
   /**
    * Hero treatment. `photo` (the live default) is the next event's own venue
    * shot; the alternatives are under review — see /hero-preview.
@@ -265,7 +279,8 @@ export async function HomeContent({
    * is worse than no band at all, same ruling as the fabricated-scores fix.
    */
   const liveEventId = isLive
-    ? (await getEvents()).events.find((e) => e.slug === next.slug)?.tournamentUuid
+    ? (liveEventOverride?.tournamentUuid ??
+      (await getEvents()).events.find((e) => e.slug === next.slug)?.tournamentUuid)
     : undefined;
   const showLiveScores = isLive && Boolean(liveEventId);
   // Live pickleball.com coverage. Empty until the API grant lands, in which case
@@ -324,11 +339,19 @@ export async function HomeContent({
               )}
             </div>
 
-            {/* The band must SAY which event it covers (Connor, 7/20). */}
+            {/* The band must SAY which event it covers (Connor, 7/20) — and
+                that is whichever event's data is actually in it. Under a preview
+                override the scores below belong to the tournament genuinely
+                being played, so this names THAT one; labelling a live Shenzhen
+                bracket "Veolia Pickleball National Championships" is the exact
+                mislabelling Connor's rule exists to stop. */}
             {(() => {
-              const chip = !showLiveScores && latestChampions ? latestChampions.event : ev;
-              const name =
-                !showLiveScores && latestChampions ? latestChampions.event.name : ev.name;
+              const chip = showLiveScores
+                ? (liveEventOverride ?? ev)
+                : latestChampions
+                  ? latestChampions.event
+                  : ev;
+              const name = chip.name;
               return (
                 <p className="mt-3 inline-flex flex-wrap items-center gap-x-2 gap-y-1 border-l-2 border-ppa-blue bg-ppa-paper px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/70">
                   {name}
