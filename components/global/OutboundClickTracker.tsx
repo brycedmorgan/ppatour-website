@@ -36,6 +36,13 @@ const PARTNER_HOSTS = [
   // without this line, repointing them at ppatour-asia.com (Wade, 8/6) would
   // have silently stopped counting the sister-tour handoff altogether.
   "ppatour-asia.com",
+  // Engine, the Official Travel Partner, from the event pages' Where to Stay
+  // (lib/engine.ts). The apex covers `members.` and `groups.` too — the matcher
+  // below tests `host === h || host.endsWith("." + h)` — so the co-branded
+  // partner page, the group rate request and the per-property deep links all
+  // report as one partner. Without this line the hotel handoff would be the one
+  // outbound commerce click on an event page that nothing counts.
+  "engine.com",
   // PPA Pickleball Tour 2025 storefronts (/game). The click out is the only
   // thing measurable — the purchase happens on the platform.
   "store.steampowered.com",

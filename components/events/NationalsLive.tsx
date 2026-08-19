@@ -18,6 +18,7 @@ import { getBroadcast } from "@/lib/broadcast";
 import { getEventGuide, parkingFor, parkingText } from "@/lib/event-guides";
 import { ticketsOnSale } from "@/lib/tixr-prices";
 import { ParkingDetails } from "@/components/events/ParkingDetails";
+import { EngineHotelLink, EngineStay } from "@/components/events/EngineStay";
 import { getEventSchedule } from "@/lib/event-schedule";
 import { playersToWatch } from "@/lib/home-content";
 import { getArticlesForEvent } from "@/lib/news-articles";
@@ -253,6 +254,19 @@ export function NationalsLive({
     : null;
   const realSchedule = getEventSchedule(t.slug);
   const mapQuery = guide?.mapQuery ?? `${t.venue}, ${t.city}, ${t.state}`;
+  /**
+   * ⚠ THE SAME SHAPE THE EVENT PAGE BUILDS, so the two surfaces cannot offer a
+   * fan different dates or a different partner link for the same tournament.
+   * Keep them in step — that drift is this file's recurring bug.
+   */
+  const engineEvent = {
+    slug: t.slug,
+    eventCode: t.eventCode,
+    city: t.city,
+    state: t.state,
+    startDate: t.startDate,
+    endDate: t.endDate,
+  };
 
   const showGrid = Boolean(ticketGrid?.hasPerDayPricing);
   // Fallback only. These three were derived arithmetically (base x2, x2.6) and
@@ -1310,9 +1324,15 @@ export function NationalsLive({
                             <span aria-hidden className="transition-transform duration-300 group-hover/book:translate-x-0.5">↗</span>
                           </a>
                         )}
+                        {col.heading === "Where to Stay" && (
+                          <EngineHotelLink hotelName={p.name} event={engineEvent} />
+                        )}
                       </li>
                     ))}
                   </ul>
+                  {/* Same placement as the event page, from the same component —
+                      under the negotiated blocks, never above them. */}
+                  {col.heading === "Where to Stay" && <EngineStay event={engineEvent} />}
                 </div>
               ))}
             </div>
