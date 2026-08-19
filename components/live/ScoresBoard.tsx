@@ -140,9 +140,27 @@ export function ScoresBoard({ eventId, light = false }: { eventId: string; light
 
   const divisions = data?.divisions ?? [];
   const [division, setDivision] = useState<string | null>(null);
+  /**
+   * Open on a division that actually has matches on the chosen day.
+   *
+   * ⚠ IT USED TO OPEN ON divisions[0] BLIND, and that started landing on "No
+   * matches on this day for this division." the moment the board could hold
+   * more than one kind of day: a tournament's first day may have Men's Doubles
+   * on court while the Women's Doubles times are still unpublished, and
+   * Women's Doubles is first in the list. Falls back to the first division, so
+   * a day with nothing in it still selects something.
+   */
   useEffect(() => {
-    if (!division && divisions[0]) setDivision(divisions[0].id);
-  }, [divisions, division]);
+    // ⚠ Wait for `day`. The day picker is chosen by the effect above, and this
+    // one is otherwise free to run first — with `day` still null nothing matches
+    // it, so this fell straight through to divisions[0] and then never re-ran,
+    // which is how the board kept opening on "No matches on this day".
+    if (division || !divisions[0] || !day) return;
+    const populated = divisions.find((d) =>
+      (data?.matches ?? []).some((m) => m.divisionId === d.id && m.dateKey === day),
+    );
+    setDivision((populated ?? divisions[0]).id);
+  }, [divisions, division, data, day]);
 
   // Divisions with a live match on the selected day (button dots).
   const liveDivsToday = useMemo(() => {

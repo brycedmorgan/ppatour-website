@@ -23,6 +23,18 @@ export type TickerMatch = {
   status: "live" | "final" | "upnext";
   court: string;
   time?: string;
+  /**
+   * When the match is due on court, as the feed states it —
+   * "2026-08-20T09:00:00Z".
+   *
+   * ⚠ LOCAL WALL-CLOCK TIME WEARING A "Z". It is 9am at the venue (see
+   * `timezoneAbbreviation`, "CST" for Shenzhen), not 9am UTC. Read the date part
+   * as written; converting shifts the tournament day for every event outside
+   * UTC, which is most of them. `time` above is the formatted display string —
+   * this is the machine-readable one, and lib/scores-api needs it because the
+   * scores endpoint has no scheduled date of its own.
+   */
+  plannedStart?: string;
   /** Index (0-2) of the in-progress game when live. */
   liveGame?: number;
   /** Live stream URL for this match, when the feed provides one. */
@@ -190,6 +202,7 @@ function mapMatch(m: ApiMatch): TickerMatch {
     status,
     court: m.courtTitle || "",
     time: status === "upnext" ? formatTime(m.localDateMatchPlannedStart, m.timezoneAbbreviation) : undefined,
+    plannedStart: m.localDateMatchPlannedStart || undefined,
     liveGame,
     watchUrl,
     teams: [
@@ -215,6 +228,19 @@ const RESULT_TTL_MS = 5_000;
 let partnerCache: CacheEntry<string | null> | null = null;
 let partnerInFlight: Promise<string | null> | null = null;
 const resultCache = new Map<string, CacheEntry<TickerResult>>();
+let plannedCache: CacheEntry<Map<string, string>> | null = null;
+let plannedInFlight: Promise<Map<string, string>> | null = null;
+/**
+ * The last planned-start map that actually had something in it.
+ *
+ * ⚠ A PUBLISHED START TIME BARELY MOVES, AND A 429 MUST NOT UNPUBLISH IT. Every
+ * transient failure returns an empty map, which is indistinguishable downstream
+ * from "nothing is scheduled" — so the scores board dropped its real dates and
+ * showed "Date TBA" for a minute at a time. Serving the last known-good answer
+ * is both more accurate and more stable; the worst case is a start time a few
+ * minutes stale, against a schedule published days ahead.
+ */
+let plannedLastGood: Map<string, string> | null = null;
 const resultInFlight = new Map<string, Promise<TickerResult>>();
 
 /**
@@ -318,5 +344,84 @@ export async function fetchLiveTicker(partnerArg?: string): Promise<TickerResult
     }
   } catch {
     return empty;
+  }
+}
+
+/**
+ * Every published start time in the current window, keyed by match UUID.
+ *
+ * ⚠ THIS EXISTS BECAUSE THE SCORES FEED HAS NO SCHEDULED DATE. A confirmed but
+ * unplayed match arrives from `/v1/ppa/tournaments/{id}/tournament_events/…`
+ * with `matchStart: null` and `matchCompleted: null` and nothing else — there
+ * is no field saying when it is due — and the per-tournament schedule paths all
+ * 403 for our token. `homepage_score_ticker` rows carry
+ * `localDateMatchPlannedStart`, so lib/scores-api joins on match UUID to give
+ * its upcoming matches a real day. Living here keeps every call to this
+ * endpoint, and its rate limiting, in one module.
+ *
+ * ⚠ IT IS A SEPARATE REQUEST FROM `fetchLiveTicker`, AND HAS TO BE. That one
+ * asks for `page_size: 20` — the rail shows a handful of matches — and the
+ * soonest 20 rows at a tour stop are its QUALIFIERS, while the scores board
+ * shows main-draw divisions. The two sets were disjoint, so the join matched
+ * nothing and every match read "Date TBA". This asks for the whole window.
+ *
+ * ⚠ ONE REQUEST, NOT ONE PER PARTNER. The first attempt fanned out across PPA /
+ * PPA Australia / PPA Asia in parallel on every scores build and earned a 429,
+ * which silently emptied the map — wrong dates are impossible here, but missing
+ * ones look identical to "not scheduled yet". The active partner is already
+ * known and cached (`pickActivePartner`), so one call answers it.
+ */
+export async function fetchPlannedStarts(): Promise<Map<string, string>> {
+  const { token, base } = config();
+  if (!token) return new Map();
+  if (plannedCache && plannedCache.expires > Date.now()) return plannedCache.value;
+  if (plannedInFlight) return plannedInFlight;
+
+  plannedInFlight = (async () => {
+    const found = new Map<string, string>();
+    try {
+      const partner =
+        process.env.PB_TICKER_PARTNER || (await pickActivePartner(token, base)) || "PPA";
+      const now = Math.floor(Date.now() / 1000);
+      const params = new URLSearchParams({
+        start_date: String(now - 86400),
+        end_date: String(now + 7 * 86400),
+        partner,
+        bracket_level_ids: "2",
+        page_size: "100",
+        current_page: "1",
+        use_camel_case: "true",
+      });
+      const res = await fetch(`${base}/v2/data/homepage_score_ticker?${params}`, {
+        headers: { "PB-API-TOKEN": token },
+        cache: "no-store",
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+      });
+      if (!res.ok) return found;
+      const json = (await res.json()) as { results?: { results?: ApiMatch[] } };
+      for (const row of json.results?.results ?? []) {
+        if (row.matchUuid && row.localDateMatchPlannedStart) {
+          found.set(row.matchUuid, row.localDateMatchPlannedStart);
+        }
+      }
+    } catch {
+      // A missing map degrades to "Date TBA", never to a wrong date.
+    }
+    return found;
+  })();
+
+  try {
+    const value = await plannedInFlight;
+    if (value.size > 0) {
+      plannedCache = { value, expires: Date.now() + PARTNER_TTL_MS };
+      plannedLastGood = value;
+      return value;
+    }
+    // Empty means the request failed or the window is genuinely bare; we cannot
+    // tell them apart, so fall back to the last good answer rather than
+    // un-publishing every date. Not cached — the next call retries.
+    return plannedLastGood ?? value;
+  } finally {
+    plannedInFlight = null;
   }
 }

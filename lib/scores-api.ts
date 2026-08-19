@@ -14,6 +14,8 @@
  * date and division.
  */
 
+import { fetchPlannedStarts } from "@/lib/ticker-api";
+
 const TIMEOUT_MS = 6000;
 const TTL_MS = 60_000;
 
@@ -124,7 +126,7 @@ function dateParts(iso: string): { key: string; label: string } {
  * orders its day tabs by key.
  */
 const UPCOMING_KEY = "9999-12-31";
-const UPCOMING_LABEL = "Upcoming";
+const UPCOMING_LABEL = "Date TBA";
 
 function normalize(m: ApiMatch, division: string, divisionId: string): ScoreMatch | null {
   const start = str(m, "matchStart", "match_start", "date_started");
@@ -294,6 +296,26 @@ async function get(base: string, token: string, path: string): Promise<unknown> 
   return res.json();
 }
 
+/**
+ * When each not-yet-played match is due on court, keyed by match UUID.
+ *
+ * ⚠ THE SCORES FEED HAS NO SCHEDULED DATE AT ALL.
+ * `/v1/ppa/tournaments/{id}/tournament_events/{eventId}` carries exactly two
+ * dates — `matchStart` and `matchCompleted` — and both are null until a match
+ * is under way, so a confirmed fixture arrives with nothing to group it by.
+ * The per-tournament paths that might have held a schedule (`/schedule`,
+ * `/matches`, `/courts`, `{event}/schedule`) all 403 for our token. The ticker
+ * feed is the one reachable source — see `fetchPlannedStarts`, which owns the
+ * request, its caching and its rate limiting.
+ *
+ * ⚠ COVERAGE IS "WHAT IS ON THIS WEEK", not the whole calendar: the ticker
+ * window runs a day back and a week forward. A tournament three weeks out gets
+ * no dates, which is the honest answer — its times are not published either.
+ * Anything unmatched keeps UPCOMING_KEY and groups under a bucket that says
+ * the date is not published yet, rather than borrowing one.
+ */
+const plannedStarts = fetchPlannedStarts;
+
 const cache = new Map<string, { value: ScoresResult; expires: number }>();
 const inFlight = new Map<string, Promise<ScoresResult>>();
 
@@ -340,10 +362,27 @@ async function build(tournamentId: string): Promise<ScoresResult> {
     );
 
     const standings = perEvent.map((p) => p.standings).filter((s): s is DivisionStandings => s !== null);
+    const matches = perEvent.flatMap((p) => p.matches);
+
+    // Give the confirmed-but-unplayed matches their real day where the feed
+    // knows it. Whatever is left keeps UPCOMING_KEY and groups under a bucket
+    // that says the date is not published yet, rather than borrowing one.
+    const scheduled = matches.filter((m) => m.status === "scheduled");
+    if (scheduled.length) {
+      const starts = await plannedStarts();
+      for (const m of scheduled) {
+        const at = starts.get(m.id);
+        if (!at) continue;
+        const { key, label } = dateParts(at);
+        m.dateKey = key;
+        m.dateLabel = label;
+      }
+    }
+
     return {
       tournamentId,
       divisions,
-      matches: perEvent.flatMap((p) => p.matches),
+      matches,
       champions: standings
         .map((s) => {
           const gold = s.places.find((p) => p.place === 1);
