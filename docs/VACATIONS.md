@@ -27,6 +27,71 @@ stop working if someone changes it without reading.
 
 ---
 
+## ⚠ Cutover status — 2026-08-19 audit
+
+Lainey asked why new bookings weren't producing confirmation emails. They
+weren't. **Steps 3 and 4 below were never done.** What the audit found:
+
+| Step | State |
+|---|---|
+| 1. Stripe env vars | ✅ Done. `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET` on ppatour-website. `/api/vacations/availability` returns `known: true`. |
+| 2. Re-point Stripe webhook | ❓ **UNVERIFIED.** Both endpoints answer a signature check. Nobody has confirmed which one Stripe actually calls. |
+| 3. SendGrid + Sheets vars | ⚠ Half fixed 8/19. `SENDGRID_API_KEY` + `SENDGRID_FROM` added and verified. `SHEETS_WEBHOOK_URL` + `SHEETS_WEBHOOK_SECRET` **still missing.** |
+| 4. Redirect `vacations.ppatour.com` | ❌ **NOT DONE.** The old app is still live and serving `/`, `/register`, `/trips` to real traffic. |
+
+**Two funnels are selling the same 20 rooms.** `vacations.ppatour.com` runs the
+archived `Gull-Stack/pickleball-vacations` build; `www.ppatour.com/vacations`
+runs this one. Both read the same Stripe account, so `capacity.ts` counts
+correctly across both, but only one of them can send an email.
+
+### The silent failure, precisely
+
+`lib/vacations/email.ts` `configure()` returns `null` when either
+`SENDGRID_API_KEY` or `SENDGRID_FROM` is unset. `sendBookingEmails` then logs a
+warning, returns `{skipped: true}`, and the webhook still returns 200. Stripe
+sees success and never retries. The guest is charged, the room is counted, and
+no email exists. Nothing in the funnel reports an error.
+
+Same shape for `appendBookingToSheet`. The "Pickleball Vacations — Bookings"
+sheet has held only two smoke-test rows since 2026-05-30. No real booking has
+ever landed in it.
+
+### Do not redirect the subdomain before verifying step 2
+
+If Stripe still calls `vacations.ppatour.com/api/stripe/webhook`, that route is
+currently the **only** one with the creds to send mail. Redirecting the
+subdomain deletes it and turns a partial failure into a total one. Order:
+confirm the webhook target → then redirect.
+
+The redirect is safe for email itself. SendGrid's authentication records sit on
+`em3148.vacations.ppatour.com` and `s1`/`s2._domainkey.vacations.ppatour.com`,
+which are distinct hostnames from the bare web record.
+
+### Mail facts worth knowing
+
+- Vacations sends through the **GullStack** SendGrid account, shared with
+  unrelated clients. Not a PPA-owned account.
+- `SENDGRID_FROM` is `noreply@vacations.ppatour.com`. There is **no** verified
+  single sender on any `pickleball.com` or `ppatour.com` address; sending works
+  because `vacations.ppatour.com` is an authenticated domain (`valid: true`).
+- `ppatour.com` domain authentication (`em8015`) exists but is `valid: false`.
+  Its four ClouDNS records are uninstalled. Installing them is what would let
+  Vacations send from a plain `@ppatour.com` address.
+- Email Activity retention on this account is **3 days**, so it cannot be used
+  to reconstruct how many confirmations were missed. Stripe payment dates are
+  the only reliable source for that.
+
+### Open
+
+- Confirm the Stripe webhook target, then do step 4.
+- Add the two `SHEETS_*` vars.
+- Back-send confirmations for bookings made between the ~8/5 cutover and
+  8/19. Two doubles are sold on Club Med Turkoise; check payment dates.
+- Rotate the SendGrid key. The one in use is full-access (it can create and
+  delete API keys); the webhook needs `mail.send` only.
+
+---
+
 ## ⚠ Cutover checklist — NOT done by the code
 
 These are console/DNS actions. Until they're done, the page is live but the
