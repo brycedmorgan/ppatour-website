@@ -79,8 +79,20 @@ function num(m: ApiMatch, ...keys: string[]): number | null {
   }
   return null;
 }
+/**
+ * ⚠ THE FEED WRITES THE STRING "TBD" INTO THE NAME FIELDS of a slot nobody has
+ * qualified into yet — `teamOnePlayerOneFirstName: "TBD"`. Left alone it is a
+ * player called TBD: it counts as a named side, so "is this matchup confirmed"
+ * cannot be asked, and a card renders "TBD" twice on one line. Dropping it here
+ * makes `team.players.length` mean what it says. Rendering is unchanged for an
+ * unknown side — ScoresBoard already prints "TBD" when a side has no players.
+ */
 function fullName(first: string, last: string): string {
-  return [first.trim(), last.trim()].filter(Boolean).join(" ");
+  const real = (v: string) => {
+    const t = v.trim();
+    return /^tbd$/i.test(t) ? "" : t;
+  };
+  return [real(first), real(last)].filter(Boolean).join(" ");
 }
 
 /** "Mens Doubles Pro Main Draw" / "Women's Doubles Pro Top 8 Ranked" →
@@ -105,6 +117,15 @@ function dateParts(iso: string): { key: string; label: string } {
   return { key, label };
 }
 
+/**
+ * Confirmed-but-unplayed matches have no date — the feed carries `matchStart`
+ * and `matchCompleted` and nothing else, so there is no scheduled time to group
+ * them under. They get their own bucket, which sorts last because the board
+ * orders its day tabs by key.
+ */
+const UPCOMING_KEY = "9999-12-31";
+const UPCOMING_LABEL = "Upcoming";
+
 function normalize(m: ApiMatch, division: string, divisionId: string): ScoreMatch | null {
   const start = str(m, "matchStart", "match_start", "date_started");
   const completed = str(m, "matchCompleted", "match_completed", "date_completed");
@@ -113,13 +134,40 @@ function normalize(m: ApiMatch, division: string, divisionId: string): ScoreMatc
   const bestOf = num(m, "scoreFormatGameBestOutOf", "best_out_of") ?? 3;
   const g1 = ["teamOneGameOneScore","teamOneGameTwoScore","teamOneGameThreeScore","teamOneGameFourScore","teamOneGameFiveScore"];
   const g2 = ["teamTwoGameOneScore","teamTwoGameTwoScore","teamTwoGameThreeScore","teamTwoGameFourScore","teamTwoGameFiveScore"];
-  const games1 = g1.slice(0, bestOf).map((k) => num(m, k));
-  const games2 = g2.slice(0, bestOf).map((k) => num(m, k));
+  const raw1 = g1.slice(0, bestOf).map((k) => num(m, k));
+  const raw2 = g2.slice(0, bestOf).map((k) => num(m, k));
 
-  // Show matches that were actually played (any score) or are live.
-  const played = games1.some((s) => s != null) || games2.some((s) => s != null);
-  if (status === "scheduled" || (status === "final" && !played)) return null;
+  /**
+   * ⚠ THE FEED SENDS 0, NOT null, FOR A GAME NOBODY HAS PLAYED. Every unplayed
+   * match arrives as 0/0/0 vs 0/0/0, so "has a score" could not be asked as
+   * `!= null` — it was true for every row in the tournament, which meant a
+   * scheduled match rendered three 0 cells a side: a 0–0–0 scoreline for a match
+   * that has not been played. Measured on the live Shenzhen draw, where every
+   * one of the 24 Men's Doubles rows carries zeros.
+   *
+   * Played means somebody scored a point. A legitimate 11–0 still counts, since
+   * the test is per game across BOTH sides, not per cell.
+   */
+  const played = raw1.some((v, i) => (v ?? 0) > 0 || (raw2[i] ?? 0) > 0);
+  const blank = raw1.map(() => null);
+  const games1 = played ? raw1 : blank;
+  const games2 = played ? raw2 : blank;
 
+  /**
+   * ⚠ SCHEDULED MATCHES ARE SHOWN, BUT ONLY WHEN BOTH SIDES ARE KNOWN (Wesley,
+   * 8/19: "show confirmed matches even if the matches haven't concluded").
+   *
+   * This used to drop every scheduled match, so the Scores tab read "No scores
+   * available yet" for the whole run-up to an event — measured on the live PPA
+   * Asia 500 Shenzhen Open: 24 rows in Men's Doubles, all scheduled, tab empty,
+   * while the Bracket tab beside it showed the full seeded draw.
+   *
+   * ⚠ AND "CONFIRMED" IS THE WHOLE TEST. Of those 24 rows only 4 had both sides
+   * filled in; 12 had one side against a qualifier slot and 8 were TBD vs TBD.
+   * A card reading "Ben Johns / Collin Johns vs TBD" is not a matchup, it is a
+   * bracket position — that is what the Bracket tab is for. Listing them here
+   * would bury the four real fixtures under twenty placeholders.
+   */
   // Winner: count games each team won (only meaningful once complete).
   let w1 = 0;
   let w2 = 0;
@@ -134,8 +182,6 @@ function normalize(m: ApiMatch, division: string, divisionId: string): ScoreMatc
   const t1Wins = status === "final" && (winnerField === "team_1" || (!winnerField && w1 > w2));
   const t2Wins = status === "final" && (winnerField === "team_2" || (!winnerField && w2 > w1));
 
-  const { key, label } = dateParts(completed || start);
-
   const team = (
     p1f: string, p1l: string, p2f: string, p2l: string,
     seed: number | null, games: (number | null)[], winner: boolean,
@@ -145,6 +191,22 @@ function normalize(m: ApiMatch, division: string, divisionId: string): ScoreMatc
     games,
     winner,
   });
+
+  const teams: [ScoreTeam, ScoreTeam] = [
+    team(str(m, "teamOnePlayerOneFirstName"), str(m, "teamOnePlayerOneLastName"), str(m, "teamOnePlayerTwoFirstName"), str(m, "teamOnePlayerTwoLastName"), num(m, "teamOneSeed"), games1, t1Wins),
+    team(str(m, "teamTwoPlayerOneFirstName"), str(m, "teamTwoPlayerOneLastName"), str(m, "teamTwoPlayerTwoFirstName"), str(m, "teamTwoPlayerTwoLastName"), num(m, "teamTwoSeed"), games2, t2Wins),
+  ];
+
+  // A scheduled match is worth showing only once both sides are known — see the
+  // note above. A "final" with no score on it never happened (walkover, or a
+  // slot the bracket filled administratively).
+  if (status === "scheduled" && !teams.every((t) => t.players.length > 0)) return null;
+  if (status === "final" && !played) return null;
+
+  const { key, label } =
+    status === "scheduled"
+      ? { key: UPCOMING_KEY, label: UPCOMING_LABEL }
+      : dateParts(completed || start);
 
   return {
     id: str(m, "matchUuid", "matchUUID", "uuid", "match_uuid") || `${divisionId}-${num(m, "matchNumber") ?? 0}`,

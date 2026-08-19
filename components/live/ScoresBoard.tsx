@@ -63,6 +63,15 @@ function ScoreCard({ m }: { m: ScoreMatch }) {
               <span className="text-[9px] font-bold uppercase tracking-[0.1em] text-white">Live</span>
             </span>
           )}
+          {/* ⚠ A confirmed-but-unplayed match has to SAY it hasn't been played.
+              Its score cells are empty (SideRow renders only games that exist —
+              never a fabricated 0–0), and without this chip an empty card reads
+              as a result we failed to load rather than a fixture still to come. */}
+          {m.status === "scheduled" && (
+            <span className="rounded-full bg-ppa-blue/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.1em] text-ppa-blue">
+              Upcoming
+            </span>
+          )}
           {m.court && (
             <span className="rounded-full bg-ppa-navy/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-ppa-navy/55">
               {m.court}
@@ -177,8 +186,12 @@ export function ScoresBoard({ eventId, light = false }: { eventId: string; light
     <div>
       {/* Day picker */}
       <div className="flex flex-wrap items-center gap-3">
+        {/* ⚠ "Matches", not "Results". The picker can now hold an "Upcoming"
+            bucket of confirmed fixtures that have not been played, and before a
+            tournament starts that is the ONLY entry — "Results by day" over a
+            list of matches nobody has played yet describes the wrong thing. */}
         <label htmlFor="scores-day" className={`text-[11px] font-bold uppercase tracking-[0.16em] ${muted}`}>
-          Results by day
+          Matches by day
         </label>
         <select
           id="scores-day"
