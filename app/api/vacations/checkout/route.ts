@@ -49,6 +49,9 @@ export async function POST(req: NextRequest) {
 
   // Flatten traveler details into Stripe metadata for the organizer.
   const metadata: Record<string, string> = {
+    // Explicit marker so the webhook can tell a Vacations session apart from
+    // every other checkout on this Stripe account. See isVacationsBooking().
+    source: "vacations",
     occupancy: option.label,
     nights: String(cfg.nights),
     destination: cfg.destination,
