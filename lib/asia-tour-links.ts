@@ -25,8 +25,8 @@
  *     used only when the events API is unreachable and we serve the curated
  *     calendar. Only the five Asia stops we carry there have one.
  *
- * All 17 destinations were requested 200 with a browser UA on 8/6 and their
- * page titles matched Wade's event names. The apex 301s to `www.`, so the URLs
+ * All 17 destinations were requested 200 with a browser UA (8/6, Hong Kong Slam
+ * re-checked 8/20) and their page titles matched Wade's event names. The apex 301s to `www.`, so the URLs
  * are written with it — a card click shouldn't spend a redirect.
  */
 
@@ -45,15 +45,14 @@ type AsiaEvent = {
 };
 
 /**
- * Wade's list, joined to the live `ppa_tournaments` feed (verified 8/6 — 16 of
- * the 17 are in it, all under the "PPA Tour Asia" org).
+ * Wade's list, joined to the live `ppa_tournaments` feed (re-verified 8/20 —
+ * all 17 are now in it, all under the "PPA Tour Asia" org).
  *
- * ⚠ THE HONG KONG SLAM IS NOT IN THE FEED AT ALL, so it has no `ptSlug` and
- * does not render on /events today — the page is feed-driven. Its row is here
- * so the curated fallback links correctly and so the entry is already right
- * when the Asia team registers it. Same exposure as the PPA Spain stops (8/5
- * pt. 16): a stop that only exists in our curated list is invisible on the live
- * calendar.
+ * ⚠ THE FEED CARRIES ASIA STOPS WADE'S LIST DOES NOT. "PPA Asia 125 Malaysia
+ * Tomaz Cup" (Subang Jaya, Aug 2026) renders on /events and still links to the
+ * pickleballtournaments.com holding page, because nobody has given us its
+ * ppatour-asia.com URL. Ask Wade before adding a row — a guessed path is worse
+ * than the holding page. `npm run asia:audit` lists this drift.
  */
 export const ASIA_TOUR_EVENTS: readonly AsiaEvent[] = [
   /* ---- 2025 (completed) ---- */
@@ -148,10 +147,11 @@ export const ASIA_TOUR_EVENTS: readonly AsiaEvent[] = [
     curatedSlug: "ppa-asia-1000-kuala-lumpur-cup",
   },
   {
-    // ⚠ NOT IN THE FEED — see the note above. Curated-only, so this row is
-    // reachable only through the API-unreachable fallback today.
+    // Registered in the feed on 8/20 — it was curated-only when this table was
+    // written. Its Asia page is live (Kai Tak, October 19–25).
     name: "Hang Seng Bank Hong Kong Slam",
     path: "2026/hong-kong-slam",
+    ptSlug: "ppa-asia-1500-hang-seng-bank-hong-kong-slam-2026",
     curatedSlug: "ppa-asia-1500-hong-kong-slam",
   },
 ];
