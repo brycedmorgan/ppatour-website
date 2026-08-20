@@ -42,6 +42,25 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-20 — Asia URL follow-up: the Hong Kong Slam was the last holding-page link
+
+- **Jeff Watson re-forwarded Wade Townsend's Asia URL list.** The work was already
+  shipped on 8/6 (`lib/asia-tour-links.ts`, commit `ff17db2`). Audited the live
+  `/events` HTML: **16 of Wade's 17 stops already link to `ppatour-asia.com`**.
+- **Fixed the seventeenth.** The Hang Seng Bank Hong Kong Slam had no `ptSlug`
+  because it was not in the `ppa_tournaments` feed in August. It is now
+  (`ppa-asia-1500-hang-seng-bank-hong-kong-slam-2026`), so the card rendered and
+  still pointed at the pickleballtournaments.com holding page. Added the slug
+  (commit `aa45d44`). Confirmed the target serves the real page — Kai Tak Arena,
+  October 19–25.
+- **Reverse drift, and it needs a human:** the feed carries **"PPA Asia 125
+  Malaysia Tomaz Cup"** (Subang Jaya, Aug 2026), which is NOT on Wade's list. It
+  keeps the holding page. Ask Wade for its `ppatour-asia.com` URL — do not guess a
+  path.
+- `npm run asia:audit` cannot run locally: `PB_API_TOKEN` is in Vercel only, not in
+  `.env.local`. The live-HTML check above substituted for it.
+- Pushed to `main` on Bryce's approval, same session.
+
 ### 2026-08-19 — "At the event": the on-site screen ships, on the website
 
 - **New route `/events/<year>/<slug>/today`.** The app's Event tab points there, the
