@@ -75,7 +75,12 @@ export function ScoreTicker() {
           {/* Only a played game produces a score; an up-next match has none, and
               printing "0–0" would read as a match under way. */}
           {score && <span className="shrink-0 font-bold text-ppa-yellow">{score}</span>}
-          {!score && featured.time && (
+          {/* A walkover is final with nothing to print in the score slot; say so
+              rather than leaving the bar looking truncated. */}
+          {!score && featured.outcome === "walkover" && (
+            <span className="shrink-0 text-white/55">Walkover</span>
+          )}
+          {!score && !featured.outcome && featured.time && (
             <span className="hidden shrink-0 text-white/55 md:inline">{featured.time}</span>
           )}
           {isLive ? (

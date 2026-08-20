@@ -39,6 +39,16 @@ export type TickerMatch = {
   liveGame?: number;
   /** Live stream URL for this match, when the feed provides one. */
   watchUrl?: string;
+  /**
+   * Which side won: 1, 2, or 0 when undecided.
+   *
+   * ⚠ THE CARD USED TO DERIVE THIS FROM THE GAME SCORES, which cannot answer for
+   * a match nobody played — so a walkover highlighted neither row. The feed
+   * states it outright; this carries it through.
+   */
+  winnerTeam?: 0 | 1 | 2;
+  /** Decided without being played — one side withdrew. */
+  outcome?: "walkover";
   teams: [TickerTeam, TickerTeam];
 };
 export type TickerTournament = { title: string; logo: string | null };
@@ -191,12 +201,32 @@ function mapMatch(m: ApiMatch): TickerMatch {
       headshot: m.teamTwoPlayerTwoPicture || null,
     });
 
+  /**
+   * ⚠ THE DECLARED WINNER, TRUSTED ONLY ONCE THE MATCH IS FINAL. Measured on the
+   * scores feed for the same tournament: 30 of 80 not-yet-played matches carry
+   * `winner: 1`, so reading it any earlier crowns winners across an undrawn
+   * bracket. Same rule as lib/scores-api and lib/brackets-api.
+   */
+  const declared = status === "final" && (m.winner === 1 || m.winner === 2) ? m.winner : 0;
+
+  /**
+   * ⚠ A WALKOVER'S GAME SCORES ARE ZEROS, NOT NULLS, and this feed marks their
+   * per-game status completed — so `notPlayed` above lets them through and the
+   * card printed "0" cells for a match nobody played. Nothing was scored, so
+   * nothing is shown; the winner is carried by `declared` instead.
+   */
+  const anyPoint = games1.some((g) => (g ?? 0) > 0) || games2.some((g) => (g ?? 0) > 0);
+  const walkover = status === "final" && declared !== 0 && !anyPoint;
+  const blank = games1.map(() => null);
+
   // Stream link: live_url while playing, archived_url once the match is done.
   const svc = m.streamingServices?.find((s) => s.liveUrl || s.archivedUrl);
   const watchUrl = (status === "final" ? svc?.archivedUrl : svc?.liveUrl) || undefined;
 
   return {
     id: m.matchUuid,
+    winnerTeam: declared,
+    outcome: walkover ? ("walkover" as const) : undefined,
     round: m.roundText || "",
     division: cleanDivision(m.eventTitle || ""),
     status,
@@ -206,8 +236,8 @@ function mapMatch(m: ApiMatch): TickerMatch {
     liveGame,
     watchUrl,
     teams: [
-      { players: p1, games: games1 },
-      { players: p2, games: games2 },
+      { players: p1, games: walkover ? blank : games1 },
+      { players: p2, games: walkover ? blank : games2 },
     ],
   };
 }

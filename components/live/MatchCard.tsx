@@ -76,8 +76,17 @@ export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: s
   const cols = columns(m);
   const aWins = cols.filter((c) => c.winner === "a").length;
   const bWins = cols.filter((c) => c.winner === "b").length;
+  /**
+   * ⚠ THE FEED'S OWN VERDICT WINS OVER THE GAME TALLY. A tally cannot decide a
+   * match nobody played, so a walkover — one side withdrew, the other advanced —
+   * highlighted neither row, and the card read as a final with no result. The
+   * tally still handles every normal match, and anything the feed leaves
+   * undecided.
+   */
+  const declared = m.winnerTeam === 1 ? 0 : m.winnerTeam === 2 ? 1 : null;
   const matchWinner =
-    m.status === "final" ? (aWins > bWins ? 0 : bWins > aWins ? 1 : null) : null;
+    m.status === "final" ? (declared ?? (aWins > bWins ? 0 : bWins > aWins ? 1 : null)) : null;
+  const walkover = m.outcome === "walkover";
   const isDoubles = m.teams.some((t) => t.players.length > 1);
 
   return (
@@ -124,7 +133,23 @@ export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: s
                   {team.players.map((p) => p.name).join(" / ")}
                 </span>
               </div>
-              {cols.map((c, gi) => {
+              {/* ⚠ A walkover has no scores, so without this the winning row is
+                  a green band with three empty cells — a result that looks like
+                  it failed to load. One "W" against a dash puts the outcome in
+                  the same column a score would occupy, matching the scores board
+                  and the bracket. */}
+              {walkover &&
+                [0, 1, 2].map((gi) => (
+                  <div
+                    key={gi}
+                    className={`flex items-center justify-center text-[15px] tabular-nums ${
+                      rowIsWinner ? "font-bold text-ppa-navy" : "text-ppa-navy/45"
+                    }`}
+                  >
+                    {gi === 0 ? (rowIsWinner ? "W" : "–") : ""}
+                  </div>
+                ))}
+              {!walkover && cols.map((c, gi) => {
                 const val = ti === 0 ? c.a : c.b;
                 const gameWinner = ti === 0 ? c.winner === "a" : c.winner === "b";
                 const cellGreen = m.status !== "final" && gameWinner;
