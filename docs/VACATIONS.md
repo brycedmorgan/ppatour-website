@@ -27,6 +27,50 @@ stop working if someone changes it without reading.
 
 ---
 
+## 🔴 ROOT CAUSE — the webhook 308 (fixed 2026-08-20)
+
+**Read this before anything else in this file.**
+
+`trailingSlash: true` (`next.config.ts`) makes Next answer the unslashed
+`/api/vacations/stripe-webhook` with a 308 to the slashed path. **Stripe does
+not follow redirects.** The endpoint was registered in Stripe WITHOUT the
+slash, so from the moment it was created on **2026-08-05** it failed 100% of
+deliveries. Response body on every attempt:
+
+```json
+{ "redirect": "/api/vacations/stripe-webhook/", "status": "308" }
+```
+
+141–182 ms per attempt: it died in routing and `route.ts` never loaded. No
+email, no sheet row, no `invalidateAvailability()`, for every booking between
+2026-08-05 and 2026-08-20.
+
+**Fixed** by re-registering the destination as
+`https://www.ppatour.com/api/vacations/stripe-webhook/` (trailing slash).
+Verified: unslashed → 308, slashed → 400 with the handler's own
+`"Webhook not configured (missing signature…)"` body, which proves the route
+now executes.
+
+### If you ever re-register this endpoint, keep the trailing slash
+
+This is the second time `trailingSlash: true` has bitten this funnel. The
+redirect tables in `next.config.ts` already carry slashes on their destinations
+for the same reason, with comments saying so. The Stripe registration is the
+one URL that lives outside the repo, so nothing in code review catches it.
+
+Anything else that POSTs to this app from outside — a new payment provider, a
+partner callback, a cron pinger — has the same trap. Register slashed.
+
+### Two separate faults, don't confuse them
+
+The 308 was the cause of the outage. It was found only after fixing a second,
+independent gap: `SENDGRID_API_KEY` / `SENDGRID_FROM` were never copied to the
+ppatour-website project, so even once the route ran it would have no-opped.
+Both had to be fixed. Fixing only the SendGrid half changes nothing visible,
+which is exactly what happened on 8/19 before the 308 was found.
+
+---
+
 ## ⚠ Cutover status — 2026-08-19 audit
 
 Lainey asked why new bookings weren't producing confirmation emails. They
@@ -35,16 +79,18 @@ weren't. **Steps 3 and 4 below were never done.** What the audit found:
 | Step | State |
 |---|---|
 | 1. Stripe env vars | ✅ Done. `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET` on ppatour-website. `/api/vacations/availability` returns `known: true`. |
-| 2. Re-point Stripe webhook | ❓ **UNVERIFIED.** Both endpoints answer a signature check. Nobody has confirmed which one Stripe actually calls. |
+| 2. Re-point Stripe webhook | ✅ Done 8/5, but registered unslashed and so **failed 100% until 8/20**. See the root-cause section above. |
 | 3. SendGrid + Sheets vars | ⚠ Half fixed 8/19. `SENDGRID_API_KEY` + `SENDGRID_FROM` added and verified. `SHEETS_WEBHOOK_URL` + `SHEETS_WEBHOOK_SECRET` **still missing.** |
 | 4. Redirect `vacations.ppatour.com` | ❌ **NOT DONE.** The old app is still live and serving `/`, `/register`, `/trips` to real traffic. |
+
+The old `vacations.ppatour.com` endpoint was never registered in Stripe at all, so no email path existed anywhere during the outage.
 
 **Two funnels are selling the same 20 rooms.** `vacations.ppatour.com` runs the
 archived `Gull-Stack/pickleball-vacations` build; `www.ppatour.com/vacations`
 runs this one. Both read the same Stripe account, so `capacity.ts` counts
 correctly across both, but only one of them can send an email.
 
-### The silent failure, precisely
+### The second failure mode, precisely (SendGrid)
 
 `lib/vacations/email.ts` `configure()` returns `null` when either
 `SENDGRID_API_KEY` or `SENDGRID_FROM` is unset. `sendBookingEmails` then logs a
