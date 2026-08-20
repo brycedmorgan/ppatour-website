@@ -489,13 +489,23 @@ const COMMERCE_BY_SLUG: Record<string, { tickets?: string; register?: string }> 
  * Veolia. Veolia is title, AT Sports is presenting" · Masters and Mesa Cup
  * "does not have a presenting partner, only Carvana as title"). Don't
  * reintroduce the fallback — an unlisted event showing nothing is correct.
+ *
+ * ⚠ THE ARIZONA OPEN NO LONGER LISTS A PRESENTING PARTNER (Wesley, 8/20: remove
+ * "AT Sports" from Presenting Partner on the AZ Open page). That SUPERSEDES the
+ * 8/4 quote above, which is left in place as the record of why the entry existed
+ * — read on its own it argues for putting the line back. It does not: the stop
+ * now shows no presenting partner, and Veolia remains its title sponsor.
+ *
+ * AT Sports is untouched as a PARTNER — it keeps its roster entry and its mark
+ * in `partners` (lib/home-content.ts, billed there as "AT Sports Surfaces /
+ * Acrytech"), and still appears in the sponsor wall on this and every event
+ * page. Only the "Presented by" credit on this one stop is gone.
  */
 const PRESENTER_BY_SLUG: Record<string, string> = {
   "veolia-pickleball-national-championships": "Fasenra",
   "rate-las-vegas-open": "JOOLA",
   "veolia-chicago-cup": "Storm",
   "veolia-malibu-cup": "Proton",
-  "veolia-arizona-open": "AT Sports",
 };
 
 /** Expand the compact schedule into Tournament records with unique slugs. */
