@@ -1,7 +1,7 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-08-19T13:36:22Z",
+  "generated_at": "2026-08-20T13:38:20Z",
   "event_count": 58,
   "ticket_type_count": 861,
   "series_breakdown": {
@@ -371,8 +371,15 @@
         {
           "name": "Courtside Session 3",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 65,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 35.83
+        },
+        {
+          "name": "Courtside Session 3",
+          "category": "STANDARD",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 75.81
         },
         {
@@ -381,13 +388,6 @@
           "sale_state": "HIDE",
           "base_price": null,
           "all_in_price": 92.05
-        },
-        {
-          "name": "Courtside Session 3",
-          "category": "STANDARD",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 35.83
         },
         {
           "name": "VIP Session 3",
@@ -439,14 +439,14 @@
           "category": "STANDARD",
           "sale_state": "SOLD_OUT",
           "base_price": null,
-          "all_in_price": 113.71
+          "all_in_price": 35.83
         },
         {
           "name": "Courtside Session 4",
           "category": "STANDARD",
           "sale_state": "SOLD_OUT",
           "base_price": null,
-          "all_in_price": 35.83
+          "all_in_price": 113.71
         },
         {
           "name": "VIP Session 4",
@@ -2574,8 +2574,8 @@
         {
           "name": "Sunday VIP",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 500,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 545.63
         }
       ],
@@ -3343,8 +3343,8 @@
           "name": "Sunday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
+          "base_price": 120,
+          "all_in_price": 135.05
         },
         {
           "name": "Sunday Grounds Pass",
@@ -3444,8 +3444,8 @@
           "name": "Friday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
+          "base_price": 50,
+          "all_in_price": 57.36
         },
         {
           "name": "Friday Grounds Pass",
@@ -3556,8 +3556,8 @@
           "name": "Sunday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
+          "base_price": 120,
+          "all_in_price": 135.05
         },
         {
           "name": "Sunday Grounds Pass",

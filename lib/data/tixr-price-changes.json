@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T13:36:22Z",
+  "updated_at": "2026-08-20T13:38:20Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -2603,6 +2603,118 @@
       "ticket": "Play with the Pro’s (4.0-4.5)",
       "base_price": 50,
       "all_in_price": 57.36
+    },
+    {
+      "at": "2026-08-20T13:38:20Z",
+      "type": "price_change",
+      "event_id": "169804",
+      "event": "Major League Pickleball New York Finals - Saturday: Session 3",
+      "ticket": "Courtside Session 3",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 35.83,
+        "to": 92.05
+      }
+    },
+    {
+      "at": "2026-08-20T13:38:20Z",
+      "type": "availability_change",
+      "event_id": "169804",
+      "event": "Major League Pickleball New York Finals - Saturday: Session 3",
+      "ticket": "Courtside Session 3",
+      "sale_state": {
+        "from": "SOLD_OUT",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-20T13:38:20Z",
+      "type": "price_change",
+      "event_id": "169803",
+      "event": "Major League Pickleball New York Finals - Saturday: Session 4",
+      "ticket": "Courtside Session 4",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 35.83,
+        "to": 113.71
+      }
+    },
+    {
+      "at": "2026-08-20T13:38:20Z",
+      "type": "price_change",
+      "event_id": "195032",
+      "event": "PPA Mesa Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "base_price": {
+        "from": 500,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 545.63,
+        "to": 545.63
+      }
+    },
+    {
+      "at": "2026-08-20T13:38:20Z",
+      "type": "availability_change",
+      "event_id": "195032",
+      "event": "PPA Mesa Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-20T13:38:20Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": 100,
+        "to": 120
+      },
+      "all_in_price": {
+        "from": 113.44,
+        "to": 135.05
+      }
+    },
+    {
+      "at": "2026-08-20T13:38:20Z",
+      "type": "price_change",
+      "event_id": "176326",
+      "event": "PPA Virginia Beach",
+      "ticket": "Friday Courtside",
+      "base_price": {
+        "from": 40,
+        "to": 50
+      },
+      "all_in_price": {
+        "from": 46.56,
+        "to": 57.36
+      }
+    },
+    {
+      "at": "2026-08-20T13:38:20Z",
+      "type": "price_change",
+      "event_id": "176326",
+      "event": "PPA Virginia Beach",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": 100,
+        "to": 120
+      },
+      "all_in_price": {
+        "from": 113.44,
+        "to": 135.05
+      }
     }
   ]
 }
