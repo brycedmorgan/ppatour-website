@@ -483,76 +483,85 @@ export async function HomeContent({
       />
 
       {/* ── Next on Tour (Bryce 7/28: text links + arrows, directly above the
-             five callouts — next three stops, then the three after that) ── */}
-      <section className="border-b border-ppa-line bg-white">
-        <div className="mx-auto w-full max-w-6xl px-4 py-7">
-          <div className="flex flex-wrap items-end justify-between gap-3">
-            <div className="flex items-center gap-2.5">
-              <span className="h-2 w-2 bg-ppa-blue" />
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
-                Next on Tour
-              </p>
-            </div>
-            <Link
-              href="/events"
-              className="group text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-blue transition-colors hover:text-ppa-blue-deep"
-            >
-              Full 2026 Schedule{" "}
-              <span
-                aria-hidden
-                className="inline-block transition-transform duration-300 group-hover:translate-x-0.5"
-              >
-                →
-              </span>
-            </Link>
-          </div>
+             five callouts — next three stops, then the three after that) ──
 
-          <ul className="mt-4 grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
-            {upNext.map((t, i) => (
-              // ⚠ `min-w-0` is load-bearing, not tidying. A grid item defaults
-              // to `min-width: auto`, so the column floors at the row's
-              // content-based minimum and the `min-w-0` + `truncate` on the
-              // name span below never gets to apply. With the FULL sponsored
-              // names this grid measured 436px inside a 358px container and
-              // dragged the whole homepage's layout viewport from 390 to 453 at
-              // a 390px emulated device. Verified back to 390 with this on.
-              <li
-                key={t.slug}
-                className={
-                  i >= 3
-                    ? "min-w-0 border-t border-ppa-line/70 lg:border-t-0"
-                    : "min-w-0"
-                }
+          ⚠ HIDDEN WHILE A STOP IS BEING PLAYED (Wesley, 8/20). During an
+          event the hero, the scores band and the site chrome are all about
+          the tournament on court, and a strip headed "Next on Tour" pushing
+          people at the stop AFTER it is competing with the thing that is
+          actually happening. It returns by itself the moment the event ends,
+          because `isLive` is derived from the calendar. */}
+      {!isLive && (
+        <section className="border-b border-ppa-line bg-white">
+          <div className="mx-auto w-full max-w-6xl px-4 py-7">
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <span className="h-2 w-2 bg-ppa-blue" />
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
+                  Next on Tour
+                </p>
+              </div>
+              <Link
+                href="/events"
+                className="group text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-blue transition-colors hover:text-ppa-blue-deep"
               >
-                <Link
-                  href={eventHref(t)}
-                  className="group flex items-baseline justify-between gap-4 border-b border-ppa-line/70 py-2.5 lg:border-b-0"
+                Full 2026 Schedule{" "}
+                <span
+                  aria-hidden
+                  className="inline-block transition-transform duration-300 group-hover:translate-x-0.5"
                 >
-                  <span className="min-w-0">
-                    <span
-                      className={`block truncate font-display uppercase leading-tight text-ppa-navy transition-colors group-hover:text-ppa-blue ${
-                        i < 3 ? "text-base" : "text-sm text-ppa-navy/75"
-                      }`}
-                    >
-                      {t.name}
-                    </span>
-                    <span className="mt-0.5 block text-[11px] uppercase tracking-wide text-ppa-navy/50">
-                      {formatDateRange(t.startDate, t.endDate)} · {t.city},{" "}
-                      {t.state}
-                    </span>
-                  </span>
-                  <span
-                    aria-hidden
-                    className="shrink-0 text-ppa-blue transition-transform duration-300 group-hover:translate-x-0.5"
+                  →
+                </span>
+              </Link>
+            </div>
+
+            <ul className="mt-4 grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
+              {upNext.map((t, i) => (
+                // ⚠ `min-w-0` is load-bearing, not tidying. A grid item defaults
+                // to `min-width: auto`, so the column floors at the row's
+                // content-based minimum and the `min-w-0` + `truncate` on the
+                // name span below never gets to apply. With the FULL sponsored
+                // names this grid measured 436px inside a 358px container and
+                // dragged the whole homepage's layout viewport from 390 to 453 at
+                // a 390px emulated device. Verified back to 390 with this on.
+                <li
+                  key={t.slug}
+                  className={
+                    i >= 3
+                      ? "min-w-0 border-t border-ppa-line/70 lg:border-t-0"
+                      : "min-w-0"
+                  }
+                >
+                  <Link
+                    href={eventHref(t)}
+                    className="group flex items-baseline justify-between gap-4 border-b border-ppa-line/70 py-2.5 lg:border-b-0"
                   >
-                    →
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+                    <span className="min-w-0">
+                      <span
+                        className={`block truncate font-display uppercase leading-tight text-ppa-navy transition-colors group-hover:text-ppa-blue ${
+                          i < 3 ? "text-base" : "text-sm text-ppa-navy/75"
+                        }`}
+                      >
+                        {t.name}
+                      </span>
+                      <span className="mt-0.5 block text-[11px] uppercase tracking-wide text-ppa-navy/50">
+                        {formatDateRange(t.startDate, t.endDate)} · {t.city},{" "}
+                        {t.state}
+                      </span>
+                    </span>
+                    <span
+                      aria-hidden
+                      className="shrink-0 text-ppa-blue transition-transform duration-300 group-hover:translate-x-0.5"
+                    >
+                      →
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
 
       {/* ── Five-Audience Lanes (Watch · Tickets · Follow · Play · Sponsor) ──
              Below sm this is a swipe rail, not a stack: five full-width 4:5
