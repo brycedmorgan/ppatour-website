@@ -28,7 +28,7 @@ function LinkIcon() {
   );
 }
 
-function SideRow({ side }: { side: BracketSide }) {
+function SideRow({ side, outcome }: { side: BracketSide; outcome?: BracketMatch["outcome"] }) {
   const p = side.participant;
   const games = side.games.filter((g) => g !== null) as number[];
   // Doubles come through as "A / B" — one player per line.
@@ -64,6 +64,22 @@ function SideRow({ side }: { side: BracketSide }) {
             {g}
           </span>
         ))}
+        {/* ⚠ A WALKOVER WINNER GETS THE SAME TREATMENT AS EVERY OTHER WINNER.
+            The green highlight lives on the SCORE cells, and a withdrawal has
+            none — so the side that advanced was styled like the side that lost,
+            distinguishable only by a bolder name. This puts one cell in the same
+            column, with the same classes, carrying "W" for the team that went
+            through and a dash for the team that withdrew. Same geometry as a
+            played match, so a row of results reads consistently. */}
+        {outcome === "walkover" && (
+          <span
+            className={`flex w-8 items-center justify-center text-[13px] tabular-nums ${
+              side.winner ? "bg-[#d3ecd0] font-bold text-ppa-navy" : "text-ppa-navy/45"
+            }`}
+          >
+            {side.winner ? "W" : "–"}
+          </span>
+        )}
       </div>
     </div>
   );
@@ -88,9 +104,9 @@ function MatchCard({
         </div>
         {/* Team rows */}
         <div className="flex flex-1 flex-col">
-          <SideRow side={m.sides[0]} />
+          <SideRow side={m.sides[0]} outcome={m.outcome} />
           <div className="h-px bg-ppa-line" />
-          <SideRow side={m.sides[1]} />
+          <SideRow side={m.sides[1]} outcome={m.outcome} />
         </div>
       </div>
       {/* Footer: court · time · link */}

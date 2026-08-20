@@ -10,7 +10,15 @@ import type { ScoreMatch, ScoresResult, ScoreTeam } from "@/lib/scores-api";
  */
 const POLL_MS = 30000;
 
-function SideRow({ team, status }: { team: ScoreTeam; status: ScoreMatch["status"] }) {
+function SideRow({
+  team,
+  status,
+  outcome,
+}: {
+  team: ScoreTeam;
+  status: ScoreMatch["status"];
+  outcome?: ScoreMatch["outcome"];
+}) {
   const games = team.games.filter((g) => g !== null) as number[];
   const names = team.players.length ? team.players : ["TBD"];
   return (
@@ -41,6 +49,22 @@ function SideRow({ team, status }: { team: ScoreTeam; status: ScoreMatch["status
             {g}
           </span>
         ))}
+        {/* ⚠ A WALKOVER WINNER GETS THE SAME TREATMENT AS EVERY OTHER WINNER.
+            The green highlight lives on the SCORE cells, and a withdrawal has
+            none — so the side that advanced was styled like the side that lost,
+            distinguishable only by a bolder name. This puts one cell in the same
+            column, with the same classes, carrying "W" for the team that went
+            through and a dash for the team that withdrew. Same geometry as a
+            played match, so a row of results reads consistently. */}
+        {outcome === "walkover" && (
+          <span
+            className={`flex w-8 items-center justify-center text-[13px] tabular-nums ${
+              team.winner ? "bg-[#d3ecd0] font-bold text-ppa-navy" : "text-ppa-navy/45"
+            }`}
+          >
+            {team.winner ? "W" : "–"}
+          </span>
+        )}
         {status === "live" && games.length === 0 && (
           <span className="flex w-8 items-center justify-center text-ppa-navy/25">–</span>
         )}
@@ -89,9 +113,9 @@ function ScoreCard({ m }: { m: ScoreMatch }) {
         </div>
       </div>
       <div className="border-t border-ppa-line">
-        <SideRow team={m.teams[0]} status={m.status} />
+        <SideRow team={m.teams[0]} status={m.status} outcome={m.outcome} />
         <div className="h-px bg-ppa-line" />
-        <SideRow team={m.teams[1]} status={m.status} />
+        <SideRow team={m.teams[1]} status={m.status} outcome={m.outcome} />
       </div>
     </article>
   );
