@@ -254,6 +254,21 @@ const nextConfig: NextConfig = {
    * WordPress used trailing slashes everywhere, so this matches the old site's
    * convention on every route, not just the blog.
    */
+  /**
+   * ⚠ AN ESCAPE HATCH FOR VERIFYING A BUILD WHILE `next dev` IS RUNNING, and it
+   * exists because not having it shipped a broken deploy. A dev server owns
+   * `.next`, and building against the same directory is what produced the "Jest
+   * worker" mystery of 8/5 pt.19 — so builds kept getting skipped, and a
+   * `useSearchParams()` outside a Suspense boundary reached Vercel, where it
+   * failed every prerendered page. tsc and eslint were both clean; only
+   * `next build` catches that class of error.
+   *
+   *   BUILD_DIST_DIR=.next-buildcheck npx next build
+   *
+   * Unset in normal use, so nothing changes for dev, CI or Vercel.
+   */
+  distDir: process.env.BUILD_DIST_DIR || ".next",
+
   trailingSlash: true,
   images: {
     // Player headshots served by the Pickleball.com partner API (rankings feed).

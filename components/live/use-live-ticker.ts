@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { getNextTournament, isTournamentLive, nowMs } from "@/lib/placeholder-data";
 import type {
   TickerMatch,
@@ -146,11 +146,29 @@ export function formatMatchScore(m: TickerMatch): string {
 /**
  * Preview only: the `?offset=` milliseconds /live pins in the URL to shift the
  * clock. 0 everywhere else, which is the wall clock.
+ *
+ * ⚠ THIS READS `window.location`, NOT `useSearchParams`, AND THAT IS A BUILD
+ * REQUIREMENT. `useTourIsLive` is called by TopBar, which lives in the root
+ * layout and therefore renders on every route — and a client component calling
+ * `useSearchParams` inside a prerendered page must sit in a Suspense boundary or
+ * the build FAILS: "useSearchParams() should be wrapped in a suspense boundary
+ * at page /watch/tv". TopBar cannot be wrapped, because the value decides which
+ * chrome stack it returns.
+ *
+ * `useSyncExternalStore` with a never-firing subscribe is the sanctioned way to
+ * read a client-only value without a hydration mismatch — the same pattern
+ * CookieBanner uses. The server snapshot is 0, which is production's real answer
+ * anyway; only /live carries an offset, and it picks it up on hydration.
  */
-export function usePreviewClockOffset(): number {
-  const searchParams = useSearchParams();
-  const raw = Number(searchParams.get("offset"));
+const subscribeNever = () => () => {};
+
+function readOffset(): number {
+  const raw = Number(new URLSearchParams(window.location.search).get("offset"));
   return Number.isFinite(raw) ? raw : 0;
+}
+
+export function usePreviewClockOffset(): number {
+  return useSyncExternalStore(subscribeNever, readOffset, () => 0);
 }
 
 /**
