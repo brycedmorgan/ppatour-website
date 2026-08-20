@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { HomeContent } from "@/components/home/HomeContent";
 import { LivePreviewClock } from "@/components/live/LivePreviewClock";
 import { getEvents } from "@/lib/events-api";
-import { fetchLiveTicker } from "@/lib/ticker-api";
+import { activeTickerPartner, fetchLiveTicker } from "@/lib/ticker-api";
 import {
   firstServeMs,
   getAllEvents,
@@ -54,6 +54,11 @@ export const metadata: Metadata = {
  * (see `runningTournament`), so the scores and bracket in a preview are real
  * even though the hero is rehearsing a stop that has not started — and the band
  * names that tournament rather than the one on the hero.
+ *
+ * ⚠ THE CHROME ON THIS ROUTE DOES NOT FOLLOW SUIT. The ticker, the marquee and
+ * the score rail all read the main PPA tour, same as production, so a sister-tour
+ * window does not appear in them by accident. To rehearse those with real
+ * matches, name the tour: `/live?in=30&partner=PPA%20Asia`.
  *
  * ⚠ SIMULATION IS OPT-IN VIA A QUERY PARAM, AND THAT IS THE WHOLE GATE. With no
  * param the clock is not shifted at all and this behaves as it always did. When
@@ -134,7 +139,17 @@ function sameTournament(a: string, b: string): boolean {
  * to the stop on the hero, i.e. today's behaviour.
  */
 async function runningTournament(): Promise<Tournament | undefined> {
-  const title = (await fetchLiveTicker()).tournament?.title;
+  /**
+   * ⚠ ASKS FOR WHICHEVER TOUR IS ACTUALLY PLAYING, WHICH THE SITE CHROME
+   * DELIBERATELY DOES NOT. `fetchLiveTicker()` defaults to the main PPA tour now,
+   * because sister-tour matches have no business on ppatour.com's ticker or hero
+   * (Wesley, 8/20). This route is the exception and the reason the exception is
+   * safe: it is the rehearsal harness, it is noindex, and finding real live
+   * matches wherever they are is its entire purpose — today that is a PPA Asia
+   * stop in Shenzhen.
+   */
+  const partner = (await activeTickerPartner()) ?? undefined;
+  const title = (await fetchLiveTicker(partner)).tournament?.title;
   if (!title) return undefined;
   const { events } = await getEvents();
   const match = events.find((e) => sameTournament(e.name, title));

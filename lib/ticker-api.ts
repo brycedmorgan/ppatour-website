@@ -278,6 +278,19 @@ const resultInFlight = new Map<string, Promise<TickerResult>>();
  * ~60s so we don't pay this extra discovery round trip on every request while
  * still auto-detecting PPA / PPA Australia / PPA Asia windows.
  */
+export async function activeTickerPartner(): Promise<string | null> {
+  const { token, base } = config();
+  return token ? pickActivePartner(token, base) : null;
+}
+
+/**
+ * ⚠ NOT FOR THE SITE CHROME. This answers "which tour has matches running",
+ * across PPA and its sister tours, and that is the wrong question for anything
+ * on ppatour.com's own furniture — see the note in `fetchLiveTicker`. It exists
+ * for the scores board's date lookup (`fetchPlannedStarts`, which is scoped to a
+ * tournament the page already chose) and for the /live rehearsal harness, whose
+ * job is to find real live content wherever it is.
+ */
 async function pickActivePartner(token: string, base: string): Promise<string | null> {
   if (partnerCache && partnerCache.expires > Date.now()) return partnerCache.value;
   if (partnerInFlight) return partnerInFlight;
@@ -352,8 +365,26 @@ export async function fetchLiveTicker(partnerArg?: string): Promise<TickerResult
   if (!token) return empty;
 
   try {
-    let partner = partnerArg || process.env.PB_TICKER_PARTNER || "";
-    if (!partner) partner = (await pickActivePartner(token, base)) || "PPA";
+    /**
+     * ⚠ THE DEFAULT IS THE MAIN PPA TOUR, AND IT IS NOT AUTO-PICKED (Wesley,
+     * 8/20: "Main PPA Tournament should be the only content that shows on the
+     * actual home page. Especially anything in that top nav and the hero.").
+     *
+     * This used to call `pickActivePartner`, which returns the FIRST partner
+     * with matches running across PPA / PPA Australia / PPA Asia. So with no PPA
+     * event on, ppatour.com's own top bar advertised a sister tour — measured on
+     * the live homepage: "Up Next · Round 16 · C. Wang / Y. Long vs Q. Chen /
+     * A. Brown · 9:00 AM CST", a PPA Asia 500 match in Shenzhen. Every consumer
+     * of this feed is site chrome (the site-wide ticker, the /live marquee and
+     * score rail, /watch's Live Now band), so the auto-pick put sister-tour
+     * content on the tour's own furniture.
+     *
+     * A sister tour still reaches those surfaces on request — `?partner=` is
+     * honoured end to end (use-live-ticker reads it from the URL, /api/ticker
+     * forwards it), which is how the PPA Asia window is being used to rehearse
+     * live behaviour. It is opt-in now rather than automatic.
+     */
+    const partner = partnerArg || process.env.PB_TICKER_PARTNER || "PPA";
 
     const cached = resultCache.get(partner);
     if (cached && cached.expires > Date.now()) return cached.value;
