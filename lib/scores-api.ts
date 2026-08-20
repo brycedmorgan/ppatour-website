@@ -39,6 +39,8 @@ export type ScoreMatch = {
   dateKey: string;
   dateLabel: string;
   status: "live" | "final" | "scheduled";
+  /** Decided without being played — one side withdrew. See MatchOutcome. */
+  outcome?: "walkover";
   teams: [ScoreTeam, ScoreTeam];
 };
 export type Champion = { divisionId: string; division: string; players: string[] };
@@ -182,9 +184,25 @@ function normalize(m: ApiMatch, division: string, divisionId: string): ScoreMatc
     if (a > b) w1++;
     else if (b > a) w2++;
   }
+  /**
+   * Who won.
+   *
+   * ⚠ THE DECLARED `winner` IS A NUMBER, AND IT WAS BEING DISCARDED. `str()`
+   * returns "" for a non-string, so the "team_1"/"team_2" tests never fired and
+   * this always fell back to the game tally. Fine while a score exists; useless
+   * for a walkover, whose games are all 0 — so a withdrawal had no winner.
+   *
+   * ⚠ ONLY TRUSTED ONCE COMPLETED. Of Shenzhen 2026's 80 unplayed matches, 30
+   * carry `winner: 1`. Reading it before completion would crown winners across
+   * half an undrawn bracket.
+   */
+  const declared = status === "final" ? num(m, "winner", "matchWinner") : null;
   const winnerField = str(m, "winner", "matchWinner").toLowerCase();
-  const t1Wins = status === "final" && (winnerField === "team_1" || (!winnerField && w1 > w2));
-  const t2Wins = status === "final" && (winnerField === "team_2" || (!winnerField && w2 > w1));
+  const byTally = status === "final" && !winnerField;
+  const t1Wins =
+    declared === 1 || winnerField === "team_1" || (byTally && declared == null && w1 > w2);
+  const t2Wins =
+    declared === 2 || winnerField === "team_2" || (byTally && declared == null && w2 > w1);
 
   const team = (
     p1f: string, p1l: string, p2f: string, p2l: string,
@@ -205,7 +223,16 @@ function normalize(m: ApiMatch, division: string, divisionId: string): ScoreMatc
   // note above. A "final" with no score on it never happened (walkover, or a
   // slot the bracket filled administratively).
   if (status === "scheduled" && !teams.every((t) => t.players.length > 0)) return null;
-  if (status === "final" && !played) return null;
+
+  /**
+   * ⚠ A COMPLETED MATCH WITH NO SCORE IS KEPT WHEN SOMEBODY WON IT. That is a
+   * walkover — one side withdrew, the other advanced — and dropping it hid a
+   * real result: the winner had progressed and the board never said why. Only a
+   * completed match with no score AND no winner is discarded, which is a slot
+   * the bracket closed administratively rather than a match.
+   */
+  const walkover = status === "final" && !played && (t1Wins || t2Wins);
+  if (status === "final" && !played && !walkover) return null;
 
   const { key, label } =
     status === "scheduled"
@@ -223,6 +250,7 @@ function normalize(m: ApiMatch, division: string, divisionId: string): ScoreMatc
     dateKey: key,
     dateLabel: label,
     status,
+    outcome: walkover ? ("walkover" as const) : undefined,
     teams: [
       team(str(m, "teamOnePlayerOneFirstName"), str(m, "teamOnePlayerOneLastName"), str(m, "teamOnePlayerTwoFirstName"), str(m, "teamOnePlayerTwoLastName"), num(m, "teamOneSeed"), games1, t1Wins),
       team(str(m, "teamTwoPlayerOneFirstName"), str(m, "teamTwoPlayerOneLastName"), str(m, "teamTwoPlayerTwoFirstName"), str(m, "teamTwoPlayerTwoLastName"), num(m, "teamTwoSeed"), games2, t2Wins),

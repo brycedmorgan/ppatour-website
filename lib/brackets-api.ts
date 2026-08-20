@@ -71,8 +71,24 @@ function bracketType(m: ApiMatch): string {
   return str(m, "inBracketType", "in_bracket_type").toUpperCase();
 }
 
-/** 1 / 2 / 0 (undecided) — the winner field, else a game-win tally. */
+/**
+ * 1 / 2 / 0 (undecided) — the declared winner, else a game-win tally.
+ *
+ * ⚠ `winner` ARRIVES AS A NUMBER AND WAS BEING THROWN AWAY. `str()` returns ""
+ * for a non-string, so the "team_1"/"team_2" comparisons below never matched and
+ * every match fell through to the tally. That works whenever a score exists —
+ * which is why normal results looked fine — and returns 0 for a walkover, whose
+ * games are all 0. Hence a withdrawn match with no winner marked.
+ *
+ * ⚠ AND THE FIELD IS ONLY TRUSTWORTHY ONCE THE MATCH IS COMPLETED. Measured
+ * across Shenzhen 2026: of the 80 matches not yet played, 30 carry `winner: 1`.
+ * Reading it unconditionally would crown a winner in half the undrawn bracket.
+ */
 function winnerTeam(m: ApiMatch): 0 | 1 | 2 {
+  if (str(m, "matchCompleted", "match_completed")) {
+    const declared = num(m, "winner", "matchWinner");
+    if (declared === 1 || declared === 2) return declared;
+  }
   const wf = str(m, "winner", "matchWinner").toLowerCase();
   if (wf === "team_1") return 1;
   if (wf === "team_2") return 2;
@@ -98,10 +114,25 @@ function teamName(m: ApiMatch, team: 1 | 2): string {
       : [fullName(str(m, "teamTwoPlayerOneFirstName"), str(m, "teamTwoPlayerOneLastName")), fullName(str(m, "teamTwoPlayerTwoFirstName"), str(m, "teamTwoPlayerTwoLastName"))];
   return p.filter(Boolean).join(" / ");
 }
+/** Did anybody score a point? The feed sends 0, not null, for an unplayed game,
+ *  so "has a score" cannot be asked as `!= null`. Checked per game across both
+ *  sides, so a legitimate 11–0 still counts as played. */
+function wasPlayed(m: ApiMatch): boolean {
+  const bestOf = num(m, "scoreFormatGameBestOutOf") ?? 3;
+  for (let i = 0; i < bestOf; i++) {
+    if ((num(m, G1[i]) ?? 0) > 0 || (num(m, G2[i]) ?? 0) > 0) return true;
+  }
+  return false;
+}
+
 function sideOf(m: ApiMatch, team: 1 | 2, decided: boolean, won: boolean): BracketSide {
   const bestOf = num(m, "scoreFormatGameBestOutOf") ?? 3;
   const keys = team === 1 ? G1 : G2;
-  const games = keys.slice(0, bestOf).map((k) => num(m, k)).filter((g) => g != null) as number[];
+  // An unplayed match has no score to show — printing its zeros is what made a
+  // walkover read as a scoreless draw.
+  const games = wasPlayed(m)
+    ? (keys.slice(0, bestOf).map((k) => num(m, k)).filter((g) => g != null) as number[])
+    : [];
   const name = teamName(m, team);
   return {
     participant: name ? { id: teamUuid(m, team) || name, name, seed: num(m, team === 1 ? "teamOneSeed" : "teamTwoSeed") ?? undefined } : null,
@@ -182,6 +213,9 @@ function buildBracket(
       number: num(m, "matchNumber") ?? undefined,
       roundIndex: roundIndexOf.get(roundNum(m)) ?? 0,
       status: matchStatus(m),
+      // Completed, decided, and nobody played it: a withdrawal.
+      outcome:
+        matchStatus(m) === "final" && w !== 0 && !wasPlayed(m) ? ("walkover" as const) : undefined,
       court: str(m, "courtTitle", "court"),
       sides: [sideOf(m, 1, decided, w === 1), sideOf(m, 2, decided, w === 2)],
       nextMatchId: nextIdOf(m),

@@ -102,6 +102,12 @@ function MatchCard({
               <span className="font-bold uppercase tracking-wide">Live</span>
             </span>
           )}
+          {/* Decided without being played — see MatchOutcome. Without it the
+              card shows two names, no scores and a highlight on one side, with
+              nothing explaining the gap. */}
+          {m.outcome === "walkover" && (
+            <span className="font-bold uppercase tracking-wide text-ppa-navy/50">Walkover</span>
+          )}
           {m.court && <span className="font-semibold text-teal-600">Court: {m.court}</span>}
           {m.court && m.time && <span className="text-ppa-navy/25">|</span>}
           {m.time && <span className="text-ppa-navy/50">{m.time}</span>}

@@ -26,12 +26,26 @@ export type BracketSide = {
 
 export type BracketMatchStatus = "scheduled" | "live" | "final";
 
+/**
+ * A completed match nobody played: one side withdrew and the other advanced.
+ *
+ * ⚠ IT IS NOT A 0–0 RESULT, AND THAT IS EXACTLY HOW IT USED TO RENDER. The feed
+ * marks these `matchCompleted` with a `winner` and every game score at 0, so a
+ * bracket card showed "0 0 0" against "0 0 0" with neither side highlighted —
+ * i.e. a match that looked like it had been played to a scoreless draw. Real
+ * example, Shenzhen 2026: N. Wiseman / L. Pham vs Y. Miao / X. Cai, Men's
+ * Doubles R32.
+ */
+export type MatchOutcome = "walkover";
+
 export type BracketMatch = {
   id: string;
   /** Sequential match number shown on the card's left rail (e.g. 17). */
   number?: number;
   roundIndex: number;
   status: BracketMatchStatus;
+  /** Set when the match was decided without being played. */
+  outcome?: MatchOutcome;
   sides: [BracketSide, BracketSide];
   court?: string;
   time?: string;

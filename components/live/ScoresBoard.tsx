@@ -67,6 +67,15 @@ function ScoreCard({ m }: { m: ScoreMatch }) {
               Its score cells are empty (SideRow renders only games that exist —
               never a fabricated 0–0), and without this chip an empty card reads
               as a result we failed to load rather than a fixture still to come. */}
+          {/* ⚠ A walkover has no score, so without saying so the card looks like
+              a result that failed to load — which is exactly how the withdrawn
+              Wiseman/Pham vs Miao/Cai match read. The winner's name is bolded by
+              SideRow; this says why there is nothing beside it. */}
+          {m.outcome === "walkover" && (
+            <span className="rounded-full bg-ppa-navy/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.1em] text-ppa-navy/60">
+              Walkover
+            </span>
+          )}
           {m.status === "scheduled" && (
             <span className="rounded-full bg-ppa-blue/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.1em] text-ppa-blue">
               Upcoming
