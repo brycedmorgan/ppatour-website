@@ -18,6 +18,8 @@ import { fetchPlannedStarts } from "@/lib/ticker-api";
 
 const TIMEOUT_MS = 6000;
 const TTL_MS = 60_000;
+/** How long to sit on the last good result after a failed rebuild. */
+const FAILED_RETRY_MS = 10_000;
 
 export type ScoreTeam = {
   players: string[];
@@ -314,7 +316,7 @@ async function get(base: string, token: string, path: string): Promise<unknown> 
  * Anything unmatched keeps UPCOMING_KEY and groups under a bucket that says
  * the date is not published yet, rather than borrowing one.
  */
-const plannedStarts = fetchPlannedStarts;
+
 
 const cache = new Map<string, { value: ScoresResult; expires: number }>();
 const inFlight = new Map<string, Promise<ScoresResult>>();
@@ -324,6 +326,21 @@ async function build(tournamentId: string): Promise<ScoresResult> {
   const empty: ScoresResult = { tournamentId, divisions: [], matches: [], champions: [], standings: [] };
   if (!token) return empty;
   try {
+    /**
+     * ⚠ FIRED HERE, AWAITED LATER — it used to run AFTER the division fan-out
+     * and was the single most expensive step of a cold build. Measured on
+     * Nationals: division list ~150ms, all five division fetches ~310ms in
+     * parallel, then planned starts ~900ms on its own — 900 of 1,360ms spent
+     * waiting on a request that could have been in flight the whole time.
+     *
+     * Not awaited unless the tournament turns out to have unplayed matches, so
+     * a finished event never blocks on it. Its own module cache is shared across
+     * tournaments, so even a speculative call that goes unused warms the next
+     * one. `fetchPlannedStarts` never rejects, so this cannot become an
+     * unhandled rejection.
+     */
+    const startsSoon = fetchPlannedStarts();
+
     const evJson = (await get(base, token, `/v1/ppa/tournaments/${tournamentId}/tournament_events?bracket_level=Pro`)) as
       | { results?: ApiEvent[] }
       | null;
@@ -369,7 +386,7 @@ async function build(tournamentId: string): Promise<ScoresResult> {
     // that says the date is not published yet, rather than borrowing one.
     const scheduled = matches.filter((m) => m.status === "scheduled");
     if (scheduled.length) {
-      const starts = await plannedStarts();
+      const starts = await startsSoon;
       for (const m of scheduled) {
         const at = starts.get(m.id);
         if (!at) continue;
@@ -396,19 +413,54 @@ async function build(tournamentId: string): Promise<ScoresResult> {
   }
 }
 
-export async function getScores(tournamentId: string): Promise<ScoresResult> {
-  const hit = cache.get(tournamentId);
-  if (hit && hit.expires > Date.now()) return hit.value;
-  const pending = inFlight.get(tournamentId);
-  if (pending) return pending;
+/** Kick off a rebuild, keeping the cache honest about what came back. */
+function refresh(tournamentId: string): Promise<ScoresResult> {
+  const existing = inFlight.get(tournamentId);
+  if (existing) return existing;
   const p = build(tournamentId).then((value) => {
+    /**
+     * ⚠ AN EMPTY RESULT NEVER OVERWRITES A GOOD ONE. `build` returns
+     * `{ matches: [] }` on any failure — `get()` returns null on a non-ok
+     * response — so a single partner-API 429 used to be cached for a full
+     * minute, and the board went from a full scoreboard to "No scores available
+     * yet" and stayed there. Seen repeatedly while testing. Keeping the last
+     * good answer means a blip costs freshness, not the whole board.
+     */
+    const previous = cache.get(tournamentId);
+    if (value.matches.length === 0 && previous && previous.value.matches.length > 0) {
+      /**
+       * ⚠ AND THE STALE ENTRY GETS A SHORT NEW EXPIRY, which is not cosmetic.
+       * Without it `expires` stays in the past, so every single request would
+       * see an expired entry and kick off another rebuild — turning an upstream
+       * outage into a rebuild per request, against the API that is already
+       * refusing us. A 10s backoff keeps the board populated and retries at a
+       * rate the origin can survive.
+       */
+      cache.set(tournamentId, { value: previous.value, expires: Date.now() + FAILED_RETRY_MS });
+      return previous.value;
+    }
     cache.set(tournamentId, { value, expires: Date.now() + TTL_MS });
     return value;
   });
   inFlight.set(tournamentId, p);
-  try {
-    return await p;
-  } finally {
-    inFlight.delete(tournamentId);
+  void p.finally(() => inFlight.delete(tournamentId));
+  return p;
+}
+
+export async function getScores(tournamentId: string): Promise<ScoresResult> {
+  const hit = cache.get(tournamentId);
+  if (hit && hit.expires > Date.now()) return hit.value;
+
+  /**
+   * ⚠ STALE WHILE REVALIDATING. A hard TTL meant whoever arrived one second
+   * after expiry paid the whole cold build — measured at 1.26s — while everyone
+   * else got 20ms. Scores a minute old are worth far more than a blank panel for
+   * a second, and the caller polls every 30s anyway, so the refresh lands
+   * without anybody waiting for it.
+   */
+  if (hit) {
+    void refresh(tournamentId);
+    return hit.value;
   }
+  return refresh(tournamentId);
 }
