@@ -69,7 +69,27 @@ export async function resolveEvent(year: string, slug: string): Promise<Resolved
   // heard of and the API being unreachable.
   const name = live?.name && live.name !== t.name ? live.name : t.name;
   const venue = live?.venue || t.venue;
-  const event = name !== t.name || venue !== t.venue ? { ...t, name, venue } : t;
+
+  /**
+   * ⚠ THE TOURNAMENT UUID IS THE THIRD FIELD TO NEED THIS OVERLAY, AND ITS
+   * ABSENCE WAS SILENT. Curated rows carry no `tournamentUuid` — only feed-built
+   * ones do — and curated is checked first, so `t.tournamentUuid` was undefined
+   * on every main US stop. Everything keyed to it therefore never appeared on
+   * those pages: the champions banner, the final results panel and the bracket
+   * are all gated on `Boolean(uuid)`, which is why they only ever worked for
+   * Atlanta, a feed-built event. The comment on the page said "full brackets
+   * only where we have the draw data (Atlanta for now)" — the draw data was
+   * there all along; the id was not.
+   *
+   * It is also what the new live scores section needs, so a tournament being
+   * played has a scoreboard on its own page.
+   */
+  const tournamentUuid = t.tournamentUuid || live?.tournamentUuid;
+
+  const event =
+    name !== t.name || venue !== t.venue || tournamentUuid !== t.tournamentUuid
+      ? { ...t, name, venue, tournamentUuid }
+      : t;
 
   /**
    * ⚠ THIS GATE WAS MISSING, AND THE DOC COMMENT ABOVE HAS CLAIMED IT SINCE

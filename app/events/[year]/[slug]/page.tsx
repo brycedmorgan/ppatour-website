@@ -16,6 +16,7 @@ import { TripBuilder } from "@/components/events/TripBuilder";
 import type { TripEvent } from "@/lib/trip";
 import { buildTripEvent } from "@/lib/trip-event";
 import { ResultsPanel } from "@/components/live/ResultsPanel";
+import { ScoresBracketToggle } from "@/components/live/ScoresBracketToggle";
 import { ChampionsBanner } from "@/components/live/ChampionsBanner";
 import { ReplayGallery } from "@/components/live/ReplayGallery";
 import { getDefendingChampions } from "@/lib/defending-champions";
@@ -34,6 +35,7 @@ import { resolveEvent } from "@/lib/resolve-event";
 import { getArticlesForEvent } from "@/lib/news-articles";
 import {
   daysUntil,
+  isTournamentLive,
   eventHref,
   eventYear,
   formatDate,
@@ -63,6 +65,19 @@ function eventMetaDescription(t: Tournament): string {
   return `${eventTierLabel(t)} · ${formatDateRange(t.startDate, t.endDate, true)} · ${where} · ${t.prizeMoney} total payout. Schedule, players, tickets, trip guide, and how to watch.`;
 }
 
+
+/**
+ * ⚠ THIS PAGE HAD NO `revalidate` AT ALL, AND ITS OWN COMMENT CLAIMED ONE.
+ * "recomputed on the page's daily revalidate" sat above the `completed` check
+ * while `generateStaticParams` made the page fully static — so an event could not
+ * become completed, and now cannot become LIVE, without a redeploy. 60s matches
+ * the homepage, which flips on the same calendar check: click through from a
+ * live homepage and the event page has to agree with it.
+ *
+ * The scores inside the section are client-polled either way; what this number
+ * governs is whether the section exists yet.
+ */
+export const revalidate = 60;
 
 export async function generateStaticParams() {
   const { events } = await getEvents();
@@ -337,6 +352,13 @@ export default async function EventPage({ params }: Params) {
   // full brackets only where we have the draw data (Atlanta for now).
   const uuid = t.tournamentUuid;
   const showResults = completed && Boolean(uuid);
+  /**
+   * Being played right now — the same calendar check the homepage flips on
+   * (lib/placeholder-data), so the two surfaces cannot disagree about whether
+   * the tour is on. Needs the tournament UUID as well, since without one there
+   * is no scoreboard to show.
+   */
+  const showLiveScores = !completed && isTournamentLive(t) && Boolean(uuid);
   // Brackets are built live from the match feed for any completed event.
   const showBracket = showResults;
 
@@ -365,6 +387,9 @@ export default async function EventPage({ params }: Params) {
           { id: "results", label: "Final Results" },
         ]
       : []),
+    // Same anchor as Final Results — one section, two states, so a link to
+    // #results lands whether the event is being played or is over.
+    ...(showLiveScores ? [{ id: "results", label: "Live Scores" }] : []),
     ...(showReplays ? [{ id: "replays", label: "Replays" }] : []),
     ...(completed
       ? []
@@ -650,6 +675,30 @@ export default async function EventPage({ params }: Params) {
           ))}
         </div>
       </section>
+
+      {/* ── Live scores + bracket, while the event is being played ──────────
+             The homepage's live band in event-page form (Wesley, 8/20): its
+             "Scores & Brackets" button deep-links here, and until now there was
+             nothing to link to — the scores section was gated on `completed`, so
+             the page carried no scores at all on the days they matter most. */}
+      {showLiveScores && uuid && (
+        <section id="results" className="scroll-mt-[120px] bg-ppa-navy">
+          <div className="mx-auto w-full max-w-6xl px-4 py-12">
+            <div className="flex items-center gap-2.5">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-ppa-live" />
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
+                Live Now
+              </p>
+            </div>
+            <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
+              {t.name} Live Scores
+            </h2>
+            <div className="mt-6">
+              <ScoresBracketToggle eventId={uuid} expandHref={`/brackets?event=${uuid}`} />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Completed events: champions → final results (standings / scores / bracket) */}
       {showResults && uuid && (

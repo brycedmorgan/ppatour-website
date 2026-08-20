@@ -318,14 +318,23 @@ export function HomeHero({
                     →
                   </span>
                 </WatchLiveButton>
+                {/* ⚠ The event's OWN scores section, not /watch. That page is
+                    the broadcast hub — where to watch, the TV guide — and answers
+                    a different question than "what is the score". The event page
+                    grows a #results section while it is being played; see the
+                    live block in app/events/[year]/[slug]/page.tsx. */}
                 <Link
-                  href="/watch"
+                  href={`${eventHref(next)}#results`}
                   className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98]"
                 >
                   Scores & Brackets
                 </Link>
+                {/* ⚠ The EVENT, not the calendar. This pointed at /events — the
+                    full schedule — so the one button on a live homepage offering
+                    to go deeper on the tournament being played sent people to a
+                    list of every other stop instead. */}
                 <Link
-                  href="/events"
+                  href={eventHref(next)}
                   className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98]"
                 >
                   Explore the Event

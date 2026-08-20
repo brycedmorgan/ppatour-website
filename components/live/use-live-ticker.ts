@@ -112,12 +112,23 @@ export function matchWatchUrl(m: TickerMatch): string {
  *  its own live link. */
 export const PBTV_STREAM_URL = "https://stream.pickleballtv.com/";
 
-/** Where a "Watch Live" button should send viewers: the live match on
- *  Championship Court, else Grandstand Court, else the PickleballTV stream. */
+/**
+ * Where a "Watch Live" button sends viewers (Wesley, 8/20):
+ *
+ *   1. the match on Championship Court, if it is live and has a stream link
+ *   2. stream.pickleballtv.com
+ *
+ * ⚠ GRANDSTAND IS NO LONGER A FALLBACK. It used to sit between the two, so a
+ * button labelled "Watch Live" on the tour's front page could open a secondary
+ * court while Championship Court was mid-match without a link of its own. The
+ * PickleballTV stream carries whatever the broadcast is showing, which is the
+ * honest answer when we cannot name the marquee match.
+ */
 export function liveWatchUrl(matches: TickerMatch[]): string {
-  const live = matches.filter((m) => m.status === "live" && m.watchUrl);
-  const onCourt = (re: RegExp) => live.find((m) => re.test(m.court))?.watchUrl;
-  return onCourt(/champ/i) || onCourt(/grandstand/i) || PBTV_STREAM_URL;
+  const championship = matches.find(
+    (m) => m.status === "live" && m.watchUrl && /champ/i.test(m.court),
+  );
+  return championship?.watchUrl || PBTV_STREAM_URL;
 }
 
 /** "11–9, 9–11, 8–6" — the games that have a score, in order. */
