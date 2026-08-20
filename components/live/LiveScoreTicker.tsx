@@ -131,7 +131,21 @@ export function LiveScoreTicker({
   // No live matches (still loading, or nothing live right now) → keep the
   // loading animation rather than showing fabricated placeholder cards.
   // Controlled mode has nothing to wait for.
-  const showCards = (matches !== undefined || self.loaded) && ordered.length > 0;
+  const settled = matches !== undefined || self.loaded;
+  const showCards = settled && ordered.length > 0;
+  /**
+   * ⚠ "NOTHING IS ON" IS NOT "STILL LOADING", AND THIS RAIL USED TO CONFLATE
+   * THEM. `showCards` needs matches, so an empty window fell through to the
+   * skeleton cards — four spinners, indefinitely. Measured: the rail settles at
+   * 3s and then spins unchanged for as long as you watch it, which reads as a
+   * feed that never loads rather than a tour that is not playing. It became the
+   * normal state once the chrome was restricted to the main PPA tour (8/20),
+   * because between PPA events there is nothing in the window at all.
+   *
+   * Skeletons are still right BEFORE the first fetch settles — that is real
+   * loading. After it, say so.
+   */
+  const showEmpty = settled && ordered.length === 0;
 
   const cardW = `${CARD_WIDTHS} shrink-0`;
 
@@ -187,12 +201,20 @@ export function LiveScoreTicker({
           onScroll={onScroll}
           className="flex h-full items-stretch gap-2 overflow-x-auto py-2 pl-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
-          {showCards
-            ? ordered.map((m) => <MatchCard key={m.id} m={m} className={cardW} />)
-            : // Loading / no-live state — spinner in each card.
-              Array.from({ length: SKELETON_COUNT }).map((_, i) => (
-                <MatchCardSkeleton key={`sk-${i}`} className={cardW} />
-              ))}
+          {showCards &&
+            ordered.map((m) => <MatchCard key={m.id} m={m} className={cardW} />)}
+          {showEmpty && (
+            <div className="flex flex-1 items-center px-3">
+              <p className="text-[13px] text-white/55">
+                No matches on court right now.
+              </p>
+            </div>
+          )}
+          {!settled &&
+            // Genuinely loading — a spinner per card until the first fetch lands.
+            Array.from({ length: SKELETON_COUNT }).map((_, i) => (
+              <MatchCardSkeleton key={`sk-${i}`} className={cardW} />
+            ))}
         </div>
       </div>
     </div>

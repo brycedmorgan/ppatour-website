@@ -138,7 +138,7 @@ function sameTournament(a: string, b: string): boolean {
  * events feed, which has both. A miss returns undefined and the band falls back
  * to the stop on the hero, i.e. today's behaviour.
  */
-async function runningTournament(): Promise<Tournament | undefined> {
+async function runningTournament(partnerArg?: string): Promise<Tournament | undefined> {
   /**
    * ⚠ ASKS FOR WHICHEVER TOUR IS ACTUALLY PLAYING, WHICH THE SITE CHROME
    * DELIBERATELY DOES NOT. `fetchLiveTicker()` defaults to the main PPA tour now,
@@ -148,8 +148,7 @@ async function runningTournament(): Promise<Tournament | undefined> {
    * matches wherever they are is its entire purpose — today that is a PPA Asia
    * stop in Shenzhen.
    */
-  const partner = (await activeTickerPartner()) ?? undefined;
-  const title = (await fetchLiveTicker(partner)).tournament?.title;
+  const title = (await fetchLiveTicker(partnerArg)).tournament?.title;
   if (!title) return undefined;
   const { events } = await getEvents();
   const match = events.find((e) => sameTournament(e.name, title));
@@ -166,6 +165,8 @@ export default async function LivePage({
     ends?: string;
     at?: string;
     offset?: string;
+    /** Preview only: which tour the chrome should read (defaults to whichever is live). */
+    partner?: string;
   }>;
 }) {
   const params = await searchParams;
@@ -177,7 +178,28 @@ export default async function LivePage({
     : getNextTournament();
   if (!target) redirect("/watch");
 
-  const keep = params.event ? `&event=${params.event}` : "";
+  /**
+   * Which tour the CHROME on this route reads.
+   *
+   * ⚠ PRODUCTION IS PPA-ONLY AND STAYS THAT WAY. `fetchLiveTicker` defaults to
+   * the main tour, because sister-tour matches have no business on ppatour.com's
+   * ticker or hero (8/20). But this route is the rehearsal harness, and with the
+   * main tour dark there is nothing to rehearse WITH — the rail settles to "No
+   * matches on court right now" and the marquee to a generic line, which tests
+   * nothing. So /live names whichever tour is actually playing and pins it in its
+   * own URL, where every consumer already looks: use-live-ticker reads
+   * `?partner=` from the location and /api/ticker forwards it. Today that is the
+   * PPA Asia stop in Shenzhen.
+   *
+   * ⚠ AND IT HAS TO SURVIVE THE REDIRECTS BELOW. `?at=` / `?in=` / `?ends=`
+   * resolve to an absolute `?offset=`, and `keep` carried only `event` — so an
+   * explicit `&partner=PPA%20Asia` was silently dropped on the way through and
+   * the chrome fell back to the main tour regardless.
+   */
+  const partner = params.partner ?? (await activeTickerPartner()) ?? undefined;
+  const keep =
+    (params.event ? `&event=${encodeURIComponent(params.event)}` : "") +
+    (partner ? `&partner=${encodeURIComponent(partner)}` : "");
   const before = seconds(params.in);
   const untilEnd = seconds(params.ends);
   const at = parseAt(params.at);
@@ -194,6 +216,13 @@ export default async function LivePage({
 
   const offset = seconds(params.offset) ?? 0;
   const simulating = params.offset !== undefined;
+
+  // Pin the resolved tour in the URL so the client-side chrome sees it too.
+  if (simulating && params.partner === undefined && partner) {
+    const qs = new URLSearchParams({ offset: String(offset), partner });
+    if (params.event) qs.set("event", params.event);
+    redirect(`/live?${qs}`);
+  }
   const now = nowMs(offset);
 
   // Not simulating and nothing actually on: send people where their question is
@@ -212,7 +241,7 @@ export default async function LivePage({
 
   return (
     <>
-      <HomeContent clockOffsetMs={offset} liveEventOverride={await runningTournament()} />
+      <HomeContent clockOffsetMs={offset} liveEventOverride={await runningTournament(partner)} />
       {simulating && (
         <LivePreviewClock
           offsetMs={offset}
