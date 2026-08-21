@@ -42,6 +42,26 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-20 (pt. 2) — `sameAs` wired, and the athlete SEO work is live
+
+- **Pushed** `ff13e0e` + `76f6a26`. Live and verified on www.ppatour.com: *Ben Johns —
+  World No. 1 Men's Pickleball Player · Carvana PPA Tour*, *Kate Fahey — No. 8 Ranked
+  Women's Pickleball Player*, and the three top-10 heroes serving their own files.
+- **`sameAs` now has a source.** The Person node had none, which is the strongest entity
+  signal an athlete page can carry — it is how a search engine ties this page to the Ben
+  Johns it already knows from elsewhere. Jackalope's Pro Player Central gained a
+  **Website profile** card (Instagram / X / TikTok / YouTube + a hero photo URL), the
+  public paddles feed carries them as `socials` + `heroImage`, and `lib/player-overrides.ts`
+  reads them. ⚠ Pasted https URLs only, validated on both sides — never expand a handle.
+- **⚠ Nothing has filled those fields yet**, so `sameAs` is absent on every page today
+  and `heroImage` is still null for all 179. The pipe is the deliverable, not the data.
+- **Watch out (Jackalope-side, cost us a live blip):** the public feed briefly returned
+  `count: 0` because its SELECT named columns the table didn't have yet. Paddles here
+  fell back to the static masterlist as designed, so the page never broke. See ziff
+  `9906783`.
+- **Still open:** named photography for 17 of the top 20 pros (Ben Johns and Anna Bright
+  included); no per-athlete OG image, so social cards crop a portrait into a wide slot.
+
 ### 2026-08-20 — Athlete-page SEO: the title tag, the Person node, internal links
 
 - **The complaint: Wikipedia outranks ppatour.com on our own athletes' names.**
