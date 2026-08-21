@@ -59,6 +59,69 @@ const HEROES_BY_SLUG: Record<string, AthleteHero> = {
     position: "53% 52%",
     credit: "PPA Tour",
   },
+  /**
+   * Eight more, 8/20 — the second batch of heroes the page has had since the
+   * slot shipped on 8/15 with one.
+   *
+   * PROVENANCE: PPA Tour event photography, committed to the Jackalope Brand
+   * Photo Library at `brand-assets/photos/general/` and named for the player in
+   * the file itself (`hayden-patriquin-forehand.jpg`, `kate-fahey-celebration.jpg`,
+   * …). The filename is the attribution — nobody decided who these people are by
+   * looking at the frames, which is the rule this file exists to enforce. All
+   * eight are single-subject action shots, so there is no second player in frame
+   * to confuse anyway.
+   *
+   * ⚠ THIS IS NOT THE TOP 10. Bryce asked for the top 10 men and the top 10
+   * women; three of those twenty have a named photo (Patriquin M4, Fahey W8,
+   * Garnett M10) and the other five here are simply the rest of what the library
+   * holds with a name on it. The remaining 17 are blocked on photography, not on
+   * code — see the note at the top of this file, and do NOT close the gap by
+   * cropping a doubles frame and deciding which one they are.
+   *
+   * `position` values were measured against the rendered band at both the desktop
+   * crop (~40% of the image height survives) and the 390px mobile crop (~54% of
+   * the width), the same two-crop problem documented on the ALW entry above.
+   */
+  "hayden-patriquin": {
+    src: "/ppa/heroes/hayden-patriquin.jpg",
+    position: "42% 20%",
+    credit: "PPA Tour",
+  },
+  "kate-fahey": {
+    src: "/ppa/heroes/kate-fahey.jpg",
+    position: "42% 14%",
+    credit: "PPA Tour",
+  },
+  "connor-garnett": {
+    src: "/ppa/heroes/connor-garnett.jpg",
+    position: "52% 16%",
+    credit: "PPA Tour",
+  },
+  "hannah-blatt": {
+    src: "/ppa/heroes/hannah-blatt.jpg",
+    position: "58% 8%",
+    credit: "PPA Tour",
+  },
+  "jack-sock": {
+    src: "/ppa/heroes/jack-sock.jpg",
+    position: "58% 68%",
+    credit: "PPA Tour",
+  },
+  "jessie-irvine": {
+    src: "/ppa/heroes/jessie-irvine.jpg",
+    position: "50% 22%",
+    credit: "PPA Tour",
+  },
+  "pablo-tellez": {
+    src: "/ppa/heroes/pablo-tellez.jpg",
+    position: "44% 26%",
+    credit: "PPA Tour",
+  },
+  "tyler-loong": {
+    src: "/ppa/heroes/tyler-loong.jpg",
+    position: "46% 32%",
+    credit: "PPA Tour",
+  },
 };
 
 /**
