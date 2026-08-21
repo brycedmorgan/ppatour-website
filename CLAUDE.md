@@ -150,6 +150,18 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - **Verified in production after the deploy:** all 17 Asia URLs render on
   `/events`. Reply to Wade + Jeff drafted in Gmail thread `19fd506f966cd904`,
   asking for the Tomaz Cup URL.
+- **8/21 — Wade sent the Tomaz Cup URL and it is in.** ⚠ Its path repeats the
+  year, `2026/2026-tomaz-cup`, which is how their site files it and the only row
+  in the table shaped that way. **Live check: 18 Asia URLs on `/events`, and no
+  Asia stop is left on a pickleballtournaments.com holding page.**
+- **⚠ Feed vs. their page on the Tomaz Cup dates:** the feed says Aug 27–29, the
+  Asia page says Aug 27–31, so our calendar shows the short version. Left alone
+  (the Asia site is authoritative for its own event, same as the Hangzhou Open)
+  and Wade was asked to correct the feed.
+- **Wade will keep sending stops** ("Will have some more coming too"), so a PPA
+  Tour Asia event in the feed with no row in `asia-tour-links.ts` is the expected
+  interim state, not a bug. It links to the holding page until he sends a URL.
+  **Never guess a path.**
 
 ### 2026-08-19 — /shop: headless Shopify built in; a PPA store already exists on Pickleball Central
 
