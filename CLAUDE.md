@@ -60,6 +60,9 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - `npm run asia:audit` cannot run locally: `PB_API_TOKEN` is in Vercel only, not in
   `.env.local`. The live-HTML check above substituted for it.
 - Pushed to `main` on Bryce's approval, same session.
+- **Verified in production after the deploy:** all 17 Asia URLs render on
+  `/events`. Reply to Wade + Jeff drafted in Gmail thread `19fd506f966cd904`,
+  asking for the Tomaz Cup URL.
 
 ### 2026-08-19 — "At the event": the on-site screen ships, on the website
 
