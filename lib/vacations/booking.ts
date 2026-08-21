@@ -11,6 +11,10 @@ export type ParsedTraveler = {
 };
 
 export type ParsedBooking = {
+  /** Stripe Checkout Session id. The idempotency key for the Jackalope write:
+   *  Stripe redelivers, so this is what stops a replay filing the same guests
+   *  twice. Also the join back to `stripe_charges`. */
+  stripeSessionId: string;
   occupancy: string;
   bedType?: string;
   nights?: string;
@@ -75,6 +79,7 @@ export function parseBookingFromSession(
   }).format(amount);
 
   return {
+    stripeSessionId: session.id,
     occupancy: m.occupancy ?? "",
     bedType: m.bed_type,
     nights: m.nights,

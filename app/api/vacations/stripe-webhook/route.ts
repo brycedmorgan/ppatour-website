@@ -3,7 +3,7 @@ import type Stripe from "stripe";
 import { getStripe } from "@/lib/vacations/stripe";
 import { isVacationsBooking, parseBookingFromSession } from "@/lib/vacations/booking";
 import { sendBookingEmails } from "@/lib/vacations/email";
-import { appendBookingToSheet } from "@/lib/vacations/sheet";
+import { postBookingToJackalope } from "@/lib/vacations/jackalope";
 import { invalidateAvailability } from "@/lib/vacations/capacity";
 
 /**
@@ -69,14 +69,14 @@ export async function POST(req: NextRequest) {
 
     // Fire side-effects. We deliberately swallow per-channel errors and still
     // return 200 so Stripe doesn't retry and cause duplicate emails/rows.
-    const [emails, sheet] = await Promise.allSettled([
+    const [emails, filed] = await Promise.allSettled([
       sendBookingEmails(booking),
-      appendBookingToSheet(booking),
+      postBookingToJackalope(booking),
     ]);
     if (emails.status === "rejected")
       console.error("[vacations webhook] emails", emails.reason);
-    if (sheet.status === "rejected")
-      console.error("[vacations webhook] sheet", sheet.reason);
+    if (filed.status === "rejected")
+      console.error("[vacations webhook] jackalope", filed.reason);
   }
 
   return NextResponse.json({ received: true });
