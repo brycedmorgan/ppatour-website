@@ -25,8 +25,8 @@
  *     used only when the events API is unreachable and we serve the curated
  *     calendar. Only the five Asia stops we carry there have one.
  *
- * All 17 destinations were requested 200 with a browser UA (8/6, Hong Kong Slam
- * re-checked 8/20) and their page titles matched Wade's event names. The apex 301s to `www.`, so the URLs
+ * All 18 destinations were requested 200 with a browser UA (8/6; Hong Kong Slam
+ * and Tomaz Cup 8/20) and their page titles matched Wade's event names. The apex 301s to `www.`, so the URLs
  * are written with it — a card click shouldn't spend a redirect.
  */
 
@@ -45,14 +45,16 @@ type AsiaEvent = {
 };
 
 /**
- * Wade's list, joined to the live `ppa_tournaments` feed (re-verified 8/20 —
- * all 17 are now in it, all under the "PPA Tour Asia" org).
+ * Wade's list plus the stops he has sent since, joined to the live
+ * `ppa_tournaments` feed (re-verified 8/20 — every row below is in it, all
+ * under the "PPA Tour Asia" org).
  *
- * ⚠ THE FEED CARRIES ASIA STOPS WADE'S LIST DOES NOT. "PPA Asia 125 Malaysia
- * Tomaz Cup" (Subang Jaya, Aug 2026) renders on /events and still links to the
- * pickleballtournaments.com holding page, because nobody has given us its
- * ppatour-asia.com URL. Ask Wade before adding a row — a guessed path is worse
- * than the holding page. `npm run asia:audit` lists this drift.
+ * ⚠ MORE ARE COMING, AND WADE SENDS THEM. He said so on 8/20: "Will have some
+ * more coming too. Will be sure to send when live." A stop can therefore reach
+ * our calendar through the feed before its Asia page exists, and it links to
+ * the pickleballtournaments.com holding page until he sends the URL. That is
+ * the correct interim state — never guess a path. `npm run asia:audit` lists
+ * the drift in both directions.
  */
 export const ASIA_TOUR_EVENTS: readonly AsiaEvent[] = [
   /* ---- 2025 (completed) ---- */
@@ -139,6 +141,16 @@ export const ASIA_TOUR_EVENTS: readonly AsiaEvent[] = [
     path: "2026/shenzhen-open",
     ptSlug: "ppa-asia-500-skechers-shenzhen-open-2026",
     curatedSlug: "ppa-asia-500-china-open-2",
+  },
+  {
+    // ⚠ NOT ON WADE'S ORIGINAL LIST — he sent this one on 8/20 after we asked.
+    // Its path breaks the table's pattern: the year appears TWICE
+    // (`2026/2026-tomaz-cup`), which is how their site files it. Not a typo.
+    // The feed dates it Aug 27–29 and their page says August 27–31; theirs is
+    // the one that has to be right about it, same as the Hangzhou Open.
+    name: "Tomaz Cup",
+    path: "2026/2026-tomaz-cup",
+    ptSlug: "ppa-asia-125-malaysia-tomaz-cup",
   },
   {
     name: "Leapmotor Kuala Lumpur Cup",
