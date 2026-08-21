@@ -54,6 +54,17 @@ export type PlayerOverride = {
    * is a worse page than the plain navy one.
    */
   heroImage: string | null;
+  /**
+   * The pro's own public accounts, as absolute URLs — Instagram, X, TikTok, YouTube,
+   * whichever Pro Player Central holds. These become `sameAs` on the athlete page's
+   * Person structured data, which is how a search engine reconciles this page with the
+   * same person elsewhere on the web. Empty is the normal case.
+   *
+   * ⚠ NEVER BUILT FROM A HANDLE, here or upstream. `instagram.com/<guess>` published
+   * under a pro's name is a machine-readable claim that they own an account that may
+   * belong to someone else. The feed validates that each value is a pasted https URL.
+   */
+  socials: string[];
 };
 
 type FeedPaddle = {
@@ -64,6 +75,7 @@ type FeedPaddle = {
   image?: string | null;
   featuredMatchUrl?: string | null;
   heroImage?: string | null;
+  socials?: string[];
 };
 
 /**
@@ -135,8 +147,18 @@ async function fetchOverrides(): Promise<Map<string, PlayerOverride>> {
       const pbcUrl = (p.pbcUrl || "").trim() || null;
       const image = (p.image || "").trim() || null;
       const heroImage = (p.heroImage || "").trim() || null;
+      // Absolute https only, de-duplicated. The feed already validates on write; this
+      // is the second gate, because a bad value here is republished as structured data.
+      const socials = [
+        ...new Set(
+          (p.socials ?? [])
+            .map((u) => (u || "").trim())
+            .filter((u) => /^https:\/\/\S+$/i.test(u)),
+        ),
+      ];
       // Nothing worth overriding with → skip (leaves the static fallback in place).
-      if (!built && !featuredMatchUrl && !pbcUrl && !image && !heroImage) continue;
+      if (!built && !featuredMatchUrl && !pbcUrl && !image && !heroImage && !socials.length)
+        continue;
       map.set(key, {
         paddle: built?.paddle ?? null,
         searchTerm: built?.searchTerm ?? null,
@@ -145,6 +167,7 @@ async function fetchOverrides(): Promise<Map<string, PlayerOverride>> {
         featuredMatchUrl,
         pbcUrl,
         heroImage,
+        socials,
       });
     }
   } catch {

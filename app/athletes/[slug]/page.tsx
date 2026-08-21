@@ -551,6 +551,18 @@ export default async function AthletePage({ params }: Params) {
                 }
               : {}),
             knowsAbout: "Pickleball",
+            /**
+             * `sameAs` — the pro's own accounts, from Pro Player Central. This is the
+             * single strongest entity signal on the page: it is how Google ties
+             * ppatour.com/athletes/ben-johns to the Ben Johns it already knows from
+             * everywhere else, instead of treating our page as an unrelated document
+             * about a name that Wikipedia covers better.
+             *
+             * ⚠ PASTED LINKS ONLY, validated twice (Jackalope on write, `lib/player-
+             * overrides.ts` on read). Never construct one from a handle — `sameAs` is a
+             * machine-readable assertion that this person owns that account.
+             */
+            ...(override?.socials?.length ? { sameAs: override.socials } : {}),
             // Reference the site-wide org node (app/layout.tsx) by @id instead of
             // redefining it, so the two never disagree.
             memberOf: { "@id": `${SITE_URL}/#organization` },
