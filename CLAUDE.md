@@ -42,6 +42,73 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-20 — Athlete-page SEO: the title tag, the Person node, internal links
+
+- **The complaint: Wikipedia outranks ppatour.com on our own athletes' names.**
+  Bryce, on /athletes/ben-johns/. The title tag was the biggest single reason it
+  could: the root layout's `%s · Carvana PPA Tour` template over a bare name gave
+  Google `Ben Johns · Carvana PPA Tour` — nothing to match beyond the name, which
+  Wikipedia also has with more authority behind it.
+- **Shipped `ff13e0e`, three changes to `app/athletes/[slug]/page.tsx`:**
+  1. Titles now state what the person is, from the live board rank and the gender
+     the page already renders — "Ben Johns — World No. 1 Men's Pickleball Player ·
+     Carvana PPA Tour". Top 10 gets its number; below that the rank churns too much
+     to put in a title, so those pages sell the contents ("Ranking & Stats").
+  2. The `Person` JSON-LD gained `birthDate`, `height`, `homeLocation`,
+     `alternateName`, `knowsAbout` — entity facts Google reconciles a person on. We
+     were publishing a name, a country and a job title.
+  3. "More Pros" was the SAME four curated pros on all 179 pages. It is now the four
+     ranked either side of this pro on their own board: unique per page, and a real
+     next/previous signal for a crawler reading /athletes/* as one roster.
+- **Eight athlete heroes landed** (`public/ppa/heroes/`) — Patriquin, Fahey, Garnett,
+  Blatt, Sock, Irvine, Tellez, Loong. Source: Jackalope's Brand Photo Library, where
+  the file is named for the player, so the filename is the attribution.
+- **⚠ The top-10 hero ask is NOT done and cannot be finished in code.** Bryce asked
+  for the top 10 men and women; 3 of those 20 have a named photo. The other 17 —
+  Ben Johns and Anna Bright among them — need someone to hand over named files. Do
+  not close the gap by cropping a doubles frame and deciding who is in it.
+- **Next:** (a) get named photography for the remaining 17; (b) `sameAs` on the
+  Person node is still empty because we hold no athlete social handles — that is
+  the strongest remaining entity signal; (c) no per-athlete OG image, so social
+  cards crop a portrait headshot into a `summary_large_image` slot.
+
+### 2026-08-20 — Vacations confirmation emails: a 308 killed the webhook for 15 days
+
+- **Lainey asked why new bookings weren't getting confirmations. They weren't, and
+  nothing had worked since the 8/5 cutover.** The Stripe destination was registered as
+  `…/api/vacations/stripe-webhook` with **no trailing slash**. `trailingSlash: true`
+  answers that with a 308, **Stripe does not follow redirects**, and so `route.ts` never
+  loaded once. 100% error rate from the day the endpoint was created. Payments succeeded
+  the whole time, which is why nobody noticed.
+- **Fixed** by re-registering the destination WITH the slash (Bryce did the edit; typing
+  into the live payment dashboard is correctly blocked for me). Verified: unslashed → 308,
+  slashed → 400 carrying the handler's own "missing signature" body, then a real resend
+  returned **200 `{"received":true}`** and the runtime log showed the send with no
+  `[email]` warning. One guest's confirmation is out.
+- **A second, independent fault was found first and is also fixed:** `SENDGRID_API_KEY`
+  and `SENDGRID_FROM` were never copied to the ppatour-website project, so even a working
+  route would have no-opped. Both are set now; `SENDGRID_FROM` is
+  `noreply@vacations.ppatour.com`. Fixing only this half changed nothing visible, which is
+  what made the 308 easy to miss.
+- **Shipped `isVacationsBooking()` (`b164581`).** The destination is account-wide and
+  receives every `checkout.session.completed` on the account, including the vibepb.com
+  WooCommerce store. `parseBookingFromSession` was turning those into blank bookings and
+  emailing the buyer a Vacations confirmation; Lainey was forwarded one in June for a
+  Boise Challenger payment. New sessions carry `metadata.source = "vacations"`; the
+  destination + occupancy + traveler fallback covers sessions made before that marker,
+  which matters because the outage's failed deliveries are still queued for retry.
+- **Root cause and the trailing-slash trap are written up in `docs/VACATIONS.md`**
+  (`deb7b3d`, corrected by `db5ce73`). Anything outside the repo that POSTs to this app
+  has the same trap — register it slashed.
+- **Still open.** Only one event has actually been redelivered; the rest are queued for
+  automatic retry and Stripe greys out manual Resend while a retry is pending, so the
+  backlog needs a second look. `SHEETS_WEBHOOK_URL` / `SHEETS_WEBHOOK_SECRET` are still
+  unset, so **bookings are not reaching the sheet even now** — the 200 above logged
+  `[sheet] … skipping`. `vacations.ppatour.com` is still un-redirected and running a
+  second live checkout against the same 20 rooms. The SendGrid key in use is full-access
+  and belongs to the **GullStack** account, not a PPA one; it should become a
+  `mail.send`-only restricted key.
+
 ### 2026-08-20 — Asia URL follow-up: the Hong Kong Slam was the last holding-page link
 
 - **Jeff Watson re-forwarded Wade Townsend's Asia URL list.** The work was already
@@ -63,6 +130,56 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - **Verified in production after the deploy:** all 17 Asia URLs render on
   `/events`. Reply to Wade + Jeff drafted in Gmail thread `19fd506f966cd904`,
   asking for the Tomaz Cup URL.
+
+### 2026-08-19 — /shop: headless Shopify built in; a PPA store already exists on Pickleball Central
+
+- **Bryce's call: build the store INTO ppatour.com, not beside it.** Shopify owns
+  products, inventory, orders and checkout; this site renders the pages. Full runbook in
+  [`docs/SHOP.md`](docs/SHOP.md). Shipped behind three unset env vars, so **production is
+  byte-for-byte unchanged until someone sets them**.
+- **⚠ THE BIGGEST FINDING IS NOT CODE: A "PPA TOUR STORE" ALREADY EXISTS AND IT IS
+  PICKLEBALL CENTRAL'S.** `pickleballcentral.com/apparel/ppa-tour-apparel/` is live with
+  **10 products** under *"Pickleball Central is the official retailer of the PPA Tour"* —
+  and **`Header.tsx:59` is a nav item labelled "Shop" that points straight at it**
+  (`SiteFooter.tsx:50` is a second). PBC holds the **Official Store** designation.
+  **That link was deliberately NOT touched and `/shop` is deliberately NOT in the nav** —
+  repointing "Shop" from a Gold partner's store to a tour-run one moves revenue away from
+  a contractual designation, which is Bryce + Connor's decision, not a routing change.
+  Three resolutions are written up in SHOP.md; the one that costs nobody anything is
+  **PBC's Shopify as the backend with `/shop` as the PPA-branded front end**, which is
+  blocked on access — PBC is **not** in the Pickleball Holdings LLC org.
+- **⚠ CHECKOUT IS HOSTED AND THE ROUTE SHAPE IS WHAT KEEPS IT THAT WAY.**
+  `POST /api/shop/checkout/` takes **a variant id and a quantity, nothing else**, builds a
+  one-line Shopify cart server-side and returns `checkoutUrl`. **The client never sends a
+  price** — Shopify prices from its own record, so the classic storefront exploit is
+  unrepresentable rather than merely validated. No card data, no addresses, no order state
+  in this app, and no persistent basket. Same line `/vacations` holds with Stripe.
+- **⚠ IT FAILS SAFE IN ONE DIRECTION, AND THAT IS THE DESIGN.** No token, a wrong API
+  version, a 429, an empty catalogue — all resolve to `[]`, and `/shop` renders a holding
+  state ("The shop opens soon"), builds no product pages, emits no sitemap URLs and drops
+  its search group. An empty grid under a heading promising gear reads as broken; the
+  holding state reads as true. Same call as "Tickets Coming Soon".
+- **Searchable, which was the actual question.** `SearchGroup` gains `"Shop"`
+  (`lib/site-search.ts`), so products rank beside events and athletes on `/search` — and
+  the source is wrapped so a storefront outage **cannot take site search down with it**.
+  `app/sitemap.ts` is now **async** and emits product URLs, with **no `lastModified`**:
+  Shopify's `updatedAt` moves on inventory changes, so publishing it would tell crawlers
+  every product page changed each time a size sold out.
+- **⚠ `SHOPIFY_API_VERSION` DEFAULTS TO `2026-07` AND IS UNVERIFIED** — no query has been
+  run against a real store. A rejected version surfaces as an empty shop, which looks
+  exactly like "no products yet". **Check this first if the holding state shows with a
+  token set.** Also added `cdn.shopify.com` to `next.config.ts` remotePatterns; without it
+  next/image 400s every product photo.
+- **Verified on a real production server (:3210) with no env vars — the path that ships
+  today:** `/shop/` **200** + holding state · `/shop/nonexistent/` **404** ·
+  checkout **503** *"The shop is not open yet."* · sitemap **zero** `/shop` URLs ·
+  `/search/?q=nationals` still returns Athletes/Events/News. `next build` green, tsc
+  clean, eslint clean on all eight changed files.
+- **Next:** Bryce + Connor settle the PBC question · get a Storefront token (custom app,
+  `unauthenticated_read_product_listings` + `unauthenticated_write_checkouts`) · verify the
+  API version · a `products/update` webhook calling `revalidateTag("shopify-catalog")` so
+  merchandising edits appear immediately instead of within 5 minutes.
+
 
 ### 2026-08-19 — "At the event": the on-site screen ships, on the website
 
