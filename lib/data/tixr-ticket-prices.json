@@ -1,13 +1,13 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-08-20T13:38:20Z",
-  "event_count": 58,
-  "ticket_type_count": 861,
+  "generated_at": "2026-08-21T13:37:37Z",
+  "event_count": 59,
+  "ticket_type_count": 868,
   "series_breakdown": {
     "Major League Pickleball": 9,
     "PPA Challenger Series": 3,
-    "PPA Tour": 46
+    "PPA Tour": 47
   },
   "field_notes": {
     "base_price": "Face value set by the organizer (USD). null when the tier is sold out / not on public sale.",
@@ -3266,8 +3266,8 @@
           "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp + Weeklong Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 550,
-          "all_in_price": 599.66
+          "base_price": 580,
+          "all_in_price": 632.07
         },
         {
           "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp + Weeklong VIP",
@@ -3406,8 +3406,8 @@
           "name": "Weeklong Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 240,
-          "all_in_price": 264.71
+          "base_price": 260,
+          "all_in_price": 286.32
         },
         {
           "name": "Weeklong Grounds Pass",
@@ -3635,6 +3635,72 @@
           "sale_state": "OPEN",
           "base_price": 900,
           "all_in_price": 977.82
+        }
+      ]
+    },
+    {
+      "event_id": "203955",
+      "name": "PPA Australia",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-10-13",
+      "end_date": "2026-10-18",
+      "venue": {
+        "name": "Queensland Tennis Center",
+        "city": "Brisbane",
+        "state": "QLD"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-australia-203955",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Qualifiers",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64 & 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
         }
       ]
     },

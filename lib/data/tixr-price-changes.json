@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T13:38:20Z",
+  "updated_at": "2026-08-21T13:37:37Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -2715,6 +2715,42 @@
         "from": 113.44,
         "to": 135.05
       }
+    },
+    {
+      "at": "2026-08-21T13:37:37Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "JOOLA 2-Day PPA 3.0/4.0 Level Camp + Weeklong Courtside",
+      "base_price": {
+        "from": 550,
+        "to": 580
+      },
+      "all_in_price": {
+        "from": 599.66,
+        "to": 632.07
+      }
+    },
+    {
+      "at": "2026-08-21T13:37:37Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Weeklong Courtside",
+      "base_price": {
+        "from": 240,
+        "to": 260
+      },
+      "all_in_price": {
+        "from": 264.71,
+        "to": 286.32
+      }
+    },
+    {
+      "at": "2026-08-21T13:37:37Z",
+      "type": "event_added",
+      "event_id": "203955",
+      "event": "PPA Australia"
     }
   ]
 }
