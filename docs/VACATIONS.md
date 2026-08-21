@@ -160,10 +160,13 @@ back half of the funnel is not.
    is charged and gets nothing: no confirmation email, no internal
    notification, no sheet row. Silent, and the worst failure mode here.
 
-3. **`SENDGRID_API_KEY` + `SENDGRID_FROM`** (verified sender) and
-   **`SHEETS_WEBHOOK_URL` + `SHEETS_WEBHOOK_SECRET`** — copy from the
-   `pickleball-vacations` project. All four fail soft: unset means that channel
-   logs a warning and no-ops, and the booking is still recorded in Stripe.
+3. **`SENDGRID_API_KEY` + `SENDGRID_FROM`** (verified sender) — done 8/19.
+   `SENDGRID_FROM` is `noreply@vacations.ppatour.com`; there is no verified
+   single sender on any pickleball.com address, so sending works off the
+   authenticated `vacations.ppatour.com` domain. **The `SHEETS_*` pair is
+   obsolete — see "Bookings go to Jackalope" below.** Both still fail soft:
+   unset means that channel warns and no-ops, and the booking is still in
+   Stripe.
 
 4. **Point `vacations.ppatour.com` here as a permanent, path-preserving
    redirect** (Vercel → Domains → Redirect to `www.ppatour.com`).
@@ -177,6 +180,36 @@ back half of the funnel is not.
 
 5. **Optional:** keep the `pickleball-vacations` Vercel project deployed but
    domain-less for a few weeks as a rollback.
+
+---
+
+## Bookings go to Jackalope, not a Google Sheet (8/20)
+
+`lib/vacations/sheet.ts` is **deleted**. It posted a flat row to a Google Apps
+Script behind `SHEETS_WEBHOOK_URL`, that variable was never set after the move,
+and the "Pickleball Vacations — Bookings" spreadsheet still holds nothing but
+two smoke-test rows from 2026-05-30. Eleven weeks of nobody noticing an empty
+sheet is the argument against leaving a second, dormant write path around.
+
+`lib/vacations/jackalope.ts` → `POST /api/public/vac-booking` on Jackalope,
+which writes `vac_bookings` + `vac_travelers`. That puts the manifest beside
+`vac_events` (visits), `vac_trips` (the contracted block) and `stripe_charges`
+(the money), so the whole funnel is one join. `stripe_charges` already had the
+payment; what it never had was the passport names, DOBs, gender and skill
+levels, and that is the part the resort needs.
+
+- **Shared secret `VAC_BOOKING_SECRET`, set on BOTH Vercel projects.** They must
+  match. The endpoint 401s on mismatch and 503s if its own copy is unset.
+- **That endpoint is deliberately NOT CORS-open**, unlike `vac-event.js`. It
+  carries PII. Never add an `Access-Control-Allow-Origin` header to it.
+- **Idempotent on `stripe_session_id`.** Stripe redelivers — failed events retry
+  for days and the outage backlog gets replayed by hand. Verified: posting the
+  same session twice returns the same `bookingId` and leaves two travelers, not
+  four.
+- **`vac_bookings` starts empty.** Bookings paid before 8/20 are NOT in it.
+  Replaying their Stripe events would backfill them but would also send those
+  guests a SECOND confirmation email. Backfilling from the Stripe API instead
+  writes the rows without touching email.
 
 ---
 
