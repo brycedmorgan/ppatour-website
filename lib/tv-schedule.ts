@@ -10,6 +10,12 @@
  * start where the PBTV window ends (Arizona Sun: PBTV 2–7, then FS1 7–9). So a
  * FOX row is additional coverage, never a duplicate of the row above it.
  *
+ * ⚠ VIRGINIA BEACH RE-RECONCILED 8/21 vs the 8/19 sheet: its Friday and Saturday
+ * Tennis Channel windows moved an hour earlier, 12–4PM → 11AM–3PM. Caught by
+ * `node scripts/audit-tv-schedule.mjs`, not by anyone re-reading the sheet —
+ * which is the argument for running it before a broadcast weekend. Total TC
+ * hours are unchanged at 13h, so the figure below still holds.
+ *
  * Reconciled 8/18 vs the 8/13 sheet: Cary 22h TC (Thu–Sun) · Arizona +2 FS2
  * +1 FS1 (no TC) · Las Vegas 4h TC (Sun only) · Chicago 16h TC (Thu–Sun) +2 FS1
  * +2 FS2 · VA Beach 13h TC · MLP Nations Cup PBTV-ONLY (its TC windows were
@@ -232,7 +238,7 @@ export const tvSchedule: TvEvent[] = [
         dow: "Fri",
         windows: [
           { channel: "PBTV", window: "10AM – 6PM", round: "Quarterfinals" },
-          { channel: "Tennis Channel", window: "12PM – 4PM", round: "Quarterfinals" },
+          { channel: "Tennis Channel", window: "11AM – 3PM", round: "Quarterfinals" },
         ],
       },
       {
@@ -240,7 +246,7 @@ export const tvSchedule: TvEvent[] = [
         dow: "Sat",
         windows: [
           { channel: "PBTV", window: "9AM – 5PM", round: "Semifinals" },
-          { channel: "Tennis Channel", window: "12PM – 4PM", round: "Semifinals" },
+          { channel: "Tennis Channel", window: "11AM – 3PM", round: "Semifinals" },
         ],
       },
       {

@@ -157,9 +157,9 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
   "virginia-beach-open": [
     { round: "RD 16", day: "Thursday", window: "10AM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
     { round: "QF's", day: "Friday", window: "10AM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "QF's", day: "Friday", window: "12PM ET - 4PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
+    { round: "QF's", day: "Friday", window: "11AM ET - 3PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
     { round: "SF's", day: "Saturday", window: "9AM ET - 5PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "SF's", day: "Saturday", window: "12PM ET - 4PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
+    { round: "SF's", day: "Saturday", window: "11AM ET - 3PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
     { round: "Championship", day: "Sunday", window: "10AM ET - 4PM ET", platform: "PBTV", type: "LIVE" },
     { round: "Championship", day: "Sunday", window: "11AM ET - 4PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
   ],
