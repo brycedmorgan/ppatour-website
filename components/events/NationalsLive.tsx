@@ -15,6 +15,7 @@ import { ChampionsBanner } from "@/components/live/ChampionsBanner";
 import { BracketPanel } from "@/components/live/BracketPanel";
 import { ATLANTA_EVENT_ID } from "@/lib/bracket-sample";
 import { getBroadcast } from "@/lib/broadcast";
+import { channelsByDay, watchCardsFor, weekdayOf } from "@/lib/event-watch";
 import { getEventGuide, parkingFor, parkingText } from "@/lib/event-guides";
 import { ticketsOnSale } from "@/lib/tixr-prices";
 import { ParkingDetails } from "@/components/events/ParkingDetails";
@@ -34,7 +35,6 @@ import {
 import { withUtm, withCampaign } from "@/lib/utm";
 import { TicketGrid } from "@/components/events/TicketGrid";
 import type { TicketGrid as TicketGridData } from "@/lib/ticket-grid-view";
-import { matchdayPrimary } from "@/lib/matchday";
 
 /**
  * LIVE variant of the National Championships event page. Counts down to first
@@ -74,35 +74,14 @@ const DIVISIONS = [
   "Mixed Doubles",
 ];
 
-const HOW_TO_WATCH: {
-  name: string;
-  logo?: string;
-  note: string;
-  detail: string;
-  href?: string;
-}[] = [
-  {
-    name: "PickleballTV",
-    logo: "/ppa/networks/pbtv.png",
-    note: "Every court, every match, all weekend — the home of live PPA streaming.",
-    detail: "Stream on PBTV",
-    href: "https://www.pickleballtv.com/?utm_source=ppatour&utm_medium=website&utm_campaign=event&utm_content=event-watch-pbtv",
-  },
-  {
-    name: "Tennis Channel",
-    // PNG, not SVG — next/image 400s on SVG.
-    logo: "/ppa/networks/tennis-channel.png",
-    note: "Featured rounds and Championship Sunday on national television.",
-    detail: "Check local listings",
-  },
-  {
-    name: "MATCHDAY App",
-    logo: "/ppa/networks/matchday.png",
-    note: "Live scores, brackets, order of play, and match alerts.",
-    detail: "iOS · Android",
-    href: matchdayPrimary("event-watch-matchday"),
-  },
-];
+/* ⚠ HOW_TO_WATCH IS GONE, NOT EDITED. It was a module-level constant —
+   PickleballTV · Tennis Channel · MATCHDAY, identical on every event page —
+   so the Veolia Arizona Open, which has ZERO Tennis Channel windows, ran a
+   Tennis Channel card promising "Championship Sunday on national television"
+   while its real FS1 window sat in the table below with no card. Deleting the
+   constant rather than rewriting it makes every consumer a type error, so no
+   surface can quietly keep the old behaviour (the `shortName` precedent).
+   Cards now derive from the event's own windows: lib/event-watch.ts. */
 
 type Day = {
   date: string;
@@ -128,7 +107,16 @@ const PRO_ROUNDS = [
   "Pro round of 64", //              fromEnd 5
 ];
 
-function buildSchedule(startIso: string, endIso: string): Day[] {
+/**
+ * ⚠ `live` IS NO LONGER INVENTED HERE. This used to hardcode "FOX · PBTV" on
+ * Championship Sunday and "Tennis Channel · PBTV" on the semis and quarters for
+ * every event on the template, which put a broadcaster's name against rounds
+ * nobody had confirmed — and contradicted the event's real sheet data where we
+ * had it. The channel now comes from lib/broadcast.ts, matched by weekday, and
+ * is simply absent when the sheet says nothing.
+ */
+function buildSchedule(startIso: string, endIso: string, slug: string): Day[] {
+  const channels = channelsByDay(slug);
   const start = new Date(`${startIso}T00:00:00`);
   const end = new Date(`${endIso}T00:00:00`);
   const days: Day[] = [];
@@ -139,7 +127,6 @@ function buildSchedule(startIso: string, endIso: string): Day[] {
     let label = "Pro main draw";
     let gates = "9:00 AM";
     let firstServe = "10:00 AM";
-    let live: string | undefined;
     const fromEnd = last - i;
     if (i === 0) {
       label = "Amateur & junior brackets";
@@ -153,22 +140,18 @@ function buildSchedule(startIso: string, endIso: string): Day[] {
       label = PRO_ROUNDS[0];
       gates = "10:00 AM";
       firstServe = "11:00 AM";
-      live = "FOX · PBTV";
-    } else if (fromEnd === 1 || fromEnd === 2) {
-      label = PRO_ROUNDS[fromEnd];
-      live = "Tennis Channel · PBTV";
     } else if (fromEnd <= 5) {
-      // Round of 16 / 32 / 64, streamed on PBTV.
       label = PRO_ROUNDS[fromEnd];
-      live = "PBTV";
     } else {
-      // Longer lead-in than a 64-draw ladder — earliest pro rounds still stream.
+      // Longer lead-in than a 64-draw ladder — earliest pro rounds still play.
       label = PRO_ROUNDS[5];
-      live = "PBTV";
     }
+    const iso = cursor.toISOString().slice(0, 10);
+    // Real channels for this weekday, or none. Never a guess.
+    const live = channels.get(weekdayOf(iso));
     days.push({
-      date: formatDate(cursor.toISOString().slice(0, 10)),
-      iso: cursor.toISOString().slice(0, 10),
+      date: formatDate(iso),
+      iso,
       label,
       gates,
       firstServe,
@@ -231,9 +214,10 @@ export function NationalsLive({
   // Live-scores area: scoreboard vs bracket.
   const [scoreView, setScoreView] = useState<"scores" | "bracket">("scores");
 
-  const days = buildSchedule(t.startDate, t.endDate);
-  const broadcastDays = days.filter((d) => d.live);
+  const days = buildSchedule(t.startDate, t.endDate, t.slug);
   const broadcast = getBroadcast(t.slug);
+  // Keep in lockstep with the event page: same cards, same source.
+  const watchCards = watchCardsFor(t.slug);
   const guide = getEventGuide(t.slug);
   // Same single source as app/events/[year]/[slug]/page.tsx — finalized details
   // for this stop, or the approved holding line.
@@ -252,6 +236,9 @@ export function NationalsLive({
       })
     : null;
   const realSchedule = getEventSchedule(t.slug);
+  // Same source as the real event page — see the note there. The hand-authored
+  // override credited Tennis Channel on Sunday only; the sheet has it Thu–Sun.
+  const dayChannels = channelsByDay(t.slug);
   const mapQuery = guide?.mapQuery ?? `${t.venue}, ${t.city}, ${t.state}`;
 
   const showGrid = Boolean(ticketGrid?.hasPerDayPricing);
@@ -908,8 +895,10 @@ export function NationalsLive({
                         </span>
                       ) : dayDone ? (
                         <span className="text-ppa-navy/35">Final</span>
-                      ) : d.live ? (
-                        <span className="text-[var(--event-accent)]">{d.live}</span>
+                      ) : (dayChannels.get(d.dow) ?? d.live) ? (
+                        <span className="text-[var(--event-accent)]">
+                          {dayChannels.get(d.dow) ?? d.live}
+                        </span>
                       ) : (
                         <span className="text-ppa-navy/30">—</span>
                       )}
@@ -984,6 +973,7 @@ export function NationalsLive({
                   {d.firstServe}
                 </span>
                 <span className="text-right text-[10px] font-bold uppercase tracking-[0.1em]">
+                  {/* Templated days already carry the sheet channel (buildSchedule). */}
                   {d.live ? (
                     <span className="text-ppa-blue">{d.live}</span>
                   ) : (
@@ -1050,37 +1040,48 @@ export function NationalsLive({
                     </span>
                   </div>
                 ))
-              : broadcastDays.map((d) => (
-                  <div
-                    key={d.iso}
-                    className="grid grid-cols-[1fr_auto] items-center gap-3 border-b border-white/5 px-4 py-3 last:border-b-0"
-                  >
-                    <span className="text-sm font-bold uppercase tracking-wide text-white">
-                      {d.label.replace("Championship Sunday — ", "")}
-                    </span>
-                    <span className="text-right text-xs font-bold uppercase tracking-[0.1em] text-ppa-sky">
-                      {d.live} · {d.date}
-                    </span>
-                  </div>
-                ))}
+              : /* ⚠ NO SHEET ROWS MEANS NO BROADCAST TABLE, not a templated one.
+                     This branch used to list every play day against a channel
+                     the template had invented — "FOX · PBTV" on Championship
+                     Sunday, "Tennis Channel · PBTV" on the semis — for events
+                     whose coverage nobody has announced. The Order of Play above
+                     still shows the days and first-serve times, which are real;
+                     what is unknown is who is carrying them. */
+                null}
+            {broadcast.length === 0 && (
+              <p className="px-4 py-6 text-sm text-white/55">
+                Broadcast windows for this event are announced closer to the
+                event.
+              </p>
+            )}
           </div>
 
           {/* How to watch */}
           <div className="mt-4 grid gap-4 sm:grid-cols-3">
-            {HOW_TO_WATCH.map((w) => (
+            {watchCards.map((w) => (
               <div
                 key={w.name}
                 className="flex flex-col border border-white/10 bg-ppa-navy-deep p-5"
               >
                 {w.logo ? (
                   <span className="flex h-10 w-fit items-center justify-center rounded bg-white px-3">
-                    <Image
-                      src={w.logo}
-                      alt={w.name}
-                      width={120}
-                      height={40}
-                      className="h-6 w-auto object-contain"
-                    />
+                    {/* ⚠ SVG MARKS GO THROUGH A PLAIN <img>. next/image 400s on
+                        SVG via the optimizer proxy but renders it fine as a bare
+                        src — the trap that broke the Tennis Channel card once
+                        (it was moved to PNG then). CBS only ships as SVG, so the
+                        branch is what lets it have a mark at all. */}
+                    {w.logo.endsWith(".svg") ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={w.logo} alt={w.name} className="h-6 w-auto object-contain" />
+                    ) : (
+                      <Image
+                        src={w.logo}
+                        alt={w.name}
+                        width={120}
+                        height={40}
+                        className="h-6 w-auto object-contain"
+                      />
+                    )}
                   </span>
                 ) : (
                   <span className="text-sm text-ppa-sky">▶</span>
