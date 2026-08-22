@@ -3,7 +3,8 @@
  *
  * TWO SOURCES, in this order:
  *   1. Jackalope (Pro Player Central), via `PlayerOverride.heroImage` — the LIVE one.
- *      A photo swapped over there reaches the page within the ISR window, no deploy.
+ *      A photo swapped over there reaches the page on the next athlete-cache refresh —
+ *      see the ⚠ on FRESHNESS in lib/player-overrides.ts. Not minutes. No deploy, though.
  *      ⚠ Jackalope has no per-player photo tagging yet (its Brand Photo Library is
  *      keyed by VENUE — the `type:'athletes'` rows are "Player walk-in" filed under
  *      mission-hills-ca, mckinney-tx, …). So the field is wired and reads null for

@@ -377,7 +377,8 @@ export default async function AthletePage({ params }: Params) {
   const paddleRecord = SHOW_EQUIPMENT ? paddleFor(a.slug) : null;
   /**
    * Jackalope (Pro Player Central → Paddles) is the LIVE source of truth for what's in
-   * the bag — the paddle a pro edits there shows here within the ISR window. It WINS over
+   * the bag — a paddle edited there shows here on the next athlete-cache refresh (see the ⚠
+   * on FRESHNESS in lib/player-overrides.ts; it is daily, not minutes). It WINS over
    * the static broadcast masterlist (`paddleRecord`), which stays as the fallback for a
    * pro the feed doesn't cover or when the feed is unreachable. Also carries the paddle
    * photo and the pinned "Buy This Paddle" URL. One fetch, used by both equipment surfaces.
