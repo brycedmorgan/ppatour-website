@@ -82,6 +82,28 @@ const HEROES_BY_SLUG: Record<string, AthleteHero> = {
    * crop (~40% of the image height survives) and the 390px mobile crop (~54% of
    * the width), the same two-crop problem documented on the ALW entry above.
    */
+  /**
+   * "ZIONCUP_QTRS_MXD_BEN-ALW-7" — the Zion Cup mixed-doubles quarterfinal, supplied by
+   * Bryce 8/22 as "one for Ben Johns".
+   *
+   * ⚠ THIS IS A MIXED-DOUBLES FRAME, so two men were on that court and "the man in the
+   * photo" is not by itself an answer. Three independent things say it is Ben:
+   *   1. Bryce sent it and named him — the person who sent it IS provenance.
+   *   2. The filename names the team, BEN-ALW, and ALW's mixed partner is Ben Johns.
+   *   3. The corroborating tell: JOOLA "J" on both cap and chest, and our own paddle
+   *      feed has Ben on a JOOLA Perseus Pro V 16mm. He is their flagship athlete.
+   * His partner is out of shot; the only other figure near him is the net post.
+   *
+   * `position` measured against both crops, as above. Y=24% is what keeps the paddle,
+   * the ball and his face all inside the desktop band — 30% starts shaving the paddle
+   * off the top, 18% drops his legs and floats him. X only does work on mobile, where
+   * 52% centres him between the net post and the left edge.
+   */
+  "ben-johns": {
+    src: "/ppa/heroes/ben-johns.jpg",
+    position: "52% 24%",
+    credit: "PPA Tour",
+  },
   "hayden-patriquin": {
     src: "/ppa/heroes/hayden-patriquin.jpg",
     position: "42% 20%",
