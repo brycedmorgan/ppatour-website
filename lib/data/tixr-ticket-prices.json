@@ -1,7 +1,7 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-08-21T13:37:37Z",
+  "generated_at": "2026-08-22T13:23:51Z",
   "event_count": 59,
   "ticket_type_count": 868,
   "series_breakdown": {
@@ -222,8 +222,8 @@
         {
           "name": "Courtside Session 1",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 80,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 92.05
         },
         {
@@ -404,7 +404,7 @@
       "series": "Major League Pickleball",
       "status": "PUBLISHED",
       "start_date": "2026-08-29",
-      "end_date": "2026-08-31",
+      "end_date": "2026-08-30",
       "venue": {
         "name": "CityPickle At Wollman Rink",
         "city": "New York",
@@ -656,8 +656,8 @@
         {
           "name": "Saturday: Wave Movement - Mat Pilates Class (9am)",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 0,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 0
         },
         {
@@ -1901,8 +1901,8 @@
         {
           "name": "Sunday Courtside",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 140,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 156.66
         },
         {
@@ -3640,7 +3640,7 @@
     },
     {
       "event_id": "203955",
-      "name": "PPA Australia",
+      "name": "PPA Australia Pickleball Cup",
       "series": "PPA Tour",
       "status": "PUBLISHED",
       "start_date": "2026-10-13",
@@ -3650,7 +3650,7 @@
         "city": "Brisbane",
         "state": "QLD"
       },
-      "url": "https://www.tixr.com/groups/ppa/events/ppa-australia-203955",
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-australia-pickleball-cup-203955",
       "currency": "USD",
       "tickets": [
         {

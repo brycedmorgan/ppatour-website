@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-21T13:37:37Z",
+  "updated_at": "2026-08-22T13:23:51Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -2751,6 +2751,84 @@
       "type": "event_added",
       "event_id": "203955",
       "event": "PPA Australia"
+    },
+    {
+      "at": "2026-08-22T13:23:51Z",
+      "type": "price_change",
+      "event_id": "169799",
+      "event": "Major League Pickleball New York Finals- Session 1",
+      "ticket": "Courtside Session 1",
+      "base_price": {
+        "from": 80,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 92.05,
+        "to": 92.05
+      }
+    },
+    {
+      "at": "2026-08-22T13:23:51Z",
+      "type": "availability_change",
+      "event_id": "169799",
+      "event": "Major League Pickleball New York Finals- Session 1",
+      "ticket": "Courtside Session 1",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-22T13:23:51Z",
+      "type": "price_change",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Saturday: Wave Movement - Mat Pilates Class (9am)",
+      "base_price": {
+        "from": 0,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 0,
+        "to": 0
+      }
+    },
+    {
+      "at": "2026-08-22T13:23:51Z",
+      "type": "availability_change",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Saturday: Wave Movement - Mat Pilates Class (9am)",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-22T13:23:51Z",
+      "type": "price_change",
+      "event_id": "184760",
+      "event": "Veolia Pickleball National Championships Sunday - Championships",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": 140,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 156.66,
+        "to": 156.66
+      }
+    },
+    {
+      "at": "2026-08-22T13:23:51Z",
+      "type": "availability_change",
+      "event_id": "184760",
+      "event": "Veolia Pickleball National Championships Sunday - Championships",
+      "ticket": "Sunday Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
     }
   ]
 }
