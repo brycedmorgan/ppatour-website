@@ -42,6 +42,35 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-22 — Ben Johns has a hero and a `sameAs`; the "5-minute" claim was wrong
+
+- **Ben Johns hero shipped** (`ZIONCUP_QTRS_MXD_BEN-ALW-7`, supplied by Bryce). ⚠ It is a
+  MIXED-DOUBLES frame — two men were on that court — so the attribution is written down
+  in `lib/athlete-heroes.ts`: Bryce named him, the filename names the team BEN-ALW, and
+  the JOOLA mark on cap and chest matches our own paddle feed. Nobody read the face.
+  That is the No. 1 man and the No. 1 woman both carrying a hero. **10 of 179.**
+- **`sameAs` is live on one page.** Bryce sent Ben's four accounts; they went into Pro
+  Player Central (Neon row 21) and now render as `sameAs` on his Person node. Facebook
+  was added to the field set — the 8/20 version only had instagram/x/tiktok/youtube.
+- **⚠ THE BIG FINDING: a Jackalope edit is NOT live in five minutes.** Three comments in
+  this repo said "within the ISR window". Measured: the feed carried Ben's links in two
+  minutes and the page still served no `sameAs` twelve minutes later. An athlete page
+  exports no `revalidate` — it is prerendered from `generateStaticParams`, so
+  `REVALIDATE_S` only caches the FETCH. The HTML regenerates on a deploy or on the
+  ONCE-DAILY cron at 07:00 UTC. Corrected in all three places; the full note and the trap
+  live at the ⚠ FRESHNESS block in `lib/player-overrides.ts`.
+- **Do NOT "fix" that with `export const revalidate` on the athlete page.** 1,174 pages;
+  the daily cron exists so renders don't walk into the partner API's rate limit. The real
+  fix is a webhook from Jackalope on save — needs a shared secret in both Vercel projects,
+  so it is Bryce's to enable.
+- **Two things that looked like bugs and are not.** (1) Ben's page briefly served rank 0
+  / no WPR after a background regeneration caught a cold WPR lookup; it self-healed on the
+  next one. Worth knowing a transient can bake a dashed rank until the next regeneration.
+  (2) Heroes and headshots appear blank in Chrome-extension screenshots — the DOM says
+  every image is loaded (naturalWidth 325/512, complete, opacity 1). Capture artifact.
+- **Next:** named photography for the remaining top-20 pros; socials for everyone but Ben;
+  the revalidation webhook; still no per-athlete OG image.
+
 ### 2026-08-20 (pt. 2) — `sameAs` wired, and the athlete SEO work is live
 
 - **Pushed** `ff13e0e` + `76f6a26`. Live and verified on www.ppatour.com: *Ben Johns —
