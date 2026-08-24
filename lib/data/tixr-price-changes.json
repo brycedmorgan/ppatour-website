@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-22T13:23:51Z",
+  "updated_at": "2026-08-24T13:42:03Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -2825,6 +2825,177 @@
       "event_id": "184760",
       "event": "Veolia Pickleball National Championships Sunday - Championships",
       "ticket": "Sunday Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-24T13:42:03Z",
+      "type": "price_change",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Tuesday Premium Parking",
+      "base_price": {
+        "from": 50,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 57.36,
+        "to": 57.36
+      }
+    },
+    {
+      "at": "2026-08-24T13:42:03Z",
+      "type": "availability_change",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Tuesday Premium Parking",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-24T13:42:03Z",
+      "type": "price_change",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Wednesday Premium Parking",
+      "base_price": {
+        "from": 50,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 57.36,
+        "to": 57.36
+      }
+    },
+    {
+      "at": "2026-08-24T13:42:03Z",
+      "type": "availability_change",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Wednesday Premium Parking",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-24T13:42:03Z",
+      "type": "price_change",
+      "event_id": "184764",
+      "event": "Veolia Pickleball National Championships Saturday Evening - Men's and Women's Doubles Semifinals",
+      "ticket": "Saturday Evening Courtside",
+      "base_price": {
+        "from": 100,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 113.44,
+        "to": 70.23
+      }
+    },
+    {
+      "at": "2026-08-24T13:42:03Z",
+      "type": "availability_change",
+      "event_id": "184764",
+      "event": "Veolia Pickleball National Championships Saturday Evening - Men's and Women's Doubles Semifinals",
+      "ticket": "Saturday Evening Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-24T13:42:03Z",
+      "type": "price_change",
+      "event_id": "195334",
+      "event": "PPA Mesa Saturday - Semifinals",
+      "ticket": "Saturday Courtside",
+      "base_price": {
+        "from": 100,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 113.44,
+        "to": 113.44
+      }
+    },
+    {
+      "at": "2026-08-24T13:42:03Z",
+      "type": "availability_change",
+      "event_id": "195334",
+      "event": "PPA Mesa Saturday - Semifinals",
+      "ticket": "Saturday Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-24T13:42:03Z",
+      "type": "price_change",
+      "event_id": "197226",
+      "event": "PPA Las Vegas Saturday - Semifinals",
+      "ticket": "Saturday VIP",
+      "base_price": {
+        "from": 350,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 383.56,
+        "to": 383.56
+      }
+    },
+    {
+      "at": "2026-08-24T13:42:03Z",
+      "type": "availability_change",
+      "event_id": "197226",
+      "event": "PPA Las Vegas Saturday - Semifinals",
+      "ticket": "Saturday VIP",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-24T13:42:03Z",
+      "type": "price_change",
+      "event_id": "166387",
+      "event": "2026 Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Full Day Box Suite",
+      "base_price": {
+        "from": 6000,
+        "to": 6500
+      },
+      "all_in_price": {
+        "from": 6503.07,
+        "to": 7044.54
+      }
+    },
+    {
+      "at": "2026-08-24T13:42:03Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "2026 Pickleball World Championships Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "base_price": {
+        "from": 500,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 546.87,
+        "to": 546.87
+      }
+    },
+    {
+      "at": "2026-08-24T13:42:03Z",
+      "type": "availability_change",
+      "event_id": "166349",
+      "event": "2026 Pickleball World Championships Sunday - Championships",
+      "ticket": "Sunday VIP",
       "sale_state": {
         "from": "OPEN",
         "to": "HIDE"
