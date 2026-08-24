@@ -168,9 +168,18 @@ back half of the funnel is not.
    unset means that channel warns and no-ops, and the booking is still in
    Stripe.
 
-4. **Point `vacations.ppatour.com` here as a permanent, path-preserving
-   redirect** (Vercel → Domains → Redirect to `www.ppatour.com`).
-   **This is not optional.** Punta Cana and Turks guests hold Stripe
+4. ✅ **DONE 2026-08-23.** `vacations.ppatour.com` now 308s here. It was not
+   done at the domain layer in the end — the redirect ships as `redirects()` in
+   the archived `pickleball-vacations` app's `next.config.ts`, which is version
+   controlled and testable rather than a dashboard toggle. Every rule targets
+   its final destination, so inbound links resolve in ONE hop:
+   `/success?session_id=…` → `/vacations/success/?session_id=…` (200),
+   `/register`, `/trips`, `/trips/punta-cana`, `/` and the old `/api/checkout`
+   all verified. **Until this landed there were two live checkouts selling the
+   same 20 rooms.** Original note follows.
+
+   Point `vacations.ppatour.com` here as a permanent, path-preserving
+   redirect. **This is not optional.** Punta Cana and Turks guests hold Stripe
    confirmation links of the form
    `vacations.ppatour.com/success?session_id=cs_live_…`, and Lainey's
    collateral prints the subdomain. The root-level redirects in
