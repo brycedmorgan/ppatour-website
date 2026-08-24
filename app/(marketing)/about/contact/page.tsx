@@ -12,7 +12,7 @@ const CONTACTS = [
   { area: "General", email: "info@ppatour.com", note: "Anything not covered below." },
   { area: "Partnerships", email: "partnerships@ppatour.com", note: "Title, presenting, and category partner inquiries." },
   { area: "Press & Media", email: "media@ppatour.com", note: "Credentials, interviews, and media-day requests." },
-  { area: "Tickets", email: "tickets@ppatour.com", note: "Group sales and corporate hospitality." },
+  { area: "Tickets", email: "ticketing@ppatour.com", note: "Group sales, corporate hospitality, and general ticketing questions." },
   { area: "Tournament Hosting", email: "tournaments@ppatour.com", note: "Venue bids and host-city inquiries." },
   { area: "Careers", email: "careers@ppatour.com", note: "Job openings and recruiting." },
   { area: "Player Relations", email: "players@ppatour.com", note: "Pros only — rankings, brackets, conduct." },
