@@ -6,8 +6,10 @@ lives in the Session Log in the repo root `CLAUDE.md`.
 
 The site is the **content / discovery / streaming** layer. Commerce redirects out
 to partners (Tixr for tickets, pickleballtournaments.com for amateur
-registration). Pickleball Vacations is the one deliberate exception, and even
-there Stripe hosts the checkout.
+registration). There are **two deliberate exceptions** — Pickleball Vacations
+and `/shop` — and in both the provider hosts the checkout. No card data,
+addresses or order state live in this app, and there is no cart. A third
+commerce surface needs the same conversation those two had.
 
 ---
 
@@ -19,6 +21,8 @@ there Stripe hosts the checkout.
 | Punta Cana bookings | LIVE at $4,800 double, 1 room left | none; Lainey controls rooms in Jackalope |
 | MLP per-player timeline | Endpoint approved, awaiting their push | `team_leagues_rosters` going live (DATA-ASKS §6) |
 | "Playing next" on profiles | Not started | Player→events endpoint (DATA-ASKS §5) |
+| `/shop` headless storefront | Built 8/19, **shipped dark** — renders a holding state | A Storefront token, and the PBC decision below ([`SHOP.md`](SHOP.md)) |
+| PPA × Vuori apparel deal | Concept + line sheet built; no approach made | Bryce to open the conversation |
 
 ## The fan app
 
@@ -41,6 +45,14 @@ owner per event, not on code).
 4. **Mirror the Trip Builder into `NationalsLive.tsx`.** The `-live` route
    renders its own trip section and drifts from the main event page.
 5. **Fill `HEROES_BY_SLUG`** for marquee pros as named photos arrive.
+6. **A Shopify `products/update` webhook** calling
+   `revalidateTag("shopify-catalog")`, so a merchandising edit appears at once
+   rather than within five minutes. Only worth building once someone is
+   merchandising live.
+7. **Verify `SHOPIFY_API_VERSION`.** It defaults to `2026-07` and no query has
+   ever run against a real store. A rejected version fails safe and therefore
+   looks exactly like "no products published yet" — check it first if the shop
+   shows its holding state with a token set.
 
 ## Later — wants a decision, not code
 
@@ -48,6 +60,15 @@ owner per event, not on code).
   `TopBar` and `StickyBuyBar` are still pathname-gated to `/live`. Making
   `StickyBuyBar` live-aware turns the tour's #1 ticket CTA into "Watch Live" on
   every page for the duration of an event. Commercial call, not a cleanup.
+- **Who runs the PPA Tour store.** Pickleball Central already operates a live
+  **PPA Tour Store** (10 products, *"the official retailer of the PPA Tour"*),
+  and ppatour.com's own header "Shop" link points at it. PBC holds the
+  **Official Store** designation, so repointing that link at our `/shop` moves
+  revenue away from a Gold partner's contract. `/shop` is therefore built but
+  absent from the nav. Three resolutions are written up in [`SHOP.md`](SHOP.md);
+  the one that costs nobody anything — PBC's Shopify as the backend, `/shop` as
+  the PPA-branded front end — is blocked because PBC is **not** in the
+  Pickleball Holdings LLC Shopify org. **Bryce + Connor.**
 - **News home** — ppatour.com vs pickleball.com. Open since 7/28.
 - **MLP's absence from the site.** Still unaddressed.
 
