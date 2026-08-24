@@ -46,6 +46,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   `isMajor()` already badged it correctly; the pro-tour tier table, the TV schedule
   label, and the "Worlds, majors, cups, opens" copy pattern were the places that
   presented it as a peer category, and they're fixed.
+- **Never quote a GA4 number from property `358407319` without
+  `Hostname contains ppatour.com` applied.** The property holds five websites and
+  ppatour.com is 2% of its views — the unfiltered number is Pickleball Brackets,
+  not the PPA Tour. Applies to decks, sponsor conversations, Connor, and any API
+  consumer including Jackalope. Found 8/24; see [`docs/ANALYTICS.md`](docs/ANALYTICS.md).
 - **Ad inventory on ppatour.com is off the table for now** (Bryce, 7/29). Don't build
   slots, don't ask again.
 - **Family details are removed from Jack Sock's bio ONLY — this is not a site-wide rule.**
@@ -57,6 +62,43 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   re-implement it, and don't "fix" the other 21 profiles that mention a spouse or child.**
 
 ## Session Log
+
+### 2026-08-24 — The GA4 property is five websites, and ppatour.com is 2% of it
+
+- **Bryce: "something seems off on our PPA Tour analytics."** It is. GA4 property
+  **`PPA - GA4` / `358407319`** carries **five web streams**, and the largest is
+  Pickleball Brackets, not us. Full write-up, evidence and roadmap:
+  [`docs/ANALYTICS.md`](docs/ANALYTICS.md).
+- **The numbers.** Last 28 days the property reports **16,041,613 views /
+  1,008,333 active users**. Filtered to `Hostname contains ppatour.com` it is
+  **319,977 views / 88,064 users** — **2.0% of views, 8.7% of users**. The
+  default top-five pages are all pickleballtournaments.com / pickleballbrackets.com
+  / pickleball.com / pickleballleagues.com. **Every unfiltered metric anyone has
+  read off this property was Pickleball Brackets.**
+- **The culprit is one stream:** `All Pickleball Variations` (`9706788521`,
+  `G-QCCT4TV3JR`, default URL pickleballbrackets.com), carrying five hostnames.
+  Ours is `PPA Tour | New` (`6289331495`, `G-NKVE1BRLK7`) — confirmed live and
+  the only tag in the production HTML. Secondary `G-VFNFRP66Z5` still dark, as
+  `LAUNCH.md` says.
+- **⚠ It poisons Jackalope too.** `api/marketing/ga4.js` queries `358407319`.
+  It is inert only because `GA4_SA_KEY` is unset. **Do not set that credential
+  before the hostname filter is in the query** — the funnel it renders would be
+  98% someone else's traffic and would look completely plausible.
+- **We cannot just delete the brackets stream.** `G-QCCT4TV3JR` is deployed
+  directly on their production sites (0 connected site tags, data flowing).
+  Deleting it kills *their* measurement. That makes the split a conversation,
+  not a cleanup — three resolutions written up in `ANALYTICS.md`.
+- **Also found, both minor:** a dead duplicate `PPA Tour` stream (`5816480422`)
+  also claiming www.ppatour.com — not double-counting today, but a landmine; and
+  a www/apex split in the data, which is pre-redirect history (verified: apex
+  301s to www).
+- **Nothing was changed in GA4.** Read-only session. Filters, streams and
+  settings untouched.
+- **Next:** (1) put the `Hostname contains ppatour.com` comparison on the
+  property — five minutes, reversible, stops the bleeding; (2) filter
+  `api/marketing/ga4.js`; (3) **audit what has already shipped off these
+  numbers** — decks, sponsor one-pagers, board slides — that is the item with a
+  clock on it; (4) Bryce + whoever owns `G-QCCT4TV3JR` to pick the split.
 
 ### 2026-08-22 — Ben Johns has a hero and a `sameAs`; the "5-minute" claim was wrong
 

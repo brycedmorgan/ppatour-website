@@ -4,6 +4,11 @@ What we are trying to do here, what is next, and what we want but cannot build
 yet. Detailed API asks live in [`DATA-ASKS.md`](DATA-ASKS.md); the dated history
 lives in the Session Log in the repo root `CLAUDE.md`.
 
+> ⚠ **Before quoting any GA4 number for this site, read
+> [`ANALYTICS.md`](ANALYTICS.md).** Property `358407319` carries five websites and
+> ppatour.com is 2% of its views. Every unfiltered metric in it is Pickleball
+> Brackets, not the PPA Tour.
+
 The site is the **content / discovery / streaming** layer. Commerce redirects out
 to partners (Tixr for tickets, pickleballtournaments.com for amateur
 registration). There are **two deliberate exceptions** — Pickleball Vacations
@@ -23,6 +28,7 @@ commerce surface needs the same conversation those two had.
 | "Playing next" on profiles | Not started | Player→events endpoint (DATA-ASKS §5) |
 | `/shop` headless storefront | Built 8/19, **shipped dark** — renders a holding state | A Storefront token, and the PBC decision below ([`SHOP.md`](SHOP.md)) |
 | PPA × Vuori apparel deal | Concept + line sheet built; no approach made | Bryce to open the conversation |
+| **GA4 property contamination** | Found 8/24; **nothing quotable until filtered** — [`ANALYTICS.md`](ANALYTICS.md) | Option A is buildable now; the split needs Bryce + the brackets owner |
 
 ## The fan app
 
@@ -34,22 +40,27 @@ owner per event, not on code).
 
 ## Next — buildable today, no external dependency
 
-1. **Add `team_leagues_rosters` to Jackalope's probe** (`lib/pbapi.js`
+1. **Put the `Hostname contains ppatour.com` comparison on GA4 property
+   `358407319`**, and add the same filter to Jackalope's `api/marketing/ga4.js`
+   **before** `GA4_SA_KEY` is set. Five minutes, reversible, and until it exists
+   every number the property reports is 98% somebody else's traffic
+   ([`ANALYTICS.md`](ANALYTICS.md)).
+2. **Add `team_leagues_rosters` to Jackalope's probe** (`lib/pbapi.js`
    `TEAM_LEAGUE_ENDPOINTS`). One line. Without it we cannot detect the endpoint
    going live, so Slack is our only signal.
-2. **Discipline-level "where their points come from"** on athlete profiles. The
+3. **Discipline-level "where their points come from"** on athlete profiles. The
    WPR weighting is verified exact for all 2,033 ranked pros (DATA-ASKS §4), so
    this needs no new access.
-3. **Per-event placements per player** by walking the bracket feed — buildable
+4. **Per-event placements per player** by walking the bracket feed — buildable
    now as a cron-warmed job (DATA-ASKS §4a).
-4. **Mirror the Trip Builder into `NationalsLive.tsx`.** The `-live` route
+5. **Mirror the Trip Builder into `NationalsLive.tsx`.** The `-live` route
    renders its own trip section and drifts from the main event page.
-5. **Fill `HEROES_BY_SLUG`** for marquee pros as named photos arrive.
-6. **A Shopify `products/update` webhook** calling
+6. **Fill `HEROES_BY_SLUG`** for marquee pros as named photos arrive.
+7. **A Shopify `products/update` webhook** calling
    `revalidateTag("shopify-catalog")`, so a merchandising edit appears at once
    rather than within five minutes. Only worth building once someone is
    merchandising live.
-7. **Verify `SHOPIFY_API_VERSION`.** It defaults to `2026-07` and no query has
+8. **Verify `SHOPIFY_API_VERSION`.** It defaults to `2026-07` and no query has
    ever run against a real store. A rejected version fails safe and therefore
    looks exactly like "no products published yet" — check it first if the shop
    shows its holding state with a token set.
@@ -69,6 +80,12 @@ owner per event, not on code).
   the one that costs nobody anything — PBC's Shopify as the backend, `/shop` as
   the PPA-branded front end — is blocked because PBC is **not** in the
   Pickleball Holdings LLC Shopify org. **Bryce + Connor.**
+- **How we separate ppatour.com from Pickleball Brackets in GA4.** `G-QCCT4TV3JR`
+  is live on their production sites, so we cannot delete the stream — that is
+  their measurement, not ours. Three resolutions are written up in
+  [`ANALYTICS.md`](ANALYTICS.md); the right end state (C, move their streams to
+  their own property) needs whoever owns `G-QCCT4TV3JR` in the room.
+  **Bryce + the brackets owner.**
 - **News home** — ppatour.com vs pickleball.com. Open since 7/28.
 - **MLP's absence from the site.** Still unaddressed.
 
