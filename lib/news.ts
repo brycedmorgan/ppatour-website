@@ -55,6 +55,14 @@ export type NewsCard = {
    */
   postType: WpPostType;
   eventSlug?: string;
+  /** Hero standfirst under the H1; unset on every WP post. Native only. */
+  subtitle?: string;
+  /**
+   * Per-article ticket CTA override; unset = the next tour stop. Native only.
+   * See the field docs on `NewsArticle` for why an announcement needs it.
+   */
+  ctaUrl?: string;
+  ctaLabel?: string;
   /** Hero-only `object-position` override; unset = `object-center`. Native only. */
   imagePosition?: string;
 };
@@ -153,6 +161,9 @@ function nativeToCard(a: NewsArticle): NewsCard {
     series: null,
     postType: "post",
     eventSlug: a.eventSlug,
+    subtitle: a.subtitle,
+    ctaUrl: a.ctaUrl,
+    ctaLabel: a.ctaLabel,
   };
 }
 

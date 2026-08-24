@@ -178,6 +178,17 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
           >
             {card.title}
           </h1>
+          {/* Standfirst — the logistics half of a press-release headline. Set
+              below the H1's display type so it reads as a second line rather
+              than competing with it. */}
+          {card.subtitle && (
+            <p
+              className="mt-2.5 max-w-2xl text-base font-semibold leading-snug text-white/80 sm:text-lg motion-safe:animate-rise"
+              style={{ animationDelay: "200ms" }}
+            >
+              {card.subtitle}
+            </p>
+          )}
         </div>
         <div className="relative h-1 bg-ppa-blue" />
       </section>
@@ -245,8 +256,10 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
             )}
 
             <div className="mt-9 flex flex-wrap gap-2.5 border-t border-ppa-line pt-6">
+              {/* An announcement selling its own ticket overrides this; every
+                  other article keeps pointing at the next stop. */}
               <a
-                href={withUtm(next.ticketsUrl, {
+                href={withUtm(card.ctaUrl ?? next.ticketsUrl, {
                   campaign: next.eventCode ?? next.slug,
                   content: `article-${card.slug}`,
                 })}
@@ -254,7 +267,7 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
                 rel="noopener noreferrer"
                 className="flex h-10 items-center bg-ppa-blue px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-ppa-blue-deep active:scale-[0.98]"
               >
-                See It Live — {next.name} Tickets
+                {card.ctaLabel ?? `See It Live — ${next.name} Tickets`}
               </a>
               <Link
                 href="/watch/tv"

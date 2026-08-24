@@ -23,6 +23,22 @@ export type NewsArticle = {
   status: "published" | "draft";
   category: string;
   title: string;
+  /**
+   * Optional standfirst under the H1, in the hero.
+   *
+   * Exists because a press-release headline is not a web headline. Comms
+   * writes one line carrying the hook AND the date, time and venue — correct
+   * for a media alert, and as an H1 it wraps to five or six lines of display
+   * type over the artwork, which is what it did here. Splitting the hook into
+   * `title` and the logistics into `subtitle` keeps every word without the
+   * headline swallowing the hero.
+   *
+   * ⚠ NOT in `<title>`, the meta description or the OG card — those take
+   * `title` and `dek`, which is the point of moving this out of the headline.
+   * Anything a search result or a share card must carry belongs in the dek
+   * too, not only here.
+   */
+  subtitle?: string;
   /** Display date, e.g. "May 17" (2026). */
   date: string;
   dek: string;
@@ -47,6 +63,24 @@ export type NewsArticle = {
   whyItMatters: string;
   /** Ties coverage to a tour stop — event pages render these under "Coverage". */
   eventSlug?: string;
+  /**
+   * Overrides the article footer's "See It Live" ticket button.
+   *
+   * ⚠ THAT BUTTON OTHERWISE SELLS THE NEXT TOUR STOP, NOT THIS STORY. It is
+   * built from `getNextTournament()`, which is right for editorial — a recap
+   * should point at whatever is on next — and wrong for an announcement that
+   * exists to sell its own ticket. A Pro-Am, a fan fest or a watch party is a
+   * separate Tixr listing from general event admission, so without this the
+   * page's one call to action sends readers to a different product than the
+   * one the story is about.
+   *
+   * Give the CLEAN listing URL — it goes through `withUtm` with this article's
+   * own `article-<slug>` content tag, so a pre-tagged link pasted from a press
+   * release would double up and misreport the click.
+   */
+  ctaUrl?: string;
+  /** Button label for `ctaUrl`. Unset falls back to the next-stop wording. */
+  ctaLabel?: string;
   /** Featured athletes (slugs) — merged with auto-detected name mentions. */
   players?: string[];
   body: string[];
@@ -206,6 +240,79 @@ export const newsArticles: NewsArticle[] = [
       "Alongside the new ranking, the Carvana PPA Tour is unveiling BE THE BEST., a new rallying cry for the PPA Tour and its community. The Tour showcases elite athletes with unique personalities within the greatest community in sports on an unrivaled global stage, and BE THE BEST. was developed to capture that identity in a single, unifying idea — one that speaks to world-class professionals and to the millions of amateurs around the world who love the game alike. The message was built to be inclusive and aspirational rather than presumptuous: everyone, at every level, has their own best to chase. It will come to life across the Carvana PPA Tour experience, appearing on-site at PPA events through both professional and amateur touchpoints, and extending into the Tour's marketing and merchandise.",
       "“BE THE BEST. is more than a tagline, it's an invitation,” said Jeff Watson, SVP, Marketing and Communications, Carvana PPA Tour. “Whether you're competing for a world title or stepping onto a court for the first time, the challenge is the same: be your best. Paired with the World Pickleball Rankings, it gives every player in our community something to strive for.”",
       "The full mechanics of the World Pickleball Rankings — the weighting, the 52-week window, and how Current Seed differs from your world rank — are laid out on How Pro Pickleball Works.",
+    ],
+  },
+  /**
+   * ⚠ OFFICIAL PRESS RELEASE, not editorial — comms copy dated Cary, NC,
+   * Aug 24 2026, supplied by Wesley as a Google Doc. Jeff Watson is its named
+   * media contact, so the byline is accurate rather than decorative. Ships
+   * `status: "published"` for the same reason the WPR release above does: the
+   * 7/20 gate exists to stop AI-WRITTEN copy going live, and this is neither
+   * AI-written nor unreviewed.
+   *
+   * ⚠ EVERY CREDENTIAL HERE IS THE RELEASE'S, AND SEVERAL ARE CHECKABLE FACTS
+   * ABOUT REAL PEOPLE — three Cups and the 2014 Conn Smythe for Williams, the
+   * 2006 Cup and Conn Smythe for Ward, 2026 Cups for Aho and Svechnikov. Don't
+   * "tidy" them; if one is wrong it is a correction to make with comms, not a
+   * wording call.
+   *
+   * ⚠ THE BULLETS AND HYPERLINKS OF THE ORIGINAL ARE GONE, BECAUSE A NATIVE
+   * BODY CANNOT CARRY THEM. `ArticleView` renders `body` as plain paragraphs
+   * through `linkifyPlayers` — no lists, no anchors. The What/Who/When/Where
+   * structure is therefore flattened to prose and the release's four inline
+   * links are dropped. The ticket link is the one that actually matters, and
+   * it survives as `ctaUrl` below rather than as body text.
+   *
+   * ⚠ THE PPA FIELD IS DELIBERATELY UNNAMED. The release says "Top Carvana PPA
+   * Tour players to be named later", so this post names no pro. Add them when
+   * comms does — and only then.
+   *
+   * No `players` rail: the four names are NHL players, not PPA pros, and none
+   * collides with an athlete on our roster (checked against
+   * published-athletes.json). Nothing here should link to a player profile.
+   */
+  {
+    slug: "canes-and-the-cup-pro-am",
+    status: "published",
+    category: "Tour News",
+    /* Comms' single headline, split at its semicolon (Wesley, 8/24): the hook
+       is the H1, the logistics are the standfirst. Both halves are verbatim —
+       no words added, none dropped. */
+    title: "Canes and the Cup Pro-Am at the Veolia Pickleball National Championships",
+    subtitle: "Thursday, Sept. 3, 6-9 p.m. at Cary Tennis Park",
+    date: "Aug 24",
+    /* The event's own key art, supplied with the release (1920×1080 PNG,
+       2.6MB) and encoded to mozjpeg q80 at native size — 281KB, in line with
+       the other heroes. NOT upscaled to the 2400px the other two use: the
+       source is 1920 wide and enlarging it adds bytes, not detail.
+
+       ⚠ THIS IS A DESIGNED GRAPHIC, NOT A PHOTOGRAPH, AND THE HERO CROPS IT.
+       The hero is `min-h-[44svh]` at `sizes="100vw"`, roughly 3.6:1, so it
+       keeps about half the height of a 16:9 image — the anchor below is
+       measured to hold the CANES / & THE CUP / PICKLEBALL PRO-AM lockup. The
+       Stanley Cup Champions and Carvana PPA Tour marks along the foot fall
+       outside that band at desktop widths and cannot be saved by an anchor;
+       a purpose-built wide crop is the only fix if they must appear. */
+    image: "/ppa/canes-and-the-cup-pro-am.jpg",
+    imagePosition: "50% 100%",
+    author: "Jeff Watson",
+    /* The release's own ticket link, cleaned of its pre-baked UTMs — it
+       arrived tagged `utm_content=event-hero-buy-tickets`, which would have
+       reported every click from this article as an event-page hero click. */
+    ctaUrl:
+      "https://www.tixr.com/groups/ppa/events/canes-night-at-the-veolia-pickleball-national-championships-202083",
+    ctaLabel: "Get Canes Night Tickets",
+    eventSlug: "veolia-pickleball-national-championships",
+    dek: "Stanley Cup champions Andrei Svechnikov, Cam Ward, Sebastian Aho and Justin Williams take Humana Championship Court alongside top Carvana PPA Tour pros — with the Stanley Cup on site for photos.",
+    whyItMatters:
+      "Four Stanley Cup champions and the Cup itself land in the middle of the tour's biggest week, on the same court the pros play on. A portion of proceeds goes to the Carolina Hurricanes Foundation.",
+    body: [
+      "CARY, N.C. — The Carolina Hurricanes and the Veolia Pickleball National Championships today announced the Canes and the Cup Pro-Am, a fun, lively and entertaining event pairing Carolina Hurricanes Stanley Cup champions with top players from the Carvana PPA Tour. Fans will have the opportunity for exclusive player meet-and-greets and a chance to have their photo taken with the Stanley Cup.",
+      "Four Hurricanes champions headline the field. Justin “Mr. Game 7” Williams is a three-time Stanley Cup champion and winner of the 2014 Conn Smythe Trophy. Cam Ward won the Cup in 2006 and took that season's Conn Smythe. Sebastian Aho, a 2026 Stanley Cup champion, is a three-time NHL All-Star, and Andrei Svechnikov, also a 2026 champion, was a 2023 NHL All-Star. The top Carvana PPA Tour players joining them will be named later.",
+      "The Pro-Am runs Thursday, Sept. 3 from 6-9 p.m. ET and is built in three parts. From 6-7 p.m., a Stormy meet-and-greet, photos with the Stanley Cup and Carolina Hurricanes activations open for courtside ticket holders at Courtside Commons. The Canes and the Cup Pro-Am itself takes Humana Championship Court from 7-8 p.m. From 8-9 p.m., VIP ticket holders mix and mingle with the Canes legends and the Stanley Cup.",
+      "Everything takes place at Humana Championship Court and Courtside Commons at the Veolia Pickleball National Championships, held at Cary Tennis Park, 2727 Louis Stephens Dr., Cary, NC 27519.",
+      "VIP tickets carry the player meet-and-greet opportunities, reserved priority seating, food and beverage, and priority access to photos with the Stanley Cup. They are expected to sell out quickly, and fans are encouraged to purchase today. A portion of proceeds goes to the Carolina Hurricanes Foundation.",
+      "Media covering the event can apply for credentials through the Carvana PPA Tour's media credential application. Further tournament information and details regarding the Veolia Pickleball National Championships will be coming soon.",
     ],
   },
 ];
