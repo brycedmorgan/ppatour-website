@@ -30,9 +30,10 @@ import {
   tournaments,
   type Tournament,
 } from "@/lib/placeholder-data";
+import { getShopProducts, shopHref } from "@/lib/shop";
 import { tourPrograms } from "@/lib/tour-programs";
 
-export type SearchGroup = "News" | "Athletes" | "Events" | "Programs" | "Pages";
+export type SearchGroup = "News" | "Athletes" | "Events" | "Programs" | "Shop" | "Pages";
 
 export type SearchHit = {
   group: SearchGroup;
@@ -58,7 +59,7 @@ export type SiteSearchResult = {
 };
 
 /** Group display order — news leads because it is the deepest content. */
-const GROUP_ORDER: SearchGroup[] = ["News", "Athletes", "Events", "Programs", "Pages"];
+const GROUP_ORDER: SearchGroup[] = ["News", "Athletes", "Events", "Programs", "Shop", "Pages"];
 
 /** Per-group cap. Deep result sets belong on /news, not in a blended list. */
 const PER_GROUP = 8;
@@ -287,6 +288,38 @@ export async function searchSite(query: string): Promise<SiteSearchResult> {
     }))
     .filter((x) => x.s > 0);
 
+  /**
+   * Shop.
+   *
+   * ⚠ THE CATALOGUE IS REMOTE, SO THIS SOURCE CAN LEGITIMATELY BE EMPTY and a
+   * failed fetch must not take the whole search down with it. `getShopProducts`
+   * already resolves to [] rather than throwing, but the try/catch is kept for
+   * the same reason the events source has one: a search for "waters" should
+   * still return an athlete when the storefront is unreachable.
+   */
+  let shopScored: { item: SearchHit; s: number }[] = [];
+  try {
+    const products = await getShopProducts();
+    shopScored = products
+      .map((p) => ({
+        item: {
+          group: "Shop" as const,
+          title: p.title,
+          meta: [p.vendor, p.productType].filter(Boolean).join(" · ") || "Official PPA Tour gear",
+          href: shopHref(p.handle),
+        } as SearchHit,
+        s: score(
+          terms,
+          norm(p.title),
+          norm(`${p.vendor} ${p.productType} ${p.tags.join(" ")}`),
+          norm(p.description),
+        ),
+      }))
+      .filter((x) => x.s > 0);
+  } catch {
+    /* leave the shop out of this result set rather than fail the search */
+  }
+
   /* Pages + linked Pickleball.com coverage */
   const pageScored = STATIC_PAGES.map((p) => ({
     item: { group: "Pages" as const, title: p.title, meta: p.meta, href: p.href } as SearchHit,
@@ -303,6 +336,7 @@ export async function searchSite(query: string): Promise<SiteSearchResult> {
     { group: "Athletes" as const, hits: takeTop(athleteScored, PER_GROUP), total: athleteScored.length },
     { group: "Events" as const, hits: takeTop(eventScored, PER_GROUP), total: eventScored.length },
     { group: "Programs" as const, hits: takeTop(programScored, PER_GROUP), total: programScored.length },
+    { group: "Shop" as const, hits: takeTop(shopScored, PER_GROUP), total: shopScored.length },
     { group: "Pages" as const, hits: takeTop(pageScored, PER_GROUP), total: pageScored.length },
   ] satisfies SearchGroupResult[]).filter((g) => g.hits.length > 0);
 

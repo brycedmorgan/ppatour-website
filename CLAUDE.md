@@ -7,6 +7,13 @@ streaming** layer; commerce redirects out to partners (tixr for tickets,
 pickleballtournaments.com for amateur registration). Do **not** embed checkout,
 build a cart, or replicate registration forms.
 
+**Two documented exceptions, both on Bryce's call, and both HOSTED:** `/vacations`
+(Stripe) and `/shop` (Shopify). Neither holds card data, addresses or order
+state — each creates a session server-side and hands the buyer to the provider's
+own checkout page. That is the line, and it is what makes them exceptions rather
+than drift. A third surface needs the same conversation; a native cart needs a
+different one.
+
 **Full brief:** read [`CLAUDE_CODE_PASSOFF_v2.md`](CLAUDE_CODE_PASSOFF_v2.md)
 end-to-end before touching code. The strategy doc (`Option B — Content-First
 Strategy`) is the ultimate source of truth.
@@ -19,6 +26,15 @@ Next.js 16 (App Router) · TypeScript strict · Tailwind v4 · shadcn/ui ·
 Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Standing rulings (don't re-litigate)
+
+- **The header "Shop" link stays pointed at Pickleball Central until Bryce and Connor
+  say otherwise.** `Header.tsx:59` and `SiteFooter.tsx:50` link out to PBC's live
+  **PPA Tour Store** (`/apparel/ppa-tour-apparel/`, 10 products, *"the official retailer
+  of the PPA Tour"*). PBC holds the **Official Store** designation, so repointing that
+  link at our own `/shop` moves revenue away from a Gold partner's contractual
+  designation. **That is a commercial decision, not a routing change.** `/shop` is built
+  and works, and is deliberately absent from the global nav until the call is made —
+  see [`docs/SHOP.md`](docs/SHOP.md) for the three ways it can resolve.
 
 - **Opens are 1,000 points.** Bryce, 7/29 — closing Hannah's "Opens 500 / Cups 1500 /
   Majors 2000" claim outright ("Hannah is full of shit"). The live tier system stands:
