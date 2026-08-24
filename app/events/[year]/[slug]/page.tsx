@@ -16,6 +16,7 @@ import { TripBuilder } from "@/components/events/TripBuilder";
 import type { TripEvent } from "@/lib/trip";
 import { buildTripEvent } from "@/lib/trip-event";
 import { ResultsPanel } from "@/components/live/ResultsPanel";
+import { BracketPanel } from "@/components/live/BracketPanel";
 import { ChampionsBanner } from "@/components/live/ChampionsBanner";
 import { ReplayGallery } from "@/components/live/ReplayGallery";
 import { getDefendingChampions } from "@/lib/defending-champions";
@@ -353,9 +354,38 @@ export default async function EventPage({ params }: Params) {
     ? t.defendingChampions
     : getDefendingChampions(year, t.slug);
 
+  /**
+   * ⚠ THE DRAW UUID IS NOT THE RESULTS UUID, AND THAT SEPARATION IS DELIBERATE.
+   * `tournamentUuid` is API-sourced only and `resolveEvent` lets a CURATED
+   * record win, so it is absent on every hand-authored stop — Nationals
+   * included. That is why the draw surfaces below were dark on exactly the
+   * events people care most about: not a data problem, a plumbing one.
+   *
+   * Looked up from the live feed here, the same way `/today` does it, rather
+   * than added to `resolveEvent`'s overlay — that record also feeds results,
+   * the champions banner and the registered count, and handing those a UUID
+   * they have never had is a behaviour change to a live page (8/19 note).
+   * So `uuid` above keeps its exact meaning and completed events are
+   * byte-identical; only the draw reads `drawUuid`.
+   */
+  const drawUuid = t.tournamentUuid ?? (await getEvents()).events.find((e) => e.slug === t.slug)?.tournamentUuid;
+
   // Players to Watch is driven by the published draw: no draw, no column.
-  const field = await getEventField(t.tournamentUuid);
+  const field = await getEventField(drawUuid);
   const watchPicks = getPlayersToWatch(field, defendingChampions, `${year}/${t.slug}`);
+
+  /**
+   * The draw, before the event — the bracket everyone already builds for
+   * COMPLETED stops, shown from the moment the draw drops instead of only
+   * after the last ball.
+   *
+   * ⚠ GATED ON `field.published`, NOT on the UUID. The ten pro shells exist as
+   * soon as an event is on the calendar, so a UUID alone would publish an
+   * empty bracket for every future stop on the schedule. `field.published` is
+   * true only once a real, non-placeholder player is in a draw — which is the
+   * same thing "the draw is out" means to a fan.
+   */
+  const showDraw = !completed && Boolean(drawUuid) && field.published;
 
   const TABS = [
     { id: "overview", label: "Overview" },
@@ -366,6 +396,7 @@ export default async function EventPage({ params }: Params) {
         ]
       : []),
     ...(showReplays ? [{ id: "replays", label: "Replays" }] : []),
+    ...(showDraw ? [{ id: "draw", label: "The Draw" }] : []),
     ...(completed
       ? []
       : [
@@ -652,6 +683,32 @@ export default async function EventPage({ params }: Params) {
       </section>
 
       {/* Completed events: champions → final results (standings / scores / bracket) */}
+      {/* The Draw — the published bracket, before a ball is hit. The same
+          BracketPanel the completed-event Results section uses; it polls, so
+          the moment play starts these cells fill with live scores. */}
+      {showDraw && drawUuid && (
+        <section id="draw" className="scroll-mt-[120px] bg-ppa-navy">
+          <div className="mx-auto w-full max-w-6xl px-4 py-12">
+            <div className="flex items-center gap-2.5">
+              <span className="h-2 w-2 bg-ppa-yellow" />
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
+                The Draw
+              </p>
+            </div>
+            <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
+              Who Plays Who at {t.name}
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm text-white/55">
+              Every pro main draw, seeded and in full. Scores fill in here live
+              once play begins.
+            </p>
+            <div className="mt-6">
+              <BracketPanel eventId={drawUuid} expandHref={`/brackets?event=${drawUuid}`} />
+            </div>
+          </div>
+        </section>
+      )}
+
       {showResults && uuid && (
         <>
           <ChampionsBanner eventId={uuid} />
