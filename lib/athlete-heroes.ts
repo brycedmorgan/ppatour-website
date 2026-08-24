@@ -159,6 +159,25 @@ export function athleteHeroFor(
   const live = (feedHero || "").trim();
   // The feed carries a URL only — keep the curated crop when we have one for this
   // pro, since a centre crop of a wide action shot usually loses the player.
-  if (live) return { src: live, position: curated?.position, credit: curated?.credit };
+  if (live) return { src: ownPath(live) ?? live, position: curated?.position, credit: curated?.credit };
   return curated;
+}
+
+/**
+ * A feed URL that points back at THIS site, reduced to its bare path.
+ *
+ * Why it matters (8/23): the page renders a "/"-prefixed src through `next/image` and
+ * anything else through a plain `<img>`, because the feed can name a host next/image has
+ * no remotePattern for. But the first hero anyone actually filled in Pro Player Central
+ * was `https://www.ppatour.com/ppa/heroes/ben-johns.jpg` — our own file, pasted back at
+ * us — and that took the plain-img branch, serving 330 KB of unoptimised JPEG as the LCP
+ * image on the tour's most-visited profile instead of a ~150 KB webp.
+ *
+ * Pasting our own URL in is the natural thing for an editor to do, so this handles it
+ * rather than asking them to remember. An off-site URL is untouched and still takes the
+ * plain-img path, which is what that branch is for.
+ */
+function ownPath(url: string): string | null {
+  const m = /^https?:\/\/(?:www\.)?ppatour\.com(\/[^\s?#]*)/i.exec(url);
+  return m ? m[1] : null;
 }
