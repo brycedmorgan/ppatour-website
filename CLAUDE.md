@@ -99,10 +99,25 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   Tournaments means no Europe calendar on any site anyone builds.
 - **⚠ Unrelated, found while reading the channel:** the `@ppatoureurope` Instagram
   password was posted **in plaintext in the public Slack channel on 8/7.** Rotate it.
-- **Next:** Bryce owes `#ppa-tour-europe` an update (he committed to Wednesday
-  8/26). Then: confirm domain ownership, get the 20 stops into the feed, get the
-  Europe roster + photos from Katherina Preis, and have the Smash conversation
-  about what their new hire actually does.
+- **Sent 8/24.** Email to Chris Patrick, Katherina Preis and Albert Escofet
+  (`albert@smashpickleball.agency`), cc Payton + Jeff, carrying the decision and
+  three asks: the 20 confirmed dates, the signed roster with photos, and the
+  scope of Smash's web hire plus what the gallery is for. `#ppa-tour-europe`
+  [posted the same](https://pickleballinc.slack.com/archives/C0BN42HQ6E4/p1787627642604769).
+- **Domain ownership answered as far as mail can answer it.** The company
+  GoDaddy account is **Jason Santerre's**, and he produced the definitive list on
+  **2026-04-19** in the merger due-diligence thread with Emily Olsen ("all the
+  domains we manage under our company account"). That attachment is the source of
+  truth. ⚠ His own caveat — others hold company domains in personal accounts, and
+  Derk Pardoe holds `ppatournaments.com` that way — so absence from that list
+  means personal account, not third party.
+- **Europe email, per Jeff 8/11:** one **Google Group** `europe@ppatour.com`
+  forwarding to Chris, Catie and Jeff (no licence, no cost). Individual licensee
+  addresses are a **paid Workspace seat each** for an outside agency's staff, and
+  are blocked on a headcount — asked for in the 8/24 email.
+- **Next:** the 20 stops into PB Tournaments (Chris), roster + photos (Katherina),
+  Smash's answer on the web hire, then spec the `/europe` route and locale
+  prefixes.
 
 
 ### 2026-08-24 — The GA4 property is five websites, and ppatour.com is 2% of it
