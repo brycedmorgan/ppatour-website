@@ -104,17 +104,21 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   three asks: the 20 confirmed dates, the signed roster with photos, and the
   scope of Smash's web hire plus what the gallery is for. `#ppa-tour-europe`
   [posted the same](https://pickleballinc.slack.com/archives/C0BN42HQ6E4/p1787627642604769).
-- **Domain ownership answered as far as mail can answer it.** The company
-  GoDaddy account is **Jason Santerre's**, and he produced the definitive list on
-  **2026-04-19** in the merger due-diligence thread with Emily Olsen ("all the
-  domains we manage under our company account"). That attachment is the source of
-  truth. ⚠ His own caveat — others hold company domains in personal accounts, and
-  Derk Pardoe holds `ppatournaments.com` that way — so absence from that list
-  means personal account, not third party.
-- **Europe email, per Jeff 8/11:** one **Google Group** `europe@ppatour.com`
-  forwarding to Chris, Catie and Jeff (no licence, no cost). Individual licensee
-  addresses are a **paid Workspace seat each** for an outside agency's staff, and
-  are blocked on a headcount — asked for in the 8/24 email.
+- **✅ `ppatoureurope.com` IS ours — confirmed, not inferred.** Row 446 of
+  `domainexport_20260419_149pm.csv`, the authoritative export Jason Santerre (CTO)
+  attached 2026-04-19 in the merger due-diligence thread. Active, auto-renew On.
+  The redirect plan has no ownership hole. ⚠ **`ppatourspain.com` is NOT in the
+  company account** (the export jumps `ppatoursouthamerica` → `ppavacations`), so
+  redirecting Spain is a request to Smash, not a DNS change we can make.
+- **✅ `europe@ppatour.com` is LIVE.** Google Group (no licence, no cost), owner
+  Bryce, members Chris Patrick, Jeff Watson, Katherina Preis. ⚠ Access type is
+  **Custom on purpose**: the default *Public* preset blocks External from posting,
+  which would bounce every inbound mail from a player or licensee. "Who can post"
+  includes External. Joining is invite-only. Full detail in
+  [`docs/EUROPE.md`](docs/EUROPE.md).
+- **Individual licensee addresses are still open** — a **paid Workspace seat each**
+  for an outside agency's staff. Headcount asked of Chris Patrick 8/24.
+  ⚠ **Kate Young creates the accounts, not Bryce.**
 - **Next:** the 20 stops into PB Tournaments (Chris), roster + photos (Katherina),
   Smash's answer on the web hire, then spec the `/europe` route and locale
   prefixes.

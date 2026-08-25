@@ -141,26 +141,67 @@ model, written down.
 
 ---
 
-## The domain portfolio (whois, 2026-08-24)
+## The domain portfolio — CONFIRMED 2026-08-24
 
-We appear to own a batch of regional domains that are all parked on GoDaddy
-landers doing nothing:
+**`ppatoureurope.com` is ours.** Verified against `domainexport_20260419_149pm.csv`,
+the authoritative export Jason Santerre (CTO) attached on **2026-04-19** in the
+merger due-diligence thread with Emily Olsen — *"all the domains we manage under
+our company account."* Row 446: **Active, auto-renew On.** The redirect plan has
+no ownership hole.
 
-- `ppatourasia.com` and `ppatoureurope.com` — registered **2024-04-20, four
-  seconds apart**. Same cart. Both on `NS*.DOMAINCONTROL.COM` parking.
-- `ppatouritaly.com` and `ppatourfrance.com` — registered **2026-02-10, one
-  second apart**. Same cart. Also parked.
-- All share `ppatour.com`'s registrar (GoDaddy) and privacy service (Domains By
-  Proxy), so registrant details are redacted. **Signal, not proof — confirm in
-  the GoDaddy account before promising anyone a redirect.**
+The company GoDaddy account holds the whole regional set:
 
-⚠ **`ppatourasia.com` is parked while the Asia partner runs `ppatour-asia.com`**
-— same name, one hyphen apart. A fan who guesses the domain gets a parking page.
-Worth fixing regardless of what happens with Europe.
+| Row | Domain | Expires | Auto-renew |
+|---|---|---|---|
+| 440 | ppatour.com | 6/25/2033 | On |
+| 443 | ppatourafrica.com | 4/19/2026 | On |
+| 444 | ppatourasia.com | 4/19/2026 | On |
+| 446 | **ppatoureurope.com** | 4/19/2026 | On |
+| 448 | ppatourfrance.com | 2/10/2027 | On |
+| 449 | ppatourindia.com | 4/19/2026 | On |
+| 450 | ppatouritaly.com | 2/10/2027 | On |
+| 453 | ppatourlatinamerica.com | 2/10/2027 | On |
+| 456 | ppatoursouthamerica.com | 4/19/2026 | On |
+
+⚠ **`ppatourspain.com` is NOT in the company account.** The export jumps row 456
+`ppatoursouthamerica` straight to row 457 `ppavacations.com`. It was registered
+2026-03-24 and runs on AWS nameservers, so it is **Smash's own domain** and
+predates the export — its absence is real, not a timing artefact. Redirecting
+Spain is a request to Smash, not a DNS change we can make.
+
+⚠ **`ppatourasia.com` is ours and parked** while the Asia partner runs
+`ppatour-asia.com`, one hyphen apart. A fan who guesses the domain gets a GoDaddy
+lander. Worth fixing regardless of what happens with Europe.
 
 `ppatourgermany.com` and `ppatouruk.com` are **unregistered** as of 8/24.
 
+**Where the file lives:** Gmail thread *"Due diligence request - domains and social
+media accounts"*, Jason Santerre's 4/19 reply. Note his standing instruction in
+that message — anyone holding a company domain in a personal account should
+transfer it in. Derk Pardoe holds `ppatournaments.com` that way.
+
 ---
+
+## Email — `europe@ppatour.com` is LIVE (created 2026-08-24)
+
+Built in Google Workspace admin as a **Google Group**, which costs nothing and
+consumes no licence. Answers Jeff Watson's 8/11 ask.
+
+- **Address:** `europe@ppatour.com` · group id `03jtnz0s23kfa0r`
+- **Owner:** Bryce. **Members:** Chris Patrick, Jeff Watson, Katherina Preis
+  (all `@pickleball.com`).
+- **Access type: Custom.** ⚠ The default *Public* preset does **not** let
+  External post, which would bounce every inbound mail from a player, licensee or
+  journalist. **"Who can post" is set to include External** — that single setting
+  is what makes the address work at all. Do not let a preset overwrite it.
+- **Who can join: Only invited users**, so staff can't add themselves and start
+  receiving Europe inquiries.
+
+**Still open:** individual addresses for the licensee teams. Each one is a **paid
+Workspace seat** for an outside agency's staff, so it needs a headcount first
+(asked of Chris Patrick, 8/24). **Kate Young creates the accounts, not Bryce.**
+⚠ If they land on `pickleball.com` the naming rule is `first.last@`; only OGs
+have a bare first name.
 
 ## What actually blocks Europe launching
 
