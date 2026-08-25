@@ -69,12 +69,33 @@ owner per event, not on code).
 
 - **PPA Tour Europe as a region of this site.** Bryce's call 8/24: build it
   **into** ppatour.com (`/europe`), not beside it as a fifth site. 7 of Smash's
-  11 asks already ship; the feed already tags Europe. Blocked on **the 20
-  announced stops reaching PB Tournaments** (2 Spain + 1 Italy live today,
-  against 20 announced 7/31) and on the **Europe roster + photography**. ⚠ This
-  is the last region we can still fold in — `ppatour.com.au` belongs to Pacific
-  Pickleball Pty Ltd and Asia is the same shape. Full write-up:
-  [`EUROPE.md`](EUROPE.md). **Bryce + Chris Patrick + Katherina Preis.**
+  11 asks already ship; the feed already tags Europe, so a Europe stop appears on
+  the calendar with no code change. ⚠ This is the last region we can still fold
+  in — `ppatour.com.au` belongs to Pacific Pickleball Pty Ltd and Asia is the same
+  shape. The decision is made and the people work is out; what remains is a build
+  waiting on data. Full write-up: [`EUROPE.md`](EUROPE.md).
+
+  **Settled 8/24–8/25 — do not re-litigate:** `ppatoureurope.com` is confirmed
+  ours (row 446 of the company domain export). `europe@ppatour.com` is live as a
+  Google Group. Redirecting `ppatourspain.com` is an **ask to Smash**, not a task
+  — it is their domain; Italy and France we own.
+
+  **Blocked on, in order:**
+  1. The **20 announced stops reaching PB Tournaments**. 3 were live on 8/24
+     against 20 announced 7/31. Nothing downstream — calendar, rankings, results,
+     medals — exists on any website until this lands. **Chris Patrick.**
+  2. The **Europe roster + player photography**. Unblocks Smash's loudest ask
+     (athlete profiles) against the system that already runs 179 US pros.
+     **Katherina Preis.** ⚠ Attribute those photos from provenance, never by
+     looking — Wishlist §2 below.
+  3. **What the gallery is for** (event recaps vs player assets vs press). It
+     changes what gets built. **Albert Escofet, Smash.**
+  4. A **headcount for licensee email addresses** — a paid Workspace seat each.
+     **Chris Patrick**, then Kate Young creates them.
+
+- **Buildable now, no dependency:** add **Andorra** to `COUNTRY_BY_CODE` in
+  `lib/events-api.ts`. It was in the 7/31 announcement and is missing from the
+  map, so an Andorran stop would silently miss the Europe region filter.
 - **Site chrome during a live event.** The homepage flips itself live, but
   `TopBar` and `StickyBuyBar` are still pathname-gated to `/live`. Making
   `StickyBuyBar` live-aware turns the tour's #1 ticket CTA into "Watch Live" on
