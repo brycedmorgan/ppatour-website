@@ -63,6 +63,48 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-24 — PPA Tour Europe is a region of this site, not a fifth website
+
+- **Bryce's call.** PPA Tour Europe gets built **into** ppatour.com as a region.
+  Full write-up: [`docs/EUROPE.md`](docs/EUROPE.md).
+- **The site is already the global calendar and nobody in `#ppa-tour-europe`
+  knew.** `lib/events-api.ts` reads every PPA org from one feed, `COUNTRY_BY_CODE`
+  already maps **17 European ISO-3 codes** to a single `Europe` value (Connor's
+  ruling, 7/31), and `ScheduleGrid.tsx` already ships the region filter. A Europe
+  stop entering the feed appears on the calendar with **no code change.**
+- **Albert Escofet's (Smash) 11-item preferences doc, audited: 7 of 11 already
+  ship.** Calendar, news, rankings, results, contact, how-it-works and athlete
+  profiles all exist as routes. Net new: **medal ladder** and **photo/video
+  gallery**. `/shop` inherits the [`SHOP.md`](docs/SHOP.md) blocker unchanged —
+  do not promise Europe merch.
+- **⚠ Europe is the LAST region where we still have the choice.**
+  `ppatour.com.au` is registered to **PACIFIC PICKLEBALL PTY LTD** — a licensed
+  operator, not a vendor — so we cannot redirect it. Asia is the same shape
+  (`upa-asia.com`, `mlp-asia.com` hang off it). `ppatoureurope.com` is a **GoDaddy
+  parking lander with nothing on it.** Once Smash ships a Europe site, Europe
+  joins the column we cannot fix.
+- **Domain portfolio finding.** `ppatourasia.com` + `ppatoureurope.com` were
+  registered **four seconds apart** on 2024-04-20; `ppatouritaly.com` +
+  `ppatourfrance.com` **one second apart** on 2026-02-10. All parked, all GoDaddy,
+  all behind Domains By Proxy — signal we own them, **not proof.** Confirm in the
+  GoDaddy account before promising a redirect. `ppatourasia.com` is parked while
+  the partner runs `ppatour-asia.com`, one hyphen apart.
+- **Two rules for the geo-aware vision.** Geo-IP **suggests, never redirects** —
+  Googlebot crawls from US datacenters, so a hard redirect leaves every European
+  page unindexed and breaks shared links. And **region is a path, language is a
+  prefix** (`/europe`, `/de/europe`); they are separate axes.
+- **The real blocker is not engineering.** Chris Patrick announced 20 Europe stops
+  on 7/31; the live `/events` page carries **2 Spain and 1 Italy**. Jeff asked for
+  confirmed dates on 7/31 and the thread still has no answer. No stops in PB
+  Tournaments means no Europe calendar on any site anyone builds.
+- **⚠ Unrelated, found while reading the channel:** the `@ppatoureurope` Instagram
+  password was posted **in plaintext in the public Slack channel on 8/7.** Rotate it.
+- **Next:** Bryce owes `#ppa-tour-europe` an update (he committed to Wednesday
+  8/26). Then: confirm domain ownership, get the 20 stops into the feed, get the
+  Europe roster + photos from Katherina Preis, and have the Smash conversation
+  about what their new hire actually does.
+
+
 ### 2026-08-24 — The GA4 property is five websites, and ppatour.com is 2% of it
 
 - **Bryce: "something seems off on our PPA Tour analytics."** It is. GA4 property

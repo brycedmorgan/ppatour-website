@@ -67,6 +67,14 @@ owner per event, not on code).
 
 ## Later — wants a decision, not code
 
+- **PPA Tour Europe as a region of this site.** Bryce's call 8/24: build it
+  **into** ppatour.com (`/europe`), not beside it as a fifth site. 7 of Smash's
+  11 asks already ship; the feed already tags Europe. Blocked on **the 20
+  announced stops reaching PB Tournaments** (2 Spain + 1 Italy live today,
+  against 20 announced 7/31) and on the **Europe roster + photography**. ⚠ This
+  is the last region we can still fold in — `ppatour.com.au` belongs to Pacific
+  Pickleball Pty Ltd and Asia is the same shape. Full write-up:
+  [`EUROPE.md`](EUROPE.md). **Bryce + Chris Patrick + Katherina Preis.**
 - **Site chrome during a live event.** The homepage flips itself live, but
   `TopBar` and `StickyBuyBar` are still pathname-gated to `/live`. Making
   `StickyBuyBar` live-aware turns the tour's #1 ticket CTA into "Watch Live" on
