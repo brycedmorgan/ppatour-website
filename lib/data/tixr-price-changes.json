@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-24T13:42:03Z",
+  "updated_at": "2026-08-25T13:41:11Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -3000,6 +3000,252 @@
         "from": "OPEN",
         "to": "HIDE"
       }
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "ticket_added",
+      "event_id": "169798",
+      "event": "Major League Pickleball New York City Finals 2026",
+      "ticket": "Media",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "price_change",
+      "event_id": "169803",
+      "event": "Major League Pickleball New York Finals - Saturday: Session 4",
+      "ticket": "Courtside Session 4",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 113.71,
+        "to": 102.88
+      }
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "price_change",
+      "event_id": "184767",
+      "event": "Veolia Pickleball National Championships Thursday - Round of 16",
+      "ticket": "Thursday Courtside+",
+      "base_price": {
+        "from": null,
+        "to": 140
+      },
+      "all_in_price": {
+        "from": 135.05,
+        "to": 156.66
+      }
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "availability_change",
+      "event_id": "184767",
+      "event": "Veolia Pickleball National Championships Thursday - Round of 16",
+      "ticket": "Thursday Courtside+",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "price_change",
+      "event_id": "184765",
+      "event": "Veolia Pickleball National Championships Friday Morning - Singles and Mxd Doubles Quarterfinals",
+      "ticket": "Friday Morning Courtside",
+      "base_price": {
+        "from": 80,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 91.83,
+        "to": 46.56
+      }
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "availability_change",
+      "event_id": "184765",
+      "event": "Veolia Pickleball National Championships Friday Morning - Singles and Mxd Doubles Quarterfinals",
+      "ticket": "Friday Morning Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "price_change",
+      "event_id": "184764",
+      "event": "Veolia Pickleball National Championships Saturday Evening - Men's and Women's Doubles Semifinals",
+      "ticket": "Saturday Evening Courtside",
+      "base_price": {
+        "from": null,
+        "to": 100
+      },
+      "all_in_price": {
+        "from": 70.23,
+        "to": 113.44
+      }
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "availability_change",
+      "event_id": "184764",
+      "event": "Veolia Pickleball National Championships Saturday Evening - Men's and Women's Doubles Semifinals",
+      "ticket": "Saturday Evening Courtside",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "price_change",
+      "event_id": "184760",
+      "event": "Veolia Pickleball National Championships Sunday - Championships",
+      "ticket": "Sunday Courtside+",
+      "base_price": {
+        "from": 220,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 243.1,
+        "to": 243.1
+      }
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "availability_change",
+      "event_id": "184760",
+      "event": "Veolia Pickleball National Championships Sunday - Championships",
+      "ticket": "Sunday Courtside+",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "price_change",
+      "event_id": "197226",
+      "event": "PPA Las Vegas Saturday - Semifinals",
+      "ticket": "Saturday VIP",
+      "base_price": {
+        "from": null,
+        "to": 350
+      },
+      "all_in_price": {
+        "from": 383.56,
+        "to": 383.56
+      }
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "availability_change",
+      "event_id": "197226",
+      "event": "PPA Las Vegas Saturday - Semifinals",
+      "ticket": "Saturday VIP",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "price_change",
+      "event_id": "197214",
+      "event": "PPA Las Vegas Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "base_price": {
+        "from": null,
+        "to": 350
+      },
+      "all_in_price": {
+        "from": 383.56,
+        "to": 383.56
+      }
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "availability_change",
+      "event_id": "197214",
+      "event": "PPA Las Vegas Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "price_change",
+      "event_id": "176326",
+      "event": "PPA Virginia Beach",
+      "ticket": "Saturday Courtside",
+      "base_price": {
+        "from": 100,
+        "to": 120
+      },
+      "all_in_price": {
+        "from": 113.44,
+        "to": 135.05
+      }
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "price_change",
+      "event_id": "176502",
+      "event": "Veolia PPA Malibu",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": 50,
+        "to": 60
+      },
+      "all_in_price": {
+        "from": 57.36,
+        "to": 70.23
+      }
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "event_added",
+      "event_id": "204325",
+      "event": "PPA Palm Springs"
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "event_added",
+      "event_id": "204420",
+      "event": "PPA Palm Springs Thursday - Round of 16"
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "event_added",
+      "event_id": "204411",
+      "event": "PPA Palm Springs Friday - Quarterfinals"
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "event_added",
+      "event_id": "204394",
+      "event": "PPA Palm Springs Saturday Evening - Men's and Women's Doubles Semifinals"
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "event_added",
+      "event_id": "204392",
+      "event": "PPA Palm Springs Saturday Morning - Singles and Mxd Doubles Semifinals"
+    },
+    {
+      "at": "2026-08-25T13:41:11Z",
+      "type": "event_added",
+      "event_id": "204335",
+      "event": "PPA Palm Springs Sunday - Championships"
     }
   ]
 }
