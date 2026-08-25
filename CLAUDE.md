@@ -116,6 +116,10 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   which would bounce every inbound mail from a player or licensee. "Who can post"
   includes External. Joining is invite-only. Full detail in
   [`docs/EUROPE.md`](docs/EUROPE.md).
+- **Spain redirect is an ASK, not a task.** Emailed Albert Escofet 8/24 (cc
+  `europe@ppatour.com`) to point `ppatourspain.com` at `/europe` in launch week,
+  path-preserving, or hand us the DNS. Italy and France we own and can do
+  ourselves. Also told Smash to start using the new group address.
 - **Individual licensee addresses are still open** — a **paid Workspace seat each**
   for an outside agency's staff. Headcount asked of Chris Patrick 8/24.
   ⚠ **Kate Young creates the accounts, not Bryce.**
