@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T13:41:11Z",
+  "updated_at": "2026-08-26T13:44:58Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -3246,6 +3246,177 @@
       "type": "event_added",
       "event_id": "204335",
       "event": "PPA Palm Springs Sunday - Championships"
+    },
+    {
+      "at": "2026-08-26T13:44:58Z",
+      "type": "price_change",
+      "event_id": "169798",
+      "event": "Major League Pickleball New York City Finals 2026",
+      "ticket": "Friday-Sunday Box Suite",
+      "base_price": {
+        "from": 25000,
+        "to": 30000
+      },
+      "all_in_price": {
+        "from": 27083.71,
+        "to": 32499.37
+      }
+    },
+    {
+      "at": "2026-08-26T13:44:58Z",
+      "type": "price_change",
+      "event_id": "169839",
+      "event": "Major League Pickleball New York Finals 2026 - Saturday: Session 3 & 4",
+      "ticket": "VIP Session 3 & 4",
+      "base_price": {
+        "from": 350,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 384.49,
+        "to": 384.49
+      }
+    },
+    {
+      "at": "2026-08-26T13:44:58Z",
+      "type": "availability_change",
+      "event_id": "169839",
+      "event": "Major League Pickleball New York Finals 2026 - Saturday: Session 3 & 4",
+      "ticket": "VIP Session 3 & 4",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-26T13:44:58Z",
+      "type": "price_change",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Tuesday: Wave Movement - Mat Pilates Class (5pm)",
+      "base_price": {
+        "from": 0,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 0,
+        "to": 0
+      }
+    },
+    {
+      "at": "2026-08-26T13:44:58Z",
+      "type": "availability_change",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Tuesday: Wave Movement - Mat Pilates Class (5pm)",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-26T13:44:58Z",
+      "type": "price_change",
+      "event_id": "202083",
+      "event": "Canes Night at the Veolia Pickleball National Championships",
+      "ticket": "Canes Night Courtside",
+      "base_price": {
+        "from": null,
+        "to": 40
+      },
+      "all_in_price": {
+        "from": 46.56,
+        "to": 46.56
+      }
+    },
+    {
+      "at": "2026-08-26T13:44:58Z",
+      "type": "availability_change",
+      "event_id": "202083",
+      "event": "Canes Night at the Veolia Pickleball National Championships",
+      "ticket": "Canes Night Courtside",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-08-26T13:44:58Z",
+      "type": "price_change",
+      "event_id": "184766",
+      "event": "Veolia Pickleball National Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening Courtside",
+      "base_price": {
+        "from": 80,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 91.83,
+        "to": 46.56
+      }
+    },
+    {
+      "at": "2026-08-26T13:44:58Z",
+      "type": "availability_change",
+      "event_id": "184766",
+      "event": "Veolia Pickleball National Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-26T13:44:58Z",
+      "type": "price_change",
+      "event_id": "184764",
+      "event": "Veolia Pickleball National Championships Saturday Evening - Men's and Women's Doubles Semifinals",
+      "ticket": "Saturday Evening Courtside",
+      "base_price": {
+        "from": 100,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 113.44,
+        "to": 70.23
+      }
+    },
+    {
+      "at": "2026-08-26T13:44:58Z",
+      "type": "availability_change",
+      "event_id": "184764",
+      "event": "Veolia Pickleball National Championships Saturday Evening - Men's and Women's Doubles Semifinals",
+      "ticket": "Saturday Evening Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-26T13:44:58Z",
+      "type": "price_change",
+      "event_id": "184760",
+      "event": "Veolia Pickleball National Championships Sunday - Championships",
+      "ticket": "Sunday Courtside+",
+      "base_price": {
+        "from": null,
+        "to": 220
+      },
+      "all_in_price": {
+        "from": 243.1,
+        "to": 243.1
+      }
+    },
+    {
+      "at": "2026-08-26T13:44:58Z",
+      "type": "availability_change",
+      "event_id": "184760",
+      "event": "Veolia Pickleball National Championships Sunday - Championships",
+      "ticket": "Sunday Courtside+",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
     }
   ]
 }

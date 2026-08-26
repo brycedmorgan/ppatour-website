@@ -1,7 +1,7 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-08-25T13:41:11Z",
+  "generated_at": "2026-08-26T13:44:58Z",
   "event_count": 65,
   "ticket_type_count": 956,
   "series_breakdown": {
@@ -35,8 +35,8 @@
           "name": "Friday-Sunday Box Suite",
           "category": "BOOTH",
           "sale_state": "OPEN",
-          "base_price": 25000,
-          "all_in_price": 27083.71
+          "base_price": 30000,
+          "all_in_price": 32499.37
         },
         {
           "name": "MLP New York Finals 2026- Friday Pass",
@@ -510,8 +510,8 @@
         {
           "name": "VIP Session 3 & 4",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 350,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 384.49
         }
       ]
@@ -740,8 +740,8 @@
         {
           "name": "Tuesday: Wave Movement - Mat Pilates Class (5pm)",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 0,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 0
         },
         {
@@ -960,36 +960,36 @@
         {
           "name": "Canes Night Courtside",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 40,
           "all_in_price": 46.56
         },
         {
           "name": "Canes Night Courtside",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 40,
           "all_in_price": 46.56
         },
         {
           "name": "Canes Night Courtside",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 40,
           "all_in_price": 46.56
         },
         {
           "name": "Canes Night Courtside",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 40,
           "all_in_price": 46.56
         },
         {
           "name": "Canes Night Courtside",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 40,
           "all_in_price": 46.56
         },
         {
@@ -1009,8 +1009,8 @@
         {
           "name": "Canes Night VIP",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 200,
           "all_in_price": 221.49
         },
         {
@@ -1277,13 +1277,6 @@
           "name": "Friday Evening Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Friday Evening Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 60,
           "all_in_price": 70.23
         },
@@ -1293,6 +1286,13 @@
           "sale_state": "OPEN",
           "base_price": 80,
           "all_in_price": 91.83
+        },
+        {
+          "name": "Friday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.56
         },
         {
           "name": "Friday Evening Courtside+",
@@ -1593,13 +1593,6 @@
           "name": "Saturday Evening Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 60,
-          "all_in_price": 70.23
-        },
-        {
-          "name": "Saturday Evening Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 80,
           "all_in_price": 91.83
         },
@@ -1609,6 +1602,13 @@
           "sale_state": "OPEN",
           "base_price": 100,
           "all_in_price": 113.44
+        },
+        {
+          "name": "Saturday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 70.23
         },
         {
           "name": "Saturday Evening Courtside+",
@@ -1895,15 +1895,15 @@
           "name": "Sunday Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
+          "base_price": 120,
+          "all_in_price": 135.05
         },
         {
           "name": "Sunday Courtside",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 120,
-          "all_in_price": 135.05
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 113.44
         },
         {
           "name": "Sunday Courtside",
@@ -1922,8 +1922,8 @@
         {
           "name": "Sunday Courtside+",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 220,
           "all_in_price": 243.1
         },
         {
@@ -5220,15 +5220,15 @@
           "name": "Sunday VIP",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 350,
-          "all_in_price": 384.43
+          "base_price": 400,
+          "all_in_price": 438.58
         },
         {
           "name": "Sunday VIP",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 400,
-          "all_in_price": 438.58
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 384.43
         },
         {
           "name": "Sunday VIP",
