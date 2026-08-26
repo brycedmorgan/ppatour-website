@@ -35,7 +35,7 @@ function SideRow({ team, status }: { team: ScoreTeam; status: ScoreMatch["status
           <span
             key={i}
             className={`flex w-8 items-center justify-center text-[13px] tabular-nums ${
-              team.winner ? "bg-[#d3ecd0] font-bold text-ppa-navy" : "text-ppa-navy/45"
+              team.winner ? "bg-ppa-win font-bold text-ppa-navy" : "text-ppa-navy/45"
             }`}
           >
             {g}

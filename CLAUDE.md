@@ -63,6 +63,29 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-26 (3) — Bracket CSS pulled back onto the brand tokens
+
+- **Audited the bracket against the site's own idioms.** The card itself was
+  already right: `rounded-md border border-ppa-line bg-white` is the site's
+  most-used card, the dark panel matches the `border-white/10 bg-ppa-navy-deep`
+  idiom, and type is inherited Gotham with no local override.
+- **Fixed the drift.** `text-teal-600` on the court label was the only default
+  Tailwind colour anywhere in `components/live` → `text-ppa-blue`. The round
+  header's `bg-[#d7dee4]` was `--color-ppa-line` hardcoded → `bg-ppa-line`.
+- **Two new tokens in `app/globals.css`.** `--color-ppa-win` (#d3ecd0) replaces
+  the winner-cell green, which existed as TWO shades (`#d3ecd0`, `#d8ebd3`)
+  across BracketView, ScoresBoard and MatchCard. `--color-ppa-bronze`
+  (#c98a3c) replaces two bronzes (`#cd7f32` in BracketView, `#c98a3c` in
+  FinalStandings). The bronze medal badge now uses `text-ppa-navy` — white on
+  bronze was ~3.4:1, navy is ~6.4:1, and gold/silver already used navy.
+- **Pill metrics aligned.** Round nav was `tracking-[0.1em]` and the zoom row
+  `px-2.5` against the site's `tracking-[0.12em]`; two pill rows stacked in
+  different metrics. Round pills stay one size below the division pills above
+  them — that is hierarchy, not drift.
+- **Asked Kenan** for `matchWinnerGoesTo` / `templateMatchID` on the draw feed:
+  <https://pickleballinc.slack.com/archives/C0BKZLY7YQG/p1787779090294199>.
+- **Next:** waiting on Kenan. Nothing else open on the bracket.
+
 ### 2026-08-26 (2) — A blank bracket was a cached upstream hiccup, not a layout bug
 
 - **Symptom:** `/brackets/?event=…&division=…` rendered an empty box. The API

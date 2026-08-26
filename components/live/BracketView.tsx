@@ -16,7 +16,7 @@ import type { Bracket, BracketMatch, BracketSide } from "@/lib/bracket-types";
 const MEDAL_BG: Record<string, string> = {
   gold: "bg-ppa-yellow text-ppa-navy",
   silver: "bg-ppa-line text-ppa-navy",
-  bronze: "bg-[#cd7f32] text-white",
+  bronze: "bg-ppa-bronze text-ppa-navy",
 };
 const MEDAL_LABEL: Record<string, string> = { gold: "1st", silver: "2nd", bronze: "3rd" };
 
@@ -103,7 +103,7 @@ function SideRow({
             <span
               key={i}
               className={`flex w-6 items-center justify-center text-[12px] tabular-nums ${
-                side.winner ? "bg-[#d3ecd0] font-bold text-ppa-navy" : "text-ppa-navy/45"
+                side.winner ? "bg-ppa-win font-bold text-ppa-navy" : "text-ppa-navy/45"
               }`}
             >
               {g ?? ""}
@@ -165,7 +165,7 @@ function MatchCard({
               <span className="font-bold uppercase tracking-wide">Live</span>
             </span>
           )}
-          {m.court && <span className="font-semibold text-teal-600">{m.court}</span>}
+          {m.court && <span className="font-semibold text-ppa-blue">{m.court}</span>}
           {m.court && m.time && <span className="text-ppa-navy/25">|</span>}
           {m.time && <span className="truncate text-ppa-navy/50">{m.time}</span>}
         </div>
@@ -315,7 +315,7 @@ export function BracketView({
             key={i}
             type="button"
             onClick={() => scrollToRound(i)}
-            className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] transition-colors ${
+            className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] transition-colors ${
               activeRound === i
                 ? light
                   ? "bg-ppa-blue text-white"
@@ -336,7 +336,7 @@ export function BracketView({
               type="button"
               onClick={() => setZoom(z)}
               aria-pressed={zoom === z}
-              className={`rounded-full px-2.5 py-1 text-[10px] font-bold tabular-nums transition-colors ${
+              className={`rounded-full px-3 py-1 text-[10px] font-bold tabular-nums transition-colors ${
                 zoom === z
                   ? light
                     ? "bg-ppa-blue text-white"
@@ -390,7 +390,7 @@ export function BracketView({
                   className="flex w-max flex-col"
                   style={{ minWidth: CARD_W }}
                 >
-                  <div className="mb-3 rounded-t-md border border-ppa-line bg-[#d7dee4] py-1.5 text-center text-[11px] font-bold uppercase tracking-wide text-ppa-navy">
+                  <div className="mb-3 rounded-t-md border border-ppa-line bg-ppa-line py-1.5 text-center text-[11px] font-bold uppercase tracking-[0.14em] text-ppa-navy">
                     {round.name}
                   </div>
                   <div className="flex flex-1 flex-col justify-around gap-3">
