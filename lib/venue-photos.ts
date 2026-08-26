@@ -57,7 +57,7 @@ export const VENUE_BY_EVENT_SLUG: Record<string, string> = {
   "atlanta-pickleball-championships": "lt-peachtree",
   "ppa-finals": "lt-sanclemente",
   // No Jackalope venue library yet: Veolia Chicago Cup (Life Time Northbrook),
-  // Veolia Malibu Cup (Pepperdine). Shoot list → docs/VENUE-ASSETS.md.
+  // Veolia Malibu Showcase (Pepperdine). Shoot list → docs/VENUE-ASSETS.md.
 };
 
 /** Every synced photo for an event's venue, in library order. */

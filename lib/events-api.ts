@@ -126,6 +126,15 @@ const CURATED_ALIASES: Record<string, string> = {
   // line above, and the same class of drift as the Asia stops (8/6), where the
   // feed and curated paths built two different slugs for one event.
   "ppa-tour-spain-p250-barcelona-open": "ppa-spain-p250-barcelona",
+  // ⚠ THIS ONE IS LOAD-BEARING AND WAS ADDED BEFORE IT COULD BITE. The feed
+  // renamed the Malibu Cup to "Veolia Malibu Showcase" on 8/26 (Bryan Renahan);
+  // production had not regenerated yet, so /events was still serving the old
+  // name and URL. On the next deploy `kebab(name)` becomes
+  // `veolia-malibu-showcase`, `findCurated` misses, and the page moves off
+  // /events/2026/veolia-malibu-cup — taking the badge, guide, broadcast table,
+  // presenter, ticket + register links and venue photos with it, since all six
+  // are keyed on the old slug. Same shape as the Mojo line above.
+  "veolia-malibu-showcase": "veolia-malibu-cup",
 };
 
 const curatedBySlug = new Map<string, Tournament>(getAllEvents().map((t) => [t.slug, t]));

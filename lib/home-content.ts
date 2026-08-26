@@ -391,7 +391,7 @@ export const partners: Partner[] = [
   },
   {
     // "Proton" per the 8/4 approved list (was "Proton Sports"). Side benefit:
-    // the Malibu Cup's curated presenter string is "Proton", so the marquee card
+    // the Malibu Showcase's curated presenter string is "Proton", so the marquee card
     // on that event now resolves this record's mark by exact name.
     name: "Proton",
     // Verified 7/28 (Conner Ogden: sponsor tiles were bouncing to a PPA page

@@ -441,8 +441,14 @@ const COMMERCE_BY_SLUG: Record<string, { tickets?: string; register?: string }> 
     register: registerEvent("ppa-tour-florida-open"), // Holly Hill venue — same event
   },
   "veolia-malibu-cup": {
+    // Tixr lists this as "Veolia PPA Malibu" — no Cup/Showcase in the name, so
+    // the rename left it alone. Verified 8/26.
     tickets: tixrEvent("ppa-malibu-176502"),
-    register: registerEvent("ppa-tour-veolia-malibu-cup"),
+    // ⚠ Follows the feed's `details_url`, which moved with the rename. The old
+    // …-malibu-cup path still 200s today, but it is no longer the registration
+    // page the tour publishes, and a platform slug that outlives its event is
+    // exactly the link that quietly dies later.
+    register: registerEvent("ppa-tour-veolia-malibu-showcase"),
   },
   "carvana-pickleball-masters": {
     register: registerEvent("ppa-tour-carvana-pickleball-masters-powered-by-invited"),
@@ -667,7 +673,24 @@ const SCHEDULE: RawEvent[] = [
   // stops — see the note on the Barcelona opener above before re-adding one.
   { name: "Proton Daytona Beach Open", start: "2026-11-16", end: "2026-11-22", city: "Holly Hill", state: "FL", venue: "Pictona at Holly Hill", type: "ppa", tier: "open" },
   { name: "PPA Canada 125 Toronto", start: "2026-11-26", end: "2026-11-29", city: "Toronto", state: "Canada", type: "international", country: "Canada" },
-  { name: "Veolia Malibu Cup", start: "2026-11-30", end: "2026-12-06", city: "Malibu", state: "CA", venue: "Pepperdine University", type: "ppa", tier: "cup" },
+  /**
+   * Renamed from "Veolia Malibu Cup" and moved off Nov 30 – Dec 6 (Bryan
+   * Renahan, 8/26). The feed carries the same rename and the same Dec 14–20,
+   * so this row is the fallback mirror of it.
+   *
+   * ⚠ `slug` IS PINNED TO THE ORIGINAL, AND IT HAS TO BE. Six keys hang off
+   * `veolia-malibu-cup` — BRAND_BY_SLUG, COMMERCE_BY_SLUG, PRESENTER_BY_SLUG,
+   * event-guides, broadcast and venue-photos — plus the live URL. Without the
+   * pin, `kebab(name)` moves the page to /veolia-malibu-showcase and silently
+   * orphans all six.
+   *
+   * ⚠ TIER LEFT AT `cup` (1,500) ON PURPOSE. The new logo reads "PPA 500", but
+   * the feed's own `skill_levels` still say "PPA 1500" and the feed is the
+   * source of truth for this. A demotion to 500 would drop the stop out of the
+   * 1,000+ "The Tour" band on /events, so it is not a badge tweak — it needs
+   * Bryan to confirm which is right.
+   */
+  { name: "Veolia Malibu Showcase", slug: "veolia-malibu-cup", start: "2026-12-14", end: "2026-12-20", city: "Malibu", state: "CA", venue: "Pepperdine University", type: "ppa", tier: "cup" },
 
   // December 2026
   { name: "PPA Australia 125 New South Wales", start: "2026-12-11", end: "2026-12-13", city: "New South Wales", state: "Australia", type: "international", country: "Australia" },

@@ -37,7 +37,11 @@ const EVENT_MAP = {
   "MLP Nations Cup": "MLP Cup",
   "PPA World Pickleball Championships": "Pickleball World Championships",
   "PPA Florida Open": "Proton Daytona Beach Open",
-  "PPA Malibu Cup": "Veolia Malibu Cup",
+  // ⚠ The 8/13 sheet still calls this one "PPA Malibu Cup"; the tour renamed it
+  // to the Showcase on 8/26. The KEY is the sheet's spelling and the VALUE is
+  // ours, so this row is exactly where that mismatch is supposed to live —
+  // don't "fix" the key until the sheet itself is reissued.
+  "PPA Malibu Cup": "Veolia Malibu Showcase",
 };
 
 /** Channels the site models. CBS/FOX/MSG windows exist on the sheet but are not

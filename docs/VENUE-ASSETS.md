@@ -28,7 +28,7 @@ One wide drone/aerial hero (≥2400px) + 4–8 grounds/crowd shots each:
 | Virginia Beach Open | Virginia Beach Sports Center, VA |
 | Pickleball World Championships | Brookhaven Country Club, Farmers Branch TX |
 | Proton Daytona Beach Open | Pictona at Holly Hill, FL |
-| Veolia Malibu Cup | Pepperdine University, Malibu CA |
+| Veolia Malibu Showcase | Pepperdine University, Malibu CA |
 | Carvana Pickleball Masters | Hyatt Regency Indian Wells, Rancho Mirage CA |
 | Minneapolis Indoor Open | Life Time — Lakeville, MN |
 | Cape Coral Open | Cape Coral Racquet Club, FL |
