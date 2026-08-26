@@ -76,6 +76,22 @@ const JOBS = [
    * those edits changes a regulated claim, not a logo.
    */
   ["", "Website Logo Inclusion_Journavx_R_Logo_RGB (1).jpg", "journavx", "Journavx (suzetrigine) 50mg tablet"],
+
+  /**
+   * Vita Pop, added 8/26 (Emily Williams). Supplied loose in Downloads, so the
+   * directory component is empty.
+   *
+   * ⚠ THE ART IS A WHITE-FILL / BLACK-OUTLINE LOCKUP ON TRANSPARENT, which is
+   * not what the other wordmarks on this wall are. On the white partner card
+   * the fill disappears and the black outline draws the letters, so it reads as
+   * outlined type rather than solid. That is the mark working as designed — it
+   * is a sticker-style logo built to sit on any background — and it is the only
+   * file the sponsor supplied. Do NOT "fix" it by flattening the fill to black
+   * or knocking out the outline: recolouring a partner's mark is not ours to do
+   * (same ruling as the network logos, 7/29). If marketing wants a solid
+   * version on the wall, ask Vita Pop for their one-colour lockup.
+   */
+  ["", "VP __ Logo (White & Black_Transparent).png", "vita-pop", "Vita Pop (white fill + black outline)"],
 ];
 
 /**
