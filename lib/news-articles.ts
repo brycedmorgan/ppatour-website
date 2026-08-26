@@ -117,6 +117,85 @@ export type NewsArticle = {
  */
 export const newsArticles: NewsArticle[] = [
   /**
+   * ⚠ HUMAN-AUTHORED EDITORIAL, published at the content owner's instruction —
+   * Dave Fleming's Nationals "storylines" preview, supplied by Tyler Dodd
+   * (marketing) on Aug 11 with a request to post it and to byline Dave Fleming.
+   * Same exception path as the Six Zero and press-release entries below: the
+   * 7/20 approval gate exists to stop AI-WRITTEN copy going live unreviewed, and
+   * this is neither — it is a named broadcaster's own preview. Ships
+   * `status: "published"`; flagged to Dylan, who can flip it back to "draft" in
+   * one line if the newsroom would rather stage it.
+   *
+   * ⚠ FAITHFUL TRANSCRIPTION, NOT A REWRITE. The source is a bulleted doc with a
+   * section per draw, and a native `body` renders as plain paragraphs
+   * (ArticleView → linkifyPlayers: no lists, no headings). So each bullet is
+   * flattened to one paragraph and each draw is led by a short label line. The
+   * seeds, streaks and every "watch out for" are Fleming's, verbatim — the
+   * doubles seed lines keep his surname-only shorthand rather than us guessing
+   * first names onto real pros. Only clear typos were fixed ("Partriquin" →
+   * "Patriquin") and "R16/R64" spelled out.
+   *
+   * No `players` list: the rail resolves the many full-name mentions by
+   * detection against published-athletes.json, and `eventSlug` ties it to the
+   * Nationals event page's Coverage rail. The footer CTA is left to default —
+   * the next tour stop IS this event, so it already points at Nationals tickets.
+   */
+  {
+    slug: "veolia-pickleball-national-championships-storylines",
+    status: "published",
+    category: "Tour News",
+    title: "Storylines for the Veolia Pickleball National Championships",
+    subtitle: "Presented by Fasenra · Aug. 31–Sept. 6, 2026 · Cary, NC",
+    date: "Aug 11",
+    image: "/ppa/nationals-crowd-stadium.jpg",
+    author: "Dave Fleming",
+    eventSlug: "veolia-pickleball-national-championships",
+    dek: "The 2026–27 Carvana PPA Tour season opens in Cary with the first of four majors — 2,000 points on the line, more than 1,400 players in the draw, and the new World Pickleball Rankings in effect for the first time.",
+    whyItMatters:
+      "The Tour's new September-to-May season starts with a major, and it is the first event scored under the three-discipline World Pickleball Rankings: 50% gender doubles, 35% mixed, 15% singles.",
+    body: [
+      "Overall Top 5",
+      "Happy New Year: the Carvana PPA Tour now follows a September-to-May format, like the NHL and NBA.",
+      "Worldly affair: the new World Pickleball Rankings are three-dimensional, combining all disciplines — 50% gender doubles, 35% mixed, and 15% singles.",
+      "No \"I\" in team: how will the MLP winners, and those that came up just short, fare with a quick turnaround?",
+      "Rock you like a hurricane: who will hoist the trophy like the NHL's Canes? The pro-am is Thursday night.",
+      "Major implications: the year starts with one of four majors, worth 2,000 points.",
+      "Venue, Tourney & TV",
+      "This is the first event of the 26/27 season, with over 1,400 players participating.",
+      "A progressive draw on the pro side means one round per bracket per day, and no bronze matches.",
+      "Coverage on PickleballTV begins at 10 a.m. Eastern Tuesday through Friday and Sunday, with a 9 a.m. start Saturday. Tennis Channel carries afternoon coverage Thursday through Sunday (non-exclusive).",
+      "Women's Singles",
+      "Top four seeds: 1) Anna Leigh Waters, 2) Kate Fahey, 3) Kaitlyn Christian, 4) Brooke Buckner.",
+      "Anna Leigh Waters' unbeaten streak has reached 824 days at the start of the main draws in NC.",
+      "Potential battle in the round of 16: Brooke Buckner (4) vs. Cailyn Campbell (13).",
+      "Watch out for Sofia Sewing (46) — a very talented player who will move up the rankings quickly, but she has to start in the 40s and will be a tough out in Cary.",
+      "Men's Singles",
+      "Top four seeds: 1) Chris Haworth, 2) Federico Staksrud, 3) Hunter Johnson, 4) Christian Alshon.",
+      "Haworth is No. 1 in the world and hoping to pick up where he left off from his win at the PPA Finals — but he has not had a good DreamBreaker season in MLP, just three points over .500.",
+      "Ben Johns is playing singles as the 24 seed and Tyson McGuffin as the 39 seed, and they meet in the round of 64. Theater.",
+      "Another round-of-64 thriller: JW Johnson (28) vs. Max Freeman (33).",
+      "Watch out for Grayson Goldin (26) — he battles a stroke, perseveres, and just won the PPA Asia event in China.",
+      "Mixed Doubles",
+      "Top four seeds: 1) Anna Leigh Waters / Ben Johns, 2) Anna Bright / Hayden Patriquin, 3) JW Johnson / Jorja Johnson, 4) Rachel Rohrabacher / Christian Alshon.",
+      "Ben Johns is the only player among the top four seeds not playing in the MLP semifinals.",
+      "Eric Oncins and Tina Pisnik are paired as the 7 seed, having made the Newport final earlier in the year.",
+      "Round-of-64 barnburner: Catherine Parenteau / Riley Newman (10) vs. Sofia Sewing / Casey Diamond (64).",
+      "Watch out for Hurricane Tyra Black and Gabe Tardio (5) — a dangerous, talented duo that will be tough to beat. They have not played together in the US in over two years, and finished third in Hanoi in April.",
+      "Women's Doubles",
+      "Top four seeds: 1) Bright / Waters, 2) Black / Johnson, 3) Rohrabacher / Todd, 4) Schneemann / Pisnik.",
+      "Waters and Bright are undefeated in 2026.",
+      "A new, dangerous team lands as the 5 seed: Sofia Sewing and Catherine Parenteau.",
+      "Potential round of 16: Etta Tuionetoa / Meghan Dizon (7) vs. Kaitlyn Christian / Brooke Buckner (9).",
+      "Watch out for Kate Fahey and Lea Jansen (6) — can they make a run to the semis or farther?",
+      "Men's Doubles",
+      "Top four seeds: 1) Johns / Tardio, 2) Alshon / Daescu, 3) Patriquin / Staksrud, 4) JW Johnson / Shimabukuro.",
+      "Ben Johns and Gabe Tardio are undefeated in 2026.",
+      "What's old is new again: Patriquin/Staksrud (3) and Alshon/Daescu (2) pair up again, both seeking their gold-medal-winning ways of 2025.",
+      "Potential round of 16: Will Howells / CJ Klinger (5) vs. Roscoe Bellamy / Connor Garnett (9).",
+      "Watch out for Tama Shimabukuro and JW Johnson (4) — what will Tama Time plus the Flickwizard produce? A fascinating new pairing that will be must-see TV.",
+    ],
+  },
+  /**
    * ⚠ SPONSORED PARTNER ANNOUNCEMENT, not editorial — Six Zero's own signing
    * copy, supplied by Hannah Johns (PPA comms) on Aug 10 with a request to
    * publish the same day. Same class as Jeff Watson's press release below: it
