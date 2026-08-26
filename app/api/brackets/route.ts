@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getBracketDivisions, getBracketDraw } from "@/lib/brackets-api";
+import { getBracketDivisions, getBracketDraw, isEmptyDraw } from "@/lib/brackets-api";
 
 /**
  * Bracket data for any tournament, built live from the PPA match feed
@@ -34,7 +34,11 @@ export async function GET(request: Request) {
 
   if (!division) {
     const divisions = await getBracketDivisions(event);
-    return NextResponse.json({ eventId: event, divisions }, { headers });
+    // An empty list is a failed upstream call far more often than a real
+    // event with no pro divisions — don't pin it at the edge.
+    return NextResponse.json({ eventId: event, divisions }, {
+      headers: divisions.length ? headers : NO_STORE,
+    });
   }
 
   const draw = await getBracketDraw(event, division);
@@ -43,6 +47,7 @@ export async function GET(request: Request) {
   }
   return NextResponse.json(
     { division: draw.division, bracket: draw.bracket, losers: draw.losers, pools: draw.pools },
-    { headers },
+    // Same rule for a draw with no rounds in it: never cache nothing.
+    { headers: isEmptyDraw(draw) ? NO_STORE : headers },
   );
 }

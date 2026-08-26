@@ -63,6 +63,28 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-26 (2) — A blank bracket was a cached upstream hiccup, not a layout bug
+
+- **Symptom:** `/brackets/?event=…&division=…` rendered an empty box. The API
+  was returning `rounds: []` for every Nationals division; Atlanta (completed)
+  was fine. Minutes later the same URL worked.
+- **Cause:** `get()` in `lib/brackets-api.ts` swallows a timeout or a bad
+  status into `null`, so a failed upstream call **builds an empty draw instead
+  of throwing**. Three layers then pinned it: the module cache held it for
+  `TTL_MS` 60s, the route sent `s-maxage=15, stale-while-revalidate=60`, and
+  `BracketPanel` rendered a zero-round bracket as a blank box. One 6s hiccup
+  blanked the bracket for every viewer for over a minute.
+- **Fixed all three.** `load()` only caches a build with real content;
+  `/api/brackets` returns `no-store` on an empty draw or an empty division
+  list; `BracketPanel` shows "No draw to show yet" instead of nothing.
+- **Also killed three infinite spinners** on the same panel: no divisions, a
+  bad `division` id in the URL, and a rejected fetch all left `loading` true
+  forever. The spinner now always resolves and the division pills stay
+  clickable, so a bad link recovers in one click.
+- **Next:** unchanged — ask Kenan (Slack group DM `C0BKZLY7YQG`) for
+  `matchWinnerGoesTo` or `templateMatchID` so pre-play winner lines can draw.
+  See [`docs/DATA-ASKS.md`](docs/DATA-ASKS.md).
+
 ### 2026-08-26 — Bracket cards cut in half; winner lines are blocked upstream
 
 - **The draw now fits on one screen.** `components/live/BracketView.tsx`:

@@ -326,6 +326,21 @@ async function buildAll(uuid: string): Promise<{ divisions: BracketDivision[]; d
   return { divisions, draws };
 }
 
+type Loaded = { divisions: BracketDivision[]; draws: Map<string, BracketDraw> };
+
+/** No divisions, or no division with a single round in it — nothing to show. */
+function isEmpty(v: Loaded): boolean {
+  if (!v.divisions.length) return true;
+  return ![...v.draws.values()].some(
+    (d) => d.bracket.rounds.length || d.pools?.rounds.length || d.losers?.rounds.length,
+  );
+}
+
+/** True when a draw carries nothing renderable (see `isEmpty`). */
+export function isEmptyDraw(d: BracketDraw): boolean {
+  return !d.bracket.rounds.length && !d.pools?.rounds.length && !d.losers?.rounds.length;
+}
+
 const cache = new Map<string, { value: { divisions: BracketDivision[]; draws: Map<string, BracketDraw> }; expires: number }>();
 const inFlight = new Map<string, Promise<{ divisions: BracketDivision[]; draws: Map<string, BracketDraw> }>>();
 
@@ -336,7 +351,11 @@ async function load(uuid: string) {
   if (pending) return pending;
   const p = buildAll(uuid)
     .then((value) => {
-      cache.set(uuid, { value, expires: Date.now() + TTL_MS });
+      // `get()` swallows a timeout or a bad status into null, which builds an
+      // EMPTY draw rather than throwing. Caching that pins a blank bracket for
+      // a full TTL over one 6s upstream hiccup, so only a build with real
+      // content is allowed into the cache; an empty one retries next request.
+      if (!isEmpty(value)) cache.set(uuid, { value, expires: Date.now() + TTL_MS });
       return value;
     })
     .catch(() => ({ divisions: [], draws: new Map<string, BracketDraw>() }));
