@@ -63,6 +63,33 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-26 — Bracket cards cut in half; winner lines are blocked upstream
+
+- **The draw now fits on one screen.** `components/live/BracketView.tsx`:
+  last names only ("Ulery / Minniefield"), one line per team instead of two,
+  the match link moved under the match number in the left rail (the footer row
+  is gone), and score columns render only in rounds that have actually been
+  played. Round gap 16→10, match gap 6→3, card floor 300→210px.
+- **Name shortening never merges two people.** A last name held by two
+  different players anywhere in the draw keeps a first initial — verified live
+  on "L. Jansen / H. Jansen" and "A. Walker / A. Walker".
+- **Zoom control** (100 / 75 / 55%) top-right of the round navigator. At 55%
+  all six rounds and 34 matches of the Nationals women's doubles draw fit one
+  screen with no scrolling.
+- **Feed cleanup** (`lib/brackets-api.ts`): the feed names an empty slot
+  "TBD / TBD" with seed 0 — that now becomes a null participant, so cards no
+  longer print a "0" seed next to a doubled "TBD".
+- **Winner-advancement lines are BLOCKED, not broken.** The draw feed has no
+  bracket position and no advancement pointer, so lines can only be
+  reconstructed after a match is final. `matchNumber` is scheduling order, not
+  bracket order, so positional inference produces the wrong tree — proven
+  against the Atlanta fixtures. Full ask written up in
+  [`docs/DATA-ASKS.md`](docs/DATA-ASKS.md). The code already prefers
+  `matchWinnerGoesTo` / `matchTeamOneComesFrom` when present.
+- **Next:** ask Kenan (Slack group DM `C0BKZLY7YQG`) for `matchWinnerGoesTo`
+  or `templateMatchID` on `/v1/ppa/tournaments/{uuid}/tournament_events/{id}`.
+  Nothing else is needed — the lines light up the day that field arrives.
+
 ### 2026-08-24 — PPA Tour Europe is a region of this site, not a fifth website
 
 - **Bryce's call.** PPA Tour Europe gets built **into** ppatour.com as a region.

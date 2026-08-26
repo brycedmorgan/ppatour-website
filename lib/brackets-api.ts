@@ -103,8 +103,13 @@ function sideOf(m: ApiMatch, team: 1 | 2, decided: boolean, won: boolean): Brack
   const keys = team === 1 ? G1 : G2;
   const games = keys.slice(0, bestOf).map((k) => num(m, k)).filter((g) => g != null) as number[];
   const name = teamName(m, team);
+  // The feed names an unfilled slot "TBD" (seed 0) rather than leaving it empty.
+  const placeholder = !name || name.split(" / ").every((n) => /^tbd$/i.test(n.trim()));
+  const seed = num(m, team === 1 ? "teamOneSeed" : "teamTwoSeed");
   return {
-    participant: name ? { id: teamUuid(m, team) || name, name, seed: num(m, team === 1 ? "teamOneSeed" : "teamTwoSeed") ?? undefined } : null,
+    participant: placeholder
+      ? null
+      : { id: teamUuid(m, team) || name, name, seed: seed ? seed : undefined },
     games,
     winner: decided && won,
   };
@@ -161,8 +166,33 @@ function buildBracket(
   // Reconstruct advancement by following the winning team into its next-round
   // match (elimination only — round-robin pools have no single next match).
   const isElim = stage === "losers" ? true : stage === "pools" ? false : hasKnockout;
+  const idOf = (m: ApiMatch) =>
+    str(m, "matchUuid", "uuid") || `${opts.divisionId}-${num(m, "matchNumber") ?? 0}`;
+  // The feed's own advancement links. `$undefined` is a literal in this payload.
+  const link = (m: ApiMatch, ...keys: string[]) => {
+    const v = str(m, ...keys);
+    return v && v !== "$undefined" ? v : "";
+  };
+  const idsInStage = new Set(path.map(idOf));
+  // Reverse links: a match names the matches its two teams come from, so a
+  // source match can find its target even when it names no target itself.
+  const comesFrom = new Map<string, string>();
+  for (const x of path) {
+    const target = idOf(x);
+    for (const k of ["matchTeamOneComesFrom", "matchTeamTwoComesFrom"]) {
+      const src = link(x, k);
+      if (src && idsInStage.has(src)) comesFrom.set(src, target);
+    }
+  }
+  // Where a winner advances to. Structural links first — they exist BEFORE the
+  // match is played, so an unplayed draw still shows every advancement line.
+  // Following the winning team stays as the fallback for feeds without them.
   const nextIdOf = (m: ApiMatch): string | undefined => {
     if (!isElim) return undefined;
+    const declared = link(m, "matchWinnerGoesTo", "winnerGoesTo", "match_winner_goes_to");
+    if (declared && idsInStage.has(declared)) return declared;
+    const reverse = comesFrom.get(idOf(m));
+    if (reverse) return reverse;
     const w = winnerTeam(m);
     if (!w) return undefined;
     const uuid = teamUuid(m, w);
