@@ -83,6 +83,16 @@ export const KIND_LABEL: Record<StageKind, string> = {
  * exists anywhere in the roster — so this is a verified correction, not a
  * guess. Every other name on the grid matched the roster exactly.
  *
+ * ⚠ FRIDAY HAS ONE CLAYTON MULLEN SET, NOT TWO. The grid named him at both
+ * 2:30–4 PM and 6:30–8 PM; Bryan Renahan's 8/27 music lineup lists Friday as
+ * "Clayton Mullen, 6:30-8pm" only, so the afternoon block was the stage being
+ * turned around for him, not a set. Removed. The lineup Bryan sent agrees with
+ * this file on the other four days (Hawkins, Decker, Longleaf Soul, Bandemic).
+ *
+ * ⚠ "Wave Movement Pilates" is the branded name (Bryan, 8/27); the grid just
+ * said "Pilates". Their logo was supplied and is not used yet — the schedule
+ * rows are text, and a logo per row would out-shout the programme.
+ *
  * ⚠ CANES NIGHT'S TIME HERE IS THE STAGE GRID'S (5–8 PM) AND THE PRESS RELEASE
  * SAYS THE PRO-AM IS 6–9 PM. Both can be true — the stage sits at Courtside
  * Commons and the Pro-Am is on Humana Championship Court — so the row states
@@ -100,7 +110,7 @@ const CARY_STAGE: StageSchedule = {
       slots: [
         { time: "10:00 AM – 1:30 PM", title: "Pro Watch Party", kind: "watch", detail: "House music on the stage" },
         { time: "2:00 PM – 4:00 PM", title: "Brandon Hawkins", kind: "music" },
-        { time: "5:00 PM – 6:00 PM", title: "Pilates Trial Run", kind: "wellness" },
+        { time: "5:00 PM – 6:00 PM", title: "Wave Movement Pilates — Trial Run", kind: "wellness" },
       ],
     },
     {
@@ -108,7 +118,7 @@ const CARY_STAGE: StageSchedule = {
       iso: "2026-09-02",
       dow: "Wed",
       slots: [
-        { time: "9:00 AM – 10:00 AM", title: "Pilates", kind: "wellness" },
+        { time: "9:00 AM – 10:00 AM", title: "Wave Movement Pilates", kind: "wellness" },
         { time: "11:00 AM – 11:30 AM", title: "Interview: Leigh Ann Urban", kind: "interview", detail: "Veolia" },
         { time: "12:00 PM – 12:30 PM", title: "Podcast: KOTC with Tyler & Jimmy", kind: "interview" },
         { time: "1:00 PM – 1:30 PM", title: "Pro autographs: Max Freeman", kind: "autographs" },
@@ -124,7 +134,7 @@ const CARY_STAGE: StageSchedule = {
       iso: "2026-09-03",
       dow: "Thu",
       slots: [
-        { time: "9:00 AM – 10:00 AM", title: "Pilates", kind: "wellness" },
+        { time: "9:00 AM – 10:00 AM", title: "Wave Movement Pilates", kind: "wellness" },
         { time: "11:00 AM – 11:30 AM", title: "Interview: Roscoe Bellamy", kind: "interview" },
         { time: "12:00 PM – 12:30 PM", title: "Dave Fleming's Daily Chalk Talk", kind: "interview" },
         { time: "1:00 PM – 1:30 PM", title: "Pro autographs: Kaitlyn Christian", kind: "autographs" },
@@ -142,7 +152,6 @@ const CARY_STAGE: StageSchedule = {
         { time: "12:00 PM – 12:30 PM", title: "Dave Fleming's Daily Chalk Talk", kind: "interview", detail: "Featuring a meet and greet at Pickleball Central" },
         { time: "1:00 PM – 1:30 PM", title: "Pro autographs: CJ Klinger", kind: "autographs" },
         { time: "1:30 PM – 2:00 PM", title: "Dirty Sodas", kind: "activity", detail: "Beside the stage until the music starts" },
-        { time: "2:30 PM – 4:00 PM", title: "Clayton Mullen", kind: "music" },
         { time: "4:30 PM – 5:00 PM", title: "Pro autographs: Armaan Bhatia", kind: "autographs" },
         { time: "5:00 PM – 5:30 PM", title: "Pickle eating contest", kind: "activity" },
         { time: "6:00 PM – 6:30 PM", title: "Pickle volley competition", kind: "activity" },
@@ -154,7 +163,7 @@ const CARY_STAGE: StageSchedule = {
       iso: "2026-09-05",
       dow: "Sat",
       slots: [
-        { time: "9:00 AM – 10:00 AM", title: "Pilates", kind: "wellness" },
+        { time: "9:00 AM – 10:00 AM", title: "Wave Movement Pilates", kind: "wellness" },
         { time: "11:00 AM – 11:30 AM", title: "Interview: Loren Gold", kind: "interview", detail: "GRSA" },
         { time: "12:00 PM – 12:30 PM", title: "Dave Fleming's Daily Chalk Talk", kind: "interview" },
         { time: "1:00 PM – 1:30 PM", title: "Pro autographs: Mari Humberg", kind: "autographs" },

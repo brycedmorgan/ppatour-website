@@ -404,7 +404,17 @@ export default async function EventPage({ params }: Params) {
    * file. Absent on every stop whose owner has not supplied one, and the venue
    * slot falls back to the aerial photo it has always used.
    */
-  const venueMapUrl = onSiteFor(t.slug).venueMapUrl;
+  const onsite = onSiteFor(t.slug);
+  const venueMapUrl = onsite.venueMapUrl;
+  /**
+   * A portrait map gets a NARROWER column than the landscape aerial. At the
+   * 1.5fr the photo uses, a 3:4 map runs ~890px tall and strands the essentials
+   * column beside a wall of green. Read off the supplied dimensions rather than
+   * hardcoded, so whichever orientation the ops team sends next lays out sanely.
+   */
+  const mapIsPortrait =
+    Boolean(venueMapUrl) &&
+    (onsite.venueMapHeight ?? 0) > (onsite.venueMapWidth ?? 0);
 
   /**
    * One featured on-site happening, pulled from its own announcement article.
@@ -427,8 +437,15 @@ export default async function EventPage({ params }: Params) {
       ? []
       : [
           { id: "stakes", label: "What's at Stake" },
+          // Tickets sits directly under What's at Stake on the page now
+          // (Wesley, 8/27), and the tab order has to follow the section order —
+          // a tab bar that runs in a different order than the page is how you
+          // scroll past the thing you clicked.
+          { id: "tickets", label: "Tickets" },
           { id: "schedule", label: "Order of Play" },
-          ...(showStage ? [{ id: "stage", label: "On the Stage" }] : []),
+          /* No separate stage tab — the programme lives inside the venue
+             section now, and two tabs scrolling into one section reads as a
+             bug. "Venue Guide" covers it. */
           { id: "watch", label: "Watch" },
           { id: "venue", label: "Venue Guide" },
         ]),
@@ -442,7 +459,6 @@ export default async function EventPage({ params }: Params) {
     ...(completed ? [] : [{ id: "involved", label: "Get Involved" }]),
     ...(coverage.length > 0 ? [{ id: "coverage", label: "Coverage" }] : []),
     { id: "sponsors", label: "Sponsors" },
-    ...(completed ? [] : [{ id: "tickets", label: "Tickets" }]),
   ];
 
   const conciergeFacts = {
@@ -934,6 +950,109 @@ export default async function EventPage({ params }: Params) {
         </section>
       )}
 
+      {/* Tickets (upcoming/live only) */}
+      {!completed && (
+      <section id="tickets" className="scroll-mt-[120px] bg-white">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
+                Tickets
+              </p>
+              <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+                Be There in {t.city}
+              </h2>
+            </div>
+            <a
+              href={withUtm(t.registerUrl, {
+                campaign: t.eventCode ?? t.slug,
+                content: "event-tickets-register",
+              })}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
+            >
+              Or register to play ↗
+            </a>
+          </div>
+
+          {!onSale && (
+            /* Not listed on Tixr yet — no prices, no Buy buttons, no link to a
+               group directory the fan would have to search. */
+            <div className="mt-6 border border-ppa-line bg-ppa-paper p-6">
+              <p className="font-display text-xl uppercase leading-none text-ppa-navy">
+                Tickets Coming Soon
+              </p>
+              {/* One template string, not JSX text beside {t.name}. A
+                  multi-line text node gets its leading whitespace trimmed by
+                  JSX, which rendered "Pickleball Masterstickets" — the source
+                  looked correct, so this is worth keeping as one string. */}
+              <p className="mt-2 max-w-xl text-sm leading-relaxed text-ppa-navy/60">
+                {`${t.name} tickets aren’t on sale yet. Prices and seating go live here the moment they open — or join the list below and we’ll tell you.`}
+              </p>
+            </div>
+          )}
+
+          {/* Day-by-day grid when Tixr sells the stop per day; the flat tier
+              cards below are the fallback for stops it doesn't. */}
+          {showGrid && ticketGrid && (
+            <TicketGrid grid={ticketGrid} campaign={t.eventCode ?? t.slug} />
+          )}
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {onSale && !showGrid && ticketTiers.map((tier) => (
+              <div
+                key={tier.name}
+                className="flex flex-col border border-ppa-line bg-ppa-paper p-5"
+              >
+                <p className="font-display text-lg uppercase leading-none text-ppa-navy">
+                  {tier.name}
+                </p>
+                <p className="mt-2 text-sm text-ppa-navy/55">{tier.blurb}</p>
+                <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/40">
+                  From
+                </p>
+                <p className="font-display text-3xl leading-none text-ppa-navy">
+                  ${tier.from}
+                </p>
+                <a
+                  href={withUtm(t.ticketsUrl, {
+                    campaign: t.eventCode ?? t.slug,
+                    content: `event-tickets-${tier.name.toLowerCase().replace(/\s+/g, "-")}`,
+                  })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex h-9 items-center justify-center bg-ppa-blue px-4 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors hover:bg-ppa-blue-deep"
+                >
+                  Buy
+                </a>
+              </div>
+            ))}
+            <div className="flex flex-col border border-ppa-navy bg-ppa-navy p-5 text-white">
+              <p className="font-display text-lg uppercase leading-none">
+                Suites & Hospitality
+              </p>
+              <p className="mt-2 text-sm text-white/65">
+                Courtside boxes, private suites, and player experiences.
+              </p>
+              <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
+                Premium
+              </p>
+              <p className="font-display text-3xl leading-none text-ppa-yellow">
+                Inquire
+              </p>
+              <Link
+                href="/tour/hospitality"
+                className="mt-4 inline-flex h-9 items-center justify-center border border-white/30 px-4 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors hover:bg-white hover:text-ppa-navy"
+              >
+                Learn More
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+      )}
+
       {/* Order of Play */}
       <section id="schedule" className="scroll-mt-[120px] bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -1104,32 +1223,6 @@ export default async function EventPage({ params }: Params) {
         </div>
       </section>
 
-      {/* On the stage — the festival programme running beside the courts.
-          Sits under Order of Play on purpose: competition first, then what
-          else there is to do while you are on site. */}
-      {showStage && stage && (
-        <section id="stage" className="scroll-mt-[120px] bg-white">
-          <div className="mx-auto w-full max-w-6xl px-4 py-12">
-            <div className="flex items-center gap-2.5">
-              <span className="h-2 w-2 bg-[var(--event-accent)]" />
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
-                On the Stage
-              </p>
-            </div>
-            <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-              {stage.name}
-            </h2>
-            {stage.note && (
-              <p className="mt-3 max-w-2xl text-sm text-ppa-navy/55">{stage.note}</p>
-            )}
-            <StageSchedule days={stage.days} />
-            <p className="mt-5 text-xs text-ppa-navy/45">
-              Stage times are subject to change.
-            </p>
-          </div>
-        </section>
-      )}
-
       {/* Watch at home — PGA-style */}
       <section id="watch" className="scroll-mt-[120px] bg-ppa-navy text-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -1263,7 +1356,11 @@ export default async function EventPage({ params }: Params) {
             parking, and what to bring.
           </p>
 
-          <div className="mt-6 grid gap-10 lg:grid-cols-[1.5fr_1fr]">
+          <div
+            className={`mt-6 grid gap-10 ${
+              mapIsPortrait ? "lg:grid-cols-[1fr_1.15fr]" : "lg:grid-cols-[1.5fr_1fr]"
+            }`}
+          >
             {/* The ops team's grounds map where one exists, otherwise a real
                 aerial of the venue (gallery photo → event hero). */}
             <div data-reveal className="self-start">
@@ -1281,15 +1378,19 @@ export default async function EventPage({ params }: Params) {
                   rel="noopener noreferrer"
                   className="group block overflow-hidden border border-ppa-line bg-white"
                 >
-                  <div className="relative aspect-[4/3]">
-                    <Image
-                      src={venueMapUrl}
-                      alt={`${t.venue} grounds map — courts, entry, parking and amenities`}
-                      fill
-                      sizes="(min-width: 1024px) 55vw, 100vw"
-                      className="object-contain"
-                    />
-                  </div>
+                  {/* ⚠ NO FORCED ASPECT. The Cary map is portrait and the one
+                      before it was landscape; a fixed 4:3 box renders a
+                      portrait map small between two fat gutters. Intrinsic
+                      width/height lets the slot size to whatever the ops team
+                      supplies. */}
+                  <Image
+                    src={venueMapUrl}
+                    alt={`${t.venue} grounds map — courts, entry, parking and amenities`}
+                    width={2000}
+                    height={2667}
+                    sizes="(min-width: 1024px) 55vw, 100vw"
+                    className="h-auto w-full object-contain"
+                  />
                   <p className="border-t border-ppa-line px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-navy/50 transition-colors group-hover:text-[var(--event-accent)]">
                     Grounds Map — Tap to Enlarge ↗
                   </p>
@@ -1439,6 +1540,26 @@ export default async function EventPage({ params }: Params) {
                   )}
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* The week's programming, INSIDE At the Venue rather than as its own
+              section — Bryan Renahan, 8/27: "Add a programming section under
+              'At the Venue'", with Canes & the Cup standing out above the rest.
+              Hence the order here: map and essentials, then the Canes callout,
+              then everything else that is on. */}
+          {showStage && stage && (
+            <div id="stage" className="mt-12 scroll-mt-[120px]">
+              <h3 className="event-display text-xl uppercase leading-[1.02] text-ppa-navy sm:text-2xl">
+                {stage.name}
+              </h3>
+              {stage.note && (
+                <p className="mt-2 max-w-2xl text-sm text-ppa-navy/55">{stage.note}</p>
+              )}
+              <StageSchedule days={stage.days} />
+              <p className="mt-5 text-xs text-ppa-navy/45">
+                Stage times are subject to change.
+              </p>
             </div>
           )}
         </div>
@@ -1963,109 +2084,6 @@ export default async function EventPage({ params }: Params) {
 
       {/* Sponsors — who backs this event + become-a-sponsor lead hook */}
       <EventSponsors event={t} />
-
-      {/* Tickets (upcoming/live only) */}
-      {!completed && (
-      <section id="tickets" className="scroll-mt-[120px] bg-white">
-        <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
-                Tickets
-              </p>
-              <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
-                Be There in {t.city}
-              </h2>
-            </div>
-            <a
-              href={withUtm(t.registerUrl, {
-                campaign: t.eventCode ?? t.slug,
-                content: "event-tickets-register",
-              })}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
-            >
-              Or register to play ↗
-            </a>
-          </div>
-
-          {!onSale && (
-            /* Not listed on Tixr yet — no prices, no Buy buttons, no link to a
-               group directory the fan would have to search. */
-            <div className="mt-6 border border-ppa-line bg-ppa-paper p-6">
-              <p className="font-display text-xl uppercase leading-none text-ppa-navy">
-                Tickets Coming Soon
-              </p>
-              {/* One template string, not JSX text beside {t.name}. A
-                  multi-line text node gets its leading whitespace trimmed by
-                  JSX, which rendered "Pickleball Masterstickets" — the source
-                  looked correct, so this is worth keeping as one string. */}
-              <p className="mt-2 max-w-xl text-sm leading-relaxed text-ppa-navy/60">
-                {`${t.name} tickets aren’t on sale yet. Prices and seating go live here the moment they open — or join the list below and we’ll tell you.`}
-              </p>
-            </div>
-          )}
-
-          {/* Day-by-day grid when Tixr sells the stop per day; the flat tier
-              cards below are the fallback for stops it doesn't. */}
-          {showGrid && ticketGrid && (
-            <TicketGrid grid={ticketGrid} campaign={t.eventCode ?? t.slug} />
-          )}
-
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {onSale && !showGrid && ticketTiers.map((tier) => (
-              <div
-                key={tier.name}
-                className="flex flex-col border border-ppa-line bg-ppa-paper p-5"
-              >
-                <p className="font-display text-lg uppercase leading-none text-ppa-navy">
-                  {tier.name}
-                </p>
-                <p className="mt-2 text-sm text-ppa-navy/55">{tier.blurb}</p>
-                <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/40">
-                  From
-                </p>
-                <p className="font-display text-3xl leading-none text-ppa-navy">
-                  ${tier.from}
-                </p>
-                <a
-                  href={withUtm(t.ticketsUrl, {
-                    campaign: t.eventCode ?? t.slug,
-                    content: `event-tickets-${tier.name.toLowerCase().replace(/\s+/g, "-")}`,
-                  })}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 inline-flex h-9 items-center justify-center bg-ppa-blue px-4 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors hover:bg-ppa-blue-deep"
-                >
-                  Buy
-                </a>
-              </div>
-            ))}
-            <div className="flex flex-col border border-ppa-navy bg-ppa-navy p-5 text-white">
-              <p className="font-display text-lg uppercase leading-none">
-                Suites & Hospitality
-              </p>
-              <p className="mt-2 text-sm text-white/65">
-                Courtside boxes, private suites, and player experiences.
-              </p>
-              <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
-                Premium
-              </p>
-              <p className="font-display text-3xl leading-none text-ppa-yellow">
-                Inquire
-              </p>
-              <Link
-                href="/tour/hospitality"
-                className="mt-4 inline-flex h-9 items-center justify-center border border-white/30 px-4 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors hover:bg-white hover:text-ppa-navy"
-              >
-                Learn More
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-      )}
 
       {/* More stops */}
       <section className="bg-ppa-paper">

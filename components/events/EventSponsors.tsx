@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { PartnerWall } from "@/components/global/PartnerWall";
 import { partnerByDisplayName, partners } from "@/lib/home-content";
+import { eventSponsorsFor } from "@/lib/event-sponsors";
+import { withUtm } from "@/lib/utm";
 import type { Tournament } from "@/lib/placeholder-data";
 
 /**
@@ -17,6 +19,8 @@ import type { Tournament } from "@/lib/placeholder-data";
  */
 export function EventSponsors({ event }: { event: Tournament }) {
   const accent = event.brand?.accent ?? "#228be6";
+  /** This stop's own sponsor list, or null to fall back to the tour roster. */
+  const eventSponsors = eventSponsorsFor(event.slug);
   // The named partners on this event's own marquee: a title sponsor embedded
   // in the event name (e.g. "Veolia …", "Rate …") plus the presenting partner.
   //
@@ -98,13 +102,80 @@ export function EventSponsors({ event }: { event: Tournament }) {
           </div>
         )}
 
-        {/* Full official partner family — every designated partner */}
-        <p className="mt-8 text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-navy/45">
-          The Official Partners of the PPA Tour
-        </p>
-        <div className="mt-3">
-          <PartnerWall accentVar={accent} eventName={event.name} />
-        </div>
+        {/* ⚠ THE EVENT'S OWN SPONSORS WHERE WE HAVE THEM, the tour roster
+            otherwise. This page used to show all 30 site-wide partners on every
+            stop — right for "who backs the PPA Tour", wrong for "who backs this
+            event", and it left out the local sponsors who actually did (Bryan
+            Renahan, 8/27). The heading changes with the source so the wall never
+            claims tour partnership for a host town. */}
+        {eventSponsors ? (
+          <>
+            <p className="mt-8 text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-navy/45">
+              Sponsors of {event.name}
+            </p>
+            {/* ⚠ Real gaps and a border per tile, NOT the `gap-px` hairline
+                grid used elsewhere. 13 sponsors in a 4-column grid leaves three
+                empty cells on the last row, and a hairline grid paints its
+                container colour through them as a grey slab. */}
+            <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+              {eventSponsors.map((s) => {
+                const mark = s.logo ? (
+                  <Image
+                    src={s.logo}
+                    alt={s.name}
+                    width={s.logoWidth!}
+                    height={s.logoHeight!}
+                    sizes="170px"
+                    className="max-h-11 w-auto max-w-[150px] object-contain"
+                  />
+                ) : (
+                  /* No mark yet — the name IS the card, same as the roster's
+                     logo-less partners. Never an empty tile. */
+                  <span className="text-center font-display text-sm uppercase leading-tight text-ppa-navy">
+                    {s.name}
+                  </span>
+                );
+                const inner = (
+                  <>
+                    <span className="flex h-16 items-center justify-center">{mark}</span>
+                    {s.role && (
+                      <span className="mt-2 block text-center text-[9px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+                        {s.role}
+                      </span>
+                    )}
+                  </>
+                );
+                return s.website ? (
+                  <a
+                    key={s.name}
+                    href={withUtm(s.website, {
+                      campaign: event.eventCode ?? event.slug,
+                      content: `event-sponsor-${s.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
+                    })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-col justify-center border border-ppa-line bg-white p-4 transition-colors hover:border-ppa-navy/25 hover:bg-ppa-paper"
+                  >
+                    {inner}
+                  </a>
+                ) : (
+                  <div key={s.name} className="flex flex-col justify-center border border-ppa-line bg-white p-4">
+                    {inner}
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        ) : (
+          <>
+            <p className="mt-8 text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-navy/45">
+              The Official Partners of the PPA Tour
+            </p>
+            <div className="mt-3">
+              <PartnerWall accentVar={accent} eventName={event.name} />
+            </div>
+          </>
+        )}
 
         {/* Become-a-sponsor CTA — the lead hook */}
         <div className="mt-8 flex flex-col items-start justify-between gap-4 bg-ppa-navy p-6 sm:flex-row sm:items-center">

@@ -92,6 +92,38 @@ const JOBS = [
    * version on the wall, ask Vita Pop for their one-colour lockup.
    */
   ["", "VP __ Logo (White & Black_Transparent).png", "vita-pop", "Vita Pop (white fill + black outline)"],
+
+  /**
+   * Nationals LOCAL sponsors, added 8/27 (Bryan Renahan). These three back the
+   * Cary event only, not the tour, so they live in lib/event-sponsors.ts and
+   * are deliberately NOT on the site-wide roster.
+   *
+   * ⚠ TWO OF THEM ARRIVED IN PRINT FORMATS THE PIPELINE CANNOT READ, and the
+   * conversions below are recorded so nobody repeats the archaeology:
+   *
+   *  • Greater Raleigh Sports Alliance came as `GRSA logo_1531.eps`. That is a
+   *    binary DOS-EPS: a 4-byte C5D0D3C6 header with offsets to the PostScript
+   *    and to an embedded TIFF preview. The PostScript needs Ghostscript, which
+   *    this machine does not have — but the TIFF preview extracts with a plain
+   *    Buffer slice at offset 1072410, length 103228. It is only 328x121 and
+   *    the TIFF itself is malformed (unsorted tags, tile errors) so it needs
+   *    sharp's `failOn: "none"`, but it decodes clean and legible.
+   *    ⚠ 328px is BELOW the 900px the other marks ship at — fine at the ~170px
+   *    card size, soft on a 3x phone. Replace with a real PNG/SVG when Delaney
+   *    or Jason sends one.
+   *
+   *  • The Town of Cary came as `TOC_Logo-R_Blue-Orange-Star_CMYK.ai`. An .ai
+   *    saved PDF-compatible IS a PDF (`%PDF-1.6` header), and headless Chrome
+   *    renders it — captured at deviceScaleFactor 2 and cropped inside the
+   *    artboard, which yields ~2140x880 on white. Verified all four corners of
+   *    the crop are pure white, i.e. it stayed inside the page.
+   *
+   * Both staged into Downloads as plain PNGs so this script's normal trim /
+   * cap / pick-smallest path handles them like any other mark.
+   */
+  ["", "Black_Dominator_Logo (1).png", "dominator", "Dominator"],
+  ["", "grsa-logo-from-eps.png", "greater-raleigh-sports-alliance", "Greater Raleigh Sports Alliance"],
+  ["", "cary-logo-from-ai.png", "town-of-cary", "Town of Cary (the mark reads CARY)"],
 ];
 
 /**
