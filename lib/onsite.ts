@@ -50,7 +50,21 @@ const ON_SITE_BY_SLUG: Record<string, OnSiteInfo> = {
   // Nationals — Aug 31–Sep 6, Cary Tennis Park. Owner: Haley Brezec.
   // Parking, ADA, shuttle and rideshare are already answered by the event
   // team's submitted copy in lib/event-guides.ts; these five are the gap.
-  "veolia-pickleball-national-championships": {},
+  "veolia-pickleball-national-championships": {
+    /**
+     * The ops team's official grounds map, v9, supplied 8/27. Encoded from a
+     * 3456×2592 / 3.0MB JPEG to 2400px q80 (444KB) — deliberately NOT crushed
+     * further: this is a wayfinding asset whose whole job is small text
+     * (court numbers, "6800 Good Hope Church Rd"), and it is rendered at a
+     * size people pinch-zoom into.
+     *
+     * ⚠ It is 4:3, which is the aspect the event page's venue slot already
+     * uses — but it must render `object-contain`, never `object-cover` with
+     * the Ken Burns pan the aerial photo gets. A cropped or drifting map is a
+     * map with a corner missing.
+     */
+    venueMapUrl: "/ppa/venue-maps/cary-tennis-park.jpg",
+  },
 };
 
 export function onSiteFor(slug: string): OnSiteInfo {

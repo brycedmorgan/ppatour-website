@@ -28,8 +28,12 @@ import { getPlaylistVideos } from "@/lib/youtube";
 import { Countdown } from "@/components/motion/Countdown";
 import { getBroadcast } from "@/lib/broadcast";
 import { getEventGuide, parkingFor, parkingText } from "@/lib/event-guides";
+import { onSiteFor } from "@/lib/onsite";
+import { spotlightFor } from "@/lib/event-spotlight";
 import { ParkingDetails } from "@/components/events/ParkingDetails";
 import { getEventSchedule } from "@/lib/event-schedule";
+import { stageScheduleFor } from "@/lib/event-stage";
+import { StageSchedule } from "@/components/events/StageSchedule";
 import { getEvents } from "@/lib/events-api";
 import { resolveEvent } from "@/lib/resolve-event";
 import { getArticlesForEvent } from "@/lib/news-articles";
@@ -387,6 +391,28 @@ export default async function EventPage({ params }: Params) {
    */
   const showDraw = !completed && Boolean(drawUuid) && field.published;
 
+  /**
+   * Festival-stage lineup, where the event team has published one. Gated on
+   * `!completed` for the same reason the Order of Play is: a lineup of music
+   * and autograph sessions that already happened is clutter on a recap page.
+   */
+  const stage = stageScheduleFor(t.slug);
+  const showStage = !completed && Boolean(stage);
+
+  /**
+   * The ops team's grounds map, shared with the /today screen so both read one
+   * file. Absent on every stop whose owner has not supplied one, and the venue
+   * slot falls back to the aerial photo it has always used.
+   */
+  const venueMapUrl = onSiteFor(t.slug).venueMapUrl;
+
+  /**
+   * One featured on-site happening, pulled from its own announcement article.
+   * Hidden once the event is over — a promo for a pro-am that already
+   * happened is the same clutter as a lineup that already played.
+   */
+  const spotlight = completed ? null : spotlightFor(t.slug);
+
   const TABS = [
     { id: "overview", label: "Overview" },
     ...(showResults
@@ -402,6 +428,7 @@ export default async function EventPage({ params }: Params) {
       : [
           { id: "stakes", label: "What's at Stake" },
           { id: "schedule", label: "Order of Play" },
+          ...(showStage ? [{ id: "stage", label: "On the Stage" }] : []),
           { id: "watch", label: "Watch" },
           { id: "venue", label: "Venue Guide" },
         ]),
@@ -1077,6 +1104,32 @@ export default async function EventPage({ params }: Params) {
         </div>
       </section>
 
+      {/* On the stage — the festival programme running beside the courts.
+          Sits under Order of Play on purpose: competition first, then what
+          else there is to do while you are on site. */}
+      {showStage && stage && (
+        <section id="stage" className="scroll-mt-[120px] bg-white">
+          <div className="mx-auto w-full max-w-6xl px-4 py-12">
+            <div className="flex items-center gap-2.5">
+              <span className="h-2 w-2 bg-[var(--event-accent)]" />
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
+                On the Stage
+              </p>
+            </div>
+            <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+              {stage.name}
+            </h2>
+            {stage.note && (
+              <p className="mt-3 max-w-2xl text-sm text-ppa-navy/55">{stage.note}</p>
+            )}
+            <StageSchedule days={stage.days} />
+            <p className="mt-5 text-xs text-ppa-navy/45">
+              Stage times are subject to change.
+            </p>
+          </div>
+        </section>
+      )}
+
       {/* Watch at home — PGA-style */}
       <section id="watch" className="scroll-mt-[120px] bg-ppa-navy text-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -1211,29 +1264,61 @@ export default async function EventPage({ params }: Params) {
           </p>
 
           <div className="mt-6 grid gap-10 lg:grid-cols-[1.5fr_1fr]">
-            {/* A real aerial of the grounds (venue photo, aerial-first), not an
-                illustrative map. Always resolves: gallery photo → event hero. */}
+            {/* The ops team's grounds map where one exists, otherwise a real
+                aerial of the venue (gallery photo → event hero). */}
             <div data-reveal className="self-start">
-              <div className="relative aspect-[4/3] overflow-hidden border border-ppa-line bg-ppa-navy">
-                <Image
-                  src={t.gallery?.[1] ?? t.gallery?.[0] ?? t.image}
-                  alt={`${t.venue} — the grounds`}
-                  fill
-                  sizes="(min-width: 1024px) 55vw, 100vw"
-                  className="animate-kenburns object-cover object-center will-change-transform motion-reduce:animate-none"
-                />
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-ppa-navy/90 via-ppa-navy/25 to-transparent p-5 pt-16">
-                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/65">
-                    The Grounds
+              {venueMapUrl ? (
+                /* ⚠ A MAP GETS THE OPPOSITE TREATMENT TO THE AERIAL. No
+                   `object-cover`, no Ken Burns pan and no bottom scrim: each
+                   of those crops, drifts or covers part of the artwork, and on
+                   a site map the part covered is the off-site parking address.
+                   `object-contain` on white shows the whole thing. It also
+                   links to the full file, because the point of a grounds map
+                   is pinch-zooming it at the gate. */
+                <a
+                  href={venueMapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group block overflow-hidden border border-ppa-line bg-white"
+                >
+                  <div className="relative aspect-[4/3]">
+                    <Image
+                      src={venueMapUrl}
+                      alt={`${t.venue} grounds map — courts, entry, parking and amenities`}
+                      fill
+                      sizes="(min-width: 1024px) 55vw, 100vw"
+                      className="object-contain"
+                    />
+                  </div>
+                  <p className="border-t border-ppa-line px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-navy/50 transition-colors group-hover:text-[var(--event-accent)]">
+                    Grounds Map — Tap to Enlarge ↗
                   </p>
-                  <p className="mt-0.5 event-display text-lg uppercase leading-tight text-white sm:text-xl">
-                    {t.venue}
-                  </p>
+                </a>
+              ) : (
+                <div className="relative aspect-[4/3] overflow-hidden border border-ppa-line bg-ppa-navy">
+                  <Image
+                    src={t.gallery?.[1] ?? t.gallery?.[0] ?? t.image}
+                    alt={`${t.venue} — the grounds`}
+                    fill
+                    sizes="(min-width: 1024px) 55vw, 100vw"
+                    className="animate-kenburns object-cover object-center will-change-transform motion-reduce:animate-none"
+                  />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-ppa-navy/90 via-ppa-navy/25 to-transparent p-5 pt-16">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/65">
+                      The Grounds
+                    </p>
+                    <p className="mt-0.5 event-display text-lg uppercase leading-tight text-white sm:text-xl">
+                      {t.venue}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
-            <div data-reveal className="flex flex-col gap-px border border-ppa-line bg-ppa-line">
+            {/* `self-start` or the grid stretches this column to the map's
+                height and the container's hairline background shows through
+                below the last row as a grey filler block. */}
+            <div data-reveal className="flex flex-col gap-px self-start border border-ppa-line bg-ppa-line">
               {[
                 {
                   k: "Gates & Sessions",
@@ -1285,6 +1370,77 @@ export default async function EventPage({ params }: Params) {
               ))}
             </div>
           </div>
+
+          {/* One featured on-site happening — thumbnail left, what it is right.
+              Sits under the map and the essentials because it is a reason to
+              come, not something you need in order to get in. */}
+          {/* ⚠ A DIV, NOT A LINK. It used to be one big <Link>; two buttons
+              cannot live inside that — nesting interactive elements is invalid
+              HTML and gives a screen reader one target where there are two.
+              The thumbnail carries the link to the article instead, and the
+              buttons are the real affordances. */}
+          {spotlight && (
+            <div
+              data-reveal
+              className="mt-10 grid gap-5 border border-ppa-line bg-white p-4 sm:grid-cols-[minmax(0,20rem)_1fr] sm:items-center sm:gap-7 sm:p-5"
+            >
+              <Link
+                href={spotlight.href}
+                tabIndex={-1}
+                aria-hidden
+                className="group relative block aspect-[16/9] overflow-hidden bg-ppa-navy"
+              >
+                <Image
+                  src={spotlight.article.image}
+                  alt=""
+                  fill
+                  sizes="(min-width: 640px) 20rem, 100vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                  style={
+                    spotlight.article.imagePosition
+                      ? { objectPosition: spotlight.article.imagePosition }
+                      : undefined
+                  }
+                />
+              </Link>
+              <div className="min-w-0">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--event-accent)]">
+                  {spotlight.eyebrow}
+                </p>
+                <h3 className="mt-1.5 event-display text-lg uppercase leading-[1.08] text-ppa-navy sm:text-xl">
+                  {spotlight.article.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-ppa-navy/60">
+                  {spotlight.article.dek}
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2.5">
+                  <Link
+                    href={spotlight.href}
+                    className="flex h-10 items-center border border-ppa-navy/25 px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy transition-colors hover:border-ppa-navy hover:bg-ppa-navy hover:text-white active:scale-[0.98]"
+                  >
+                    {spotlight.cta}
+                  </Link>
+                  {/* ⚠ Tagged HERE, not in the data. The article stores this
+                      URL clean precisely so each placement can stamp its own
+                      `utm_content` — reusing the article footer's tag would
+                      report a venue-section click as an article click. */}
+                  {spotlight.ticketUrl && (
+                    <a
+                      href={withUtm(spotlight.ticketUrl, {
+                        campaign: t.eventCode ?? t.slug,
+                        content: "event-venue-spotlight",
+                      })}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex h-10 items-center bg-[var(--event-accent)] px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:brightness-90 active:scale-[0.98]"
+                    >
+                      {spotlight.ticketLabel}
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
       </>
