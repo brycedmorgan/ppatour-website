@@ -10,6 +10,13 @@
  * ⚠ KEEP IN LOCKSTEP WITH `lib/tv-schedule.ts`, which carries the same windows
  * for /watch and /watch/tv. The two are separate transcriptions of one sheet and
  * have drifted before (7/26: two events' TC windows disagreed).
+ *
+ * ⚠ BUT DO NOT RECONCILE THESE AGAINST THE ORDER OF PLAY. Broadcast windows and
+ * `lib/event-schedule.ts`'s first-serve and gate times are independent — Wesley,
+ * 8/27: "they are two different things. Sometimes the broadcast times will not
+ * match the order of play times." Coverage can open before play starts or run
+ * past its end. Nationals Thursday is the live example: PBTV from 9AM against a
+ * 10AM first serve, and both are correct. A mismatch here is not a bug.
  */
 export type BroadcastSlot = {
   round: string;
@@ -100,7 +107,7 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
   "veolia-pickleball-national-championships": [
     { round: "RD 64", day: "Tuesday", window: "10AM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
     { round: "RD 32", day: "Wednesday", window: "10AM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "RD 16", day: "Thursday", window: "10AM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "RD 16", day: "Thursday", window: "9AM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
     { round: "RD 16", day: "Thursday", window: "11:30AM ET - 5PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
     { round: "QF's", day: "Friday", window: "10AM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
     { round: "QF's", day: "Friday", window: "11:30AM ET - 5PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },

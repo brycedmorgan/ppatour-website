@@ -15,8 +15,24 @@ export type ProDay = {
   date: string; // "Aug 31"
   dow: string;
   label: string;
+  /**
+   * When play starts and when the gates open.
+   *
+   * ⚠ THESE ARE NOT BROADCAST TIMES AND ARE NOT DERIVED FROM THEM — Wesley,
+   * 8/27: "have broadcast and order of play separate, they are two different
+   * things. Sometimes the broadcast times will not match the order of play
+   * times." A window in `lib/broadcast.ts` that starts before or after first
+   * serve is normal, not a discrepancy to fix. Nationals Thursday is the live
+   * example: PBTV opens 9AM against a 10AM first serve.
+   *
+   * So do NOT shift these to match a broadcast sheet, and do not add a check
+   * that asserts they agree. `gates` in particular tells a family when to
+   * physically arrive; it changes when the event team says so, and on nothing
+   * else.
+   */
   firstServe: string;
   gates: string;
+  /** Channel(s) carrying the day. The WINDOWS live in lib/broadcast.ts. */
   live?: string;
   /**
    * Amateur / junior / senior sessions running THIS day — rendered in the
@@ -73,27 +89,35 @@ export const eventSchedules: Record<string, EventSchedule> = {
       },
       {
         date: "Sep 4", dow: "Fri", label: "Quarterfinals", firstServe: "10:00 AM", gates: "9:00 AM", live: "PBTV",
-        amateur: [{ label: "Amateur skill & age brackets" }],
+        amateur: [
+          { label: "Amateur skill & age brackets" },
+          { label: "Junior PPA — Singles", detail: "Showcase Court 1" },
+        ],
       },
       {
         date: "Sep 5", dow: "Sat", label: "Semifinals", firstServe: "9:00 AM", gates: "8:00 AM", live: "PBTV",
-        amateur: [{ label: "Amateur skill & age brackets" }],
+        amateur: [
+          { label: "Amateur skill & age brackets" },
+          { label: "Junior PPA — Doubles", detail: "Carvana Grandstand Court" },
+        ],
       },
       {
         date: "Sep 6", dow: "Sun", label: "Championship Sunday — Gold & Bronze", firstServe: "10:00 AM", gates: "9:00 AM", live: "Tennis Channel · PBTV",
-        amateur: [{ label: "Amateur skill & age brackets", detail: "Medal matches" }],
+        amateur: [
+          { label: "Amateur skill & age brackets", detail: "Medal matches" },
+          { label: "Junior PPA — Mixed Doubles", detail: "Carvana Grandstand Court" },
+        ],
       },
     ],
     // ⚠ ONLY the sessions whose day the tournament has not published. The
-    // registration page still says TBD for all three (re-checked 7/31) — the
     // amateur bracket week and the camp moved onto their real days above.
-    // Move these three up the moment the days land.
+    //
+    // ⚠ JUNIOR PPA CAME OFF THIS LIST ON 8/27 — it had sat here since 7/16.
+    // The PBTV broadcast note dates it: Singles Friday on SC1, Doubles Saturday
+    // and Mixed Sunday on the Carvana Grandstand. It is now on those three days
+    // above. Senior Open and MoneyBall are still genuinely undated; move each
+    // up the moment its day lands, and delete this block when the last one goes.
     amateur: [
-      {
-        when: "Day TBA",
-        label: "Junior PPA",
-        detail: "Selections confirmed by email after the Aug 24 registration deadline.",
-      },
       {
         when: "Day TBA",
         label: "Senior Open",
