@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Bracket, BracketDivision } from "@/lib/bracket-types";
+import { mergeBracket } from "@/lib/bracket-merge";
 import { BracketView } from "@/components/live/BracketView";
 
 /**
@@ -76,9 +77,14 @@ export function BracketPanel({
           // A 404 or a parse failure has to clear the spinner too — otherwise a
           // bad division id in the URL spins forever instead of saying so.
           if (d) {
-            setBracket(d.bracket);
-            setLosers(d.losers ?? null);
-            setPools(d.pools ?? null);
+            // ⚠ MERGE, DO NOT REPLACE. `setBracket(d.bracket)` here is what
+            // made the draw vanish and change shape between polls: any thin
+            // or empty response overwrote a complete bracket. `mergeBracket`
+            // keeps the richer structure and applies the newest match data on
+            // top, so a poll only ever advances the draw. See lib/bracket-merge.
+            setBracket((prev) => mergeBracket(prev, d.bracket));
+            setLosers((prev) => mergeBracket(prev, d.losers ?? null));
+            setPools((prev) => mergeBracket(prev, d.pools ?? null));
             // Default view per division (once, so polling doesn't reset a
             // manual toggle) — round-robin events open on their pool play.
             if (first) {
@@ -92,6 +98,15 @@ export function BracketPanel({
           if (active) setLoading(false);
         });
     setLoading(true);
+    // ⚠ Clear on a DIVISION CHANGE (this effect re-runs), never on a poll.
+    // Merging is what protects a draw mid-poll; across divisions it would be
+    // wrong — and for a division with no losers/pools bracket the incoming
+    // value is null, which `mergeBracket` reads as "nothing arrived, keep what
+    // you have". Without this reset that keeps the PREVIOUS division's losers
+    // bracket behind the toggle.
+    setBracket(null);
+    setLosers(null);
+    setPools(null);
     load();
     const id = window.setInterval(load, POLL_MS);
     return () => {
