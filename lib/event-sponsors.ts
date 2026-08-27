@@ -85,11 +85,11 @@ const EVENT_SPONSORS_BY_SLUG: Record<string, EventSponsorRef[]> = {
       logoHeight: 121,
     },
     {
-      name: "Town of Cary",
+      name: "City of Cary",
       website: "https://www.carync.gov",
-      role: "Host Town",
+      role: "Host City",
       // The mark itself reads only "CARY" — it settles neither City nor Town.
-      logo: "/ppa/sponsors/town-of-cary.png",
+      logo: "/ppa/sponsors/city-of-cary.png",
       logoWidth: 900,
       logoHeight: 260,
     },

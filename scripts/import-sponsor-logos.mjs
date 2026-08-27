@@ -112,7 +112,7 @@ const JOBS = [
    *    card size, soft on a 3x phone. Replace with a real PNG/SVG when Delaney
    *    or Jason sends one.
    *
-   *  • The Town of Cary came as `TOC_Logo-R_Blue-Orange-Star_CMYK.ai`. An .ai
+   *  • Cary came as `TOC_Logo-R_Blue-Orange-Star_CMYK.ai`. An .ai
    *    saved PDF-compatible IS a PDF (`%PDF-1.6` header), and headless Chrome
    *    renders it — captured at deviceScaleFactor 2 and cropped inside the
    *    artboard, which yields ~2140x880 on white. Verified all four corners of
@@ -123,7 +123,10 @@ const JOBS = [
    */
   ["", "Black_Dominator_Logo (1).png", "dominator", "Dominator"],
   ["", "grsa-logo-from-eps.png", "greater-raleigh-sports-alliance", "Greater Raleigh Sports Alliance"],
-  ["", "cary-logo-from-ai.png", "town-of-cary", "Town of Cary (the mark reads CARY)"],
+  // Published as "City of Cary" (Bryan wrote City; Wesley confirmed 8/27),
+  // though the source file is the Town of Cary's TOC_Logo and the mark reads
+  // only "CARY".
+  ["", "cary-logo-from-ai.png", "city-of-cary", "City of Cary (the mark reads CARY)"],
 ];
 
 /**
