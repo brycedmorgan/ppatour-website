@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T22:41:47Z",
+  "updated_at": "2026-08-28T22:47:41Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -3825,6 +3825,96 @@
       "event_id": "204325",
       "event": "PPA Palm Springs",
       "ticket": "VIP*"
+    },
+    {
+      "at": "2026-08-28T22:47:41Z",
+      "type": "price_change",
+      "event_id": "169802",
+      "event": "Major League Pickleball New York Finals- Session 2",
+      "ticket": "Courtside Session 2",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 35.83,
+        "to": 92.05
+      }
+    },
+    {
+      "at": "2026-08-28T22:47:41Z",
+      "type": "price_change",
+      "event_id": "169804",
+      "event": "Major League Pickleball New York Finals - Saturday: Session 3",
+      "ticket": "Courtside Session 3",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 92.05,
+        "to": 35.83
+      }
+    },
+    {
+      "at": "2026-08-28T22:47:41Z",
+      "type": "availability_change",
+      "event_id": "169804",
+      "event": "Major League Pickleball New York Finals - Saturday: Session 3",
+      "ticket": "Courtside Session 3",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-28T22:47:41Z",
+      "type": "availability_change",
+      "event_id": "169803",
+      "event": "Major League Pickleball New York Finals - Saturday: Session 4",
+      "ticket": "Courtside Session 4",
+      "sale_state": {
+        "from": "SOLD_OUT",
+        "to": "CLOSED"
+      }
+    },
+    {
+      "at": "2026-08-28T22:47:41Z",
+      "type": "price_change",
+      "event_id": "184760",
+      "event": "Veolia Pickleball National Championships Sunday - Championships",
+      "ticket": "Sunday Courtside+",
+      "base_price": {
+        "from": 220,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 243.1,
+        "to": 243.1
+      }
+    },
+    {
+      "at": "2026-08-28T22:47:41Z",
+      "type": "availability_change",
+      "event_id": "184760",
+      "event": "Veolia Pickleball National Championships Sunday - Championships",
+      "ticket": "Sunday Courtside+",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-28T22:47:41Z",
+      "type": "event_removed",
+      "event_id": "169837",
+      "event": "Major League Pickleball New York Finals 2026 - Friday: Session 1 & 2"
+    },
+    {
+      "at": "2026-08-28T22:47:41Z",
+      "type": "event_removed",
+      "event_id": "169799",
+      "event": "Major League Pickleball New York Finals- Session 1"
     }
   ]
 }

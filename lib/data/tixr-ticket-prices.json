@@ -1,11 +1,11 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-08-27T22:41:47Z",
-  "event_count": 65,
-  "ticket_type_count": 965,
+  "generated_at": "2026-08-28T22:47:41Z",
+  "event_count": 63,
+  "ticket_type_count": 954,
   "series_breakdown": {
-    "Major League Pickleball": 9,
+    "Major League Pickleball": 7,
     "PPA Challenger Series": 3,
     "PPA Tour": 53
   },
@@ -132,117 +132,6 @@
       ]
     },
     {
-      "event_id": "169837",
-      "name": "Major League Pickleball New York Finals 2026 - Friday: Session 1 & 2",
-      "series": "Major League Pickleball",
-      "status": "PUBLISHED",
-      "start_date": "2026-08-28",
-      "end_date": "2026-08-28",
-      "venue": {
-        "name": "CityPickle At Wollman Rink",
-        "city": "New York",
-        "state": "NY"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-finals-2026-friday-session-1-2-169837",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Courtside Session 1 & 2",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 30,
-          "all_in_price": 35.83
-        },
-        {
-          "name": "Courtside Session 1 & 2",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 70,
-          "all_in_price": 81.22
-        },
-        {
-          "name": "Courtside Session 1 & 2",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.71
-        },
-        {
-          "name": "Courtside Session 1 & 2",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 140,
-          "all_in_price": 156.66
-        },
-        {
-          "name": "VIP Session 1 & 2",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 350,
-          "all_in_price": 384.49
-        }
-      ]
-    },
-    {
-      "event_id": "169799",
-      "name": "Major League Pickleball New York Finals- Session 1",
-      "series": "Major League Pickleball",
-      "status": "PUBLISHED",
-      "start_date": "2026-08-28",
-      "end_date": "2026-08-28",
-      "venue": {
-        "name": "CityPickle At Wollman Rink",
-        "city": "New York",
-        "state": "NY"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-finals-session-1-169799",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Box Suite Friday Session 1",
-          "category": "BOOTH",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Courtside Session 1",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 30,
-          "all_in_price": 35.83
-        },
-        {
-          "name": "Courtside Session 1",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.66
-        },
-        {
-          "name": "Courtside Session 1",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 60,
-          "all_in_price": 70.39
-        },
-        {
-          "name": "Courtside Session 1",
-          "category": "STANDARD",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 92.05
-        },
-        {
-          "name": "VIP Session 1",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 0
-        }
-      ]
-    },
-    {
       "event_id": "169802",
       "name": "Major League Pickleball New York Finals- Session 2",
       "series": "Major League Pickleball",
@@ -267,23 +156,16 @@
         {
           "name": "Courtside Session 2",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 40,
+          "sale_state": "CLOSED",
+          "base_price": null,
           "all_in_price": 46.66
         },
         {
           "name": "Courtside Session 2",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 60,
+          "sale_state": "CLOSED",
+          "base_price": null,
           "all_in_price": 70.39
-        },
-        {
-          "name": "Courtside Session 2",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 92.05
         },
         {
           "name": "Courtside Session 2",
@@ -291,6 +173,13 @@
           "sale_state": "SOLD_OUT",
           "base_price": null,
           "all_in_price": 35.83
+        },
+        {
+          "name": "Courtside Session 2",
+          "category": "STANDARD",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 92.05
         },
         {
           "name": "VIP Session 2",
@@ -380,13 +269,6 @@
           "category": "STANDARD",
           "sale_state": "SOLD_OUT",
           "base_price": null,
-          "all_in_price": 35.83
-        },
-        {
-          "name": "Courtside Session 3",
-          "category": "STANDARD",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
           "all_in_price": 75.81
         },
         {
@@ -395,6 +277,13 @@
           "sale_state": "HIDE",
           "base_price": null,
           "all_in_price": 92.05
+        },
+        {
+          "name": "Courtside Session 3",
+          "category": "STANDARD",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 35.83
         },
         {
           "name": "VIP Session 3",
@@ -430,16 +319,16 @@
         {
           "name": "Courtside Session 4",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 70,
-          "all_in_price": 81.22
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 35.83
         },
         {
           "name": "Courtside Session 4",
           "category": "STANDARD",
-          "sale_state": "SOLD_OUT",
+          "sale_state": "CLOSED",
           "base_price": null,
-          "all_in_price": 35.83
+          "all_in_price": 81.22
         },
         {
           "name": "Courtside Session 4",
@@ -451,7 +340,7 @@
         {
           "name": "Courtside Session 4",
           "category": "STANDARD",
-          "sale_state": "SOLD_OUT",
+          "sale_state": "CLOSED",
           "base_price": null,
           "all_in_price": 102.88
         },
@@ -1922,8 +1811,8 @@
         {
           "name": "Sunday Courtside+",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 220,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 243.1
         },
         {
