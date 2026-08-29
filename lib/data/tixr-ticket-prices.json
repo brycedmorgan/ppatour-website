@@ -1,11 +1,11 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-08-28T22:47:41Z",
-  "event_count": 63,
-  "ticket_type_count": 954,
+  "generated_at": "2026-08-29T16:54:52Z",
+  "event_count": 62,
+  "ticket_type_count": 948,
   "series_breakdown": {
-    "Major League Pickleball": 7,
+    "Major League Pickleball": 6,
     "PPA Challenger Series": 3,
     "PPA Tour": 53
   },
@@ -132,65 +132,6 @@
       ]
     },
     {
-      "event_id": "169802",
-      "name": "Major League Pickleball New York Finals- Session 2",
-      "series": "Major League Pickleball",
-      "status": "PUBLISHED",
-      "start_date": "2026-08-28",
-      "end_date": "2026-08-29",
-      "venue": {
-        "name": "CityPickle At Wollman Rink",
-        "city": "New York",
-        "state": "NY"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-finals-session-2-169802",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Box Suite Friday Session 2",
-          "category": "BOOTH",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Courtside Session 2",
-          "category": "STANDARD",
-          "sale_state": "CLOSED",
-          "base_price": null,
-          "all_in_price": 46.66
-        },
-        {
-          "name": "Courtside Session 2",
-          "category": "STANDARD",
-          "sale_state": "CLOSED",
-          "base_price": null,
-          "all_in_price": 70.39
-        },
-        {
-          "name": "Courtside Session 2",
-          "category": "STANDARD",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 35.83
-        },
-        {
-          "name": "Courtside Session 2",
-          "category": "STANDARD",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 92.05
-        },
-        {
-          "name": "VIP Session 2",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 0
-        }
-      ]
-    },
-    {
       "event_id": "173667",
       "name": "PPA Challenger Series - Peachtree City",
       "series": "PPA Challenger Series",
@@ -260,13 +201,6 @@
         {
           "name": "Courtside Session 3",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 45,
-          "all_in_price": 52.08
-        },
-        {
-          "name": "Courtside Session 3",
-          "category": "STANDARD",
           "sale_state": "SOLD_OUT",
           "base_price": null,
           "all_in_price": 75.81
@@ -284,6 +218,13 @@
           "sale_state": "SOLD_OUT",
           "base_price": null,
           "all_in_price": 35.83
+        },
+        {
+          "name": "Courtside Session 3",
+          "category": "STANDARD",
+          "sale_state": "CLOSED",
+          "base_price": null,
+          "all_in_price": 52.08
         },
         {
           "name": "VIP Session 3",
@@ -399,8 +340,8 @@
         {
           "name": "VIP Session 3 & 4",
           "category": "STANDARD",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 350,
           "all_in_price": 384.49
         }
       ]
@@ -1193,8 +1134,8 @@
         {
           "name": "Friday Evening Courtside+",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 140,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 156.66
         },
         {
@@ -1783,9 +1724,9 @@
         {
           "name": "Sunday Courtside",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 156.66
+          "sale_state": "OPEN",
+          "base_price": 120,
+          "all_in_price": 135.05
         },
         {
           "name": "Sunday Courtside",
@@ -1799,7 +1740,7 @@
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 135.05
+          "all_in_price": 156.66
         },
         {
           "name": "Sunday Courtside+",
@@ -5789,8 +5730,8 @@
         {
           "name": "Play with the Pro’s (4.0-4.5)",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 50,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 57.36
         },
         {

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28T22:47:41Z",
+  "updated_at": "2026-08-29T16:54:52Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -3915,6 +3915,131 @@
       "type": "event_removed",
       "event_id": "169799",
       "event": "Major League Pickleball New York Finals- Session 1"
+    },
+    {
+      "at": "2026-08-29T16:54:52Z",
+      "type": "price_change",
+      "event_id": "169804",
+      "event": "Major League Pickleball New York Finals - Saturday: Session 3",
+      "ticket": "Courtside Session 3",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 35.83,
+        "to": 52.08
+      }
+    },
+    {
+      "at": "2026-08-29T16:54:52Z",
+      "type": "availability_change",
+      "event_id": "169804",
+      "event": "Major League Pickleball New York Finals - Saturday: Session 3",
+      "ticket": "Courtside Session 3",
+      "sale_state": {
+        "from": "SOLD_OUT",
+        "to": "CLOSED"
+      }
+    },
+    {
+      "at": "2026-08-29T16:54:52Z",
+      "type": "price_change",
+      "event_id": "169839",
+      "event": "Major League Pickleball New York Finals 2026 - Saturday: Session 3 & 4",
+      "ticket": "VIP Session 3 & 4",
+      "base_price": {
+        "from": null,
+        "to": 350
+      },
+      "all_in_price": {
+        "from": 384.49,
+        "to": 384.49
+      }
+    },
+    {
+      "at": "2026-08-29T16:54:52Z",
+      "type": "availability_change",
+      "event_id": "169839",
+      "event": "Major League Pickleball New York Finals 2026 - Saturday: Session 3 & 4",
+      "ticket": "VIP Session 3 & 4",
+      "sale_state": {
+        "from": "SOLD_OUT",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-08-29T16:54:52Z",
+      "type": "price_change",
+      "event_id": "184766",
+      "event": "Veolia Pickleball National Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening Courtside+",
+      "base_price": {
+        "from": 140,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 156.66,
+        "to": 156.66
+      }
+    },
+    {
+      "at": "2026-08-29T16:54:52Z",
+      "type": "availability_change",
+      "event_id": "184766",
+      "event": "Veolia Pickleball National Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening Courtside+",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-29T16:54:52Z",
+      "type": "price_change",
+      "event_id": "184760",
+      "event": "Veolia Pickleball National Championships Sunday - Championships",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 135.05,
+        "to": 156.66
+      }
+    },
+    {
+      "at": "2026-08-29T16:54:52Z",
+      "type": "price_change",
+      "event_id": "176502",
+      "event": "Veolia PPA Malibu",
+      "ticket": "Play with the Pro’s (4.0-4.5)",
+      "base_price": {
+        "from": 50,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 57.36,
+        "to": 57.36
+      }
+    },
+    {
+      "at": "2026-08-29T16:54:52Z",
+      "type": "availability_change",
+      "event_id": "176502",
+      "event": "Veolia PPA Malibu",
+      "ticket": "Play with the Pro’s (4.0-4.5)",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-29T16:54:52Z",
+      "type": "event_removed",
+      "event_id": "169802",
+      "event": "Major League Pickleball New York Finals- Session 2"
     }
   ]
 }
