@@ -13,6 +13,7 @@ import { MetaPixel } from "@/components/global/MetaPixel";
 import { MarketingTags } from "@/components/global/MarketingTags";
 import { AccessibilityWidget } from "@/components/global/AccessibilityWidget";
 import { AppChrome } from "@/components/app/AppChrome";
+import { JackalopeAnalytics } from "@/components/global/JackalopeAnalytics";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_INDEXABLE, SITE_URL } from "@/lib/site";
@@ -216,6 +217,12 @@ export default function RootLayout({
          */}
         <VercelAnalytics />
         <SpeedInsights />
+        {/* Pickleball Inc's own first-party pipe — the portfolio view GA4
+            cannot give us, because its property holds five of our sites at
+            once. Cookieless, so it sits outside the consent banner for the
+            same reason the two above do; see the component for the mechanism
+            and for when that stops being true. */}
+        <JackalopeAnalytics />
         {/* UserWay accessibility toolbar. Sits here, outside the consent and
             production gates, for the same reason the two above do — see the
             component for why gating an accessibility widget behind cookie

@@ -63,6 +63,39 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-30 — Jackalope's first-party tag goes on, outside the consent banner
+
+- **One line in the root layout: `<JackalopeAnalytics />`.** Loads
+  `pickleball.usejackalope.com/api/public/tag.js` (~2.3 KB, `afterInteractive`,
+  cached a day at the edge). This site is now the first real property reporting
+  into Jackalope → Marketing → Web Analytics.
+- **Why a fourth analytics tool.** GA4 is the marketing stack; Vercel Analytics
+  is the honest denominator; this is the **portfolio** view. GA4 property
+  358407319 holds five of the company's sites in ONE property, so every number
+  out of it is wrong until somebody remembers a Hostname filter. This puts
+  ppatour.com beside MLP, Pickleball Central and Jackalope in a table that needs
+  no filter to be true.
+- **Not a duplicate of `lib/vacations/track.ts`.** That beacon exists so the
+  Vacations funnel joins to `stripe_charges`; this is site-wide traffic. `/vacations`
+  is split out as its own property server-side by path prefix, so Lainey's funnel
+  does not vanish inside the tour's pageviews. One tag covers both.
+- **⚠ Production-gated but NOT consent-gated, and the reason is stronger than
+  Vercel Analytics'.** No cookie; nothing written to the device except a per-tab
+  `sessionStorage` id that dies with the tab; the visitor id is a one-way hash of
+  a **server-side salt that rotates at midnight**, with the previous day's salt
+  deleted — so a visitor cannot be recognised tomorrow by us or by anyone holding
+  the database. No IP or user-agent is stored; there is no column for either.
+  **If anyone ever gives that tag a persistent id, this component moves behind
+  the banner with MarketingTags.** Privacy decision, not a deploy decision.
+- **Previews are immune twice over.** `ANALYTICS_ENABLED` stops the request, and
+  Jackalope resolves the property server-side from the Origin host — a
+  `*.vercel.app` preview is not a registered property, so a beacon from one is
+  dropped rather than mis-filed.
+
+**Next session picks up:** nothing here. MLP is deferred on the Jackalope side
+until that site is rebuilt.
+
+
 ### 2026-08-26 (3) — Bracket CSS pulled back onto the brand tokens
 
 - **Audited the bracket against the site's own idioms.** The card itself was
