@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T17:03:51Z",
+  "updated_at": "2026-08-31T19:17:58Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -4185,6 +4185,102 @@
       "type": "event_removed",
       "event_id": "169839",
       "event": "Major League Pickleball New York Finals 2026 - Saturday: Session 3 & 4"
+    },
+    {
+      "at": "2026-08-31T19:17:58Z",
+      "type": "price_change",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Thursday: Free Youth Clinic",
+      "base_price": {
+        "from": 0,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 0,
+        "to": 0
+      }
+    },
+    {
+      "at": "2026-08-31T19:17:58Z",
+      "type": "availability_change",
+      "event_id": "184656",
+      "event": "Veolia Pickleball National Championships",
+      "ticket": "Thursday: Free Youth Clinic",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-08-31T19:17:58Z",
+      "type": "price_change",
+      "event_id": "184765",
+      "event": "Veolia Pickleball National Championships Friday Morning - Singles and Mxd Doubles Quarterfinals",
+      "ticket": "Friday Morning Courtside+",
+      "base_price": {
+        "from": null,
+        "to": 140
+      },
+      "all_in_price": {
+        "from": 135.05,
+        "to": 156.66
+      }
+    },
+    {
+      "at": "2026-08-31T19:17:58Z",
+      "type": "availability_change",
+      "event_id": "184765",
+      "event": "Veolia Pickleball National Championships Friday Morning - Singles and Mxd Doubles Quarterfinals",
+      "ticket": "Friday Morning Courtside+",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-08-31T19:17:58Z",
+      "type": "price_change",
+      "event_id": "195335",
+      "event": "PPA Mesa Friday - Quarterfinals",
+      "ticket": "Friday VIP",
+      "base_price": {
+        "from": 400,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 437.59,
+        "to": 329.54
+      }
+    },
+    {
+      "at": "2026-08-31T19:17:58Z",
+      "type": "availability_change",
+      "event_id": "195335",
+      "event": "PPA Mesa Friday - Quarterfinals",
+      "ticket": "Friday VIP",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-08-31T19:17:58Z",
+      "type": "event_removed",
+      "event_id": "169798",
+      "event": "Major League Pickleball New York City Finals 2026"
+    },
+    {
+      "at": "2026-08-31T19:17:58Z",
+      "type": "event_removed",
+      "event_id": "173667",
+      "event": "PPA Challenger Series - Peachtree City"
+    },
+    {
+      "at": "2026-08-31T19:17:58Z",
+      "type": "event_removed",
+      "event_id": "169805",
+      "event": "Major League Pickleball New York Finals - Championship Sunday: Session 5"
     }
   ]
 }

@@ -1,13 +1,13 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-08-30T17:03:51Z",
-  "event_count": 59,
-  "ticket_type_count": 931,
+  "generated_at": "2026-08-31T19:17:58Z",
+  "event_count": 56,
+  "ticket_type_count": 907,
   "series_breakdown": {
-    "Major League Pickleball": 3,
-    "PPA Challenger Series": 3,
-    "PPA Tour": 53
+    "PPA Tour": 53,
+    "PPA Challenger Series": 2,
+    "Major League Pickleball": 1
   },
   "field_notes": {
     "base_price": "Face value set by the organizer (USD). null when the tier is sold out / not on public sale.",
@@ -16,225 +16,6 @@
     "status": "Tixr event publication status."
   },
   "events": [
-    {
-      "event_id": "169798",
-      "name": "Major League Pickleball New York City Finals 2026",
-      "series": "Major League Pickleball",
-      "status": "PUBLISHED",
-      "start_date": "2026-08-28",
-      "end_date": "2026-08-30",
-      "venue": {
-        "name": "CityPickle At Wollman Rink",
-        "city": "New York",
-        "state": "NY"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-city-finals-2026-169798",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Friday-Sunday Box Suite",
-          "category": "BOOTH",
-          "sale_state": "OPEN",
-          "base_price": 30000,
-          "all_in_price": 32499.37
-        },
-        {
-          "name": "MLP New York Finals 2026- Friday Pass",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "MLP New York Finals 2026- Friday Session 1",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "MLP New York Finals 2026- Friday Session 2",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "MLP New York Finals 2026- Saturday Pass",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "MLP New York Finals 2026- Saturday Session 3",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "MLP New York Finals 2026- Saturday Session 4",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "MLP New York Finals- Championship Sunday",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "VIP",
-          "category": "GA",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 319.51
-        },
-        {
-          "name": "Courtside",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 113.71
-        },
-        {
-          "name": "Courtside*",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 113.71
-        },
-        {
-          "name": "Courtside**",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 113.71
-        },
-        {
-          "name": "Courtside***",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 113.71
-        },
-        {
-          "name": "Media",
-          "category": "VENDOR",
-          "sale_state": "OPEN",
-          "base_price": 0,
-          "all_in_price": 0
-        }
-      ]
-    },
-    {
-      "event_id": "173667",
-      "name": "PPA Challenger Series - Peachtree City",
-      "series": "PPA Challenger Series",
-      "status": "PUBLISHED",
-      "start_date": "2026-08-28",
-      "end_date": "2026-08-31",
-      "venue": {
-        "name": "Let's Go Pickleball & Padel",
-        "city": "Peachtree City",
-        "state": "GA"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/ppa-challenger-series-peachtree-city-173667",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Friday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 15,
-          "all_in_price": 19.55
-        },
-        {
-          "name": "Saturday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 15,
-          "all_in_price": 19.55
-        },
-        {
-          "name": "Sunday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 15,
-          "all_in_price": 19.55
-        },
-        {
-          "name": "Weekend Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        }
-      ]
-    },
-    {
-      "event_id": "169805",
-      "name": "Major League Pickleball New York Finals - Championship Sunday: Session 5",
-      "series": "Major League Pickleball",
-      "status": "PUBLISHED",
-      "start_date": "2026-08-30",
-      "end_date": "2026-08-30",
-      "venue": {
-        "name": "CityPickle At Wollman Rink",
-        "city": "New York",
-        "state": "NY"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-finals-championship-sunday-session-5-169805",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Box Suite Sunday Session 5",
-          "category": "BOOTH",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Courtside Session 5",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 30,
-          "all_in_price": 35.83
-        },
-        {
-          "name": "Courtside Session 5",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.71
-        },
-        {
-          "name": "Courtside Session 5",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 140,
-          "all_in_price": 157.04
-        },
-        {
-          "name": "Courtside Session 5",
-          "category": "STANDARD",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 189.53
-        },
-        {
-          "name": "VIP Session 5",
-          "category": "STANDARD",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 438.65
-        }
-      ]
-    },
     {
       "event_id": "184656",
       "name": "Veolia Pickleball National Championships",
@@ -351,8 +132,8 @@
         {
           "name": "Thursday: Free Youth Clinic",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 0,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 0
         },
         {
@@ -1115,16 +896,16 @@
         {
           "name": "Friday Morning Courtside+",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 156.66
+          "sale_state": "OPEN",
+          "base_price": 120,
+          "all_in_price": 135.05
         },
         {
           "name": "Friday Morning Courtside+",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 135.05
+          "sale_state": "OPEN",
+          "base_price": 140,
+          "all_in_price": 156.66
         },
         {
           "name": "Friday Morning Grandstand (Singles & Mxd Doubles Quarterfinals)",
@@ -1554,16 +1335,16 @@
         {
           "name": "Sunday Courtside",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 120,
-          "all_in_price": 135.05
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 156.66
         },
         {
           "name": "Sunday Courtside",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 156.66
+          "all_in_price": 135.05
         },
         {
           "name": "Sunday Courtside",
@@ -1996,13 +1777,6 @@
           "name": "Friday VIP",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 300,
-          "all_in_price": 329.54
-        },
-        {
-          "name": "Friday VIP",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 350,
           "all_in_price": 383.56
         },
@@ -2012,6 +1786,13 @@
           "sale_state": "OPEN",
           "base_price": 400,
           "all_in_price": 437.59
+        },
+        {
+          "name": "Friday VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 329.54
         }
       ],
       "parent_event_id": "195027"
