@@ -719,9 +719,9 @@ export default async function EventPage({ params }: Params) {
                 </Link>
               </>
             )}
+            {!completed && <FirstServeCountdown targetIso={t.startDate} />}
           </div>
         </div>
-        {!completed && <FirstServeCountdown targetIso={t.startDate} />}
         <div className={`relative h-1 ${completed ? "bg-ppa-yellow" : "bg-[var(--event-accent)]"}`} />
       </section>
 

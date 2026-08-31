@@ -63,6 +63,40 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-31 — The hero countdown ran over "At the Event"; it is a flex item now
+
+- **Patrick Sorensen, Slack:** the "First Serve In" clock on an event page hero
+  printed straight through the **"At the Event →"** button. Fixed.
+- **Cause:** `FirstServeCountdown` was `absolute bottom-8 right-4`, i.e. positioned
+  against the hero `<section>` and unaware of anything in the page flow. The CTA row
+  grew to **five buttons** when "At the Event" shipped (8/19), the row reached the
+  right edge, and the clock sat on top of it. Nothing in the old layout could detect
+  the collision — it was a matter of how wide the buttons happened to be.
+- **Fix: the clock is now a flex item inside the CTA row**, `hidden w-full text-right
+  lg:block`. It takes its own line at the end of the row and right-aligns there, so
+  the two can no longer share pixels at any width. Absolute positioning is gone.
+- **⚠ `lg:ml-auto` was tried first and looked like Tailwind hadn't generated it.**
+  It had; see the service-worker note below. `w-full` is what shipped anyway — the
+  five buttons need ~1,054px and the container caps at `max-w-6xl` (1,152px), so the
+  clock never fits beside them and a full-width line is the deterministic answer.
+- **Measured over CDP at 1024 / 1200 / 1440 / 1600 / 390** (never `resize_window` —
+  it reported success and left the layout viewport at 1512 again): **zero overlaps,
+  zero horizontal overflow** at every width. Below `lg` the desktop clock stays
+  hidden and the eyebrow's "N Days Out" countdown is unchanged. tsc + eslint clean.
+- **⚠ THE REAL TIME SINK: THIS SITE'S SERVICE WORKER SERVES STALE JS IN LOCAL DEV.**
+  The PWA registers a service worker on `localhost:3000` with caches `ppa-v1-shell` /
+  `ppa-v1-assets`. It kept handing the browser an **older component chunk** — so an
+  edit on disk, a dev-server restart, `rm -rf .next` and a cache-busting query string
+  all showed the previous className, and a probe for a Tailwind utility read the old
+  stylesheet and reported the class as **never generated**. Both conclusions were
+  wrong. **If a local change appears not to apply, run
+  `navigator.serviceWorker.getRegistrations()` and clear `caches.keys()` before
+  suspecting the code, the build or Tailwind.**
+- ⚠ Verified on **Pickleball World Championships**, not Nationals: Nationals starts
+  today (8/31), so `diff <= 0` and the clock correctly renders nothing there.
+- **Not pushed** — committed locally, waiting on Bryce. Patrick has not been answered
+  in Slack yet.
+
 ### 2026-08-30 — Jackalope's first-party tag goes on, outside the consent banner
 
 - **One line in the root layout: `<JackalopeAnalytics />`.** Loads

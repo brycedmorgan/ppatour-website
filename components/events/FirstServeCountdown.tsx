@@ -4,8 +4,12 @@ import { useEffect, useState } from "react";
 
 /**
  * Broadcast-style hero clock — "First Serve In" with days/hours/minutes/
- * seconds ticking live in the corner of the event hero. Renders nothing
+ * seconds ticking live at the right end of the event hero. Renders nothing
  * until mounted (no hydration drift) and nothing once the event starts.
+ *
+ * It sits in the CTA row as a flex item, not absolutely positioned. It used
+ * to be `absolute bottom-8 right-4`, which ran straight over the "At the
+ * Event →" button once the row grew to five CTAs.
  */
 export function FirstServeCountdown({ targetIso }: { targetIso: string }) {
   const [now, setNow] = useState<number | null>(null);
@@ -34,7 +38,7 @@ export function FirstServeCountdown({ targetIso }: { targetIso: string }) {
   ];
 
   return (
-    <div className="absolute bottom-8 right-4 hidden text-right motion-safe:animate-fade lg:block xl:right-8">
+    <div className="hidden w-full text-right motion-safe:animate-fade lg:block">
       <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-white/60">
         First Serve In
       </p>
