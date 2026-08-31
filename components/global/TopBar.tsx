@@ -36,7 +36,6 @@ export function TopBar() {
    * goes live, and both read the same calendar check.
    */
   const pathname = usePathname();
-  const onLiveRoute = isLivePath(pathname);
   const { live } = useTourIsLive();
 
   /**
@@ -51,24 +50,27 @@ export function TopBar() {
    * retiring — and this was the last piece still keyed to the URL, so the
    * homepage got a one-line summary while the rehearsal got the real thing.
    *
-   * ⚠ THE MARQUEE STAYS ON /live ONLY. LiveBar is a broadcast header — a
-   * scrolling "Live · Round 16 · <tournament>" strip plus social — and the ask
-   * was for the score ticker with the match cards, not a second banner above the
-   * tour's front page. One line here adds it if that changes.
+   * The marquee comes with it (Wesley, 8/31: "it should also have that marquee
+   * text that we have when it goes live"). Both halves of the broadcast header
+   * now render wherever the tour is live, so the homepage and /live are the same
+   * chrome reading the same feed — which is the point of /live being a rehearsal
+   * rather than a second design.
+   *
+   * ⚠ Every word of the marquee is derived (see LiveBar's own note). It used to
+   * be two constants naming the April Atlanta test event; if it ever goes back to
+   * a hardcoded phrase, this is now the tour's front page carrying it.
    */
-  const showRail = live && (onLiveRoute || isHomePath(pathname));
+  const showBroadcastChrome = live && (isLivePath(pathname) || isHomePath(pathname));
 
-  // On /live the marquee + score ticker scroll away; only the nav sticks.
-  if (showRail) {
+  // The marquee + score ticker scroll away; only the nav sticks.
+  if (showBroadcastChrome) {
     return (
       <>
         {/* Suspense: both read useSearchParams (?partner=) through
             useLiveTicker, which needs a boundary to build/prerender. */}
-        {onLiveRoute && (
-          <Suspense fallback={<div className="h-[41px] bg-ppa-navy" />}>
-            <LiveBar />
-          </Suspense>
-        )}
+        <Suspense fallback={<div className="h-[41px] bg-ppa-navy" />}>
+          <LiveBar />
+        </Suspense>
         <Suspense fallback={<div className="h-[104px] bg-ppa-navy" />}>
           {/* ⚠ No logo/href passed on purpose. These were pinned to the Veolia
               Atlanta Championships — the April test event — so the broadcast
