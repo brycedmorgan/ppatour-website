@@ -405,7 +405,24 @@ export default async function EventPage({ params }: Params) {
    * true only once a real, non-placeholder player is in a draw — which is the
    * same thing "the draw is out" means to a fan.
    */
-  const showDraw = !completed && Boolean(drawUuid) && field.published;
+  /**
+   * ⚠ AND IT RETIRES THE MOMENT PLAY STARTS (Wesley, 8/31, mid-Nationals: "now
+   * that we are live, we don't need The Draw section, since we show the live
+   * brackets in the Live Scores section. Remember that for future tournaments as
+   * well."). The Live Scores panel carries the same bracket with results in it,
+   * so keeping a second, frozen copy above it is two answers to one question —
+   * and the stale one is higher up the page.
+   *
+   * Gated on `showLiveScores` rather than on `isTournamentLive` on purpose: if
+   * the live panel cannot render (no tournament UUID resolved), the draw is
+   * still the best thing we have and stays. It only gives way to something that
+   * actually replaced it.
+   *
+   * This is a rule, not a Nationals edit — every future stop follows it, because
+   * both flags are derived from the calendar and the feed.
+   */
+  const showDraw =
+    !completed && !showLiveScores && Boolean(drawUuid) && field.published;
 
   /**
    * Festival-stage lineup, where the event team has published one. Gated on
