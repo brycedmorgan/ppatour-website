@@ -63,6 +63,54 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-31 (pt. 2) — Cary parks in the grass lot, and the map ships with the line
+
+- **The event team's addition, pasted verbatim** into Cary's General Parking
+  block: *"Parking is located in the large grass lot. Please refer to the
+  attached map and follow all onsite signage to ensure you are parking in the
+  correct lot."* Pushed to main (`44e0bda`).
+- **That copy points at a map, so `ParkingSection` gained an optional `image`**
+  and `ParkingDetails` renders it under the section's paragraphs — the words and
+  the thing they point at have to arrive together. The supplied aerial (Phillips
+  Farms, free grass lot outlined in blue, shuttle pickup marked) lives at
+  `public/ppa/parking/<slug>.jpg`, keyed by slug so the pairing is legible from
+  the filesystem, same as `public/ppa/heroes/`.
+- **⚠ A PARKING MAP IS SUPPLIED ART, NEVER ONE WE DRAW OR DERIVE** — the same
+  rule the copy is under. A lot outlined on a satellite photo tells a driver
+  where to leave their car, and a guessed outline sends them to the wrong field.
+  One entry per event or nothing; `parkingText()` omits it, so the concierge and
+  the search index never describe an image they can't show.
+- **Encoding is 1600px / mozjpeg q72 / 4:4:4, and the subsampling is the reason.**
+  Satellite noise made the house 2048 q64 hero standard 333 KB here; the blue
+  outline and the "SHUTTLE PICKUP" label are saturated blue on green, which is
+  exactly what 4:2:0 smears. 295 KB, label checked by cropping and looking at it.
+  `sizes="(min-width: 1024px) 640px, 100vw"` is measured, not guessed — the
+  accordion draws 543px at 1440, the Plan-Your-Trip card 510px.
+- **⚠ FIXED A REAL LEGIBILITY BUG IN THE SAME COMPONENT, found while verifying:
+  the section headings were invisible on the on-site screen.**
+  `/events/<year>/<slug>/today` is white-on-navy and `ParkingDetails` hardcoded
+  `text-ppa-navy/50` on its headings, so **all four of Cary's read as blank gaps
+  on the page someone opens standing in the parking lot** — pre-existing since
+  the Today route shipped 8/19, and Nationals starts today. New `tone` prop,
+  default `"light"`, so the event page and NationalsLive are unchanged.
+- **⚠ `border-current/15` COMPILES AND THEN RESOLVES TO ALPHA 0 IN CHROME.** The
+  first pass framed the map with a border tinted off the inherited text colour so
+  it would work on both grounds; Tailwind v4 emits
+  `color-mix(in oklab, currentcolor 15%, transparent)` and the computed
+  `border-top-color` measured `oklab(0 0 0 / 0)` — an invisible frame, not a
+  subtle one. Dropped the border entirely, matching the venue grounds map on the
+  same page. **Don't reach for an opacity modifier on `current` here.**
+- Verified per surface on the dev server that owns the repo dir, not by grep:
+  event page (accordion + Plan Your Trip), the `-live` route and the Today screen
+  all render the line and the map; **Las Vegas — parking not finalized — still
+  renders the holding line and no map.** Over CDP at 1440 and 390: **zero
+  horizontal overflow**, map loads at the 640w/1200w candidates the `sizes` hint
+  predicts. tsc + eslint clean.
+- ⚠ `npm run build` not run — a `next dev` owns `.next` on :3000 (use
+  `BUILD_DIST_DIR=.next-buildcheck` if a build is wanted). The change adds no
+  hook or client/server boundary, and all four routes were rendered.
+
+
 ### 2026-08-31 — The hero countdown ran over "At the Event"; it is a flex item now
 
 - **Patrick Sorensen, Slack:** the "First Serve In" clock on an event page hero
