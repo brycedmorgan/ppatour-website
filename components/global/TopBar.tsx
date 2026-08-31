@@ -66,7 +66,11 @@ export function TopBar() {
   // main floating header travels down the page.
   return (
     <div className="site-chrome sticky top-0 z-50">
-      <HideOnScroll>
+      {/* ⚠ The ticker stays put while the tour is on. Off-season it still
+          retires on first scroll, which is what Bryce asked for — but a live
+          score is the most useful thing in the chrome, not something to read
+          once and dismiss. `live` is the same calendar check the hero flips on. */}
+      <HideOnScroll keep={live}>
         {/* Suspense: ScoreTicker reads live matches through useLiveTicker, which
             reads useSearchParams. The fallback is the bar's exact height so the
             chrome never shifts. */}
