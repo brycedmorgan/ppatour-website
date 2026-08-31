@@ -94,9 +94,22 @@ export function useLiveTicker({
         if (res.ok) {
           const data = (await res.json()) as TickerResult;
           if (!active) return;
-          setMatches(data.matches);
-          setTournament(data.tournament);
-          ok = true;
+          /**
+           * ⚠ HTTP 200 IS NOT THE SAME AS "THE FEED ANSWERED". The route
+           * serves a JSON body whatever happens upstream, so a timeout arrived
+           * here as a perfectly good response carrying an empty list — and this
+           * wrote it straight over five live matches. That is the "No matches on
+           * court right now" Wesley saw appear minutes into a session.
+           *
+           * `ok` is the payload's own word for whether the upstream call
+           * worked. A failure is now treated exactly like a network error: keep
+           * what we already have on screen and retry in RETRY_MS.
+           */
+          if (data.ok) {
+            setMatches(data.matches);
+            setTournament(data.tournament);
+            ok = true;
+          }
         }
       } catch {
         // keep last-known on transient errors
@@ -114,9 +127,18 @@ export function useLiveTicker({
         if (failures >= RETRIES_BEFORE_EMPTY) setLoaded(true);
       }
 
-      // Self-scheduling rather than setInterval, so the delay can depend on
-      // whether the last attempt actually worked.
-      timer = setTimeout(load, ok ? POLL_MS : RETRY_MS);
+      /**
+       * Self-scheduling rather than setInterval, so the delay can depend on
+       * whether the last attempt actually worked.
+       *
+       * ⚠ THE FAST RETRY IS BUDGETED, NOT INDEFINITE. It exists to recover from
+       * the FIRST bad fetch quickly; once the budget is spent the feed is
+       * genuinely down (or the ?partner= is one the API won't serve) and a
+       * 2-second poll from every open tab is a load problem of our own making.
+       * After that it settles back to the normal cadence and keeps trying.
+       */
+      const spent = failures >= RETRIES_BEFORE_EMPTY;
+      timer = setTimeout(load, ok || spent ? POLL_MS : RETRY_MS);
     };
 
     void load();
@@ -152,6 +174,38 @@ export const PBTV_WATCH_URL =
 /** A match's own live/archived stream link, falling back to PickleballTV. */
 export function matchWatchUrl(m: TickerMatch): string {
   return m.watchUrl || PBTV_WATCH_URL;
+}
+
+/**
+ * Which service a watch link actually opens.
+ *
+ * ⚠ THE CARD USED TO PRINT THE PICKLEBALLTV MARK ON EVERY LIVE MATCH, whatever
+ * the link went to. Wesley, 8/31: "the watch URL is showing a pickleball.com
+ * logo, but the match is live on YouTube." Measured against the live Nationals
+ * feed the same minute: of the six matches carrying a watch link, SIX were
+ * `youtube.com/live/…` and none were PickleballTV — so the mark was wrong on
+ * every card that had one, sending viewers to YouTube under another broadcaster's
+ * logo.
+ *
+ * Derived from the resolved URL rather than from a field, so a match with no
+ * link of its own — which `matchWatchUrl` sends to PickleballTV — correctly
+ * shows the PickleballTV mark. Anything we don't recognise gets a neutral
+ * "Watch" rather than a guessed brand.
+ */
+export type WatchPlatform = "youtube" | "pbtv" | "other";
+
+export function watchPlatform(url: string): WatchPlatform {
+  let host = "";
+  try {
+    host = new URL(url).hostname.toLowerCase();
+  } catch {
+    return "other";
+  }
+  if (host === "youtu.be" || host === "youtube.com" || host.endsWith(".youtube.com")) {
+    return "youtube";
+  }
+  if (host === "pickleballtv.com" || host.endsWith(".pickleballtv.com")) return "pbtv";
+  return "other";
 }
 
 /** The PickleballTV live stream — the fallback when no marquee-court match has

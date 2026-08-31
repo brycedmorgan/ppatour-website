@@ -56,6 +56,19 @@ export type TickerResult = {
   matches: TickerMatch[];
   tournament: TickerTournament | null;
   partner: string;
+  /**
+   * Did this payload come from an upstream call that actually worked.
+   *
+   * ⚠ WITHOUT THIS, A TIMEOUT AND AN EMPTY COURT SCHEDULE ARE THE SAME BYTES.
+   * Every failure used to resolve to `{ matches: [] }` with a 200, so the rail
+   * said "No matches on court right now" during Nationals with five matches in
+   * progress. Reproduced on the live feed: one poll took 5.04s (the upstream
+   * timeout), returned 45 bytes, and the seven polls around it returned 12,137.
+   * A consumer cannot tell those apart unless the payload says so.
+   */
+  ok: boolean;
+  /** Last known-good data, served because the live call failed just now. */
+  stale?: boolean;
 };
 
 /** Raw match fields (camelCase) we rely on from homepage_score_ticker. */
@@ -258,6 +271,28 @@ const RESULT_TTL_MS = 5_000;
 let partnerCache: CacheEntry<string | null> | null = null;
 let partnerInFlight: Promise<string | null> | null = null;
 const resultCache = new Map<string, CacheEntry<TickerResult>>();
+/**
+ * The last result per partner that came back from a working call — the same
+ * last-known-good idea `plannedLastGood` (below) already applies to start times,
+ * for the same reason: a transient upstream failure must not un-publish data we
+ * know to be true seconds ago.
+ *
+ * ⚠ IT EXPIRES. Served indefinitely it would keep a finished tournament's
+ * matches on the front page for as long as upstream stayed unreachable. Two
+ * minutes is long enough to cover a burst of timeouts and short enough that a
+ * genuinely-stale board admits it.
+ */
+const lastGoodResult = new Map<string, { value: TickerResult; at: number }>();
+const LAST_GOOD_MAX_MS = 120_000;
+
+/** What to serve when the live call failed: recent real data, else nothing. */
+function fallbackFor(partner: string): TickerResult {
+  const held = lastGoodResult.get(partner);
+  if (held && Date.now() - held.at < LAST_GOOD_MAX_MS) {
+    return { ...held.value, stale: true };
+  }
+  return { matches: [], tournament: null, partner, ok: false };
+}
 let plannedCache: CacheEntry<Map<string, string>> | null = null;
 let plannedInFlight: Promise<Map<string, string>> | null = null;
 /**
@@ -347,7 +382,9 @@ async function fetchScores(
     cache: "no-store",
     signal: AbortSignal.timeout(TIMEOUT_MS),
   });
-  if (!res.ok) return { matches: [], tournament: null, partner };
+  // ⚠ THROW, DON'T RETURN EMPTY. A 429 or a 500 is not "no matches on court";
+  // resolving it to an empty list is what published that claim mid-tournament.
+  if (!res.ok) throw new Error(`homepage_score_ticker ${res.status}`);
 
   const json = (await res.json()) as { results?: { results?: ApiMatch[] } };
   const rows = json.results?.results ?? [];
@@ -356,55 +393,58 @@ async function fetchScores(
   const tournament: TickerTournament | null = first
     ? { title: first.tournamentTitle || "", logo: first.tournamentLogo || null }
     : null;
-  return { matches, tournament, partner };
+  return { matches, tournament, partner, ok: true };
 }
 
 export async function fetchLiveTicker(partnerArg?: string): Promise<TickerResult> {
   const { token, base } = config();
-  const empty: TickerResult = { matches: [], tournament: null, partner: partnerArg ?? "" };
-  if (!token) return empty;
 
-  try {
-    /**
-     * ⚠ THE DEFAULT IS THE MAIN PPA TOUR, AND IT IS NOT AUTO-PICKED (Wesley,
-     * 8/20: "Main PPA Tournament should be the only content that shows on the
-     * actual home page. Especially anything in that top nav and the hero.").
-     *
-     * This used to call `pickActivePartner`, which returns the FIRST partner
-     * with matches running across PPA / PPA Australia / PPA Asia. So with no PPA
-     * event on, ppatour.com's own top bar advertised a sister tour — measured on
-     * the live homepage: "Up Next · Round 16 · C. Wang / Y. Long vs Q. Chen /
-     * A. Brown · 9:00 AM CST", a PPA Asia 500 match in Shenzhen. Every consumer
-     * of this feed is site chrome (the site-wide ticker, the /live marquee and
-     * score rail, /watch's Live Now band), so the auto-pick put sister-tour
-     * content on the tour's own furniture.
-     *
-     * A sister tour still reaches those surfaces on request — `?partner=` is
-     * honoured end to end (use-live-ticker reads it from the URL, /api/ticker
-     * forwards it), which is how the PPA Asia window is being used to rehearse
-     * live behaviour. It is opt-in now rather than automatic.
-     */
-    const partner = partnerArg || process.env.PB_TICKER_PARTNER || "PPA";
+  /**
+   * ⚠ THE DEFAULT IS THE MAIN PPA TOUR, AND IT IS NOT AUTO-PICKED (Wesley,
+   * 8/20: "Main PPA Tournament should be the only content that shows on the
+   * actual home page. Especially anything in that top nav and the hero.").
+   *
+   * This used to call `pickActivePartner`, which returns the FIRST partner
+   * with matches running across PPA / PPA Australia / PPA Asia. So with no PPA
+   * event on, ppatour.com's own top bar advertised a sister tour — measured on
+   * the live homepage: "Up Next · Round 16 · C. Wang / Y. Long vs Q. Chen /
+   * A. Brown · 9:00 AM CST", a PPA Asia 500 match in Shenzhen. Every consumer
+   * of this feed is site chrome (the site-wide ticker, the /live marquee and
+   * score rail, /watch's Live Now band), so the auto-pick put sister-tour
+   * content on the tour's own furniture.
+   *
+   * A sister tour still reaches those surfaces on request — `?partner=` is
+   * honoured end to end (use-live-ticker reads it from the URL, /api/ticker
+   * forwards it), which is how the PPA Asia window is being used to rehearse
+   * live behaviour. It is opt-in now rather than automatic.
+   */
+  const partner = partnerArg || process.env.PB_TICKER_PARTNER || "PPA";
+  if (!token) return { matches: [], tournament: null, partner, ok: false };
 
-    const cached = resultCache.get(partner);
-    if (cached && cached.expires > Date.now()) return cached.value;
+  const cached = resultCache.get(partner);
+  if (cached && cached.expires > Date.now()) return cached.value;
 
-    const pending = resultInFlight.get(partner);
-    if (pending) return pending;
+  const pending = resultInFlight.get(partner);
+  if (pending) return pending;
 
-    const p = (async () => {
-      const result = await fetchScores(token, base, partner);
-      resultCache.set(partner, { value: result, expires: Date.now() + RESULT_TTL_MS });
-      return result;
-    })();
-    resultInFlight.set(partner, p);
+  const p = (async () => {
     try {
-      return await p;
-    } finally {
-      resultInFlight.delete(partner);
+      const result = await fetchScores(token, base, partner);
+      // ⚠ ONLY A WORKING CALL IS CACHED, and only a working call becomes the
+      // fallback. Caching a failure pinned "nothing is live" for RESULT_TTL_MS
+      // and then for however long the CDN held the 200 on top of it.
+      resultCache.set(partner, { value: result, expires: Date.now() + RESULT_TTL_MS });
+      lastGoodResult.set(partner, { value: result, at: Date.now() });
+      return result;
+    } catch {
+      return fallbackFor(partner);
     }
-  } catch {
-    return empty;
+  })();
+  resultInFlight.set(partner, p);
+  try {
+    return await p;
+  } finally {
+    resultInFlight.delete(partner);
   }
 }
 

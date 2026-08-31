@@ -2,7 +2,22 @@
 
 import { useState } from "react";
 import type { TickerMatch, TickerPlayer } from "@/lib/ticker-api";
-import { matchWatchUrl } from "@/components/live/use-live-ticker";
+import { matchWatchUrl, watchPlatform } from "@/components/live/use-live-ticker";
+
+/**
+ * The YouTube play badge, in YouTube red — the same official glyph the footer
+ * and the live marquee already use. Inline rather than a file in
+ * public/ppa/networks/ because it is one path and needs no colour variants:
+ * every other mark in that folder is knocked out to a single colour, and this
+ * one has to stay red to read as YouTube.
+ */
+function YouTubeMark() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-auto" fill="#FF0000" aria-hidden>
+      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+    </svg>
+  );
+}
 
 /**
  * One live/upcoming/final match card. Shared by the scrolling ticker rail
@@ -73,6 +88,12 @@ function columns(m: TickerMatch) {
 
 export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: string }) {
   const [pbtvSrc, setPbtvSrc] = useState("/ppa/networks/pickleballtv-white.svg");
+  // Resolved once: matchWatchUrl falls back to PickleballTV, so the platform is
+  // read off the link that will actually open, not off m.watchUrl.
+  const watchHref = matchWatchUrl(m);
+  const platform = watchPlatform(watchHref);
+  const platformLabel =
+    platform === "youtube" ? "YouTube" : platform === "pbtv" ? "PickleballTV" : "the live stream";
   const cols = columns(m);
   const aWins = cols.filter((c) => c.winner === "a").length;
   const bWins = cols.filter((c) => c.winner === "b").length;
@@ -196,23 +217,32 @@ export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: s
             {m.time}
           </span>
         ) : m.status === "live" ? (
-          // Live — PickleballTV logo linking to the live stream.
+          // Live — the mark of whichever service the link actually opens.
           <a
-            href={matchWatchUrl(m)}
+            href={watchHref}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Watch live on PickleballTV"
-            className="transition hover:opacity-70"
+            aria-label={`Watch live on ${platformLabel}`}
+            className="flex items-center transition hover:opacity-70"
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={pbtvSrc}
-              alt="PickleballTV"
-              onError={() => setPbtvSrc("/ppa/networks/pbtv.png")}
-              className={`h-4 w-auto object-contain ${
-                pbtvSrc.endsWith(".svg") ? "brightness-0" : ""
-              }`}
-            />
+            {platform === "youtube" ? (
+              <YouTubeMark />
+            ) : platform === "pbtv" ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={pbtvSrc}
+                alt="PickleballTV"
+                onError={() => setPbtvSrc("/ppa/networks/pbtv.png")}
+                className={`h-4 w-auto object-contain ${
+                  pbtvSrc.endsWith(".svg") ? "brightness-0" : ""
+                }`}
+              />
+            ) : (
+              // Somewhere we don't have a mark for — say "Watch", claim nothing.
+              <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-blue">
+                <span aria-hidden>▶</span> Watch
+              </span>
+            )}
           </a>
         ) : m.watchUrl ? (
           // Final — a "Watch" link to the replay when the feed provides one.
