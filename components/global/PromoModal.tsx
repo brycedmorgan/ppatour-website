@@ -1,22 +1,27 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CONSENT_KEY, CONSENT_EVENT } from "@/lib/analytics";
 import type { ResolvedPromo } from "@/lib/site-promo";
 
 /**
  * The one-per-visitor promo modal. Content and placement live in
  * `lib/site-promo.ts`; this file is only the behaviour.
  *
- * ⚠ IT WAITS FOR THE COOKIE BANNER, AND THAT IS NOT POLITENESS — IT IS A BUG
- * FIX. The banner is `fixed bottom-0 z-40`; this backdrop is `inset-0 z-[80]`,
- * so opening on top of it would put a marketing popup physically over the
- * Accept/Decline buttons and make a compliance control unclickable. So the
- * modal holds until consent has been answered, subscribing to the same
- * `CONSENT_EVENT` the banner dispatches — meaning it appears right after the
- * click, with no reload.
+ * ⚠ IT OPENS OVER AN UNANSWERED COOKIE BANNER, AND THE BACKDROP IS CUT SHORT
+ * SO THAT IS SAFE. The banner is `fixed bottom-0 z-40` and this backdrop is
+ * `z-[80]`, so a full `inset-0` would lie across the Accept/Decline buttons
+ * and leave a marketing popup obstructing a compliance control — which is a
+ * dark pattern, not a z-index detail. Instead the backdrop stops at
+ * `--cookie-banner-h`, the variable CookieBanner already publishes on
+ * documentElement for the sticky buy bar. The banner stays uncovered,
+ * undimmed and clickable while the modal is up, and CookieBanner itself is
+ * untouched.
+ *
+ * This replaced an earlier gate that held the modal until consent had been
+ * answered. That was safe but cost reach: a first-time visitor who ignores
+ * the banner — and plenty do — never saw the promo at all.
  *
  * ⚠ EXPIRY IS DECIDED ON THE DEVICE, LIKE THE COUNTDOWNS. Both host pages are
  * ISR-cached (`revalidate = 60`, and the homepage is `force-static`), so a
@@ -32,11 +37,6 @@ import type { ResolvedPromo } from "@/lib/site-promo";
  * telling you something.
  */
 const DELAY_MS = 1200;
-
-function subscribeConsent(onChange: () => void) {
-  window.addEventListener(CONSENT_EVENT, onChange);
-  return () => window.removeEventListener(CONSENT_EVENT, onChange);
-}
 
 /**
  * ⚠ NO STORAGE MEANS NO POPUP — a deliberate, and the safer, failure.
@@ -71,8 +71,6 @@ function storage(): Storage | null {
  * happens. The blast radius is "someone who typed an undocumented query param
  * sees a promo again", which is not a risk worth a broken review tool.
  *
- * It does NOT override the consent gate: covering the cookie banner is the one
- * thing this modal must never do, reviewer or not.
  */
 function forcedOpen(): boolean {
   try {
@@ -91,17 +89,7 @@ export function PromoModal({ promo }: { promo: ResolvedPromo }) {
   // next does not find every visitor already opted out of it.
   const dismissKey = `ppa-promo-${promo.id}`;
 
-  const consentAnswered = useSyncExternalStore(
-    subscribeConsent,
-    () => Boolean(storage()?.getItem(CONSENT_KEY)),
-    () => false,
-  );
-
   useEffect(() => {
-    // The consent gate is never overridden — see the note above. Everything
-    // else can be, for review.
-    if (!consentAnswered) return;
-
     const s = storage();
     if (!forcedOpen()) {
       if (!s) return;
@@ -111,7 +99,7 @@ export function PromoModal({ promo }: { promo: ResolvedPromo }) {
 
     const id = setTimeout(() => setOpen(true), DELAY_MS);
     return () => clearTimeout(id);
-  }, [consentAnswered, dismissKey, promo.endsAt]);
+  }, [dismissKey, promo.endsAt]);
 
   /** Remember the dismissal without closing — for clicks that navigate away. */
   const remember = useCallback(() => {
@@ -155,7 +143,12 @@ export function PromoModal({ promo }: { promo: ResolvedPromo }) {
       aria-modal="true"
       aria-labelledby={headingId}
       onClick={close}
-      className="fixed inset-0 z-[80] flex items-center justify-center bg-ppa-navy-deep/80 p-4 backdrop-blur-sm motion-safe:animate-fade"
+      /* bottom-[--cookie-banner-h] — NOT inset-0. See the note at the top of
+         this file: the dim layer deliberately stops short of the cookie
+         banner so Accept/Decline stay uncovered and clickable underneath an
+         open promo. Falls back to 0px, so with no banner on screen this is
+         a full-viewport backdrop exactly as before. */
+      className="fixed inset-x-0 top-0 bottom-[var(--cookie-banner-h,0px)] z-[80] flex items-center justify-center bg-ppa-navy-deep/80 p-4 backdrop-blur-sm motion-safe:animate-fade"
     >
       <div
         onClick={(e) => e.stopPropagation()}
