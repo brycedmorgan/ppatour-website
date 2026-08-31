@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { StageBadge } from "@/components/live/StageBadge";
+import { localDayKey, showQualifierBoard } from "@/lib/scores-stage";
 import type { ScoreMatch, ScoresResult, ScoreTeam } from "@/lib/scores-api";
 
 /**
@@ -124,7 +126,21 @@ function ScoreCard({ m }: { m: ScoreMatch }) {
 export function ScoresBoard({ eventId, light = false }: { eventId: string; light?: boolean }) {
   const [data, setData] = useState<ScoresResult | null>(null);
   const [loaded, setLoaded] = useState(false);
-  const [day, setDay] = useState<string | null>(null);
+  const [daySel, setDay] = useState<string | null>(null);
+  /**
+   * The device's date, re-read every minute so a tab left open across midnight
+   * moves to the pro draw on its own rather than sitting on yesterday's
+   * qualifiers until somebody reloads. Null until mount — reading the clock
+   * during render would make this component impure and risk hydrating to a
+   * different day than the server rendered.
+   */
+  const [todayKey, setTodayKey] = useState<string | null>(null);
+  useEffect(() => {
+    const tick = () => setTodayKey(localDayKey(new Date()));
+    tick();
+    const id = window.setInterval(tick, 60_000);
+    return () => window.clearInterval(id);
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -145,34 +161,59 @@ export function ScoresBoard({ eventId, light = false }: { eventId: string; light
     };
   }, [eventId]);
 
+  /**
+   * The bracket on screen. Everything below reads `shown`, never `data`
+   * directly, so the day picker, the division pills and the match cards can
+   * never end up describing different brackets.
+   */
+  const isQualifier = showQualifierBoard(data, todayKey);
+  const shown = isQualifier && data?.qualifier ? data.qualifier : data;
+
   // Distinct tournament days (ascending), derived from the matches.
   const days = useMemo(() => {
     const m = new Map<string, string>();
-    for (const x of data?.matches ?? []) m.set(x.dateKey, x.dateLabel);
+    for (const x of shown?.matches ?? []) m.set(x.dateKey, x.dateLabel);
     return [...m.entries()]
       .sort((a, b) => a[0].localeCompare(b[0]))
       .map(([key, label]) => ({ key, label }));
-  }, [data]);
+  }, [shown]);
+
+  /**
+   * ⚠ A SELECTION FROM ONE BRACKET IS MEANINGLESS IN THE OTHER, so the day and
+   * the division are validated against what is actually on screen rather than
+   * trusted. When the board switches at midnight, the qualifier ids held in
+   * state name nothing in the main draw: left alone, no pill would read as
+   * active and the board would say "No matches on this day for this division."
+   * on an event with a full schedule. Falling back to null hands the choice
+   * back to the two picker effects, which choose a real day and a populated
+   * division.
+   *
+   * Derived here rather than reset in an effect on purpose — an effect would
+   * cost a second render pass and a `set-state-in-effect` lint error, and this
+   * is derived data, not state.
+   */
+  const day = days.some((d) => d.key === daySel) ? daySel : null;
 
   // Default day on first load: today if it's a tournament day; otherwise the
   // most recent day on/before today (so a finished event opens on its last day,
-  // and a future date falls back to the first day).
+  // and a future date falls back to the first day). Uses the same `todayKey`
+  // the bracket switch reads — one definition of "today" on this board.
   useEffect(() => {
-    if (day || !days.length) return;
-    const now = new Date();
-    const pad = (n: number) => String(n).padStart(2, "0");
-    const todayKey = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+    if (day || !days.length || !todayKey) return;
     const onOrBefore = days.filter((d) => d.key <= todayKey);
     setDay(onOrBefore.length ? onOrBefore[onOrBefore.length - 1].key : days[0].key);
-  }, [days, day]);
+  }, [days, day, todayKey]);
 
   const liveAny = useMemo(
-    () => (data?.matches ?? []).some((m) => m.status === "live"),
-    [data],
+    () => (shown?.matches ?? []).some((m) => m.status === "live"),
+    [shown],
   );
 
-  const divisions = data?.divisions ?? [];
-  const [division, setDivision] = useState<string | null>(null);
+  const divisions = shown?.divisions ?? [];
+  const [divisionSel, setDivision] = useState<string | null>(null);
+  /** Validated against the bracket on screen — see the note on `day`. */
+  const division = divisions.some((d) => d.id === divisionSel) ? divisionSel : null;
+
   /**
    * Open on a division that actually has matches on the chosen day.
    *
@@ -190,25 +231,26 @@ export function ScoresBoard({ eventId, light = false }: { eventId: string; light
     // which is how the board kept opening on "No matches on this day".
     if (division || !divisions[0] || !day) return;
     const populated = divisions.find((d) =>
-      (data?.matches ?? []).some((m) => m.divisionId === d.id && m.dateKey === day),
+      (shown?.matches ?? []).some((m) => m.divisionId === d.id && m.dateKey === day),
     );
     setDivision((populated ?? divisions[0]).id);
-  }, [divisions, division, data, day]);
+  }, [divisions, division, shown, day]);
+
 
   // Divisions with a live match on the selected day (button dots).
   const liveDivsToday = useMemo(() => {
     const set = new Set<string>();
-    for (const m of data?.matches ?? []) if (m.dateKey === day && m.status === "live") set.add(m.divisionId);
+    for (const m of shown?.matches ?? []) if (m.dateKey === day && m.status === "live") set.add(m.divisionId);
     return set;
-  }, [data, day]);
+  }, [shown, day]);
 
   // Matches for the selected day + division, finals first.
   const matches = useMemo(
     () =>
-      (data?.matches ?? [])
+      (shown?.matches ?? [])
         .filter((m) => m.dateKey === day && m.divisionId === division)
         .sort((a, b) => b.roundNumber - a.roundNumber || a.matchNumber - b.matchNumber),
-    [data, day, division],
+    [shown, day, division],
   );
 
   const panel = light ? "border-ppa-line bg-ppa-paper" : "border-white/10 bg-ppa-navy-deep";
@@ -235,6 +277,14 @@ export function ScoresBoard({ eventId, light = false }: { eventId: string; light
 
   return (
     <div>
+      {/* Which bracket these scores are — see StageBadge. */}
+      {isQualifier && (
+        <div className="mb-3">
+          <StageBadge light={light} />
+        </div>
+      )}
+
+
       {/* Day picker */}
       <div className="flex flex-wrap items-center gap-3">
         {/* ⚠ "Matches", not "Results". The picker can now hold an "Upcoming"

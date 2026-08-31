@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { StageBadge } from "@/components/live/StageBadge";
 import Link from "next/link";
 import type { Bracket, BracketDivision } from "@/lib/bracket-types";
 import { mergeBracket } from "@/lib/bracket-merge";
@@ -40,8 +41,15 @@ export function BracketPanel({
   const [pools, setPools] = useState<Bracket | null>(null);
   const [view, setView] = useState<"main" | "losers" | "pools">("main");
   const [loading, setLoading] = useState(true);
+  const [isQualifier, setIsQualifier] = useState(false);
+  /**
+   * Bumped to re-read the division list when the draw underneath us changes
+   * shape — see the resync note in the draw effect.
+   */
+  const [resync, setResync] = useState(0);
+  const resyncedFor = useRef<string | null>(null);
 
-  // Division list — once.
+  // Division list.
   useEffect(() => {
     let active = true;
     fetch(`/api/brackets?event=${encodeURIComponent(eventId)}`, { cache: "no-store" })
@@ -50,8 +58,17 @@ export function BracketPanel({
         if (!active || !d) return;
         const divs: BracketDivision[] = d.divisions ?? [];
         setDivisions(divs);
+        setIsQualifier(d.stage === "qualifier");
         const next = initialDivision ?? divs[0]?.id ?? null;
-        setSelected((prev) => prev ?? next);
+        /**
+         * ⚠ THE HELD SELECTION IS VALIDATED, NOT KEPT BLINDLY. This used to be
+         * `prev ?? next`, which is right while the division list is stable —
+         * but the panel now switches between two brackets, and a qualifier
+         * division id names nothing in the pro draw. A tab open across the
+         * switch would keep asking for a division that no longer exists and
+         * sit on "No draw to show yet" until somebody reloaded.
+         */
+        setSelected((prev) => (prev && divs.some((x) => x.id === prev) ? prev : next));
         // Nothing to select means the draw fetch below never runs — drop the
         // spinner here or the panel spins forever on an event with no draw.
         if (!next) setLoading(false);
@@ -60,7 +77,7 @@ export function BracketPanel({
     return () => {
       active = false;
     };
-  }, [eventId, initialDivision]);
+  }, [eventId, initialDivision, resync]);
 
   // Selected bracket — fetch + poll. Reset to the winners view on switch.
   useEffect(() => {
@@ -76,6 +93,19 @@ export function BracketPanel({
           if (!active) return;
           // A 404 or a parse failure has to clear the spinner too — otherwise a
           // bad division id in the URL spins forever instead of saying so.
+          /**
+           * ⚠ A NULL RESPONSE MAY MEAN THE DRAW MOVED, NOT THAT IT IS MISSING.
+           * The panel switches from the qualifier bracket to the pro draw when
+           * qualifying finishes, and the division ids change with it — so the
+           * 404 an open tab starts getting is a signal to re-read the division
+           * list, not just an empty state to render. Guarded by `resyncedFor`
+           * so a genuinely bad division id in a URL re-reads once and then
+           * settles on "No draw to show yet" instead of polling forever.
+           */
+          if (!d && selected && resyncedFor.current !== selected) {
+            resyncedFor.current = selected;
+            setResync((n) => n + 1);
+          }
           if (d) {
             // ⚠ MERGE, DO NOT REPLACE. `setBracket(d.bracket)` here is what
             // made the draw vanish and change shape between polls: any thin
@@ -125,6 +155,13 @@ export function BracketPanel({
 
   return (
     <div>
+      {/* Which bracket this draw is — see StageBadge. */}
+      {isQualifier && (
+        <div className="mb-3">
+          <StageBadge light={light} />
+        </div>
+      )}
+
       {/* Division picker + optional "open full page" link */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex flex-wrap gap-2">

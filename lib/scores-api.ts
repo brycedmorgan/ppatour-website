@@ -2,18 +2,25 @@
  * Tournament scores adapter — Pickleball.com PPA endpoints (two-step):
  *
  *   GET {base}/v1/ppa/tournaments/{uuid}/tournament_events?bracket_level=Pro
- *     → the tournament's pro events (divisions). Skip UNDEFINED_PPA_EVENT_TYPE
- *       (qualifiers).
+ *     → the tournament's pro events. Both brackets are read: the Pro Main Draw
+ *       (MAIN_EVENT_TYPE) and the Pro Qualifier (UNDEFINED_PPA_EVENT_TYPE).
  *   GET {base}/v1/ppa/tournaments/{uuid}/tournament_events/{eventId}
  *     → every match for that event, with per-game scores + times.
  *
  * header  PB-API-TOKEN: <token>
+ *
+ * ⚠ ONLY ONE BRACKET IS SURFACED AT A TIME, and which one is decided from the
+ * feed rather than from the calendar — see the "WHICH BRACKET THE BOARD SHOWS"
+ * note in `build`. On a stop's qualifying day the main draw has not been played
+ * and the qualifier has, so the board carries qualifying; from the moment the
+ * main draw starts it carries the main draw and never goes back.
  *
  * Server-only (reads the token). Never throws — returns an empty result on any
  * problem. We flatten all divisions' matches into one list the UI groups by
  * date and division.
  */
 
+import { pbGetJson } from "@/lib/pb-fetch";
 import { fetchPlannedStarts } from "@/lib/ticker-api";
 
 const TIMEOUT_MS = 6000;
@@ -47,17 +54,57 @@ export type Champion = { divisionId: string; division: string; players: string[]
 export type Medal = "gold" | "silver" | "bronze";
 export type Standing = { place: number; medal: Medal | null; players: string[] };
 export type DivisionStandings = { divisionId: string; division: string; places: Standing[] };
+/**
+ * Which bracket a board is showing.
+ *
+ * A tour stop plays its Pro Qualifier before the Pro Main Draw — at Nationals
+ * that is Monday, with the main draw opening Tuesday — so for one day the only
+ * pickleball being played is qualifying, and a main-draw-only surface is empty.
+ *
+ * ⚠ THE TWO SURFACES SWITCH ON DIFFERENT RULES, AND THAT IS DELIBERATE
+ * (Wesley, 8/31). The SCORES board switches on the calendar day, so it matches
+ * the day badge on the ticker above it — decided in the browser, see
+ * ScoresBoard. The BRACKET switches when qualifying is actually finished, which
+ * can be mid-afternoon — decided on the server, see `buildAll` in
+ * lib/brackets-api. A board answers "what happened today"; a draw answers "how
+ * did this bracket finish".
+ */
+export type ScoresStage = "qualifier" | "main";
+/** One bracket's divisions and matches. */
+export type ScoresBracket = { divisions: { id: string; name: string }[]; matches: ScoreMatch[] };
 export type ScoresResult = {
   tournamentId: string;
+  /**
+   * The PRO MAIN DRAW's divisions and matches — always, whatever is being
+   * shown. The qualifier travels separately in `qualifier` so the client can
+   * choose between them without a second request.
+   */
   divisions: { id: string; name: string }[];
   matches: ScoreMatch[];
-  /** Division winners (gold-medal match), once decided. */
+  /**
+   * The Pro Qualifier draw, when qualifying has been played and the main draw
+   * has not started. Null the rest of the time — including every completed
+   * event, where it is never even fetched.
+   *
+   * ⚠ THE UI HAS TO SAY WHEN IT IS SHOWING THIS ONE. The division names are
+   * identical in both brackets — both are "Men's Doubles" — so with no label a
+   * qualifier result reads as a main-draw result.
+   */
+  qualifier: ScoresBracket | null;
+  /**
+   * Division winners (gold-medal match), once decided.
+   *
+   * ⚠ ALWAYS FROM THE MAIN DRAW, never from qualifying. A qualifier final has a
+   * winner and that team is not the event's champion — they have won a
+   * main-draw seed. Publishing one here would put them on the homepage's
+   * "Latest Champions" band and on the event page's podium.
+   */
   champions: Champion[];
-  /** Final podium (gold/silver/bronze) per division, once decided. */
+  /** Final podium (gold/silver/bronze) per division, once decided. Main draw only — see `champions`. */
   standings: DivisionStandings[];
 };
 
-type ApiEvent = {
+export type ApiEvent = {
   eventId?: string;
   eventType?: string;
   eventTitle?: string;
@@ -316,14 +363,28 @@ function standingsOf(raws: ApiMatch[], division: string, divisionId: string): Di
   return places.length ? { divisionId, division, places } : null;
 }
 
+/**
+ * One JSON GET against the partner API.
+ *
+ * ⚠ IT RETRIES A 429, AND ON A QUALIFYING DAY THAT IS LOAD-BEARING. This used
+ * to be a bare fetch that turned any non-ok response into null, and `build`
+ * turns a null into an empty division — so a rate-limited response did not look
+ * like an error, it looked like a division with no matches in it. Measured
+ * against Nationals' five qualifier draws this morning: two of five parallel
+ * requests came back 429, and the board silently published 23 of the 94
+ * completed qualifier matches with no sign the rest existed. `pbGetJson` is the
+ * repo's existing answer to this endpoint's rate limiting (see lib/pb-fetch.ts)
+ * and already backs off on `retry-after`.
+ *
+ * ⚠ NOT given `revalidate`, deliberately: it stays `no-store` exactly as before,
+ * because this module runs its own 60s cache with stale-while-revalidate in
+ * front of it and two caches disagreeing about live scores is worse than one.
+ */
 async function get(base: string, token: string, path: string): Promise<unknown> {
-  const res = await fetch(`${base}${path}`, {
-    headers: { "PB-API-TOKEN": token },
-    cache: "no-store",
-    signal: AbortSignal.timeout(TIMEOUT_MS),
+  return pbGetJson(`${base}${path}`, { "PB-API-TOKEN": token }, {
+    timeoutMs: TIMEOUT_MS,
+    retries: 3,
   });
-  if (!res.ok) return null;
-  return res.json();
 }
 
 /**
@@ -349,9 +410,99 @@ async function get(base: string, token: string, path: string): Promise<unknown> 
 const cache = new Map<string, { value: ScoresResult; expires: number }>();
 const inFlight = new Map<string, Promise<ScoresResult>>();
 
+/**
+ * A tournament's Pro Qualifier events.
+ *
+ * ⚠ THE EVENT TYPE ALONE IS NOT THE TEST. The feed files qualifying under
+ * `UNDEFINED_PPA_EVENT_TYPE` — a bucket, not a name — so requiring the title to
+ * say "qualifier" as well keeps anything else the feed ever puts in that bucket
+ * out of the board, exactly as it is excluded today. Verified across the last
+ * 8 reachable PPA stops: every `UNDEFINED_PPA_EVENT_TYPE` event is a qualifier,
+ * in one of two title shapes ("Mens Doubles Pro Qualifier",
+ * "PRO MEN'S SINGLES - QUALIFIER").
+ */
+export function isQualifierEvent(e: ApiEvent): boolean {
+  return e.eventType === "UNDEFINED_PPA_EVENT_TYPE" && /qualif/i.test(e.eventTitle ?? "");
+}
+
+/**
+ * Division name for a qualifier event — "Men's Doubles", same as its main draw.
+ *
+ * ⚠ THE TAB MUST NOT CARRY THE WORD ITSELF. `stage` labels the whole board once
+ * (see ScoresResult), so repeating "Qualifier" on all five pills is noise that
+ * wraps them onto a second row on a phone. `cleanDivision` already strips the
+ * "Pro Qualifier" shape; the second regex handles the "- QUALIFIER" one, which
+ * it does not. `cleanDivision` is deliberately NOT changed — the bracket panel
+ * imports it, and brackets are staying as they are.
+ */
+export function qualifierDivision(title: string): string {
+  return cleanDivision(title).replace(/\s*[-–—]?\s*qualifier\s*$/i, "").trim();
+}
+
+/**
+ * One event per division, preferring the Top 8 Ranked bracket.
+ *
+ * Some tournaments (e.g. the PPA Finals) run both a "Pro Main Draw" and a
+ * "Pro Top 8 Ranked" bracket per discipline. The Top 8 Ranked bracket is the
+ * real championship (the marquee field), so it supersedes the Main Draw when
+ * both exist for the same division.
+ */
+function oncePerDivision(events: ApiEvent[], name: (title: string) => string): ApiEvent[] {
+  const isTop8 = (t?: string) => /top\s*8\s*ranked/i.test(t ?? "");
+  const byDivision = new Map<string, ApiEvent>();
+  for (const e of events) {
+    const div = name(e.eventTitle as string);
+    const existing = byDivision.get(div);
+    if (!existing || (isTop8(e.eventTitle) && !isTop8(existing.eventTitle))) {
+      byDivision.set(div, e);
+    }
+  }
+  return [...byDivision.values()];
+}
+
+type Bracket = {
+  divisions: { id: string; name: string }[];
+  matches: ScoreMatch[];
+  standings: DivisionStandings[];
+};
+
+/** Fetch and normalize every match for one set of events, in parallel. */
+async function loadBracket(
+  base: string,
+  token: string,
+  tournamentId: string,
+  events: ApiEvent[],
+  name: (title: string) => string,
+): Promise<Bracket> {
+  const perEvent = await Promise.all(
+    events.map(async (e) => {
+      const mj = (await get(base, token, `/v1/ppa/tournaments/${tournamentId}/tournament_events/${e.eventId}`)) as
+        | { results?: ApiMatch[] }
+        | null;
+      const raws = mj?.results ?? [];
+      const division = name(e.eventTitle as string);
+      const eid = e.eventId as string;
+      return {
+        matches: raws.map((m) => normalize(m, division, eid)).filter((x): x is ScoreMatch => x !== null),
+        standings: standingsOf(raws, division, eid),
+      };
+    }),
+  );
+  return {
+    divisions: events.map((e) => ({ id: e.eventId as string, name: name(e.eventTitle as string) })),
+    matches: perEvent.flatMap((p) => p.matches),
+    standings: perEvent.map((p) => p.standings).filter((s): s is DivisionStandings => s !== null),
+  };
+}
+
+/** Has anybody actually played in this bracket? Scheduled fixtures don't count. */
+function hasPlay(b: Bracket): boolean {
+  return b.matches.some((m) => m.status === "live" || m.status === "final");
+}
+
 async function build(tournamentId: string): Promise<ScoresResult> {
   const { token, base } = config();
-  const empty: ScoresResult = { tournamentId, divisions: [], matches: [], champions: [], standings: [] };
+  const empty: ScoresResult = { tournamentId, divisions: [], matches: [], qualifier: null, champions: [], standings: [] };
   if (!token) return empty;
   try {
     /**
@@ -372,47 +523,75 @@ async function build(tournamentId: string): Promise<ScoresResult> {
     const evJson = (await get(base, token, `/v1/ppa/tournaments/${tournamentId}/tournament_events?bracket_level=Pro`)) as
       | { results?: ApiEvent[] }
       | null;
-    const rawEvents = (evJson?.results ?? []).filter(
-      (e) => e.eventType !== "UNDEFINED_PPA_EVENT_TYPE" && e.eventId && e.eventTitle,
+    const all = (evJson?.results ?? []).filter((e) => e.eventId && e.eventTitle);
+    const mainEvents = oncePerDivision(
+      all.filter((e) => e.eventType !== "UNDEFINED_PPA_EVENT_TYPE"),
+      cleanDivision,
     );
-    // Some tournaments (e.g. the PPA Finals) run both a "Pro Main Draw" and a
-    // "Pro Top 8 Ranked" bracket per discipline. The Top 8 Ranked bracket is the
-    // real championship (the marquee field), so it supersedes the Main Draw when
-    // both exist for the same division.
-    const isTop8 = (t?: string) => /top\s*8\s*ranked/i.test(t ?? "");
-    const byDivision = new Map<string, ApiEvent>();
-    for (const e of rawEvents) {
-      const div = cleanDivision(e.eventTitle as string);
-      const existing = byDivision.get(div);
-      if (!existing || (isTop8(e.eventTitle) && !isTop8(existing.eventTitle))) {
-        byDivision.set(div, e);
-      }
-    }
-    const events = [...byDivision.values()];
-    const divisions = events.map((e) => ({ id: e.eventId as string, name: cleanDivision(e.eventTitle as string) }));
+    const qualifierEvents = oncePerDivision(all.filter(isQualifierEvent), qualifierDivision);
 
-    const perEvent = await Promise.all(
-      events.map(async (e) => {
-        const mj = (await get(base, token, `/v1/ppa/tournaments/${tournamentId}/tournament_events/${e.eventId}`)) as
-          | { results?: ApiMatch[] }
-          | null;
-        const raws = mj?.results ?? [];
-        const division = cleanDivision(e.eventTitle as string);
-        const eid = e.eventId as string;
-        return {
-          matches: raws.map((m) => normalize(m, division, eid)).filter((x): x is ScoreMatch => x !== null),
-          standings: standingsOf(raws, division, eid),
-        };
-      }),
-    );
+    /**
+     * ── WHICH BRACKET THE BOARD SHOWS ────────────────────────────────────────
+     * Wesley, 8/31: Monday of Nationals is qualifying, so show the qualifier
+     * scores today and the pro scores from tomorrow.
+     *
+     * ⚠ DECIDED FROM THE FEED, NOT FROM THE DATE. A hardcoded "qualifiers until
+     * Sept 1" would be this adapter's version of the marquee that named a
+     * finished April event for months — right for one day, wrong every day
+     * after, and wrong at every other tour stop. The rule is simply that **the
+     * main draw wins the moment it has been played**; until then, if qualifying
+     * has produced results, that is the pickleball being played and that is
+     * what the board shows. Measured on Nationals this morning: 5 qualifier
+     * divisions carrying 93 completed and 5 live matches, against 5 main-draw
+     * divisions carrying 0 played and 267 scheduled. It flips itself when the
+     * main draw opens tomorrow, needs no edit to do it, and behaves the same
+     * way at every stop from here on.
+     *
+     * ⚠ THE MAIN DRAW IS FETCHED FIRST AND NORMALLY ENDS IT THERE, which is what
+     * keeps the cost honest. Once a main draw is under way — that is, every day
+     * of every event after qualifying, plus every completed event the homepage
+     * asks for champions — the qualifier requests never happen and this is the
+     * same 5 upstream calls it has always been. The extra 5 are spent only on
+     * the one day they are the only scores there are. That matters here: this
+     * adapter is the reason for the rate-limit work of 7/31.
+     */
+    const main = await loadBracket(base, token, tournamentId, mainEvents, cleanDivision);
+    const qualifierBracket =
+      !hasPlay(main) && qualifierEvents.length
+        ? await loadBracket(base, token, tournamentId, qualifierEvents, qualifierDivision)
+        : null;
+    /**
+     * ⚠ BOTH BRACKETS ARE SHIPPED AND THE CLIENT PICKS — see ScoresBoard.
+     * Wesley, 8/31: the scores switch "when the score ticker changes to the next
+     * day", and the ticker's day is the DEVICE's date, not the server's. This
+     * route is CDN-cached for 30s and shared between viewers in every timezone,
+     * so the server cannot answer "is it still qualifying day for you"; a
+     * server-side answer would flip at the origin's midnight for everybody at
+     * once. Sending both and deciding in the browser is what keeps the board and
+     * the ticker above it saying the same thing.
+     *
+     * `qualifier` is null unless qualifying has actually been played, so the
+     * extra payload exists only while it is the story. Once the main draw
+     * starts, `loadBracket` above is never even called for it.
+     */
+    const qualifier =
+      qualifierBracket && hasPlay(qualifierBracket)
+        ? { divisions: qualifierBracket.divisions, matches: qualifierBracket.matches }
+        : null;
 
-    const standings = perEvent.map((p) => p.standings).filter((s): s is DivisionStandings => s !== null);
-    const matches = perEvent.flatMap((p) => p.matches);
+    const { divisions, matches } = main;
+    /**
+     * ⚠ THE PODIUM IS THE MAIN DRAW'S, ALWAYS — see ScoresResult.champions.
+     * A qualifier final has a winner, and crowning them here would put them on
+     * the homepage's "Latest Champions" band and on the event page's podium.
+     */
+    const standings = main.standings;
 
     // Give the confirmed-but-unplayed matches their real day where the feed
     // knows it. Whatever is left keeps UPCOMING_KEY and groups under a bucket
     // that says the date is not published yet, rather than borrowing one.
-    const scheduled = matches.filter((m) => m.status === "scheduled");
+    // Both brackets get this — the client may be about to render either.
+    const scheduled = [...matches, ...(qualifier?.matches ?? [])].filter((m) => m.status === "scheduled");
     if (scheduled.length) {
       const starts = await startsSoon;
       for (const m of scheduled) {
@@ -428,6 +607,7 @@ async function build(tournamentId: string): Promise<ScoresResult> {
       tournamentId,
       divisions,
       matches,
+      qualifier,
       champions: standings
         .map((s) => {
           const gold = s.places.find((p) => p.place === 1);

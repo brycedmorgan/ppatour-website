@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
-import { getBracketDivisions, getBracketDraw, isEmptyDraw } from "@/lib/brackets-api";
+import { getBracketIndex, getBracketDraw, isEmptyDraw } from "@/lib/brackets-api";
 
 /**
  * Bracket data for any tournament, built live from the PPA match feed
  * (lib/brackets-api). Works for every completed event, not just the old
  * Atlanta sample.
  *
- *   GET /api/brackets?event=<uuid>                 → { eventId, divisions[] }
+ *   GET /api/brackets?event=<uuid>                 → { eventId, divisions[], stage }
+ *     (`stage` is "qualifier" while the Pro Qualifier draw is the one being
+ *      returned, else "main" — the panel has to say which bracket it shows)
  *   GET /api/brackets?event=<uuid>&division=<id>   → { division, bracket, losers }
  *     (`losers` is the losers bracket for double-elim divisions, else null)
  */
@@ -33,10 +35,10 @@ export async function GET(request: Request) {
   }
 
   if (!division) {
-    const divisions = await getBracketDivisions(event);
+    const { divisions, stage } = await getBracketIndex(event);
     // An empty list is a failed upstream call far more often than a real
     // event with no pro divisions — don't pin it at the edge.
-    return NextResponse.json({ eventId: event, divisions }, {
+    return NextResponse.json({ eventId: event, divisions, stage }, {
       headers: divisions.length ? headers : NO_STORE,
     });
   }
