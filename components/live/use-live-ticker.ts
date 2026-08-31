@@ -23,6 +23,24 @@ import type {
  */
 
 const POLL_MS = 15000;
+/**
+ * How soon to try again after a FAILED fetch, as opposed to a successful one
+ * that simply found nothing.
+ *
+ * ⚠ A SINGLE FAILED FIRST FETCH USED TO COST 15 SECONDS OF WRONG CHROME. The
+ * poll was a fixed `setInterval`, and a non-ok response just returned — so on
+ * the opening morning of Nationals the top bar read "Next Event · Veolia
+ * Pickleball National Championships" while two matches were live on court.
+ * Measured end to end in a browser: server HTML at 1.0s, and the live score did
+ * not appear until 19.2s, because attempt one 500'd and attempt two was a full
+ * interval behind it.
+ *
+ * Only a FAILURE retries fast. A successful empty response means nothing is on,
+ * which is a real answer and must not be re-asked every two seconds.
+ */
+const RETRY_MS = 2000;
+/** Failed attempts before we stop showing a spinner and admit we have nothing. */
+const RETRIES_BEFORE_EMPTY = 3;
 
 export const STATUS_ORDER: Record<TickerMatch["status"], number> = {
   live: 0,
@@ -57,26 +75,54 @@ export function useLiveTicker({
   useEffect(() => {
     if (!enabled) return;
     let active = true;
-    const url = partner ? `/api/ticker?partner=${encodeURIComponent(partner)}` : "/api/ticker";
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let failures = 0;
+    /**
+     * ⚠ THE TRAILING SLASH IS DELIBERATE. `trailingSlash: true` (next.config)
+     * makes "/api/ticker" a 308 to "/api/ticker/", so every poll from every open
+     * tab paid a redirect before reaching the route — the same trap the rankings
+     * fetch hit on 8/5.
+     */
+    const url = partner
+      ? `/api/ticker/?partner=${encodeURIComponent(partner)}`
+      : "/api/ticker/";
+
     const load = async () => {
+      let ok = false;
       try {
         const res = await fetch(url, { cache: "no-store" });
-        if (!res.ok) return;
-        const data = (await res.json()) as TickerResult;
-        if (!active) return;
-        setMatches(data.matches);
-        setTournament(data.tournament);
+        if (res.ok) {
+          const data = (await res.json()) as TickerResult;
+          if (!active) return;
+          setMatches(data.matches);
+          setTournament(data.tournament);
+          ok = true;
+        }
       } catch {
         // keep last-known on transient errors
-      } finally {
-        if (active) setLoaded(true);
       }
+      if (!active) return;
+
+      if (ok) {
+        failures = 0;
+        setLoaded(true);
+      } else {
+        failures += 1;
+        // Only admit we have nothing once retrying has genuinely not worked —
+        // marking it loaded on the first failure is what let the rail say "no
+        // matches on court" when the truth was "we could not ask".
+        if (failures >= RETRIES_BEFORE_EMPTY) setLoaded(true);
+      }
+
+      // Self-scheduling rather than setInterval, so the delay can depend on
+      // whether the last attempt actually worked.
+      timer = setTimeout(load, ok ? POLL_MS : RETRY_MS);
     };
+
     void load();
-    const id = setInterval(load, POLL_MS);
     return () => {
       active = false;
-      clearInterval(id);
+      if (timer) clearTimeout(timer);
     };
   }, [enabled, partner]);
 
