@@ -162,6 +162,53 @@ function athleteDescription(a: {
   return `${a.name} is a professional pickleball player on the Carvana PPA Tour.${divisions}${country}`.trim();
 }
 
+/**
+ * The <title>. This is the single biggest lever on an athlete page, and until
+ * 8/20 it was `%s · Carvana PPA Tour` — "Ben Johns · Carvana PPA Tour", 28
+ * characters that say nothing a searcher typed. Wikipedia outranks us on our
+ * own athletes' names, and a title with no descriptive modifiers is one reason:
+ * it gives Google nothing to match beyond the name itself, which Wikipedia also
+ * has and has more authority behind.
+ *
+ * So the title now states what the page is AND what the person is, using facts
+ * we already hold and already render:
+ *
+ *   Ben Johns — World No. 1 Men's Pickleball Player · Carvana PPA Tour
+ *   Kate Fahey — No. 8 Ranked Women's Pickleball Player · Carvana PPA Tour
+ *   Zane Navratil — Pro Pickleball Player, Ranking & Stats · Carvana PPA Tour
+ *
+ * ⚠ FACTS ONLY, and the rank is the LIVE board rank — the same number the hero
+ * chip prints. It must never come from `curated.bestRank` (a stale hand-kept
+ * career best; see `loadAthlete`), or the title claims a ranking the page below
+ * it contradicts.
+ *
+ * ⚠ Length is deliberate. Google renders roughly 600px / ~60 characters, and
+ * the brand suffix is the part designed to be cut — the name and the descriptor
+ * both land inside the visible width. Do not add more keywords here; a longer
+ * title is not a better one, and a stuffed one gets rewritten by Google
+ * outright.
+ *
+ * Top 10 gets the number because "No. 3 ranked" is a claim worth making in a
+ * SERP. Below that the rank moves too often to be worth churning the title over,
+ * so those pages sell the page's contents instead.
+ */
+function athleteTitle(a: {
+  name: string;
+  rank: number;
+  gender?: "male" | "female";
+}): string {
+  const board = a.gender === "female" ? "Women's " : a.gender === "male" ? "Men's " : "";
+  const descriptor =
+    a.rank === 1
+      ? `World No. 1 ${board}Pickleball Player`
+      : a.rank > 1 && a.rank <= 10
+        ? `No. ${a.rank} Ranked ${board}Pickleball Player`
+        : a.rank > 10
+          ? "Pro Pickleball Player, Ranking & Stats"
+          : "Pro Pickleball Player Profile";
+  return `${a.name} — ${descriptor} · Carvana PPA Tour`;
+}
+
 function initials(name: string): string {
   return name
     .split(/\s+/)
@@ -202,11 +249,16 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     if (line && description.length + line.length <= 300) description += line;
   }
   const images = a.headshot ? [a.headshot] : [];
+  /**
+   * `absolute` — this title carries its own brand suffix, so it must NOT also
+   * get the root layout's `%s · Carvana PPA Tour` template appended.
+   */
+  const title = athleteTitle(a);
   return {
-    title: a.name,
+    title: { absolute: title },
     description,
     openGraph: {
-      title: `${a.name} — Carvana PPA Tour`,
+      title,
       description,
       images,
     },
@@ -260,7 +312,46 @@ export default async function AthletePage({ params }: Params) {
 
   const boardLabel =
     a.gender === "female" ? "Women's" : a.gender === "male" ? "Men's" : null;
-  const others = athletes.filter((x) => x.slug !== a.slug).slice(0, 4);
+  /**
+   * The "More Pros" links (8/20 rewrite).
+   *
+   * This used to be `athletes.slice(0, 4)` — the SAME four curated pros on all
+   * 179 profiles. As internal linking that is close to worthless: 179 pages
+   * pointing at four, no page reachable from any other, and nothing that tells
+   * a crawler these people are related. It is also the surface Google uses to
+   * work out that /athletes/* is a connected roster rather than 179 orphans.
+   *
+   * Now it is the pros ranked immediately either side of this one on their own
+   * board — a contextual, unique set per page, and a genuine "next/previous"
+   * signal. Falls back to the top of the board for an unranked pro, and to the
+   * old curated four if the live board is unavailable, so the section never
+   * renders empty.
+   */
+  const boardRoster = await getWprRoster().catch(() => []);
+  const others = ((): { slug: string; name: string; headshot: string }[] => {
+    const board = boardRoster
+      .filter((p) => p.gender === a.gender && p.rank > 0 && p.headshot)
+      .sort((x, y) => x.rank - y.rank);
+    const i = board.findIndex((p) => p.slug === a.slug);
+    /**
+     * Two above and two below — a five-wide window that SLIDES to the board
+     * edges, so the world No. 1 gets four links (Nos. 2–5) rather than the two
+     * that sit above her. Take five, drop this player, keep four.
+     */
+    const start = Math.max(0, Math.min(i - 2, board.length - 5));
+    const picks =
+      i < 0
+        ? board.slice(0, 4)
+        : board.slice(start, start + 5).filter((p) => p.slug !== a.slug).slice(0, 4);
+    if (picks.length) {
+      return picks.map((p) => ({
+        slug: curatedSlugFor(p.slug) ?? p.slug,
+        name: p.name,
+        headshot: p.headshot!,
+      }));
+    }
+    return athletes.filter((x) => x.slug !== a.slug).slice(0, 4);
+  })();
   // Live WPR rank for the "More Pros" cards. One cached board fetch serves every
   // slug — see the note on `bestRank` in lib/athletes.ts for why we can't use it.
   const liveRanks = await getRankingBySlug();
@@ -286,7 +377,8 @@ export default async function AthletePage({ params }: Params) {
   const paddleRecord = SHOW_EQUIPMENT ? paddleFor(a.slug) : null;
   /**
    * Jackalope (Pro Player Central → Paddles) is the LIVE source of truth for what's in
-   * the bag — the paddle a pro edits there shows here within the ISR window. It WINS over
+   * the bag — a paddle edited there shows here on the next athlete-cache refresh (see the ⚠
+   * on FRESHNESS in lib/player-overrides.ts; it is daily, not minutes). It WINS over
    * the static broadcast masterlist (`paddleRecord`), which stays as the fallback for a
    * pro the feed doesn't cover or when the feed is unreachable. Also carries the paddle
    * photo and the pinned "Buy This Paddle" URL. One fetch, used by both equipment surfaces.
@@ -434,6 +526,44 @@ export default async function AthletePage({ params }: Params) {
             // Reconciled, not raw — this is structured data Google reads, so it
             // must not publish a title count the page itself contradicts.
             description: bioParagraphs.join(" "),
+            /**
+             * Entity attributes (8/20). Google reconciles a person across the web
+             * on facts like these, and we were publishing a Person node with a
+             * name, a country and a job title — thinner than the Wikipedia entry
+             * that outranks us on our own athletes' names.
+             *
+             * ⚠ EVERY FIELD BELOW IS A FACT THE PAGE ITSELF ALREADY RENDERS, from
+             * the same variables. `birthDate` is the published profile's DOB (the
+             * value the Age row is computed from), `height`/`homeLocation` are the
+             * Quick Info rows, `alternateName` is the feed's nickname. Nothing is
+             * inferred, and anything we don't hold is simply omitted.
+             */
+            ...(stats?.nickname ? { alternateName: stats.nickname } : {}),
+            ...(qi?.dob ? { birthDate: qi.dob } : {}),
+            ...(stats?.height || qi?.height
+              ? { height: stats?.height ?? qi?.height }
+              : {}),
+            ...(stats?.hometown || qi?.resides
+              ? {
+                  homeLocation: {
+                    "@type": "Place",
+                    name: stats?.hometown ?? qi?.resides,
+                  },
+                }
+              : {}),
+            knowsAbout: "Pickleball",
+            /**
+             * `sameAs` — the pro's own accounts, from Pro Player Central. This is the
+             * single strongest entity signal on the page: it is how Google ties
+             * ppatour.com/athletes/ben-johns to the Ben Johns it already knows from
+             * everywhere else, instead of treating our page as an unrelated document
+             * about a name that Wikipedia covers better.
+             *
+             * ⚠ PASTED LINKS ONLY, validated twice (Jackalope on write, `lib/player-
+             * overrides.ts` on read). Never construct one from a handle — `sameAs` is a
+             * machine-readable assertion that this person owns that account.
+             */
+            ...(override?.socials?.length ? { sameAs: override.socials } : {}),
             // Reference the site-wide org node (app/layout.tsx) by @id instead of
             // redefining it, so the two never disagree.
             memberOf: { "@id": `${SITE_URL}/#organization` },

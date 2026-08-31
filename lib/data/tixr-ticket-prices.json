@@ -1,13 +1,13 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-08-19T13:36:22Z",
-  "event_count": 58,
-  "ticket_type_count": 861,
+  "generated_at": "2026-08-30T17:03:51Z",
+  "event_count": 59,
+  "ticket_type_count": 931,
   "series_breakdown": {
-    "Major League Pickleball": 9,
+    "Major League Pickleball": 3,
     "PPA Challenger Series": 3,
-    "PPA Tour": 46
+    "PPA Tour": 53
   },
   "field_notes": {
     "base_price": "Face value set by the organizer (USD). null when the tier is sold out / not on public sale.",
@@ -35,8 +35,8 @@
           "name": "Friday-Sunday Box Suite",
           "category": "BOOTH",
           "sale_state": "OPEN",
-          "base_price": 25000,
-          "all_in_price": 27083.71
+          "base_price": 30000,
+          "all_in_price": 32499.37
         },
         {
           "name": "MLP New York Finals 2026- Friday Pass",
@@ -121,175 +121,12 @@
           "sale_state": "HIDE",
           "base_price": null,
           "all_in_price": 113.71
-        }
-      ]
-    },
-    {
-      "event_id": "169837",
-      "name": "Major League Pickleball New York Finals 2026 - Friday: Session 1 & 2",
-      "series": "Major League Pickleball",
-      "status": "PUBLISHED",
-      "start_date": "2026-08-28",
-      "end_date": "2026-08-28",
-      "venue": {
-        "name": "CityPickle At Wollman Rink",
-        "city": "New York",
-        "state": "NY"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-finals-2026-friday-session-1-2-169837",
-      "currency": "USD",
-      "tickets": [
+        },
         {
-          "name": "Courtside Session 1 & 2",
-          "category": "STANDARD",
+          "name": "Media",
+          "category": "VENDOR",
           "sale_state": "OPEN",
-          "base_price": 30,
-          "all_in_price": 35.83
-        },
-        {
-          "name": "Courtside Session 1 & 2",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 70,
-          "all_in_price": 81.22
-        },
-        {
-          "name": "Courtside Session 1 & 2",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.71
-        },
-        {
-          "name": "Courtside Session 1 & 2",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 140,
-          "all_in_price": 156.66
-        },
-        {
-          "name": "VIP Session 1 & 2",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 350,
-          "all_in_price": 384.49
-        }
-      ]
-    },
-    {
-      "event_id": "169799",
-      "name": "Major League Pickleball New York Finals- Session 1",
-      "series": "Major League Pickleball",
-      "status": "PUBLISHED",
-      "start_date": "2026-08-28",
-      "end_date": "2026-08-28",
-      "venue": {
-        "name": "CityPickle At Wollman Rink",
-        "city": "New York",
-        "state": "NY"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-finals-session-1-169799",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Box Suite Friday Session 1",
-          "category": "BOOTH",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Courtside Session 1",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 30,
-          "all_in_price": 35.83
-        },
-        {
-          "name": "Courtside Session 1",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.66
-        },
-        {
-          "name": "Courtside Session 1",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 60,
-          "all_in_price": 70.39
-        },
-        {
-          "name": "Courtside Session 1",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 92.05
-        },
-        {
-          "name": "VIP Session 1",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 0
-        }
-      ]
-    },
-    {
-      "event_id": "169802",
-      "name": "Major League Pickleball New York Finals- Session 2",
-      "series": "Major League Pickleball",
-      "status": "PUBLISHED",
-      "start_date": "2026-08-28",
-      "end_date": "2026-08-29",
-      "venue": {
-        "name": "CityPickle At Wollman Rink",
-        "city": "New York",
-        "state": "NY"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-finals-session-2-169802",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Box Suite Friday Session 2",
-          "category": "BOOTH",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Courtside Session 2",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.66
-        },
-        {
-          "name": "Courtside Session 2",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 60,
-          "all_in_price": 70.39
-        },
-        {
-          "name": "Courtside Session 2",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 92.05
-        },
-        {
-          "name": "Courtside Session 2",
-          "category": "STANDARD",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 35.83
-        },
-        {
-          "name": "VIP Session 2",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "base_price": 0,
           "all_in_price": 0
         }
       ]
@@ -336,176 +173,6 @@
           "sale_state": "OPEN",
           "base_price": 40,
           "all_in_price": 46.56
-        }
-      ]
-    },
-    {
-      "event_id": "169804",
-      "name": "Major League Pickleball New York Finals - Saturday: Session 3",
-      "series": "Major League Pickleball",
-      "status": "PUBLISHED",
-      "start_date": "2026-08-29",
-      "end_date": "2026-08-29",
-      "venue": {
-        "name": "CityPickle At Wollman Rink",
-        "city": "New York",
-        "state": "NY"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-finals-saturday-session-3-169804",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Box Suite Saturday Session 3",
-          "category": "BOOTH",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Courtside Session 3",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 45,
-          "all_in_price": 52.08
-        },
-        {
-          "name": "Courtside Session 3",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 65,
-          "all_in_price": 75.81
-        },
-        {
-          "name": "Courtside Session 3",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 92.05
-        },
-        {
-          "name": "Courtside Session 3",
-          "category": "STANDARD",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 35.83
-        },
-        {
-          "name": "VIP Session 3",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 0
-        }
-      ]
-    },
-    {
-      "event_id": "169803",
-      "name": "Major League Pickleball New York Finals - Saturday: Session 4",
-      "series": "Major League Pickleball",
-      "status": "PUBLISHED",
-      "start_date": "2026-08-29",
-      "end_date": "2026-08-31",
-      "venue": {
-        "name": "CityPickle At Wollman Rink",
-        "city": "New York",
-        "state": "NY"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-finals-saturday-session-4-169803",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Box Suite Saturday Session 4",
-          "category": "BOOTH",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Courtside Session 4",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 70,
-          "all_in_price": 81.22
-        },
-        {
-          "name": "Courtside Session 4",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 90,
-          "all_in_price": 102.88
-        },
-        {
-          "name": "Courtside Session 4",
-          "category": "STANDARD",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 113.71
-        },
-        {
-          "name": "Courtside Session 4",
-          "category": "STANDARD",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 35.83
-        },
-        {
-          "name": "VIP Session 4",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 0
-        }
-      ]
-    },
-    {
-      "event_id": "169839",
-      "name": "Major League Pickleball New York Finals 2026 - Saturday: Session 3 & 4",
-      "series": "Major League Pickleball",
-      "status": "PUBLISHED",
-      "start_date": "2026-08-29",
-      "end_date": "2026-08-30",
-      "venue": {
-        "name": "CityPickle At Wollman Rink",
-        "city": "New York",
-        "state": "NY"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/major-league-pickleball-new-york-finals-2026-saturday-session-3-4-169839",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Courtside Session 3 & 4",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 30,
-          "all_in_price": 35.83
-        },
-        {
-          "name": "Courtside Session 3 & 4",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.71
-        },
-        {
-          "name": "Courtside Session 3 & 4",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 120,
-          "all_in_price": 135.37
-        },
-        {
-          "name": "Courtside Session 3 & 4",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 160,
-          "all_in_price": 178.7
-        },
-        {
-          "name": "VIP Session 3 & 4",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 350,
-          "all_in_price": 384.49
         }
       ]
     },
@@ -656,8 +323,8 @@
         {
           "name": "Saturday: Wave Movement - Mat Pilates Class (9am)",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 0,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 0
         },
         {
@@ -677,8 +344,8 @@
         {
           "name": "Thursday: Family Night",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 0,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 0
         },
         {
@@ -733,8 +400,8 @@
         {
           "name": "Tuesday: Wave Movement - Mat Pilates Class (5pm)",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 0,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 0
         },
         {
@@ -803,15 +470,15 @@
         {
           "name": "Tuesday Premium Parking",
           "category": "PARKING",
-          "sale_state": "OPEN",
-          "base_price": 50,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 57.36
         },
         {
           "name": "Wednesday Premium Parking",
           "category": "PARKING",
-          "sale_state": "OPEN",
-          "base_price": 50,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 57.36
         },
         {
@@ -960,29 +627,22 @@
         {
           "name": "Canes Night Courtside",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 40,
           "all_in_price": 46.56
         },
         {
           "name": "Canes Night Courtside",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 40,
           "all_in_price": 46.56
         },
         {
           "name": "Canes Night Courtside",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Canes Night Courtside",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 40,
           "all_in_price": 46.56
         },
         {
@@ -990,6 +650,13 @@
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Canes Night North Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
           "all_in_price": 46.56
         },
         {
@@ -1002,8 +669,8 @@
         {
           "name": "Canes Night VIP",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 200,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 221.49
         },
         {
@@ -1112,6 +779,13 @@
           "name": "Thursday Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
           "base_price": 60,
           "all_in_price": 70.23
         },
@@ -1123,25 +797,18 @@
           "all_in_price": 91.83
         },
         {
-          "name": "Thursday Courtside",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 46.56
-        },
-        {
           "name": "Thursday Courtside+",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 156.66
-        },
-        {
-          "name": "Thursday Courtside+",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 120,
           "all_in_price": 135.05
+        },
+        {
+          "name": "Thursday Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 140,
+          "all_in_price": 156.66
         },
         {
           "name": "Thursday Grandstand (Round of 16)",
@@ -1270,13 +937,6 @@
           "name": "Friday Evening Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Friday Evening Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 60,
           "all_in_price": 70.23
         },
@@ -1286,6 +946,13 @@
           "sale_state": "OPEN",
           "base_price": 80,
           "all_in_price": 91.83
+        },
+        {
+          "name": "Friday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.56
         },
         {
           "name": "Friday Evening Courtside+",
@@ -1428,13 +1095,6 @@
           "name": "Friday Morning Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Friday Morning Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 60,
           "all_in_price": 70.23
         },
@@ -1444,6 +1104,13 @@
           "sale_state": "OPEN",
           "base_price": 80,
           "all_in_price": 91.83
+        },
+        {
+          "name": "Friday Morning Courtside",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.56
         },
         {
           "name": "Friday Morning Courtside+",
@@ -1586,13 +1253,6 @@
           "name": "Saturday Evening Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 60,
-          "all_in_price": 70.23
-        },
-        {
-          "name": "Saturday Evening Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 80,
           "all_in_price": 91.83
         },
@@ -1602,6 +1262,13 @@
           "sale_state": "OPEN",
           "base_price": 100,
           "all_in_price": 113.44
+        },
+        {
+          "name": "Saturday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 70.23
         },
         {
           "name": "Saturday Evening Courtside+",
@@ -1888,22 +1555,22 @@
           "name": "Sunday Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
-        },
-        {
-          "name": "Sunday Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 120,
           "all_in_price": 135.05
         },
         {
           "name": "Sunday Courtside",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 140,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 156.66
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 113.44
         },
         {
           "name": "Sunday Courtside+",
@@ -1915,8 +1582,8 @@
         {
           "name": "Sunday Courtside+",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 220,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 243.1
         },
         {
@@ -2437,8 +2104,8 @@
         {
           "name": "Saturday Courtside",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 100,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 113.44
         },
         {
@@ -2553,8 +2220,8 @@
         {
           "name": "Sunday Courtside",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 100,
           "all_in_price": 113.44
         },
         {
@@ -2574,8 +2241,8 @@
         {
           "name": "Sunday VIP",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 500,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 545.63
         }
       ],
@@ -3089,8 +2756,8 @@
         {
           "name": "Saturday VIP",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 350,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 383.56
         }
       ],
@@ -3266,8 +2933,8 @@
           "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp + Weeklong Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 550,
-          "all_in_price": 599.66
+          "base_price": 580,
+          "all_in_price": 632.07
         },
         {
           "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp + Weeklong VIP",
@@ -3322,8 +2989,8 @@
           "name": "Saturday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 91.83
+          "base_price": 100,
+          "all_in_price": 113.44
         },
         {
           "name": "Saturday Grounds Pass",
@@ -3343,8 +3010,8 @@
           "name": "Sunday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
+          "base_price": 140,
+          "all_in_price": 156.66
         },
         {
           "name": "Sunday Grounds Pass",
@@ -3406,8 +3073,8 @@
           "name": "Weeklong Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 240,
-          "all_in_price": 264.71
+          "base_price": 260,
+          "all_in_price": 286.32
         },
         {
           "name": "Weeklong Grounds Pass",
@@ -3444,8 +3111,8 @@
           "name": "Friday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
+          "base_price": 50,
+          "all_in_price": 57.36
         },
         {
           "name": "Friday Grounds Pass",
@@ -3535,8 +3202,8 @@
           "name": "Saturday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
+          "base_price": 120,
+          "all_in_price": 135.05
         },
         {
           "name": "Saturday Grounds Pass",
@@ -3556,8 +3223,8 @@
           "name": "Sunday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
+          "base_price": 120,
+          "all_in_price": 135.05
         },
         {
           "name": "Sunday Grounds Pass",
@@ -3635,6 +3302,72 @@
           "sale_state": "OPEN",
           "base_price": 900,
           "all_in_price": 977.82
+        }
+      ]
+    },
+    {
+      "event_id": "203955",
+      "name": "PPA Australia Pickleball Cup",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2026-10-13",
+      "end_date": "2026-10-18",
+      "venue": {
+        "name": "Queensland Tennis Center",
+        "city": "Brisbane",
+        "state": "QLD"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-australia-pickleball-cup-203955",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Qualifiers",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64 & 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
         }
       ]
     },
@@ -4870,8 +4603,8 @@
           "name": "Saturday Full Day Box Suite",
           "category": "BOOTH",
           "sale_state": "OPEN",
-          "base_price": 6000,
-          "all_in_price": 6503.07
+          "base_price": 7500,
+          "all_in_price": 8127.48
         },
         {
           "name": "Championships",
@@ -5120,6 +4853,13 @@
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
+          "all_in_price": 92.03
+        },
+        {
+          "name": "Sunday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 70.37
         },
         {
@@ -5128,13 +4868,6 @@
           "sale_state": "HIDE",
           "base_price": null,
           "all_in_price": 113.69
-        },
-        {
-          "name": "Sunday Courtside Bleacher",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 92.03
         },
         {
           "name": "Sunday Courtside Chair",
@@ -5596,15 +5329,15 @@
           "name": "Saturday Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 50,
-          "all_in_price": 57.36
+          "base_price": 60,
+          "all_in_price": 70.23
         },
         {
           "name": "Saturday Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 70,
-          "all_in_price": 81.03
+          "base_price": 80,
+          "all_in_price": 91.83
         },
         {
           "name": "Saturday On Court VIP",
@@ -5698,15 +5431,15 @@
           "name": "Sunday Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 50,
-          "all_in_price": 57.36
+          "base_price": 60,
+          "all_in_price": 70.23
         },
         {
           "name": "Sunday Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 70,
-          "all_in_price": 81.03
+          "base_price": 80,
+          "all_in_price": 91.83
         },
         {
           "name": "Sunday On Court VIP",
@@ -5827,8 +5560,8 @@
         {
           "name": "Play with the Pro’s (4.0-4.5)",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 50,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 57.36
         },
         {
@@ -5863,8 +5596,8 @@
           "name": "Sunday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 50,
-          "all_in_price": 57.36
+          "base_price": 60,
+          "all_in_price": 70.23
         },
         {
           "name": "Sunday Grounds Pass",
@@ -5944,6 +5677,785 @@
           "all_in_price": 869.77
         }
       ]
+    },
+    {
+      "event_id": "204325",
+      "name": "PPA Palm Springs",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2027-01-11",
+      "end_date": "2027-01-18",
+      "venue": {
+        "name": "Mission Hills Country Club",
+        "city": "Rancho Mirage",
+        "state": "CA"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-palm-springs-204325",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Tuesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Wednesday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Thursday-Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 200,
+          "all_in_price": 221.49
+        },
+        {
+          "name": "Thursday-Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 250,
+          "all_in_price": 275.51
+        },
+        {
+          "name": "Thursday-Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Thursday-Sunday Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 500,
+          "all_in_price": 545.63
+        },
+        {
+          "name": "Thursday-Sunday Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 600,
+          "all_in_price": 653.68
+        },
+        {
+          "name": "Thursday-Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 900,
+          "all_in_price": 977.82
+        },
+        {
+          "name": "Thursday-Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 1100,
+          "all_in_price": 1193.91
+        }
+      ]
+    },
+    {
+      "event_id": "204420",
+      "name": "PPA Palm Springs Thursday - Round of 16",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2027-01-14",
+      "end_date": "2027-01-15",
+      "venue": {
+        "name": "Mission Hills Country Club",
+        "city": "Rancho Mirage",
+        "state": "CA"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-palm-springs-thursday-round-of-16-204420",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Thursday Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 120,
+          "all_in_price": 135.05
+        },
+        {
+          "name": "Thursday Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 160,
+          "all_in_price": 178.27
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Thursday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        }
+      ],
+      "parent_event_id": "204325"
+    },
+    {
+      "event_id": "204411",
+      "name": "PPA Palm Springs Friday - Quarterfinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2027-01-15",
+      "end_date": "2027-01-16",
+      "venue": {
+        "name": "Mission Hills Country Club",
+        "city": "Rancho Mirage",
+        "state": "CA"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-palm-springs-friday-quarterfinals-204411",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Friday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Friday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Friday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Friday Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 120,
+          "all_in_price": 135.05
+        },
+        {
+          "name": "Friday Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 160,
+          "all_in_price": 178.27
+        },
+        {
+          "name": "Friday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Friday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        }
+      ],
+      "parent_event_id": "204325"
+    },
+    {
+      "event_id": "204394",
+      "name": "PPA Palm Springs Saturday Evening - Men's and Women's Doubles Semifinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2027-01-16",
+      "end_date": "2027-01-17",
+      "venue": {
+        "name": "Mission Hills Country Club",
+        "city": "Rancho Mirage",
+        "state": "CA"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-palm-springs-saturday-evening-men-s-and-women-s-doubles-semifinals-204394",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Semifinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Saturday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Saturday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Saturday Evening Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 120,
+          "all_in_price": 135.05
+        },
+        {
+          "name": "Saturday Evening Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 160,
+          "all_in_price": 178.27
+        },
+        {
+          "name": "Saturday Evening VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Saturday Evening VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 437.59
+        }
+      ],
+      "parent_event_id": "204325"
+    },
+    {
+      "event_id": "204392",
+      "name": "PPA Palm Springs Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2027-01-16",
+      "end_date": "2027-01-16",
+      "venue": {
+        "name": "Mission Hills Country Club",
+        "city": "Rancho Mirage",
+        "state": "CA"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-palm-springs-saturday-morning-singles-and-mxd-doubles-semifinals-204392",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Semifinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Saturday Morning Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Saturday Morning Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Saturday Morning Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Saturday Morning Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 120,
+          "all_in_price": 135.05
+        },
+        {
+          "name": "Saturday Morning Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 160,
+          "all_in_price": 178.27
+        },
+        {
+          "name": "Saturday Morning VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Saturday Morning VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 437.59
+        }
+      ],
+      "parent_event_id": "204325"
+    },
+    {
+      "event_id": "204335",
+      "name": "PPA Palm Springs Sunday - Championships",
+      "series": "PPA Tour",
+      "status": "PUBLISHED",
+      "start_date": "2027-01-17",
+      "end_date": "2027-01-18",
+      "venue": {
+        "name": "Mission Hills Country Club",
+        "city": "Rancho Mirage",
+        "state": "CA"
+      },
+      "url": "https://www.tixr.com/groups/ppa/events/ppa-palm-springs-sunday-championships-204335",
+      "currency": "USD",
+      "tickets": [
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Register Here",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 16",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 32",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Round of 64",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Men's and Women's Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Semifinals - Singles and Mxd Doubles",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Sunday Grounds Pass",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 25,
+          "all_in_price": 30.35
+        },
+        {
+          "name": "Weeklong Passes",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 91.83
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
+        },
+        {
+          "name": "Sunday Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 140,
+          "all_in_price": 156.66
+        },
+        {
+          "name": "Sunday Courtside+",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 180,
+          "all_in_price": 199.88
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 350,
+          "all_in_price": 383.56
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 437.59
+        }
+      ],
+      "parent_event_id": "204325"
     },
     {
       "event_id": "196548",

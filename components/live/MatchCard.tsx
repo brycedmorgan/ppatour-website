@@ -116,7 +116,7 @@ export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: s
             <div
               key={ti}
               className={`grid flex-1 grid-cols-[1fr_2rem_2rem_2rem] items-stretch border-b border-ppa-line last:border-b-0 ${
-                rowIsWinner ? "bg-[#d8ebd3]" : ""
+                rowIsWinner ? "bg-ppa-win" : ""
               }`}
             >
               <div className="flex items-center gap-2 px-3 py-1.5">
@@ -160,7 +160,7 @@ export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: s
                       c.live
                         ? "font-bold text-ppa-live"
                         : cellGreen
-                          ? "bg-[#d8ebd3] font-bold text-ppa-navy"
+                          ? "bg-ppa-win font-bold text-ppa-navy"
                           : rowIsWinner
                             ? "font-bold text-ppa-navy"
                             : "text-ppa-navy/45"

@@ -4,6 +4,7 @@ import { CURATED_TO_CANONICAL, publishedAthletes } from "@/lib/published-athlete
 import { eventHref, tournaments } from "@/lib/placeholder-data";
 import { tourPrograms } from "@/lib/tour-programs";
 import { allNews } from "@/lib/news";
+import { getShopProductHandles, shopHref } from "@/lib/shop";
 
 import { SITE_URL } from "@/lib/site";
 
@@ -19,7 +20,15 @@ const url = (path: string) => {
   return abs.endsWith("/") ? abs : `${abs}/`;
 };
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  /**
+   * Product URLs come from Shopify, so this is the first remote read in the
+   * sitemap. It resolves to [] when the storefront is unconfigured or down —
+   * which is the right failure: a sitemap that lists product pages the site
+   * cannot render is worse than one that omits them for a build.
+   */
+  const shopHandles = await getShopProductHandles();
+
   // Every athlete page (curated shorthand slug when we have one, else canonical).
   const canonicalToCurated: Record<string, string> = Object.fromEntries(
     Object.entries(CURATED_TO_CANONICAL).map(([ours, api]) => [api, ours]),
@@ -57,6 +66,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/about/privacy",
     "/about/terms",
     "/search",
+    /**
+     * ⚠ /shop is listed only when the catalogue actually resolved. The page
+     * renders a holding state either way, and submitting a "shop" URL with no
+     * product behind it is how a thin-content flag gets earned on a domain
+     * whose SEO baseline we are still building.
+     */
+    ...(shopHandles.length > 0 ? ["/shop"] : []),
   ];
 
   return [
@@ -115,6 +131,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: url(n.href),
       lastModified: new Date(n.publishedAt),
       changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
+    /**
+     * Shop products. No `lastModified` — Shopify has an `updatedAt` but it
+     * moves on inventory changes, so emitting it would tell crawlers a product
+     * page changed every time a size sold out. Omitting it is more honest than
+     * a date that means something else.
+     */
+    ...shopHandles.map((handle) => ({
+      url: url(shopHref(handle)),
+      changeFrequency: "weekly" as const,
       priority: 0.6,
     })),
   ];

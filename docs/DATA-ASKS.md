@@ -365,3 +365,43 @@ blind and Slack remains the only signal.
 
 **⚠ Supersedes the stale note that Team Leagues has no player→team link.** That
 was true on 8/6 and stopped being true on 8/7.
+
+## Bracket advancement links — ❌ BLOCKED, needs a feed field
+
+**Verified 2026-08-26.** The bracket connectors ("winner of this match plays
+here") cannot be drawn for an **unplayed** draw. The draw feed
+`/v1/ppa/tournaments/{uuid}/tournament_events/{eventId}` carries no bracket
+position and no advancement pointer. Its full field list is:
+
+```
+roundNumber matchNumber roundText inBracketType matchUuid matchCompletedType
+teamOneUuid teamTwoUuid teamOne/TwoPlayerOne/TwoUuid|FirstName|LastName
+teamOne/TwoSeed courtUuid courtTitle scoreFormatTitle scoreFormatGameBestOutOf
+teamOne/TwoGameOne..FiveScore matchStart matchCompleted winner
+```
+
+`lib/brackets-api.ts` therefore reconstructs advancement by following the
+**winning team UUID** into its next-round match. That works only once a match
+is final, so a pre-play draw shows zero connector lines.
+
+**Why we can't infer it.** `matchNumber` is *scheduling* order, not bracket
+order. Ground truth from `lib/bracket-fixtures/atlanta-mens-singles-pro.json`:
+the Round-of-64 matches are numbered 17–48 but occupy template slots
+2,4,6,…,32 then 1,3,5,…,31. Pairing adjacent match numbers (`i → floor(i/2)`)
+therefore produces the **wrong** tree. It is not a safe guess and we do not
+ship it.
+
+**The ask (one field, either one):**
+
+- `matchWinnerGoesTo` — the UUID of the match the winner advances to, **or**
+- `templateMatchID` — the bracket slot, e.g. `00064W-00002`; slot *n* in
+  `000{N}W` feeds slot `ceil(n/2)` in `000{N/2}W`.
+
+Both fields exist in the older `apps/brackets` payload we captured as fixtures
+(see `lib/bracket-adapter.ts`), so this is an exposure question, not a data
+question. `lib/brackets-api.ts` **already reads `matchWinnerGoesTo`,
+`matchTeamOneComesFrom` and `matchTeamTwoComesFrom`** and prefers them over the
+winner trace — the day the feed carries one, every line lights up with no code
+change.
+
+**Who to ask:** Kenan, in the API Slack group DM `C0BKZLY7YQG`.

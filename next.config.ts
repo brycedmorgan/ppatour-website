@@ -287,6 +287,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "khubqvjky7bimx7i.public.blob.vercel-storage.com",
       },
+      // Shopify product imagery for the headless storefront (/shop). The
+      // Storefront API returns absolute cdn.shopify.com URLs; without this
+      // pattern next/image 400s them and every product card renders empty.
+      { protocol: "https", hostname: "cdn.shopify.com" },
       // NOTE: ppatour.com is deliberately NOT allowlisted. All 1,553 archive
       // assets are rehosted to Blob (`sync-wp-media.mjs --verify` passes at
       // 100%), so a next/image request for a ppatour.com URL now means an

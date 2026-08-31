@@ -1,8 +1,8 @@
 /**
  * Per-player paddle data managed in Jackalope (Pro Player Central → Paddles & Watch,
- * Dillon Segur + Liv Borski). This is the LIVE source of truth for what's in the bag —
- * a pro's paddle changes there and this page reflects it within the ISR window, no
- * rebuild. Fields:
+ * Dillon Segur + Liv Borski). This is the source of truth for what's in the bag — a pro's
+ * paddle changes there and this page picks it up with no rebuild, though NOT as quickly as
+ * this comment used to claim; see the ⚠ on FRESHNESS below. Fields:
  *   - paddle / searchTerm — the brand + model, live. Wins over the static broadcast
  *     masterlist (`lib/athlete-paddles.ts`), which stays as the fallback for a pro the
  *     feed doesn't cover or when the feed is unreachable.
@@ -30,6 +30,28 @@ import { ATHLETES_CACHE_TAG } from "@/lib/cache-tags";
 const FEED = "https://jackalopehq.vercel.app/api/public/paddles";
 const REVALIDATE_S = 300;
 
+/**
+ * ⚠ FRESHNESS — READ THIS BEFORE TELLING ANYONE "IT UPDATES IN FIVE MINUTES".
+ * It does not. Three comments in this repo used to say "within the ISR window";
+ * measured on 8/22 against a real edit, they were wrong.
+ *
+ * `REVALIDATE_S` above is how long the FETCH is cached. But an athlete page exports no
+ * `revalidate` — it is prerendered from `generateStaticParams`, so the page's own HTML
+ * only regenerates when something invalidates ATHLETES_CACHE_TAG. Today the only things
+ * that do are a deploy and the Vercel Cron on `/api/revalidate-athletes`, which runs
+ * ONCE A DAY at 07:00 UTC (vercel.json). So a Pro Player Central edit is visible on
+ * ppatour.com somewhere between a minute and 24 hours later, averaging about twelve.
+ *
+ * Do NOT "fix" this by adding `export const revalidate` to the athlete page. There are
+ * 1,174 of them; a short window means every one re-renders on its own schedule, and the
+ * daily cron exists precisely so page renders don't walk into the partner API's rate
+ * limit (see the note in app/api/revalidate-athletes/route.ts).
+ *
+ * The real fix is a webhook: Jackalope calls `/api/revalidate-athletes` when a player
+ * record is saved, and the edit lands in seconds. That needs a shared secret set in both
+ * Vercel projects, so it is Bryce's to enable, not something this file can do.
+ */
+
 export type PlayerOverride = {
   paddle: string | null;
   searchTerm: string | null;
@@ -54,6 +76,17 @@ export type PlayerOverride = {
    * is a worse page than the plain navy one.
    */
   heroImage: string | null;
+  /**
+   * The pro's own public accounts, as absolute URLs — Instagram, X, TikTok, YouTube,
+   * whichever Pro Player Central holds. These become `sameAs` on the athlete page's
+   * Person structured data, which is how a search engine reconciles this page with the
+   * same person elsewhere on the web. Empty is the normal case.
+   *
+   * ⚠ NEVER BUILT FROM A HANDLE, here or upstream. `instagram.com/<guess>` published
+   * under a pro's name is a machine-readable claim that they own an account that may
+   * belong to someone else. The feed validates that each value is a pasted https URL.
+   */
+  socials: string[];
 };
 
 type FeedPaddle = {
@@ -64,6 +97,7 @@ type FeedPaddle = {
   image?: string | null;
   featuredMatchUrl?: string | null;
   heroImage?: string | null;
+  socials?: string[];
 };
 
 /**
@@ -135,8 +169,18 @@ async function fetchOverrides(): Promise<Map<string, PlayerOverride>> {
       const pbcUrl = (p.pbcUrl || "").trim() || null;
       const image = (p.image || "").trim() || null;
       const heroImage = (p.heroImage || "").trim() || null;
+      // Absolute https only, de-duplicated. The feed already validates on write; this
+      // is the second gate, because a bad value here is republished as structured data.
+      const socials = [
+        ...new Set(
+          (p.socials ?? [])
+            .map((u) => (u || "").trim())
+            .filter((u) => /^https:\/\/\S+$/i.test(u)),
+        ),
+      ];
       // Nothing worth overriding with → skip (leaves the static fallback in place).
-      if (!built && !featuredMatchUrl && !pbcUrl && !image && !heroImage) continue;
+      if (!built && !featuredMatchUrl && !pbcUrl && !image && !heroImage && !socials.length)
+        continue;
       map.set(key, {
         paddle: built?.paddle ?? null,
         searchTerm: built?.searchTerm ?? null,
@@ -145,6 +189,7 @@ async function fetchOverrides(): Promise<Map<string, PlayerOverride>> {
         featuredMatchUrl,
         pbcUrl,
         heroImage,
+        socials,
       });
     }
   } catch {

@@ -391,7 +391,7 @@ export const partners: Partner[] = [
   },
   {
     // "Proton" per the 8/4 approved list (was "Proton Sports"). Side benefit:
-    // the Malibu Cup's curated presenter string is "Proton", so the marquee card
+    // the Malibu Showcase's curated presenter string is "Proton", so the marquee card
     // on that event now resolves this record's mark by exact name.
     name: "Proton",
     // Verified 7/28 (Conner Ogden: sponsor tiles were bouncing to a PPA page
@@ -801,6 +801,31 @@ export const partners: Partner[] = [
     logo: "/ppa/sponsors/tixr.png",
     logoWidth: 900,
     logoHeight: 186,
+  },
+  {
+    /**
+     * Added 8/26 (Emily Williams). Tier and designation are both hers,
+     * verbatim — "Tour Sponsor" section, "Official Functional & Prebiotic
+     * Soda". `role` renders as written, so the ampersand and the wording are
+     * the sponsor's, not a house rephrase.
+     *
+     * ⚠ THE MARK IS WHITE-FILL WITH A BLACK OUTLINE, so on the wall's white
+     * card the outline draws the letters and the fill drops out — it reads as
+     * outlined type beside solid wordmarks. That is the supplied art behaving
+     * as designed, not a broken asset; the reasoning and the "don't recolour
+     * it" ruling live on its job in scripts/import-sponsor-logos.mjs.
+     *
+     * No `eventNamePrefix`: Vita Pop titles no stop, and unset is what keeps
+     * `EventSponsors` from ever crediting them with one.
+     */
+    name: "Vita Pop",
+    website: "https://vitapopsodas.com/",
+    role: "Official Functional & Prebiotic Soda",
+    category: "Functional & Prebiotic Soda",
+    tier: "tour",
+    logo: "/ppa/sponsors/vita-pop.webp",
+    logoWidth: 768,
+    logoHeight: 586,
   },
   {
     /**

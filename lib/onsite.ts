@@ -28,6 +28,15 @@ export type OnSiteInfo = {
    * gate rather than downloading.
    */
   venueMapUrl?: string;
+  /**
+   * The map's intrinsic pixel size. REQUIRED alongside `venueMapUrl`:
+   * next/image needs a ratio to reserve space, and hardcoding one in the page
+   * would squash the next stop's map if it arrives in the other orientation —
+   * which is exactly what happened here when a landscape v9 was replaced by a
+   * portrait kiosk v1 on the same day.
+   */
+  venueMapWidth?: number;
+  venueMapHeight?: number;
   /** Which gate to use, in the event team's words. */
   entry?: string;
   /** Bag policy — size limits, what is prohibited. */
@@ -50,7 +59,32 @@ const ON_SITE_BY_SLUG: Record<string, OnSiteInfo> = {
   // Nationals — Aug 31–Sep 6, Cary Tennis Park. Owner: Haley Brezec.
   // Parking, ADA, shuttle and rideshare are already answered by the event
   // team's submitted copy in lib/event-guides.ts; these five are the gap.
-  "veolia-pickleball-national-championships": {},
+  "veolia-pickleball-national-championships": {
+    /**
+     * The ops team's kiosk map, v1 — it REPLACED the landscape v9 the same day
+     * (Bryan Renahan, 8/27). Encoded from a 2592×3456 PNG to 2000px webp
+     * (279KB): webp because this is flat, vector-style art where it beat both
+     * JPEG and palette PNG outright, and 2000px because the job of the image is
+     * small text (court numbers, "6800 Good Hope Church Rd") that people
+     * pinch-zoom into.
+     *
+     * ⚠ IT IS PORTRAIT (3:4) WHERE v9 WAS LANDSCAPE (4:3). The venue slot must
+     * therefore NOT force an aspect ratio — a portrait map in a 4:3 box renders
+     * small between two fat gutters. It sizes to the dimensions below instead,
+     * so the next stop can supply either orientation.
+     *
+     * ⚠ And it renders `object-contain` with no Ken Burns pan and no scrim,
+     * unlike the aerial photo it stands in place of: each of those crops,
+     * drifts, or covers part of the artwork.
+     *
+     * What the kiosk cut drops against v9 — the Veolia branding rail, the
+     * sponsor logos, the stage-music list and the dates — this site now renders
+     * natively and better, so this is the stronger web asset, not a lesser one.
+     */
+    venueMapUrl: "/ppa/venue-maps/cary-tennis-park.webp",
+    venueMapWidth: 2000,
+    venueMapHeight: 2667,
+  },
 };
 
 export function onSiteFor(slug: string): OnSiteInfo {

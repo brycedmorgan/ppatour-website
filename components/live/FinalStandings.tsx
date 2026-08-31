@@ -10,7 +10,7 @@ import type { DivisionStandings, Medal, ScoresResult } from "@/lib/scores-api";
 const MEDAL: Record<Medal, { icon: string; label: string; ring: string }> = {
   gold: { icon: "🥇", label: "Champion", ring: "border-l-ppa-yellow" },
   silver: { icon: "🥈", label: "Finalist", ring: "border-l-white/50" },
-  bronze: { icon: "🥉", label: "Third", ring: "border-l-[#c98a3c]" },
+  bronze: { icon: "🥉", label: "Third", ring: "border-l-ppa-bronze" },
 };
 
 export function FinalStandings({ eventId }: { eventId: string }) {

@@ -4,10 +4,17 @@ What we are trying to do here, what is next, and what we want but cannot build
 yet. Detailed API asks live in [`DATA-ASKS.md`](DATA-ASKS.md); the dated history
 lives in the Session Log in the repo root `CLAUDE.md`.
 
+> ⚠ **Before quoting any GA4 number for this site, read
+> [`ANALYTICS.md`](ANALYTICS.md).** Property `358407319` carries five websites and
+> ppatour.com is 2% of its views. Every unfiltered metric in it is Pickleball
+> Brackets, not the PPA Tour.
+
 The site is the **content / discovery / streaming** layer. Commerce redirects out
 to partners (Tixr for tickets, pickleballtournaments.com for amateur
-registration). Pickleball Vacations is the one deliberate exception, and even
-there Stripe hosts the checkout.
+registration). There are **two deliberate exceptions** — Pickleball Vacations
+and `/shop` — and in both the provider hosts the checkout. No card data,
+addresses or order state live in this app, and there is no cart. A third
+commerce surface needs the same conversation those two had.
 
 ---
 
@@ -19,6 +26,9 @@ there Stripe hosts the checkout.
 | Punta Cana bookings | LIVE at $4,800 double, 1 room left | none; Lainey controls rooms in Jackalope |
 | MLP per-player timeline | Endpoint approved, awaiting their push | `team_leagues_rosters` going live (DATA-ASKS §6) |
 | "Playing next" on profiles | Not started | Player→events endpoint (DATA-ASKS §5) |
+| `/shop` headless storefront | Built 8/19, **shipped dark** — renders a holding state | A Storefront token, and the PBC decision below ([`SHOP.md`](SHOP.md)) |
+| PPA × Vuori apparel deal | Concept + line sheet built; no approach made | Bryce to open the conversation |
+| **GA4 property contamination** | Found 8/24; **nothing quotable until filtered** — [`ANALYTICS.md`](ANALYTICS.md) | Option A is buildable now; the split needs Bryce + the brackets owner |
 
 ## The fan app
 
@@ -30,24 +40,81 @@ owner per event, not on code).
 
 ## Next — buildable today, no external dependency
 
-1. **Add `team_leagues_rosters` to Jackalope's probe** (`lib/pbapi.js`
+1. **Put the `Hostname contains ppatour.com` comparison on GA4 property
+   `358407319`**, and add the same filter to Jackalope's `api/marketing/ga4.js`
+   **before** `GA4_SA_KEY` is set. Five minutes, reversible, and until it exists
+   every number the property reports is 98% somebody else's traffic
+   ([`ANALYTICS.md`](ANALYTICS.md)).
+2. **Add `team_leagues_rosters` to Jackalope's probe** (`lib/pbapi.js`
    `TEAM_LEAGUE_ENDPOINTS`). One line. Without it we cannot detect the endpoint
    going live, so Slack is our only signal.
-2. **Discipline-level "where their points come from"** on athlete profiles. The
+3. **Discipline-level "where their points come from"** on athlete profiles. The
    WPR weighting is verified exact for all 2,033 ranked pros (DATA-ASKS §4), so
    this needs no new access.
-3. **Per-event placements per player** by walking the bracket feed — buildable
+4. **Per-event placements per player** by walking the bracket feed — buildable
    now as a cron-warmed job (DATA-ASKS §4a).
-4. **Mirror the Trip Builder into `NationalsLive.tsx`.** The `-live` route
+5. **Mirror the Trip Builder into `NationalsLive.tsx`.** The `-live` route
    renders its own trip section and drifts from the main event page.
-5. **Fill `HEROES_BY_SLUG`** for marquee pros as named photos arrive.
+6. **Fill `HEROES_BY_SLUG`** for marquee pros as named photos arrive.
+7. **A Shopify `products/update` webhook** calling
+   `revalidateTag("shopify-catalog")`, so a merchandising edit appears at once
+   rather than within five minutes. Only worth building once someone is
+   merchandising live.
+8. **Verify `SHOPIFY_API_VERSION`.** It defaults to `2026-07` and no query has
+   ever run against a real store. A rejected version fails safe and therefore
+   looks exactly like "no products published yet" — check it first if the shop
+   shows its holding state with a token set.
 
 ## Later — wants a decision, not code
 
+- **PPA Tour Europe as a region of this site.** Bryce's call 8/24: build it
+  **into** ppatour.com (`/europe`), not beside it as a fifth site. 7 of Smash's
+  11 asks already ship; the feed already tags Europe, so a Europe stop appears on
+  the calendar with no code change. ⚠ This is the last region we can still fold
+  in — `ppatour.com.au` belongs to Pacific Pickleball Pty Ltd and Asia is the same
+  shape. The decision is made and the people work is out; what remains is a build
+  waiting on data. Full write-up: [`EUROPE.md`](EUROPE.md).
+
+  **Settled 8/24–8/25 — do not re-litigate:** `ppatoureurope.com` is confirmed
+  ours (row 446 of the company domain export). `europe@ppatour.com` is live as a
+  Google Group. Redirecting `ppatourspain.com` is an **ask to Smash**, not a task
+  — it is their domain; Italy and France we own.
+
+  **Blocked on, in order:**
+  1. The **20 announced stops reaching PB Tournaments**. 3 were live on 8/24
+     against 20 announced 7/31. Nothing downstream — calendar, rankings, results,
+     medals — exists on any website until this lands. **Chris Patrick.**
+  2. The **Europe roster + player photography**. Unblocks Smash's loudest ask
+     (athlete profiles) against the system that already runs 179 US pros.
+     **Katherina Preis.** ⚠ Attribute those photos from provenance, never by
+     looking — Wishlist §2 below.
+  3. **What the gallery is for** (event recaps vs player assets vs press). It
+     changes what gets built. **Albert Escofet, Smash.**
+  4. A **headcount for licensee email addresses** — a paid Workspace seat each.
+     **Chris Patrick**, then Kate Young creates them.
+
+- **Buildable now, no dependency:** add **Andorra** to `COUNTRY_BY_CODE` in
+  `lib/events-api.ts`. It was in the 7/31 announcement and is missing from the
+  map, so an Andorran stop would silently miss the Europe region filter.
 - **Site chrome during a live event.** The homepage flips itself live, but
   `TopBar` and `StickyBuyBar` are still pathname-gated to `/live`. Making
   `StickyBuyBar` live-aware turns the tour's #1 ticket CTA into "Watch Live" on
   every page for the duration of an event. Commercial call, not a cleanup.
+- **Who runs the PPA Tour store.** Pickleball Central already operates a live
+  **PPA Tour Store** (10 products, *"the official retailer of the PPA Tour"*),
+  and ppatour.com's own header "Shop" link points at it. PBC holds the
+  **Official Store** designation, so repointing that link at our `/shop` moves
+  revenue away from a Gold partner's contract. `/shop` is therefore built but
+  absent from the nav. Three resolutions are written up in [`SHOP.md`](SHOP.md);
+  the one that costs nobody anything — PBC's Shopify as the backend, `/shop` as
+  the PPA-branded front end — is blocked because PBC is **not** in the
+  Pickleball Holdings LLC Shopify org. **Bryce + Connor.**
+- **How we separate ppatour.com from Pickleball Brackets in GA4.** `G-QCCT4TV3JR`
+  is live on their production sites, so we cannot delete the stream — that is
+  their measurement, not ours. Three resolutions are written up in
+  [`ANALYTICS.md`](ANALYTICS.md); the right end state (C, move their streams to
+  their own property) needs whoever owns `G-QCCT4TV3JR` in the room.
+  **Bryce + the brackets owner.**
 - **News home** — ppatour.com vs pickleball.com. Open since 7/28.
 - **MLP's absence from the site.** Still unaddressed.
 

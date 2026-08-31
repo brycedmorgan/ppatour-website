@@ -68,7 +68,7 @@ export const tvSchedule: TvEvent[] = [
         date: "Sep 3",
         dow: "Thu",
         windows: [
-          { channel: "PBTV", window: "10AM – 6PM", round: "Round of 16" },
+          { channel: "PBTV", window: "9AM – 5PM", round: "Round of 16" },
           { channel: "Tennis Channel", window: "11:30AM – 5PM", round: "Round of 16" },
         ],
       },
@@ -333,11 +333,28 @@ export const tvSchedule: TvEvent[] = [
    * 2:30–5:30PM. WEDNESDAY IS NEW — TC carries five days here, not four.
    */
   {
-    name: "Veolia Malibu Cup",
+    /**
+     * Renamed and re-dated 8/26 (Bryan Renahan, via the feed): "Veolia Malibu
+     * Cup" → "Veolia Malibu Showcase", and the event now opens Dec 14.
+     *
+     * ⚠ THE TV WINDOWS BELOW ARE DELIBERATELY UNCHANGED, and the calendar is
+     * why. The event gained a day at the FRONT, not a shift: Dec 14 is a
+     * Monday and Dec 20 is still the Sunday, so Championship Sunday has not
+     * moved and every Tue–Sun row still lands on the weekday the 8/13 sheet
+     * assigned it. Monday carries no window — the sheet has never listed one,
+     * and an opening qualifying day without TV is the Nationals pattern.
+     * ⚠ Do NOT shift these rows back a day to "match" the new start; that
+     * would put Championship Sunday on a Saturday.
+     *
+     * `startIso` is the EVENT's start (Dec 14) so it agrees with /events; the
+     * `days` array below is TV coverage only. Nothing derives the days from
+     * these two fields — they drive sorting and the event link's year.
+     */
+    name: "Veolia Malibu Showcase",
     location: "Pepperdine University · Malibu, CA",
     tier: "Cup · 1,500",
     league: "PPA",
-    startIso: "2026-12-15",
+    startIso: "2026-12-14",
     endIso: "2026-12-20",
     slug: "veolia-malibu-cup",
     days: [

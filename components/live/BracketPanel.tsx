@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Bracket, BracketDivision } from "@/lib/bracket-types";
+import { mergeBracket } from "@/lib/bracket-merge";
 import { BracketView } from "@/components/live/BracketView";
 
 /**
@@ -49,9 +50,13 @@ export function BracketPanel({
         if (!active || !d) return;
         const divs: BracketDivision[] = d.divisions ?? [];
         setDivisions(divs);
-        setSelected((prev) => prev ?? initialDivision ?? divs[0]?.id ?? null);
+        const next = initialDivision ?? divs[0]?.id ?? null;
+        setSelected((prev) => prev ?? next);
+        // Nothing to select means the draw fetch below never runs — drop the
+        // spinner here or the panel spins forever on an event with no draw.
+        if (!next) setLoading(false);
       })
-      .catch(() => {});
+      .catch(() => setLoading(false));
     return () => {
       active = false;
     };
@@ -68,20 +73,40 @@ export function BracketPanel({
       })
         .then((r) => (r.ok ? r.json() : null))
         .then((d) => {
-          if (!active || !d) return;
-          setBracket(d.bracket);
-          setLosers(d.losers ?? null);
-          setPools(d.pools ?? null);
-          // Default view per division (once, so polling doesn't reset a manual
-          // toggle) — round-robin events open on their pool play.
-          if (first) {
-            setView(d.pools ? "pools" : "main");
-            first = false;
+          if (!active) return;
+          // A 404 or a parse failure has to clear the spinner too — otherwise a
+          // bad division id in the URL spins forever instead of saying so.
+          if (d) {
+            // ⚠ MERGE, DO NOT REPLACE. `setBracket(d.bracket)` here is what
+            // made the draw vanish and change shape between polls: any thin
+            // or empty response overwrote a complete bracket. `mergeBracket`
+            // keeps the richer structure and applies the newest match data on
+            // top, so a poll only ever advances the draw. See lib/bracket-merge.
+            setBracket((prev) => mergeBracket(prev, d.bracket));
+            setLosers((prev) => mergeBracket(prev, d.losers ?? null));
+            setPools((prev) => mergeBracket(prev, d.pools ?? null));
+            // Default view per division (once, so polling doesn't reset a
+            // manual toggle) — round-robin events open on their pool play.
+            if (first) {
+              setView(d.pools ? "pools" : "main");
+              first = false;
+            }
           }
           setLoading(false);
         })
-        .catch(() => {});
+        .catch(() => {
+          if (active) setLoading(false);
+        });
     setLoading(true);
+    // ⚠ Clear on a DIVISION CHANGE (this effect re-runs), never on a poll.
+    // Merging is what protects a draw mid-poll; across divisions it would be
+    // wrong — and for a division with no losers/pools bracket the incoming
+    // value is null, which `mergeBracket` reads as "nothing arrived, keep what
+    // you have". Without this reset that keeps the PREVIOUS division's losers
+    // bracket behind the toggle.
+    setBracket(null);
+    setLosers(null);
+    setPools(null);
     load();
     const id = window.setInterval(load, POLL_MS);
     return () => {
@@ -192,17 +217,28 @@ export function BracketPanel({
         );
       })()}
 
-      {/* Bracket */}
+      {/* Bracket. A draw with no rounds is a real state — an upstream hiccup
+          builds one, and so does an event whose draw isn't posted. Say so
+          instead of rendering an empty box; the 15s poll heals it either way. */}
       <div className="mt-4">
-        {loading || !shown ? (
+        {loading ? (
           <div className={`flex h-[220px] items-center justify-center rounded-lg border ${light ? "border-ppa-line bg-ppa-paper" : "border-white/10 bg-ppa-navy-deep"}`}>
             <span
               aria-hidden
               className={`size-6 animate-spin rounded-full border-2 ${light ? "border-ppa-line border-t-ppa-blue" : "border-white/20 border-t-white"}`}
             />
           </div>
-        ) : (
+        ) : shown?.rounds.length ? (
           <BracketView bracket={shown} fullPage={fullPage} light={light} />
+        ) : (
+          <div className={`flex h-[220px] flex-col items-center justify-center gap-2 rounded-lg border px-6 text-center ${light ? "border-ppa-line bg-ppa-paper" : "border-white/10 bg-ppa-navy-deep"}`}>
+            <p className={`text-[13px] font-bold uppercase tracking-[0.14em] ${light ? "text-ppa-navy" : "text-white"}`}>
+              No draw to show yet
+            </p>
+            <p className={`text-[13px] ${light ? "text-ppa-navy/55" : "text-white/55"}`}>
+              This page checks again every few seconds.
+            </p>
+          </div>
         )}
       </div>
     </div>

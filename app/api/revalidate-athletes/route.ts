@@ -10,12 +10,43 @@ import { ATHLETES_CACHE_TAG } from "@/lib/cache-tags";
  * builds don't re-hit — and never trip — the partner API's rate limit.
  *
  * If CRON_SECRET is set, we require Vercel's `Authorization: Bearer <secret>`.
+ *
+ * SECOND CALLER (8/23): Jackalope, on save.
+ *
+ * The daily cron alone means a Pro Player Central edit — a paddle, a hero photo, a pro's
+ * social links — is invisible here for up to 24 hours, averaging about twelve. Three
+ * comments in this repo used to claim five minutes; they were wrong, and the reason is
+ * written up at the ⚠ FRESHNESS block in `lib/player-overrides.ts`. Jackalope now calls
+ * this route when a player record is saved, so an edit lands in seconds.
+ *
+ * It authenticates with its OWN secret, `REVALIDATE_HOOK_SECRET`, NOT with CRON_SECRET.
+ * Two reasons: CRON_SECRET is Vercel's cron credential and should not be copied into a
+ * second application, and a separate secret can be rotated to cut Jackalope off without
+ * breaking the cron.
+ *
+ * ⚠ UNSET IS THE SAFE DEFAULT AND THE CURRENT STATE. With no REVALIDATE_HOOK_SECRET this
+ * route behaves exactly as before — the branch below can never match, because an unset
+ * secret is never compared against. Setting it in both projects is what switches the
+ * webhook on; nothing here needs to change again.
  */
 export const dynamic = "force-dynamic";
 
+/**
+ * True when the request carries a Bearer token matching a secret we actually hold.
+ * ⚠ An UNSET secret must never authorise anything — `!secret` returns false rather than
+ * falling through to a `"Bearer undefined"` comparison.
+ */
+function bearerMatches(request: Request, secret: string | undefined): boolean {
+  if (!secret) return false;
+  return request.headers.get("authorization") === `Bearer ${secret}`;
+}
+
 export async function GET(request: Request) {
   const secret = process.env.CRON_SECRET;
-  if (secret && request.headers.get("authorization") !== `Bearer ${secret}`) {
+  const authorized =
+    bearerMatches(request, secret) ||
+    bearerMatches(request, process.env.REVALIDATE_HOOK_SECRET);
+  if (secret && !authorized) {
     return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
   }
 

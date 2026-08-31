@@ -87,6 +87,23 @@ const NAME_SLOTS: [string, string, string][] = [
 ];
 
 /**
+ * ⚠ THE FEED FILLS EMPTY DRAW SLOTS WITH THE LITERAL STRING "TBD", and a bye
+ * with "BYE" — first name set, last name empty. They arrive the moment the
+ * draw is created, so every unplayed later round is full of them: verified on
+ * Nationals 2026-08-24, where all five main draws carry seeded round-one
+ * players and rounds 2-7 are entirely TBD.
+ *
+ * Left in, they are counted as players — so `published` goes true on a draw
+ * shell that names nobody, and `getPlayersToWatch` can put a card reading
+ * "TBD" on an event page. Neither is a person, so neither belongs in a field.
+ */
+const PLACEHOLDER_NAMES = new Set(["TBD", "BYE"]);
+
+function isPlaceholder(name: string): boolean {
+  return PLACEHOLDER_NAMES.has(name.trim().toUpperCase());
+}
+
+/**
  * The pro field for a tournament — every named player in the published main
  * draws, with their best seed. `published: false` (and an empty list) whenever
  * the draw isn't out, the token is unset, or anything fails.
@@ -128,7 +145,7 @@ export async function getEventField(uuid: string | undefined): Promise<EventFiel
     for (const m of detail?.results ?? []) {
       for (const [firstKey, lastKey, seedKey] of NAME_SLOTS) {
         const name = [str(m, firstKey), str(m, lastKey)].filter(Boolean).join(" ");
-        if (!name) continue;
+        if (!name || isPlaceholder(name)) continue;
         const seed = num(m, seedKey);
         const existing = byName.get(name);
         if (existing) {

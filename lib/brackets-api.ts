@@ -134,8 +134,13 @@ function sideOf(m: ApiMatch, team: 1 | 2, decided: boolean, won: boolean): Brack
     ? (keys.slice(0, bestOf).map((k) => num(m, k)).filter((g) => g != null) as number[])
     : [];
   const name = teamName(m, team);
+  // The feed names an unfilled slot "TBD" (seed 0) rather than leaving it empty.
+  const placeholder = !name || name.split(" / ").every((n) => /^tbd$/i.test(n.trim()));
+  const seed = num(m, team === 1 ? "teamOneSeed" : "teamTwoSeed");
   return {
-    participant: name ? { id: teamUuid(m, team) || name, name, seed: num(m, team === 1 ? "teamOneSeed" : "teamTwoSeed") ?? undefined } : null,
+    participant: placeholder
+      ? null
+      : { id: teamUuid(m, team) || name, name, seed: seed ? seed : undefined },
     games,
     winner: decided && won,
   };
@@ -192,8 +197,33 @@ function buildBracket(
   // Reconstruct advancement by following the winning team into its next-round
   // match (elimination only — round-robin pools have no single next match).
   const isElim = stage === "losers" ? true : stage === "pools" ? false : hasKnockout;
+  const idOf = (m: ApiMatch) =>
+    str(m, "matchUuid", "uuid") || `${opts.divisionId}-${num(m, "matchNumber") ?? 0}`;
+  // The feed's own advancement links. `$undefined` is a literal in this payload.
+  const link = (m: ApiMatch, ...keys: string[]) => {
+    const v = str(m, ...keys);
+    return v && v !== "$undefined" ? v : "";
+  };
+  const idsInStage = new Set(path.map(idOf));
+  // Reverse links: a match names the matches its two teams come from, so a
+  // source match can find its target even when it names no target itself.
+  const comesFrom = new Map<string, string>();
+  for (const x of path) {
+    const target = idOf(x);
+    for (const k of ["matchTeamOneComesFrom", "matchTeamTwoComesFrom"]) {
+      const src = link(x, k);
+      if (src && idsInStage.has(src)) comesFrom.set(src, target);
+    }
+  }
+  // Where a winner advances to. Structural links first — they exist BEFORE the
+  // match is played, so an unplayed draw still shows every advancement line.
+  // Following the winning team stays as the fallback for feeds without them.
   const nextIdOf = (m: ApiMatch): string | undefined => {
     if (!isElim) return undefined;
+    const declared = link(m, "matchWinnerGoesTo", "winnerGoesTo", "match_winner_goes_to");
+    if (declared && idsInStage.has(declared)) return declared;
+    const reverse = comesFrom.get(idOf(m));
+    if (reverse) return reverse;
     const w = winnerTeam(m);
     if (!w) return undefined;
     const uuid = teamUuid(m, w);
@@ -330,6 +360,21 @@ async function buildAll(uuid: string): Promise<{ divisions: BracketDivision[]; d
   return { divisions, draws };
 }
 
+type Loaded = { divisions: BracketDivision[]; draws: Map<string, BracketDraw> };
+
+/** No divisions, or no division with a single round in it — nothing to show. */
+function isEmpty(v: Loaded): boolean {
+  if (!v.divisions.length) return true;
+  return ![...v.draws.values()].some(
+    (d) => d.bracket.rounds.length || d.pools?.rounds.length || d.losers?.rounds.length,
+  );
+}
+
+/** True when a draw carries nothing renderable (see `isEmpty`). */
+export function isEmptyDraw(d: BracketDraw): boolean {
+  return !d.bracket.rounds.length && !d.pools?.rounds.length && !d.losers?.rounds.length;
+}
+
 const cache = new Map<string, { value: { divisions: BracketDivision[]; draws: Map<string, BracketDraw> }; expires: number }>();
 const inFlight = new Map<string, Promise<{ divisions: BracketDivision[]; draws: Map<string, BracketDraw> }>>();
 
@@ -340,7 +385,11 @@ async function load(uuid: string) {
   if (pending) return pending;
   const p = buildAll(uuid)
     .then((value) => {
-      cache.set(uuid, { value, expires: Date.now() + TTL_MS });
+      // `get()` swallows a timeout or a bad status into null, which builds an
+      // EMPTY draw rather than throwing. Caching that pins a blank bracket for
+      // a full TTL over one 6s upstream hiccup, so only a build with real
+      // content is allowed into the cache; an empty one retries next request.
+      if (!isEmpty(value)) cache.set(uuid, { value, expires: Date.now() + TTL_MS });
       return value;
     })
     .catch(() => ({ divisions: [], draws: new Map<string, BracketDraw>() }));

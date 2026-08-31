@@ -1,17 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { getStripe } from "@/lib/vacations/stripe";
-import { parseBookingFromSession } from "@/lib/vacations/booking";
+import { isVacationsBooking, parseBookingFromSession } from "@/lib/vacations/booking";
 import { sendBookingEmails } from "@/lib/vacations/email";
-import { appendBookingToSheet } from "@/lib/vacations/sheet";
+import { postBookingToJackalope } from "@/lib/vacations/jackalope";
 import { invalidateAvailability } from "@/lib/vacations/capacity";
 
 /**
- * ⚠ This endpoint moved when Vacations came onto ppatour.com. The Stripe
- * webhook must be re-pointed at
- * `https://www.ppatour.com/api/vacations/stripe-webhook` or paid bookings stop
- * producing a confirmation email and a sheet row — the payment still succeeds,
- * so the failure is silent. See docs/VACATIONS.md.
+ * ⚠ REGISTER THIS ENDPOINT IN STRIPE **WITH THE TRAILING SLASH**:
+ * `https://www.ppatour.com/api/vacations/stripe-webhook/`
+ *
+ * `trailingSlash: true` in next.config.ts answers the unslashed path with a
+ * 308, and Stripe does not follow redirects. Registered unslashed on 8/5, this
+ * endpoint failed 100% of deliveries until 8/20 and route.ts never once ran —
+ * no email, no sheet row, no cache invalidation, while every payment succeeded
+ * normally. Silent, and the worst failure mode here. See docs/VACATIONS.md.
  */
 
 // Stripe needs the raw request body + Node runtime for signature verification.
@@ -47,6 +50,17 @@ export async function POST(req: NextRequest) {
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
+
+    // This destination receives every checkout on the account, not just ours.
+    // Anything that isn't a Vacations booking is acknowledged and dropped —
+    // 200 so Stripe stops retrying, but no email and no sheet row.
+    if (!isVacationsBooking(session)) {
+      console.log(
+        `[vacations webhook] ignoring non-vacations session ${session.id}`
+      );
+      return NextResponse.json({ received: true, ignored: true });
+    }
+
     const booking = parseBookingFromSession(session);
 
     // A room just went. Drop the cached count so the next page render and the
@@ -55,14 +69,14 @@ export async function POST(req: NextRequest) {
 
     // Fire side-effects. We deliberately swallow per-channel errors and still
     // return 200 so Stripe doesn't retry and cause duplicate emails/rows.
-    const [emails, sheet] = await Promise.allSettled([
+    const [emails, filed] = await Promise.allSettled([
       sendBookingEmails(booking),
-      appendBookingToSheet(booking),
+      postBookingToJackalope(booking),
     ]);
     if (emails.status === "rejected")
       console.error("[vacations webhook] emails", emails.reason);
-    if (sheet.status === "rejected")
-      console.error("[vacations webhook] sheet", sheet.reason);
+    if (filed.status === "rejected")
+      console.error("[vacations webhook] jackalope", filed.reason);
   }
 
   return NextResponse.json({ received: true });

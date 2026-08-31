@@ -7,6 +7,13 @@ streaming** layer; commerce redirects out to partners (tixr for tickets,
 pickleballtournaments.com for amateur registration). Do **not** embed checkout,
 build a cart, or replicate registration forms.
 
+**Two documented exceptions, both on Bryce's call, and both HOSTED:** `/vacations`
+(Stripe) and `/shop` (Shopify). Neither holds card data, addresses or order
+state — each creates a session server-side and hands the buyer to the provider's
+own checkout page. That is the line, and it is what makes them exceptions rather
+than drift. A third surface needs the same conversation; a native cart needs a
+different one.
+
 **Full brief:** read [`CLAUDE_CODE_PASSOFF_v2.md`](CLAUDE_CODE_PASSOFF_v2.md)
 end-to-end before touching code. The strategy doc (`Option B — Content-First
 Strategy`) is the ultimate source of truth.
@@ -20,6 +27,15 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Standing rulings (don't re-litigate)
 
+- **The header "Shop" link stays pointed at Pickleball Central until Bryce and Connor
+  say otherwise.** `Header.tsx:59` and `SiteFooter.tsx:50` link out to PBC's live
+  **PPA Tour Store** (`/apparel/ppa-tour-apparel/`, 10 products, *"the official retailer
+  of the PPA Tour"*). PBC holds the **Official Store** designation, so repointing that
+  link at our own `/shop` moves revenue away from a Gold partner's contractual
+  designation. **That is a commercial decision, not a routing change.** `/shop` is built
+  and works, and is deliberately absent from the global nav until the call is made —
+  see [`docs/SHOP.md`](docs/SHOP.md) for the three ways it can resolve.
+
 - **Opens are 1,000 points.** Bryce, 7/29 — closing Hannah's "Opens 500 / Cups 1500 /
   Majors 2000" claim outright ("Hannah is full of shit"). The live tier system stands:
   Opens 1,000 · Cups 1,500 · Championship 2,000 · Worlds 3,000, and Connor's 7/23
@@ -30,6 +46,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   `isMajor()` already badged it correctly; the pro-tour tier table, the TV schedule
   label, and the "Worlds, majors, cups, opens" copy pattern were the places that
   presented it as a peer category, and they're fixed.
+- **Never quote a GA4 number from property `358407319` without
+  `Hostname contains ppatour.com` applied.** The property holds five websites and
+  ppatour.com is 2% of its views — the unfiltered number is Pickleball Brackets,
+  not the PPA Tour. Applies to decks, sponsor conversations, Connor, and any API
+  consumer including Jackalope. Found 8/24; see [`docs/ANALYTICS.md`](docs/ANALYTICS.md).
 - **Ad inventory on ppatour.com is off the table for now** (Bryce, 7/29). Don't build
   slots, don't ask again.
 - **Family details are removed from Jack Sock's bio ONLY — this is not a site-wide rule.**
@@ -41,6 +62,413 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   re-implement it, and don't "fix" the other 21 profiles that mention a spouse or child.**
 
 ## Session Log
+
+### 2026-08-30 — Jackalope's first-party tag goes on, outside the consent banner
+
+- **One line in the root layout: `<JackalopeAnalytics />`.** Loads
+  `pickleball.usejackalope.com/api/public/tag.js` (~2.3 KB, `afterInteractive`,
+  cached a day at the edge). This site is now the first real property reporting
+  into Jackalope → Marketing → Web Analytics.
+- **Why a fourth analytics tool.** GA4 is the marketing stack; Vercel Analytics
+  is the honest denominator; this is the **portfolio** view. GA4 property
+  358407319 holds five of the company's sites in ONE property, so every number
+  out of it is wrong until somebody remembers a Hostname filter. This puts
+  ppatour.com beside MLP, Pickleball Central and Jackalope in a table that needs
+  no filter to be true.
+- **Not a duplicate of `lib/vacations/track.ts`.** That beacon exists so the
+  Vacations funnel joins to `stripe_charges`; this is site-wide traffic. `/vacations`
+  is split out as its own property server-side by path prefix, so Lainey's funnel
+  does not vanish inside the tour's pageviews. One tag covers both.
+- **⚠ Production-gated but NOT consent-gated, and the reason is stronger than
+  Vercel Analytics'.** No cookie; nothing written to the device except a per-tab
+  `sessionStorage` id that dies with the tab; the visitor id is a one-way hash of
+  a **server-side salt that rotates at midnight**, with the previous day's salt
+  deleted — so a visitor cannot be recognised tomorrow by us or by anyone holding
+  the database. No IP or user-agent is stored; there is no column for either.
+  **If anyone ever gives that tag a persistent id, this component moves behind
+  the banner with MarketingTags.** Privacy decision, not a deploy decision.
+- **Previews are immune twice over.** `ANALYTICS_ENABLED` stops the request, and
+  Jackalope resolves the property server-side from the Origin host — a
+  `*.vercel.app` preview is not a registered property, so a beacon from one is
+  dropped rather than mis-filed.
+
+**Next session picks up:** nothing here. MLP is deferred on the Jackalope side
+until that site is rebuilt.
+
+
+### 2026-08-26 (3) — Bracket CSS pulled back onto the brand tokens
+
+- **Audited the bracket against the site's own idioms.** The card itself was
+  already right: `rounded-md border border-ppa-line bg-white` is the site's
+  most-used card, the dark panel matches the `border-white/10 bg-ppa-navy-deep`
+  idiom, and type is inherited Gotham with no local override.
+- **Fixed the drift.** `text-teal-600` on the court label was the only default
+  Tailwind colour anywhere in `components/live` → `text-ppa-blue`. The round
+  header's `bg-[#d7dee4]` was `--color-ppa-line` hardcoded → `bg-ppa-line`.
+- **Two new tokens in `app/globals.css`.** `--color-ppa-win` (#d3ecd0) replaces
+  the winner-cell green, which existed as TWO shades (`#d3ecd0`, `#d8ebd3`)
+  across BracketView, ScoresBoard and MatchCard. `--color-ppa-bronze`
+  (#c98a3c) replaces two bronzes (`#cd7f32` in BracketView, `#c98a3c` in
+  FinalStandings). The bronze medal badge now uses `text-ppa-navy` — white on
+  bronze was ~3.4:1, navy is ~6.4:1, and gold/silver already used navy.
+- **Pill metrics aligned.** Round nav was `tracking-[0.1em]` and the zoom row
+  `px-2.5` against the site's `tracking-[0.12em]`; two pill rows stacked in
+  different metrics. Round pills stay one size below the division pills above
+  them — that is hierarchy, not drift.
+- **Asked Kenan** for `matchWinnerGoesTo` / `templateMatchID` on the draw feed:
+  <https://pickleballinc.slack.com/archives/C0BKZLY7YQG/p1787779090294199>.
+- **Next:** waiting on Kenan. Nothing else open on the bracket.
+
+### 2026-08-26 (2) — A blank bracket was a cached upstream hiccup, not a layout bug
+
+- **Symptom:** `/brackets/?event=…&division=…` rendered an empty box. The API
+  was returning `rounds: []` for every Nationals division; Atlanta (completed)
+  was fine. Minutes later the same URL worked.
+- **Cause:** `get()` in `lib/brackets-api.ts` swallows a timeout or a bad
+  status into `null`, so a failed upstream call **builds an empty draw instead
+  of throwing**. Three layers then pinned it: the module cache held it for
+  `TTL_MS` 60s, the route sent `s-maxage=15, stale-while-revalidate=60`, and
+  `BracketPanel` rendered a zero-round bracket as a blank box. One 6s hiccup
+  blanked the bracket for every viewer for over a minute.
+- **Fixed all three.** `load()` only caches a build with real content;
+  `/api/brackets` returns `no-store` on an empty draw or an empty division
+  list; `BracketPanel` shows "No draw to show yet" instead of nothing.
+- **Also killed three infinite spinners** on the same panel: no divisions, a
+  bad `division` id in the URL, and a rejected fetch all left `loading` true
+  forever. The spinner now always resolves and the division pills stay
+  clickable, so a bad link recovers in one click.
+- **Next:** unchanged — ask Kenan (Slack group DM `C0BKZLY7YQG`) for
+  `matchWinnerGoesTo` or `templateMatchID` so pre-play winner lines can draw.
+  See [`docs/DATA-ASKS.md`](docs/DATA-ASKS.md).
+
+### 2026-08-26 — Bracket cards cut in half; winner lines are blocked upstream
+
+- **The draw now fits on one screen.** `components/live/BracketView.tsx`:
+  last names only ("Ulery / Minniefield"), one line per team instead of two,
+  the match link moved under the match number in the left rail (the footer row
+  is gone), and score columns render only in rounds that have actually been
+  played. Round gap 16→10, match gap 6→3, card floor 300→210px.
+- **Name shortening never merges two people.** A last name held by two
+  different players anywhere in the draw keeps a first initial — verified live
+  on "L. Jansen / H. Jansen" and "A. Walker / A. Walker".
+- **Zoom control** (100 / 75 / 55%) top-right of the round navigator. At 55%
+  all six rounds and 34 matches of the Nationals women's doubles draw fit one
+  screen with no scrolling.
+- **Feed cleanup** (`lib/brackets-api.ts`): the feed names an empty slot
+  "TBD / TBD" with seed 0 — that now becomes a null participant, so cards no
+  longer print a "0" seed next to a doubled "TBD".
+- **Winner-advancement lines are BLOCKED, not broken.** The draw feed has no
+  bracket position and no advancement pointer, so lines can only be
+  reconstructed after a match is final. `matchNumber` is scheduling order, not
+  bracket order, so positional inference produces the wrong tree — proven
+  against the Atlanta fixtures. Full ask written up in
+  [`docs/DATA-ASKS.md`](docs/DATA-ASKS.md). The code already prefers
+  `matchWinnerGoesTo` / `matchTeamOneComesFrom` when present.
+- **Next:** ask Kenan (Slack group DM `C0BKZLY7YQG`) for `matchWinnerGoesTo`
+  or `templateMatchID` on `/v1/ppa/tournaments/{uuid}/tournament_events/{id}`.
+  Nothing else is needed — the lines light up the day that field arrives.
+
+### 2026-08-24 — PPA Tour Europe is a region of this site, not a fifth website
+
+- **Bryce's call.** PPA Tour Europe gets built **into** ppatour.com as a region.
+  Full write-up: [`docs/EUROPE.md`](docs/EUROPE.md).
+- **The site is already the global calendar and nobody in `#ppa-tour-europe`
+  knew.** `lib/events-api.ts` reads every PPA org from one feed, `COUNTRY_BY_CODE`
+  already maps **17 European ISO-3 codes** to a single `Europe` value (Connor's
+  ruling, 7/31), and `ScheduleGrid.tsx` already ships the region filter. A Europe
+  stop entering the feed appears on the calendar with **no code change.**
+- **Albert Escofet's (Smash) 11-item preferences doc, audited: 7 of 11 already
+  ship.** Calendar, news, rankings, results, contact, how-it-works and athlete
+  profiles all exist as routes. Net new: **medal ladder** and **photo/video
+  gallery**. `/shop` inherits the [`SHOP.md`](docs/SHOP.md) blocker unchanged —
+  do not promise Europe merch.
+- **⚠ Europe is the LAST region where we still have the choice.**
+  `ppatour.com.au` is registered to **PACIFIC PICKLEBALL PTY LTD** — a licensed
+  operator, not a vendor — so we cannot redirect it. Asia is the same shape
+  (`upa-asia.com`, `mlp-asia.com` hang off it). `ppatoureurope.com` is a **GoDaddy
+  parking lander with nothing on it.** Once Smash ships a Europe site, Europe
+  joins the column we cannot fix.
+- **Domain portfolio finding.** `ppatourasia.com` + `ppatoureurope.com` were
+  registered **four seconds apart** on 2024-04-20; `ppatouritaly.com` +
+  `ppatourfrance.com` **one second apart** on 2026-02-10. All parked, all GoDaddy,
+  all behind Domains By Proxy — signal we own them, **not proof.** Confirm in the
+  GoDaddy account before promising a redirect. `ppatourasia.com` is parked while
+  the partner runs `ppatour-asia.com`, one hyphen apart.
+- **Two rules for the geo-aware vision.** Geo-IP **suggests, never redirects** —
+  Googlebot crawls from US datacenters, so a hard redirect leaves every European
+  page unindexed and breaks shared links. And **region is a path, language is a
+  prefix** (`/europe`, `/de/europe`); they are separate axes.
+- **The real blocker is not engineering.** Chris Patrick announced 20 Europe stops
+  on 7/31; the live `/events` page carries **2 Spain and 1 Italy**. Jeff asked for
+  confirmed dates on 7/31 and the thread still has no answer. No stops in PB
+  Tournaments means no Europe calendar on any site anyone builds.
+- **⚠ Unrelated, found while reading the channel:** the `@ppatoureurope` Instagram
+  password was posted **in plaintext in the public Slack channel on 8/7.** Rotate it.
+- **Sent 8/24.** Email to Chris Patrick, Katherina Preis and Albert Escofet
+  (`albert@smashpickleball.agency`), cc Payton + Jeff, carrying the decision and
+  three asks: the 20 confirmed dates, the signed roster with photos, and the
+  scope of Smash's web hire plus what the gallery is for. `#ppa-tour-europe`
+  [posted the same](https://pickleballinc.slack.com/archives/C0BN42HQ6E4/p1787627642604769).
+- **✅ `ppatoureurope.com` IS ours — confirmed, not inferred.** Row 446 of
+  `domainexport_20260419_149pm.csv`, the authoritative export Jason Santerre (CTO)
+  attached 2026-04-19 in the merger due-diligence thread. Active, auto-renew On.
+  The redirect plan has no ownership hole. ⚠ **`ppatourspain.com` is NOT in the
+  company account** (the export jumps `ppatoursouthamerica` → `ppavacations`), so
+  redirecting Spain is a request to Smash, not a DNS change we can make.
+- **✅ `europe@ppatour.com` is LIVE.** Google Group (no licence, no cost), owner
+  Bryce, members Chris Patrick, Jeff Watson, Katherina Preis. ⚠ Access type is
+  **Custom on purpose**: the default *Public* preset blocks External from posting,
+  which would bounce every inbound mail from a player or licensee. "Who can post"
+  includes External. Joining is invite-only. Full detail in
+  [`docs/EUROPE.md`](docs/EUROPE.md).
+- **Spain redirect is an ASK, not a task.** Emailed Albert Escofet 8/24 (cc
+  `europe@ppatour.com`) to point `ppatourspain.com` at `/europe` in launch week,
+  path-preserving, or hand us the DNS. Italy and France we own and can do
+  ourselves. Also told Smash to start using the new group address.
+- **Individual licensee addresses are still open** — a **paid Workspace seat each**
+  for an outside agency's staff. Headcount asked of Chris Patrick 8/24.
+  ⚠ **Kate Young creates the accounts, not Bryce.**
+- **Next:** the 20 stops into PB Tournaments (Chris), roster + photos (Katherina),
+  Smash's answer on the web hire, then spec the `/europe` route and locale
+  prefixes.
+
+
+### 2026-08-24 — The GA4 property is five websites, and ppatour.com is 2% of it
+
+- **Bryce: "something seems off on our PPA Tour analytics."** It is. GA4 property
+  **`PPA - GA4` / `358407319`** carries **five web streams**, and the largest is
+  Pickleball Brackets, not us. Full write-up, evidence and roadmap:
+  [`docs/ANALYTICS.md`](docs/ANALYTICS.md).
+- **The numbers.** Last 28 days the property reports **16,041,613 views /
+  1,008,333 active users**. Filtered to `Hostname contains ppatour.com` it is
+  **319,977 views / 88,064 users** — **2.0% of views, 8.7% of users**. The
+  default top-five pages are all pickleballtournaments.com / pickleballbrackets.com
+  / pickleball.com / pickleballleagues.com. **Every unfiltered metric anyone has
+  read off this property was Pickleball Brackets.**
+- **The culprit is one stream:** `All Pickleball Variations` (`9706788521`,
+  `G-QCCT4TV3JR`, default URL pickleballbrackets.com), carrying five hostnames.
+  Ours is `PPA Tour | New` (`6289331495`, `G-NKVE1BRLK7`) — confirmed live and
+  the only tag in the production HTML. Secondary `G-VFNFRP66Z5` still dark, as
+  `LAUNCH.md` says.
+- **⚠ It poisons Jackalope too.** `api/marketing/ga4.js` queries `358407319`.
+  It is inert only because `GA4_SA_KEY` is unset. **Do not set that credential
+  before the hostname filter is in the query** — the funnel it renders would be
+  98% someone else's traffic and would look completely plausible.
+- **We cannot just delete the brackets stream.** `G-QCCT4TV3JR` is deployed
+  directly on their production sites (0 connected site tags, data flowing).
+  Deleting it kills *their* measurement. That makes the split a conversation,
+  not a cleanup — three resolutions written up in `ANALYTICS.md`.
+- **Also found, both minor:** a dead duplicate `PPA Tour` stream (`5816480422`)
+  also claiming www.ppatour.com — not double-counting today, but a landmine; and
+  a www/apex split in the data, which is pre-redirect history (verified: apex
+  301s to www).
+- **Nothing was changed in GA4.** Read-only session. Filters, streams and
+  settings untouched.
+- **Next:** (1) put the `Hostname contains ppatour.com` comparison on the
+  property — five minutes, reversible, stops the bleeding; (2) filter
+  `api/marketing/ga4.js`; (3) **audit what has already shipped off these
+  numbers** — decks, sponsor one-pagers, board slides — that is the item with a
+  clock on it; (4) Bryce + whoever owns `G-QCCT4TV3JR` to pick the split.
+
+### 2026-08-22 — Ben Johns has a hero and a `sameAs`; the "5-minute" claim was wrong
+
+- **Ben Johns hero shipped** (`ZIONCUP_QTRS_MXD_BEN-ALW-7`, supplied by Bryce). ⚠ It is a
+  MIXED-DOUBLES frame — two men were on that court — so the attribution is written down
+  in `lib/athlete-heroes.ts`: Bryce named him, the filename names the team BEN-ALW, and
+  the JOOLA mark on cap and chest matches our own paddle feed. Nobody read the face.
+  That is the No. 1 man and the No. 1 woman both carrying a hero. **10 of 179.**
+- **`sameAs` is live on one page.** Bryce sent Ben's four accounts; they went into Pro
+  Player Central (Neon row 21) and now render as `sameAs` on his Person node. Facebook
+  was added to the field set — the 8/20 version only had instagram/x/tiktok/youtube.
+- **⚠ THE BIG FINDING: a Jackalope edit is NOT live in five minutes.** Three comments in
+  this repo said "within the ISR window". Measured: the feed carried Ben's links in two
+  minutes and the page still served no `sameAs` twelve minutes later. An athlete page
+  exports no `revalidate` — it is prerendered from `generateStaticParams`, so
+  `REVALIDATE_S` only caches the FETCH. The HTML regenerates on a deploy or on the
+  ONCE-DAILY cron at 07:00 UTC. Corrected in all three places; the full note and the trap
+  live at the ⚠ FRESHNESS block in `lib/player-overrides.ts`.
+- **Do NOT "fix" that with `export const revalidate` on the athlete page.** 1,174 pages;
+  the daily cron exists so renders don't walk into the partner API's rate limit. The real
+  fix is a webhook from Jackalope on save — needs a shared secret in both Vercel projects,
+  so it is Bryce's to enable.
+- **Two things that looked like bugs and are not.** (1) Ben's page briefly served rank 0
+  / no WPR after a background regeneration caught a cold WPR lookup; it self-healed on the
+  next one. Worth knowing a transient can bake a dashed rank until the next regeneration.
+  (2) Heroes and headshots appear blank in Chrome-extension screenshots — the DOM says
+  every image is loaded (naturalWidth 325/512, complete, opacity 1). Capture artifact.
+- **Next:** named photography for the remaining top-20 pros; socials for everyone but Ben;
+  the revalidation webhook; still no per-athlete OG image.
+
+### 2026-08-20 (pt. 2) — `sameAs` wired, and the athlete SEO work is live
+
+- **Pushed** `ff13e0e` + `76f6a26`. Live and verified on www.ppatour.com: *Ben Johns —
+  World No. 1 Men's Pickleball Player · Carvana PPA Tour*, *Kate Fahey — No. 8 Ranked
+  Women's Pickleball Player*, and the three top-10 heroes serving their own files.
+- **`sameAs` now has a source.** The Person node had none, which is the strongest entity
+  signal an athlete page can carry — it is how a search engine ties this page to the Ben
+  Johns it already knows from elsewhere. Jackalope's Pro Player Central gained a
+  **Website profile** card (Instagram / X / TikTok / YouTube + a hero photo URL), the
+  public paddles feed carries them as `socials` + `heroImage`, and `lib/player-overrides.ts`
+  reads them. ⚠ Pasted https URLs only, validated on both sides — never expand a handle.
+- **⚠ Nothing has filled those fields yet**, so `sameAs` is absent on every page today
+  and `heroImage` is still null for all 179. The pipe is the deliverable, not the data.
+- **Watch out (Jackalope-side, cost us a live blip):** the public feed briefly returned
+  `count: 0` because its SELECT named columns the table didn't have yet. Paddles here
+  fell back to the static masterlist as designed, so the page never broke. See ziff
+  `9906783`.
+- **Still open:** named photography for 17 of the top 20 pros (Ben Johns and Anna Bright
+  included); no per-athlete OG image, so social cards crop a portrait into a wide slot.
+
+### 2026-08-20 — Athlete-page SEO: the title tag, the Person node, internal links
+
+- **The complaint: Wikipedia outranks ppatour.com on our own athletes' names.**
+  Bryce, on /athletes/ben-johns/. The title tag was the biggest single reason it
+  could: the root layout's `%s · Carvana PPA Tour` template over a bare name gave
+  Google `Ben Johns · Carvana PPA Tour` — nothing to match beyond the name, which
+  Wikipedia also has with more authority behind it.
+- **Shipped `ff13e0e`, three changes to `app/athletes/[slug]/page.tsx`:**
+  1. Titles now state what the person is, from the live board rank and the gender
+     the page already renders — "Ben Johns — World No. 1 Men's Pickleball Player ·
+     Carvana PPA Tour". Top 10 gets its number; below that the rank churns too much
+     to put in a title, so those pages sell the contents ("Ranking & Stats").
+  2. The `Person` JSON-LD gained `birthDate`, `height`, `homeLocation`,
+     `alternateName`, `knowsAbout` — entity facts Google reconciles a person on. We
+     were publishing a name, a country and a job title.
+  3. "More Pros" was the SAME four curated pros on all 179 pages. It is now the four
+     ranked either side of this pro on their own board: unique per page, and a real
+     next/previous signal for a crawler reading /athletes/* as one roster.
+- **Eight athlete heroes landed** (`public/ppa/heroes/`) — Patriquin, Fahey, Garnett,
+  Blatt, Sock, Irvine, Tellez, Loong. Source: Jackalope's Brand Photo Library, where
+  the file is named for the player, so the filename is the attribution.
+- **⚠ The top-10 hero ask is NOT done and cannot be finished in code.** Bryce asked
+  for the top 10 men and women; 3 of those 20 have a named photo. The other 17 —
+  Ben Johns and Anna Bright among them — need someone to hand over named files. Do
+  not close the gap by cropping a doubles frame and deciding who is in it.
+- **Next:** (a) get named photography for the remaining 17; (b) `sameAs` on the
+  Person node is still empty because we hold no athlete social handles — that is
+  the strongest remaining entity signal; (c) no per-athlete OG image, so social
+  cards crop a portrait headshot into a `summary_large_image` slot.
+
+### 2026-08-20 — Vacations confirmation emails: a 308 killed the webhook for 15 days
+
+- **Lainey asked why new bookings weren't getting confirmations. They weren't, and
+  nothing had worked since the 8/5 cutover.** The Stripe destination was registered as
+  `…/api/vacations/stripe-webhook` with **no trailing slash**. `trailingSlash: true`
+  answers that with a 308, **Stripe does not follow redirects**, and so `route.ts` never
+  loaded once. 100% error rate from the day the endpoint was created. Payments succeeded
+  the whole time, which is why nobody noticed.
+- **Fixed** by re-registering the destination WITH the slash (Bryce did the edit; typing
+  into the live payment dashboard is correctly blocked for me). Verified: unslashed → 308,
+  slashed → 400 carrying the handler's own "missing signature" body, then a real resend
+  returned **200 `{"received":true}`** and the runtime log showed the send with no
+  `[email]` warning. One guest's confirmation is out.
+- **A second, independent fault was found first and is also fixed:** `SENDGRID_API_KEY`
+  and `SENDGRID_FROM` were never copied to the ppatour-website project, so even a working
+  route would have no-opped. Both are set now; `SENDGRID_FROM` is
+  `noreply@vacations.ppatour.com`. Fixing only this half changed nothing visible, which is
+  what made the 308 easy to miss.
+- **Shipped `isVacationsBooking()` (`b164581`).** The destination is account-wide and
+  receives every `checkout.session.completed` on the account, including the vibepb.com
+  WooCommerce store. `parseBookingFromSession` was turning those into blank bookings and
+  emailing the buyer a Vacations confirmation; Lainey was forwarded one in June for a
+  Boise Challenger payment. New sessions carry `metadata.source = "vacations"`; the
+  destination + occupancy + traveler fallback covers sessions made before that marker,
+  which matters because the outage's failed deliveries are still queued for retry.
+- **Root cause and the trailing-slash trap are written up in `docs/VACATIONS.md`**
+  (`deb7b3d`, corrected by `db5ce73`). Anything outside the repo that POSTs to this app
+  has the same trap — register it slashed.
+- **Still open.** Only one event has actually been redelivered; the rest are queued for
+  automatic retry and Stripe greys out manual Resend while a retry is pending, so the
+  backlog needs a second look. `SHEETS_WEBHOOK_URL` / `SHEETS_WEBHOOK_SECRET` are still
+  unset, so **bookings are not reaching the sheet even now** — the 200 above logged
+  `[sheet] … skipping`. `vacations.ppatour.com` is still un-redirected and running a
+  second live checkout against the same 20 rooms. The SendGrid key in use is full-access
+  and belongs to the **GullStack** account, not a PPA one; it should become a
+  `mail.send`-only restricted key.
+
+### 2026-08-20 — Asia URL follow-up: the Hong Kong Slam was the last holding-page link
+
+- **Jeff Watson re-forwarded Wade Townsend's Asia URL list.** The work was already
+  shipped on 8/6 (`lib/asia-tour-links.ts`, commit `ff17db2`). Audited the live
+  `/events` HTML: **16 of Wade's 17 stops already link to `ppatour-asia.com`**.
+- **Fixed the seventeenth.** The Hang Seng Bank Hong Kong Slam had no `ptSlug`
+  because it was not in the `ppa_tournaments` feed in August. It is now
+  (`ppa-asia-1500-hang-seng-bank-hong-kong-slam-2026`), so the card rendered and
+  still pointed at the pickleballtournaments.com holding page. Added the slug
+  (commit `aa45d44`). Confirmed the target serves the real page — Kai Tak Arena,
+  October 19–25.
+- **Reverse drift, and it needs a human:** the feed carries **"PPA Asia 125
+  Malaysia Tomaz Cup"** (Subang Jaya, Aug 2026), which is NOT on Wade's list. It
+  keeps the holding page. Ask Wade for its `ppatour-asia.com` URL — do not guess a
+  path.
+- `npm run asia:audit` cannot run locally: `PB_API_TOKEN` is in Vercel only, not in
+  `.env.local`. The live-HTML check above substituted for it.
+- Pushed to `main` on Bryce's approval, same session.
+- **Verified in production after the deploy:** all 17 Asia URLs render on
+  `/events`. Reply to Wade + Jeff drafted in Gmail thread `19fd506f966cd904`,
+  asking for the Tomaz Cup URL.
+- **8/21 — Wade sent the Tomaz Cup URL and it is in.** ⚠ Its path repeats the
+  year, `2026/2026-tomaz-cup`, which is how their site files it and the only row
+  in the table shaped that way. **Live check: 18 Asia URLs on `/events`, and no
+  Asia stop is left on a pickleballtournaments.com holding page.**
+- **⚠ Feed vs. their page on the Tomaz Cup dates:** the feed says Aug 27–29, the
+  Asia page says Aug 27–31, so our calendar shows the short version. Left alone
+  (the Asia site is authoritative for its own event, same as the Hangzhou Open)
+  and Wade was asked to correct the feed.
+- **Wade will keep sending stops** ("Will have some more coming too"), so a PPA
+  Tour Asia event in the feed with no row in `asia-tour-links.ts` is the expected
+  interim state, not a bug. It links to the holding page until he sends a URL.
+  **Never guess a path.**
+
+### 2026-08-19 — /shop: headless Shopify built in; a PPA store already exists on Pickleball Central
+
+- **Bryce's call: build the store INTO ppatour.com, not beside it.** Shopify owns
+  products, inventory, orders and checkout; this site renders the pages. Full runbook in
+  [`docs/SHOP.md`](docs/SHOP.md). Shipped behind three unset env vars, so **production is
+  byte-for-byte unchanged until someone sets them**.
+- **⚠ THE BIGGEST FINDING IS NOT CODE: A "PPA TOUR STORE" ALREADY EXISTS AND IT IS
+  PICKLEBALL CENTRAL'S.** `pickleballcentral.com/apparel/ppa-tour-apparel/` is live with
+  **10 products** under *"Pickleball Central is the official retailer of the PPA Tour"* —
+  and **`Header.tsx:59` is a nav item labelled "Shop" that points straight at it**
+  (`SiteFooter.tsx:50` is a second). PBC holds the **Official Store** designation.
+  **That link was deliberately NOT touched and `/shop` is deliberately NOT in the nav** —
+  repointing "Shop" from a Gold partner's store to a tour-run one moves revenue away from
+  a contractual designation, which is Bryce + Connor's decision, not a routing change.
+  Three resolutions are written up in SHOP.md; the one that costs nobody anything is
+  **PBC's Shopify as the backend with `/shop` as the PPA-branded front end**, which is
+  blocked on access — PBC is **not** in the Pickleball Holdings LLC org.
+- **⚠ CHECKOUT IS HOSTED AND THE ROUTE SHAPE IS WHAT KEEPS IT THAT WAY.**
+  `POST /api/shop/checkout/` takes **a variant id and a quantity, nothing else**, builds a
+  one-line Shopify cart server-side and returns `checkoutUrl`. **The client never sends a
+  price** — Shopify prices from its own record, so the classic storefront exploit is
+  unrepresentable rather than merely validated. No card data, no addresses, no order state
+  in this app, and no persistent basket. Same line `/vacations` holds with Stripe.
+- **⚠ IT FAILS SAFE IN ONE DIRECTION, AND THAT IS THE DESIGN.** No token, a wrong API
+  version, a 429, an empty catalogue — all resolve to `[]`, and `/shop` renders a holding
+  state ("The shop opens soon"), builds no product pages, emits no sitemap URLs and drops
+  its search group. An empty grid under a heading promising gear reads as broken; the
+  holding state reads as true. Same call as "Tickets Coming Soon".
+- **Searchable, which was the actual question.** `SearchGroup` gains `"Shop"`
+  (`lib/site-search.ts`), so products rank beside events and athletes on `/search` — and
+  the source is wrapped so a storefront outage **cannot take site search down with it**.
+  `app/sitemap.ts` is now **async** and emits product URLs, with **no `lastModified`**:
+  Shopify's `updatedAt` moves on inventory changes, so publishing it would tell crawlers
+  every product page changed each time a size sold out.
+- **⚠ `SHOPIFY_API_VERSION` DEFAULTS TO `2026-07` AND IS UNVERIFIED** — no query has been
+  run against a real store. A rejected version surfaces as an empty shop, which looks
+  exactly like "no products yet". **Check this first if the holding state shows with a
+  token set.** Also added `cdn.shopify.com` to `next.config.ts` remotePatterns; without it
+  next/image 400s every product photo.
+- **Verified on a real production server (:3210) with no env vars — the path that ships
+  today:** `/shop/` **200** + holding state · `/shop/nonexistent/` **404** ·
+  checkout **503** *"The shop is not open yet."* · sitemap **zero** `/shop` URLs ·
+  `/search/?q=nationals` still returns Athletes/Events/News. `next build` green, tsc
+  clean, eslint clean on all eight changed files.
+- **Next:** Bryce + Connor settle the PBC question · get a Storefront token (custom app,
+  `unauthenticated_read_product_listings` + `unauthenticated_write_checkouts`) · verify the
+  API version · a `products/update` webhook calling `revalidateTag("shopify-catalog")` so
+  merchandising edits appear immediately instead of within 5 minutes.
+
 
 ### 2026-08-19 — "At the event": the on-site screen ships, on the website
 

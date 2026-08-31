@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T13:36:22Z",
+  "generated_at": "2026-08-30T17:03:51Z",
   "prices": {
     "166229": {
       "from": 15,
@@ -42,34 +42,10 @@
       "onSale": true
     },
     "169798": {
-      "from": 25000,
-      "onSale": true
-    },
-    "169799": {
-      "from": 30,
-      "onSale": true
-    },
-    "169802": {
-      "from": 40,
-      "onSale": true
-    },
-    "169803": {
-      "from": 70,
-      "onSale": true
-    },
-    "169804": {
-      "from": 45,
+      "from": 30000,
       "onSale": true
     },
     "169805": {
-      "from": 30,
-      "onSale": true
-    },
-    "169837": {
-      "from": 30,
-      "onSale": true
-    },
-    "169839": {
       "from": 30,
       "onSale": true
     },
@@ -230,6 +206,34 @@
       "onSale": true
     },
     "203187": {
+      "from": 25,
+      "onSale": true
+    },
+    "203955": {
+      "from": null,
+      "onSale": false
+    },
+    "204325": {
+      "from": 25,
+      "onSale": true
+    },
+    "204335": {
+      "from": 25,
+      "onSale": true
+    },
+    "204392": {
+      "from": 25,
+      "onSale": true
+    },
+    "204394": {
+      "from": 25,
+      "onSale": true
+    },
+    "204411": {
+      "from": 25,
+      "onSale": true
+    },
+    "204420": {
       "from": 25,
       "onSale": true
     }
