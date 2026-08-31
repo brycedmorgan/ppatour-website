@@ -107,7 +107,7 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
   "veolia-pickleball-national-championships": [
     { round: "RD 64", day: "Tuesday", window: "10AM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
     { round: "RD 32", day: "Wednesday", window: "10AM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "RD 16", day: "Thursday", window: "9AM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "RD 16", day: "Thursday", window: "9AM ET - 5PM ET", platform: "PBTV", type: "LIVE" },
     { round: "RD 16", day: "Thursday", window: "11:30AM ET - 5PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
     { round: "QF's", day: "Friday", window: "10AM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
     { round: "QF's", day: "Friday", window: "11:30AM ET - 5PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
