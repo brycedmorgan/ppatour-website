@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { HomeContent } from "@/components/home/HomeContent";
+import { PromoModal } from "@/components/global/PromoModal";
+import { homePromo } from "@/lib/site-promo";
 import { SITE_URL } from "@/lib/site";
 
 /**
@@ -55,5 +57,15 @@ export const revalidate = 60;
 export const dynamic = "force-static";
 
 export default function Home() {
-  return <HomeContent />;
+  /* One dismissible promo for the tour's featured on-site happening. Resolves
+     to null between promos. Nothing renders server-side even when it is set —
+     see PromoModal for why the expiry has to be read off the device clock
+     rather than baked into this force-static page. */
+  const promo = homePromo();
+  return (
+    <>
+      <HomeContent />
+      {promo && <PromoModal promo={promo} />}
+    </>
+  );
 }
