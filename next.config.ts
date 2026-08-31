@@ -242,6 +242,26 @@ const LEGACY_REDIRECTS = [
   { source: "/day-in-the-life-on-tour", destination: "/news/" },
 ];
 
+/**
+ * Retired athlete profiles — a page that existed and no longer should.
+ *
+ * ⚠ TEMPORARY (307), NOT PERMANENT, AND THAT IS THE WHOLE REASON THIS LIST IS
+ * SEPARATE FROM LEGACY_REDIRECTS. Every rule above is a 308 because those URLs
+ * are never coming back. A profile pulled because a contract lapsed is exactly
+ * the kind that can return, and a 308 sits in browsers' caches long after we
+ * republish the page — the same call made for the international event stops on
+ * 8/6. If a name here is ever genuinely permanent, move it up.
+ *
+ * Sent to the roster rather than left to 404: the URL was a live, indexed 200
+ * on ppatour.com, and /athletes is where someone following an old link or a
+ * search result actually wants to end up.
+ */
+const RETIRED_ATHLETE_REDIRECTS = [
+  // Jay Devilliers — contract expired (Conner Ogden, via Wesley, 8/31).
+  { source: "/athletes/jay-devilliers", destination: "/athletes/" },
+];
+
+
 const nextConfig: NextConfig = {
   /**
    * Every WordPress URL ended in a slash — all 811 migrated posts carry a Yoast
@@ -302,7 +322,10 @@ const nextConfig: NextConfig = {
     qualities: [65, 75],
   },
   async redirects() {
-    return LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true }));
+    return [
+      ...LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true })),
+      ...RETIRED_ATHLETE_REDIRECTS.map((r) => ({ ...r, permanent: false })),
+    ];
   },
   /**
    * The two static decks live as `public/<name>/index.html`. They resolved at

@@ -150,16 +150,6 @@ export const athletes: Athlete[] = [
     bio: "Andrei Daescu is one of the tour's sharpest doubles minds — patient, precise, and dangerous at the net, with a long résumé of doubles and mixed finals.",
   },
   {
-    slug: "jay-devilliers",
-    name: "Jay Devilliers",
-    country: "France",
-    headshot: P("jay-devilliers"),
-    divisions: ["Men's Singles", "Men's Doubles"],
-    bestRank: 5,
-    tagline: "The fan-favorite Frenchman",
-    bio: "Jay Devilliers is one of the tour's most entertaining and athletic competitors, a French veteran who brings energy and a deep all-court game to every match.",
-  },
-  {
     slug: "dekel-bar",
     name: "Dekel Bar",
     country: "Israel",

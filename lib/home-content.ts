@@ -43,8 +43,7 @@ export const divisionRankings: Division[] = [
       { rank: 4, slug: "gabe-tardio", points: 7620, move: 1 },
       { rank: 5, slug: "hayden-patriquin", points: 6980, move: -1 },
       { rank: 6, slug: "jw-johnson", points: 6540, move: 0 },
-      { rank: 7, slug: "jay-devilliers", points: 6080, move: 2 },
-      { rank: 8, slug: "dekel-bar", points: 5720, move: -1 },
+      { rank: 7, slug: "dekel-bar", points: 5720, move: -1 },
     ],
   },
   {
