@@ -148,7 +148,7 @@ export default async function TodayPage({ params }: Params) {
           )}
 
           <Block heading="Parking">
-            <ParkingDetails sections={parking} ticketsUrl={ticketsUrl} />
+            <ParkingDetails sections={parking} ticketsUrl={ticketsUrl} tone="dark" />
           </Block>
 
           {onsite.entry && <Block heading="Entry">{onsite.entry}</Block>}

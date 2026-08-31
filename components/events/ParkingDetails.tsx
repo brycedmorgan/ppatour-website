@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import type { ParkingSection } from "@/lib/event-guides";
 
 /**
@@ -13,10 +15,15 @@ import type { ParkingSection } from "@/lib/event-guides";
  * `whitespace-pre-line` is load-bearing: the off-site address is a single body
  * entry with newlines, so that the submitted text stays verbatim rather than
  * being re-punctuated into a sentence for the layout.
+ *
+ * A section may also carry the event team's own parking map (`image`), rendered
+ * under that section's paragraphs — Cary's copy says "refer to the attached
+ * map", so the map has to sit with the words that point at it.
  */
 export function ParkingDetails({
   sections,
   ticketsUrl,
+  tone = "light",
   className,
 }: {
   sections: ParkingSection[];
@@ -28,6 +35,18 @@ export function ParkingDetails({
    * (see TICKETS_HIDDEN). Absent/null is always the safe value.
    */
   ticketsUrl?: string | null;
+  /**
+   * Which ground this is rendering on. The section headings ("General Parking",
+   * "Premium Parking", …) are the one thing here with its own colour rather than
+   * the inherited body colour, so they need telling.
+   *
+   * ⚠ `"dark"` EXISTS BECAUSE THE HEADINGS WERE INVISIBLE ON THE ON-SITE SCREEN.
+   * `/events/<year>/<slug>/today` is white-on-navy; the light heading tint is
+   * navy-on-navy there, so all four of Cary's headings read as blank gaps on the
+   * page someone opens standing in the parking lot. Default stays light — the
+   * event page and NationalsLive are unchanged.
+   */
+  tone?: "light" | "dark";
   className?: string;
 }) {
   // The holding line (and any single unlabelled block) is one paragraph — no
@@ -39,7 +58,11 @@ export function ParkingDetails({
       {sections.map((s, i) => (
         <div key={s.heading ?? i} className={i > 0 ? "mt-4" : undefined}>
           {s.heading && (
-            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-ppa-navy/50">
+            <p
+              className={`text-[11px] font-bold uppercase tracking-[0.14em] ${
+                tone === "dark" ? "text-white/45" : "text-ppa-navy/50"
+              }`}
+            >
               {s.heading}
             </p>
           )}
@@ -53,6 +76,25 @@ export function ParkingDetails({
               {renderBody(p, ticketsUrl ? s.ticketLinkText : undefined, ticketsUrl)}
             </p>
           ))}
+          {/* The event team's parking map.
+              ⚠ `sizes` is measured, not guessed: this renders in the
+              Know-Before-You-Go accordion (543px at 1440) and the narrower
+              Plan-Your-Trip card (510px), both inside a max-w-6xl page — a
+              100vw hint would have the browser pick a candidate 4× wider than
+              any surface draws.
+              ⚠ NO BORDER, matching the venue grounds map on the same page: this
+              component also renders on the dark on-site "Today" screen, and a
+              frame tinted for one of those two reads as a mistake on the other. */}
+          {s.image && (
+            <Image
+              src={s.image.src}
+              alt={s.image.alt}
+              width={s.image.width}
+              height={s.image.height}
+              sizes="(min-width: 1024px) 640px, 100vw"
+              className="mt-3 h-auto w-full"
+            />
+          )}
         </div>
       ))}
     </div>

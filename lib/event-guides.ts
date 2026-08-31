@@ -64,6 +64,16 @@ export type ParkingSection = {
    * than routing around the hold. `parkingText()` never links anything.
    */
   ticketLinkText?: string;
+  /**
+   * The event team's own parking map, rendered under this section's paragraphs.
+   *
+   * ⚠ THE FILE IS SUPPLIED ART, NEVER A MAP WE DRAW OR DERIVE. It is the same
+   * class of claim as the copy above it — a lot outlined on a satellite photo
+   * tells a driver where to leave their car, and a guessed outline sends them to
+   * the wrong field. One entry per event, or nothing. `parkingText()` omits it,
+   * so the concierge and the search index never describe an image they can't show.
+   */
+  image?: { src: string; alt: string; width: number; height: number };
 };
 
 /**
@@ -99,9 +109,18 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
       body: [
         "Free off-site parking is available Monday–Sunday, with complimentary shuttle service to and from the venue.",
         "Off-Site Parking Location:\nPhillips Farms\n6800 Good Hope Church Rd.\nCary, NC 27519",
+        "Parking is located in the large grass lot. Please refer to the attached map and follow all onsite signage to ensure you are parking in the correct lot.",
         "Shuttles will begin approximately one hour before the first matches each day and continue until one hour after the final match concludes.",
         "Estimated Shuttle Hours: 6:30 AM – 10:00 PM",
       ],
+      // The event team's map of the Phillips Farms lot, with the shuttle pickup
+      // marked. Sits under the copy that says "refer to the attached map".
+      image: {
+        src: "/ppa/parking/veolia-pickleball-national-championships.jpg",
+        alt: "Aerial map of the Phillips Farms parking lot in Cary, NC, with the free grass parking area outlined in blue and the shuttle pickup point marked at its northeast corner.",
+        width: 1600,
+        height: 1107,
+      },
     },
     {
       heading: "Premium Parking",
