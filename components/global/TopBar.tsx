@@ -23,6 +23,8 @@ import { useTourIsLive } from "@/components/live/use-live-ticker";
  * said "Buy Tickets".
  */
 const isLivePath = (pathname: string) => pathname === "/live" || pathname === "/live/";
+/** trailingSlash: true means the index is "/" — kept alongside "" defensively. */
+const isHomePath = (pathname: string) => pathname === "/" || pathname === "";
 
 export function TopBar() {
   /**
@@ -33,18 +35,40 @@ export function TopBar() {
    * still counting down underneath. Now it appears when the page it sits above
    * goes live, and both read the same calendar check.
    */
-  const onLiveRoute = isLivePath(usePathname());
+  const pathname = usePathname();
+  const onLiveRoute = isLivePath(pathname);
   const { live } = useTourIsLive();
 
+  /**
+   * ⚠ THE MATCH-CARD RAIL BELONGS ON THE HOMEPAGE TOO, NOT JUST /live.
+   *
+   * Wesley, 8/31: "on /live we get a score ticker to appear… it shows the match
+   * cards. However, on the home page, that score ticker isn't appearing. /live
+   * was just a reference for when we are live on home."
+   *
+   * /live was only ever the rehearsal surface. Everything else about the live
+   * homepage was wired to the calendar — the hero, the scores band, Next on Tour
+   * retiring — and this was the last piece still keyed to the URL, so the
+   * homepage got a one-line summary while the rehearsal got the real thing.
+   *
+   * ⚠ THE MARQUEE STAYS ON /live ONLY. LiveBar is a broadcast header — a
+   * scrolling "Live · Round 16 · <tournament>" strip plus social — and the ask
+   * was for the score ticker with the match cards, not a second banner above the
+   * tour's front page. One line here adds it if that changes.
+   */
+  const showRail = live && (onLiveRoute || isHomePath(pathname));
+
   // On /live the marquee + score ticker scroll away; only the nav sticks.
-  if (onLiveRoute && live) {
+  if (showRail) {
     return (
       <>
         {/* Suspense: both read useSearchParams (?partner=) through
             useLiveTicker, which needs a boundary to build/prerender. */}
-        <Suspense fallback={<div className="h-[41px] bg-ppa-navy" />}>
-          <LiveBar />
-        </Suspense>
+        {onLiveRoute && (
+          <Suspense fallback={<div className="h-[41px] bg-ppa-navy" />}>
+            <LiveBar />
+          </Suspense>
+        )}
         <Suspense fallback={<div className="h-[104px] bg-ppa-navy" />}>
           {/* ⚠ No logo/href passed on purpose. These were pinned to the Veolia
               Atlanta Championships — the April test event — so the broadcast
