@@ -63,6 +63,69 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-01 — Connor's website pass: the semifinals column was wrong, Plan Your Trip now ends at first serve, Gold loses its designation
+
+- **⚠ THE ATHLETE "SEMIFINALS" NUMBER HAS BEEN WRONG SINCE THE CAREER TABLE
+  SHIPPED, AND IT IS THE COMPLAINT CONNOR RELAYED FROM THE PLAYERS.**
+  `lib/athlete-stats.ts` printed `BronzeMedals` under the heading *Semifinals*.
+  Bronze is **third place** — the player who WON the bronze match — so every
+  **fourth-place** finish was invisible. The endpoint carries them separately as
+  `{Singles|Doubles|Mix|SkinnySingles}BronzeLost`, which nothing read. Semifinals
+  is now `bronze + bronzeLost`, per division and career.
+  **Verified against pickleball.com's own player pages (`/players/<slug>/stats?show=ppa`),
+  which is the same upstream database:** Ben Johns 6 → **12** (their table: 9 + 1 + 2),
+  Tyson McGuffin 14 → **30** (their table: 12 + 10 + 8). Every per-division cell
+  now matches theirs exactly. Titles and Finals were always right, which is why
+  this survived — two of the three numbers agreed.
+- **⚠ TYSON'S "17 TITLES" IS NOT OURS TO FIX.** He told Connor 17 titles / 40
+  finals / 80 semis. The tour's own database says **8 / 19 / 30** at PPA scope —
+  and pickleball.com prints those same three numbers on his own player page. His
+  career figures across ALL tours are 24 / 40 / 71, which is where the "40" comes
+  from. So the site is faithfully reporting `partners=ppa,upa&scope_title=Pro`;
+  the gap is a data/scope question for pickleball.com, not a rendering bug.
+  **Don't "fix" it by widening the query** — that would silently credit APP and
+  non-PPA results as PPA titles across all 179 profiles.
+- **Plan Your Trip disappears at first serve** (Connor: *"As soon as the event
+  starts, planner trip probably goes away"*; Bryce: *"should be taken down now"*).
+  New `started = completed || isTournamentLive(t)` gates the tab, the hero button
+  and the section together — a hero button pointing at a missing `#travel` anchor
+  scrolls nowhere. Same rule in `NationalsLive` (its own `started`).
+  **Nationals is live today, so this is visible immediately;** Cape Coral 2027
+  still has it.
+- **The concierge had to learn it too.** Four answers ended with *"…in 'Plan Your
+  Trip' on this page"*. New required `hasTripGuide` fact: the hotel and restaurant
+  NAMES still come through once the event starts, the pointer at a section that
+  isn't there does not.
+- **The day-by-day price matrix is gone** (Connor, on that table: *"This whole
+  thing is just why? It's not doing us anything. Not impressive. That part should
+  just take us over to Tixr."* Bryce confirmed the referent). `TicketGrid` now
+  renders one card per day — weekday, round, which access levels that day sells —
+  each linking to **that day's own Tixr listing**, plus a "See All Tickets on
+  Tixr" button. Multi-day passes keep their prices (*"that one's fine"*).
+  Per-day deep links were deliberately preserved: a fan who wants Sunday still
+  lands on Sunday.
+- **A photo fills the dead space beside Suites & Hospitality** (Bryce: *"Pictures
+  need to go there. It's kind of ugly."*). With `showGrid` true the tier cards are
+  skipped, which left one small navy card and three empty columns. Uses
+  `t.gallery[2]` — `[0]` is the card image and `[1]` is the venue fallback, so
+  leading with either printed the same picture twice on one page.
+- **Gold and below lose their designation** (Connor: *"If you're gold or below,
+  we actually take away the designation. Just shows their logo. Everything
+  category leader shows the actual designation."*). New `showsDesignation(p)` in
+  `lib/home-content.ts` — title + platinum only — applied to all six surfaces
+  that printed `p.role`: partner wall, homepage spotlight + marquee tooltip,
+  footer strip, sponsors directory, senior page. **This is a sales rule, not
+  layout:** a printed designation reads as category exclusivity, and Gold isn't
+  exclusive, so it was talking prospects out of calling.
+- **Athlete socials now render.** They were already in the page — but only inside
+  the JSON-LD `sameAs`, where no human sees them. New `lib/social-links.ts` labels
+  a pasted URL by host (Instagram / X / TikTok / YouTube / Facebook / LinkedIn /
+  …) and the profile shows a "Follow {First}" row. **Still URL-in, label-out —
+  nothing builds a link from a handle.** Only Ben Johns has socials in Pro Player
+  Central today; the row collapses for everyone else, which is Dylan and Liv's
+  data-entry job, not a code gap.
+- tsc + eslint clean, `next build` clean. **Committed locally, not pushed.**
+
 ### 2026-08-31 (pt. 3) — Box-score cards narrowed, winner tint off green, favicon was never linked
 
 - **Bryce: the ticker cards are too wide, and why is the winner highlight green?** Both fixed.
