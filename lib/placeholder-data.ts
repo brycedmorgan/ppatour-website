@@ -16,6 +16,9 @@
  */
 
 import { asiaTourUrlForCuratedSlug } from "@/lib/asia-tour-links";
+import { australiaTourUrlForCuratedSlug } from "@/lib/australia-tour-links";
+import { canadaTourUrlForCuratedSlug } from "@/lib/canada-tour-links";
+import { sisterTourTickets } from "@/lib/sister-tour-tickets";
 import { venueGalleryFor, venueHeroFor } from "@/lib/venue-photos";
 import { ticketPriceFrom, ticketsOnSale } from "@/lib/tixr-price-index";
 
@@ -95,6 +98,16 @@ export type Tournament = {
    */
   ticketsOnSale?: boolean;
   ticketsUrl: string;
+  /**
+   * What we know about admission when it is NOT simply "on sale at $X".
+   * Absent means nothing special. Set only from a source someone gave us —
+   * see lib/sister-tour-tickets.ts.
+   *   "free"     — admission is free; no tickets exist and none are coming.
+   *   "no-price" — tickets are on sale, but we hold no price, so no surface
+   *                may print one. `ticketPriceFrom` is a tier-table fallback
+   *                on those records, i.e. a number nobody quoted.
+   */
+  ticketNote?: "free" | "no-price";
   registerUrl: string;
   status: "upcoming" | "live" | "completed";
   /**
@@ -165,6 +178,21 @@ export type Tournament = {
    * the search index.
    */
   detailsComingSoon?: boolean;
+  /**
+   * Render this curated stop on /events even though the live feed has no row
+   * for it. Opt-in PER EVENT, and it has to stay that way: 23 curated upcoming
+   * events are absent from the feed, and merging them wholesale would both
+   * promote sister-tour stops we do not run and double-render the two
+   * second-edition rows whose slugs are date-suffixed precisely because the
+   * feed already lists them (`newport-beach-open-2027-03-02`,
+   * `atlanta-ppa-challenger-2026-08-28`).
+   *
+   * ⚠ NOT the same as `detailsComingSoon`. That one renders a card with NO
+   * link because there is nowhere to send anyone. This one is for a stop that
+   * has a real destination — the sister tour's own event page — but no feed
+   * row: PPA Canada's Ottawa and Toronto 125s (Wesley, 9/1).
+   */
+  showWhenAbsentFromFeed?: boolean;
   /** API `logo_url` (square event mark), when available. */
   logoUrl?: string;
   /** Where this record came from — the live API or the curated fallback. */
@@ -337,6 +365,8 @@ type RawEvent = {
   image?: string;
   /** See {@link Tournament.detailsComingSoon}. */
   detailsComingSoon?: boolean;
+  /** See {@link Tournament.showWhenAbsentFromFeed}. */
+  showWhenAbsentFromFeed?: boolean;
 };
 
 // Badge-matched brand colors + icons per event (keyed by generated slug).
@@ -530,6 +560,13 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
             (tierFromName(r.name) ?? "open")
           : r.tier!;
 
+    // Tickets for a sister-tour stop (undefined for US rows).
+    const intlTickets = sisterTourTickets({
+      country: r.country,
+      slug,
+      detailsUrl: COMMERCE_BY_SLUG[slug]?.register,
+    });
+
     return {
       slug,
       name: r.name,
@@ -540,11 +577,24 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
       endDate: r.end,
       // Real Tixr price when we have it; the tier table is only a fallback for
       // stops with no Tixr listing yet. See lib/tixr-prices.ts.
+      //
+      // ⚠ SISTER-TOUR STOPS ANSWER FIRST — the fallbacks here describe the US
+      // tour only. `ticketPriceFrom`/`ticketsOnSale` read a snapshot of Tixr
+      // group 1164, the blanket $35 for an international stop is a number
+      // nobody quoted, and `TIXR` is the US group root — the wrong tour's box
+      // office. This is the API-unreachable path; the live one is in
+      // lib/events-api.ts and both must agree. See lib/sister-tour-tickets.ts.
       ticketPriceFrom:
+        intlTickets?.priceFrom ??
         ticketPriceFrom(COMMERCE_BY_SLUG[slug]?.tickets) ??
         (r.type === "international" ? 35 : TIER_PRICE[tier]),
-      ticketsOnSale: ticketsOnSale(COMMERCE_BY_SLUG[slug]?.tickets),
-      ticketsUrl: COMMERCE_BY_SLUG[slug]?.tickets ?? TIXR,
+      ticketsOnSale: intlTickets
+        ? intlTickets.onSale
+        : ticketsOnSale(COMMERCE_BY_SLUG[slug]?.tickets),
+      // `||`, not `??`: a free event resolves to no storefront at all, and an
+      // empty string must fall through rather than render as a href.
+      ticketsUrl: intlTickets?.url || COMMERCE_BY_SLUG[slug]?.tickets || TIXR,
+      ticketNote: intlTickets?.note,
       registerUrl: COMMERCE_BY_SLUG[slug]?.register ?? REGISTER,
       status: "upcoming" as const,
       eventCode: eventCode({ city: r.city, state: r.state, endDate: r.end }),
@@ -579,7 +629,12 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
       // cards would otherwise fall through to `registerUrl`, which for an
       // unlisted stop is the bare pickleballtournaments.com homepage. Undefined
       // for every non-Asia event, which leaves that behaviour exactly as it was.
-      externalUrl: asiaTourUrlForCuratedSlug(slug),
+      // PPA Tour Australia's own pages land here too (Wesley, 9/1).
+      externalUrl:
+        asiaTourUrlForCuratedSlug(slug) ??
+        australiaTourUrlForCuratedSlug(slug) ??
+        canadaTourUrlForCuratedSlug(slug),
+      showWhenAbsentFromFeed: r.showWhenAbsentFromFeed,
       // Only U.S. PPA stops get a rich internal page; Challengers and the
       // international sister tours link out. Stated EXPLICITLY (not left
       // undefined) because the card components treat `!== false` as internal —
@@ -618,7 +673,12 @@ const SCHEDULE: RawEvent[] = [
 
   // September 2026
   { name: "PPA Asia 1000 Kuala Lumpur Cup", start: "2026-09-09", end: "2026-09-13", city: "Kuala Lumpur", state: "Malaysia", type: "international", country: "Asia" },
-  { name: "PPA Canada 125 Vancouver", start: "2026-09-10", end: "2026-09-13", city: "Vancouver", state: "Canada", type: "international", country: "Canada" },
+  // ⚠ Dec 3-6, not the Sept 10-13 this row used to carry (Wesley, 9/1: "pushed
+  // back to December 3-6"). The live feed already says Dec 3-6 and the feed
+  // wins on /events, so this only shows when the API is unreachable — which is
+  // exactly when a stale date would go unnoticed. PPA Canada's own schedule
+  // says Dec 3-6 too.
+  { name: "PPA Canada 125 Vancouver", start: "2026-12-03", end: "2026-12-06", city: "Vancouver", state: "Canada", type: "international", country: "Canada" },
   { name: "Veolia Arizona Open", start: "2026-09-14", end: "2026-09-20", city: "Mesa", state: "AZ", venue: "Arizona Athletic Grounds", type: "ppa", tier: "open" },
   { name: "Grand Rapids PPA Challenger", start: "2026-09-18", end: "2026-09-20", city: "Rockford", state: "MI", type: "challenger", points: 250 },
   // ⚠ PPA SPAIN PUBLISHES BARCELONA ONLY. Wesley, 8/5, on the PPA Europe
@@ -664,7 +724,7 @@ const SCHEDULE: RawEvent[] = [
   { name: "Mojo Energy Pouches Virginia Beach Open", slug: "virginia-beach-open", start: "2026-10-12", end: "2026-10-18", city: "Virginia Beach", state: "VA", type: "ppa", tier: "open" },
   { name: "PPA 1500 Australia Pickleball Open", start: "2026-10-13", end: "2026-10-18", city: "Australia", state: "", type: "international", country: "Australia" },
   { name: "PPA Asia 1500 Hong Kong Slam", start: "2026-10-19", end: "2026-10-25", city: "Hong Kong", state: "China", type: "international", country: "Asia" },
-  { name: "PPA Canada 125 Ottawa", start: "2026-10-22", end: "2026-10-25", city: "Ottawa", state: "Canada", type: "international", country: "Canada" },
+  { name: "PPA Canada 125 Ottawa", start: "2026-10-22", end: "2026-10-25", city: "Ottawa", state: "Canada", type: "international", country: "Canada", showWhenAbsentFromFeed: true },
 
   // November 2026
   { name: "Pickleball World Championships", start: "2026-11-02", end: "2026-11-08", city: "Farmers Branch", state: "TX", venue: "Brookhaven Country Club", type: "ppa", tier: "worlds" },
@@ -672,7 +732,7 @@ const SCHEDULE: RawEvent[] = [
   // alone, with no city. Deleted 8/5 with the other four unconfirmed Spanish
   // stops — see the note on the Barcelona opener above before re-adding one.
   { name: "Proton Daytona Beach Open", start: "2026-11-16", end: "2026-11-22", city: "Holly Hill", state: "FL", venue: "Pictona at Holly Hill", type: "ppa", tier: "open" },
-  { name: "PPA Canada 125 Toronto", start: "2026-11-26", end: "2026-11-29", city: "Toronto", state: "Canada", type: "international", country: "Canada" },
+  { name: "PPA Canada 125 Toronto", start: "2026-11-26", end: "2026-11-29", city: "Toronto", state: "Canada", type: "international", country: "Canada", showWhenAbsentFromFeed: true },
   /**
    * Renamed from "Veolia Malibu Cup" and moved off Nov 30 – Dec 6 (Bryan
    * Renahan, 8/26). The feed carries the same rename and the same Dec 14–20,

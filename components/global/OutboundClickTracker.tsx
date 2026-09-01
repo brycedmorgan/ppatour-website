@@ -36,6 +36,13 @@ const PARTNER_HOSTS = [
   // without this line, repointing them at ppatour-asia.com (Wade, 8/6) would
   // have silently stopped counting the sister-tour handoff altogether.
   "ppatour-asia.com",
+  // PPA Tour Australia's own site, for exactly the same reason (Wesley, 9/1):
+  // their stops used to link to pickleballtournaments.com and counted as
+  // `register_click`, so repointing them at ppatour.com.au without this line
+  // would have silently stopped counting the handoff altogether.
+  "ppatour.com.au",
+  // PPA Tour Canada, same reason again (Wesley, 9/1).
+  "ppatourcanada.ca",
   // PPA Pickleball Tour 2025 storefronts (/game). The click out is the only
   // thing measurable — the purchase happens on the platform.
   "store.steampowered.com",

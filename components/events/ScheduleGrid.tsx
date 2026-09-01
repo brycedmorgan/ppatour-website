@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useDeferredValue, useMemo, useState } from "react";
 import { eventMatcher } from "@/lib/event-search";
+import { withUtm } from "@/lib/utm";
 import {
   formatDateRange,
   tierPoints,
@@ -12,6 +13,9 @@ import {
   type Tournament,
   eventHref,
 } from "@/lib/placeholder-data";
+
+/** The card's bottom-right ticket chip — one class for all four states. */
+const CHIP = "text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-yellow";
 
 type TimeKey = "upcoming" | "past";
 type TypeKey = "all" | "main" | "challengers" | "international";
@@ -363,15 +367,53 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
                     {/* Suppressed while details are pending: "Tickets soon"
                         beside "Details Coming Soon" says the same thing twice,
                         and tickets are the smaller of the two unknowns. */}
-                    {!comingSoon && (
-                      <span className="text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-yellow">
-                        {completed
-                          ? "Completed"
-                          : t.ticketsOnSale
-                            ? `From $${t.ticketPriceFrom}`
-                            : "Tickets soon"}
-                      </span>
-                    )}
+                    {!comingSoon &&
+                      (completed ? (
+                        <span className={CHIP}>Completed</span>
+                      ) : t.ticketNote === "free" ? (
+                        /* Deliberately NOT a link — there is nothing to buy.
+                           Free admission is a fact about the event, and the
+                           previous "Tickets soon" promised tickets that are
+                           never coming (Wesley, 9/1: Barcelona is free entry). */
+                        <span className={CHIP}>Free Admission</span>
+                      ) : t.ticketsOnSale && !internal && t.ticketsUrl ? (
+                        /* ⚠ LINKED ONLY ON LINK-OUT STOPS, AND THAT IS ON PURPOSE.
+                           A US stop's card already goes to its own event page,
+                           where tickets are sold — the standing "drive to the
+                           event page" decision (5/21). A sister-tour stop has no
+                           such page, so without this the chip states tickets are
+                           on sale and gives no way to reach them.
+
+                           ⚠ `relative z-10` is load-bearing: the event title's
+                           `after:inset-0` covers the whole card, so a link
+                           without its own stacking context is unclickable —
+                           every click lands on the card behind it. */
+                        <a
+                          href={withUtm(t.ticketsUrl, {
+                            campaign: t.eventCode ?? t.slug,
+                            content: "events-grid-tickets",
+                          })}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`${CHIP} relative z-10 underline-offset-2 hover:underline`}
+                        >
+                          {/* No price is printed unless somebody gave us one —
+                              `ticketPriceFrom` is a tier-table fallback on these
+                              records, i.e. a number nobody quoted. */}
+                          {t.ticketNote === "no-price"
+                            ? "Tickets"
+                            : `From $${t.ticketPriceFrom}`}{" "}
+                          ↗
+                        </a>
+                      ) : t.ticketsOnSale ? (
+                        /* An internal stop on sale: unchanged from before this
+                           file grew the states above it — plain text, because
+                           the card itself goes to the event page that sells the
+                           ticket. Do NOT fold this into the link branch. */
+                        <span className={CHIP}>From ${t.ticketPriceFrom}</span>
+                      ) : (
+                        <span className={CHIP}>Tickets soon</span>
+                      ))}
                   </span>
                 </div>
               </article>

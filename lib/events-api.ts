@@ -19,6 +19,8 @@
  */
 
 import { asiaTourUrlForDetailsUrl } from "@/lib/asia-tour-links";
+import { australiaTourUrlForEvent } from "@/lib/australia-tour-links";
+import { canadaTourUrlForEvent } from "@/lib/canada-tour-links";
 import { eventCode } from "@/lib/event-code";
 import {
   type EventTier,
@@ -36,6 +38,7 @@ import {
 } from "@/lib/placeholder-data";
 import { venueGalleryFor, venueHeroFor } from "@/lib/venue-photos";
 import { ticketPriceFrom, ticketsOnSale } from "@/lib/tixr-price-index";
+import { sisterTourTickets } from "@/lib/sister-tour-tickets";
 
 const PATH = "/v2/data/ppa_tournaments";
 /**
@@ -354,6 +357,9 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
   const name = cleanTitle(t.title);
   const isUsOrg = t.organization_name === US_ORG;
   const isChallenger = /challenger/i.test(name);
+  // Region is read twice below (the record field, and the ticket resolver),
+  // so it is computed once here rather than inferred in two places.
+  const country = isUsOrg ? undefined : inferCountry(t.organization_name, t.venue_country);
   const startDate = dateOnly(t.start_date);
 
   // Prefer the curated slug (so guides/broadcast/brand + existing URLs light up);
@@ -376,6 +382,14 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     curated?.tierKey ??
     (isChallenger ? "challenger" : inferTier(name, eventDays(startDate, endDate)));
   const status = mapStatus(t.tournament_status);
+  // Tickets for a sister-tour stop. Undefined for US events, so the domestic
+  // Tixr-snapshot path below is untouched.
+  const intlTickets = sisterTourTickets({
+    country,
+    tournamentUuid: t.tournament_uuid,
+    slug,
+    detailsUrl: t.details_url,
+  });
 
   return {
     slug,
@@ -409,13 +423,22 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     venue: resolveVenue(slug, curated?.venue, t.venue_name, t.venue_city),
     startDate,
     endDate,
-    // Tixr first, then whatever the curated record says, then the tier table.
+    // ⚠ SISTER-TOUR STOPS ARE ANSWERED FIRST, AND THE US PATH BELOW IS
+    // UNCHANGED. The three fallbacks below can only ever describe the US tour:
+    // `ticketPriceFrom`/`ticketsOnSale` read a snapshot of Tixr group 1164,
+    // and the curated `ticketsUrl` fallback is the `TIXR` constant — the US
+    // group root, i.e. the wrong tour's box office on an Asia, Australia or
+    // Spain event. See lib/sister-tour-tickets.ts.
     ticketPriceFrom:
+      intlTickets?.priceFrom ??
       ticketPriceFrom(curated?.ticketsUrl ?? t.details_url) ??
       curated?.ticketPriceFrom ??
       TIER_PRICE[tier],
-    ticketsOnSale: ticketsOnSale(curated?.ticketsUrl ?? t.details_url),
-    ticketsUrl: curated?.ticketsUrl ?? t.details_url,
+    ticketsOnSale: intlTickets
+      ? intlTickets.onSale
+      : ticketsOnSale(curated?.ticketsUrl ?? t.details_url),
+    ticketsUrl: intlTickets?.url ?? curated?.ticketsUrl ?? t.details_url,
+    ticketNote: intlTickets?.note,
     registerUrl: t.details_url || curated?.registerUrl || "",
     status,
     // Same join key as the curated builder — an API-sourced event must be
@@ -460,7 +483,7 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     // the 2027 Newport Beach Open still get their crest.
     brand: curated?.brand ?? brandForSlug(slug),
     region: isUsOrg ? undefined : "international",
-    country: isUsOrg ? undefined : inferCountry(t.organization_name, t.venue_country),
+    country,
     season: status === "completed" ? inferSeason(startDate) : undefined,
     tournamentUuid: t.tournament_uuid,
     // ⚠ THE ASIA TOUR'S OWN PAGE WINS OVER THE FEED'S `details_url`. Wade (PPA
@@ -468,7 +491,15 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     // pickleballtournaments.com holding page; they publish a real page per
     // tournament. Unlisted events are untouched — see lib/asia-tour-links.ts,
     // which fails safe back to this URL and has an audit script for the drift.
-    externalUrl: asiaTourUrlForDetailsUrl(t.details_url) ?? (t.details_url || undefined),
+    // ⚠ THE AUSTRALIA TOUR'S OWN PAGE WINS TOO, same reason and same shape as
+    // Asia above (Wesley, 9/1). Their site publishes a page per tournament at
+    // ppatour.com.au/tournaments/{slug}/; unlisted stops keep this URL. See
+    // lib/australia-tour-links.ts, which fails safe and has an audit script.
+    externalUrl:
+      asiaTourUrlForDetailsUrl(t.details_url) ??
+      australiaTourUrlForEvent(t.tournament_uuid, t.details_url) ??
+      canadaTourUrlForEvent(t.tournament_uuid, t.details_url) ??
+      (t.details_url || undefined),
     // US main-tour + curated events get a rich internal page; challengers and
     // international sister-tour stops link out to their details_url instead.
     //
@@ -517,7 +548,16 @@ function fallback(): { events: Tournament[]; source: "fallback" } {
  */
 function withComingSoon(events: Tournament[]): Tournament[] {
   const live = new Set(events.map((e) => e.slug));
-  const pending = getAllEvents().filter((t) => t.detailsComingSoon && !live.has(t.slug));
+  // ⚠ TWO OPT-INS, NOT ONE, AND THEY MEAN DIFFERENT THINGS.
+  // `detailsComingSoon` is a stop with nowhere to send anyone yet (renders a
+  // card with no link). `showWhenAbsentFromFeed` is a stop that HAS a real
+  // destination — its sister tour's own event page — but no feed row, so it
+  // would otherwise be invisible on a feed-driven calendar: PPA Canada's
+  // Ottawa and Toronto 125s (Wesley, 9/1). Both stay per-event; see the note
+  // on the type for why merging every feed-absent curated row is wrong.
+  const pending = getAllEvents().filter(
+    (t) => (t.detailsComingSoon || t.showWhenAbsentFromFeed) && !live.has(t.slug),
+  );
   if (pending.length === 0) return events;
   return [...events, ...pending.map((t) => ({ ...t, source: "curated" as const }))].sort((a, b) =>
     a.startDate.localeCompare(b.startDate),
