@@ -63,6 +63,34 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-01 (pt. 3) — ⚠ CORRECTION: `partners=ppa` is a 1,000-point floor, not a missing tag
+
+- **The earlier entry below blamed a missing PPA partner tag on pre-2024 events. THAT IS
+  WRONG — do not act on it.** Reg Mellon and Kenan Hasanovic, in the API thread: *"we were
+  asked to only include PPA 1000 and above in those numbers."* **It is our own requirement**,
+  and it matches Connor's 7/23 "The Tour = 1,000+ points" ruling already recorded above. The
+  endpoint is doing exactly what it was specified to do.
+- **Why the wrong read was so convincing:** the per-year gap converges at 2024 and falls apart
+  before it, which looks like a tagging failure that healed. It is a points floor, and 2024 is
+  simply when nearly every PPA stop became 1,000+.
+- **⚠ WE HAD THE DISPROOF IN THIS REPO THE WHOLE TIME.**
+  `lib/data/tournament-history.json` holds PPA main-draw champions and gives **Ben Johns 12
+  titles in 2020** where `partners=ppa` returns **3**. One `Counter` over a file we already
+  ship would have killed the tagging theory before it went to anyone. **Check our own results
+  archive before theorising about an upstream feed.**
+- **⚠ AND IT SAYS TYSON IS RIGHT.** Same file: **15 titles / 37 finals lost / 33 thirds**
+  from 2020 on, and it does not reach 2019. He told Connor 17 and 40. The API's PPA scope says
+  8 / 19 / 30. We were answering a narrower question than the one he was asking — not
+  reporting his results wrongly.
+- **The ask changed shape.** Not a backfill: a second scope on `player_medals` with **no points
+  floor**, so a profile can show career PPA titles while the race keeps 1,000+. Also asked
+  whether anything before 2020 exists at any scope. Posted in the API thread 9/1.
+- **`scope_title=Pro` being inert and the `app`/`usap`/`mlp` keys not existing are still true**
+  — those were probed directly. Only the *cause* of the low numbers was misdiagnosed.
+- No code change from this. The "PPA Tour" relabel shipped earlier today is still the right
+  call and becomes more clearly right: the block genuinely is a 1,000+ subset, so calling it
+  "Career" was wrong twice over.
+
 ### 2026-09-01 (pt. 2) — Ticker scores were clipped by a missing `min-w-0`; player photos on the scores board
 
 - **⚠ THE CUT-OFF SCORES WERE NOT A WIDTH PROBLEM.** Bryce sent a screenshot of the
