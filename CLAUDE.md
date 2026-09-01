@@ -91,6 +91,24 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   three more. Not challengers. `partners=ppa` gives Ben Johns **6** golds that year against
   **25** in our archive. **The floor separates 2024-and-later from everything before it, not
   tour titles from lesser ones**, because the points were rebased in between.
+- **⚠ 2020 AND 2021 ARE WHERE IT IS CATASTROPHIC, AND THEY ARE ALSO WHERE OUR OWN ARCHIVE IS
+  THINNEST.** Ben Johns golds, our `tournament-history.json` vs `partners=ppa`:
+
+  | Year | PPA stops we hold | Ben, ours | Ben, API | Share surviving |
+  |---|---|---|---|---|
+  | 2020 | 6 | 12 | **3** | 25% |
+  | 2021 | 14 | 25 | **6** | 24% |
+  | 2022 | 21 | 32 | 13 | 41% |
+  | 2023 | 22 | 34 | 24 | 71% |
+  | 2024 | 24 | 32 | 31 | 97% |
+  | 2025 | 19 | 26 | 27 | ~100% |
+
+  **Roughly one stop in six counted in 2020 and two in fourteen in 2021.** That is the window
+  where Tyson was at his peak, which is why he of all people noticed.
+- **⚠ THIS ALSO KILLS THE "JUST COMPUTE IT OURSELVES" FALLBACK FOR THOSE YEARS.** Our archive
+  holds 6 stops for 2020 and 14 for 2021 against a real calendar that was larger, and it
+  **starts 2020-02-13** — nothing before it exists on our side at all. So pre-2022 titles can
+  only come from pickleball.com. Building our own counter would reproduce the same hole.
 - **The ask changed shape.** Not a backfill: a second scope defined as **"PPA sanctioned",
   not a points number** — a threshold cannot be stable across a period when the points changed
   meaning. 1,000-and-above stays exactly as it is for the race and the rankings. Also asked
