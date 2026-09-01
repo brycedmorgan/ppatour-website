@@ -82,8 +82,18 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   from 2020 on, and it does not reach 2019. He told Connor 17 and 40. The API's PPA scope says
   8 / 19 / 30. We were answering a narrower question than the one he was asking — not
   reporting his results wrongly.
-- **The ask changed shape.** Not a backfill: a second scope on `player_medals` with **no points
-  floor**, so a profile can show career PPA titles while the race keeps 1,000+. Also asked
+- **⚠ AND THE FLOOR ITSELF IS THE PROBLEM — Bryce's catch, and it is the strongest argument
+  in the thread.** A 1,000-point floor is **today's scale applied backwards**. PPA stops that
+  were 500-point events in earlier years are still PPA titles. `tournament-history.json` lists
+  the whole 2021 calendar and it is fourteen real tour stops — Hyundai Masters, PPA
+  Championships, Texas Open, Las Vegas Open, Orlando Cup, Rocky Mountain Championships, Takeya
+  Showcase, Orange County Cup, Atlanta Open, Newport Beach Doubles Shootout, Red Rock Open and
+  three more. Not challengers. `partners=ppa` gives Ben Johns **6** golds that year against
+  **25** in our archive. **The floor separates 2024-and-later from everything before it, not
+  tour titles from lesser ones**, because the points were rebased in between.
+- **The ask changed shape.** Not a backfill: a second scope defined as **"PPA sanctioned",
+  not a points number** — a threshold cannot be stable across a period when the points changed
+  meaning. 1,000-and-above stays exactly as it is for the race and the rankings. Also asked
   whether anything before 2020 exists at any scope. Posted in the API thread 9/1.
 - **`scope_title=Pro` being inert and the `app`/`usap`/`mlp` keys not existing are still true**
   — those were probed directly. Only the *cause* of the low numbers was misdiagnosed.
