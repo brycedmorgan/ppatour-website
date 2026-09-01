@@ -282,7 +282,7 @@ export const tvSchedule: TvEvent[] = [
     ],
   },
   {
-    name: "Pickleball World Championships",
+    name: "Opendoor Pickleball World Championships",
     location: "Brookhaven Country Club · Farmers Branch, TX",
     // Worlds is a Major — the biggest one (Bryce, 7/29) — not its own tier.
     tier: "Major · 3,000",

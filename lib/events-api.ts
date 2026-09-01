@@ -138,6 +138,16 @@ const CURATED_ALIASES: Record<string, string> = {
   // presenter, ticket + register links and venue photos with it, since all six
   // are keyed on the old slug. Same shape as the Mojo line above.
   "veolia-malibu-showcase": "veolia-malibu-cup",
+  // ⚠ PRE-EMPTIVE, LIKE THE MALIBU LINE ABOVE — Opendoor was announced as the
+  // title sponsor of Worlds on 9/1 and the feed has NOT been renamed yet
+  // (checked live: it still returns "Pickleball World Championships"). The day
+  // PB Tournaments makes the edit, `kebab(name)` becomes
+  // "opendoor-pickleball-world-championships", `findCurated` misses, and the
+  // page moves off /events/2026/pickleball-world-championships — taking the
+  // badge, the Brookhaven venue photography, the guide, the broadcast table,
+  // the Tixr + registration links and the Major designation with it, since all
+  // six are keyed on the old slug. This line is what keeps the URL still.
+  "opendoor-pickleball-world-championships": "pickleball-world-championships",
 };
 
 const curatedBySlug = new Map<string, Tournament>(getAllEvents().map((t) => [t.slug, t]));
@@ -158,6 +168,9 @@ const NAME_OVERRIDE_BY_SLUG: Record<string, string> = {
   "veolia-pickleball-national-championships": "Veolia Pickleball National Championships",
   "virginia-beach-open": "Mojo Energy Pouches Virginia Beach Open",
   "atlanta-pickleball-championships": "Pickleball Players Championships",
+  // Announced 9/1; the feed still says "Pickleball World Championships".
+  // Delete this row the moment PB Tournaments carries the title sponsor.
+  "pickleball-world-championships": "Opendoor Pickleball World Championships",
 };
 
 /**

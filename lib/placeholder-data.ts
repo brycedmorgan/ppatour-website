@@ -391,6 +391,9 @@ const BRAND_BY_SLUG: Record<
   "rate-las-vegas-open": { primary: "#003058", accent: "#2088e0", icon: "/ppa/badges/las-vegas.png" },
   "veolia-chicago-cup": { primary: "#003058", accent: "#c8102e", icon: "/ppa/badges/chicago.png" },
   "virginia-beach-open": { primary: "#003058", accent: "#0078d0", icon: "/ppa/badges/virginia-beach.png" },
+  // ⚠ Reissued 9/1 with Opendoor as title sponsor — same house web-icon
+  // format (0.545:1 portrait card, white plate baked in), so this stays a
+  // one-liner like every sibling. The pre-Opendoor card is in git history.
   "pickleball-world-championships": { primary: "#182068", accent: "#007838", icon: "/ppa/badges/worlds.png" },
   "proton-daytona-beach-open": { primary: "#003058", accent: "#2088e0", icon: "/ppa/badges/daytona.png" },
   "veolia-malibu-cup": { primary: "#003058", accent: "#e23a76", icon: "/ppa/badges/malibu.png" },
@@ -727,7 +730,20 @@ const SCHEDULE: RawEvent[] = [
   { name: "PPA Canada 125 Ottawa", start: "2026-10-22", end: "2026-10-25", city: "Ottawa", state: "Canada", type: "international", country: "Canada", showWhenAbsentFromFeed: true },
 
   // November 2026
-  { name: "Pickleball World Championships", start: "2026-11-02", end: "2026-11-08", city: "Farmers Branch", state: "TX", venue: "Brookhaven Country Club", type: "ppa", tier: "worlds" },
+  /**
+   * Opendoor became the title sponsor on 9/1. This row is only the fallback the
+   * site serves when the API is unreachable — the live name comes from the feed
+   * (and, until the feed is renamed, from NAME_OVERRIDE_BY_SLUG in
+   * lib/events-api.ts) — but it has to agree, or an outage would publish the
+   * unsponsored name.
+   *
+   * ⚠ `slug` IS PINNED, AND IT HAS TO BE. Six keys hang off
+   * `pickleball-world-championships` — BRAND_BY_SLUG, COMMERCE_BY_SLUG,
+   * event-guides, broadcast, venue-photos and MAJOR_SLUGS — plus the live URL.
+   * Without the pin, `kebab(name)` moves the page to
+   * /opendoor-pickleball-world-championships and silently orphans all six.
+   */
+  { name: "Opendoor Pickleball World Championships", slug: "pickleball-world-championships", start: "2026-11-02", end: "2026-11-08", city: "Farmers Branch", state: "TX", venue: "Brookhaven Country Club", type: "ppa", tier: "worlds" },
   // ⚠ A PPA Spain P125 sat here (11–15 Nov) on the strength of the 5/27 release
   // alone, with no city. Deleted 8/5 with the other four unconfirmed Spanish
   // stops — see the note on the Barcelona opener above before re-adding one.
