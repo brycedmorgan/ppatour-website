@@ -63,6 +63,38 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-08-31 (pt. 3) — Box-score cards narrowed, winner tint off green, favicon was never linked
+
+- **Bryce: the ticker cards are too wide, and why is the winner highlight green?** Both fixed.
+- **Width.** `CARD_WIDTHS` capped at `23%` above 1400px, so a 2000px display showed **4 cards
+  at ~460px each** — a box score with more whitespace than data. Now steps down through two
+  new breakpoints: `21%` at 1400, `17%` at 1700, `14%` at 2000. Measured on a seeded rail:
+  **2000px goes 4 cards → 7, 1440px stays 4 at 274px (was ~320px), zero page overflow.**
+- **⚠ The green was a real brand break, not a preference.** `--color-ppa-win` was `#d3ecd0`
+  — a green that is in no PPA palette. It is now `#d7eafb`, a tint of `ppa-blue`. **One token,
+  four surfaces**: MatchCard rows AND per-game cells, BracketView, ScoresBoard. Navy on it
+  measures fine; nothing else needed to change.
+- Card header dropped `text-sm` → `text-xs`. A long division name ("Women's Doubles Pro
+  Qualifier") needs 259px and a 261px card gives the label 174px, so it truncates **at any
+  type size** — the smaller header shows ~20% more of it and sits better on the narrower card.
+  The full name stays in the DOM.
+- **⚠ THE SITE HAS SHIPPED WITH NO FAVICON SINCE LAUNCH, AND `app/icon.svg` EXISTED THE WHOLE
+  TIME.** Declaring **any** `icons` entry in metadata turns off Next's file-based icon
+  detection, and `app/layout.tsx` listed only `apple`. So `/icon.svg` served 200, **no
+  `<link rel="icon">` shipped at all**, and every browser tab fell back to `/favicon.ico`,
+  which 404s. Verified on production before the fix: the HTML carried `apple-touch-icon` and
+  nothing else. `icon` is now named explicitly (svg + the 192 PNG fallback).
+- **And the icon itself was unreadable.** It was the full lockup — Carvana row + PPA +
+  PICKLEBALL TOUR — on a 775×847 canvas, i.e. three lines of type in 16 pixels. Rendered it
+  beside the alternatives at 16/32/64px and cropped `app/icon.svg` to **the PPA lettermark
+  alone** (28,100 → 6,126 bytes). The complete lockup still ships for home screens via
+  `public/app-icons/`, which is where it is legible.
+- **⚠ The rail cannot be verified locally without a fixture.** `.env.local` has no
+  `PB_API_TOKEN`, so `/api/ticker/` returns `matches: []` and the cards never render. Seeded
+  the route with a 7-match fixture (live / final / up-next / singles) to measure, **then
+  reverted it** — `git diff` shows the route untouched.
+- tsc + eslint clean. **Committed locally, not pushed.**
+
 ### 2026-08-31 (pt. 2) — Cary parks in the grass lot, and the map ships with the line
 
 - **The event team's addition, pasted verbatim** into Cary's General Parking

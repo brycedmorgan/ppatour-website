@@ -89,7 +89,17 @@ export const metadata: Metadata = {
     title: "PPA Tour",
     statusBarStyle: "black-translucent",
   },
+  /**
+   * ⚠ DECLARING ANY `icons` ENTRY TURNS OFF NEXT'S FILE-BASED ICON DETECTION.
+   * `app/icon.svg` existed and served at /icon.svg, but this block listed only
+   * `apple` — so no <link rel="icon"> shipped at all and every browser tab fell
+   * back to /favicon.ico, which 404s. Name the tab icon explicitly here.
+   */
   icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/app-icons/icon-192.png", type: "image/png", sizes: "192x192" },
+    ],
     apple: "/app-icons/apple-touch-icon.png",
   },
   title: {

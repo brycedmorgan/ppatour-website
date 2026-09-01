@@ -116,7 +116,7 @@ export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: s
     >
       {/* Header */}
       <div className="flex items-center justify-between gap-2 px-3 py-1.5">
-        <span className="truncate font-display text-sm uppercase leading-none text-ppa-navy">
+        <span className="truncate font-display text-xs uppercase leading-none text-ppa-navy">
           {m.division || m.round}
         </span>
         <div className="flex shrink-0 items-center gap-1.5">

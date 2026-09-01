@@ -94,7 +94,7 @@ function ArrowButton({ dir, onClick }: { dir: "left" | "right"; onClick: () => v
  * scrolls — same reason the homepage callout rail sits at 68vw (7/31 pt.5).
  */
 const CARD_WIDTHS =
-  "w-[88%] min-[778px]:w-[46%] min-[1080px]:w-[31%] min-[1400px]:w-[23%]";
+  "w-[86%] min-[778px]:w-[43%] min-[1080px]:w-[28%] min-[1400px]:w-[21%] min-[1700px]:w-[17%] min-[2000px]:w-[14%]";
 
 /** Enough placeholders to fill the widest layout; the rest scroll off. */
 const SKELETON_COUNT = 4;

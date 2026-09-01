@@ -61,7 +61,7 @@
   --color-ppa-live-deep: #c22318; /* live red — hover */
   --color-ppa-paper: #f3f5f7; /* light editorial body */
   --color-ppa-line: #d7dee4; /* light borders */
-  --color-ppa-win: #d3ecd0; /* winning side's score cells — brackets, scores, match cards */
+  --color-ppa-win: #d7eafb; /* winning side's score cells — a tint of ppa-blue, not green; brackets, scores, match cards */
   --color-ppa-bronze: #c98a3c; /* third place — the one medal with no brand colour */
 
   /* Pickleball Vacations — sub-brand accent. Carried over from the standalone
