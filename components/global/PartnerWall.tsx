@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   partnersByTier,
+  showsDesignation,
   titlePartner,
   type Partner,
   type PartnerTier,
@@ -199,7 +200,7 @@ function PartnerCard({
       )}
       <div className="mt-4 flex items-end justify-between gap-2">
         <div>
-          {p.role && !p.hideRole && (
+          {showsDesignation(p) && (
             <p
               className="text-[10px] font-bold uppercase tracking-[0.16em]"
               style={{ color: accent }}

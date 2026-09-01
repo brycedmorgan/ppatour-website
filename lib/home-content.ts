@@ -897,6 +897,40 @@ export const partners: Partner[] = [
 export const titlePartner = partners.find((p) => p.tier === "title");
 
 /**
+ * Tiers whose designation we PRINT — Connor's "category leaders".
+ *
+ * Connor, 9/1: "If you're gold or below, we actually take away the designation.
+ * Just shows their logo. Everything category leader shows the actual
+ * designation."
+ *
+ * ⚠ THIS IS A SALES RULE, NOT A LAYOUT PREFERENCE, so it lives here rather than
+ * in any one component. A printed designation reads as category exclusivity —
+ * Connor's example was apparel: a prospect who sees "Official Apparel Partner"
+ * under a Gold logo concludes the category is sold and never calls. Gold and
+ * below are NOT exclusive, so their marks stand alone and the category stays
+ * open. (He made the same call for a Platinum partner's *category* — Yoma is
+ * genuinely the exclusive shoe, "but I don't think we have to put that in
+ * there" — which is why `category` is not printed anywhere either.)
+ *
+ * Suppression is by TIER only. `hideRole` stays the per-partner override for a
+ * title/platinum partner whose designation adds nothing beside their mark.
+ */
+const DESIGNATION_TIERS: ReadonlySet<PartnerTier> = new Set(["title", "platinum"]);
+
+/**
+ * Does this partner's designation get printed beside their logo?
+ *
+ * Every surface that renders `p.role` calls this — the partner wall, the
+ * homepage spotlight and marquee, the footer strip, the sponsors directory and
+ * the senior-tour page. One rule, one place to change it: filtering by tier at
+ * each call site is how six surfaces end up disagreeing about a sponsor's
+ * billing.
+ */
+export function showsDesignation(p: Partner): boolean {
+  return Boolean(p.role) && !p.hideRole && DESIGNATION_TIERS.has(p.tier);
+}
+
+/**
  * Resolve a partner record from a name written somewhere else in the codebase —
  * specifically an event's curated `presentedBy` string.
  *

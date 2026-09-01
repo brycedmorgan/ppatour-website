@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { footerPartners } from "@/lib/home-content";
+import { footerPartners, showsDesignation } from "@/lib/home-content";
 import { partnerLink } from "@/lib/partner-link";
 import { withUtm } from "@/lib/utm";
 import { InquiryForm } from "@/components/forms/InquiryForm";
@@ -260,7 +260,7 @@ export function SiteFooter() {
               const { href, external } = partnerLink(p);
               // Designation appended only when we hold one — otherwise this
               // read "Zimmer Biomet — undefined" on hover.
-              const label = p.role ? `${p.name} — ${p.role}` : p.name;
+              const label = showsDesignation(p) ? `${p.name} — ${p.role}` : p.name;
               const inner = (
                 <Image
                   src={p.logo!}

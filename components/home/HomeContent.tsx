@@ -27,6 +27,7 @@ import {
   explainers,
   logoPartnersInTierOrder,
   playersToWatch,
+  showsDesignation,
 } from "@/lib/home-content";
 // Server-only (pulls the migrated WP archive) — safe here because HomeContent
 // is rendered exclusively by app/page.tsx and app/live/page.tsx, both server
@@ -999,7 +1000,7 @@ export async function HomeContent({
                 <div
                   key={idx}
                   className="flex h-10 shrink-0 items-center justify-center"
-                  title={p.role ? `${p.name} — ${p.role}` : p.name}
+                  title={showsDesignation(p) ? `${p.name} — ${p.role}` : p.name}
                 >
                   <Image
                     src={p.logo!}

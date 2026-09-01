@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { SeniorRankings } from "@/components/marketing/SeniorRankings";
-import { partners } from "@/lib/home-content";
+import { partners, showsDesignation } from "@/lib/home-content";
 import { partnerLink } from "@/lib/partner-link";
 import { getSeniorRankings } from "@/lib/senior-rankings";
 import { withUtm } from "@/lib/utm";
@@ -427,7 +427,7 @@ export default async function SeniorOpenPage() {
                       className="h-8 w-auto max-w-[200px] object-contain object-left"
                     />
                   )}
-                  {p.role && (
+                  {showsDesignation(p) && (
                     <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
                       {p.role}
                     </p>

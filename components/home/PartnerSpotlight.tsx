@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { logoPartnersInTierOrder } from "@/lib/home-content";
+import { logoPartnersInTierOrder, showsDesignation } from "@/lib/home-content";
 
 /**
  * Auto-rotating partner highlight. Cycles through every tour partner with
@@ -56,7 +56,7 @@ export function PartnerSpotlight() {
         {/* Editorial block — the logo carries the name (Bryce, 7/28), so only
             the designation and the note are typed out. */}
         <div>
-          {p.role && !p.hideRole && (
+          {showsDesignation(p) && (
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-blue">
               {p.role}
             </p>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { partnersByTier, titlePartner } from "@/lib/home-content";
+import { partnersByTier, showsDesignation, titlePartner } from "@/lib/home-content";
 import { partnerLink } from "@/lib/partner-link";
 import { SponsorInquiryForm } from "@/components/marketing/SponsorInquiryForm";
 
@@ -298,7 +298,7 @@ export default function SponsorsPage() {
               >
                 {g.items.map((p) => {
                   const { href, external } = partnerLink(p);
-                  const showsRole = Boolean(p.role) && !p.hideRole;
+                  const showsRole = showsDesignation(p);
                   // Every card forwards to the partner's own site (UTM-tagged).
                   // These were plain divs until 8/3 — the sponsors page showed
                   // 29 logos and not one of them was clickable.
