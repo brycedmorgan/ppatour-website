@@ -208,27 +208,33 @@ export function watchPlatform(url: string): WatchPlatform {
   return "other";
 }
 
-/** The PickleballTV live stream — the fallback when no marquee-court match has
- *  its own live link. */
+/** The PickleballTV live stream — the fallback when the first match on the
+ *  rail has no live link of its own. */
 export const PBTV_STREAM_URL = "https://stream.pickleballtv.com/";
 
 /**
- * Where a "Watch Live" button sends viewers (Wesley, 8/20):
+ * Where a "Watch Live" button sends viewers (Wesley, 9/1):
  *
- *   1. the match on Championship Court, if it is live and has a stream link
+ *   1. the FIRST match on the score-ticker rail, if it carries a stream link
  *   2. stream.pickleballtv.com
  *
- * ⚠ GRANDSTAND IS NO LONGER A FALLBACK. It used to sit between the two, so a
- * button labelled "Watch Live" on the tour's front page could open a secondary
- * court while Championship Court was mid-match without a link of its own. The
- * PickleballTV stream carries whatever the broadcast is showing, which is the
- * honest answer when we cannot name the marquee match.
+ * ⚠ THE BUTTON AND THE RAIL HAVE TO NAME THE SAME MATCH, so pass the rail's own
+ * `ordered` list — the array LiveScoreTicker maps over, sorted live → up next →
+ * final. `matches[0]` is then literally the leftmost card on screen. Handing
+ * this a differently sorted list would put a button labelled "Watch Live" next
+ * to a card it does not open.
+ *
+ * ⚠ THE COURT NAME IS NO LONGER PART OF THIS. It used to hunt for a live match
+ * on Championship Court (and, before that, Grandstand), so the button skipped
+ * past whatever the rail was leading with whenever the marquee court's own link
+ * was missing or its court string was spelled differently upstream. The rail
+ * already decides which match is featured; this follows it.
+ *
+ * The PickleballTV stream carries whatever the broadcast is showing, which is
+ * the honest answer when the first match has no link of its own.
  */
 export function liveWatchUrl(matches: TickerMatch[]): string {
-  const championship = matches.find(
-    (m) => m.status === "live" && m.watchUrl && /champ/i.test(m.court),
-  );
-  return championship?.watchUrl || PBTV_STREAM_URL;
+  return matches[0]?.watchUrl || PBTV_STREAM_URL;
 }
 
 /** "11–9, 9–11, 8–6" — the games that have a score, in order. */

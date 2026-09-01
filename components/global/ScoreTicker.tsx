@@ -3,7 +3,7 @@
 import Link from "next/link";
 import {
   formatMatchScore,
-  matchWatchUrl,
+  liveWatchUrl,
   pickFeaturedMatch,
   teamLabel,
   useLiveTicker,
@@ -84,8 +84,13 @@ export function ScoreTicker() {
             <span className="hidden shrink-0 text-white/55 md:inline">{featured.time}</span>
           )}
           {isLive ? (
+            /* Same resolution as every other "Watch Live" button on the site:
+               the first match on the rail, else the PickleballTV stream. The
+               featured match IS `ordered[0]` here — `pickFeaturedMatch` reads a
+               list already sorted live-first — so this names the same match it
+               is describing, and shares one fallback with the rest. */
             <a
-              href={matchWatchUrl(featured)}
+              href={liveWatchUrl(ordered)}
               target="_blank"
               rel="noopener noreferrer"
               className="ml-auto shrink-0 text-ppa-yellow hover:text-white"
