@@ -16,38 +16,68 @@ import { MatchCard, MatchCardSkeleton } from "@/components/live/MatchCard";
  * reads the same hook, so both surfaces stay in sync.
  */
 
-/** Tournament logo (optional) + month + day badge. Lazy-computed;
- *  suppressHydrationWarning covers the rare midnight SSR/client boundary. */
+/**
+ * Tournament logo (optional) + month + day badge. Lazy-computed;
+ * suppressHydrationWarning covers the rare midnight SSR/client boundary.
+ *
+ * ⚠ IT IS A ROW ON TOP BELOW `sm`, A COLUMN ON THE LEFT ABOVE IT (Wesley, 9/1).
+ * As a left rail it is a fixed 128px — a third of a 390px phone — taken out of
+ * the width of the single card that fits at that viewport, i.e. exactly where a
+ * box score has the least room to give. Stacked, the crest and date read as a
+ * slim header and the card gets the whole width.
+ *
+ * ⚠ AND THE TWO LAYOUTS WORD THE DATE DIFFERENTLY, ON PURPOSE (Wesley, 9/1).
+ * The stacked row is left-aligned "SEPTEMBER 1" at one type size, flush with
+ * the card edge below it — a header line. The desktop column keeps "SEP" over a
+ * large day, because a 128px column cannot carry the full month at that size.
+ * Both read off the same Date; only the month format and scale differ.
+ */
 function DateBadge({ logo, logoHref }: { logo?: string; logoHref?: string }) {
   const [date] = useState(() => {
     const d = new Date();
     return {
+      // Both formats: the stacked row spells the month out, the desktop
+      // column abbreviates it. See the ⚠ above.
       month: d.toLocaleString("en-US", { month: "short" }).toUpperCase(),
+      monthLong: d.toLocaleString("en-US", { month: "long" }).toUpperCase(),
       day: String(d.getDate()),
     };
   });
   const logoImg = logo && (
-    <div className="relative h-32 w-full">
-      <Image src={logo} alt="" fill sizes="224px" className="object-contain" />
+    <div className="relative h-7 w-20 sm:h-32 sm:w-full">
+      <Image
+        src={logo}
+        alt=""
+        fill
+        sizes="(min-width: 640px) 224px, 80px"
+        className="object-contain"
+      />
     </div>
   );
   return (
     <div
       suppressHydrationWarning
-      className="flex w-32 shrink-0 flex-col items-center justify-center gap-1 border-r border-white/10 px-3 py-2 leading-none text-white"
+      className="flex w-full shrink-0 items-center gap-2 border-b border-white/10 px-2 py-2 leading-none text-white sm:w-32 sm:flex-col sm:justify-center sm:gap-1 sm:border-b-0 sm:border-r sm:px-3"
     >
       {logo &&
         (logoHref ? (
-          <Link href={logoHref} aria-label="Tournament page" className="w-full transition hover:opacity-80">
+          <Link
+            href={logoHref}
+            aria-label="Tournament page"
+            className="shrink-0 transition hover:opacity-80 sm:w-full"
+          >
             {logoImg}
           </Link>
         ) : (
           logoImg
         ))}
-      <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-white/60">
-        {date.month}
+      <span className="text-xs font-bold uppercase tracking-[0.14em] text-white/60 sm:text-[11px]">
+        <span className="sm:hidden">{date.monthLong}</span>
+        <span className="hidden sm:inline">{date.month}</span>
       </span>
-      <span className="font-display text-2xl leading-none">{date.day}</span>
+      <span className="font-display text-xs leading-none tracking-[0.14em] sm:text-2xl sm:tracking-normal">
+        {date.day}
+      </span>
     </div>
   );
 }
@@ -190,7 +220,7 @@ export function LiveScoreTicker({
   }, [ordered, showCards]);
 
   return (
-    <div className={`flex items-stretch ${transparent ? "" : "bg-ppa-navy"}`}>
+    <div className={`flex flex-col items-stretch sm:flex-row ${transparent ? "" : "bg-ppa-navy"}`}>
       {/* ⚠ The crest defaults to the LIVE tournament's own logo from the feed.
           TopBar used to hand this a hardcoded Veolia Atlanta crest and event
           link, so the broadcast header credited a finished April test event
