@@ -1,0 +1,51 @@
+name: Audit international ticket claims
+
+# Answers Wesley's question on the "Incorrect info for international events"
+# task (9/1): "what is the best way to make sure everyone is on the same page so
+# links go up when tickets launch?"
+#
+# Nothing about sister-tour tickets reaches this site on its own — the
+# ppa_tournaments feed carries no ticket link, and the nightly Tixr sync only
+# covers the US storefront (group 1164). So this watches the thing that IS
+# public: each sister tour advertises its own tickets on its own site. When what
+# they advertise stops matching what we publish, this run FAILS, and GitHub
+# emails the repo watchers on the status change. No Slack app, no new plumbing.
+#
+# It REPORTS, NEVER REWRITES. A ticket claim is a commercial statement about
+# someone else's event, so the fix is a human editing lib/sister-tour-tickets.ts
+# with a comment naming who said so.
+#
+# ⚠ NEEDS THE `PB_API_TOKEN` REPO SECRET. Without it the script exits 2 with a
+# clear message rather than reporting a false clean pass — but that means the
+# check is dark until someone adds the secret. It is the same token the site
+# already uses on Vercel.
+#
+# Runs daily rather than weekly on purpose: the whole point is catching a ticket
+# launch promptly, and a weekly cadence can miss one by six days. It costs about
+# a dozen page fetches, and it is silent unless something actually disagrees.
+
+on:
+  schedule:
+    - cron: "0 14 * * *" # 14:00 UTC daily (~10am ET / 7am PT)
+  workflow_dispatch: {}
+
+concurrency:
+  group: audit-intl-tickets
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Compare our ticket claims against the sister tours' own sites
+        env:
+          PB_API_TOKEN: ${{ secrets.PB_API_TOKEN }}
+        run: node scripts/audit-intl-tickets.mjs

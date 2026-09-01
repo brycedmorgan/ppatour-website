@@ -15,6 +15,7 @@
     "asia:audit": "node scripts/audit-asia-links.mjs",
     "australia:audit": "node scripts/audit-australia-links.mjs",
     "canada:audit": "node scripts/audit-canada-links.mjs",
+    "intl:tickets": "node scripts/audit-intl-tickets.mjs",
     "paddles:import": "node scripts/import-paddles.mjs",
     "paddles:report": "node scripts/import-paddles.mjs --report"
   },
