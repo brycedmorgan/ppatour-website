@@ -19,7 +19,30 @@ const TIMEOUT_MS = 8000;
 const TTL_MS = 60 * 60 * 1000;
 const REVALIDATE_S = 60 * 60 * 24; // Data Cache; the daily cron refreshes it
 
-export type MedalSet = { gold: number; silver: number; bronze: number };
+export type MedalSet = {
+  /** Won it. */
+  gold: number;
+  /** Lost the final. */
+  silver: number;
+  /** Third place — WON the bronze match, not "reached the semis". */
+  bronze: number;
+  /** Fourth place — lost the semi AND the bronze match (`{Div}BronzeLost`). */
+  bronzeLost: number;
+  /**
+   * Reached the semifinals but not the final: `bronze + bronzeLost`.
+   *
+   * ⚠ THIS IS THE COLUMN THE SITE PRINTS, AND IT USED TO PRINT `bronze` ALONE.
+   * Bronze counts only the player who WON the third-place match, so every
+   * fourth-place finish vanished — the page showed Ben Johns 6 semifinals where
+   * pickleball.com's own player page shows 12, and Tyson McGuffin 14 where it
+   * shows 30. Titles and Finals were never affected (gold and silver are
+   * complete on their own), which is why the error survived: two of the three
+   * numbers agreed with the tour's database. Found 9/1 by diffing our table
+   * against pickleball.com/players/<slug>/stats?show=ppa for both pros; the
+   * per-division numbers now match it exactly.
+   */
+  semifinals: number;
+};
 export type AthleteStats = {
   uuid: string;
   nickname: string | null;
@@ -86,11 +109,18 @@ function height(ft: unknown, inches: unknown): string | null {
   if (!f) return null;
   return `${f}' ${i ?? 0}"`;
 }
+/** Division prefixes the medals endpoint uses. "Mix", not "Mixed". */
+const MEDAL_PREFIXES = ["Singles", "Doubles", "Mix", "SkinnySingles"] as const;
+
 function medalSet(m: Obj, prefix: string): MedalSet {
+  const bronze = num(m[`${prefix}Bronze`]) ?? 0;
+  const bronzeLost = num(m[`${prefix}BronzeLost`]) ?? 0;
   return {
     gold: num(m[`${prefix}Gold`]) ?? 0,
     silver: num(m[`${prefix}Silver`]) ?? 0,
-    bronze: num(m[`${prefix}Bronze`]) ?? 0,
+    bronze,
+    bronzeLost,
+    semifinals: bronze + bronzeLost,
   };
 }
 
@@ -112,6 +142,19 @@ async function build(slug: string): Promise<AthleteStats | null> {
   const uuid = str(r.uuid) as string;
 
   const medalJson = await get(base, token, `/v2/data/users/${uuid}/player_medals?partners=ppa,upa&scope_title=Pro`);
+  /**
+   * Fourth-place finishes, summed across divisions.
+   *
+   * ⚠ Summed rather than read off a career field, because the endpoint has no
+   * top-level `BronzeLostMedals` the way it has `BronzeMedals` — only
+   * `SinglesBronzeLost`, `DoublesBronzeLost`, `MixBronzeLost` and
+   * `SkinnySinglesBronzeLost`. Skinny singles is included even though the page
+   * prints no row for it, so the career total stays consistent with
+   * `BronzeMedals`, which does count it.
+   */
+  const bronzeLostTotal = medalJson
+    ? MEDAL_PREFIXES.reduce((sum, p) => sum + (num(medalJson[`${p}BronzeLost`]) ?? 0), 0)
+    : 0;
   const medals =
     medalJson && (num(medalJson.GoldMedals) || num(medalJson.SilverMedals) || num(medalJson.BronzeMedals))
       ? {
@@ -122,6 +165,8 @@ async function build(slug: string): Promise<AthleteStats | null> {
             gold: num(medalJson.GoldMedals) ?? 0,
             silver: num(medalJson.SilverMedals) ?? 0,
             bronze: num(medalJson.BronzeMedals) ?? 0,
+            bronzeLost: bronzeLostTotal,
+            semifinals: (num(medalJson.BronzeMedals) ?? 0) + bronzeLostTotal,
           },
         }
       : null;

@@ -29,6 +29,7 @@ import { resolveGear } from "@/lib/athlete-gear";
 import { paddleImageFor } from "@/lib/paddle-images";
 import { athleteHeroFor } from "@/lib/athlete-heroes";
 import { playerOverrideFor } from "@/lib/player-overrides";
+import { socialLinks } from "@/lib/social-links";
 import { paddleFor } from "@/lib/athlete-paddles";
 import { paddleUpdateFor } from "@/lib/paddle-updates";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
@@ -390,6 +391,14 @@ export default async function AthletePage({ params }: Params) {
    */
   const override = await playerOverrideFor(a.name);
   const liveOverride = SHOW_EQUIPMENT ? override : null;
+  /**
+   * The pro's own accounts, for the visible link row under the bio. Same array
+   * that feeds `sameAs` in the structured data below — one source, so the page
+   * a fan reads and the page a search engine reads can't list different
+   * accounts. Empty for every pro but Ben Johns today; Dillon and Liv fill
+   * these in Pro Player Central.
+   */
+  const socials = socialLinks(override?.socials);
   /** The full-bleed action shot behind the hero. Null → the plain navy band. */
   const hero = athleteHeroFor(a.slug, override?.heroImage);
   const knownPaddle = liveOverride?.paddle ?? paddleRecord?.paddle ?? null;
@@ -446,7 +455,7 @@ export default async function AthletePage({ params }: Params) {
         ["Singles", stats.medals.singles],
         ["Doubles", stats.medals.doubles],
         ["Mixed", stats.medals.mixed],
-      ] as const).filter(([, m]) => m.gold + m.silver + m.bronze > 0)
+      ] as const).filter(([, m]) => m.gold + m.silver + m.semifinals > 0)
     : [];
 
   /**
@@ -831,6 +840,33 @@ export default async function AthletePage({ params }: Params) {
                     the destination is a downgrade. `sourceUrl` is kept on the
                     record as provenance for the imported bio, just not linked. */}
               </div>
+
+              {/* Follow — the pro's own accounts (Connor, 9/1). Named links
+                  rather than icons: the roster spans Instagram, X, TikTok,
+                  YouTube, Facebook and LinkedIn, and a wordmark set we don't
+                  hold is worse than the platform's name typed out. Collapses
+                  entirely when Pro Player Central holds nothing for a pro, so
+                  no page shows an empty "Follow" heading. */}
+              {socials.length > 0 && (
+                <div className="mt-6 border-t border-ppa-line pt-5">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-ppa-navy/45">
+                    Follow {a.name.split(" ")[0]}
+                  </p>
+                  <div className="mt-2.5 flex flex-wrap gap-2">
+                    {socials.map((s) => (
+                      <a
+                        key={s.href}
+                        href={s.href}
+                        target="_blank"
+                        rel="noopener noreferrer me"
+                        className="inline-flex h-9 items-center border border-ppa-line bg-white px-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy transition-colors hover:border-ppa-blue hover:text-ppa-blue"
+                      >
+                        {s.label} ↗
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             <aside>
@@ -980,7 +1016,10 @@ export default async function AthletePage({ params }: Params) {
                     [
                       ["Titles", stats.medals.total.gold, "bg-ppa-yellow"],
                       ["Finals", stats.medals.total.silver, "bg-ppa-blue"],
-                      ["Semifinals", stats.medals.total.bronze, "bg-ppa-line"],
+                      // Semifinal APPEARANCES that ended there — third AND
+                      // fourth place. Not `.bronze`, which is third place only;
+                      // see the ⚠ on MedalSet.semifinals.
+                      ["Semifinals", stats.medals.total.semifinals, "bg-ppa-line"],
                     ] as const
                   ).map(([label, count, bar]) => (
                     <div key={label} className="overflow-hidden rounded-md border border-ppa-line bg-ppa-paper">
@@ -1014,7 +1053,7 @@ export default async function AthletePage({ params }: Params) {
                             <td className="px-4 py-2 font-semibold text-ppa-navy">{div}</td>
                             <td className="px-4 py-2 text-right tabular-nums text-ppa-navy">{m.gold}</td>
                             <td className="px-4 py-2 text-right tabular-nums text-ppa-navy/70">{m.silver}</td>
-                            <td className="px-4 py-2 text-right tabular-nums text-ppa-navy/70">{m.bronze}</td>
+                            <td className="px-4 py-2 text-right tabular-nums text-ppa-navy/70">{m.semifinals}</td>
                           </tr>
                         ))}
                       </tbody>
