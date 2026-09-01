@@ -22,6 +22,7 @@
 
 import { pbGetJson } from "@/lib/pb-fetch";
 import { fetchPlannedStarts } from "@/lib/ticker-api";
+import { scoreHeadshots } from "@/lib/score-headshots";
 
 const TIMEOUT_MS = 6000;
 const TTL_MS = 60_000;
@@ -74,6 +75,17 @@ export type ScoresStage = "qualifier" | "main";
 export type ScoresBracket = { divisions: { id: string; name: string }[]; matches: ScoreMatch[] };
 export type ScoresResult = {
   tournamentId: string;
+  /**
+   * Player name (normalized) → headshot URL, for the whole response.
+   *
+   * ⚠ ONE MAP PER RESPONSE, NOT A URL PER ROW. ScoresBoard polls every 30s and
+   * a big draw carries hundreds of matches; hanging a ~90-byte URL off each of
+   * four players per match added ~100 KB to every poll for a few hundred
+   * distinct faces. Keyed by name because the feed gives us names — see
+   * lib/score-headshots.ts for why ambiguous ones are absent rather than
+   * guessed.
+   */
+  headshots: Record<string, string>;
   /**
    * The PRO MAIN DRAW's divisions and matches — always, whatever is being
    * shown. The qualifier travels separately in `qualifier` so the client can
@@ -502,7 +514,7 @@ function hasPlay(b: Bracket): boolean {
 
 async function build(tournamentId: string): Promise<ScoresResult> {
   const { token, base } = config();
-  const empty: ScoresResult = { tournamentId, divisions: [], matches: [], qualifier: null, champions: [], standings: [] };
+  const empty: ScoresResult = { tournamentId, divisions: [], matches: [], qualifier: null, champions: [], standings: [], headshots: {} };
   if (!token) return empty;
   try {
     /**
@@ -608,6 +620,10 @@ async function build(tournamentId: string): Promise<ScoresResult> {
       divisions,
       matches,
       qualifier,
+      /* Awaited last and behind its own try/catch inside `scoreHeadshots`, so a
+         slow or failed ranking board costs the board its photos and never its
+         scores. */
+      headshots: await scoreHeadshots(),
       champions: standings
         .map((s) => {
           const gold = s.places.find((p) => p.place === 1);

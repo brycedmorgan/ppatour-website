@@ -115,7 +115,7 @@ export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: s
       className={`flex flex-col overflow-hidden rounded-lg border border-ppa-line bg-white ${className}`}
     >
       {/* Header */}
-      <div className="flex items-center justify-between gap-2 px-3 py-1.5">
+      <div className="flex items-center justify-between gap-2 px-2.5 py-1.5">
         <span className="truncate font-display text-xs uppercase leading-none text-ppa-navy">
           {m.division || m.round}
         </span>
@@ -136,18 +136,28 @@ export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: s
           return (
             <div
               key={ti}
-              className={`grid flex-1 grid-cols-[1fr_2rem_2rem_2rem] items-stretch border-b border-ppa-line last:border-b-0 ${
+              /* ⚠ `minmax(0,1fr)`, NOT `1fr`, AND `min-w-0` ON THE CELL — THIS IS
+                 WHY THE SCORES WERE CUT OFF. A grid item defaults to
+                 `min-width: auto`, so the name column refused to shrink below
+                 its own text, pushed the three score columns past the card's
+                 right edge, and `overflow-hidden` on the article clipped them.
+                 The `truncate` on the name did nothing, because it can only
+                 take effect once an ancestor is allowed to shrink. Two long
+                 doubles names ("A. Bright / H. Patriquin") were enough.
+                 Reported by Bryce 9/1 with a screenshot of the third game
+                 column sliced in half. */
+              className={`grid flex-1 grid-cols-[minmax(0,1fr)_1.9rem_1.9rem_1.9rem] items-stretch border-b border-ppa-line last:border-b-0 ${
                 rowIsWinner ? "bg-ppa-win" : ""
               }`}
             >
-              <div className="flex items-center gap-2 px-3 py-1.5">
+              <div className="flex min-w-0 items-center gap-1.5 px-2.5 py-1.5">
                 <div className="flex -space-x-1.5">
                   {team.players.map((p, pi) => (
                     <Avatar key={pi} player={p} />
                   ))}
                 </div>
                 <span
-                  className={`truncate font-semibold text-ppa-navy ${
+                  className={`min-w-0 truncate font-semibold text-ppa-navy ${
                     isDoubles ? "text-[11px]" : "text-[13px]"
                   }`}
                 >
@@ -163,7 +173,7 @@ export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: s
                 [0, 1, 2].map((gi) => (
                   <div
                     key={gi}
-                    className={`flex items-center justify-center text-[15px] tabular-nums ${
+                    className={`flex items-center justify-end pr-2 text-[15px] tabular-nums ${
                       rowIsWinner ? "font-bold text-ppa-navy" : "text-ppa-navy/45"
                     }`}
                   >
@@ -177,7 +187,13 @@ export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: s
                 return (
                   <div
                     key={gi}
-                    className={`flex items-center justify-center text-[15px] tabular-nums ${
+                    /* Right-aligned, not centred (Bryce, 9/1). Scores are 1–2
+                       digits and a centred column makes "7" and "11" start in
+                       different places down the card; right-aligned with
+                       `tabular-nums` they form a clean column. The inset is
+                       padding INSIDE the cell rather than on the row, so a
+                       winning game's tint still reaches the card edge. */
+                    className={`flex items-center justify-end pr-2 text-[15px] tabular-nums ${
                       c.live
                         ? "font-bold text-ppa-live"
                         : cellGreen
@@ -197,7 +213,7 @@ export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: s
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between gap-2 border-t border-ppa-line px-3 py-1.5">
+      <div className="flex items-center justify-between gap-2 border-t border-ppa-line px-2.5 py-1.5">
         {m.status === "upnext" ? (
           <span className="text-[9px] font-bold uppercase tracking-[0.14em] text-ppa-navy/50">
             Head-to-Head Info

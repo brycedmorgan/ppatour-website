@@ -89,12 +89,18 @@ function ArrowButton({ dir, onClick }: { dir: "left" | "right"; onClick: () => v
  * onto a laptop. A JS breakpoint would also mean the first paint is wrong until
  * hydration measures the window. Media queries get it right on the server.
  *
+ * ⚠ THE TOP TWO STEPS WERE EASED ON 9/1 (17% → 18%, 14% → 15.5%). Bryce, on a
+ * 2000px display: "we have gone too far with the boxes". The clipped scores in
+ * that screenshot were a separate bug — a missing `min-w-0` in MatchCard, fixed
+ * there — but seven cards on a rail was past the point where a box score reads,
+ * and 15.5% brings 2000px back to six.
+ *
  * ⚠ AND THE WIDTHS INTENTIONALLY DON'T ADD UP TO 100%. Each leaves ~8–12% for a
  * sliver of the next card, which is the only thing telling a reader the rail
  * scrolls — same reason the homepage callout rail sits at 68vw (7/31 pt.5).
  */
 const CARD_WIDTHS =
-  "w-[86%] min-[778px]:w-[43%] min-[1080px]:w-[28%] min-[1400px]:w-[21%] min-[1700px]:w-[17%] min-[2000px]:w-[14%]";
+  "w-[86%] min-[778px]:w-[43%] min-[1080px]:w-[28%] min-[1400px]:w-[21%] min-[1700px]:w-[18%] min-[2000px]:w-[15.5%]";
 
 /** Enough placeholders to fill the widest layout; the rest scroll off. */
 const SKELETON_COUNT = 4;

@@ -63,6 +63,56 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-01 (pt. 2) — Ticker scores were clipped by a missing `min-w-0`; player photos on the scores board
+
+- **⚠ THE CUT-OFF SCORES WERE NOT A WIDTH PROBLEM.** Bryce sent a screenshot of the
+  rail with the third game column sliced in half. `MatchCard`'s team row is
+  `grid-cols-[1fr_2rem_2rem_2rem]`, and **a grid item defaults to
+  `min-width: auto`** — so the name column refused to shrink below its own text,
+  pushed the three score columns past the card's right edge, and
+  `overflow-hidden` on the `<article>` clipped them. The `truncate` on the name
+  did nothing, because truncation only engages once an ancestor is allowed to
+  shrink. Fixed with `minmax(0,1fr)` on the track plus `min-w-0` on the cell and
+  the span. **Measured: cards forced to 240px — narrower than any real
+  breakpoint — now clip 0 of 126 score cells.**
+- **Scores are right-aligned, not centred** (Bryce). 1–2 digit scores in a
+  centred column start in different places down the card; right-aligned with
+  `tabular-nums` they form a column. The inset is `pr-2` INSIDE each cell rather
+  than padding on the row, so a winning game's tint still reaches the card edge.
+  Card padding went `px-3` → `px-2.5` throughout.
+- **The two narrowest rail steps were eased**, 17% → 18% and 14% → 15.5%
+  ("we have gone too far with the boxes"). 2000px goes back from seven cards to
+  six. Separate from the clipping bug, which had nothing to do with width.
+- **⚠ THE SCORES FEED CARRIES NO PLAYER PHOTOS — probed against the live API.**
+  `/v1/ppa/tournaments/{id}/tournament_events/{eventId}` returns
+  `teamOnePlayerOneFirstName` / `LastName` / `Uuid` and nothing else. The
+  ticker's photos come from a different endpoint
+  (`/v2/data/homepage_score_ticker`, which does have `...Picture`) and that one
+  only covers this week, so it cannot illustrate Tuesday's round of 64 on
+  Saturday. New `lib/score-headshots.ts` builds a name → headshot map from the
+  ranking boards instead. **95% coverage on Nationals (434/456 player slots);**
+  the rest fall back to initials, same chip the ticker uses.
+- **⚠ ONE MAP PER RESPONSE, NOT A URL PER ROW.** `ScoresBoard` polls every 30s
+  and Nationals carries 155 matches; a URL on each of four players per match
+  added ~100 KB per poll for ~550 distinct faces. `ScoresResult.headshots` is
+  keyed by normalized name and sent once.
+- **⚠ AMBIGUOUS NAMES ARE DROPPED — and that rule ate Ben Johns on the first
+  pass.** The boards hold ~2,000 players and about twenty shared names,
+  including world No. 1 and world No. 682 Ben Johns. Strict dropping gave the
+  tour's biggest star an initials chip. A **curated `/ppa/pros/` photo now breaks
+  the tie**, and only when exactly one candidate has one: it means we published a
+  profile for that person, there is one such profile per name, and a PPA pro main
+  draw is where that pro is. Two curated photos under one name still drops.
+  Coverage 94% → 95% and `ben johns` resolves.
+- **⚠ `normalizeScoreName` LIVES IN ITS OWN FILE (`lib/score-names.ts`).**
+  `score-headshots.ts` imports `getFullRankings`, which reads `PB_API_TOKEN`;
+  `ScoresBoard` is a client component and importing the function from there would
+  have shipped the whole ranking adapter to the browser. Same split as
+  `ticket-grid-view.ts` beside `ticket-grid.ts`.
+- Verified on a preview deployment against real data (dev has no `PB_API_TOKEN`,
+  so the board is empty locally). tsc + eslint + `next build` clean. Preview
+  deployments removed afterwards.
+
 ### 2026-09-01 — Connor's website pass: the semifinals column was wrong, Plan Your Trip now ends at first serve, Gold loses its designation
 
 - **⚠ THE ATHLETE "SEMIFINALS" NUMBER HAS BEEN WRONG SINCE THE CAREER TABLE

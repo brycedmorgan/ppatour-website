@@ -13,7 +13,7 @@ const m = (status: ScoreMatch["status"], dateKey: string): ScoreMatch =>
 const result = (mainMatches: ScoreMatch[], qualMatches: ScoreMatch[] | null): ScoresResult =>
   ({ tournamentId: "t", divisions: [{ id: "d", name: "Men's Doubles" }], matches: mainMatches,
      qualifier: qualMatches ? { divisions: [{ id: "q", name: "Men's Doubles" }], matches: qualMatches } : null,
-     champions: [], standings: [] }) as ScoresResult;
+     champions: [], standings: [], headshots: {} }) as ScoresResult;
 
 const QUAL_PLAYED = [m("final", "2026-08-31"), m("live", "2026-08-31"), m("scheduled", "9999-12-31")];
 

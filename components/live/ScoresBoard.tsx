@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { StageBadge } from "@/components/live/StageBadge";
 import { localDayKey, showQualifierBoard } from "@/lib/scores-stage";
+import { normalizeScoreName } from "@/lib/score-names";
 import type { ScoreMatch, ScoresResult, ScoreTeam } from "@/lib/scores-api";
 
 /**
@@ -12,14 +13,52 @@ import type { ScoreMatch, ScoresResult, ScoreTeam } from "@/lib/scores-api";
  */
 const POLL_MS = 30000;
 
+function initials(name: string): string {
+  return name
+    .replace(/[^A-Za-z. ]/g, "")
+    .split(/\s+/)
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+/**
+ * A player's face, or their initials.
+ *
+ * ⚠ Deliberately the SAME treatment as the live ticker's card (MatchCard) —
+ * `size-6`, circular, white ring, `object-top` so a headshot crops to the face
+ * rather than the middle of a torso. The two components render the same matches
+ * one band apart on an event page, and a different avatar in each reads as two
+ * different systems.
+ */
+function Avatar({ name, src }: { name: string; src?: string }) {
+  return (
+    <span className="relative size-6 shrink-0 overflow-hidden rounded-full bg-ppa-line ring-2 ring-white">
+      {src ? (
+        // Plain img — headshots come from varied hosts; skip next/image config.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={src} alt="" className="h-full w-full object-cover object-top" />
+      ) : (
+        <span className="flex h-full w-full items-center justify-center text-[8px] font-bold text-ppa-navy/50">
+          {initials(name)}
+        </span>
+      )}
+    </span>
+  );
+}
+
 function SideRow({
   team,
   status,
   outcome,
+  headshots,
 }: {
   team: ScoreTeam;
   status: ScoreMatch["status"];
   outcome?: ScoreMatch["outcome"];
+  /** Normalized name → headshot URL, from the response. See lib/score-headshots. */
+  headshots: Record<string, string>;
 }) {
   const games = team.games.filter((g) => g !== null) as number[];
   const names = team.players.length ? team.players : ["TBD"];
@@ -28,17 +67,28 @@ function SideRow({
       <span className="flex w-6 shrink-0 items-center justify-center text-[11px] font-bold tabular-nums text-ppa-navy/40">
         {team.seed ?? ""}
       </span>
-      <div className="flex min-h-[2.4rem] flex-1 flex-col justify-center py-1.5">
-        {names.map((n, i) => (
-          <span
-            key={i}
-            className={`whitespace-nowrap text-[13px] leading-tight ${
-              team.winner ? "font-bold text-ppa-navy" : "text-ppa-navy/70"
-            }`}
-          >
-            {n}
-          </span>
-        ))}
+      <div className="flex min-w-0 flex-1 items-center gap-2 py-1.5">
+        {/* Overlapped, like a doubles team on the ticker card. Hidden below
+            `sm`: the phone layout gives a name row ~150px and two faces plus a
+            doubles pairing does not fit without truncating the names, which are
+            the part a reader actually needs. */}
+        <div className="hidden -space-x-1.5 sm:flex">
+          {names.map((n, i) => (
+            <Avatar key={i} name={n} src={headshots[normalizeScoreName(n)]} />
+          ))}
+        </div>
+        <div className="flex min-h-[2.4rem] min-w-0 flex-1 flex-col justify-center">
+          {names.map((n, i) => (
+            <span
+              key={i}
+              className={`truncate text-[13px] leading-tight ${
+                team.winner ? "font-bold text-ppa-navy" : "text-ppa-navy/70"
+              }`}
+            >
+              {n}
+            </span>
+          ))}
+        </div>
       </div>
       <div className="flex shrink-0 items-stretch border-l border-ppa-line">
         {games.map((g, i) => (
@@ -75,7 +125,7 @@ function SideRow({
   );
 }
 
-function ScoreCard({ m }: { m: ScoreMatch }) {
+function ScoreCard({ m, headshots }: { m: ScoreMatch; headshots: Record<string, string> }) {
   return (
     <article className="overflow-hidden rounded-md border border-ppa-line bg-white">
       <div className="flex items-center justify-between gap-2 px-3 py-1.5">
@@ -115,9 +165,9 @@ function ScoreCard({ m }: { m: ScoreMatch }) {
         </div>
       </div>
       <div className="border-t border-ppa-line">
-        <SideRow team={m.teams[0]} status={m.status} outcome={m.outcome} />
+        <SideRow team={m.teams[0]} status={m.status} outcome={m.outcome} headshots={headshots} />
         <div className="h-px bg-ppa-line" />
-        <SideRow team={m.teams[1]} status={m.status} outcome={m.outcome} />
+        <SideRow team={m.teams[1]} status={m.status} outcome={m.outcome} headshots={headshots} />
       </div>
     </article>
   );
@@ -351,7 +401,7 @@ export function ScoresBoard({ eventId, light = false }: { eventId: string; light
         ) : (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {matches.map((m) => (
-              <ScoreCard key={m.id} m={m} />
+              <ScoreCard key={m.id} m={m} headshots={data?.headshots ?? {}} />
             ))}
           </div>
         )}
