@@ -31,6 +31,9 @@ export type MedalSet = {
   /**
    * Reached the semifinals but not the final: `bronze + bronzeLost`.
    *
+   * Read from the feed's own `Semifinalist` / `{Div}Semifinalist` where it
+   * exists, falling back to `bronze + bronzeLost`.
+   *
    * ⚠ THIS IS THE COLUMN THE SITE PRINTS, AND IT USED TO PRINT `bronze` ALONE.
    * Bronze counts only the player who WON the third-place match, so every
    * fourth-place finish vanished — the page showed Ben Johns 6 semifinals where
@@ -40,6 +43,13 @@ export type MedalSet = {
    * numbers agreed with the tour's database. Found 9/1 by diffing our table
    * against pickleball.com/players/<slug>/stats?show=ppa for both pros; the
    * per-division numbers now match it exactly.
+   *
+   * ⚠ NOT YET CONFIRMED AGAINST `player_medals` ITSELF — `.env.local` has no
+   * `PB_API_TOKEN` and `vercel env pull` returns the encrypted vars blank, so
+   * this was verified against the same fields as served to pickleball.com's own
+   * player page. If `player_medals` omits both `Semifinalist` and `BronzeLost`,
+   * every value here falls back to `bronze` and the column silently reverts to
+   * the old wrong number. **Check one live profile after deploying.**
    */
   semifinals: number;
 };
@@ -112,6 +122,22 @@ function height(ft: unknown, inches: unknown): string | null {
 /** Division prefixes the medals endpoint uses. "Mix", not "Mixed". */
 const MEDAL_PREFIXES = ["Singles", "Doubles", "Mix", "SkinnySingles"] as const;
 
+/**
+ * Semifinal appearances that ended in the semis, for one division.
+ *
+ * Reads the feed's OWN `{Div}Semifinalist` first and only derives the number
+ * when that field is absent. Both were checked against pickleball.com's player
+ * pages, which render the same upstream object: at PPA scope `Semifinalist`
+ * and `Bronze + BronzeLost` agree exactly for both Ben Johns (12) and Tyson
+ * McGuffin (30), and both match the printed table. **At career scope they
+ * DIVERGE** — Tyson is 53 vs 71, Ben 17 vs 24 — so they are not the same
+ * quantity, and the named field is the one to trust.
+ */
+function semifinalsFor(m: Obj, prefix: string, bronze: number, bronzeLost: number): number {
+  const named = num(m[`${prefix}Semifinalist`]);
+  return named ?? bronze + bronzeLost;
+}
+
 function medalSet(m: Obj, prefix: string): MedalSet {
   const bronze = num(m[`${prefix}Bronze`]) ?? 0;
   const bronzeLost = num(m[`${prefix}BronzeLost`]) ?? 0;
@@ -120,7 +146,7 @@ function medalSet(m: Obj, prefix: string): MedalSet {
     silver: num(m[`${prefix}Silver`]) ?? 0,
     bronze,
     bronzeLost,
-    semifinals: bronze + bronzeLost,
+    semifinals: semifinalsFor(m, prefix, bronze, bronzeLost),
   };
 }
 
@@ -166,7 +192,9 @@ async function build(slug: string): Promise<AthleteStats | null> {
             silver: num(medalJson.SilverMedals) ?? 0,
             bronze: num(medalJson.BronzeMedals) ?? 0,
             bronzeLost: bronzeLostTotal,
-            semifinals: (num(medalJson.BronzeMedals) ?? 0) + bronzeLostTotal,
+            semifinals:
+              num(medalJson.Semifinalist) ??
+              (num(medalJson.BronzeMedals) ?? 0) + bronzeLostTotal,
           },
         }
       : null;

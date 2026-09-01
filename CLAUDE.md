@@ -77,14 +77,35 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   Tyson McGuffin 14 → **30** (their table: 12 + 10 + 8). Every per-division cell
   now matches theirs exactly. Titles and Finals were always right, which is why
   this survived — two of the three numbers agreed.
-- **⚠ TYSON'S "17 TITLES" IS NOT OURS TO FIX.** He told Connor 17 titles / 40
-  finals / 80 semis. The tour's own database says **8 / 19 / 30** at PPA scope —
-  and pickleball.com prints those same three numbers on his own player page. His
-  career figures across ALL tours are 24 / 40 / 71, which is where the "40" comes
-  from. So the site is faithfully reporting `partners=ppa,upa&scope_title=Pro`;
-  the gap is a data/scope question for pickleball.com, not a rendering bug.
-  **Don't "fix" it by widening the query** — that would silently credit APP and
-  non-PPA results as PPA titles across all 179 profiles.
+- **The feed has a `Semifinalist` field and the code now prefers it**, falling
+  back to `bronze + bronzeLost`. ⚠ **The two are NOT the same quantity.** At PPA
+  scope they agree exactly for both pros (Ben 12, Tyson 30) and match the printed
+  table; at career scope they diverge (Tyson 53 vs 71, Ben 17 vs 24). The named
+  field wins.
+- **⚠ NOT CONFIRMED AGAINST `player_medals` ITSELF.** `.env.local` has no
+  `PB_API_TOKEN` and `vercel env pull` returns encrypted vars blank, so every
+  number above was read off the object pickleball.com's own player page renders.
+  If `player_medals` carries neither `Semifinalist` nor `BronzeLost`, the column
+  silently falls back to `bronze` — i.e. the old wrong number. **Look at one live
+  profile straight after deploying.**
+- **⚠ TYSON'S "17 TITLES": THE `partners=ppa,upa` TAG IS BROKEN UPSTREAM BEFORE
+  2024, AND THAT IS THE REAL CAUSE.** First read of this was wrong — it blamed
+  APP, and Bryce is right that Tyson barely played APP. The per-year gold counts
+  from pickleball.com's own payload settle it. **Ben Johns, PPA scope vs overall:
+  2020 3/13 · 2021 6/36 · 2022 13/37 · 2023 24/41 · 2024 31/32 · 2025 27/27 ·
+  2026 16/18.** Ben has been the PPA's exclusive marquee player throughout; he
+  did not win thirty non-PPA golds in 2021. **The two scopes converge in 2024 and
+  disagree wildly before it**, so the PPA partner tag is simply missing on older
+  events. Tyson is hit far harder than Ben because his peak was 2019–21: PPA
+  scope gives him 1 gold in 2021 where overall gives 9.
+  **Also: the database starts in 2020.** He turned pro in 2016 and his #1 singles
+  years were 2018–19; none of that exists at either scope.
+  So `8 / 19 / 30` is what the tour's database says under our filter, and
+  pickleball.com prints the same three numbers on his own page — but the filter
+  is the problem, not the arithmetic. **Do NOT just widen the query**: overall
+  scope also sweeps in APP, US Open and USA Pickleball results and would credit
+  them as PPA titles on all 179 profiles. **The fix is upstream tagging — take it
+  to pickleball.com / Wesley.**
 - **Plan Your Trip disappears at first serve** (Connor: *"As soon as the event
   starts, planner trip probably goes away"*; Bryce: *"should be taken down now"*).
   New `started = completed || isTournamentLive(t)` gates the tab, the hero button
