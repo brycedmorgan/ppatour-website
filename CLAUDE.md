@@ -82,7 +82,24 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   scope they agree exactly for both pros (Ben 12, Tyson 30) and match the printed
   table; at career scope they diverge (Tyson 53 vs 71, Ben 17 vs 24). The named
   field wins.
-- **⚠ NOT CONFIRMED AGAINST `player_medals` ITSELF.** `.env.local` has no
+- **✅ CONFIRMED ON A PREVIEW BUILD AGAINST THE LIVE API (9/1).** `player_medals`
+  does carry `Semifinalist`, `{Div}Semifinalist` and `{Div}BronzeLost`. Rendered
+  athlete pages on the preview read **Tyson 8 / 19 / 30** and **Ben 120 / 15 / 12**,
+  per-division identical to pickleball.com. The preview deployments and the
+  throwaway probe route were deleted afterwards.
+- **⚠ THERE IS NO QUERY THAT RETURNS CORRECT PPA TITLES. Probed every combination
+  from a preview build:** `scope_title=Pro` is **inert** (byte-identical results
+  with and without it), `app` / `usap` / `mlp` are **not recognised partner keys**
+  (adding them changes nothing), and `partners` is binary — any value containing
+  `ppa` gives Tyson 8 gold, omitting it entirely gives 24. So the choice is
+  "undercounted PPA" or "everything including APP, the US Open and USA
+  Pickleball". **Only pickleball.com can fix this, by backfilling the partner tag
+  on pre-2024 events.**
+- **The section is no longer labelled "Career" — it says "PPA Tour"**, with a line
+  under the tiles saying the numbers are PPA events only. A pro reading his own
+  page was measuring an undercount against his whole career. One line to revert
+  when the tag is fixed.
+- **(superseded) ⚠ NOT CONFIRMED AGAINST `player_medals` ITSELF.** `.env.local` has no
   `PB_API_TOKEN` and `vercel env pull` returns encrypted vars blank, so every
   number above was read off the object pickleball.com's own player page renders.
   If `player_medals` carries neither `Semifinalist` nor `BronzeLost`, the column

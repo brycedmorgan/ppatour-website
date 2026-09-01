@@ -987,12 +987,26 @@ export default async function AthletePage({ params }: Params) {
         </div>
       </section>
 
-      {/* By the Numbers — rankings, DUPR + career podium finishes (live player API) */}
+      {/* By the Numbers — podium finishes at PPA-tagged events (live player API).
+          ⚠ THE EYEBROW SAYS "PPA TOUR", NOT "CAREER", AND THAT IS DELIBERATE.
+          `player_medals` is queried with `partners=ppa,upa`, and the PPA partner
+          tag is MISSING on most pre-2024 events upstream — measured 9/1 by
+          probing the endpoint from a preview build. Ben Johns' gold by year,
+          PPA filter vs unfiltered: 2020 3/13 · 2021 6/36 · 2022 13/37 ·
+          2023 24/41 · 2024 31/32 · 2025 27/27. He has been PPA-exclusive
+          throughout, so the gap is tagging, not other tours. The database also
+          holds nothing before 2020 at any setting.
+          Dropping `partners` is NOT the fix — unfiltered sweeps in APP, the US
+          Open and USA Pickleball and would print those as PPA titles on all 179
+          profiles. `scope_title=Pro` is inert (identical results with and
+          without it), and `app`/`usap`/`mlp` are not recognised partner keys, so
+          there is no third setting. Until pickleball.com backfills the tag, the
+          honest move is to stop calling an undercount a career total. */}
       {(stats?.hasStats || hasAnyDivRank) && (
         <section className="bg-white">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
-              Career
+              PPA Tour
             </p>
             <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
               By the Numbers
@@ -1035,6 +1049,14 @@ export default async function AthletePage({ params }: Params) {
                     </div>
                   ))}
                 </div>
+
+                {/* Says what the three numbers count. A pro reading his own page
+                    was comparing them against his whole career and finding them
+                    short — Tyson McGuffin via Connor, 9/1. */}
+                <p className="mt-3 max-w-xl text-[11px] leading-relaxed text-ppa-navy/45">
+                  Podium finishes at PPA Tour events, from the tour&rsquo;s results
+                  database. Results from other tours aren&rsquo;t counted.
+                </p>
 
                 {medalRows.length > 0 && (
                   <div className="mt-4 overflow-hidden rounded-md border border-ppa-line">
