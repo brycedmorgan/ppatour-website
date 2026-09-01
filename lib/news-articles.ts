@@ -55,6 +55,14 @@ export type NewsArticle = {
    */
   imagePosition?: string;
   /**
+   * Set when `image` is a designed GRAPHIC — its own lockup, logos and type,
+   * like the Canes/Stanley Cup key art — rather than a photograph. The hero
+   * then shows it WHOLE (object-contain, uncropped) with the headline on a band
+   * below, instead of cover-cropping it and overlaying the headline on the
+   * artwork (which collides with the graphic's own text). Photos leave it unset.
+   */
+  heroGraphic?: boolean;
+  /**
    * Byline override. Unset falls back to the "PPA Tour" house byline, which is
    * right for anything the newsroom writes itself — set this only when a named
    * person actually authored the piece (e.g. comms issuing a press release).
@@ -373,7 +381,11 @@ export const newsArticles: NewsArticle[] = [
        outside that band at desktop widths and cannot be saved by an anchor;
        a purpose-built wide crop is the only fix if they must appear. */
     image: "/ppa/canes-and-the-cup-pro-am.jpg",
+    // Designed key art (Canes / Stanley Cup / Carvana PPA Tour lockup), not a
+    // photo — show it whole with the headline below, so the two don't overlap.
+    // `imagePosition` no longer applies in the graphic layout; kept harmless.
     imagePosition: "50% 100%",
+    heroGraphic: true,
     author: "Jeff Watson",
     /* The release's own ticket link, cleaned of its pre-baked UTMs — it
        arrived tagged `utm_content=event-hero-buy-tickets`, which would have

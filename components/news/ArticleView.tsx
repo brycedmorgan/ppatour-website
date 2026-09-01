@@ -132,66 +132,103 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
   const tags = detail.source === "wordpress" ? detail.post.tags : [];
   const isBlog = card.postType === "ppa-blog";
 
+  // The eyebrow row + headline + standfirst. Shared by the two hero layouts:
+  // overlaid on a photo, or set on a plain band beneath a designed graphic.
+  const heroText = (
+    <>
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em] motion-safe:animate-rise">
+        {/* The blog badge links back to its own index — these are evergreen
+            how-tos, and the reader who wants one usually wants another. */}
+        {isBlog ? (
+          <Link href="/blog" className="bg-ppa-blue px-2 py-0.5 transition hover:bg-ppa-blue-deep">
+            {card.category}
+          </Link>
+        ) : (
+          <span className="bg-ppa-blue px-2 py-0.5">{card.category}</span>
+        )}
+        <span className="text-white/70">{card.displayDate}</span>
+        <span className="text-white/25">/</span>
+        <span className="text-white/70">{card.author}</span>
+        {minutes !== null && (
+          <>
+            <span className="text-white/25">/</span>
+            <span className="text-white/70">{minutes} min read</span>
+          </>
+        )}
+      </div>
+      <h1
+        className="mt-3 font-display text-[clamp(1.6rem,4.4vw,2.6rem)] uppercase leading-[1.02] motion-safe:animate-rise"
+        style={{ animationDelay: "120ms" }}
+      >
+        {card.title}
+      </h1>
+      {/* Standfirst — the logistics half of a press-release headline. Set
+          below the H1's display type so it reads as a second line rather
+          than competing with it. */}
+      {card.subtitle && (
+        <p
+          className="mt-2.5 max-w-2xl text-base font-semibold leading-snug text-white/80 sm:text-lg motion-safe:animate-rise"
+          style={{ animationDelay: "200ms" }}
+        >
+          {card.subtitle}
+        </p>
+      )}
+    </>
+  );
+
   return (
     <>
-      {/* Article hero */}
-      <section className="relative isolate flex min-h-[44svh] flex-col justify-end overflow-hidden bg-ppa-navy text-white">
-        {card.image && (
-          <Image
-            src={card.image}
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center"
-            /* Per-article anchor, inline because the value is data — a dynamic
-               Tailwind class would not survive the JIT scan. Unset on every
-               other article, so `object-center` above still wins there. */
-            style={card.imagePosition ? { objectPosition: card.imagePosition } : undefined}
-          />
-        )}
-        <div className={`absolute inset-0 ${card.image ? "scrim-hero" : "bg-ppa-navy-deep"}`} />
-        <div className="relative mx-auto w-full max-w-3xl px-4 pb-9 pt-24">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em] motion-safe:animate-rise">
-            {/* The blog badge links back to its own index — these are evergreen
-                how-tos, and the reader who wants one usually wants another. */}
-            {isBlog ? (
-              <Link href="/blog" className="bg-ppa-blue px-2 py-0.5 transition hover:bg-ppa-blue-deep">
-                {card.category}
-              </Link>
-            ) : (
-              <span className="bg-ppa-blue px-2 py-0.5">{card.category}</span>
-            )}
-            <span className="text-white/70">{card.displayDate}</span>
-            <span className="text-white/25">/</span>
-            <span className="text-white/70">{card.author}</span>
-            {minutes !== null && (
-              <>
-                <span className="text-white/25">/</span>
-                <span className="text-white/70">{minutes} min read</span>
-              </>
-            )}
+      {/* Article hero — two layouts.
+
+          Default: the headline overlays a full-bleed PHOTO, darkened by a
+          scrim. But a designed GRAPHIC (its own lockup, logos and type — the
+          Canes/Stanley Cup key art, flagged `heroGraphic`) is not a photo:
+          `object-cover` crops its logos off and the overlaid headline lands on
+          top of the artwork's own text. So a graphic is shown WHOLE
+          (`object-contain`, never cropped) with the headline on a plain band
+          beneath it — the two never collide. */}
+      {card.heroGraphic && card.image ? (
+        <section className="bg-ppa-navy text-white">
+          <div className="w-full bg-ppa-navy-deep">
+            <div className="relative mx-auto aspect-[16/9] w-full max-w-4xl">
+              <Image
+                src={card.image}
+                alt=""
+                fill
+                priority
+                sizes="(min-width: 896px) 896px, 100vw"
+                className="object-contain"
+              />
+            </div>
           </div>
-          <h1
-            className="mt-3 font-display text-[clamp(1.6rem,4.4vw,2.6rem)] uppercase leading-[1.02] motion-safe:animate-rise"
-            style={{ animationDelay: "120ms" }}
-          >
-            {card.title}
-          </h1>
-          {/* Standfirst — the logistics half of a press-release headline. Set
-              below the H1's display type so it reads as a second line rather
-              than competing with it. */}
-          {card.subtitle && (
-            <p
-              className="mt-2.5 max-w-2xl text-base font-semibold leading-snug text-white/80 sm:text-lg motion-safe:animate-rise"
-              style={{ animationDelay: "200ms" }}
-            >
-              {card.subtitle}
-            </p>
+          <div className="relative mx-auto w-full max-w-3xl px-4 pb-9 pt-9">
+            {heroText}
+          </div>
+          <div className="relative h-1 bg-ppa-blue" />
+        </section>
+      ) : (
+        <section className="relative isolate flex min-h-[44svh] flex-col justify-end overflow-hidden bg-ppa-navy text-white">
+          {card.image && (
+            <Image
+              src={card.image}
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center"
+              /* Per-article anchor, inline because the value is data — a dynamic
+                 Tailwind class would not survive the JIT scan. Unset on every
+                 other article, so `object-center` above still wins there. */
+              style={card.imagePosition ? { objectPosition: card.imagePosition } : undefined}
+            />
           )}
-        </div>
-        <div className="relative h-1 bg-ppa-blue" />
-      </section>
+          <div className={`absolute inset-0 ${card.image ? "scrim-hero" : "bg-ppa-navy-deep"}`} />
+          <div className="relative mx-auto w-full max-w-3xl px-4 pb-9 pt-24">
+            {heroText}
+          </div>
+          <div className="relative h-1 bg-ppa-blue" />
+        </section>
+      )}
 
       {/* Body + players rail */}
       <article className="bg-white">

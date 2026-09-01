@@ -65,6 +65,12 @@ export type NewsCard = {
   ctaLabel?: string;
   /** Hero-only `object-position` override; unset = `object-center`. Native only. */
   imagePosition?: string;
+  /**
+   * Hero image is a designed GRAPHIC (its own lockup/logos/type), not a photo.
+   * ArticleView then shows it whole (uncropped) with the headline on a band
+   * below instead of overlaid on top. Native only; unset = the photo hero.
+   */
+  heroGraphic?: boolean;
 };
 
 /**
@@ -164,6 +170,7 @@ function nativeToCard(a: NewsArticle): NewsCard {
     subtitle: a.subtitle,
     ctaUrl: a.ctaUrl,
     ctaLabel: a.ctaLabel,
+    heroGraphic: a.heroGraphic,
   };
 }
 
