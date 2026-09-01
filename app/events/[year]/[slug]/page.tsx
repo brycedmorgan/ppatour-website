@@ -305,6 +305,15 @@ export default async function EventPage({ params }: Params) {
    */
   const ticketGrid = onSale ? buildTicketGrid(t.ticketsUrl, t.startDate, t.endDate) : null;
   const showGrid = Boolean(ticketGrid?.hasPerDayPricing);
+  /**
+   * A shot of this stop's grounds for the Tickets row. Deliberately the THIRD
+   * gallery photo where there is one: `[0]` is the event card image and `[1]`
+   * is the venue-section fallback, so leading with either prints the same
+   * picture twice on one page. Falls back down the list, then to the event's
+   * own image — never to another city's, since `t.gallery` is synced per venue
+   * (lib/venue-photos.ts).
+   */
+  const ticketPhoto = t.gallery?.[2] ?? t.gallery?.[0] ?? t.image ?? null;
   const realTiers = admissionTiersFor(t.ticketsUrl)
     .filter((x) => !x.soldOut)
     .slice(0, 3);
@@ -358,6 +367,18 @@ export default async function EventPage({ params }: Params) {
    * is no scoreboard to show.
    */
   const showLiveScores = !completed && isTournamentLive(t) && Boolean(uuid);
+  /**
+   * First serve has happened — the stop is being played, or it is over.
+   *
+   * Connor, 9/1: "As soon as the event starts, Plan Your Trip goes away."
+   * A travel guide is a pre-trip surface: once the gates are open, the fan
+   * who is here wants the Venue Guide and the on-site Today screen, and the
+   * fan at home is not booking a flight to a tournament that started. Note
+   * this is NOT `showLiveScores` — that one also needs a tournament UUID, and
+   * whether we hold a scoreboard has nothing to do with whether the trip is
+   * still plannable.
+   */
+  const started = completed || isTournamentLive(t);
   // Brackets are built live from the match feed for any completed event.
   const showBracket = showResults;
 
@@ -485,7 +506,7 @@ export default async function EventPage({ params }: Params) {
           { id: "watch", label: "Watch" },
           { id: "venue", label: "Venue Guide" },
         ]),
-    ...(guide && !completed ? [{ id: "travel", label: "Plan Your Trip" }] : []),
+    ...(guide && !started ? [{ id: "travel", label: "Plan Your Trip" }] : []),
     // Must match the #players section's own condition exactly — the section is
     // now also skipped when there is neither a published draw nor a prior-year
     // champion, and a tab pointing at an absent anchor scrolls nowhere.
@@ -521,6 +542,7 @@ export default async function EventPage({ params }: Params) {
     airport: guide ? `${guide.airport} (${guide.airportNote})` : undefined,
     hotels: guide?.hotels.map((h) => h.name) ?? [],
     dining: guide?.dining.map((d) => d.name) ?? [],
+    hasTripGuide: Boolean(guide) && !started,
     watch:
       broadcast.length > 0
         ? `Every round streams live, and the marquee rounds hit national TV — ${[...new Set(broadcast.map((b) => b.platform))].join(", ")}. The full round-by-round broadcast table is under "Watch" on this page.`
@@ -695,12 +717,17 @@ export default async function EventPage({ params }: Params) {
                 >
                   Register to Play ↗
                 </a>
-                <a
-                  href="#travel"
-                  className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
-                >
-                  Plan Your Trip ↓
-                </a>
+                {/* Same gate as the section it scrolls to — a hero button
+                    pointing at an anchor that isn't on the page scrolls
+                    nowhere. */}
+                {guide && !started && (
+                  <a
+                    href="#travel"
+                    className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
+                  >
+                    Plan Your Trip ↓
+                  </a>
+                )}
                 <a
                   href="#watch"
                   className="hidden h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy sm:flex"
@@ -1056,9 +1083,21 @@ export default async function EventPage({ params }: Params) {
           {/* Day-by-day grid when Tixr sells the stop per day; the flat tier
               cards below are the fallback for stops it doesn't. */}
           {showGrid && ticketGrid && (
-            <TicketGrid grid={ticketGrid} campaign={t.eventCode ?? t.slug} />
+            <TicketGrid
+              grid={ticketGrid}
+              campaign={t.eventCode ?? t.slug}
+              eventTicketsUrl={onSale ? t.ticketsUrl : null}
+            />
           )}
 
+          {/* ⚠ The photo is here because of what this row looks like WITHOUT it.
+              When Tixr sells the stop day-by-day, `showGrid` renders the table
+              above and the tier cards below are skipped — leaving the Suites
+              card alone in a four-column grid, i.e. one small navy box and
+              three columns of empty white. Bryce, 9/1: "Pictures need to go
+              there. It's kind of ugly." So the photo fills the row it is
+              actually in, and only in that state: when the tier cards render,
+              the row is full and nothing is added. */}
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {onSale && !showGrid && ticketTiers.map((tier) => (
               <div
@@ -1108,6 +1147,21 @@ export default async function EventPage({ params }: Params) {
                 Learn More
               </Link>
             </div>
+            {/* Decorative — the section's own heading and the grid above carry
+                the meaning, so `alt` is empty rather than a caption a screen
+                reader has to sit through. Hidden below `sm`, where the grid is
+                one column and a photo would just push the schedule down. */}
+            {showGrid && ticketPhoto && (
+              <div className="relative hidden min-h-[220px] overflow-hidden sm:block lg:col-span-3">
+                <Image
+                  src={ticketPhoto}
+                  alt=""
+                  fill
+                  sizes="(min-width: 1024px) 830px, 50vw"
+                  className="object-cover"
+                />
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -1640,8 +1694,9 @@ export default async function EventPage({ params }: Params) {
       </>
       )}
 
-      {/* Plan Your Trip — Ragnar-style (upcoming/live only) */}
-      {guide && !completed && (
+      {/* Plan Your Trip — Ragnar-style. Upcoming stops only: it disappears at
+          first serve (Connor, 9/1), same gate as the hero button and the tab. */}
+      {guide && !started && (
         <section id="travel" className="scroll-mt-[120px] bg-white">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
             <div className="flex items-center gap-2.5">

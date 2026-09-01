@@ -43,6 +43,17 @@ export type ConciergeFacts = {
   airport?: string;
   hotels: string[];
   dining: string[];
+  /**
+   * Is the "Plan Your Trip" section actually on the page right now?
+   *
+   * ⚠ The travel section disappears at first serve (Connor, 9/1), and four
+   * answers below used to end with `... in "Plan Your Trip" on this page`.
+   * Sending a fan looking for a section that isn't there is worse than a
+   * shorter answer, so the pointer is appended only when the section exists.
+   * The hotel and restaurant NAMES still come through either way — those are
+   * useful to somebody who is already in town.
+   */
+  hasTripGuide: boolean;
   watch: string;
 };
 
@@ -94,16 +105,20 @@ const INTENTS: Intent[] = [
     test: /hotel|stay|sleep|lodging|airbnb/i,
     answer: (f) => ({
       text: f.hotels.length
-        ? `Closest picks: ${f.hotels.join(" · ")}. The full where-to-stay list (plus restaurants and things to do) is in "Plan Your Trip" on this page.`
-        : `The where-to-stay guide is in "Plan Your Trip" on this page.`,
+        ? `Closest picks: ${f.hotels.join(" · ")}.${f.hasTripGuide ? ` The full where-to-stay list (plus restaurants and things to do) is in "Plan Your Trip" on this page.` : ""}`
+        : f.hasTripGuide
+          ? `The where-to-stay guide is in "Plan Your Trip" on this page.`
+          : `We don't have a hotel list for this stop.`,
     }),
   },
   {
     test: /eat|food|restaurant|dinner|drink|bar\b/i,
     answer: (f) => ({
       text: f.dining.length
-        ? `On the grounds, Vendor Village has a full food row. Off-site: ${f.dining.join(" · ")} — more in "Plan Your Trip."`
-        : `Vendor Village has a full food row on the grounds; city picks are in "Plan Your Trip."`,
+        ? `On the grounds, Vendor Village has a full food row. Off-site: ${f.dining.join(" · ")}${f.hasTripGuide ? ` — more in "Plan Your Trip."` : "."}`
+        : f.hasTripGuide
+          ? `Vendor Village has a full food row on the grounds; city picks are in "Plan Your Trip."`
+          : `Vendor Village has a full food row on the grounds.`,
     }),
   },
   {
@@ -123,7 +138,7 @@ const INTENTS: Intent[] = [
   {
     test: /fly|airport|plane|get there|directions|address|where is|located/i,
     answer: (f) => ({
-      text: `${f.venue}, ${f.city}${f.state ? `, ${f.state}` : ""}.${f.airport ? ` Closest airport: ${f.airport}.` : ""} There's a tap-to-open map in "Plan Your Trip."`,
+      text: `${f.venue}, ${f.city}${f.state ? `, ${f.state}` : ""}.${f.airport ? ` Closest airport: ${f.airport}.` : ""}${f.hasTripGuide ? ` There's a tap-to-open map in "Plan Your Trip."` : ` There's a tap-to-open map under "Venue Guide."`}`,
     }),
   },
   {

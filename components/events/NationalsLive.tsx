@@ -280,7 +280,8 @@ export function NationalsLive({
     { id: "schedule", label: "Order of Play" },
     { id: "watch", label: "Watch" },
     { id: "venue", label: "Venue Guide" },
-    { id: "travel", label: "Plan Your Trip" },
+    // Gone at first serve, same rule as the main event page (Connor, 9/1).
+    ...(started ? [] : [{ id: "travel", label: "Plan Your Trip" }]),
     { id: "players", label: "Players" },
     { id: "involved", label: "Get Involved" },
     ...(coverage.length > 0 ? [{ id: "coverage", label: "Coverage" }] : []),
@@ -309,6 +310,7 @@ export function NationalsLive({
     airport: guide ? `${guide.airport} (${guide.airportNote})` : undefined,
     hotels: guide?.hotels.map((h) => h.name) ?? [],
     dining: guide?.dining.map((d) => d.name) ?? [],
+    hasTripGuide: Boolean(guide) && !started,
     watch:
       broadcast.length > 0
         ? `Every round streams live, and the marquee rounds hit national TV — ${[...new Set(broadcast.map((b) => b.platform))].join(", ")}. The full round-by-round broadcast table is under "Watch" on this page.`
@@ -477,12 +479,8 @@ export function NationalsLive({
                 >
                   Buy Tickets — from ${t.ticketPriceFrom}
                 </a>
-                <a
-                  href="#travel"
-                  className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
-                >
-                  Plan Your Trip ↓
-                </a>
+                {/* No "Plan Your Trip" here — first serve has happened and the
+                    section it points at is gone (Connor, 9/1). */}
               </>
             ) : (
               <>
@@ -1205,8 +1203,8 @@ export function NationalsLive({
         </div>
       </section>
 
-      {/* Plan Your Trip — Ragnar-style */}
-      {guide && (
+      {/* Plan Your Trip — Ragnar-style. Disappears at first serve (Connor, 9/1). */}
+      {guide && !started && (
         <section id="travel" className="scroll-mt-[120px] bg-white">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
             <div className="flex items-center gap-2.5">
@@ -1618,7 +1616,11 @@ export function NationalsLive({
           </div>
 
           {showGrid && ticketGrid && (
-            <TicketGrid grid={ticketGrid} campaign={t.eventCode ?? t.slug} />
+            <TicketGrid
+              grid={ticketGrid}
+              campaign={t.eventCode ?? t.slug}
+              eventTicketsUrl={t.ticketsUrl}
+            />
           )}
 
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
