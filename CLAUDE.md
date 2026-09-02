@@ -88,6 +88,8 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   and sit under Past, which is why Upcoming + Asia shows 2. Kim Koh's Jan 30
   "2026 Asia Schedule" thread lists 3 stops for 2027 Q1 with no dates:
   Manila Open, Thailand Open, China Open 2 (the last became Shenzhen, Aug 2026).
+- Texted Chris (iMessage, +1 831-325-9523) 9/2: all 18 Asia stops live, 8 of
+  10 played, no 2027 list exists yet, send it and it goes up this week.
 - Open: Chris to send the Asia 10 + Australia list; Wade/Tim to register
   them in pickleballtournaments.com so the feed carries them for good.
 
