@@ -357,6 +357,16 @@ export const newsArticles: NewsArticle[] = [
    * No `players` rail: the four names are NHL players, not PPA pros, and none
    * collides with an athlete on our roster (checked against
    * published-athletes.json). Nothing here should link to a player profile.
+   *
+   * ⚠ CAM WARD IS OUT AND JALEN CHATFIELD IS IN (9/2, via the event team —
+   * Delaney reissued both graphics). Ward's line in the body carried the 2006
+   * Cup and that season's Conn Smythe, which are his alone, so it was replaced
+   * rather than renamed. Three surfaces carry this night and ALL THREE had to
+   * move together: this article, the homepage promo modal
+   * (`lib/site-promo.ts`, which points at the SQUARE cut of the same art) and
+   * the Nationals event page's spotlight block — the last one reads its
+   * headline, blurb and thumbnail straight back out of this entry, so it
+   * followed for free. There is no fourth copy of the roster.
    */
   {
     slug: "canes-and-the-cup-pro-am",
@@ -368,10 +378,18 @@ export const newsArticles: NewsArticle[] = [
     title: "Canes and the Cup Pro-Am at the Veolia Pickleball National Championships",
     subtitle: "Thursday, Sept. 3, 6-9 p.m. at Cary Tennis Park",
     date: "Aug 24",
-    /* The event's own key art, supplied with the release (1920×1080 PNG,
-       2.6MB) and encoded to mozjpeg q80 at native size — 281KB, in line with
-       the other heroes. NOT upscaled to the 2400px the other two use: the
-       source is 1920 wide and enlarging it adds bytes, not detail.
+    /* The event's own key art, supplied with the release (1920×1080 PNG) and
+       encoded to mozjpeg q80 at native size — 315KB, in line with the other
+       heroes. NOT upscaled to the 2400px the other two use: the source is 1920
+       wide and enlarging it adds bytes, not detail.
+
+       ⚠ THE FILENAME CARRIES A VERSION, AND IT IS NOT COSMETIC. The
+       first pass overwrote the original file in place; the URL never changed,
+       so the optimizer served the CACHED first-cut bytes and the modal kept
+       publishing Cam Ward — reproduced locally with the new file on disk. The
+       optimized variant is cached against the URL, so a same-name replacement
+       can keep serving the superseded roster for as long as the TTL holds. A
+       new name is a new cache key. Version it again on the next reissue.
 
        ⚠ THIS IS A DESIGNED GRAPHIC, NOT A PHOTOGRAPH, AND THE HERO CROPS IT.
        The hero is `min-h-[44svh]` at `sizes="100vw"`, roughly 3.6:1, so it
@@ -380,7 +398,7 @@ export const newsArticles: NewsArticle[] = [
        Stanley Cup Champions and Carvana PPA Tour marks along the foot fall
        outside that band at desktop widths and cannot be saved by an anchor;
        a purpose-built wide crop is the only fix if they must appear. */
-    image: "/ppa/canes-and-the-cup-pro-am.jpg",
+    image: "/ppa/canes-and-the-cup-pro-am-v2.jpg",
     // Designed key art (Canes / Stanley Cup / Carvana PPA Tour lockup), not a
     // photo — show it whole with the headline below, so the two don't overlap.
     // `imagePosition` no longer applies in the graphic layout; kept harmless.
@@ -394,12 +412,12 @@ export const newsArticles: NewsArticle[] = [
       "https://www.tixr.com/groups/ppa/events/canes-night-at-the-veolia-pickleball-national-championships-202083",
     ctaLabel: "Get Canes Night Tickets",
     eventSlug: "veolia-pickleball-national-championships",
-    dek: "Stanley Cup champions Andrei Svechnikov, Cam Ward, Sebastian Aho and Justin Williams take Humana Championship Court alongside top Carvana PPA Tour pros — with the Stanley Cup on site for photos.",
+    dek: "Stanley Cup champions Andrei Svechnikov, Jalen Chatfield, Sebastian Aho and Justin Williams take Humana Championship Court alongside top Carvana PPA Tour pros — with the Stanley Cup on site for photos.",
     whyItMatters:
       "Four Stanley Cup champions and the Cup itself land in the middle of the tour's biggest week, on the same court the pros play on. A portion of proceeds goes to the Carolina Hurricanes Foundation.",
     body: [
       "CARY, N.C. — The Carolina Hurricanes and the Veolia Pickleball National Championships today announced the Canes and the Cup Pro-Am, a fun, lively and entertaining event pairing Carolina Hurricanes Stanley Cup champions with top players from the Carvana PPA Tour. Fans will have the opportunity for exclusive player meet-and-greets and a chance to have their photo taken with the Stanley Cup.",
-      "Four Hurricanes champions headline the field. Justin “Mr. Game 7” Williams is a three-time Stanley Cup champion and winner of the 2014 Conn Smythe Trophy. Cam Ward won the Cup in 2006 and took that season's Conn Smythe. Sebastian Aho, a 2026 Stanley Cup champion, is a three-time NHL All-Star, and Andrei Svechnikov, also a 2026 champion, was a 2023 NHL All-Star. The top Carvana PPA Tour players joining them will be named later.",
+      "Four Hurricanes champions headline the field. Justin “Mr. Game 7” Williams is a three-time Stanley Cup champion and winner of the 2014 Conn Smythe Trophy. Sebastian Aho, a 2026 Stanley Cup champion, is a three-time NHL All-Star. Andrei Svechnikov, also a 2026 champion, was a 2023 NHL All-Star, and defenseman Jalen Chatfield is a 2026 champion as well. The top Carvana PPA Tour players joining them will be named later.",
       "The Pro-Am runs Thursday, Sept. 3 from 6-9 p.m. ET and is built in three parts. From 6-7 p.m., a Stormy meet-and-greet, photos with the Stanley Cup and Carolina Hurricanes activations open for courtside ticket holders at Courtside Commons. The Canes and the Cup Pro-Am itself takes Humana Championship Court from 7-8 p.m. From 8-9 p.m., VIP ticket holders mix and mingle with the Canes legends and the Stanley Cup.",
       "Everything takes place at Humana Championship Court and Courtside Commons at the Veolia Pickleball National Championships, held at Cary Tennis Park, 2727 Louis Stephens Dr., Cary, NC 27519.",
       "VIP tickets carry the player meet-and-greet opportunities, reserved priority seating, food and beverage, and priority access to photos with the Stanley Cup. They are expected to sell out quickly, and fans are encouraged to purchase today. A portion of proceeds goes to the Carolina Hurricanes Foundation.",

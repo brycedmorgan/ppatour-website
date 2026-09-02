@@ -75,7 +75,15 @@ type PromoConfig = {
 const ACTIVE_PROMO: PromoConfig | null = {
   id: "canes-and-the-cup-pro-am",
   articleSlug: "canes-and-the-cup-pro-am",
-  image: "/ppa/promos/canes-and-the-cup-pro-am-square.jpg",
+  /* The 1:1 cut of the same key art, reissued 9/2 with Jalen Chatfield in
+     Cam Ward's place. ⚠ THE FILENAME CARRIES A VERSION, AND IT IS NOT COSMETIC. The
+     first pass overwrote the original file in place; the URL never changed,
+     so the optimizer served the CACHED first-cut bytes and the modal kept
+     publishing Cam Ward — reproduced locally with the new file on disk. The
+     optimized variant is cached against the URL, so a same-name replacement
+     can keep serving the superseded roster for as long as the TTL holds. A
+     new name is a new cache key. Version it again on the next reissue. */
+  image: "/ppa/promos/canes-and-the-cup-pro-am-square-v2.jpg",
   imageWidth: 1080,
   imageHeight: 1080,
   // 9 p.m. ET on the night itself — the promo dies when the Pro-Am ends, not
