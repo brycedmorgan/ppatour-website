@@ -63,6 +63,28 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-02 — Chris: "no international in 2027" — the feed has none, and neither do the sister-tour sites
+
+- Chris Patrick flagged that /events shows no 2027 Asia or Australia stops (he
+  expects ~10 each; Europe is his, still unfinished). Confirmed: the live
+  `ppa_tournaments` feed has 2027 rows for the US tour only (Jan–May 2027).
+  ppatour-asia.com lists only 2026 stops; ppatour.com.au/calendar links only
+  2026 pickleballtournaments pages. So the gap is upstream — nobody has
+  registered a 2027 Asia/Australia event yet. No code is wrong.
+- The "list of 10 from Asia" Bryce remembers is Wade's **2026** list (11 rows
+  in `lib/asia-tour-links.ts`). Nothing in Gmail/Drive holds a 2027 Asia
+  calendar; Egon's 8/20 "PPA Asia Latest" share is a KL points sheet.
+- The lever once Chris sends names/dates/cities/tiers: curated rows in
+  `lib/placeholder-data.ts` with `detailsComingSoon: true` (card, no link)
+  until each stop has a pickleballtournaments/ppatour-asia page, then
+  `showWhenAbsentFromFeed` + a row in the tour-links table. Per-event opt-in,
+  never a wholesale merge (see the type comment).
+- Curated already carries two 2027 Australia rows (Melbourne 125 Feb 18–21,
+  Sydney 250 Finals Mar 17–21) but neither is opted in, so neither renders.
+  Do not opt them in blind — Tim's 2027 dates are unconfirmed.
+- Open: Chris to send the Asia 10 + Australia list; Wade/Tim to register
+  them in pickleballtournaments.com so the feed carries them for good.
+
 ### 2026-09-01 (pt. 3) — ⚠ CORRECTION: `partners=ppa` is a 1,000-point floor, not a missing tag
 
 - **The earlier entry below blamed a missing PPA partner tag on pre-2024 events. THAT IS
