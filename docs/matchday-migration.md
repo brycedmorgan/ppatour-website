@@ -68,3 +68,15 @@ run (Bryce, 8/18). These notes cover moving MATCHDAY off Lovable.
 
 ⚠ Savings ledger row 16 ("Lovable → self-hosted", $75k, banked 7/31) is early.
 The app is still on Lovable. Treat it as committed until step 11.
+
+## Lovable billing (added 2026-09-02)
+
+- Slack group DM (Chris Cantino, Jason Santerre, Bryce; External Connections →
+  matchday-collab), 9/1: the workspace AI credit cap is 2000/month. Chris hit it
+  building the PBTV prototype and paid overages on his personal card. Auto-top-up
+  is off.
+- Taylor told Jason MATCHDAY sits under PPA, so Bryce owns credit increases now.
+- The MATCHDAY Lovable workspace is domain-linked to pickleball.com (6 members).
+  bryce@pickleball.com is not a member yet; it can only "Request" to join. The
+  8/5 invite went to b.morgan@ppatour.com, which is likely where the admin seat is.
+- Open: join as admin, raise the cap or enable auto-top-up, reimburse Chris.
