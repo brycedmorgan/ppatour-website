@@ -73,8 +73,10 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   accepted; GitHub invite expired 8/12. That is the blocker.
 - Recommendation: our own Supabase project + Vercel for the web build. Not Neon.
 - ⚠ Jackalope savings ledger row 16 counts the Lovable move as banked. It is not.
-- Next: Bryce accepts the Lovable invite and gets a fresh GitHub invite; then
-  audit `supabase/` in the repo and write the runbook.
+- Email sent to Chris (9/2): fresh GitHub invite or transfer to Pickleball-Inc-Crew,
+  Lovable bill, Cloud inventory. Proposed cutover Nov 9–15 (Worlds → Daytona gap).
+- Next: Bryce accepts the Lovable invite; once repo access lands, audit
+  `supabase/` and write the runbook.
 
 ### 2026-09-02 — Chris: "no international in 2027" — the feed has none, and neither do the sister-tour sites
 

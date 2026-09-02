@@ -33,6 +33,12 @@ run (Bryce, 8/18). These notes cover moving MATCHDAY off Lovable.
 - No connection string, no dashboard, no pg_dump. No one-click move.
 - Removing Cloud deletes the instance permanently.
 
+## Status
+
+- 9/2: Bryce emailed Chris (chris@color.capital) asking for a fresh GitHub
+  invite or a transfer into the Pickleball-Inc-Crew org, the current Lovable
+  bill, and the edge-function/cron/secret/bucket inventory. Proposed Nov 9–15.
+
 ## Plan
 
 1. Access. Accept the Lovable workspace invite (sent 8/5 to b.morgan@ppatour.com).
@@ -53,6 +59,11 @@ run (Bryce, 8/18). These notes cover moving MATCHDAY off Lovable.
 9. Web: strip `/~flock.js` and `lovable-tagger`, deploy to Vercel, point
    pblfg.com at Vercel.
 10. Cutover in a gap between events. Freeze writes, final export, import, flip.
+    Proposed window (Bryce → Chris, 9/2): **Nov 9–15 2026**, between Worlds
+    (Nov 2–8, Farmers Branch) and Daytona (Nov 16–22). A store build with a
+    switchable backend URL ships in October; the switch flips that week.
+    Alternatives if that slips: Nov 23–25 (short), Dec 7–13 (Adelaide only).
+    MLP fall dates not confirmed; Chris asked to flag conflicts.
 11. Keep Lovable 30 days, then remove Cloud and downgrade.
 
 ⚠ Savings ledger row 16 ("Lovable → self-hosted", $75k, banked 7/31) is early.
