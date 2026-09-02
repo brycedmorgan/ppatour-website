@@ -82,6 +82,12 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - Curated already carries two 2027 Australia rows (Melbourne 125 Feb 18–21,
   Sydney 250 Finals Mar 17–21) but neither is opted in, so neither renders.
   Do not opt them in blind — Tim's 2027 dates are unconfirmed.
+- Bryce asked where "the list of 10" went. It is Wade Townsend's 8/5 list in
+  the "PPA Asia URL Updates" thread: 10 stops for 2026, 7 results for 2025,
+  zero for 2027. All 18 (incl. Tomaz Cup) are live; 8 of the 10 have played
+  and sit under Past, which is why Upcoming + Asia shows 2. Kim Koh's Jan 30
+  "2026 Asia Schedule" thread lists 3 stops for 2027 Q1 with no dates:
+  Manila Open, Thailand Open, China Open 2 (the last became Shenzhen, Aug 2026).
 - Open: Chris to send the Asia 10 + Australia list; Wade/Tim to register
   them in pickleballtournaments.com so the feed carries them for good.
 
