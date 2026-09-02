@@ -80,3 +80,8 @@ The app is still on Lovable. Treat it as committed until step 11.
   bryce@pickleball.com is not a member yet; it can only "Request" to join. The
   8/5 invite went to b.morgan@ppatour.com, which is likely where the admin seat is.
 - Open: join as admin, raise the cap or enable auto-top-up, reimburse Chris.
+- 9/2 22:30Z, inside the workspace: Bryce is Admin. Plan is Lovable Business,
+  2,000 monthly credits, renews the 8th. Auto top-up is ON (500 credits when
+  below 10) and bills the card on file. Last 30 days 4,767 credits (pbtv 2,570,
+  MATCHDAY 2,197). Business at 3,000 credits is $1,410/mo. Billing "Manage" is
+  Owner-only (Chris); the card swap to a company card is his move.
