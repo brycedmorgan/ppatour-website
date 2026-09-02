@@ -22,6 +22,7 @@ commerce surface needs the same conversation those two had.
 
 | Item | State | Blocker |
 |---|---|---|
+| MATCHDAY off Lovable | Emailed Chris Cantino 9/2; Bryce asked him for a fresh GitHub invite; proposed cutover **Nov 9–15** | Repo access (`gh api user/repository_invitations` shows nothing yet), then the Cloud inventory. Plan: [`matchday-migration.md`](matchday-migration.md) |
 | Athlete hero images | Slot shipped 8/15; **1 of 179 filled** (Anna Leigh Waters) | Named per-player photography — see Wishlist |
 | Punta Cana bookings | LIVE at $4,800 double, 1 room left | none; Lainey controls rooms in Jackalope |
 | MLP per-player timeline | Endpoint approved, awaiting their push | `team_leagues_rosters` going live (DATA-ASKS §6) |
