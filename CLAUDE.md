@@ -113,6 +113,23 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - Full notes: `docs/matchday-migration.md`.
 
 
+### 2026-09-03 (pt. 3) — Paddle Lab: every PBC paddle is in, lab stats on athlete pages
+
+- Commit `82a5e1e`. Preview:
+  https://ppatour-website-69nyfhzji-bryce-pickleballs-projects.vercel.app/paddle-lab/
+- Bryce: "why did we not pull in paddles from PBC and link to them to
+  purchase?" The list is now the union: 468 Kew-tested + 350 PBC shop-only =
+  **818 paddles**, every one with a page and a buy button. Shop-only pages say
+  "Not yet tested"; browse has a "Lab-tested only" toggle; sold-out is labelled.
+- Athlete In the Bag card: five headline measurements with bars
+  (`LabStatsMini`) when the paddle is tested, plus the lab's PBC photo when the
+  feed has none.
+- Matcher: 87 of 468 matched (thickness-without-mm and shape-word exceptions).
+  `lib/data/pbc-near-misses.json` holds 59 pairs for human confirmation → the
+  `ALIASES` table in `scripts/import-pbc-paddles.mjs`.
+- Still preview only (Bryce). No email sent for this round.
+- Next: Hannah/John confirm the 59 near-misses; editorial JSON; Kew terms.
+
 ### 2026-09-03 (pt. 2) — Paddle Lab: PBC photos, predictive search, pros by brand
 
 - Commit `5d07447`. Preview:
