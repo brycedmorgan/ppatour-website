@@ -85,3 +85,22 @@ The app is still on Lovable. Treat it as committed until step 11.
   below 10) and bills the card on file. Last 30 days 4,767 credits (pbtv 2,570,
   MATCHDAY 2,197). Business at 3,000 credits is $1,410/mo. Billing "Manage" is
   Owner-only (Chris); the card swap to a company card is his move.
+
+## Access landed (2026-09-02, 22:30Z)
+
+- Chris replied: invites sent, and he built `pblfg.com/migration-export`
+  (edge function `migration-inventory`, password-gated; password is in his
+  9/2 email to Bryce). It returns the live backend inventory. He also says
+  Lovable Cloud is at 100% instance capacity and it is hurting performance.
+  He wants this sooner. Plan is now the first event-free week in October.
+- GitHub invite accepted as `brycedmorgan`. Clone: `~/pickleball/pbpulse`.
+- `supabase/` IS in the repo: 154 edge functions, 1,001 migrations (latest
+  2026-09-03), config.toml. 22 migrations schedule pg_cron jobs.
+- Storage buckets: app-fonts, app-logos, event-guide-assets, player-avatars,
+  team-avatars, user-avatars.
+- Secrets to hand-carry (from `migration-inventory`): APNS_* (5), 
+  FIREBASE_SERVICE_ACCOUNT, INTERNAL_FUNCTION_SECRET (also read as
+  INTERNAL_SECRET), OIDC_CLIENT_SECRET, PBTV_BRIDGE_SECRET, PB_API_TOKEN,
+  PB_USER_TOKEN, PB_DEV_TOKEN, PB_API_BASE_URL, LOVABLE_API_KEY (4 functions
+  use Lovable's AI gateway; those need a replacement provider).
+- Lovable coupling in the web build: only `lovable-tagger` in vite.config.ts.
