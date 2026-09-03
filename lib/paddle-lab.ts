@@ -1,27 +1,32 @@
 /**
  * The Paddle Lab library — every paddle the lab can show, with its test data,
- * its editorial layer and the two links a page needs (its own page, the shop).
+ * its shop record, its editorial layer and the two links a page needs.
  *
- * Two files feed this, and they are deliberately different kinds of thing:
+ * THE LIST IS THE UNION OF TWO CATALOGUES (Bryce, 9/3: "why did we not pull in
+ * paddles from PBC and link to them to purchase?"):
+ *
+ *   John Kew's tested paddles   lib/data/paddles.json (468) — the measurements
+ *   Pickleball Central's shop   lib/data/pbc-paddle-catalog.json (487) — photo,
+ *                               live price, the buy button
+ *
+ * Where scripts/import-pbc-paddles.mjs matched a PBC product to a Kew paddle,
+ * they are ONE record (lib/data/paddle-pbc.json). Every other PBC paddle is
+ * its own record with `tested: false`: it has a page, a photo and a buy
+ * button, and says "Not yet tested" where the bars would be. A fan who
+ * searches for a paddle we sell always finds it.
+ *
+ * Three files feed this, and they are deliberately different kinds of thing:
  *
  *   lib/data/paddles.json               THE GRID. Written only by
- *                                       scripts/import-paddle-lab.mjs from John
- *                                       Kew's published sheet. Never hand-edited.
- *   lib/data/paddle-lab-editorial.json  THE PROSE. Hannah's team writes it:
- *                                       skill tags, a summary, pros/cons, a pinned
- *                                       Pickleball Central URL, trending flags.
+ *                                       scripts/import-paddle-lab.mjs. Never hand-edited.
+ *   lib/data/pbc-paddle-catalog.json    THE SHOP. Written only by the PBC crawler.
+ *   lib/data/paddle-lab-editorial.json  THE PROSE. Hannah's team writes it.
  *
- * ⚠ NOTHING HERE COMPUTES A RATING. Scores on the site are Kew's own scaled
- * z-scores (0–100 against every paddle he has measured), copied through. The
- * only derived things are filter buckets (price band, weight band), and those
- * are UI groupings in lib/paddle-lab-shared.ts, not measurements.
- *
- * ⚠ SERVER ONLY. This module imports the whole grid. Client components import
- * lib/paddle-lab-shared.ts and receive PaddleSummary[] as a prop.
- *
- * Requested by Hannah Johns (8/28) — see docs/PADDLE-LAB.md.
+ * ⚠ NOTHING HERE COMPUTES A RATING. Scores are Kew's own scaled z-scores.
+ * ⚠ SERVER ONLY. Client components import lib/paddle-lab-shared.ts.
  */
 import raw from "@/lib/data/paddles.json";
+import catalogRaw from "@/lib/data/pbc-paddle-catalog.json";
 import editorialRaw from "@/lib/data/paddle-lab-editorial.json";
 import pbcRaw from "@/lib/data/paddle-pbc.json";
 import { pbcDestination } from "@/lib/pbc-links";
@@ -100,7 +105,7 @@ export type Editorial = {
   review?: string;
   pros?: string[];
   cons?: string[];
-  /** Exact Pickleball Central product URL. Beats the brand-page fallback. */
+  /** Exact Pickleball Central product URL. Beats the crawled product and the brand-page fallback. */
   pbcUrl?: string;
   /** Put it in the landing-page carousel. */
   trending?: boolean;
@@ -109,13 +114,7 @@ export type Editorial = {
   reviewedOn?: string;
 };
 
-/**
- * The Pickleball Central product the matcher placed for a paddle
- * (scripts/import-pbc-paddles.mjs → lib/data/paddle-pbc.json). Photo, live
- * price at crawl time, exact product URL. 82 of 468 today; the matcher refuses
- * anything it cannot place with confidence, and an editor's `pbcUrl` pin is how
- * the rest get one.
- */
+/** A Pickleball Central product as the crawler saw it. */
 export type PbcProduct = {
   url: string;
   title: string;
@@ -137,10 +136,39 @@ export type Paddle = PaddleRow & {
   displayPrice: number | null;
   /** True when displayPrice came from Pickleball Central. */
   livePrice: boolean;
+  /** False for a shop-only paddle John Kew has not measured. */
+  tested: boolean;
+  soldOut: boolean;
 };
 
 const EDITORIAL = editorialRaw as Record<string, Editorial>;
 const PBC = pbcRaw as Record<string, PbcProduct>;
+const CATALOG = (catalogRaw as { products: (PbcProduct & { brand: string | null })[] }).products;
+
+const EMPTY_METRICS: PaddleMetrics = {
+  spinRpm: null,
+  spinScore: null,
+  spinCategory: null,
+  spinDurabilityTier: null,
+  swingWeight: null,
+  swingScore: null,
+  twistWeight: null,
+  twistScore: null,
+  balancePointCm: null,
+  balanceScore: null,
+  handSpeedIndex: null,
+  serveSpeedMph: null,
+  powerScore: null,
+  punchVolleyMph: null,
+  popScore: null,
+  firepower: null,
+  kewCor: null,
+  deflectionLbs: null,
+  tilt: null,
+  tiltRaw: null,
+};
+
+const tight = (s: string) => s.toLowerCase().replace(/\+/g, "plus").replace(/[^a-z0-9]+/g, "");
 
 /** Pinned editorial URL beats the crawled product page beats the brand-page ladder. */
 function shopHrefFor(row: PaddleRow, ed: Editorial, pbc: PbcProduct | null): string {
@@ -151,9 +179,8 @@ function shopHrefFor(row: PaddleRow, ed: Editorial, pbc: PbcProduct | null): str
   });
 }
 
-export const paddles: Paddle[] = (raw.paddles as PaddleRow[]).map((row) => {
+function assemble(row: PaddleRow, pbc: PbcProduct | null, tested: boolean): Paddle {
   const editorial = EDITORIAL[row.slug] ?? {};
-  const pbc = PBC[row.slug] ?? null;
   const image = paddleImageFor(row.name);
   return {
     ...row,
@@ -165,10 +192,90 @@ export const paddles: Paddle[] = (raw.paddles as PaddleRow[]).map((row) => {
     photo: image?.cutout ? null : (pbc?.image ?? null),
     displayPrice: pbc?.price ?? row.price,
     livePrice: pbc?.price != null,
+    tested,
+    soldOut: pbc?.availability === "oos",
   };
+}
+
+/* ---- Kew's tested paddles, with their PBC match when there is one ---- */
+
+const tested: Paddle[] = (raw.paddles as PaddleRow[]).map((row) => assemble(row, PBC[row.slug] ?? null, true));
+
+/* ---- Every other paddle Pickleball Central sells ---- */
+
+/** Titles the matcher also skips: variants of a product, not products. */
+const NOT_A_PRODUCT = /\b(used|bundle|demo|set of|cover)\b/i;
+
+const matchedUrls = new Set(Object.values(PBC).map((p) => p.url));
+const kewBrands = Array.from(new Set(tested.map((p) => p.brand))).sort((a, b) => tight(b).length - tight(a).length);
+const takenSlugs = new Set(tested.map((p) => p.slug));
+
+/**
+ * Brand + model out of a PBC title. The brand is read against Kew's brand
+ * list first so "Six Zero" and "SixZero" land in one bucket, then PBC's own
+ * JSON-LD brand, then the first word. The model is what is left after the
+ * brand, the thickness and the words "Pickleball Paddle".
+ */
+function splitTitle(title: string, jsonLdBrand: string | null): { brand: string; model: string; thicknessMm: number | null } {
+  const mm = title.match(/\b(\d{1,2}(?:\.\d)?)\s?mm\b/i);
+  const thicknessMm = mm ? Number(mm[1]) : null;
+  const t = tight(title);
+  let brand = kewBrands.find((b) => t.startsWith(tight(b))) ?? null;
+  if (!brand && jsonLdBrand && t.startsWith(tight(jsonLdBrand))) brand = jsonLdBrand;
+  if (!brand) brand = title.split(/\s+/)[0];
+  let model = title
+    .replace(/\b\d{1,2}(?:\.\d)?\s?mm\b/gi, " ")
+    .replace(/\bpickleball\b/gi, " ")
+    .replace(/\bpaddles?\b/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  // Drop the brand prefix however PBC spelled it: compare on the tight form.
+  const words = model.split(" ");
+  let cut = 0;
+  let acc = "";
+  for (let i = 0; i < words.length; i++) {
+    acc += tight(words[i]);
+    if (acc === tight(brand)) {
+      cut = i + 1;
+      break;
+    }
+    if (!tight(brand).startsWith(acc)) break;
+  }
+  model = words.slice(cut).join(" ").trim() || model;
+  return { brand, model, thicknessMm };
+}
+
+const shopOnly: Paddle[] = CATALOG.filter((p) => !matchedUrls.has(p.url) && !NOT_A_PRODUCT.test(p.title)).map((p) => {
+  const { brand, model, thicknessMm } = splitTitle(p.title, p.brand);
+  let slug = new URL(p.url).pathname.replace(/\/+$/, "").split("/").pop()!.replace(/-pickleball-paddle$/, "");
+  if (takenSlugs.has(slug)) slug = `${slug}-pbc`;
+  takenSlugs.add(slug);
+  const row: PaddleRow = {
+    slug,
+    brand,
+    model,
+    name: `${brand} ${model}`,
+    thicknessMm,
+    price: p.price,
+    condition: null,
+    dateEntered: null,
+    certification: "unknown",
+    certificationRaw: null,
+    warranty: null,
+    shape: "Unknown",
+    build: null,
+    process: null,
+    surfaceTexture: null,
+    surfaceLayup: null,
+    coreType: null,
+    specs: { lengthIn: null, widthIn: null, handleLengthIn: null, staticWeightOz: null },
+    metrics: EMPTY_METRICS,
+  };
+  const pbc: PbcProduct = { url: p.url, title: p.title, image: p.image, price: p.price, availability: p.availability, sku: p.sku };
+  return assemble(row, pbc, false);
 });
 
-export const photoCount = paddles.filter((p) => p.image?.cutout || p.photo).length;
+export const paddles: Paddle[] = [...tested, ...shopOnly].sort((a, b) => a.name.localeCompare(b.name));
 
 const BY_SLUG = new Map(paddles.map((p) => [p.slug, p]));
 export function paddleBySlug(slug: string): Paddle | null {
@@ -176,11 +283,19 @@ export function paddleBySlug(slug: string): Paddle | null {
 }
 
 export const paddleCount = paddles.length;
+export const testedCount = tested.length;
+export const shopOnlyCount = shopOnly.length;
+export const photoCount = paddles.filter((p) => p.image?.cutout || p.photo).length;
+export const buyableCount = paddles.filter((p) => p.pbc || p.editorial.pbcUrl).length;
+
 export const brandList: { name: string; count: number }[] = Array.from(
   paddles.reduce((m, p) => m.set(p.brand, (m.get(p.brand) ?? 0) + 1), new Map<string, number>()),
 )
   .map(([name, count]) => ({ name, count }))
   .sort((a, b) => a.name.localeCompare(b.name));
+
+/** Brands with at least one tested paddle — the hero's "brands measured" number. */
+export const testedBrandCount = new Set(tested.map((p) => p.brand)).size;
 
 /** The lab's data credit line. The snapshot is the committed CSV, not a live read. */
 export const DATA_SOURCE = {
@@ -433,7 +548,7 @@ export function formatMetric(def: MetricDef, v: number | string | null): string 
 
 /** Newest entries by John's "Date Entered", for the 182 paddles that carry one. */
 export function newestTested(n: number): Paddle[] {
-  return paddles
+  return tested
     .filter((p) => p.dateEntered)
     .sort((a, b) => (b.dateEntered! > a.dateEntered! ? 1 : b.dateEntered! < a.dateEntered! ? -1 : 0))
     .slice(0, n);
@@ -454,14 +569,17 @@ export const reviewedCount = paddles.filter((p) => p.editorial.review || p.edito
 
 /**
  * Paddles a reader might weigh against this one: same shape, same tilt when
- * known, nearest in price. A selection rule for a "see also" rail — not a
+ * known, nearest in price. For a shop-only paddle with no shape, same brand,
+ * nearest in price. A selection rule for a "see also" rail — not a
  * recommendation, and no score is involved.
  */
 export function similarPaddles(p: Paddle, n = 3): Paddle[] {
-  const price = p.price ?? 0;
-  return paddles
-    .filter((q) => q.slug !== p.slug && q.shape === p.shape && (!p.metrics.tilt || q.metrics.tilt === p.metrics.tilt))
-    .sort((a, b) => Math.abs((a.price ?? 0) - price) - Math.abs((b.price ?? 0) - price))
+  const price = p.displayPrice ?? 0;
+  const pool = p.tested
+    ? paddles.filter((q) => q.slug !== p.slug && q.shape === p.shape && (!p.metrics.tilt || q.metrics.tilt === p.metrics.tilt))
+    : paddles.filter((q) => q.slug !== p.slug && q.brand === p.brand);
+  return pool
+    .sort((a, b) => Math.abs((a.displayPrice ?? 0) - price) - Math.abs((b.displayPrice ?? 0) - price))
     .slice(0, n);
 }
 
@@ -490,6 +608,8 @@ export function summarize(p: Paddle): PaddleSummary {
     summary: p.editorial.summary ?? null,
     image: p.image?.cutout ? p.image.src : null,
     photo: p.photo,
+    tested: p.tested,
+    soldOut: p.soldOut,
     href: p.href,
     shopHref: p.shopHref,
   };
@@ -522,15 +642,17 @@ for (const p of paddles) {
  *
  * The broadcast masterlist writes "Franklin C45 Hybrid 14MM" while John writes
  * "Franklin" + "C45 Hybrid" + 14; so match on brand+model with the thickness
- * stripped, then use the thickness to pick between builds. Refuses when the
- * name matches more than one lab record and the thickness cannot settle it,
- * because linking a pro to the wrong build is worse than no link.
+ * stripped, then use the thickness to pick between builds. A tested record
+ * wins over a shop-only one with the same name. Refuses when the name matches
+ * more than one record and the thickness cannot settle it, because linking a
+ * pro to the wrong build is worse than no link.
  */
 export function labPaddleForName(paddle: string | null | undefined): Paddle | null {
   if (!paddle) return null;
   const first = paddle.split(",")[0];
   const mm = first.match(/\b(\d{1,2}(?:\.\d)?)\s?mm\b/i);
-  const candidates = BY_NORM.get(norm(first)) ?? [];
+  let candidates = BY_NORM.get(norm(first)) ?? [];
+  if (candidates.some((c) => c.tested)) candidates = candidates.filter((c) => c.tested);
   if (candidates.length === 1) return candidates[0];
   if (candidates.length > 1 && mm) {
     const want = Number(mm[1]);

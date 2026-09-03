@@ -113,6 +113,11 @@ export default function HowWeTestPage() {
               The 0–100 bars are John Kew&apos;s scaled scores: where a paddle sits relative to every
               other paddle he has measured. A 50 is the middle of the pack, not a grade.
             </p>
+            <p>
+              The lab also lists paddles Pickleball Central sells that have not been through the rig
+              yet. Those pages say &ldquo;Not yet tested&rdquo; and carry only the photo, the price and
+              the buy button. Tick &ldquo;Lab-tested only&rdquo; on the browse page to hide them.
+            </p>
           </div>
 
           <H2>Our editorial review</H2>

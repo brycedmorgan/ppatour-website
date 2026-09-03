@@ -31,6 +31,7 @@ import { dirname, join } from "node:path";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CATALOG = join(ROOT, "lib/data/pbc-paddle-catalog.json");
 const OUT = join(ROOT, "lib/data/paddle-pbc.json");
+const NEAR = join(ROOT, "lib/data/pbc-near-misses.json");
 const PADDLES = join(ROOT, "lib/data/paddles.json");
 const FETCH = process.argv.includes("--fetch");
 const REPORT_ONLY = process.argv.includes("--report");
@@ -147,6 +148,16 @@ function thicknessOf(s) {
   return m ? Number(m[1]) : null;
 }
 
+/**
+ * Confirmed equivalences the token rule cannot derive: Kew slug → PBC product
+ * URL. Add a line ONLY when a human has confirmed the two are the same paddle
+ * (Hannah / John Kew / the PBC product page itself). Near-misses the rule
+ * rejected are written to lib/data/pbc-near-misses.json for exactly that review.
+ */
+const ALIASES = {
+  // empty by design — see docs/PADDLE-LAB.md "Near-misses to confirm"
+};
+
 /** Words a PBC title may carry beyond the brand + model without meaning a different paddle. */
 const NOISE = new Set(["edition", "dual", "series", "the", "official", "with", "by", "and", "new", "certified", "usap", "upa", "upaa", "pickleball", "paddle", "paddles"]);
 
@@ -161,19 +172,42 @@ function match(paddles, catalog) {
 
   const result = {};
   const ambiguous = [];
+  const nearMisses = [];
   let matched = 0;
   for (const lab of paddles) {
+    const alias = ALIASES[lab.slug];
+    if (alias) {
+      const p = products.find((x) => x.url === alias);
+      if (!p) throw new Error(`alias for ${lab.slug} points at a URL not in the catalogue: ${alias}`);
+      matched++;
+      result[lab.slug] = { url: p.url, title: p.title, image: p.image, price: p.price, availability: p.availability, sku: p.sku };
+      continue;
+    }
     const brand = tight(lab.brand);
     const model = tokens(lab.model.replace(/\b\d{1,2}(?:\.\d)?\s?mm\b/gi, " "));
     const brandToks = new Set(tokens(lab.brand));
-    const candidates = products
+    const loose = products
       .filter((p) => p.tight.startsWith(brand) || (p.brand && tight(p.brand) === brand))
       .filter((p) => model.every((t) => p.toks.includes(t)))
+      .filter((p) => lab.thicknessMm == null || p.mm == null || p.mm === lab.thicknessMm);
+    const candidates = loose
       // ⚠ Extra tokens in the PBC title must be noise, never a version. "Hurache-X
       // Power" matched "Hurache-X Power 2" and "Perseus 3S" matched "Perseus Pro
       // 3S" before this line; a stray digit, "Pro", "Plus", "V2" or a player's
       // name means a different paddle, and no photo beats the wrong one.
-      .filter((p) => p.toks.every((t) => model.includes(t) || brandToks.has(t) || NOISE.has(t)))
+      // Two derivable exceptions: the thickness written without "mm" ("Rhapsody
+      // 13" for a 13 mm paddle) and a shape word that equals Kew's own shape for
+      // the paddle ("Waves 1 Elongated"). Both are facts on the lab record.
+      .filter((p) =>
+        p.toks.every(
+          (t) =>
+            model.includes(t) ||
+            brandToks.has(t) ||
+            NOISE.has(t) ||
+            (lab.thicknessMm != null && t === String(lab.thicknessMm)) ||
+            (lab.shape && t === lab.shape.toLowerCase()),
+        ),
+      )
       .filter((p) => lab.thicknessMm == null || p.mm == null || p.mm === lab.thicknessMm)
       .map((p) => ({
         p,
@@ -181,7 +215,12 @@ function match(paddles, catalog) {
         score: p.toks.length - model.length + (p.mm == null && lab.thicknessMm != null ? 2 : 0),
       }))
       .sort((a, b) => a.score - b.score);
-    if (!candidates.length) continue;
+    if (!candidates.length) {
+      // Brand + model + thickness agreed but a stray token blocked it. That is
+      // the review list for the alias table, not a match.
+      if (loose.length) nearMisses.push({ slug: lab.slug, kew: `${lab.name} ${lab.thicknessMm ?? ""}mm`.trim(), pbc: loose.slice(0, 4).map((p) => ({ title: p.title, url: p.url })) });
+      continue;
+    }
     const best = candidates[0];
     const tie = candidates.filter((c) => c.score === best.score);
     if (tie.length > 1 && new Set(tie.map((c) => c.p.title)).size > 1) {
@@ -192,7 +231,7 @@ function match(paddles, catalog) {
     const { url, title, image, price, availability, sku } = best.p;
     result[lab.slug] = { url, title, image, price, availability, sku };
   }
-  return { result, ambiguous, matched };
+  return { result, ambiguous, matched, nearMisses };
 }
 
 /* ---------------- main ---------------- */
@@ -203,12 +242,14 @@ async function main() {
   else catalog = JSON.parse(readFileSync(CATALOG, "utf8")).products;
 
   const paddles = JSON.parse(readFileSync(PADDLES, "utf8")).paddles;
-  const { result, ambiguous, matched } = match(paddles, catalog);
+  const { result, ambiguous, matched, nearMisses } = match(paddles, catalog);
   console.log(`matched ${matched} of ${paddles.length} lab paddles to a PBC product (${catalog.length} in catalogue)`);
   for (const a of ambiguous) console.log(`  ambiguous, skipped: ${a}`);
+  console.log(`${nearMisses.length} near-misses for human review (brand+model agree, a stray token blocked it)`);
   if (REPORT_ONLY) return;
   writeFileSync(OUT, JSON.stringify(result, null, 2) + "\n");
-  console.log(`wrote ${OUT}`);
+  writeFileSync(NEAR, JSON.stringify(nearMisses, null, 2) + "\n");
+  console.log(`wrote ${OUT} and ${NEAR}`);
 }
 
 main().catch((e) => {

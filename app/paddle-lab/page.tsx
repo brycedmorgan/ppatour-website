@@ -15,6 +15,7 @@ import {
   paddles,
   reviewedCount,
   summarize,
+  testedCount,
   trendingPaddles,
   withSkill,
 } from "@/lib/paddle-lab";
@@ -100,8 +101,9 @@ export default function PaddleLabPage() {
             Use professional data to find the perfect paddle
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/70">
-            {paddleCount} paddles from {brandList.length} brands, measured the same way. Power, pop, spin,
-            swing weight, twist weight and more, with the acronyms explained. Then buy the one you picked.
+            {paddleCount} paddles from {brandList.length} brands, {testedCount} of them measured the same way.
+            Power, pop, spin, swing weight, twist weight and more, with the acronyms explained. Then buy
+            the one you picked.
           </p>
 
           <div className="mt-8">
@@ -119,8 +121,8 @@ export default function PaddleLabPage() {
 
           <dl className="mt-10 grid max-w-2xl grid-cols-3 gap-4 border-t border-white/15 pt-6">
             {[
-              [paddleCount, "paddles tested"],
-              [brandList.length, "brands"],
+              [paddleCount, "paddles"],
+              [testedCount, "lab tested"],
               [measured, "measured metrics"],
             ].map(([n, label]) => (
               <div key={label}>

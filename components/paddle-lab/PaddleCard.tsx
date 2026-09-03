@@ -31,17 +31,30 @@ export function PaddleCard({ p, compare = true }: { p: PaddleSummary; compare?: 
           </h3>
         </Link>
         <p className="mt-1 text-[11px] text-ppa-navy/55">
-          {[p.shape, p.thicknessMm ? `${p.thicknessMm} mm` : null, p.tilt ? TILT_LABEL[p.tilt] : null]
+          {[p.shape !== "Unknown" ? p.shape : null, p.thicknessMm ? `${p.thicknessMm} mm` : null, p.tilt ? TILT_LABEL[p.tilt] : null]
             .filter(Boolean)
-            .join(" · ")}
+            .join(" · ") || " "}
         </p>
-        <div className="mt-3 grid grid-cols-3 gap-2 border-t border-ppa-line pt-3">
-          <Stat label="Power mph" value={p.powerMph != null ? p.powerMph.toFixed(1) : null} />
-          <Stat label="Spin rpm" value={p.spinRpm != null ? String(p.spinRpm) : null} />
-          <Stat label="Swing wt" value={p.swingWeight != null ? p.swingWeight.toFixed(0) : null} />
-        </div>
+        {p.tested ? (
+          <div className="mt-3 grid grid-cols-3 gap-2 border-t border-ppa-line pt-3">
+            <Stat label="Power mph" value={p.powerMph != null ? p.powerMph.toFixed(1) : null} />
+            <Stat label="Spin rpm" value={p.spinRpm != null ? String(p.spinRpm) : null} />
+            <Stat label="Swing wt" value={p.swingWeight != null ? p.swingWeight.toFixed(0) : null} />
+          </div>
+        ) : (
+          /* A paddle Pickleball Central sells that the lab hasn't measured. Say so
+             rather than showing three dashes that read as missing data. */
+          <p className="mt-3 border-t border-ppa-line pt-3 text-[11px] font-bold uppercase tracking-[0.14em] text-ppa-navy/40">
+            Not yet tested
+          </p>
+        )}
         <div className="mt-auto flex items-center justify-between gap-2 pt-4">
-          <p className="text-sm font-bold tabular-nums text-ppa-navy">{price ?? ""}</p>
+          <p className="text-sm font-bold tabular-nums text-ppa-navy">
+            {price ?? ""}
+            {p.soldOut && (
+              <span className="ml-2 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">Sold out</span>
+            )}
+          </p>
           {compare && <CompareButton slug={p.slug} compact />}
         </div>
       </div>

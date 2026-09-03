@@ -46,7 +46,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     title: `${p.name}${p.thicknessMm ? ` ${p.thicknessMm}mm` : ""} — Test Data, Specs & Review`,
     description:
       p.editorial.summary ??
-      `${p.name} measured: ${bits.join(", ")}. ${p.shape} shape${p.thicknessMm ? `, ${p.thicknessMm} mm core` : ""}. Full lab data, specs and where to buy.`,
+      (p.tested
+        ? `${p.name} measured: ${bits.join(", ")}. ${p.shape} shape${p.thicknessMm ? `, ${p.thicknessMm} mm core` : ""}. Full lab data, specs and where to buy.`
+        : `${p.name}${p.thicknessMm ? ` ${p.thicknessMm} mm` : ""}: price, photo and where to buy at Pickleball Central. Not yet through the Paddle Lab's measurements.`),
     alternates: { canonical: `${SITE_URL}${p.href}/` },
   };
 }
@@ -91,7 +93,7 @@ export default async function PaddlePage({ params }: Params) {
   const ed = p.editorial;
   const similar = similarPaddles(p, 3);
   const chips = [
-    p.shape,
+    p.shape !== "Unknown" ? p.shape : null,
     p.thicknessMm ? `${p.thicknessMm} mm core` : null,
     p.specs.staticWeightOz ? `${p.specs.staticWeightOz.toFixed(1)} oz` : null,
     p.metrics.tilt ? TILT_LABEL[p.metrics.tilt] : null,
@@ -161,12 +163,23 @@ export default async function PaddlePage({ params }: Params) {
                 <p className="mt-5 max-w-2xl text-base leading-relaxed text-ppa-navy/75">{ed.summary}</p>
               ) : (
                 <p className="mt-5 max-w-2xl text-sm leading-relaxed text-ppa-navy/55">
-                  Lab data below. Our editors&apos; write-up for this paddle is on the way.
+                  {p.tested
+                    ? "Lab data below. Our editors’ write-up for this paddle is on the way."
+                    : "Sold at Pickleball Central. Not yet through the lab’s measurements."}
                 </p>
               )}
 
               <div className="mt-6 flex flex-wrap items-center gap-3">
-                {price && <p className="font-display text-2xl tabular-nums text-ppa-navy">{price}</p>}
+                {price && (
+                  <p className="font-display text-2xl tabular-nums text-ppa-navy">
+                    {price}
+                    {p.soldOut && (
+                      <span className="ml-2 align-middle font-sans text-[11px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+                        Sold out
+                      </span>
+                    )}
+                  </p>
+                )}
                 <a
                   href={p.shopHref}
                   target="_blank"
@@ -197,6 +210,28 @@ export default async function PaddlePage({ params }: Params) {
             <span className="h-2 w-2 bg-ppa-blue" />
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">Lab data</p>
           </div>
+          {!p.tested ? (
+            /* Sold at Pickleball Central, not yet through John Kew's rig. Say so
+               plainly instead of rendering sixteen "Not measured" rows. */
+            <div className="mt-2">
+              <h2 className="font-display text-2xl uppercase leading-tight sm:text-3xl">Not yet tested</h2>
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ppa-navy/60">
+                Pickleball Central sells this paddle, but it has not been through the lab&apos;s measurements
+                yet. When it is, power, pop, spin, swing weight and twist weight will appear here.{" "}
+                <Link href={`${LAB_PATH}/how-we-test`} className="font-bold text-ppa-blue hover:underline">
+                  How we test
+                </Link>
+                .
+              </p>
+              <Link
+                href={browseHref({ tested: "1", brand: p.brand })}
+                className="mt-5 inline-flex items-center gap-2 border border-ppa-navy px-5 py-3 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy transition-colors hover:bg-ppa-paper"
+              >
+                Tested {p.brand} paddles <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          ) : (
+            <>
           <h2 className="mt-2 font-display text-2xl uppercase leading-tight sm:text-3xl">How it measured</h2>
           <p className="mt-2 max-w-2xl text-sm text-ppa-navy/60">
             Bars are the paddle&apos;s position, 0 to 100, against every paddle in the database. A blue bar
@@ -232,6 +267,8 @@ export default async function PaddlePage({ params }: Params) {
           <p className="mt-6 text-[11px] text-ppa-navy/45">
             Test data: <a href={DATA_SOURCE.url} target="_blank" rel="noopener noreferrer" className="underline hover:text-ppa-blue">{DATA_SOURCE.name}</a>. Measurements are shown as published and never edited.
           </p>
+            </>
+          )}
         </div>
       </section>
 
@@ -294,14 +331,16 @@ export default async function PaddlePage({ params }: Params) {
                   <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">Weigh it against</p>
                 </div>
                 <h2 className="mt-2 font-display text-2xl uppercase leading-tight">
-                  Same shape{p.metrics.tilt ? ", same play style" : ""}, nearest in price
+                  {p.tested
+                    ? `Same shape${p.metrics.tilt ? ", same play style" : ""}, nearest in price`
+                    : `More from ${p.brand}, nearest in price`}
                 </h2>
               </div>
               <Link
-                href={browseHref({ shape: p.shape })}
+                href={p.tested ? browseHref({ shape: p.shape }) : browseHref({ brand: p.brand })}
                 className="hidden items-center gap-1.5 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue sm:inline-flex"
               >
-                All {p.shape.toLowerCase()} paddles <ArrowRight className="h-3.5 w-3.5" />
+                {p.tested ? `All ${p.shape.toLowerCase()} paddles` : `All ${p.brand} paddles`} <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
             <ul className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">

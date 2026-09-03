@@ -53,6 +53,8 @@ type Filters = {
   thickness: string;
   weight: string;
   skill: string;
+  /** "1" = only paddles with lab data; "" = everything Pickleball Central sells too. */
+  tested: string;
   sort: SortKey;
 };
 
@@ -66,6 +68,7 @@ const DEFAULTS: Filters = {
   thickness: "",
   weight: "",
   skill: "",
+  tested: "",
   sort: "name",
 };
 
@@ -81,6 +84,7 @@ function fromParams(sp: URLSearchParams): Filters {
     thickness: sp.get("thickness") ?? "",
     weight: sp.get("weight") ?? "",
     skill: sp.get("skill") ?? "",
+    tested: sp.get("tested") === "1" ? "1" : "",
     sort: (SORTS.some((s) => s.key === sort) ? sort : "name") as SortKey,
   };
 }
@@ -99,7 +103,8 @@ function apply(list: PaddleSummary[], f: Filters): PaddleSummary[] {
       (!f.spin || p.spinCategory === f.spin) &&
       (!thick || (p.thicknessMm != null && thick.test(p.thicknessMm))) &&
       (!weight || (p.weightOz != null && weight.test(p.weightOz))) &&
-      (!f.skill || p.skill.includes(f.skill as PaddleSummary["skill"][number])),
+      (!f.skill || p.skill.includes(f.skill as PaddleSummary["skill"][number])) &&
+      (!f.tested || p.tested),
   );
   // Nulls sink to the bottom on every numeric sort, whichever direction.
   const num = (v: number | null, dir: 1 | -1) => (v == null ? Infinity : v * dir);
@@ -181,6 +186,15 @@ export function PaddleBrowser({ items, brands }: { items: PaddleSummary[]; brand
 
   const panel = (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+      <label className="flex h-10 cursor-pointer items-center gap-2.5 border border-ppa-line bg-white px-3 text-sm text-ppa-navy sm:col-span-2 lg:col-span-1">
+        <input
+          type="checkbox"
+          checked={filters.tested === "1"}
+          onChange={(e) => set({ tested: e.target.checked ? "1" : "" })}
+          className="h-4 w-4 accent-ppa-blue"
+        />
+        <span className="font-medium">Lab-tested only</span>
+      </label>
       <Select
         label="Brand"
         value={filters.brand}

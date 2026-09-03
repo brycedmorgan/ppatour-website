@@ -76,6 +76,31 @@ and product URL may change. Pinned URLs live in ONE file (the editorial JSON),
 so the fix is a find-and-replace there plus a refresh of `BRAND_PAGES` in
 pbc-links.ts. Do not scatter PBC URLs anywhere else.
 
+## The list is the union of Kew and PBC (Bryce, 9/3 pt. 3)
+
+Bryce: "why did we not pull in paddles from PBC and link to them to purchase?"
+So the lab's list is now every tested paddle PLUS every paddle Pickleball
+Central sells that Kew hasn't measured. `lib/paddle-lab.ts` builds the union at
+load: 468 tested + 350 shop-only = **818 paddles**, each with a page, a buy
+button and (for shop-only) a photo and live price. Shop-only records carry
+`tested: false`, `shape: "Unknown"`, empty metrics; their page says "Not yet
+tested" and the card says the same instead of three dashes. The browse page
+has a "Lab-tested only" toggle (`?tested=1`). Sold-out products (PBC
+`availability: oos`, 75 at crawl) are labelled, never hidden.
+
+Athlete pages: a tested paddle now shows five headline stats with bars inside
+the In the Bag card (`LabStatsMini`), and the card's photo falls back to the
+lab's PBC product shot when the feed has none.
+
+### Near-misses to confirm (alias table)
+
+`lib/data/pbc-near-misses.json` (59 today) lists Kew paddles where brand,
+model and thickness agree with a PBC product but a stray title token blocked
+the match ("Hurache-X Power" vs "Hurache-X Power 2", "Perseus 3S" vs "Perseus
+Pro 3S Dual"). A human confirms each pair, then adds `kewSlug: pbcUrl` to
+`ALIASES` in `scripts/import-pbc-paddles.mjs` and re-runs `npm run lab:pbc`.
+Never resolve one by loosening the rule.
+
 ## Images and live prices (Pickleball Central crawl)
 
 `scripts/import-pbc-paddles.mjs` crawls PBC's product sitemap (their category

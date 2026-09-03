@@ -32,6 +32,7 @@ import { playerOverrideFor } from "@/lib/player-overrides";
 import { socialLinks } from "@/lib/social-links";
 import { paddleFor } from "@/lib/athlete-paddles";
 import { labPaddleForName } from "@/lib/paddle-lab";
+import { LabStatsMini } from "@/components/paddle-lab/LabStatsMini";
 import { paddleUpdateFor } from "@/lib/paddle-updates";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 
@@ -491,6 +492,14 @@ export default async function AthletePage({ params }: Params) {
    * "See the lab data" line under the buy button; absent otherwise.
    */
   const labPaddle = gear ? labPaddleForName(gear.paddle) : null;
+  /**
+   * The picture in the card: curated cut-out or the feed photo as before, and
+   * now Pickleball Central's product shot from the lab when neither exists.
+   * The lab photo is keyed to the exact product the matcher placed, so it
+   * cannot show a signature colourway on the wrong pro.
+   */
+  const bagImage =
+    paddleImage ?? (labPaddle?.photo ? { src: labPaddle.photo, width: 1, height: 1, cutout: false } : null);
   /** Who makes it, for the Product node. Feed field first, partner match second. */
   const paddleBrand = paddleUpdate?.brand ?? liveOverride?.brand ?? gear?.brand ?? null;
   /** Stable @id for the paddle's Product node, so Person.owns can point at it. */
@@ -931,14 +940,14 @@ export default async function AthletePage({ params }: Params) {
                   </p>
                   <div className="mt-3 border border-ppa-navy/10 bg-ppa-navy text-white">
                     <div className="flex items-center gap-4 p-4">
-                      {paddleImage && (
+                      {bagImage && (
                         <div className="flex h-32 w-20 shrink-0 items-center justify-center">
-                          {paddleImage.cutout ? (
+                          {bagImage.cutout ? (
                             <Image
-                              src={paddleImage.src}
+                              src={bagImage.src}
                               alt={`${gear.paddle} pickleball paddle`}
-                              width={paddleImage.width}
-                              height={paddleImage.height}
+                              width={bagImage.width}
+                              height={bagImage.height}
                               sizes="80px"
                               className="h-full w-auto object-contain drop-shadow-[0_6px_14px_rgba(0,0,0,0.45)]"
                             />
@@ -949,7 +958,7 @@ export default async function AthletePage({ params }: Params) {
                                ship its own background. */
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
-                              src={paddleImage.src}
+                              src={bagImage.src}
                               alt={`${gear.paddle} pickleball paddle`}
                               loading="lazy"
                               className="h-full w-full rounded-md bg-white object-contain p-1.5"
@@ -986,14 +995,19 @@ export default async function AthletePage({ params }: Params) {
                     >
                       Buy This Paddle ↗
                     </a>
-                    {labPaddle && (
+                    {/* Bryce 9/3: the paddle's headline measurements live on the
+                        player's page too, not just a link. Tested paddle → five
+                        stats + a link; shop-only paddle → the link alone. */}
+                    {labPaddle && labPaddle.tested ? (
+                      <LabStatsMini paddle={labPaddle} />
+                    ) : labPaddle ? (
                       <Link
                         href={labPaddle.href}
                         className="flex h-10 items-center justify-center border-t border-white/10 text-[11px] font-bold uppercase tracking-[0.14em] text-white/75 transition-colors hover:bg-white/5 hover:text-white"
                       >
-                        See the lab data →
+                        See it in the Paddle Lab →
                       </Link>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               )}

@@ -71,6 +71,14 @@
     "availability": "instock",
     "sku": "ADI293-0001"
   },
+  "avoura-rhapsody-13mm": {
+    "url": "https://pickleballcentral.com/avoura-rhapsody-13-pickleball-paddle/",
+    "title": "Avoura Rhapsody 13 Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/6488/35266/AVO100_Avoura-Rhapsody_13mm_Pink_1000_01__02308.1743699397.jpg",
+    "price": 123.75,
+    "availability": "instock",
+    "sku": "AVO100-0001"
+  },
   "avoura-rivelle-13mm": {
     "url": "https://pickleballcentral.com/avoura-rivelle-13mm-pickleball-paddle/",
     "title": "Avoura Rivelle 13mm Pickleball Paddle",
@@ -110,6 +118,30 @@
     "price": 229.99,
     "availability": "instock",
     "sku": "CRB120-0001"
+  },
+  "crbn-trufoam-waves-1-14mm": {
+    "url": "https://pickleballcentral.com/crbn-trufoam-waves-1-elongated-pickleball-paddle/",
+    "title": "CRBN TruFoam Waves 1 Elongated Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7853/37346/1__83972.1758742664.jpg",
+    "price": 199.99,
+    "availability": "instock",
+    "sku": "CRB121-0001"
+  },
+  "crbn-trufoam-waves-3-14mm": {
+    "url": "https://pickleballcentral.com/crbn-trufoam-waves-3-elongated-pickleball-paddle/",
+    "title": "CRBN TruFoam Waves 3 Elongated Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7855/37335/3__08714.1758742386.jpg",
+    "price": 199.99,
+    "availability": "instock",
+    "sku": "CRB123-0001"
+  },
+  "crbn-trufoam-waves-4-14mm": {
+    "url": "https://pickleballcentral.com/crbn-trufoam-waves-4-hybrid-pickleball-paddle/",
+    "title": "CRBN TruFoam Waves 4 Hybrid Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7856/37324/4__03358.1758742231.jpg",
+    "price": 199.99,
+    "availability": "instock",
+    "sku": "CRB124-0001"
   },
   "diadem-hush-18mm": {
     "url": "https://pickleballcentral.com/diadem-hush-pickleball-paddle/",
@@ -334,6 +366,14 @@
     "price": 150,
     "availability": "instock",
     "sku": "HOL141-0002"
+  },
+  "luzz-glider-2026-16mm": {
+    "url": "https://pickleballcentral.com/luzz-glider-2026-hybrid-pickleball-paddle/",
+    "title": "Luzz Glider 2026 Hybrid Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8342/43436/LUZ104_Glider_2026_Hybrid_-_Chris_Hayworth_01__01397.1783970354.jpg",
+    "price": 129,
+    "availability": "instock",
+    "sku": "LUZ104-0002"
   },
   "luzz-pro-cannon-16mm": {
     "url": "https://pickleballcentral.com/luzz-pro-cannon-pickleball-paddle/",

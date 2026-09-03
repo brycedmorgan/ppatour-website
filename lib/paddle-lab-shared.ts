@@ -17,7 +17,8 @@ export const compareHref = (slugs: string[]) =>
   slugs.length ? `${LAB_PATH}/compare?p=${slugs.join(",")}` : `${LAB_PATH}/compare`;
 export const MAX_COMPARE = 4;
 
-export type Shape = "Elongated" | "Hybrid" | "Widebody" | "Other";
+/** "Unknown" is a shop-only paddle Kew hasn't measured; it never matches the shape filter and is not displayed. */
+export type Shape = "Elongated" | "Hybrid" | "Widebody" | "Other" | "Unknown";
 export type Tilt = "power" | "balanced" | "pop";
 export type Certification =
   | "usap"
@@ -88,6 +89,10 @@ export type PaddleSummary = {
   image: string | null;
   /** Pickleball Central's product photo, when the matcher placed it. Null with no `image` renders the brand tile. */
   photo: string | null;
+  /** False for a paddle Pickleball Central sells that John Kew has not measured. */
+  tested: boolean;
+  /** Pickleball Central reported it out of stock at crawl time. */
+  soldOut: boolean;
   href: string;
   shopHref: string;
 };
