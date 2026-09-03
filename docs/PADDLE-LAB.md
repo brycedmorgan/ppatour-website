@@ -144,3 +144,29 @@ already credits him by name and links his database on every paddle page.
 - [ ] PBC product feed for photos + live prices (Traver)
 - [ ] Decide the host: pickleball.com path rewrite vs ppatour.com/paddle-lab
 - [ ] PPL (Pro Pickleball Labs) data: Hannah's brief names them as a second source; they publish no public database. Ask what they'd supply.
+
+## Hero photography (added 2026-09-03)
+
+The landing hero is a full-bleed photograph — `public/ppa/action-champ-sunday.jpg`,
+a pro at the moment of contact — behind `.scrim-hero-lab`.
+
+**Two things about it are deliberate and should not be "fixed":**
+
+1. **Nobody is named and no paddle is credited.** Attributing an athlete from a
+   frame is how the wrong player ends up on a page, and the How We Test page says
+   "nobody pays to be here" — crediting a paddle brand on the hero of a neutral
+   lab would undercut that. The `alt` is empty because the image is decorative;
+   the headline carries the meaning.
+2. **`.scrim-hero-lab` is its own scrim and needed to be.** Every other hero on
+   this site puts a short headline over the FOOT of a photo, so the house scrims
+   are bottom-weighted (0.08 at the top). This hero's content column — eyebrow,
+   headline, paragraph, search field, stat row — runs the full height, so a
+   bottom-weighted gradient leaves the eyebrow on bare photograph. It never thins
+   past 0.74 (6.9:1 white-on-worst-case at the top, 14.4:1 at the foot), carries
+   an extra even veil below lg where the headline wraps through the busiest part
+   of the crowd, and is masked at lg so the right edge reads as photography.
+
+To swap the photo, change the `src` in `app/paddle-lab/page.tsx`. Anything wide,
+sunlit and paddle-forward works; `action-singles.jpg` is the strongest
+alternative (full-stretch lunge, ball on the paddle face, dark backdrop) but its
+paddle sits at the far LEFT of the frame, directly under the headline.

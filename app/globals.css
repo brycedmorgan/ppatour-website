@@ -417,6 +417,59 @@
     rgba(7, 34, 58, 0.18) 100%
   );
 }
+/* Paddle Lab hero. Every other hero on this site puts a short headline over the
+   FOOT of a photo, which is why the house scrims are bottom-weighted (0.08 at the
+   top). This one carries an eyebrow, a headline, a paragraph, a search field and a
+   stat row — the content column runs the full height of the section, so a
+   bottom-weighted gradient would leave the eyebrow and the top of the headline
+   sitting on bare photograph.
+
+   So this one never thins past 0.74. Worst case — a pure-white pixel behind it —
+   white type measures 6.9:1 at the top, 9.9:1 mid, 14.4:1 at the foot: AA for
+   normal text everywhere, not just for the headline. Above lg it is masked so the
+   darkening eases toward the right edge, where no text sits and the court and the
+   crowd get to read as photography. */
+.scrim-hero-lab {
+  background:
+    linear-gradient(
+      to top,
+      rgba(7, 34, 58, 0.96) 0%,
+      rgba(7, 34, 58, 0.86) 45%,
+      rgba(7, 34, 58, 0.74) 100%
+    ),
+    rgba(7, 34, 58, 0.35);
+}
+
+/* Below lg the headline wraps to four lines and runs straight through the middle
+   of the frame, where a stadium crowd is at its busiest. Same answer as
+   .scrim-hero-event: an even veil UNDER the gradient, dropped again at lg where
+   the headline is short and the crowd sits above it. Top of the hero goes 0.74 ->
+   0.83 effective, i.e. 9.4:1 white-on-worst-case. */
+@media (min-width: 1024px) {
+  .scrim-hero-lab {
+    background: linear-gradient(
+      to top,
+      rgba(7, 34, 58, 0.96) 0%,
+      rgba(7, 34, 58, 0.86) 45%,
+      rgba(7, 34, 58, 0.74) 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      #000 0%,
+      #000 58%,
+      rgba(0, 0, 0, 0.72) 80%,
+      rgba(0, 0, 0, 0.55) 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      #000 0%,
+      #000 58%,
+      rgba(0, 0, 0, 0.72) 80%,
+      rgba(0, 0, 0, 0.55) 100%
+    );
+  }
+}
+
 .scrim-soft {
   background: linear-gradient(
     to top,

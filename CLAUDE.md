@@ -63,6 +63,37 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-03 (pt. 2) — Paddle Lab gets a real hero photograph
+
+- Bryce: "we have some of the coolest photography of anyone in professional
+  sports" — use it behind the Paddle Lab hero. Shipped: full-bleed
+  `public/ppa/action-champ-sunday.jpg` (a pro at the moment of contact, ball on
+  the paddle face) behind a new `.scrim-hero-lab`.
+- **⚠ THE HOUSE SCRIMS DID NOT FIT AND THAT IS THE INTERESTING PART.** All eight
+  of them are bottom-weighted (0.97 at the foot, 0.08 at the top) because every
+  other hero on this site puts a SHORT headline over the foot of a photo. This
+  hero's content column runs the full height — eyebrow, headline, paragraph,
+  search field, stat row — so `.scrim-hero` would have left the eyebrow and the
+  top of the headline sitting on bare photograph. `.scrim-hero-lab` never thins
+  past 0.74.
+- **Alphas are computed, not chosen.** Against a pure-white photo pixel (worst
+  case) white type measures 6.9:1 at the top, 9.9:1 mid, 14.4:1 at the foot —
+  AA for normal text everywhere, not just for the headline.
+- **Below lg it carries an even veil under the gradient**, the same answer
+  `.scrim-hero-event` uses: the headline wraps to four lines there and runs
+  straight through the busiest part of a stadium crowd. Rendered at 390 before
+  and after — the first pass was legible but visually noisy.
+- **Nobody is named and no paddle is credited.** Attribution from a frame is how
+  the wrong athlete lands on a page, and the lab's own method page says "nobody
+  pays to be here" — a credited brand on its hero would undercut that.
+- ⚠ **The contact point sits partly behind the search field** and no crop fixes
+  it: the subject is centred in the frame, and the content column occupies the
+  left 58%. `action-singles.jpg` is the better photograph (full-stretch lunge,
+  ball on the paddle face, dark backdrop) but its paddle is at the far LEFT,
+  directly under the headline. One-line swap if anyone prefers it.
+- Verified over CDP at 1440 and 390: zero horizontal overflow, image loaded and
+  filling the section at both. tsc + eslint clean, full `next build` green.
+
 ### 2026-09-02 — MATCHDAY: access landed, cutover pulled to October
 
 - Bryce is Admin on the MATCHDAY Lovable workspace (Business, 2,000 credits/mo,
@@ -81,6 +112,25 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   Slack connector (restart Claude Code after re-auth in claude.ai).
 - Full notes: `docs/matchday-migration.md`.
 
+
+### 2026-09-03 (pt. 2) — Paddle Lab: PBC photos, predictive search, pros by brand
+
+- Commit `5d07447`. Preview:
+  https://ppatour-website-3k3h2syn6-bryce-pickleballs-projects.vercel.app/paddle-lab/
+- `scripts/import-pbc-paddles.mjs` crawls Pickleball Central's product sitemap
+  (487 paddle products → `lib/data/pbc-paddle-catalog.json`) and matches lab
+  paddles with a refuse-on-doubt rule → `lib/data/paddle-pbc.json`. **82 of 468
+  matched.** Photo, live price and exact product URL flow into cards, paddle
+  pages and compare. `next.config.ts` allowlists `cdn11.bigcommerce.com`.
+- Landing hero search is now a typeahead (`LabSearch`): brands, paddles, see all.
+- New "What the pros play" section (`ProsByBrand`): head count per brand from
+  the broadcast masterlist, 91 pros. JOOLA 24, CRBN 8, PaddleTek 8, Luzz 7.
+- Follow-up sent to Hannah/Samin/Taylor with the new preview.
+- ⚠ Another session left uncommitted edits in `app/paddle-lab/page.tsx` +
+  `app/globals.css` (a hero photo + `.scrim-hero-lab`). Not mine, not committed
+  here, not in the preview. Whoever owns it should commit or drop it.
+- Next: alias table for the 386 unmatched PBC titles once Hannah/John confirm
+  name equivalences (JOOLA "Perseus 3S" vs "Perseus Pro 3S Dual" is the big one).
 
 ### 2026-09-03 — Paddle Lab shipped to preview (`/paddle-lab`)
 

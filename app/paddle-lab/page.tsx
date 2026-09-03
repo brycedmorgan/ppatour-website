@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ExternalLink, FlaskConical } from "lucide-react";
 import { LabSearch } from "@/components/paddle-lab/LabSearch";
@@ -71,9 +72,26 @@ export default function PaddleLabPage() {
 
   return (
     <>
-      {/* Hero + search */}
-      <section className="bg-ppa-navy text-white">
-        <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:py-20">
+      {/* Hero + search.
+          ⚠ THE PHOTO IS NOT DECORATION AND IT IS NOT AN ATHLETE PORTRAIT. It is the
+          moment of contact — the ball on the face of the paddle — which is the one
+          thing this whole section measures. Nobody is named here and no paddle is
+          credited: naming a player off a frame is how the wrong athlete ends up on a
+          page, and crediting a brand on the hero of a lab whose own method page says
+          "nobody pays to be here" would undercut the claim. See .scrim-hero-lab in
+          globals.css for why this hero needs its own scrim. */}
+      <section className="relative isolate overflow-hidden bg-ppa-navy text-white">
+        <Image
+          src="/ppa/action-champ-sunday.jpg"
+          alt=""
+          fill
+          priority
+          quality={65}
+          sizes="100vw"
+          className="animate-kenburns object-cover object-[50%_38%] will-change-transform"
+        />
+        <div aria-hidden className="scrim-hero-lab absolute inset-0" />
+        <div className="relative mx-auto w-full max-w-6xl px-4 py-14 sm:py-20">
           <div className="flex items-center gap-2.5">
             <span className="h-2 w-2 bg-ppa-sky" />
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/60">PPA Tour Paddle Lab</p>
