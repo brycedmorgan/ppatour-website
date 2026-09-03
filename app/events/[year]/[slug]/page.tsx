@@ -11,6 +11,7 @@ import { EventSponsors } from "@/components/events/EventSponsors";
 import { RegisteredCount } from "@/components/events/RegisteredCount";
 import { VolunteerModalButton } from "@/components/events/VolunteerModalButton";
 import { BookGroupRateLink } from "@/components/events/BookGroupRateLink";
+import { EngineHotelLink, EngineStay } from "@/components/events/EngineStay";
 import { publishedHotelsFor } from "@/lib/published-hotels";
 import { TripBuilder } from "@/components/events/TripBuilder";
 import type { TripEvent } from "@/lib/trip";
@@ -264,6 +265,20 @@ export default async function EventPage({ params }: Params) {
   // guide list when present, matched by city; otherwise the guide's own hotels.
   const publishedHotels = await publishedHotelsFor(t.city);
   const stayHotels = publishedHotels ?? guide?.hotels ?? [];
+  /**
+   * What the Engine links need, and nothing more. Built from the RESOLVED event
+   * `t`, so it inherits the feed overlays above — a stop whose dates moved (the
+   * Malibu Cup, 8/17) prefills a fan's stay on the dates the tour is actually
+   * playing, not the curated row's stale pair.
+   */
+  const engineEvent = {
+    slug: t.slug,
+    eventCode: t.eventCode,
+    city: t.city,
+    state: t.state,
+    startDate: t.startDate,
+    endDate: t.endDate,
+  };
 
   // Serializable event context for the Trip Builder wizard — built by the shared
   // helper so the on-page wizard and the emailed plan can't drift.
@@ -1596,6 +1611,12 @@ export default async function EventPage({ params }: Params) {
                   </div>
                 </details>
               ))}
+              {/* Engine survives the `started` gate here, and this is the only
+                  placement that does. Plan Your Trip retires at first serve (Connor,
+                  9/1) — but the official room blocks above it have book-by cutoffs
+                  weeks earlier, so during event week Engine is the page's only
+                  remaining answer to "I need a room". Live only, never completed. */}
+              {started && !completed && <EngineStay event={engineEvent} variant="onsite" />}
             </div>
           </div>
 
@@ -1806,9 +1827,15 @@ export default async function EventPage({ params }: Params) {
                         {p.href && col.heading === "Where to Stay" && (
                           <BookGroupRateLink href={p.href} eventSlug={t.slug} />
                         )}
+                        {col.heading === "Where to Stay" && (
+                          <EngineHotelLink hotelName={p.name} event={engineEvent} />
+                        )}
                       </li>
                     ))}
                   </ul>
+                  {/* Engine sits UNDER the hotel list, never above it — the rows
+                      above are negotiated group rates with a cutoff. */}
+                  {col.heading === "Where to Stay" && <EngineStay event={engineEvent} />}
                 </div>
               ))}
             </div>

@@ -19,6 +19,7 @@ import { channelsByDay, watchCardsFor, weekdayOf } from "@/lib/event-watch";
 import { getEventGuide, parkingFor, parkingText } from "@/lib/event-guides";
 import { ticketsOnSale } from "@/lib/tixr-prices";
 import { ParkingDetails } from "@/components/events/ParkingDetails";
+import { EngineHotelLink, EngineStay } from "@/components/events/EngineStay";
 import { getEventSchedule } from "@/lib/event-schedule";
 import { playersToWatch } from "@/lib/home-content";
 import { getArticlesForEvent } from "@/lib/news-articles";
@@ -240,6 +241,19 @@ export function NationalsLive({
   // override credited Tennis Channel on Sunday only; the sheet has it Thu–Sun.
   const dayChannels = channelsByDay(t.slug);
   const mapQuery = guide?.mapQuery ?? `${t.venue}, ${t.city}, ${t.state}`;
+  /**
+   * ⚠ THE SAME SHAPE THE EVENT PAGE BUILDS, so the two surfaces cannot offer a
+   * fan different dates or a different partner link for the same tournament.
+   * Keep them in step — that drift is this file's recurring bug.
+   */
+  const engineEvent = {
+    slug: t.slug,
+    eventCode: t.eventCode,
+    city: t.city,
+    state: t.state,
+    startDate: t.startDate,
+    endDate: t.endDate,
+  };
 
   const showGrid = Boolean(ticketGrid?.hasPerDayPricing);
   // Fallback only. These three were derived arithmetically (base x2, x2.6) and
@@ -1198,6 +1212,13 @@ export function NationalsLive({
                   </div>
                 </details>
               ))}
+              {/* Engine survives the `started` gate here, and this is the only
+                  placement that does — mirroring the real event page so the two
+                  surfaces cannot drift on a partner placement. Gated on `isLive`
+                  rather than `started`: `started` is also true once the demo
+                  clock passes the end, and nobody books a room for a finished
+                  tournament. */}
+              {isLive && <EngineStay event={engineEvent} variant="onsite" />}
             </div>
           </div>
         </div>
@@ -1309,9 +1330,15 @@ export function NationalsLive({
                             <span aria-hidden className="transition-transform duration-300 group-hover/book:translate-x-0.5">↗</span>
                           </a>
                         )}
+                        {col.heading === "Where to Stay" && (
+                          <EngineHotelLink hotelName={p.name} event={engineEvent} />
+                        )}
                       </li>
                     ))}
                   </ul>
+                  {/* Same placement as the event page, from the same component —
+                      under the negotiated blocks, never above them. */}
+                  {col.heading === "Where to Stay" && <EngineStay event={engineEvent} />}
                 </div>
               ))}
             </div>
