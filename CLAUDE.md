@@ -126,9 +126,9 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - New "What the pros play" section (`ProsByBrand`): head count per brand from
   the broadcast masterlist, 91 pros. JOOLA 24, CRBN 8, PaddleTek 8, Luzz 7.
 - Follow-up sent to Hannah/Samin/Taylor with the new preview.
-- ⚠ Another session left uncommitted edits in `app/paddle-lab/page.tsx` +
-  `app/globals.css` (a hero photo + `.scrim-hero-lab`). Not mine, not committed
-  here, not in the preview. Whoever owns it should commit or drop it.
+- A parallel session added a hero photograph behind the search (`d0d390a`,
+  `.scrim-hero-lab` in globals.css). It landed after the preview above was
+  deployed, so the preview shows the plain navy hero.
 - Next: alias table for the 386 unmatched PBC titles once Hannah/John confirm
   name equivalences (JOOLA "Perseus 3S" vs "Perseus Pro 3S Dual" is the big one).
 
