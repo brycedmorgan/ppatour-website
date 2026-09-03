@@ -21,7 +21,7 @@ export function PaddleCard({ p, compare = true }: { p: PaddleSummary; compare?: 
   return (
     <li className="group flex h-full flex-col border border-ppa-line bg-white transition-colors hover:border-ppa-blue">
       <Link href={p.href} className="block">
-        <PaddleTile name={p.name} brand={p.brand} image={p.image} />
+        <PaddleTile name={p.name} brand={p.brand} image={p.image} photo={p.photo} />
       </Link>
       <div className="flex flex-1 flex-col p-4">
         <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">{p.brand}</p>

@@ -23,6 +23,7 @@
  */
 import raw from "@/lib/data/paddles.json";
 import editorialRaw from "@/lib/data/paddle-lab-editorial.json";
+import pbcRaw from "@/lib/data/paddle-pbc.json";
 import { pbcDestination } from "@/lib/pbc-links";
 import { paddleImageFor, type PaddleImage } from "@/lib/paddle-images";
 import { withUtm } from "@/lib/utm";
@@ -108,17 +109,42 @@ export type Editorial = {
   reviewedOn?: string;
 };
 
+/**
+ * The Pickleball Central product the matcher placed for a paddle
+ * (scripts/import-pbc-paddles.mjs → lib/data/paddle-pbc.json). Photo, live
+ * price at crawl time, exact product URL. 82 of 468 today; the matcher refuses
+ * anything it cannot place with confidence, and an editor's `pbcUrl` pin is how
+ * the rest get one.
+ */
+export type PbcProduct = {
+  url: string;
+  title: string;
+  image: string | null;
+  price: number | null;
+  availability: string | null;
+  sku: string | null;
+};
+
 export type Paddle = PaddleRow & {
   editorial: Editorial;
   href: string;
   shopHref: string;
   image: PaddleImage | null;
+  pbc: PbcProduct | null;
+  /** PBC product photo when there is no curated cut-out. */
+  photo: string | null;
+  /** Live PBC price when we hold one, else John's recorded list price. */
+  displayPrice: number | null;
+  /** True when displayPrice came from Pickleball Central. */
+  livePrice: boolean;
 };
 
 const EDITORIAL = editorialRaw as Record<string, Editorial>;
+const PBC = pbcRaw as Record<string, PbcProduct>;
 
-function shopHrefFor(row: PaddleRow, ed: Editorial): string {
-  return withUtm(pbcDestination(row.name, row.brand, null, ed.pbcUrl), {
+/** Pinned editorial URL beats the crawled product page beats the brand-page ladder. */
+function shopHrefFor(row: PaddleRow, ed: Editorial, pbc: PbcProduct | null): string {
+  return withUtm(pbcDestination(row.name, row.brand, null, ed.pbcUrl ?? pbc?.url), {
     campaign: "paddle-lab",
     content: "shop-cta",
     term: row.slug,
@@ -127,14 +153,22 @@ function shopHrefFor(row: PaddleRow, ed: Editorial): string {
 
 export const paddles: Paddle[] = (raw.paddles as PaddleRow[]).map((row) => {
   const editorial = EDITORIAL[row.slug] ?? {};
+  const pbc = PBC[row.slug] ?? null;
+  const image = paddleImageFor(row.name);
   return {
     ...row,
     editorial,
     href: labHref(row.slug),
-    shopHref: shopHrefFor(row, editorial),
-    image: paddleImageFor(row.name),
+    shopHref: shopHrefFor(row, editorial, pbc),
+    image,
+    pbc,
+    photo: image?.cutout ? null : (pbc?.image ?? null),
+    displayPrice: pbc?.price ?? row.price,
+    livePrice: pbc?.price != null,
   };
 });
+
+export const photoCount = paddles.filter((p) => p.image?.cutout || p.photo).length;
 
 const BY_SLUG = new Map(paddles.map((p) => [p.slug, p]));
 export function paddleBySlug(slug: string): Paddle | null {
@@ -439,7 +473,7 @@ export function summarize(p: Paddle): PaddleSummary {
     name: p.name,
     brand: p.brand,
     model: p.model,
-    price: p.price,
+    price: p.displayPrice,
     shape: p.shape,
     thicknessMm: p.thicknessMm,
     weightOz: p.specs.staticWeightOz,
@@ -455,6 +489,7 @@ export function summarize(p: Paddle): PaddleSummary {
     dateEntered: p.dateEntered,
     summary: p.editorial.summary ?? null,
     image: p.image?.cutout ? p.image.src : null,
+    photo: p.photo,
     href: p.href,
     shopHref: p.shopHref,
   };

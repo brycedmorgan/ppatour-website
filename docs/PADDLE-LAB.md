@@ -76,12 +76,45 @@ and product URL may change. Pinned URLs live in ONE file (the editorial JSON),
 so the fix is a find-and-replace there plus a refresh of `BRAND_PAGES` in
 pbc-links.ts. Do not scatter PBC URLs anywhere else.
 
-## Images
+## Images and live prices (Pickleball Central crawl)
 
-Only the six curated cut-outs in `lib/paddle-images.ts` render a photo; every
-other paddle gets the branded navy tile (`PaddleTile`). Product photography
-needs a PBC feed (SKU → image → price → handle), which is also the right way to
-get live prices and the Shopify-era URLs. Ask in DATA-ASKS.md.
+`scripts/import-pbc-paddles.mjs` crawls PBC's product sitemap (their category
+and search pages are client-rendered, so there is nothing else to scrape),
+reads each paddle product page's `og:image` + JSON-LD offer, and writes
+`lib/data/pbc-paddle-catalog.json` (487 products, raw). A second pass matches
+lab paddles to catalogue products and writes `lib/data/paddle-pbc.json`
+(slug → url, title, image, price, availability, sku).
+
+```
+npm run lab:pbc          # re-match from the committed catalogue
+npm run lab:pbc:crawl    # re-crawl PBC (~800 pages, a few minutes), then match
+```
+
+**82 of 468 matched (2026-09-03).** The matcher refuses ties and any PBC title
+with a token beyond brand + model + a short noise list. That is deliberate: a
+first pass without the token rule matched "Hurache-X Power" to "Hurache-X Power
+2" and "Perseus 3S" to "Perseus Pro 3S". A wrong photo on a paddle page is
+worse than the brand tile. The unmatched 386 get one of two things:
+
+- an editor's `pbcUrl` pin in the editorial JSON (the matcher's output is then
+  irrelevant for that paddle: the pin wins for the shop link; the photo still
+  comes from the crawl only if matched), or
+- a future alias table in the script, once Hannah/John confirm which Kew names
+  equal which PBC titles (JOOLA's "Perseus 3S" vs "Perseus Pro 3S Dual" is the
+  big one: 24 tour pros play JOOLA).
+
+Photo priority in `PaddleTile`: curated cut-out → PBC photo (white plate) →
+brand tile. Price shown is PBC's when matched ("when we last checked"), else
+John's recorded list price. `next.config.ts` allowlists `cdn11.bigcommerce.com`.
+
+## Landing page extras (Bryce, 9/3)
+
+- **Predictive search** (`LabSearch`): brands, then paddles, then "see all".
+  In-memory over a ~40 KB index passed from the server page.
+- **What the pros play** (`ProsByBrand`, `lib/paddle-lab-pros.ts`): head count
+  per brand from the broadcast masterlist (`athlete-paddles.json`, 91 pros),
+  top models per brand, a few names. Links to the lab page only when
+  `labPaddleForName` resolves exactly one record.
 
 ## Metric semantics we assert (verify with John before launch)
 

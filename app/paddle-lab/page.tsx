@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, ExternalLink, FlaskConical, Search } from "lucide-react";
+import { ArrowRight, ExternalLink, FlaskConical } from "lucide-react";
+import { LabSearch } from "@/components/paddle-lab/LabSearch";
 import { PaddleCard } from "@/components/paddle-lab/PaddleCard";
+import { ProsByBrand } from "@/components/paddle-lab/ProsByBrand";
 import {
   browseHref,
   brandList,
@@ -84,26 +86,18 @@ export default function PaddleLabPage() {
             swing weight, twist weight and more, with the acronyms explained. Then buy the one you picked.
           </p>
 
-          <form action={`${LAB_PATH}/paddles`} method="get" role="search" className="mt-8 max-w-2xl">
-            <div className="flex">
-              <label className="relative flex-1">
-                <span className="sr-only">Search paddles</span>
-                <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-ppa-navy/40" />
-                <input
-                  type="search"
-                  name="q"
-                  placeholder="Search by brand or paddle name"
-                  className="h-14 w-full bg-white pl-12 pr-4 text-base text-ppa-navy placeholder:text-ppa-navy/40 focus:outline-none"
-                />
-              </label>
-              <button
-                type="submit"
-                className="h-14 bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
-              >
-                Search
-              </button>
-            </div>
-          </form>
+          <div className="mt-8">
+            <LabSearch
+              items={paddles.map((p) => ({
+                slug: p.slug,
+                name: p.name,
+                brand: p.brand,
+                href: p.href,
+                sub: [p.thicknessMm ? `${p.thicknessMm} mm` : null, p.shape].filter(Boolean).join(" · "),
+              }))}
+              brands={brandList}
+            />
+          </div>
 
           <dl className="mt-10 grid max-w-2xl grid-cols-3 gap-4 border-t border-white/15 pt-6">
             {[
@@ -197,6 +191,8 @@ export default function PaddleLabPage() {
           </ul>
         </div>
       </section>
+
+      <ProsByBrand />
 
       {/* How we test + PBC quiz */}
       <section className="bg-ppa-paper">

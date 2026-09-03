@@ -311,6 +311,10 @@ const nextConfig: NextConfig = {
       // Storefront API returns absolute cdn.shopify.com URLs; without this
       // pattern next/image 400s them and every product card renders empty.
       { protocol: "https", hostname: "cdn.shopify.com" },
+      // Pickleball Central product photography for the Paddle Lab
+      // (lib/data/paddle-pbc.json, crawled by scripts/import-pbc-paddles.mjs).
+      // Their BigCommerce CDN; goes away with the Shopify move in Jan 2027.
+      { protocol: "https", hostname: "cdn11.bigcommerce.com" },
       // NOTE: ppatour.com is deliberately NOT allowlisted. All 1,553 archive
       // assets are rehosted to Blob (`sync-wp-media.mjs --verify` passes at
       // 100%), so a next/image request for a ppatour.com URL now means an

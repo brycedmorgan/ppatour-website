@@ -84,8 +84,10 @@ export type PaddleSummary = {
   skill: Skill[];
   dateEntered: string | null;
   summary: string | null;
-  /** A curated transparent cut-out, when we have one. Null renders the brand tile. */
+  /** A curated transparent cut-out, when we have one. */
   image: string | null;
+  /** Pickleball Central's product photo, when the matcher placed it. Null with no `image` renders the brand tile. */
+  photo: string | null;
   href: string;
   shopHref: string;
 };

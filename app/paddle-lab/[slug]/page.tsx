@@ -87,7 +87,7 @@ export default async function PaddlePage({ params }: Params) {
   const p = paddleBySlug(slug);
   if (!p) notFound();
 
-  const price = formatPrice(p.price);
+  const price = formatPrice(p.displayPrice);
   const ed = p.editorial;
   const similar = similarPaddles(p, 3);
   const chips = [
@@ -135,7 +135,7 @@ export default async function PaddlePage({ params }: Params) {
 
           <div className="mt-6 grid gap-8 lg:grid-cols-[320px_1fr]">
             <div className="mx-auto w-full max-w-xs lg:mx-0">
-              <PaddleTile name={p.name} brand={p.brand} image={p.image?.cutout ? p.image.src : null} size="hero" />
+              <PaddleTile name={p.name} brand={p.brand} image={p.image?.cutout ? p.image.src : null} photo={p.photo} size="hero" />
             </div>
 
             <div>
@@ -178,7 +178,11 @@ export default async function PaddlePage({ params }: Params) {
                 <CompareButton slug={p.slug} />
               </div>
               <p className="mt-3 text-[11px] text-ppa-navy/45">
-                {price ? "Price is the manufacturer's list price as recorded in the lab; " : ""}
+                {price
+                  ? p.livePrice
+                    ? "Price at Pickleball Central when we last checked; "
+                    : "Price is the manufacturer's list price as recorded in the lab; "
+                  : ""}
                 Pickleball Central is part of Pickleball Inc, the PPA Tour&apos;s parent company.
               </p>
             </div>

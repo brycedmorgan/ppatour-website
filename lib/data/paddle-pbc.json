@@ -1,0 +1,658 @@
+{
+  "11six24-hurache-x-jelly-bean-16mm": {
+    "url": "https://pickleballcentral.com/11six24-hurache-x-jelly-bean-pickleball-paddle/",
+    "title": "11SIX24 Hurache-X Jelly Bean Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8320/43483/SIX103_Hurache-X_Jelly_Bean_Pickleball_Paddle_Teal_01__77706.1784499219.jpg",
+    "price": 99.99,
+    "availability": "oos",
+    "sku": "SIX103-0001"
+  },
+  "11six24-hurache-x-power-2-16mm": {
+    "url": "https://pickleballcentral.com/11six24-hurache-x-power-2-pickleball-paddle/",
+    "title": "11SIX24 Hurache-X Power 2 Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8218/42678/11SIX24_Hurache_Power_2_Pickleball_Paddle_01__07577.1779823621.jpg",
+    "price": 209.99,
+    "availability": "instock",
+    "sku": "SIX102-0001"
+  },
+  "11six24-pegasus-jelly-bean-16mm": {
+    "url": "https://pickleballcentral.com/11six24-pegasus-jelly-bean-pickleball-paddle/",
+    "title": "11SIX24 Pegasus Jelly Bean Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8322/43488/SIX105_Pegasus_Jelly_Bean_Pickleball_Paddle_Teal_01__58289.1784499485.jpg",
+    "price": 99.99,
+    "availability": "oos",
+    "sku": "SIX105-0001"
+  },
+  "11six24-pegasus-power-2-16mm": {
+    "url": "https://pickleballcentral.com/11six24-pegasus-power-2-pickleball-paddle/",
+    "title": "11SIX24 Pegasus Power 2 Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8216/42655/11six24_Pegasus_Power_2_01__85086.1779822633.jpg",
+    "price": 209.99,
+    "availability": "instock",
+    "sku": "SIX100-0001"
+  },
+  "11six24-vapor-jelly-bean-16mm": {
+    "url": "https://pickleballcentral.com/11six24-vapor-jelly-bean-pickleball-paddle/",
+    "title": "11SIX24 Vapor Jelly Bean Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8321/43492/SIX104_Vapor_Jelly_Bean_Pickleball_Paddle_Teal_01__01220.1784657300.jpg",
+    "price": 99.99,
+    "availability": "oos",
+    "sku": "SIX104-0001"
+  },
+  "11six24-vapor-power-2-16mm": {
+    "url": "https://pickleballcentral.com/11six24-vapor-power-2-pickleball-paddle/",
+    "title": "11SIX24 Vapor Power 2 Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8217/42663/11SIX24_Vapor_Power-2_Paddle_04__13395.1779823429.jpg",
+    "price": 209.99,
+    "availability": "instock",
+    "sku": "SIX101-0002"
+  },
+  "adidas-adipower-pro-attk-14mm": {
+    "url": "https://pickleballcentral.com/adidas-adipower-pro-edition-attk-14mm-pickleball-paddle/",
+    "title": "adidas ADIPOWER PRO Edition ATTK 14mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7874/37429/ADI291_Adipower_Pro_ATTK_14_1000_1__32414.1758824426.jpg",
+    "price": 189,
+    "availability": "instock",
+    "sku": "ADI291-0001"
+  },
+  "adidas-adipower-pro-attk-16mm": {
+    "url": "https://pickleballcentral.com/adidas-adipower-pro-edition-attk-16mm-pickleball-paddle/",
+    "title": "adidas ADIPOWER PRO Edition ATTK 16mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7875/39665/PICKLEBALL-ADIPOWER-PRO-EDIT-16-CJK-FRONT__90896.1765503831.jpg",
+    "price": 189,
+    "availability": "instock",
+    "sku": "ADI292-0002"
+  },
+  "adidas-adipower-pro-ctrl-16mm": {
+    "url": "https://pickleballcentral.com/adidas-adipower-pro-edition-ctrl-16mm-pickleball-paddle/",
+    "title": "adidas ADIPOWER PRO Edition CTRL 16mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7876/37445/ADI293_AdipowerPro_CTRL_16_1000_1__23776.1758824697.jpg",
+    "price": 189,
+    "availability": "instock",
+    "sku": "ADI293-0001"
+  },
+  "avoura-rivelle-13mm": {
+    "url": "https://pickleballcentral.com/avoura-rivelle-13mm-pickleball-paddle/",
+    "title": "Avoura Rivelle 13mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7759/36362/AVO103_Rivelle_Blue_1_1000__61134.1750281763.jpg",
+    "price": 80,
+    "availability": "instock",
+    "sku": "AVO101-0001"
+  },
+  "crbn-trufoam-genesis-1-14mm": {
+    "url": "https://pickleballcentral.com/crbn-1-trugenesis-pickleball-paddle/",
+    "title": "CRBN 1 TruFoam Genesis Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/6382/35392/TFG1__30625.1744220357.jpg",
+    "price": 199.99,
+    "availability": "instock",
+    "sku": "CRB116-0001"
+  },
+  "crbn-trufoam-genesis-2-14mm": {
+    "url": "https://pickleballcentral.com/crbn-2-trufoam-genesis-pickleball-paddle/",
+    "title": "CRBN 2 TruFoam Genesis Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/6383/35393/TFG2__01924.1744220393.jpg",
+    "price": 199.99,
+    "availability": "instock",
+    "sku": "CRB117-0001"
+  },
+  "crbn-trufoam-genesis-3-14mm": {
+    "url": "https://pickleballcentral.com/crbn-3-trufoam-genesis-pickleball-paddle/",
+    "title": "CRBN 3 TruFoam Genesis Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/6384/35394/TFG3__44191.1744220419.jpg",
+    "price": 199.99,
+    "availability": "instock",
+    "sku": "CRB118-0001"
+  },
+  "crbn-trufoam-genesis-4-14mm": {
+    "url": "https://pickleballcentral.com/crbn-4-trufoam-genesis-pickleball-paddle/",
+    "title": "CRBN 4 TruFoam Genesis Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7782/36441/CRBN120_TruFoam4_1_1000__98549.1752687981.jpg",
+    "price": 229.99,
+    "availability": "instock",
+    "sku": "CRB120-0001"
+  },
+  "diadem-hush-18mm": {
+    "url": "https://pickleballcentral.com/diadem-hush-pickleball-paddle/",
+    "title": "Diadem Hush Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/5994/31305/DIA233_Hush_Black_1_1000__72350.1722969341.jpg",
+    "price": 132.97,
+    "availability": "instock",
+    "sku": "DIA233-0001"
+  },
+  "engage-profoam-14mm": {
+    "url": "https://pickleballcentral.com/engage-profoam-14mm-pickleball-paddle/",
+    "title": "Engage ProFoam 14mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7889/38332/ENG952_ProFoam_14mm_1000_JessieIrvine_1__26955.1759869325.jpg",
+    "price": 67.5,
+    "availability": "instock",
+    "sku": "ENG952-0003"
+  },
+  "engage-pursuit-ex-pro-13mm": {
+    "url": "https://pickleballcentral.com/engage-pursuit-pro-ex-carbon-fiber-pickleball-paddle/",
+    "title": "Engage Pursuit Pro EX Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/4917/28527/ENG916_PursuitProEX_Jessie_1_1000__18196.1732553808.jpg",
+    "price": 99.99,
+    "availability": "oos",
+    "sku": "ENG916-0011"
+  },
+  "engage-x2-elongated-16mm": {
+    "url": "https://pickleballcentral.com/engage-x2-elongated-16mm-pickleball-paddle/",
+    "title": "Engage X2 Elongated 16mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8251/41919/ENG953_01__44090.1776287476.jpg",
+    "price": 259.99,
+    "availability": "instock",
+    "sku": "ENG953-0001"
+  },
+  "franklin-c45-dynasty-14mm-14mm": {
+    "url": "https://pickleballcentral.com/franklin-c45-dynasty-14mm-pickleball-paddle/",
+    "title": "Franklin C45 Dynasty 14mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7743/38414/59232c1-phase1-main__38883.1760547888.jpg",
+    "price": 229.99,
+    "availability": "instock",
+    "sku": "FRKL208-0002"
+  },
+  "franklin-c45-dynasty-16mm-16mm": {
+    "url": "https://pickleballcentral.com/franklin-c45-dynasty-16mm-pickleball-paddle/",
+    "title": "Franklin C45 Dynasty 16mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7744/38413/59231C1-Phase1-Main__65044.1760547798.jpg",
+    "price": 229.99,
+    "availability": "instock",
+    "sku": "FRKL209-0002"
+  },
+  "franklin-c45-hybrid-14mm-14mm": {
+    "url": "https://pickleballcentral.com/franklin-c45-hybrid-14mm-pickleball-paddle/",
+    "title": "Franklin C45 Hybrid 14mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/6580/34854/FRKL207_FranklinC45_Blu_1_1000__33533.1740423847.jpg",
+    "price": 229.99,
+    "availability": "instock",
+    "sku": "FRKL207-0002"
+  },
+  "franklin-c45-tempo-14mm-14mm": {
+    "url": "https://pickleballcentral.com/franklin-c45-tempo-14mm-pickleball-paddle/",
+    "title": "Franklin C45 Tempo 14mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7745/36078/FRKL210_C45_Tempo_Red_14mm_1__12587.1749227867.jpg",
+    "price": 229.99,
+    "availability": "instock",
+    "sku": "FRKL210-0001"
+  },
+  "franklin-c45-tempo-16mm-16mm": {
+    "url": "https://pickleballcentral.com/franklin-c45-tempo-16mm-pickleball-paddle/",
+    "title": "Franklin C45 Tempo 16mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7746/36064/FRKL211_C45_Tempo_Red_16mm_1__16749.1749227450.jpg",
+    "price": 229.99,
+    "availability": "instock",
+    "sku": "FRKL211-0001"
+  },
+  "friday-aura-hybrid-16mm": {
+    "url": "https://pickleballcentral.com/friday-aura-hybrid-pickleball-paddle/",
+    "title": "FRIDAY Aura Hybrid Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8219/41884/FRI106_01__44809.1776193243.jpg",
+    "price": 129,
+    "availability": "instock",
+    "sku": "FRI106-0002"
+  },
+  "friday-aura-pro-elongated-16mm": {
+    "url": "https://pickleballcentral.com/friday-aura-pro-elongated-pickleball-paddle/",
+    "title": "FRIDAY Aura Pro Elongated Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8180/41625/lunar-aura-pro-hero-color_4c7c5c75-3882-4a96-a969-ff415d5676c7__58338.1774400954.jpg",
+    "price": 169,
+    "availability": "instock",
+    "sku": "FRI105-0002"
+  },
+  "friday-aura-pro-hybrid-16mm": {
+    "url": "https://pickleballcentral.com/friday-aura-pro-hybrid-pickleball-paddle/",
+    "title": "FRIDAY Aura Pro Hybrid Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8221/41900/FRI108_03__03187.1776193960.jpg",
+    "price": 169,
+    "availability": "instock",
+    "sku": "FRI108-0002"
+  },
+  "friday-aura-pro-widebody-16mm": {
+    "url": "https://pickleballcentral.com/friday-aura-pro-widebody-pickleball-paddle/",
+    "title": "FRIDAY Aura Pro Widebody Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8222/41906/FRI109_03__34438.1776194079.jpg",
+    "price": 169,
+    "availability": "instock",
+    "sku": "FRI109-0002"
+  },
+  "friday-fever-101-elongated-16mm": {
+    "url": "https://pickleballcentral.com/friday-fever-101-elongated-carbon-fiber-pickleball-paddle/",
+    "title": "FRIDAY Fever 101 Elongated Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7935/39118/Friday_Fever_101_Glacier__98604.1767988180.jpg",
+    "price": 99,
+    "availability": "instock",
+    "sku": "FRI101-0001"
+  },
+  "friday-fever-102-elongated-16mm": {
+    "url": "https://pickleballcentral.com/friday-fever-102-widebody-carbon-fiber-pickleball-paddle/",
+    "title": "FRIDAY Fever 102 Elongated Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7934/40446/vice-fever-102-hero-white__87030.1769541764.jpg",
+    "price": 102,
+    "availability": "oos",
+    "sku": "FRI103-0001"
+  },
+  "gearbox-cx14h-ultimate-power-14mm": {
+    "url": "https://pickleballcentral.com/gearbox-cx14h-ultimate-power-wide-pickleball-paddle/",
+    "title": "Gearbox CX14H Ultimate Power Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/4501/25298/Gearbox-CX14H-Paddle-1__13690.1698264813.jpg",
+    "price": 94.49,
+    "availability": "oos",
+    "sku": "GBX308"
+  },
+  "gearbox-gbx-power-elongated-16mm": {
+    "url": "https://pickleballcentral.com/gearbox-gbx-power-elongated-pickleball-paddle/",
+    "title": "Gearbox GBX Power Elongated Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8196/41648/1PGBXEP3-1_Gearbox_GBX-Power_Elongated_Blue-Green-16mm-7__29528.1774467476.jpg",
+    "price": 179.99,
+    "availability": "instock",
+    "sku": "GBX323-0001"
+  },
+  "gearbox-gx2-power-elongated-16mm": {
+    "url": "https://pickleballcentral.com/gearbox-gx2-power-elongated-16mm-pickleball-paddle/",
+    "title": "Gearbox GX2 Power Elongated 16mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7803/43666/GBX321_Gearbox_GX2_Power_Elongated_16mm_Pickleball_Paddle_Front__58483.1786405165.jpg",
+    "price": 279.99,
+    "availability": "instock",
+    "sku": "GBX321-0002"
+  },
+  "gearbox-gx2-power-hybrid-16mm": {
+    "url": "https://pickleballcentral.com/gearbox-gx2-hybrid-elongated-16mm-pickleball-paddle/",
+    "title": "Gearbox GX2 Power Hybrid 16mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7804/36722/1PGX2P4-1_Gearbox_GX2-Power_Hybrid_2__92803.1753994656.jpg",
+    "price": 279.99,
+    "availability": "instock",
+    "sku": "GBX322-0001"
+  },
+  "gearbox-pro-ultimate-elongated-16mm": {
+    "url": "https://pickleballcentral.com/gearbox-pro-ultimate-elongated-16mm-pickleball-paddle/",
+    "title": "Gearbox PRO ULTIMATE Elongated 16mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/5940/31245/1PROEPU1-1_Gearbox_Pro_Elongated_Ultimate-2__84020.1722307568.jpg",
+    "price": 274.99,
+    "availability": "instock",
+    "sku": "GBX316-0001"
+  },
+  "gearbox-pro-ultimate-power-elongated-14mm": {
+    "url": "https://pickleballcentral.com/gearbox-pro-ultimate-power-elongated-14mm-pickleball-paddle/",
+    "title": "Gearbox PRO ULTIMATE Power Elongated 14mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/6635/35078/GBX318_Pro-Ultimate-Power-Elongated-14mm-Paddle_1000_03__57474.1741284415.jpg",
+    "price": 274.99,
+    "availability": "instock",
+    "sku": "GBX318-0001"
+  },
+  "head-radical-pro-ex-15-15mm": {
+    "url": "https://pickleballcentral.com/head-radical-pro-ex-15-pickleball-paddle/",
+    "title": "HEAD Radical PRO EX 15 Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8127/40838/200135-Radical-PRO-EX15-2025_2__90130.1772566011.jpg",
+    "price": 199.95,
+    "availability": "instock",
+    "sku": "HD251-0001"
+  },
+  "holbrook-arma-metallic-s-14mm": {
+    "url": "https://pickleballcentral.com/holbrook-arma-s-metallic-14mm-pickleball-paddle/",
+    "title": "Holbrook ARMA S Metallic 14mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/6761/36049/Arma-S-Metallic-1__00858.1749222008.png",
+    "price": 199.99,
+    "availability": "instock",
+    "sku": "HOL132-0001"
+  },
+  "holbrook-arma-metallic-t-14mm": {
+    "url": "https://pickleballcentral.com/holbrook-arma-t-metallic-14mm-pickleball-paddle/",
+    "title": "Holbrook ARMA T Metallic 14mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/6759/36014/Arma-T-Metallic-1__67052.1749220720.png",
+    "price": 199.99,
+    "availability": "instock",
+    "sku": "HOL130-0001"
+  },
+  "holbrook-arma-s-14mm": {
+    "url": "https://pickleballcentral.com/holbrook-arma-s-14mm-pickleball-paddle/",
+    "title": "Holbrook ARMA S 14mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/6764/36026/ARMA_-_S_-_Carbon-1__69092.1749221160.png",
+    "price": 199.99,
+    "availability": "instock",
+    "sku": "HOL135-0001"
+  },
+  "holbrook-arma-t-14mm": {
+    "url": "https://pickleballcentral.com/holbrook-arma-t-14mm-pickleball-paddle/",
+    "title": "Holbrook ARMA T 14mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/6762/36038/ARMA-T-Carbon-1__07793.1749222080.png",
+    "price": 199.99,
+    "availability": "instock",
+    "sku": "HOL133-0001"
+  },
+  "holbrook-fuze-elongated-16mm": {
+    "url": "https://pickleballcentral.com/holbrook-fuze-elongated-16mm-pickleball-paddle/",
+    "title": "Holbrook Fuze Elongated 16mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8106/43302/HOL143_Fuze_16mm_Elongated-American_02__93511.1782660355.jpg",
+    "price": 249.99,
+    "availability": "instock",
+    "sku": "HOL143-0003"
+  },
+  "holbrook-fuze-hybrid-16mm": {
+    "url": "https://pickleballcentral.com/holbrook-fuze-hybrid-16mm-pickleball-paddle/",
+    "title": "Holbrook Fuze Hybrid 16mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8104/42638/Blue-Fuze-Hybrid-White-1__11925.1779375133.jpg",
+    "price": 150,
+    "availability": "instock",
+    "sku": "HOL141-0002"
+  },
+  "luzz-pro-cannon-16mm": {
+    "url": "https://pickleballcentral.com/luzz-pro-cannon-pickleball-paddle/",
+    "title": "LUZZ Pro Cannon Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8231/41964/LUZ101_01__03771.1776711356.jpg",
+    "price": 109,
+    "availability": "instock",
+    "sku": "LUZ101-0001"
+  },
+  "nox-x-foam-tempus-16mm": {
+    "url": "https://pickleballcentral.com/nox-x-foam-tempus-pickleball-paddle/",
+    "title": "NOX X-FOAM TEMPUS Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8276/42345/XFOAMTEMPUS14_1__82518.1778081858.jpg",
+    "price": 199,
+    "availability": "instock",
+    "sku": "NOX104-0001"
+  },
+  "owl-owl-cxe-16mm": {
+    "url": "https://pickleballcentral.com/owl-cxe-pickleball-paddle/",
+    "title": "OWL CXE Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8027/43396/OWL101_OWL_CXE_R2_01__24748.1783538102.jpg",
+    "price": 129.99,
+    "availability": "instock",
+    "sku": "OWL101-0001"
+  },
+  "paddletek-bantam-alw-c-14-3mm": {
+    "url": "https://pickleballcentral.com/paddletek-bantam-alw-c-anna-leigh-waters-carbon-fiber-14mm-pickleball-paddle/",
+    "title": "Paddletek Bantam ALW-C 14.3mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/5164/32237/PTK618_Bantam-ALW_Riptide_1_1000__93693.1738692348.jpg",
+    "price": 149.99,
+    "availability": "oos",
+    "sku": "PTK618-0010"
+  },
+  "paddletek-bantam-alw-c-12-7mm": {
+    "url": "https://pickleballcentral.com/paddletek-bantam-alw-c-anna-leigh-waters-carbon-fiber-12mm-pickleball-paddle/",
+    "title": "Paddletek Bantam ALW-C 12.7mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/5163/32130/PTK617_Bantam-ALW_Aurora_1_1000__53896.1738692370.jpg",
+    "price": 149.99,
+    "availability": "instock",
+    "sku": "PTK617-0009"
+  },
+  "paddletek-bantam-esq-c-12-7mm": {
+    "url": "https://pickleballcentral.com/paddletek-bantam-esq-c-12-7mm-pickleball-paddle/",
+    "title": "Paddletek Bantam ESQ-C 12.7mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/6100/31932/PTK627_Bantam-ESQ-C_12.7_Blue_1_1000__65548.1738692401.jpg",
+    "price": 199.99,
+    "availability": "instock",
+    "sku": "PTK627-0001"
+  },
+  "paddletek-bantam-esq-c-14-3mm": {
+    "url": "https://pickleballcentral.com/paddletek-bantam-esq-c-14-3mm-pickleball-paddle/",
+    "title": "Paddletek Bantam ESQ-C 14.3mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/6101/31939/PTK627_Bantam-ESQ-C_12.7_Red_1_1000__16443.1738692388.jpg",
+    "price": 199.99,
+    "availability": "instock",
+    "sku": "PTK628-0002"
+  },
+  "paddletek-bantam-gto-c-14-3mm": {
+    "url": "https://pickleballcentral.com/paddletek-bantam-gto-c-14-3mm-pickleball-paddle/",
+    "title": "Paddletek Bantam GTO-C 14.3mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7748/36261/PTK630_Paddletek_GTO_Red_Front_14.3_1000__43520.1750178844.jpg",
+    "price": 199.99,
+    "availability": "instock",
+    "sku": "PTK630-0003"
+  },
+  "paddletek-bantam-gto-c-12-7mm": {
+    "url": "https://pickleballcentral.com/paddletek-bantam-gto-c-12-7mm-pickleball-paddle/",
+    "title": "Paddletek Bantam GTO-C 12.7mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7747/36255/PTK629_Paddletek_GTO_Blue_Front_12.7_1000__47426.1750178379.jpg",
+    "price": 119.99,
+    "availability": "instock",
+    "sku": "PTK629-0002"
+  },
+  "paddletek-bantam-tko-c-12-7mm": {
+    "url": "https://pickleballcentral.com/paddletek-bantam-tko-c-12.7mm-carbon-fiber-pickleball-paddle/",
+    "title": "Paddletek Bantam TKO-C 12.7mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/5702/29862/_Tempest-TKO-C_12mm_Wildfire_1_1000__18148.1738692472.jpg",
+    "price": 199.99,
+    "availability": "instock",
+    "sku": "PTK620-0003"
+  },
+  "paddletek-bantam-tko-cx-12-7mm": {
+    "url": "https://pickleballcentral.com/paddletek-bantam-tko-cx-12.7mm-carbon-fiber-pickleball-paddle/",
+    "title": "Paddletek Bantam TKO-CX 12.7mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/5701/29867/_Tempest-TKO-C_12mm_Aurora_1_1000__06962.1738692484.jpg",
+    "price": 199.99,
+    "availability": "instock",
+    "sku": "PTK619-0001"
+  },
+  "paddletek-bantam-tko-cx-14-3mm": {
+    "url": "https://pickleballcentral.com/paddletek-bantam-tko-cx-14.3mm-carbon-fiber-pickleball-paddle/",
+    "title": "Paddletek Bantam TKO-CX 14.3mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/5703/29916/PTK621_Bantam-TKO-CX_14mm_Aurora_1_1000__70105.1738692455.jpg",
+    "price": 199.99,
+    "availability": "instock",
+    "sku": "PTK621-0001"
+  },
+  "paddletek-reserve-honeyfoam-16mm": {
+    "url": "https://pickleballcentral.com/paddletek-honeyfoam-reserve-16mm-pickleball-paddle/",
+    "title": "Paddletek Honeyfoam Reserve 16mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8067/40351/The-Reserve-Honeyfoam-TKO-X-Front__79592.1768933268.jpg",
+    "price": 199.99,
+    "availability": "instock",
+    "sku": "PTK632-0001"
+  },
+  "paddletek-tempest-tko-c-14-3mm": {
+    "url": "https://pickleballcentral.com/paddletek-tempest-tko-c-14.3mm-carbon-fiber-pickleball-paddle/",
+    "title": "Paddletek Tempest TKO-C 14.3mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/5705/30029/PTK623_Tempest-TKO-C_14mm_Aurora_1_1000__73694.1733258750.jpg",
+    "price": 149.99,
+    "availability": "instock",
+    "sku": "PTK623-0002"
+  },
+  "paddletek-tempest-wave-pro-c-14-3mm": {
+    "url": "https://pickleballcentral.com/paddletek-tempest-wave-pro-c-14.3mm-carbon-fiber-pickleball-paddle/",
+    "title": "Paddletek Tempest Wave Pro-C 14.3mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/5706/29888/_Tempest-Wave-Pro-C_Wildfire_1_1000__75246.1733258747.jpg",
+    "price": 149.99,
+    "availability": "instock",
+    "sku": "PTK624-0003"
+  },
+  "proton-series-two-16-2mm": {
+    "url": "https://pickleballcentral.com/proton-series-two-pickleball-paddle/",
+    "title": "Proton Series Two Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/5892/30603/PRO108_Series-Two_2_1000__60931.1764169447.jpg",
+    "price": 88,
+    "availability": "instock",
+    "sku": "PRO108-0001"
+  },
+  "proxr-signature-16mm": {
+    "url": "https://pickleballcentral.com/proxr-signature-series-16mm-pickleball-paddle/",
+    "title": "ProXR Signature Series 16mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/5850/30508/PXR134_Signature-Series_16mm_Iconic-Blue_1_1000__73721.1718892263.jpg",
+    "price": 79.99,
+    "availability": "instock",
+    "sku": "PXR134-0003"
+  },
+  "selkirk-amped-pro-air-epic-16mm": {
+    "url": "https://pickleballcentral.com/selkirk-amped-pro-air-epic-pickleball-paddle/",
+    "title": "Selkirk AMPED Pro Air Epic Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/5524/31684/SEL1199_AMPED-Pro-Air-Epic-PPA__87515.1725859562.jpg",
+    "price": 99.99,
+    "availability": "oos",
+    "sku": "SEL1199-0006"
+  },
+  "selkirk-amped-pro-air-invikta-16mm": {
+    "url": "https://pickleballcentral.com/selkirk-amped-pro-air-invikta-pickleball-paddle/",
+    "title": "Selkirk AMPED Pro Air Invikta Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/5525/32878/SEL1200_AMPED-Pro-Air-Invikta_JackSock_01_1000__42279.1730785568.jpg",
+    "price": 99.99,
+    "availability": "oos",
+    "sku": "SEL1200-0007"
+  },
+  "selkirk-labs-project-boomstik-elongated-16mm": {
+    "url": "https://pickleballcentral.com/selkirk-labs-project-boomstik-elongated-16mm-pickleball-paddle/",
+    "title": "Selkirk Labs Project Boomstik Elongated 16mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7828/43693/SEL1268_Boomstick_Elongated_Calypso_Front__47384.1787182620.jpg",
+    "price": 332.99,
+    "availability": "instock",
+    "sku": "SEL1268-0011"
+  },
+  "selkirk-labs-project-boomstik-widebody-16mm": {
+    "url": "https://pickleballcentral.com/selkirk-labs-project-boomstik-widebody-16mm-pickleball-paddle/",
+    "title": "Selkirk Labs Project Boomstik Widebody 16mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7829/43321/SEL1269_Boomstik_Widebody-Canyon_Clay_01__78228.1787605059.jpg",
+    "price": 332.99,
+    "availability": "instock",
+    "sku": "SEL1269-0008"
+  },
+  "selkirk-omni-elongated-16mm": {
+    "url": "https://pickleballcentral.com/selkirk-omni-elongated-pickleball-paddle/",
+    "title": "Selkirk OMNI Elongated Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8293/43702/SEL1314_OMNI_Elongated_Calypso_Front__67351.1787182984.jpg",
+    "price": 299.99,
+    "availability": "instock",
+    "sku": "SEL1314-0001"
+  },
+  "selkirk-omni-widebody-16mm": {
+    "url": "https://pickleballcentral.com/selkirk-omni-widebody-pickleball-paddle/",
+    "title": "Selkirk OMNI Widebody Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8294/43703/SEL1315_OMNI_Widebody_Calypso_Front__51947.1787183104.jpg",
+    "price": 299.99,
+    "availability": "instock",
+    "sku": "SEL1315-0006"
+  },
+  "selkirk-vanguard-pro-invikta-16mm": {
+    "url": "https://pickleballcentral.com/selkirk-vanguard-pro-invikta-pickleball-paddle/",
+    "title": "Selkirk VANGUARD Pro Invikta Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/6039/31877/SEL1208_Vanguard-Pro-Epic_1_1000__87506.1727380760.jpg",
+    "price": 119.99,
+    "availability": "oos",
+    "sku": "SEL1208-0001"
+  },
+  "six-zero-black-diamond-power-14mm": {
+    "url": "https://pickleballcentral.com/six-zero-black-diamond-power-pickleball-paddle/",
+    "title": "Six Zero Black Diamond Power Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/5423/28905/SZO100_Black-Diamond-Power_Grey_1_1000__65644.1708027511.1280.1280__99620.1711558322.jpg",
+    "price": 180,
+    "availability": "oos",
+    "sku": "SZO114"
+  },
+  "six-zero-black-opal-14mm": {
+    "url": "https://pickleballcentral.com/six-zero-black-opal-pickleball-paddle/",
+    "title": "Six Zero Black Opal Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7872/41979/six-zero-black-opal-official-paddle-ppa__19742.1776717495.png",
+    "price": 220,
+    "availability": "instock",
+    "sku": "SZO128-0001"
+  },
+  "six-zero-boulder-opal-14mm": {
+    "url": "https://pickleballcentral.com/six-zero-boulder-opal-pickleball-paddle/",
+    "title": "Six Zero Boulder Opal Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8397/43677/SZO134_Six_Zero_Boulder_Opal_Front__59156.1786563711.JPG",
+    "price": 220,
+    "availability": "instock",
+    "sku": "SZO134-0001"
+  },
+  "six-zero-coral-pro-elongated-16mm": {
+    "url": "https://pickleballcentral.com/six-zero-coral-pro-elongated-pickleball-paddle/",
+    "title": "Six Zero Coral Pro Elongated Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8329/42773/SZO136_Coral_Pro_Elongated_Paddle_01__33317.1781134934.png",
+    "price": 220,
+    "availability": "instock",
+    "sku": "SZO136-0001"
+  },
+  "six-zero-coral-pro-hybrid-16mm": {
+    "url": "https://pickleballcentral.com/six-zero-coral-pro-hybrid-pickleball-paddle/",
+    "title": "Six Zero Coral Pro Hybrid Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8328/42778/SZO135_Coral_Pro_Hybrid_Paddle_01__02221.1787605080.png",
+    "price": 220,
+    "availability": "instock",
+    "sku": "SZO135-0001"
+  },
+  "six-zero-coral-pro-widebody-16mm": {
+    "url": "https://pickleballcentral.com/six-zero-coral-pro-widebody-pickleball-paddle/",
+    "title": "Six Zero Coral Pro Widebody Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8330/42766/SZO137_Coral_Pro_Widebody_Paddle_01__31257.1781134829.png",
+    "price": 220,
+    "availability": "instock",
+    "sku": "SZO137-0001"
+  },
+  "six-zero-coral-elongated-16mm": {
+    "url": "https://pickleballcentral.com/six-zero-coral-16mm-elongated-pickleball-paddle/",
+    "title": "Six Zero Coral 16mm Elongated Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8021/41972/six-zero-coral-elongated-blue-official-paddle-ppa__74211.1776717111.png",
+    "price": 200,
+    "availability": "instock",
+    "sku": "SZO132-0001"
+  },
+  "six-zero-coral-hybrid-16mm": {
+    "url": "https://pickleballcentral.com/six-zero-coral-16mm-hybrid-propulsion-foam-core-pickleball-paddle/",
+    "title": "Six Zero Coral 16mm Hybrid Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7983/43346/SZO131_Coral_Hybrid_Nautica_01__54993.1787621004.jpg",
+    "price": 200,
+    "availability": "instock",
+    "sku": "SZO131-0004"
+  },
+  "six-zero-coral-widebody-16mm": {
+    "url": "https://pickleballcentral.com/six-zero-coral-16mm-widebody-pickleball-paddle/",
+    "title": "Six Zero Coral 16mm Widebody Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8022/39727/SZO133_Coral_Widebody_1000_3__21524.1765909856.jpg",
+    "price": 200,
+    "availability": "instock",
+    "sku": "SZO133-0001"
+  },
+  "six-zero-quartz-15mm": {
+    "url": "https://pickleballcentral.com/six-zero-quartz-pickleball-paddle/",
+    "title": "Six Zero Quartz Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/6091/31706/SZO118__Quartz_Amethyst_1_1000__47102.1726163190.jpg",
+    "price": 89.99,
+    "availability": "instock",
+    "sku": "SZO118-0001"
+  },
+  "six-zero-ruby-16mm": {
+    "url": "https://pickleballcentral.com/six-zero-ruby-16mm-pickleball-paddle/",
+    "title": "Six Zero Ruby 16mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/5397/41981/six-zero-ruby-official-paddle-ppa__17716.1776717610.png",
+    "price": 199,
+    "availability": "instock",
+    "sku": "SZO105"
+  },
+  "six-zero-ruby-14mm": {
+    "url": "https://pickleballcentral.com/six-zero-ruby-14mm-pickleball-paddle/",
+    "title": "Six Zero Ruby 14mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/5938/30905/SZO116_Ruby_Red_14mm_1_1000__05745.1721051845.jpg",
+    "price": 199,
+    "availability": "oos",
+    "sku": "SZO116-0001"
+  },
+  "six-zero-ruby-pro-14mm": {
+    "url": "https://pickleballcentral.com/six-zero-ruby-pro-14mm-pickleball-paddle/",
+    "title": "Six Zero Ruby Pro 14mm Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/7923/41510/six-zero-ruby-pro-award__41893.1776717407.png",
+    "price": 220,
+    "availability": "instock",
+    "sku": "SZO129-0001"
+  },
+  "warping-point-sophon-16mm": {
+    "url": "https://pickleballcentral.com/warping-point-sophon-pickleball-paddle/",
+    "title": "Warping Point Sophon Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/8331/42695/WAR103_Sophon_01__09208.1780428500.jpg",
+    "price": 149.99,
+    "availability": "instock",
+    "sku": "WAR103-0001"
+  },
+  "wilson-vesper-control-17-17mm": {
+    "url": "https://pickleballcentral.com/wilson-vesper-control-17-pickleball-paddle/",
+    "title": "Wilson Vesper Control 17 Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/6727/35568/WS722_Wilson_Vesper_Control_1000_1__13423.1745431957.jpg",
+    "price": 199,
+    "availability": "instock",
+    "sku": "WS722-0001"
+  },
+  "wilson-vesper-power-14-14mm": {
+    "url": "https://pickleballcentral.com/wilson-vesper-power-14-pickleball-paddle/",
+    "title": "Wilson Vesper Power 14 Pickleball Paddle",
+    "image": "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/800x800/products/6726/35760/VesperImage__27132.1746639569.jpg",
+    "price": 99,
+    "availability": "instock",
+    "sku": "WS721-0001"
+  }
+}

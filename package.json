@@ -20,7 +20,9 @@
     "paddles:report": "node scripts/import-paddles.mjs --report",
     "lab:import": "node scripts/import-paddle-lab.mjs",
     "lab:refresh": "node scripts/import-paddle-lab.mjs --fetch",
-    "lab:report": "node scripts/import-paddle-lab.mjs --report"
+    "lab:report": "node scripts/import-paddle-lab.mjs --report",
+    "lab:pbc": "node scripts/import-pbc-paddles.mjs",
+    "lab:pbc:crawl": "node scripts/import-pbc-paddles.mjs --fetch"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

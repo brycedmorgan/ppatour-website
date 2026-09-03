@@ -137,14 +137,14 @@ function CompareTable({ list }: { list: Paddle[] }) {
           {list.map((p) => (
             <div key={p.slug} className="relative bg-white p-3">
               <div className="mx-auto w-24">
-                <PaddleTile name={p.name} brand={p.brand} image={p.image?.cutout ? p.image.src : null} />
+                <PaddleTile name={p.name} brand={p.brand} image={p.image?.cutout ? p.image.src : null} photo={p.photo} />
               </div>
               <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.16em] text-ppa-navy/45">{p.brand}</p>
               <Link href={p.href} className="block font-display text-sm uppercase leading-tight text-ppa-navy hover:text-ppa-blue">
                 {p.model}
                 {p.thicknessMm ? ` ${p.thicknessMm}mm` : ""}
               </Link>
-              <p className="mt-1 text-sm font-bold tabular-nums text-ppa-navy">{formatPrice(p.price) ?? ""}</p>
+              <p className="mt-1 text-sm font-bold tabular-nums text-ppa-navy">{formatPrice(p.displayPrice) ?? ""}</p>
               <div className="mt-3 flex flex-col gap-1.5">
                 <a
                   href={p.shopHref}
