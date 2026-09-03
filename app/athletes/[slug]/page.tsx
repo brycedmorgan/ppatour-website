@@ -418,15 +418,24 @@ export default async function AthletePage({ params }: Params) {
    * white box; falls back to the feed's scraped product photo, which gets a
    * white plate behind it because it may carry its own background.
    */
-  const paddleImage = paddleImageFor(
-    effPaddle,
-    // ⚠ The feed's photo belongs to the paddle the feed names. Under a pending
-    // update that is the OLD paddle, so it is dropped rather than shown beside
-    // the new one — the curated cut-out map is keyed on the paddle name and
-    // simply misses, which is the correct "no photo" outcome.
-    paddleUpdate ? null : liveOverride?.image,
-    a.slug,
-  );
+  const paddleImage = paddleUpdate
+    ? /**
+       * ⚠ UNDER AN ACTIVE UPDATE, THE ONLY PHOTO THAT MAY RENDER IS THE ONE THE
+       * UPDATE CARRIES — and `paddleImageFor` is bypassed entirely rather than
+       * passed a null feed image, which is what this used to do.
+       *
+       * Every other source describes the paddle the DATA names, which under an
+       * update is the old one: the feed's `image` is a photo of it, and
+       * `paddleImageFor`'s by-slug map is keyed on the ATHLETE, so it is
+       * consulted before the paddle name and would happily hand back the
+       * superseded paddle's cut-out. (Its name-keyed map does miss, which is
+       * why this was safe in practice — but only by accident, and only for the
+       * pros who have no by-slug entry.)
+       *
+       * So: the update's own image, or none. See lib/paddle-updates.ts.
+       */
+      (paddleUpdate.image ? { ...paddleUpdate.image, cutout: true } : null)
+    : paddleImageFor(effPaddle, liveOverride?.image, a.slug);
   const quickFacts: { label: string; value: string }[] = [
     { label: "Resides", value: stats?.hometown ?? qi?.resides ?? "" },
     { label: "Age", value: ageVal != null ? String(ageVal) : "" },
@@ -484,6 +493,18 @@ export default async function AthletePage({ params }: Params) {
    * about a contract beyond the partner badge the roster already earns.
    */
   const gearAnswer = gear ? `${a.name} plays the ${gear.paddle}.` : null;
+  /**
+   * Alt text for the paddle photo. "… pickleball paddle" is appended so the
+   * image is described rather than just named — but only when the product name
+   * does not already end that way. MEHAU sells the "S5 AIRPOOM™ Aerodynamic
+   * Pickleball Paddle", so the plain template read "…Pickleball Paddle
+   * pickleball paddle" on the two profiles that play it.
+   */
+  const paddleAlt = gear
+    ? gear.paddle.trim().toLowerCase().endsWith("paddle")
+      ? gear.paddle
+      : `${gear.paddle} pickleball paddle`
+    : "";
   /** Who makes it, for the Product node. Feed field first, partner match second. */
   const paddleBrand = paddleUpdate?.brand ?? liveOverride?.brand ?? gear?.brand ?? null;
   /** Stable @id for the paddle's Product node, so Person.owns can point at it. */
@@ -929,7 +950,7 @@ export default async function AthletePage({ params }: Params) {
                           {paddleImage.cutout ? (
                             <Image
                               src={paddleImage.src}
-                              alt={`${gear.paddle} pickleball paddle`}
+                              alt={paddleAlt}
                               width={paddleImage.width}
                               height={paddleImage.height}
                               sizes="80px"
@@ -943,7 +964,7 @@ export default async function AthletePage({ params }: Params) {
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
                               src={paddleImage.src}
-                              alt={`${gear.paddle} pickleball paddle`}
+                              alt={paddleAlt}
                               loading="lazy"
                               className="h-full w-full rounded-md bg-white object-contain p-1.5"
                             />

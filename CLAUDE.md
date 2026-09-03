@@ -63,6 +63,80 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-03 — Hunter Johnson onto the MEHAU S5; the photo rides on the update row
+
+- Event team via Wesley: put Hunter Johnson on the **"MEHAU S5 AIRPOOM™ Aerodynamic Pickleball
+  Paddle"**, with the product URL and a supplied product shot. Live on his profile.
+- **The paddle itself is the 8/13 stopgap layer used exactly as designed.** Jackalope still says
+  **Hit Pickleball Hand Cannon** (probed live) and he is **not in the broadcast masterlist at all**,
+  so an edit to either source was impossible from this repo. New row in `lib/paddle-updates.ts`
+  with `supersedes: "Hit Pickleball Hand Cannon"`, so it retires itself the moment Pro Player
+  Central says anything else. **Confirmed against production before writing it: the live page reads
+  "Hunter Johnson plays the Hit Pickleball Hand Cannon."** — that string is what `supersedes` has to
+  match, and reading it off the deployed page is the only way to be sure.
+  **This is the second row in that file, so it is also the second open ticket: ask Dillon Segur /
+  Liv Borski to make the edit in Jackalope, then delete the row.**
+- **⚠ THE PADDLE SHIPS IN SIX COLOURWAYS, WHICH DECIDES WHERE THE PHOTO CAN LIVE.** MEHAU's own
+  Shopify record lists **Vanguard Steed · Apex Stag · Sage Rhino · Lucky Magpie · Dolphin Leap ·
+  Cosmos Elephant**, and the display string names none of them. So `CUTOUTS` in
+  `lib/paddle-images.ts` — keyed on the paddle NAME — is the wrong home: **Adam Harvey plays the same
+  model** (8/13), and an entry there would have published Hunter's Sage Rhino on his profile as if it
+  were his. Same objection as "Six Zero Coral", which is deliberately left photo-less for this reason.
+- **⚠ AND `BY_SLUG` IS ALSO WRONG, FOR A DIFFERENT AND LESS OBVIOUS REASON.** It is keyed on the
+  ATHLETE and consulted **before** the paddle name, so a photo left there would keep rendering after
+  the update row stopped applying — a picture of a paddle the pro no longer plays, i.e. the exact
+  stale-endorsement failure the update layer exists to prevent. So the image is a new optional field
+  **on the update row itself** and retires with it. `paddleImageFor` is now **bypassed entirely**
+  under an active update rather than passed a null feed image: every other source describes the
+  paddle the DATA names, which under an update is the old one. **That closes a latent bug — the
+  8/13 note said the cut-out map "simply misses" the new name, which is true of the name-keyed map
+  and false of the slug-keyed one.**
+- **Verified consequence: Adam Harvey keeps the MEHAU paddle and correctly renders NO photo**, because
+  nobody has told us which of the six colourways he plays. That is the right answer, not a gap to fill.
+- **⚠ MY OWN CONTRAST MEASUREMENT SAID THE PHOTO WAS UNUSABLE AND IT WAS WRONG. LOOK AT THE PICTURE.**
+  The card is `bg-ppa-navy` and the S5 is a near-black paddle: the body measures **rgb(41,41,44), a
+  1.01:1 luminance ratio against #0C2B44**, which on paper means invisible. Rendered at the true 128px
+  slot beside the two shipped cut-outs it reads **as clearly as either of them** — the silhouette is
+  carried by hue (neutral grey against blue), the white wordmark, the grey rhino graphic and the black
+  grip, none of which a single luminance ratio can see. The white-plate alternative was built and
+  rejected on the render: it looks like a sticker and breaks with the house treatment.
+  **A luminance ratio is not a legibility verdict for a photograph.**
+- **`scripts/import-paddle-image.mjs` gained `--file`.** It could only scrape an og:image off a
+  Pickleball Central product page, and this paddle is not sold there — brand-supplied art arrives as
+  a file. Everything after the source is unchanged, **including the "is this actually a
+  white-background product shot" guard**, which is the part that must not be skipped for supplied
+  art. Output `public/ppa/paddles/mehau-s5-airpoom-sage-rhino.png`, 207×480, 87.7 KB — mid-range of
+  the existing 62–156 KB assets. **The colourway is in the filename because the display string does
+  not carry it.**
+- **Knockout checked by eye, not by exit code** (the 8/13 CRBN lesson): the enclosed white MEHAU
+  wordmark, the S5 mark and the UPA-A/cert stamps all survived, the grip has no holes, and no opaque
+  rectangle was written.
+- **⚠ ONE PRE-EXISTING WART FIXED IN PASSING: the alt text was doubled.** The template was
+  `` `${gear.paddle} pickleball paddle` ``, and MEHAU's product name already ends in "Pickleball
+  Paddle", so both MEHAU profiles published *"…Pickleball Paddle pickleball paddle"* — since 8/13.
+  The suffix is now appended only when the name does not already end that way; Ben Johns and ALW
+  keep theirs.
+- Verified on rendered pages against the live feed, not by grep alone: `/athletes/hunter-johnson/`
+  carries the MEHAU name in the heading answer, the buy button pointing at MEHAU's product page with
+  `utm_content=paddle:hunter-johnson`, the new cut-out through the optimizer, **and zero occurrences
+  of "Hit Pickleball", "Hand Cannon" or "Paddletek" anywhere on the page including the Product and
+  FAQPage JSON-LD**. All five `ld+json` blocks parse; the Product node reads brand **MEHAU** (not the
+  feed's "Hit Pickleball"), carries the new image and **no `offers`**. Meta description picks up
+  "Plays the …". Controls unchanged: **Ben Johns and ALW keep their cut-outs and badges, Lindsey
+  Newman still renders no callout.** CDP at 1440 and 390: **zero horizontal overflow, zero elements
+  wider than the viewport**, card 358px on a phone. tsc + eslint clean; **`next build` green,
+  1,228 pages** (run with `BUILD_DIST_DIR=.next-buildcheck` so it did not fight the dev server —
+  ⚠ that flag makes Next append two entries to `tsconfig.json`, which were reverted).
+- **⚠ FOUND, NOT FIXED, AND UNRELATED: only 183 of 203 published athletes prerender.** Hunter Johnson
+  is one of the twenty that do not, so his page is server-rendered on demand rather than baked. It
+  serves 200 either way — production proves it — and nothing in this change can affect
+  `generateStaticParams`, but the gap is worth a look on its own.
+- **⚠ Also: `.env.local` NOW HAS `PB_API_TOKEN`.** A dozen notes above say it doesn't and that live
+  data can only be checked on a deploy. That is no longer true — the rankings boards and the paddle
+  feed both resolve locally. ⚠ `tsx` does not load `.env.local` on its own; `scratchpad/load-env.ts`
+  is the shim.
+- **Not committed or pushed.**
+
 ### 2026-09-01 (pt. 3) — ⚠ CORRECTION: `partners=ppa` is a 1,000-point floor, not a missing tag
 
 - **The earlier entry below blamed a missing PPA partner tag on pre-2024 events. THAT IS

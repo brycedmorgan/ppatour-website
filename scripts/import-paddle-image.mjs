@@ -20,7 +20,7 @@
  * white that is reachable from the border without crossing the paddle is
  * removed, so enclosed white stays.
  */
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
@@ -114,15 +114,31 @@ function contentBox(data, width, height) {
 async function main() {
   const slug = arg("slug");
   const pageUrl = arg("url");
-  if (!slug || !pageUrl) {
+  const filePath = arg("file");
+  if (!slug || (!pageUrl && !filePath)) {
     console.error("usage: --url <pbc product url> --slug <output-slug>");
+    console.error("   or: --file <local image path> --slug <output-slug>");
     process.exitCode = 1;
     return;
   }
 
-  const imgUrl = await productImageUrl(pageUrl);
-  console.log(`source  ${imgUrl}`);
-  const buf = Buffer.from(await (await get(imgUrl)).arrayBuffer());
+  /**
+   * ⚠ `--file` EXISTS BECAUSE NOT EVERY PADDLE IS SOLD ON PICKLEBALL CENTRAL.
+   * A brand the tour has no retail relationship with hands art over directly
+   * (MEHAU did, for the S5 AIRPOOM) and there is no product page here to scrape
+   * an og:image from. Everything after this point is identical either way —
+   * including the "is this actually a white-background product shot" guard,
+   * which is the part that must not be skipped for supplied art.
+   */
+  let buf;
+  if (filePath) {
+    console.log(`source  ${filePath}`);
+    buf = await readFile(filePath);
+  } else {
+    const imgUrl = await productImageUrl(pageUrl);
+    console.log(`source  ${imgUrl}`);
+    buf = Buffer.from(await (await get(imgUrl)).arrayBuffer());
+  }
 
   const { data, info } = await sharp(buf)
     .ensureAlpha()
