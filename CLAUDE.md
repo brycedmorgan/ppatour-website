@@ -63,6 +63,25 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-02 — MATCHDAY: access landed, cutover pulled to October
+
+- Bryce is Admin on the MATCHDAY Lovable workspace (Business, 2,000 credits/mo,
+  auto top-up on, bills Chris's card). Decision: hold the plan, move the card to
+  a company card, reimburse Chris. Divvy virtual card still to issue.
+- GitHub `chriscantino/pbpulse` accepted; clone at `~/pickleball/pbpulse`.
+  `supabase/` is in the repo: 154 functions, 1,001 migrations, 45 cron jobs.
+- Chris's export tool (pblfg.com/migration-export) run; baseline saved at
+  `~/pickleball/matchday-export/2026-09-03/` (hashes + tokens, never commit).
+- Finding: DB is 14 GB but 12M of 13.6M rows are analytics logs. Asked Chris in
+  #matchday-collab for a 30-day purge. That is his "100% capacity" problem.
+- Cutover target: first event-free week in October (was Nov 9–15). Chris wants
+  sooner. Emailed him the October target.
+- Next: pick the October dates against the fall calendar; write the runbook
+  from Chris's HAND-CARRY-CHECKLIST.md; Divvy card for Chris; reconnect the
+  Slack connector (restart Claude Code after re-auth in claude.ai).
+- Full notes: `docs/matchday-migration.md`.
+
+
 ### 2026-09-03 — Paddle Lab shipped to preview (`/paddle-lab`)
 
 - Hannah Johns' V1 brief (8/28): search, paddle pages, compare, How We Test,
