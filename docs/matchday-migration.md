@@ -104,3 +104,24 @@ The app is still on Lovable. Treat it as committed until step 11.
   PB_USER_TOKEN, PB_DEV_TOKEN, PB_API_BASE_URL, LOVABLE_API_KEY (4 functions
   use Lovable's AI gateway; those need a replacement provider).
 - Lovable coupling in the web build: only `lovable-tagger` in vite.config.ts.
+
+## Export baseline (2026-09-03 05:10Z, from Chris's migration-export tool)
+
+Saved at `~/pickleball/matchday-export/2026-09-03/` (outside any repo; it holds
+password hashes and cron tokens verbatim. Never commit it.)
+
+- DB is **14 GB**, 140 tables, ~13.6M rows. **~12M rows are logs/analytics**:
+  polling_analytics 5.2M, notification_history 4.1M, scraper_analytics 1.2M,
+  page_analytics 955k, device_token_attempts 423k, console_logs, error_analytics.
+  Real app data is small: matches 39k, users 3,449, storage 315 MB / 1,550 files.
+  The "100% capacity" Chris reports is log bloat. Prune these first; it fixes
+  performance now and takes the migration under Lovable's 5 GB export cap.
+- Users: 3,449 (3,264 with password hashes in the export, 184 anonymous).
+  Providers: email 3,263, google 2. Hashes import into Supabase auth, so no
+  forced reset if we bring the JWT secret across, else a forced re-login.
+- 45 pg_cron jobs, all active. Commands carry URL + token; rewrite at cutover.
+- Extensions: pg_cron, pg_net, pgmq, pgcrypto, supabase_vault, uuid-ossp.
+- 8 realtime tables, 401 RLS policies, 217 DB functions, 109 triggers, 9 views.
+- 6 public buckets. Object bytes are NOT in the export; copy by hand.
+- Chris's HAND-CARRY-CHECKLIST.md in the export is the secrets list and the
+  cutover order. It is good. Use it as the runbook skeleton.
