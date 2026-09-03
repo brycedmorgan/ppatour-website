@@ -27,7 +27,8 @@
     "europe:audit": "node scripts/audit-europe-portraits.mjs",
     "rankings:snapshot": "node scripts/snapshot-rankings.mjs",
     "rankings:snapshot:check": "node scripts/snapshot-rankings.mjs --check",
-    "recap": "node scripts/tournament-recap.mjs"
+    "recap": "node scripts/tournament-recap.mjs",
+    "engine:properties": "node scripts/engine-properties.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.126.0",
