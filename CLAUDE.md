@@ -63,6 +63,24 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-03 — Paddle Lab shipped to preview (`/paddle-lab`)
+
+- Hannah Johns' V1 brief (8/28): search, paddle pages, compare, How We Test,
+  Pickleball Central CTAs. Bryce: build it here now. Commit `e2683a1`.
+- Routes: landing + search, `/paddles` browse with URL-state filters, 468
+  static paddle pages, `/compare?p=a,b,c,d` (noindex), `/how-we-test`. Header
+  About menu, footer, sitemap. Athlete In the Bag → "See the lab data".
+- Data: John Kew's public sheet snapshot → `scripts/import-paddle-lab.mjs` →
+  `lib/data/paddles.json`. The app computes no rating. Editorial layer is
+  `lib/data/paddle-lab-editorial.json` (empty; Hannah's team owns it).
+- Preview: https://ppatour-website-f1z6h2vwg-bryce-pickleballs-projects.vercel.app/paddle-lab/
+  Replied to Hannah/Samin/Taylor on the thread with the link and the asks.
+- ⚠ Preview only. Kew terms unsigned. Photos are brand tiles (6 cut-outs) until
+  a PBC product feed lands. Everything in `docs/PADDLE-LAB.md`.
+- Next: Hannah on Kew terms + spin-durability semantics + editorial JSON;
+  Bryce asks Traver for the PBC feed; host decision (pickleball.com rewrite vs
+  here) once Kew is on paper.
+
 ### 2026-09-02 — MATCHDAY off Lovable: what it takes
 
 - Research only, no code. Findings in `docs/matchday-migration.md`.
