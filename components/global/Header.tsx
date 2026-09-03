@@ -52,6 +52,7 @@ const NAV_ITEMS: NavItem[] = [
       { label: "Tournament History", href: "/about/history" },
       { label: "How It Works", href: "/about/how-it-works" },
       { label: "What is Pickleball?", href: "/about/what-is-pickleball" },
+      { label: "Paddle Lab", href: "/paddle-lab" },
       { label: "Contact", href: "/about/contact" },
     ],
   },
@@ -312,6 +313,7 @@ function MegaPanelContent({
         <PanelEyebrow>The Organization</PanelEyebrow>
         <div className="mt-4 space-y-3">
           <BigLink href="/about" label="About the Tour" onNavigate={onNavigate} />
+          <BigLink href="/paddle-lab" label="Paddle Lab" onNavigate={onNavigate} />
           <BigLink href="/about" label="The Pro Tour" onNavigate={onNavigate} />
           <BigLink href="/about/history" label="History" onNavigate={onNavigate} />
         </div>

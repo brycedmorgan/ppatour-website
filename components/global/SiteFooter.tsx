@@ -35,6 +35,7 @@ const PRO_TOUR_LINKS: FooterLink[] = [
 
 const PPA_LINKS: FooterLink[] = [
   { label: "About the PPA Tour", href: "/about" },
+  { label: "Paddle Lab", href: "/paddle-lab" },
   { label: "Sponsors", href: "/about/sponsors" },
   { label: "Host a Tournament", href: "/about/host-tournament" },
   { label: "Host a Private Event", href: "/about/private-events" },

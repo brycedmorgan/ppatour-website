@@ -5,6 +5,7 @@ import { eventHref, tournaments } from "@/lib/placeholder-data";
 import { tourPrograms } from "@/lib/tour-programs";
 import { allNews } from "@/lib/news";
 import { getShopProductHandles, shopHref } from "@/lib/shop";
+import { LAB_PATH, paddles } from "@/lib/paddle-lab";
 
 import { SITE_URL } from "@/lib/site";
 
@@ -73,6 +74,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
      * whose SEO baseline we are still building.
      */
     ...(shopHandles.length > 0 ? ["/shop"] : []),
+    // Paddle Lab. /compare is a reader's scratch page and is noindex, so it
+    // stays out; every paddle is listed below.
+    LAB_PATH,
+    `${LAB_PATH}/paddles`,
+    `${LAB_PATH}/how-we-test`,
   ];
 
   return [
@@ -105,6 +111,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: url(`/tour/${p.slug}`),
       changeFrequency: "monthly" as const,
       priority: 0.5,
+    })),
+    // One page per paddle in the lab (lib/data/paddles.json, static).
+    ...paddles.map((p) => ({
+      url: url(p.href),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
     })),
     /**
      * Pickleball Vacations — indexed as of 8/5, Stripe configured (secret key +

@@ -405,3 +405,23 @@ winner trace — the day the feed carries one, every line lights up with no code
 change.
 
 **Who to ask:** Kenan, in the API Slack group DM `C0BKZLY7YQG`.
+
+## Paddle Lab — data asks (opened 2026-09-03)
+
+Context: [`PADDLE-LAB.md`](PADDLE-LAB.md). The lab runs on John Kew's public
+sheet today. These are the three things it cannot get from that sheet.
+
+1. **Pickleball Central product feed** (owner: Traver West). Per paddle:
+   SKU/handle, product URL, product image (white-background shot), current
+   price, in-stock flag. Needed for photos (460 of 468 paddles show a brand
+   tile), live prices (the lab shows John's recorded list price), and to
+   survive the January 2027 Shopify URL change. Match key: brand + model +
+   core thickness.
+2. **John Kew terms** (owner: Hannah). Attribution wording, refresh cadence,
+   full database vs subset, payment, affiliate revenue share. Also confirm the
+   metric semantics listed in PADDLE-LAB.md, especially which Spin Durability
+   tier is "better".
+3. **Pro Pickleball Labs (PPL)** (owner: Hannah). The brief names PPL as a
+   second data source. They publish no public database; ask what tables they
+   would supply and in what format. The importer expects one row per paddle
+   with a stable brand + model + thickness key.

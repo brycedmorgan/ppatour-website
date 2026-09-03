@@ -1,0 +1,506 @@
+/**
+ * The Paddle Lab library — every paddle the lab can show, with its test data,
+ * its editorial layer and the two links a page needs (its own page, the shop).
+ *
+ * Two files feed this, and they are deliberately different kinds of thing:
+ *
+ *   lib/data/paddles.json               THE GRID. Written only by
+ *                                       scripts/import-paddle-lab.mjs from John
+ *                                       Kew's published sheet. Never hand-edited.
+ *   lib/data/paddle-lab-editorial.json  THE PROSE. Hannah's team writes it:
+ *                                       skill tags, a summary, pros/cons, a pinned
+ *                                       Pickleball Central URL, trending flags.
+ *
+ * ⚠ NOTHING HERE COMPUTES A RATING. Scores on the site are Kew's own scaled
+ * z-scores (0–100 against every paddle he has measured), copied through. The
+ * only derived things are filter buckets (price band, weight band), and those
+ * are UI groupings in lib/paddle-lab-shared.ts, not measurements.
+ *
+ * ⚠ SERVER ONLY. This module imports the whole grid. Client components import
+ * lib/paddle-lab-shared.ts and receive PaddleSummary[] as a prop.
+ *
+ * Requested by Hannah Johns (8/28) — see docs/PADDLE-LAB.md.
+ */
+import raw from "@/lib/data/paddles.json";
+import editorialRaw from "@/lib/data/paddle-lab-editorial.json";
+import { pbcDestination } from "@/lib/pbc-links";
+import { paddleImageFor, type PaddleImage } from "@/lib/paddle-images";
+import { withUtm } from "@/lib/utm";
+import {
+  labHref,
+  type Certification,
+  type PaddleSummary,
+  type Shape,
+  type Skill,
+  type Tilt,
+} from "@/lib/paddle-lab-shared";
+
+export * from "@/lib/paddle-lab-shared";
+
+export type PaddleSpecs = {
+  lengthIn: number | null;
+  widthIn: number | null;
+  handleLengthIn: number | null;
+  staticWeightOz: number | null;
+};
+
+export type PaddleMetrics = {
+  spinRpm: number | null;
+  spinScore: number | null;
+  spinCategory: string | null;
+  spinDurabilityTier: number | null;
+  swingWeight: number | null;
+  swingScore: number | null;
+  twistWeight: number | null;
+  twistScore: number | null;
+  balancePointCm: number | null;
+  balanceScore: number | null;
+  handSpeedIndex: number | null;
+  serveSpeedMph: number | null;
+  powerScore: number | null;
+  punchVolleyMph: number | null;
+  popScore: number | null;
+  firepower: number | null;
+  kewCor: number | null;
+  deflectionLbs: number | null;
+  tilt: Tilt | null;
+  tiltRaw: string | null;
+};
+
+/** One row of the grid, exactly as the importer wrote it. */
+export type PaddleRow = {
+  slug: string;
+  brand: string;
+  model: string;
+  name: string;
+  thicknessMm: number | null;
+  price: number | null;
+  condition: string | null;
+  dateEntered: string | null;
+  certification: Certification;
+  certificationRaw: string | null;
+  warranty: string | null;
+  shape: Shape;
+  build: string | null;
+  process: string | null;
+  surfaceTexture: string | null;
+  surfaceLayup: string | null;
+  coreType: string | null;
+  specs: PaddleSpecs;
+  metrics: PaddleMetrics;
+};
+
+/** What an editor may add to a paddle. Every field is optional. */
+export type Editorial = {
+  skill?: Skill[];
+  /** One or two sentences, shown on the card and at the top of the page. */
+  summary?: string;
+  /** The longer read, paragraphs separated by blank lines. */
+  review?: string;
+  pros?: string[];
+  cons?: string[];
+  /** Exact Pickleball Central product URL. Beats the brand-page fallback. */
+  pbcUrl?: string;
+  /** Put it in the landing-page carousel. */
+  trending?: boolean;
+  /** Reviewer credit, e.g. "Hannah Johns". */
+  reviewedBy?: string;
+  reviewedOn?: string;
+};
+
+export type Paddle = PaddleRow & {
+  editorial: Editorial;
+  href: string;
+  shopHref: string;
+  image: PaddleImage | null;
+};
+
+const EDITORIAL = editorialRaw as Record<string, Editorial>;
+
+function shopHrefFor(row: PaddleRow, ed: Editorial): string {
+  return withUtm(pbcDestination(row.name, row.brand, null, ed.pbcUrl), {
+    campaign: "paddle-lab",
+    content: "shop-cta",
+    term: row.slug,
+  });
+}
+
+export const paddles: Paddle[] = (raw.paddles as PaddleRow[]).map((row) => {
+  const editorial = EDITORIAL[row.slug] ?? {};
+  return {
+    ...row,
+    editorial,
+    href: labHref(row.slug),
+    shopHref: shopHrefFor(row, editorial),
+    image: paddleImageFor(row.name),
+  };
+});
+
+const BY_SLUG = new Map(paddles.map((p) => [p.slug, p]));
+export function paddleBySlug(slug: string): Paddle | null {
+  return BY_SLUG.get(slug) ?? null;
+}
+
+export const paddleCount = paddles.length;
+export const brandList: { name: string; count: number }[] = Array.from(
+  paddles.reduce((m, p) => m.set(p.brand, (m.get(p.brand) ?? 0) + 1), new Map<string, number>()),
+)
+  .map(([name, count]) => ({ name, count }))
+  .sort((a, b) => a.name.localeCompare(b.name));
+
+/** The lab's data credit line. The snapshot is the committed CSV, not a live read. */
+export const DATA_SOURCE = {
+  name: "John Kew Pickleball",
+  url: "https://www.johnkewpickleball.com/paddle-database",
+};
+
+/* ---------------- metric definitions ---------------- */
+
+export type MetricGroup = "performance" | "handling" | "physical";
+
+export type MetricDef = {
+  key: string;
+  label: string;
+  /** Column header in the compare table. */
+  short: string;
+  unit?: string;
+  group: MetricGroup;
+  /** Whether it makes sense to flag the highest value in a comparison. */
+  highlightMax: boolean;
+  /** One line, plain English, for tooltips. */
+  hint: string;
+  /** A paragraph for the How We Test glossary. */
+  explain: string;
+  value: (p: PaddleRow) => number | string | null;
+  /** Kew's 0–100 scaled z-score, when he publishes one for this metric. */
+  score?: (p: PaddleRow) => number | null;
+  decimals?: number;
+};
+
+export const METRICS: MetricDef[] = [
+  {
+    key: "power",
+    label: "Power",
+    short: "Power",
+    unit: "mph",
+    group: "performance",
+    highlightMax: true,
+    hint: "Ball speed off a full swing. Higher means more pace on drives and serves.",
+    explain:
+      "Power is the speed of the ball leaving the paddle on a standardized full swing, in miles per hour. Two paddles swung the same way send the ball out at different speeds; this number captures that. It is the metric behind “this paddle hits hard.”",
+    value: (p) => p.metrics.serveSpeedMph,
+    score: (p) => p.metrics.powerScore,
+    decimals: 1,
+  },
+  {
+    key: "pop",
+    label: "Pop",
+    short: "Pop",
+    unit: "mph",
+    group: "performance",
+    highlightMax: true,
+    hint: "Ball speed off a short punch volley. Higher means more speed from a compact stroke.",
+    explain:
+      "Pop is the ball speed from a short, compact punch volley, the kind you hit at the kitchen line. It isolates how lively the face is without a full swing. A paddle can have high power and modest pop, or the reverse, which is why we show both.",
+    value: (p) => p.metrics.punchVolleyMph,
+    score: (p) => p.metrics.popScore,
+    decimals: 1,
+  },
+  {
+    key: "firepower",
+    label: "Firepower",
+    short: "Firepower",
+    unit: "/100",
+    group: "performance",
+    highlightMax: true,
+    hint: "John Kew's combined power-and-pop index, 0 to 100.",
+    explain:
+      "Firepower is a single 0–100 index that folds power and pop into one number. It is a convenience for quick sorting. When two paddles are close, look at power and pop separately.",
+    value: (p) => p.metrics.firepower,
+    decimals: 1,
+  },
+  {
+    key: "spin",
+    label: "Spin",
+    short: "Spin",
+    unit: "rpm",
+    group: "performance",
+    highlightMax: true,
+    hint: "Ball rotation off the face, in revolutions per minute. Higher means more grip on the ball.",
+    explain:
+      "Spin is how many revolutions per minute the ball leaves the paddle with in a controlled spin test. A rougher, grippier face produces more. Spin category (Elite, Good, Fair, Poor) is the same number in buckets.",
+    value: (p) => p.metrics.spinRpm,
+    score: (p) => p.metrics.spinScore,
+    decimals: 0,
+  },
+  {
+    key: "spinDurability",
+    label: "Spin Durability",
+    short: "Spin Dur.",
+    group: "performance",
+    highlightMax: false,
+    hint: "John Kew's tier for how the face texture holds up with wear. See How We Test.",
+    explain:
+      "Spin Durability is a tier for how well the surface keeps producing spin as it wears. Face textures fade at different rates, and some paddles lose a lot of spin within weeks. The tiers are John Kew's classification. We show the tier as published and do not re-rank it.",
+    value: (p) => (p.metrics.spinDurabilityTier ? `Tier ${p.metrics.spinDurabilityTier}` : null),
+  },
+  {
+    key: "kewCor",
+    label: "KewCOR",
+    short: "KewCOR",
+    group: "performance",
+    highlightMax: false,
+    hint: "How much energy the face gives back to the ball, measured by John Kew. Higher is livelier.",
+    explain:
+      "KewCOR is John Kew's measurement of the face's coefficient of restitution: how much of the ball's energy comes back off the paddle. Higher is a livelier, more trampoline-like face. It is related to, but not the same as, the PBCOR limit the governing bodies test against for certification.",
+    value: (p) => p.metrics.kewCor,
+    decimals: 3,
+  },
+  {
+    key: "swingWeight",
+    label: "Swing Weight",
+    short: "Swing Wt",
+    group: "handling",
+    highlightMax: false,
+    hint: "How heavy the paddle feels when you swing it. Higher is more plow-through; lower is quicker.",
+    explain:
+      "Swing weight is how heavy the paddle feels in motion, which depends on where the mass sits, not just how much there is. A higher swing weight gives more stability and plow-through on drives; a lower one is faster to get around at the kitchen line. Neither end is better, which is why we never highlight a winner on it.",
+    value: (p) => p.metrics.swingWeight,
+    score: (p) => p.metrics.swingScore,
+    decimals: 1,
+  },
+  {
+    key: "twistWeight",
+    label: "Twist Weight",
+    short: "Twist Wt",
+    group: "handling",
+    highlightMax: true,
+    hint: "Resistance to twisting on off-center hits. Higher means a more forgiving sweet spot.",
+    explain:
+      "Twist weight is how much the paddle resists rotating in your hand when you hit off-center. A higher twist weight means a bigger effective sweet spot and more forgiveness; a low one punishes mis-hits with a wobbly, dead response.",
+    value: (p) => p.metrics.twistWeight,
+    score: (p) => p.metrics.twistScore,
+    decimals: 2,
+  },
+  {
+    key: "balancePoint",
+    label: "Balance Point",
+    short: "Balance",
+    unit: "cm",
+    group: "handling",
+    highlightMax: false,
+    hint: "Distance from the butt of the handle to the balance point. Higher is more head-heavy.",
+    explain:
+      "Balance point is measured in centimetres from the end of the handle to where the paddle balances. A higher number is a more head-heavy paddle, which usually swings heavier for the same static weight. Lead tape or a heavier grip moves it.",
+    value: (p) => p.metrics.balancePointCm,
+    score: (p) => p.metrics.balanceScore,
+    decimals: 1,
+  },
+  {
+    key: "handSpeed",
+    label: "Hand Speed",
+    short: "Hand Speed",
+    unit: "/100",
+    group: "handling",
+    highlightMax: true,
+    hint: "John Kew's 0–100 index of how quick the paddle is to manoeuvre. Higher is quicker.",
+    explain:
+      "Hand Speed is a 0–100 index John Kew derives from the handling measurements to describe how quickly the paddle gets around in a fast exchange. It is the flip side of plow-through. Pick your side.",
+    value: (p) => p.metrics.handSpeedIndex,
+    decimals: 0,
+  },
+  {
+    key: "deflection",
+    label: "Face Stiffness",
+    short: "Stiffness",
+    unit: "lbs",
+    group: "handling",
+    highlightMax: false,
+    hint: "Force needed to deflect the face in a stiffness test. Higher is a stiffer face.",
+    explain:
+      "Face stiffness is the force, in pounds, needed to deflect the paddle face by a set amount. A stiffer face feels crisper; a softer one feels plusher. Shown where John Kew has measured it.",
+    value: (p) => p.metrics.deflectionLbs,
+    decimals: 1,
+  },
+  {
+    key: "staticWeight",
+    label: "Static Weight",
+    short: "Weight",
+    unit: "oz",
+    group: "physical",
+    highlightMax: false,
+    hint: "The paddle on a scale, in ounces.",
+    explain:
+      "Static weight is the paddle on a scale. It is the number on the box, and it says less about feel than swing weight does.",
+    value: (p) => p.specs.staticWeightOz,
+    decimals: 1,
+  },
+  {
+    key: "thickness",
+    label: "Core Thickness",
+    short: "Core",
+    unit: "mm",
+    group: "physical",
+    highlightMax: false,
+    hint: "Core thickness in millimetres. Thicker is usually softer; thinner is livelier.",
+    explain:
+      "Core thickness in millimetres. 16 mm is the common “control” build and 14 mm the livelier one, though construction matters more than the number alone.",
+    value: (p) => p.thicknessMm,
+    decimals: 1,
+  },
+  {
+    key: "length",
+    label: "Length",
+    short: "Length",
+    unit: "in",
+    group: "physical",
+    highlightMax: false,
+    hint: "Total length in inches.",
+    explain: "Total paddle length in inches. Length plus width may not exceed 24 inches under the rules.",
+    value: (p) => p.specs.lengthIn,
+    decimals: 2,
+  },
+  {
+    key: "width",
+    label: "Width",
+    short: "Width",
+    unit: "in",
+    group: "physical",
+    highlightMax: false,
+    hint: "Face width in inches.",
+    explain: "Face width in inches. Widebody shapes trade length for width; elongated shapes do the reverse.",
+    value: (p) => p.specs.widthIn,
+    decimals: 2,
+  },
+  {
+    key: "handle",
+    label: "Handle Length",
+    short: "Handle",
+    unit: "in",
+    group: "physical",
+    highlightMax: false,
+    hint: "Handle length in inches. Two-handed backhands want more.",
+    explain: "Handle length in inches. Players with a two-handed backhand tend to want 5.5 inches or more.",
+    value: (p) => p.specs.handleLengthIn,
+    decimals: 2,
+  },
+];
+
+export const METRIC_BY_KEY = new Map(METRICS.map((m) => [m.key, m]));
+
+export function formatMetric(def: MetricDef, v: number | string | null): string {
+  if (v == null) return "—";
+  if (typeof v === "string") return v;
+  const n = def.decimals != null ? v.toFixed(def.decimals) : String(v);
+  return def.unit && def.unit !== "/100" ? `${n} ${def.unit}` : n;
+}
+
+/* ---------------- lists the landing page needs ---------------- */
+
+/** Newest entries by John's "Date Entered", for the 182 paddles that carry one. */
+export function newestTested(n: number): Paddle[] {
+  return paddles
+    .filter((p) => p.dateEntered)
+    .sort((a, b) => (b.dateEntered! > a.dateEntered! ? 1 : b.dateEntered! < a.dateEntered! ? -1 : 0))
+    .slice(0, n);
+}
+
+/** Editors' trending picks; falls back to newest tested so the rail never empties. */
+export function trendingPaddles(n: number): { list: Paddle[]; curated: boolean } {
+  const curated = paddles.filter((p) => p.editorial.trending);
+  if (curated.length) return { list: curated.slice(0, n), curated: true };
+  return { list: newestTested(n), curated: false };
+}
+
+export function withSkill(skill: Skill): Paddle[] {
+  return paddles.filter((p) => p.editorial.skill?.includes(skill));
+}
+
+export const reviewedCount = paddles.filter((p) => p.editorial.review || p.editorial.summary).length;
+
+/**
+ * Paddles a reader might weigh against this one: same shape, same tilt when
+ * known, nearest in price. A selection rule for a "see also" rail — not a
+ * recommendation, and no score is involved.
+ */
+export function similarPaddles(p: Paddle, n = 3): Paddle[] {
+  const price = p.price ?? 0;
+  return paddles
+    .filter((q) => q.slug !== p.slug && q.shape === p.shape && (!p.metrics.tilt || q.metrics.tilt === p.metrics.tilt))
+    .sort((a, b) => Math.abs((a.price ?? 0) - price) - Math.abs((b.price ?? 0) - price))
+    .slice(0, n);
+}
+
+/* ---------------- the compact record client components receive ---------------- */
+
+export function summarize(p: Paddle): PaddleSummary {
+  return {
+    slug: p.slug,
+    name: p.name,
+    brand: p.brand,
+    model: p.model,
+    price: p.price,
+    shape: p.shape,
+    thicknessMm: p.thicknessMm,
+    weightOz: p.specs.staticWeightOz,
+    tilt: p.metrics.tilt,
+    spinCategory: p.metrics.spinCategory,
+    spinRpm: p.metrics.spinRpm,
+    powerMph: p.metrics.serveSpeedMph,
+    popMph: p.metrics.punchVolleyMph,
+    swingWeight: p.metrics.swingWeight,
+    twistWeight: p.metrics.twistWeight,
+    certification: p.certification,
+    skill: p.editorial.skill ?? [],
+    dateEntered: p.dateEntered,
+    summary: p.editorial.summary ?? null,
+    image: p.image?.cutout ? p.image.src : null,
+    href: p.href,
+    shopHref: p.shopHref,
+  };
+}
+
+export const summaries: PaddleSummary[] = paddles.map(summarize);
+
+/** slug → display name, for the compare tray (which only knows slugs). */
+export const nameBySlug: Record<string, string> = Object.fromEntries(paddles.map((p) => [p.slug, p.name]));
+
+/* ---------------- athlete profile tie-in ---------------- */
+
+function norm(s: string): string {
+  return s
+    .toLowerCase()
+    .replace(/\+/g, " plus ")
+    .replace(/\b(\d{1,2}(?:\.\d)?)\s?mm\b/g, " ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+const BY_NORM = new Map<string, Paddle[]>();
+for (const p of paddles) {
+  const k = norm(p.name);
+  BY_NORM.set(k, [...(BY_NORM.get(k) ?? []), p]);
+}
+
+/**
+ * The lab record for the paddle string on a pro's profile, or null.
+ *
+ * The broadcast masterlist writes "Franklin C45 Hybrid 14MM" while John writes
+ * "Franklin" + "C45 Hybrid" + 14; so match on brand+model with the thickness
+ * stripped, then use the thickness to pick between builds. Refuses when the
+ * name matches more than one lab record and the thickness cannot settle it,
+ * because linking a pro to the wrong build is worse than no link.
+ */
+export function labPaddleForName(paddle: string | null | undefined): Paddle | null {
+  if (!paddle) return null;
+  const first = paddle.split(",")[0];
+  const mm = first.match(/\b(\d{1,2}(?:\.\d)?)\s?mm\b/i);
+  const candidates = BY_NORM.get(norm(first)) ?? [];
+  if (candidates.length === 1) return candidates[0];
+  if (candidates.length > 1 && mm) {
+    const want = Number(mm[1]);
+    const byMm = candidates.filter((c) => c.thicknessMm === want);
+    if (byMm.length === 1) return byMm[0];
+  }
+  return null;
+}

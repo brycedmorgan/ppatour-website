@@ -22,6 +22,7 @@ commerce surface needs the same conversation those two had.
 
 | Item | State | Blocker |
 |---|---|---|
+| **Paddle Lab** `/paddle-lab` | Built 9/3 from Hannah's V1 brief: landing, browse+filters, 468 paddle pages, compare (4), How We Test. Data = John Kew's public sheet via parser. **Preview only** — [`PADDLE-LAB.md`](PADDLE-LAB.md) | Kew terms unsigned; editorial JSON empty (Hannah); PBC photo/price feed (Traver); host decision (pickleball.com rewrite vs here) |
 | MATCHDAY off Lovable | Emailed Chris Cantino 9/2; Bryce asked him for a fresh GitHub invite; proposed cutover **Nov 9–15** | Repo access (`gh api user/repository_invitations` shows nothing yet), then the Cloud inventory. Plan: [`matchday-migration.md`](matchday-migration.md) |
 | Athlete hero images | Slot shipped 8/15; **1 of 179 filled** (Anna Leigh Waters) | Named per-player photography — see Wishlist |
 | Punta Cana bookings | LIVE at $4,800 double, 1 room left | none; Lainey controls rooms in Jackalope |

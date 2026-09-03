@@ -31,6 +31,7 @@ import { athleteHeroFor } from "@/lib/athlete-heroes";
 import { playerOverrideFor } from "@/lib/player-overrides";
 import { socialLinks } from "@/lib/social-links";
 import { paddleFor } from "@/lib/athlete-paddles";
+import { labPaddleForName } from "@/lib/paddle-lab";
 import { paddleUpdateFor } from "@/lib/paddle-updates";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 
@@ -484,6 +485,12 @@ export default async function AthletePage({ params }: Params) {
    * about a contract beyond the partner badge the roster already earns.
    */
   const gearAnswer = gear ? `${a.name} plays the ${gear.paddle}.` : null;
+  /**
+   * The Paddle Lab page for this paddle, when the name resolves to exactly one
+   * lab record (lib/paddle-lab.ts → labPaddleForName refuses ambiguity). Adds a
+   * "See the lab data" line under the buy button; absent otherwise.
+   */
+  const labPaddle = gear ? labPaddleForName(gear.paddle) : null;
   /** Who makes it, for the Product node. Feed field first, partner match second. */
   const paddleBrand = paddleUpdate?.brand ?? liveOverride?.brand ?? gear?.brand ?? null;
   /** Stable @id for the paddle's Product node, so Person.owns can point at it. */
@@ -979,6 +986,14 @@ export default async function AthletePage({ params }: Params) {
                     >
                       Buy This Paddle ↗
                     </a>
+                    {labPaddle && (
+                      <Link
+                        href={labPaddle.href}
+                        className="flex h-10 items-center justify-center border-t border-white/10 text-[11px] font-bold uppercase tracking-[0.14em] text-white/75 transition-colors hover:bg-white/5 hover:text-white"
+                      >
+                        See the lab data →
+                      </Link>
+                    )}
                   </div>
                 </div>
               )}
