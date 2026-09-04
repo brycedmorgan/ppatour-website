@@ -94,6 +94,11 @@ lab's PBC product shot when the feed has none.
 
 ### Near-misses to confirm (alias table)
 
+Review sheet sent to Hannah, Samin and Taylor on 2026-09-04 (73 rows, Y/N in
+the last column):
+https://docs.google.com/spreadsheets/d/1hOCvqEgXsKXVA5r0Sy6SqjMWWLhBSGfwQ7kQe2rhm20/edit
+When it comes back, each Y becomes one `ALIASES` line, then `npm run lab:pbc`.
+
 `lib/data/pbc-near-misses.json` (59 today) lists Kew paddles where brand,
 model and thickness agree with a PBC product but a stray title token blocked
 the match ("Hurache-X Power" vs "Hurache-X Power 2", "Perseus 3S" vs "Perseus
