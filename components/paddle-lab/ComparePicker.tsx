@@ -37,10 +37,19 @@ export function ComparePicker({
     }
   }, [selected, router]);
 
+  /* ⚠ TESTED PADDLES RANK FIRST, AND THAT IS NOT A PREFERENCE.
+     The lab is the union of two catalogues: John Kew's 468 measured paddles and
+     ~350 that are on sale at Pickleball Central and have never been on his rig.
+     Alphabetically they interleave, so a search for "joola" used to return a
+     mixture and it was possible to build a whole comparison out of paddles that
+     have no measurements at all — every row reading "Unknown" or an em dash,
+     with nothing on the page saying why. Tested first, and an untested row says
+     so where the specs would be. */
   const results = useMemo(() => {
     const query = q.trim();
     if (!query) return [];
-    return items.filter((p) => !selected.includes(p.slug) && matchesQuery(p, query)).slice(0, 8);
+    const hits = items.filter((p) => !selected.includes(p.slug) && matchesQuery(p, query));
+    return [...hits.filter((p) => p.tested), ...hits.filter((p) => !p.tested)].slice(0, 8);
   }, [items, q, selected]);
 
   const full = !swapFor && selected.length >= MAX_COMPARE;
@@ -80,7 +89,9 @@ export function ComparePicker({
                 <span className="min-w-0">
                   <span className="block truncate font-bold text-ppa-navy">{p.name}</span>
                   <span className="block text-[11px] text-ppa-navy/55">
-                    {[p.shape, p.thicknessMm ? `${p.thicknessMm} mm` : null].filter(Boolean).join(" · ")}
+                    {p.tested
+                      ? [p.shape, p.thicknessMm ? `${p.thicknessMm} mm` : null].filter(Boolean).join(" · ")
+                      : `In the shop, not tested yet${p.thicknessMm ? ` · ${p.thicknessMm} mm` : ""}`}
                   </span>
                 </span>
                 <Plus className="h-4 w-4 shrink-0 text-ppa-blue" />

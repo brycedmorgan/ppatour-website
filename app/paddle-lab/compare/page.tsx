@@ -124,6 +124,12 @@ export default async function ComparePage({ searchParams }: Search) {
   );
 }
 
+/** "A", "A and B", "A, B and C" — for a sentence, not a legend. */
+function andList(names: string[]): string {
+  if (names.length <= 1) return names[0] ?? "";
+  return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+}
+
 function CompareTable({ list }: { list: Paddle[] }) {
   const slugs = list.map((p) => p.slug);
   const cols = `minmax(140px,1.2fr) repeat(${list.length}, minmax(150px,1fr))`;
@@ -135,17 +141,32 @@ function CompareTable({ list }: { list: Paddle[] }) {
         <div className="grid gap-px bg-ppa-line" style={{ gridTemplateColumns: cols }}>
           <div className="bg-white" />
           {list.map((p) => (
-            <div key={p.slug} className="relative bg-white p-3">
+            /* ⚠ THE CARD IS A FLEX COLUMN AND THE NAME HOLDS TWO LINES ON PURPOSE.
+               Paddle names wrap unevenly — "Andre Agassi Pro 16mm" is one line,
+               "Anna Bright Scorpeus Pro IV 14mm" is two — so a plain stack put the
+               price and the Shop button at a different height in every column, on
+               the one screen whose whole job is reading across. The name reserves
+               two lines so the price lines up, and the buttons are pushed to the
+               foot so they line up whatever the name does. */
+            <div key={p.slug} className="relative flex h-full flex-col bg-white p-3">
               <div className="mx-auto w-24">
                 <PaddleTile name={p.name} brand={p.brand} image={p.image?.cutout ? p.image.src : null} photo={p.photo} />
               </div>
               <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.16em] text-ppa-navy/45">{p.brand}</p>
-              <Link href={p.href} className="block font-display text-sm uppercase leading-tight text-ppa-navy hover:text-ppa-blue">
+              <Link
+                href={p.href}
+                className="block min-h-[2.5rem] font-display text-sm uppercase leading-tight text-ppa-navy hover:text-ppa-blue"
+              >
                 {p.model}
                 {p.thicknessMm ? ` ${p.thicknessMm}mm` : ""}
               </Link>
               <p className="mt-1 text-sm font-bold tabular-nums text-ppa-navy">{formatPrice(p.displayPrice) ?? ""}</p>
-              <div className="mt-3 flex flex-col gap-1.5">
+              {!p.tested && (
+                <p className="mt-2 inline-flex w-fit items-center border border-ppa-line bg-ppa-paper px-2 py-1 text-[9.5px] font-bold uppercase tracking-[0.12em] text-ppa-navy/60">
+                  Not tested yet
+                </p>
+              )}
+              <div className="mt-auto flex flex-col gap-1.5 pt-3">
                 <a
                   href={p.shopHref}
                   target="_blank"
@@ -173,6 +194,26 @@ function CompareTable({ list }: { list: Paddle[] }) {
             </div>
           ))}
         </div>
+
+        {/* ⚠ THE ANSWER TO "why are there no stats here?" GOES ABOVE THE TABLE, NOT IN IT.
+            A paddle Pickleball Central sells but John Kew has never measured has a
+            photo, a price and a buy button and nothing else, so every row below it
+            reads "Unknown" or an em dash. Twenty blank cells read as a broken page;
+            one sentence naming the paddles reads as the truth. */}
+        {list.some((p) => !p.tested) && (
+          <p className="border border-t-0 border-ppa-line bg-ppa-paper px-4 py-3 text-xs leading-relaxed text-ppa-navy/70">
+            <span className="font-bold text-ppa-navy">
+              {list.filter((p) => !p.tested).length === list.length
+                ? "None of these have been tested yet."
+                : `${andList(list.filter((p) => !p.tested).map((p) => p.name))} ${
+                    list.filter((p) => !p.tested).length === 1 ? "has" : "have"
+                  } not been tested yet.`}
+            </span>{" "}
+            {DATA_SOURCE.name} measures a paddle before it gets numbers, and these are in the
+            Pickleball Central shop ahead of the lab — so every row below is blank for them.
+            Swap one out for a tested paddle to fill the table.
+          </p>
+        )}
 
         {/* Identity rows */}
         <Section title="At a glance" cols={cols}>

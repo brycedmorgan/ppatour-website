@@ -63,6 +63,37 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-04 — Compare: alignment, and the reason there were no stats
+
+- Bryce, on `/paddle-lab/compare` with three JOOLA paddles: "we need better
+  alignment for the paddle and shop thing. And no stats here?" Both fixed, and
+  the second one had a cause worth writing down.
+- **⚠ THE MISSING STATS WERE THE PICKER, NOT THE TABLE.** The lab is the union
+  of two catalogues — **468 paddles John Kew has measured and 350 Pickleball
+  Central sells that he has not** (`tested: false`, `null` for every metric).
+  `ComparePicker` filtered by query and took the first 8 alphabetically, and the
+  two catalogues interleave. **Measured: a search for "joola" returned eight
+  untested paddles and zero tested ones in that top 8** — so it was not possible
+  to reach a measured JOOLA from the search box. Tested rank first now (joola
+  8/8), and an untested row says "In the shop, not tested yet" where the specs
+  would be.
+- **The table now says why it is empty, above the table and once**, naming the
+  paddles: "JOOLA Ben Johns Hyperion Pro IV has not been tested yet… every row
+  below is blank for them. Swap one out for a tested paddle to fill the table."
+  Twenty blank cells read as a broken page; one sentence reads as the truth.
+  Untested cards also carry a NOT TESTED YET chip.
+- **Alignment:** the header card is a flex column, the name reserves two lines
+  and the buttons are pinned with `mt-auto`. Names wrap unevenly ("Andre Agassi
+  Pro 16mm" is one line, "Anna Bright Scorpeus Pro IV 14mm" is two), so a plain
+  stack put the price and the Shop button at a different height in every column
+  — on the one screen whose whole job is reading across.
+- **Browse was already right** and needed nothing: its cards carry a "Not yet
+  tested" state and it has a Lab-tested only filter. Compare and its picker were
+  the only two surfaces that ignored the flag.
+- Verified by rendering both cases at 1440 — three untested, and one tested
+  beside one untested with real bars in the tested column. tsc + eslint clean,
+  full `next build` green (1,978 pages).
+
 ### 2026-09-04 — Nationals weather reschedule: Fri + Sat TV windows
 
 - Keaton Maynard, `@here` 9/3 7:46PM: intense weather moved Friday and Saturday

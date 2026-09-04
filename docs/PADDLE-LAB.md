@@ -195,3 +195,33 @@ To swap the photo, change the `src` in `app/paddle-lab/page.tsx`. Anything wide,
 sunlit and paddle-forward works; `action-singles.jpg` is the strongest
 alternative (full-stretch lunge, ball on the paddle face, dark backdrop) but its
 paddle sits at the far LEFT of the frame, directly under the headline.
+
+## The two catalogues, and how compare has to behave (2026-09-04)
+
+The lab is **818 paddles: 468 John Kew has measured and 350 Pickleball Central
+sells that he has not.** A shop-only record is `tested: false` — a photo, a
+price and a buy button, and `null` for every metric.
+
+Browse already handles this (a "Not yet tested" card state and a **Lab-tested
+only** filter). **Compare did not**, and it produced the one screen where the
+gap is unreadable: three untested paddles side by side, every row "Unknown" or
+an em dash, and nothing saying why.
+
+**⚠ THE PICKER WAS THE ACTUAL CAUSE, NOT THE TABLE.** It filtered by query and
+took the first 8 in alphabetical order, and the two catalogues interleave.
+Measured: a search for **"joola" returned eight untested paddles and zero
+tested ones** in that top 8 — so a fan comparing JOOLA paddles could not reach a
+measured one from the search box at all. Tested now rank first (joola 8/8
+tested, hyperion and scorpeus lead with theirs), and an untested row reads
+"In the shop, not tested yet" where the specs would be.
+
+Two other rules on that page:
+
+- **The card is a flex column and the name reserves two lines.** Paddle names
+  wrap unevenly, so a plain stack put the price and the Shop button at a
+  different height in every column — on the one screen whose whole job is
+  reading across. Buttons are pinned with `mt-auto` so they align whatever the
+  name does.
+- **The explanation goes ABOVE the table, once, naming the paddles.** Twenty
+  blank cells read as a broken page; one sentence reads as the truth.
+
