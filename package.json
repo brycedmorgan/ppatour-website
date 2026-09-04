@@ -22,7 +22,9 @@
     "lab:refresh": "node scripts/import-paddle-lab.mjs --fetch",
     "lab:report": "node scripts/import-paddle-lab.mjs --report",
     "lab:pbc": "node scripts/import-pbc-paddles.mjs",
-    "lab:pbc:crawl": "node scripts/import-pbc-paddles.mjs --fetch"
+    "lab:pbc:crawl": "node scripts/import-pbc-paddles.mjs --fetch",
+    "europe:portraits": "node scripts/import-europe-portraits.mjs",
+    "europe:audit": "node scripts/audit-europe-portraits.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

@@ -65,7 +65,7 @@ export type EuroPro = {
  * re-derived. **Flip this to `true` in the same commit that adds the files**,
  * and never before: a path is not a picture.
  */
-const PORTRAITS_IN_REPO = false;
+const PORTRAITS_IN_REPO = true;
 
 const P = (slug: string): string | undefined =>
   PORTRAITS_IN_REPO ? `/europe/pros/${slug}.jpg` : undefined;
@@ -475,7 +475,15 @@ export const europeRoster: EuroPro[] = [
     age: 25,
     divisions: [...MS, ...MD, ...XD],
     sponsors: [],
-    portrait: P("tom-protzek"),
+    /**
+     * ⚠ NO PORTRAIT ON PURPOSE, AND NOT FOR THE SAME REASON AS ALEXIA'S. Catie's
+     * file for him is a PHONE SCREENSHOT OF A FILE VIEWER — close button, Share
+     * button, an Edit/Comment/Resize toolbar, and a small studio photo in the
+     * middle. Cropping the photo out of it would publish an upscaled screenshot.
+     * He is on the WPR board, so the roster falls through to his real
+     * pickleball.com headshot, which is better than anything that file can give.
+     * Add `portrait: P("tom-protzek")` the day Catie sends the actual image.
+     */
     tagline: "Took world No. 1 Federico Staksrud to three sets in his second tournament",
     bio: [
       "Tom Protzek moved from a Division I soccer career at the University of Tulsa to professional pickleball, making his PPA debut in November 2024. In only his second tournament he reached the round of 16 in singles and pushed world No. 1 Federico Staksrud to three sets.",

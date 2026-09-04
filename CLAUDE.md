@@ -63,6 +63,42 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-04 (pt. 6) — The 24 Europe portraits are in, and two source files were not portraits
+
+- **`authuser=0` was the whole blocker.** Catie's Drive folder is not
+  link-shared, and `gcloud` has no Drive scope. The download redirects to
+  `drive.usercontent.google.com`, which had been resolving to **`authuser=1`** —
+  a different signed-in Google account — and 403ing. Forcing `authuser=0` in a
+  signed-in browser session downloads every file. **25 pulled, 24 shipped.**
+- **`scripts/import-europe-portraits.mjs`** (`npm run europe:portraits`) maps
+  Catie's filenames onto roster slugs and encodes to the house headshot standard
+  — 700px square, mozjpeg q80, 14–56 KB each. ⚠ **The map is explicit and must
+  stay that way.** Fuzzy-matching a filename to a roster name is how "Zoey Wang"
+  became Chao Yi Wang in the paddle importer (8/5 pt. 22); an unmapped file is
+  reported and skipped, never guessed at. Attribution is from provenance —
+  Catie named the file — **never from looking at the frame.**
+- **⚠ TWO SOURCE FILES ARE NOT HEADSHOTS, AND BOTH WERE FOUND BY RENDERING A
+  CONTACT SHEET AND LOOKING AT IT.** Nothing in the pipeline could have caught
+  either. **Build a contact sheet after any re-import.**
+  - **Tom Protzek's file is a PHONE SCREENSHOT OF A FILE VIEWER** — 738×1600,
+    with a close button, a Share button and an Edit / Comment / Resize / Remove
+    toolbar around a small studio photo. **Skipped**, and his record now carries
+    no `portrait` at all: he is on the WPR board, so the roster falls through to
+    his real pickleball.com headshot, which beats anything that file can give.
+  - **Ellie Tomkinson's is a full-body action frame on a court**, not a
+    head-and-shoulders portrait, so the default centred square rendered her tiny
+    inside a lot of empty court. One documented crop override (`CROP`), centred
+    on the subject's head. ⚠ **Framing by eye is fine; identity by eye is not** —
+    the override moves the square, never decides who is in it.
+- **⚠ NEW GUARD: `npm run europe:audit`.** It fails if the roster names a
+  portrait file that is not in the repo — the exact bug that shipped 25 broken
+  images with a green build. A portrait path is a plain string; the bundler never
+  opens it and `next/image` only fails in a browser. **A path is not a picture.**
+  ⚠ It strips comments before matching, because its own first run failed on a
+  `P("tom-protzek")` that only appears inside the note explaining his absence.
+- **`PORTRAITS_IN_REPO` is now `true`.** Verified in the built output: every one
+  of the 24 portrait URLs on /europe resolves to a file that exists.
+
 ### 2026-09-04 (pt. 5) — 25 broken images on /europe, and the page rebuilt on the site's own components
 
 - **⚠ THE ROSTER SHIPPED 25 BROKEN IMAGES TO PRODUCTION AND THE BUILD WAS GREEN
