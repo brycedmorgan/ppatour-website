@@ -420,3 +420,64 @@ is a DNS record and a redirect map. Subdomain-first and consolidating later mean
 301ing every URL and re-earning the authority in between. If independent deploys
 ever become the real requirement without the licensing change, Vercel
 microfrontends give that under one domain — a third option that keeps the path.
+
+
+---
+
+## Two corrections from Bryce, same afternoon (2026-09-04)
+
+### ⚠ The roster shipped 25 broken images, and the fallback I documented never fired
+
+`P()` in `lib/europe-roster.ts` built `/europe/pros/<slug>.jpg` **unconditionally**,
+so all 25 records carried a path to a file that is not in the repo. The
+silhouette fallback keys on a MISSING `portrait`, so it fired for exactly one
+record — Alexia Alvarez, the only pro with no path — and the other 25 rendered
+broken images on production. The session note claiming "the roster renders
+initials until the portraits land" was **wrong**, and wrong in the direction that
+looks fine in a build and fails in a browser.
+
+`PORTRAITS_IN_REPO` now gates the helper. The per-player mapping stays written
+down; **flip the flag in the same commit that adds the files, never before.**
+**A path is not a picture** — the only safe check is whether the bytes are in
+`public/`.
+
+### ⚠ It has to be the site's components, not the site's aesthetic
+
+Bryce, on the first draft: *"This should follow the same feel, look, and
+structure we have for the other events and pages. I'm not sure why this is so
+different."* He was right, and the reason is worth naming: the page reproduced
+the site's *visual language* — the eyebrow rule, the hairline grids, the display
+type — while hand-rolling the two components that carry the most behaviour. The
+result reads as almost-right, which is worse than obviously wrong.
+
+What the bespoke versions silently dropped:
+
+| Surface | Hand-rolled | Now |
+|---|---|---|
+| Schedule | A 2-col card grid of my own | **`FeaturedEvents`** — the same big cards, tier badges, date formatting and three link states as `/events` and the homepage |
+| Roster | A 4-col portrait grid | **`AthleteRoster`** — search, gender / discipline / rank filters, live world rank, follow chips, and the branded placeholder for a missing portrait |
+| Hero | A flat paper-coloured band | The house full-bleed photo + `.scrim-hero` + CTA row, as on `/tour/[slug]` and every event page |
+
+**A regional page is a page OF this site.** Every fix to `FeaturedEvents` or
+`AthleteRoster` now lands on `/europe` for free, and neither can drift.
+**Do not reintroduce a bespoke card here.**
+
+### The region switcher
+
+`components/global/RegionSwitcher.tsx`, at the top of `/europe`. Bryce asked for
+it and the architecture section above already specified it: *"the region
+switcher is visible on every page."*
+
+⚠ **Two of the four regions leave the site, and that is not a gap we can close.**
+Asia and Australia are licensed regional operators on their own domains, so those
+entries are external links marked with a `↗`, the same treatment their event
+cards already get. Europe is a path because Europe is the last region we could
+fold in.
+
+⚠ **It never redirects anyone.** A visitor picks a region. Geo-IP may one day
+suggest one; the URL is never decided by an IP address.
+
+⚠ **It is NOT in the global header yet, deliberately** — while `EUROPE_PUBLIC` is
+false, a site-wide switcher naming Europe would advertise the page the flag
+exists to keep unlisted. Promote it into `Header.tsx` in the same change that
+flips the flag.

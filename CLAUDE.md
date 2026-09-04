@@ -63,59 +63,113 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
-### 2026-09-04 — Compare: alignment, and the reason there were no stats
+### 2026-09-04 (pt. 5) — 25 broken images on /europe, and the page rebuilt on the site's own components
 
-- Bryce, on `/paddle-lab/compare` with three JOOLA paddles: "we need better
-  alignment for the paddle and shop thing. And no stats here?" Both fixed, and
-  the second one had a cause worth writing down.
-- **⚠ THE MISSING STATS WERE THE PICKER, NOT THE TABLE.** The lab is the union
-  of two catalogues — **468 paddles John Kew has measured and 350 Pickleball
-  Central sells that he has not** (`tested: false`, `null` for every metric).
-  `ComparePicker` filtered by query and took the first 8 alphabetically, and the
-  two catalogues interleave. **Measured: a search for "joola" returned eight
-  untested paddles and zero tested ones in that top 8** — so it was not possible
-  to reach a measured JOOLA from the search box. Tested rank first now (joola
-  8/8), and an untested row says "In the shop, not tested yet" where the specs
-  would be.
-- **The table now says why it is empty, above the table and once**, naming the
-  paddles: "JOOLA Ben Johns Hyperion Pro IV has not been tested yet… every row
-  below is blank for them. Swap one out for a tested paddle to fill the table."
-  Twenty blank cells read as a broken page; one sentence reads as the truth.
-  Untested cards also carry a NOT TESTED YET chip.
-- **Alignment:** the header card is a flex column, the name reserves two lines
-  and the buttons are pinned with `mt-auto`. Names wrap unevenly ("Andre Agassi
-  Pro 16mm" is one line, "Anna Bright Scorpeus Pro IV 14mm" is two), so a plain
-  stack put the price and the Shop button at a different height in every column
-  — on the one screen whose whole job is reading across.
-- **Browse was already right** and needed nothing: its cards carry a "Not yet
-  tested" state and it has a Lab-tested only filter. Compare and its picker were
-  the only two surfaces that ignored the flag.
-- Verified by rendering both cases at 1440 — three untested, and one tested
-  beside one untested with real bars in the tested column. tsc + eslint clean,
-  full `next build` green (1,978 pages).
+- **⚠ THE ROSTER SHIPPED 25 BROKEN IMAGES TO PRODUCTION AND THE BUILD WAS GREEN
+  THE WHOLE TIME.** Bryce: *"Tons of broken images."* `P()` in
+  `lib/europe-roster.ts` built `/europe/pros/<slug>.jpg` **unconditionally**, so
+  every record carried a path to a file that is not in the repo. The silhouette
+  fallback keys on a MISSING `portrait`, so it fired for exactly one pro —
+  Alexia Alvarez, the only record with no path — and the other 25 requested
+  404s. Confirmed against production: all three sampled assets returned **404**.
+- **The pt. 3 entry's claim that "the roster renders initials" was wrong.** A
+  path is not a picture, and `next build` cannot tell the difference.
+  `PORTRAITS_IN_REPO` now gates the helper; the per-player mapping stays written
+  down. **Flip it in the same commit that adds the files, never before.**
+- **⚠ AND THE PAGE WAS REPRODUCING THE SITE'S LOOK RATHER THAN USING ITS
+  COMPONENTS.** Bryce: *"This should follow the same feel, look, and structure we
+  have for the other events and pages. I'm not sure why this is so different."*
+  The first draft copied the visual language — eyebrow rules, hairline grids,
+  display type — while hand-rolling the two components that carry the behaviour.
+  That reads as almost-right, which is worse than obviously wrong.
+  - Schedule → **`FeaturedEvents`**: the same big cards, tier badges, date
+    formatting and three link states as /events and the homepage.
+  - Roster → **`AthleteRoster`**: search, gender/discipline/rank filters, live
+    world rank, follow chips **and the branded placeholder for a missing
+    portrait** — i.e. the component that would have made the broken-image bug
+    impossible in the first place.
+  - Hero → the house full-bleed photo + `.scrim-hero` + CTA row, as on
+    `/tour/[slug]`. Photo is `event-barcelona.jpg`, a real Europe frame we
+    already hold, not a US venue standing in for one.
+- **Live world rank comes free on these 26.** `getWprIndex()` is keyed by the
+  pickleball.com slug, which is what `europeRoster` keys on — so a Europe pro on
+  the board gets a real rank with no extra request, and rank 0 (the roster's own
+  unranked state) when the token is absent or upstream 429s. **Never a fabricated
+  number.**
+- **New `components/global/RegionSwitcher.tsx`** at the top of the page, which
+  the architecture section of `docs/EUROPE.md` had already specified. ⚠ Asia and
+  Australia are **external links with a ↗** — licensed operators on their own
+  domains, the same treatment their event cards get. ⚠ It **never redirects**;
+  a visitor picks a region. ⚠ It is deliberately **not in the global header**
+  yet — while `EUROPE_PUBLIC` is false a site-wide switcher naming Europe would
+  advertise the page the flag exists to hide. Promote it in the launch commit.
+- Verified in the built output: **0 `/europe/pros/` paths**, and **every image
+  URL on the page resolves to a file that exists** (13 of 13). The Europe athlete
+  pages render **0 empty `src` attributes**.
+- **⚠ AND THE CARD BADGE WAS CONTRADICTING THE PAGE IT SAT ON.** With the real
+  component in, the Barcelona stop rendered **"Challenger · 250"** a scroll above
+  this page's own table explaining that Europe runs 75 / 125 / 250 / 500-point
+  events. `eventTierShort` reads "Challenger" for anything under 1,000 points —
+  correct US tier vocabulary (Worlds / Majors / Cups / Opens / Challengers),
+  wrong system entirely for Europe. New optional `tierName` prop on
+  `FeaturedEvents`; /europe passes "PPA Tour Europe". **Deliberately a
+  per-caller override, not a change to `eventTierShort`** — that function feeds
+  /events, the homepage, site search and the OG cards, where "Challenger" is the
+  intended word. Verified: **0 "Challenger" badges on /europe, and /events still
+  renders its 22.**
+- **⚠ THE FEED HAS ONE UPCOMING EUROPE STOP, NOT FOUR.** Production shows the
+  Barcelona P250 alone; Portorož has been played. The earlier "four stops" count
+  came from a LOCAL build, and `.env.local` holds no `PB_API_TOKEN`, so local
+  renders the curated fallback while production renders the live feed. **Count
+  Europe stops on production, never off a local build.**
 
-### 2026-09-04 — Nationals weather reschedule: Fri + Sat TV windows
+### 2026-09-04 (pt. 4) — Europe ships UNLISTED; subfolder settled over subdomain
 
-- Keaton Maynard, `@here` 9/3 7:46PM: intense weather moved Friday and Saturday
-  broadcast at Nationals. Both days now **9AM-12PM ET (PBTV)**, then
-  **4:30-9:30PM ET (Tennis Channel + PBTV)**. Was Fri PBTV 10-6 / TC 11:30-5 and
-  Sat PBTV 9-5 / TC 11-5.
-- Updated `lib/broadcast.ts` and `lib/tv-schedule.ts` in lockstep (Sep 4, Sep 5).
-  `lib/event-schedule.ts` now names Tennis Channel in `live` for both days.
-  Commit `d15639f`. Typecheck + `next build` clean.
-- **`node scripts/audit-tv-schedule.mjs` will now FAIL on Nationals Fri/Sat.**
-  That is correct: the site is ahead of the 8/13 sheet. Both files carry a
-  comment saying so. Clear it when broadcast reissues the sheet.
-- Fixed a real bug the change exposed: `components/watch/TvGuide.tsx` keyed rows
-  on `date-channel-round`, which collides now that a day carries two PBTV
-  windows for the same round. Key includes the index.
-- **First serve and gate times are UNCHANGED.** Order of play and broadcast are
-  separate (Wesley, 8/27) and the notice only moved TV. Friday still reads
-  10:00 AM first serve against a 9AM PBTV open. If play actually moved, the
-  event team owns that number and it needs a second update.
+- Bryce: *"I want them to be able to see it, but not be live for everyone yet.
+  Maybe push it but no link to it?"* **`EUROPE_PUBLIC` in
+  `lib/europe-launch.ts` is the one line that launches it.** Five files read it;
+  none needs editing. `/europe` renders in full with a "Preview — not yet live"
+  banner and `noindex, nofollow`; the nav item, footer link, site-search hit and
+  sitemap entries are all absent until it flips.
+- **⚠ THE ROSTER HAD ALREADY PUT 26 ATHLETE PAGES IN THE SITEMAP, WHICH IS THE
+  LEAK THIS CAUGHT.** `lib/athletes.ts` feeds `app/sitemap.ts`, so folding the
+  Europe pros in submitted 19 brand-new URLs to Google under a page that is not
+  supposed to be public. They are now noindex and out of the sitemap. **The seven
+  who already had a scraped profile — Owczarek, Platel, Cugliari, Amaro, Paque,
+  Seccia, Protzek — are deliberately untouched**: they were indexed long before
+  Europe was a page, and pulling them would be a live SEO regression wearing a
+  launch control's clothes. `isUnlistedEuropeAthlete` exists for exactly that
+  distinction.
+- **⚠ `lib/europe-launch.ts` IMPORTS NOTHING, AND THE FIRST DRAFT DID.** It
+  imported `europeRoster` and the 179-profile `published-athletes` JSON for the
+  helper — and `Header.tsx` is a **client component**, so both would have shipped
+  to every browser on every page of the site. The server-side half moved to
+  `lib/europe-visibility.ts`. Same split as `lib/score-names.ts` beside
+  `lib/score-headshots.ts`.
+- **⚠ NO robots.txt `Disallow`, DELIBERATELY.** Blocking the crawl stops Google
+  reading the `noindex` it is meant to obey, and a disallowed URL someone links
+  to externally can still surface as a bare contentless result. Noindex **with**
+  crawling allowed is what actually keeps a page out of the index. Do not
+  "tighten" this.
+- **⚠ UNLISTED IS NOT PRIVATE.** Anyone with the link sees it. Right weight for a
+  public tour's schedule and roster; wrong weight for anything sensitive. A real
+  gate is Basic auth in a `proxy.ts`, not this flag.
+- **Settled: `/europe` stays a path, not `europe.ppatour.com`.** Bryce raised the
+  subdomain and deferred the call. The three things he named as reasons —
+  region-varying sponsors, languages, geo-aware loading — are each a data or
+  edge-routing problem that a subdomain does not solve, while a subdomain does
+  cost the domain authority this site spent eighteen months turning around
+  (62,703 → 74,198 organic in the first month on the rebuild). It would also
+  re-create the Asia/Australia silo whose ongoing cost is written down in
+  `lib/asia-tour-links.ts`. Full reasoning, including the one case that WOULD
+  justify a subdomain, in `docs/EUROPE.md`.
+- Verified in the built output, not by reading the diff: `/europe` noindex + 0
+  sitemap entries + banner present · `arwid-dahlin` (minted) noindex + absent
+  from the sitemap · `karolina-owczarek` (pre-existing) carries no robots tag and
+  is still in the sitemap · `ben-johns` unchanged · **0 occurrences of "PPA Tour
+  Europe" in the homepage HTML.**
 
-### 2026-09-04 — `/europe` ships: 26 signed pros, the Europe rules, a form with no address
-
+### 2026-09-04 (pt. 3) — `/europe` ships: 26 signed pros, the Europe rules, a form with no address
 - Payton Pemberton posted the Europe content to `#ppa-tour-europe` on 9/3 (rules
   differences, the roster Drive folder, the contact-form ask). `/europe` is built
   from it — `app/(marketing)/europe/page.tsx`, prerendered, 5-minute revalidate,
@@ -181,6 +235,242 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   still Chris Patrick and still the thing that decides whether any of this has a
   calendar to show.
 
+### 2026-09-04 — Compare: alignment, and the reason there were no stats
+
+- Bryce, on `/paddle-lab/compare` with three JOOLA paddles: "we need better
+  alignment for the paddle and shop thing. And no stats here?" Both fixed, and
+  the second one had a cause worth writing down.
+- **⚠ THE MISSING STATS WERE THE PICKER, NOT THE TABLE.** The lab is the union
+  of two catalogues — **468 paddles John Kew has measured and 350 Pickleball
+  Central sells that he has not** (`tested: false`, `null` for every metric).
+  `ComparePicker` filtered by query and took the first 8 alphabetically, and the
+  two catalogues interleave. **Measured: a search for "joola" returned eight
+  untested paddles and zero tested ones in that top 8** — so it was not possible
+  to reach a measured JOOLA from the search box. Tested rank first now (joola
+  8/8), and an untested row says "In the shop, not tested yet" where the specs
+  would be.
+- **The table now says why it is empty, above the table and once**, naming the
+  paddles: "JOOLA Ben Johns Hyperion Pro IV has not been tested yet… every row
+  below is blank for them. Swap one out for a tested paddle to fill the table."
+  Twenty blank cells read as a broken page; one sentence reads as the truth.
+  Untested cards also carry a NOT TESTED YET chip.
+- **Alignment:** the header card is a flex column, the name reserves two lines
+  and the buttons are pinned with `mt-auto`. Names wrap unevenly ("Andre Agassi
+  Pro 16mm" is one line, "Anna Bright Scorpeus Pro IV 14mm" is two), so a plain
+  stack put the price and the Shop button at a different height in every column
+  — on the one screen whose whole job is reading across.
+- **Browse was already right** and needed nothing: its cards carry a "Not yet
+  tested" state and it has a Lab-tested only filter. Compare and its picker were
+  the only two surfaces that ignored the flag.
+- Verified by rendering both cases at 1440 — three untested, and one tested
+  beside one untested with real bars in the tested column. tsc + eslint clean,
+  full `next build` green (1,978 pages).
+
+### 2026-09-04 — Nationals weather reschedule: Fri + Sat TV windows
+
+- Keaton Maynard, `@here` 9/3 7:46PM: intense weather moved Friday and Saturday
+  broadcast at Nationals. Both days now **9AM-12PM ET (PBTV)**, then
+  **4:30-9:30PM ET (Tennis Channel + PBTV)**. Was Fri PBTV 10-6 / TC 11:30-5 and
+  Sat PBTV 9-5 / TC 11-5.
+- Updated `lib/broadcast.ts` and `lib/tv-schedule.ts` in lockstep (Sep 4, Sep 5).
+  `lib/event-schedule.ts` now names Tennis Channel in `live` for both days.
+  Commit `d15639f`. Typecheck + `next build` clean.
+- **`node scripts/audit-tv-schedule.mjs` will now FAIL on Nationals Fri/Sat.**
+  That is correct: the site is ahead of the 8/13 sheet. Both files carry a
+  comment saying so. Clear it when broadcast reissues the sheet.
+- Fixed a real bug the change exposed: `components/watch/TvGuide.tsx` keyed rows
+  on `date-channel-round`, which collides now that a day carries two PBTV
+  windows for the same round. Key includes the index.
+- **First serve and gate times are UNCHANGED.** Order of play and broadcast are
+  separate (Wesley, 8/27) and the notice only moved TV. Friday still reads
+  10:00 AM first serve against a 9AM PBTV open. If play actually moved, the
+  event team owns that number and it needs a second update.
+
+### 2026-09-03 (pt. 2) — Paddle Lab gets a real hero photograph
+### 2026-09-04 (pt. 2) — AstraZeneca / Fasenra is off the roster, not just de-logo'd
+
+- **Marketing, after seeing the logo-only fix: "it shouldn't be up on the site entirely, not just
+  the logo."** The roster record is deleted. **Audited on 10 rendered routes: AstraZeneca is now 0
+  site-wide**, and every sponsor surface is clear — `/about/sponsors`, the homepage Gold grid, the
+  logo marquee, and the "Sponsors of {event}" section on **every** event page, with the
+  "Official Asthma Partner" designation gone with it (0 occurrences anywhere).
+- **⚠ DELETING THE RECORD IS WHAT DID IT — BLANKING FIELDS WOULD NOT HAVE.** Pulling `logo` on 9/4
+  pt. 1 cleared the mark but PartnerWall then printed the NAME, its documented fallback, so a
+  text card survived in all four places. There is no combination of empty fields that removes a
+  partner; the entry has to go.
+- **⚠ IT WAS WIRED IN TWICE, AND THE SECOND ONE IS EASY TO MISS.** Beyond the roster,
+  `lib/event-sponsors.ts` carries Nationals' own curated sponsor list (Bryan Renahan's 8/27 order)
+  with `"AstraZeneca / Fasenra"` written out in full — deliberately, so the match didn't rely on
+  the slash-splitting fallback. Removing only the roster record would have left that string
+  resolving to no partner and **still rendering a name card** on the biggest event page on the
+  site. Both are gone; the docblock's sponsor count went thirteen → twelve.
+- **⚠ A TOMBSTONE COMMENT SITS WHERE THE RECORD WAS, and it is load-bearing.** The roster is
+  alphabetical within tier and this repo's habit is to fill gaps against the live
+  ppatour.com/sponsors page — so an unexplained absence reads as a missing Gold partner and
+  invites a re-add. Same reasoning as the notes left where `ScoreRail` and the Gold Prize Grid
+  were deleted. The `import-sponsor-logos.mjs` row stays commented out for the same reason.
+- **⚠ THE PRESENTING CREDIT IS DELIBERATELY STILL THERE, AND THIS IS THE ONE TO GET RIGHT.**
+  7 "Fasenra" hits remain and **all 7 are the presenting credit** — Nationals' hero eyebrow, the
+  `Presenting Partner` card in that page's sponsor marquee, the `-live` hero, the homepage
+  Next-on-Tour card and two `/events` cards. All derive from ONE line, `PRESENTER_BY_SLUG` in
+  `lib/placeholder-data.ts`, so it is a one-line change either way.
+  **Left alone because removing it would make the site state something FALSE about a live event**:
+  Nationals genuinely is presented by Fasenra, the on-court signage and broadcast graphics say so,
+  and that is a different class of error from continuing to show a sponsor who asked to come down.
+  Flagged to marketing twice and asked for an explicit call. **Pulling a paid presenting credit
+  mid-tournament is an event-billing decision, not a sponsor-listing one.**
+- Verified per route, not by grep over source: 10 routes, **0 AstraZeneca, 0 logo references,
+  0 "Official Asthma Partner"**, the asset still 404s, and **all 34 other partner marks render
+  unchanged** on the sponsors page. Controls: `/tour/senior`, `/watch` and an athlete page were
+  already clean and still are. tsc + eslint clean.
+
+### 2026-09-04 — The AstraZeneca mark is off the site, and the importer can't put it back
+
+- **Urgent request relayed by Wesley: remove the AstraZeneca logo from the sponsors page.** Done,
+  pushed to main, and it is off **every** surface, not just `/about/sponsors`.
+- **⚠ ONE FIELD, BECAUSE THE MARK WAS NEVER PAGE-SPECIFIC.** Dropping `logo`/`logoWidth`/
+  `logoHeight` from the partner record in `lib/home-content.ts` clears it from the sponsors
+  directory, the homepage Gold grid, the marquee AND the event-page sponsor wall in one edit.
+  Removing it from `/about/sponsors` alone would have left the same mark published on the
+  homepage and on Nationals' own page — i.e. the request half-done in the least visible way.
+- **⚠ THE ASSET IS DELETED AND THE IMPORTER ROW IS COMMENTED OUT. THAT SECOND HALF IS THE POINT.**
+  `scripts/import-sponsor-logos.mjs` is **re-runnable** and carried a row pulling `LOGO-AZ-1.png`
+  → `astrazeneca`, so a de-referenced file would have been silently restored by the next logo
+  refresh and could have drifted back into a card later. Same trap class as
+  `sync-tixr-prices.mjs` putting withheld tickets back on sale (7/31) and the WP importer
+  rewriting `news-posts.json` wholesale (8/5 pt. 16). Both halves or neither.
+- **⚠ THE PARTNER IS STILL LISTED, BY NAME — only the mark was asked for.** With no `logo`,
+  PartnerWall prints the partner name, its documented fallback (10 of 17 partners rendered that
+  way through August), and because **Gold shows no designation** (9/1 ruling) the card is
+  name-only: "AstraZeneca / Fasenra" with no "Official Asthma Partner" line. **Dropping a Gold
+  partner off the roster entirely is a commercial decision, not a logo removal — ask before doing
+  it.**
+- **⚠ WHY THIS CARD IN PARTICULAR IS WORTH A COMPLIANCE THOUGHT, NOT JUST A DELETE.** The art we
+  held was the **AstraZeneca CORPORATE** mark (Fasenra is one of their drugs), and this card paired
+  it with an "Official Asthma Partner" designation and a link to a **prescription-drug site**.
+  Pharma is the one category where that pairing is a regulated question. Written onto the record so
+  nobody re-adds the mark as a tidy-up.
+- **⚠ "Fasenra presents the National Championships" is UNTOUCHED, and correctly so.** That credit
+  is a NAME in event copy (`lib/placeholder-data.ts`, news copy, tournament history), not a mark.
+  The event page still reads "Presenting Partner · Fasenra" and renders no AstraZeneca image.
+- Verified on rendered pages: **zero `astrazeneca` image references on `/about/sponsors`, `/`, the
+  Nationals event page and the `-live` route** (the two leftover hits per page are the
+  `utm_content=partner-astrazeneca-fasenra` slug on the outbound link, derived from the name), the
+  asset itself now **404s** while `joola.png` still 200s, and **all 34 other partner marks render
+  unchanged**. tsc + eslint clean.
+- ⚠ The outbound URL is still `fasenra.com` where ppatour.com/sponsors uses `astrazeneca.com`
+  (Wesley's 8/3 call). Unchanged here, but it is the obvious next question for marketing.
+
+### 2026-09-03 (pt. 3) — Weather split Nationals' Friday and Saturday TV windows in two
+
+- **Event team, mid-tournament:** intense weather at Cary. Friday and Saturday are now
+  **9AM–12PM ET on PBTV, then 4:30–9:30PM ET on Tennis Channel + PBTV**. Both days were a
+  single all-day PBTV window with a midday TC window (Fri 10AM–6PM / TC 11:30–5, Sat 9–5 /
+  TC 11–5). Shipped in the two files that carry broadcast windows.
+- **⚠ THE SPLIT MEANS THREE ROWS A DAY, NOT TWO, AND THE EXTRA ONE IS PBTV'S.** The evening
+  block is a **simulcast**, so PBTV needs its own 4:30–9:30 row alongside the Tennis Channel
+  one — `TvWindow` has no `secondary` field, and without the PBTV row the evening window
+  would vanish from `/watch/tv`'s **PickleballTV filter pill** on the two biggest days of the
+  event. The TC rows deliberately carry **no `secondary: "PBTV"`** (unlike Thu/Sun, where the
+  PBTV window is wider): a standalone PBTV row already covers the identical window, and both
+  would have printed PBTV twice against one time slot.
+- **⚠ THE ORDER OF PLAY NEEDED NO EDIT, AND THAT IS THE 8/31 FIX PAYING OFF.** `d.live` in
+  `lib/event-schedule.ts` still reads `"PBTV"` for Fri and Sat — but `channelsByDay(slug)`
+  derives from `lib/broadcast.ts` and **wins over it**, so both days now print
+  **"PBTV · Tennis Channel"** for free. Don't "fix" the stale `live` strings; nothing renders
+  them (Thursday has read `"PBTV"` against a real TC window since 7/16 for the same reason).
+- **⚠ AND THE ORDER OF PLAY'S FIRST-SERVE TIMES ARE DELIBERATELY UNTOUCHED.** Broadcast
+  windows and first serve are independent (Wesley, 8/27), so a 9AM PBTV window against a 10AM
+  Friday first serve is not a mismatch to reconcile. **If weather also moved first serve or
+  gates, that is a separate edit to `lib/event-schedule.ts` and nobody has said it did.**
+- **⚠ THE AUDIT NOW FAILS ON NATIONALS ON PURPOSE.** `node scripts/audit-tv-schedule.mjs`
+  pulls the live sheet, whose header now reads **"as of 8/29/26"** — newer than the 8/13 sheet
+  this file was reconciled to, and it **still lists the pre-weather windows**. So the six new
+  windows report as site-vs-sheet mismatches until the sheet is reissued. Noted in both files;
+  **do not reconcile them back.** Lockstep (check 2) passes: **12/12 slots agree.**
+- **⚠ FOUND, NOT FIXED, AND UNRELATED: the 8/29 sheet DROPPED three Malibu windows** — Dec 15
+  Tue PBTV 1–9, Dec 16 Wed PBTV 1–9 and Dec 16 Wed TC 3:30–6:30. That is a real reconciliation
+  against a sheet nobody has re-read since 8/18, not a side effect of this change. December, so
+  it has time, but it wants a look.
+- Verified on rendered pages, not by grep: **`/watch/tv`, `/watch`, the event page's broadcast
+  table AND its Order of Play, the `-live` route and `/today`** all show the three Friday rows
+  and the three Saturday rows, and the Order of Play reads PBTV · Tennis Channel on both days.
+  Controls unchanged — Thu 11:30–5 and Sun 11–4 TC windows intact, and the other seven events
+  still pass the sheet audit. tsc + eslint clean. **Not committed.**
+
+### 2026-09-03 — Hunter Johnson onto the MEHAU S5; the photo rides on the update row
+
+- Event team via Wesley: put Hunter Johnson on the **"MEHAU S5 AIRPOOM™ Aerodynamic Pickleball
+  Paddle"**, with the product URL and a supplied product shot. Live on his profile.
+- **The paddle itself is the 8/13 stopgap layer used exactly as designed.** Jackalope still says
+  **Hit Pickleball Hand Cannon** (probed live) and he is **not in the broadcast masterlist at all**,
+  so an edit to either source was impossible from this repo. New row in `lib/paddle-updates.ts`
+  with `supersedes: "Hit Pickleball Hand Cannon"`, so it retires itself the moment Pro Player
+  Central says anything else. **Confirmed against production before writing it: the live page reads
+  "Hunter Johnson plays the Hit Pickleball Hand Cannon."** — that string is what `supersedes` has to
+  match, and reading it off the deployed page is the only way to be sure.
+  **This is the second row in that file, so it is also the second open ticket: ask Dillon Segur /
+  Liv Borski to make the edit in Jackalope, then delete the row.**
+- **⚠ THE PADDLE SHIPS IN SIX COLOURWAYS, WHICH DECIDES WHERE THE PHOTO CAN LIVE.** MEHAU's own
+  Shopify record lists **Vanguard Steed · Apex Stag · Sage Rhino · Lucky Magpie · Dolphin Leap ·
+  Cosmos Elephant**, and the display string names none of them. So `CUTOUTS` in
+  `lib/paddle-images.ts` — keyed on the paddle NAME — is the wrong home: **Adam Harvey plays the same
+  model** (8/13), and an entry there would have published Hunter's Sage Rhino on his profile as if it
+  were his. Same objection as "Six Zero Coral", which is deliberately left photo-less for this reason.
+- **⚠ AND `BY_SLUG` IS ALSO WRONG, FOR A DIFFERENT AND LESS OBVIOUS REASON.** It is keyed on the
+  ATHLETE and consulted **before** the paddle name, so a photo left there would keep rendering after
+  the update row stopped applying — a picture of a paddle the pro no longer plays, i.e. the exact
+  stale-endorsement failure the update layer exists to prevent. So the image is a new optional field
+  **on the update row itself** and retires with it. `paddleImageFor` is now **bypassed entirely**
+  under an active update rather than passed a null feed image: every other source describes the
+  paddle the DATA names, which under an update is the old one. **That closes a latent bug — the
+  8/13 note said the cut-out map "simply misses" the new name, which is true of the name-keyed map
+  and false of the slug-keyed one.**
+- **Verified consequence: Adam Harvey keeps the MEHAU paddle and correctly renders NO photo**, because
+  nobody has told us which of the six colourways he plays. That is the right answer, not a gap to fill.
+- **⚠ MY OWN CONTRAST MEASUREMENT SAID THE PHOTO WAS UNUSABLE AND IT WAS WRONG. LOOK AT THE PICTURE.**
+  The card is `bg-ppa-navy` and the S5 is a near-black paddle: the body measures **rgb(41,41,44), a
+  1.01:1 luminance ratio against #0C2B44**, which on paper means invisible. Rendered at the true 128px
+  slot beside the two shipped cut-outs it reads **as clearly as either of them** — the silhouette is
+  carried by hue (neutral grey against blue), the white wordmark, the grey rhino graphic and the black
+  grip, none of which a single luminance ratio can see. The white-plate alternative was built and
+  rejected on the render: it looks like a sticker and breaks with the house treatment.
+  **A luminance ratio is not a legibility verdict for a photograph.**
+- **`scripts/import-paddle-image.mjs` gained `--file`.** It could only scrape an og:image off a
+  Pickleball Central product page, and this paddle is not sold there — brand-supplied art arrives as
+  a file. Everything after the source is unchanged, **including the "is this actually a
+  white-background product shot" guard**, which is the part that must not be skipped for supplied
+  art. Output `public/ppa/paddles/mehau-s5-airpoom-sage-rhino.png`, 207×480, 87.7 KB — mid-range of
+  the existing 62–156 KB assets. **The colourway is in the filename because the display string does
+  not carry it.**
+- **Knockout checked by eye, not by exit code** (the 8/13 CRBN lesson): the enclosed white MEHAU
+  wordmark, the S5 mark and the UPA-A/cert stamps all survived, the grip has no holes, and no opaque
+  rectangle was written.
+- **⚠ ONE PRE-EXISTING WART FIXED IN PASSING: the alt text was doubled.** The template was
+  `` `${gear.paddle} pickleball paddle` ``, and MEHAU's product name already ends in "Pickleball
+  Paddle", so both MEHAU profiles published *"…Pickleball Paddle pickleball paddle"* — since 8/13.
+  The suffix is now appended only when the name does not already end that way; Ben Johns and ALW
+  keep theirs.
+- Verified on rendered pages against the live feed, not by grep alone: `/athletes/hunter-johnson/`
+  carries the MEHAU name in the heading answer, the buy button pointing at MEHAU's product page with
+  `utm_content=paddle:hunter-johnson`, the new cut-out through the optimizer, **and zero occurrences
+  of "Hit Pickleball", "Hand Cannon" or "Paddletek" anywhere on the page including the Product and
+  FAQPage JSON-LD**. All five `ld+json` blocks parse; the Product node reads brand **MEHAU** (not the
+  feed's "Hit Pickleball"), carries the new image and **no `offers`**. Meta description picks up
+  "Plays the …". Controls unchanged: **Ben Johns and ALW keep their cut-outs and badges, Lindsey
+  Newman still renders no callout.** CDP at 1440 and 390: **zero horizontal overflow, zero elements
+  wider than the viewport**, card 358px on a phone. tsc + eslint clean; **`next build` green,
+  1,228 pages** (run with `BUILD_DIST_DIR=.next-buildcheck` so it did not fight the dev server —
+  ⚠ that flag makes Next append two entries to `tsconfig.json`, which were reverted).
+- **⚠ FOUND, NOT FIXED, AND UNRELATED: only 183 of 203 published athletes prerender.** Hunter Johnson
+  is one of the twenty that do not, so his page is server-rendered on demand rather than baked. It
+  serves 200 either way — production proves it — and nothing in this change can affect
+  `generateStaticParams`, but the gap is worth a look on its own.
+- **⚠ Also: `.env.local` NOW HAS `PB_API_TOKEN`.** A dozen notes above say it doesn't and that live
+  data can only be checked on a deploy. That is no longer true — the rankings boards and the paddle
+  feed both resolve locally. ⚠ `tsx` does not load `.env.local` on its own; `scratchpad/load-env.ts`
+  is the shim.
+- **Not committed or pushed.**
 ### 2026-09-04 (pt. 2) — Europe ships UNLISTED; subfolder settled over subdomain
 
 - Bryce: *"I want them to be able to see it, but not be live for everyone yet.
@@ -375,7 +665,6 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   10 played, no 2027 list exists yet, send it and it goes up this week.
 - Open: Chris to send the Asia 10 + Australia list; Wade/Tim to register
   them in pickleballtournaments.com so the feed carries them for good.
-
 ### 2026-09-01 (pt. 3) — ⚠ CORRECTION: `partners=ppa` is a 1,000-point floor, not a missing tag
 
 - **The earlier entry below blamed a missing PPA partner tag on pre-2024 events. THAT IS

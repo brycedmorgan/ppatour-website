@@ -513,6 +513,18 @@ export default async function AthletePage({ params }: Params) {
    */
   const bagImage =
     paddleImage ?? (labPaddle?.photo ? { src: labPaddle.photo, width: 1, height: 1, cutout: false } : null);
+  /**
+   * Alt text for the paddle photo. "… pickleball paddle" is appended so the
+   * image is described rather than just named — but only when the product name
+   * does not already end that way. MEHAU sells the "S5 AIRPOOM™ Aerodynamic
+   * Pickleball Paddle", so the plain template read "…Pickleball Paddle
+   * pickleball paddle" on the two profiles that play it.
+   */
+  const paddleAlt = gear
+    ? gear.paddle.trim().toLowerCase().endsWith("paddle")
+      ? gear.paddle
+      : `${gear.paddle} pickleball paddle`
+    : "";
   /** Who makes it, for the Product node. Feed field first, partner match second. */
   const paddleBrand = paddleUpdate?.brand ?? liveOverride?.brand ?? gear?.brand ?? null;
   /** Stable @id for the paddle's Product node, so Person.owns can point at it. */
@@ -958,7 +970,7 @@ export default async function AthletePage({ params }: Params) {
                           {bagImage.cutout ? (
                             <Image
                               src={bagImage.src}
-                              alt={`${gear.paddle} pickleball paddle`}
+                              alt={paddleAlt}
                               width={bagImage.width}
                               height={bagImage.height}
                               sizes="80px"
@@ -972,7 +984,7 @@ export default async function AthletePage({ params }: Params) {
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
                               src={bagImage.src}
-                              alt={`${gear.paddle} pickleball paddle`}
+                              alt={paddleAlt}
                               loading="lazy"
                               className="h-full w-full rounded-md bg-white object-contain p-1.5"
                             />

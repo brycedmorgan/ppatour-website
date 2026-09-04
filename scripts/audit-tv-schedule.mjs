@@ -35,7 +35,10 @@ const EVENT_MAP = {
   "PPA Chicago Cup": "Veolia Chicago Cup",
   "PPA Virginia Beach Open": "Virginia Beach Open",
   "MLP Nations Cup": "MLP Cup",
-  "PPA World Pickleball Championships": "Pickleball World Championships",
+  // ⚠ Same shape as the Malibu row below: the KEY is the sheet's spelling and
+  // the VALUE is ours, so the Opendoor title (announced 9/1, after the 8/13
+  // sheet) lives here rather than being "fixed" on either side.
+  "PPA World Pickleball Championships": "Opendoor Pickleball World Championships",
   "PPA Florida Open": "Proton Daytona Beach Open",
   // ⚠ The 8/13 sheet still calls this one "PPA Malibu Cup"; the tour renamed it
   // to the Showcase on 8/26. The KEY is the sheet's spelling and the VALUE is

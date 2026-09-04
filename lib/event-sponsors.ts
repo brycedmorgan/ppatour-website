@@ -39,12 +39,14 @@ export type EventSponsorRef = string | LocalSponsor;
 const EVENT_SPONSORS_BY_SLUG: Record<string, EventSponsorRef[]> = {
   /**
    * Nationals / Cary — Bryan Renahan's approved list, 8/27, in his order.
-   * Thirteen sponsors; everything else on the tour roster is deliberately off
+   * Twelve sponsors; everything else on the tour roster is deliberately off
    * this page.
    *
-   * ⚠ "AstraZeneca" IS THE FASENRA PARTNER. Bryan's list says AstraZeneca and
-   * the event's own artwork says "presented by Fasenra" — one relationship,
-   * two marks, as recorded on the roster entry since 8/3. Do not add a second.
+   * ⚠ ASTRAZENECA WAS ON BRYAN'S LIST AND WAS REMOVED 9/4/26, at marketing's
+   * request, along with the roster record itself — see the tombstone in
+   * `lib/home-content.ts`. It is a deliberate absence, not a transcription miss
+   * against his list. Do not re-add it from that list without marketing.
+   * ⚠ The hero's "presented by Fasenra" credit is a different fact and stays.
    *
    * ⚠ THE THREE LOCAL MARKS WERE RECOVERED FROM PRINT FILES — the .eps preview
    * and the .ai's PDF stream. How, and the one that is under-resolution, is
@@ -60,10 +62,6 @@ const EVENT_SPONSORS_BY_SLUG: Record<string, EventSponsorRef[]> = {
    */
   "veolia-pickleball-national-championships": [
     "Veolia",
-    // Exact roster name. Bryan wrote "AstraZeneca"; the roster carries the pair
-    // because the event artwork uses the Fasenra mark. Written in full so the
-    // match is exact rather than relying on the slash-splitting fallback.
-    "AstraZeneca / Fasenra",
     "Carvana",
     {
       name: "Dominator",

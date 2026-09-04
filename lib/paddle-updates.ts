@@ -42,6 +42,26 @@ export type PaddleUpdate = {
    */
   buyUrl?: string;
   /**
+   * A transparent cut-out of the NEW paddle, for the callout.
+   *
+   * ⚠ IT RIDES ON THIS ROW RATHER THAN LIVING IN `lib/paddle-images.ts`, AND
+   * THAT IS THE WHOLE REASON IT IS HERE. That file's two maps are both wrong
+   * homes for a stopgap photo: `CUTOUTS` is keyed on the paddle NAME, and a
+   * name is not always a picture — the MEHAU S5 AIRPOOM ships in six
+   * colourways (Vanguard Steed, Apex Stag, Sage Rhino, Lucky Magpie, Dolphin
+   * Leap, Cosmos Elephant) and the display string names none of them, so an
+   * entry there would publish one pro's colourway on every other pro playing
+   * that model. And `BY_SLUG` is keyed on the athlete and consulted before the
+   * paddle name, so a photo left there would keep rendering after this row
+   * stopped applying — a photo of a paddle the pro no longer plays, which is
+   * the exact stale-endorsement failure this module is built to avoid.
+   *
+   * Here it retires when the row does. Once Jackalope carries the paddle it can
+   * carry the photo too (`image` on the feed), and the asset stays on disk
+   * either way.
+   */
+  image?: { src: string; width: number; height: number };
+  /**
    * The paddle this replaces, as the page is publishing it today. The update
    * applies ONLY while that is still the effective paddle — see the header.
    */
@@ -61,6 +81,22 @@ const BY_SLUG: Record<string, PaddleUpdate> = {
       "https://mehaupickleball.com/products/mehau-s5-airpoom-aerodynamic-pickleball-paddle",
     supersedes: "Luzz PRO-CANNON",
     note: "Event team via Wesley, 8/13. Jackalope + the broadcast masterlist both still say Luzz PRO-CANNON.",
+  },
+  "hunter-johnson": {
+    paddle: "MEHAU S5 AIRPOOM™ Aerodynamic Pickleball Paddle",
+    searchTerm: "MEHAU S5 AIRPOOM",
+    brand: "MEHAU",
+    // Same paddle, same reason as Adam Harvey above: not sold on Pickleball
+    // Central, so the buy button goes to MEHAU's own product page rather than
+    // to a PBC search that returns nothing.
+    buyUrl:
+      "https://mehaupickleball.com/products/mehau-s5-airpoom-aerodynamic-pickleball-paddle",
+    // The Sage Rhino colourway — the shot MEHAU supplied for him. The colourway
+    // is in the filename because the display string above does not carry it and
+    // five other colourways of this paddle exist; see `image` on the type.
+    image: { src: "/ppa/paddles/mehau-s5-airpoom-sage-rhino.png", width: 207, height: 480 },
+    supersedes: "Hit Pickleball Hand Cannon",
+    note: "Event team via Wesley, 9/3. Jackalope still says Hit Pickleball Hand Cannon; he is not in the broadcast masterlist at all.",
   },
 };
 

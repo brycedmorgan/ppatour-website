@@ -469,34 +469,28 @@ export const partners: Partner[] = [
   },
 
   /* ---- Gold (alphabetical) ---- */
-  {
-    /**
-     * "AstraZeneca / Fasenra" — the name marketing approved on 8/4, and it
-     * closes the flag this record has carried since the logo drop: the only art
-     * supplied is the ASTRAZENECA corporate mark (Fasenra is one of their drugs),
-     * so a card named Fasenra was showing an AstraZeneca wordmark. Naming both
-     * brands makes the mark and the record agree.
-     *
-     * ⚠ URL still open. Kept on fasenra.com — Wesley's 8/3 call, and it's the
-     * product site behind the Official Asthma Partner designation — while
-     * ppatour.com/sponsors links this partner to astrazeneca.com. One-line
-     * switch if marketing wants the corporate destination now that the mark and
-     * the name both lead with AstraZeneca.
-     *
-     * ⚠ Fasenra (not AstraZeneca) presents the National Championships, so that
-     * presenting credit still reads Fasenra in event copy. And at 575px this is
-     * the lowest-resolution mark we hold — both resolve by getting Fasenra art.
-     */
-    name: "AstraZeneca / Fasenra",
-    website: "https://www.fasenra.com",
-    role: "Official Asthma Partner",
-    category: "Medicinal",
-    note: "The tour's exclusive asthma partner.",
-    tier: "gold",
-    logo: "/ppa/sponsors/astrazeneca.png",
-    logoWidth: 575,
-    logoHeight: 139,
-  },
+  /**
+   * ⚠ ASTRAZENECA / FASENRA WAS REMOVED FROM THE ROSTER 9/4/26. DO NOT RE-ADD IT
+   * WITHOUT MARKETING — IT IS NOT A MISSING PARTNER, IT IS A DELIBERATE ABSENCE.
+   * Urgent request relayed via Wesley: the mark came down first, then "it
+   * shouldn't be up on the site entirely, not just the logo". Deleting the
+   * record is what clears it from every sponsor surface at once — the sponsors
+   * directory, the homepage Gold grid, the logo marquee and the "Sponsors of
+   * {event}" section on every event page, designation included. Blanking fields
+   * one at a time would have left a name-only card in all four.
+   *
+   * The art (`public/ppa/sponsors/astrazeneca.png`) is deleted and the matching
+   * row in `scripts/import-sponsor-logos.mjs` is commented out, so a re-run of
+   * that re-runnable importer cannot restore it. Its Nationals entry in
+   * `lib/event-sponsors.ts` is removed too.
+   *
+   * ⚠ THE PRESENTING CREDIT IS A SEPARATE FACT AND IS DELIBERATELY UNTOUCHED.
+   * Nationals genuinely is "presented by Fasenra" — that lives in
+   * `PRESENTER_BY_SLUG` (lib/placeholder-data.ts), the event's own artwork and
+   * broadcast graphics say it, and deleting it would make the site state
+   * something false about a live event rather than merely stop showing a
+   * sponsor. Pulling it is an event-billing decision; ask before doing it.
+   */
   {
     /**
      * "AT Sports Surfaces / Acrytech" — approved 8/4, and the same fix as

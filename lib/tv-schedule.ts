@@ -16,6 +16,10 @@
  * which is the argument for running it before a broadcast weekend. Total TC
  * hours are unchanged at 13h, so the figure below still holds.
  *
+ * ⚠ CARY'S FRIDAY AND SATURDAY WERE REVISED 9/3 FOR WEATHER, mid-tournament and
+ * ahead of the sheet — see the note on those two days below. Cary TC is now
+ * 20.5h, not the 22h this paragraph recorded when it was reconciled.
+ *
  * Reconciled 8/18 vs the 8/13 sheet: Cary 22h TC (Thu–Sun) · Arizona +2 FS2
  * +1 FS1 (no TC) · Las Vegas 4h TC (Sun only) · Chicago 16h TC (Thu–Sun) +2 FS1
  * +2 FS2 · VA Beach 13h TC · MLP Nations Cup PBTV-ONLY (its TC windows were
@@ -72,13 +76,15 @@ export const tvSchedule: TvEvent[] = [
           { channel: "Tennis Channel", window: "11:30AM – 5PM", round: "Round of 16" },
         ],
       },
-      /**
-       * ⚠ WEATHER RESCHEDULE, Keaton Maynard 9/3 7:46PM — not the 8/13 sheet.
-       * Friday and Saturday each split into a morning PBTV block and an evening
-       * Tennis Channel + PBTV block. `node scripts/audit-tv-schedule.mjs` will
-       * report these two days against the sheet until the sheet is reissued;
-       * that report is expected. Kept in lockstep with lib/broadcast.ts.
-       */
+      // ⚠ WEATHER REVISION, 9/3/26 (event team, mid-tournament). Friday and
+      // Saturday are SPLIT WINDOWS now — a morning PBTV block, a long break, then
+      // a five-hour evening block simulcast on Tennis Channel and PBTV. Both days
+      // were one all-day PBTV window with a midday TC window on the 8/13 sheet.
+      // ⚠ THE PRODUCTION SHEET DOES NOT CARRY THIS CHANGE — checked 9/3, the live
+      // export (header "as of 8/29/26") still lists the pre-weather windows. So
+      // `node scripts/audit-tv-schedule.mjs` WILL report these six as
+      // site-vs-sheet mismatches. That is expected; do NOT "reconcile" them back
+      // to the sheet. Clear the note once a reissued sheet matches.
       {
         date: "Sep 4",
         dow: "Fri",
@@ -291,7 +297,7 @@ export const tvSchedule: TvEvent[] = [
     ],
   },
   {
-    name: "Pickleball World Championships",
+    name: "Opendoor Pickleball World Championships",
     location: "Brookhaven Country Club · Farmers Branch, TX",
     // Worlds is a Major — the biggest one (Bryce, 7/29) — not its own tier.
     tier: "Major · 3,000",
