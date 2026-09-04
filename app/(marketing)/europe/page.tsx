@@ -242,6 +242,10 @@ export default async function EuropePage() {
             events={europeEvents}
             kicker="Calendar"
             title="Next Up in Europe"
+            /* ⚠ NOT "Challenger". Europe's tiers are 75 / 125 / 250 / 500 and
+               the table further down this page says so; the house badge would
+               print the US sub-1,000 word and contradict it. */
+            tierName="PPA Tour Europe"
             subtitle="Every PPA Tour Europe stop, from the same live feed that runs the global calendar. Filter the full tour by region on Find an Event."
           />
         ) : (

@@ -106,6 +106,22 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - Verified in the built output: **0 `/europe/pros/` paths**, and **every image
   URL on the page resolves to a file that exists** (13 of 13). The Europe athlete
   pages render **0 empty `src` attributes**.
+- **⚠ AND THE CARD BADGE WAS CONTRADICTING THE PAGE IT SAT ON.** With the real
+  component in, the Barcelona stop rendered **"Challenger · 250"** a scroll above
+  this page's own table explaining that Europe runs 75 / 125 / 250 / 500-point
+  events. `eventTierShort` reads "Challenger" for anything under 1,000 points —
+  correct US tier vocabulary (Worlds / Majors / Cups / Opens / Challengers),
+  wrong system entirely for Europe. New optional `tierName` prop on
+  `FeaturedEvents`; /europe passes "PPA Tour Europe". **Deliberately a
+  per-caller override, not a change to `eventTierShort`** — that function feeds
+  /events, the homepage, site search and the OG cards, where "Challenger" is the
+  intended word. Verified: **0 "Challenger" badges on /europe, and /events still
+  renders its 22.**
+- **⚠ THE FEED HAS ONE UPCOMING EUROPE STOP, NOT FOUR.** Production shows the
+  Barcelona P250 alone; Portorož has been played. The earlier "four stops" count
+  came from a LOCAL build, and `.env.local` holds no `PB_API_TOKEN`, so local
+  renders the curated fallback while production renders the live feed. **Count
+  Europe stops on production, never off a local build.**
 
 ### 2026-09-04 (pt. 4) — Europe ships UNLISTED; subfolder settled over subdomain
 

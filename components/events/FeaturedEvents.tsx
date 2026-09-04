@@ -22,12 +22,31 @@ export function FeaturedEvents({
   title = "Next Up on Tour",
   subtitle,
   headingAs: Heading = "h2",
+  tierName,
 }: {
   events: Tournament[];
   kicker?: string;
   title?: string;
   subtitle?: string;
   headingAs?: "h1" | "h2";
+  /**
+   * Override the word before the points on the tier badge.
+   *
+   * ⚠ THIS EXISTS BECAUSE "CHALLENGER" IS WRONG ON A PPA TOUR EUROPE STOP, AND
+   * IT IS WRONG IN THE ONE PLACE IT CONTRADICTS THE PAGE AROUND IT.
+   * `eventTierShort` reads "Challenger" for anything under 1,000 points — a US
+   * tier vocabulary (Worlds / Majors / Cups / Opens / Challengers). Europe is
+   * sized purely by points: 75 / 125 / 250 / 500. So /europe was printing
+   * "Challenger · 250" on a card sitting a scroll above its own table
+   * explaining what a 250-point event is. Two different tier systems, one badge.
+   *
+   * Deliberately a per-CALLER override rather than a change to
+   * `eventTierShort`: that function feeds /events, the homepage, site search and
+   * the OG cards, where "Challenger" is the correct and intended word for a US
+   * sub-1,000 stop. Renaming it globally would relabel every Challenger on the
+   * tour to fix one regional page.
+   */
+  tierName?: string;
 }) {
   if (events.length === 0) return null;
 
@@ -117,7 +136,7 @@ export function FeaturedEvents({
 
                 <div className="absolute right-3 top-3 flex flex-col items-end gap-1">
                   <span className={`${tierBadgeClass(t)} px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] whitespace-nowrap`}>
-                    {eventTierShort(t)} · {tierPoints(t).toLocaleString()}
+                    {tierName ?? eventTierShort(t)} · {tierPoints(t).toLocaleString()}
                   </span>
                   {days > 0 && (
                     <span
