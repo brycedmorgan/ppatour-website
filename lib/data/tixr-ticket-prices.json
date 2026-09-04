@@ -1,11 +1,11 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-09-03T16:44:40Z",
-  "event_count": 56,
-  "ticket_type_count": 907,
+  "generated_at": "2026-09-04T16:39:15Z",
+  "event_count": 54,
+  "ticket_type_count": 869,
   "series_breakdown": {
-    "PPA Tour": 53,
+    "PPA Tour": 51,
     "PPA Challenger Series": 2,
     "Major League Pickleball": 1
   },
@@ -139,8 +139,8 @@
         {
           "name": "Thursday: King's Court 3.0 - 3.5",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 20,
+          "sale_state": "CLOSED",
+          "base_price": null,
           "all_in_price": 24.95
         },
         {
@@ -321,308 +321,6 @@
       ]
     },
     {
-      "event_id": "202083",
-      "name": "Canes Night at the Veolia Pickleball National Championships",
-      "series": "PPA Tour",
-      "status": "PUBLISHED",
-      "start_date": "2026-09-03",
-      "end_date": "2026-09-04",
-      "venue": {
-        "name": "Cary Tennis Center",
-        "city": "Cary",
-        "state": "NC"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/canes-night-at-the-veolia-pickleball-national-championships-202083",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Championships",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Quarterfinals - Men's and Women's Doubles",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Quarterfinals - Singles and Mxd Doubles",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 16",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 32",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 64",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Semifinals - Men's and Women's Doubles",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Semifinals - Singles and Mxd Doubles",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Weeklong Passes",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Canes Night Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Canes Night Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Canes Night Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Canes Night Courtside",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Canes Night Grandstand",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Canes Night North Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Canes Night On Court VIP",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 221.49
-        },
-        {
-          "name": "Canes Night VIP",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 221.49
-        },
-        {
-          "name": "Canes Night VIP",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 221.49
-        }
-      ],
-      "parent_event_id": "184656"
-    },
-    {
-      "event_id": "184767",
-      "name": "Veolia Pickleball National Championships Thursday - Round of 16",
-      "series": "PPA Tour",
-      "status": "PUBLISHED",
-      "start_date": "2026-09-03",
-      "end_date": "2026-09-04",
-      "venue": {
-        "name": "Cary Tennis Center",
-        "city": "Cary",
-        "state": "NC"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/veolia-pickleball-national-championships-thursday-round-of-16-184767",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Championships",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Pickleball Vacations",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Quarterfinals - Men's and Women's Doubles",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Quarterfinals - Singles and Mxd Doubles",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Register Here",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 32",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 64",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Semifinals - Men's and Women's Doubles",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Semifinals - Singles and Mxd Doubles",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Thursday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 25,
-          "all_in_price": 30.35
-        },
-        {
-          "name": "Weeklong Passes",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Thursday Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Thursday Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 60,
-          "all_in_price": 70.23
-        },
-        {
-          "name": "Thursday Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 91.83
-        },
-        {
-          "name": "Thursday Courtside+",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 120,
-          "all_in_price": 135.05
-        },
-        {
-          "name": "Thursday Courtside+",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 120,
-          "all_in_price": 135.05
-        },
-        {
-          "name": "Thursday Grandstand (Round of 16)",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Thursday On Court VIP",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 437.59
-        },
-        {
-          "name": "Thursday VIP",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 300,
-          "all_in_price": 329.54
-        },
-        {
-          "name": "Thursday VIP",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 350,
-          "all_in_price": 383.56
-        }
-      ],
-      "parent_event_id": "184656"
-    },
-    {
       "event_id": "184766",
       "name": "Veolia Pickleball National Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
       "series": "PPA Tour",
@@ -718,6 +416,13 @@
           "name": "Friday Evening Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Friday Evening Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
           "base_price": 60,
           "all_in_price": 70.23
         },
@@ -729,13 +434,6 @@
           "all_in_price": 91.83
         },
         {
-          "name": "Friday Evening Courtside",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 46.56
-        },
-        {
           "name": "Friday Evening Courtside+",
           "category": "STANDARD",
           "sale_state": "OPEN",
@@ -745,8 +443,8 @@
         {
           "name": "Friday Evening Courtside+",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 120,
           "all_in_price": 135.05
         },
         {
@@ -931,8 +629,8 @@
         {
           "name": "Friday Morning VIP",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 350,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 383.56
         }
       ],
@@ -1047,8 +745,8 @@
         {
           "name": "Saturday Evening Courtside",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 100,
           "all_in_price": 113.44
         },
         {
@@ -1185,13 +883,6 @@
           "name": "Saturday Morning Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 60,
-          "all_in_price": 70.23
-        },
-        {
-          "name": "Saturday Morning Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 80,
           "all_in_price": 91.83
         },
@@ -1201,6 +892,13 @@
           "sale_state": "OPEN",
           "base_price": 100,
           "all_in_price": 113.44
+        },
+        {
+          "name": "Saturday Morning Courtside",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 70.23
         },
         {
           "name": "Saturday Morning Courtside+",
@@ -1370,8 +1068,8 @@
         {
           "name": "Sunday Grandstand (Bronze Medal Matches)",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 40,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 46.56
         },
         {
@@ -1391,8 +1089,8 @@
         {
           "name": "Sunday VIP",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 450,
           "all_in_price": 491.61
         }
       ],
