@@ -324,6 +324,15 @@ const COUNTRY_BY_CODE: Record<string, Tournament["country"]> = {
   POL: "Europe",
   CZE: "Europe",
   GRC: "Europe",
+  // ⚠ ANDORRA WAS IN CHRIS PATRICK'S 7/31 ANNOUNCEMENT AND WAS MISSING HERE.
+  // Without this line an Andorran stop lands on /events with no country chip
+  // and silently drops out of the Europe filter.
+  AND: "Europe",
+  SVK: "Europe",
+  HUN: "Europe",
+  IRL: "Europe",
+  LVA: "Europe",
+  SRB: "Europe",
   CAN: "Canada",
 };
 

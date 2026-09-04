@@ -53,6 +53,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/about",
     "/about/sponsors",
     "/about/how-it-works",
+    "/europe",
     "/about/what-is-pickleball",
     "/about/history",
     "/about/host-tournament",

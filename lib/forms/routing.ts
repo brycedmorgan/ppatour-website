@@ -137,6 +137,23 @@ export const FORM_ROUTING: Record<string, FormRouting> = {
     sheetTab: "Sponsorship",
     replyToSubmitter: true,
   },
+  /**
+   * PPA Tour Europe contact (/europe).
+   *
+   * ⚠ `FORM_INBOX_EUROPE` is the `europe@ppatour.com` Google Group — a group,
+   * not a mailbox, so the membership is the routing and Workspace admin is
+   * where it changes. Members as of 9/4: Katherina Preis, Chris Patrick, Payton
+   * Pemberton. Jeff Watson was removed on Payton's instruction (9/3).
+   *
+   * The address is never rendered. See the matching note in ./schema.ts.
+   */
+  europe: {
+    notifyTo: () => inbox("FORM_INBOX_EUROPE"),
+    subject: (d) =>
+      `New submission from PPATour.com — PPA Tour Europe (${d.topic || "General"})`,
+    sheetTab: "Europe",
+    replyToSubmitter: true,
+  },
   newsletter: {
     notifyTo: () => inbox("FORM_INBOX_NEWSLETTER"),
     subject: () => "New newsletter signup — ppatour.com",

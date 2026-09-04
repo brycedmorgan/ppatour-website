@@ -6,6 +6,8 @@
  * and reference these slugs.
  */
 
+import { europeRoster } from "@/lib/europe-roster";
+
 export type Athlete = {
   slug: string;
   name: string;
@@ -28,7 +30,12 @@ export type Athlete = {
 
 const P = (slug: string) => `/ppa/pros/${slug}.jpg`;
 
-export const athletes: Athlete[] = [
+/**
+ * The curated US roster. Exported only through `athletes` below, which folds in
+ * the PPA Tour Europe signings so each of them mints a real /athletes/[slug]
+ * page instead of a second, parallel profile route. See lib/europe-roster.ts.
+ */
+const curatedUsAthletes: Athlete[] = [
   {
     slug: "ben-johns",
     name: "Ben Johns",
@@ -420,6 +427,33 @@ export const athletes: Athlete[] = [
     bio: "Lina Padegimaite is one of the tour's international competitors, contesting both the women's singles and doubles draws.",
   },
 ];
+
+/**
+ * PPA Tour Europe signings as curated athlete records.
+ *
+ * ⚠ `bestRank` IS ZERO ON PURPOSE and must stay that way. The field is a
+ * hand-maintained career-best that the profile page is already forbidden from
+ * rendering as a rank (see the warning on the type). Europe pros have no such
+ * figure, and inventing one would be inventing a ranking. A live world rank
+ * still resolves normally through `getWprPlayerBySlug` for any Europe pro on
+ * the board — which is why `europeRoster` keys on the pickleball.com slug.
+ *
+ * ⚠ A pro with no portrait yet (Alexia Alvarez) carries an EMPTY headshot, not
+ * a placeholder path. `loadAthlete` treats the empty string as absent and falls
+ * through to the API headshot, so she is never a broken image.
+ */
+const europeAthletes: Athlete[] = europeRoster.map((p) => ({
+  slug: p.slug,
+  name: p.name,
+  country: p.country,
+  headshot: p.portrait ?? "",
+  divisions: p.divisions,
+  bestRank: 0,
+  tagline: p.tagline,
+  bio: p.bio[0] ?? `${p.name} is a professional pickleball player on PPA Tour Europe.`,
+}));
+
+export const athletes: Athlete[] = [...curatedUsAthletes, ...europeAthletes];
 
 export function getAthlete(slug: string): Athlete | undefined {
   return athletes.find((a) => a.slug === slug);
