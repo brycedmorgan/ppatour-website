@@ -594,14 +594,19 @@ const SLUG_ALIAS: Record<string, string> = CURATED_TO_CANONICAL;
  * Called by EVERY news article page as well as the athlete pages, so it has to
  * be free after the first hit — it reads the same shared board cache the rest
  * of this file does and makes no request of its own.
+ *
+ * ⚠ WHOLE BOARD, NOT PAGE 1 — fixed 9/4 with {@link getWprPlayerBySlug}, which
+ * carries the full note. This one decides the rank badge on the "More Pros"
+ * rail and on every news article's "Players in This Story" rail, so leaving it
+ * capped at the top {@link BOARD_PAGE_SIZE} would have shown a pro's rank on
+ * their own profile and a blank beside their face two sections away.
  */
 export async function getRankingBySlug(): Promise<Record<string, AthleteRanking>> {
   if (!config().token) return {};
 
   const out: Record<string, AthleteRanking> = {};
   for (const g of RANKING_GENDERS) {
-    const board = await boardPage(g.gender, 1);
-    for (const e of board?.entries ?? []) {
+    for (const e of await boardAll(g.gender)) {
       if (e.slug && e.rank > 0) {
         out[e.slug] = { rank: e.rank, gender: g.key as "men" | "women", points: e.points };
       }
@@ -655,9 +660,15 @@ export async function getWprRoster(): Promise<ApiAthlete[]> {
 
 /**
  * Live WPR record for every ranked player, keyed by the API `player_slug`,
- * covering the first {@link BOARD_PAGE_SIZE} of each gender board. Lets the full
- * roster grid show live rank/points/headshots for any published athlete who is
- * ranked. Never throws — returns {} on any problem.
+ * covering the WHOLE of both gender boards. Lets the full roster grid show live
+ * rank/points/headshots for any published athlete who is ranked. Never throws —
+ * returns {} on any problem.
+ *
+ * ⚠ THIS READS `boardAll`, NOT PAGE 1. It used to read only the first
+ * {@link BOARD_PAGE_SIZE} rows of each board, which silently blanked the rank
+ * and points of every pro ranked 251+ — see the note on
+ * {@link getWprPlayerBySlug} for what that cost and why the extra pages are
+ * effectively free.
  */
 export async function getWprIndex(): Promise<Record<string, ApiAthlete>> {
   if (!config().token) return {};
@@ -665,9 +676,9 @@ export async function getWprIndex(): Promise<Record<string, ApiAthlete>> {
   const out: Record<string, ApiAthlete> = {};
   await Promise.all(
     RANKING_GENDERS.map(async (g) => {
-      const board = await boardPage(g.gender, 1);
+      const entries = await boardAll(g.gender);
       const gender = g.gender === "F" ? "female" : "male";
-      for (const e of board?.entries ?? []) out[e.slug] = { ...e, gender };
+      for (const e of entries) out[e.slug] = { ...e, gender };
     }),
   );
   return out;
@@ -675,8 +686,25 @@ export async function getWprIndex(): Promise<Record<string, ApiAthlete>> {
 
 /**
  * A single player's live WPR record by slug (accepts our curated slug or the
- * API's player_slug). Scans the first {@link BOARD_PAGE_SIZE} of both boards.
- * Null if not found or on any error.
+ * API's player_slug). Scans the WHOLE of both boards. Null if not found or on
+ * any error.
+ *
+ * ⚠ IT USED TO SCAN ONLY PAGE 1 — THE TOP {@link BOARD_PAGE_SIZE} — AND THAT
+ * WAS A REAL BUG, NOT A LIMIT. A pro ranked 251+ was simply "not found", so the
+ * page fell through to `rank: 0` / `points: 0` and printed a DASH for both,
+ * which reads as "unranked" when the player has real points. Reported 9/4 on
+ * Karolina Owczarek — world No. 261, 51.25 points, page 2 of the women's board
+ * — whose profile showed a blank WPR while pickleball.com showed her 51.
+ * **Measured the same day: 17 of our 203 published profiles were blanked this
+ * way**, from No. 261 down to No. 1047. Only 5 of the 203 are genuinely
+ * unranked, and those still (correctly) show a dash.
+ *
+ * ⚠ The extra pages are effectively free, which is why this is safe to do on a
+ * per-page lookup. `boardAll` is 4 pages for the women's board and 6 for the
+ * men's at today's sizes; every one is memoized in-process, held in the Next
+ * Data Cache for 24h and tagged {@link ATHLETES_CACHE_TAG}, and `/rankings`
+ * already pulls exactly these pages via `getFullRankings` — so the board is
+ * usually already warm before an athlete page asks for it.
  *
  * Called once per athlete page AND again from its generateMetadata, so it must
  * cost nothing beyond the shared board — hence no request of its own.
@@ -686,8 +714,8 @@ export async function getWprPlayerBySlug(slug: string): Promise<ApiAthlete | nul
 
   const target = SLUG_ALIAS[slug] ?? slug;
   for (const g of RANKING_GENDERS) {
-    const board = await boardPage(g.gender, 1);
-    const found = board?.entries.find((e) => e.slug === target);
+    const entries = await boardAll(g.gender);
+    const found = entries.find((e) => e.slug === target);
     if (found) return { ...found, gender: g.gender === "F" ? "female" : "male" };
   }
   return null;

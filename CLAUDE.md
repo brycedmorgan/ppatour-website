@@ -63,6 +63,48 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-04 (pt. 7) — The WPR lookups only read the top 250, blanking 17 profiles
+
+- **Wesley: Karolina Owczarek's profile shows a blank WPR while pickleball.com gives her 51 points.**
+  She is ranked. Probed the live board: **women's No. 261, 51.25 points, 2 events**, `player_slug`
+  `karolina-owczarek` — an exact match, no alias needed. pickleball.com's "51" is the same figure
+  rounded.
+- **⚠ THE CAUSE WAS A PAGE-1 CAP IN OUR OWN LOOKUP, NOT THE FEED AND NOT THE CACHE.**
+  `getWprPlayerBySlug` read `boardPage(gender, 1)` — the top {@link BOARD_PAGE_SIZE} = 250. The
+  women's board is **859 players over 4 pages**, so at No. 261 she is on page 2 and came back "not
+  found". The page then falls through to `rank: 0` / `points: 0`, and both tiles print a DASH —
+  which reads as *unranked* for a player with real points. **No amount of cache clearing could
+  have fixed it**, which is worth knowing because that is what was being tried first.
+- **⚠ IT WAS 17 PROFILES, NOT ONE. Measured, not estimated:** full boards (F 859 / M 1484)
+  cross-referenced against all 203 published profiles — **181 ranked inside the top 250 and showed
+  correctly, 17 ranked 251+ and rendered blank, 5 genuinely unranked and correctly blank.** The 17
+  run from No. 261 down to **No. 1047** (Owczarek 261, Paolicelli 262, Merchant 364, Amaro Veloso
+  432, Jensen 479, Bukina 493, Jones 501, Paque 588, Ling 611, Teo 635, Seccia 669, Sanchez Vidal
+  672, Kanichova 674, Kaszoni 701, Enmer 718, Peltier 1045, Biedermann 1047).
+- **⚠ THREE FUNCTIONS HAD THE SAME CAP AND FIXING ONE WOULD HAVE BEEN WORSE THAN FIXING NONE.**
+  `getWprPlayerBySlug` (the profile's rank chip AND its `<title>`), `getWprIndex` (the `/athletes`
+  roster grid) and `getRankingBySlug` (rank badges on "More Pros" **and** on every news article's
+  "Players in This Story" rail). Patching only the profile would have printed a pro's rank in the
+  hero and a blank beside their face two sections down the same page.
+- **⚠ `getWprRoster` IS DELIBERATELY LEFT CAPPED** — it calls `boardTop(gender, TOP_COUNT)` because
+  the roster module is *defined* as the top 25 of each board. That is a feature, not this bug.
+- **The extra pages are effectively free, which is what makes this safe on a per-page lookup.**
+  `boardAll` is 4 requests for the women's board and 6 for the men's; every one is memoized
+  in-process, held 24h in the Data Cache under `ATHLETES_CACHE_TAG`, and **`/rankings` already
+  pulls exactly these pages via `getFullRankings`**, so the board is usually warm before an athlete
+  page asks. Measured on rendered pages: a 251+ profile is **not slower** than a top-250 one
+  (4.2s vs 4.8–8.5s on dev), i.e. the deep pages are coming out of the shared cache.
+- Verified on rendered pages: Owczarek reads **No. 261 · 51.25 WPR Points** on her profile and
+  `W No. 261 · 51.25 WPR pts` on her `/athletes` card; Paolicelli 262, Merchant 364 and Biedermann
+  1047 all populate. **Controls unchanged — Ben Johns No. 1 / 18,837.5, ALW No. 1 / 21,555, Kate
+  Fahey No. 8 / 6,352.5.** tsc + eslint clean.
+- **⚠ THERE IS STILL A CEILING: `MAX_BOARD_PAGES` 10 × 250 = 2,500 per gender, and it truncates
+  SILENTLY.** The men's board is 1,484 today so there is headroom, but the same class of blank
+  returns the day a board passes 2,500 — and nothing warns.
+- ⚠ Found while probing, not fixed: points render unrounded, so her tile reads **51.25** where
+  pickleball.com reads **51**. Deep-board players carry fractional points; a rounding rule is a
+  presentation decision, so it was left alone.
+
 ### 2026-09-04 (pt. 6) — The 24 Europe portraits are in, and two source files were not portraits
 
 - **`authuser=0` was the whole blocker.** Catie's Drive folder is not
