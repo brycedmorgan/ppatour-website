@@ -1,36 +1,52 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { AthleteRoster, type RosterAthlete } from "@/components/athletes/AthleteRoster";
+import { FeaturedEvents } from "@/components/events/FeaturedEvents";
 import { InquiryForm } from "@/components/forms/InquiryForm";
+import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
+import { RegionSwitcher } from "@/components/global/RegionSwitcher";
 import { getEvents } from "@/lib/events-api";
 import { EUROPE_PUBLIC, europeRobots } from "@/lib/europe-launch";
 import { europeRoster } from "@/lib/europe-roster";
+import { countryCodeFor } from "@/lib/published-athletes";
+import { getWprIndex } from "@/lib/rankings-api";
 import { SITE_URL } from "@/lib/site";
 
 /**
  * PPA Tour Europe — a REGION of ppatour.com, not a fifth website.
  *
- * Bryce's call 2026-08-24; the full reasoning, the domain audit and the list of
- * what actually blocks Europe launching are in `docs/EUROPE.md`. Read that
- * before adding anything here.
+ * Bryce's call 2026-08-24; the full reasoning, the domain audit, the unlisted
+ * launch flag and the subfolder-vs-subdomain ruling are all in `docs/EUROPE.md`.
+ * Read that before adding anything here.
  *
- * ⚠ THIS PAGE OWNS NO CALENDAR OF ITS OWN, AND THAT IS THE WHOLE POINT.
- * `lib/events-api.ts` already reads every PPA org from one feed and rolls 20+
- * European ISO codes up to a single `Europe` country value (Connor, 7/31). The
- * schedule below is that feed, filtered. A Europe stop appears here the moment
- * it lands in PB Tournaments, with no code change — which also means an EMPTY
- * schedule here is a data problem for Chris Patrick, never a bug in this file.
+ * ⚠ THIS PAGE RENDERS THE SITE'S OWN COMPONENTS, NOT ITS OWN LOOKALIKES, AND
+ * THAT IS THE WHOLE POINT OF THIS FILE'S SECOND DRAFT. The first version
+ * hand-rolled an event grid and a roster grid that were *nearly* the site's —
+ * different card, different hero, no filters, no live rank, no follow button —
+ * and Bryce's note was immediate: *"This should follow the same feel, look, and
+ * structure we have for the other events and pages."* A regional page is a page
+ * OF this site. It uses `FeaturedEvents` for the schedule and `AthleteRoster`
+ * for the pros, so a fix to either lands here for free and neither can drift.
+ * **Do not reintroduce a bespoke card here.**
+ *
+ * ⚠ THIS PAGE OWNS NO CALENDAR OF ITS OWN. `lib/events-api.ts` already reads
+ * every PPA org from one feed and rolls 20+ European ISO codes up to a single
+ * `Europe` country value (Connor, 7/31). The schedule below is that feed,
+ * filtered. A Europe stop appears the moment it lands in PB Tournaments, with no
+ * code change — which also means an EMPTY schedule here is a data problem for
+ * Chris Patrick, never a bug in this file.
  *
  * ⚠ CONTENT SOURCE: Payton Pemberton, #ppa-tour-europe 9/3, with the rules
- * differences written by the Europe team. Rules copy below is theirs, near
- * verbatim, and should not be "improved" without asking them — several lines
- * are deliberately hedged (draw sizes vary, no fixed entry threshold) because
- * the tournament director has discretion.
+ * differences written by the Europe team. The rules copy is theirs, near
+ * verbatim, and should not be "improved" without asking them — several lines are
+ * deliberately hedged (draw sizes vary, no fixed entry threshold) because the
+ * tournament director has discretion.
  *
  * ⚠ THE CONTACT SECTION RENDERS A FORM AND NO ADDRESS, ON PURPOSE. Payton, 9/3:
  * "Don't publicize the email but have the form forward to us." The destination
- * is the `europe@ppatour.com` Google Group, held in `FORM_INBOX_EUROPE`. Do not
- * add a mailto row here like /about/contact has.
+ * is the `europe@ppatour.com` group, held in `FORM_INBOX_EUROPE`. Do not add a
+ * mailto row here like /about/contact has.
  */
 
 export const revalidate = 300;
@@ -80,15 +96,14 @@ const ENTRY_PRIORITY = [
   },
 ];
 
-const SECTIONS = [
-  { id: "schedule", label: "Schedule" },
-  { id: "roster", label: "The Pros" },
-  { id: "events", label: "Event Types" },
-  { id: "entry", label: "Entry & Eligibility" },
-  { id: "rules", label: "Rules" },
-  { id: "contact", label: "Contact" },
+const DIFFERENCES = [
+  "Its own calendar, events and player operations across the region.",
+  "Four event tiers — 75, 125, 250 and 500 points — rather than the US Worlds / Majors / Cups / Opens structure.",
+  "ITP players may compete, capped at 125-point events.",
+  "Draw sizes of 32 to 64, set per event by the tournament director.",
 ];
 
+/** House section heading — the same eyebrow + rule the rest of the site uses. */
 function SectionHead({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
     <>
@@ -105,24 +120,44 @@ function SectionHead({ eyebrow, title }: { eyebrow: string; title: string }) {
   );
 }
 
-function dateRange(startIso: string, endIso: string): string {
-  const s = new Date(`${startIso}T12:00:00Z`);
-  const e = new Date(`${endIso}T12:00:00Z`);
-  const opts: Intl.DateTimeFormatOptions = { month: "short", day: "numeric", timeZone: "UTC" };
-  const sameMonth = s.getUTCMonth() === e.getUTCMonth() && s.getUTCFullYear() === e.getUTCFullYear();
-  const left = s.toLocaleDateString("en-US", opts);
-  const right = sameMonth
-    ? String(e.getUTCDate())
-    : e.toLocaleDateString("en-US", opts);
-  return `${left}–${right}, ${e.getUTCFullYear()}`;
+function genderFromDivisions(divisions: string[]): "male" | "female" {
+  return divisions.some((d) => d.startsWith("Women")) ? "female" : "male";
 }
 
 export default async function EuropePage() {
   const { events } = await getEvents();
   const europeEvents = events
-    .filter((e) => e.country === "Europe")
+    .filter((e) => e.country === "Europe" && e.status !== "completed")
     .sort((a, b) => a.startDate.localeCompare(b.startDate));
-  const upcoming = europeEvents.filter((e) => e.status !== "completed");
+
+  /**
+   * Live world rank for any Europe pro who is on the board. This is the payoff
+   * for keying `europeRoster` on the pickleball.com slug rather than a name we
+   * made up: the same index /athletes uses answers for these 26 with no extra
+   * request. Degrades to rank 0 (the roster's own "unranked" state) with no
+   * token or on a 429 — never a fabricated number.
+   */
+  const wprIndex = await getWprIndex().catch(
+    () => ({}) as Awaited<ReturnType<typeof getWprIndex>>,
+  );
+
+  const roster: RosterAthlete[] = europeRoster.map((p) => {
+    const wpr = wprIndex[p.slug];
+    return {
+      slug: p.slug,
+      name: p.name,
+      // ⚠ "" is the roster's documented "render the branded placeholder" value.
+      // Never a path to a file that is not in the repo — that shipped 25 broken
+      // images to production once already. See lib/europe-roster.ts.
+      headshot: p.portrait ?? wpr?.image ?? "",
+      country: p.country,
+      countryCode: wpr?.countryCode || countryCodeFor(p.country),
+      rank: wpr?.rank ?? 0,
+      points: wpr?.points ?? 0,
+      gender: wpr?.gender ?? genderFromDivisions(p.divisions),
+      divisions: p.divisions,
+    };
+  });
 
   return (
     <>
@@ -132,196 +167,126 @@ export default async function EuropePage() {
           is how someone forwards it to a licensee or posts it to social. It
           disappears with the flag, along with the nav gap it explains. */}
       {!EUROPE_PUBLIC && (
-        <div className="bg-ppa-navy text-white">
+        <div className="bg-ppa-blue-deep text-white">
           <div className="mx-auto w-full max-w-6xl px-4 py-2.5">
-            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-white/70">
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80">
               Preview — not yet live.{" "}
-              <span className="font-normal normal-case tracking-normal text-white/55">
-                This page is reachable by link only. It is not linked from
-                ppatour.com and not in search. Please don&apos;t share it publicly yet.
+              <span className="font-normal normal-case tracking-normal text-white/60">
+                Reachable by link only. Not linked from ppatour.com and not in
+                search. Please don&apos;t share it publicly yet.
               </span>
             </p>
           </div>
         </div>
       )}
 
-      {/* ---------------------------------------------------------- Hero */}
-      <section className="bg-ppa-paper">
-        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+      <RegionSwitcher active="Europe" />
+
+      {/* ------------------------------------------------------------ Hero */}
+      {/* Same hero as /tour/[slug] and the event pages: full-bleed photograph,
+          the house `.scrim-hero`, eyebrow, display headline, CTA row. */}
+      <section className="relative isolate overflow-hidden bg-ppa-navy text-white">
+        <Image
+          src="/ppa/event-barcelona.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 scrim-hero" />
+        <div className="relative mx-auto w-full max-w-6xl px-4 py-16">
           <div className="flex items-center gap-2.5">
             <span className="h-2 w-2 bg-ppa-blue" />
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
               PPA Tour Europe
             </p>
           </div>
           <h1 className="mt-2 max-w-3xl font-display text-3xl uppercase leading-[1.02] sm:text-5xl">
             Professional Pickleball, Across Europe
           </h1>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ppa-navy/60 sm:text-base">
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/70 sm:text-base">
             PPA Tour Europe is operated separately from the PPA Tour in the
             United States. It shares the PPA name and standards, and runs its own
             calendar, events and player operations across the region.
           </p>
-
-          <nav aria-label="On this page" className="mt-6 flex min-w-0 flex-wrap gap-2">
-            {SECTIONS.map((s) => (
-              <a
-                key={s.id}
-                href={`#${s.id}`}
-                className="border border-ppa-line bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy transition-colors hover:border-ppa-blue hover:text-ppa-blue"
-              >
-                {s.label}
-              </a>
-            ))}
-          </nav>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href="#schedule"
+              className="inline-flex items-center border border-ppa-blue bg-ppa-blue px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition-colors hover:border-ppa-blue-deep hover:bg-ppa-blue-deep"
+            >
+              Schedule
+            </a>
+            <a
+              href="#pros"
+              className="inline-flex items-center border border-white/30 px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition-colors hover:border-white hover:bg-white/10"
+            >
+              The Pros
+            </a>
+            <a
+              href="#entry"
+              className="inline-flex items-center border border-white/30 px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition-colors hover:border-white hover:bg-white/10"
+            >
+              Entry &amp; Rules
+            </a>
+          </div>
         </div>
       </section>
 
-      {/* ------------------------------------------------------ Schedule */}
-      <section id="schedule" className="scroll-mt-24 bg-white">
-        <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <SectionHead eyebrow="Calendar" title="PPA Tour Europe Schedule" />
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ppa-navy/60">
-            Every PPA Tour Europe stop, from the same live feed that runs the
-            global calendar. Filter the full tour by region on{" "}
-            <Link href="/events" className="text-ppa-blue hover:text-ppa-navy">
-              Find an Event
-            </Link>
-            .
-          </p>
-
-          {upcoming.length === 0 ? (
-            /* ⚠ NOT AN ERROR STATE. The feed is authoritative; if it holds no
-               Europe stop, the honest thing is to say the calendar is being
-               confirmed rather than print a fabricated one. */
-            <div className="mt-6 border border-ppa-line bg-ppa-paper p-6">
-              <p className="font-display text-base uppercase text-ppa-navy">
-                The 2026–2027 calendar is being confirmed
-              </p>
-              <p className="mt-2 max-w-xl text-sm leading-relaxed text-ppa-navy/60">
+      {/* -------------------------------------------------------- Schedule */}
+      {/* ⚠ The site's own event band, not a lookalike. Same card, same tier
+          badge, same date and link behaviour as /events and the homepage. */}
+      <section id="schedule" className="scroll-mt-24">
+        {europeEvents.length > 0 ? (
+          <FeaturedEvents
+            events={europeEvents}
+            kicker="Calendar"
+            title="Next Up in Europe"
+            subtitle="Every PPA Tour Europe stop, from the same live feed that runs the global calendar. Filter the full tour by region on Find an Event."
+          />
+        ) : (
+          /* ⚠ NOT AN ERROR STATE. The feed is authoritative; with no Europe stop
+             in it the honest thing is to say the calendar is being confirmed
+             rather than print a fabricated one. */
+          <div className="border-b border-ppa-line bg-white">
+            <div className="mx-auto w-full max-w-6xl px-4 py-12">
+              <SectionHead eyebrow="Calendar" title="The Calendar Is Being Confirmed" />
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ppa-navy/60">
                 Dates and venues are announced as each host city is confirmed.
                 Sign up below and we will send the schedule the day it lands.
               </p>
             </div>
-          ) : (
-            <div className="mt-6 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-2">
-              {upcoming.map((e) => {
-                const inner = (
-                  <>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-blue">
-                      {dateRange(e.startDate, e.endDate)}
-                    </p>
-                    <p className="mt-1 font-display text-base uppercase leading-tight text-ppa-navy">
-                      {e.name}
-                    </p>
-                    <p className="mt-1 text-xs text-ppa-navy/55">
-                      {[e.venue, e.city, e.state].filter(Boolean).join(" · ")}
-                    </p>
-                  </>
-                );
-                /* Three link states, exactly as lib/placeholder-data.ts
-                   documents them: internal page, link-out, or nowhere to go. */
-                if (e.detailsComingSoon) {
-                  return (
-                    <div key={e.slug} className="bg-white p-5">
-                      {inner}
-                      <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.14em] text-ppa-navy/40">
-                        Details Coming Soon
-                      </p>
-                    </div>
-                  );
-                }
-                if (e.hasInternalPage) {
-                  return (
-                    <Link
-                      key={e.slug}
-                      href={`/events/${e.slug}`}
-                      className="bg-white p-5 transition-colors hover:bg-ppa-paper"
-                    >
-                      {inner}
-                    </Link>
-                  );
-                }
-                return (
-                  <a
-                    key={e.slug}
-                    href={e.externalUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-white p-5 transition-colors hover:bg-ppa-paper"
-                  >
-                    {inner}
-                    <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.14em] text-ppa-blue">
-                      Event Details ↗
-                    </p>
-                  </a>
-                );
-              })}
-            </div>
-          )}
+          </div>
+        )}
+        <div className="border-b border-ppa-line bg-white">
+          <div className="mx-auto w-full max-w-6xl px-4 pb-10 text-sm">
+            <Link href="/events" className="text-ppa-blue hover:text-ppa-navy">
+              See the full tour schedule →
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* -------------------------------------------------------- Roster */}
-      <section id="roster" className="scroll-mt-24 bg-ppa-paper">
+      {/* ----------------------------------------------------------- Pros */}
+      {/* ⚠ The site's roster component — search, gender, discipline and rank
+          filters, live world rank, follow chips, and the branded placeholder for
+          a pro whose portrait has not arrived. All of it for free. */}
+      <section id="pros" className="scroll-mt-24 bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <SectionHead eyebrow="The Pros" title="Signed to PPA Tour Europe" />
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ppa-navy/60">
-            {europeRoster.length} professionals from {new Set(europeRoster.map((p) => p.country)).size}{" "}
-            countries. Tap any pro for their full profile.
+            {europeRoster.length} professionals from{" "}
+            {new Set(europeRoster.map((p) => p.country)).size} countries. Search
+            the roster, filter it, and tap any pro for their profile.
           </p>
-
-          <div className="mt-6 grid grid-cols-2 gap-px border border-ppa-line bg-ppa-line sm:grid-cols-3 lg:grid-cols-4">
-            {europeRoster.map((p) => (
-              <Link
-                key={p.slug}
-                href={`/athletes/${p.slug}`}
-                className="group min-w-0 bg-white transition-colors hover:bg-ppa-paper"
-              >
-                <div className="relative aspect-square w-full overflow-hidden bg-ppa-navy/5">
-                  {p.portrait ? (
-                    <Image
-                      src={p.portrait}
-                      alt={p.name}
-                      fill
-                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                      className="object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
-                    />
-                  ) : (
-                    /* ⚠ Deliberate, visible gap — Alexia Alvarez's portrait has
-                       not arrived. See lib/europe-roster.ts. */
-                    <div className="flex h-full w-full items-center justify-center">
-                      <span className="font-display text-2xl uppercase text-ppa-navy/25">
-                        {p.name
-                          .split(" ")
-                          .map((w) => w[0])
-                          .join("")
-                          .slice(0, 2)}
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <div className="min-w-0 p-4">
-                  <p className="font-display text-sm uppercase leading-tight text-ppa-navy group-hover:text-ppa-blue">
-                    {p.name}
-                  </p>
-                  <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
-                    {p.country} · {p.age}
-                  </p>
-                  {p.sponsors.length > 0 && (
-                    <p className="mt-1.5 text-xs leading-snug text-ppa-navy/55">
-                      {p.sponsors.join(", ")}
-                    </p>
-                  )}
-                </div>
-              </Link>
-            ))}
+          <div className="mt-6">
+            <AthleteRoster athletes={roster} />
           </div>
         </div>
       </section>
 
       {/* --------------------------------------------------- Event types */}
-      <section id="events" className="scroll-mt-24 bg-white">
+      <section id="events" className="scroll-mt-24 border-t border-ppa-line bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <SectionHead eyebrow="Event Types" title="Four Tiers, Sized by Points" />
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ppa-navy/60">
@@ -329,9 +294,9 @@ export default async function EuropePage() {
             ranking points are on the line.
           </p>
 
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-6 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-2 lg:grid-cols-4">
             {EVENT_TIERS.map((t) => (
-              <div key={t.points} className="min-w-0 border border-ppa-line bg-ppa-paper p-5">
+              <div key={t.points} className="min-w-0 bg-white p-5">
                 <p className="font-display text-3xl leading-none text-ppa-blue">{t.points}</p>
                 <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-navy/50">
                   Point Event
@@ -350,7 +315,7 @@ export default async function EuropePage() {
       </section>
 
       {/* ------------------------------------------- Entry & eligibility */}
-      <section id="entry" className="scroll-mt-24 bg-ppa-paper">
+      <section id="entry" className="scroll-mt-24 border-t border-ppa-line bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <SectionHead eyebrow="Entry & Eligibility" title="How the Main Draw Is Filled" />
 
@@ -426,7 +391,7 @@ export default async function EuropePage() {
       </section>
 
       {/* --------------------------------------------------------- Rules */}
-      <section id="rules" className="scroll-mt-24 bg-white">
+      <section id="rules" className="scroll-mt-24 border-t border-ppa-line bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <SectionHead eyebrow="Rules" title="The Rulebook" />
           <div className="mt-5 grid gap-10 lg:grid-cols-[1.1fr_1fr]">
@@ -444,44 +409,50 @@ export default async function EuropePage() {
                 The rules on this page are the ones specific to Europe. Anything
                 not covered here follows the rulebook.
               </p>
-              <a
-                href="https://upaa.unitedpickleball.com/official-rulebook/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 border border-ppa-blue bg-ppa-blue px-4 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition-colors hover:border-ppa-blue-deep hover:bg-ppa-blue-deep"
-              >
-                Read the UPA-A Rulebook ↗
-              </a>
+              <div className="flex flex-wrap gap-3 pt-1">
+                <a
+                  href="https://upaa.unitedpickleball.com/official-rulebook/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center border border-ppa-blue bg-ppa-blue px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition-colors hover:border-ppa-blue-deep hover:bg-ppa-blue-deep"
+                >
+                  Read the UPA-A Rulebook ↗
+                </a>
+                <Link
+                  href="/about/how-it-works"
+                  className="inline-flex items-center border border-ppa-line px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy transition-colors hover:border-ppa-blue hover:text-ppa-blue"
+                >
+                  How the US Tour Works
+                </Link>
+              </div>
             </div>
             <div className="min-w-0 border border-ppa-line bg-ppa-paper p-5">
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 How Europe differs from the US tour
               </p>
               <ul className="mt-3 space-y-2.5 text-xs leading-relaxed text-ppa-navy/65">
-                <li>Its own calendar, events and player operations across the region.</li>
-                <li>Four event tiers — 75, 125, 250 and 500 points — rather than the US Worlds / Majors / Cups / Opens structure.</li>
-                <li>ITP players may compete, capped at 125-point events.</li>
-                <li>Draw sizes of 32 to 64, set per event by the tournament director.</li>
+                {DIFFERENCES.map((d) => (
+                  <li key={d} className="flex gap-2.5">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 bg-ppa-blue" />
+                    <span>{d}</span>
+                  </li>
+                ))}
               </ul>
-              <Link
-                href="/about/how-it-works"
-                className="mt-4 inline-block text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
-              >
-                How the US tour works →
-              </Link>
             </div>
           </div>
         </div>
       </section>
 
       {/* ------------------------------------------------------- Contact */}
-      <section id="contact" className="scroll-mt-24 bg-ppa-paper">
+      <section id="contact" className="scroll-mt-24 border-t border-ppa-line bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="mx-auto w-full max-w-3xl">
             <InquiryForm formType="europe" />
           </div>
         </div>
       </section>
+
+      <LeadMagnetCapture />
     </>
   );
 }

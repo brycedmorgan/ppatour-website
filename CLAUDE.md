@@ -63,6 +63,96 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-04 (pt. 5) — 25 broken images on /europe, and the page rebuilt on the site's own components
+
+- **⚠ THE ROSTER SHIPPED 25 BROKEN IMAGES TO PRODUCTION AND THE BUILD WAS GREEN
+  THE WHOLE TIME.** Bryce: *"Tons of broken images."* `P()` in
+  `lib/europe-roster.ts` built `/europe/pros/<slug>.jpg` **unconditionally**, so
+  every record carried a path to a file that is not in the repo. The silhouette
+  fallback keys on a MISSING `portrait`, so it fired for exactly one pro —
+  Alexia Alvarez, the only record with no path — and the other 25 requested
+  404s. Confirmed against production: all three sampled assets returned **404**.
+- **The pt. 3 entry's claim that "the roster renders initials" was wrong.** A
+  path is not a picture, and `next build` cannot tell the difference.
+  `PORTRAITS_IN_REPO` now gates the helper; the per-player mapping stays written
+  down. **Flip it in the same commit that adds the files, never before.**
+- **⚠ AND THE PAGE WAS REPRODUCING THE SITE'S LOOK RATHER THAN USING ITS
+  COMPONENTS.** Bryce: *"This should follow the same feel, look, and structure we
+  have for the other events and pages. I'm not sure why this is so different."*
+  The first draft copied the visual language — eyebrow rules, hairline grids,
+  display type — while hand-rolling the two components that carry the behaviour.
+  That reads as almost-right, which is worse than obviously wrong.
+  - Schedule → **`FeaturedEvents`**: the same big cards, tier badges, date
+    formatting and three link states as /events and the homepage.
+  - Roster → **`AthleteRoster`**: search, gender/discipline/rank filters, live
+    world rank, follow chips **and the branded placeholder for a missing
+    portrait** — i.e. the component that would have made the broken-image bug
+    impossible in the first place.
+  - Hero → the house full-bleed photo + `.scrim-hero` + CTA row, as on
+    `/tour/[slug]`. Photo is `event-barcelona.jpg`, a real Europe frame we
+    already hold, not a US venue standing in for one.
+- **Live world rank comes free on these 26.** `getWprIndex()` is keyed by the
+  pickleball.com slug, which is what `europeRoster` keys on — so a Europe pro on
+  the board gets a real rank with no extra request, and rank 0 (the roster's own
+  unranked state) when the token is absent or upstream 429s. **Never a fabricated
+  number.**
+- **New `components/global/RegionSwitcher.tsx`** at the top of the page, which
+  the architecture section of `docs/EUROPE.md` had already specified. ⚠ Asia and
+  Australia are **external links with a ↗** — licensed operators on their own
+  domains, the same treatment their event cards get. ⚠ It **never redirects**;
+  a visitor picks a region. ⚠ It is deliberately **not in the global header**
+  yet — while `EUROPE_PUBLIC` is false a site-wide switcher naming Europe would
+  advertise the page the flag exists to hide. Promote it in the launch commit.
+- Verified in the built output: **0 `/europe/pros/` paths**, and **every image
+  URL on the page resolves to a file that exists** (13 of 13). The Europe athlete
+  pages render **0 empty `src` attributes**.
+
+### 2026-09-04 (pt. 4) — Europe ships UNLISTED; subfolder settled over subdomain
+
+- Bryce: *"I want them to be able to see it, but not be live for everyone yet.
+  Maybe push it but no link to it?"* **`EUROPE_PUBLIC` in
+  `lib/europe-launch.ts` is the one line that launches it.** Five files read it;
+  none needs editing. `/europe` renders in full with a "Preview — not yet live"
+  banner and `noindex, nofollow`; the nav item, footer link, site-search hit and
+  sitemap entries are all absent until it flips.
+- **⚠ THE ROSTER HAD ALREADY PUT 26 ATHLETE PAGES IN THE SITEMAP, WHICH IS THE
+  LEAK THIS CAUGHT.** `lib/athletes.ts` feeds `app/sitemap.ts`, so folding the
+  Europe pros in submitted 19 brand-new URLs to Google under a page that is not
+  supposed to be public. They are now noindex and out of the sitemap. **The seven
+  who already had a scraped profile — Owczarek, Platel, Cugliari, Amaro, Paque,
+  Seccia, Protzek — are deliberately untouched**: they were indexed long before
+  Europe was a page, and pulling them would be a live SEO regression wearing a
+  launch control's clothes. `isUnlistedEuropeAthlete` exists for exactly that
+  distinction.
+- **⚠ `lib/europe-launch.ts` IMPORTS NOTHING, AND THE FIRST DRAFT DID.** It
+  imported `europeRoster` and the 179-profile `published-athletes` JSON for the
+  helper — and `Header.tsx` is a **client component**, so both would have shipped
+  to every browser on every page of the site. The server-side half moved to
+  `lib/europe-visibility.ts`. Same split as `lib/score-names.ts` beside
+  `lib/score-headshots.ts`.
+- **⚠ NO robots.txt `Disallow`, DELIBERATELY.** Blocking the crawl stops Google
+  reading the `noindex` it is meant to obey, and a disallowed URL someone links
+  to externally can still surface as a bare contentless result. Noindex **with**
+  crawling allowed is what actually keeps a page out of the index. Do not
+  "tighten" this.
+- **⚠ UNLISTED IS NOT PRIVATE.** Anyone with the link sees it. Right weight for a
+  public tour's schedule and roster; wrong weight for anything sensitive. A real
+  gate is Basic auth in a `proxy.ts`, not this flag.
+- **Settled: `/europe` stays a path, not `europe.ppatour.com`.** Bryce raised the
+  subdomain and deferred the call. The three things he named as reasons —
+  region-varying sponsors, languages, geo-aware loading — are each a data or
+  edge-routing problem that a subdomain does not solve, while a subdomain does
+  cost the domain authority this site spent eighteen months turning around
+  (62,703 → 74,198 organic in the first month on the rebuild). It would also
+  re-create the Asia/Australia silo whose ongoing cost is written down in
+  `lib/asia-tour-links.ts`. Full reasoning, including the one case that WOULD
+  justify a subdomain, in `docs/EUROPE.md`.
+- Verified in the built output, not by reading the diff: `/europe` noindex + 0
+  sitemap entries + banner present · `arwid-dahlin` (minted) noindex + absent
+  from the sitemap · `karolina-owczarek` (pre-existing) carries no robots tag and
+  is still in the sitemap · `ben-johns` unchanged · **0 occurrences of "PPA Tour
+  Europe" in the homepage HTML.**
+
 ### 2026-09-04 (pt. 3) — `/europe` ships: 26 signed pros, the Europe rules, a form with no address
 
 - Payton Pemberton posted the Europe content to `#ppa-tour-europe` on 9/3 (rules
@@ -129,52 +219,6 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   Escofet — **Kate Young creates them**) · and the ~16 remaining stops, which is
   still Chris Patrick and still the thing that decides whether any of this has a
   calendar to show.
-
-### 2026-09-04 (pt. 2) — Europe ships UNLISTED; subfolder settled over subdomain
-
-- Bryce: *"I want them to be able to see it, but not be live for everyone yet.
-  Maybe push it but no link to it?"* **`EUROPE_PUBLIC` in
-  `lib/europe-launch.ts` is the one line that launches it.** Five files read it;
-  none needs editing. `/europe` renders in full with a "Preview — not yet live"
-  banner and `noindex, nofollow`; the nav item, footer link, site-search hit and
-  sitemap entries are all absent until it flips.
-- **⚠ THE ROSTER HAD ALREADY PUT 26 ATHLETE PAGES IN THE SITEMAP, WHICH IS THE
-  LEAK THIS CAUGHT.** `lib/athletes.ts` feeds `app/sitemap.ts`, so folding the
-  Europe pros in submitted 19 brand-new URLs to Google under a page that is not
-  supposed to be public. They are now noindex and out of the sitemap. **The seven
-  who already had a scraped profile — Owczarek, Platel, Cugliari, Amaro, Paque,
-  Seccia, Protzek — are deliberately untouched**: they were indexed long before
-  Europe was a page, and pulling them would be a live SEO regression wearing a
-  launch control's clothes. `isUnlistedEuropeAthlete` exists for exactly that
-  distinction.
-- **⚠ `lib/europe-launch.ts` IMPORTS NOTHING, AND THE FIRST DRAFT DID.** It
-  imported `europeRoster` and the 179-profile `published-athletes` JSON for the
-  helper — and `Header.tsx` is a **client component**, so both would have shipped
-  to every browser on every page of the site. The server-side half moved to
-  `lib/europe-visibility.ts`. Same split as `lib/score-names.ts` beside
-  `lib/score-headshots.ts`.
-- **⚠ NO robots.txt `Disallow`, DELIBERATELY.** Blocking the crawl stops Google
-  reading the `noindex` it is meant to obey, and a disallowed URL someone links
-  to externally can still surface as a bare contentless result. Noindex **with**
-  crawling allowed is what actually keeps a page out of the index. Do not
-  "tighten" this.
-- **⚠ UNLISTED IS NOT PRIVATE.** Anyone with the link sees it. Right weight for a
-  public tour's schedule and roster; wrong weight for anything sensitive. A real
-  gate is Basic auth in a `proxy.ts`, not this flag.
-- **Settled: `/europe` stays a path, not `europe.ppatour.com`.** Bryce raised the
-  subdomain and deferred the call. The three things he named as reasons —
-  region-varying sponsors, languages, geo-aware loading — are each a data or
-  edge-routing problem that a subdomain does not solve, while a subdomain does
-  cost the domain authority this site spent eighteen months turning around
-  (62,703 → 74,198 organic in the first month on the rebuild). It would also
-  re-create the Asia/Australia silo whose ongoing cost is written down in
-  `lib/asia-tour-links.ts`. Full reasoning, including the one case that WOULD
-  justify a subdomain, in `docs/EUROPE.md`.
-- Verified in the built output, not by reading the diff: `/europe` noindex + 0
-  sitemap entries + banner present · `arwid-dahlin` (minted) noindex + absent
-  from the sitemap · `karolina-owczarek` (pre-existing) carries no robots tag and
-  is still in the sitemap · `ben-johns` unchanged · **0 occurrences of "PPA Tour
-  Europe" in the homepage HTML.**
 
 ### 2026-09-03 (pt. 2) — Paddle Lab gets a real hero photograph
 ### 2026-09-04 (pt. 2) — AstraZeneca / Fasenra is off the roster, not just de-logo'd

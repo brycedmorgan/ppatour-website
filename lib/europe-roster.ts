@@ -52,7 +52,23 @@ export type EuroPro = {
   bio: string[];
 };
 
-const P = (slug: string) => `/europe/pros/${slug}.jpg`;
+/**
+ * ⚠ RETURNS `undefined` UNTIL THE PORTRAIT FILES ARE ACTUALLY IN THE REPO, AND
+ * THAT FLAG IS NOT BUREAUCRACY — IT IS THE BUG IT WAS ADDED FOR. This helper
+ * used to build `/europe/pros/<slug>.jpg` unconditionally, so every one of the
+ * 25 records carried a path to a file that does not exist. The silhouette
+ * fallback only fires on a MISSING `portrait`, so it never fired: the roster
+ * shipped 25 broken images to production, and Alexia Alvarez — the one record
+ * with no path — was the only card that looked right.
+ *
+ * The per-player mapping below stays written down so nothing has to be
+ * re-derived. **Flip this to `true` in the same commit that adds the files**,
+ * and never before: a path is not a picture.
+ */
+const PORTRAITS_IN_REPO = false;
+
+const P = (slug: string): string | undefined =>
+  PORTRAITS_IN_REPO ? `/europe/pros/${slug}.jpg` : undefined;
 
 const MD = ["Men's Doubles"];
 const WD = ["Women's Doubles"];
