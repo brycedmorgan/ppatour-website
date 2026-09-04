@@ -36,7 +36,11 @@ const JOBS = [
 
   // --- the marks that were missing (9 of the 10; Selkirk was not supplied)
   ["Gold Partner Logos", "rate-dark@200x-100-1536x625.jpg", "rate", "Rate"],
-  ["Gold Partner Logos", "LOGO-AZ-1.png", "astrazeneca", "AstraZeneca (the Fasenra record uses this)"],
+  // ⚠ DISABLED 9/4/26 — the AstraZeneca mark was pulled from the site at
+  // marketing's request and the asset deleted. This importer is re-runnable, so
+  // leaving the row here would quietly restore the file. Re-enable only with
+  // marketing's sign-off; see the partner record in `lib/home-content.ts`.
+  // ["Gold Partner Logos", "LOGO-AZ-1.png", "astrazeneca", "AstraZeneca (the Fasenra record uses this)"],
   ["Gold Partner Logos", "HALine-Logo_Vertical-copy-1536x972.png", "holland-america", "Holland America Line (vertical lockup)"],
   ["Gold Partner Logos", "joma-black-1536x381.png", "joma", "Joma"],
   ["Gold Partner Logos", "Park-Place-Technologies_Stacked_Color-final-1-1536x887.png", "park-place", "Park Place Technologies (stacked)"],

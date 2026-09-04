@@ -63,6 +63,43 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-04 — The AstraZeneca mark is off the site, and the importer can't put it back
+
+- **Urgent request relayed by Wesley: remove the AstraZeneca logo from the sponsors page.** Done,
+  pushed to main, and it is off **every** surface, not just `/about/sponsors`.
+- **⚠ ONE FIELD, BECAUSE THE MARK WAS NEVER PAGE-SPECIFIC.** Dropping `logo`/`logoWidth`/
+  `logoHeight` from the partner record in `lib/home-content.ts` clears it from the sponsors
+  directory, the homepage Gold grid, the marquee AND the event-page sponsor wall in one edit.
+  Removing it from `/about/sponsors` alone would have left the same mark published on the
+  homepage and on Nationals' own page — i.e. the request half-done in the least visible way.
+- **⚠ THE ASSET IS DELETED AND THE IMPORTER ROW IS COMMENTED OUT. THAT SECOND HALF IS THE POINT.**
+  `scripts/import-sponsor-logos.mjs` is **re-runnable** and carried a row pulling `LOGO-AZ-1.png`
+  → `astrazeneca`, so a de-referenced file would have been silently restored by the next logo
+  refresh and could have drifted back into a card later. Same trap class as
+  `sync-tixr-prices.mjs` putting withheld tickets back on sale (7/31) and the WP importer
+  rewriting `news-posts.json` wholesale (8/5 pt. 16). Both halves or neither.
+- **⚠ THE PARTNER IS STILL LISTED, BY NAME — only the mark was asked for.** With no `logo`,
+  PartnerWall prints the partner name, its documented fallback (10 of 17 partners rendered that
+  way through August), and because **Gold shows no designation** (9/1 ruling) the card is
+  name-only: "AstraZeneca / Fasenra" with no "Official Asthma Partner" line. **Dropping a Gold
+  partner off the roster entirely is a commercial decision, not a logo removal — ask before doing
+  it.**
+- **⚠ WHY THIS CARD IN PARTICULAR IS WORTH A COMPLIANCE THOUGHT, NOT JUST A DELETE.** The art we
+  held was the **AstraZeneca CORPORATE** mark (Fasenra is one of their drugs), and this card paired
+  it with an "Official Asthma Partner" designation and a link to a **prescription-drug site**.
+  Pharma is the one category where that pairing is a regulated question. Written onto the record so
+  nobody re-adds the mark as a tidy-up.
+- **⚠ "Fasenra presents the National Championships" is UNTOUCHED, and correctly so.** That credit
+  is a NAME in event copy (`lib/placeholder-data.ts`, news copy, tournament history), not a mark.
+  The event page still reads "Presenting Partner · Fasenra" and renders no AstraZeneca image.
+- Verified on rendered pages: **zero `astrazeneca` image references on `/about/sponsors`, `/`, the
+  Nationals event page and the `-live` route** (the two leftover hits per page are the
+  `utm_content=partner-astrazeneca-fasenra` slug on the outbound link, derived from the name), the
+  asset itself now **404s** while `joola.png` still 200s, and **all 34 other partner marks render
+  unchanged**. tsc + eslint clean.
+- ⚠ The outbound URL is still `fasenra.com` where ppatour.com/sponsors uses `astrazeneca.com`
+  (Wesley's 8/3 call). Unchanged here, but it is the obvious next question for marketing.
+
 ### 2026-09-03 (pt. 3) — Weather split Nationals' Friday and Saturday TV windows in two
 
 - **Event team, mid-tournament:** intense weather at Cary. Friday and Saturday are now

@@ -471,21 +471,28 @@ export const partners: Partner[] = [
   /* ---- Gold (alphabetical) ---- */
   {
     /**
-     * "AstraZeneca / Fasenra" — the name marketing approved on 8/4, and it
-     * closes the flag this record has carried since the logo drop: the only art
-     * supplied is the ASTRAZENECA corporate mark (Fasenra is one of their drugs),
-     * so a card named Fasenra was showing an AstraZeneca wordmark. Naming both
-     * brands makes the mark and the record agree.
+     * ⚠ THE LOGO WAS PULLED 9/4/26 — DO NOT PUT IT BACK WITHOUT MARKETING.
+     * Urgent request relayed via Wesley: remove the AstraZeneca mark from the
+     * sponsors page. The art we held was the ASTRAZENECA CORPORATE mark (Fasenra
+     * is one of their drugs), and this card paired it with an "Official Asthma
+     * Partner" designation and a link to a prescription-drug site — pharma
+     * brand usage is the one category where that pairing is a compliance
+     * question, not a design one. `public/ppa/sponsors/astrazeneca.png` is
+     * deleted and the row in `scripts/import-sponsor-logos.mjs` is disabled, so
+     * a re-run of that importer cannot restore it.
      *
-     * ⚠ URL still open. Kept on fasenra.com — Wesley's 8/3 call, and it's the
-     * product site behind the Official Asthma Partner designation — while
-     * ppatour.com/sponsors links this partner to astrazeneca.com. One-line
-     * switch if marketing wants the corporate destination now that the mark and
-     * the name both lead with AstraZeneca.
+     * ⚠ THE PARTNER IS STILL LISTED, BY NAME. Only the mark was asked for, and
+     * dropping a Gold partner off the roster is a commercial decision. With no
+     * `logo`, PartnerWall prints the name instead — its documented fallback —
+     * and because Gold shows no designation (9/1 ruling) the card is name-only.
      *
      * ⚠ Fasenra (not AstraZeneca) presents the National Championships, so that
-     * presenting credit still reads Fasenra in event copy. And at 575px this is
-     * the lowest-resolution mark we hold — both resolve by getting Fasenra art.
+     * presenting credit still reads Fasenra in event copy. That is a NAME, not a
+     * mark, and nothing here changes it.
+     *
+     * ⚠ URL still open, unchanged: fasenra.com (Wesley's 8/3 call) where
+     * ppatour.com/sponsors uses astrazeneca.com. Ask marketing which
+     * destination they want alongside this.
      */
     name: "AstraZeneca / Fasenra",
     website: "https://www.fasenra.com",
@@ -493,9 +500,6 @@ export const partners: Partner[] = [
     category: "Medicinal",
     note: "The tour's exclusive asthma partner.",
     tier: "gold",
-    logo: "/ppa/sponsors/astrazeneca.png",
-    logoWidth: 575,
-    logoHeight: 139,
   },
   {
     /**
