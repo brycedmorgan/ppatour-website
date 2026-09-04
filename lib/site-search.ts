@@ -18,6 +18,7 @@
  */
 
 import { searchNews, type NewsCard } from "@/lib/news";
+import { EUROPE_PUBLIC } from "@/lib/europe-launch";
 import { athletes } from "@/lib/athletes";
 import { CURATED_TO_CANONICAL, publishedAthletes } from "@/lib/published-athletes";
 import { eventGuides, parkingText } from "@/lib/event-guides";
@@ -77,7 +78,11 @@ const STATIC_PAGES: { title: string; meta: string; href: string; extra?: string 
   { title: "The Pro Tour", meta: "How the professional tour works", href: "/about" },
   { title: "Tournament History", meta: "National champions year by year", href: "/about/history", extra: "past champions winners records" },
   { title: "How It Works", meta: "Season format, points, and divisions", href: "/about/how-it-works", extra: "ranking points tiers majors cups opens divisions" },
-  { title: "PPA Tour Europe", meta: "European schedule, signed pros, and entry rules", href: "/europe", extra: "europe european spain italy france germany portugal uk andorra itp qualifying 75 125 250 500 points smash" },
+  // ⚠ PPA Tour Europe is unlisted until EUROPE_PUBLIC flips (lib/europe-launch.ts).
+  // Site search is a link surface like the nav — a hit here advertises the page.
+  ...(EUROPE_PUBLIC
+    ? [{ title: "PPA Tour Europe", meta: "European schedule, signed pros, and entry rules", href: "/europe", extra: "europe european spain italy france germany portugal uk andorra itp qualifying 75 125 250 500 points smash" }]
+    : []),
   { title: "Sponsors", meta: "Title and official partners", href: "/about/sponsors", extra: "carvana veolia joola humana partners partnership" },
   { title: "What is Pickleball?", meta: "The basics for new fans", href: "/about/what-is-pickleball", extra: "rules beginner kitchen dink serve scoring" },
   { title: "Contact", meta: "Reach the right PPA team", href: "/about/contact", extra: "email press media tickets" },

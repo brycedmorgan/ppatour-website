@@ -312,3 +312,111 @@ is not on the public site, or the season label is informal. The page says
    and add himself. Not yet done — Workspace admin task.
 7. **The remaining ~16 stops.** Chris Patrick. Unchanged since 7/31, and still
    the thing that decides whether any of this has a calendar to show.
+
+
+---
+
+## Unlisted, not private — the launch flag (2026-09-04)
+
+Bryce: *"I want them to be able to see it, but not be live for everyone yet.
+Maybe push it but no link to it?"* That is what shipped.
+
+**`EUROPE_PUBLIC` in [`lib/europe-launch.ts`](../lib/europe-launch.ts) is the one
+line.** Flip it to `true` and the nav item, the footer link, site search, the
+sitemap entries, the noindex directives and the preview banner all resolve
+together. Five files read it; none of them needs editing to launch.
+
+| Surface | While `false` | Verified in the build |
+|---|---|---|
+| `/europe` | Renders in full, `noindex, nofollow`, carries a "Preview — not yet live" banner | ✅ |
+| Header About menu · footer · site search | No Europe entry at all | ✅ 0 hits on the homepage |
+| `app/sitemap.ts` | No `/europe`, and none of the 19 minted athlete URLs | ✅ |
+| The 19 athlete pages the roster **minted** | `noindex, nofollow` | ✅ `arwid-dahlin` |
+| The 7 Europe pros who **already had** a scraped profile | Untouched — indexable, still in the sitemap | ✅ `karolina-owczarek` |
+
+⚠ **THE SEVEN ARE THE POINT OF `isUnlistedEuropeAthlete`.** Owczarek, Platel,
+Cugliari, Amaro, Paque, Seccia and Protzek had public, indexed profiles long
+before Europe was a page. Adding a portrait and a tagline is not a reason to pull
+them from the index — that would be a live SEO regression dressed up as a launch
+control. Only URLs this work created are held back.
+
+⚠ **UNLISTED IS NOT PRIVATE, AND NOBODY SHOULD BE TOLD IT IS.** Anyone with the
+link sees the page. That is the right weight for a public tour's schedule and
+roster, and the wrong weight for anything commercially sensitive. A real gate is
+HTTP Basic auth in a `proxy.ts` — the shape the 8/5 `/live` work used — not this
+flag.
+
+⚠ **AND THERE IS DELIBERATELY NO robots.txt `Disallow`.** Blocking the crawl
+stops Google reading the `noindex` it is meant to obey, and a disallowed URL that
+someone links to externally can still surface as a bare, contentless result.
+**Noindex WITH crawling allowed is the state that actually keeps a page out of
+the index.** Do not "tighten" this by adding a Disallow.
+
+⚠ `lib/europe-launch.ts` **imports nothing, and that is load-bearing.**
+`Header.tsx` is a client component, so anything that file pulls in ships to every
+browser on every page. The first draft imported `europeRoster` and the
+179-profile `published-athletes` JSON for the helper that now lives in
+`lib/europe-visibility.ts`. Same split as `lib/score-names.ts` beside
+`lib/score-headshots.ts`. **Keep it dependency-free.**
+
+---
+
+## Subfolder, not subdomain — settled 2026-09-04
+
+Bryce raised `europe.ppatour.com` and deferred the call. **It stays
+`ppatour.com/europe`**, and the three things he named as reasons to reconsider —
+region-varying sponsors, languages, and geo-aware loading — are the reasons *not*
+to. Every one of them is a data or edge-routing problem, and a subdomain solves
+none of them while costing something real.
+
+**1. Authority is the measurable argument, and we have our own numbers.**
+Google treats a subdomain as substantially a separate site for link equity.
+`ppatour.com` carries 10,976 keywords and turned organic traffic around after
+eighteen months of decline — 62,703 in Jul-26 to 74,198 in the first month on the
+rebuild ([`roadmap.md`](roadmap.md), and the board deck). A subfolder inherits
+that on day one. `europe.ppatour.com` starts at zero and spends a year earning
+back something we already own. **We are also about to point `ppatoureurope.com`
+at it with a 301** — the whole value of that redirect is consolidating authority
+into one property, which a subdomain immediately re-splits.
+
+**2. It re-creates the silo the 8/24 decision existed to avoid.** Australia and
+Asia are separate sites, and `lib/asia-tour-links.ts` — a hand-maintained URL
+table with `npm run asia:audit` to catch drift — is the written-down cost of that
+model. A Europe subdomain is the same shape with better ownership. It would drift
+the same way: two headers, two footers, two analytics properties, two Search
+Console properties, two sets of partner logos to keep current.
+
+**3. Region-varying sponsors is a data problem.** The fix is a `regions` field on
+`Partner` in `lib/home-content.ts` and a region argument on `partnersByTier()`,
+so a Europe surface renders the Europe roster and the US surface renders the US
+one. That works identically on a path or a host. ⚠ **And it is a commercial
+question before it is a code one** — Connor's Gold-and-below designation rule
+(9/1) is per-partner, and whether a US Platinum partner appears on a European
+page is a contract question for Patrick and Jacob, not a routing decision.
+
+**4. Language is the argument that sounds strongest for a subdomain and is
+actually the opposite.** hreflang works on subdirectories, subdomains and ccTLDs
+alike, so there is no SEO reason to prefer a host. What differs is maintenance:
+`ppatour.com/de/europe` is one property, one certificate, one analytics stream,
+one Search Console account. `de.ppatour.com` × 5 languages × 2 regions is ten.
+**Region is a path and language is a prefix** — the rule already in this document
+— and both are path segments precisely so they can vary independently. Germans
+live in Spain.
+
+**5. Geo-aware loading happens at the edge, on either.** Vercel Routing
+Middleware reads the geo hint before the cache and can rewrite or suggest on any
+path. The binding rule is unchanged and is about behaviour, not hosting:
+**geo-IP suggests, never redirects.**
+
+### The one case that would justify a subdomain
+
+If Europe ever runs on a **different stack with an independent release cadence** —
+Smash's own CMS, their own deploys, their own team shipping without us. That is a
+licensing decision, and Bryce's 8/24 call was the opposite: Europe is ours, with
+Smash's hire as a content admin in our CMS.
+
+**Going subfolder-first is the reversible choice.** `/europe` → a subdomain later
+is a DNS record and a redirect map. Subdomain-first and consolidating later means
+301ing every URL and re-earning the authority in between. If independent deploys
+ever become the real requirement without the licensing change, Vercel
+microfrontends give that under one domain — a third option that keeps the path.

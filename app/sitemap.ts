@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 import { athletes } from "@/lib/athletes";
+import { EUROPE_PUBLIC } from "@/lib/europe-launch";
+import { isUnlistedEuropeAthlete } from "@/lib/europe-visibility";
 import { CURATED_TO_CANONICAL, publishedAthletes } from "@/lib/published-athletes";
 import { eventHref, tournaments } from "@/lib/placeholder-data";
 import { tourPrograms } from "@/lib/tour-programs";
@@ -53,7 +55,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/about",
     "/about/sponsors",
     "/about/how-it-works",
-    "/europe",
     "/about/what-is-pickleball",
     "/about/history",
     "/about/host-tournament",
@@ -97,7 +98,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: "weekly" as const,
         priority: 0.8,
       })),
-    ...[...athleteSlugs].map((slug) => ({
+    // ⚠ PPA Tour Europe is unlisted until EUROPE_PUBLIC flips, and the 19 athlete
+    // pages the Europe roster MINTED go with it — a sitemap entry is an
+    // invitation to index, which is exactly what "not live for everyone yet"
+    // rules out. The seven Europe pros who already had a scraped profile stay,
+    // because they were public before any of this.
+    ...(EUROPE_PUBLIC ? [{ url: url("/europe"), changeFrequency: "weekly" as const, priority: 0.7 }] : []),
+    ...[...athleteSlugs].filter((slug) => !isUnlistedEuropeAthlete(slug)).map((slug) => ({
       url: url(`/athletes/${slug}`),
       changeFrequency: "weekly" as const,
       priority: 0.6,
