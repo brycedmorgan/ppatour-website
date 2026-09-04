@@ -63,6 +63,43 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-03 (pt. 3) — Weather split Nationals' Friday and Saturday TV windows in two
+
+- **Event team, mid-tournament:** intense weather at Cary. Friday and Saturday are now
+  **9AM–12PM ET on PBTV, then 4:30–9:30PM ET on Tennis Channel + PBTV**. Both days were a
+  single all-day PBTV window with a midday TC window (Fri 10AM–6PM / TC 11:30–5, Sat 9–5 /
+  TC 11–5). Shipped in the two files that carry broadcast windows.
+- **⚠ THE SPLIT MEANS THREE ROWS A DAY, NOT TWO, AND THE EXTRA ONE IS PBTV'S.** The evening
+  block is a **simulcast**, so PBTV needs its own 4:30–9:30 row alongside the Tennis Channel
+  one — `TvWindow` has no `secondary` field, and without the PBTV row the evening window
+  would vanish from `/watch/tv`'s **PickleballTV filter pill** on the two biggest days of the
+  event. The TC rows deliberately carry **no `secondary: "PBTV"`** (unlike Thu/Sun, where the
+  PBTV window is wider): a standalone PBTV row already covers the identical window, and both
+  would have printed PBTV twice against one time slot.
+- **⚠ THE ORDER OF PLAY NEEDED NO EDIT, AND THAT IS THE 8/31 FIX PAYING OFF.** `d.live` in
+  `lib/event-schedule.ts` still reads `"PBTV"` for Fri and Sat — but `channelsByDay(slug)`
+  derives from `lib/broadcast.ts` and **wins over it**, so both days now print
+  **"PBTV · Tennis Channel"** for free. Don't "fix" the stale `live` strings; nothing renders
+  them (Thursday has read `"PBTV"` against a real TC window since 7/16 for the same reason).
+- **⚠ AND THE ORDER OF PLAY'S FIRST-SERVE TIMES ARE DELIBERATELY UNTOUCHED.** Broadcast
+  windows and first serve are independent (Wesley, 8/27), so a 9AM PBTV window against a 10AM
+  Friday first serve is not a mismatch to reconcile. **If weather also moved first serve or
+  gates, that is a separate edit to `lib/event-schedule.ts` and nobody has said it did.**
+- **⚠ THE AUDIT NOW FAILS ON NATIONALS ON PURPOSE.** `node scripts/audit-tv-schedule.mjs`
+  pulls the live sheet, whose header now reads **"as of 8/29/26"** — newer than the 8/13 sheet
+  this file was reconciled to, and it **still lists the pre-weather windows**. So the six new
+  windows report as site-vs-sheet mismatches until the sheet is reissued. Noted in both files;
+  **do not reconcile them back.** Lockstep (check 2) passes: **12/12 slots agree.**
+- **⚠ FOUND, NOT FIXED, AND UNRELATED: the 8/29 sheet DROPPED three Malibu windows** — Dec 15
+  Tue PBTV 1–9, Dec 16 Wed PBTV 1–9 and Dec 16 Wed TC 3:30–6:30. That is a real reconciliation
+  against a sheet nobody has re-read since 8/18, not a side effect of this change. December, so
+  it has time, but it wants a look.
+- Verified on rendered pages, not by grep: **`/watch/tv`, `/watch`, the event page's broadcast
+  table AND its Order of Play, the `-live` route and `/today`** all show the three Friday rows
+  and the three Saturday rows, and the Order of Play reads PBTV · Tennis Channel on both days.
+  Controls unchanged — Thu 11:30–5 and Sun 11–4 TC windows intact, and the other seven events
+  still pass the sheet audit. tsc + eslint clean. **Not committed.**
+
 ### 2026-09-03 — Hunter Johnson onto the MEHAU S5; the photo rides on the update row
 
 - Event team via Wesley: put Hunter Johnson on the **"MEHAU S5 AIRPOOM™ Aerodynamic Pickleball

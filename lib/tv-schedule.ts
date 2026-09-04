@@ -16,6 +16,10 @@
  * which is the argument for running it before a broadcast weekend. Total TC
  * hours are unchanged at 13h, so the figure below still holds.
  *
+ * ⚠ CARY'S FRIDAY AND SATURDAY WERE REVISED 9/3 FOR WEATHER, mid-tournament and
+ * ahead of the sheet — see the note on those two days below. Cary TC is now
+ * 20.5h, not the 22h this paragraph recorded when it was reconciled.
+ *
  * Reconciled 8/18 vs the 8/13 sheet: Cary 22h TC (Thu–Sun) · Arizona +2 FS2
  * +1 FS1 (no TC) · Las Vegas 4h TC (Sun only) · Chicago 16h TC (Thu–Sun) +2 FS1
  * +2 FS2 · VA Beach 13h TC · MLP Nations Cup PBTV-ONLY (its TC windows were
@@ -72,20 +76,31 @@ export const tvSchedule: TvEvent[] = [
           { channel: "Tennis Channel", window: "11:30AM – 5PM", round: "Round of 16" },
         ],
       },
+      // ⚠ WEATHER REVISION, 9/3/26 (event team, mid-tournament). Friday and
+      // Saturday are SPLIT WINDOWS now — a morning PBTV block, a long break, then
+      // a five-hour evening block simulcast on Tennis Channel and PBTV. Both days
+      // were one all-day PBTV window with a midday TC window on the 8/13 sheet.
+      // ⚠ THE PRODUCTION SHEET DOES NOT CARRY THIS CHANGE — checked 9/3, the live
+      // export (header "as of 8/29/26") still lists the pre-weather windows. So
+      // `node scripts/audit-tv-schedule.mjs` WILL report these six as
+      // site-vs-sheet mismatches. That is expected; do NOT "reconcile" them back
+      // to the sheet. Clear the note once a reissued sheet matches.
       {
         date: "Sep 4",
         dow: "Fri",
         windows: [
-          { channel: "PBTV", window: "10AM – 6PM", round: "Quarterfinals" },
-          { channel: "Tennis Channel", window: "11:30AM – 5PM", round: "Quarterfinals" },
+          { channel: "PBTV", window: "9AM – 12PM", round: "Quarterfinals" },
+          { channel: "PBTV", window: "4:30PM – 9:30PM", round: "Quarterfinals" },
+          { channel: "Tennis Channel", window: "4:30PM – 9:30PM", round: "Quarterfinals" },
         ],
       },
       {
         date: "Sep 5",
         dow: "Sat",
         windows: [
-          { channel: "PBTV", window: "9AM – 5PM", round: "Semifinals" },
-          { channel: "Tennis Channel", window: "11AM – 5PM", round: "Semifinals" },
+          { channel: "PBTV", window: "9AM – 12PM", round: "Semifinals" },
+          { channel: "PBTV", window: "4:30PM – 9:30PM", round: "Semifinals" },
+          { channel: "Tennis Channel", window: "4:30PM – 9:30PM", round: "Semifinals" },
         ],
       },
       {
