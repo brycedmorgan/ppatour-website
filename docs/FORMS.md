@@ -87,6 +87,7 @@ Each value may be a **comma-separated list** of addresses.
 | `FORM_INBOX_AMBASSADOR` | Ambassador application | ambassador team (4 addresses) |
 | `FORM_INBOX_OPT_IN` | Fan opt-in | CRM lead |
 | `FORM_INBOX_NEWSLETTER` | Footer newsletter signup | `info@ppatour.com` |
+| `FORM_INBOX_EUROPE` | PPA Tour Europe contact (`/europe`) | `europe@ppatour.com` — a Google Group, not a mailbox. Membership *is* the routing; change it in Workspace admin, not here. The address is deliberately never shown on the page. |
 
 The addresses were never committed, so they are **not recoverable from git** —
 they live in the Gravity Forms export, in Vercel's env store, and in each dev's

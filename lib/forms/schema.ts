@@ -295,6 +295,43 @@ export const FORM_SCHEMAS: Record<string, FormSchema> = {
     ],
   },
 
+  // ── PPA Tour Europe contact (new 2026-09-03) ──────────────────────
+  /**
+   * The Europe region's "Contact Us".
+   *
+   * ⚠ THE DESTINATION ADDRESS IS DELIBERATELY NOT PUBLISHED ANYWHERE ON THE
+   * PAGE. Payton Pemberton, 9/3: *"Don't publicize the email but have the form
+   * forward to us."* That is why /europe carries a form and not a mailto row
+   * like /about/contact does. Do not add the address to the page, to this file,
+   * or to a `CONTACTS` table — it lives in `FORM_INBOX_EUROPE` only.
+   */
+  europe: {
+    key: "europe",
+    eyebrow: "PPA Tour Europe",
+    heading: "Contact PPA Tour Europe",
+    intro:
+      "Questions about the European tour — events, entries, partnerships or media. Your message goes straight to the PPA Tour Europe team.",
+    submitLabel: "Send Message",
+    successTitle: "Thanks for contacting PPA Tour Europe!",
+    successBody: "We will get back to you shortly.",
+    fields: [
+      { name: "firstName", label: "First name", type: "text", required: true, half: true, maxLength: 120, placeholder: "First" },
+      { name: "lastName", label: "Last name", type: "text", required: true, half: true, maxLength: 120, placeholder: "Last" },
+      { name: "email", label: "Email", type: "email", required: true, half: true, maxLength: 160, placeholder: "Email Address" },
+      { name: "phone", label: "Phone", type: "tel", half: true, maxLength: 40, placeholder: "Phone" },
+      { name: "country", label: "Country", type: "text", half: true, maxLength: 80, placeholder: "Country" },
+      {
+        name: "topic",
+        label: "What is this about?",
+        type: "select",
+        required: true,
+        half: true,
+        options: ["Event Entry", "Schedule & Tickets", "Player Relations", "Partnerships", "Media", "Hosting an Event", "Other"],
+      },
+      { name: "message", label: "Your message", type: "textarea", required: true, maxLength: 2000, placeholder: "How can we help?" },
+    ],
+  },
+
   // ── Newsletters (GF #2 footer, #10 CTA, #14 junior) ───────────────
   newsletter: {
     key: "newsletter",

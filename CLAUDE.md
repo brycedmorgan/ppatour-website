@@ -63,6 +63,73 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-04 — `/europe` ships: 26 signed pros, the Europe rules, a form with no address
+
+- Payton Pemberton posted the Europe content to `#ppa-tour-europe` on 9/3 (rules
+  differences, the roster Drive folder, the contact-form ask). `/europe` is built
+  from it — `app/(marketing)/europe/page.tsx`, prerendered, 5-minute revalidate,
+  linked from the header About menu, the footer, the sitemap and site search.
+  Full write-up in [`docs/EUROPE.md`](docs/EUROPE.md).
+- **The page owns no calendar, deliberately.** The schedule is `getEvents()`
+  filtered to `country === "Europe"` — the same feed `/events` runs. Four stops
+  render today (Italy 125 Portorož, Italy 125 Brescia, Spain P250 and P500
+  Barcelona) against the ~20 Chris Patrick announced 7/31. **An empty schedule
+  here is a PB Tournaments gap, never a bug in this file** — the copy degrades to
+  "the 2026–2027 calendar is being confirmed" rather than inventing dates.
+- **⚠ SIX ISO-3 CODES WERE MISSING FROM `COUNTRY_BY_CODE`, AND EVERY ONE IS A
+  COUNTRY ON THE SIGNED ROSTER.** `AND` (Andorra — in the 7/31 announcement, and
+  the gap `docs/EUROPE.md` had already flagged), plus `SVK`, `HUN`, `IRL`, `LVA`,
+  `SRB`. A stop in any of them would have landed on `/events` with no country
+  chip and **silently dropped out of the Europe filter**.
+- **Albert's loudest ask is unblocked.** `lib/europe-roster.ts` holds 26 signed
+  pros from Catie Preis's sheet — country, age, sponsors, Instagram, her bios.
+  They fold through `lib/athletes.ts`, so each mints a real `/athletes/[slug]`
+  page rather than a parallel `/europe/players/*` route that would duplicate the
+  seven already in the WordPress scrape (Owczarek, Platel, Cugliari, Amaro,
+  Paque, Seccia, Protzek).
+- **⚠ `slug` IS THE pickleball.com PLAYER SLUG, COPIED FROM THE SHEET, NEVER
+  DERIVED FROM THE NAME.** It is the same key the WPR board uses, so a Europe pro
+  on the board picks up a live world rank for free. Four do not match the name:
+  Matteo Cugliari is `mat-teo`, Ellie Tomkinson is `eleanor-tomkinson`, Katie
+  Morris is `katie-morris-3`, Héctor Sánchez Vidal is `hector-sanchez-vidal-1`.
+- **⚠ AND THAT FORCED A ONE-CHARACTER FIX ON THE ATHLETE PAGE.** `loadAthlete`
+  read `curated?.headshot ?? api?.headshot`, and a Europe pro whose portrait has
+  not arrived carries an **empty** curated headshot — `??` treats `""` as a real
+  value, so she would have rendered a broken image instead of falling through to
+  the API. Now `||`.
+- **Contact is a form and no address, on Payton's instruction** (*"Don't
+  publicize the email but have the form forward to us"*). New `europe` form type
+  → `FORM_INBOX_EUROPE` → the `europe@ppatour.com` group. **Do not add a mailto
+  row here like /about/contact has.**
+- **The rulebook link points at the page, not the PDF.** The live document is
+  `upaa.unitedpickleball.com/official-rulebook/`; the PDF behind it is currently
+  `V0.9-8.24.26-UPA-A-Rulebook-.pdf`, a versioned path that will rotate. The page
+  states it governs **both amateur and pro** divisions, as asked.
+- **⚠ A NAMING DISCREPANCY WORTH SETTLING WITH PAYTON.** He asked for the "UPA
+  2026-2027 Rulebook". What UPA-A publishes is the **2026 UPA-A Rulebook**,
+  effective 22 May 2026, at V0.9. The page says "UPA-A Rulebook" with no year,
+  which is true either way.
+- **Two bios were rewritten from first to third person** (Biedermann, Tomkinson)
+  on Bryce's call, to match the other 23 and every US athlete page. Same facts,
+  nothing added. **Tell Catie**, or the sheet and the site drift.
+- **⚠ THE 25 PORTRAITS ARE NOT IN THE REPO AND THE ROSTER RENDERS INITIALS.**
+  Catie's `Euro Player Portrait Pictures` folder is not link-shared; the `gcloud`
+  token has no Drive scope, and a browser session 403s because Drive redirects
+  the download to `drive.usercontent.google.com` under the wrong `authuser`.
+  Unblock is one command: `gcloud auth application-default login
+  --scopes=https://www.googleapis.com/auth/drive.readonly`, then the files go to
+  `/public/europe/pros/<slug>.jpg` and nothing else changes.
+- **⚠ Alexia Alvarez has no portrait AND no bio in the sheet.** She ships as a
+  visible gap on purpose — a silhouette card Catie can close — rather than being
+  quietly omitted from a roster of 26.
+- **Next:** the portraits · the gallery (Catie's first-event photos, promised
+  9/3) · the media credential form (Payton drafting) · remove Jeff Watson from
+  and add Payton to the `europe@ppatour.com` group · five licensee Workspace
+  seats (David Botti, Daniel Botti, Francesco Foschi, Eddie Jackson, Albert
+  Escofet — **Kate Young creates them**) · and the ~16 remaining stops, which is
+  still Chris Patrick and still the thing that decides whether any of this has a
+  calendar to show.
+
 ### 2026-09-03 (pt. 2) — Paddle Lab gets a real hero photograph
 
 - Bryce: "we have some of the coolest photography of anyone in professional

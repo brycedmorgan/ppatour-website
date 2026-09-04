@@ -114,7 +114,10 @@ async function loadAthlete(slug: string) {
   return {
     slug,
     name,
-    headshot: curated?.headshot ?? api?.headshot ?? "",
+    // ⚠ `||`, NOT `??`. A Europe pro whose portrait has not arrived yet carries
+    // an EMPTY curated headshot (see lib/athletes.ts) — `??` would treat "" as a
+    // real value and render a broken image instead of falling through to the API.
+    headshot: curated?.headshot || api?.headshot || "",
     country: published?.country || curated?.country || api?.country || "",
     countryCode: api?.countryCode || published?.countryCode || "",
     // NEVER fall back to curated.bestRank here. That field is a hand-maintained

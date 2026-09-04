@@ -53,6 +53,8 @@ const NAV_ITEMS: NavItem[] = [
       { label: "How It Works", href: "/about/how-it-works" },
       { label: "What is Pickleball?", href: "/about/what-is-pickleball" },
       { label: "Paddle Lab", href: "/paddle-lab" },
+      // A region of this site, not a separate tour site — see docs/EUROPE.md.
+      { label: "PPA Tour Europe", href: "/europe" },
       { label: "Contact", href: "/about/contact" },
     ],
   },
@@ -323,6 +325,7 @@ function MegaPanelContent({
         <ul className="mt-4 space-y-3.5">
           <li>
             <SmallLink href="/about/how-it-works" label="How It Works" detail="Season format, points, and divisions" onNavigate={onNavigate} />
+            <SmallLink href="/europe" label="PPA Tour Europe" detail="European schedule, pros, and entry rules" onNavigate={onNavigate} />
           </li>
           <li>
             <SmallLink href="/about/host-tournament" label="Host a Tournament" detail="Bring a PPA event to your venue" onNavigate={onNavigate} />

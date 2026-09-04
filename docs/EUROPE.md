@@ -68,10 +68,10 @@ carries a country chip, and is already filterable. No code required.
 | 5 | Results | ✅ `/brackets`, `/leaderboards`, event pages |
 | 6 | Contact Us | ✅ `/about/contact` |
 | 7 | How It Works | ✅ `/about/how-it-works` |
-| 8 | Player Profiles | ✅ `/athletes/[slug]` — **blocked on Europe roster + photos** |
+| 8 | Player Profiles | ✅ `/athletes/[slug]` — **UNBLOCKED 9/4.** 26 signed pros shipped. |
 | 9 | Main menu SHOP link | ⚠ `/shop` is built but hidden. See [`SHOP.md`](SHOP.md). **Do not promise Europe merch.** |
-| 10 | Medal ladder | ❌ Net new. Asia-site feature, no equivalent here. |
-| 11 | Photo / video gallery | ❌ Net new. Ask what it is for before building. |
+| 10 | Medal ladder | ❌ Net new. Asia-site feature, no equivalent here. Not built. |
+| 11 | Photo / video gallery | ❌ Net new. **Waiting on Catie's photos from the first event** (promised 9/3). No placeholder section shipped — an empty gallery is worse than none. |
 
 Seven of eleven already ship. Two are net new. One is commercially blocked. One
 is blocked on people, not engineering.
@@ -236,3 +236,79 @@ public `#ppa-tour-europe` channel on 2026-08-07. Rotate it.
 - The shop. See [`SHOP.md`](SHOP.md) — Europe inherits that blocker unchanged.
 - Which languages ship first. Needs Katherina's read on where the players and
   the audience actually are.
+
+
+---
+
+## What shipped 2026-09-04 — `/europe` is live in the repo
+
+Built from the content Payton Pemberton posted to `#ppa-tour-europe` on 9/3
+(the Europe rules differences, the roster Drive folder, the contact-form ask).
+
+**The route.** `app/(marketing)/europe/page.tsx`, prerendered, 5-minute
+revalidate. Linked from the header About menu, the footer, the sitemap and site
+search. Sections: schedule, roster, event types, entry & eligibility, rules,
+contact.
+
+**The schedule is the live feed, filtered — this page owns no calendar.**
+`getEvents()` → `country === "Europe"`. Four stops render today: PPA Italy 125
+Portorož, PPA Italy 125 Brescia, PPA Spain P250 Barcelona, PPA Spain P500
+Barcelona. That is still 4 of the ~20 Chris Patrick announced on 7/31. An empty
+or thin schedule here is a PB Tournaments data gap, never a bug in the page —
+the copy degrades to "the 2026–2027 calendar is being confirmed" rather than
+inventing dates.
+
+⚠ **Six ISO-3 codes were missing from `COUNTRY_BY_CODE` and are now added:**
+`AND` (Andorra — in the 7/31 announcement, and the original gap this doc
+flagged), plus `SVK`, `HUN`, `IRL`, `LVA`, `SRB` — every one of which is a
+country on the signed roster, so each was a stop that would have silently
+dropped out of the Europe filter.
+
+**The roster answers Albert's loudest ask.** `lib/europe-roster.ts` holds 26
+signed pros from Catie Preis's "PPA Europe Roster Profile Info" sheet — country,
+age, sponsors, Instagram, and her bios. They fold into `lib/athletes.ts`, so
+each one mints a real `/athletes/[slug]` page rather than a parallel
+`/europe/players/*` route that would duplicate the seven pros already in the
+WordPress scrape.
+
+⚠ **`slug` is the pickleball.com player slug, copied from the sheet, never
+derived from the name.** It is the same key the WPR board uses, so a Europe pro
+on the board picks up a live world rank for free. Several do not match the name:
+Matteo Cugliari is `mat-teo`, Ellie Tomkinson is `eleanor-tomkinson`, Katie
+Morris is `katie-morris-3`, Héctor Sánchez Vidal is `hector-sanchez-vidal-1`.
+
+**Contact is a form with no address on the page.** Payton, 9/3: *"Don't
+publicize the email but have the form forward to us."* `formType="europe"` →
+`FORM_INBOX_EUROPE` → the `europe@ppatour.com` group. Do not add a mailto row.
+
+**The rulebook link points at the page, not the PDF.** The live document is
+`upaa.unitedpickleball.com/official-rulebook/`. The PDF behind it is currently
+`V0.9-8.24.26-UPA-A-Rulebook-.pdf` — a versioned path that will rotate, which is
+why the page is the link. The site says it governs **both amateur and pro**
+divisions, as asked.
+
+⚠ **A naming discrepancy worth resolving with Payton.** He asked for the "UPA
+2026-2027 Rulebook". What UPA-A publishes is titled the **2026 UPA-A Rulebook**,
+effective 22 May 2026, currently at V0.9. Either a 2026-2027 edition exists that
+is not on the public site, or the season label is informal. The page says
+"UPA-A Rulebook" with no year, which is true either way.
+
+### Still open on Europe
+
+1. **The 25 portraits are not in the repo.** They are in Catie's Drive folder
+   (`Euro Player Portrait Pictures`), which is not link-shared, and neither the
+   `gcloud` token nor a browser session could pull them — Drive redirects the
+   download to `drive.usercontent.google.com` and 403s. The roster renders
+   initials placeholders until they land in `/public/europe/pros/<slug>.jpg`.
+   Unblock: `gcloud auth application-default login --scopes=...drive.readonly`.
+2. **Alexia Alvarez has no portrait and no bio** in the sheet at all. She ships
+   as a visible gap on purpose. Catie owns it.
+3. **The gallery.** Catie's photos from the first event, promised 9/3.
+4. **The media credential form.** Payton was drafting it 9/3.
+5. **Licensee email accounts.** Payton named five people 9/3: David Botti,
+   Daniel Botti, Francesco Foschi, Eddie Jackson, Albert Escofet. Each is a paid
+   Workspace seat. **Kate Young creates them, not Bryce.** Not urgent per Payton.
+6. **`europe@ppatour.com` membership.** Payton asked 9/3 to remove Jeff Watson
+   and add himself. Not yet done — Workspace admin task.
+7. **The remaining ~16 stops.** Chris Patrick. Unchanged since 7/31, and still
+   the thing that decides whether any of this has a calendar to show.
