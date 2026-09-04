@@ -63,6 +63,43 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-04 (pt. 2) — AstraZeneca / Fasenra is off the roster, not just de-logo'd
+
+- **Marketing, after seeing the logo-only fix: "it shouldn't be up on the site entirely, not just
+  the logo."** The roster record is deleted. **Audited on 10 rendered routes: AstraZeneca is now 0
+  site-wide**, and every sponsor surface is clear — `/about/sponsors`, the homepage Gold grid, the
+  logo marquee, and the "Sponsors of {event}" section on **every** event page, with the
+  "Official Asthma Partner" designation gone with it (0 occurrences anywhere).
+- **⚠ DELETING THE RECORD IS WHAT DID IT — BLANKING FIELDS WOULD NOT HAVE.** Pulling `logo` on 9/4
+  pt. 1 cleared the mark but PartnerWall then printed the NAME, its documented fallback, so a
+  text card survived in all four places. There is no combination of empty fields that removes a
+  partner; the entry has to go.
+- **⚠ IT WAS WIRED IN TWICE, AND THE SECOND ONE IS EASY TO MISS.** Beyond the roster,
+  `lib/event-sponsors.ts` carries Nationals' own curated sponsor list (Bryan Renahan's 8/27 order)
+  with `"AstraZeneca / Fasenra"` written out in full — deliberately, so the match didn't rely on
+  the slash-splitting fallback. Removing only the roster record would have left that string
+  resolving to no partner and **still rendering a name card** on the biggest event page on the
+  site. Both are gone; the docblock's sponsor count went thirteen → twelve.
+- **⚠ A TOMBSTONE COMMENT SITS WHERE THE RECORD WAS, and it is load-bearing.** The roster is
+  alphabetical within tier and this repo's habit is to fill gaps against the live
+  ppatour.com/sponsors page — so an unexplained absence reads as a missing Gold partner and
+  invites a re-add. Same reasoning as the notes left where `ScoreRail` and the Gold Prize Grid
+  were deleted. The `import-sponsor-logos.mjs` row stays commented out for the same reason.
+- **⚠ THE PRESENTING CREDIT IS DELIBERATELY STILL THERE, AND THIS IS THE ONE TO GET RIGHT.**
+  7 "Fasenra" hits remain and **all 7 are the presenting credit** — Nationals' hero eyebrow, the
+  `Presenting Partner` card in that page's sponsor marquee, the `-live` hero, the homepage
+  Next-on-Tour card and two `/events` cards. All derive from ONE line, `PRESENTER_BY_SLUG` in
+  `lib/placeholder-data.ts`, so it is a one-line change either way.
+  **Left alone because removing it would make the site state something FALSE about a live event**:
+  Nationals genuinely is presented by Fasenra, the on-court signage and broadcast graphics say so,
+  and that is a different class of error from continuing to show a sponsor who asked to come down.
+  Flagged to marketing twice and asked for an explicit call. **Pulling a paid presenting credit
+  mid-tournament is an event-billing decision, not a sponsor-listing one.**
+- Verified per route, not by grep over source: 10 routes, **0 AstraZeneca, 0 logo references,
+  0 "Official Asthma Partner"**, the asset still 404s, and **all 34 other partner marks render
+  unchanged** on the sponsors page. Controls: `/tour/senior`, `/watch` and an athlete page were
+  already clean and still are. tsc + eslint clean.
+
 ### 2026-09-04 — The AstraZeneca mark is off the site, and the importer can't put it back
 
 - **Urgent request relayed by Wesley: remove the AstraZeneca logo from the sponsors page.** Done,
