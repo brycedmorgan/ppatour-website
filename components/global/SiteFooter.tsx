@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { EUROPE_PUBLIC } from "@/lib/europe-launch";
 import Link from "next/link";
 import { footerPartners, showsDesignation } from "@/lib/home-content";
 import { partnerLink } from "@/lib/partner-link";
@@ -34,10 +35,14 @@ const PRO_TOUR_LINKS: FooterLink[] = [
 ];
 
 const PPA_LINKS: FooterLink[] = [
+  // ⚠ Unlisted until EUROPE_PUBLIC flips — see lib/europe-launch.ts. The page is
+  // live for anyone with the link; it just isn't advertised here yet.
+  ...(EUROPE_PUBLIC
+    ? [{ label: "PPA Tour Europe", href: "/europe" }]
+    : []),
   { label: "About the PPA Tour", href: "/about" },
   { label: "Paddle Lab", href: "/paddle-lab" },
   { label: "Sponsors", href: "/about/sponsors" },
-  { label: "PPA Tour Europe", href: "/europe" },
   { label: "Host a Tournament", href: "/about/host-tournament" },
   { label: "Host a Private Event", href: "/about/private-events" },
   { label: "Ambassador Program", href: "/about/ambassadors" },

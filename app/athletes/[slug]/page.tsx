@@ -35,6 +35,7 @@ import { labPaddleForName } from "@/lib/paddle-lab";
 import { LabStatsMini } from "@/components/paddle-lab/LabStatsMini";
 import { paddleUpdateFor } from "@/lib/paddle-updates";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
+import { isUnlistedEuropeAthlete } from "@/lib/europe-visibility";
 
 /**
  * Equipment is back ON, now that it has a source worth publishing (Wesley,
@@ -263,6 +264,15 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return {
     title: { absolute: title },
     description,
+    /**
+     * ⚠ THE 19 PROFILES THE PPA TOUR EUROPE ROSTER MINTED ARE NOINDEX UNTIL
+     * EUROPE LAUNCHES. They are new URLs created by an unlisted page, and
+     * submitting them to Google is the one thing "not live for everyone yet"
+     * rules out. The seven Europe pros who already had a scraped profile are
+     * untouched — see the note in lib/europe-visibility.ts. One flag
+     * (EUROPE_PUBLIC) releases all of them at once.
+     */
+    robots: isUnlistedEuropeAthlete(slug) ? { index: false, follow: false } : undefined,
     openGraph: {
       title,
       description,

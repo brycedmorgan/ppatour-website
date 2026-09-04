@@ -181,6 +181,52 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   still Chris Patrick and still the thing that decides whether any of this has a
   calendar to show.
 
+### 2026-09-04 (pt. 2) — Europe ships UNLISTED; subfolder settled over subdomain
+
+- Bryce: *"I want them to be able to see it, but not be live for everyone yet.
+  Maybe push it but no link to it?"* **`EUROPE_PUBLIC` in
+  `lib/europe-launch.ts` is the one line that launches it.** Five files read it;
+  none needs editing. `/europe` renders in full with a "Preview — not yet live"
+  banner and `noindex, nofollow`; the nav item, footer link, site-search hit and
+  sitemap entries are all absent until it flips.
+- **⚠ THE ROSTER HAD ALREADY PUT 26 ATHLETE PAGES IN THE SITEMAP, WHICH IS THE
+  LEAK THIS CAUGHT.** `lib/athletes.ts` feeds `app/sitemap.ts`, so folding the
+  Europe pros in submitted 19 brand-new URLs to Google under a page that is not
+  supposed to be public. They are now noindex and out of the sitemap. **The seven
+  who already had a scraped profile — Owczarek, Platel, Cugliari, Amaro, Paque,
+  Seccia, Protzek — are deliberately untouched**: they were indexed long before
+  Europe was a page, and pulling them would be a live SEO regression wearing a
+  launch control's clothes. `isUnlistedEuropeAthlete` exists for exactly that
+  distinction.
+- **⚠ `lib/europe-launch.ts` IMPORTS NOTHING, AND THE FIRST DRAFT DID.** It
+  imported `europeRoster` and the 179-profile `published-athletes` JSON for the
+  helper — and `Header.tsx` is a **client component**, so both would have shipped
+  to every browser on every page of the site. The server-side half moved to
+  `lib/europe-visibility.ts`. Same split as `lib/score-names.ts` beside
+  `lib/score-headshots.ts`.
+- **⚠ NO robots.txt `Disallow`, DELIBERATELY.** Blocking the crawl stops Google
+  reading the `noindex` it is meant to obey, and a disallowed URL someone links
+  to externally can still surface as a bare contentless result. Noindex **with**
+  crawling allowed is what actually keeps a page out of the index. Do not
+  "tighten" this.
+- **⚠ UNLISTED IS NOT PRIVATE.** Anyone with the link sees it. Right weight for a
+  public tour's schedule and roster; wrong weight for anything sensitive. A real
+  gate is Basic auth in a `proxy.ts`, not this flag.
+- **Settled: `/europe` stays a path, not `europe.ppatour.com`.** Bryce raised the
+  subdomain and deferred the call. The three things he named as reasons —
+  region-varying sponsors, languages, geo-aware loading — are each a data or
+  edge-routing problem that a subdomain does not solve, while a subdomain does
+  cost the domain authority this site spent eighteen months turning around
+  (62,703 → 74,198 organic in the first month on the rebuild). It would also
+  re-create the Asia/Australia silo whose ongoing cost is written down in
+  `lib/asia-tour-links.ts`. Full reasoning, including the one case that WOULD
+  justify a subdomain, in `docs/EUROPE.md`.
+- Verified in the built output, not by reading the diff: `/europe` noindex + 0
+  sitemap entries + banner present · `arwid-dahlin` (minted) noindex + absent
+  from the sitemap · `karolina-owczarek` (pre-existing) carries no robots tag and
+  is still in the sitemap · `ben-johns` unchanged · **0 occurrences of "PPA Tour
+  Europe" in the homepage HTML.**
+
 ### 2026-09-03 (pt. 2) — Paddle Lab gets a real hero photograph
 
 - Bryce: "we have some of the coolest photography of anyone in professional

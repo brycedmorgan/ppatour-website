@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { InquiryForm } from "@/components/forms/InquiryForm";
 import { getEvents } from "@/lib/events-api";
+import { EUROPE_PUBLIC, europeRobots } from "@/lib/europe-launch";
 import { europeRoster } from "@/lib/europe-roster";
 import { SITE_URL } from "@/lib/site";
 
@@ -39,6 +40,9 @@ export const metadata: Metadata = {
   description:
     "PPA Tour Europe — the European professional pickleball tour. Schedule, signed pros, event tiers, entry priority and the rules that differ from the US tour.",
   alternates: { canonical: `${SITE_URL}/europe` },
+  // ⚠ Unlisted, not private. Live for anyone with the link, invisible to search
+  // until EUROPE_PUBLIC flips. See lib/europe-launch.ts.
+  robots: europeRobots,
 };
 
 /* ------------------------------------------------------------------ *
@@ -122,6 +126,25 @@ export default async function EuropePage() {
 
   return (
     <>
+      {/* ⚠ Review banner, shown only while EUROPE_PUBLIC is false. Payton, Catie,
+          Chris and Smash are being sent this URL before launch, and a finished
+          page with no "not live yet" marker reads as already published — which
+          is how someone forwards it to a licensee or posts it to social. It
+          disappears with the flag, along with the nav gap it explains. */}
+      {!EUROPE_PUBLIC && (
+        <div className="bg-ppa-navy text-white">
+          <div className="mx-auto w-full max-w-6xl px-4 py-2.5">
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-white/70">
+              Preview — not yet live.{" "}
+              <span className="font-normal normal-case tracking-normal text-white/55">
+                This page is reachable by link only. It is not linked from
+                ppatour.com and not in search. Please don&apos;t share it publicly yet.
+              </span>
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* ---------------------------------------------------------- Hero */}
       <section className="bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
