@@ -72,20 +72,29 @@ export const tvSchedule: TvEvent[] = [
           { channel: "Tennis Channel", window: "11:30AM – 5PM", round: "Round of 16" },
         ],
       },
+      /**
+       * ⚠ WEATHER RESCHEDULE, Keaton Maynard 9/3 7:46PM — not the 8/13 sheet.
+       * Friday and Saturday each split into a morning PBTV block and an evening
+       * Tennis Channel + PBTV block. `node scripts/audit-tv-schedule.mjs` will
+       * report these two days against the sheet until the sheet is reissued;
+       * that report is expected. Kept in lockstep with lib/broadcast.ts.
+       */
       {
         date: "Sep 4",
         dow: "Fri",
         windows: [
-          { channel: "PBTV", window: "10AM – 6PM", round: "Quarterfinals" },
-          { channel: "Tennis Channel", window: "11:30AM – 5PM", round: "Quarterfinals" },
+          { channel: "PBTV", window: "9AM – 12PM", round: "Quarterfinals" },
+          { channel: "PBTV", window: "4:30PM – 9:30PM", round: "Quarterfinals" },
+          { channel: "Tennis Channel", window: "4:30PM – 9:30PM", round: "Quarterfinals" },
         ],
       },
       {
         date: "Sep 5",
         dow: "Sat",
         windows: [
-          { channel: "PBTV", window: "9AM – 5PM", round: "Semifinals" },
-          { channel: "Tennis Channel", window: "11AM – 5PM", round: "Semifinals" },
+          { channel: "PBTV", window: "9AM – 12PM", round: "Semifinals" },
+          { channel: "PBTV", window: "4:30PM – 9:30PM", round: "Semifinals" },
+          { channel: "Tennis Channel", window: "4:30PM – 9:30PM", round: "Semifinals" },
         ],
       },
       {

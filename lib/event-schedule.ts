@@ -88,14 +88,14 @@ export const eventSchedules: Record<string, EventSchedule> = {
         amateur: [{ label: "Amateur skill & age brackets" }],
       },
       {
-        date: "Sep 4", dow: "Fri", label: "Quarterfinals", firstServe: "10:00 AM", gates: "9:00 AM", live: "PBTV",
+        date: "Sep 4", dow: "Fri", label: "Quarterfinals", firstServe: "10:00 AM", gates: "9:00 AM", live: "Tennis Channel · PBTV",
         amateur: [
           { label: "Amateur skill & age brackets" },
           { label: "Junior PPA — Singles", detail: "Showcase Court 1" },
         ],
       },
       {
-        date: "Sep 5", dow: "Sat", label: "Semifinals", firstServe: "9:00 AM", gates: "8:00 AM", live: "PBTV",
+        date: "Sep 5", dow: "Sat", label: "Semifinals", firstServe: "9:00 AM", gates: "8:00 AM", live: "Tennis Channel · PBTV",
         amateur: [
           { label: "Amateur skill & age brackets" },
           { label: "Junior PPA — Doubles", detail: "Carvana Grandstand Court" },

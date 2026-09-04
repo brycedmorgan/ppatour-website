@@ -129,7 +129,7 @@ export function TvGuide({ limit }: { limit?: number }) {
             {e.days.map((d) =>
               d.windows.map((w, i) => (
                 <div
-                  key={`${d.date}-${w.channel}-${w.round}`}
+                  key={`${d.date}-${w.channel}-${w.round}-${i}`}
                   className="grid gap-1 border-b border-ppa-line/60 px-4 py-2.5 last:border-b-0 sm:grid-cols-[7rem_1fr_10rem] sm:items-center sm:gap-3"
                 >
                   <span className="text-xs font-bold uppercase tracking-wide text-ppa-navy">
