@@ -63,6 +63,26 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-04 — Nationals weather reschedule: Fri + Sat TV windows
+
+- Keaton Maynard, `@here` 9/3 7:46PM: intense weather moved Friday and Saturday
+  broadcast at Nationals. Both days now **9AM-12PM ET (PBTV)**, then
+  **4:30-9:30PM ET (Tennis Channel + PBTV)**. Was Fri PBTV 10-6 / TC 11:30-5 and
+  Sat PBTV 9-5 / TC 11-5.
+- Updated `lib/broadcast.ts` and `lib/tv-schedule.ts` in lockstep (Sep 4, Sep 5).
+  `lib/event-schedule.ts` now names Tennis Channel in `live` for both days.
+  Commit `d15639f`. Typecheck + `next build` clean.
+- **`node scripts/audit-tv-schedule.mjs` will now FAIL on Nationals Fri/Sat.**
+  That is correct: the site is ahead of the 8/13 sheet. Both files carry a
+  comment saying so. Clear it when broadcast reissues the sheet.
+- Fixed a real bug the change exposed: `components/watch/TvGuide.tsx` keyed rows
+  on `date-channel-round`, which collides now that a day carries two PBTV
+  windows for the same round. Key includes the index.
+- **First serve and gate times are UNCHANGED.** Order of play and broadcast are
+  separate (Wesley, 8/27) and the notice only moved TV. Friday still reads
+  10:00 AM first serve against a 9AM PBTV open. If play actually moved, the
+  event team owns that number and it needs a second update.
+
 ### 2026-09-04 — `/europe` ships: 26 signed pros, the Europe rules, a form with no address
 
 - Payton Pemberton posted the Europe content to `#ppa-tour-europe` on 9/3 (rules
