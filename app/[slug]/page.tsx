@@ -30,6 +30,18 @@ function rootDetail(slug: string) {
   return detail && detail.card.postType !== "ppa-blog" ? detail : undefined;
 }
 
+/**
+ * ⚠ SAME TRAP AS /athletes/[slug] (9/5): this page renders ArticleView, which
+ * calls `getRankingBySlug` for the "Players in This Story" rail — and that
+ * reads the WHOLE ranking board. Every data call here happens after
+ * `await params`, a Request-time API, and the DEFAULT `fetchCache: "auto"`
+ * "will not cache fetch requests that are discovered AFTER Request-time APIs
+ * are used". So the board was re-paged from upstream on any render that was not
+ * served from cached HTML — up to ten requests per gender, for a rail of
+ * headshots. `default-cache` restores each fetch’s own revalidate + tags.
+ */
+export const fetchCache = "default-cache";
+
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const detail = rootDetail(slug);

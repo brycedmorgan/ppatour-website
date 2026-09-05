@@ -59,6 +59,36 @@ const SHOW_EQUIPMENT: boolean = true;
 
 type Params = { params: Promise<{ slug: string }> };
 
+/**
+ * ⚠ THIS IS WHAT KEEPS AN ATHLETE PAGE FROM COSTING ~16 UPSTREAM CALLS EVERY
+ * TIME IT RENDERS (9/5). This route was the single biggest consumer of the
+ * partner API — measured on Vercel: 6.1K of the 6.7K `partner_rankings` calls
+ * in one hour came from `/athletes/[slug]`, and a cache MISS on this page took
+ * 9.0s to render, which is what ten board pages plus six division boards cost
+ * when none of them are cached.
+ *
+ * The cause is `params`. Next lists it as a Request-time API, and under the
+ * DEFAULT `fetchCache: "auto"` Next "will not cache fetch requests that are
+ * discovered AFTER Request-time APIs are used". Every data call on this page
+ * happens after `await params`, so the `revalidate` + `tags` that
+ * `lib/rankings-api.ts`, `lib/division-rankings.ts` and `lib/athlete-stats.ts`
+ * all carefully pass were being ignored. The `generateStaticParams` exemption
+ * covers PRERENDERING; it does not help a page rendered on demand, which is
+ * every athlete not in the prerendered set and every page whose cached HTML has
+ * since been evicted or revalidated.
+ *
+ * `default-cache` is documented for exactly this: it means "even fetch requests
+ * after Request-time APIs are considered static", so each call's own options
+ * apply again. It does NOT make the page static — rendering is unchanged.
+ *
+ * ⚠ AND IT IS DELIBERATELY NOT `export const revalidate`. That was considered
+ * and rejected on 8/22 for a reason that still holds: there are 1,100+ pages
+ * here and the daily cron exists so mass regeneration never walks into the
+ * partner API's rate limit. The problem was never how OFTEN this page
+ * re-renders, it was how much a single re-render cost.
+ */
+export const fetchCache = "default-cache";
+
 export async function generateStaticParams() {
   const roster = await getWprRoster().catch(() => []);
   // A scraped slug the board says duplicates another profile mints no page of
