@@ -1,6 +1,4 @@
 import { getAthlete } from "@/lib/athletes";
-import { unstable_cache } from "next/cache";
-
 import { RANKINGS_CACHE_TAG } from "@/lib/cache-tags";
 import { type Division, type DivisionKey, divisionRankings } from "@/lib/home-content";
 import { pbGetJson } from "@/lib/pb-fetch";
@@ -283,62 +281,62 @@ const boardDay = () => new Date().toISOString().slice(0, 10);
 const BOARD_RETRIES = 2;
 
 /**
- * The upstream fetch for one board page, behind the durable cache.
+ * The upstream fetch for one board page.
  *
- * ⚠ THE DURABLE LAYER IS ON THE RESULT, NOT ON THE `fetch`, AND THAT IS THE
- * WHOLE POINT OF THIS WRAPPER. `pbGetJson` makes its first attempt against the
- * Next Data Cache and every RETRY with `cache: "no-store"`, so that a 429 is
- * never what lands in the cache. But `no-store` does not WRITE either — so a
- * call that was throttled once and then SUCCEEDED on a retry returned good data
- * and cached nothing. Every later request missed again, re-fetched, and was
- * throttled again: while we were being rate limited the cache could never warm,
- * which is what made being rate limited self-sustaining rather than a blip.
- * Caching the returned VALUE means whichever attempt succeeds is what persists.
+ * ⚠ THE DURABLE LAYER IS `pbGetJson`'s OWN Next Data Cache ENTRY, AND IT STAYS
+ * THAT WAY. On 9/5 this briefly wrapped the call in `unstable_cache` instead, to
+ * fix a real but narrower problem: `pbGetJson` retries with `cache: "no-store"`,
+ * which does not WRITE, so a page that only succeeded on a RETRY cached nothing.
+ * Caching the assembled result rather than the fetch would have persisted it.
  *
- * ⚠ FAILURE MUST THROW, NOT RETURN. A thrown error is not cached, which is how
- * this keeps the original guarantee — we still never pin a 429, an outage or an
- * empty board for a day. Callers get `null` from {@link boardPage} exactly as
- * before.
+ * That was reverted the same day, and the reason is worth keeping. Next's own
+ * docs scope `unstable_cache` to non-`fetch` work — database queries and async
+ * functions — and wrapping a `fetch` in it meant the inner call ran `no-store`
+ * on every attempt, so the ONLY thing standing between us and an upstream
+ * request was that outer layer persisting. It did not visibly do so on Vercel:
+ * `partner_rankings` went to ~1.7K calls in fifteen minutes, which is the shape
+ * of "every render re-pages the whole board" — roughly ten calls per athlete
+ * page, news article, /athletes and /europe render, instead of ten per DAY.
+ *
+ * The fetch-level Data Cache is the mechanism that demonstrably held this
+ * endpoint for months. Do not replace it with a cleverer one during an
+ * incident. The retry-does-not-persist problem is real and still open, but it
+ * only bites while we are ALREADY being throttled, and it is a far smaller
+ * problem than the one trading it away created.
  */
-function fetchBoardPage(gender: "M" | "F", page: number, day: string): Promise<Board> {
-  return unstable_cache(
-    async (): Promise<Board> => {
-      const { token, baseUrl } = config();
-      if (!token) throw new Error("partner_rankings: no token");
-      const params = new URLSearchParams({
-        partner: "ppa",
-        division_type: String(WORLD_DIVISION_TYPE),
-        gender,
-        race: String(RACE),
-        is_live: "false",
-        bracket_level_id: String(PRO_BRACKET),
-        current_page: String(page),
-        page_size: String(BOARD_PAGE_SIZE),
-        // Day-scoped key: rolls the cache over at midnight UTC on its own.
-        rank: day,
-      });
+async function fetchBoardPage(gender: "M" | "F", page: number): Promise<Board | null> {
+  const { token, baseUrl } = config();
+  if (!token) return null;
+  const params = new URLSearchParams({
+    partner: "ppa",
+    division_type: String(WORLD_DIVISION_TYPE),
+    gender,
+    race: String(RACE),
+    is_live: "false",
+    bracket_level_id: String(PRO_BRACKET),
+    current_page: String(page),
+    page_size: String(BOARD_PAGE_SIZE),
+    // Day-scoped key: rolls the cache over at midnight UTC on its own.
+    rank: boardDay(),
+  });
 
-      const json = (await pbGetJson(
-        `${baseUrl}/v2/data/partner_rankings?${params}`,
-        { "PB-API-TOKEN": token },
-        { timeoutMs: TIMEOUT_MS, retries: BOARD_RETRIES },
-      )) as { total_records?: number; results?: { player_rankings?: ApiPlayer[] } } | null;
-      if (!json) throw new Error("partner_rankings: unavailable");
-
-      const players = json.results?.player_rankings ?? [];
-      // Always drop zero-point players (matches the source handler).
-      const entries = players.filter((pl) => (pl.points ?? 0) > 0).map(mapPlayer);
-      // An empty page is a transient blip or a board that shrank — never worth
-      // persisting for a day. boardAll stops on `total`, so it does not ask for
-      // a page past the end in the ordinary case.
-      if (entries.length === 0) throw new Error("partner_rankings: empty page");
-      return { entries, total: json.total_records ?? entries.length };
+  const json = (await pbGetJson(
+    `${baseUrl}/v2/data/partner_rankings?${params}`,
+    { "PB-API-TOKEN": token },
+    {
+      timeoutMs: TIMEOUT_MS,
+      retries: BOARD_RETRIES,
+      revalidate: REVALIDATE_SECONDS,
+      tags: [RANKINGS_CACHE_TAG],
     },
-    ["wpr-board", gender, String(page), day],
-    { revalidate: REVALIDATE_SECONDS, tags: [RANKINGS_CACHE_TAG] },
-  )();
-}
+  )) as { total_records?: number; results?: { player_rankings?: ApiPlayer[] } } | null;
+  if (!json) return null;
 
+  const players = json.results?.player_rankings ?? [];
+  // Always drop zero-point players (matches the source handler).
+  const entries = players.filter((pl) => (pl.points ?? 0) > 0).map(mapPlayer);
+  return { entries, total: json.total_records ?? entries.length };
+}
 /**
  * One page of one gender board, cached three ways (see the file header). Null
  * means the call genuinely failed — callers must distinguish that from a page
@@ -354,15 +352,13 @@ async function boardPage(gender: "M" | "F", page: number): Promise<Board | null>
   if (pending) return pending;
 
   const p = (async (): Promise<Board | null> => {
-    try {
-      const value = await fetchBoardPage(gender, page, boardDay());
+    const value = await fetchBoardPage(gender, page);
+    // Only memo a populated page — never pin an empty result from a transient
+    // blip for six hours (the next caller retries instead).
+    if (value && value.entries.length > 0) {
       boardCache.set(key, { value, expires: Date.now() + BOARD_TTL_MS });
-      return value;
-    } catch {
-      // Unavailable or empty — the next caller retries rather than us pinning a
-      // bad result. Same contract this function has always had.
-      return null;
     }
+    return value;
   })();
 
   boardInFlight.set(key, p);
