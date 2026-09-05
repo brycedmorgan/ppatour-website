@@ -60,6 +60,40 @@ const SHOW_EQUIPMENT: boolean = true;
 type Params = { params: Promise<{ slug: string }> };
 
 /**
+ * ⚠ WITHOUT THIS, THE ~20 ATHLETES THAT DO NOT PRERENDER RE-RENDER ON EVERY
+ * SINGLE REQUEST, AND THEY ARE THE MOST-VISITED PAGES ON THE SITE (9/5).
+ * Measured on production: /athletes/ben-johns returned `X-Vercel-Cache: MISS`
+ * with `Age: 0` on three consecutive requests, taking 18.8s, 17.4s and 30.0s —
+ * nothing cached, nothing shared, a full render each time. Meanwhile
+ * dj-young, joel-poland and tyson-mcguffin served as PRERENDER in ~0.3s.
+ *
+ * A render costs roughly sixteen upstream calls (ten board pages via
+ * {@link getWprPlayerBySlug}/{@link getRankingBySlug}, six division boards),
+ * so a handful of popular players generated essentially all of it: Vercel
+ * attributed 6.1K of the 6.7K `partner_rankings` calls in one hour to this
+ * route, at a 2.1% error rate — succeeding calls, pure volume.
+ *
+ * ⚠ THE SPLIT IS NOT RANDOM: the slow ones are the pros in the CURATED roster
+ * (`lib/athletes.ts`), which render more — hero, gear, videos — and so are the
+ * expensive pages to build. They are in `generateStaticParams` and still do not
+ * come out of the build prerendered, which is worth a look at a build log on
+ * its own. This does not fix that; it makes it stop mattering.
+ *
+ * ⚠ AND IT IS 24h ON PURPOSE, NOT MINUTES. The 8/22 note rejected adding
+ * `revalidate` here, and the concern was real — 1,100+ pages, and the daily
+ * cron exists so mass regeneration never walks into the partner API's rate
+ * limit. A DAILY window is exactly the cadence that cron already runs at, and
+ * matches the 24h Data Cache the ranking boards use, so it adds no regeneration
+ * pressure that was not already there. What it removes is a page rendering
+ * itself from scratch several times a minute.
+ *
+ * Live data does not go stale for a day: `revalidateTag(ATHLETES_CACHE_TAG)`
+ * still drops these pages the moment Jackalope saves a player, and the cron
+ * still refreshes them every morning.
+ */
+export const revalidate = 86400;
+
+/**
  * ⚠ THIS IS WHAT KEEPS AN ATHLETE PAGE FROM COSTING ~16 UPSTREAM CALLS EVERY
  * TIME IT RENDERS (9/5). This route was the single biggest consumer of the
  * partner API — measured on Vercel: 6.1K of the 6.7K `partner_rankings` calls
