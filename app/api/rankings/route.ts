@@ -15,27 +15,36 @@ import { getFullRankings, toBoardDivisions } from "@/lib/rankings-api";
  * reads the 24h Data Cache (tagged, refreshed by the athletes cron) that the
  * /rankings build and /leaderboards already populate.
  */
-export const dynamic = "force-dynamic";
+/**
+ * ⚠ THIS ROUTE MUST NOT DECLARE `dynamic = "force-dynamic"`, AND THAT WAS THE
+ * BUG (9/5). Next documents force-dynamic as equivalent to setting EVERY
+ * fetch() in the segment to `{ cache: 'no-store', next: { revalidate: 0 } }`,
+ * i.e. `fetchCache = 'force-no-store'`. The FORCE is literal and it wins over
+ * a weaker setting — adding `fetchCache = "default-cache"` alongside it did NOT
+ * rescue the fetches, which is how this was finally pinned down. So the
+ * `revalidate` + `tags` that `lib/rankings-api.ts` passes on each board page
+ * were overridden, and the 24h Data Cache entries the docblock above promises
+ * were never written. The comment was aspirational; the route re-paged both
+ * boards from upstream on every single miss.
+ *
+ * That is up to ten upstream requests per gender, and /rankings asks this route
+ * for the full board from the browser on every visit. Measured on production:
+ * forced-origin requests took 7.3s and 8.1s back to back, and one board page
+ * costs ~0.36s upstream — so the timing says every page was being fetched fresh.
+ *
+ * ⚠ AND force-dynamic WAS NEVER NEEDED: this handler reads no request-time APIs
+ * at all — no searchParams, no headers, no cookies. It was doing nothing except
+ * switching off the cache. `revalidate` expresses the real intent, and matches
+ * the `s-maxage=300` this route already sets on its own response, so freshness
+ * is unchanged: the board is at most five minutes old, exactly as before.
+ */
+export const revalidate = 300;
 
 /**
- * ⚠ WITHOUT THIS, `force-dynamic` ABOVE SILENTLY DISABLES THE DATA CACHE FOR
- * EVERY FETCH THIS ROUTE MAKES, AND THAT IS WHY `partner_rankings` RAN HOT
- * (9/5). Next's own words: `dynamic = "force-dynamic"` is "equivalent to …
- * setting the option of every fetch() request to { cache: 'no-store',
- * next: { revalidate: 0 } }" and to `fetchCache = 'force-no-store'`. The FORCE
- * in that name is literal — it overrides the `revalidate` and `tags` that
- * `lib/rankings-api.ts` passes on each board page, so the 24h Data Cache
- * entries this route thinks it is reading were never written.
- *
- * The cost is not one call. Assembling a board walks up to ten pages per
- * gender, and /rankings fetches this route from the browser on every visit, so
- * every uncached assembly was ~10 upstream requests. Measured on production
- * before the fix: two back-to-back forced-origin requests took 7.3s and 8.1s,
- * the second no faster than the first — i.e. nothing the first one fetched was
- * retained.
- *
- * `default-cache` keeps the route itself dynamic (it must always run) while
- * letting each fetch's own cache options be respected again.
+ * Belt and braces on top of the above: allow each fetch's own cache options to
+ * be respected. Harmless now that no `force-*` setting is fighting it, and it
+ * documents the requirement so a future `force-dynamic` cannot be re-added
+ * quietly without someone reading why it is wrong.
  */
 export const fetchCache = "default-cache";
 

@@ -7,15 +7,16 @@ import { getAthleteVideosFor } from "@/lib/athlete-videos";
  *
  *   GET /api/athlete-videos?slug=<player-slug>&tournament=<uuid> → { videos[] }
  */
-export const dynamic = "force-dynamic";
-
 /**
- * ⚠ SAME TRAP AS /api/rankings (9/5): `force-dynamic` is documented as
- * equivalent to `fetchCache = "force-no-store"`, which OVERRIDES the
- * `revalidate` + `tags` this route’s adapter passes on every call — so the
- * tagged 1h Data Cache it is written against was never actually written, and
- * every request re-hit the partner API. `default-cache` keeps the route
- * dynamic while letting each fetch’s own options be respected again.
+ * ⚠ NO `force-dynamic` HERE, DELIBERATELY (9/5). It is documented as
+ * equivalent to `fetchCache = "force-no-store"`, and that FORCE overrode the
+ * `revalidate` + `tags` this route’s adapter passes — so its tagged 1h Data
+ * Cache was never written and every request re-hit the partner API. Pairing it
+ * with `default-cache` does not rescue it; a force-* setting wins. Same bug as
+ * /api/rankings, same fix.
+ *
+ * Nothing is lost by dropping it: this handler reads `searchParams`, so it is
+ * dynamic on its own terms and always runs.
  */
 export const fetchCache = "default-cache";
 
