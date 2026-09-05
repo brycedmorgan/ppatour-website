@@ -1,4 +1,5 @@
 import { getAthlete } from "@/lib/athletes";
+import wprSnapshot from "@/lib/data/wpr-snapshot.json";
 import { RANKINGS_CACHE_TAG } from "@/lib/cache-tags";
 import { type Division, type DivisionKey, divisionRankings } from "@/lib/home-content";
 import { pbGetJson } from "@/lib/pb-fetch";
@@ -262,6 +263,56 @@ function mapPlayer(p: ApiPlayer): RankingEntry {
   };
 }
 
+/**
+ * The on-disk board snapshot (`scripts/snapshot-rankings.mjs`).
+ *
+ * ⚠ THIS IS WHAT MAKES A PAGE VIEW COST ZERO RANKING CALLS, AND IT IS WHY EVERY
+ * ATHLETE CAN PRERENDER (9/5). The three lookups above all need the WHOLE board
+ * — correctly, since 9/4, or 17 profiles ranked 251+ render a blank rank — and
+ * the whole board is up to six upstream pages for men and four for women. Once
+ * a day that is nothing. Per render it was 6.1K `partner_rankings` calls in an
+ * hour from `/athletes/[slug]` alone, pages taking 17-30s and never caching.
+ *
+ * It broke the BUILD too, which is the half that made it self-sustaining:
+ * `next build` fans out over 29 worker processes, each with its own module
+ * cache, all paging the same boards against an API that was throttling them.
+ * The tail of the build crawled at roughly a minute a page and only 132 of 203
+ * athletes came out prerendered — the other 71, Ben Johns and Anna Leigh Waters
+ * among them, fell back to rendering on every request, which kept us throttled,
+ * which made the next build worse.
+ *
+ * ⚠ IT EXPIRES, DELIBERATELY. Past {@link SNAPSHOT_MAX_AGE_MS} we fall through
+ * to the live API rather than serve ranks of unknown age. A refresh job that
+ * quietly stops must not freeze the standings indefinitely — it should cost us
+ * calls again and show up, which is the failure we can see.
+ */
+const SNAPSHOT_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
+
+function snapshotBoard(gender: "M" | "F"): { total: number; players: ApiPlayer[] } | null {
+  const snap = wprSnapshot as {
+    generatedAt?: string;
+    boards?: Record<string, { total: number; players: ApiPlayer[] }>;
+  };
+  const board = snap.boards?.[gender];
+  if (!board || !Array.isArray(board.players) || board.players.length === 0) return null;
+  const age = Date.now() - Date.parse(snap.generatedAt ?? "");
+  if (!Number.isFinite(age) || age > SNAPSHOT_MAX_AGE_MS) return null;
+  return board;
+}
+
+/**
+ * Can we answer a board question at all? A token OR a usable snapshot will do.
+ *
+ * ⚠ THE SNAPSHOT ALONE IS ENOUGH, AND THAT MATTERS FOR THE BUILD. Every public
+ * entry point below used to open with a bare token check and bail to the
+ * placeholder rows, so a build or a preview without `PB_API_TOKEN` published
+ * demo standings. With a snapshot committed, those environments now serve the
+ * real board and make no request to do it.
+ */
+function hasBoardSource(): boolean {
+  return Boolean(config().token) || snapshotBoard("M") !== null || snapshotBoard("F") !== null;
+}
+
 /** One {@link BOARD_PAGE_SIZE}-row page of one gender board. */
 type Board = { entries: RankingEntry[]; total: number };
 
@@ -352,6 +403,23 @@ async function boardPage(gender: "M" | "F", page: number): Promise<Board | null>
   if (pending) return pending;
 
   const p = (async (): Promise<Board | null> => {
+    // ⚠ SNAPSHOT FIRST — this is the whole point of the file on disk. A page
+    // served from it costs no upstream request, which is what lets every
+    // athlete prerender instead of 71 of them rendering per view.
+    const snap = snapshotBoard(gender);
+    if (snap) {
+      const start = (page - 1) * BOARD_PAGE_SIZE;
+      const slice = snap.players.slice(start, start + BOARD_PAGE_SIZE);
+      const value: Board = {
+        entries: slice.filter((pl) => (pl.points ?? 0) > 0).map(mapPlayer),
+        total: snap.total,
+      };
+      if (value.entries.length > 0) {
+        boardCache.set(key, { value, expires: Date.now() + BOARD_TTL_MS });
+      }
+      return value;
+    }
+
     const value = await fetchBoardPage(gender, page);
     // Only memo a populated page — never pin an empty result from a transient
     // blip for six hours (the next caller retries instead).
@@ -398,6 +466,19 @@ async function boardAll(gender: "M" | "F"): Promise<RankingEntry[]> {
   if (pending) return pending;
 
   const p = (async (): Promise<RankingEntry[]> => {
+    // ⚠ SNAPSHOT FIRST, for the same reason boardPage does it — and here it
+    // replaces up to MAX_BOARD_PAGES sequential upstream calls with one pass
+    // over an array. Mapping ~2,300 players is not free, so it stays inside the
+    // memo below rather than being redone per caller.
+    const snap = snapshotBoard(gender);
+    if (snap) {
+      const mapped = snap.players.filter((pl) => (pl.points ?? 0) > 0).map(mapPlayer);
+      if (mapped.length > 0) {
+        fullBoardCache.set(key, { value: mapped, expires: Date.now() + BOARD_TTL_MS });
+      }
+      return mapped;
+    }
+
     const all: RankingEntry[] = [];
     let page = 1;
     let total = Infinity;
@@ -534,7 +615,7 @@ function filterEntries(entries: RankingEntry[], query: RankingQuery): RankingEnt
  * take the {@link TOP_COUNT} default.
  */
 export async function getRankings(count: number = TOP_COUNT): Promise<RankingsResult> {
-  if (!config().token) return fallbackResult();
+  if (!hasBoardSource()) return fallbackResult();
 
   /* One board failing must not take the other down with it, and NEITHER may be
      replaced by the demo data — see the note on RankingsResult.source. */
@@ -562,7 +643,7 @@ export async function getRankings(count: number = TOP_COUNT): Promise<RankingsRe
  * total wipeout reports unavailable.
  */
 export async function getFullRankings(): Promise<RankingsResult> {
-  if (!config().token) return fallbackResult();
+  if (!hasBoardSource()) return fallbackResult();
 
   const divisions = await Promise.all(
     RANKING_GENDERS.map(async (g) => ({
@@ -610,7 +691,7 @@ export async function getRankingPage(
 ): Promise<RankingPage> {
   const g = RANKING_GENDERS.find((x) => x.key === genderKey) ?? RANKING_GENDERS[0];
   const requested = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
-  if (!config().token) return fallbackPage(g, requested, FULL_PAGE_SIZE, query);
+  if (!hasBoardSource()) return fallbackPage(g, requested, FULL_PAGE_SIZE, query);
 
   const all = await boardAll(g.gender);
   // Configured but the call failed — say so, never print the demo rows.
@@ -652,7 +733,7 @@ export async function countRankingMatches(
   query: RankingQuery,
 ): Promise<number> {
   const g = RANKING_GENDERS.find((x) => x.key === genderKey);
-  if (!g || !config().token) return 0;
+  if (!g || !hasBoardSource()) return 0;
   if (!isFiltering(query.q ?? "", query.region ?? "all")) return 0;
   return filterEntries(await boardAll(g.gender), query).length;
 }
@@ -681,7 +762,7 @@ const SLUG_ALIAS: Record<string, string> = CURATED_TO_CANONICAL;
  * their own profile and a blank beside their face two sections away.
  */
 export async function getRankingBySlug(): Promise<Record<string, AthleteRanking>> {
-  if (!config().token) return {};
+  if (!hasBoardSource()) return {};
 
   const out: Record<string, AthleteRanking> = {};
   for (const g of RANKING_GENDERS) {
@@ -725,7 +806,7 @@ export function curatedSlugFor(apiSlug: string): string | null {
  * problem so the page can fall back to the curated roster.
  */
 export async function getWprRoster(): Promise<ApiAthlete[]> {
-  if (!config().token) return [];
+  if (!hasBoardSource()) return [];
 
   const boards = await Promise.all(
     RANKING_GENDERS.map(async (g) => {
@@ -750,7 +831,7 @@ export async function getWprRoster(): Promise<ApiAthlete[]> {
  * effectively free.
  */
 export async function getWprIndex(): Promise<Record<string, ApiAthlete>> {
-  if (!config().token) return {};
+  if (!hasBoardSource()) return {};
 
   const out: Record<string, ApiAthlete> = {};
   await Promise.all(
@@ -789,7 +870,7 @@ export async function getWprIndex(): Promise<Record<string, ApiAthlete>> {
  * cost nothing beyond the shared board — hence no request of its own.
  */
 export async function getWprPlayerBySlug(slug: string): Promise<ApiAthlete | null> {
-  if (!config().token) return null;
+  if (!hasBoardSource()) return null;
 
   const target = SLUG_ALIAS[slug] ?? slug;
   for (const g of RANKING_GENDERS) {

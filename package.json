@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "prebuild": "node scripts/sync-wp-media.mjs --verify",
+    "prebuild": "node scripts/snapshot-rankings.mjs && node scripts/sync-wp-media.mjs --verify",
     "verify:media": "node scripts/sync-wp-media.mjs --verify",
     "tixr:sync": "node scripts/sync-tixr-prices.mjs",
     "tixr:audit": "node scripts/audit-tixr-mapping.mjs",
@@ -24,7 +24,9 @@
     "lab:pbc": "node scripts/import-pbc-paddles.mjs",
     "lab:pbc:crawl": "node scripts/import-pbc-paddles.mjs --fetch",
     "europe:portraits": "node scripts/import-europe-portraits.mjs",
-    "europe:audit": "node scripts/audit-europe-portraits.mjs"
+    "europe:audit": "node scripts/audit-europe-portraits.mjs",
+    "rankings:snapshot": "node scripts/snapshot-rankings.mjs",
+    "rankings:snapshot:check": "node scripts/snapshot-rankings.mjs --check"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
