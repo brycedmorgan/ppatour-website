@@ -285,6 +285,34 @@ const resultCache = new Map<string, CacheEntry<TickerResult>>();
 const lastGoodResult = new Map<string, { value: TickerResult; at: number }>();
 const LAST_GOOD_MAX_MS = 120_000;
 
+/**
+ * How long to stop calling upstream after a failed call, per partner.
+ *
+ * ⚠ WITHOUT THIS, BEING RATE LIMITED MAKES US CALL HARDER, WHICH IS HOW A BLIP
+ * BECOMES AN OUTAGE (9/5). Only a WORKING call is written to `resultCache`, so a
+ * failure left nothing cached and the very next poll — 15s later, from every
+ * open tab, on every instance — went straight back upstream. `/api/ticker` also
+ * (correctly) refuses to let the CDN pin a failure, so none of those polls were
+ * absorbed at the edge either. The result is a positive feedback loop: the
+ * moment `homepage_score_ticker` starts returning 429 we generate our maximum
+ * possible load against the endpoint that is already throttling us, and it
+ * cannot recover on its own. Confirmed live mid-Nationals — a direct probe
+ * returned `429 Too many requests` while the dashboard showed `/api/ticker`
+ * making 30K of the site's 31K upstream calls in twelve hours.
+ *
+ * A cooldown is the backoff this endpoint never had: `fetchScores` uses a raw
+ * fetch, not {@link pbGetJson}, so it has no retry logic and no backoff of any
+ * kind. During the window we serve {@link fallbackFor} — the last good board,
+ * marked stale — which is what a viewer should see anyway while scores are
+ * briefly unreachable.
+ *
+ * 20s is a little longer than the client's 15s poll, so a tab that polls into a
+ * cooldown makes at most one upstream attempt per cooldown rather than one per
+ * poll, and recovery is still fast enough to be invisible when the limit lifts.
+ */
+const FAILURE_COOLDOWN_MS = 20_000;
+const failureUntil = new Map<string, number>();
+
 /** What to serve when the live call failed: recent real data, else nothing. */
 function fallbackFor(partner: string): TickerResult {
   const held = lastGoodResult.get(partner);
@@ -424,6 +452,13 @@ export async function fetchLiveTicker(partnerArg?: string): Promise<TickerResult
   const cached = resultCache.get(partner);
   if (cached && cached.expires > Date.now()) return cached.value;
 
+  // ⚠ BACKING OFF IS NOT OPTIONAL HERE — see FAILURE_COOLDOWN_MS. A recent
+  // failure means we do not call upstream at all; the viewer gets the last good
+  // board rather than us adding another request to an endpoint that is already
+  // refusing them.
+  const coolingUntil = failureUntil.get(partner) ?? 0;
+  if (coolingUntil > Date.now()) return fallbackFor(partner);
+
   const pending = resultInFlight.get(partner);
   if (pending) return pending;
 
@@ -435,8 +470,12 @@ export async function fetchLiveTicker(partnerArg?: string): Promise<TickerResult
       // and then for however long the CDN held the 200 on top of it.
       resultCache.set(partner, { value: result, expires: Date.now() + RESULT_TTL_MS });
       lastGoodResult.set(partner, { value: result, at: Date.now() });
+      failureUntil.delete(partner);
       return result;
     } catch {
+      // Start the cooldown. The failure itself is still never cached as a
+      // RESULT — only the decision to stop asking for a moment is remembered.
+      failureUntil.set(partner, Date.now() + FAILURE_COOLDOWN_MS);
       return fallbackFor(partner);
     }
   })();
