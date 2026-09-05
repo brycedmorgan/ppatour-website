@@ -45,6 +45,32 @@ const CACHE_CONTROL = "public, s-maxage=10, stale-while-revalidate=30";
 const CACHE_CONTROL_EMPTY = "public, s-maxage=10";
 
 /**
+ * The degraded state — upstream is failing, and we are serving the last-good
+ * board that {@link fallbackFor} kept.
+ *
+ * ⚠ THIS WAS THE LAST NO-STORE PATH AND IT BECAME THE DOMINANT ONE (9/5). With
+ * the earlier two fixes in, the endpoint still ran at ~16 upstream calls/min
+ * with a 27.5% error rate, and the reason is that every one of those failures
+ * answered `no-store`: the CDN could shield nothing, so every 15s poll from
+ * every open tab reached origin, and each instance re-attempted upstream as
+ * soon as its cooldown lapsed. That multiplies by instance count rather than
+ * being collapsed at the edge — precisely backwards, because the moment
+ * upstream starts failing is the moment we most need the edge in front of it.
+ *
+ * ⚠ AND THIS IS NOT THE THING THE NOTE ABOVE FORBIDS. What must never be pinned
+ * is a claim we cannot stand behind — a 429 rendered as "No matches on court
+ * right now". A stale board is the opposite: it is real match data we served
+ * seconds ago, carrying `stale: true` so the client knows what it has. Holding
+ * that at the edge for 10s is the same answer every viewer would get anyway,
+ * served once instead of once per tab. The genuinely empty failure — no
+ * last-good board to fall back on — is still `no-store`, because that one WOULD
+ * be publishing "nothing is on" off the back of an outage.
+ *
+ * No stale-while-revalidate, so a degraded board is never held past its 10s.
+ */
+const CACHE_CONTROL_STALE = "public, s-maxage=10";
+
+/**
  * ⚠ A FAILED OR EMPTY ANSWER IS NEVER PINNED AT THE EDGE.
  *
  * The header above is right for real scores and wrong for everything else. An
@@ -63,15 +89,18 @@ export async function GET(request: Request) {
   const partner = new URL(request.url).searchParams.get("partner") ?? undefined;
   const result = await fetchLiveTicker(partner);
 
-  // A failure, or the last-good board served as a fallback, is never cached at
-  // the edge — that is what the note above is about. A call that WORKED is,
-  // whether or not it found matches; the empty case just gets a shorter header.
-  const trustworthy = result.ok && !result.stale;
-  const cacheControl = !trustworthy
-    ? "no-store"
-    : result.matches.length > 0
+  // A call that WORKED is cacheable whether or not it found matches; the empty
+  // case just gets a shorter header. A DEGRADED answer is cacheable too, but
+  // only when we have a real last-good board to serve — see the notes above.
+  // Nothing else is: an outage with no data behind it stays no-store.
+  const fresh = result.ok && !result.stale;
+  const cacheControl = fresh
+    ? result.matches.length > 0
       ? CACHE_CONTROL
-      : CACHE_CONTROL_EMPTY;
+      : CACHE_CONTROL_EMPTY
+    : result.matches.length > 0
+      ? CACHE_CONTROL_STALE
+      : "no-store";
 
   return NextResponse.json(result, { headers: { "Cache-Control": cacheControl } });
 }
