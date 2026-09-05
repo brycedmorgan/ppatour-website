@@ -257,7 +257,29 @@ function mapMatch(m: ApiMatch): TickerMatch {
 
 // Cap every upstream call so a slow/unresponsive backend degrades to the empty
 // (loading) state instead of hanging the ticker's spinner indefinitely.
-const TIMEOUT_MS = 5000;
+/**
+ * How long to wait on `homepage_score_ticker` before giving up.
+ *
+ * ⚠ 5s WAS INSIDE THE ENDPOINT'S OWN RESPONSE-TIME DISTRIBUTION, WHICH IS THE
+ * WORST PLACE TO PUT A TIMEOUT (9/5). Measured on Vercel's external-API view
+ * during Nationals: average 2.97s, P75 4.53s, and `/api/ticker` sitting at a
+ * P75 duration of exactly 5s with a 44.6% error rate — i.e. we were not timing
+ * out on a broken endpoint, we were timing out on a SLOW one, roughly half the
+ * time, a few hundred milliseconds before it would have answered.
+ *
+ * That is worse than it looks, because an aborted request does not save
+ * upstream any work — it has already done it, and we throw the result away.
+ * Then the cache is not populated, so the next poll asks again and upstream
+ * does the same work a second time. A timeout set mid-distribution therefore
+ * MULTIPLIES load on exactly the endpoint that is struggling, which is how a
+ * slow API and a rate limit turn into each other.
+ *
+ * 10s is well clear of anything we have measured. Nothing waits on it in a way
+ * a visitor feels: /api/ticker is polled in the background and answered from
+ * the edge, /watch streams this under its own Suspense boundary, and a warm
+ * instance serves from `resultCache` without calling at all.
+ */
+const TIMEOUT_MS = 10_000;
 
 type CacheEntry<T> = { value: T; expires: number };
 // Which partner is live changes slowly; the match window changes fast.
