@@ -18,6 +18,29 @@ import { getFullRankings, toBoardDivisions } from "@/lib/rankings-api";
 export const dynamic = "force-dynamic";
 
 /**
+ * ⚠ WITHOUT THIS, `force-dynamic` ABOVE SILENTLY DISABLES THE DATA CACHE FOR
+ * EVERY FETCH THIS ROUTE MAKES, AND THAT IS WHY `partner_rankings` RAN HOT
+ * (9/5). Next's own words: `dynamic = "force-dynamic"` is "equivalent to …
+ * setting the option of every fetch() request to { cache: 'no-store',
+ * next: { revalidate: 0 } }" and to `fetchCache = 'force-no-store'`. The FORCE
+ * in that name is literal — it overrides the `revalidate` and `tags` that
+ * `lib/rankings-api.ts` passes on each board page, so the 24h Data Cache
+ * entries this route thinks it is reading were never written.
+ *
+ * The cost is not one call. Assembling a board walks up to ten pages per
+ * gender, and /rankings fetches this route from the browser on every visit, so
+ * every uncached assembly was ~10 upstream requests. Measured on production
+ * before the fix: two back-to-back forced-origin requests took 7.3s and 8.1s,
+ * the second no faster than the first — i.e. nothing the first one fetched was
+ * retained.
+ *
+ * `default-cache` keeps the route itself dynamic (it must always run) while
+ * letting each fetch's own cache options be respected again.
+ */
+export const fetchCache = "default-cache";
+
+
+/**
  * Rankings move on event results, not on the minute, so the CDN answers
  * essentially every hit. `s-maxage` is shared-cache only: browsers re-ask on a
  * reload and get a fresh-enough edge copy, and stale-while-revalidate means a

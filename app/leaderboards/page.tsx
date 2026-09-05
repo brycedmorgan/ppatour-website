@@ -12,6 +12,21 @@ import {
 } from "@/lib/ranking-filters";
 import { countRankingMatches, getRankingPage, RANKING_GENDERS } from "@/lib/rankings-api";
 
+/**
+ * ⚠ THE BOARD FETCHES HERE ARE ONLY CACHED BECAUSE OF THIS LINE (9/5). This
+ * page reads `searchParams` — a Request-time API — before it asks for a board,
+ * and Next’s default `fetchCache: "auto"` "will not cache fetch requests that
+ * are discovered AFTER Request-time APIs are used". So every page, search and
+ * region filter re-paged both boards from upstream: up to ten requests per
+ * gender, per view. It is the same class of bug as the `force-dynamic` one on
+ * /api/rankings, arrived at from the other direction.
+ *
+ * `default-cache` lets the `revalidate` + `tags` that `lib/rankings-api.ts`
+ * already passes be respected. The page stays dynamic — this changes what its
+ * DATA does, not when the page renders.
+ */
+export const fetchCache = "default-cache";
+
 export const metadata: Metadata = {
   title: "Leaderboards",
   description:

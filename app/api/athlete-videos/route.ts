@@ -10,6 +10,16 @@ import { getAthleteVideosFor } from "@/lib/athlete-videos";
 export const dynamic = "force-dynamic";
 
 /**
+ * ⚠ SAME TRAP AS /api/rankings (9/5): `force-dynamic` is documented as
+ * equivalent to `fetchCache = "force-no-store"`, which OVERRIDES the
+ * `revalidate` + `tags` this route’s adapter passes on every call — so the
+ * tagged 1h Data Cache it is written against was never actually written, and
+ * every request re-hit the partner API. `default-cache` keeps the route
+ * dynamic while letting each fetch’s own options be respected again.
+ */
+export const fetchCache = "default-cache";
+
+/**
  * Highlight reels for a finished tournament don't change, so this is the one
  * proxy that can cache hard — an hour at the CDN, a day of stale-while-
  * revalidate. Every dropdown flip used to be an upstream call.
