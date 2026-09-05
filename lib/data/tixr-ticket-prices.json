@@ -1,11 +1,11 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-09-04T16:39:15Z",
-  "event_count": 54,
-  "ticket_type_count": 869,
+  "generated_at": "2026-09-05T15:42:05Z",
+  "event_count": 52,
+  "ticket_type_count": 829,
   "series_breakdown": {
-    "PPA Tour": 51,
+    "PPA Tour": 49,
     "PPA Challenger Series": 2,
     "Major League Pickleball": 1
   },
@@ -321,322 +321,6 @@
       ]
     },
     {
-      "event_id": "184766",
-      "name": "Veolia Pickleball National Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
-      "series": "PPA Tour",
-      "status": "PUBLISHED",
-      "start_date": "2026-09-04",
-      "end_date": "2026-09-05",
-      "venue": {
-        "name": "Cary Tennis Center",
-        "city": "Cary",
-        "state": "NC"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/veolia-pickleball-national-championships-friday-evening-men-s-and-women-s-doubles-quarterfinals-184766",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Championships",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Friday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 25,
-          "all_in_price": 30.35
-        },
-        {
-          "name": "Pickleball Vacations",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Quarterfinals - Singles and Mxd Doubles",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Register Here",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 16",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 32",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 64",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Semifinals - Men's and Women's Doubles",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Semifinals - Singles and Mxd Doubles",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Weeklong Passes",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Friday Evening Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Friday Evening Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 60,
-          "all_in_price": 70.23
-        },
-        {
-          "name": "Friday Evening Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 91.83
-        },
-        {
-          "name": "Friday Evening Courtside+",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 120,
-          "all_in_price": 135.05
-        },
-        {
-          "name": "Friday Evening Courtside+",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 120,
-          "all_in_price": 135.05
-        },
-        {
-          "name": "Friday Evening Grandstand (Men's and Women's Doubles Quarterfinals)",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Friday Evening On Court VIP",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 437.59
-        },
-        {
-          "name": "Friday Evening VIP",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 300,
-          "all_in_price": 329.54
-        },
-        {
-          "name": "Friday Evening VIP",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 383.56
-        }
-      ],
-      "parent_event_id": "184656"
-    },
-    {
-      "event_id": "184765",
-      "name": "Veolia Pickleball National Championships Friday Morning - Singles and Mxd Doubles Quarterfinals",
-      "series": "PPA Tour",
-      "status": "PUBLISHED",
-      "start_date": "2026-09-04",
-      "end_date": "2026-09-04",
-      "venue": {
-        "name": "Cary Tennis Center",
-        "city": "Cary",
-        "state": "NC"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/veolia-pickleball-national-championships-friday-morning-singles-and-mxd-doubles-quarterfinals-184765",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Championships",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Friday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 25,
-          "all_in_price": 30.35
-        },
-        {
-          "name": "Pickleball Vacations",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Quarterfinals - Men's and Women's Doubles",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Register Here",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 16",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 32",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 64",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Semifinals - Men's and Women's Doubles",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Semifinals - Singles and Mxd Doubles",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Weeklong Passes",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Friday Morning Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 60,
-          "all_in_price": 70.23
-        },
-        {
-          "name": "Friday Morning Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 91.83
-        },
-        {
-          "name": "Friday Morning Courtside",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Friday Morning Courtside+",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 120,
-          "all_in_price": 135.05
-        },
-        {
-          "name": "Friday Morning Courtside+",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 120,
-          "all_in_price": 135.05
-        },
-        {
-          "name": "Friday Morning Grandstand (Singles & Mxd Doubles Quarterfinals)",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Friday Morning On Court VIP",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 437.59
-        },
-        {
-          "name": "Friday Morning VIP",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 300,
-          "all_in_price": 329.54
-        },
-        {
-          "name": "Friday Morning VIP",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 383.56
-        }
-      ],
-      "parent_event_id": "184656"
-    },
-    {
       "event_id": "184764",
       "name": "Veolia Pickleball National Championships Saturday Evening - Men's and Women's Doubles Semifinals",
       "series": "PPA Tour",
@@ -780,8 +464,8 @@
         {
           "name": "Saturday Evening VIP",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 350,
           "all_in_price": 383.56
         }
       ],
@@ -883,6 +567,13 @@
           "name": "Saturday Morning Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
+          "base_price": 60,
+          "all_in_price": 70.23
+        },
+        {
+          "name": "Saturday Morning Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
           "base_price": 80,
           "all_in_price": 91.83
         },
@@ -892,13 +583,6 @@
           "sale_state": "OPEN",
           "base_price": 100,
           "all_in_price": 113.44
-        },
-        {
-          "name": "Saturday Morning Courtside",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 70.23
         },
         {
           "name": "Saturday Morning Courtside+",
@@ -1034,13 +718,6 @@
           "name": "Sunday Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
-        },
-        {
-          "name": "Sunday Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 120,
           "all_in_price": 135.05
         },
@@ -1050,6 +727,13 @@
           "sale_state": "OPEN",
           "base_price": 140,
           "all_in_price": 156.66
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 113.44
         },
         {
           "name": "Sunday Courtside+",
@@ -2552,8 +2236,8 @@
           "name": "Weeklong Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 260,
-          "all_in_price": 286.32
+          "base_price": 300,
+          "all_in_price": 329.54
         },
         {
           "name": "Weeklong Grounds Pass",
