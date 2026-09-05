@@ -1,5 +1,7 @@
 import { getAthlete } from "@/lib/athletes";
-import { ATHLETES_CACHE_TAG } from "@/lib/cache-tags";
+import { unstable_cache } from "next/cache";
+
+import { RANKINGS_CACHE_TAG } from "@/lib/cache-tags";
 import { type Division, type DivisionKey, divisionRankings } from "@/lib/home-content";
 import { pbGetJson } from "@/lib/pb-fetch";
 import { CURATED_TO_CANONICAL, getPublishedAthlete } from "@/lib/published-athletes";
@@ -34,9 +36,11 @@ import {
  *
  *   1. `pbGetJson` — retry with backoff, so a 429 is absorbed instead of
  *      collapsing the board to "unavailable" on the first throttle.
- *   2. Next Data Cache, 24h, tagged {@link ATHLETES_CACHE_TAG} — durable across
- *      requests, builds and deploys, refreshed by the daily
- *      /api/revalidate-athletes cron.
+ *   2. A durable 24h cache of the RESULT, tagged {@link RANKINGS_CACHE_TAG} —
+ *      across requests, builds and deploys. It caches the assembled value
+ *      rather than the `fetch`, so a page that only succeeded on a RETRY still
+ *      persists; see {@link fetchBoardPage} for why that distinction is what
+ *      makes a rate limit recoverable instead of self-sustaining.
  *   3. A module-scope memo + in-flight map — collapses the parallel page
  *      renders of one build (or one warm instance) into a single upstream call,
  *      which the Data Cache alone can't do while it's still cold.
@@ -266,6 +270,75 @@ type Board = { entries: RankingEntry[]; total: number };
 const boardCache = new Map<string, { value: Board; expires: number }>();
 const boardInFlight = new Map<string, Promise<Board | null>>();
 
+/** UTC day stamp — the boards roll over on their own at midnight. */
+const boardDay = () => new Date().toISOString().slice(0, 10);
+
+/**
+ * Retries for a board page. Deliberately lower than {@link pbGetJson}'s default
+ * of 4: {@link boardAll} walks up to {@link MAX_BOARD_PAGES} pages, so a cold
+ * board against a throttled API multiplies by every page — at the default that
+ * is up to fifty upstream calls from a single render, which is a way of
+ * ATTACKING a rate limit rather than backing off from it.
+ */
+const BOARD_RETRIES = 2;
+
+/**
+ * The upstream fetch for one board page, behind the durable cache.
+ *
+ * ⚠ THE DURABLE LAYER IS ON THE RESULT, NOT ON THE `fetch`, AND THAT IS THE
+ * WHOLE POINT OF THIS WRAPPER. `pbGetJson` makes its first attempt against the
+ * Next Data Cache and every RETRY with `cache: "no-store"`, so that a 429 is
+ * never what lands in the cache. But `no-store` does not WRITE either — so a
+ * call that was throttled once and then SUCCEEDED on a retry returned good data
+ * and cached nothing. Every later request missed again, re-fetched, and was
+ * throttled again: while we were being rate limited the cache could never warm,
+ * which is what made being rate limited self-sustaining rather than a blip.
+ * Caching the returned VALUE means whichever attempt succeeds is what persists.
+ *
+ * ⚠ FAILURE MUST THROW, NOT RETURN. A thrown error is not cached, which is how
+ * this keeps the original guarantee — we still never pin a 429, an outage or an
+ * empty board for a day. Callers get `null` from {@link boardPage} exactly as
+ * before.
+ */
+function fetchBoardPage(gender: "M" | "F", page: number, day: string): Promise<Board> {
+  return unstable_cache(
+    async (): Promise<Board> => {
+      const { token, baseUrl } = config();
+      if (!token) throw new Error("partner_rankings: no token");
+      const params = new URLSearchParams({
+        partner: "ppa",
+        division_type: String(WORLD_DIVISION_TYPE),
+        gender,
+        race: String(RACE),
+        is_live: "false",
+        bracket_level_id: String(PRO_BRACKET),
+        current_page: String(page),
+        page_size: String(BOARD_PAGE_SIZE),
+        // Day-scoped key: rolls the cache over at midnight UTC on its own.
+        rank: day,
+      });
+
+      const json = (await pbGetJson(
+        `${baseUrl}/v2/data/partner_rankings?${params}`,
+        { "PB-API-TOKEN": token },
+        { timeoutMs: TIMEOUT_MS, retries: BOARD_RETRIES },
+      )) as { total_records?: number; results?: { player_rankings?: ApiPlayer[] } } | null;
+      if (!json) throw new Error("partner_rankings: unavailable");
+
+      const players = json.results?.player_rankings ?? [];
+      // Always drop zero-point players (matches the source handler).
+      const entries = players.filter((pl) => (pl.points ?? 0) > 0).map(mapPlayer);
+      // An empty page is a transient blip or a board that shrank — never worth
+      // persisting for a day. boardAll stops on `total`, so it does not ask for
+      // a page past the end in the ordinary case.
+      if (entries.length === 0) throw new Error("partner_rankings: empty page");
+      return { entries, total: json.total_records ?? entries.length };
+    },
+    ["wpr-board", gender, String(page), day],
+    { revalidate: REVALIDATE_SECONDS, tags: [RANKINGS_CACHE_TAG] },
+  )();
+}
+
 /**
  * One page of one gender board, cached three ways (see the file header). Null
  * means the call genuinely failed — callers must distinguish that from a page
@@ -281,36 +354,15 @@ async function boardPage(gender: "M" | "F", page: number): Promise<Board | null>
   if (pending) return pending;
 
   const p = (async (): Promise<Board | null> => {
-    const { token, baseUrl } = config();
-    if (!token) return null;
-    const params = new URLSearchParams({
-      partner: "ppa",
-      division_type: String(WORLD_DIVISION_TYPE),
-      gender,
-      race: String(RACE),
-      is_live: "false",
-      bracket_level_id: String(PRO_BRACKET),
-      current_page: String(page),
-      page_size: String(BOARD_PAGE_SIZE),
-      // Day-scoped key: rolls the cache over at midnight UTC on its own.
-      rank: new Date().toISOString().slice(0, 10),
-    });
-
-    const json = (await pbGetJson(
-      `${baseUrl}/v2/data/partner_rankings?${params}`,
-      { "PB-API-TOKEN": token },
-      { timeoutMs: TIMEOUT_MS, revalidate: REVALIDATE_SECONDS, tags: [ATHLETES_CACHE_TAG] },
-    )) as { total_records?: number; results?: { player_rankings?: ApiPlayer[] } } | null;
-    if (!json) return null;
-
-    const players = json.results?.player_rankings ?? [];
-    // Always drop zero-point players (matches the source handler).
-    const entries = players.filter((pl) => (pl.points ?? 0) > 0).map(mapPlayer);
-    const value: Board = { entries, total: json.total_records ?? entries.length };
-    // Only memo a populated page — never pin an empty result from a transient
-    // blip for six hours (the next caller retries instead).
-    if (entries.length > 0) boardCache.set(key, { value, expires: Date.now() + BOARD_TTL_MS });
-    return value;
+    try {
+      const value = await fetchBoardPage(gender, page, boardDay());
+      boardCache.set(key, { value, expires: Date.now() + BOARD_TTL_MS });
+      return value;
+    } catch {
+      // Unavailable or empty — the next caller retries rather than us pinning a
+      // bad result. Same contract this function has always had.
+      return null;
+    }
   })();
 
   boardInFlight.set(key, p);
@@ -327,22 +379,53 @@ async function boardTop(gender: "M" | "F", count: number): Promise<RankingEntry[
   return board ? board.entries.slice(0, count) : null;
 }
 
+const fullBoardCache = new Map<string, { value: RankingEntry[]; expires: number }>();
+const fullBoardInFlight = new Map<string, Promise<RankingEntry[]>>();
+
 /**
  * Every ranked player on one gender board, paging the shared cache. A failed
  * page ends paging and we keep what we already collected (see getFullRankings).
+ *
+ * ⚠ MEMOIZED AND IN-FLIGHT-COLLAPSED AS A WHOLE BOARD, not merely per page.
+ * Since 9/4 this is what the athlete pages, the /athletes grid, /europe and
+ * every news article's player rail read — it fixed 17 profiles that rendered a
+ * blank rank because they sit past the top 250 — which also made it the site's
+ * hottest upstream path. One uncollapsed call walks up to
+ * {@link MAX_BOARD_PAGES} pages, so without this, concurrent renders on one
+ * instance each re-walk the board and interleave between the per-page awaits.
  */
 async function boardAll(gender: "M" | "F"): Promise<RankingEntry[]> {
-  const all: RankingEntry[] = [];
-  let page = 1;
-  let total = Infinity;
-  while (all.length < total && page <= MAX_BOARD_PAGES) {
-    const got = await boardPage(gender, page);
-    if (!got || got.entries.length === 0) break;
-    all.push(...got.entries);
-    total = got.total;
-    page += 1;
+  const key = `${gender}:${boardDay()}`;
+  const hit = fullBoardCache.get(key);
+  if (hit && hit.expires > Date.now()) return hit.value;
+  const pending = fullBoardInFlight.get(key);
+  if (pending) return pending;
+
+  const p = (async (): Promise<RankingEntry[]> => {
+    const all: RankingEntry[] = [];
+    let page = 1;
+    let total = Infinity;
+    while (all.length < total && page <= MAX_BOARD_PAGES) {
+      const got = await boardPage(gender, page);
+      if (!got || got.entries.length === 0) break;
+      all.push(...got.entries);
+      total = got.total;
+      page += 1;
+    }
+    // Only memo a board we actually assembled in full — never pin a partial or
+    // empty result from a blip, for the same reason boardPage does not.
+    if (all.length > 0 && all.length >= total) {
+      fullBoardCache.set(key, { value: all, expires: Date.now() + BOARD_TTL_MS });
+    }
+    return all;
+  })();
+
+  fullBoardInFlight.set(key, p);
+  try {
+    return await p;
+  } finally {
+    fullBoardInFlight.delete(key);
   }
-  return all;
 }
 
 /* ---- placeholder fallbacks (API down / unconfigured) ---- */
@@ -702,7 +785,7 @@ export async function getWprIndex(): Promise<Record<string, ApiAthlete>> {
  * ⚠ The extra pages are effectively free, which is why this is safe to do on a
  * per-page lookup. `boardAll` is 4 pages for the women's board and 6 for the
  * men's at today's sizes; every one is memoized in-process, held in the Next
- * Data Cache for 24h and tagged {@link ATHLETES_CACHE_TAG}, and `/rankings`
+ * durable cache for 24h and tagged {@link RANKINGS_CACHE_TAG}, and `/rankings`
  * already pulls exactly these pages via `getFullRankings` — so the board is
  * usually already warm before an athlete page asks for it.
  *

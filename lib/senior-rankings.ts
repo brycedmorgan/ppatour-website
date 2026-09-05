@@ -36,13 +36,18 @@
  * Caching follows lib/rankings-api.ts, for the reason recorded there — we were
  * rate-limited off this exact endpoint on 7/31, and a raw loop over these six
  * boards still 429s today (it did while this was being written). One page size,
- * Next Data Cache 24h tagged {@link ATHLETES_CACHE_TAG} so the daily
- * /api/revalidate-athletes cron refreshes it, plus a module memo and in-flight
- * map to collapse the parallel page renders of a single build into one call.
+ * Next Data Cache 24h tagged {@link RANKINGS_CACHE_TAG}, plus a module memo and
+ * in-flight map to collapse the parallel page renders of a single build into one
+ * call.
+ *
+ * ⚠ NOTHING PURGES THAT TAG ON A SCHEDULE, AND IT DOES NOT NEED TO. The board
+ * URL carries `rank=<today>`, so it rolls itself over at midnight UTC. It used
+ * to ride on the athletes tag, which meant every Jackalope player save dropped
+ * these six boards for no reason — see the note on RANKINGS_CACHE_TAG.
  *
  * Server-only (reads the token). Never throws.
  */
-import { ATHLETES_CACHE_TAG } from "@/lib/cache-tags";
+import { RANKINGS_CACHE_TAG } from "@/lib/cache-tags";
 import { pbGetJson } from "@/lib/pb-fetch";
 
 /** The senior league. 2 is pro, 5 is junior. */
@@ -213,7 +218,7 @@ async function fetchPage(d: SeniorDivision, page: number): Promise<RawPage | nul
   const json = (await pbGetJson(
     `${baseUrl}/v2/data/partner_rankings?${params}`,
     { "PB-API-TOKEN": token },
-    { timeoutMs: TIMEOUT_MS, revalidate: REVALIDATE_SECONDS, tags: [ATHLETES_CACHE_TAG] },
+    { timeoutMs: TIMEOUT_MS, revalidate: REVALIDATE_SECONDS, tags: [RANKINGS_CACHE_TAG] },
   )) as { total_records?: number; results?: { player_rankings?: ApiSeniorPlayer[] } } | null;
   if (!json) return null;
 

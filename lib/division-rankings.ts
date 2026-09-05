@@ -28,7 +28,7 @@
  * which covers the ranked pros we feature.
  */
 import { pbGetJson } from "@/lib/pb-fetch";
-import { ATHLETES_CACHE_TAG } from "@/lib/cache-tags";
+import { RANKINGS_CACHE_TAG } from "@/lib/cache-tags";
 
 const TIMEOUT_MS = 8000;
 const TTL_MS = 6 * 60 * 60 * 1000;
@@ -79,7 +79,7 @@ async function fetchBoard(dt: number, gender: "M" | "F"): Promise<Map<string, Di
     const json = (await pbGetJson(`${base}/v2/data/partner_rankings?${params}`, { "PB-API-TOKEN": token }, {
       timeoutMs: TIMEOUT_MS,
       revalidate: REVALIDATE_S,
-      tags: [ATHLETES_CACHE_TAG],
+      tags: [RANKINGS_CACHE_TAG],
     })) as { results?: { player_rankings?: ApiPlayer[] } } | null;
     for (const p of json?.results?.player_rankings ?? []) {
       const slug = p.player_slug;

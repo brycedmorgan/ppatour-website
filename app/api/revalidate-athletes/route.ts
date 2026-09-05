@@ -4,10 +4,21 @@ import { ATHLETES_CACHE_TAG } from "@/lib/cache-tags";
 
 /**
  * Daily cache refresh for the athlete pages. Invoked by the Vercel Cron in
- * vercel.json: invalidates the athlete API fetch tag (stats, DUPR, division
- * rankings, highlights) so the next request re-pulls fresh data. Between
- * refreshes those calls are served from the Data Cache, so page renders and
- * builds don't re-hit — and never trip — the partner API's rate limit.
+ * vercel.json: invalidates the athlete API fetch tag (stats, DUPR, highlights)
+ * so the next request re-pulls fresh data. Between refreshes those calls are
+ * served from the Data Cache, so page renders and builds don't re-hit — and
+ * never trip — the partner API's rate limit.
+ *
+ * ⚠ THIS DELIBERATELY NO LONGER TOUCHES THE RANKING BOARDS (9/5). They now
+ * carry their own RANKINGS_CACHE_TAG. Because the SECOND caller below is
+ * Jackalope on every player save, purging one shared tag meant a single paddle
+ * edit dropped all ten cached WPR board pages plus the six division boards, and
+ * the next render of any athlete page, news article, /athletes or /europe had to
+ * re-page both boards from upstream. That is a thundering herd per save, and a
+ * bulk import (the 24 Europe portraits, 9/4) is two dozen of them back to back.
+ * A player record changing does not change the rankings. The boards roll
+ * themselves over daily via their `rank=<today>` URL, so nothing has to purge
+ * them on a schedule.
  *
  * If CRON_SECRET is set, we require Vercel's `Authorization: Bearer <secret>`.
  *
