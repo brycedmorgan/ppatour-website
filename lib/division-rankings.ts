@@ -29,6 +29,7 @@
  */
 import { pbGetJson } from "@/lib/pb-fetch";
 import { RANKINGS_CACHE_TAG } from "@/lib/cache-tags";
+import wprSnapshot from "@/lib/data/wpr-snapshot.json";
 
 const TIMEOUT_MS = 8000;
 const TTL_MS = 6 * 60 * 60 * 1000;
@@ -53,6 +54,27 @@ type ApiPlayer = { ranking?: string; player_slug?: string; points?: number };
 const boardCache = new Map<string, { value: Map<string, DivisionRank>; expires: number }>();
 const boardInFlight = new Map<string, Promise<Map<string, DivisionRank>>>();
 
+/**
+ * One division board out of the on-disk snapshot, or null to fall back to the
+ * live call. Mirrors `snapshotBoard` in lib/rankings-api.ts — same file, same
+ * expiry rule, so the two cannot disagree about whether the snapshot is usable.
+ */
+const SNAPSHOT_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
+
+type SnapshotDivisionRow = { player_slug: string; ranking?: string; points?: number };
+
+function snapshotDivision(dt: number, gender: "M" | "F"): SnapshotDivisionRow[] | null {
+  const snap = wprSnapshot as {
+    generatedAt?: string;
+    divisions?: Record<string, SnapshotDivisionRow[]>;
+  };
+  const rows = snap.divisions?.[`${dt}:${gender}`];
+  if (!Array.isArray(rows) || rows.length === 0) return null;
+  const age = Date.now() - Date.parse(snap.generatedAt ?? "");
+  if (!Number.isFinite(age) || age > SNAPSHOT_MAX_AGE_MS) return null;
+  return rows;
+}
+
 async function fetchBoard(dt: number, gender: "M" | "F"): Promise<Map<string, DivisionRank>> {
   const key = `${dt}:${gender}`;
   const hit = boardCache.get(key);
@@ -63,6 +85,25 @@ async function fetchBoard(dt: number, gender: "M" | "F"): Promise<Map<string, Di
   const p = (async () => {
     const { token, base } = config();
     const out = new Map<string, DivisionRank>();
+
+    // ⚠ SNAPSHOT FIRST. Every athlete page render calls getDivisionRanks, which
+    // pulls three of these boards — and that was the ENTIRE remainder of the
+    // partner_rankings traffic once the WPR boards moved to disk on 9/5
+    // (/athletes/[slug] went ~5,000 calls/hour to ~660, and this was the 660).
+    // Reading them from the same snapshot takes a page render to zero ranking
+    // requests. Falls through to the live call below when the snapshot is
+    // absent or expired, exactly as lib/rankings-api.ts does.
+    const snapRows = snapshotDivision(dt, gender);
+    if (snapRows) {
+      for (const row of snapRows) {
+        const slug = row.player_slug;
+        const rank = Number.parseInt(row.ranking ?? "", 10);
+        if (slug && Number.isFinite(rank)) out.set(slug, { rank, points: row.points ?? 0 });
+      }
+      if (out.size > 0) boardCache.set(key, { value: out, expires: Date.now() + TTL_MS });
+      return out;
+    }
+
     if (!token) return out;
     const today = new Date().toISOString().slice(0, 10);
     const params = new URLSearchParams({

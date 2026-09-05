@@ -110,6 +110,57 @@ async function board(gender) {
   return { total: Number.isFinite(total) ? total : players.length, players };
 }
 
+/**
+ * The six DIVISION boards behind the athlete page’s per-discipline ranks.
+ *
+ * ⚠ THESE ARE A SECOND, SEPARATE `partner_rankings` QUERY, AND MISSING THEM IS
+ * WHY THE FIRST SNAPSHOT ONLY GOT US 90% (9/5). Snapshotting the WPR boards took
+ * /athletes/[slug] from ~5,000 calls/hour to ~660, and the remainder was all
+ * this: every render calls `getDivisionRanks`, which fetches three boards
+ * (singles, doubles, mixed) for that pro’s gender. Six combinations cover the
+ * whole roster, so they belong on disk for exactly the same reason the WPR
+ * boards do.
+ *
+ * Gender doubles is 4 (women) / 5 (men); mixed is 3. Do NOT swap these — the
+ * note in lib/division-rankings.ts explains why they are not symmetrical.
+ */
+const DIVISIONS = [
+  { dt: 1, gender: "F" },
+  { dt: 2, gender: "M" },
+  { dt: 4, gender: "F" },
+  { dt: 5, gender: "M" },
+  { dt: 3, gender: "F" },
+  { dt: 3, gender: "M" },
+];
+
+/** Only what lib/division-rankings.ts reads off a row. */
+const pickDivision = (p) => ({
+  player_slug: p.player_slug,
+  ranking: p.ranking,
+  points: p.points,
+});
+
+async function divisionBoard(dt, gender) {
+  const params = new URLSearchParams({
+    partner: "ppa",
+    division_type: String(dt),
+    gender,
+    race: "false",
+    is_live: "false",
+    bracket_level_id: String(PRO_BRACKET),
+    rank: new Date().toISOString().slice(0, 10),
+    current_page: "1",
+    page_size: String(PAGE_SIZE),
+  });
+  const res = await fetch(`${BASE}/v2/data/partner_rankings?${params}`, {
+    headers: { "PB-API-TOKEN": TOKEN },
+    signal: AbortSignal.timeout(20000),
+  });
+  if (!res.ok) throw new Error(`division ${dt}/${gender}: HTTP ${res.status}`);
+  const json = await res.json();
+  return (json.results?.player_rankings ?? []).map(pickDivision);
+}
+
 async function main() {
   const check = process.argv.includes("--check");
   if (!TOKEN) {
@@ -118,9 +169,17 @@ async function main() {
   }
 
   let boards;
+  let divisions;
   try {
     const [M, F] = await Promise.all([board("M"), board("F")]);
     boards = { M, F };
+    // Sequential and spaced: six more calls against an API that has been
+    // throttling us today is not worth saving two seconds over.
+    divisions = {};
+    for (const d of DIVISIONS) {
+      divisions[`${d.dt}:${d.gender}`] = await divisionBoard(d.dt, d.gender);
+      await new Promise((r) => setTimeout(r, 250));
+    }
   } catch (err) {
     console.log(`[wpr-snapshot] upstream unavailable (${err.message}) — keeping existing snapshot.`);
     return;
@@ -140,10 +199,13 @@ async function main() {
   const payload = {
     generatedAt: new Date().toISOString(),
     boards,
+    divisions,
   };
-  const summary = Object.entries(boards)
-    .map(([g, b]) => `${g} ${b.players.length}/${b.total}`)
-    .join(" · ");
+  const divTotal = Object.values(divisions).reduce((n, rows) => n + rows.length, 0);
+  const summary =
+    Object.entries(boards)
+      .map(([g, b]) => `${g} ${b.players.length}/${b.total}`)
+      .join(" · ") + ` · ${Object.keys(divisions).length} division boards (${divTotal} rows)`;
 
   if (check) {
     console.log(`[wpr-snapshot] --check OK: ${summary}`);
