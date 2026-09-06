@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-05T15:42:05Z",
+  "updated_at": "2026-09-06T15:53:25Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -5149,6 +5149,18 @@
       "type": "event_removed",
       "event_id": "184765",
       "event": "Veolia Pickleball National Championships Friday Morning - Singles and Mxd Doubles Quarterfinals"
+    },
+    {
+      "at": "2026-09-06T15:53:25Z",
+      "type": "event_removed",
+      "event_id": "184764",
+      "event": "Veolia Pickleball National Championships Saturday Evening - Men's and Women's Doubles Semifinals"
+    },
+    {
+      "at": "2026-09-06T15:53:25Z",
+      "type": "event_removed",
+      "event_id": "184762",
+      "event": "Veolia Pickleball National Championships Saturday Morning - Singles and Mxd Doubles Semifinals"
     }
   ]
 }
