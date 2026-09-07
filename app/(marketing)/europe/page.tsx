@@ -456,7 +456,15 @@ export default async function EuropePage() {
         </div>
       </section>
 
-      <LeadMagnetCapture />
+      {/* Email — LeadMagnetCapture draws white type and a white-bordered input,
+          so it MUST sit on a navy section. Rendered bare it was invisible on
+          this page's ppa-paper ground and ran flush to the viewport edge.
+          Same wrapper as the other 15 call sites. */}
+      <section className="bg-ppa-navy-deep">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <LeadMagnetCapture variant="fan" />
+        </div>
+      </section>
     </>
   );
 }

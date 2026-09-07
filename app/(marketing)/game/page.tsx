@@ -283,7 +283,12 @@ export default function GamePage() {
         </div>
       </section>
 
-      <LeadMagnetCapture variant="fan" />
+      {/* Email — see the note on /europe: this component needs a navy section. */}
+      <section className="bg-ppa-navy-deep">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <LeadMagnetCapture variant="fan" />
+        </div>
+      </section>
     </>
   );
 }
