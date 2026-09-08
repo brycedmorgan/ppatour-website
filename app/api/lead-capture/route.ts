@@ -8,7 +8,12 @@ import { cioIdentifyAndTrack } from "@/lib/customerio";
  * player guide vs streaming reminders).
  */
 export async function POST(request: Request) {
-  let payload: { email?: string; variant?: string; page?: string };
+  let payload: {
+    email?: string;
+    variant?: string;
+    region?: string;
+    page?: string;
+  };
   try {
     payload = await request.json();
   } catch {
@@ -21,14 +26,24 @@ export async function POST(request: Request) {
   }
   const variant = payload.variant ?? "fan";
   const page = payload.page ?? "";
+  // Region is an opt-in tag set per call site, never inferred from the path —
+  // a page can move and a regional page can be linked from anywhere.
+  const region =
+    typeof payload.region === "string" && /^[a-z-]{2,24}$/.test(payload.region)
+      ? payload.region
+      : undefined;
 
-  console.log("[lead-capture]", { email, variant, page });
+  console.log("[lead-capture]", { email, variant, region, page });
 
   const ok = await cioIdentifyAndTrack(
     email,
-    { website_lead_variant: variant, website_lead_page: page },
+    {
+      website_lead_variant: variant,
+      website_lead_page: page,
+      ...(region ? { website_lead_region: region } : {}),
+    },
     "website_lead_capture",
-    { variant, page, source: "ppatour-website" },
+    { variant, page, source: "ppatour-website", ...(region ? { region } : {}) },
   );
   if (!ok) {
     return NextResponse.json({ error: "Could not subscribe" }, { status: 502 });

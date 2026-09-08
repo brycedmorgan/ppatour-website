@@ -26,7 +26,21 @@ const COPY: Record<Variant, { eyebrow: string; heading: string; cta: string }> =
  * Email capture surface (§9.8). Email is the moat — every page has one.
  * Posts to /api/lead-capture (stub → Customer.io once credentials land).
  */
-export function LeadMagnetCapture({ variant = "fan" }: { variant?: Variant }) {
+export function LeadMagnetCapture({
+  variant = "fan",
+  region,
+}: {
+  variant?: Variant;
+  /**
+   * Marks the signup as belonging to a region so email can be targeted at it.
+   * Payton Pemberton, 9/8: PPA Tour Europe wants its signups "designated as
+   * European so we can target our email campaigns". Lands in Customer.io as the
+   * person attribute `website_lead_region` — a stable field to segment on,
+   * unlike `website_lead_page`, which is overwritten by whatever page that
+   * person last signed up from.
+   */
+  region?: string;
+}) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">(
     "idle",
@@ -40,11 +54,16 @@ export function LeadMagnetCapture({ variant = "fan" }: { variant?: Variant }) {
       const res = await fetch("/api/lead-capture/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, variant, page: window.location.pathname }),
+        body: JSON.stringify({
+          email,
+          variant,
+          region,
+          page: window.location.pathname,
+        }),
       });
       if (res.ok) {
-        window.gtag?.("event", "generate_lead", { variant });
-        window.fbq?.("track", "Lead", { variant });
+        window.gtag?.("event", "generate_lead", { variant, region });
+        window.fbq?.("track", "Lead", { variant, region });
       }
       setStatus(res.ok ? "done" : "error");
     } catch {

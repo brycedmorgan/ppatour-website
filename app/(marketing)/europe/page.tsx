@@ -462,7 +462,7 @@ export default async function EuropePage() {
           Same wrapper as the other 15 call sites. */}
       <section className="bg-ppa-navy-deep">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <LeadMagnetCapture variant="fan" />
+          <LeadMagnetCapture variant="fan" region="europe" />
         </div>
       </section>
     </>
