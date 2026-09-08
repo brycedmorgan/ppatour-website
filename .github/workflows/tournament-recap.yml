@@ -1,0 +1,90 @@
+name: Post-tournament recap
+
+# Writes the two post-event reports the morning after a tour stop finishes:
+#   docs/recaps/<month>-<slug>/internal.md    — for the web team
+#   docs/recaps/<month>-<slug>/audience.html  — for Bryce and shareholders
+# and records that event's audience in docs/recaps/metrics.json.
+#
+# Most days there is no tournament to write up and the job exits green having
+# done nothing. That is the normal case, not a failure.
+#
+# ⚠ THE metrics.json COMMIT IS THE POINT OF THE SCHEDULE, NOT A SIDE EFFECT.
+# Vercel Observability only answers about nine days back, so an event's numbers
+# have to be read while they still exist. That file is the permanent record and
+# the only thing that makes "compare with the last tournament" possible at all.
+# If this workflow is broken for ten days across an event, that event has no
+# numbers and never will — so a red run here is worth chasing the same day.
+
+on:
+  schedule:
+    # 12:00 UTC (~8am ET). After the site's own 09:00 UTC rebuild cron, so the
+    # day's first deploy is already counted in the delivery section.
+    - cron: "0 12 * * *"
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Event slug to (re)generate, e.g. veolia-pickleball-national-championships. Leave blank for the normal day-after check."
+        required: false
+        type: string
+
+permissions:
+  contents: write # commits the reports and the metrics history
+
+concurrency:
+  group: tournament-recap
+  cancel-in-progress: false
+
+jobs:
+  recap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        # Full history: the recap lists what shipped during the event, which
+        # means reading commits from up to a week back. A shallow clone would
+        # silently report an empty "what shipped" section.
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate recap
+        env:
+          PB_API_TOKEN: ${{ secrets.PB_API_TOKEN }}
+          # ⚠ NEW SECRET — this workflow does nothing useful without it. Create a
+          # Vercel access token with read scope on the Pickleball HQ team and add
+          # it as VERCEL_TOKEN. Without it the audience report is skipped
+          # entirely rather than published with blank figures.
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          # ⚠ Passed through the environment, NOT interpolated into the script.
+          # `${{ inputs.slug }}` inside a run block is substituted before the
+          # shell sees it, so a slug containing shell metacharacters would
+          # execute as part of the command.
+          INPUT_SLUG: ${{ inputs.slug }}
+        run: |
+          if [ -n "$INPUT_SLUG" ]; then
+            node scripts/tournament-recap.mjs --slug "$INPUT_SLUG"
+          else
+            node scripts/tournament-recap.mjs --ended-yesterday
+          fi
+
+      - name: Commit the reports and the metrics history
+        run: |
+          if [ -z "$(git status --porcelain docs/recaps)" ]; then
+            echo "No tournament finished yesterday — nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/recaps
+          # No [skip ci]: Vercel reads it as "don't build". These are docs and
+          # do not need a deploy, but the Tixr workflow's note applies — keep the
+          # two consistent so nobody copies the wrong pattern into a job that
+          # does need one. Pushes made with the Actions token do not retrigger
+          # workflows, so there is no loop to guard against.
+          git commit -m "docs(recap): post-tournament reports"
+          git push
+          echo "Committed the recap."

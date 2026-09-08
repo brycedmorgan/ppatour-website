@@ -26,7 +26,8 @@
     "europe:portraits": "node scripts/import-europe-portraits.mjs",
     "europe:audit": "node scripts/audit-europe-portraits.mjs",
     "rankings:snapshot": "node scripts/snapshot-rankings.mjs",
-    "rankings:snapshot:check": "node scripts/snapshot-rankings.mjs --check"
+    "rankings:snapshot:check": "node scripts/snapshot-rankings.mjs --check",
+    "recap": "node scripts/tournament-recap.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

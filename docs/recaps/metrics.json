@@ -1,0 +1,59 @@
+{
+  "events": [
+    {
+      "slug": "veolia-pickleball-national-championships",
+      "name": "Veolia Pickleball National Championships",
+      "tier": "Major",
+      "start": "2026-08-31",
+      "end": "2026-09-06",
+      "venue": "Cary Tennis Center, Cary, NC",
+      "capturedAt": "2026-09-08T18:25:56.802Z",
+      "views": 503602,
+      "peakDay": "2026-09-06",
+      "peakViews": 128207,
+      "requests": 66043520,
+      "topPages": [
+        {
+          "path": "/",
+          "v": 147551
+        },
+        {
+          "path": "/events/2026/veolia-pickleball-national-championships",
+          "v": 99528
+        },
+        {
+          "path": "/events",
+          "v": 35455
+        },
+        {
+          "path": "/vacations",
+          "v": 14602
+        },
+        {
+          "path": "/rankings",
+          "v": 14489
+        },
+        {
+          "path": "/watch",
+          "v": 6889
+        },
+        {
+          "path": "/news",
+          "v": 6610
+        },
+        {
+          "path": "/athletes/anna-leigh-waters",
+          "v": 5317
+        },
+        {
+          "path": "/athletes",
+          "v": 4200
+        },
+        {
+          "path": "/leaderboards",
+          "v": 3607
+        }
+      ]
+    }
+  ]
+}
