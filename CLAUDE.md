@@ -63,6 +63,41 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-08 — /europe: the email capture was invisible, and its leads had no home
+
+- **Payton Pemberton, 9/7:** *"could you just fix the look of the form at the bottom,
+  'Your First PPA Event.'"* She was being polite — the block was not badly styled, it was
+  **unreadable**.
+- **⚠ `LeadMagnetCapture` ONLY WORKS ON A DARK SECTION, AND TWO CALL SITES DIDN'T GIVE IT
+  ONE.** It draws white type, `white/55` body copy and a white-bordered input, with no
+  background and no container of its own. Fifteen of the seventeen call sites wrap it in
+  `<section className="bg-ppa-navy*">` + the house `max-w-6xl px-4 py-12`. **`/europe` and
+  `/game` rendered it bare**, so it inherited each page's `ppa-paper` ground — white on
+  white, flush to the viewport edge, with only the blue button visible. Both now use the
+  same wrapper. If this component is ever placed again, it needs the navy section.
+- **⚠ `FORM_INBOX_EUROPE` WAS NEVER SET IN PRODUCTION, AND NOBODY WOULD HAVE NOTICED.**
+  Sixteen other `FORM_INBOX_*` vars exist; Europe was not among them. `inbox()` fails safe
+  to `info@ppatour.com`, so **every /europe contact submission since launch went there
+  instead of to `europe@ppatour.com`** — no bounce, no error, no missing mail, just the
+  wrong three people. Set it in Production; live as of this deploy. **A routed form is not
+  done when the code is written — check the env var exists.**
+- **Europe signups are now targetable.** Payton, 9/8: *"if we could have them designated as
+  European so we can target our email campaigns that would be great."* `LeadMagnetCapture`
+  takes an optional `region`; `/europe` passes `region="europe"`; it lands in Customer.io
+  as the person attribute **`website_lead_region`** and on the `website_lead_capture` event.
+  - **Deliberately a separate field from `website_lead_page`.** That one is overwritten by
+    whatever page a person most recently signed up from, so it cannot be segmented on.
+  - **Region is opt-in per call site, never inferred from the pathname** — a page can move,
+    and a regional page can be linked from anywhere. The route validates `/^[a-z-]{2,24}$/`
+    and drops anything else rather than writing it to a profile.
+- **Answered for the record: this form does NOT feed pickleball.com or
+  pickleballtournaments.com.** It is Customer.io only; those are separate databases with no
+  sync. Payton was happy either way but assumed it already fed one of them.
+- Verified on a real production build, then on the live site in a browser. ⚠ **Headless
+  screenshots of the deployed page kept showing the OLD layout after the deploy** — the
+  served HTML was already correct. Check the markup and a real browser before believing a
+  screenshot that says a fix did not land.
+
 ### 2026-09-04 (pt. 7) — The WPR lookups only read the top 250, blanking 17 profiles
 
 - **Wesley: Karolina Owczarek's profile shows a blank WPR while pickleball.com gives her 51 points.**
