@@ -68,12 +68,18 @@ function SideRow({
   short,
   showScores,
   outcome,
+  namePending,
 }: {
   side: BracketSide;
   short: Map<string, string>;
   showScores: boolean;
   /** Set when the match was decided without being played. */
   outcome?: BracketMatch["outcome"];
+  /**
+   * Print "TBD" in an unfilled slot instead of leaving it blank. FIRST ROUND
+   * ONLY — see the note at the call site.
+   */
+  namePending?: boolean;
 }) {
   const p = side.participant;
   const games = side.games.filter((g) => g !== null) as number[];
@@ -82,7 +88,9 @@ function SideRow({
         .split(" / ")
         .map((n) => short.get(n.trim()) ?? n.trim())
         .join(" / ")
-    : "TBD";
+    : namePending
+      ? "TBD"
+      : "";
   return (
     <div className="flex min-h-[1.75rem] items-stretch">
       <span className="flex w-5 shrink-0 items-center justify-center text-[10px] font-bold tabular-nums text-ppa-navy/40">
@@ -163,11 +171,27 @@ function MatchCard({
             <LinkIcon />
           </a>
         </div>
-        {/* Team rows */}
+        {/*
+          Team rows.
+
+          ⚠ "TBD" IS FIRST ROUND ONLY, AND THE FEED IS WHY IT HAS TO BE. The
+          draw feed writes the literal name "TBD" into EVERY unfilled slot in
+          EVERY round — measured on Arizona's women's doubles: 30 of them, right
+          through the quarters, semis and final. Printing them all turned the
+          right-hand half of an unplayed bracket into a wall of "TBD", which is
+          not what the official bracket on pickleballtournaments shows and reads
+          as a broken draw rather than an unplayed one.
+
+          A first-round gap is a real, waiting entry position — the qualifier who
+          has not come through yet — so it earns the label. Every later gap just
+          means "winner of an earlier match", which the connector lines already
+          say, so it stays blank. The row keeps its height either way
+          (`min-h-[1.75rem]`), so the card does not move when a name lands.
+        */}
         <div className="flex flex-1 flex-col">
-          <SideRow side={m.sides[0]} short={short} showScores={showScores} outcome={m.outcome} />
+          <SideRow side={m.sides[0]} short={short} showScores={showScores} outcome={m.outcome} namePending={m.roundIndex === 0} />
           <div className="h-px bg-ppa-line" />
-          <SideRow side={m.sides[1]} short={short} showScores={showScores} outcome={m.outcome} />
+          <SideRow side={m.sides[1]} short={short} showScores={showScores} outcome={m.outcome} namePending={m.roundIndex === 0} />
         </div>
       </div>
       {hasFooter && (

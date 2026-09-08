@@ -278,6 +278,69 @@ function buildBracket(
       if (src && idsInStage.has(src)) comesFrom.set(src, target);
     }
   }
+  /**
+   * Advancement inferred from the shape of the draw — including the rounds
+   * that carry byes.
+   *
+   * ⚠ THE RULE IS "ONE FEEDER PER EMPTY SLOT", NOT "TWO MATCHES PER MATCH".
+   * Pairing each next-round match with two feeders is what fails on a bracket
+   * with byes, and it fails badly: measured against every completed
+   * advancement at Nationals 2026 (ground truth = following the winning team's
+   * uuid forward), naive pairing scored 2 of 22 on a 22→16 round and 2 of 18 on
+   * an 18→16 round, while every clean 32→16 / 16→8 / 8→4 / 4→2 / 2→1 round
+   * scored 100%. The reason is simple once seen: a next-round match that
+   * already holds a seed on a bye has only ONE slot to fill, so it consumes one
+   * feeder, and every match after it shifts.
+   *
+   * So capacity is counted per match instead. Arizona men's singles, R64→R32:
+   * matches 1,2 → 21 · 3,4 → 22 · 5 → 23 (Garnett already there on a bye) ·
+   * 6 → 24 (Oncins) · 7,8 → 25 · 9,10 → 26 · 11 → 27 (Khlif) · 12,13 → 28 ·
+   * 14,15 → 29 · 16,17 → 30 · 18 → 31 (Frazier) · 19,20 → 32. That reproduces
+   * the official bracket on pickleballtournaments exactly, byes and all.
+   *
+   * ⚠ THE BALANCE CHECK IS THE SAFETY, AND IT MUST STAY. The assignment is only
+   * forced when the feeders coming out of a round exactly equal the empty slots
+   * waiting in the next one. Verified across all five Arizona draws: every
+   * transition balances. When it does NOT balance — a partly-played round where
+   * some slots already hold winners, an odd feed, a format this does not model —
+   * the transition is skipped and nothing is drawn, because a wrong line tells a
+   * viewer the wrong match decides their player's next opponent, which is worse
+   * than no line at all.
+   *
+   * ⚠ STILL A RECONSTRUCTION, AND THE UPSTREAM ASK STANDS.
+   * `matchWinnerGoesTo` / `templateMatchID` on the draw feed would give the tree
+   * outright instead of deriving it — the outstanding request in
+   * docs/DATA-ASKS.md. This is a faithful reconstruction, not a substitute.
+   */
+  const positionalNext = new Map<string, string>();
+  if (isElim) {
+    /** A slot nobody occupies yet — the same "TBD"/empty test `sideOf` uses. */
+    const slotOpen = (m: ApiMatch, team: 1 | 2) => {
+      const name = teamName(m, team);
+      return !name || name.split(" / ").every((n) => /^tbd$/i.test(n.trim()));
+    };
+    const byRound = roundNumbers.map((rn) =>
+      path
+        .filter((m) => roundNum(m) === rn)
+        .sort((a, b) => (num(a, "matchNumber") ?? 0) - (num(b, "matchNumber") ?? 0)),
+    );
+    for (let i = 0; i < byRound.length - 1; i++) {
+      const cur = byRound[i];
+      const nxt = byRound[i + 1];
+      if (!cur.length || !nxt.length) continue;
+      const capacity = nxt.map((n) => (slotOpen(n, 1) ? 1 : 0) + (slotOpen(n, 2) ? 1 : 0));
+      const seats = capacity.reduce((a, b) => a + b, 0);
+      if (seats !== cur.length) continue; // does not balance — do not guess
+      let k = 0;
+      nxt.forEach((target, ni) => {
+        for (let s = 0; s < capacity[ni]; s++) {
+          const src = cur[k++];
+          if (src) positionalNext.set(idOf(src), idOf(target));
+        }
+      });
+    }
+  }
+
   // Where a winner advances to. Structural links first — they exist BEFORE the
   // match is played, so an unplayed draw still shows every advancement line.
   // Following the winning team stays as the fallback for feeds without them.
@@ -287,15 +350,23 @@ function buildBracket(
     if (declared && idsInStage.has(declared)) return declared;
     const reverse = comesFrom.get(idOf(m));
     if (reverse) return reverse;
+    // Real data before inference: once a match is decided, the winning team's
+    // uuid appearing in a later round IS the advancement, byes and all.
     const w = winnerTeam(m);
-    if (!w) return undefined;
-    const uuid = teamUuid(m, w);
-    if (!uuid) return undefined;
-    const r = roundNum(m);
-    const future = path
-      .filter((x) => roundNum(x) > r && (teamUuid(x, 1) === uuid || teamUuid(x, 2) === uuid))
-      .sort((a, b) => roundNum(a) - roundNum(b));
-    return future.length ? str(future[0], "matchUuid", "uuid") : undefined;
+    if (w) {
+      const uuid = teamUuid(m, w);
+      if (uuid) {
+        const r = roundNum(m);
+        const future = path
+          .filter((x) => roundNum(x) > r && (teamUuid(x, 1) === uuid || teamUuid(x, 2) === uuid))
+          .sort((a, b) => roundNum(a) - roundNum(b));
+        const followed = future.length ? str(future[0], "matchUuid", "uuid") : "";
+        if (followed) return followed;
+      }
+    }
+    // Nothing played yet: fall back to the forced pairing, which only has an
+    // entry for rounds that halve cleanly. See `positionalNext`.
+    return positionalNext.get(idOf(m));
   };
 
   const toMatch = (m: ApiMatch): BracketMatch => {
