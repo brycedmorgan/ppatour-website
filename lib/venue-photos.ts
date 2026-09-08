@@ -127,6 +127,24 @@ const HERO_OVERRIDE_BY_EVENT_SLUG: Record<string, string> = {
   // reason someone "confirms" a venue. The venue comes from the feed.
   "texas-open": "/ppa/events/texas-open.jpg",
   "atlanta-pickleball-championships": "/ppa/events/atlanta-pickleball-championships.jpg",
+  // Wesley, 9/8, relaying the event team: "can we have the photo for Kuala Lumpur
+  // Cup switched on the PPA Schedule? The current one is of Australia." It was —
+  // and for the same reason Barcelona was showing Melbourne (see the VENUE_IMAGES
+  // note in lib/placeholder-data.ts). The stop has no Jackalope venue library and
+  // no curated `image`, so an international card falls through to
+  // `VENUE_IMAGES[index % 3]` — Melbourne / Macao / Gold Coast — i.e. TWO OF THE
+  // THREE FALLBACKS ARE AUSTRALIA, and which one a card lands on is decided by
+  // calendar index. Now the KLCC skyline at dusk (Petronas Towers, Suria KLCC and
+  // the Symphony Lake fountains), supplied by the event team.
+  //
+  // ⚠ BOTH SLUGS ARE LOAD-BEARING, NOT A BELT-AND-BRACES DUPLICATE. The feed
+  // titles this stop "PPA Asia 1000 Leapmotor Kuala Lumpur Cup 2026" and there is
+  // no CURATED_ALIAS for it, so `findCurated` misses and the live /events card
+  // renders under the kebabbed feed title. The second key is the curated record’s
+  // own slug, which is what serves when the API is unreachable. Pinning only one
+  // leaves the other publishing an Australian skyline on a Malaysian event.
+  "ppa-asia-1000-leapmotor-kuala-lumpur-cup-2026": "/ppa/event-kuala-lumpur.jpg",
+  "ppa-asia-1000-kuala-lumpur-cup": "/ppa/event-kuala-lumpur.jpg",
 };
 
 /**
