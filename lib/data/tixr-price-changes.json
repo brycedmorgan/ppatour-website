@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-07T17:59:32Z",
+  "updated_at": "2026-09-08T16:53:56Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -5173,6 +5173,122 @@
       "type": "event_removed",
       "event_id": "184760",
       "event": "Veolia Pickleball National Championships Sunday - Championships"
+    },
+    {
+      "at": "2026-09-08T16:53:56Z",
+      "type": "price_change",
+      "event_id": "195335",
+      "event": "PPA Mesa Friday - Quarterfinals",
+      "ticket": "Friday Courtside",
+      "base_price": {
+        "from": 80,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 91.83,
+        "to": 91.83
+      }
+    },
+    {
+      "at": "2026-09-08T16:53:56Z",
+      "type": "availability_change",
+      "event_id": "195335",
+      "event": "PPA Mesa Friday - Quarterfinals",
+      "ticket": "Friday Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-09-08T16:53:56Z",
+      "type": "price_change",
+      "event_id": "195334",
+      "event": "PPA Mesa Saturday - Semifinals",
+      "ticket": "Saturday Courtside",
+      "base_price": {
+        "from": null,
+        "to": 100
+      },
+      "all_in_price": {
+        "from": 113.44,
+        "to": 113.44
+      }
+    },
+    {
+      "at": "2026-09-08T16:53:56Z",
+      "type": "availability_change",
+      "event_id": "195334",
+      "event": "PPA Mesa Saturday - Semifinals",
+      "ticket": "Saturday Courtside",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-09-08T16:53:56Z",
+      "type": "price_change",
+      "event_id": "197214",
+      "event": "PPA Las Vegas Sunday - Championships",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": 50,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 57.36,
+        "to": 57.36
+      }
+    },
+    {
+      "at": "2026-09-08T16:53:56Z",
+      "type": "availability_change",
+      "event_id": "197214",
+      "event": "PPA Las Vegas Sunday - Championships",
+      "ticket": "Sunday Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-09-08T16:53:56Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "base_price": {
+        "from": 500,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 546.87,
+        "to": 546.87
+      }
+    },
+    {
+      "at": "2026-09-08T16:53:56Z",
+      "type": "availability_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-09-08T16:53:56Z",
+      "type": "event_added",
+      "event_id": "206216",
+      "event": "PPA Minneapolis"
+    },
+    {
+      "at": "2026-09-08T16:53:56Z",
+      "type": "event_added",
+      "event_id": "206222",
+      "event": "PPA Cape Coral"
     }
   ]
 }
