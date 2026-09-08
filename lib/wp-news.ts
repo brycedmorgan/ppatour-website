@@ -27,6 +27,7 @@
 
 import raw from "@/lib/data/news-posts.json";
 import rawBlog from "@/lib/data/blog-posts.json";
+import { authoredPosts } from "@/lib/news-posts-authored";
 
 /** Featured image as it exists upstream, pre-rehost. */
 export type WpImage = {
@@ -92,6 +93,10 @@ export type WpPost = {
  */
 const posts: WpPost[] = [
   ...(raw as Omit<WpPost, "postType">[]).map((p) => ({ ...p, postType: "post" as const })),
+  // ⚠ Posts written AFTER the migration live in their own module, because the
+  // importer rewrites news-posts.json wholesale and would delete them. Same
+  // shape, same rendering path — see lib/news-posts-authored.ts.
+  ...authoredPosts.map((p) => ({ ...p, postType: "post" as const })),
   ...(rawBlog as WpPost[]),
 ];
 
