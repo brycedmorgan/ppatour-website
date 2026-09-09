@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
+import { withAliasNames } from "@/lib/athlete-aliases";
 import { athletes, type Athlete } from "@/lib/athletes";
 import { newsPlayersFor, relatedNews, type NewsDetail, type NewsPlayer } from "@/lib/news";
 import { renderPostHtml, readingMinutes } from "@/lib/news-html";
@@ -117,15 +118,23 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
 
   // Native articles keep the React-node linkifier over their paragraph array;
   // migrated posts go through the HTML-safe path in lib/news-html.ts.
+  /**
+   * ⚠ BOTH LINKIFIERS MATCH ON `name`, NOT ON THE DETECTED MENTION, so they
+   * need the alias spellings or a nickname earns a rail entry and stays plain
+   * text in the sentence it appears in. `withAliasNames` only expands players
+   * this article already features — it never widens who is linked.
+   */
   const curatedForLinkify =
     detail.source === "native"
-      ? athletes.filter((p) => featured.some((f) => f.slug === p.slug))
+      ? withAliasNames(
+          athletes.filter((p) => featured.some((f) => f.slug === p.slug)),
+        )
       : [];
   const bodyHtml =
     detail.source === "wordpress"
       ? renderPostHtml(
           detail.post.bodyHtml,
-          featured.map((p) => ({ name: p.name, slug: p.slug })),
+          withAliasNames(featured.map((p) => ({ name: p.name, slug: p.slug }))),
         )
       : "";
   const minutes = detail.source === "wordpress" ? readingMinutes(detail.post.bodyHtml) : null;

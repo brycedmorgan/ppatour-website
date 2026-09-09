@@ -1,3 +1,4 @@
+import { ATHLETE_NAME_ALIASES } from "@/lib/athlete-aliases";
 import { athletes } from "@/lib/athletes";
 import { publishedAthletes, publishedProfileSlug } from "@/lib/published-athletes";
 
@@ -79,6 +80,13 @@ function roster(): Candidate[] {
 
   for (const a of publishedAthletes) add(a.name, a.slug);
   for (const a of athletes) add(a.name, a.slug);
+  /**
+   * Everyday spellings the newsroom actually writes — see
+   * lib/athlete-aliases.ts. Added through the same `add()` on purpose, so an
+   * alias that ever collides with a real name is DROPPED by the ambiguity
+   * guard below rather than linked to the wrong player.
+   */
+  for (const a of ATHLETE_NAME_ALIASES) add(a.name, a.slug);
   for (const key of ambiguous) bySlug.delete(key);
 
   // Longest first so "Anna Leigh Waters" wins the alternation over a nested
