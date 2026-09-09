@@ -1,7 +1,7 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-09-08T16:53:56Z",
+  "generated_at": "2026-09-09T16:56:46Z",
   "event_count": 50,
   "ticket_type_count": 788,
   "series_breakdown": {
@@ -213,13 +213,6 @@
           "name": "Thursday Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Thursday Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 60,
           "all_in_price": 70.23
         },
@@ -229,6 +222,13 @@
           "sale_state": "OPEN",
           "base_price": 80,
           "all_in_price": 91.83
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.56
         },
         {
           "name": "Thursday VIP",
@@ -3243,16 +3243,16 @@
         {
           "name": "Sunday Courtside Bleacher",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 60,
-          "all_in_price": 70.37
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 113.69
         },
         {
           "name": "Sunday Courtside Bleacher",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 113.69
+          "all_in_price": 70.37
         },
         {
           "name": "Sunday Courtside Bleacher",
@@ -4864,7 +4864,7 @@
       "start_date": "2027-01-18",
       "end_date": "2027-01-25",
       "venue": {
-        "name": "Life Time Lakeville",
+        "name": "Life Time",
         "city": "Lakeville",
         "state": "MN"
       },
