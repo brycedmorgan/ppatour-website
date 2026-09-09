@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { withAliasNames } from "@/lib/athlete-aliases";
-import { athletes, type Athlete } from "@/lib/athletes";
+
 import { newsPlayersFor, relatedNews, type NewsDetail, type NewsPlayer } from "@/lib/news";
 import { renderPostHtml, readingMinutes } from "@/lib/news-html";
 import { playerInitials } from "@/lib/player-photos";
@@ -21,15 +21,35 @@ import { withUtm } from "@/lib/utm";
  * prerender, which detail is valid) stay in the routes.
  */
 
-/** Wraps athlete full-name mentions in links to their bios. */
-function linkifyPlayers(text: string, players: Athlete[]) {
+/**
+ * Wraps athlete full-name mentions in links to their bios.
+ *
+ * ⚠ TAKES ANY {name, slug}, NOT THE CURATED `Athlete`. It used to be handed
+ * `lib/athletes.ts` — the 40 hand-written marquee profiles — which meant a
+ * native article's rail linked every published pro it mentioned while the
+ * prose linked only the marquee ones. Measured on Fleming's Arizona preview,
+ * 9/9: **19 body links against 35 rail entries**, so sixteen pros had a face
+ * and a card in the rail and plain text in the sentence above it. The split
+ * was an artifact of when detection arrived, not a decision — the comment at
+ * the call site describes native vs migrated as a RENDERING difference.
+ *
+ * ⚠ THE BOUNDARIES ARE LOOKAROUNDS, NOT `\b`, matching
+ * `lib/article-players.ts`. Without them a name nested in a longer one gets
+ * linked inside it — "Ben Johns" inside "Ben Johnson" is the case that module
+ * calls out by name. It mattered less over 40 names and matters more over 200,
+ * and the detector has always been strict here while this was not.
+ */
+function linkifyPlayers(
+  text: string,
+  players: { name: string; slug: string }[],
+) {
   const inText = players.filter((p) => text.includes(p.name));
   if (inText.length === 0) return text;
   const pattern = new RegExp(
-    `(${inText
+    `(?<![\\p{L}\\p{N}])(${inText
       .map((p) => p.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
-      .join("|")})`,
-    "g",
+      .join("|")})(?![\\p{L}\\p{N}])`,
+    "gu",
   );
   return text.split(pattern).map((part, i) => {
     const athlete = inText.find((p) => p.name === part);
@@ -124,11 +144,16 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
    * text in the sentence it appears in. `withAliasNames` only expands players
    * this article already features — it never widens who is linked.
    */
-  const curatedForLinkify =
+  /**
+   * ⚠ EVERY PROFILE THE ARTICLE MENTIONS, NOT THE CURATED 40 (Wesley, 9/9).
+   * `featured` is already resolved to slugs `/athletes/[slug]` prerenders, so
+   * this cannot link a page that does not exist — and it is the same list the
+   * rail renders, which is the point: the two can no longer disagree about who
+   * this story is about.
+   */
+  const playersForLinkify =
     detail.source === "native"
-      ? withAliasNames(
-          athletes.filter((p) => featured.some((f) => f.slug === p.slug)),
-        )
+      ? withAliasNames(featured.map((p) => ({ name: p.name, slug: p.slug })))
       : [];
   const bodyHtml =
     detail.source === "wordpress"
@@ -252,7 +277,7 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
             {card.dek && (
               <p className="text-lg leading-relaxed text-ppa-navy/80">
                 {detail.source === "native"
-                  ? linkifyPlayers(card.dek, curatedForLinkify)
+                  ? linkifyPlayers(card.dek, playersForLinkify)
                   : card.dek}
               </p>
             )}
@@ -272,7 +297,7 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
               <div className="mt-7 space-y-5">
                 {detail.article.body.map((p, i) => (
                   <p key={i} className="text-[15px] leading-[1.75] text-ppa-navy/75">
-                    {linkifyPlayers(p, curatedForLinkify)}
+                    {linkifyPlayers(p, playersForLinkify)}
                   </p>
                 ))}
               </div>

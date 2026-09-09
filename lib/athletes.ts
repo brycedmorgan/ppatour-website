@@ -218,7 +218,13 @@ const curatedUsAthletes: Athlete[] = [
   },
   {
     slug: "paris-todd",
-    name: "Paris Todd",
+    // ⚠ "Parris", two r's — was "Paris Todd" until 9/9, which is how it printed
+    // in her own <h1> while the published profile on the same page spelled it
+    // correctly 38 times. Her published record, 128 archived posts and comms all
+    // say Parris. ⚠ The SLUG stays `paris-todd`: it is what /athletes/[slug]
+    // prerenders and what CURATED_TO_CANONICAL keys on, so renaming it would
+    // move a live URL for a spelling fix.
+    name: "Parris Todd",
     country: "USA",
     headshot: P("paris-todd"),
     divisions: ["Women's Singles", "Women's Doubles", "Mixed Doubles"],
@@ -258,7 +264,9 @@ const curatedUsAthletes: Athlete[] = [
   },
   {
     slug: "megan-dizon",
-    name: "Megan Dizon",
+    // ⚠ "Meghan", with the h — same fix and same day as Parris Todd above. The
+    // slug stays `megan-dizon` for the same reason.
+    name: "Meghan Dizon",
     country: "USA",
     headshot: P("megan-dizon"),
     divisions: ["Women's Doubles", "Mixed Doubles"],
