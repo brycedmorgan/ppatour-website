@@ -361,6 +361,55 @@ browser on every page. The first draft imported `europeRoster` and the
 
 ---
 
+## europe.ppatour.com — a presentation URL, added 2026-09-09
+
+**The ruling below still holds. This did not reverse it.**
+
+Chris Patrick, 9/9: *"Needs to be a standalone site please. Just like Asia and
+Australia. We have a big meeting with a potential $1.5M sponsor this week."*
+
+What he needs in that room is a URL that reads as its own property. He does not
+need a second codebase, and Asia and Australia are not the model he thinks they
+are — they are **partner-owned domains we cannot fold back in**, and
+`lib/asia-tour-links.ts` plus `npm run asia:audit` is the written-down ongoing
+cost of that silo. See the table at the top of this file.
+
+So `europe.ppatour.com` now serves the Europe page at its own root, from **this
+app, this deployment**. The mechanism is four lines in `next.config.ts`:
+
+```ts
+{ source: "/", has: [{ type: "host", value: "europe.ppatour.com" }],
+  destination: "/europe/" }
+```
+
+**Only `/` is rewritten.** Every other path on that host resolves normally, so
+the Europe page's links to `/athletes/*`, `/events/*` and the rulebook keep
+working from the subdomain, and a bad path still 404s. Verified live: the
+subdomain root serves *PPA Tour Europe*, `www.ppatour.com/` is unchanged, and
+`/athletes/ben-johns/`, `/events/`, `/rankings/` all 200 on the subdomain.
+
+⚠ **THIS IS ONLY SAFE WHILE EUROPE IS `noindex`, WHICH IT IS.** `EUROPE_PUBLIC`
+is `false`, so both hosts serve a page no crawler will index and there is nothing
+to split. **If Europe launches with this rewrite still in place,
+`europe.ppatour.com/` and `ppatour.com/europe/` become the same indexable page on
+two hosts.** Resolve it in one direction at launch — either the subdomain 301s to
+the path, or the path canonicalises to the subdomain. Do not ship both.
+
+⚠ **Bryce, 9/9: Europe stays unlisted for now** — *"No Chris can keep this
+private still."* The subdomain is a link to hand to a prospect, not a launch.
+
+⚠ **`vercel domains add` and `vercel inspect` DEFAULT TO THE `gull-stack` SCOPE**
+and this project lives under `bryce-pickleballs-projects`. Both fail with a
+misleading error — "Project not found (404)" and "Can't find the deployment" —
+that reads like the resource is missing rather than like you are in the wrong
+team. Pass `--scope bryce-pickleballs-projects`. Same trap that provisioned a
+Neon database on the wrong team on 8/18.
+
+✅ The cert provisioned on its own here, unlike `jackalope.ppatour.com`, which
+needed `vercel certs issue` forced. Do not assume either way — check.
+
+---
+
 ## Subfolder, not subdomain — settled 2026-09-04
 
 Bryce raised `europe.ppatour.com` and deferred the call. **It stays
