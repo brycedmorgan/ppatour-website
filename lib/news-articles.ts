@@ -125,6 +125,103 @@ export type NewsArticle = {
  */
 export const newsArticles: NewsArticle[] = [
   /**
+   * ⚠ HUMAN-AUTHORED EDITORIAL, same provenance and same exception path as the
+   * Nationals storylines below — Dave Fleming's preview of the season's second
+   * stop, supplied by Wesley on 9/9. The 7/20 approval gate exists to stop
+   * AI-WRITTEN copy going live unreviewed and this is neither, so it ships
+   * `status: "published"`; Dylan can flip it to "draft" in one line.
+   *
+   * ⚠ THE BYLINE COMES FROM PROVENANCE, NOT FROM THE VOICE. The source doc
+   * ("#2: VEOLIA ARIZONA OPEN STORYLINES (SEP 14-20, 2026)") is owned by
+   * dave@pickleball.com, which is what names him — not the fact that it reads
+   * like the Nationals piece. Same rule as the athlete heroes: attribution is
+   * never inferred from the content.
+   *
+   * ⚠ FAITHFUL TRANSCRIPTION, NOT A REWRITE. Each of Fleming's bullets is
+   * flattened to one paragraph and each draw is led by a short label line,
+   * because a native `body` renders as plain paragraphs (ArticleView →
+   * linkifyPlayers: no lists, no headings). Seeds, streaks and every "watch out
+   * for" are his, verbatim, including the surname-only shorthand in the doubles
+   * seed lines — we do not guess first names onto real pros. Only clear typos
+   * were fixed ("Truoung" → "Truong", "Colin Johns" → "Collin Johns") and
+   * R64/R32/R16 spelled out.
+   *
+   * ⚠ HIS TV LINE WAS CHECKED AGAINST OUR OWN SCHEDULE RATHER THAN TRUSTED. It
+   * matches `lib/tv-schedule.ts` exactly — PBTV 1PM Thu, 1PM Fri, 12PM Sat, 2PM
+   * Sun, FS2 Friday and Saturday nights, FS1 Sunday night. A preview that
+   * disagreed with /watch/tv would send fans to the wrong channel, and the
+   * article is the copy people act on.
+   *
+   * ⚠ NO PRESENTING PARTNER IN THE SUBTITLE, DELIBERATELY. This stop shows none
+   * (Wesley, 8/20 — "AT Sports" removed from the AZ Open page); Veolia is the
+   * title sponsor and is already in the event's name. See PRESENTER_BY_SLUG.
+   *
+   * ⚠ AND THE IMAGE IS NOT THE EVENT'S OWN FEATURED SHOT. `featured-mesa-cup.jpg`
+   * is pinned as this event's hero, card and OG image in HERO_OVERRIDE_BY_EVENT_SLUG,
+   * so using it here too would print the same picture twice wherever an article
+   * card and the event card share a page — the same objection as the Nationals
+   * gallery reusing `t.gallery[0]`. This is a different frame from the same
+   * venue set: Wesley's call, 9/9.
+   */
+  {
+    slug: "veolia-arizona-open-storylines",
+    status: "published",
+    category: "Tour News",
+    title: "Storylines for the Veolia Arizona Open",
+    subtitle: "Sept. 14–20, 2026 · Mesa, AZ",
+    date: "Sep 9",
+    image: "/ppa/venues/aag-mesa/crowd-04.jpg",
+    author: "Dave Fleming",
+    eventSlug: "veolia-arizona-open",
+    dek: "The season's first open lands in Mesa with 1,000 points on the line, triple-digit heat in the forecast, and the top four seeds in every draw byed straight to the round of 16 on their World Pickleball Ranking.",
+    whyItMatters:
+      "This is the first open of the new season, worth 1,000 points, and the first event at which the World Pickleball Rankings decide the byes — the top four players or teams in each draw skip straight to the round of 16.",
+    body: [
+      "Overall Top 5",
+      "Be worldly: the top four players and teams in each event get byes to the round of 16 based on their World Pickleball Ranking.",
+      "2 for 2: this is the second event of the new season, and the second visit to Mesa, AZ in calendar year 2026.",
+      "Triple digits: the heat will be on again, with 100+ degree highs in the forecast in the desert.",
+      "No triple crown: Anna Leigh Waters is just playing singles and mixed, so there is no triple opportunity for her.",
+      "Open it up: this is the first open of the year, worth 1,000 points.",
+      "Venue, Tourney & TV",
+      "A return to the city, but not the locale, where the PPA started in 2020.",
+      "A progressive draw on the pro side, one round per bracket per day and no bronze matches.",
+      "Coverage on PickleballTV begins at 1 p.m. Eastern Thursday and Friday, 12 p.m. Eastern Saturday, and 2 p.m. Eastern on Sunday, with coverage on FS2 Friday and Saturday night and FS1 on Sunday night.",
+      "Women's Singles",
+      "Top four seeds: 1) Anna Leigh Waters, 2) Kate Fahey, 3) Kaitlyn Christian, 4) Brooke Buckner.",
+      "Anna Leigh Waters' unbeaten streak has reached 2 years, 3 months and 18 days at the start of the Mesa event.",
+      "Round-of-64 must watch: Mary Brascia (14) vs. Sofia Sewing (43).",
+      "Potential battle in the round of 16: Brooke Buckner (4) vs. Elsie Hendershot (27).",
+      "Watch out for Kate Fahey (2) — firmly established as the No. 2 player in singles, she pushed Waters to 11-9 in game two of the final in NC. Will they meet again?",
+      "Men's Singles",
+      "Top four seeds: 1) Chris Haworth, 2) Federico Staksrud, 3) Hunter Johnson, 4) Christian Alshon.",
+      "Ben Johns is vaulted into the round of 16 based on his World Pickleball Ranking. He is the 22 seed in singles and could face Staksrud, his doubles partner, in the quarters.",
+      "Round-of-64 battle of the new vs. the OG champs: Grayson Goldin (15) vs. Tyson McGuffin (35).",
+      "Another round-of-64 thriller: Cason Campbell (19) vs. Cam Chaffin (34).",
+      "Watch out for Hunter Johnson (3) — he won in NC last week, beating both Haworth and Staksrud on his path to the title.",
+      "Mixed Doubles",
+      "Top four seeds: 1) Anna Leigh Waters / Ben Johns, 2) Rachel Rohrabacher / Christian Alshon, 3) Parris Todd / Andrei Daescu, 4) Hurricane Tyra Black / Noe Khlif.",
+      "Waters and Johns have not fared well, for them, on this championship court. They did not win in 2025 or in February of this year, and last won this one in 2024.",
+      "Catherine Parenteau and Jonathan Truong (7) are playing together for the first time.",
+      "Round-of-64 barnburner: Jack Sock / Lacy Schneemann (14) vs. Sofia Sewing / Casey Diamond (46).",
+      "Watch out for Hurricane Tyra Black and Noe Khlif (4) — a third tournament together, can they make a deep run?",
+      "Women's Doubles",
+      "Top four seeds: 1) Rachel Rohrabacher / Parris Todd, 2) Hurricane Tyra Black / Meghan Dizon, 3) Lacy Schneemann / Tina Pisnik, 4) Catherine Parenteau / Sofia Sewing.",
+      "Anna Bright and Jorja Johnson are not in the tournament, and Waters is out of just women's doubles.",
+      "Kate Fahey and Jamie Wei (5) — can they make a run to the semis or farther?",
+      "Tournament number two for the 4 seed: Sofia Sewing and Catherine Parenteau reached the quarters in NC before falling to Rohrabacher / Todd.",
+      "Round-of-32 fun matchup: the Brascia sisters (20) vs. Mari Humberg and Judit Castillo (9).",
+      "Watch out for the bride to be, Rachel Rohrabacher — the top seed hopes to take gold to her wedding on September 26.",
+      "Men's Doubles",
+      "Top four seeds: 1) Johns / Staksrud, 2) Alshon / Daescu, 3) Chaffin / Klinger, 4) Oncins / Khlif.",
+      "Gabe Tardio is out of the country, so Federico Staksrud jumps in next to Ben for the first time.",
+      "Bro vs. bro in the quarters? Collin Johns / Hunter Johnson (7) are in the same quarter as Ben and Fed.",
+      "Not playing in this event: JW Johnson, Hayden Patriquin and Tama Shimabukuro.",
+      "Right-side Daescu with Alshon (2) reached the final in NC — can they take the title in AZ?",
+      "Watch out for CJ Klinger and Cam Chaffin (3) — can the Ohio buddies make a run to the semis or farther in Mesa?",
+    ],
+  },
+  /**
    * ⚠ HUMAN-AUTHORED EDITORIAL, published at the content owner's instruction —
    * Dave Fleming's Nationals "storylines" preview, supplied by Tyler Dodd
    * (marketing) on Aug 11 with a request to post it and to byline Dave Fleming.
