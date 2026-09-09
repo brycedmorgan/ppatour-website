@@ -63,6 +63,61 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-09 (pt. 3) — Junior PPA: the branch was empty, the work was in a stash's third parent
+
+- Daniela Almendarez's ten-item doc, submitted through the website request form 8/5
+  (Asana `1217200231519436`, due 8/28). **8 of 10 shipped**; the other two need photos
+  from her.
+- **⚠ THE BRANCH EVERYONE REMEMBERED HAD NOTHING IN IT.** `junior-ppa-updates` was local
+  only, had **zero commits**, and its reflog held one line: created off main on 9/3. The
+  work was in **`stash@{0}`** — and the two files the page cannot run without were in the
+  stash's **THIRD PARENT**, the untracked-files commit that `git stash -u` creates:
+  `components/tour/JuniorFinalists.tsx` (the page imports it, so without it the page does
+  not compile) and `public/ppa/junior/junior-ppa-logo.png` (the page renders it, so
+  without it that is a broken image with a green build — the Europe-roster failure from
+  9/4 pt. 5 exactly). **`git stash show --stat` does not list them.** Check
+  `git rev-list --parents` for a third parent before concluding a stash is incomplete.
+- **⚠ AND `git stash pop` WOULD HAVE REGRESSED THREE SHIPPED THINGS.** The stash was taken
+  off a 9/3 base and main has moved 60 commits, so it also carried: the **9/4 boardAll
+  fix** to `lib/rankings-api.ts` (already on main, and since superseded by three caching
+  commits), the **AstraZeneca removal** in its earlier logo-only form (main went further
+  on 9/4 pt. 2 and deleted the roster record), and the **Nationals weather reschedule**
+  in `broadcast.ts`/`tv-schedule.ts`, since amended again. Same trap as the parked
+  vacations branch on 8/16: superseded work riding in under cover of the work you want.
+  The branch was rebuilt off current main and only the junior files taken.
+- **⚠ `LeadMagnetCapture` HAD TO BE HAND-MERGED, NOT TAKEN.** Main gained Payton's
+  `region` prop on 9/8 and the stash predates it, so taking the file would have silently
+  reverted Europe email targeting. Only the new `junior` variant went on top — its own
+  variant, not a reuse of `amateur`, because the variant is what Customer.io segments on
+  and juniors' parents must not land in the adult-amateur flow. Its docblock now also
+  carries the **dark-ground warning** /europe and /game learned the hard way on 9/8; the
+  Junior page mounts it as a navy card inside a white section.
+- Shipped from her list: the logo back in the hero (**the reversed lockup**, so it reads
+  on navy) · upcoming tournaments linking to their event pages · #PLAYWHERETHEPROSPLAY →
+  **#BeTheBest** · the "Skill — Under 5.5 DUPR" tile dropped **and the grid made
+  count-agnostic** so the removal leaves no empty column (same fix as the event-page
+  quick-facts bar, 8/5 pt. 20) · a **Format** heading above the two format cards · the
+  finalists **selectable by season** via a new `JuniorFinalists`, mirroring the existing
+  `JuniorRankings` control rather than inventing a second idiom two sections apart · a
+  **Stay Connected** section of its own, her copy, all three Junior PPA channels and both
+  staff contacts.
+- **⚠ TWO ASKS ARE BLOCKED ON HER, AND ONE OF THEM IS A JUDGEMENT CALL WORTH KEEPING.**
+  The **hero group photo** she offered to send is not here, so the hero is still
+  `action-singles.jpg` — an adult pro on the juniors' page. That placeholder was already
+  live, so shipping this changed nothing about it. The **gallery** 
+  ("between Stay Connected and Learn more") is not built and the insertion point is
+  marked in the file. **Finalist photos are deliberately not built either**: she asked
+  and said "if not, no worries", and these are minors — the athlete-hero rule that
+  nothing here decides who is in a picture applies with more force to children, not
+  less. Do not crop faces out of a group shot to fill it.
+- Verified on rendered pages, not by reading the diff: page 200, **all 9 event links
+  200**, the logo resolving through the optimizer (`/_next/image/?…` — with the trailing
+  slash), **0 broken images and 0 horizontal overflow at 1440 and 390**, 0 elements stuck
+  at opacity 0. Looked at the hero and the Stay Connected section as pictures, which is
+  how the reversed-logo-on-navy and the newsletter-card legibility were actually
+  confirmed. tsc + eslint clean.
+- ⚠ `stash@{0}` is left in place until this is reviewed. Drop it once it is; everything
+  in it is either committed here or already on main.
 ### 2026-09-09 (pt. 2) — "himselfrself": one circled typo was four live profiles
 
 - Hannah Johns, Slack DM 9/8, one screenshot with one word circled in red on Allyce
