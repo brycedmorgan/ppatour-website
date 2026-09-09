@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-type Variant = "fan" | "amateur" | "streaming";
+type Variant = "fan" | "amateur" | "streaming" | "junior";
 
 const COPY: Record<Variant, { eyebrow: string; heading: string; cta: string }> = {
   fan: {
@@ -20,11 +20,35 @@ const COPY: Record<Variant, { eyebrow: string; heading: string; cta: string }> =
     heading: "Streaming Reminders for Every Event",
     cta: "Notify me",
   },
+  /**
+   * Junior PPA (Daniela Almendarez, 9/3 — the "Newsletter" line in her Stay
+   * Connected section). Its own variant rather than reusing `amateur`: the
+   * variant is sent to Customer.io as `website_lead_variant`, so it is what
+   * lets a Junior PPA signup be segmented and welcomed differently from an
+   * adult amateur. Reusing another variant would file juniors' parents into
+   * the wrong flow.
+   */
+  junior: {
+    eyebrow: "Junior PPA Newsletter",
+    heading: "Events, Announcements and Junior PPA News",
+    cta: "Sign up",
+  },
 };
 
 /**
  * Email capture surface (§9.8). Email is the moat — every page has one.
- * Posts to /api/lead-capture (stub → Customer.io once credentials land).
+ * Posts to /api/lead-capture, which identifies the lead in Customer.io and
+ * records `website_lead_capture` carrying this `variant`.
+ *
+ * ⚠ THIS COMPONENT ONLY WORKS ON A DARK GROUND, AND TWO CALL SITES PROVED IT
+ * THE HARD WAY (9/8). The heading is `text-white`, the body `text-white/55`
+ * and the input carries a white border — it draws no background of its own, so
+ * on white or `ppa-paper` the heading and the reassurance copy are invisible
+ * and all a visitor sees is a floating blue button. That is exactly how it
+ * shipped on /europe and /game until Payton Pemberton reported it. Fifteen of
+ * the seventeen call sites wrap it in a `bg-ppa-navy*` section for this reason;
+ * the Junior page mounts it as a navy card inside a white section. If it ever
+ * needs a light treatment, that is a change in here, not a class on a wrapper.
  */
 export function LeadMagnetCapture({
   variant = "fan",

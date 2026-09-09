@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { JuniorRankings } from "@/components/tour/JuniorRankings";
+import { JuniorFinalists, type FinalsYear } from "@/components/tour/JuniorFinalists";
+import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
+import { getEvents } from "@/lib/events-api";
+import { eventHref } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
 
 /**
@@ -34,29 +38,107 @@ const YOUTUBE = withUtm("https://www.youtube.com/@JuniorPPATour", {
   content: "youtube",
 });
 const INSTAGRAM = "https://www.instagram.com/junior.ppa/";
+const FACEBOOK =
+  "https://www.facebook.com/people/Junior-PPA-Tour/61587897389740/";
+
+/**
+ * Junior PPA staff, for the Stay Connected section (Daniela Almendarez, 9/3).
+ *
+ * ⚠ NAMES, TITLES AND ADDRESSES ARE VERBATIM FROM HER REQUEST. These are real
+ * people's work addresses published on a public page — never guess a colleague's
+ * address from a naming pattern, and never add a row here that did not come from
+ * the team itself.
+ */
+const CONTACTS = [
+  {
+    name: "Jake Weinbach",
+    title: "Director of Junior PPA Tour",
+    email: "j.weinbach@ppatour.com",
+  },
+  {
+    name: "Daniela Almendarez",
+    title: "Junior PPA Coordinator",
+    email: "d.almendarez@ppatour.com",
+  },
+];
 
 /** Self-hosted on purpose: the original lives at ppatour.com/wp-content/, which
  *  stops resolving the moment DNS moves ppatour.com off WordPress. */
 const HANDBOOK = "/ppa/junior/2026-junior-ppa-handbook.pdf";
 
 /**
- * ⚠ VERBATIM from the live page (Wesley's call, 8/4) — including the two names
- * our own feed now spells differently ("Florida Open" is Proton Daytona Beach
- * Open; "Pickleball National Championships" is Veolia PPA National
- * Championships). Fidelity to the live page was chosen over consistency with
- * the schedule data, so these are deliberately NOT linked to event pages.
+ * ⚠ THE LABELS ARE VERBATIM FROM THE LIVE PAGE (Wesley's call, 8/4) AND STAY
+ * THAT WAY — three of them are not what the tour's own feed calls the event
+ * ("Florida Open" is the Proton Daytona Beach Open, "Mesa, AZ" is the Veolia
+ * Arizona Open, "Pickleball National Championships" is the Veolia PPA National
+ * Championships). Daniela asked on 9/3 for these to link to their event pages,
+ * which is a link, not a rename: the row keeps her words and gains an href.
+ *
+ * ⚠ THE SLUG AND YEAR ARE CURATED AND HAND-VERIFIED, NEVER MATCHED ON THE NAME.
+ * Every one of these labels matches several events by name across seasons, and
+ * the loose ones match the WRONG one: name-matching "Mesa, AZ" returns the
+ * February Carvana Mesa Cup, and "Pickleball National Championships" returns
+ * the 2023 Biofreeze edition. Each row below was resolved by DATE OVERLAP
+ * against the live feed and then written down — the same one-row-per-event
+ * discipline as lib/asia-tour-links.ts, for the same reason: a link to the
+ * wrong tour stop sends a junior's family to the wrong week.
+ *
+ * ⚠ `slug: null` MEANS "HAS NO EVENT PAGE", NOT "NOT LOOKED UP YET". The
+ * Vancouver stop is a PPA Canada event, and international stops deliberately
+ * have no internal page (8/6) — linking it would hit a redirect out or a 404.
+ * It renders as plain text, exactly as every row did before today.
+ *
+ * The href is only emitted if the slug still resolves to an event that really
+ * has an internal page (see `upcomingWithLinks`), so a stale row degrades to
+ * plain text rather than publishing a dead link.
  */
-const UPCOMING = [
-  { dates: "August 19–23, 2026", event: "Vancouver, Canada" },
-  { dates: "August 31 – September 6, 2026", event: "Pickleball National Championships" },
-  { dates: "September 14–20, 2026", event: "Mesa, AZ" },
-  { dates: "September 28 – October 4, 2026", event: "Las Vegas Open" },
-  { dates: "October 5–11, 2026", event: "Chicago Cup" },
-  { dates: "October 12–18, 2026", event: "Virginia Beach Open" },
-  { dates: "November 2–8, 2026", event: "Pickleball World Championships" },
-  { dates: "November 16–22, 2026", event: "Florida Open" },
-  { dates: "April 12–18, 2027", event: "Cincinnati Open" },
+const UPCOMING: {
+  dates: string;
+  event: string;
+  slug: string | null;
+  year: number;
+}[] = [
+  // PPA Canada — link-out stop, no internal event page.
+  { dates: "August 19–23, 2026", event: "Vancouver, Canada", slug: null, year: 2026 },
+  { dates: "August 31 – September 6, 2026", event: "Pickleball National Championships", slug: "veolia-pickleball-national-championships", year: 2026 },
+  // Her label is the city; the tour stop that week is the Veolia Arizona Open.
+  { dates: "September 14–20, 2026", event: "Mesa, AZ", slug: "veolia-arizona-open", year: 2026 },
+  { dates: "September 28 – October 4, 2026", event: "Las Vegas Open", slug: "rate-las-vegas-open", year: 2026 },
+  { dates: "October 5–11, 2026", event: "Chicago Cup", slug: "veolia-chicago-cup", year: 2026 },
+  { dates: "October 12–18, 2026", event: "Virginia Beach Open", slug: "virginia-beach-open", year: 2026 },
+  { dates: "November 2–8, 2026", event: "Pickleball World Championships", slug: "pickleball-world-championships", year: 2026 },
+  // "Florida Open" is the Proton Daytona Beach Open in the feed.
+  { dates: "November 16–22, 2026", event: "Florida Open", slug: "proton-daytona-beach-open", year: 2026 },
+  { dates: "April 12–18, 2027", event: "Cincinnati Open", slug: "cincinnati-open", year: 2027 },
 ];
+
+/**
+ * Attach an href to each upcoming row, but only where it is genuinely safe.
+ *
+ * Three gates, and all three have failed for real elsewhere in this repo:
+ *   1. the row must name a slug (null = a link-out stop with no page),
+ *   2. the slug AND year must both match a live event — the slug alone is not
+ *      unique, `pickleball-world-championships` exists for 2025 and 2026, and
+ *      `eventHref` builds the year from the record it is given, so matching on
+ *      slug alone can publish a link to last season's page,
+ *   3. that event must have `hasInternalPage`, or the URL redirects out (8/6).
+ *
+ * The feed being unreachable falls back to the curated schedule inside
+ * `getEvents()`; if a row still cannot be resolved it simply renders unlinked.
+ */
+async function upcomingWithLinks() {
+  const { events } = await getEvents();
+  return UPCOMING.map((u) => {
+    if (!u.slug) return { ...u, href: null };
+    const match = events.find(
+      (e) =>
+        e.slug === u.slug &&
+        Number(e.startDate.slice(0, 4)) === u.year &&
+        e.hasInternalPage,
+    );
+    return { ...u, href: match ? eventHref(match) : null };
+  });
+}
 
 const DIVISIONS = [
   { group: "Singles", items: ["Boys Singles 12U, 14U, 16U, 18U", "Girls Singles 12U, 14U, 16U, 18U"] },
@@ -162,6 +244,16 @@ const FINALS_2024 = [
   ["Mixed Doubles 16U", "Elsie Hendershot & Braden Jacobson"],
 ];
 
+/**
+ * Every season of Junior PPA Finals champions, NEWEST FIRST — the selector
+ * defaults to `FINALS[0]`, so adding a season is one entry at the top and
+ * nothing else. Don't reorder these oldest-first.
+ */
+const FINALS: FinalsYear[] = [
+  { year: "2025", rows: FINALS_2025 },
+  { year: "2024", rows: FINALS_2024 },
+];
+
 const SECTIONS = [
   { id: "tournaments", label: "Tournaments" },
   { id: "rankings", label: "Rankings" },
@@ -169,6 +261,7 @@ const SECTIONS = [
   { id: "register", label: "How to Register" },
   { id: "finals", label: "Junior PPA Finals" },
   { id: "serves", label: "Junior PPA Serves" },
+  { id: "connected", label: "Stay Connected" },
 ];
 
 export const metadata: Metadata = {
@@ -193,24 +286,8 @@ function SectionHead({ eyebrow, title }: { eyebrow: string; title: string }) {
   );
 }
 
-function ChampionList({ rows }: { rows: string[][] }) {
-  return (
-    <ul className="mt-4 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-2 lg:grid-cols-3">
-      {rows.map(([division, champion]) => (
-        <li key={`${division}-${champion}`} className="min-w-0 bg-white p-4">
-          <span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
-            {division}
-          </span>
-          <span className="mt-1 block text-sm font-semibold text-ppa-navy">
-            {champion}
-          </span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-export default function JuniorPage() {
+export default async function JuniorPage() {
+  const upcoming = await upcomingWithLinks();
   return (
     <>
       {/* ---------------------------------------------------------- Hero */}
@@ -225,7 +302,37 @@ export default function JuniorPage() {
         />
         <div className="absolute inset-0 scrim-hero" />
         <div className="relative mx-auto w-full max-w-6xl px-4 py-16">
-          <div className="flex items-center gap-2.5">
+          {/**
+           * The Junior PPA lockup (Daniela Almendarez, 9/3: "Add our logo back
+           * up").
+           *
+           * ⚠ THIS IS THE REVERSED (WHITE) CUT AND IT ONLY WORKS ON A DARK
+           * GROUND. Rendered on white it very nearly disappears — the type is
+           * white, and all that survives is the navy inside the P counters. It
+           * is placed here because this hero is bg-ppa-navy. Do NOT reuse it on
+           * ppa-paper or white without getting the positive cut from the brand
+           * team first. Same trap as the reversed MOJO mark (8/10).
+           *
+           * ⚠ PROVENANCE: extracted from page 1 of the official 2026 Junior PPA
+           * Handbook we already self-host (public/ppa/junior/), which is the
+           * tour's own publication — not lifted off a third-party site. The navy
+           * it was flattened onto measured rgb(12,44,69), one level per channel
+           * off ppa-navy, so it was flood-filled to transparency rather than
+           * dropped in as a JPEG that would show a faint box.
+           *
+           * alt="" on purpose: the <h1> immediately below says the same words,
+           * and a screen reader should not read the brand twice.
+           */}
+          <Image
+            src="/ppa/junior/junior-ppa-logo.png"
+            alt=""
+            width={371}
+            height={396}
+            priority
+            sizes="(min-width: 640px) 144px, 112px"
+            className="h-28 w-auto sm:h-36"
+          />
+          <div className="mt-6 flex items-center gap-2.5">
             <span className="h-2 w-2 bg-ppa-blue" />
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
               For Players 18 &amp; Under
@@ -316,17 +423,44 @@ export default function JuniorPage() {
       <section id="tournaments" className="scroll-mt-24 bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <SectionHead eyebrow="The Schedule" title="Upcoming Tournaments" />
+          {/**
+           * Each row links to that stop's event page where one exists
+           * (Daniela, 9/3). A row with no resolved href stays exactly as it
+           * always rendered — see the gates on `upcomingWithLinks`. The whole
+           * cell is the link so the target is a comfortable size on a phone.
+           */}
           <ul className="mt-5 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-2 lg:grid-cols-3">
-            {UPCOMING.map((u) => (
-              <li key={`${u.dates}-${u.event}`} className="min-w-0 bg-white p-4">
-                <span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-blue">
-                  {u.dates}
-                </span>
-                <span className="mt-1 block font-display text-sm uppercase text-ppa-navy">
-                  {u.event}
-                </span>
-              </li>
-            ))}
+            {upcoming.map((u) => {
+              const inner = (
+                <>
+                  <span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-blue">
+                    {u.dates}
+                  </span>
+                  <span className="mt-1 block font-display text-sm uppercase text-ppa-navy">
+                    {u.event}
+                    {u.href && (
+                      <span aria-hidden className="ml-1.5 text-ppa-blue">
+                        →
+                      </span>
+                    )}
+                  </span>
+                </>
+              );
+              return (
+                <li key={`${u.dates}-${u.event}`} className="min-w-0 bg-white">
+                  {u.href ? (
+                    <Link
+                      href={u.href}
+                      className="group block h-full p-4 transition-colors hover:bg-ppa-paper"
+                    >
+                      {inner}
+                    </Link>
+                  ) : (
+                    <div className="p-4">{inner}</div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
       </section>
@@ -355,14 +489,20 @@ export default function JuniorPage() {
             Compete against the top junior pickleball players around the country
             in traditional tournament events, where you will have the
             opportunity to showcase your talents, refine your skill set, and
-            #PlayWhereTheProsPlay.
+            #BeTheBest.
           </p>
 
           {/* Eligibility + cost */}
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {/**
+           * ⚠ THE GRID IS COUNT-AGNOSTIC ON PURPOSE. Daniela asked on 9/3 to
+           * drop the "Skill — Under 5.5 DUPR" tile, which left three tiles in a
+           * hardcoded lg:grid-cols-4 and a visible empty column. Same fix as the
+           * event-page quick-facts bar (8/5 pt. 20): let the column count follow
+           * the number of tiles so the next add or removal needs no layout edit.
+           */}
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
               { label: "Age", value: "8–18" },
-              { label: "Skill", value: "Under 5.5 DUPR" },
               { label: "Registration fee", value: "$75" },
               { label: "Event fee", value: "$30" },
             ].map((f) => (
@@ -403,8 +543,14 @@ export default function JuniorPage() {
             </div>
           </div>
 
-          {/* Format */}
-          <div className="mt-10 grid gap-4 lg:grid-cols-2">
+          {/* Format — heading added at Daniela's request (9/3); the two cards
+              below were previously unlabelled, unlike Divisions above them. */}
+          <div className="mt-10">
+            <h3 className="font-display text-lg uppercase text-ppa-navy">
+              Format
+            </h3>
+          </div>
+          <div className="mt-3 grid gap-4 lg:grid-cols-2">
             <div className="min-w-0 border border-ppa-line bg-ppa-paper p-6">
               <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
                 7 teams or more
@@ -576,15 +722,11 @@ export default function JuniorPage() {
             invite.
           </p>
 
-          <h3 className="mt-8 font-display text-lg uppercase text-ppa-navy">
-            2025 Champions
-          </h3>
-          <ChampionList rows={FINALS_2025} />
-
-          <h3 className="mt-8 font-display text-lg uppercase text-ppa-navy">
-            2024 Champions
-          </h3>
-          <ChampionList rows={FINALS_2024} />
+          {/* Champions by season, selectable (Daniela, 9/3 — "like the
+              rankings where you can select by year"). */}
+          <div className="mt-8">
+            <JuniorFinalists seasons={FINALS} />
+          </div>
 
           <div className="mt-10 border border-ppa-line bg-ppa-paper p-6">
             <h3 className="font-display text-lg uppercase text-ppa-navy">
@@ -661,24 +803,104 @@ export default function JuniorPage() {
                   </p>
                 </div>
               ))}
-              <div className="min-w-0 border border-ppa-line bg-white p-5">
-                <h3 className="font-display text-base uppercase text-ppa-navy">
-                  Stay Connected
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-ppa-navy/65">
-                  Follow{" "}
-                  <a
-                    href={INSTAGRAM}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-semibold text-ppa-navy underline decoration-ppa-blue underline-offset-2 hover:text-ppa-blue"
-                  >
-                    @junior.ppa
-                  </a>{" "}
-                  for upcoming events, announcements, and news.
-                </p>
-              </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------- Stay connected */}
+      {/**
+       * Daniela Almendarez, 9/3: a Stay Connected section of its own, "separate
+       * from the Junior PPA Serves" — it used to be one card inside that grid,
+       * where a newsletter signup and the staff contacts had nowhere to live.
+       * Heading, blurb, channel list and both contacts are her copy.
+       *
+       * ⚠ The Junior PPA GALLERY she also asked for belongs BETWEEN THIS
+       * SECTION AND THE HANDBOOK ("Between Stay Connected and Learn more"). It
+       * is not built yet — it needs her junior photos, and this repo does not
+       * publish photographs of children chosen by us. Drop it in right here.
+       */}
+      <section id="connected" className="scroll-mt-24 bg-white">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <SectionHead eyebrow="Follow Along" title="Stay Connected" />
+          <p className="mt-4 max-w-3xl text-sm leading-relaxed text-ppa-navy/70">
+            Stay connected and never miss the action! Follow us for upcoming
+            events, important announcements, and all things Junior PPA.
+          </p>
+
+          <div className="mt-6 grid gap-4 lg:grid-cols-3">
+            {/* Social */}
+            <div className="min-w-0 border border-ppa-line bg-ppa-paper p-5">
+              <h3 className="font-display text-base uppercase text-ppa-navy">
+                Follow Junior PPA
+              </h3>
+              <ul className="mt-3 space-y-2">
+                {[
+                  { label: "Instagram", handle: "@junior.ppa", href: INSTAGRAM },
+                  { label: "Facebook", handle: "Junior PPA Tour", href: FACEBOOK },
+                  { label: "YouTube", handle: "@JuniorPPATour", href: YOUTUBE },
+                ].map((sm) => (
+                  <li key={sm.label} className="min-w-0">
+                    <a
+                      href={sm.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex min-w-0 items-baseline gap-2 text-sm text-ppa-navy/70 hover:text-ppa-blue"
+                    >
+                      <span className="w-20 shrink-0 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+                        {sm.label}
+                      </span>
+                      <span className="min-w-0 truncate font-semibold text-ppa-navy group-hover:text-ppa-blue">
+                        {sm.handle}
+                      </span>
+                      <span aria-hidden className="shrink-0 text-ppa-blue">
+                        ↗
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Contacts */}
+            <div className="min-w-0 border border-ppa-line bg-ppa-paper p-5 lg:col-span-2">
+              <h3 className="font-display text-base uppercase text-ppa-navy">
+                Contact Junior PPA
+              </h3>
+              <ul className="mt-3 grid gap-4 sm:grid-cols-2">
+                {CONTACTS.map((c) => (
+                  <li key={c.email} className="min-w-0">
+                    <p className="text-sm font-semibold text-ppa-navy">
+                      {c.name}
+                    </p>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy/45">
+                      {c.title}
+                    </p>
+                    <a
+                      href={`mailto:${c.email}`}
+                      className="mt-1.5 inline-block min-w-0 max-w-full truncate border-b border-ppa-blue text-sm text-ppa-navy hover:text-ppa-blue"
+                    >
+                      {c.email}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/**
+           * Newsletter (the "Newsletter" line in Daniela's list).
+           *
+           * Its own `junior` variant, so a Junior PPA signup is segmented as one
+           * in Customer.io rather than filed with the adult amateur guide.
+           *
+           * ⚠ THE NAVY WRAPPER IS REQUIRED, NOT DECORATION. LeadMagnetCapture
+           * renders its heading white and its body white/55, so on this white
+           * section it published an eyebrow above an empty gap with a stray
+           * button under it — caught by looking at the section, not by tsc.
+           */}
+          <div className="mt-4 bg-ppa-navy p-6 sm:p-8">
+            <LeadMagnetCapture variant="junior" />
           </div>
         </div>
       </section>
