@@ -63,6 +63,73 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-09 (pt. 4) — Four stops were on sale and the site said "Tickets Coming Soon"; the audit that should have caught it was blind
+
+- Cem Aslan, Slack 9/9: Masters 2027 tickets are up, please update the site (Asana
+  `1218330569068125`). He then sent Minneapolis and Cape Coral. All three are in, plus
+  one nobody had reported.
+- **⚠ `npm run tixr:audit` HAD BEEN CHECKING NOTHING SINCE 8/4, AND THAT IS THE ENTRY.**
+  It exists to report a live Tixr listing with no mapping on our side — exactly what Cem
+  had to report by hand. It was dying with *"Parsed COMMERCE_BY_SLUG but found no
+  tixrEvent() entries"*: `readCommerceMap` searched for the bare string
+  `COMMERCE_BY_SLUG`, and since 8/4 the **first hit is a DOCBLOCK** listing the maps a
+  rename would orphan. The slice that followed ran to the end of the next object literal
+  (`BRAND_BY_SLUG`), which contains no `tixrEvent()` calls at all. Now anchored on
+  `const COMMERCE_BY_SLUG`. **Anchor a source-parsing script on the declaration, never on
+  the identifier** — the same class as the Europe audit tripping over its own comment.
+  ⚠ A guard that throws is better than one that passes wrongly, but only if somebody runs
+  it. **Nothing runs this on a schedule; `tixr:sync` does. That is worth wiring up.**
+- **⚠ FIXING THE AUDIT IMMEDIATELY FOUND A DEAD LINK NOBODY HAD REPORTED: DAYTONA.**
+  `proton-daytona-beach-open` pointed at `ppa-daytona-beach-178517`, and that listing is
+  **gone from the PPA group** — absent from the snapshot, `null` in the price index. A
+  missing id means `ticketsOnSale` reads false, so the page published "Tickets Coming
+  Soon" for a stop selling 12 open tiers from $25. Repointed to `203020` on an exact
+  start-date match (2026-11-16). Same failure and same fix as the Las Vegas id
+  (178513 → 195857). **The stop is nine weeks out.**
+- Mapped, all on exact city + start date, which is how every other entry in that map was
+  matched: **Masters** → `ppa-palm-springs-204325` (Tixr calls it "PPA Palm Springs", so
+  neither name nor slug matches — Rancho Mirage, 2027-01-11) · **Minneapolis Indoor
+  Open** → `ppa-minneapolis-206216` (Lakeville, 2027-01-18; no mapping had ever existed
+  for this stop) · **Cape Coral Open** → `ppa-cape-coral-206222`.
+- **⚠ CAPE CORAL'S 31 JUL HOLD IS LIFTED. That reverses a standing instruction**, on
+  Cem's request and Wesley's approval, so `TICKETS_HIDDEN` carries a tombstone rather
+  than a silent deletion — an unexplained gap in that list reads as an oversight and
+  invites the hold being restored. **Cincinnati is untouched and still withheld**; nobody
+  asked about it. Removing the line was also not optional once the mapping moved:
+  TICKETS_HIDDEN is keyed on the id we LINK, so a line naming 196548 would suppress
+  nothing while claiming we withhold tickets we are selling.
+- **⚠ CAPE CORAL HAS TWO LIVE TIXR LISTINGS FOR ONE STOP, AND THIS IS NOT A STALE ID.**
+  Unlike Daytona, the old `196548` is still published and sellable (7 open tiers) beside
+  `206222` (26 tiers) — same event, date and city. We link the one Cem sent. **The audit
+  now flags 196548 as unmapped and it must stay flagged**: one event cannot have two Buy
+  Tickets destinations. The duplicate is Tixr-side; ask Cem to retire it.
+- **⚠ THE PER-DAY SESSION LISTINGS ARE DELIBERATELY UNMAPPED.** Tixr publishes a listing
+  per playing day (Palm Springs alone has six: Round of 16, Quarterfinals, two Saturday
+  semifinals, Championships). The parent sells every day and `TicketGrid` already
+  deep-links each day from the day cards. Mapping a parent is what lets the audit
+  recognise its children — the unresolved count fell **16 → 3** as parents landed, with
+  the per-day bucket going 24 → 33.
+- **⚠ FOUND AND CORRECTED IN PASSING: the Masters' curated venue was a different venue in
+  a different city.** The row said "Hyatt Regency Indian Wells"; the live feed, the Tixr
+  listing and our own `venue-photos` mapping (`mission-hills-ca`) all say **Mission Hills
+  Country Club**. Nothing rendered the wrong string — the feed's venue wins on every
+  surface, verified on production — so it would only ever have surfaced in the curated
+  FALLBACK, i.e. precisely when the API is unreachable and we are least able to notice.
+- **⚠ THE $15 TIERS ARE NOT ADMISSION, AND THE SITE IS RIGHT TO IGNORE THEM.** Minneapolis
+  and Cape Coral both carry open $15 tiers named "King of the Court (3.0-3.5)" — amateur
+  PLAY entries, not spectator tickets. The resolved price index reads `from: 25` for both,
+  which is what the pages show. A naive min over open tiers would have advertised a $15
+  ticket that does not let anyone watch anything.
+- Verified on rendered pages, not by grep over source: Masters, Daytona, Minneapolis and
+  Cape Coral all render **0 "Tickets Coming Soon", "From $25", and their new Tixr id**
+  with the correct per-event UTM campaign code (e.g. `0127-PPA-RANCHOMIRAGE-CA-USA`);
+  **the retired ids 178517 and 196548 appear 0 times** on any of them; `/events` cards
+  updated. **Control: Cincinnati still renders "Tickets Coming Soon" ×4** with no price.
+  tsc clean, `next build` green (2,065 pages), audit down to 3 items.
+- **Still open, and all three are decisions rather than bugs:** the Charlotte Challenger
+  (`190874`, live from $15, register-only mapping today) · Cape Coral's duplicate
+  `196548` · and putting `tixr:audit` on a schedule so the next dead link is not found by
+  a partner emailing us.
 ### 2026-09-09 (pt. 3) — Junior PPA: the branch was empty, the work was in a stash's third parent
 
 - Daniela Almendarez's ten-item doc, submitted through the website request form 8/5

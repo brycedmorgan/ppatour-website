@@ -47,7 +47,15 @@ export function tixrEventIdFrom(ticketsUrl: string | undefined): string | null {
  */
 export const TICKETS_HIDDEN: Record<string, string> = {
   "181370": "Cincinnati Open — 12–18 Apr 2027 (Wesley, 31 Jul: hide until we turn it back on)",
-  "196548": "Cape Coral Open — 1–7 Feb 2027 (Wesley, 31 Jul: hide until we turn it back on)",
+  // ⚠ CAPE CORAL'S HOLD WAS LIFTED 9/9, DELIBERATELY — Cem Aslan asked for its
+  // tickets to go up and Wesley approved, which reverses his own 31 Jul
+  // instruction to withhold them. Recorded here rather than silently deleted,
+  // because an unexplained gap in this list reads like an oversight and invites
+  // the hold being restored. The stop is now mapped to the newer listing
+  // (ppa-cape-coral-206222) in COMMERCE_BY_SLUG, and its old id 196548 is still
+  // live on Tixr but deliberately unmapped.
+  //
+  // Cincinnati above is UNCHANGED and still withheld — nobody asked about it.
 };
 
 /** Are we withholding tickets for this event regardless of its Tixr listing? */

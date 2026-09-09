@@ -48,10 +48,25 @@ function idFromUrl(url) {
  * slug -> Tixr id from COMMERCE_BY_SLUG in lib/placeholder-data.ts, read as text
  * because that module uses the `@/` path alias which bare Node can't resolve.
  */
+/**
+ * ⚠ ANCHOR ON THE DECLARATION, NOT THE NAME. This searched for the bare string
+ * "COMMERCE_BY_SLUG", and since 8/4 the first hit is a DOCBLOCK that lists the
+ * maps a rename would orphan ("BRAND_BY_SLUG, COMMERCE_BY_SLUG, …"). The slice
+ * that follows then ran to the end of the next object literal — BRAND_BY_SLUG —
+ * which contains no tixrEvent() calls, so the audit threw "found no tixrEvent()
+ * entries" and checked nothing.
+ *
+ * ⚠ AND IT WENT BLIND AT THE WORST POSSIBLE PLACE: this is the check that reports
+ * a live Tixr listing with no mapping on our side. While it was broken, the
+ * Carvana Pickleball Masters went on sale (Tixr 204325) with no `tickets` entry
+ * here, so the site showed "Tickets Coming Soon" against a live listing until Cem
+ * Aslan reported it by hand on 9/9. A guard that throws is better than one that
+ * passes wrongly — but only if somebody runs it.
+ */
 function readCommerceMap() {
   const src = readFileSync(resolve(ROOT, "lib/placeholder-data.ts"), "utf8");
-  const start = src.indexOf("COMMERCE_BY_SLUG");
-  if (start === -1) throw new Error("COMMERCE_BY_SLUG not found in lib/placeholder-data.ts");
+  const start = src.indexOf("const COMMERCE_BY_SLUG");
+  if (start === -1) throw new Error("COMMERCE_BY_SLUG declaration not found in lib/placeholder-data.ts");
   const block = src.slice(start, src.indexOf("\n};", start));
   const out = new Map();
   for (const m of block.matchAll(/"([a-z0-9-]+)":\s*\{([\s\S]*?)\}/g)) {

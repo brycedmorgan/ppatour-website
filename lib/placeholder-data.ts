@@ -446,9 +446,23 @@ const COMMERCE_BY_SLUG: Record<string, { tickets?: string; register?: string }> 
     register: registerEvent("ppa-tour-veolia-ppa-national-championships"),
   },
   "veolia-arizona-open": { tickets: tixrEvent("ppa-mesa-195027") },
+  // Cem Aslan, 9/9. No tickets mapping had ever existed for this stop, so the
+  // page said "Tickets Coming Soon" against a live listing carrying 26 open
+  // tiers. Matched on exact city + start date: Lakeville, MN, 2027-01-18.
+  "minneapolis-indoor-open": { tickets: tixrEvent("ppa-minneapolis-206216") },
   // Both matched to their Tixr listing on exact city + start date; each was
   // pointing at the generic tixr.com/groups/ppa page before.
-  "cape-coral-open": { tickets: tixrEvent("ppa-cape-coral-196548") },
+  // ⚠ TWO LIVE TIXR LISTINGS EXIST FOR THIS ONE STOP, AND THIS IS NOT A STALE
+  // ID. Unlike Daytona's 178517, the old `ppa-cape-coral-196548` is still
+  // published and sellable (7 open tiers) alongside `206222` (26 open tiers) —
+  // same event, same date, same city. We link the one Cem Aslan sent on 9/9,
+  // which is also the fuller of the two.
+  //
+  // ⚠ SO `npm run tixr:audit` WILL NOW FLAG 196548 AS AN UNMAPPED LIVE LISTING.
+  // That is correct and it should stay flagged: do not "fix" it by mapping it
+  // too. One event cannot have two Buy Tickets destinations, and the duplicate
+  // is Tixr-side — worth asking Cem to retire it.
+  "cape-coral-open": { tickets: tixrEvent("ppa-cape-coral-206222") },
   "cincinnati-open": { tickets: tixrEvent("veolia-ppa-cincinnati-181370") },
   "rate-las-vegas-open": {
     // 178513 is no longer in the PPA group's 61 Tixr events; 195857 is the
@@ -470,7 +484,18 @@ const COMMERCE_BY_SLUG: Record<string, { tickets?: string; register?: string }> 
     register: registerEvent("2026-pickleball-world-championships"),
   },
   "proton-daytona-beach-open": {
-    tickets: tixrEvent("ppa-daytona-beach-178517"),
+    // ⚠ WAS 178517, AND THAT LISTING NO LONGER EXISTS IN THE PPA GROUP (9/9).
+    // Same failure as the Las Vegas id below, with the same symptom the Masters
+    // had: a dead id is absent from the price index, `ticketsOnSale` reads false,
+    // and the page publishes "Tickets Coming Soon" for a stop that is on sale —
+    // 203020 carries 12 open tiers from $25. Matched on the exact start date
+    // (2026-11-16); Tixr files it under "Daytona Beach" where our row says Holly
+    // Hill, which is the same venue (Pictona at Holly Hill) either way.
+    //
+    // ⚠ Found by `npm run tixr:audit` only after fixing the audit itself, which
+    // had been parsing the wrong block since 8/4 and checking nothing. This stop
+    // is 9 weeks out; nobody had reported it.
+    tickets: tixrEvent("ppa-daytona-beach-203020"),
     register: registerEvent("ppa-tour-florida-open"), // Holly Hill venue — same event
   },
   "veolia-malibu-cup": {
@@ -484,6 +509,19 @@ const COMMERCE_BY_SLUG: Record<string, { tickets?: string; register?: string }> 
     register: registerEvent("ppa-tour-veolia-malibu-showcase"),
   },
   "carvana-pickleball-masters": {
+    // ⚠ TIXR CALLS IT "PPA PALM SPRINGS", SO NEITHER NAME NOR SLUG MATCHES.
+    // Matched the way the other entries here were: exact city + start date —
+    // Rancho Mirage, CA, 2027-01-11 — which the Tixr listing, the live feed and
+    // this row all agree on. Cem Aslan reported it on sale 9/9; before this the
+    // page said "Tickets Coming Soon" against a live listing.
+    //
+    // ⚠ THE PARENT STOP, NOT THE SIX PER-DAY SESSIONS. Tixr also publishes
+    // Thursday Round of 16 (204420), Friday Quarterfinals (204411), two Saturday
+    // semifinal listings (204392, 204394) and Sunday Championships (204335) for
+    // this week. `npm run tixr:audit` files those under PER-DAY SESSION LISTINGS
+    // and they must stay unlinked: the parent listing sells every day, and
+    // TicketGrid already deep-links each day from the day cards.
+    tickets: tixrEvent("ppa-palm-springs-204325"),
     register: registerEvent("ppa-tour-carvana-pickleball-masters-powered-by-invited"),
   },
   "macon-ppa-challenger": {
@@ -774,7 +812,14 @@ const SCHEDULE: RawEvent[] = [
   // January 2027
   { name: "PPA Italy 125 Brescia", start: "2027-01-05", end: "2027-01-09", city: "Brescia", state: "Italy", type: "international", country: "Europe" },
   // ⚠ Feed name + pinned slug — see the Nationals note above.
-  { name: "Carvana Pickleball Masters Powered by Invited", slug: "carvana-pickleball-masters", start: "2027-01-11", end: "2027-01-17", city: "Rancho Mirage", state: "CA", venue: "Hyatt Regency Indian Wells", type: "ppa", tier: "slam" },
+  // ⚠ VENUE CORRECTED 9/9: this row said "Hyatt Regency Indian Wells", which is
+  // a different venue in a different city. The live feed, the Tixr listing and
+  // our own venue-photos mapping (`mission-hills-ca`) all say Mission Hills
+  // Country Club. Nothing rendered the wrong string — the feed's venue wins on
+  // every surface, verified on production — so this only ever surfaced in the
+  // curated FALLBACK, i.e. exactly when the API is unreachable and we are least
+  // able to notice. A fallback that names the wrong venue is worse than none.
+  { name: "Carvana Pickleball Masters Powered by Invited", slug: "carvana-pickleball-masters", start: "2027-01-11", end: "2027-01-17", city: "Rancho Mirage", state: "CA", venue: "Mission Hills Country Club", type: "ppa", tier: "slam" },
   { name: "Minneapolis Indoor Open", start: "2027-01-18", end: "2027-01-24", city: "Lakeville", state: "MN", venue: "Life Time — Lakeville", type: "ppa", tier: "open" },
 
   // February 2027
