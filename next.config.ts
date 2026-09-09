@@ -343,6 +343,28 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return {
       beforeFiles: [
+        // europe.ppatour.com serves the Europe region at its own root, so PPA Tour
+        // Europe reads as a property of its own in a room — Chris Patrick, 9/9,
+        // ahead of a sponsor meeting. ONLY the root is rewritten: every other path
+        // on this host still resolves normally, so the Europe page's links to
+        // /athletes/*, /events/* and the rulebook keep working from the subdomain.
+        //
+        // ⚠ THIS IS A PRESENTATION URL, NOT A SECOND SITE. One codebase, one
+        // deployment. The 8/24 + 9/4 rulings stand: Europe is a region of
+        // ppatour.com, not a fifth silo like the partner-owned Asia and Australia
+        // sites we cannot fold back in. See docs/EUROPE.md.
+        //
+        // ⚠ AND IT IS SAFE ONLY WHILE EUROPE IS noindex. Today `EUROPE_PUBLIC` is
+        // false, so this host serves nothing a crawler will index and there is no
+        // duplicate content to split. If Europe launches while this rewrite exists,
+        // europe.ppatour.com/ and ppatour.com/europe/ become the same indexable
+        // page on two hosts — decide then whether the subdomain 301s to the path,
+        // or the path canonicalises to the subdomain. Do not launch and leave both.
+        {
+          source: "/",
+          has: [{ type: "host", value: "europe.ppatour.com" }],
+          destination: "/europe/",
+        },
         { source: "/app-tour", destination: "/app-tour/index.html" },
         { source: "/pbtv", destination: "/pbtv/index.html" },
         // Per-show pages under the same static deck (public/pbtv/shows/<slug>/).
