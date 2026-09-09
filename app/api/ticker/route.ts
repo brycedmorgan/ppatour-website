@@ -16,7 +16,21 @@ export const dynamic = "force-dynamic";
  * upstream call rate is capped at ~6/min for the whole site regardless of
  * traffic. `s-maxage` is shared-cache only, so browsers still never store it.
  */
-const CACHE_CONTROL = "public, s-maxage=10, stale-while-revalidate=30";
+/**
+ * ⚠ s-maxage WAS 10s AGAINST A 15s CLIENT POLL, SO THE EDGE ENTRY WAS ALWAYS
+ * ALREADY STALE WHEN THE NEXT POLL ARRIVED (9/6). Every poll therefore triggered
+ * a background revalidation, and the origin call rate settles at roughly
+ * 3600/s-maxage per hour per edge region for as long as any tab keeps polling —
+ * which, with no visibility gating, was permanently. That arithmetic predicts
+ * ~360 origin calls per region per hour, and the dashboard showed 10K calls in
+ * twelve hours across a handful of regions. It matches.
+ *
+ * 15s aligns the window with POLL_MS in use-live-ticker so a tab's poll lands on
+ * the entry its own previous poll created. The upstream ceiling is now set by
+ * RESULT_REVALIDATE_S in lib/ticker-api (shared across every region), so this
+ * header governs function invocations rather than API calls.
+ */
+const CACHE_CONTROL = "public, s-maxage=15, stale-while-revalidate=45";
 
 /**
  * The quiet state — a call that WORKED and found nothing on court.

@@ -24,6 +24,7 @@ import {
   type BracketSide,
 } from "@/lib/bracket-types";
 import { pbGetJson } from "@/lib/pb-fetch";
+import { LIVE_SCORES_CACHE_TAG } from "@/lib/cache-tags";
 import {
   cleanDivision,
   isQualifierEvent,
@@ -74,14 +75,37 @@ function fullName(first: string, last: string): string {
  * pushed it over. `pbGetJson` is the repo's existing answer to this endpoint's
  * rate limiting and backs off on `retry-after`.
  *
- * ⚠ NOT given `revalidate`: it stays `no-store`, because this module runs its
- * own 60s cache in front and a bracket must not be served from two caches that
- * disagree.
+ * ⚠ NOW GIVEN `revalidate`, REVERSING THE NOTE THAT USED TO SIT HERE (9/6).
+ * That note said no-store was right "because this module runs its own 60s
+ * cache in front and [it] must not be served from two caches that disagree."
+ * The premise is wrong on a serverless deploy: the module cache is per warm
+ * instance per region, so it was never ONE cache — it was N of them, each
+ * holding a different answer, and a cold start held none. Every instance
+ * therefore paid its own full fan-out.
+ *
+ * Measured on Vercel's external-API view over twelve hours: the
+ * `tournament_events` family took roughly 36K upstream calls, and the only
+ * paths with a non-empty Cached Calls column were the ones lib/event-field.ts
+ * fetches — the single caller that already passed `revalidate`.
+ *
+ * The Data Cache is shared across instances, regions and deploys, so the fan-out
+ * is paid once per window by the whole fleet. 20s is deliberately SHORTER than
+ * the 60s module TTL, so the module cache still bounds how stale anything on
+ * screen can be and nothing is served older than it already was — this layer
+ * only removes duplicate work behind it.
+ *
+ * ⚠ THE ENTRIES ARE SHARED WITH lib/scores-api ON PURPOSE. Both adapters read
+ * the same two paths for the same tournament, so one cached response now
+ * answers a scores poll and a bracket poll instead of each buying its own.
  */
+const SHARED_REVALIDATE_S = 20;
+
 async function get(base: string, token: string, path: string): Promise<unknown> {
   return pbGetJson(`${base}${path}`, { "PB-API-TOKEN": token }, {
     timeoutMs: TIMEOUT_MS,
     retries: 3,
+    revalidate: SHARED_REVALIDATE_S,
+    tags: [LIVE_SCORES_CACHE_TAG],
   });
 }
 

@@ -19,7 +19,11 @@ export function FinalStandings({ eventId }: { eventId: string }) {
 
   useEffect(() => {
     let active = true;
-    fetch(`/api/scores?event=${encodeURIComponent(eventId)}`, { cache: "no-store" })
+    // ⚠ THE TRAILING SLASH IS DELIBERATE. `trailingSlash: true` (next.config)
+    // answers the unslashed form with a 308, so without it every poll costs two
+    // requests — measured on a real server. Same trap documented at length in
+    // components/live/use-live-ticker.
+    fetch(`/api/scores/?event=${encodeURIComponent(eventId)}`, { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((d: ScoresResult | null) => {
         if (!active || !d) return;

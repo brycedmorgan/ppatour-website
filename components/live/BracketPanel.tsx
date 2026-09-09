@@ -6,6 +6,7 @@ import Link from "next/link";
 import type { Bracket, BracketDivision } from "@/lib/bracket-types";
 import { mergeBracket } from "@/lib/bracket-merge";
 import { BracketView } from "@/components/live/BracketView";
+import { isTabHidden, onTabVisible } from "@/components/live/poll-visibility";
 
 /**
  * Bracket panel for the live-scores area: a division picker + the selected
@@ -52,7 +53,11 @@ export function BracketPanel({
   // Division list.
   useEffect(() => {
     let active = true;
-    fetch(`/api/brackets?event=${encodeURIComponent(eventId)}`, { cache: "no-store" })
+    // ⚠ THE TRAILING SLASH IS DELIBERATE. `trailingSlash: true` (next.config)
+    // answers the unslashed form with a 308, so without it every poll costs two
+    // requests — measured on a real server. Same trap documented at length in
+    // components/live/use-live-ticker.
+    fetch(`/api/brackets/?event=${encodeURIComponent(eventId)}`, { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
         if (!active || !d) return;
@@ -85,7 +90,7 @@ export function BracketPanel({
     let active = true;
     let first = true;
     const load = () =>
-      fetch(`/api/brackets?event=${encodeURIComponent(eventId)}&division=${selected}`, {
+      fetch(`/api/brackets/?event=${encodeURIComponent(eventId)}&division=${selected}`, {
         cache: "no-store",
       })
         .then((r) => (r.ok ? r.json() : null))
@@ -138,10 +143,17 @@ export function BracketPanel({
     setLosers(null);
     setPools(null);
     load();
-    const id = window.setInterval(load, POLL_MS);
+    // Hidden tab → no poll. A draw only changes when a match ends, and the
+    // visible-again handler re-reads it before the viewer can notice.
+    const tick = () => {
+      if (!isTabHidden()) load();
+    };
+    const id = window.setInterval(tick, POLL_MS);
+    const off = onTabVisible(load);
     return () => {
       active = false;
       window.clearInterval(id);
+      off();
     };
   }, [eventId, selected]);
 

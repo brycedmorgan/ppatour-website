@@ -33,3 +33,16 @@ export const REPLAYS_CACHE_TAG = "replays";
  * schedule; it exists so the boards CAN be purged deliberately.
  */
 export const RANKINGS_CACHE_TAG = "rankings";
+
+/**
+ * Live match data — the ticker window, the scores board and the brackets, all
+ * of which read `homepage_score_ticker` or `tournament_events`.
+ *
+ * ⚠ THIS TAG EXISTS TO MAKE A SHARED CACHE PURGEABLE, NOT TO SCHEDULE ONE.
+ * Nothing in vercel.json purges it and nothing should: these entries carry
+ * 10-30s revalidate windows and roll themselves over continuously. It is here
+ * so a human can drop every live-data entry at once — the case that matters is
+ * an upstream correction mid-tournament (a match voided, a score amended),
+ * where waiting out even a 30s window on every edge is the wrong answer.
+ */
+export const LIVE_SCORES_CACHE_TAG = "live-scores";

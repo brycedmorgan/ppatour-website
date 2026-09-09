@@ -8,6 +8,32 @@
  * `revalidateTag`). The first attempt uses the cache; retries after a 429/5xx
  * go straight to the network (no-store) so a rate-limit blip isn't what lands
  * in the cache. Returns null on give-up. Server-only.
+ *
+ * ⚠ `revalidate` SURVIVES `dynamic = "force-dynamic"`, AND NEXT'S OWN DOCS SAY
+ * IT DOES NOT. This matters because the live-data route handlers
+ * (app/api/ticker, app/api/scores, app/api/brackets) all declare
+ * force-dynamic, and every upstream call behind them is made through here or
+ * through the same pattern — so if the docs were right, the shared cache on the
+ * hottest endpoints on the site would be a silent no-op.
+ *
+ * The docs (node_modules/next/dist/docs/01-app/02-guides/
+ * caching-without-cache-components.md) call force-dynamic “equivalent to …
+ * setting the segment config to `export const fetchCache = 'force-no-store'`”,
+ * which “forces all fetch requests to be re-fetched every request”. The runtime
+ * disagrees: in node_modules/next/dist/server/lib/patch-fetch.js,
+ * `pageFetchCacheMode` is read from `workStore.fetchCache` — the EXPLICIT
+ * segment config only — and `forceDynamic` is consulted solely through
+ * `noFetchConfigAndForceDynamic`, which requires `!currentFetchRevalidate`. An
+ * explicit per-fetch revalidate therefore wins, exactly as that code's own
+ * comment intends (“top-level modes are responsible for setting reasonable
+ * defaults”).
+ *
+ * ⚠ SO THIS IS LOAD-BEARING AND UNDOCUMENTED. Verified against Next 16.2.6.
+ * RE-CHECK IT ON A NEXT UPGRADE: if a release ever aligns the runtime with the
+ * doc, these caches stop working and nothing fails loudly — the only symptom is
+ * the upstream call rate climbing back to where it was. The fix in that case is
+ * to move the fetches out of the force-dynamic segment (a cached function
+ * rather than a per-fetch option), not to re-tune the windows.
  */
 const DEFAULT_TIMEOUT_MS = 8000;
 const DEFAULT_RETRIES = 4;

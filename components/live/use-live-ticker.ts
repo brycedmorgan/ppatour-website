@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { getNextTournament, isTournamentLive, nowMs } from "@/lib/placeholder-data";
+import { isTabHidden, onTabVisible } from "@/components/live/poll-visibility";
 import type {
   TickerMatch,
   TickerResult,
@@ -39,6 +40,47 @@ const POLL_MS = 15000;
  * which is a real answer and must not be re-asked every two seconds.
  */
 const RETRY_MS = 2000;
+/**
+ * The poll interval once we know nothing is being played.
+ *
+ * ⚠ THIS HOOK RUNS ON EVERY PAGE OF THE SITE, IN AND OUT OF SEASON. It feeds the
+ * site-wide ScoreTicker, so for the great majority of the year it asks "is
+ * anything live?" every fifteen seconds, is told "no", and asks again — from
+ * every open tab, forever. On a tour calendar with roughly twenty stops there
+ * are far more quiet days than playing ones, and the quiet days were costing
+ * the same upstream volume as Championship Sunday.
+ *
+ * ⚠ IT IS GATED ON THE CALENDAR, NOT MERELY ON AN EMPTY FEED, AND THAT
+ * DISTINCTION IS THE WHOLE SAFETY ARGUMENT. /api/ticker deliberately holds an
+ * empty board for only 10s so that "the first match of a session appears within
+ * one client poll" stays true (see CACHE_CONTROL_EMPTY in app/api/ticker) — and
+ * backing off to 60s purely because the feed is empty would break exactly that
+ * guarantee on the one morning it matters, first serve.
+ *
+ * So the slow cadence applies only when the feed is empty AND the tour calendar
+ * says no stop is being played. During a tournament — including its quiet
+ * stretches, overnight and between days — the cadence is unchanged at POLL_MS.
+ * What collapses is the baseline on the days with nothing on, which is where
+ * this hook was doing nearly all of its work for nothing. Measured against the
+ * live calendar by sampling every day of the coming year: the gate reads live on
+ * 125 of 365 days, so it is dark on 240 — roughly two days in three.
+ *
+ * ⚠ AND "THE CALENDAR" HERE MEANS THE DOMESTIC MAIN TOUR, NOT EVERY EVENT WE
+ * RUN. `getMainTourEvents` keeps only 1,000+ point stops, drops
+ * `region: "international"` and drops rows hand-marked `completed`. So during a
+ * Challenger the gate reads dark, and if the feed is also empty the first match
+ * of that session can take up to IDLE_POLL_MS to appear rather than POLL_MS.
+ * That is bounded and self-correcting — one non-empty response puts the fast
+ * cadence back — and the sister tours are a different `partner` this hook never
+ * asks for. But it is a gap, not a guarantee: widen what feeds
+ * `isTournamentLive` below before reading this as “no pro pickleball is being
+ * played anywhere”.
+ *
+ * ⚠ IT IS NOT USED FOR FAILURES. A failed fetch keeps the fast RETRY_MS path —
+ * "we could not ask" and "nothing is on" are different answers, which is the
+ * distinction the `ok` flag exists to carry.
+ */
+const IDLE_POLL_MS = 60000;
 /** Failed attempts before we stop showing a spinner and admit we have nothing. */
 const RETRIES_BEFORE_EMPTY = 3;
 
@@ -77,6 +119,8 @@ export function useLiveTicker({
     let active = true;
     let timer: ReturnType<typeof setTimeout> | undefined;
     let failures = 0;
+    // Was the last successful answer an empty one — i.e. is the tour dark?
+    let idle = false;
     /**
      * ⚠ THE TRAILING SLASH IS DELIBERATE. `trailingSlash: true` (next.config)
      * makes "/api/ticker" a 308 to "/api/ticker/", so every poll from every open
@@ -88,6 +132,19 @@ export function useLiveTicker({
       : "/api/ticker/";
 
     const load = async () => {
+      /**
+       * ⚠ A HIDDEN TAB ASKS FOR NOTHING. See components/live/poll-visibility —
+       * this hook is mounted site-wide, so without this an abandoned tab keeps
+       * a revalidation loop alive against the live-scores endpoint for as long
+       * as the browser stays open. Re-armed at the normal cadence rather than
+       * stopped, and `onTabVisible` below fires an immediate load the moment
+       * the viewer comes back, so returning to a tab shows fresher data than it
+       * used to rather than staler.
+       */
+      if (isTabHidden()) {
+        timer = setTimeout(load, POLL_MS);
+        return;
+      }
       let ok = false;
       try {
         const res = await fetch(url, { cache: "no-store" });
@@ -109,6 +166,15 @@ export function useLiveTicker({
             setMatches(data.matches);
             setTournament(data.tournament);
             ok = true;
+            /**
+             * Slow down only when the feed is empty AND the calendar agrees
+             * nothing is being played — see IDLE_POLL_MS. `isTournamentLive`
+             * is the same pure date check the homepage flips on, so this costs
+             * no request and cannot disagree with the hero above it.
+             */
+            idle =
+              data.matches.length === 0 &&
+              !isTournamentLive(getNextTournament(Date.now()), Date.now());
           }
         }
       } catch {
@@ -138,13 +204,21 @@ export function useLiveTicker({
        * After that it settles back to the normal cadence and keeps trying.
        */
       const spent = failures >= RETRIES_BEFORE_EMPTY;
-      timer = setTimeout(load, ok || spent ? POLL_MS : RETRY_MS);
+      const settled = ok || spent;
+      timer = setTimeout(load, settled ? (idle ? IDLE_POLL_MS : POLL_MS) : RETRY_MS);
     };
 
     void load();
+    // Coming back to the tab re-reads at once instead of waiting out the
+    // remainder of an interval — including the 60s idle one.
+    const off = onTabVisible(() => {
+      if (timer) clearTimeout(timer);
+      void load();
+    });
     return () => {
       active = false;
       if (timer) clearTimeout(timer);
+      off();
     };
   }, [enabled, partner]);
 

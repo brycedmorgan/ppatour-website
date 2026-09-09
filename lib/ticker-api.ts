@@ -13,6 +13,8 @@
  * problem. Map each raw match into the shape the ticker card renders.
  */
 
+import { LIVE_SCORES_CACHE_TAG } from "@/lib/cache-tags";
+
 export type TickerPlayer = { name: string; headshot: string | null };
 export type TickerTeam = { players: TickerPlayer[]; games: (number | null)[] };
 export type TickerMatch = {
@@ -284,7 +286,54 @@ const TIMEOUT_MS = 10_000;
 type CacheEntry<T> = { value: T; expires: number };
 // Which partner is live changes slowly; the match window changes fast.
 const PARTNER_TTL_MS = 60_000;
-const RESULT_TTL_MS = 5_000;
+/**
+ * How long a fetched match window is reused on this instance.
+ *
+ * ⚠ IT WAS 5s, WHICH IS SHORTER THAN THE 15s CLIENT POLL, SO IT NEVER ONCE HIT
+ * (9/6). A cache whose TTL sits below the request rate feeding it is not a
+ * cache — every poll arrived to find the entry already expired and went
+ * straight upstream. Measured on Vercel's external-API view over twelve hours:
+ * homepage_score_ticker took 10K calls with its Cached Calls column reading
+ * "—", i.e. not one request in twelve hours was served from any cache. That
+ * single endpoint was 20% of the site's entire upstream volume.
+ *
+ * 15s matches POLL_MS in components/live/use-live-ticker, so a tab's next poll
+ * lands on the entry its previous poll created instead of racing it.
+ */
+const RESULT_TTL_MS = 15_000;
+/**
+ * The SHARED cache window, in seconds, for the match feed.
+ *
+ * ⚠ EVERY CACHE ABOVE THIS LINE IS PER-INSTANCE, WHICH IS THE OTHER HALF OF THE
+ * SAME BUG. resultCache lives in module scope, so it is one cache per warm
+ * instance per region — on a serverless deploy that is N caches, not one, and a
+ * cold start has none at all. The Data Cache is shared across instances,
+ * regions, requests and deploys, so the whole fleet costs ONE upstream call per
+ * window rather than one per instance per window.
+ *
+ * Deliberately SHORTER than RESULT_TTL_MS: the module cache stays the fast path
+ * and remains the thing that bounds staleness, so nothing on screen is older
+ * than it already was. This layer only removes duplicate work behind it.
+ *
+ * ⚠ THAT THIS WORKS AT ALL THROUGH A `force-dynamic` ROUTE HANDLER IS
+ * UNDOCUMENTED BEHAVIOUR — Next's docs say force-dynamic forces `no-store` on
+ * every fetch in the segment, and app/api/ticker declares it. The runtime
+ * honours an explicit revalidate anyway; the evidence, and what to re-check on
+ * a Next upgrade, is written up on `pbGetJson` in lib/pb-fetch.ts.
+ */
+const RESULT_REVALIDATE_S = 10;
+/** Which partner is live — changes over hours, not seconds. */
+const PARTNER_REVALIDATE_S = 60;
+/**
+ * Published start times.
+ *
+ * ⚠ FAR LONGER THAN THE SCORES, AND THAT IS THE POINT. This module's own note
+ * on plannedLastGood says the worst case is "a start time a few minutes stale,
+ * against a schedule published days ahead" — so paying for it on a 60s cycle
+ * bought nothing. It is the same upstream endpoint as the live window, so every
+ * call saved here comes off the same 10K.
+ */
+const PLANNED_REVALIDATE_S = 300;
 
 // Module-scoped caches. They persist across requests on a warm server instance,
 // so repeated 15s polls and the two ticker consumers (header ticker + sticky
@@ -389,7 +438,9 @@ async function pickActivePartner(token: string, base: string): Promise<string | 
       });
       const res = await fetch(`${base}/v2/data/homepage_ticker_activity?${params}`, {
         headers: { "PB-API-TOKEN": token },
-        cache: "no-store",
+        // Shared across instances — see RESULT_REVALIDATE_S. Which tour has
+        // matches running is a question that changes over hours.
+        next: { revalidate: PARTNER_REVALIDATE_S, tags: [LIVE_SCORES_CACHE_TAG] },
         signal: AbortSignal.timeout(TIMEOUT_MS),
       });
       if (!res.ok) return null;
@@ -417,7 +468,18 @@ async function fetchScores(
   base: string,
   partner: string,
 ): Promise<TickerResult> {
-  const now = Math.floor(Date.now() / 1000);
+  /**
+   * ⚠ THE WINDOW IS QUANTIZED, OR THE SHARED CACHE CAN NEVER HIT. This was
+   * `Math.floor(Date.now() / 1000) ± 86400`, recomputed per call — so every
+   * instance built a URL nobody else would ever build again, and the Data Cache
+   * is keyed on the URL. Rounding the anchor down to a RESULT_REVALIDATE_S
+   * boundary makes every caller inside the same window ask for byte-identical
+   * bounds, which is what lets one upstream call answer all of them.
+   *
+   * Safe because the bounds are ±1 day: moving the anchor by up to ten seconds
+   * cannot change which matches fall in range.
+   */
+  const now = Math.floor(Date.now() / 1000 / RESULT_REVALIDATE_S) * RESULT_REVALIDATE_S;
   const params = new URLSearchParams({
     start_date: String(now - 86400),
     end_date: String(now + 86400),
@@ -427,9 +489,19 @@ async function fetchScores(
     current_page: "1",
     use_camel_case: "true",
   });
+
   const res = await fetch(`${base}/v2/data/homepage_score_ticker?${params}`, {
     headers: { "PB-API-TOKEN": token },
-    cache: "no-store",
+    /**
+     * ⚠ SHARED, AND A FAILURE CACHED HERE IS THE CORRECT OUTCOME, NOT A BUG.
+     * The module-level guards in `fetchLiveTicker` still refuse to cache a
+     * failed RESULT — only a working call reaches `resultCache` and
+     * `lastGoodResult`. If a 429 lands in the Data Cache it simply means the
+     * fleet stops asking a throttling endpoint for ten seconds and every
+     * viewer is served the last good board instead, which is exactly what
+     * FAILURE_COOLDOWN_MS was added to do by hand.
+     */
+    next: { revalidate: RESULT_REVALIDATE_S, tags: [LIVE_SCORES_CACHE_TAG] },
     signal: AbortSignal.timeout(TIMEOUT_MS),
   });
   // ⚠ THROW, DON'T RETURN EMPTY. A 429 or a 500 is not "no matches on court";
@@ -544,7 +616,8 @@ export async function fetchPlannedStarts(): Promise<Map<string, string>> {
     try {
       const partner =
         process.env.PB_TICKER_PARTNER || (await pickActivePartner(token, base)) || "PPA";
-      const now = Math.floor(Date.now() / 1000);
+      const now =
+        Math.floor(Date.now() / 1000 / PLANNED_REVALIDATE_S) * PLANNED_REVALIDATE_S;
       const params = new URLSearchParams({
         start_date: String(now - 86400),
         end_date: String(now + 7 * 86400),
@@ -556,7 +629,8 @@ export async function fetchPlannedStarts(): Promise<Map<string, string>> {
       });
       const res = await fetch(`${base}/v2/data/homepage_score_ticker?${params}`, {
         headers: { "PB-API-TOKEN": token },
-        cache: "no-store",
+        // Same quantizing rule as fetchScores, at this endpoint's own window.
+        next: { revalidate: PLANNED_REVALIDATE_S, tags: [LIVE_SCORES_CACHE_TAG] },
         signal: AbortSignal.timeout(TIMEOUT_MS),
       });
       if (!res.ok) return found;

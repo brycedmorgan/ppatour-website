@@ -17,7 +17,12 @@ export const dynamic = "force-dynamic";
  * CDN collapses all viewers of an event onto one refresh per 30s window, and
  * stale-while-revalidate means nobody waits for that rebuild.
  */
-const CACHE_CONTROL = "public, s-maxage=30, stale-while-revalidate=60";
+/**
+ * ⚠ SAME COIN FLIP AS /api/brackets: 30s against ScoresBoard's 30s poll. 35s
+ * puts the window clear of it, so a tab polling on its own cadence hits a fresh
+ * entry rather than racing its expiry.
+ */
+const CACHE_CONTROL = "public, s-maxage=35, stale-while-revalidate=60";
 
 export async function GET(request: Request) {
   const event = new URL(request.url).searchParams.get("event") || ATLANTA_EVENT_ID;

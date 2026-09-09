@@ -63,6 +63,98 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-09 — Live polls stop when nobody is looking; every cache was tuned under its own poll rate
+
+- Fourth pass at the same problem (9/5, 9/6, and this). Each earlier one fixed a layer
+  without measuring the one behind it, which is why there were four.
+- **⚠ EVERY CACHE IN THE LIVE PATH WAS TUNED SHORTER THAN THE POLL FEEDING IT, WHICH IS
+  NOT A CACHE.** `RESULT_TTL_MS` was **5s against a 15s client poll**, so it never hit
+  once — measured on Vercel's external-API view: `homepage_score_ticker` took **10K calls
+  in twelve hours with its Cached Calls column reading a dash**, i.e. 20% of the site's
+  entire upstream volume served from nothing. `/api/ticker` s-maxage was 10s against that
+  same 15s poll, and `/api/brackets` and `/api/scores` **matched their polls exactly** — a
+  coin flip, stale about as often as fresh. Now 15s / 15s / 20s / 35s, each clear of its
+  poll.
+- **⚠ AND THE MODULE CACHES WERE NEVER ONE CACHE.** The notes in `lib/scores-api.ts` and
+  `lib/brackets-api.ts` said `no-store` was right because the module runs its own 60s
+  cache in front and the data must not be served from two caches that disagree. On a
+  serverless deploy that premise is wrong: module scope is **one cache per warm instance
+  per region**, so it was N of them each holding a different answer, and a cold start held
+  none. Both notes are reversed and the Data Cache now sits behind them — shared across
+  instances, regions and deploys. `tournament_events` was ~36K calls in the same window,
+  and the only paths with a non-empty Cached Calls column were `lib/event-field.ts`'s: the
+  one caller that already passed `revalidate`.
+- **⚠ THE SHARED CACHE IS KEYED ON THE URL, SO THE TIME WINDOW HAD TO BE QUANTIZED.**
+  `fetchScores` built `Math.floor(Date.now()/1000) ± 86400` per call, so every instance
+  asked for bounds nobody would ever ask for again and no entry could be reused by anyone.
+  The anchor is now rounded down to a `RESULT_REVALIDATE_S` boundary. Safe because the
+  bounds are ±1 day — moving the anchor ten seconds cannot change which matches fall in
+  range.
+- **⚠ `revalidate` SURVIVES `force-dynamic`, AND NEXT'S OWN DOCS SAY IT DOES NOT. This
+  undocumented fact is what the entire caching half rests on.** All three route handlers
+  declare `dynamic = "force-dynamic"`, which the bundled docs call equivalent to
+  `fetchCache = 'force-no-store'`, forcing every fetch in the segment to refetch. If that
+  were true, every `revalidate` above would be a silent no-op on the only path the client
+  polls use. The runtime disagrees: in `patch-fetch.js`, `pageFetchCacheMode` reads the
+  EXPLICIT `fetchCache` config only, and `forceDynamic` is consulted solely through
+  `noFetchConfigAndForceDynamic`, which requires `!currentFetchRevalidate`. So an explicit
+  per-fetch revalidate wins. Written up on `pbGetJson` in `lib/pb-fetch.ts`, verified
+  against **Next 16.2.6**. **RE-CHECK ON A NEXT UPGRADE** — if a release aligns the runtime
+  with the doc, nothing fails loudly and the only symptom is the call rate climbing back.
+  The fix then is a cached function, not re-tuned windows.
+- **New `components/live/poll-visibility.ts` — nothing on this site checked tab
+  visibility.** The ticker (15s), scores board (30s), bracket panel (15s) and the Today
+  screen (30s) all polled for as long as their tab existed, so a tab left open overnight
+  made ~5,760 requests before anybody looked at it. Browsers throttle background timers;
+  throttling is not stopping. Hidden → no ask; visible again → **ask immediately** rather
+  than waiting out the interval, so a returning viewer sees fresher data than before, not
+  staler.
+- **⚠ `components/events/TodayPanel.tsx` MATTERED MOST AND WAS MISSED ON THE FIRST PASS.**
+  It is the on-site screen — the phone left open in a pocket at a venue all day — and it
+  was still polling ungated. Found by grepping every `setInterval` in the tree rather than
+  by re-reading the files already open.
+- **⚠ AND SIX POLLS WERE PAYING A 308 EVERY TIME.** `trailingSlash: true` answers
+  `/api/scores?…` with a redirect, and only `use-live-ticker` knew — it has carried a ⚠
+  about exactly this since it was written. `ScoresBoard`, `BracketPanel` (×2),
+  `ChampionsBanner`, `FinalStandings` and `TodayPanel` all omitted the slash, so **every
+  poll cost two requests.** Measured on a real server: unslashed 308, slashed **200 with 0
+  redirects**.
+- **The idle cadence is gated on the CALENDAR, not on an empty feed, and that distinction
+  is the safety argument.** `/api/ticker` holds an empty board only 10s so that the first
+  match of a session appears within one client poll; backing off merely because the feed is
+  empty would break that on the one morning it matters. So 60s applies only when the feed
+  is empty AND `isTournamentLive` says nothing is being played. Measured by sampling every
+  day of the coming year: **the gate reads live on 125 of 365 days**, dark on 240.
+  - **⚠ "The calendar" means the DOMESTIC MAIN TOUR.** `getMainTourEvents` keeps 1,000+
+    point stops only, drops `region: "international"`, and drops rows hand-marked
+    `completed`. So during a **Challenger** the gate reads dark, and the first match of a
+    session can take up to 60s to appear instead of 15s. Bounded, self-correcting, and the
+    sister tours are a different `partner` this hook never asks for — but it is a gap, not
+    a guarantee. Written on the constant.
+  - ⚠ It is **not** used for failures: a failed fetch keeps the fast `RETRY_MS` path. "We
+    could not ask" and "nothing is on" are different answers.
+- ⚠ `useLiveTicker` skips its **first** load when the tab is hidden (its gate is inside
+  `load()`), where the other three deliberately always load once. A tab opened in the
+  background therefore sits in the unloaded ticker state until focus, then fetches at once.
+  Pages that server-prefetch (`initialData`) are unaffected.
+- ⚠ Quantized URLs mint a fresh Data Cache key every 10s — ~8,600/day for the ticker alone,
+  never reused. Harmless under LRU eviction, worth knowing before reading a cache-size
+  graph.
+- Verified: tsc clean · eslint unchanged from baseline (4 errors across the touched files,
+  every one a pre-existing `set-state-in-effect` statement confirmed present at HEAD) ·
+  **`next build` green, 2,065 pages** (run with `BUILD_DIST_DIR=.next-buildcheck` so it did
+  not fight the dev server — ⚠ that flag appends two entries to `tsconfig.json`, which were
+  reverted) · the six slashed URLs return 200 with 0 redirects.
+- **⚠ NOTHING HAS YET MEASURED A DATA CACHE HIT.** `scratchpad/probe-ticker-cache.mjs`
+  reads `x-vercel-cache`, which is the EDGE and not the upstream shield, and `.next/cache`
+  does not exist locally — so the headline claim (one upstream call per window for the
+  whole fleet) is reasoned, not observed. **The pass mark on the deploy is a non-empty
+  Cached Calls column on `homepage_score_ticker` and `tournament_events`.** If it still
+  reads a dash after a day, the Data Cache is not engaging through these route handlers and
+  the answer is to move the fetches out of the force-dynamic segment.
+- Shipped in the quiet window on purpose: no event is live and the next stop is the
+  **Veolia Arizona Open, Sep 14–20**, so this gets a few days of low-stakes production data
+  first. Arizona is the real load test.
 ### 2026-09-08 — /europe: the email capture was invisible, and its leads had no home
 
 - **Payton Pemberton, 9/7:** *"could you just fix the look of the form at the bottom,

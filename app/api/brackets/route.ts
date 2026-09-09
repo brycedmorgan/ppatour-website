@@ -21,7 +21,15 @@ export const dynamic = "force-dynamic";
  * 15s of shared staleness is invisible. Errors stay uncached so a transient
  * upstream failure isn't pinned at the edge.
  */
-const CACHE_CONTROL = "public, s-maxage=15, stale-while-revalidate=60";
+/**
+ * ⚠ s-maxage MATCHED THE 15s CLIENT POLL EXACTLY, WHICH IS A COIN FLIP, NOT A
+ * CACHE (9/6). An entry that expires on the same beat the next request arrives
+ * is stale about as often as it is fresh, so roughly every other poll went to
+ * origin and fanned out one upstream call per pro division behind it. 20s puts
+ * the window clear of the poll; a draw only changes when a match ends, so the
+ * extra five seconds are not observable.
+ */
+const CACHE_CONTROL = "public, s-maxage=20, stale-while-revalidate=60";
 const NO_STORE = { "Cache-Control": "no-store" };
 
 export async function GET(request: Request) {

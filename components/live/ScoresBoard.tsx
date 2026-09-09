@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { StageBadge } from "@/components/live/StageBadge";
 import { localDayKey, showQualifierBoard } from "@/lib/scores-stage";
 import { normalizeScoreName } from "@/lib/score-names";
+import { isTabHidden, onTabVisible } from "@/components/live/poll-visibility";
 import type { ScoreMatch, ScoresResult, ScoreTeam } from "@/lib/scores-api";
 
 /**
@@ -195,7 +196,11 @@ export function ScoresBoard({ eventId, light = false }: { eventId: string; light
   useEffect(() => {
     let active = true;
     const load = () =>
-      fetch(`/api/scores?event=${encodeURIComponent(eventId)}`, { cache: "no-store" })
+      // ⚠ THE TRAILING SLASH IS DELIBERATE. `trailingSlash: true` (next.config)
+      // answers the unslashed form with a 308, so without it every poll costs two
+      // requests — measured on a real server. Same trap documented at length in
+      // components/live/use-live-ticker.
+      fetch(`/api/scores/?event=${encodeURIComponent(eventId)}`, { cache: "no-store" })
         .then((r) => (r.ok ? r.json() : null))
         .then((d: ScoresResult | null) => {
           if (!active || !d) return;
@@ -203,11 +208,19 @@ export function ScoresBoard({ eventId, light = false }: { eventId: string; light
           setLoaded(true);
         })
         .catch(() => {});
+    // A board nobody is looking at does not need refreshing — see
+    // components/live/poll-visibility. The first load still runs regardless, so
+    // a tab opened in the background has real scores the moment it is revealed.
+    const tick = () => {
+      if (!isTabHidden()) load();
+    };
     load();
-    const id = window.setInterval(load, POLL_MS);
+    const id = window.setInterval(tick, POLL_MS);
+    const off = onTabVisible(load);
     return () => {
       active = false;
       window.clearInterval(id);
+      off();
     };
   }, [eventId]);
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { isTabHidden, onTabVisible } from "@/components/live/poll-visibility";
 import type { ProDay } from "@/lib/event-schedule";
 import type { ScoreMatch, ScoresResult } from "@/lib/scores-api";
 
@@ -50,7 +51,11 @@ export function TodayPanel({
     let active = true;
     const load = async () => {
       try {
-        const res = await fetch(`/api/scores?event=${encodeURIComponent(eventUuid)}`);
+        // ⚠ THE TRAILING SLASH IS DELIBERATE. `trailingSlash: true` (next.config)
+        // answers the unslashed form with a 308, so without it every poll costs two
+        // requests — measured on a real server. Same trap documented at length in
+        // components/live/use-live-ticker.
+        const res = await fetch(`/api/scores/?event=${encodeURIComponent(eventUuid)}`);
         if (!res.ok) return;
         const data = (await res.json()) as ScoresResult;
         if (active) setMatches(data.matches ?? []);
@@ -61,10 +66,21 @@ export function TodayPanel({
       }
     };
     void load();
-    const id = setInterval(load, POLL_MS);
+    // ⚠ A SCREEN NOBODY IS LOOKING AT DOES NOT NEED REFRESHING — see
+    // components/live/poll-visibility. This is the surface where it matters
+    // most: the on-site screen, whose expected use is a phone left open in a
+    // pocket at a venue all day. The first load still runs regardless, and
+    // `onTabVisible` re-reads on unlock, so the courts are current the moment
+    // anybody actually looks.
+    const tick = () => {
+      if (!isTabHidden()) void load();
+    };
+    const id = setInterval(tick, POLL_MS);
+    const off = onTabVisible(() => void load());
     return () => {
       active = false;
       clearInterval(id);
+      off();
     };
   }, [eventUuid]);
 
