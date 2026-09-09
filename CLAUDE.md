@@ -63,6 +63,36 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-09 (pt. 2) — "himselfrself": one circled typo was four live profiles
+
+- Hannah Johns, Slack DM 9/8, one screenshot with one word circled in red on Allyce
+  Jones' profile: *"She has established **himselfrself** as a notable competitor…"*
+  (Asana `1218321712026344`).
+- **⚠ IT WAS FOUR PROFILES, NOT ONE, AND IT WAS IN THE STRUCTURED DATA TOO.** The
+  sentence is boilerplate from the 2024 profile scrape and sits in **160 of 203**
+  records in `lib/data/published-athletes.json`, resolving correctly everywhere else:
+  **84 "himself", 72 "herself", 4 broken** — `allyce-jones`, `ava-ignatowich`,
+  `lea-jansen`, `parris-todd`, every one a woman whose sentence already opens "She has
+  established". So "herself" was mechanical, not an editorial call, and all four were
+  fixed rather than leaving three copies of the same garbage word live. Now 84/76/0.
+- **⚠ AND IT RENDERED ON FOUR SURFACES PER PAGE, NOT ONE:** the visible bio, the meta
+  description, the `Person` JSON-LD `description` and the social-card description. A
+  broken word in the scrape reaches everything derived from the bio, including what
+  Google reads.
+- **No second half needed, and that was checked rather than assumed.** Three scripts
+  touch that file: `import-wp-posts.mjs` and `import-wp-blog.mjs` only READ it for
+  roster resolution, and `import-paddles.mjs` writes a different output. **Nothing
+  rewrites `bio`**, so this cannot be reverted by a re-run the way the AstraZeneca logo
+  and the Tixr prices could.
+- ⚠ Only the circled word was changed. Allyce's bio also repeats the same paragraph
+  verbatim under Playing Style / Career Highlights / Off the Court — generated filler
+  from the same scrape, and a content question for Hannah, not a defect to sweep. Family
+  details left alone per the standing Jack Sock ruling.
+- Verified: diff is **exactly four words on four lines** (no reserialization, all 203
+  records intact) and all four pages render 200 with **0 occurrences of the broken word**
+  and the corrected sentence on all four surfaces. `ben-johns` control unchanged.
+- ⚠ Athlete pages are prerendered, so the edit reaches production only on a deploy or the
+  daily 07:00 UTC cron — a data fix alone would not have reached her.
 ### 2026-09-09 — Live polls stop when nobody is looking; every cache was tuned under its own poll rate
 
 - Fourth pass at the same problem (9/5, 9/6, and this). Each earlier one fixed a layer
