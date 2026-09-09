@@ -63,6 +63,89 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-09 (pt. 6) — Fleming's Arizona preview, and the prose was linking a third fewer players than the rail
+
+- Second storylines post of the season, from Dave Fleming's doc via Wesley. Shipped on
+  `blog/arizona-open-storylines`, then merged.
+- **⚠ THE BYLINE IS PROVENANCE, NOT VOICE.** The doc is owned by `dave@pickleball.com`,
+  which is what names him — not that it reads like his Nationals piece. Same rule as the
+  athlete heroes. Ships `status: "published"` on the same exception path as that entry:
+  the 7/20 gate exists to stop AI copy going live, and this is a named broadcaster's own
+  preview.
+- **⚠ HIS TV LINE WAS CHECKED, NOT TRUSTED, AND IT MATCHED EXACTLY** — PBTV 1PM Thu, 1PM
+  Fri, 12PM Sat, 2PM Sun; FS2 Friday and Saturday nights; FS1 Sunday night, all identical
+  to `lib/tv-schedule.ts`. The article is the copy fans act on, so a preview disagreeing
+  with /watch/tv would send people to the wrong channel. Also verified: first open of the
+  season at 1,000 points, Sep 14–20, and Mesa as "where the PPA started in 2020".
+- **⚠ NO PRESENTING PARTNER IN THE SUBTITLE.** This stop deliberately shows none since
+  8/20, when AT Sports came off the AZ Open page. Veolia is title and already in the name.
+- **⚠ THE FEATURED IMAGE IS DELIBERATELY NOT THE EVENT'S OWN.**
+  `aag-mesa/featured-mesa-cup.jpg` is pinned as this event's hero, card and OG image in
+  `HERO_OVERRIDE_BY_EVENT_SLUG`, so reusing it would print the same picture twice wherever
+  an article card and the event card share a page. It runs `aag-mesa/crowd-04.jpg` — a
+  different frame from the same venue set, chosen off a contact sheet of all 13.
+  ⚠ `crowd-06.jpg` was also rejected: it is a close portrait of a single junior.
+- **⚠ DROPBOX IS UNREACHABLE FROM HERE AND THAT IS THE HONEST ANSWER.** There is no synced
+  Dropbox folder on this machine (only OneDrive), Chrome runs with **no remote-debugging
+  port**, and Chrome locks its profile while running — so a logged-in session cannot be
+  driven, and relaunching the user's live browser under automation would expose every
+  account they are signed into for the sake of one photo. Ask for a share link, or use
+  what `public/ppa/venues/` already holds. The 9/4 Drive download worked because that
+  session had a browser tool; this one does not.
+
+#### The names the newsroom writes
+
+- **⚠ "CHRIS HAWORTH" AND "GABE TARDIO" RESOLVED TO NOBODY — IN 132 ARTICLES.** The roster
+  stores them as Christopher and Gabriel, and the detector matches roster names, so the
+  world No. 1 in men's singles was invisible to the player rail. Measured across the 811
+  migrated posts: **"Chris Haworth" in 42, "Gabe Tardio" in 90.** New
+  `lib/athlete-aliases.ts`, fed through the same `add()` as the real roster so aliases
+  inherit its guards — two-word minimum, ambiguity dropped rather than guessed, no page
+  no link. Verified against all 203 published names: zero collisions.
+  - ⚠ **HAND-WRITTEN, NEVER DERIVED.** Christopher → Chris and Gabriel → Gabe would also
+    derive the wrong player; that inference is how the paddle importer read "Zoey Wang"
+    as Chao Yi Wang (8/5 pt. 22).
+  - ⚠ **THE ALIAS `slug` MUST BE THE CANONICAL PROFILE SLUG.** Tardio is published as
+    `gabriel-tardio` and his page is `gabe-tardio`. The first pass used the published one:
+    the rail worked and the inline link silently did not, because `add()` canonicalises
+    and `withAliasNames` does not.
+- **⚠ AND THE RAIL AND THE PROSE WERE USING DIFFERENT LISTS.** `linkifyPlayers` was handed
+  the 40 hand-written marquee profiles while the rail rendered every published pro
+  detected — **19 body links against 35 rail entries** on this article, i.e. sixteen pros
+  with a face and a card in the rail and plain text in the sentence above it. The split
+  was an artifact of when detection arrived, not a decision: the call site's own comment
+  frames native vs migrated as a RENDERING difference. Now fed `featured`, already
+  resolved to slugs the route prerenders. **37 and 37, zero gaps.**
+- `linkifyPlayers` also gained the boundary lookarounds `article-players` always had.
+  Without them a name nested in a longer one links inside it — "Ben Johns" inside "Ben
+  Johnson" is the case that module names. Tolerable over 40 names, not over 200.
+- **⚠ TWO CURATED NAMES WERE MISSPELLED, AND EACH PRINTED IN THAT ATHLETE'S OWN `<h1>`.**
+  "Paris Todd" → **Parris Todd** and "Megan Dizon" → **Meghan Dizon** — while the
+  published profile on the same page spelled it correctly **38 and 30 times**. Their
+  published records, **128 and 55** archived posts and comms all agree. ⚠ **Slugs
+  untouched** (`paris-todd`, `megan-dizon`): they are what the route prerenders and what
+  `CURATED_TO_CANONICAL` keys on, so renaming them would move a live URL for a spelling
+  fix.
+- **⚠ THIS WAS NOT A BLANKET SYNC, AND A BLANKET SYNC WOULD HAVE REGRESSED THREE NAMES.**
+  Audited all 40 curated names against their profiles: **6 mismatches, 3 of them
+  deliberate.** "Tyra Black" is the newsroom shorthand every article uses (published:
+  "Hurricane Tyra Black") and `article-players` depends on the short form; "Eddie Perez"
+  is the same shape (published: "Edward Perez"); and curated **"Marina Sičić" is MORE
+  correct** than the published "Marina Sicic". The audit also lists 12 curated records
+  with no published profile — the Europe roster, expected.
+  - ⚠ Found, not fixed: `mikolaj-biedermann` is curated "Mikolaj" where the profile has
+    the Polish **"Mikołaj"**. That name lives in `lib/europe-roster.ts`, sourced from
+    Catie Preis's sheet — changing it here without telling her is how the sheet and the
+    site drift.
+- ⚠ **A BUG IN MY OWN EDIT HARNESS, worth knowing if a scripted edit ever duplicates a
+  block:** `String.replace(old, next)` expands `$&` in the REPLACEMENT to the whole match.
+  A replacement containing a regex-escape literal (`"\\$&"`) therefore injected the entire
+  matched block back into the file. Use a replacer function.
+- Verified on rendered pages: article 200 at its ROOT url (`/news/{slug}` is a legacy 308
+  — that briefly looked like a 404), image resolving through the optimizer, both
+  nicknames linking inline on a native AND an archived post, both corrected `<h1>`s, and
+  the guards holding — bare "Chris" and "Gabe" link to nobody and "Ben Johnson" still
+  does not resolve to Ben Johns. tsc + eslint clean, `next build` green.
 ### 2026-09-09 (pt. 5) — Daniela's photos land: the Junior PPA hero and gallery, and a second component that only works on navy
 
 - Daniela Almendarez attached 12 photos to the Asana request within the hour
