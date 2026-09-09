@@ -63,6 +63,59 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-09 (pt. 5) — Daniela's photos land: the Junior PPA hero and gallery, and a second component that only works on navy
+
+- Daniela Almendarez attached 12 photos to the Asana request within the hour
+  (`1217200231519436`), closing the last two of her ten asks. **All ten are now done.**
+- **⚠ WHICH PHOTO IS THE HEADER CAME FROM THE COMMENT TIMELINE, NOT FROM THE FRAMES.**
+  She attached `ATL26_JUNIOR PPA_MEDIA DAY_-124.jpg` at 15:56 and commented *"Please let
+  me know if this works for the header!"* at 15:57, then sent the other eleven. So the
+  hero is her choice and the gallery is the remaining eleven **in her own sending
+  order**, not re-sorted. Same principle as the pickleball.com featured picks: a person
+  chose the order, so honour it.
+- **Contact sheet first, before anything shipped.** The Europe import (9/4 pt. 6) found
+  two files that were not portraits at all, and the only thing that caught them was
+  rendering a sheet and looking at it. All 12 here are genuine Junior PPA photography —
+  11 landscape, 1 portrait, originals 4.6K–7K wide.
+- **⚠ THE HERO IS DELIBERATELY OFF THE HOUSE ENCODE, AND THE REASON IS THE OPACITY.**
+  At the standard 2048×1365 q64 this frame came out **312 KB against the 187 KB
+  `action-singles.jpg` it replaces** — a 125 KB regression on this page's LCP element,
+  which carries `priority`. It compresses badly because it is a branded wall plus
+  fourteen people. It renders at **opacity 25 under a scrim**, where neither a smaller
+  box nor lower quality is visible, so it ships **1800×1200 q48 = 200 KB**, parity with
+  what it replaces. Written on the JSX: re-encode at the house standard if the opacity
+  is ever raised.
+- **Gallery is the house `EventGallery`** — drag rail, arrows, lightbox with keyboard and
+  swipe — not a hand-rolled grid. Natural aspect at 1600px on the long edge (1.64 MB for
+  eleven), **not pre-cropped to the rail's 4:3**: the rail crops with `object-cover`, but
+  the lightbox serves the same file at 100vw, so pre-cropping would throw away the frame
+  a visitor opens the lightbox to see.
+- **⚠ AND `EventGallery` IS THE SECOND COMPONENT ON THIS SITE THAT ONLY WORKS ON A DARK
+  GROUND.** Its hint line under the rail is `text-white/35`; both event-page callers
+  mount it on a dark section, so nothing was ever wrong until this gallery went on
+  `ppa-paper` and the hint rendered as **a faint smudge**. Identical class to
+  LeadMagnetCapture on /europe and /game (9/8) — and caught the same way, by looking at
+  the rendered section rather than by tsc, which was clean throughout. Fixed with a
+  `tone` prop defaulting to `"dark"`, the same shape `ParkingDetails` got on 8/31, so
+  every event page is unchanged. **Verified on the Arizona Open: still `text-white/35`
+  and still the default alt text.**
+- `EventGallery` also gained an optional `altContext`. Its alt text was hardcoded to
+  "the scene at the venue", which is true of one venue on one weekend and false of a
+  gallery spanning media days, clinics and finals across several stops.
+- **⚠ NOBODY IS NAMED IN THE GALLERY, AND THE FINALISTS STILL HAVE NO PHOTOS.** These
+  are photographs of minors. The rail carries no captions and no per-player attribution,
+  and `JuniorFinalists` remains photo-less: putting a face beside a name means deciding
+  which child is in a frame, which is the call this repo does not make. Daniela asked
+  for finalist photos and said "if not, no worries"; the answer stands until named
+  per-player files arrive. ⚠ She also **did not answer the question about publication
+  clearance** — worth closing that loop, though the provenance is as good as it gets:
+  tour-produced photography, sent by the Junior PPA coordinator, for publication on the
+  tour's own site.
+- Verified on rendered pages: **0 broken images, 0 horizontal overflow at 1440 and 390**,
+  all 11 gallery paths resolve to files that exist (the /europe lesson — a path is not a
+  picture), `action-singles.jpg` gone from the page, the hint legible in navy/45, and
+  the section sitting exactly between Stay Connected and the handbook. Looked at the
+  hero and the gallery as pictures. tsc + eslint clean.
 ### 2026-09-09 (pt. 4) — Four stops were on sale and the site said "Tickets Coming Soon"; the audit that should have caught it was blind
 
 - Cem Aslan, Slack 9/9: Masters 2027 tickets are up, please update the site (Asana

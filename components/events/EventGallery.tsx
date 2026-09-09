@@ -15,9 +15,31 @@ import { useCallback, useEffect, useRef, useState } from "react";
 export function EventGallery({
   images,
   eventName,
+  altContext = "the scene at the venue",
+  tone = "dark",
 }: {
   images: string[];
   eventName: string;
+  /**
+   * What these photos are OF, for the alt text. Defaults to the event-page
+   * wording ("the scene at the venue"), which is wrong for a gallery that is
+   * not one venue on one weekend — /tour/junior spans media days, clinics and
+   * finals across several stops. Additive on purpose: every event page keeps
+   * the default and is unchanged.
+   */
+  altContext?: string;
+  /**
+   * Ground this sits on.
+   *
+   * ⚠ THE HINT LINE UNDER THE RAIL IS `text-white/35`, SO ON A LIGHT SECTION IT
+   * IS INVISIBLE. Both event-page callers mount this on a dark section, so it
+   * was never wrong until /tour/junior put a gallery on `ppa-paper` and the
+   * hint rendered as a faint smudge — caught by LOOKING at the section, not by
+   * tsc. Same failure as LeadMagnetCapture on /europe and /game (9/8), and the
+   * same fix as ParkingDetails got on 8/31: a tone prop, defaulting to the
+   * existing behaviour so every current caller is unchanged.
+   */
+  tone?: "dark" | "light";
 }) {
   const [openAt, setOpenAt] = useState<number | null>(null);
   const touchX = useRef<number | null>(null);
@@ -101,7 +123,7 @@ export function EventGallery({
             >
               <Image
                 src={src}
-                alt={`${eventName} — the scene at the venue (photo ${i + 1})`}
+                alt={`${eventName} — ${altContext} (photo ${i + 1})`}
                 fill
                 draggable={false}
                 sizes="(min-width: 1024px) 30rem, (min-width: 640px) 44vw, 78vw"
@@ -136,7 +158,11 @@ export function EventGallery({
         </button>
       </div>
       {/* Both mount points are dark ("The Scene" band on navy). */}
-      <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-white/35">
+      <p
+        className={`mt-1 text-[11px] uppercase tracking-[0.12em] ${
+          tone === "light" ? "text-ppa-navy/45" : "text-white/35"
+        }`}
+      >
         Drag or swipe to browse · tap any photo to enlarge
       </p>
 

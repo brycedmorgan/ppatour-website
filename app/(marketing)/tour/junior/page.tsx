@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { EventGallery } from "@/components/events/EventGallery";
 import { JuniorRankings } from "@/components/tour/JuniorRankings";
 import { JuniorFinalists, type FinalsYear } from "@/components/tour/JuniorFinalists";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
@@ -254,6 +255,33 @@ const FINALS: FinalsYear[] = [
   { year: "2024", rows: FINALS_2024 },
 ];
 
+/**
+ * Junior PPA gallery photos, supplied by Daniela Almendarez on the Asana
+ * request 9/9 (task 1217200231519436).
+ *
+ * ⚠ ORDER IS HERS, NOT RESORTED. She attached them in this sequence, and the
+ * one she named for the header — ATL26_JUNIOR PPA_MEDIA DAY_-124, now
+ * hero-media-day-group.jpg — is deliberately NOT repeated in the rail.
+ *
+ * ⚠ NOBODY IS NAMED, AND THAT IS THE RULE HERE. These are photographs of
+ * minors: the gallery carries no captions and no per-player attribution, and
+ * the finalists table still has no photos for the same reason. Identifying a
+ * child from a frame is exactly the call this repo never makes.
+ */
+const GALLERY = [
+  "/ppa/junior/gallery/atl26-media-day-107.jpg",
+  "/ppa/junior/gallery/atl-clinic-3.jpg",
+  "/ppa/junior/gallery/junior-action-29.jpg",
+  "/ppa/junior/gallery/juniors-249.jpg",
+  "/ppa/junior/gallery/cs-junior-48.jpg",
+  "/ppa/junior/gallery/masters-gs-69.jpg",
+  "/ppa/junior/gallery/atl26-media-day-112.jpg",
+  "/ppa/junior/gallery/atl-slam-24.jpg",
+  "/ppa/junior/gallery/masters-gs-58.jpg",
+  "/ppa/junior/gallery/masters-2025-52.jpg",
+  "/ppa/junior/gallery/atl-clinic-56.jpg",
+];
+
 const SECTIONS = [
   { id: "tournaments", label: "Tournaments" },
   { id: "rankings", label: "Rankings" },
@@ -262,6 +290,7 @@ const SECTIONS = [
   { id: "finals", label: "Junior PPA Finals" },
   { id: "serves", label: "Junior PPA Serves" },
   { id: "connected", label: "Stay Connected" },
+  { id: "gallery", label: "Gallery" },
 ];
 
 export const metadata: Metadata = {
@@ -292,8 +321,25 @@ export default async function JuniorPage() {
     <>
       {/* ---------------------------------------------------------- Hero */}
       <section className="relative isolate overflow-hidden bg-ppa-navy text-white">
+        {/**
+         * Daniela's own pick for the header, sent 9/9 — the Atlanta media-day
+         * group. It replaces `action-singles.jpg`, a general tour action shot of
+         * an ADULT pro that had been standing in on the juniors' page.
+         *
+         * ⚠ alt="" on purpose: it is decorative here, drawn at 25% behind the
+         * scrim, and the headline below already says what the page is.
+         *
+         * ⚠ ENCODED 1800x1200 q48, NOT THE HOUSE 2048/q64, AND THE OPACITY IS THE
+         * REASON. This frame is a branded wall plus fourteen people, so it
+         * compresses badly: at the house standard it came out 312 KB against the
+         * 187 KB file it replaces — a real regression on this page's LCP element,
+         * which carries `priority`. Nothing here is ever seen above 25% opacity
+         * under a scrim, so neither the smaller box nor the lower quality is
+         * visible, and it lands at 200 KB. Re-encode at the house standard if the
+         * opacity is ever raised.
+         */}
         <Image
-          src="/ppa/action-singles.jpg"
+          src="/ppa/junior/hero-media-day-group.jpg"
           alt=""
           fill
           priority
@@ -815,10 +861,9 @@ export default async function JuniorPage() {
        * where a newsletter signup and the staff contacts had nowhere to live.
        * Heading, blurb, channel list and both contacts are her copy.
        *
-       * ⚠ The Junior PPA GALLERY she also asked for belongs BETWEEN THIS
-       * SECTION AND THE HANDBOOK ("Between Stay Connected and Learn more"). It
-       * is not built yet — it needs her junior photos, and this repo does not
-       * publish photographs of children chosen by us. Drop it in right here.
+       * The Junior PPA GALLERY she asked for sits immediately below this
+       * section and above the handbook, which is where she wanted it
+       * ("Between Stay Connected and Learn more"). Her photos arrived 9/9.
        */}
       <section id="connected" className="scroll-mt-24 bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
@@ -902,6 +947,33 @@ export default async function JuniorPage() {
           <div className="mt-4 bg-ppa-navy p-6 sm:p-8">
             <LeadMagnetCapture variant="junior" />
           </div>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------- Gallery */}
+      {/**
+       * Daniela, 9/3: "bring back our Junior PPA Gallery with the junior
+       * photos… Between Stay Connected and Learn more" — so it sits here,
+       * between those two sections, and not at the foot of the page.
+       *
+       * Uses the house `EventGallery` (drag rail + lightbox, keyboard and
+       * swipe) rather than a hand-rolled grid. Same lesson as /europe:
+       * reproducing the site's look while re-implementing its behaviour reads
+       * as almost-right, which is worse than obviously wrong.
+       */}
+      <section id="gallery" className="scroll-mt-24 bg-ppa-paper">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <SectionHead eyebrow="The Scene" title="Junior PPA Gallery" />
+          <p className="mt-4 max-w-3xl text-sm leading-relaxed text-ppa-navy/70">
+            Media days, clinics and finals from across the Junior PPA season.
+            Drag or swipe through, and tap any photo to open it full screen.
+          </p>
+          <EventGallery
+            images={GALLERY}
+            eventName="Junior PPA"
+            altContext="juniors competing and training on tour"
+            tone="light"
+          />
         </div>
       </section>
 
