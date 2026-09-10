@@ -63,6 +63,39 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-10 — JOOLA complained, the Paddle Lab went behind a password
+
+- **Gordon Kaye (JOOLA, Chief Experience Officer) emailed Connor about
+  `/paddle-lab/`.** JOOLA spends $1.5M+ with the tour this year and reads a
+  public ranking of hundreds of competitors' paddles, on tour pages, with every
+  buy link pointing at Pickleball Central, as the tour promoting everyone except
+  the brands that pay it. He also caught a real data conflict: UPA-A publishes a
+  2100 max RPM and most of the lab's top all-court paddles show 2200+, because
+  the numbers are John Kew's independent tests and nothing syncs them to UPA-A.
+  Taylor Loomis: *"We should pull this down for now until we have a better path."*
+  Bryce: *"Please make this not linkable.... and password protected."*
+- **The lab is now gated, not deleted.** `lib/paddle-lab-access.ts` holds
+  `PADDLE_LAB_PUBLIC = false`; a new root `proxy.ts` (Next 16's `middleware.ts`
+  replacement) puts HTTP Basic auth in front of `/paddle-lab` and everything
+  under it. It FAILS CLOSED — a missing `PADDLE_LAB_PASSWORD` refuses every
+  request. Credentials are `PADDLE_LAB_USER` / `PADDLE_LAB_PASSWORD`, set in
+  Vercel Production, Preview and Development.
+- **Unlinked everywhere in the same commit.** Header About panel, mobile
+  submenu, footer, the three sitemap paths and all 818 paddle sitemap URLs, and
+  the athlete-page `LabStatsMini` block plus "See it in the Paddle Lab". The
+  PBC product photo stays on the In the Bag card — a shop photo is not lab data.
+  Verified against a production build: zero `paddle-lab` strings on the home
+  page, `/about/`, three athlete pages and the sitemap.
+- **Index signals: `noindex` on the layout, `X-Robots-Tag: noindex, nofollow` on
+  the 401, and deliberately NO robots.txt `Disallow`.** A disallowed URL can
+  never be recrawled, so Google would keep an indexed `/paddle-lab/` as a bare
+  result forever; a crawlable 401 carrying `noindex` is what drops it.
+- **Next:** the agreed home is pickleball.com. Reopening is one line
+  (`PADDLE_LAB_PUBLIC = true`) but needs three things first — terms with John Kew
+  (Hannah Johns owns it), an answer to the UPA-A vs Kew RPM conflict, and a
+  partner-brand position Gordon Kaye can live with. Anything already in Google
+  needs the Search Console Removals tool; the build cannot do that.
+
 ### 2026-09-09 (pt. 6) — Fleming's Arizona preview, and the prose was linking a third fewer players than the rail
 
 - Second storylines post of the season, from Dave Fleming's doc via Wesley. Shipped on

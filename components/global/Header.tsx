@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { EUROPE_PUBLIC } from "@/lib/europe-launch";
+import { PADDLE_LAB_PUBLIC } from "@/lib/paddle-lab-access";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -53,7 +54,10 @@ const NAV_ITEMS: NavItem[] = [
       { label: "Tournament History", href: "/about/history" },
       { label: "How It Works", href: "/about/how-it-works" },
       { label: "What is Pickleball?", href: "/about/what-is-pickleball" },
-      { label: "Paddle Lab", href: "/paddle-lab" },
+      // ⚠ Gated and unlinked since 9/10 — JOOLA read a public paddle ranking on
+      // tour pages as the tour promoting its partners' competitors. See
+      // lib/paddle-lab-access.ts. The lab's home is pickleball.com now.
+      ...(PADDLE_LAB_PUBLIC ? [{ label: "Paddle Lab", href: "/paddle-lab" }] : []),
       // A region of this site, not a separate tour site — see docs/EUROPE.md.
       // ⚠ Unlisted until EUROPE_PUBLIC flips; the page is live for anyone with
       // the link, it just isn't advertised here yet (Bryce, 9/4).
@@ -320,7 +324,10 @@ function MegaPanelContent({
         <PanelEyebrow>The Organization</PanelEyebrow>
         <div className="mt-4 space-y-3">
           <BigLink href="/about" label="About the Tour" onNavigate={onNavigate} />
-          <BigLink href="/paddle-lab" label="Paddle Lab" onNavigate={onNavigate} />
+          {/* Gated since 9/10 — see lib/paddle-lab-access.ts. */}
+          {PADDLE_LAB_PUBLIC && (
+            <BigLink href="/paddle-lab" label="Paddle Lab" onNavigate={onNavigate} />
+          )}
           <BigLink href="/about" label="The Pro Tour" onNavigate={onNavigate} />
           <BigLink href="/about/history" label="History" onNavigate={onNavigate} />
         </div>

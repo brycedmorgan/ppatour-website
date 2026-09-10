@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { EUROPE_PUBLIC } from "@/lib/europe-launch";
+import { PADDLE_LAB_PUBLIC } from "@/lib/paddle-lab-access";
 import Link from "next/link";
 import { footerPartners, showsDesignation } from "@/lib/home-content";
 import { partnerLink } from "@/lib/partner-link";
@@ -41,7 +42,8 @@ const PPA_LINKS: FooterLink[] = [
     ? [{ label: "PPA Tour Europe", href: "/europe" }]
     : []),
   { label: "About the PPA Tour", href: "/about" },
-  { label: "Paddle Lab", href: "/paddle-lab" },
+  // ⚠ Gated and unlinked since 9/10 — see lib/paddle-lab-access.ts.
+  ...(PADDLE_LAB_PUBLIC ? [{ label: "Paddle Lab", href: "/paddle-lab" }] : []),
   { label: "Sponsors", href: "/about/sponsors" },
   { label: "Host a Tournament", href: "/about/host-tournament" },
   { label: "Host a Private Event", href: "/about/private-events" },

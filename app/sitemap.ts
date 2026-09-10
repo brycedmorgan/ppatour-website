@@ -8,6 +8,7 @@ import { tourPrograms } from "@/lib/tour-programs";
 import { allNews } from "@/lib/news";
 import { getShopProductHandles, shopHref } from "@/lib/shop";
 import { LAB_PATH, paddles } from "@/lib/paddle-lab";
+import { PADDLE_LAB_PUBLIC } from "@/lib/paddle-lab-access";
 
 import { SITE_URL } from "@/lib/site";
 
@@ -76,11 +77,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
      * whose SEO baseline we are still building.
      */
     ...(shopHandles.length > 0 ? ["/shop"] : []),
-    // Paddle Lab. /compare is a reader's scratch page and is noindex, so it
-    // stays out; every paddle is listed below.
-    LAB_PATH,
-    `${LAB_PATH}/paddles`,
-    `${LAB_PATH}/how-we-test`,
+    /**
+     * Paddle Lab. /compare is a reader's scratch page and is noindex, so it
+     * stays out; every paddle is listed below.
+     *
+     * ⚠ THE WHOLE LAB LEAVES THE SITEMAP WHILE `PADDLE_LAB_PUBLIC` IS FALSE.
+     * Every /paddle-lab URL answers 401 behind Basic auth (proxy.ts), and
+     * submitting a password-gated URL to Google is submitting an error page.
+     */
+    ...(PADDLE_LAB_PUBLIC
+      ? [LAB_PATH, `${LAB_PATH}/paddles`, `${LAB_PATH}/how-we-test`]
+      : []),
   ];
 
   return [
@@ -120,12 +127,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.5,
     })),
-    // One page per paddle in the lab (lib/data/paddles.json, static).
-    ...paddles.map((p) => ({
-      url: url(p.href),
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    })),
+    // One page per paddle in the lab (lib/data/paddles.json, static) — gone
+    // while the lab is gated, same reason as the three lab paths above.
+    ...(PADDLE_LAB_PUBLIC
+      ? paddles.map((p) => ({
+          url: url(p.href),
+          changeFrequency: "monthly" as const,
+          priority: 0.6,
+        }))
+      : []),
     /**
      * Pickleball Vacations — indexed as of 8/5, Stripe configured (secret key +
      * webhook live). /register, /success and the Punta Cana guest archive stay

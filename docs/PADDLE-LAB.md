@@ -7,6 +7,61 @@ Bryce's call on 2026-09-03: build it in this stack now. Hannah's brief said
 pickleball.com; that is a hosting decision for later (a path rewrite from
 pickleball.com onto this app is the likely shape).
 
+## ⚠ GATED SINCE 2026-09-10 — password, no links, no index
+
+The lab is built and complete, and no member of the public can reach it.
+
+**What happened.** Gordon Kaye, Chief Experience Officer at JOOLA, emailed
+Connor Pardoe on 2026-09-10 after finding `/paddle-lab/` from a player profile.
+His argument, in his words: JOOLA spends $1.5M+ with the tour this year, $2M+
+next, plus ~$500k funding into Pickleball Central, and the tour is "doing a
+great job promoting hundreds of paddles and dozens of brands in a manner
+considerably better than the brands that actually support you." Two further
+points, both real:
+
+1. **Every buy link goes to pickleballcentral.com**, so PBC reads as
+   co-signing the measurements, not just selling the paddle.
+2. **The numbers contradict our own testing standard.** UPA-A publishes a max
+   of 2100 RPM. Most of the lab's top all-court paddles show 2200+, because
+   these are John Kew's independent tests and nothing syncs them to UPA-A.
+   Kaye's phrase: it "challenges the authenticity and validity of your own
+   testing standards."
+
+Taylor Loomis, same morning: *"We should pull this down for now until we have a
+better path. Probably lives only on pickleball.com."* Bryce replied to Taylor
+and Connor that the lab will move to pickleball.com, and was built here only
+because this stack is where it could be built and demoed. Bryce's instruction:
+*"Please make this not linkable.... and password protected."*
+
+**How the gate is built.**
+
+| Piece | Where |
+|---|---|
+| The switch | `lib/paddle-lab-access.ts` → `PADDLE_LAB_PUBLIC = false` |
+| The password | `proxy.ts` — HTTP Basic auth on `/paddle-lab` and everything under it |
+| Credentials | `PADDLE_LAB_USER` (default `ppa`) + `PADDLE_LAB_PASSWORD`, set in Vercel Production, Preview and Development |
+| Nav + footer | `components/global/Header.tsx`, `components/global/SiteFooter.tsx` — the item is gone, not hidden with CSS |
+| Sitemap | `app/sitemap.ts` — the three lab paths and all 818 paddle URLs are out |
+| Athlete pages | `app/athletes/[slug]/page.tsx` — `LabStatsMini` and "See it in the Paddle Lab" are gone; the PBC product photo stays, because a shop photo is not lab data |
+| Index signals | `noindex` in `app/paddle-lab/layout.tsx`, plus `X-Robots-Tag: noindex, nofollow` on the 401 itself |
+
+**It fails closed.** No `PADDLE_LAB_PASSWORD` in the environment means every
+request is refused. A gate that silently opens when a deploy loses a variable is
+worse than no gate.
+
+**No robots.txt `Disallow`, on purpose.** A disallowed URL can never be
+recrawled, so Google would keep any already-indexed `/paddle-lab/` URL as a
+bare, contentless result forever. A crawlable 401 carrying `noindex` is what
+actually gets the pages dropped. Google's Removals tool in Search Console is the
+fast path for anything already indexed — that is a person's job, not the build's.
+
+**Reopening it is one line, and it is not a developer's call.** Flipping
+`PADDLE_LAB_PUBLIC` to `true` restores the nav item, the footer link, the
+sitemap entries and the athlete-page stats, and drops the password. Three things
+land first: terms with John Kew (Hannah Johns owns that conversation), an answer
+to the UPA-A vs Kew RPM conflict, and a partner-brand position Gordon Kaye can
+live with. And the agreed home is pickleball.com, not here.
+
 ## Routes
 
 | Route | What | Rendering |
@@ -19,7 +74,9 @@ pickleball.com onto this app is the likely shape).
 
 Nav: About mega-panel + About mobile submenu + footer "PPA" column. Athlete
 pages: "See the lab data →" under the In the Bag buy button when the pro's
-paddle string resolves to exactly one lab record (`labPaddleForName`).
+paddle string resolves to exactly one lab record (`labPaddleForName`). ⚠ ALL OF
+THAT IS SWITCHED OFF while `PADDLE_LAB_PUBLIC` is false — see the gate section
+above. This table describes the lab as it will be, not as the public sees it.
 
 ## Data: two files, two kinds of thing
 

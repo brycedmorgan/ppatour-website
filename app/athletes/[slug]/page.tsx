@@ -32,6 +32,7 @@ import { playerOverrideFor } from "@/lib/player-overrides";
 import { socialLinks } from "@/lib/social-links";
 import { paddleFor } from "@/lib/athlete-paddles";
 import { labPaddleForName } from "@/lib/paddle-lab";
+import { PADDLE_LAB_PUBLIC } from "@/lib/paddle-lab-access";
 import { LabStatsMini } from "@/components/paddle-lab/LabStatsMini";
 import { paddleUpdateFor } from "@/lib/paddle-updates";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
@@ -570,6 +571,15 @@ export default async function AthletePage({ params }: Params) {
    */
   const labPaddle = gear ? labPaddleForName(gear.paddle) : null;
   /**
+   * ⚠ THE MEASUREMENTS COME OFF THE PROFILE WHILE THE LAB IS GATED. Gordon Kaye
+   * (JOOLA) found the lab from a player profile on 2026-09-10; the profiles are
+   * how it was discovered, and a stat block that links into a 401 is a dead end
+   * anyway. `labPaddle` itself stays — its Pickleball Central product photo is a
+   * shop record, not lab data, and still fills the card. See
+   * lib/paddle-lab-access.ts.
+   */
+  const showLabStats = PADDLE_LAB_PUBLIC && labPaddle !== null;
+  /**
    * The picture in the card: curated cut-out or the feed photo as before, and
    * now Pickleball Central's product shot from the lab when neither exists.
    * The lab photo is keyed to the exact product the matcher placed, so it
@@ -1087,11 +1097,11 @@ export default async function AthletePage({ params }: Params) {
                     {/* Bryce 9/3: the paddle's headline measurements live on the
                         player's page too, not just a link. Tested paddle → five
                         stats + a link; shop-only paddle → the link alone. */}
-                    {labPaddle && labPaddle.tested ? (
-                      <LabStatsMini paddle={labPaddle} />
-                    ) : labPaddle ? (
+                    {showLabStats && labPaddle!.tested ? (
+                      <LabStatsMini paddle={labPaddle!} />
+                    ) : showLabStats ? (
                       <Link
-                        href={labPaddle.href}
+                        href={labPaddle!.href}
                         className="flex h-10 items-center justify-center border-t border-white/10 text-[11px] font-bold uppercase tracking-[0.14em] text-white/75 transition-colors hover:bg-white/5 hover:text-white"
                       >
                         See it in the Paddle Lab →
