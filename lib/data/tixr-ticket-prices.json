@@ -1,7 +1,7 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-09-09T16:56:46Z",
+  "generated_at": "2026-09-10T16:44:41Z",
   "event_count": 50,
   "ticket_type_count": 788,
   "series_breakdown": {
@@ -213,6 +213,13 @@
           "name": "Thursday Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.56
+        },
+        {
+          "name": "Thursday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
           "base_price": 60,
           "all_in_price": 70.23
         },
@@ -222,13 +229,6 @@
           "sale_state": "OPEN",
           "base_price": 80,
           "all_in_price": 91.83
-        },
-        {
-          "name": "Thursday Courtside",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 46.56
         },
         {
           "name": "Thursday VIP",
@@ -640,8 +640,8 @@
         {
           "name": "Sunday VIP",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 500,
           "all_in_price": 545.63
         }
       ],
@@ -1250,8 +1250,8 @@
         {
           "name": "Sunday Courtside",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 50,
           "all_in_price": 57.36
         },
         {
@@ -2935,6 +2935,13 @@
           "name": "Saturday Evening Courtside Bleacher",
           "category": "STANDARD",
           "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Saturday Evening Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
           "base_price": 60,
           "all_in_price": 70.37
         },
@@ -2944,13 +2951,6 @@
           "sale_state": "OPEN",
           "base_price": 80,
           "all_in_price": 92.03
-        },
-        {
-          "name": "Saturday Evening Courtside Bleacher",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 46.66
         },
         {
           "name": "Saturday Evening Courtside Chair",
@@ -3243,37 +3243,37 @@
         {
           "name": "Sunday Courtside Bleacher",
           "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 80,
+          "all_in_price": 92.03
+        },
+        {
+          "name": "Sunday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 157.01
+        },
+        {
+          "name": "Sunday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 135.35
+        },
+        {
+          "name": "Sunday Courtside Bleacher",
+          "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
           "all_in_price": 113.69
         },
         {
-          "name": "Sunday Courtside Bleacher",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 70.37
-        },
-        {
-          "name": "Sunday Courtside Bleacher",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 70.37
-        },
-        {
-          "name": "Sunday Courtside Bleacher",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 92.03
-        },
-        {
           "name": "Sunday Courtside Chair",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 221.99
+          "sale_state": "OPEN",
+          "base_price": 250,
+          "all_in_price": 276.13
         },
         {
           "name": "Sunday VIP",
@@ -4439,15 +4439,15 @@
           "name": "Friday Courtside+",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 120,
-          "all_in_price": 135.05
+          "base_price": 160,
+          "all_in_price": 178.27
         },
         {
           "name": "Friday Courtside+",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 160,
-          "all_in_price": 178.27
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 135.05
         },
         {
           "name": "Friday VIP",
@@ -4829,15 +4829,15 @@
           "name": "Sunday Courtside+",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 140,
-          "all_in_price": 156.66
+          "base_price": 180,
+          "all_in_price": 199.88
         },
         {
           "name": "Sunday Courtside+",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 180,
-          "all_in_price": 199.88
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 156.66
         },
         {
           "name": "Sunday VIP",
