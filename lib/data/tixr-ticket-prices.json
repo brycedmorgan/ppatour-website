@@ -1,7 +1,7 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-09-10T16:44:41Z",
+  "generated_at": "2026-09-11T16:48:59Z",
   "event_count": 50,
   "ticket_type_count": 788,
   "series_breakdown": {
@@ -2639,9 +2639,9 @@
         {
           "name": "Friday Evening Courtside Chair",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 167.84
+          "sale_state": "OPEN",
+          "base_price": 180,
+          "all_in_price": 200.33
         },
         {
           "name": "Friday Evening VIP",
@@ -2955,9 +2955,9 @@
         {
           "name": "Saturday Evening Courtside Chair",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 200.33
+          "sale_state": "OPEN",
+          "base_price": 200,
+          "all_in_price": 221.99
         },
         {
           "name": "Saturday Evening VIP",
@@ -3113,9 +3113,9 @@
         {
           "name": "Saturday Morning Courtside Chair",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 200.33
+          "sale_state": "OPEN",
+          "base_price": 200,
+          "all_in_price": 221.99
         },
         {
           "name": "Saturday Morning VIP",
@@ -4439,15 +4439,15 @@
           "name": "Friday Courtside+",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 160,
-          "all_in_price": 178.27
+          "base_price": 120,
+          "all_in_price": 135.05
         },
         {
           "name": "Friday Courtside+",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 135.05
+          "sale_state": "OPEN",
+          "base_price": 160,
+          "all_in_price": 178.27
         },
         {
           "name": "Friday VIP",
@@ -4808,8 +4808,8 @@
           "name": "Sunday Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 50,
-          "all_in_price": 57.36
+          "base_price": 60,
+          "all_in_price": 70.23
         },
         {
           "name": "Sunday Courtside",
@@ -4829,22 +4829,15 @@
           "name": "Sunday Courtside+",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 180,
-          "all_in_price": 199.88
+          "base_price": 140,
+          "all_in_price": 156.66
         },
         {
           "name": "Sunday Courtside+",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 156.66
-        },
-        {
-          "name": "Sunday VIP",
-          "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 350,
-          "all_in_price": 383.56
+          "base_price": 180,
+          "all_in_price": 199.88
         },
         {
           "name": "Sunday VIP",
@@ -4852,6 +4845,13 @@
           "sale_state": "OPEN",
           "base_price": 400,
           "all_in_price": 437.59
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 500,
+          "all_in_price": 545.63
         }
       ],
       "parent_event_id": "204325"
@@ -5315,8 +5315,8 @@
           "name": "Sunday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 50,
-          "all_in_price": 57.36
+          "base_price": 60,
+          "all_in_price": 70.23
         },
         {
           "name": "Sunday Grounds Pass",
@@ -5378,8 +5378,8 @@
           "name": "Weeklong Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 170,
-          "all_in_price": 189.08
+          "base_price": 180,
+          "all_in_price": 199.88
         },
         {
           "name": "Weeklong Grounds Pass",

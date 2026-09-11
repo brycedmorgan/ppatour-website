@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-10T16:44:41Z",
+  "updated_at": "2026-09-11T16:48:59Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -5511,6 +5511,181 @@
       "sale_state": {
         "from": "OPEN",
         "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-09-11T16:48:59Z",
+      "type": "price_change",
+      "event_id": "166396",
+      "event": "Opendoor Pickleball World Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening Courtside Chair",
+      "base_price": {
+        "from": null,
+        "to": 180
+      },
+      "all_in_price": {
+        "from": 167.84,
+        "to": 200.33
+      }
+    },
+    {
+      "at": "2026-09-11T16:48:59Z",
+      "type": "availability_change",
+      "event_id": "166396",
+      "event": "Opendoor Pickleball World Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening Courtside Chair",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-09-11T16:48:59Z",
+      "type": "price_change",
+      "event_id": "166381",
+      "event": "Opendoor Pickleball World Championships Saturday Evening - Men's and Women's Doubles Semifinals",
+      "ticket": "Saturday Evening Courtside Chair",
+      "base_price": {
+        "from": null,
+        "to": 200
+      },
+      "all_in_price": {
+        "from": 200.33,
+        "to": 221.99
+      }
+    },
+    {
+      "at": "2026-09-11T16:48:59Z",
+      "type": "availability_change",
+      "event_id": "166381",
+      "event": "Opendoor Pickleball World Championships Saturday Evening - Men's and Women's Doubles Semifinals",
+      "ticket": "Saturday Evening Courtside Chair",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-09-11T16:48:59Z",
+      "type": "price_change",
+      "event_id": "166387",
+      "event": "Opendoor Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning Courtside Chair",
+      "base_price": {
+        "from": null,
+        "to": 200
+      },
+      "all_in_price": {
+        "from": 200.33,
+        "to": 221.99
+      }
+    },
+    {
+      "at": "2026-09-11T16:48:59Z",
+      "type": "availability_change",
+      "event_id": "166387",
+      "event": "Opendoor Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning Courtside Chair",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-09-11T16:48:59Z",
+      "type": "price_change",
+      "event_id": "204411",
+      "event": "PPA Palm Springs Friday - Quarterfinals",
+      "ticket": "Friday Courtside+",
+      "base_price": {
+        "from": null,
+        "to": 160
+      },
+      "all_in_price": {
+        "from": 135.05,
+        "to": 178.27
+      }
+    },
+    {
+      "at": "2026-09-11T16:48:59Z",
+      "type": "availability_change",
+      "event_id": "204411",
+      "event": "PPA Palm Springs Friday - Quarterfinals",
+      "ticket": "Friday Courtside+",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-09-11T16:48:59Z",
+      "type": "price_change",
+      "event_id": "204335",
+      "event": "PPA Palm Springs Sunday - Championships",
+      "ticket": "Sunday Courtside+",
+      "base_price": {
+        "from": null,
+        "to": 180
+      },
+      "all_in_price": {
+        "from": 156.66,
+        "to": 199.88
+      }
+    },
+    {
+      "at": "2026-09-11T16:48:59Z",
+      "type": "availability_change",
+      "event_id": "204335",
+      "event": "PPA Palm Springs Sunday - Championships",
+      "ticket": "Sunday Courtside+",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-09-11T16:48:59Z",
+      "type": "price_change",
+      "event_id": "204335",
+      "event": "PPA Palm Springs Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "base_price": {
+        "from": 400,
+        "to": 500
+      },
+      "all_in_price": {
+        "from": 437.59,
+        "to": 545.63
+      }
+    },
+    {
+      "at": "2026-09-11T16:48:59Z",
+      "type": "price_change",
+      "event_id": "206222",
+      "event": "PPA Cape Coral",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": 50,
+        "to": 60
+      },
+      "all_in_price": {
+        "from": 57.36,
+        "to": 70.23
+      }
+    },
+    {
+      "at": "2026-09-11T16:48:59Z",
+      "type": "price_change",
+      "event_id": "206222",
+      "event": "PPA Cape Coral",
+      "ticket": "Weeklong Courtside",
+      "base_price": {
+        "from": 170,
+        "to": 180
+      },
+      "all_in_price": {
+        "from": 189.08,
+        "to": 199.88
       }
     }
   ]
