@@ -63,6 +63,27 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-11 — pickleballcentraleurope.com points at /europe
+
+- Bryce: put `pickleballcentraleurope.com` live for the ppatour.com/europe site.
+  Jason Santerre holds the domain in GoDaddy and asked for the DNS records.
+- **Redirect shipped in `next.config.ts` (`EUROPE_DOMAIN_REDIRECTS`).** Apex and
+  www send every path to `https://www.ppatour.com/europe/`. The domain only ever
+  served a GoDaddy parking lander, so no old path is kept.
+- **307, not 308, while `EUROPE_PUBLIC` is false.** Make it permanent in the
+  Europe launch commit.
+- Verified on a local build with Host headers: both hosts 307 to /europe; an
+  unslashed path takes the site-wide trailing-slash 308 first, then lands.
+  `/events` and the vacations host redirect are unchanged.
+- **⚠ Not live yet. Two steps outside the repo:** (1) add both hostnames to the
+  `ppatour-website` Vercel project (the auto-mode classifier blocked the CLI
+  domain add); (2) Jason sets `A @ 76.76.21.21` and `CNAME www
+  cname.vercel-dns.com` in GoDaddy. **The MX records (GoDaddy email,
+  secureserver.net) must stay.**
+- ⚠ The domain name says Pickleball Central. Jason gave it in reply to the PBC
+  Europe storefront question. If that store needs its own domain later, this
+  redirect is the thing to change.
+
 ### 2026-09-10 — JOOLA complained, the Paddle Lab went behind a password
 
 - **Gordon Kaye (JOOLA, Chief Experience Officer) emailed Connor about

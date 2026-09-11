@@ -261,6 +261,27 @@ const RETIRED_ATHLETE_REDIRECTS = [
   { source: "/athletes/jay-devilliers", destination: "/athletes/" },
 ];
 
+/**
+ * pickleballcentraleurope.com sends every request to the Europe page (Bryce, 9/11;
+ * Jason Santerre holds the domain in GoDaddy). The domain never carried a site —
+ * it served a GoDaddy parking lander — so there is no old path worth preserving.
+ *
+ * ⚠ TEMPORARY (307) WHILE `EUROPE_PUBLIC` IS FALSE. /europe is still an unlisted
+ * preview, and a 308 sits in browser caches long after a destination changes.
+ * Make it permanent in the same commit that launches Europe.
+ *
+ * ⚠ The domain has GoDaddy email on it (MX → secureserver.net). Only the A and
+ * www records point here; the MX records must stay as they are.
+ */
+const EUROPE_DOMAIN_REDIRECTS = [
+  "pickleballcentraleurope.com",
+  "www.pickleballcentraleurope.com",
+].map((host) => ({
+  source: "/:path*",
+  has: [{ type: "host" as const, value: host }],
+  destination: "https://www.ppatour.com/europe/",
+}));
+
 
 const nextConfig: NextConfig = {
   /**
@@ -327,6 +348,8 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // First, so the domain rule wins on that host before any path rule.
+      ...EUROPE_DOMAIN_REDIRECTS.map((r) => ({ ...r, permanent: false })),
       ...LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true })),
       ...RETIRED_ATHLETE_REDIRECTS.map((r) => ({ ...r, permanent: false })),
     ];
