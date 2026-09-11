@@ -262,23 +262,21 @@ const RETIRED_ATHLETE_REDIRECTS = [
 ];
 
 /**
- * ppatoureurope.com sends every request to the Europe page (Bryce, 9/11). The
- * domain never carried a site — it served a GoDaddy parking lander — so there is
- * no old path worth preserving. It is the Europe domain docs/EUROPE.md already
- * named; pickleballcentraleurope.com was set up here first by mistake and removed.
+ * ppatoureurope.com is the Europe site's own address (Bryce, 9/11: "Don't redirect
+ * it. Show ppatoureurope.com as the real site"). The apex SERVES the Europe page —
+ * see the rewrite in `rewrites()` — and this rule only folds www onto the apex so
+ * the site answers at one address.
  *
- * ⚠ TEMPORARY (307) WHILE `EUROPE_PUBLIC` IS FALSE. /europe is still an unlisted
- * preview, and a 308 sits in browser caches long after a destination changes.
- * Make it permanent in the same commit that launches Europe.
+ * ⚠ TEMPORARY (307) WHILE `EUROPE_PUBLIC` IS FALSE, so nothing gets cached in
+ * browsers while the Europe setup is still moving. Make it permanent at launch.
  */
 const EUROPE_DOMAIN_REDIRECTS = [
-  "ppatoureurope.com",
-  "www.ppatoureurope.com",
-].map((host) => ({
-  source: "/:path*",
-  has: [{ type: "host" as const, value: host }],
-  destination: "https://www.ppatour.com/europe/",
-}));
+  {
+    source: "/:path*",
+    has: [{ type: "host" as const, value: "www.ppatoureurope.com" }],
+    destination: "https://ppatoureurope.com/:path*",
+  },
+];
 
 
 const nextConfig: NextConfig = {
@@ -384,6 +382,14 @@ const nextConfig: NextConfig = {
         {
           source: "/",
           has: [{ type: "host", value: "europe.ppatour.com" }],
+          destination: "/europe/",
+        },
+        // ppatoureurope.com is the Europe site's own domain (Bryce, 9/11) — same
+        // presentation-URL rule as europe.ppatour.com above, same noindex caveat.
+        // www folds onto this host in EUROPE_DOMAIN_REDIRECTS.
+        {
+          source: "/",
+          has: [{ type: "host", value: "ppatoureurope.com" }],
           destination: "/europe/",
         },
         { source: "/app-tour", destination: "/app-tour/index.html" },

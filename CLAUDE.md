@@ -63,7 +63,18 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
-### 2026-09-11 — ppatoureurope.com points at /europe
+### 2026-09-11 — ppatoureurope.com is the Europe site's own address
+
+- **⚠ SUPERSEDES THE REDIRECT BELOW, SAME DAY.** Bryce, once it went live: *"Don't
+  redirect it. Show ppatoureurope.com as the real site."* The apex now SERVES the
+  Europe page via a `beforeFiles` rewrite of `/` → `/europe/` — the exact
+  europe.ppatour.com rule from 9/9, with the same caveat: safe only while
+  `EUROPE_PUBLIC` is false (noindex), because ppatour.com/europe/,
+  europe.ppatour.com/ and ppatoureurope.com/ become one indexable page on three
+  hosts the day Europe launches. Pick the canonical host then.
+- Only `/` is rewritten, so the page's links (/events, /athletes, the rulebook)
+  still work on that host. `www.ppatoureurope.com` 307s onto the apex, path kept.
+- The "live, verified" bullet below describes the redirect that this replaced.
 
 - Bryce: put the Europe domain live for the ppatour.com/europe site. Bryce now
   has GoDaddy access (granted by Jason Santerre) and sets DNS himself.
