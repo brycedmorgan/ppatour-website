@@ -262,20 +262,18 @@ const RETIRED_ATHLETE_REDIRECTS = [
 ];
 
 /**
- * pickleballcentraleurope.com sends every request to the Europe page (Bryce, 9/11;
- * Jason Santerre holds the domain in GoDaddy). The domain never carried a site —
- * it served a GoDaddy parking lander — so there is no old path worth preserving.
+ * ppatoureurope.com sends every request to the Europe page (Bryce, 9/11). The
+ * domain never carried a site — it served a GoDaddy parking lander — so there is
+ * no old path worth preserving. It is the Europe domain docs/EUROPE.md already
+ * named; pickleballcentraleurope.com was set up here first by mistake and removed.
  *
  * ⚠ TEMPORARY (307) WHILE `EUROPE_PUBLIC` IS FALSE. /europe is still an unlisted
  * preview, and a 308 sits in browser caches long after a destination changes.
  * Make it permanent in the same commit that launches Europe.
- *
- * ⚠ The domain has GoDaddy email on it (MX → secureserver.net). Only the A and
- * www records point here; the MX records must stay as they are.
  */
 const EUROPE_DOMAIN_REDIRECTS = [
-  "pickleballcentraleurope.com",
-  "www.pickleballcentraleurope.com",
+  "ppatoureurope.com",
+  "www.ppatoureurope.com",
 ].map((host) => ({
   source: "/:path*",
   has: [{ type: "host" as const, value: host }],

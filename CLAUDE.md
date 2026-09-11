@@ -63,26 +63,26 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
-### 2026-09-11 — pickleballcentraleurope.com points at /europe
+### 2026-09-11 — ppatoureurope.com points at /europe
 
-- Bryce: put `pickleballcentraleurope.com` live for the ppatour.com/europe site.
-  Jason Santerre holds the domain in GoDaddy and asked for the DNS records.
-- **Redirect shipped in `next.config.ts` (`EUROPE_DOMAIN_REDIRECTS`).** Apex and
-  www send every path to `https://www.ppatour.com/europe/`. The domain only ever
-  served a GoDaddy parking lander, so no old path is kept.
+- Bryce: put the Europe domain live for the ppatour.com/europe site. Bryce now
+  has GoDaddy access (granted by Jason Santerre) and sets DNS himself.
+- **Redirect in `next.config.ts` (`EUROPE_DOMAIN_REDIRECTS`).** Apex and www
+  send every path to `https://www.ppatour.com/europe/`. The domain only ever
+  served a GoDaddy parking lander, so no old path is kept. No MX records exist.
+- **⚠ First pushed for the wrong domain** (`pickleballcentraleurope.com`, which
+  Jason gave in reply to the PBC Europe storefront question, `08dc8f3`). Bryce
+  corrected it to `ppatoureurope.com` the same hour. That rule never had DNS
+  behind it and is removed. Leave pickleballcentraleurope.com alone.
 - **307, not 308, while `EUROPE_PUBLIC` is false.** Make it permanent in the
   Europe launch commit.
-- Verified on a local build with Host headers: both hosts 307 to /europe; an
-  unslashed path takes the site-wide trailing-slash 308 first, then lands.
-  `/events` and the vacations host redirect are unchanged.
+- Verified the rule on a local build with Host headers (on the first hostname):
+  307 to /europe; an unslashed path takes the site-wide trailing-slash 308 first.
+  `/events` and the vacations host redirect were unchanged.
 - **⚠ Not live yet. Two steps outside the repo:** (1) add both hostnames to the
-  `ppatour-website` Vercel project (the auto-mode classifier blocked the CLI
-  domain add); (2) Jason sets `A @ 76.76.21.21` and `CNAME www
-  cname.vercel-dns.com` in GoDaddy. **The MX records (GoDaddy email,
-  secureserver.net) must stay.**
-- ⚠ The domain name says Pickleball Central. Jason gave it in reply to the PBC
-  Europe storefront question. If that store needs its own domain later, this
-  redirect is the thing to change.
+  `ppatour-website` Vercel project (the auto-mode classifier blocks the CLI
+  domain add); (2) in GoDaddy set `A @ 76.76.21.21` and `CNAME www
+  cname.vercel-dns.com`, and turn off domain forwarding if it is on.
 
 ### 2026-09-10 — JOOLA complained, the Paddle Lab went behind a password
 
