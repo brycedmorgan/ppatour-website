@@ -79,10 +79,21 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - Verified the rule on a local build with Host headers (on the first hostname):
   307 to /europe; an unslashed path takes the site-wide trailing-slash 308 first.
   `/events` and the vacations host redirect were unchanged.
-- **⚠ Not live yet. Two steps outside the repo:** (1) add both hostnames to the
-  `ppatour-website` Vercel project (the auto-mode classifier blocks the CLI
-  domain add); (2) in GoDaddy set `A @ 76.76.21.21` and `CNAME www
-  cname.vercel-dns.com`, and turn off domain forwarding if it is on.
+- **✅ LIVE 9/11, verified over real DNS.** Both hosts, http and https, land on
+  `https://www.ppatour.com/europe/` with a 200. Let's Encrypt certs for apex
+  and www, valid to Dec 10 2026.
+- **How it was wired, for the next domain:** Bryce added both hostnames with
+  `vercel domains add <host> --scope bryce-pickleballs-projects`, run from this
+  repo. ⚠ The CLI defaults to the Gull Stack team, so without `--scope` it
+  returns "Project not found (404)"; the two-argument `domains add <host>
+  <project>` form errors. DNS is in GoDaddy (Jason's account, Bryce has
+  delegate access): `A @ 76.76.21.21` and `A www 76.76.21.21`, the old
+  `CNAME www` deleted. Nameservers stay at GoDaddy. No forwarding, no MX.
+- **⚠ The apex certificate did not issue on its own.** www got one within
+  minutes; the apex served www's cert and HTTPS failed, so http → https broke.
+  `vercel certs issue ppatoureurope.com --scope bryce-pickleballs-projects`
+  fixed it in 11 seconds. Same as jackalope.ppatour.com on 8/26: force it rather
+  than wait.
 
 ### 2026-09-10 — JOOLA complained, the Paddle Lab went behind a password
 
