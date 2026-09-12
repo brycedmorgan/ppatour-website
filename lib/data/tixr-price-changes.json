@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-11T16:48:59Z",
+  "updated_at": "2026-09-12T15:55:31Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -5686,6 +5686,48 @@
       "all_in_price": {
         "from": 189.08,
         "to": 199.88
+      }
+    },
+    {
+      "at": "2026-09-12T15:55:31Z",
+      "type": "ticket_added",
+      "event_id": "195027",
+      "event": "PPA Mesa",
+      "ticket": "Thursday, Sept. 17 — Play with a Pro Clinic",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-09-12T15:55:31Z",
+      "type": "ticket_added",
+      "event_id": "195027",
+      "event": "PPA Mesa",
+      "ticket": "Tuesday, Sept. 15 — On Court with PPA Pros",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-09-12T15:55:31Z",
+      "type": "ticket_added",
+      "event_id": "195027",
+      "event": "PPA Mesa",
+      "ticket": "Wednesday, Sept. 16 — King’s Court",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-09-12T15:55:31Z",
+      "type": "price_change",
+      "event_id": "204335",
+      "event": "PPA Palm Springs Sunday - Championships",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": 100,
+        "to": 120
+      },
+      "all_in_price": {
+        "from": 113.44,
+        "to": 135.05
       }
     }
   ]

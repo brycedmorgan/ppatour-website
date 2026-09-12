@@ -1,9 +1,9 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-09-11T16:48:59Z",
+  "generated_at": "2026-09-12T15:55:31Z",
   "event_count": 50,
-  "ticket_type_count": 788,
+  "ticket_type_count": 791,
   "series_breakdown": {
     "PPA Tour": 47,
     "PPA Challenger Series": 2,
@@ -74,6 +74,13 @@
           "all_in_price": 0
         },
         {
+          "name": "Thursday, Sept. 17 — Play with a Pro Clinic",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 0,
+          "all_in_price": 0
+        },
+        {
           "name": "Tuesday Grounds Pass",
           "category": "GA",
           "sale_state": "OPEN",
@@ -81,11 +88,25 @@
           "all_in_price": 30.35
         },
         {
+          "name": "Tuesday, Sept. 15 — On Court with PPA Pros",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 0,
+          "all_in_price": 0
+        },
+        {
           "name": "Wednesday Grounds Pass",
           "category": "GA",
           "sale_state": "OPEN",
           "base_price": 25,
           "all_in_price": 30.35
+        },
+        {
+          "name": "Wednesday, Sept. 16 — King’s Court",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 0,
+          "all_in_price": 0
         },
         {
           "name": "Weeklong Grounds Pass",
@@ -4808,13 +4829,6 @@
           "name": "Sunday Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 60,
-          "all_in_price": 70.23
-        },
-        {
-          "name": "Sunday Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 80,
           "all_in_price": 91.83
         },
@@ -4824,6 +4838,13 @@
           "sale_state": "OPEN",
           "base_price": 100,
           "all_in_price": 113.44
+        },
+        {
+          "name": "Sunday Courtside",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 120,
+          "all_in_price": 135.05
         },
         {
           "name": "Sunday Courtside+",
