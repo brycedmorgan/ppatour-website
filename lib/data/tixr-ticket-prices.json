@@ -1,7 +1,7 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-09-12T15:55:31Z",
+  "generated_at": "2026-09-13T16:44:33Z",
   "event_count": 50,
   "ticket_type_count": 791,
   "series_breakdown": {
@@ -76,8 +76,8 @@
         {
           "name": "Thursday, Sept. 17 — Play with a Pro Clinic",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 0,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 0
         },
         {
@@ -90,8 +90,8 @@
         {
           "name": "Tuesday, Sept. 15 — On Court with PPA Pros",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 0,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 0
         },
         {
