@@ -7,7 +7,7 @@ import { InquiryForm } from "@/components/forms/InquiryForm";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { RegionSwitcher } from "@/components/global/RegionSwitcher";
 import { getEvents } from "@/lib/events-api";
-import { EUROPE_PUBLIC, europeRobots } from "@/lib/europe-launch";
+import { europeRobots } from "@/lib/europe-launch";
 import { europeRoster } from "@/lib/europe-roster";
 import { countryCodeFor } from "@/lib/published-athletes";
 import { getWprIndex } from "@/lib/rankings-api";
@@ -51,11 +51,56 @@ import { SITE_URL } from "@/lib/site";
 
 export const revalidate = 300;
 
+/**
+ * ⚠ EVERY CARVANA STRING HERE IS A DELIBERATE OVERRIDE OF THE ROOT LAYOUT, NOT
+ * DUPLICATION. Carvana is the US title sponsor. This page is shown to European
+ * sponsor prospects, so the tour's US title partner must not appear on it —
+ * their own pitch would be carrying a rival's billing.
+ *
+ * The root layout (`app/layout.tsx`) sets a title template `"%s · Carvana PPA
+ * Tour"`, `openGraph.siteName`/`title` and `twitter.title`, all reading
+ * "Carvana PPA Tour". Next merges page metadata over the layout's, so each one
+ * has to be displaced explicitly:
+ *
+ * - `title.absolute` — bypasses the template entirely. Plain `title` would come
+ *   out as "PPA Tour Europe · Carvana PPA Tour", which is what shipped until
+ *   2026-09-14.
+ * - `openGraph` — the root object otherwise wins WHOLE. Before this block the
+ *   page's own description never reached og:description at all; the unfurl read
+ *   "Carvana PPA Tour — The Pro Tour of Pickleball". That is what appeared when
+ *   anyone pasted this link into Slack or a calendar invite.
+ * - `twitter` — same reason.
+ *
+ * ⚠ The OG IMAGE is NOT set here. It comes from the sibling
+ * `opengraph-image.tsx`, which Next resolves file-first and which overrides
+ * anything named in metadata. Without that file this page inherits the root
+ * card, and the root card draws the Carvana lockup.
+ *
+ * ⚠ STILL CARVANA-BRANDED AND NOT FIXABLE FROM THIS FILE: the header and footer
+ * lockups, the footer's ten US partner marks (Carvana among them, labelled
+ * "Title Partner" and linking to carvana.com), and `SITE_JSON_LD` in the root
+ * layout, which is rendered as a raw script rather than through the metadata
+ * API and so cannot be overridden per page. Those need region-aware chrome.
+ */
 export const metadata: Metadata = {
-  title: "PPA Tour Europe",
+  title: { absolute: "PPA Tour Europe" },
   description:
     "PPA Tour Europe — the European professional pickleball tour. Schedule, signed pros, event tiers, entry priority and the rules that differ from the US tour.",
   alternates: { canonical: `${SITE_URL}/europe` },
+  openGraph: {
+    type: "website",
+    siteName: "PPA Tour Europe",
+    title: "PPA Tour Europe",
+    description:
+      "The European professional pickleball tour — schedule, signed pros, event tiers and entry priority.",
+    url: `${SITE_URL}/europe`,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "PPA Tour Europe",
+    description:
+      "The European professional pickleball tour — schedule, signed pros, event tiers and entry priority.",
+  },
   // ⚠ Unlisted, not private. Live for anyone with the link, invisible to search
   // until EUROPE_PUBLIC flips. See lib/europe-launch.ts.
   robots: europeRobots,
@@ -161,24 +206,20 @@ export default async function EuropePage() {
 
   return (
     <>
-      {/* ⚠ Review banner, shown only while EUROPE_PUBLIC is false. Payton, Catie,
-          Chris and Smash are being sent this URL before launch, and a finished
-          page with no "not live yet" marker reads as already published — which
-          is how someone forwards it to a licensee or posts it to social. It
-          disappears with the flag, along with the nav gap it explains. */}
-      {!EUROPE_PUBLIC && (
-        <div className="bg-ppa-blue-deep text-white">
-          <div className="mx-auto w-full max-w-6xl px-4 py-2.5">
-            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80">
-              Preview — not yet live.{" "}
-              <span className="font-normal normal-case tracking-normal text-white/60">
-                Reachable by link only. Not linked from ppatour.com and not in
-                search. Please don&apos;t share it publicly yet.
-              </span>
-            </p>
-          </div>
-        </div>
-      )}
+      {/* ⚠ THE "Preview — not yet live" BANNER WAS REMOVED 2026-09-14, on Bryce's
+          instruction ("take the preview off"), because this URL is being shown to
+          a sponsor prospect and a banner saying the page is not live reads badly
+          on their own pitch.
+
+          ⚠ REMOVING THE BANNER DID NOT PUBLISH THE PAGE. `europeRobots` above
+          still returns noindex/nofollow while EUROPE_PUBLIC is false, and the
+          page is still absent from the nav, the footer, site search and the
+          sitemap. So it remains reachable by link only — the banner was the only
+          thing that SAID so. Anyone sending this link still needs to say it out
+          loud, because the page no longer does.
+
+          Do not re-add it as a way of marking the page unlaunched; that is what
+          EUROPE_PUBLIC is for. */}
 
       <RegionSwitcher active="Europe" />
 
