@@ -14,6 +14,7 @@
  */
 
 import { LIVE_SCORES_CACHE_TAG } from "@/lib/cache-tags";
+import { pbGetJson } from "@/lib/pb-fetch";
 
 export type TickerPlayer = { name: string; headshot: string | null };
 export type TickerTeam = { players: TickerPlayer[]; games: (number | null)[] };
@@ -627,15 +628,38 @@ export async function fetchPlannedStarts(): Promise<Map<string, string>> {
         current_page: "1",
         use_camel_case: "true",
       });
-      const res = await fetch(`${base}/v2/data/homepage_score_ticker?${params}`, {
-        headers: { "PB-API-TOKEN": token },
-        // Same quantizing rule as fetchScores, at this endpoint's own window.
-        next: { revalidate: PLANNED_REVALIDATE_S, tags: [LIVE_SCORES_CACHE_TAG] },
-        signal: AbortSignal.timeout(TIMEOUT_MS),
-      });
-      if (!res.ok) return found;
-      const json = (await res.json()) as { results?: { results?: ApiMatch[] } };
-      for (const row of json.results?.results ?? []) {
+      /**
+       * ⚠ THROUGH `pbGetJson`, SO A 429 IS RETRIED RATHER THAN READ AS "NO
+       * MATCH HAS A DATE". This was a bare fetch returning an empty map on any
+       * non-ok response, and the note above already names the consequence —
+       * "missing ones look identical to 'not scheduled yet'". That was a
+       * cosmetic "Date TBA" on the board until the scores adapter started
+       * deciding which bracket to SHOW from these dates: a rate-limited
+       * response then flipped the board back to the main draw on qualifying
+       * morning. Measured on the Arizona Open, same minute, same tournament:
+       * two consecutive builds returned a 43-match qualifier and no qualifier
+       * at all.
+       *
+       * ⚠ AND THE RETRIES ARE DELIBERATELY FEWER THAN THE DEFAULT (4). This is
+       * the endpoint FAILURE_COOLDOWN_MS exists to protect — retrying hard
+       * against something already throttling us is what that cooldown is for.
+       * Two attempts is enough to ride out a single blip, and the load stays
+       * bounded regardless: `plannedInFlight` single-flights this and a success
+       * is cached for PARTNER_TTL_MS, so this is a handful of requests per ten
+       * minutes per instance, not one per poll.
+       */
+      const json = (await pbGetJson(
+        `${base}/v2/data/homepage_score_ticker?${params}`,
+        { "PB-API-TOKEN": token },
+        {
+          timeoutMs: TIMEOUT_MS,
+          retries: 2,
+          // Same quantizing rule as fetchScores, at this endpoint's own window.
+          revalidate: PLANNED_REVALIDATE_S,
+          tags: [LIVE_SCORES_CACHE_TAG],
+        },
+      )) as { results?: { results?: ApiMatch[] } } | null;
+      for (const row of json?.results?.results ?? []) {
         if (row.matchUuid && row.localDateMatchPlannedStart) {
           found.set(row.matchUuid, row.localDateMatchPlannedStart);
         }

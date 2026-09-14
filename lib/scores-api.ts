@@ -536,6 +536,23 @@ function hasPlay(b: Bracket): boolean {
   return b.matches.some((m) => m.status === "live" || m.status === "final");
 }
 
+/**
+ * Is this bracket scheduled to play on a day the feed has actually published?
+ *
+ * ⚠ THE UPCOMING SENTINEL IS THE WHOLE GUARD, and without it this is true for
+ * every event on the calendar. A confirmed-but-undated fixture keeps
+ * UPCOMING_KEY, and `fetchPlannedStarts` only covers a now-1d .. now+7d window
+ * — so a stop three months out has no dated fixture, this is false, and its
+ * qualifier is never shipped. What it DOES catch is the morning of qualifying
+ * day, when the qualifier draw carries real start times and nothing anywhere
+ * has been played yet.
+ *
+ * Only meaningful AFTER the planned starts have been applied — see `build`.
+ */
+function hasDatedFixture(b: Bracket): boolean {
+  return b.matches.some((m) => m.status === "scheduled" && m.dateKey !== UPCOMING_KEY);
+}
+
 async function build(tournamentId: string): Promise<ScoresResult> {
   const { token, base } = config();
   const empty: ScoresResult = { tournamentId, divisions: [], matches: [], qualifier: null, champions: [], standings: [], headshots: {} };
@@ -596,38 +613,28 @@ async function build(tournamentId: string): Promise<ScoresResult> {
       !hasPlay(main) && qualifierEvents.length
         ? await loadBracket(base, token, tournamentId, qualifierEvents, qualifierDivision)
         : null;
+
     /**
-     * ⚠ BOTH BRACKETS ARE SHIPPED AND THE CLIENT PICKS — see ScoresBoard.
-     * Wesley, 8/31: the scores switch "when the score ticker changes to the next
-     * day", and the ticker's day is the DEVICE's date, not the server's. This
-     * route is CDN-cached for 30s and shared between viewers in every timezone,
-     * so the server cannot answer "is it still qualifying day for you"; a
-     * server-side answer would flip at the origin's midnight for everybody at
-     * once. Sending both and deciding in the browser is what keeps the board and
-     * the ticker above it saying the same thing.
+     * Give the confirmed-but-unplayed matches their real day where the feed
+     * knows it. Whatever is left keeps UPCOMING_KEY and groups under a bucket
+     * that says the date is not published yet, rather than borrowing one.
      *
-     * `qualifier` is null unless qualifying has actually been played, so the
-     * extra payload exists only while it is the story. Once the main draw
-     * starts, `loadBracket` above is never even called for it.
+     * ⚠ THIS RUNS BEFORE THE QUALIFIER DECISION BELOW, AND THAT ORDER IS THE
+     * FIX. It used to run after, so at decision time every scheduled match still
+     * carried UPCOMING_KEY and `hasDatedFixture` could never be true — which is
+     * the bug: on the morning of qualifying day nothing has been played in
+     * either bracket, so the board fell through to the main draw. Measured on
+     * the Veolia Arizona Open at 07:56 MST on 9/14: all 43 of the feed's
+     * published start times belonged to the qualifier and every one was that
+     * day, the main draw had none, and the board published 72 main-draw fixtures
+     * each under "Date TBA" while hiding the 43 about to be played.
+     *
+     * Both brackets get it — the client may be about to render either, and the
+     * decision below reads these dates.
      */
-    const qualifier =
-      qualifierBracket && hasPlay(qualifierBracket)
-        ? { divisions: qualifierBracket.divisions, matches: qualifierBracket.matches }
-        : null;
-
-    const { divisions, matches } = main;
-    /**
-     * ⚠ THE PODIUM IS THE MAIN DRAW'S, ALWAYS — see ScoresResult.champions.
-     * A qualifier final has a winner, and crowning them here would put them on
-     * the homepage's "Latest Champions" band and on the event page's podium.
-     */
-    const standings = main.standings;
-
-    // Give the confirmed-but-unplayed matches their real day where the feed
-    // knows it. Whatever is left keeps UPCOMING_KEY and groups under a bucket
-    // that says the date is not published yet, rather than borrowing one.
-    // Both brackets get this — the client may be about to render either.
-    const scheduled = [...matches, ...(qualifier?.matches ?? [])].filter((m) => m.status === "scheduled");
+    const scheduled = [...main.matches, ...(qualifierBracket?.matches ?? [])].filter(
+      (m) => m.status === "scheduled",
+    );
     if (scheduled.length) {
       const starts = await startsSoon;
       for (const m of scheduled) {
@@ -638,6 +645,42 @@ async function build(tournamentId: string): Promise<ScoresResult> {
         m.dateLabel = label;
       }
     }
+
+    /**
+     * ⚠ BOTH BRACKETS ARE SHIPPED AND THE CLIENT PICKS — see ScoresBoard.
+     * Wesley, 8/31: the scores switch "when the score ticker changes to the next
+     * day", and the ticker's day is the DEVICE's date, not the server's. This
+     * route is CDN-cached for 30s and shared between viewers in every timezone,
+     * so the server cannot answer "is it still qualifying day for you"; a
+     * server-side answer would flip at the origin's midnight for everybody at
+     * once. Sending both and deciding in the browser is what keeps the board and
+     * the ticker above it saying the same thing.
+     *
+     * ⚠ SHIPPED WHEN QUALIFYING HAS BEEN PLAYED **OR IS SCHEDULED TO PLAY**, and
+     * the second half is what covers qualifying morning. `hasPlay` alone was
+     * right at 15:52 on Nationals Monday, when 94 qualifier matches were already
+     * complete — and wrong at 08:00, when the qualifier is the only pickleball
+     * with a start time on it and none of it has begun yet. `hasDatedFixture`
+     * carries its own guard against every upcoming stop on the calendar shipping
+     * an empty qualifier draw: a fixture has to carry a published date, and the
+     * planned-start window is only seven days wide.
+     *
+     * Costs no extra upstream calls — `loadBracket` above is still gated on the
+     * main draw having no play, so the qualifier is fetched in exactly the cases
+     * it was before. Only the decision to ship it changed.
+     */
+    const qualifier =
+      qualifierBracket && (hasPlay(qualifierBracket) || hasDatedFixture(qualifierBracket))
+        ? { divisions: qualifierBracket.divisions, matches: qualifierBracket.matches }
+        : null;
+
+    const { divisions, matches } = main;
+    /**
+     * ⚠ THE PODIUM IS THE MAIN DRAW'S, ALWAYS — see ScoresResult.champions.
+     * A qualifier final has a winner, and crowning them here would put them on
+     * the homepage's "Latest Champions" band and on the event page's podium.
+     */
+    const standings = main.standings;
 
     return {
       tournamentId,

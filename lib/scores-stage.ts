@@ -14,6 +14,9 @@ export function localDayKey(d: Date): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
+/** The sentinel a confirmed-but-undated fixture carries — see lib/scores-api. */
+const UPCOMING_KEY = "9999-12-31";
+
 /**
  * Show the qualifier board?
  *
@@ -25,12 +28,25 @@ export function localDayKey(d: Date): string {
  * origin's midnight for everybody at once, and could leave this board and the
  * ticker directly above it disagreeing about what day it is.
  *
- * ⚠ QUALIFYING DAY IS THE FIRST DAY QUALIFYING PLAYED, AND FIRST RATHER THAN
+ * ⚠ QUALIFYING DAY IS THE FIRST DAY QUALIFYING IS PLAYED, AND FIRST RATHER THAN
  * LAST IS THE POINT. `dateKey` buckets a match by its UTC date, so a qualifier
- * finishing after 8pm in Cary lands on TOMORROW's key — and keying off the last
+ * finishing after 8pm in Mesa lands on TOMORROW's key — and keying off the last
  * day would then hold the qualifier board up through the whole of the next day,
- * which is exactly what this is supposed to prevent. The first day qualifying
- * played cannot drift like that.
+ * which is exactly what this is supposed to prevent. The first day cannot drift
+ * like that.
+ *
+ * ⚠ A SCHEDULED DAY COUNTS AS WELL AS A PLAYED ONE, and that is what makes the
+ * board right on qualifying MORNING. Read from played matches alone this
+ * returned false until the first ball was struck: at 07:56 MST on 9/14 the
+ * Arizona Open had 43 qualifier fixtures with published start times, all that
+ * day, nothing played anywhere, and the board showed the main draw's 72 undated
+ * fixtures instead. Taking the MIN across both is what keeps the rest honest —
+ * once qualifying has been played, a leftover fixture rescheduled into tomorrow
+ * cannot push the switch back, because the played day is earlier and wins.
+ *
+ * ⚠ THE UPCOMING SENTINEL IS EXCLUDED EXPLICITLY. A confirmed-but-undated
+ * fixture carries "9999-12-31"; left in, a bracket where every fixture is
+ * undated would give a first day of 9999 and pin this true forever.
  *
  * ⚠ THE MAIN DRAW STARTING ALSO ENDS IT, whatever the date says. Once pro
  * matches are under way they are the story, and this is the backstop if the
@@ -43,8 +59,10 @@ export function showQualifierBoard(data: ScoresResult | null, todayKey: string |
   if ((data?.matches ?? []).some((m) => m.status === "live" || m.status === "final")) return false;
   let firstQualifyingDay: string | undefined;
   for (const m of q.matches) {
-    if (m.status !== "live" && m.status !== "final") continue;
+    const counts =
+      m.status === "live" || m.status === "final" || m.dateKey !== UPCOMING_KEY;
+    if (!counts) continue;
     if (firstQualifyingDay === undefined || m.dateKey < firstQualifyingDay) firstQualifyingDay = m.dateKey;
   }
-  return firstQualifyingDay !== undefined && todayKey <= firstQualifyingDay;
+  return firstQualifyingDay !== undefined && firstQualifyingDay !== UPCOMING_KEY && todayKey <= firstQualifyingDay;
 }

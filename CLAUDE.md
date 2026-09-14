@@ -63,6 +63,65 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-14 — Arizona's qualifying morning: the qualifier gate needed a ball to be struck
+
+- Wesley, 9/14: *"Just like we did for the last tournament… show the Pro Qualifiers today"*
+  on the homepage Live & Latest band and the event page's Live Scores, then *"show the
+  qualifiers for the brackets as well."* All three surfaces now do.
+- **⚠ THE 8/31 MECHANISM WAS ALREADY THERE AND ALREADY SELF-FLIPPING — ITS GATE WAS THE
+  BUG.** Both adapters shipped the qualifier only once `hasPlay` / `drawHasPlay` was true,
+  i.e. once a qualifier match had actually STARTED. That was right at 15:52 on Nationals
+  Monday, when 94 qualifier matches were already complete, which is why nobody saw the
+  hole. At 07:56 MST on Arizona Monday nothing had been played in either bracket, so both
+  surfaces fell through to the Pro Main Draw.
+- **⚠ AND THE FEED WAS UNAMBIGUOUS ABOUT WHOSE DAY IT WAS. Measured, not inferred: all 43
+  of the feed's published start times belonged to the qualifier and every one was dated
+  today; the main draw had ZERO.** The board was publishing **72 main-draw fixtures, every
+  one under "Date TBA"**, while hiding the 43 about to be played.
+- **The gate is now "played OR scheduled to play on a published date."** `hasDatedFixture`
+  (scores) and `drawScheduledSoon` (brackets) read the same planned-start map, so the
+  Scores and Bracket tabs — which sit next to each other — cannot disagree about whether
+  qualifying is happening.
+- **⚠ THE PUBLISHED DATE IS THE WHOLE GUARD, AND IT IS WHAT ANSWERS THE ORIGINAL
+  OBJECTION.** `buildAll`'s own comment warned that widening this would "show its empty
+  qualifier draw for months before it is played" on every upcoming stop.
+  `fetchPlannedStarts` only covers a **now-1d .. now+7d** window, so a stop three months
+  out has no dated fixture and ships no qualifier. Verified on Las Vegas, Chicago and
+  Shandong: all three still `stage=main`, qualifier null.
+- **⚠ THE PLANNED STARTS HAD TO BE APPLIED BEFORE THE DECISION, AND THAT ORDER IS HALF THE
+  FIX.** In `build` they ran *after* the qualifier was chosen, so at decision time every
+  scheduled match still carried `UPCOMING_KEY` and a "scheduled today" test could never
+  have been true. Moved above it; no new upstream calls, because the loop's condition was
+  already satisfied whenever the qualifier bracket exists.
+- **⚠ AND THE FIRST PASS FLAPPED, WHICH TURNED UP A REAL PRE-EXISTING BUG ONE ENDPOINT
+  OVER.** `fetchPlannedStarts` was a **bare fetch with no 429 retry** — the only live-path
+  call not going through `pbGetJson` — so a rate-limited response returned an empty map.
+  Its own docblock already named the consequence (*"missing ones look identical to 'not
+  scheduled yet'"*) and nobody had wired the backoff. **Measured: two consecutive builds,
+  same minute, same tournament, returned a 43-match qualifier and no qualifier at all** —
+  the board would have swapped brackets every 60s. Now through `pbGetJson`, **retries: 2
+  rather than the default 4**, because this is the endpoint `FAILURE_COOLDOWN_MS` exists
+  to protect and it is single-flighted + cached 10 min anyway. **This also fixes
+  pre-existing "Date TBA" flapping that had nothing to do with qualifiers.**
+- **⚠ THE TWO SURFACES KEEP THEIR DIFFERENT SWITCHING RULES, deliberately** (the 8/31
+  ruling): scores switch on the DEVICE's calendar day so the board agrees with the ticker
+  above it; the bracket switches when qualifying is finished, which can be mid-afternoon.
+  Only the "has qualifying started" precondition changed, on both.
+- **⚠ NOBODY NEEDS TO CHANGE ANYTHING TOMORROW, and that was checked against the real
+  payload rather than reasoned about.** Ran Arizona's live payload through every way
+  tomorrow can arrive: main draw starts → pro draw; qualifying completes → pro draw;
+  qualifying NEVER played → pro draw on the 15th. It also correctly stays on qualifiers if
+  play runs past midnight UTC on the 14th. `scratchpad/verify-az-rollover.ts`.
+- Verified on rendered pages at 1440 and 390, not by grep: both surfaces show the **Pro
+  Qualifiers** badge, **Mon, Sep 14**, all five divisions and real seeded matchups; the
+  bracket renders Quarterfinals → Semifinals → Final; **0 "Date TBA"** (was 72); zero
+  horizontal overflow. **Controls unchanged: Nationals, Kuala Lumpur and Atlanta still
+  pro draw with their 5 champions each, and the Nationals bracket renders 0 qualifier
+  badges.** 18/18 switch cases pass (all 11 original ones included), six consecutive
+  builds past the cache TTL stable. tsc + eslint clean (lint at its existing
+  ScoresBoard baseline), `next build` green.
+- ⚠ Champions and standings stay main-draw only, unchanged — a qualifier winner is not the
+  event's champion.
 ### 2026-09-11 — ppatoureurope.com is the Europe site's own address
 
 - **⚠ SUPERSEDES THE REDIRECT BELOW, SAME DAY.** Bryce, once it went live: *"Don't

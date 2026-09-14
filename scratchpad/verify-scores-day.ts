@@ -16,6 +16,8 @@ const result = (mainMatches: ScoreMatch[], qualMatches: ScoreMatch[] | null): Sc
      champions: [], standings: [], headshots: {} }) as ScoresResult;
 
 const QUAL_PLAYED = [m("final", "2026-08-31"), m("live", "2026-08-31"), m("scheduled", "9999-12-31")];
+/** Qualifying morning: fixtures dated today by the planned-start feed, none played. */
+const QUAL_DATED = [m("scheduled", "2026-08-31"), m("scheduled", "2026-08-31")];
 
 const CASES: [string, ScoresResult | null, string | null, boolean][] = [
   ["qualifying day — qualifier played, main draw idle",        result([m("scheduled", "9999-12-31")], QUAL_PLAYED), "2026-08-31", true],
@@ -25,11 +27,27 @@ const CASES: [string, ScoresResult | null, string | null, boolean][] = [
   ["main draw has started — pro wins on qualifying day itself", result([m("live", "2026-08-31")], QUAL_PLAYED),      "2026-08-31", false],
   ["main draw completed (finished event)",                      result([m("final", "2026-08-30")], QUAL_PLAYED),     "2026-08-31", false],
   ["no qualifier bracket in the payload",                       result([m("scheduled", "9999-12-31")], null),        "2026-08-31", false],
-  ["qualifier present but nothing played yet (pre-event)",      result([m("scheduled", "9999-12-31")], [m("scheduled", "9999-12-31")]), "2026-08-31", false],
+  ["qualifier present, undated and unplayed (far-future stop)", result([m("scheduled", "9999-12-31")], [m("scheduled", "9999-12-31")]), "2026-08-31", false],
   ["late-night qualifier bucketed to the NEXT UTC day",
     result([m("scheduled", "9999-12-31")], [m("final", "2026-08-31"), m("final", "2026-09-01")]), "2026-09-01", false],
   ["before mount (device date not read yet)",                   result([m("scheduled", "9999-12-31")], QUAL_PLAYED), null,         false],
   ["no data at all",                                            null,                                                "2026-08-31", false],
+
+  // ── qualifying MORNING: nothing played anywhere, qualifier dated today ──────
+  ["QUALIFYING MORNING — dated today, nothing played (the Arizona case)",
+    result([m("scheduled", "9999-12-31")], QUAL_DATED), "2026-08-31", true],
+  ["qualifying morning, but the main draw has already started",
+    result([m("live", "2026-08-31")], QUAL_DATED),      "2026-08-31", false],
+  ["day AFTER a dated-but-never-played qualifier",
+    result([m("scheduled", "9999-12-31")], QUAL_DATED), "2026-09-01", false],
+  ["day before a dated qualifier (lead-in)",
+    result([m("scheduled", "9999-12-31")], QUAL_DATED), "2026-08-30", true],
+  ["mixed: qualifier played today, a leftover fixture rescheduled to tomorrow",
+    result([m("scheduled", "9999-12-31")], [m("final", "2026-08-31"), m("scheduled", "2026-09-01")]), "2026-09-01", false],
+  ["mixed: same payload, on qualifying day itself",
+    result([m("scheduled", "9999-12-31")], [m("final", "2026-08-31"), m("scheduled", "2026-09-01")]), "2026-08-31", true],
+  ["main draw ALSO dated today — pro draw is not played, qualifier still wins",
+    result([m("scheduled", "2026-08-31")], QUAL_DATED), "2026-08-31", true],
 ];
 
 let pass = 0, fail = 0;

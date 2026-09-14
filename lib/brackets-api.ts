@@ -25,6 +25,7 @@ import {
 } from "@/lib/bracket-types";
 import { pbGetJson } from "@/lib/pb-fetch";
 import { LIVE_SCORES_CACHE_TAG } from "@/lib/cache-tags";
+import { fetchPlannedStarts } from "@/lib/ticker-api";
 import {
   cleanDivision,
   isQualifierEvent,
@@ -491,6 +492,32 @@ function drawHasPlay(raws: ApiMatch[]): boolean {
 }
 
 /**
+ * Is this draw scheduled to play on a day the feed has actually published?
+ *
+ * ⚠ THE PUBLISHED START IS THE WHOLE GUARD, and it is what keeps the original
+ * objection answered: without it, widening the gate below from "played" would
+ * put an empty qualifier draw on every stop on the calendar for months before
+ * it is played. `fetchPlannedStarts` only covers a now-1d .. now+7d window, so
+ * a stop three months out has no published start, this is false, and its
+ * qualifier bracket is never shown.
+ *
+ * ⚠ AND IT IS THE SAME SOURCE THE SCORES BOARD READS, deliberately. The two
+ * surfaces switch on different rules (see buildAll), but they must not disagree
+ * about whether qualifying is happening at all — the Scores and Bracket tabs sit
+ * next to each other on the event page and on the homepage band.
+ *
+ * Fails to false, never to true: an unreachable or rate-limited planned-starts
+ * call leaves the gate exactly where it was before this existed.
+ */
+function drawScheduledSoon(raws: ApiMatch[], starts: Map<string, string>): boolean {
+  if (!starts.size) return false;
+  return raws.some((m) => {
+    const id = str(m, "matchUuid", "uuid");
+    return !!id && starts.has(id);
+  });
+}
+
+/**
  * Is this division's draw finished — i.e. has its final been completed?
  *
  * ⚠ THE TEST IS THE FINAL, NOT "every row is completed", and the difference
@@ -544,9 +571,14 @@ async function buildAll(uuid: string): Promise<BuiltAll> {
    * finish".
    *
    * Three conditions, each doing a job:
-   *   · qualifying has been PLAYED — otherwise every event on the calendar
-   *     would show its empty qualifier draw for months before it is played,
-   *     which is a regression for every upcoming stop.
+   *   · qualifying has been PLAYED, OR IS SCHEDULED TO PLAY on a day the feed
+   *     has published — see `drawScheduledSoon`. "Played" alone was right at
+   *     15:52 on Nationals Monday and wrong at 08:00 on Arizona Monday, when
+   *     nothing had been played in either bracket and the panel showed the pro
+   *     draw while 43 qualifier matches were about to start. The published-date
+   *     half is what still keeps every upcoming stop on the calendar from
+   *     showing an empty qualifier draw for months before it is played, which is
+   *     the regression this condition exists to prevent.
    *   · qualifying is NOT FINISHED — see `drawFinished`, which tests the final
    *     rather than every row.
    *   · the main draw has NOT started — the backstop, and the first thing
@@ -558,14 +590,30 @@ async function buildAll(uuid: string): Promise<BuiltAll> {
    * every day of a stop after qualifying — the qualifier is never requested and
    * this is the same one-call-per-division it has always been. The second round
    * of calls is spent only in the window where qualifying is the live story.
+   *
+   * ⚠ THE PLANNED-STARTS CALL IS ONLY MADE IN THAT SAME WINDOW, and it is the
+   * same cached, single-flighted map the scores adapter reads on the same page —
+   * so on the one morning it is consulted it costs nothing extra, and on every
+   * other day it is never called at all.
    */
   const mainRaws = await Promise.all(events.main.map((e) => eventMatches(base, token, uuid, e.eventId as string)));
   const qualifierRaws =
     !mainRaws.some(drawHasPlay) && events.qualifier.length
       ? await Promise.all(events.qualifier.map((e) => eventMatches(base, token, uuid, e.eventId as string)))
       : null;
+  const qualifierPlayed = qualifierRaws !== null && qualifierRaws.some(drawHasPlay);
+  // Only asked when qualifying exists and has not been played — i.e. the one
+  // morning a stop needs it. Never on a completed event, never after the main
+  // draw opens.
+  let qualifierScheduled = false;
+  if (qualifierRaws !== null && !qualifierPlayed) {
+    const starts = await fetchPlannedStarts();
+    qualifierScheduled = qualifierRaws.some((raws) => drawScheduledSoon(raws, starts));
+  }
   const showQualifier =
-    qualifierRaws !== null && qualifierRaws.some(drawHasPlay) && !qualifierRaws.every(drawFinished);
+    qualifierRaws !== null &&
+    (qualifierPlayed || qualifierScheduled) &&
+    !qualifierRaws.every(drawFinished);
 
   const stage: ScoresStage = showQualifier ? "qualifier" : "main";
   const chosen = showQualifier ? events.qualifier : events.main;
