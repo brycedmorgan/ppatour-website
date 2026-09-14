@@ -1,9 +1,9 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-09-13T16:44:33Z",
+  "generated_at": "2026-09-14T18:15:31Z",
   "event_count": 50,
-  "ticket_type_count": 791,
+  "ticket_type_count": 793,
   "series_breakdown": {
     "PPA Tour": 47,
     "PPA Challenger Series": 2,
@@ -252,6 +252,13 @@
           "all_in_price": 91.83
         },
         {
+          "name": "Thursday Grandstand",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 35,
+          "all_in_price": 41.16
+        },
+        {
           "name": "Thursday VIP",
           "category": "STANDARD",
           "sale_state": "OPEN",
@@ -411,6 +418,13 @@
           "sale_state": "HIDE",
           "base_price": null,
           "all_in_price": 91.83
+        },
+        {
+          "name": "Friday Grandstand",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 35,
+          "all_in_price": 41.16
         },
         {
           "name": "Friday VIP",
@@ -1409,8 +1423,8 @@
           "name": "Saturday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
+          "base_price": 120,
+          "all_in_price": 135.05
         },
         {
           "name": "Saturday Grounds Pass",
@@ -3280,14 +3294,14 @@
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 135.35
+          "all_in_price": 113.69
         },
         {
           "name": "Sunday Courtside Bleacher",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 113.69
+          "all_in_price": 135.35
         },
         {
           "name": "Sunday Courtside Chair",
@@ -3306,16 +3320,16 @@
         {
           "name": "Sunday VIP",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 400,
-          "all_in_price": 438.58
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 546.87
         },
         {
           "name": "Sunday VIP",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 546.87
+          "all_in_price": 438.58
         }
       ],
       "parent_event_id": "166345"
@@ -5315,8 +5329,8 @@
           "name": "Saturday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 50,
-          "all_in_price": 57.36
+          "base_price": 60,
+          "all_in_price": 70.23
         },
         {
           "name": "Saturday Grounds Pass",
@@ -5399,8 +5413,8 @@
           "name": "Weeklong Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 180,
-          "all_in_price": 199.88
+          "base_price": 200,
+          "all_in_price": 221.49
         },
         {
           "name": "Weeklong Grounds Pass",

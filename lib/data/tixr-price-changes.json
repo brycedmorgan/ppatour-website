@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-13T16:44:33Z",
+  "updated_at": "2026-09-14T18:15:31Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -5780,6 +5780,99 @@
       "sale_state": {
         "from": "OPEN",
         "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-09-14T18:15:31Z",
+      "type": "ticket_added",
+      "event_id": "195336",
+      "event": "PPA Mesa Thursday - Round of 16",
+      "ticket": "Thursday Grandstand",
+      "base_price": 35,
+      "all_in_price": 41.16
+    },
+    {
+      "at": "2026-09-14T18:15:31Z",
+      "type": "ticket_added",
+      "event_id": "195335",
+      "event": "PPA Mesa Friday - Quarterfinals",
+      "ticket": "Friday Grandstand",
+      "base_price": 35,
+      "all_in_price": 41.16
+    },
+    {
+      "at": "2026-09-14T18:15:31Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Saturday Courtside",
+      "base_price": {
+        "from": 100,
+        "to": 120
+      },
+      "all_in_price": {
+        "from": 113.44,
+        "to": 135.05
+      }
+    },
+    {
+      "at": "2026-09-14T18:15:31Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday Courtside Bleacher",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 113.69,
+        "to": 135.35
+      }
+    },
+    {
+      "at": "2026-09-14T18:15:31Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 546.87,
+        "to": 438.58
+      }
+    },
+    {
+      "at": "2026-09-14T18:15:31Z",
+      "type": "price_change",
+      "event_id": "206222",
+      "event": "PPA Cape Coral",
+      "ticket": "Saturday Courtside",
+      "base_price": {
+        "from": 50,
+        "to": 60
+      },
+      "all_in_price": {
+        "from": 57.36,
+        "to": 70.23
+      }
+    },
+    {
+      "at": "2026-09-14T18:15:31Z",
+      "type": "price_change",
+      "event_id": "206222",
+      "event": "PPA Cape Coral",
+      "ticket": "Weeklong Courtside",
+      "base_price": {
+        "from": 180,
+        "to": 200
+      },
+      "all_in_price": {
+        "from": 199.88,
+        "to": 221.49
       }
     }
   ]
