@@ -189,7 +189,8 @@ consumes no licence. Answers Jeff Watson's 8/11 ask.
 
 - **Address:** `europe@ppatour.com` · group id `03jtnz0s23kfa0r`
 - **Owner:** Bryce. **Members:** Chris Patrick, Jeff Watson, Katherina Preis
-  (all `@pickleball.com`).
+  (all `@pickleball.com`) and **Payton Pemberton** (`p.pemberton@ppatour.com`,
+  added 2026-09-14 — the only member not on `pickleball.com`).
 - **Access type: Custom.** ⚠ The default *Public* preset does **not** let
   External post, which would bounce every inbound mail from a player, licensee or
   journalist. **"Who can post" is set to include External** — that single setting
@@ -197,11 +198,27 @@ consumes no licence. Answers Jeff Watson's 8/11 ask.
 - **Who can join: Only invited users**, so staff can't add themselves and start
   receiving Europe inquiries.
 
-**Still open:** individual addresses for the licensee teams. Each one is a **paid
-Workspace seat** for an outside agency's staff, so it needs a headcount first
-(asked of Chris Patrick, 8/24). **Kate Young creates the accounts, not Bryce.**
+**The five licensee accounts do NOT exist — verified 2026-09-14.** Filtered the
+Workspace directory on **Last name** for each: `Botti`, `Foschi` and `Escofet` all
+return *No users match*, and `Jackson` returns **Schaefer Jackson only**. So none
+of David Botti, Daniel Botti, Francesco Foschi, Eddie Jackson or Albert Escofet
+has an account. Each is a **paid Workspace seat** for an outside agency's staff, so
+it needs a headcount first (asked of Chris Patrick, 8/24; his 8/25 reply — *"I
+don't know that we need a lot of email addresses"* — is still the blocker).
+**Kate Young creates the accounts, not Bryce** (`kate.young@pickleball.com`).
 ⚠ If they land on `pickleball.com` the naming rule is `first.last@`; only OGs
-have a bare first name.
+have a bare first name. ⚠ Only Albert's address is known
+(`albert@smashpickleball.agency`); the other four have to come from Payton.
+
+⚠ **DO NOT check the directory with the Admin console's global search box.** It
+returns a **false negative on a user who demonstrably exists** — searching `preis`
+answered "No results matching 'preis'" while Katherina Preis was sitting in this
+very group. Use **Users → Add a filter → Last name**, and **click into the
+filter's text input before typing** — it does not take focus on its own, and a
+silent no-op there looks exactly like an applied filter returning nothing. Apply
+one filter per page state: clearing a chip and re-opening the filter in the same
+batch does not work. **Always run a control on somebody you know exists before
+reporting an absence.**
 
 ## What actually blocks Europe launching
 
@@ -309,7 +326,13 @@ is not on the public site, or the season label is informal. The page says
    Daniel Botti, Francesco Foschi, Eddie Jackson, Albert Escofet. Each is a paid
    Workspace seat. **Kate Young creates them, not Bryce.** Not urgent per Payton.
 6. **`europe@ppatour.com` membership.** Payton asked 9/3 to remove Jeff Watson
-   and add himself. Not yet done — Workspace admin task.
+   and add himself. **Half done 2026-09-14: Payton is on the group** — he was
+   never a member, which is the whole reason he received nothing sent to the
+   address. **Jeff Watson stays**, on Bryce's call: he is cc'd on the live thread
+   and would notice the address going quiet. ⚠ **No send-as alias has ever been
+   verified** for this address — a Gmail search for the confirmation mail returns
+   zero — and that verification code only reaches Payton now that he is a member.
+   New members default to **Each Email**.
 7. **The remaining ~16 stops.** Chris Patrick. Unchanged since 7/31, and still
    the thing that decides whether any of this has a calendar to show.
 
