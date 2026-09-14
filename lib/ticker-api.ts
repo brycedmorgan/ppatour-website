@@ -21,6 +21,14 @@ export type TickerTeam = { players: TickerPlayer[]; games: (number | null)[] };
 export type TickerMatch = {
   id: string;
   round: string;
+  /**
+   * Is this a Pro Qualifier match rather than a main-draw one?
+   *
+   * The feed states the round WITHIN qualifying, so a qualifier row arrives as
+   * "Round 32" and reads on a marquee as if the tournament proper were at that
+   * round. Consumers that name the round use this to say what is actually on.
+   */
+  qualifier: boolean;
   /** Division, e.g. "Men's Doubles" (cleaned eventTitle); "" if unknown. */
   division: string;
   status: "live" | "final" | "upnext";
@@ -163,13 +171,42 @@ function formatTime(iso?: string, tz?: string): string | undefined {
   return `${h}:${min} ${ampm}${tz ? ` ${tz}` : ""}`;
 }
 
-/** "Mens Doubles Pro Main Draw" → "Men's Doubles". */
+/**
+ * "Mens Doubles Pro Main Draw" / "Mens Doubles Pro Qualifier" -> "Men's Doubles".
+ *
+ * ⚠ THE CARD MUST NOT CARRY THE WORD "QUALIFIER" ITSELF — the marquee above
+ * the rail says it once for the whole band (see LiveBar), so repeating it on
+ * every card is noise, and here it was noise that COST information: the card
+ * header truncates, so "Mens Singles Pro Qualifier" rendered as "MEN'S SINGLES
+ * PRO ..." and the division itself was the part that got cut. Same call
+ * lib/scores-api makes for its own division pills (`qualifierDivision`).
+ */
 function cleanDivision(title: string): string {
   return title
-    .replace(/\s*Pro Main Draw\s*/i, "")
+    .replace(/\s*Pro (?:Main Draw|Qualifier)\s*/i, "")
     .replace(/\bMens\b/i, "Men's")
     .replace(/\bWomens\b/i, "Women's")
     .trim();
+}
+
+/**
+ * Is this row a Pro Qualifier match?
+ *
+ * ⚠ TITLE-ONLY, AND THAT IS NOT A WEAKER TEST HERE — IT IS THE ONLY POSITIVE
+ * ONE AVAILABLE. lib/scores-api's `isQualifierEvent` also requires
+ * `eventType === "UNDEFINED_PPA_EVENT_TYPE"`, because there it is guarding a
+ * BUCKET: the feed files qualifying under an "undefined" type, so the title
+ * check keeps anything else the feed ever drops in that bucket out. This
+ * endpoint sends no event type at all, and matching the word "Qualifier" in the
+ * title can only ever be a false NEGATIVE — a main draw is titled "Pro Main
+ * Draw" and cannot match it. Measured on the live Arizona ticker: 59 of 59 rows
+ * titled "... Pro Qualifier".
+ *
+ * ⚠ NOT IMPORTED FROM scores-api, and it cannot be: that module imports THIS
+ * one for `fetchPlannedStarts`, so the dependency only runs one way.
+ */
+function isQualifierRow(title: string | undefined): boolean {
+  return /qualif/i.test(title ?? "");
 }
 
 function mapMatch(m: ApiMatch): TickerMatch {
@@ -244,6 +281,7 @@ function mapMatch(m: ApiMatch): TickerMatch {
     winnerTeam: declared,
     outcome: walkover ? ("walkover" as const) : undefined,
     round: m.roundText || "",
+    qualifier: isQualifierRow(m.eventTitle),
     division: cleanDivision(m.eventTitle || ""),
     status,
     court: m.courtTitle || "",

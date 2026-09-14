@@ -63,6 +63,48 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-14 (pt. 2) — The marquee says "Pro Qualifiers", and the date-window version of it had already expired
+
+- Wesley, after the scores and brackets landed: *"can you make the marquee show that it is
+  the pro qualifiers? Use that in place of the round it is in."*
+- **⚠ THE FEED STATES THE ROUND WITHIN QUALIFYING, WHICH IS THE WHOLE PROBLEM.** Measured on
+  the live Arizona ticker: **59 of 59 rows titled "… Pro Qualifier"**, with `roundText`
+  reading Round 64 / Round 32 / Round 16 / Quarter Finals / Semi-Finals. So the front-page
+  marquee read **"Live · Round 64 · PPA Tour: Veolia Arizona Open"** — true of the match,
+  and a claim about a tournament whose main draw has not started.
+- **⚠ THE 8/31 VERSION OF THIS WAS STILL IN THE FILE, EXPIRED, AND THAT IS THE FINDING.**
+  It was a hardcoded `2026-08-31T04:00Z → 2026-09-01T04:00Z` window for Nationals whose own
+  comment said *"delete the block once the day is over — self-expiry is a safety net, not a
+  reason to leave dead code in the tour's front-page chrome."* Nobody did. It had been inert
+  for two weeks in the chrome whose top note is about a marquee that named the April Atlanta
+  test event for months. **Replaced, not extended — a second date window would have been the
+  same mistake with a new fuse.**
+- **New `TickerMatch.qualifier`, derived per row from the feed's own `eventTitle`.** No
+  window, no maintenance, right at every stop — and it **follows the featured match**, so the
+  marquee stops saying it the moment the main draw is what is on court, including
+  mid-afternoon on qualifying day, which a calendar window could not do.
+- **⚠ THE TEST IS TITLE-ONLY HERE, AND THAT IS NOT THE WEAKER VERSION OF `isQualifierEvent`.**
+  That one also requires `eventType === "UNDEFINED_PPA_EVENT_TYPE"` because it is guarding a
+  BUCKET; this endpoint sends no event type at all, and matching the word "Qualifier" in a
+  title can only ever be a false NEGATIVE — a main draw is titled "Pro Main Draw" and cannot
+  match. ⚠ It is also **deliberately not imported from `scores-api`**: that module imports
+  `ticker-api` for `fetchPlannedStarts`, so the dependency only runs one way.
+- **⚠ AND THE CARDS UNDER IT WERE EATING THEIR OWN DIVISION NAME.** `cleanDivision` stripped
+  "Pro Main Draw" but never "Pro Qualifier", so every card header rendered
+  **"MEN'S SINGLES PRO …"** — truncated, with the division the part that got cut. With the
+  marquee now naming the stage once for the whole band, repeating it per card was noise that
+  cost information. Now "Men's Singles". **Same call `scores-api` already makes for its own
+  division pills** (`qualifierDivision`). ⚠ Beyond the literal ask — one line, and easy to
+  revert if the per-card wording is wanted back.
+- Verified on rendered pages at 1440 and 390: the marquee reads **"PRO QUALIFIERS · PPA TOUR:
+  VEOLIA ARIZONA OPEN"** with **0 occurrences of "Round 64"**, cards read "MEN'S SINGLES" /
+  "WOMEN'S SINGLES", no horizontal overflow. 7/7 label cases pass — **every main-draw title
+  keeps the feed's round** (Round 32, Final, Championship) and an empty title falls back to
+  it. tsc + eslint clean, `next build` green.
+- ⚠ The "Live ·" prefix is unchanged and still appears only when a match is genuinely in
+  progress, so between sessions the marquee reads "Pro Qualifiers · {tournament}" with no
+  live claim.
+
 ### 2026-09-14 — Arizona's qualifying morning: the qualifier gate needed a ball to be struck
 
 - Wesley, 9/14: *"Just like we did for the last tournament… show the Pro Qualifiers today"*

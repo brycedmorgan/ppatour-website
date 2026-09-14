@@ -1,7 +1,8 @@
 "use client";
 
 import { WatchLiveButton } from "@/components/live/WatchLiveButton";
-import { pickFeaturedMatch, useLiveTicker, useTourIsLive } from "@/components/live/use-live-ticker";
+import { pickFeaturedMatch, useLiveTicker } from "@/components/live/use-live-ticker";
+import type { TickerMatch } from "@/lib/ticker-api";
 
 /**
  * What the marquee says, built from what is actually on.
@@ -17,37 +18,31 @@ import { pickFeaturedMatch, useLiveTicker, useTourIsLive } from "@/components/li
  * the tournament name without the claim.
  */
 /**
- * ── ONE-DAY ROUND OVERRIDE ────────────────────────────────────────────────
- * Wesley, 8/31: the marquee should read "Pro Qualifiers" today.
+ * ── WHAT THE MARQUEE CALLS THE ROUND ──────────────────────────────────────
+ * Wesley, 9/14: the marquee should say it is the Pro Qualifiers, in place of
+ * the round.
  *
- * Monday of Nationals is qualifying, and the feed states the round WITHIN
- * qualifying ("Round 16"), so the marquee read "Live · Round 16 · …" — true of
- * the match, misleading about the day.
+ * The feed states the round WITHIN qualifying, so a qualifying day arrives as
+ * "Round 32" and the marquee read "Live · Round 32 · Veolia Arizona Open" —
+ * true of the match, and misleading about the tournament, which has not
+ * started its main draw.
  *
- * ⚠ IT EXPIRES ON ITS OWN, AND THAT IS THE POINT. This file's own warning is
- * about a marquee that named the April Atlanta test event long after it
- * finished, because somebody hardcoded a phrase and nobody removed it. A bare
- * string here would be the same mistake with a shorter fuse. Outside the window
- * the marquee goes straight back to the feed's round with no edit.
+ * ⚠ DERIVED FROM THE MATCH, NOT FROM A DATE, AND THAT REPLACES A BLOCK THAT
+ * HAD ALREADY EXPIRED. The 8/31 version of this was a hardcoded
+ * 2026-08-31T04:00Z → 2026-09-01T04:00Z window for Nationals; its own comment
+ * said to delete it once the day was over, and it was still here on 9/14 —
+ * dead code in the tour's front-page chrome, which is exactly the failure this
+ * file's top note is about (a marquee that named the April Atlanta test event
+ * for months). `TickerMatch.qualifier` comes off the row's own event title, so
+ * this needs no window, no maintenance, and is right at every stop.
  *
- * ⚠ THE WINDOW IS ABSOLUTE, NOT "the viewer's today". Nationals is in Cary
- * (EDT, UTC−4) and this renders on every device in every timezone, so a local
- * date check would start and end the override at a different moment for each
- * visitor. These are the instants Monday begins and ends AT THE VENUE.
- *
- * Still delete the block once the day is over — self-expiry is a safety net,
- * not a reason to leave dead code in the tour's front-page chrome.
+ * ⚠ IT FOLLOWS THE FEATURED MATCH, so the marquee stops saying it the moment
+ * the main draw is what is on court — including mid-afternoon on qualifying
+ * day itself, which a calendar window could not do.
  */
-const ROUND_OVERRIDE = {
-  label: "Pro Qualifiers",
-  fromMs: Date.parse("2026-08-31T04:00:00Z"),
-  untilMs: Date.parse("2026-09-01T04:00:00Z"),
-};
-
-function overriddenRound(round: string | undefined, now: number): string | undefined {
-  return now >= ROUND_OVERRIDE.fromMs && now < ROUND_OVERRIDE.untilMs
-    ? ROUND_OVERRIDE.label
-    : round;
+function roundLabel(match: TickerMatch | undefined): string | undefined {
+  if (!match) return undefined;
+  return match.qualifier ? "Pro Qualifiers" : match.round;
 }
 
 function marqueePhrase(round: string | undefined, tournament: string | undefined, live: boolean) {
@@ -82,18 +77,9 @@ const SOCIAL = [
 
 export function LiveBar() {
   const { ordered, tournament } = useLiveTicker();
-  /**
-   * ⚠ NOT `Date.now()` — eslint rejects an impure call during render, and it is
-   * right to: the server and the hydrating client would read two different
-   * instants and the marquee text could mismatch. `useTourIsLive` is this
-   * repo's clock for exactly that reason (seeded during render, ticks every
-   * second), and costs nothing here because TopBar already calls it and
-   * re-renders this component every second regardless.
-   */
-  const { now } = useTourIsLive();
   const featured = pickFeaturedMatch(ordered);
   const phrase = marqueePhrase(
-    overriddenRound(featured?.round, now),
+    roundLabel(featured),
     tournament?.title,
     featured?.status === "live",
   );
