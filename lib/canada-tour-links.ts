@@ -53,29 +53,41 @@ type CanadaEvent = {
   path: string;
   /**
    * `tournament_uuid` from the ppa_tournaments feed, where the feed has this
-   * stop at all. Absent for Ottawa and Toronto, which it does not carry.
+   * stop at all. ⚠ Populate this as soon as a stop is registered: it is the
+   * only key `canadaTourUrlForEvent` checks first, and a feed row missing from
+   * this table silently keeps its pickleballtournaments URL.
    */
   uuid?: string;
   /** Last segment of the feed's `details_url`, as a secondary key. */
   ptSlug?: string;
   /**
-   * Slug in the curated calendar. Load-bearing for Ottawa and Toronto — with no
-   * feed row, it is the ONLY key that can ever match them.
+   * Slug in the curated calendar — the fallback path, used when the API is
+   * unreachable and /events renders the curated list.
    */
   curatedSlug?: string;
 };
 
 export const CANADA_TOUR_EVENTS: readonly CanadaEvent[] = [
+  // ⚠ BOTH OF THESE WERE "curated only" UNTIL 9/14, AND THE KEYS BELOW ARE WHY
+  // THAT MATTERED. PPA Tour Canada registered both stops on 2026-09-01, so the
+  // feed now carries them — and a FEED event resolves through
+  // `canadaTourUrlForEvent`, which only reads `uuid` and `ptSlug`. With neither
+  // populated the live cards matched nothing here and fell back to their
+  // pickleballtournaments listing instead of ppatour.ca, which is the same
+  // failure the Asia table was built to fix (8/6). `curatedSlug` stays as the
+  // fallback path for when the API is unreachable and /events serves curated.
   {
     name: "Ottawa 125",
     path: "2026/ottawa-125",
-    // Not in the feed — curated only.
+    uuid: "94307fed-6e0f-4390-bf19-bda3bfb80d18",
+    ptSlug: "ppa-canada-ottawa-125",
     curatedSlug: "ppa-canada-125-ottawa",
   },
   {
     name: "Toronto 125",
     path: "2026/toronto-125",
-    // Not in the feed — curated only.
+    uuid: "79d96d9b-e9b4-4030-8a14-0499456650c8",
+    ptSlug: "ppa-canada-toronto-125",
     curatedSlug: "ppa-canada-125-toronto",
   },
   {

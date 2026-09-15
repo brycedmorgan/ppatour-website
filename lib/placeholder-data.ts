@@ -765,7 +765,14 @@ const SCHEDULE: RawEvent[] = [
   { name: "Mojo Energy Pouches Virginia Beach Open", slug: "virginia-beach-open", start: "2026-10-12", end: "2026-10-18", city: "Virginia Beach", state: "VA", type: "ppa", tier: "open" },
   { name: "PPA 1500 Australia Pickleball Open", start: "2026-10-13", end: "2026-10-18", city: "Australia", state: "", type: "international", country: "Australia" },
   { name: "PPA Asia 1500 Hong Kong Slam", start: "2026-10-19", end: "2026-10-25", city: "Hong Kong", state: "China", type: "international", country: "Asia" },
-  { name: "PPA Canada 125 Ottawa", start: "2026-10-22", end: "2026-10-25", city: "Ottawa", state: "Canada", type: "international", country: "Canada", showWhenAbsentFromFeed: true },
+  // ⚠ `showWhenAbsentFromFeed` DROPPED 9/15 — the feed now carries this stop
+  // (PPA Tour Canada registered it 2026-09-01) and the flag was rendering a
+  // second card beside it (Bryan Renahan). The feed titles it "PPA Canada
+  // Ottawa 125", which kebabs differently from this row, so the de-dupe in
+  // `withComingSoon` could not see them as one event; a CURATED_ALIASES entry
+  // in lib/events-api.ts now maps the feed slug onto this one. This row stays
+  // as the API-unreachable fallback — don't re-add the flag.
+  { name: "PPA Canada 125 Ottawa", start: "2026-10-22", end: "2026-10-25", city: "Ottawa", state: "Canada", type: "international", country: "Canada" },
 
   // November 2026
   /**
@@ -786,7 +793,9 @@ const SCHEDULE: RawEvent[] = [
   // alone, with no city. Deleted 8/5 with the other four unconfirmed Spanish
   // stops — see the note on the Barcelona opener above before re-adding one.
   { name: "Proton Daytona Beach Open", start: "2026-11-16", end: "2026-11-22", city: "Holly Hill", state: "FL", venue: "Pictona at Holly Hill", type: "ppa", tier: "open" },
-  { name: "PPA Canada 125 Toronto", start: "2026-11-26", end: "2026-11-29", city: "Toronto", state: "Canada", type: "international", country: "Canada", showWhenAbsentFromFeed: true },
+  // ⚠ `showWhenAbsentFromFeed` DROPPED 9/15 — same as the Ottawa row above, and
+  // for the same reason. Aliased in lib/events-api.ts; fallback only now.
+  { name: "PPA Canada 125 Toronto", start: "2026-11-26", end: "2026-11-29", city: "Toronto", state: "Canada", type: "international", country: "Canada" },
   /**
    * Renamed from "Veolia Malibu Cup" and moved off Nov 30 – Dec 6 (Bryan
    * Renahan, 8/26). The feed carries the same rename and the same Dec 14–20,

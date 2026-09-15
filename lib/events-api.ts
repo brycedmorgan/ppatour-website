@@ -148,6 +148,24 @@ const CURATED_ALIASES: Record<string, string> = {
   // the Tixr + registration links and the Major designation with it, since all
   // six are keyed on the old slug. This line is what keeps the URL still.
   "opendoor-pickleball-world-championships": "pickleball-world-championships",
+  // ⚠ THESE TWO ARE THE BUG THE COMMENT ON `withComingSoon` PREDICTED, and it
+  // reached production: Bryan Renahan, 9/14 — "two events for Ottawa and two for
+  // Toronto using the same dates". Wesley added curated rows with
+  // `showWhenAbsentFromFeed` on 9/1 because the feed carried neither stop; PPA
+  // Tour Canada then registered both the SAME DAY (created 2026-09-01), titled
+  // with the points AFTER the city — "PPA Canada Ottawa 125" where we carry
+  // "PPA Canada 125 Ottawa". Different word order, different `kebab(name)`, so
+  // the de-dupe in `withComingSoon` (which tests `live.has(t.slug)`) missed and
+  // both cards rendered. These lines make the feed row adopt the curated slug,
+  // which is what puts it in `live` and suppresses the curated twin; the flags
+  // on both rows were dropped in the same commit.
+  //
+  // ⚠ ONLY THE SLUG COMES FROM CURATED — the feed keeps the name, city and
+  // venue, which here is strictly better data: "The Forge, Orleans, ON" and
+  // "Pickleplex Social Club - Downsview, North York, ON" against the curated
+  // placeholder of city "Ottawa"/"Toronto", state "Canada", venue = the city.
+  "ppa-canada-ottawa-125": "ppa-canada-125-ottawa",
+  "ppa-canada-toronto-125": "ppa-canada-125-toronto",
 };
 
 const curatedBySlug = new Map<string, Tournament>(getAllEvents().map((t) => [t.slug, t]));
