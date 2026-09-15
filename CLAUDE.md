@@ -98,7 +98,35 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   "still has Carvana", and "the links go to the wrong place and there are lots that
   should not be on there (like How it works, player handbook)". **Carvana is the US
   TITLE sponsor**, so a European prospect was reading a competitor's billing on their
-  own pitch. Shipped in three commits: `fb84c20`, `4ff9ba4`, then `cd8f794`.
+  own pitch. Shipped in five commits: `fb84c20`, `4ff9ba4`, `cd8f794`, `2797b1b`,
+  then `e5b870c`.
+- **⚠ THE METADATA FIX LEFT /europe WITH NO SHARE IMAGE AT ALL, AND NOBODY WOULD HAVE
+  NOTICED FROM THE CODE.** `page.tsx` sets its own `openGraph` block to displace the
+  root one (which reads "Carvana PPA Tour" and draws the Carvana lockup). That block
+  carried **no `images`**, so from the moment it shipped the page emitted zero
+  `og:image` and every scraper fell back to whatever it could find — Slack picked the
+  Barcelona hero, with no card and no branding, next to the US tour's designed one.
+  Payton Pemberton caught it, not any check of mine. **Overriding `openGraph` per page
+  replaces the root object WHOLE; if you displace it, you owe it an image.**
+  `app/(marketing)/europe/opengraph-image.tsx` is now that card — file-based, which
+  wins over anything named in metadata.
+- **⚠ THE WORDMARK ON THAT CARD IS TEXT, NOT A RASTER, AND THE REASON IS A FILE THAT
+  PASSED FOUR CHECKS WHILE BEING BROKEN.** A cropped PNG of the lockup was generated
+  with `qlmanage`, which **rasterises SVG onto an opaque white background** — so the
+  asset was a white rectangle. It passed its dimensions (1400×311), its byte count
+  (8,955), its **RGBA colour type**, and **viewing it directly**, because white
+  artwork on transparency renders as white either way. Only compositing it over navy
+  exposed it. Satori drops a malformed image **silently**. The card draws "PPA TOUR"
+  in Gotham Black, which `ogFonts()` already loads. **Do not reintroduce a raster.**
+- ⚠ The card route takes the site-wide **trailing-slash 308** like every other
+  endpoint here — `curl` without `-L` saves the redirect body, not a PNG. Hit while
+  verifying a fix for a different instance of the same trap.
+- ⚠ **`og:url` and the card's own image URL both read `https://www.ppatour.com/...`
+  even on ppatoureurope.com**, because both derive from `SITE_URL`, a single
+  build-time env constant. So a link shared from the Europe domain renders a clean
+  Europe card whose small print says ppatour.com. That is **the canonical-host
+  decision**, not a bug — deferred to Bryce, and cheap to change only while
+  `EUROPE_PUBLIC` is false and the page is `noindex`.
 - **⚠ THE THIRD COMMIT EXISTS BECAUSE THE FIRST TWO SHIPPED A VISIBLE BUG TO THE ONE
   DOMAIN THAT MATTERED, AND EVERY AUTOMATED CHECK SAID THEY WERE FINE.**
   `ppatoureurope.com` rendered a US live-scores marquee, four empty score spinners and
