@@ -1,9 +1,9 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-09-14T18:15:31Z",
+  "generated_at": "2026-09-15T17:23:54Z",
   "event_count": 50,
-  "ticket_type_count": 793,
+  "ticket_type_count": 794,
   "series_breakdown": {
     "PPA Tour": 47,
     "PPA Challenger Series": 2,
@@ -1190,8 +1190,8 @@
         {
           "name": "Saturday VIP",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 350,
           "all_in_price": 383.56
         }
       ],
@@ -1299,8 +1299,8 @@
         {
           "name": "Sunday VIP",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 350,
           "all_in_price": 383.56
         }
       ],
@@ -1420,11 +1420,11 @@
           "all_in_price": 0
         },
         {
-          "name": "Saturday Courtside",
+          "name": "Saturday Evening Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 120,
-          "all_in_price": 135.05
+          "base_price": 100,
+          "all_in_price": 113.44
         },
         {
           "name": "Saturday Grounds Pass",
@@ -1432,6 +1432,13 @@
           "sale_state": "OPEN",
           "base_price": 25,
           "all_in_price": 30.35
+        },
+        {
+          "name": "Saturday Morning Courtside",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 100,
+          "all_in_price": 113.44
         },
         {
           "name": "Saturday VIP",
