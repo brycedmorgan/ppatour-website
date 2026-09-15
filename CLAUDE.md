@@ -63,6 +63,76 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-15 — Carvana off /europe: a rival's title billing was on the sponsor's own pitch
+
+- **Chris Patrick, 9/14, before a meeting with a "huge sponsor":** the Europe page
+  "still has Carvana", and "the links go to the wrong place and there are lots that
+  should not be on there (like How it works, player handbook)". **Carvana is the US
+  TITLE sponsor**, so a European prospect was reading a competitor's billing on their
+  own pitch. Shipped in two commits: `fb84c20`, then `4ff9ba4`.
+- **Audited before touching anything, and it was pervasive rather than a stray logo:
+  48 "Carvana" occurrences on the rendered page.** Header and footer lockups both embed
+  the Carvana badge; the footer printed Carvana's mark labelled **"Title Partner",
+  linking to carvana.com**, among ten US partner marks; title / OG / twitter / JSON-LD /
+  manifest all read "Carvana PPA Tour"; and the sticky bar sold the next **US** stop.
+- **⚠ `EUROPE_PUBLIC` GATES WHETHER EUROPE IS ADVERTISED, NOT WHAT IT LOOKS LIKE.**
+  Launching would have published the problem, not fixed it. Worth knowing before anyone
+  reaches for that flag as a fix again.
+- **New `app/(marketing)/europe/layout.tsx` renders Europe-scoped chrome.** Header is the
+  cropped PPA TOUR lockup + "Europe"; the footer drops the partner strip, the US Tixr
+  ticket link, How It Works and the Player Handbook. **No nav links at all** — Europe has
+  no routes of its own, every section lives on `/europe`, and inventing anchors risks
+  linking to IDs that don't exist. A lockup that goes nowhere wrong beats a nav that goes
+  somewhere wrong.
+- **⚠ THE REGION MARKER MUST STAY SERVER-RENDERED, AND BOTH IN-REPO PRECEDENTS ARE TRAPS.**
+  `data-app-mode` (`components/app/use-app-mode.ts`) and `body[data-deck="usap"]`
+  (`components/partners/UsapDeck.tsx:46`) both set their attribute in a **useEffect, i.e.
+  after hydration** — either would paint the Carvana header on first load and swap it a
+  beat later. UsapDeck survives that only because its deck is a fixed, opaque, full-screen
+  overlay; this page has none. `globals.css` uses `html:has([data-region="europe"])`
+  instead: the chrome is a **sibling** of the marker, so `:has()` is the only selector that
+  can reach it.
+- **⚠ THE LOGO CROP WAS VERIFIED BY RASTERISING AND LOOKING, NOT BY TRUSTING THE
+  COORDINATES.** `public/ppa/logos/ppa-tour-horizontal-{white,blue}.svg` are the shipped
+  lockup at `viewBox="738 0 670 149"`. Rendered, the artwork reads **CARVANA® PPA TOUR**
+  on one line, Carvana ending ~x718 and PPA TOUR starting ~x765 — so 738 sits in the
+  ink-free gap. The crop renders as PPA TOUR alone: no clipped glyph, no orphaned ® mark.
+  ⚠ **Intrinsic width is 670, NOT 1408.** Both global lockups hardcode 1408, so swapping
+  only the `src` hands next/image a 9.45:1 ratio for 4.5:1 artwork and renders it stretched.
+- **⚠ `AthleteRoster` DREW THE CARVANA LOCKUP INSIDE THE ROSTER** — the "Photo Coming" card
+  for a pro with no portrait, at 40% opacity. Alexia Alvarez has no portrait, so it fires on
+  this page. Now an optional `placeholderMark`, per-caller like `tierName` on
+  `FeaturedEvents`. **`/athletes` is byte-identical — verified: still 160 references to the
+  full lockup.**
+- **⚠ HIDDEN IS NOT REMOVED. The count only fell 48 → 36.** The global header and footer are
+  **still in the DOM**, with two `carvana.com` links and a `<link rel="preload">` that
+  downloads the Carvana lockup on every visit — **a preload fires regardless of
+  `display:none`**. And `SITE_JSON_LD` still says "Carvana PPA Tour" with **no way for a page
+  to override it**: it is a raw `<script>` in the root layout, not the metadata API.
+  Removing any of this needs the root layout to read `headers()`, which **opts the whole site
+  out of static generation** — the thing that took `/rankings` from 34.8s to 0.21s.
+  Deliberately not done.
+- **Payton Pemberton sent a ~25-item list on 9/15** spanning Watch, Athletes, Rankings, Tour,
+  Sponsors, About, Contact, History, Host a Tournament and six footer pages, plus the Europe
+  socials (**YouTube @PPATourEurope, Instagram @ppatoureurope**; no TikTok or X) and Europe's
+  own partners (**LT 48 ball and Joola, as "Official Partners"**). Most of it concerns pages
+  the Europe nav no longer links to. **Scope this session was the Europe page only** (Bryce).
+- **⚠ OPEN, AND COMMERCIAL RATHER THAN TECHNICAL:** Payton proposes stripping "Carvana" from
+  the **main PPA Tour site** as well — `/athletes` ("Carvana PPA Tour Pros"), `/rankings`
+  ("weighted across the last 52 weeks of Carvana PPA Tour results", plus the WPR video's own
+  Carvana logo), `/about`. **Carvana is a paying title sponsor.** That is Bryce + Connor's
+  call and was deliberately left alone.
+- **⚠ CHRIS HAS NOW TWICE ASKED FOR A GENUINELY STANDALONE EUROPE SITE** (9/8: *"Needs to be
+  a standalone site please. Just like Asia and Australia."*). The settled architecture is
+  Europe-as-a-region (8/24). This work makes the region **look** standalone; it does not make
+  it standalone. Unresolved, and he may expect otherwise.
+- Separately, in Workspace: **Payton added to the `europe@ppatour.com` group** — he was never
+  a member, which is exactly why he received nothing sent to it. And **none of the five
+  licensee accounts exist**, verified by Last-name filter with two passing controls. See
+  [`docs/EUROPE.md`](docs/EUROPE.md). ⚠ **The Admin console's global search box returns false
+  negatives** — it reported no match for "preis" while Katherina Preis sat in that very group.
+  Use **Users → Add a filter → Last name**, and click into the input before typing.
+
 ### 2026-09-14 (pt. 2) — The marquee says "Pro Qualifiers", and the date-window version of it had already expired
 
 - Wesley, after the scores and brackets landed: *"can you make the marquee show that it is
