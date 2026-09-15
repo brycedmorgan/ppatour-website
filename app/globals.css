@@ -564,6 +564,31 @@ html[data-motion="on"] [data-reveal-group].is-revealed > * {
   display: none !important;
 }
 
+/* ── Europe chrome ────────────────────────────────────────────────────────
+   /europe is shown to European sponsor prospects, and the global header and
+   footer both render the Carvana lockup — Carvana is the US TITLE sponsor,
+   so that is a rival's billing on the prospect's own pitch. The footer also
+   prints Carvana's mark labelled "Title Partner" linking to carvana.com.
+   The Europe layout renders its own chrome and marks itself
+   `data-region="europe"`; these rules take the global chrome off that page.
+
+   ⚠ `:has()` ON <html>, NOT THE data-app-mode IDIOM ABOVE. That attribute is
+   set in a useEffect AFTER hydration — components/app/use-app-mode.ts says so
+   deliberately, because markup that differs from the server's first render is
+   a hydration error. Copying it here would paint the Carvana header on first
+   load and swap it a moment later: a visible Carvana flash on the one page
+   that must never show it. The Europe marker is server-rendered inside
+   <body>, and the chrome is a SIBLING of it rather than a descendant, so
+   `:has()` is the only selector that can reach it.
+
+   ⚠ This rule is inert until something renders `[data-region="europe"]`.
+   Hiding chrome is only half the job — the Europe layout must render its own
+   header and footer, or the page ships with no navigation at all. */
+html:has([data-region="europe"]) .site-chrome,
+html:has([data-region="europe"]) .site-footer {
+  display: none !important;
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

@@ -87,7 +87,28 @@ function Select<T extends string>({
  * Roster grid with search + filters (gender / discipline / ranking range)
  * and sort. Filters per Connor's 7/20 punch list.
  */
-export function AthleteRoster({ athletes }: { athletes: RosterAthlete[] }) {
+export function AthleteRoster({
+  athletes,
+  placeholderMark = { src: "/ppa/logos/ppa-horizontal-white.svg", width: 1408 },
+}: {
+  athletes: RosterAthlete[];
+  /**
+   * The lockup drawn on the "Photo Coming" card for a pro with no portrait.
+   *
+   * ⚠ THE DEFAULT IS THE CARVANA LOCKUP, and that is correct for the US roster
+   * — Carvana is the US title sponsor. It is wrong on /europe, which is shown
+   * to European sponsor prospects: a rival's billing inside their own roster.
+   * Europe passes the cropped, Carvana-free mark instead.
+   *
+   * Per-caller override rather than a change to the component's own default,
+   * following `tierName` on FeaturedEvents — /athletes must stay byte-identical.
+   *
+   * ⚠ `width` is the mark's REAL intrinsic width, not a constant. The full
+   * lockup is 1408x149 (9.45:1); the crop is 670x149 (4.5:1). Passing the wrong
+   * one hands next/image a false aspect ratio and renders it stretched.
+   */
+  placeholderMark?: { src: string; width: number };
+}) {
   const [query, setQuery] = useState("");
   const [gender, setGender] = useState<GenderKey>("all");
   const [discipline, setDiscipline] = useState<DisciplineKey>("all");
@@ -235,9 +256,9 @@ export function AthleteRoster({ athletes }: { athletes: RosterAthlete[] }) {
                      picture" (Connor, 7/20). */
                   <span className="relative flex h-full w-full flex-col items-center justify-center gap-2 bg-ppa-navy">
                     <Image
-                      src="/ppa/logos/ppa-horizontal-white.svg"
+                      src={placeholderMark.src}
                       alt=""
-                      width={1408}
+                      width={placeholderMark.width}
                       height={149}
                       className="h-4 w-auto opacity-40"
                     />

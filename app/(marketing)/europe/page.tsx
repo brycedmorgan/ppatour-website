@@ -325,7 +325,18 @@ export default async function EuropePage() {
             the roster, filter it, and tap any pro for their profile.
           </p>
           <div className="mt-6">
-            <AthleteRoster athletes={roster} />
+            {/* ⚠ The Carvana-free lockup, not the site default. A pro with no
+                portrait gets a branded "Photo Coming" card, and the default
+                mark is the Carvana lockup — the US title sponsor, inside a
+                roster shown to European sponsor prospects. Alexia Alvarez has
+                no portrait today, so this card renders on this page. */}
+            <AthleteRoster
+              athletes={roster}
+              placeholderMark={{
+                src: "/ppa/logos/ppa-tour-horizontal-white.svg",
+                width: 670,
+              }}
+            />
           </div>
         </div>
       </section>

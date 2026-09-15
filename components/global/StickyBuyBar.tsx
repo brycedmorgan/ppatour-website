@@ -94,7 +94,23 @@ export function StickyBuyBar() {
    * `--buy-bar-visible-h`, by checking the suppressed path rather than assuming
    * it worked. Compare both forms so it survives the config being flipped back.
    */
-  const suppressed = isApp || pathname === "/brackets" || pathname === "/brackets/";
+  /**
+   * ⚠ /europe IS SUPPRESSED BECAUSE THE BAR SELLS THE WRONG TOUR THERE. It
+   * advertises the next US stop by name, date and city with a "Buy Tickets"
+   * CTA — and several of those stops are Carvana-titled events. On a page shown
+   * to European sponsor prospects that is both the wrong product and the US
+   * title sponsor's billing on their pitch. See docs/EUROPE.md.
+   *
+   * ⚠ Both slash forms, per the warning above: `trailingSlash: true` makes
+   * usePathname() return "/europe/", so the unslashed comparison alone would
+   * never fire — exactly the bug that left this bar sitting on /brackets.
+   */
+  const suppressed =
+    isApp ||
+    pathname === "/brackets" ||
+    pathname === "/brackets/" ||
+    pathname === "/europe" ||
+    pathname === "/europe/";
 
   /**
    * Publish how much bottom edge this bar is actually covering right now, so
