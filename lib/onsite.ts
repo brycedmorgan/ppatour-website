@@ -85,6 +85,21 @@ const ON_SITE_BY_SLUG: Record<string, OnSiteInfo> = {
     venueMapWidth: 2000,
     venueMapHeight: 2667,
   },
+  // Arizona Open — Sep 14–20, Arizona Athletic Grounds, Mesa. Bryan Renahan,
+  // 9/10, supplied `ppa-mesa-site-map-kiosk-v1.png` — the SAME kiosk template
+  // and the same 2592×3456 source as Cary's, so it takes the identical encode:
+  // 2000px webp, portrait 3:4, `object-contain` with no crop.
+  //
+  // ⚠ This is the ON-SITE map (courts 1–35, championship + grandstand courts,
+  // ticketing, vendor village, VIP, food trucks). It is NOT the parking map —
+  // Dana Summers' lot map is a separate asset and lives on the parking section
+  // in lib/event-guides.ts, because a spectator looking for court 22 and a
+  // driver looking for lot 2 are asking different questions.
+  "veolia-arizona-open": {
+    venueMapUrl: "/ppa/venue-maps/arizona-athletic-grounds.webp",
+    venueMapWidth: 2000,
+    venueMapHeight: 2667,
+  },
 };
 
 export function onSiteFor(slug: string): OnSiteInfo {

@@ -147,6 +147,28 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
       ],
     },
   ],
+  // Arizona Open — Dana Summers, 9/10, submitted through the website request
+  // form. Her whole submission is the one paragraph below plus the map.
+  //
+  // ⚠ SHE SUPPLIED GENERAL PARKING ONLY. There is deliberately no Premium, ADA
+  // or Rideshare section here the way Cary has one — nobody has told us what
+  // this venue does for any of the three, and inventing them is the exact bug
+  // the 8/5 pass deleted 18 strings to close. Add a section when the event team
+  // sends the copy, not before.
+  "veolia-arizona-open": [
+    {
+      heading: "General Parking",
+      body: ["General parking is included with your event admission. Lots 1, 2, and 3 are recommended. (See map below)"],
+      // Her copy says "See map below", so the words and the thing they point at
+      // have to ship together. Supplied art — the venue's own lot map.
+      image: {
+        src: "/ppa/parking/veolia-arizona-open.webp",
+        alt: "Map of the Arizona Athletic Grounds in Mesa, AZ, with the eight parking lots numbered. Lots 1, 2 and 3 sit along the west and north side of the fieldhouses, closest to the pickleball center.",
+        width: 1470,
+        height: 1070,
+      },
+    },
+  ],
 };
 
 /** Parking details for an event page — finalized sections, or the holding line. */
