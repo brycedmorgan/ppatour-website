@@ -38,6 +38,69 @@
 const DEFAULT_TIMEOUT_MS = 8000;
 const DEFAULT_RETRIES = 4;
 
+/**
+ * ⚠ THE PARTNER API LIMITS CONCURRENCY, NOT VOLUME — AND WE WERE EXCEEDING IT
+ * FROM INSIDE A SINGLE REQUEST (9/15).
+ *
+ * Measured against api.pickleball.com today, same token, same endpoint, same
+ * minute: 40 requests fired in parallel returned 5x 200 and 35x 429, while 15
+ * requests sent sequentially 200ms apart returned 15/15 OK. So the budget is
+ * roughly five in flight at once; total calls per hour is not what it counts.
+ *
+ * ⚠ AND THE 429 BODY READS AS AN AUTHORIZATION FAILURE, WHICH IS HOW THIS WENT
+ * MISDIAGNOSED. It says `platform access denied: platformID=9 path=...`, and
+ * platformID 9 is US. A genuine auth problem on this API is a 401 with a
+ * different message ("no platform token" / "Platform token record not found"),
+ * verified by sending no token and a bad one. Anything saying "access denied"
+ * on a 429 is this limit, not a permission we are missing. Do not go asking for
+ * access.
+ *
+ * So: one gate in front of every partner call. `lib/scores-api.ts` fans out
+ * with `Promise.all` across a tournament's divisions, which on the live
+ * Arizona event measured 16 calls at a PEAK OF 6 CONCURRENT and took 4x 429 --
+ * i.e. our own live-scores path was throttling itself on every cold build, and
+ * the retry logic was quietly paying for it in latency.
+ *
+ * ⚠ THIS BOUNDS ONE PROCESS, NOT THE FLEET. The limit is per platform token,
+ * shared across every lambda instance and every build worker, and nothing here
+ * can see the others. What it does fix is the self-inflicted burst: no single
+ * render can put more than {@link MAX_IN_FLIGHT} of our own requests on the
+ * wire at once. Fleet-wide headroom comes from the callers making fewer calls
+ * at all -- which is what the on-disk rankings snapshot does.
+ *
+ * Tune with `PB_MAX_CONCURRENCY` if the API team gives us a real number; the
+ * default is deliberately one under the five we measured, since the budget is
+ * shared with every other instance.
+ */
+const MAX_IN_FLIGHT = Math.max(1, Number(process.env.PB_MAX_CONCURRENCY) || 4);
+
+let inFlight = 0;
+const waiting: (() => void)[] = [];
+
+/**
+ * Run `fn` with a concurrency slot held.
+ *
+ * ⚠ THE SLOT COVERS THE NETWORK CALL AND NOTHING ELSE. It is never held across
+ * a caller's own work or across a retry backoff, so a gated call can never sit
+ * on a slot while waiting for something that needs one -- which is the only way
+ * a gate like this deadlocks.
+ */
+async function gated<T>(fn: () => Promise<T>): Promise<T> {
+  if (inFlight < MAX_IN_FLIGHT) inFlight++;
+  else await new Promise<void>((resolve) => waiting.push(resolve));
+  try {
+    return await fn();
+  } finally {
+    // Hand the slot straight to the next waiter rather than decrementing and
+    // letting it re-race for it.
+    const next = waiting.shift();
+    if (next) next();
+    else inFlight--;
+  }
+}
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 function backoffMs(attempt: number, retryAfter: string | null): number {
   const ra = retryAfter ? Number(retryAfter) : NaN;
   if (Number.isFinite(ra) && ra > 0) return Math.min(ra * 1000, 6000);
@@ -59,20 +122,31 @@ export async function pbGetJson(
       attempt === 0 && cached
         ? { next: { revalidate: opts.revalidate, ...(opts.tags ? { tags: opts.tags } : {}) } }
         : { cache: "no-store" };
+
+    // One attempt, inside a concurrency slot. Returning rather than sleeping in
+    // here is what keeps the backoff OUTSIDE the gate -- a retry that waited on
+    // its slot would hold a quarter of the budget doing nothing.
+    let outcome:
+      | { retry: false; value: unknown | null }
+      | { retry: true; retryAfter: string | null };
     try {
-      const res = await fetch(url, { headers, ...cacheInit, signal: AbortSignal.timeout(timeoutMs) });
-      if ((res.status === 429 || res.status >= 500) && attempt < retries) {
-        await new Promise((r) => setTimeout(r, backoffMs(attempt, res.headers.get("retry-after"))));
-        continue;
-      }
-      if (!res.ok) return null;
-      return (await res.json()) as unknown;
+      outcome = await gated(async () => {
+        const res = await fetch(url, { headers, ...cacheInit, signal: AbortSignal.timeout(timeoutMs) });
+        if ((res.status === 429 || res.status >= 500) && attempt < retries) {
+          return { retry: true as const, retryAfter: res.headers.get("retry-after") };
+        }
+        if (!res.ok) return { retry: false as const, value: null };
+        return { retry: false as const, value: (await res.json()) as unknown };
+      });
     } catch {
       if (attempt < retries) {
-        await new Promise((r) => setTimeout(r, backoffMs(attempt, null)));
+        await sleep(backoffMs(attempt, null));
         continue;
       }
       return null;
     }
+
+    if (!outcome.retry) return outcome.value;
+    await sleep(backoffMs(attempt, outcome.retryAfter));
   }
 }
