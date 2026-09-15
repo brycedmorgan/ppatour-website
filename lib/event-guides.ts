@@ -147,18 +147,25 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
       ],
     },
   ],
-  // Arizona Open — Dana Summers, 9/10, submitted through the website request
-  // form. Her whole submission is the one paragraph below plus the map.
+  // Arizona Open — Dana Summers, 9/10 (general parking + the map) and 9/15,
+  // when she sent the remaining three in reply to the note that we were
+  // publishing general parking only. All of it is her wording.
   //
-  // ⚠ SHE SUPPLIED GENERAL PARKING ONLY. There is deliberately no Premium, ADA
-  // or Rideshare section here the way Cary has one — nobody has told us what
-  // this venue does for any of the three, and inventing them is the exact bug
-  // the 8/5 pass deleted 18 strings to close. Add a section when the event team
-  // sends the copy, not before.
+  // ⚠ THERE IS STILL NO "PREMIUM PARKING" SECTION, AND THAT IS NOW A FACT
+  // RATHER THAN A GAP. She answered "Premium Parking: N/A. All guests should
+  // use the general parking lots listed above." A heading reading "N/A" is not
+  // useful to somebody standing in a lot, so the publishable half of that
+  // answer — her second sentence — closes the General Parking section instead,
+  // where "listed above" refers to the lots and map directly above it. The
+  // sentence matters: Cary DOES sell premium parking, so a fan who has been to
+  // Nationals may go looking for it here, and silence would leave that open.
   "veolia-arizona-open": [
     {
       heading: "General Parking",
-      body: ["General parking is included with your event admission. Lots 1, 2, and 3 are recommended. (See map below)"],
+      body: [
+        "General parking is included with your event admission. Lots 1, 2, and 3 are recommended. (See map below)",
+        "All guests should use the general parking lots listed above.",
+      ],
       // Her copy says "See map below", so the words and the thing they point at
       // have to ship together. Supplied art — the venue's own lot map.
       image: {
@@ -167,6 +174,14 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
         width: 1470,
         height: 1070,
       },
+    },
+    {
+      heading: "ADA Parking",
+      body: ["Accessible parking is available in Lots 2 and 3."],
+    },
+    {
+      heading: "Rideshare",
+      body: ["Rideshare drop-off is welcome in any parking lot."],
     },
   ],
 };
