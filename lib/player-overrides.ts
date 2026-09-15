@@ -28,24 +28,52 @@
 import { ATHLETES_CACHE_TAG } from "@/lib/cache-tags";
 
 const FEED = "https://jackalopehq.vercel.app/api/public/paddles";
-const REVALIDATE_S = 300;
+/**
+ * ⚠ 24h, AND IT WAS 300 UNTIL 9/15 — THAT NUMBER WAS CAPPING THE WHOLE ATHLETE
+ * ROUTE AT FIVE MINUTES. Next's ISR rule: "If you have multiple fetch requests
+ * in a prerendered route, and each has a different revalidate frequency, the
+ * lowest time will be used for ISR" (incremental-static-regeneration.md:575).
+ * Every other athlete data source — athlete-stats, athlete-videos,
+ * division-rankings, rankings-api — passes 86400, so this single 300 was the
+ * floor, and `export const revalidate = 86400` on the page was a silent no-op.
+ * The build output said so in plain sight: /athletes/[slug] printed `5m`.
+ *
+ * ⚠ THE COST WAS NOT ABSTRACT. A cold athlete render is ~16 upstream calls and
+ * measured 17–42s on production. At a 5-minute window every athlete page spends
+ * most of its life expired, so the most-visited pages — Anna Leigh Waters and
+ * Ben Johns — served a cold render to a real fan over and over. Reported 9/15 as
+ * "the cards don't work": a card click is a client-side navigation, so a 20s
+ * server render looks like a dead link rather than a slow page, which is why it
+ * was reported as broken while the direct URL "just loads slowly".
+ *
+ * ⚠ NOTHING GETS STALER, AND THE NOTE BELOW IS WHY. The 300 never bought page
+ * freshness in the first place — it only ever cached the FETCH, as the 8/22
+ * measurement proved. Immediacy comes from `revalidateTag(ATHLETES_CACHE_TAG)`,
+ * which this fetch already passes and `/api/revalidate-athletes` already calls.
+ * So a Jackalope save still drops these pages the moment it lands.
+ */
+const REVALIDATE_S = 60 * 60 * 24;
 
 /**
  * ⚠ FRESHNESS — READ THIS BEFORE TELLING ANYONE "IT UPDATES IN FIVE MINUTES".
  * It does not. Three comments in this repo used to say "within the ISR window";
  * measured on 8/22 against a real edit, they were wrong.
  *
- * `REVALIDATE_S` above is how long the FETCH is cached. But an athlete page exports no
- * `revalidate` — it is prerendered from `generateStaticParams`, so the page's own HTML
- * only regenerates when something invalidates ATHLETES_CACHE_TAG. Today the only things
- * that do are a deploy and the Vercel Cron on `/api/revalidate-athletes`, which runs
- * ONCE A DAY at 07:00 UTC (vercel.json). So a Pro Player Central edit is visible on
- * ppatour.com somewhere between a minute and 24 hours later, averaging about twelve.
+ * `REVALIDATE_S` above is how long the FETCH is cached. The page's own HTML regenerates
+ * on its own 24h ISR window (`export const revalidate = 86400`, added 9/5) or whenever
+ * something invalidates ATHLETES_CACHE_TAG — today a deploy and the Vercel Cron on
+ * `/api/revalidate-athletes`, which runs ONCE A DAY at 07:00 UTC (vercel.json). So a Pro
+ * Player Central edit is visible on ppatour.com somewhere between a minute and 24 hours
+ * later, averaging about twelve.
  *
- * Do NOT "fix" this by adding `export const revalidate` to the athlete page. There are
- * 1,174 of them; a short window means every one re-renders on its own schedule, and the
- * daily cron exists precisely so page renders don't walk into the partner API's rate
- * limit (see the note in app/api/revalidate-athletes/route.ts).
+ * ⚠ DO NOT SHORTEN `REVALIDATE_S` TO MAKE EDITS LAND SOONER. It will not work and it
+ * will take the whole route down with it: the lowest fetch revalidate on a prerendered
+ * route becomes the route's ISR window, so a 5-minute value here expires every athlete
+ * page every 5 minutes — which is exactly the 9/15 outage, where a cold 17–42s render
+ * made the Waters and Johns cards look like dead links. The page-level note that used to
+ * sit here ("do NOT add `export const revalidate`") was overtaken on 9/5; the daily
+ * window is now deliberate and matches the cron, and the rate-limit concern it was
+ * guarding against is handled by that cadence (see app/api/revalidate-athletes/route.ts).
  *
  * The real fix is a webhook: Jackalope calls `/api/revalidate-athletes` when a player
  * record is saved, and the edit lands in seconds. That needs a shared secret set in both
