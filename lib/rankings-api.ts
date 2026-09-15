@@ -313,8 +313,15 @@ function hasBoardSource(): boolean {
   return Boolean(config().token) || snapshotBoard("M") !== null || snapshotBoard("F") !== null;
 }
 
-/** One {@link BOARD_PAGE_SIZE}-row page of one gender board. */
-type Board = { entries: RankingEntry[]; total: number };
+/**
+ * One {@link BOARD_PAGE_SIZE}-row page of one gender board.
+ *
+ * ⚠ `rows` IS THE RAW COUNT THE API RETURNED, AND IT IS NOT `entries.length`.
+ * We drop zero-point players (63 men, 22 women today), so the filtered list is
+ * always shorter than the page actually delivered. Anything deciding whether
+ * there is a NEXT page has to read the raw number -- see {@link boardAll}.
+ */
+type Board = { entries: RankingEntry[]; total: number; rows: number };
 
 const boardCache = new Map<string, { value: Board; expires: number }>();
 const boardInFlight = new Map<string, Promise<Board | null>>();
@@ -386,7 +393,7 @@ async function fetchBoardPage(gender: "M" | "F", page: number): Promise<Board | 
   const players = json.results?.player_rankings ?? [];
   // Always drop zero-point players (matches the source handler).
   const entries = players.filter((pl) => (pl.points ?? 0) > 0).map(mapPlayer);
-  return { entries, total: json.total_records ?? entries.length };
+  return { entries, total: json.total_records ?? players.length, rows: players.length };
 }
 /**
  * One page of one gender board, cached three ways (see the file header). Null
@@ -413,6 +420,7 @@ async function boardPage(gender: "M" | "F", page: number): Promise<Board | null>
       const value: Board = {
         entries: slice.filter((pl) => (pl.points ?? 0) > 0).map(mapPlayer),
         total: snap.total,
+        rows: slice.length,
       };
       if (value.entries.length > 0) {
         boardCache.set(key, { value, expires: Date.now() + BOARD_TTL_MS });
@@ -479,19 +487,44 @@ async function boardAll(gender: "M" | "F"): Promise<RankingEntry[]> {
       return mapped;
     }
 
+    /**
+     * ⚠ PAGE ON THE RAW ROW COUNT, AND STOP ON A SHORT PAGE. THE OBVIOUS
+     * CONDITION IS WRONG AND COST A GUARANTEED 404 PER BOARD (9/15).
+     *
+     * This used to loop `while (all.length < total)`, comparing the
+     * POINTS-FILTERED list against the API's UNFILTERED `total_records`. Those
+     * can never meet: we drop zero-point players, 63 of 1,444 men and 22 of 832
+     * women today. So after the last real page the condition still read true and
+     * we asked for one more -- `current_page=7` on a six-page men's board,
+     * `current_page=5` on a four-page women's board -- every cold read.
+     *
+     * The API team quoted that exact request back to us during the 9/15
+     * incident, with its 404, and noted that 4xx responses are NOT stored in
+     * their cache. So it was uncacheable load, on every miss, forever.
+     *
+     * A short page is the only end-of-pagination signal that does not depend on
+     * what `total_records` counts. `total` is still read, but only to report the
+     * board size; it no longer steers the loop.
+     *
+     * ⚠ Same root cause as the phantom page 28 on /leaderboards (9/1). That one
+     * was fixed where it rendered; this loop was missed.
+     */
     const all: RankingEntry[] = [];
     let page = 1;
-    let total = Infinity;
-    while (all.length < total && page <= MAX_BOARD_PAGES) {
+    let complete = false;
+    while (page <= MAX_BOARD_PAGES) {
       const got = await boardPage(gender, page);
-      if (!got || got.entries.length === 0) break;
+      if (!got || got.rows === 0) break;
       all.push(...got.entries);
-      total = got.total;
+      if (got.rows < BOARD_PAGE_SIZE) {
+        complete = true;
+        break;
+      }
       page += 1;
     }
     // Only memo a board we actually assembled in full — never pin a partial or
     // empty result from a blip, for the same reason boardPage does not.
-    if (all.length > 0 && all.length >= total) {
+    if (all.length > 0 && complete) {
       fullBoardCache.set(key, { value: all, expires: Date.now() + BOARD_TTL_MS });
     }
     return all;
