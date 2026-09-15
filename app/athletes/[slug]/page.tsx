@@ -498,15 +498,33 @@ export default async function AthletePage({ params }: Params) {
    * white box; falls back to the feed's scraped product photo, which gets a
    * white plate behind it because it may carry its own background.
    */
-  const paddleImage = paddleImageFor(
-    effPaddle,
-    // ⚠ The feed's photo belongs to the paddle the feed names. Under a pending
-    // update that is the OLD paddle, so it is dropped rather than shown beside
-    // the new one — the curated cut-out map is keyed on the paddle name and
-    // simply misses, which is the correct "no photo" outcome.
-    paddleUpdate ? null : liveOverride?.image,
-    a.slug,
-  );
+  /**
+   * ⚠ AN ACTIVE UPDATE BYPASSES `paddleImageFor` ENTIRELY — it does not simply
+   * get a null feed image. Both of that function's other sources describe the
+   * paddle the DATA names, which under an update is the OLD one: the feed's
+   * scraped photo is of the superseded paddle outright, and its `BY_SLUG`
+   * signature map is keyed on the ATHLETE and consulted before the paddle name,
+   * so a photo there would keep rendering after the update stopped applying —
+   * a picture of a paddle the pro no longer plays. So the update supplies its
+   * own photo or there is none.
+   *
+   * ⚠ NO PHOTO IS THE CORRECT OUTCOME FOR AN UPDATE THAT CARRIES NONE, and it
+   * is a live case, not a hypothetical: Adam Harvey plays the same MEHAU model
+   * as Hunter Johnson, nobody has told us which of its six colourways, and
+   * publishing Hunter's Sage Rhino on Adam's profile would be a claim about
+   * Adam's gear that nobody made. See `image` on PaddleUpdate.
+   *
+   * ⚠ This wiring was MISSING until 9/15. `PaddleUpdate.image` shipped on 9/3
+   * with Hunter Johnson's cut-out and a docblock explaining why it lives on the
+   * row, but the call site still read `paddleUpdate ? null : …` from the 8/13
+   * Adam Harvey commit — so the field was never read by anything, and his page
+   * published the MEHAU name with no photo while the asset sat unused on disk.
+   */
+  const paddleImage = paddleUpdate
+    ? paddleUpdate.image
+      ? { ...paddleUpdate.image, cutout: true }
+      : null
+    : paddleImageFor(effPaddle, liveOverride?.image, a.slug);
   const quickFacts: { label: string; value: string }[] = [
     { label: "Resides", value: stats?.hometown ?? qi?.resides ?? "" },
     { label: "Age", value: ageVal != null ? String(ageVal) : "" },
