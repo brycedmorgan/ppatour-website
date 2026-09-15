@@ -152,7 +152,17 @@ export function StickyBuyBar() {
     <div
       aria-hidden={!visible}
       style={{ bottom: "var(--cookie-banner-h, 0px)" }}
-      className={`fixed inset-x-0 z-30 transition-transform duration-500 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${
+      /* ⚠ `site-buy-bar` IS A HOOK FOR /europe, AND IT EXISTS BECAUSE THE
+         `suppressed` CHECK ABOVE CANNOT SEE THAT HOST. ppatoureurope.com and
+         europe.ppatour.com serve the Europe page through a `beforeFiles`
+         rewrite of "/" → "/europe/", so usePathname() returns "/" in the
+         browser and the `pathname === "/europe"` comparison never matches —
+         the same class of bug as the /brackets trailing slash noted above,
+         in a form a trailing slash cannot fix. The bar then advertises the
+         next US stop, several of which are Carvana-titled, on a page shown to
+         European sponsor prospects. globals.css hides it off the
+         server-rendered region marker, which is correct on every host. */
+      className={`site-buy-bar fixed inset-x-0 z-30 transition-transform duration-500 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] ${
         visible ? "translate-y-0" : "pointer-events-none translate-y-full"
       }`}
     >

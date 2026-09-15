@@ -68,17 +68,35 @@ export function TopBar() {
       <>
         {/* Suspense: both read useSearchParams (?partner=) through
             useLiveTicker, which needs a boundary to build/prerender. */}
-        <Suspense fallback={<div className="h-[41px] bg-ppa-navy" />}>
-          <LiveBar />
-        </Suspense>
-        <Suspense fallback={<div className="h-[104px] bg-ppa-navy" />}>
-          {/* ⚠ No logo/href passed on purpose. These were pinned to the Veolia
-              Atlanta Championships — the April test event — so the broadcast
-              header wore a finished tournament's crest over whatever was
-              genuinely live. The rail takes the live tournament's own crest
-              from the feed now. */}
-          <LiveScoreTicker />
-        </Suspense>
+        {/* ⚠ `site-broadcast-chrome` EXISTS SO /europe CAN HIDE THIS, AND THE
+            REASON IS THE REWRITE. `showBroadcastChrome` above reads
+            usePathname(), but ppatoureurope.com and europe.ppatour.com serve
+            the Europe page through a `beforeFiles` rewrite of "/" → "/europe/"
+            (next.config.ts). The rewrite is server-side, so the BROWSER path
+            stays "/" — `isHomePath` returns true and this stack renders the US
+            marquee and live score rail on top of the Europe page.
+
+            It is client-only: the server prerenders "/europe", where the gate
+            correctly does not fire, so none of this is in the HTML. That is why
+            every string count over the deployed page came back clean and only a
+            screenshot caught it. ⚠ Do not verify this class of bug by grepping
+            the response body.
+
+            These two sit OUTSIDE the `.site-chrome` wrapper below, so the rule
+            that hides that one never touched them. See globals.css. */}
+        <div className="site-broadcast-chrome">
+          <Suspense fallback={<div className="h-[41px] bg-ppa-navy" />}>
+            <LiveBar />
+          </Suspense>
+          <Suspense fallback={<div className="h-[104px] bg-ppa-navy" />}>
+            {/* ⚠ No logo/href passed on purpose. These were pinned to the Veolia
+                Atlanta Championships — the April test event — so the broadcast
+                header wore a finished tournament's crest over whatever was
+                genuinely live. The rail takes the live tournament's own crest
+                from the feed now. */}
+            <LiveScoreTicker />
+          </Suspense>
+        </div>
         <div className="site-chrome sticky top-0 z-50">
           <Header />
         </div>
