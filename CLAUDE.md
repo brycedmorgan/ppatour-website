@@ -69,7 +69,32 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   "still has Carvana", and "the links go to the wrong place and there are lots that
   should not be on there (like How it works, player handbook)". **Carvana is the US
   TITLE sponsor**, so a European prospect was reading a competitor's billing on their
-  own pitch. Shipped in two commits: `fb84c20`, then `4ff9ba4`.
+  own pitch. Shipped in three commits: `fb84c20`, `4ff9ba4`, then `cd8f794`.
+- **⚠ THE THIRD COMMIT EXISTS BECAUSE THE FIRST TWO SHIPPED A VISIBLE BUG TO THE ONE
+  DOMAIN THAT MATTERED, AND EVERY AUTOMATED CHECK SAID THEY WERE FINE.**
+  `ppatoureurope.com` rendered a US live-scores marquee, four empty score spinners and
+  **@ppatour social icons above the Europe header**, plus a US "Buy Tickets" bar below
+  it. `ppatour.com/europe` was clean the whole time.
+  - **Cause: `usePathname()` LIES ON A REWRITE HOST.** `ppatoureurope.com` and
+    `europe.ppatour.com` serve this page through a `beforeFiles` rewrite of `/` →
+    `/europe/`. The rewrite is server-side, so the **browser path stays `/`** — so
+    `TopBar`'s `isHomePath` check believed it was the homepage and rendered the
+    broadcast stack, and `StickyBuyBar`'s `pathname === "/europe"` guard never matched.
+    **Never gate region behaviour on `usePathname()` in this repo.** Gate on the
+    server-rendered `[data-region="europe"]` marker, which is correct on every host.
+  - ⚠ `LiveBar` and `LiveScoreTicker` sit **outside** the `.site-chrome` wrapper, so
+    the rule hiding that one never reached them. They now carry
+    `.site-broadcast-chrome`; the buy bar carries `.site-buy-bar`.
+  - ⚠ **It is intermittent.** The broadcast branch also requires `live`, so it appears
+    only while a US tournament is running and would have vanished after Arizona and
+    returned at the next stop.
+- **⚠ THE VERIFICATION LESSON, AND IT COST MOST OF THE SESSION: A CLIENT-ONLY DEFECT IS
+  INVISIBLE TO EVERY SERVER-SIDE CHECK.** The page is prerendered at `/europe`, where the
+  gate does not fire, so none of the broken chrome was ever in the response body. Region
+  marker, lockup counts and Carvana counts all passed **on all three hosts** while a
+  sponsor would have seen a US marquee. `curl | grep` cannot see it. **A local server
+  cannot see it either** — `localhost:3311/europe/` has a real `/europe` path, so the bug
+  is unreproducible there. **Screenshot the real production host.**
 - **Audited before touching anything, and it was pervasive rather than a stray logo:
   48 "Carvana" occurrences on the rendered page.** Header and footer lockups both embed
   the Carvana badge; the footer printed Carvana's mark labelled **"Title Partner",
