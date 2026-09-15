@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { EventGallery } from "@/components/events/EventGallery";
 import { JuniorRankings } from "@/components/tour/JuniorRankings";
+import juniorRankings from "@/lib/data/junior-rankings.json";
 import { JuniorFinalists, type FinalsYear } from "@/components/tour/JuniorFinalists";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { getEvents } from "@/lib/events-api";
@@ -518,8 +519,13 @@ export default async function JuniorPage() {
             eyebrow="Presented by Proton"
             title="Junior PPA Rankings"
           />
+          {/* ⚠ DERIVED, NOT TYPED. This was the hardcoded string "Last updated
+              May 19, 2026" sitting directly above JuniorRankings, which renders
+              its own caption from the data — so the 9/15 refresh moved one and
+              left the other, and the section stated two dates four months apart
+              about the same board. Both now read the same field. */}
           <p className="mt-3 text-xs uppercase tracking-[0.14em] text-ppa-navy/45">
-            Last updated May 19, 2026
+            Last updated {juniorRankings.updated}
           </p>
           <div className="mt-6">
             <JuniorRankings />

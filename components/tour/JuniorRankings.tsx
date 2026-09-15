@@ -7,12 +7,17 @@ import raw from "@/lib/data/junior-rankings.json";
 /**
  * Junior PPA rankings board.
  *
- * ⚠ STATIC SNAPSHOT, and it says so on the page. Scraped from
- * ppatour.com/junior-ppa-tour/ on 8/4 (the board's own "Last Updated" is
- * 19 May 2026, which is what renders — never today's date). There is no junior
- * rankings feed yet; when one lands, replace the JSON import and delete the
- * dated caption. The date is shown precisely so staleness is visible rather
- * than implied-fresh.
+ * ⚠ STATIC SNAPSHOT, and it says so on the page. The caption renders
+ * `DATA.updated` — the date the SOURCE was last changed, never today's — so
+ * staleness is visible rather than implied-fresh. There is still no junior
+ * rankings feed; when one lands, replace the JSON import and delete the caption.
+ *
+ * Refreshed 9/15 from Jake Weinbach's "2026 Junior PPA Points" sheet, supplied
+ * by Daniela Almendarez, replacing the 8/4 scrape of ppatour.com/junior-ppa-tour/
+ * (which had been showing 19 May 2026 for four months). 2,207 -> 2,352 rows.
+ * Run `node scripts/import-junior-rankings.mjs` to refresh it again — that
+ * script carries the guards, including the one that stops a reordered sheet
+ * publishing one division's players under another division's heading.
  *
  * ⚠ ONLY THE SELECTED DIVISION IS RENDERED. All 24 divisions are 2,207 rows;
  * the 8/1 audit is why that matters — /rankings put its whole board in one
