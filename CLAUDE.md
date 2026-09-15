@@ -36,11 +36,13 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   and works, and is deliberately absent from the global nav until the call is made —
   see [`docs/SHOP.md`](docs/SHOP.md) for the three ways it can resolve.
 
-- **Opens are 1,000 points.** Bryce, 7/29 — closing Hannah's "Opens 500 / Cups 1500 /
-  Majors 2000" claim outright ("Hannah is full of shit"). The live tier system stands:
-  Opens 1,000 · Cups 1,500 · Championship 2,000 · Worlds 3,000, and Connor's 7/23
-  "The Tour = 1,000+ points" spec stays baked into `getMainTourEvents()` and the
-  events buckets. **No further changes on this.**
+- **The Tour = Majors, Cups, and Opens. Opens are 1,000 points, or 500 for three
+  stops.** The 7/29 ruling (Opens 1,000, "The Tour = 1,000+") was superseded by the
+  **9/8 board decision**: **Veolia Malibu Showcase, Minneapolis Indoor Open and
+  Cincinnati Open are PPA 500 Opens** and stay PPA Tour stops (Bryce, 9/15). They are
+  curated `tier: "open", points: 500`. The Tour is `isTourStop()` (not a Challenger,
+  500+ points) in one place. **Copy says "Majors, Cups, and Opens", never "500 points
+  or more".** Challengers and international 500s are NOT Tour stops.
 - **Worlds is a Major** — the biggest one, at 3,000 points. Bryce, 7/29: "Worlds is
   the biggest slam. Still in the category." It is NOT a tier sitting above the Majors.
   `isMajor()` already badged it correctly; the pro-tour tier table, the TV schedule
@@ -62,6 +64,33 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   re-implement it, and don't "fix" the other 21 profiles that mention a spouse or child.**
 
 ## Session Log
+
+### 2026-09-15 — The three PPA 500 Opens are on The Tour; "1,000+" copy gone
+
+- **Bryce:** Malibu Showcase, Minneapolis Indoor Open and the third 500 are PPA Tour
+  stops even at 500 points. **The third is the Cincinnati Open (Apr 12–18, 2027)**, per
+  the 9/8 board decision recorded in Jackalope, not Daytona or Sacramento.
+- **Data:** the three curated rows are now `tier: "open", points: 500` (Malibu was a
+  1,500 Cup). Both the curated builder and `lib/events-api.ts` now honour a curated
+  `points` on a non-Challenger tier. Verified the live feed resolves all three to the
+  curated slugs, so the override reaches every page.
+- **One predicate:** new `isTourStop()` + `MAIN_TOUR_MIN_POINTS = 500` in
+  `lib/placeholder-data.ts`, used by `getMainTourEvents`, the Next Six band, the grid's
+  Tour filter and the volunteer page. Challengers and international 500s stay out.
+- **Copy:** /events kicker "1,000+ Points" → "Majors, Cups, and Opens"; subtitle now
+  "Every Carvana PPA Tour stop is a crucial stop in the race to the PPA Finals and in a
+  player's standing in the World Pickleball Rankings." Grid filter "The Tour · 1,000+
+  Pts" → "The Tour · Majors, Cups & Opens"; "Open · 1,000" → "Open · 500–1,000". About
+  page stat + paragraph no longer claim every stop is 1,000+.
+- ⚠ **Bryce wrote "Opens, Cups, and Slams" for the filter; shipped "Majors, Cups &
+  Opens"** to match item 1 and the 7/21 Slams→Majors rename.
+- ⚠ **Left alone on purpose:** /about/how-it-works "1,000 points and up / Under 1,000
+  points" (main-draw entry priority) and "no bronze at events worth 1,000 points or
+  more". Those are competition rules; whether they apply to the 500 Opens is a rules
+  call, not copy.
+- **Verified:** tsc clean; eslint shows only the 2 pre-existing findings; local dev
+  /events renders the new copy, zero "1,000+", and the Tour filter lists all three as
+  OPEN · 500.
 
 ### 2026-09-15 — Carvana off /europe: a rival's title billing was on the sponsor's own pitch
 

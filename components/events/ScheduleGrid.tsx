@@ -8,6 +8,7 @@ import { withUtm } from "@/lib/utm";
 import {
   formatDateRange,
   tierPoints,
+  isTourStop,
   eventTierShort,
   tierBadgeClass,
   type Tournament,
@@ -27,7 +28,7 @@ type SeasonKey = "all" | "2025-2026" | "2025" | "2024" | "2023" | "2022";
 // Challengers, and the international series. Narrow with the other options.
 const TYPE_OPTIONS: { value: TypeKey; label: string }[] = [
   { value: "all", label: "PPA Tour — All Events" },
-  { value: "main", label: "The Tour · 1,000+ Pts" },
+  { value: "main", label: "The Tour · Majors, Cups & Opens" },
   { value: "challengers", label: "Challengers" },
   { value: "international", label: "International" },
 ];
@@ -37,7 +38,7 @@ const TIER_OPTIONS: { value: TierKey; label: string }[] = [
   { value: "all", label: "All Points" },
   { value: "slam", label: "Major · 2,000+" },
   { value: "cup", label: "Cup · 1,500" },
-  { value: "open", label: "Open · 1,000" },
+  { value: "open", label: "Open · 500–1,000" },
   { value: "500", label: "500" },
   { value: "250", label: "250" },
   { value: "125", label: "125" },
@@ -125,13 +126,10 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
 
       // Type — "all" is the whole PPA Tour (main draw + Challengers + international).
       //
-      // ⚠ "main" tests POINTS, not just the tier key. The dropdown is labelled
-      // "The Tour · 1,000+ Pts", and app/events/page.tsx defines The Tour as
-      // `tierKey !== "challenger" && tierPoints(e) >= 1000` for the Next Six
-      // band. This filter previously checked only region + tierKey, so the two
-      // could disagree about the same event and the label was a claim the code
-      // didn't enforce. Same predicate in both places now.
-      if (type === "main" && (t.tierKey === "challenger" || tierPoints(t) < 1000)) return false;
+      // ⚠ "main" uses the SAME predicate as the Next Six band on
+      // app/events/page.tsx: `isTourStop` (a Major, Cup or Open, 500+ points).
+      // The two used to disagree about the same event; one function now.
+      if (type === "main" && !isTourStop(t)) return false;
       if (type === "challengers" && t.tierKey !== "challenger") return false;
       if (type === "international" && t.region !== "international") return false;
 
@@ -141,7 +139,8 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
         const pts = tierPoints(t);
         if (tier === "slam" && pts < 2000) return false;
         if (tier === "cup" && pts !== 1500) return false;
-        if (tier === "open" && pts !== 1000) return false;
+        // Opens are 1,000 or, since the 9/8 board decision, 500.
+        if (tier === "open" && t.tierKey !== "open") return false;
         if (/^\d+$/.test(tier) && pts !== Number(tier)) return false;
       }
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { FeaturedEvents } from "@/components/events/FeaturedEvents";
 import { ScheduleGrid } from "@/components/events/ScheduleGrid";
 import { getEvents } from "@/lib/events-api";
-import { tierPoints } from "@/lib/placeholder-data";
+import { isTourStop } from "@/lib/placeholder-data";
 
 /**
  * ISR. Schedule + Tixr prices. Prices sync once a day; 5 minutes is far tighter
@@ -24,20 +24,20 @@ export const metadata: Metadata = {
 
 /**
  * Events page structure (Connor, 7/23 + 7/31): the page leads with the next six
- * stops worth 1,000+ ranking points, then goes straight to Find an Event — the
+ * Tour stops (Majors, Cups, and Opens; 500+ points since the 9/8 PPA 500 Opens),
+ * then goes straight to Find an Event — the
  * searchable, filterable list of EVERY event we run, 125s through Worlds. The
- * old "Other Events" strip (a separate under-1,000 band) is gone; those stops
+ * old "Other Events" strip (a separate Challenger band) is gone; those stops
  * live in Find an Event and are reachable by the tier filter (Connor, 7/31).
  */
 export default async function EventsPage() {
   const { events } = await getEvents();
   const upcoming = events.filter((e) => e.status !== "completed");
 
-  // The Tour — every stop worth 1,000+ points, U.S. AND international
-  // (Asia/Australia 1,000+ now live here as full events — Connor, 7/23).
-  const theTour = upcoming.filter(
-    (e) => e.tierKey !== "challenger" && tierPoints(e) >= 1000,
-  );
+  // The Tour — every Major, Cup and Open, U.S. AND international (Asia/Australia
+  // Tour stops live here as full events — Connor, 7/23). Includes the three PPA
+  // 500 Opens (board decision 9/8, Bryce 9/15). See `isTourStop`.
+  const theTour = upcoming.filter(isTourStop);
 
   // Bryce 7/28: clicking "Full 2026 Schedule" should land on the big-card view
   // of the NEXT SIX tour stops, not the entire season in one wall of cards.
@@ -48,10 +48,10 @@ export default async function EventsPage() {
     <>
       <FeaturedEvents
         events={nextSix}
-        kicker="1,000+ Points"
+        kicker="Majors, Cups, and Opens"
         title="Next Six on Tour"
         headingAs="h1"
-        subtitle="Majors, Cups, and Opens — every Carvana PPA Tour stop is a crucial stop in the race to the PPA Finals and worth 1,000+ World Pickleball Ranking points."
+        subtitle="Every Carvana PPA Tour stop is a crucial stop in the race to the PPA Finals and in a player's standing in the World Pickleball Rankings."
       />
       <section className="bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">

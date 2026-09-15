@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { VolunteerApplicationForm } from "@/components/volunteer/VolunteerApplicationForm";
 import { getEvents } from "@/lib/events-api";
-import { tierPoints } from "@/lib/placeholder-data";
+import { isTourStop } from "@/lib/placeholder-data";
 
 export const metadata: Metadata = {
   title: "Volunteer",
@@ -202,7 +202,7 @@ export default async function VolunteerPage() {
   // schedule, sorted by date. Falls back to an empty list if the feed is down —
   // the picker simply hides rather than blocking the application.
   //
-  // Scoped to the domestic main PPA Tour only — the 1,000+ point stops, no
+  // Scoped to the domestic main PPA Tour only — Majors, Cups and Opens, no
   // Challengers, no international series. Same "The Tour" predicate the events
   // page uses (region + tierKey + points), since that's where volunteering runs.
   const { events } = await getEvents();
@@ -213,8 +213,7 @@ export default async function VolunteerPage() {
           (t) =>
             t.status !== "completed" &&
             t.region !== "international" &&
-            t.tierKey !== "challenger" &&
-            tierPoints(t) >= 1000,
+            isTourStop(t),
         )
         .sort((a, b) => a.startDate.localeCompare(b.startDate))
         .map((t) => {

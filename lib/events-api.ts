@@ -500,8 +500,10 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     // Without the curated overlay this line would keep publishing 500 on
     // the feed-driven /events grid while the curated list said 250 — the
     // same half-applied split as the 8/3 name pass.
+    // A curated `points` also wins on a Tour stop: the three PPA 500 Opens
+    // (board decision 9/8) are tier `open` with `points: 500`.
     points:
-      tier === "challenger" ? (curated?.points ?? pointsFromName(name) ?? undefined) : undefined,
+      curated?.points ?? (tier === "challenger" ? (pointsFromName(name) ?? undefined) : undefined),
     prizeMoney: curated?.prizeMoney ?? TIER_PRIZE[tier],
     // Curated-only: see PRESENTER_BY_SLUG. Never infer a presenter from the
     // title sponsor in the name — that fabricated 6 of 10 presenters (8/4).

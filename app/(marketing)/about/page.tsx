@@ -31,7 +31,7 @@ export const metadata: Metadata = {
  * derived (see above) rather than provisional.
  */
 const STATS = [
-  { n: String(seasonStopCount), label: "Tour Stops", note: "Each worth 1,000+ ranking points" },
+  { n: String(seasonStopCount), label: "Tour Stops", note: "Majors, Cups, and Opens" },
   { n: "$30M+", label: "Total Payout", note: "To pro athletes" },
   { n: "12", label: "Countries", note: "A growing international footprint" },
 ];
@@ -176,9 +176,9 @@ export default function AboutPage() {
                     Championships" spelling after the 8/3 feed-name change. */}
                 <p>
                   {seasonStopCount} tour stops cover every region of the
-                  country, plus a growing international footprint. Each
-                  tournament carries 1,000+ ranking points; the Majors pay
-                  2,000, and Worlds pays 3,000. The season begins in August with
+                  country, plus a growing international footprint. Every stop
+                  is a Major, Cup or Open; the Majors pay 2,000 ranking points,
+                  and Worlds pays 3,000. The season begins in August with
                   the {seasonOpener} and ends in May with the {seasonCloser},
                   where all season championships are decided.
                 </p>

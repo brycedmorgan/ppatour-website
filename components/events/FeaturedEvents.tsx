@@ -82,7 +82,7 @@ export function FeaturedEvents({
             const days = daysUntil(t.startDate);
             /**
              * ⚠ THIS BAND CAN HOLD A LINK-OUT EVENT, AND IT WAS 404ing.
-             * "Next Six on Tour" is every upcoming stop worth 1,000+ points,
+             * "Next Six on Tour" is every upcoming Major, Cup and Open,
              * U.S. AND international (Connor, 7/23) — so a PPA Tour Asia 1000
              * or 1500 stop legitimately lands here (the Leapmotor Kuala Lumpur
              * Cup, Sep 9–13, does today). Those stops have no internal page, and

@@ -65,8 +65,22 @@ export function tierFromName(name: string): EventTier | null {
   return "challenger";
 }
 
-/** Minimum ranking points for an event to appear on the homepage + schedule. */
-export const MAIN_TOUR_MIN_POINTS = 1000;
+/**
+ * Minimum ranking points for a stop on The Tour (homepage, Next Six, the grid's
+ * Tour filter). 500, not 1,000: the board moved three Opens to PPA 500 on 9/8
+ * (Malibu Showcase, Minneapolis Indoor Open, Cincinnati Open) and they stay PPA
+ * Tour stops (Bryce, 9/15). The Tour is named "Majors, Cups, and Opens" in copy,
+ * never "500 points or more".
+ *
+ * ⚠ Points alone do not make a Tour stop. A 500-point Challenger or an
+ * international 500 is NOT one. Use `isTourStop()`, which also checks the tier.
+ */
+export const MAIN_TOUR_MIN_POINTS = 500;
+
+/** A stop on The Tour: a Major, Cup or Open (never a Challenger), 500+ points. */
+export function isTourStop(t: Pick<Tournament, "tierKey"> & { points?: number }): boolean {
+  return t.tierKey !== "challenger" && tierPoints(t) >= MAIN_TOUR_MIN_POINTS;
+}
 
 export type Tournament = {
   slug: string;
@@ -644,8 +658,10 @@ function buildSchedule(raws: RawEvent[], seen: Set<string>): Tournament[] {
       // Challenger tier reads 500 for all of them otherwise. A hand-set
       // `points` wins over the name parse: U.S. Challengers state no number
       // in their title, so the parse can never answer for them.
+      // A hand-set `points` also wins on a Tour stop: the three PPA 500 Opens
+      // (board decision 9/8) are tier `open` with `points: 500`.
       points:
-        tier === "challenger" ? (r.points ?? pointsFromName(r.name) ?? undefined) : undefined,
+        r.points ?? (tier === "challenger" ? (pointsFromName(r.name) ?? undefined) : undefined),
       prizeMoney: r.type === "international" ? "$100,000" : TIER_PRIZE[tier],
       presentedBy: PRESENTER_BY_SLUG[slug],
       // Main-tour cards lead with venue scenes; Challengers/international
@@ -807,13 +823,11 @@ const SCHEDULE: RawEvent[] = [
    * pin, `kebab(name)` moves the page to /veolia-malibu-showcase and silently
    * orphans all six.
    *
-   * ⚠ TIER LEFT AT `cup` (1,500) ON PURPOSE. The new logo reads "PPA 500", but
-   * the feed's own `skill_levels` still say "PPA 1500" and the feed is the
-   * source of truth for this. A demotion to 500 would drop the stop out of the
-   * 1,000+ "The Tour" band on /events, so it is not a badge tweak — it needs
-   * Bryan to confirm which is right.
+   * PPA 500 OPEN (board decision 9/8, confirmed Bryce 9/15). It was a 1,500
+   * Cup; it is now an Open worth 500 points and stays a PPA Tour stop, so it
+   * still appears on The Tour. Tier `open` + `points: 500`.
    */
-  { name: "Veolia Malibu Showcase", slug: "veolia-malibu-cup", start: "2026-12-14", end: "2026-12-20", city: "Malibu", state: "CA", venue: "Pepperdine University", type: "ppa", tier: "cup" },
+  { name: "Veolia Malibu Showcase", slug: "veolia-malibu-cup", start: "2026-12-14", end: "2026-12-20", city: "Malibu", state: "CA", venue: "Pepperdine University", type: "ppa", tier: "open", points: 500 },
 
   // December 2026
   { name: "PPA Australia 125 New South Wales", start: "2026-12-11", end: "2026-12-13", city: "New South Wales", state: "Australia", type: "international", country: "Australia" },
@@ -829,7 +843,8 @@ const SCHEDULE: RawEvent[] = [
   // curated FALLBACK, i.e. exactly when the API is unreachable and we are least
   // able to notice. A fallback that names the wrong venue is worse than none.
   { name: "Carvana Pickleball Masters Powered by Invited", slug: "carvana-pickleball-masters", start: "2027-01-11", end: "2027-01-17", city: "Rancho Mirage", state: "CA", venue: "Mission Hills Country Club", type: "ppa", tier: "slam" },
-  { name: "Minneapolis Indoor Open", start: "2027-01-18", end: "2027-01-24", city: "Lakeville", state: "MN", venue: "Life Time — Lakeville", type: "ppa", tier: "open" },
+  // PPA 500 Open (board decision 9/8): still a PPA Tour stop.
+  { name: "Minneapolis Indoor Open", start: "2027-01-18", end: "2027-01-24", city: "Lakeville", state: "MN", venue: "Life Time — Lakeville", type: "ppa", tier: "open", points: 500 },
 
   // February 2027
   { name: "Cape Coral Open", start: "2027-02-01", end: "2027-02-07", city: "Cape Coral", state: "FL", venue: "Cape Coral Racquet Club", type: "ppa", tier: "open" },
@@ -865,7 +880,8 @@ const SCHEDULE: RawEvent[] = [
   // No venue: Bryan Renahan, 8/4 — "Cincy should not have Lindner Family Tennis
   // Center listed anywhere. No venue for now." Falls back to the city until a
   // venue is confirmed; don't re-add one without him.
-  { name: "Cincinnati Open", start: "2027-04-12", end: "2027-04-18", city: "Cincinnati", state: "OH", type: "ppa", tier: "open" },
+  // PPA 500 Open (board decision 9/8): still a PPA Tour stop.
+  { name: "Cincinnati Open", start: "2027-04-12", end: "2027-04-18", city: "Cincinnati", state: "OH", type: "ppa", tier: "open", points: 500 },
   { name: "Pickleball Players Championships", slug: "atlanta-pickleball-championships", start: "2027-04-26", end: "2027-05-02", city: "Atlanta", state: "GA", venue: "Life Time — Peachtree Corners", type: "ppa", tier: "slam" },
 
   // May 2027
@@ -1151,7 +1167,7 @@ export function getMainTourEvents(): Tournament[] {
   return tournaments
     .filter(
       (t) =>
-        tierPoints(t) >= MAIN_TOUR_MIN_POINTS &&
+        isTourStop(t) &&
         t.status !== "completed" &&
         t.region !== "international",
     )
