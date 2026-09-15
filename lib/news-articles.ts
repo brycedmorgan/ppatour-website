@@ -146,11 +146,19 @@ export const newsArticles: NewsArticle[] = [
    * were fixed ("Truoung" → "Truong", "Colin Johns" → "Collin Johns") and
    * R64/R32/R16 spelled out.
    *
-   * ⚠ HIS TV LINE WAS CHECKED AGAINST OUR OWN SCHEDULE RATHER THAN TRUSTED. It
-   * matches `lib/tv-schedule.ts` exactly — PBTV 1PM Thu, 1PM Fri, 12PM Sat, 2PM
-   * Sun, FS2 Friday and Saturday nights, FS1 Sunday night. A preview that
-   * disagreed with /watch/tv would send fans to the wrong channel, and the
-   * article is the copy people act on.
+   * ⚠ HIS TV LINE WAS CHECKED AGAINST OUR OWN SCHEDULE RATHER THAN TRUSTED —
+   * and on 9/15 that check is what caught it going stale. The broadcast was
+   * rescheduled to the 9/10 sheet (Keaton Maynard, "changed to later half of
+   * day") and the sentence he wrote was then wrong on every count: PBTV now
+   * opens at 5PM ET on all four days, not 1PM/1PM/12PM/2PM, and FRIDAY'S FOX
+   * WINDOW MOVED FROM FS2 TO FS1. So the paragraph now reads 5PM Thu–Sun, FS1
+   * Friday and Sunday night, FS2 Saturday night — matching `lib/tv-schedule.ts`
+   * exactly, which is the whole point of the check.
+   *
+   * ⚠ THE TV SENTENCE IS THE ONE PARAGRAPH IN THIS BODY THAT IS MAINTAINED
+   * RATHER THAN TRANSCRIBED. Everything else is Fleming's and must not be
+   * touched; this line is a channel and a clock time that fans act on, so it
+   * tracks the schedule. Re-check it if the sheet moves again.
    *
    * ⚠ NO PRESENTING PARTNER IN THE SUBTITLE, DELIBERATELY. This stop shows none
    * (Wesley, 8/20 — "AT Sports" removed from the AZ Open page); Veolia is the
@@ -186,7 +194,7 @@ export const newsArticles: NewsArticle[] = [
       "Venue, Tourney & TV",
       "A return to the city, but not the locale, where the PPA started in 2020.",
       "A progressive draw on the pro side, one round per bracket per day and no bronze matches.",
-      "Coverage on PickleballTV begins at 1 p.m. Eastern Thursday and Friday, 12 p.m. Eastern Saturday, and 2 p.m. Eastern on Sunday, with coverage on FS2 Friday and Saturday night and FS1 on Sunday night.",
+      "Coverage on PickleballTV begins at 5 p.m. Eastern Thursday through Sunday, with coverage on FS1 Friday and Sunday night and FS2 on Saturday night.",
       "Women's Singles",
       "Top four seeds: 1) Anna Leigh Waters, 2) Kate Fahey, 3) Kaitlyn Christian, 4) Brooke Buckner.",
       "Anna Leigh Waters' unbeaten streak has reached 2 years, 3 months and 18 days at the start of the Mesa event.",

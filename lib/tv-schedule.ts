@@ -7,7 +7,7 @@
  *
  * ⚠ FOX SPORTS WINDOWS ARE NEW AS OF THE 8/13 SHEET, and they are NOT a
  * simulcast of the PBTV window — most are FS1/FS2-exclusive night windows that
- * start where the PBTV window ends (Arizona Sun: PBTV 2–7, then FS1 7–9). So a
+ * start where the PBTV window ends (Arizona Sun: PBTV 5–7, then FS1 7–9). So a
  * FOX row is additional coverage, never a duplicate of the row above it.
  *
  * ⚠ VIRGINIA BEACH RE-RECONCILED 8/21 vs the 8/19 sheet: its Friday and Saturday
@@ -20,8 +20,13 @@
  * ahead of the sheet — see the note on those two days below. Cary TC is now
  * 20.5h, not the 22h this paragraph recorded when it was reconciled.
  *
- * Reconciled 8/18 vs the 8/13 sheet: Cary 22h TC (Thu–Sun) · Arizona +2 FS2
- * +1 FS1 (no TC) · Las Vegas 4h TC (Sun only) · Chicago 16h TC (Thu–Sun) +2 FS1
+ * ⚠ ARIZONA WAS RESCHEDULED WHOLESALE ON THE 9/10 SHEET — every window moved
+ * into the evening (PBTV opens 5PM ET on all four days, running to 1AM Thu–Sat)
+ * and Friday's FOX window changed network, FS2 → FS1. Its line below therefore
+ * reads +1 FS2 +2 FS1, not the +2 FS2 +1 FS1 the 8/13 sheet gave.
+ *
+ * Reconciled 8/18 vs the 8/13 sheet, Arizona amended 9/15 vs the 9/10 sheet:
+ * Cary 22h TC (Thu–Sun) · Arizona +1 FS2 +2 FS1 (no TC) · Las Vegas 4h TC (Sun only) · Chicago 16h TC (Thu–Sun) +2 FS1
  * +2 FS2 · VA Beach 13h TC · MLP Nations Cup PBTV-ONLY (its TC windows were
  * removed from the sheet) · Worlds 2h TC (Wed Pro-Am only) · Malibu 15h TC
  * (Wed–Sun). The hour totals are computed from the windows below.
@@ -114,11 +119,25 @@ export const tvSchedule: TvEvent[] = [
     ],
   },
   /**
-   * ⚠ NO TENNIS CHANNEL WINDOW — this stop is PBTV + FOX Sports. The 8/13 sheet
-   * added an FS2 window on Friday and Saturday and an FS1 window on Championship
-   * Sunday, and moved two PBTV windows to make room (Sat 12–8 → 12–9, Sun 1–7 →
-   * 2–7). The Sunday FS1 window is FS1-exclusive and starts when the PBTV window
-   * ends, so Sunday coverage runs 2PM–9PM across the two.
+   * ⚠ NO TENNIS CHANNEL WINDOW — this stop is PBTV + FOX Sports.
+   *
+   * ⚠ RESCHEDULED TO THE 9/10 SHEET (Keaton Maynard: "changed to later half of
+   * day"). EVERY window moved — the whole event is now an evening broadcast,
+   * PBTV opening at 5PM ET rather than 12–1PM, and running to 1AM on the three
+   * days that aren't Championship Sunday. Do not reconcile these back to the
+   * 8/13 windows; they are superseded.
+   *
+   * ⚠ AND FRIDAY'S FOX WINDOW CHANGED NETWORK, FS2 → FS1, which is the easiest
+   * thing here to miss on a skim. FS1 takes Friday QFs and Championship Sunday
+   * and is EXCLUSIVE on both; FS2 keeps Saturday SFs and is not.
+   *
+   * ⚠ EXCLUSIVITY IS WHY PBTV HAS TWO ROWS ON FRI AND SUN AND ONE ON THU/SAT.
+   * An FS1-exclusive window means PBTV goes dark for those two hours, so its
+   * coverage is split around it (Fri 5–7 then 9–1AM; Sun 5–7 then 9–10). The
+   * Saturday FS2 window is non-exclusive, so PBTV runs straight through it
+   * 5PM–1AM — which is also why that FS2 row carries no `secondary: "PBTV"`:
+   * a standalone PBTV row already covers the identical hours and both would
+   * print PBTV twice against one slot.
    */
   {
     name: "Veolia Arizona Open",
@@ -132,20 +151,21 @@ export const tvSchedule: TvEvent[] = [
     // link, 7/27). The September 2026 Mesa stop is the Veolia Arizona Open.
     slug: "veolia-arizona-open",
     days: [
-      { date: "Sep 17", dow: "Thu", windows: [{ channel: "PBTV", window: "1PM – 9PM", round: "Round of 16" }] },
+      { date: "Sep 17", dow: "Thu", windows: [{ channel: "PBTV", window: "5PM – 1AM", round: "Round of 16" }] },
       {
         date: "Sep 18",
         dow: "Fri",
         windows: [
-          { channel: "PBTV", window: "1PM – 9PM", round: "Quarterfinals" },
-          { channel: "FS2", window: "6PM – 8PM", round: "Quarterfinals" },
+          { channel: "PBTV", window: "5PM – 7PM", round: "Quarterfinals" },
+          { channel: "FS1", window: "7PM – 9PM", round: "Quarterfinals" },
+          { channel: "PBTV", window: "9PM – 1AM", round: "Quarterfinals" },
         ],
       },
       {
         date: "Sep 19",
         dow: "Sat",
         windows: [
-          { channel: "PBTV", window: "12PM – 9PM", round: "Semifinals" },
+          { channel: "PBTV", window: "5PM – 1AM", round: "Semifinals" },
           { channel: "FS2", window: "7PM – 9PM", round: "Semifinals" },
         ],
       },
@@ -153,8 +173,9 @@ export const tvSchedule: TvEvent[] = [
         date: "Sep 20",
         dow: "Sun",
         windows: [
-          { channel: "PBTV", window: "2PM – 7PM", round: "Championship Sunday" },
+          { channel: "PBTV", window: "5PM – 7PM", round: "Championship Sunday" },
           { channel: "FS1", window: "7PM – 9PM", round: "Championship Sunday" },
+          { channel: "PBTV", window: "9PM – 10PM", round: "Championship Sunday" },
         ],
       },
     ],

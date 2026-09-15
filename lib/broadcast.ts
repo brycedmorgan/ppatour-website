@@ -131,15 +131,24 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
     { round: "Championship", day: "Sunday", window: "10AM ET - 4PM ET", platform: "PBTV", type: "LIVE" },
     { round: "Championship", day: "Sunday", window: "10AM ET - 2PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
   ],
+  // ⚠ RESCHEDULED to the 9/10 sheet — Keaton Maynard, "changed to later half of
+  // day". Every window moved; this stop is now an evening broadcast (PBTV from
+  // 5PM ET, running to 1AM Thu–Sat). ⚠ Friday's FOX window also changed network,
+  // FS2 → FS1. Kept in lockstep with lib/tv-schedule.ts, which carries the full
+  // reasoning for why PBTV splits into two rows on Fri and Sun.
   "veolia-arizona-open": [
-    { round: "RD 16", day: "Thursday", window: "1PM ET - 9PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "QF's", day: "Friday", window: "1PM ET - 9PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "QF's", day: "Friday", window: "6PM ET - 8PM ET", platform: "FS2", type: "LIVE" },
-    { round: "SF's", day: "Saturday", window: "12PM ET - 9PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "RD 16", day: "Thursday", window: "5PM ET - 1AM ET", platform: "PBTV", type: "LIVE" },
+    { round: "QF's", day: "Friday", window: "5PM ET - 7PM ET", platform: "PBTV", type: "LIVE" },
+    // FS1-exclusive: PBTV goes dark for these two hours and resumes at 9PM.
+    { round: "QF's", day: "Friday", window: "7PM ET - 9PM ET", platform: "FS1", type: "LIVE" },
+    { round: "QF's", day: "Friday", window: "9PM ET - 1AM ET", platform: "PBTV", type: "LIVE" },
+    { round: "SF's", day: "Saturday", window: "5PM ET - 1AM ET", platform: "PBTV", type: "LIVE" },
+    // Non-exclusive, so the PBTV row above runs straight through it.
     { round: "SF's", day: "Saturday", window: "7PM ET - 9PM ET", platform: "FS2", type: "LIVE" },
-    { round: "Championship", day: "Sunday", window: "2PM ET - 7PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "Championship", day: "Sunday", window: "5PM ET - 7PM ET", platform: "PBTV", type: "LIVE" },
     // FS1-exclusive, and it starts where the PBTV window ends — not a simulcast.
     { round: "Championship", day: "Sunday", window: "7PM ET - 9PM ET", platform: "FS1", type: "LIVE" },
+    { round: "Championship", day: "Sunday", window: "9PM ET - 10PM ET", platform: "PBTV", type: "LIVE" },
   ],
   "rate-las-vegas-open": [
     { round: "RD 16", day: "Thursday", window: "1PM ET - 9PM ET", platform: "PBTV", type: "LIVE" },
