@@ -124,6 +124,35 @@ export const revalidate = 86400;
  */
 export const fetchCache = "default-cache";
 
+/**
+ * ⚠ `force-static` IS WHAT ACTUALLY MAKES THESE PAGES PRERENDER, AND WITHOUT IT
+ * THE PRERENDERED SET IS NON-DETERMINISTIC. Measured 9/15 on three builds of
+ * identical code: `generateStaticParams` asked for 219 paths and the build
+ * emitted 140, then 204, then 169. Membership moved between runs — Ben Johns
+ * prerendered in the first and not the second, Kate Fahey the reverse.
+ *
+ * THE CAUSE IS THE 429 RETRY IN lib/pb-fetch.ts. Its retries deliberately go
+ * `cache: "no-store"` so a rate-limit blip can't land in the Data Cache — and a
+ * single no-store fetch during render opts that page out of static generation.
+ * `partner_rankings` rate-limits under exactly this load (219 athlete pages,
+ * ~16 upstream calls each), so whether any given pro prerendered came down to
+ * whether upstream throttled us while that page was building. The build log
+ * says nothing: the code catches the error and renders fine.
+ *
+ * ⚠ AND THIS IS THE SAME BUG /rankings HAD ON 8/3, with the same fix and the
+ * same 30-second symptom. See the note on `dynamic` in app/rankings/page.tsx.
+ * A pro who loses the race renders on demand at 15–42s, which is what made the
+ * Waters and Johns cards on /athletes read as broken links rather than slow
+ * pages — a client-side navigation shows nothing at all while it waits.
+ *
+ * force-static pins the intent instead of hoping the build wins the race. This
+ * page reads no cookies, headers or searchParams, so nothing is lost by it;
+ * `permanentRedirect` for duplicate scrape slugs and the `redirect` fallback
+ * are both fine under static generation, and `dynamicParams` stays default so a
+ * slug that is not in `generateStaticParams` still renders on demand.
+ */
+export const dynamic = "force-static";
+
 export async function generateStaticParams() {
   const roster = await getWprRoster().catch(() => []);
   // A scraped slug the board says duplicates another profile mints no page of
