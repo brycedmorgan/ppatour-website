@@ -579,6 +579,34 @@ export const partners: Partner[] = [
     logoHeight: 188,
   },
   {
+    /**
+     * Organics Ocean — added 9/16 on Bryan Renahan's request, as Gold.
+     *
+     * A supplements brand (organicsocean.com), and the destination was verified
+     * rather than guessed: their own site fronts three PPA pros, including a
+     * "PPA Gold Medalist", and they are already activating on tour — the Arizona
+     * Open venue map published this month marks an "ORGANICS ocean Player
+     * Lounge". Two independent confirmations that this is the same company whose
+     * mark Bryan attached.
+     *
+     * ⚠ NO DESIGNATION, DELIBERATELY. Bryan asked for "Gold Sponsor" and named
+     * no category, so there is no `role` here — and per the 9/1 ruling Gold and
+     * below render logo-only anyway, so inventing one would be invisible on the
+     * card AND wrong in the data. Add it when marketing states it.
+     */
+    name: "Organics Ocean",
+    website: "https://organicsocean.com",
+    tier: "gold",
+    // Dark-teal wordmark with a LIGHTER teal "ORGANICS" arched above it. Ink
+    // averages 0.36 relative luminance, so it is built for the white partner
+    // card, which is where Gold renders. On a dark ground the arch — the brand's
+    // own first word — is the half that would vanish; ask for a reversed cut
+    // before ever placing this on navy.
+    logo: "/ppa/sponsors/organics-ocean.png",
+    logoWidth: 900,
+    logoHeight: 296,
+  },
+  {
     // "Park Place" per the 8/4 approved list (was "Park Place Technologies").
     // The supplied mark still reads Park Place Technologies; the name is never
     // printed beside a logo, so it surfaces only as alt text and hover title.

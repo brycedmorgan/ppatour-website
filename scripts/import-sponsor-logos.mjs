@@ -131,6 +131,21 @@ const JOBS = [
   // though the source file is the Town of Cary's TOC_Logo and the mark reads
   // only "CARY".
   ["", "cary-logo-from-ai.png", "city-of-cary", "City of Cary (the mark reads CARY)"],
+
+  /**
+   * Organics Ocean, added 9/16 (Bryan Renahan) as a Gold sponsor. Supplied as a
+   * PNG attached to the Asana request rather than in a zip, so it was staged
+   * into Downloads under the name Asana gave it and the directory component is
+   * empty, like Journavx and Vita Pop above.
+   *
+   * ⚠ TWO-TONE ARTWORK, AND THE LIGHTER HALF IS THE RISK. The mark is "ocean"
+   * in dark teal with "ORGANICS" arched above it in a much lighter teal. The
+   * ink averages 0.36 relative luminance, so it is dark-on-transparent art and
+   * belongs on the white partner card — which is where Gold renders. Do NOT
+   * place this one on a navy ground without looking at it first: the arch is
+   * the half that would disappear, and it carries the brand's first word.
+   */
+  ["", "Organics_Ocean_Logo.png", "organics-ocean", "Organics Ocean (ORGANICS arched over ocean)"],
 ];
 
 /**
