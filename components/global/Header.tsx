@@ -354,7 +354,7 @@ function MegaPanelContent({
         <div className="mt-4">
           <FeatureCard
             href="/about/what-is-pickleball"
-            image="/ppa/action-mxd.jpg"
+            image="/ppa/play-amateur-court.jpg"
             eyebrow="New to the Sport"
             title="What is Pickleball?"
             meta="The basics, in two minutes"
@@ -433,7 +433,7 @@ export function Header() {
       const paths = [
         getNextTournament().image,
         "/ppa/action-singles.jpg",
-        "/ppa/action-mxd.jpg",
+        "/ppa/play-amateur-court.jpg",
       ];
       for (const path of paths) {
         // FeatureCard renders `sizes="320px"`, so 384 covers DPR1 and 640 DPR2.

@@ -230,14 +230,36 @@ const REGISTER = "https://www.pickleballtournaments.com/"; // fallback — regis
 
 /* ---- schedule builder ---- */
 
-// Generic action photos, cycled across upcoming events until real art lands.
+/**
+ * Generic action photos, cycled across upcoming events until real art lands.
+ *
+ * ⚠ TWO FRAMES CAME OUT OF THIS POOL ON 9/16 AND NEITHER MAY GO BACK IN.
+ * Bryan Renahan found the Reign Storm hero still on /tour/state-championships
+ * — "I thought we removed [it] from the site… that photo should not be used
+ * anywhere." Reign Storm was renamed STORM on the 8/4 approved roster, so the
+ * board in these frames is retired branding for a partner who is still on the
+ * wall under a different name.
+ *
+ *  • `action-mxd.jpg` — a full-width "REIGN STORM / CLEAN ENERGY" board across
+ *    the centre of the frame. The FILE IS DELETED, not just de-referenced, for
+ *    the same reason the AstraZeneca mark was deleted on 9/4: this pool cycles
+ *    photos onto any event without pinned art, so a file left on disk finds its
+ *    way back onto a page by itself.
+ *  • `action-masters.jpg` — the same board, smaller and cropped at the right
+ *    edge. Bryan did not name this one, so the FILE STAYS while it comes out of
+ *    the rotation; restoring it is one line if he decides the cropped mark is
+ *    fine. Flagged to him rather than decided here.
+ *
+ * ⚠ CHECK NEW ENTRIES BY LOOKING AT THEM. Nothing in the build can see what is
+ * printed on a court-side board, and this pool is the one place a photo can
+ * appear on a page nobody chose it for.
+ */
 export const GENERIC_IMAGES = [
   "/ppa/action-md-final.jpg",
-  "/ppa/action-mxd.jpg",
+  "/ppa/action-mxd-ppa-finals.jpg",
   "/ppa/action-singles.jpg",
   "/ppa/action-champ-sunday.jpg",
   "/ppa/action-waters-bright.jpg",
-  "/ppa/action-masters.jpg",
 ];
 
 /**
@@ -928,7 +950,7 @@ const PAST_EVENTS: Tournament[] = ([
     status: "completed",
     tierKey: "cup",
     prizeMoney: "$1,271,734",
-    image: "/ppa/action-mxd.jpg",
+    image: "/ppa/action-mxd-ppa-finals.jpg",
     season: "2025-2026",
   },
   {
@@ -985,7 +1007,7 @@ const PAST_EVENTS: Tournament[] = ([
     // Both are set to 125 (events team, 8/5); keep them in step.
     points: 125,
     prizeMoney: "$25,000",
-    image: "/ppa/action-mxd.jpg",
+    image: "/ppa/action-mxd-ppa-finals.jpg",
     season: "2025-2026",
   },
   {
@@ -1036,7 +1058,7 @@ const PAST_EVENTS: Tournament[] = ([
     status: "completed",
     tierKey: "cup",
     prizeMoney: "$200,000",
-    image: "/ppa/action-mxd.jpg",
+    image: "/ppa/action-mxd-ppa-finals.jpg",
     season: "2023",
   },
   {

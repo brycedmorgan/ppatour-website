@@ -122,8 +122,39 @@ export const tourPrograms: TourProgram[] = [
       { title: "State champion status", detail: "Gold medalists in each state earn the title of state champion." },
       { title: "A place at the World Championships", detail: "State champions qualify automatically for the Champions Division brackets at the Pickleball World Championships." },
     ],
-    cta: { label: "Find a Tournament Near You", href: REGISTER_PPA, external: true },
-    image: "/ppa/action-mxd.jpg",
+    /**
+     * ⚠ NOT `REGISTER_PPA`, AND THAT WAS A REAL BUG RATHER THAN A PREFERENCE.
+     * This button pointed at pickleballtournaments.com/search?partner=sanction_ppa
+     * until 9/16. Fetched directly, that page contains ZERO occurrences of
+     * "State Championship" or "Powerball" — it is the pro tour calendar. So the
+     * one button on the state-series page sent an amateur looking for their own
+     * state's event to a list of PPA Tour stops (Bryan Renahan, 9/16).
+     *
+     * The Worlds site publishes the series properly: every state event with its
+     * dates, venue, a map link and its own pickleballtournaments registration
+     * link. That is the page this button always meant, and it is maintained by
+     * the people who run the series rather than by us.
+     *
+     * ⚠ Verified before repointing, per the 7/29 rule that a CTA never gets an
+     * unconfirmed destination: 200, no redirect, and the page genuinely lists
+     * the Powerball series state by state.
+     */
+    cta: {
+      label: "Find a Tournament Near You",
+      href: "https://worlds.unitedpickleball.com/championships",
+      external: true,
+    },
+    /**
+     * ⚠ THE OLD HERO WAS THE REIGN STORM PHOTO AND IT IS NOW DELETED FROM THE
+     * REPO — see the note on GENERIC_IMAGES in lib/placeholder-data.ts. Bryan,
+     * 9/16: "that photo should not be used anywhere."
+     *
+     * This replacement is not just the nearest clean frame. The series is an
+     * AMATEUR championship — the copy above says so four times — and the photo
+     * it replaces was two pros on a stadium show court. This one is club players
+     * on an outdoor court, which is who actually enters these events.
+     */
+    image: "/ppa/play-amateur-court.jpg",
   },
   {
     slug: "camps",
