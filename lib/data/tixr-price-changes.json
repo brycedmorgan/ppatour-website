@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-15T17:23:54Z",
+  "updated_at": "2026-09-16T17:22:44Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -5951,6 +5951,36 @@
       "event_id": "176687",
       "event": "Veolia PPA Chicago",
       "ticket": "Saturday Courtside"
+    },
+    {
+      "at": "2026-09-16T17:22:44Z",
+      "type": "price_change",
+      "event_id": "204335",
+      "event": "PPA Palm Springs Sunday - Championships",
+      "ticket": "Sunday Courtside+",
+      "base_price": {
+        "from": 180,
+        "to": 200
+      },
+      "all_in_price": {
+        "from": 199.88,
+        "to": 221.49
+      }
+    },
+    {
+      "at": "2026-09-16T17:22:44Z",
+      "type": "price_change",
+      "event_id": "206222",
+      "event": "PPA Cape Coral",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": 60,
+        "to": 80
+      },
+      "all_in_price": {
+        "from": 70.23,
+        "to": 91.83
+      }
     }
   ]
 }
