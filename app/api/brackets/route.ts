@@ -29,7 +29,15 @@ export const dynamic = "force-dynamic";
  * the window clear of the poll; a draw only changes when a match ends, so the
  * extra five seconds are not observable.
  */
-const CACHE_CONTROL = "public, s-maxage=20, stale-while-revalidate=60";
+/**
+ * ⚠ RAISED 20s -> 45s ON 9/17, IN STEP WITH THE 30s CLIENT POLL AND THE 45s
+ * DATA CACHE WINDOW. The three layers have to move together or the middle one
+ * stops being a cache — that is the mistake this block already records once.
+ * Measured that day: the live Arizona draw was rebuilding every 14 seconds for
+ * 1,454 upstream calls an hour, because a bracket was being refreshed on a
+ * scoreboard's cadence. A draw only changes when a match ENDS.
+ */
+const CACHE_CONTROL = "public, s-maxage=45, stale-while-revalidate=60";
 const NO_STORE = { "Cache-Control": "no-store" };
 
 export async function GET(request: Request) {

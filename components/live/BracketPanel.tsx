@@ -16,7 +16,15 @@ import { isTabHidden, onTabVisible } from "@/components/live/poll-visibility";
  * toggle); group+knockout round-robin divisions load their pool play (Round
  * Robin/Bracket toggle).
  */
-const POLL_MS = 15000;
+/**
+ * ⚠ 15s WAS A SCOREBOARD'S CADENCE ON A DRAW, and one poll costs six upstream
+ * calls behind it (the division fan-out in lib/brackets-api). Measured 9/17:
+ * 1,454 calls an hour for the live Arizona bracket. A draw changes only when a
+ * match ends — twenty to forty minutes per court — so 30s is still far finer
+ * than the thing it is watching, and it halves the traffic feeding the fan-out.
+ * Keep this clear of the route's 45s s-maxage and the 45s Data Cache window.
+ */
+const POLL_MS = 30000;
 
 export function BracketPanel({
   eventId,

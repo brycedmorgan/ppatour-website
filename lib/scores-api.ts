@@ -22,7 +22,12 @@
 
 import { pbGetJson } from "@/lib/pb-fetch";
 import { LIVE_SCORES_CACHE_TAG } from "@/lib/cache-tags";
-import { LIVE_WINDOW_S, liveCacheWindowFor } from "@/lib/live-cache-window";
+import {
+  LIVE_WINDOW_S,
+  listWindowFor,
+  noteWindow,
+  windowFromProEvents,
+} from "@/lib/live-cache-window";
 import { fetchPlannedStarts } from "@/lib/ticker-api";
 import { scoreHeadshots } from "@/lib/score-headshots";
 
@@ -119,6 +124,8 @@ export type ScoresResult = {
 };
 
 export type ApiEvent = {
+  /** Null while this division is still being played — see lib/live-cache-window. */
+  endDate?: string | null;
   eventId?: string;
   eventType?: string;
   eventTitle?: string;
@@ -589,12 +596,19 @@ async function build(tournamentId: string): Promise<ScoresResult> {
      * One calendar lookup, then threaded into every call in this build, so a
      * finished tournament's whole fan-out lands on the long window together.
      */
-    const revalidateS = await liveCacheWindowFor(tournamentId);
+    // The list call picks the window for the per-division calls behind it —
+    // see lib/live-cache-window. It runs on the live cadence until this
+    // instance has once seen the tournament finished.
+    const listWindow = listWindowFor(tournamentId, LIVE_WINDOW_S);
 
-    const evJson = (await get(base, token, `/v1/ppa/tournaments/${tournamentId}/tournament_events?bracket_level=Pro`, revalidateS)) as
+    const evJson = (await get(base, token, `/v1/ppa/tournaments/${tournamentId}/tournament_events?bracket_level=Pro`, listWindow)) as
       | { results?: ApiEvent[] }
       | null;
     const all = (evJson?.results ?? []).filter((e) => e.eventId && e.eventTitle);
+    // A finished tournament's scores are history; its per-division calls go on
+    // the six-hour window. Fails short on any uncertainty.
+    const revalidateS = windowFromProEvents(all, LIVE_WINDOW_S);
+    noteWindow(tournamentId, revalidateS);
     const mainEvents = oncePerDivision(
       all.filter((e) => e.eventType !== "UNDEFINED_PPA_EVENT_TYPE"),
       cleanDivision,

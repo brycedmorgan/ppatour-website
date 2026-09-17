@@ -26,7 +26,12 @@ import {
 import { pbGetJson } from "@/lib/pb-fetch";
 import { LIVE_SCORES_CACHE_TAG } from "@/lib/cache-tags";
 import { fetchPlannedStarts } from "@/lib/ticker-api";
-import { LIVE_WINDOW_S, liveCacheWindowFor } from "@/lib/live-cache-window";
+import {
+  BRACKET_LIVE_WINDOW_S,
+  listWindowFor,
+  noteWindow,
+  windowFromProEvents,
+} from "@/lib/live-cache-window";
 import {
   cleanDivision,
   isQualifierEvent,
@@ -37,7 +42,14 @@ import {
 const TIMEOUT_MS = 6000;
 const TTL_MS = 60_000;
 
-type ApiEvent = { eventId?: string; eventType?: string; eventTitle?: string; bracketFormatId?: number | string };
+type ApiEvent = {
+  eventId?: string;
+  eventType?: string;
+  eventTitle?: string;
+  bracketFormatId?: number | string;
+  /** Null while this division is still being played — see lib/live-cache-window. */
+  endDate?: string | null;
+};
 type ApiMatch = Record<string, unknown>;
 
 function config() {
@@ -100,7 +112,7 @@ function fullName(first: string, last: string): string {
  * the same two paths for the same tournament, so one cached response now
  * answers a scores poll and a bracket poll instead of each buying its own.
  */
-const SHARED_REVALIDATE_S = LIVE_WINDOW_S;
+const SHARED_REVALIDATE_S = BRACKET_LIVE_WINDOW_S;
 
 /**
  * ⚠ `revalidateS` IS PER-TOURNAMENT, NOT PER-CALL-SITE. A finished draw is
@@ -602,8 +614,12 @@ async function proEvents(
   base: string,
   token: string,
   uuid: string,
-  revalidateS: number,
-): Promise<{ main: ApiEvent[]; qualifier: ApiEvent[] }> {
+): Promise<{ main: ApiEvent[]; qualifier: ApiEvent[]; window: number }> {
+  // ⚠ THE LIST CALL CHOOSES THE WINDOW FOR THE FIVE THAT FOLLOW IT, so it
+  // cannot be on that window itself the first time. It runs on the live
+  // cadence until this instance has once seen the tournament finished — one
+  // cheap call out of six. See listWindowFor.
+  const revalidateS = listWindowFor(uuid, BRACKET_LIVE_WINDOW_S);
   const evJson = (await get(base, token, `/v1/ppa/tournaments/${uuid}/tournament_events?bracket_level=Pro`, revalidateS)) as
     | { results?: ApiEvent[] }
     | null;
@@ -618,9 +634,14 @@ async function proEvents(
     }
     return [...byDivision.values()];
   };
+  // Every division's end date, read off the list we already have — a finished
+  // tournament's five per-division calls then go on the six-hour window.
+  const window = windowFromProEvents(all, BRACKET_LIVE_WINDOW_S);
+  noteWindow(uuid, window);
   return {
     main: oncePerDivision(all.filter((e) => e.eventType !== "UNDEFINED_PPA_EVENT_TYPE"), cleanDivision),
     qualifier: oncePerDivision(all.filter(isQualifierEvent), qualifierDivision),
+    window,
   };
 }
 
@@ -712,8 +733,8 @@ async function buildAll(uuid: string): Promise<BuiltAll> {
    * finished tournament's ten requests all land on the long window together.
    * Computed here rather than inside `get` so it cannot vary mid-build.
    */
-  const revalidateS = await liveCacheWindowFor(uuid);
-  const events = await proEvents(base, token, uuid, revalidateS);
+  const events = await proEvents(base, token, uuid);
+  const revalidateS = events.window;
 
   /**
    * ── WHICH BRACKET THE PANEL SHOWS ──────────────────────────────────────────
