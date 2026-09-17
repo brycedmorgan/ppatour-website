@@ -346,6 +346,9 @@ const nextConfig: NextConfig = {
     return [
       // First, so the domain rule wins on that host before any path rule.
       ...EUROPE_DOMAIN_REDIRECTS.map((r) => ({ ...r, permanent: false })),
+      // Same path on any other host (ppatour.com, europe.ppatour.com) lands on
+      // the Europe links page too, so a mistyped QR domain still works.
+      { source: "/eventlinks", destination: "/europe/eventlinks", permanent: false },
       ...LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true })),
       ...RETIRED_ATHLETE_REDIRECTS.map((r) => ({ ...r, permanent: false })),
     ];
@@ -391,6 +394,14 @@ const nextConfig: NextConfig = {
           source: "/",
           has: [{ type: "host", value: "ppatoureurope.com" }],
           destination: "/europe/",
+        },
+        // The QR code on every Europe credential is printed with
+        // ppatoureurope.com/eventlinks (Payton, 9/17). A printed code is fixed
+        // forever, so this path must keep resolving to the Europe links page.
+        {
+          source: "/eventlinks",
+          has: [{ type: "host", value: "ppatoureurope.com" }],
+          destination: "/europe/eventlinks",
         },
         { source: "/app-tour", destination: "/app-tour/index.html" },
         { source: "/pbtv", destination: "/pbtv/index.html" },
