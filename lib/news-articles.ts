@@ -125,6 +125,71 @@ export type NewsArticle = {
  */
 export const newsArticles: NewsArticle[] = [
   /**
+   * ⚠ OFFICIAL PRESS RELEASE, not editorial — the same exception path as the
+   * WPR "BE THE BEST" post below. Supplied by Wesley on 9/17 with the artwork,
+   * it is comms copy carrying two real attributed quotes (Mike Burke, CEO of
+   * Arizona Athletic Grounds; Connor Pardoe, Founder and CEO of the Carvana PPA
+   * Tour). The 7/20 gate exists to stop AI-written coverage of real people
+   * going live; this is the organisation's own announcement, published at his
+   * instruction, so it ships `published` and does NOT reopen that ruling.
+   *
+   * ⚠ NO `author`, DELIBERATELY. Wesley asked for the byline "PPA Tour", and
+   * that is exactly what an UNSET author renders — see the field's docblock.
+   * Setting it explicitly would be a named-person claim about who wrote it.
+   *
+   * ⚠ THE HEADLINE IS SPLIT, AND THE WHOLE OF IT IS STILL ON THE PAGE. The
+   * release's own headline runs ~160 characters in caps, which as an H1 wraps
+   * to five or six lines of display type. The hook is the `title`, the rest is
+   * the `subtitle` — the split `subtitle` was added for. Sentence case because
+   * every other headline here is; the display casing is CSS, not the data.
+   */
+  {
+    slug: "ppa-campus-at-arizona-athletic-grounds",
+    status: "published",
+    category: "Tour News",
+    title: "Arizona Athletic Grounds and Carvana PPA Tour Execute Major Deal",
+    subtitle:
+      "Transferring year-round pickleball operations to the global leader in pro and amateur pickleball",
+    date: "Sep 17",
+    dek: "PPA Campus at Arizona Athletic Grounds will become a national hub for pro tournaments, premier training for pros and junior, amateur programming and experiences, and much more.",
+    /**
+     * The supplied key art — an aerial of the AAG grounds with the Carvana PPA
+     * Tour and Arizona Athletic Grounds lockup panelled top-right.
+     *
+     * ⚠ `heroGraphic` BECAUSE OF THAT PANEL. The hero band is roughly 3.6:1 and
+     * normally cover-crops with the headline over the artwork — which here would
+     * put display type straight through the lockup. Shown whole instead, with
+     * the headline on a band below, exactly as the Canes key art is.
+     *
+     * ⚠ Encoded 4:2:0, NOT the 4:4:4 the parking maps use. That rule exists for
+     * small saturated type on a busy ground; this frame is a photograph whose
+     * only type is large white-on-navy, i.e. luminance contrast, which chroma
+     * subsampling does not touch. Checked by cropping the lockup and looking at
+     * it — the CARVANA and PPA marks and the small circular "ARIZONA ATHLETIC
+     * GROUNDS MESA" seal all hold. 360KB, in line with the other heroes; 4:4:4
+     * cost 440KB for no visible gain.
+     */
+    image: "/ppa/ppa-campus-arizona-athletic-grounds.jpg",
+    heroGraphic: true,
+    /**
+     * Renders under "Coverage" on the Arizona Open's event page. That stop is
+     * named in the release as "currently taking place" and is played at this
+     * venue, so it is the right tie — though the Carvana Mesa Cup is at AAG too
+     * and only one slug can be set.
+     */
+    eventSlug: "veolia-arizona-open",
+    whyItMatters:
+      "The Carvana PPA Tour takes over year-round operations of a 41-court facility it already uses for two annual stops, and is funding a capital investment in it — shade, seating and other improvements. New initiatives are planned to launch in early 2027.",
+    body: [
+      "Arizona Athletic Grounds (AAG) and the Carvana PPA Tour announced today a multi-decade partnership, making the “PPA Campus at Arizona Athletic Grounds” a national home for the premier global professional and amateur pickleball organization. As the national destination for championship sports and live entertainment, attracting millions of visitors annually, AAG is already home to multiple annual Carvana PPA Tour events including the incredibly popular Carvana Mesa Cup in February and Veolia Arizona Open, which is currently taking place.",
+      "The Carvana PPA Tour will take over year-round operations of AAG’s state-of-the-art pickleball facility that features 41 courts, including four medal courts with spectator stands and a covered Championship Stadium court with seating for up to 2,000 spectators. The newly named “PPA Campus at Arizona Athletic Grounds” will continue to host marquee Carvana PPA Tour events, while also introducing new tournaments and year-round pro and amateur training at AAG’s best-in-class sports and training ecosystem.",
+      "“Our focus on partnering with the top sports organizations in the U.S. is unwavering. We have long admired the incredible organization that Connor Pardoe and the team at the PPA have built, and to execute this expansive, multi-decade partnership is a major win for both of our organizations”, said Mike Burke, CEO of Arizona Athletic Grounds. “With the PPA’s incredible growth and programming expertise, and AAG’s state-of-the-art facilities and commitment to white-glove service, I firmly believe that the PPA Campus at Arizona Athletic Grounds will have an enormously positive impact on the local, regional, and national pickleball community.”",
+      "As part of the new partnership, PPA will also fund a significant capital investment in the campus, including additional shade, seating, and other improvements to support year-round play. With the deal recently finalized, more information on the exciting evolution of the PPA Campus at Arizona Athletic Grounds will be forthcoming, with many new initiatives planned to launch in early 2027.",
+      "“Year after year, the success of Carvana PPA Tour events at Arizona Athletic Grounds underscores just how amazing the facility, its staff and the broader Mesa pickleball community are,” said Connor Pardoe, Founder and CEO of the Carvana PPA Tour. “We are incredibly excited to be able to invest in the development of the new PPA Campus at Arizona Athletic Grounds not only from an infrastructure standpoint, but also from the perspective of programming and initiatives that grow the sport and our passionate community of pro and amateur players.”",
+      "Already one of the nation’s premier pickleball destinations, the PPA Campus at Arizona Athletic Grounds represents the long-term vision and commitment from both AAG and the Carvana PPA Tour to help elevate the fastest growing sport in the country. Further details regarding planned initiatives to follow.",
+    ],
+  },
+  /**
    * ⚠ HUMAN-AUTHORED EDITORIAL, same provenance and same exception path as the
    * Nationals storylines below — Dave Fleming's preview of the season's second
    * stop, supplied by Wesley on 9/9. The 7/20 approval gate exists to stop
