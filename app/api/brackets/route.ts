@@ -40,6 +40,24 @@ export const dynamic = "force-dynamic";
 const CACHE_CONTROL = "public, s-maxage=45, stale-while-revalidate=60";
 const NO_STORE = { "Cache-Control": "no-store" };
 
+/**
+ * An EMPTY result — no divisions, or a draw with no rounds — is held for five
+ * seconds at the edge instead of not at all.
+ *
+ * ⚠ THE `no-store` THAT USED TO BE HERE WAS THE OUTER HALF OF A FEEDBACK LOOP.
+ * When upstream throttles us the build comes back empty, and with no-store every
+ * viewer's 30s poll went straight past the edge to origin, where each one
+ * re-ran the six-call fan-out and collected more 429s. Measured 9/17: 3,998
+ * calls in five minutes against a 45s window, with the upstream team's Grafana
+ * alerting on us twice in an hour.
+ *
+ * Five seconds is short enough that a real draw appears essentially as soon as
+ * it exists — the reason no-store was chosen — but long enough that a throttled
+ * moment collapses N concurrent viewers into one origin request instead of N.
+ * The matching brake on the server side is EMPTY_TTL_MS in lib/brackets-api.
+ */
+const EMPTY_CACHE = { "Cache-Control": "public, s-maxage=5" };
+
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const event = url.searchParams.get("event");
@@ -55,7 +73,7 @@ export async function GET(request: Request) {
     // An empty list is a failed upstream call far more often than a real
     // event with no pro divisions — don't pin it at the edge.
     return NextResponse.json({ eventId: event, divisions, stage }, {
-      headers: divisions.length ? headers : NO_STORE,
+      headers: divisions.length ? headers : EMPTY_CACHE,
     });
   }
 
@@ -66,6 +84,6 @@ export async function GET(request: Request) {
   return NextResponse.json(
     { division: draw.division, bracket: draw.bracket, losers: draw.losers, pools: draw.pools },
     // Same rule for a draw with no rounds in it: never cache nothing.
-    { headers: isEmptyDraw(draw) ? NO_STORE : headers },
+    { headers: isEmptyDraw(draw) ? EMPTY_CACHE : headers },
   );
 }

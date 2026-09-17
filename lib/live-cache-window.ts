@@ -51,11 +51,24 @@ export const LIVE_WINDOW_S = 20;
  * six-call fan-out on the scoreboard's cadence bought nothing — measured 9/17,
  * the live Arizona draw was rebuilding every 14 seconds for 1,454 calls an hour.
  *
- * The staleness this adds is not observable: a completed match already took up
- * to ~100s to reach the panel through the module cache, the Data Cache and the
- * edge stacked together, and this moves that to ~125s.
+ * ⚠ 90s, NOT LONGER, AND THE CEILING IS THE LIVE DOT. The bracket is not a
+ * static picture of the draw: BracketView renders `status === "live"` as a
+ * pulsing indicator and shows per-game scores as they are played. So this window
+ * is bounded by in-progress scores, not by advancement — a pulsing "live" badge
+ * beside a score that is minutes stale, on the same page as a scoreboard
+ * refreshing every 30s, reads as a broken page rather than a cached one.
+ *
+ * Worst-case staleness for an in-progress score is the edge (45s) plus the module
+ * cache (60s) plus this, so roughly three minutes. Advancement — who is through
+ * to the next round, which is what a draw is actually for — cannot be more than
+ * one window behind, and matches take twenty minutes at the very least.
+ *
+ * If bracket volume ever needs halving again, the honest lever is not this number
+ * but making the window depend on whether any match in THAT tournament is
+ * currently live: a draw with nothing on court can be held for many minutes
+ * without anyone being able to tell.
  */
-export const BRACKET_LIVE_WINDOW_S = 45;
+export const BRACKET_LIVE_WINDOW_S = 90;
 
 /**
  * The cadence for a tournament that has not started yet — once a day.

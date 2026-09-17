@@ -45,6 +45,12 @@ import {
 const TIMEOUT_MS = 6000;
 const TTL_MS = 60_000;
 
+/**
+ * How long an EMPTY build is held. See the long note in `load` — this is the
+ * brake on the 429 feedback loop, not a cache in the usual sense.
+ */
+const EMPTY_TTL_MS = 10_000;
+
 type ApiEvent = {
   eventId?: string;
   eventType?: string;
@@ -876,16 +882,36 @@ async function load(uuid: string) {
   if (pending) return pending;
   const p = buildAll(uuid)
     .then((value) => {
-      // `get()` swallows a timeout or a bad status into null, which builds an
-      // EMPTY draw rather than throwing. Caching that pins a blank bracket for
-      // a full TTL over one 6s upstream hiccup, so only a build with real
-      // content is allowed into the cache; an empty one retries next request.
       // ⚠ A FINISHED DRAW IS PINNED IN MEMORY, NOT HELD FOR 60s. Rebuilding it
       // every minute forever is what kept Nationals calling upstream eleven days
       // after it ended — each rebuild re-reads six fetches. `settled` was just
       // written by `proEvents`, so this asks the same question it did.
       const ttl = isSettled(uuid) ? FINISHED_MEMO_MS : TTL_MS;
-      if (!isEmpty(value)) cache.set(uuid, { value, expires: Date.now() + ttl });
+
+      /**
+       * ⚠ AN EMPTY BUILD IS NOW CACHED BRIEFLY, AND THAT REVERSES HALF OF THE 8/26
+       * RULE ON PURPOSE — IT WAS AMPLIFYING RATE LIMITS INTO OUTAGES.
+       *
+       * The rule was: only a build with real content may be cached, so one 6s
+       * upstream hiccup cannot pin a blank bracket for a full minute. Sound on its
+       * own. Under sustained 429s it becomes a feedback loop: a throttled fetch
+       * builds empty -> nothing caches here -> the route sends no-store -> every
+       * viewer's poll reaches origin -> each rebuild fans out six calls with up to
+       * four retries each -> more 429s. It amplifies until upstream relents.
+       *
+       * Measured on production 9/17 (16:35-16:45 CDT): /api/brackets went from 115
+       * to 3,998 calls in a five-minute bucket with 1,138 x 429 — roughly 666
+       * rebuilds, 2.2 a second, against a 45s cache window. Nothing was caching.
+       * The upstream team's own Grafana alerted on it ("Platform 9 is being
+       * actively rate limited"), twice in an hour.
+       *
+       * EMPTY_TTL_MS caps the fan-out at six calls per ten seconds per instance
+       * instead of six per request. Ten seconds still honours the original intent
+       * — a transient hiccup clears almost immediately, nothing is pinned for a
+       * full minute — while removing the unbounded retry rate that made a rate
+       * limit self-sustaining.
+       */
+      cache.set(uuid, { value, expires: Date.now() + (isEmpty(value) ? EMPTY_TTL_MS : ttl) });
       return value;
     })
     .catch(() => ({ divisions: [], draws: new Map<string, BracketDraw>(), stage: "main" as ScoresStage }));
