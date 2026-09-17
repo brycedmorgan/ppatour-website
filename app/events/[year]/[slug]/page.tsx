@@ -84,6 +84,42 @@ function eventMetaDescription(t: Tournament): string {
  */
 export const revalidate = 60;
 
+/**
+ * ⚠ WITHOUT THIS THE PAGE RENDERED ON EVERY SINGLE REQUEST, AND IT WAS 57% OF
+ * THE SITE'S ENTIRE UPSTREAM VOLUME.
+ *
+ * Measured on production 9/17, mid-Arizona: `/events/[year]/[slug]` made
+ * **63,709 of 111,473 outgoing calls in twelve hours**, and twelve consecutive
+ * requests to the Arizona page over a minute returned `x-vercel-cache: MISS`
+ * with `Cache-Control: private, no-cache, no-store`. The `revalidate = 60`
+ * above was a statement of intent the route never honoured.
+ *
+ * The cause is the one already written up on `/` and `/rankings` (8/3):
+ * `pbGetJson` retries a 429 with `cache: "no-store"`, and a no-store fetch
+ * inside a render opts the WHOLE ROUTE out of static generation. This page
+ * fans out six `tournament_events` calls per render through
+ * {@link getEventField}, against the endpoint that throttles hardest — 422 of
+ * the window's 429s came from this route — so it lost the race constantly and
+ * then made more calls, which caused more 429s.
+ *
+ * `force-static` breaks that loop at the source: with it set, Next stops
+ * treating a `revalidate: 0` fetch as a reason to go dynamic
+ * (`patch-fetch.js`, `!(workStore.forceStatic && finalRevalidate === 0)`), so
+ * one throttled retry no longer costs the page its cache entry. The retry
+ * still reaches the network — only the page's static-ness is pinned.
+ *
+ * Safe here for the same reason it is safe on the homepage: nothing in this
+ * render reads cookies, headers or searchParams. Every live surface on the
+ * page — scores, brackets, champions, countdown — is a client component
+ * polling its own CDN-cached endpoint, so the 60s shell is not stale in any
+ * way a visitor can see.
+ *
+ * ⚠ DO NOT REMOVE THIS WITHOUT RE-MEASURING `x-vercel-cache` ON A CURRENT-SEASON
+ * EVENT PAGE. Nothing fails loudly if it goes: the page still renders, still
+ * looks right, and the only symptom is the upstream call rate going back up.
+ */
+export const dynamic = "force-static";
+
 export async function generateStaticParams() {
   const { events } = await getEvents();
   const seen = new Set<string>();
@@ -408,6 +444,13 @@ export default async function EventPage({ params }: Params) {
    * they have never had is a behaviour change to a live page (8/19 note).
    * So `uuid` above keeps its exact meaning and completed events are
    * byte-identical; only the draw reads `drawUuid`.
+   *
+   * ⚠ THIS IS THE RENDER'S SECOND `getEvents()` AND IT IS FREE — don't "fix"
+   * it by threading the uuid down from `resolveEvent`, which would collapse
+   * the distinction the paragraph above exists to keep. `getEvents` is wrapped
+   * in React `cache()`, so every call inside one render resolves to the same
+   * promise. It was NOT free before 9/17: this line was roughly half of the
+   * 16,807 `ppa_tournaments` calls this route made in twelve hours.
    */
   const drawUuid = t.tournamentUuid ?? (await getEvents()).events.find((e) => e.slug === t.slug)?.tournamentUuid;
 

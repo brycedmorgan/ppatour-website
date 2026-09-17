@@ -18,6 +18,7 @@
  * on any problem so the page always renders.
  */
 
+import { cache } from "react";
 import { asiaTourUrlForDetailsUrl } from "@/lib/asia-tour-links";
 import { australiaTourUrlForEvent } from "@/lib/australia-tour-links";
 import { canadaTourUrlForEvent } from "@/lib/canada-tour-links";
@@ -610,8 +611,28 @@ function withComingSoon(events: Tournament[]): Tournament[] {
  * Every tour event from the API (quality-gated, mapped, curated-enriched),
  * chronological. Falls back to the curated list if the API is unconfigured,
  * errors, or returns nothing. Safe to call from server components.
+ *
+ * ⚠ WRAPPED IN React `cache()` BECAUSE ONE RENDER CALLS IT SEVERAL TIMES, AND
+ * THE DATA CACHE WAS NOT COVERING THAT. The event page alone reaches it through
+ * `resolveEvent`, through `buildTripEvent`, and directly — measured on
+ * production 9/17 at **16,807 `/v2/data/ppa_tournaments` calls in twelve
+ * hours from `/events/[year]/[slug]`**, roughly two per render, against a feed
+ * this module already asks Next to cache for a full day.
+ *
+ * `cache()` dedupes within a single request; the `next: { revalidate }` below
+ * dedupes across requests. They are different layers and both are wanted —
+ * the Data Cache entry can be missing (cold region, a throttled retry, a
+ * `revalidateTag` from the nightly cron) and without this each of those calls
+ * would go upstream separately inside the same render.
+ *
+ * ⚠ It also makes the shape of the mapped list stable within a render. Callers
+ * compare events by slug across several helpers, and re-mapping per call was
+ * doing that work two or three times for no reason.
  */
-export async function getEvents(): Promise<{ events: Tournament[]; source: "live" | "fallback" }> {
+export const getEvents = cache(async function getEvents(): Promise<{
+  events: Tournament[];
+  source: "live" | "fallback";
+}> {
   const { token, baseUrl } = config();
   if (!token) return fallback();
 
@@ -638,7 +659,7 @@ export async function getEvents(): Promise<{ events: Tournament[]; source: "live
   } catch {
     return fallback();
   }
-}
+});
 
 /**
  * Resolve a single event that should have an internal page, by slug. Returns

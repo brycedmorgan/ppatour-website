@@ -26,6 +26,7 @@ import {
 import { pbGetJson } from "@/lib/pb-fetch";
 import { LIVE_SCORES_CACHE_TAG } from "@/lib/cache-tags";
 import { fetchPlannedStarts } from "@/lib/ticker-api";
+import { LIVE_WINDOW_S, liveCacheWindowFor } from "@/lib/live-cache-window";
 import {
   cleanDivision,
   isQualifierEvent,
@@ -99,13 +100,28 @@ function fullName(first: string, last: string): string {
  * the same two paths for the same tournament, so one cached response now
  * answers a scores poll and a bracket poll instead of each buying its own.
  */
-const SHARED_REVALIDATE_S = 20;
+const SHARED_REVALIDATE_S = LIVE_WINDOW_S;
 
-async function get(base: string, token: string, path: string): Promise<unknown> {
+/**
+ * ⚠ `revalidateS` IS PER-TOURNAMENT, NOT PER-CALL-SITE. A finished draw is
+ * immutable, so re-asking upstream every 20s for a bracket that was decided
+ * weeks ago bought nothing — the National Championships alone cost 10,402 calls
+ * in twelve hours on 9/17, eleven days after it ended. See
+ * lib/live-cache-window.ts for the rule and why it fails short.
+ *
+ * It defaults to the live window so a caller that forgets to thread it through
+ * is merely as expensive as before, never staler.
+ */
+async function get(
+  base: string,
+  token: string,
+  path: string,
+  revalidateS: number = SHARED_REVALIDATE_S,
+): Promise<unknown> {
   return pbGetJson(`${base}${path}`, { "PB-API-TOKEN": token }, {
     timeoutMs: TIMEOUT_MS,
     retries: 3,
-    revalidate: SHARED_REVALIDATE_S,
+    revalidate: revalidateS,
     tags: [LIVE_SCORES_CACHE_TAG],
   });
 }
@@ -457,8 +473,9 @@ async function proEvents(
   base: string,
   token: string,
   uuid: string,
+  revalidateS: number,
 ): Promise<{ main: ApiEvent[]; qualifier: ApiEvent[] }> {
-  const evJson = (await get(base, token, `/v1/ppa/tournaments/${uuid}/tournament_events?bracket_level=Pro`)) as
+  const evJson = (await get(base, token, `/v1/ppa/tournaments/${uuid}/tournament_events?bracket_level=Pro`, revalidateS)) as
     | { results?: ApiEvent[] }
     | null;
   const all = (evJson?.results ?? []).filter((e) => e.eventId && e.eventTitle);
@@ -479,8 +496,14 @@ async function proEvents(
 }
 
 /** Every match row for one event. */
-async function eventMatches(base: string, token: string, uuid: string, eventId: string): Promise<ApiMatch[]> {
-  const mj = (await get(base, token, `/v1/ppa/tournaments/${uuid}/tournament_events/${eventId}`)) as
+async function eventMatches(
+  base: string,
+  token: string,
+  uuid: string,
+  eventId: string,
+  revalidateS: number,
+): Promise<ApiMatch[]> {
+  const mj = (await get(base, token, `/v1/ppa/tournaments/${uuid}/tournament_events/${eventId}`, revalidateS)) as
     | { results?: ApiMatch[] }
     | null;
   return mj?.results ?? [];
@@ -555,7 +578,13 @@ type BuiltAll = { divisions: BracketDivision[]; draws: Map<string, BracketDraw>;
 async function buildAll(uuid: string): Promise<BuiltAll> {
   const { token, base } = config();
   if (!token) return { divisions: [], draws: new Map(), stage: "main" };
-  const events = await proEvents(base, token, uuid);
+  /**
+   * One calendar lookup per build, then threaded into every call below, so a
+   * finished tournament's ten requests all land on the long window together.
+   * Computed here rather than inside `get` so it cannot vary mid-build.
+   */
+  const revalidateS = await liveCacheWindowFor(uuid);
+  const events = await proEvents(base, token, uuid, revalidateS);
 
   /**
    * ── WHICH BRACKET THE PANEL SHOWS ──────────────────────────────────────────
@@ -596,10 +625,14 @@ async function buildAll(uuid: string): Promise<BuiltAll> {
    * so on the one morning it is consulted it costs nothing extra, and on every
    * other day it is never called at all.
    */
-  const mainRaws = await Promise.all(events.main.map((e) => eventMatches(base, token, uuid, e.eventId as string)));
+  const mainRaws = await Promise.all(
+    events.main.map((e) => eventMatches(base, token, uuid, e.eventId as string, revalidateS)),
+  );
   const qualifierRaws =
     !mainRaws.some(drawHasPlay) && events.qualifier.length
-      ? await Promise.all(events.qualifier.map((e) => eventMatches(base, token, uuid, e.eventId as string)))
+      ? await Promise.all(
+          events.qualifier.map((e) => eventMatches(base, token, uuid, e.eventId as string, revalidateS)),
+        )
       : null;
   const qualifierPlayed = qualifierRaws !== null && qualifierRaws.some(drawHasPlay);
   // Only asked when qualifying exists and has not been played — i.e. the one
@@ -626,7 +659,7 @@ async function buildAll(uuid: string): Promise<BuiltAll> {
       const eid = e.eventId as string;
       const name = chosenName(e.eventTitle as string);
       const format = bracketTypeFromFormatId(e.bracketFormatId);
-      const matches = cached?.[i] ?? (await eventMatches(base, token, uuid, eid));
+      const matches = cached?.[i] ?? (await eventMatches(base, token, uuid, eid, revalidateS));
 
       // Qualifier draws hide their closing rounds behind `HIDE` — see `inStage`.
       const meta = { eventId: uuid, divisionId: eid, divisionName: name, format, includeHidden: showQualifier };

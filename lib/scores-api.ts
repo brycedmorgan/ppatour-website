@@ -22,6 +22,7 @@
 
 import { pbGetJson } from "@/lib/pb-fetch";
 import { LIVE_SCORES_CACHE_TAG } from "@/lib/cache-tags";
+import { LIVE_WINDOW_S, liveCacheWindowFor } from "@/lib/live-cache-window";
 import { fetchPlannedStarts } from "@/lib/ticker-api";
 import { scoreHeadshots } from "@/lib/score-headshots";
 
@@ -412,13 +413,23 @@ function standingsOf(raws: ApiMatch[], division: string, divisionId: string): Di
  * the Data Cache; a 429 or 5xx is retried with `no-store`, so a rate-limited
  * response is never what lands in the shared entry.
  */
-const SHARED_REVALIDATE_S = 20;
+const SHARED_REVALIDATE_S = LIVE_WINDOW_S;
 
-async function get(base: string, token: string, path: string): Promise<unknown> {
+/**
+ * ⚠ `revalidateS` IS PER-TOURNAMENT — a finished event's scores are history and
+ * do not need re-asking every 20s. See lib/live-cache-window.ts; it defaults to
+ * the live window so a missed call site costs money, never freshness.
+ */
+async function get(
+  base: string,
+  token: string,
+  path: string,
+  revalidateS: number = SHARED_REVALIDATE_S,
+): Promise<unknown> {
   return pbGetJson(`${base}${path}`, { "PB-API-TOKEN": token }, {
     timeoutMs: TIMEOUT_MS,
     retries: 3,
-    revalidate: SHARED_REVALIDATE_S,
+    revalidate: revalidateS,
     tags: [LIVE_SCORES_CACHE_TAG],
   });
 }
@@ -509,10 +520,11 @@ async function loadBracket(
   tournamentId: string,
   events: ApiEvent[],
   name: (title: string) => string,
+  revalidateS: number,
 ): Promise<Bracket> {
   const perEvent = await Promise.all(
     events.map(async (e) => {
-      const mj = (await get(base, token, `/v1/ppa/tournaments/${tournamentId}/tournament_events/${e.eventId}`)) as
+      const mj = (await get(base, token, `/v1/ppa/tournaments/${tournamentId}/tournament_events/${e.eventId}`, revalidateS)) as
         | { results?: ApiMatch[] }
         | null;
       const raws = mj?.results ?? [];
@@ -573,7 +585,13 @@ async function build(tournamentId: string): Promise<ScoresResult> {
      */
     const startsSoon = fetchPlannedStarts();
 
-    const evJson = (await get(base, token, `/v1/ppa/tournaments/${tournamentId}/tournament_events?bracket_level=Pro`)) as
+    /**
+     * One calendar lookup, then threaded into every call in this build, so a
+     * finished tournament's whole fan-out lands on the long window together.
+     */
+    const revalidateS = await liveCacheWindowFor(tournamentId);
+
+    const evJson = (await get(base, token, `/v1/ppa/tournaments/${tournamentId}/tournament_events?bracket_level=Pro`, revalidateS)) as
       | { results?: ApiEvent[] }
       | null;
     const all = (evJson?.results ?? []).filter((e) => e.eventId && e.eventTitle);
@@ -608,10 +626,10 @@ async function build(tournamentId: string): Promise<ScoresResult> {
      * the one day they are the only scores there are. That matters here: this
      * adapter is the reason for the rate-limit work of 7/31.
      */
-    const main = await loadBracket(base, token, tournamentId, mainEvents, cleanDivision);
+    const main = await loadBracket(base, token, tournamentId, mainEvents, cleanDivision, revalidateS);
     const qualifierBracket =
       !hasPlay(main) && qualifierEvents.length
-        ? await loadBracket(base, token, tournamentId, qualifierEvents, qualifierDivision)
+        ? await loadBracket(base, token, tournamentId, qualifierEvents, qualifierDivision, revalidateS)
         : null;
 
     /**

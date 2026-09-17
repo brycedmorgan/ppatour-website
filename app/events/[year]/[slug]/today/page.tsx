@@ -34,6 +34,22 @@ import { withUtm } from "@/lib/utm";
  */
 export const revalidate = 300;
 
+/**
+ * ⚠ SAME FIX, SAME REASON AS THE EVENT PAGE — see the long note on
+ * `dynamic` in ../page.tsx. This route built as `ƒ (Dynamic)` with no
+ * prerendered paths at all, so every request re-rendered it and re-ran
+ * `getEvents()`; measured at 3,567 upstream calls in twelve hours on 9/17, all
+ * of them `/v2/data/ppa_tournaments`, for a page whose own data changes at most
+ * once every five minutes.
+ *
+ * Safe for the stronger of the two reasons: this page server-renders NO live
+ * data whatsoever. Courts and today's order of play are {@link TodayPanel},
+ * a client component polling `/api/scores` on its own 30s cycle, so the
+ * 300s shell holds nothing time-sensitive. The two server awaits are
+ * `resolveEvent` and `getEvents`, both of which are calendar data.
+ */
+export const dynamic = "force-static";
+
 type Params = { params: Promise<{ year: string; slug: string }> };
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {

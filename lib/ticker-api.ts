@@ -545,7 +545,36 @@ async function fetchScores(
   });
   // ⚠ THROW, DON'T RETURN EMPTY. A 429 or a 500 is not "no matches on court";
   // resolving it to an empty list is what published that claim mid-tournament.
-  if (!res.ok) throw new Error(`homepage_score_ticker ${res.status}`);
+  if (!res.ok) {
+    /**
+     * ⚠ DIAGNOSTIC ONLY — NO BEHAVIOUR CHANGE. `fetchLiveTicker` catches this
+     * and serves the last good board either way; this line only makes the
+     * failure legible in Vercel's runtime logs.
+     *
+     * It is here because of an unexplained 404 rate measured 9/17: this
+     * endpoint returns **~300 404s per hour, flat, for 24 hours straight** —
+     * 25-30% of every call it receives — and the count does NOT move with
+     * traffic while the 200s swing from 641 to 880 an hour. So it is a
+     * fixed-cadence condition, not a share of requests.
+     *
+     * Every request shape this file actually emits was replayed by hand
+     * against the live API (both date windows, page_size 20/50/100, every
+     * partner in `homepage_ticker_activity`, empty partner, camelCase on and
+     * off): **all 200.** Nothing follows the `nextPage` link. So the shape is
+     * not the cause and a fix would have been a guess — which is the one thing
+     * not to ship into the live-scores path during a tournament.
+     *
+     * The partner and the window are logged because they are the only inputs
+     * that vary between a call that works and one that does not. WHEN THIS IS
+     * SOLVED, DELETE THIS BLOCK — it is a probe, not a feature.
+     */
+    if (res.status === 404) {
+      console.warn(
+        `[ticker] homepage_score_ticker 404 · partner=${JSON.stringify(partner)} · window=${params.get("start_date")}..${params.get("end_date")}`,
+      );
+    }
+    throw new Error(`homepage_score_ticker ${res.status}`);
+  }
 
   const json = (await res.json()) as { results?: { results?: ApiMatch[] } };
   const rows = json.results?.results ?? [];
