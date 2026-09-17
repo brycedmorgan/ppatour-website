@@ -91,9 +91,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   Sep 23–27). ⚠ First deploy landed on `ppatoureurope.com/europe/eventlinks/` because
   **redirects run before `beforeFiles` rewrites** and the any-host redirect fired on the
   Europe host too; fixed with `missing: [{type:"host", value:"ppatoureurope.com"}]` on the
-  redirect. ⚠ Headless Chrome at 390px clips
-  the right edge on this page AND on the live /europe page identically — a screenshot
-  artefact, not a layout bug.
+  redirect. ⚠ Two headless-Chrome artefacts cost time here, neither a bug:
+  at 390px it clips the right edge on this page AND on live /europe identically, and it
+  painted the CARVANA lockup in the Europe footer from a stale cached SVG. The real browser
+  (Chrome MCP) shows the cropped PPA TOUR mark, natural size 300×67, global footer
+  `display:none`. **Verify chrome in a real browser, not a headless screenshot.**
 - **Next:** Payton's per-stop links into `lib/europe-eventlinks.ts` · Albert (Smash) has
   ideas for building the page out; wait for them in #ppa-tour-europe · consider a Jackalope
   endpoint so the Europe team edits links without a deploy ([[project-ppa-europe-website]]).
