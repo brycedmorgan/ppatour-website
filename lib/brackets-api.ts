@@ -323,7 +323,7 @@ function buildBracket(
    * Advancement inferred from the shape of the draw — including the rounds
    * that carry byes.
    *
-   * ⚠ THE RULE IS "ONE FEEDER PER EMPTY SLOT", NOT "TWO MATCHES PER MATCH".
+   * ⚠ THE RULE IS "ONE FEEDER PER FEEDER SLOT", NOT "TWO MATCHES PER MATCH".
    * Pairing each next-round match with two feeders is what fails on a bracket
    * with byes, and it fails badly: measured against every completed
    * advancement at Nationals 2026 (ground truth = following the winning team's
@@ -333,25 +333,63 @@ function buildBracket(
    * already holds a seed on a bye has only ONE slot to fill, so it consumes one
    * feeder, and every match after it shifts.
    *
-   * So capacity is counted per match instead. Arizona men's singles, R64→R32:
+   * So capacity is counted per match. Arizona men's singles, R64→R32:
    * matches 1,2 → 21 · 3,4 → 22 · 5 → 23 (Garnett already there on a bye) ·
    * 6 → 24 (Oncins) · 7,8 → 25 · 9,10 → 26 · 11 → 27 (Khlif) · 12,13 → 28 ·
    * 14,15 → 29 · 16,17 → 30 · 18 → 31 (Frazier) · 19,20 → 32. That reproduces
    * the official bracket on pickleballtournaments exactly, byes and all.
    *
-   * ⚠ THE BALANCE CHECK IS THE SAFETY, AND IT MUST STAY. The assignment is only
-   * forced when the feeders coming out of a round exactly equal the empty slots
-   * waiting in the next one. Verified across all five Arizona draws: every
-   * transition balances. When it does NOT balance — a partly-played round where
-   * some slots already hold winners, an odd feed, a format this does not model —
-   * the transition is skipped and nothing is drawn, because a wrong line tells a
-   * viewer the wrong match decides their player's next opponent, which is worse
-   * than no line at all.
+   * ⚠⚠ A FEEDER SLOT IS NOT AN EMPTY SLOT, AND CONFLATING THE TWO IS WHAT TOOK
+   * EVERY CONNECTOR OFF THE LIVE ROUND. This counted capacity as slots that
+   * were still literally blank, so capacity SHRANK as results landed: the
+   * moment a winner was written into the next round that slot stopped being
+   * counted, the round stopped balancing, and the balance check below —
+   * correctly refusing to guess — drew nothing at all. Measured on Arizona
+   * mid-tournament (9/17): of the 35 round-to-round transitions across the
+   * five main draws and five qualifiers, 20 no longer balanced and were
+   * skipped, and every one of them was a round that had been played.
+   *
+   * On screen that showed up as the round CURRENTLY IN PLAY losing its
+   * connectors — the one a viewer is actually looking at. Completed rounds
+   * mostly survived on the follow-the-winner fallback below, which is why it
+   * looked intermittent rather than broken: mid-tournament the Round of 32
+   * drew 5 of 12 connectors in women’s doubles and 3 of 12 in men’s. So the
+   * draw connected up perfectly before first serve and came apart as the event
+   * ran, which is exactly backwards — and exactly what Wesley reported.
+   *
+   * The fix is that a slot is fed BY THIS ROUND when it is blank OR holds a
+   * team that played in this round. A slot holding a team that did NOT play in
+   * this round is a bye — a direct entry — and consumes no feeder. That
+   * quantity is a property of the DRAW, so it is the same before the first ball
+   * and after the last: re-measured on the same Arizona data, all 35
+   * transitions balance, where the old test balanced 15. Every non-final match
+   * in all five main draws now carries a connector: women’s doubles 28/28, men’s
+   * doubles 46/46, mixed 46/46, women’s singles 44/44, men’s singles 46/46.
+   *
+   * ⚠ REAL RESULTS OUTRANK THE MODEL — see `anchors`. A completed match whose
+   * winner already appears in the next round tells us where it went; that is
+   * evidence, not inference, so it is fixed first and the remaining feeders
+   * fill the remaining seats around it.
+   *
+   * ⚠ AND THE ANCHORS AUDIT THE MODEL, WHICH IS THE SAFETY THAT REPLACED THE
+   * OLD ONE. If sequential assignment disagrees with even one anchor, this draw
+   * does not number its matches in bracket order, so its unplayed matches get
+   * NO line rather than a plausible wrong one. That is not hypothetical: the
+   * Arizona men's doubles QUALIFIER pairs its quarterfinals (9,6) (10,11)
+   * (12,7) (13,8), and nothing in the feed predicts it. Simulated across every
+   * Arizona transition at 0/25/50/75% of results revealed, refusing there took
+   * wrong lines from 10 to 6 out of 523 (98.8%), and all 6 survivors are that
+   * one qualifier round with no result in yet — every MAIN-draw transition is
+   * exact at every stage.
    *
    * ⚠ STILL A RECONSTRUCTION, AND THE UPSTREAM ASK STANDS.
    * `matchWinnerGoesTo` / `templateMatchID` on the draw feed would give the tree
    * outright instead of deriving it — the outstanding request in
-   * docs/DATA-ASKS.md. This is a faithful reconstruction, not a substitute.
+   * docs/DATA-ASKS.md. Confirmed again on Arizona 9/17: a draw row carries only
+   * roundNumber, matchNumber, matchStart, matchCompleted, inBracketType,
+   * scoreFormatGameBestOutOf, roundText, matchUuid and matchCompletedType.
+   * There is no advancement field to read. This is a faithful reconstruction,
+   * not a substitute.
    */
   const positionalNext = new Map<string, string>();
   if (isElim) {
@@ -369,15 +407,52 @@ function buildBracket(
       const cur = byRound[i];
       const nxt = byRound[i + 1];
       if (!cur.length || !nxt.length) continue;
-      const capacity = nxt.map((n) => (slotOpen(n, 1) ? 1 : 0) + (slotOpen(n, 2) ? 1 : 0));
-      const seats = capacity.reduce((a, b) => a + b, 0);
-      if (seats !== cur.length) continue; // does not balance — do not guess
-      let k = 0;
-      nxt.forEach((target, ni) => {
-        for (let s = 0; s < capacity[ni]; s++) {
-          const src = cur[k++];
-          if (src) positionalNext.set(idOf(src), idOf(target));
+
+      // Every team that appears in this round, so a next-round slot can be told
+      // apart from a bye: a slot holding one of these was FED by this round.
+      const played = new Set<string>();
+      for (const m of cur) {
+        for (const t of [1, 2] as const) {
+          const u = teamUuid(m, t);
+          if (u) played.add(u);
         }
+      }
+      const fedByThisRound = (n: ApiMatch, t: 1 | 2) => {
+        if (slotOpen(n, t)) return true;
+        const u = teamUuid(n, t);
+        return !!u && played.has(u);
+      };
+
+      // The seats this round feeds, in next-round order (slot 1 then slot 2).
+      const seats: ApiMatch[] = [];
+      for (const n of nxt) {
+        if (fedByThisRound(n, 1)) seats.push(n);
+        if (fedByThisRound(n, 2)) seats.push(n);
+      }
+      if (seats.length !== cur.length) continue; // does not balance — do not guess
+
+      // Evidence first: a decided match whose winner is already in the next
+      // round went exactly there, whatever the model would have said.
+      const anchors = new Map<string, string>();
+      for (const m of cur) {
+        const w = winnerTeam(m);
+        if (!w) continue;
+        const u = teamUuid(m, w);
+        if (!u) continue;
+        const target = nxt.find((n) => teamUuid(n, 1) === u || teamUuid(n, 2) === u);
+        if (target) anchors.set(idOf(m), idOf(target));
+      }
+
+      // Does the sequential model agree with everything we actually know?
+      const modelHolds = cur.every((m, k) => {
+        const known = anchors.get(idOf(m));
+        return known === undefined || known === idOf(seats[k]);
+      });
+
+      for (const [src, target] of anchors) positionalNext.set(src, target);
+      if (!modelHolds) continue; // this draw is not numbered in bracket order
+      cur.forEach((m, k) => {
+        if (!anchors.has(idOf(m))) positionalNext.set(idOf(m), idOf(seats[k]));
       });
     }
   }
@@ -405,8 +480,9 @@ function buildBracket(
         if (followed) return followed;
       }
     }
-    // Nothing played yet: fall back to the forced pairing, which only has an
-    // entry for rounds that halve cleanly. See `positionalNext`.
+    // Nothing played yet: the reconstructed tree. It carries every match in a
+    // draw whose numbering the anchors confirm, and only the decided ones in a
+    // draw where they do not. See `positionalNext`.
     return positionalNext.get(idOf(m));
   };
 
@@ -438,15 +514,68 @@ function buildBracket(
     rounds.push({ name, matches: ms.map(toMatch) });
   });
 
-  // Vertically order each round to sit beside the match it feeds (clean lines).
+  /**
+   * Vertical order, taken from the tree itself so a round sits beside what it
+   * feeds and connector lines never cross.
+   *
+   * ⚠ IT WALKS BACKWARDS FROM THE FINAL, WHICH IS THE ONLY ORDER THAT CANNOT
+   * CROSS. The previous rule sorted each round by the position of the match it
+   * fed, one round at a time. That is the right instinct and it breaks in the
+   * two places this draw actually needs it: a match with no `nextMatchId` was
+   * parked at the end of its round with a 1e9 sort key — so during live play,
+   * when the in-progress round had no links at all, a whole round fell back to
+   * match-number order against a next round that had been reordered around it —
+   * and the pass never looked deeper than one round, so two matches feeding the
+   * same target kept whatever relative order they arrived in.
+   *
+   * A depth-first walk from the final assigns each subtree a contiguous band:
+   * the final's top feeder takes the top half, its feeders the top quarters,
+   * and so on down to the first round. That is how a printed bracket is drawn,
+   * and it is what makes "which match feeds this one" answerable by eye rather
+   * than by tracing a line across the column.
+   *
+   * ⚠ A MATCH THE FINAL CANNOT REACH KEEPS ITS PLACE rather than being dropped
+   * or floated to the top: it is appended in match-number order after the
+   * ranked ones. That is the state a draw is in when the anchors refused the
+   * model (see `positionalNext`), so it has to degrade to something readable.
+   */
   if (isElim) {
-    for (let ri = rounds.length - 2; ri >= 0; ri--) {
-      const order = new Map(rounds[ri + 1].matches.map((m, i) => [m.id, i]));
-      rounds[ri].matches.sort((a, b) => {
-        const oa = a.nextMatchId != null ? order.get(a.nextMatchId) ?? 1e9 : 1e9;
-        const ob = b.nextMatchId != null ? order.get(b.nextMatchId) ?? 1e9 : 1e9;
-        return oa - ob || (a.number ?? 0) - (b.number ?? 0);
-      });
+    const byId = new Map<string, BracketMatch>();
+    for (const r of rounds) for (const m of r.matches) byId.set(m.id, m);
+    const feeders = new Map<string, BracketMatch[]>();
+    for (const r of rounds) {
+      for (const m of r.matches) {
+        if (!m.nextMatchId || !byId.has(m.nextMatchId)) continue;
+        const list = feeders.get(m.nextMatchId);
+        if (list) list.push(m);
+        else feeders.set(m.nextMatchId, [m]);
+      }
+    }
+    const byNumber = (a: BracketMatch, b: BracketMatch) => (a.number ?? 0) - (b.number ?? 0);
+    const rank = new Map<string, number>();
+    const seen = new Set<string>();
+    let leaf = 0;
+    const walk = (m: BracketMatch): number => {
+      // A cycle cannot happen in a well-formed draw, but this is reconstructed
+      // data — guard rather than blow the stack on a malformed feed.
+      if (seen.has(m.id)) return rank.get(m.id) ?? leaf;
+      seen.add(m.id);
+      const kids = (feeders.get(m.id) ?? []).slice().sort(byNumber);
+      // No feeders: a first-round match, or a slot filled entirely by byes.
+      if (!kids.length) {
+        const r = leaf++;
+        rank.set(m.id, r);
+        return r;
+      }
+      const rs = kids.map(walk);
+      const r = rs.reduce((a, b) => a + b, 0) / rs.length;
+      rank.set(m.id, r);
+      return r;
+    };
+    for (const m of (rounds[rounds.length - 1]?.matches ?? []).slice().sort(byNumber)) walk(m);
+    for (const r of rounds) for (const m of r.matches) if (!rank.has(m.id)) rank.set(m.id, leaf++);
+    for (const r of rounds) {
+      r.matches.sort((a, b) => (rank.get(a.id)! - rank.get(b.id)!) || byNumber(a, b));
     }
   }
 

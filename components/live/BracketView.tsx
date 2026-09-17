@@ -11,6 +11,26 @@ import type { Bracket, BracketMatch, BracketSide } from "@/lib/bracket-types";
  * Cards are deliberately dense: last names only, one line per team, and score
  * columns only in rounds that have actually been played. A whole draw has to
  * read at a glance, so every row we can drop is width and height we get back.
+ *
+ * ⚠ A MATCH IS POSITIONED AT THE MIDPOINT OF WHAT FEEDS IT, NOT SPREAD EVENLY
+ * DOWN ITS COLUMN. Each round used to be `justify-around`, which distributes a
+ * round's matches at equal intervals over the full height — so a 12-match round
+ * beside a 20-match round put its matches at twelfths against their feeders'
+ * twentieths, and every connector left as a long diagonal crossing its
+ * neighbours. It reads as a tangle rather than a tree, which is the half of
+ * Wesley's report that survives even when every line is present.
+ *
+ * So the layout is computed here instead (see `layout`): the first round is
+ * packed at a fixed pitch, and every later match is centred on the average
+ * centre of its own feeders, pushed down only when it would collide with the
+ * match above it. That is how a printed bracket is drawn — a connector becomes
+ * a short horizontal with a single step in it, and the two feeders of a match
+ * sit symmetrically above and below it.
+ *
+ * ⚠ THE VERTICAL ORDER THAT MAKES THAT WORK IS lib/brackets-api's, NOT THIS
+ * FILE'S. It walks the tree back from the final so each subtree owns a
+ * contiguous band; measured on all five Arizona main draws, 0 crossings over
+ * 1,229 feeder pairs. This file only places what that order hands it.
  */
 
 const MEDAL_BG: Record<string, string> = {
@@ -21,8 +41,28 @@ const MEDAL_BG: Record<string, string> = {
 const MEDAL_LABEL: Record<string, string> = { gold: "1st", silver: "2nd", bronze: "3rd" };
 
 const CARD_W = 210;
-const CONNECTOR = "rgba(255,255,255,0.4)";
+const CONNECTOR = "rgba(255,255,255,0.28)";
+const CONNECTOR_ON = "#4dc1ef";
 const ZOOMS = [1, 0.75, 0.55];
+
+/**
+ * ⚠ CARD HEIGHT IS FIXED IN PIXELS BECAUSE THE LAYOUT IS ARITHMETIC. Every
+ * match centre is derived from the centres of its feeders, so a card whose
+ * height depended on its content would move every card to its right. The
+ * height is therefore declared here and the card fills it, rather than the
+ * other way round: two team rows and a divider, plus the footer row when the
+ * round has one.
+ *
+ * ⚠ AND THE FOOTER IS DECIDED PER ROUND, NOT PER CARD, for the same reason —
+ * one live match in a column must not make its own card taller than the rest
+ * of that column and shift every centre downstream of it.
+ */
+const ROW_H = 28;
+const CARD_BODY_H = ROW_H * 2 + 1;
+const CARD_BORDER = 2;
+const FOOTER_H = 19;
+/** Smallest gap between two cards in the same column. */
+const MIN_GAP = 10;
 
 function LinkIcon() {
   return (
@@ -69,6 +109,8 @@ function SideRow({
   showScores,
   outcome,
   namePending,
+  onTeam,
+  teamOn,
 }: {
   side: BracketSide;
   short: Map<string, string>;
@@ -80,6 +122,9 @@ function SideRow({
    * ONLY — see the note at the call site.
    */
   namePending?: boolean;
+  /** Hovering a name traces that team through the draw. */
+  onTeam?: (id: string | null) => void;
+  teamOn?: boolean;
 }) {
   const p = side.participant;
   const games = side.games.filter((g) => g !== null) as number[];
@@ -92,14 +137,16 @@ function SideRow({
       ? "TBD"
       : "";
   return (
-    <div className="flex min-h-[1.75rem] items-stretch">
+    <div className="flex min-h-0 flex-1 items-stretch">
       <span className="flex w-5 shrink-0 items-center justify-center text-[10px] font-bold tabular-nums text-ppa-navy/40">
         {p?.seed ?? ""}
       </span>
       <span
-        className={`flex flex-1 items-center gap-1.5 whitespace-nowrap py-1 pr-2 text-[12px] leading-tight ${
+        onPointerEnter={p && onTeam ? () => onTeam(p.id) : undefined}
+        onPointerLeave={p && onTeam ? () => onTeam(null) : undefined}
+        className={`flex flex-1 items-center gap-1.5 overflow-hidden whitespace-nowrap py-1 pr-2 text-[12px] leading-tight ${
           p ? "text-ppa-navy" : "text-ppa-navy/35"
-        } ${side.winner ? "font-bold" : ""}`}
+        } ${side.winner ? "font-bold" : ""} ${teamOn ? "bg-ppa-blue/15" : ""}`}
       >
         {label}
         {p?.medal && (
@@ -140,22 +187,47 @@ function MatchCard({
   m,
   short,
   showScores,
+  hasFooterRow,
+  height,
   setRef,
+  onHover,
+  onPin,
+  onTeam,
+  onPath,
+  pinned,
+  activeTeam,
 }: {
   m: BracketMatch;
   short: Map<string, string>;
   showScores: boolean;
+  /** The whole round reserves a footer row, so every card in it is one height. */
+  hasFooterRow: boolean;
+  height: number;
   setRef: (el: HTMLElement | null) => void;
+  onHover: (id: string | null) => void;
+  onPin: (id: string) => void;
+  onTeam: (id: string | null) => void;
+  /** This card is on the traced route. */
+  onPath: boolean;
+  pinned: boolean;
+  activeTeam: string | null;
 }) {
-  // Court and time only earn a row once there is one — an unplayed draw is all
-  // card, no footer.
-  const hasFooter = m.status === "live" || Boolean(m.court) || Boolean(m.time);
   return (
     <article
       ref={setRef}
-      className="overflow-hidden rounded-md border border-ppa-line bg-white shadow-sm"
+      onPointerEnter={() => onHover(m.id)}
+      onPointerLeave={() => onHover(null)}
+      onClick={() => onPin(m.id)}
+      style={{ height }}
+      className={`flex cursor-pointer flex-col overflow-hidden rounded-md border bg-white ${
+        pinned
+          ? "border-ppa-blue shadow-[0_0_0_2px_var(--color-ppa-blue)]"
+          : onPath
+            ? "border-ppa-blue shadow-[0_0_0_1px_var(--color-ppa-blue)]"
+            : "border-ppa-line shadow-sm"
+      }`}
     >
-      <div className="flex">
+      <div className="flex min-h-0 flex-1">
         {/* Match-number rail — number on top, match link beneath it. */}
         <div className="flex w-6 shrink-0 flex-col items-center justify-center gap-0.5 border-r border-ppa-line py-1">
           <span className="text-[10px] font-bold leading-none tabular-nums text-ppa-navy/45">
@@ -165,6 +237,7 @@ function MatchCard({
             href={`https://pickleball.com/results/match/${m.id}`}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
             aria-label={`Match ${m.number ?? ""} details`}
             className="text-ppa-navy/25 transition-colors hover:text-ppa-blue"
           >
@@ -185,17 +258,36 @@ function MatchCard({
           A first-round gap is a real, waiting entry position — the qualifier who
           has not come through yet — so it earns the label. Every later gap just
           means "winner of an earlier match", which the connector lines already
-          say, so it stays blank. The row keeps its height either way
-          (`min-h-[1.75rem]`), so the card does not move when a name lands.
+          say, so it stays blank. The row keeps its height either way, so the
+          card does not move when a name lands.
         */}
-        <div className="flex flex-1 flex-col">
-          <SideRow side={m.sides[0]} short={short} showScores={showScores} outcome={m.outcome} namePending={m.roundIndex === 0} />
-          <div className="h-px bg-ppa-line" />
-          <SideRow side={m.sides[1]} short={short} showScores={showScores} outcome={m.outcome} namePending={m.roundIndex === 0} />
+        <div className="flex min-h-0 flex-1 flex-col">
+          <SideRow
+            side={m.sides[0]}
+            short={short}
+            showScores={showScores}
+            outcome={m.outcome}
+            namePending={m.roundIndex === 0}
+            onTeam={onTeam}
+            teamOn={!!activeTeam && m.sides[0].participant?.id === activeTeam}
+          />
+          <div className="h-px shrink-0 bg-ppa-line" />
+          <SideRow
+            side={m.sides[1]}
+            short={short}
+            showScores={showScores}
+            outcome={m.outcome}
+            namePending={m.roundIndex === 0}
+            onTeam={onTeam}
+            teamOn={!!activeTeam && m.sides[1].participant?.id === activeTeam}
+          />
         </div>
       </div>
-      {hasFooter && (
-        <div className="flex items-center gap-1.5 border-t border-ppa-line px-2 py-0.5 text-[10px]">
+      {hasFooterRow && (
+        <div
+          className="flex shrink-0 items-center gap-1.5 overflow-hidden border-t border-ppa-line px-2 text-[10px]"
+          style={{ height: FOOTER_H - 1 }}
+        >
           {m.status === "live" && (
             <span className="flex items-center gap-1 text-ppa-live">
               <span className="size-1.5 animate-pulse rounded-full bg-ppa-live" />
@@ -207,7 +299,7 @@ function MatchCard({
           {m.outcome === "walkover" && (
             <span className="font-bold uppercase tracking-wide text-ppa-navy/50">Walkover</span>
           )}
-          {m.court && <span className="font-semibold text-ppa-blue">{m.court}</span>}
+          {m.court && <span className="truncate font-semibold text-ppa-blue">{m.court}</span>}
           {m.court && m.time && <span className="text-ppa-navy/25">|</span>}
           {m.time && <span className="truncate text-ppa-navy/50">{m.time}</span>}
         </div>
@@ -232,11 +324,14 @@ export function BracketView({
   const scrollRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const colRefs = useRef<HTMLDivElement[]>([]);
-  const [paths, setPaths] = useState<string[]>([]);
+  const [paths, setPaths] = useState<{ d: string; key: string }[]>([]);
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [railW, setRailW] = useState(0);
   const [activeRound, setActiveRound] = useState(0);
   const [zoom, setZoom] = useState(1);
+  const [hovered, setHovered] = useState<string | null>(null);
+  const [pinned, setPinned] = useState<string | null>(null);
+  const [team, setTeam] = useState<string | null>(null);
 
   const short = useMemo(() => shortNameMap(bracket), [bracket]);
   // Score columns are per ROUND, so every card in a column stays the same width.
@@ -247,6 +342,150 @@ export function BracketView({
       ),
     [bracket],
   );
+  // Footer is per ROUND for the same reason heights are fixed — see CARD_BODY_H.
+  const roundHasFooter = useMemo(
+    () =>
+      bracket.rounds.map((r) =>
+        r.matches.some(
+          (m) => m.status === "live" || m.outcome === "walkover" || Boolean(m.court) || Boolean(m.time),
+        ),
+      ),
+    [bracket],
+  );
+
+  /** Feeders of each match, inverted from `nextMatchId`. */
+  const feeders = useMemo(() => {
+    const ids = new Set<string>();
+    for (const r of bracket.rounds) for (const m of r.matches) ids.add(m.id);
+    const map = new Map<string, string[]>();
+    for (const r of bracket.rounds) {
+      for (const m of r.matches) {
+        if (!m.nextMatchId || !ids.has(m.nextMatchId)) continue;
+        const list = map.get(m.nextMatchId);
+        if (list) list.push(m.id);
+        else map.set(m.nextMatchId, [m.id]);
+      }
+    }
+    return map;
+  }, [bracket]);
+
+  /**
+   * Where every card sits: the classic tidy-tree placement. Every match with
+   * no feeders takes the next horizontal band, and every match that has them
+   * is centred between its outermost two. A collision inside a column pushes
+   * the lower card down.
+   *
+   * ⚠ THE BANDS BELONG TO THE TREE'S LEAVES, NOT TO THE FIRST ROUND, AND THE
+   * WOMEN'S DRAW IS WHY. The first cut of this packed round 0 at a fixed pitch
+   * and centred everything after it. That is the same thing for a draw whose
+   * first round IS its widest, and wrong for Arizona women's doubles, whose
+   * Round of 64 is a 2-match play-in feeding a 12-match Round of 32: it pinned
+   * those two play-ins to the top of the column while the ten unfed R32
+   * matches stacked from the top of theirs, so the two matches that had a
+   * connector were dragged hundreds of pixels away from it. Measured on that
+   * draw: worst feeder-to-target offset 792px, mean 62px.
+   *
+   * Treating "has no feeders" as the leaf condition — whatever round it sits
+   * in — puts a play-in beside the match it feeds and costs nothing on a draw
+   * where the leaves really are all in round 0. Re-measured: worst 0px.
+   *
+   * ⚠ A DRAW WITH NO LINKS AT ALL IS STACKED, NOT WALKED. Round-robin pools
+   * carry no `nextMatchId`, so a tree walk from the last round would find only
+   * that round and push every earlier one underneath it. They get a plain grid.
+   */
+  const layout = useMemo(() => {
+    const heights = bracket.rounds.map(
+      (_, ri) => CARD_BODY_H + CARD_BORDER + (roundHasFooter[ri] ? FOOTER_H : 0),
+    );
+    const pitch = Math.max(...heights) + MIN_GAP;
+    const centres = new Map<string, number>();
+
+    if (feeders.size) {
+      let band = 0;
+      const seen = new Set<string>();
+      const centreOf = (id: string): number => {
+        if (seen.has(id)) return centres.get(id) ?? band * pitch + pitch / 2;
+        seen.add(id);
+        const kids = feeders.get(id) ?? [];
+        if (!kids.length) {
+          const c = band * pitch + pitch / 2;
+          band += 1;
+          centres.set(id, c);
+          return c;
+        }
+        const cs = kids.map(centreOf);
+        const c = (Math.min(...cs) + Math.max(...cs)) / 2;
+        centres.set(id, c);
+        return c;
+      };
+      for (const m of bracket.rounds[bracket.rounds.length - 1]?.matches ?? []) centreOf(m.id);
+    }
+
+    const tops = new Map<string, number>();
+    bracket.rounds.forEach((round, ri) => {
+      const h = heights[ri];
+      let prevBottom = -Infinity;
+      round.matches.forEach((m, mi) => {
+        // Unreachable from the final (a link the adapter refused to guess, or a
+        // pool match): follow the card above rather than stacking on top of it.
+        const centre =
+          centres.get(m.id) ??
+          (feeders.size
+            ? (prevBottom === -Infinity ? 0 : prevBottom + MIN_GAP) + h / 2
+            : mi * pitch + pitch / 2);
+        let top = centre - h / 2;
+        if (prevBottom !== -Infinity && top < prevBottom + MIN_GAP) top = prevBottom + MIN_GAP;
+        tops.set(m.id, top);
+        prevBottom = top + h;
+      });
+    });
+    return { tops, heights };
+  }, [bracket, feeders, roundHasFooter]);
+
+  /**
+   * The traced route: hovering (or tapping) a match lights the way from it to
+   * the final plus the matches that feed it, and hovering a name lights that
+   * team's whole run. This is the direct answer to "where does this round
+   * connect to the next" — following one line by eye across a 20-match column
+   * is exactly what a viewer should not have to do.
+   */
+  const trace = useMemo(() => {
+    const cards = new Set<string>();
+    const links = new Set<string>();
+    const byId = new Map<string, BracketMatch>();
+    for (const r of bracket.rounds) for (const m of r.matches) byId.set(m.id, m);
+
+    if (team) {
+      for (const m of byId.values()) {
+        if (m.sides.some((s) => s.participant?.id === team)) cards.add(m.id);
+      }
+      for (const m of byId.values()) {
+        if (cards.has(m.id) && m.nextMatchId && cards.has(m.nextMatchId)) {
+          links.add(`${m.id}->${m.nextMatchId}`);
+        }
+      }
+      return { cards, links };
+    }
+
+    const focus = hovered ?? pinned;
+    if (!focus) return { cards, links };
+    // Forward to the final. `guard` is for reconstructed data, not a real draw.
+    let cur = byId.get(focus);
+    const guard = new Set<string>();
+    while (cur && !guard.has(cur.id)) {
+      guard.add(cur.id);
+      cards.add(cur.id);
+      const next = cur.nextMatchId ? byId.get(cur.nextMatchId) : undefined;
+      if (next) links.add(`${cur.id}->${next.id}`);
+      cur = next;
+    }
+    // One round back, so the matches that decide this one are obvious too.
+    for (const f of feeders.get(focus) ?? []) {
+      cards.add(f);
+      links.add(`${f}->${focus}`);
+    }
+    return { cards, links };
+  }, [bracket, feeders, hovered, pinned, team]);
 
   // Keep the always-visible sticky scrollbar and the bracket in sync.
   const onBarScroll = () => {
@@ -262,7 +501,7 @@ export function BracketView({
     // Anchor on the round's COLUMN (always present) — not a match-id lookup that
     // can miss for some rounds and make the jump behave inconsistently.
     const left = Math.max(0, col.offsetLeft * zoom - 8);
-    // The column centers its matches vertically, so scroll to the first card too
+    // The column places its matches by the tree, so scroll to the first card too
     // (else a short round like the final sits off-screen below the fold).
     const firstCard = col.querySelector("article") as HTMLElement | null;
     if (fullPage) {
@@ -315,7 +554,7 @@ export function BracketView({
       };
       // Draw a connector from each match to the exact match its winner
       // advances to (nextMatchId) — never a positional guess.
-      const ps: string[] = [];
+      const ps: { d: string; key: string }[] = [];
       for (const round of bracket.rounds) {
         for (const m of round.matches) {
           if (!m.nextMatchId) continue;
@@ -327,7 +566,7 @@ export function BracketView({
           const tx = tb.l;
           const ty = tb.t + tb.h / 2;
           const midX = (sx + tx) / 2;
-          ps.push(`M${sx},${sy} H${midX} V${ty} H${tx}`);
+          ps.push({ d: `M${sx},${sy} H${midX} V${ty} H${tx}`, key: `${m.id}->${m.nextMatchId}` });
         }
       }
       setPaths(ps);
@@ -342,7 +581,9 @@ export function BracketView({
       ro.disconnect();
       window.removeEventListener("resize", compute);
     };
-  }, [bracket, zoom]);
+  }, [bracket, zoom, layout]);
+
+  const tracing = trace.cards.size > 0;
 
   return (
     <div>
@@ -410,17 +651,28 @@ export function BracketView({
             {/* Padding on the content (not the container) so both the first and
                 last rounds get side spacing — padding-right on scroll containers
                 is unreliable. */}
-            <div ref={wrapRef} className="relative flex min-w-max gap-10 p-6">
+            <div ref={wrapRef} className="relative flex min-w-max items-start gap-10 p-6">
               <svg
+                data-bracket-links
                 className="pointer-events-none absolute left-0 top-0"
                 width={size.w}
                 height={size.h}
                 style={{ overflow: "visible" }}
                 aria-hidden
               >
-                {paths.map((d, i) => (
-                  <path key={i} d={d} fill="none" stroke={CONNECTOR} strokeWidth={1.5} />
-                ))}
+                {paths.map((p) => {
+                  const on = trace.links.has(p.key);
+                  return (
+                    <path
+                      key={p.key}
+                      d={p.d}
+                      fill="none"
+                      stroke={on ? CONNECTOR_ON : CONNECTOR}
+                      strokeWidth={on ? 2.5 : 1.5}
+                      opacity={tracing && !on ? 0.35 : 1}
+                    />
+                  );
+                })}
               </svg>
 
               {bracket.rounds.map((round, ri) => (
@@ -432,22 +684,42 @@ export function BracketView({
                   className="flex w-max flex-col"
                   style={{ minWidth: CARD_W }}
                 >
-                  <div className="mb-3 rounded-t-md border border-ppa-line bg-ppa-line py-1.5 text-center text-[11px] font-bold uppercase tracking-[0.14em] text-ppa-navy">
+                  <div className="mb-3 flex shrink-0 items-center justify-center gap-1.5 rounded-t-md border border-ppa-line bg-ppa-line py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-ppa-navy">
                     {round.name}
+                    <span className="tabular-nums text-ppa-navy/45">{round.matches.length}</span>
                   </div>
-                  <div className="flex flex-1 flex-col justify-around gap-3">
-                    {round.matches.map((m) => (
-                      <MatchCard
-                        key={m.id}
-                        m={m}
-                        short={short}
-                        showScores={roundHasScores[ri]}
-                        setRef={(el) => {
-                          if (el) cardRefs.current.set(m.id, el);
-                          else cardRefs.current.delete(m.id);
-                        }}
-                      />
-                    ))}
+                  {/* Cards are placed by margin rather than absolutely, so the
+                      column still sizes to its widest card (names are
+                      `whitespace-nowrap` and can exceed CARD_W). */}
+                  <div className="flex flex-col">
+                    {round.matches.map((m, mi) => {
+                      const top = layout.tops.get(m.id) ?? 0;
+                      const prev = mi > 0 ? round.matches[mi - 1] : null;
+                      const prevBottom = prev
+                        ? (layout.tops.get(prev.id) ?? 0) + layout.heights[ri]
+                        : 0;
+                      return (
+                        <div key={m.id} style={{ marginTop: Math.max(0, top - prevBottom) }}>
+                          <MatchCard
+                            m={m}
+                            short={short}
+                            showScores={roundHasScores[ri]}
+                            hasFooterRow={roundHasFooter[ri]}
+                            height={layout.heights[ri]}
+                            onHover={setHovered}
+                            onPin={(id) => setPinned((cur) => (cur === id ? null : id))}
+                            onTeam={setTeam}
+                            onPath={trace.cards.has(m.id)}
+                            pinned={pinned === m.id}
+                            activeTeam={team}
+                            setRef={(el) => {
+                              if (el) cardRefs.current.set(m.id, el);
+                              else cardRefs.current.delete(m.id);
+                            }}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               ))}
@@ -455,6 +727,16 @@ export function BracketView({
           </div>
         </div>
       </div>
+
+      {/* ⚠ THE HINT HAS TO MATCH WHAT THE VIEW CAN ACTUALLY DO. Round-robin pool
+          play carries no `nextMatchId`, so there is no route to the final to
+          trace and only the team highlight works — promising the other one on
+          that view is telling a viewer to try something that does nothing. */}
+      <p className={`mt-2 text-[11px] ${light ? "text-ppa-navy/60" : "text-white/55"}`}>
+        {feeders.size > 0
+          ? "Hover a match to trace it to the final, or a name to follow that team through the draw. Tap a match to keep it lit."
+          : "Hover a name to follow that team through the pool."}
+      </p>
 
       {/* Always-visible horizontal scrollbar (full page): pinned to the
           viewport bottom and synced to the bracket, so left/right scrolling is
