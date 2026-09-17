@@ -348,7 +348,15 @@ const nextConfig: NextConfig = {
       ...EUROPE_DOMAIN_REDIRECTS.map((r) => ({ ...r, permanent: false })),
       // Same path on any other host (ppatour.com, europe.ppatour.com) lands on
       // the Europe links page too, so a mistyped QR domain still works.
-      { source: "/eventlinks", destination: "/europe/eventlinks", permanent: false },
+      // ⚠ `missing` host: redirects run BEFORE beforeFiles rewrites, so without
+      // it this redirect fires on ppatoureurope.com too and the scanned URL
+      // lands at ppatoureurope.com/europe/eventlinks/ instead of staying put.
+      {
+        source: "/eventlinks",
+        missing: [{ type: "host" as const, value: "ppatoureurope.com" }],
+        destination: "/europe/eventlinks",
+        permanent: false,
+      },
       ...LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true })),
       ...RETIRED_ATHLETE_REDIRECTS.map((r) => ({ ...r, permanent: false })),
     ];

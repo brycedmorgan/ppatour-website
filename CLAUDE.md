@@ -65,6 +65,39 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-17 — /europe/eventlinks: the page behind the QR on Europe credentials
+
+- **Payton Pemberton (DM, 9/17 1:23pm MT):** the Europe team prints a QR code on every
+  credential **tomorrow** and wants "an updated list of relevant links for each tour stop
+  (probably pickleball brackets, map, rulebook, etc.)". Bryce's answer in the thread: no QR
+  tool, none needed; a printed code is fixed forever, so point it at a page we control and
+  change the page per stop. She asked for `ppatoureurope.com/eventlinks`. **Built and live.**
+- **Route is `app/(marketing)/europe/eventlinks/page.tsx`** under the Europe layout, so it
+  gets the Europe header/footer and no Carvana. `ppatoureurope.com/eventlinks` is a
+  `beforeFiles` host rewrite in `next.config.ts` next to the existing `/` one; every other
+  host gets a temporary redirect `/eventlinks` → `/europe/eventlinks` so a mistyped QR domain
+  still lands. Unlisted like the rest of the region (`europeRobots`).
+- **Stops come from the live feed, filtered `country === "Europe"`, not completed, AND
+  `endDate >= today`.** The feed still had P125 Portorož (Jul 22–26) as "upcoming" in
+  September; without the date filter a finished event sat at the top of a credential page.
+  First stop renders as "Happening now" / "Next stop" with Event page + Map & directions
+  (Google Maps search of venue + city, derived from the feed, not guessed); later stops list
+  under "Coming up"; a fixed "The tour" block links the /europe sections.
+- **Per-stop links live in `lib/europe-eventlinks.ts`, keyed by feed slug, and it is EMPTY
+  on purpose.** Only links the Europe team actually gives us go in (brackets, rulebook).
+  Never guess a URL for a credential. Payton has not sent any yet.
+- **Verified on a phone-width headless render and on production** (`ppatoureurope.com/eventlinks`
+  → 308 to the trailing slash → 200, "Next stop" = the live feed's P250 Barcelona Open,
+  Sep 23–27). ⚠ First deploy landed on `ppatoureurope.com/europe/eventlinks/` because
+  **redirects run before `beforeFiles` rewrites** and the any-host redirect fired on the
+  Europe host too; fixed with `missing: [{type:"host", value:"ppatoureurope.com"}]` on the
+  redirect. ⚠ Headless Chrome at 390px clips
+  the right edge on this page AND on the live /europe page identically — a screenshot
+  artefact, not a layout bug.
+- **Next:** Payton's per-stop links into `lib/europe-eventlinks.ts` · Albert (Smash) has
+  ideas for building the page out; wait for them in #ppa-tour-europe · consider a Jackalope
+  endpoint so the Europe team edits links without a deploy ([[project-ppa-europe-website]]).
+
 ### 2026-09-15 — The three PPA 500 Opens are on The Tour; "1,000+" copy gone
 
 - **Bryce:** Malibu Showcase, Minneapolis Indoor Open and the third 500 are PPA Tour
