@@ -46,3 +46,25 @@ export const RANKINGS_CACHE_TAG = "rankings";
  * where waiting out even a 30s window on every edge is the wrong answer.
  */
 export const LIVE_SCORES_CACHE_TAG = "live-scores";
+
+/**
+ * Finished tournaments: draws, scores and pro fields that can no longer change.
+ *
+ * ⚠ IT EXISTS BECAUSE THE OTHER TAGS ARE PURGED ON A SCHEDULE AND THIS DATA MUST
+ * NOT BE. Wesley, 9/17: "completed tournaments should never trigger an API call
+ * again because the tournament is over and the content will not change again."
+ * Entries for a settled tournament carry a one-year window, so the only thing
+ * that could still make them re-fetch is a tag purge — and
+ * {@link TOURNAMENT_DETAILS_CACHE_TAG}, which lib/event-field.ts used to use, is
+ * purged by the daily `/api/revalidate-content` cron. Left on that tag, every
+ * finished event would have re-read its whole pro field once a day forever.
+ *
+ * ⚠ NOTHING PURGES THIS ON A SCHEDULE, AND NOTHING SHOULD. Adding it to the cron
+ * in app/api/revalidate-content/route.ts would silently undo the whole point.
+ *
+ * The escape hatch is deliberate and manual: `/api/revalidate-content?tag=
+ * finished-results` with the cron secret, for the one case that justifies it —
+ * a result corrected after the fact (a voided match, an amended score, a late
+ * DQ). See lib/live-cache-window.ts.
+ */
+export const FINISHED_RESULTS_CACHE_TAG = "finished-results";

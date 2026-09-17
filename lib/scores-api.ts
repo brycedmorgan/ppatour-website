@@ -21,12 +21,15 @@
  */
 
 import { pbGetJson } from "@/lib/pb-fetch";
-import { LIVE_SCORES_CACHE_TAG } from "@/lib/cache-tags";
+import { FINISHED_RESULTS_CACHE_TAG, LIVE_SCORES_CACHE_TAG } from "@/lib/cache-tags";
 import {
   LIVE_WINDOW_S,
   listWindowFor,
   noteWindow,
   windowFromProEvents,
+  isSettled,
+  FINISHED_MEMO_MS,
+  FINISHED_WINDOW_S,
 } from "@/lib/live-cache-window";
 import { fetchPlannedStarts } from "@/lib/ticker-api";
 import { scoreHeadshots } from "@/lib/score-headshots";
@@ -437,7 +440,10 @@ async function get(
     timeoutMs: TIMEOUT_MS,
     retries: 3,
     revalidate: revalidateS,
-    tags: [LIVE_SCORES_CACHE_TAG],
+    // ⚠ THE TAG FOLLOWS THE WINDOW. A one-year entry sitting on a tag something
+    // purges is not a one-year entry — see FINISHED_RESULTS_CACHE_TAG for why
+    // settled data gets its own, and why no cron may touch it.
+    tags: [revalidateS === FINISHED_WINDOW_S ? FINISHED_RESULTS_CACHE_TAG : LIVE_SCORES_CACHE_TAG],
   });
 }
 
@@ -762,7 +768,11 @@ function refresh(tournamentId: string): Promise<ScoresResult> {
       cache.set(tournamentId, { value: previous.value, expires: Date.now() + FAILED_RETRY_MS });
       return previous.value;
     }
-    cache.set(tournamentId, { value, expires: Date.now() + TTL_MS });
+    // ⚠ Same pinning as the bracket build — a finished tournament's board is
+    // history, so a warm instance assembles it once and serves it from memory
+    // rather than re-reading six fetches every minute. See FINISHED_MEMO_MS.
+    const ttl = isSettled(tournamentId) ? FINISHED_MEMO_MS : TTL_MS;
+    cache.set(tournamentId, { value, expires: Date.now() + ttl });
     return value;
   });
   inFlight.set(tournamentId, p);

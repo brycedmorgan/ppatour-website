@@ -17,7 +17,13 @@
  * Server-only. Never throws — returns an empty field on any problem, which reads
  * as "no draw yet" and hides the column.
  */
-import { TOURNAMENT_DETAILS_CACHE_TAG } from "@/lib/cache-tags";
+import { FINISHED_RESULTS_CACHE_TAG, TOURNAMENT_DETAILS_CACHE_TAG } from "@/lib/cache-tags";
+import {
+  FINISHED_WINDOW_S,
+  listWindowFor,
+  noteWindow,
+  windowFromProEvents,
+} from "@/lib/live-cache-window";
 import { pbGetJson } from "@/lib/pb-fetch";
 
 /** Draws drop mid-week without warning, so keep this fresher than a day. */
@@ -41,7 +47,13 @@ export type EventField = {
 
 const EMPTY: EventField = { published: false, players: [] };
 
-type ApiEvent = { eventId?: string; eventType?: string; divisionType?: string };
+type ApiEvent = {
+  eventId?: string;
+  eventType?: string;
+  divisionType?: string;
+  /** Null while this division is still being played — see lib/live-cache-window. */
+  endDate?: string | null;
+};
 type ApiMatch = Record<string, unknown>;
 
 function config() {
@@ -116,21 +128,39 @@ export async function getEventField(uuid: string | undefined): Promise<EventFiel
   const { token, base } = config();
   if (!token) return EMPTY;
 
-  // Tagged so the daily /api/revalidate-content cron refreshes the field —
-  // without a tag these entries were cached but unreachable by any cron, and
-  // this call fans out one request per pro division per event page.
-  const opts = {
+  /**
+   * ⚠ THIS IS THE THIRD CALLER OF THE SAME TWO ENDPOINTS, and it runs on every
+   * event page — including the ~80 completed ones in the sitemap, whose pro field
+   * is as immutable as their bracket. Left on the 30-minute window it re-read the
+   * whole fan-out for finished events forever, which is exactly what "completed
+   * tournaments should never trigger an API call again" rules out.
+   *
+   * ⚠ AND THE TAG HAD TO CHANGE WITH IT. TOURNAMENT_DETAILS_CACHE_TAG is purged
+   * by the daily /api/revalidate-content cron, so a one-year entry left on it
+   * would have re-fetched once a day regardless of the window.
+   */
+  const buildOpts = (revalidate: number) => ({
     timeoutMs: TIMEOUT_MS,
-    revalidate: REVALIDATE_S,
-    tags: [TOURNAMENT_DETAILS_CACHE_TAG],
-  };
+    revalidate,
+    tags: [
+      revalidate === FINISHED_WINDOW_S ? FINISHED_RESULTS_CACHE_TAG : TOURNAMENT_DETAILS_CACHE_TAG,
+    ],
+  });
+
+  // The list call picks the window for the per-division calls behind it, and can
+  // only use the long one itself once this instance has seen it finished.
   const listed = (await pbGetJson(
     `${base}/v1/ppa/tournaments/${uuid}/tournament_events?bracket_level=Pro`,
     { "PB-API-TOKEN": token },
-    opts,
+    buildOpts(listWindowFor(uuid, REVALIDATE_S)),
   )) as { results?: ApiEvent[] } | null;
 
-  const mains = (listed?.results ?? []).filter((e) => e.eventType === "MAIN_EVENT_TYPE" && e.eventId);
+  const rows = listed?.results ?? [];
+  const window = windowFromProEvents(rows, REVALIDATE_S);
+  noteWindow(uuid, window);
+  const opts = buildOpts(window);
+
+  const mains = rows.filter((e) => e.eventType === "MAIN_EVENT_TYPE" && e.eventId);
   if (!mains.length) return EMPTY;
 
   const byName = new Map<string, FieldPlayer>();

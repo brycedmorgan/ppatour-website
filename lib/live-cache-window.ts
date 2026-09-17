@@ -58,15 +58,70 @@ export const LIVE_WINDOW_S = 20;
 export const BRACKET_LIVE_WINDOW_S = 45;
 
 /**
- * The finished cadence — six hours.
+ * The cadence for a tournament that has not started yet — once a day.
  *
- * ⚠ NOT INFINITE, ON PURPOSE. A draw can be corrected after the fact: a scoring
- * mistake, a retro-actively applied walkover, a division re-published. Six hours
- * means a correction still reaches the site the same day without anybody
- * deploying, while cutting a finished event's cost by ~500x. It also sits
- * comfortably inside the daily `revalidateTag` cron, which remains the backstop.
+ * ⚠ WESLEY, 9/17: an upcoming event "should refresh daily". Its ten division
+ * shells exist as soon as it is on the calendar but hold no matches and no names
+ * until the draw drops in event week, so polling them on a live cadence was
+ * re-reading the same empty shells forever. Measured that day, three upcoming
+ * stops — Las Vegas, the Chicago Cup and the 2027 Masters — were all being
+ * polled with zero divisions started.
  */
-export const FINISHED_WINDOW_S = 6 * 60 * 60;
+export const UPCOMING_WINDOW_S = 24 * 60 * 60;
+
+/**
+ * How close to first serve the daily window gives way to the live one.
+ *
+ * ⚠ WITHOUT THIS, A 24-HOUR CACHE WOULD HIDE THE START OF A TOURNAMENT FOR UP TO
+ * A DAY, which is the single worst failure available here — this repo has fixed
+ * "the first match of a session must appear quickly" twice already (9/9).
+ *
+ * The arithmetic is self-correcting, which is why two days is enough rather than
+ * a week. The longest a daily entry can survive is 24h, so an entry written at
+ * the last moment it still qualified (T-2d) expires at T-1d; from there every
+ * refresh sees the event inside the guard and drops to the live cadence. The
+ * live window is therefore in force for AT LEAST a full day before first serve,
+ * which is also when the draw itself publishes.
+ */
+const LIVE_FROM_MS = 2 * 24 * 60 * 60 * 1000;
+
+/**
+ * The finished cadence — a year, i.e. never again in any practical sense.
+ *
+ * ⚠ WESLEY, 9/17: "completed tournaments should never trigger an API call again
+ * because the tournament is over and the content will not change again." This
+ * was six hours; it is now effectively permanent.
+ *
+ * A year is the honest way to spell "never" here. Next stores anything at or
+ * above its INFINITE_CACHE sentinel as CACHE_ONE_YEAR_SECONDS anyway
+ * (`normalizedRevalidate` in patch-fetch.js), so a year IS the infinite window —
+ * and keeping it a plain number means every caller stays arithmetic.
+ *
+ * ⚠ THE ESCAPE HATCH IS THE TAG, AND IT IS WHY THIS IS SAFE. These entries carry
+ * LIVE_SCORES_CACHE_TAG, which lib/cache-tags.ts documents as purgeable by hand
+ * and deliberately purged by NO cron. So a draw that genuinely is corrected after
+ * the fact — a voided match, an amended score, a late DQ — is one
+ * `revalidateTag("live-scores")` away from being re-read, rather than needing a
+ * deploy. Without that hatch this window would be the wrong call.
+ *
+ * ⚠ "NEVER" MEANS NEVER ON A SCHEDULE, NOT PROVABLY ZERO FOREVER. Vercel's Data
+ * Cache evicts under pressure and a cold entry re-fetches once. The steady state
+ * is zero calls; the floor is one call per tournament per evicted entry.
+ */
+export const FINISHED_WINDOW_S = 365 * 24 * 60 * 60;
+
+/**
+ * Module-cache TTL for a finished tournament's BUILT result.
+ *
+ * ⚠ THE DATA CACHE ALONE DOES NOT REACH ZERO, WHICH IS THE POINT OF THIS. The
+ * adapters hold their assembled draw/board in module scope for 60s and rebuild
+ * after that — and a rebuild re-reads every fetch behind it. So even with a
+ * permanent Data Cache, a warm instance kept re-assembling Nationals once a
+ * minute forever, and each rebuild was six cache reads that could each miss.
+ * With both layers pinned, a warm instance builds a finished tournament ONCE and
+ * serves it from memory thereafter.
+ */
+export const FINISHED_MEMO_MS = 365 * 24 * 60 * 60 * 1000;
 
 /**
  * How long after the last division ends before a tournament counts as settled.
@@ -82,7 +137,14 @@ export const FINISHED_WINDOW_S = 6 * 60 * 60;
 const SETTLED_AFTER_MS = 24 * 60 * 60 * 1000;
 
 /** The shape this module needs from one `tournament_events` row. */
-export type DatedEvent = { endDate?: string | null };
+export type DatedEvent = {
+  /** Null until this division actually begins play — the "has it started" test. */
+  startDate?: string | null;
+  /** Null while this division is still being played. */
+  endDate?: string | null;
+  /** Scheduled play date, present long before anything starts. */
+  eventDate?: string | null;
+};
 
 /**
  * Decide the window for a tournament's per-division calls from its own event
@@ -95,6 +157,25 @@ export type DatedEvent = { endDate?: string | null };
  */
 export function windowFromProEvents(rows: DatedEvent[], liveWindow: number): number {
   if (!rows.length) return liveWindow;
+
+  // ── UPCOMING ──────────────────────────────────────────────────────────────
+  // Not one division has begun, so there is nothing to watch change. Verified
+  // on the live API: Las Vegas, Chicago Cup and the 2027 Masters all report 10
+  // divisions with startDate null, while the live Arizona Open reports 10 of 10
+  // started.
+  if (!rows.some((r) => r.startDate)) {
+    const scheduled = rows
+      .map((r) => (r.eventDate ? Date.parse(r.eventDate) : NaN))
+      .filter((t) => Number.isFinite(t));
+    if (!scheduled.length) return liveWindow;
+    const firstServe = Math.min(...scheduled);
+    // Inside the guard the live cadence takes over, so the start is never missed.
+    return firstServe - Date.now() > LIVE_FROM_MS ? UPCOMING_WINDOW_S : liveWindow;
+  }
+
+  // ── COMPLETED ─────────────────────────────────────────────────────────────
+  // Play has begun somewhere. It is over only when EVERY division has closed and
+  // the last one closed more than a day ago.
   let latest = 0;
   for (const r of rows) {
     // A null end date means that division is still being played. One is enough.
@@ -107,25 +188,41 @@ export function windowFromProEvents(rows: DatedEvent[], liveWindow: number): num
 }
 
 /**
- * Tournaments observed finished, so the LIST call can go on the long window too
+ * The window last computed for each tournament, so the LIST call can use it too
  * from the second build onwards.
+ *
+ * ⚠ IT HAS TO REMEMBER THE WINDOW, NOT JUST "IS IT FINISHED". The list call is
+ * the one that tells us which state a tournament is in, so on its own it can
+ * never benefit from the answer — and for an UPCOMING tournament that left it
+ * running at the live cadence forever while the five calls behind it sat on a
+ * daily window. Remembering the number fixes both states with one map.
  *
  * ⚠ PER-INSTANCE AND DELIBERATELY SO. A module map is one cache per warm
  * instance, which would be wrong for data (the 9/9 lesson) but is exactly right
- * for a hint: the worst case is that a cold instance pays one live-window list
- * call before it learns, and the entry it writes is only ever an accelerant for
- * a conclusion `windowFromProEvents` reaches independently on every build.
- * Nothing is served from it.
+ * for a hint: the worst case is a cold instance paying one live-window list call
+ * before it learns, and what it writes is only ever an accelerant for a
+ * conclusion `windowFromProEvents` reaches independently on every build. Nothing
+ * is served from it.
+ *
+ * ⚠ AND IT IS SAFE TO REMEMBER A LONG WINDOW ONLY BECAUSE BOTH LONG WINDOWS ARE
+ * SELF-CORRECTING. A finished tournament never changes state again; an upcoming
+ * one drops to the live cadence at least a full day before first serve (see
+ * LIVE_FROM_MS). Neither can strand the list call on a stale window through a
+ * transition that matters.
  */
-const settled = new Set<string>();
+const remembered = new Map<string, number>();
 
-/** Window for the LIST call itself — long only once we have seen it finished. */
-export function listWindowFor(uuid: string, liveWindow: number): number {
-  return settled.has(uuid) ? FINISHED_WINDOW_S : liveWindow;
+/** Has this instance seen this tournament finished? */
+export function isSettled(uuid: string): boolean {
+  return remembered.get(uuid) === FINISHED_WINDOW_S;
 }
 
-/** Record what the list said, so the next build can skip the live list call. */
+/** Window for the LIST call itself — whatever the last build concluded. */
+export function listWindowFor(uuid: string, liveWindow: number): number {
+  return remembered.get(uuid) ?? liveWindow;
+}
+
+/** Record what the list said, so the next build starts from the right window. */
 export function noteWindow(uuid: string, window: number): void {
-  if (window === FINISHED_WINDOW_S) settled.add(uuid);
-  else settled.delete(uuid);
+  remembered.set(uuid, window);
 }

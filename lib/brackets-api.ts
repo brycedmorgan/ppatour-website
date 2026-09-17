@@ -24,13 +24,16 @@ import {
   type BracketSide,
 } from "@/lib/bracket-types";
 import { pbGetJson } from "@/lib/pb-fetch";
-import { LIVE_SCORES_CACHE_TAG } from "@/lib/cache-tags";
+import { FINISHED_RESULTS_CACHE_TAG, LIVE_SCORES_CACHE_TAG } from "@/lib/cache-tags";
 import { fetchPlannedStarts } from "@/lib/ticker-api";
 import {
   BRACKET_LIVE_WINDOW_S,
   listWindowFor,
   noteWindow,
   windowFromProEvents,
+  isSettled,
+  FINISHED_MEMO_MS,
+  FINISHED_WINDOW_S,
 } from "@/lib/live-cache-window";
 import {
   cleanDivision,
@@ -134,7 +137,10 @@ async function get(
     timeoutMs: TIMEOUT_MS,
     retries: 3,
     revalidate: revalidateS,
-    tags: [LIVE_SCORES_CACHE_TAG],
+    // ⚠ THE TAG FOLLOWS THE WINDOW. A one-year entry sitting on a tag something
+    // purges is not a one-year entry — see FINISHED_RESULTS_CACHE_TAG for why
+    // settled data gets its own, and why no cron may touch it.
+    tags: [revalidateS === FINISHED_WINDOW_S ? FINISHED_RESULTS_CACHE_TAG : LIVE_SCORES_CACHE_TAG],
   });
 }
 
@@ -874,7 +880,12 @@ async function load(uuid: string) {
       // EMPTY draw rather than throwing. Caching that pins a blank bracket for
       // a full TTL over one 6s upstream hiccup, so only a build with real
       // content is allowed into the cache; an empty one retries next request.
-      if (!isEmpty(value)) cache.set(uuid, { value, expires: Date.now() + TTL_MS });
+      // ⚠ A FINISHED DRAW IS PINNED IN MEMORY, NOT HELD FOR 60s. Rebuilding it
+      // every minute forever is what kept Nationals calling upstream eleven days
+      // after it ended — each rebuild re-reads six fetches. `settled` was just
+      // written by `proEvents`, so this asks the same question it did.
+      const ttl = isSettled(uuid) ? FINISHED_MEMO_MS : TTL_MS;
+      if (!isEmpty(value)) cache.set(uuid, { value, expires: Date.now() + ttl });
       return value;
     })
     .catch(() => ({ divisions: [], draws: new Map<string, BracketDraw>(), stage: "main" as ScoresStage }));

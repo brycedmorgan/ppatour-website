@@ -4,6 +4,8 @@ import {
   REGISTRATIONS_CACHE_TAG,
   REPLAYS_CACHE_TAG,
   TOURNAMENT_DETAILS_CACHE_TAG,
+  FINISHED_RESULTS_CACHE_TAG,
+  LIVE_SCORES_CACHE_TAG,
 } from "@/lib/cache-tags";
 
 /**
@@ -19,10 +21,41 @@ export const dynamic = "force-dynamic";
 
 const TAGS = [TOURNAMENT_DETAILS_CACHE_TAG, REGISTRATIONS_CACHE_TAG, REPLAYS_CACHE_TAG];
 
+/** Tags `?tag=` may purge on demand. See the note in the handler. */
+const PURGEABLE = [...TAGS, FINISHED_RESULTS_CACHE_TAG, LIVE_SCORES_CACHE_TAG];
+
 export async function GET(request: Request) {
   const secret = process.env.CRON_SECRET;
   if (secret && request.headers.get("authorization") !== `Bearer ${secret}`) {
     return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
+  }
+
+  /**
+   * ⚠ `?tag=` IS THE MANUAL ESCAPE HATCH FOR DATA THE CRON DELIBERATELY NEVER
+   * TOUCHES, and it is the reason a one-year cache window on finished
+   * tournaments is a safe call rather than a trap.
+   *
+   * A settled draw is immutable in practice, but "in practice" is not "always":
+   * a match gets voided, a score is amended, a late DQ lands. Without a way to
+   * force a re-read, the only remedy would be a code change and a deploy. With
+   * it:  curl -H "Authorization: Bearer $CRON_SECRET"    *        "https://www.ppatour.com/api/revalidate-content/?tag=finished-results"
+   *
+   * ⚠ ALLOWLISTED, NOT FREE-FORM. The route already runs behind CRON_SECRET, but
+   * an arbitrary tag name would let one leaked secret purge every cache the site
+   * has at will. Only tags named here can be purged, and the scheduled set above
+   * is deliberately NOT extended — adding finished-results to `TAGS` would undo
+   * the whole point of the tag.
+   */
+  const requested = new URL(request.url).searchParams.get("tag");
+  if (requested) {
+    if (!PURGEABLE.includes(requested)) {
+      return NextResponse.json(
+        { ok: false, error: "unknown tag", purgeable: PURGEABLE },
+        { status: 400 },
+      );
+    }
+    revalidateTag(requested, "max");
+    return NextResponse.json({ ok: true, revalidated: [requested], at: new Date().toISOString() });
   }
 
   // "max" → stale-while-revalidate: serve cached data on the next visit while
