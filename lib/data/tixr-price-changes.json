@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-16T17:22:44Z",
+  "updated_at": "2026-09-17T17:21:47Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -5980,6 +5980,84 @@
       "all_in_price": {
         "from": 70.23,
         "to": 91.83
+      }
+    },
+    {
+      "at": "2026-09-17T17:21:47Z",
+      "type": "price_change",
+      "event_id": "197226",
+      "event": "PPA Las Vegas Saturday - Semifinals",
+      "ticket": "Saturday VIP",
+      "base_price": {
+        "from": 350,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 383.56,
+        "to": 383.56
+      }
+    },
+    {
+      "at": "2026-09-17T17:21:47Z",
+      "type": "availability_change",
+      "event_id": "197226",
+      "event": "PPA Las Vegas Saturday - Semifinals",
+      "ticket": "Saturday VIP",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-09-17T17:21:47Z",
+      "type": "price_change",
+      "event_id": "197214",
+      "event": "PPA Las Vegas Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "base_price": {
+        "from": 350,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 383.56,
+        "to": 383.56
+      }
+    },
+    {
+      "at": "2026-09-17T17:21:47Z",
+      "type": "availability_change",
+      "event_id": "197214",
+      "event": "PPA Las Vegas Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-09-17T17:21:47Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday Courtside Chair",
+      "base_price": {
+        "from": 250,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 276.13,
+        "to": 276.13
+      }
+    },
+    {
+      "at": "2026-09-17T17:21:47Z",
+      "type": "availability_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday Courtside Chair",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
       }
     }
   ]

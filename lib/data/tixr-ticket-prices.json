@@ -1,7 +1,7 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-09-16T17:22:44Z",
+  "generated_at": "2026-09-17T17:21:47Z",
   "event_count": 50,
   "ticket_type_count": 794,
   "series_breakdown": {
@@ -18,7 +18,7 @@
   "events": [
     {
       "event_id": "195027",
-      "name": "PPA Mesa",
+      "name": "Veolia Arizona Open",
       "series": "PPA Tour",
       "status": "PUBLISHED",
       "start_date": "2026-09-14",
@@ -28,7 +28,7 @@
         "city": "Mesa",
         "state": "AZ"
       },
-      "url": "https://www.tixr.com/groups/ppa/events/ppa-mesa-195027",
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-arizona-open-195027",
       "currency": "USD",
       "tickets": [
         {
@@ -161,7 +161,7 @@
     },
     {
       "event_id": "195336",
-      "name": "PPA Mesa Thursday - Round of 16",
+      "name": "Veolia PPA Mesa Thursday - Round of 16",
       "series": "PPA Tour",
       "status": "PUBLISHED",
       "start_date": "2026-09-17",
@@ -171,7 +171,7 @@
         "city": "Mesa",
         "state": "AZ"
       },
-      "url": "https://www.tixr.com/groups/ppa/events/ppa-mesa-thursday-round-of-16-195336",
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-ppa-mesa-thursday-round-of-16-195336",
       "currency": "USD",
       "tickets": [
         {
@@ -329,7 +329,7 @@
     },
     {
       "event_id": "195335",
-      "name": "PPA Mesa Friday - Quarterfinals",
+      "name": "Veolia PPA Mesa Friday - Quarterfinals",
       "series": "PPA Tour",
       "status": "PUBLISHED",
       "start_date": "2026-09-18",
@@ -339,7 +339,7 @@
         "city": "Mesa",
         "state": "AZ"
       },
-      "url": "https://www.tixr.com/groups/ppa/events/ppa-mesa-friday-quarterfinals-195335",
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-ppa-mesa-friday-quarterfinals-195335",
       "currency": "USD",
       "tickets": [
         {
@@ -452,7 +452,7 @@
     },
     {
       "event_id": "195334",
-      "name": "PPA Mesa Saturday - Semifinals",
+      "name": "Veolia PPA Mesa Saturday - Semifinals",
       "series": "PPA Tour",
       "status": "PUBLISHED",
       "start_date": "2026-09-19",
@@ -462,7 +462,7 @@
         "city": "Mesa",
         "state": "AZ"
       },
-      "url": "https://www.tixr.com/groups/ppa/events/ppa-mesa-saturday-semifinals-195334",
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-ppa-mesa-saturday-semifinals-195334",
       "currency": "USD",
       "tickets": [
         {
@@ -568,7 +568,7 @@
     },
     {
       "event_id": "195032",
-      "name": "PPA Mesa Sunday - Championships",
+      "name": "Veolia PPA Mesa Sunday - Championships",
       "series": "PPA Tour",
       "status": "PUBLISHED",
       "start_date": "2026-09-20",
@@ -578,7 +578,7 @@
         "city": "Mesa",
         "state": "AZ"
       },
-      "url": "https://www.tixr.com/groups/ppa/events/ppa-mesa-sunday-championships-195032",
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-ppa-mesa-sunday-championships-195032",
       "currency": "USD",
       "tickets": [
         {
@@ -1190,8 +1190,8 @@
         {
           "name": "Saturday VIP",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 350,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 383.56
         }
       ],
@@ -1299,8 +1299,8 @@
         {
           "name": "Sunday VIP",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 350,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 383.56
         }
       ],
@@ -3313,8 +3313,8 @@
         {
           "name": "Sunday Courtside Chair",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 250,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 276.13
         },
         {
