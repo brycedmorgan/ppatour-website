@@ -19,7 +19,7 @@ import { channelsByDay, watchCardsFor, weekdayOf } from "@/lib/event-watch";
 import { getEventGuide, parkingFor, parkingText } from "@/lib/event-guides";
 import { ticketsOnSale } from "@/lib/tixr-prices";
 import { ParkingDetails } from "@/components/events/ParkingDetails";
-import { getEventSchedule } from "@/lib/event-schedule";
+import { gatesFor, getEventSchedule, hasGatesOverride } from "@/lib/event-schedule";
 import { playersToWatch } from "@/lib/home-content";
 import { getArticlesForEvent } from "@/lib/news-articles";
 import {
@@ -153,7 +153,10 @@ function buildSchedule(startIso: string, endIso: string, slug: string): Day[] {
       date: formatDate(iso),
       iso,
       label,
-      gates,
+      // The event team's own gate time when this stop has one, otherwise the
+      // template's. First serve is deliberately NOT shifted with it — see the
+      // note on GATES_BY_SLUG in lib/event-schedule.ts.
+      gates: gatesFor(slug, gates),
       firstServe,
       live,
     });
@@ -295,6 +298,7 @@ export function NationalsLive({
     venue: t.venue,
     dates: formatDateRange(t.startDate, t.endDate, true),
     gates: days[0]?.gates ?? "an hour before first serve",
+    gatesTemplated: !hasGatesOverride(t.slug),
     ticketFrom: t.ticketPriceFrom,
     ticketsUrl: withUtm(t.ticketsUrl, {
       campaign: t.eventCode ?? t.slug,
@@ -811,8 +815,15 @@ export function NationalsLive({
             Daily Schedule & Session Times
           </h2>
           <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
-            All times local. Gates open an hour before first serve; finals
-            move to a late-morning start for the broadcast window.
+            All times local.{" "}
+            {hasGatesOverride(t.slug) ? (
+              <>Gates open {days[0]?.gates} daily.</>
+            ) : (
+              <>
+                Gates open an hour before first serve; finals move to a
+                late-morning start for the broadcast window.
+              </>
+            )}
           </p>
           {realSchedule ? (
             <>

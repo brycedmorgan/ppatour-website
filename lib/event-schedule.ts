@@ -137,3 +137,54 @@ export const eventSchedules: Record<string, EventSchedule> = {
 export function getEventSchedule(slug: string): EventSchedule | undefined {
   return eventSchedules[slug];
 }
+
+/**
+ * Per-event GATE TIME overrides for stops that have no full order-of-play
+ * entry above and therefore fall back to the templated schedule in
+ * `app/events/[year]/[slug]/page.tsx` (and its twin in NationalsLive).
+ *
+ * The template's gate times are a house default (8:00 AM on the two lead-in
+ * days, 9:00 AM through the week, 10:00 AM on Championship Sunday). They are a
+ * reasonable stand-in for a daytime stop and simply wrong for one that plays in
+ * the evening, and a gate time is the single fact on this page that decides
+ * when a family physically arrives.
+ *
+ * ⚠ THIS SETS THE GATE AND NOTHING ELSE. First serve stays on the template
+ * (Wesley, 9/18) — order of play and gates are separate facts here, and we hold
+ * no transcribed first-serve times for these stops. So a day can read a gate
+ * later than its first serve: that is the templated first serve being a
+ * placeholder, not the gate being wrong. Replace the whole stop with a real
+ * `eventSchedules` entry the moment the event team publishes its order of play,
+ * and delete its line here.
+ *
+ * ⚠ Never write a plausible time. One entry per stop, from the event team.
+ */
+const GATES_BY_SLUG: Record<string, string> = {
+  /**
+   * Veolia Arizona Open — Sep 14–20, Arizona Athletic Grounds, Mesa.
+   * Gates open at noon every day (Wesley, 9/18, mid-tournament). Consistent
+   * with the wholesale evening reschedule on the 9/10 broadcast sheet: PBTV
+   * opens 5PM ET on all four broadcast days, which is 2PM local — Arizona does
+   * not observe DST, so ET is local + 3 in September.
+   */
+  "veolia-arizona-open": "12:00 PM",
+};
+
+/**
+ * The gate time for a templated day at this stop: the event team's own if we
+ * have it, otherwise whatever the template worked out. Both copies of
+ * `buildSchedule` read this, so the event page, the `-live` route, the Know
+ * Before You Go line and the concierge cannot disagree about it.
+ */
+export function gatesFor(slug: string, templated: string): string {
+  return GATES_BY_SLUG[slug] ?? templated;
+}
+
+/**
+ * Has the event team set this stop's gate time itself? True means the gate is
+ * a supplied fact with no derivable relationship to first serve — so no surface
+ * may describe it as "an hour before first serve".
+ */
+export function hasGatesOverride(slug: string): boolean {
+  return slug in GATES_BY_SLUG;
+}

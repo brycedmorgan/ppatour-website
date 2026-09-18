@@ -18,6 +18,14 @@ export type ConciergeFacts = {
   dates: string;
   gates: string;
   /**
+   * True when `gates` is the templated default, which is derived as an hour
+   * before the templated first serve — and so the only case in which we may
+   * say so. A stop whose gate time came from the event team (GATES_BY_SLUG in
+   * lib/event-schedule.ts) has no such relationship to its first serve, and
+   * claiming one contradicts the order of play printed on the same page.
+   */
+  gatesTemplated: boolean;
+  /**
    * Null when tickets aren't on sale (unlisted on Tixr, or held back by hand —
    * see TICKETS_HIDDEN). The concierge must not quote a price or hand out a
    * ticket link in that state: it was answering "Tickets start at $39" off the
@@ -86,7 +94,7 @@ const INTENTS: Intent[] = [
   {
     test: /schedule|time|when|gate|start|first serve|hours|session/i,
     answer: (f) => ({
-      text: `${f.name} runs ${f.dates}. Gates open ${f.gates} — about an hour before first serve each day. Finals move to a late-morning start for the broadcast window. The full order of play is on this page under "Order of Play."`,
+      text: `${f.name} runs ${f.dates}. Gates open ${f.gates}${f.gatesTemplated ? " — about an hour before first serve each day. Finals move to a late-morning start for the broadcast window." : " daily."} The full order of play is on this page under "Order of Play."`,
     }),
   },
   {
