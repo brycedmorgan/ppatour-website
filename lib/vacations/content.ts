@@ -169,6 +169,12 @@ export const pros: {
     leading: true,
     slug: "hayden-patriquin",
   },
+  {
+    name: "Aanik Lohani",
+    role: "PPA Professional",
+    image: "/vacations/pros/aanik-lohani-ppa.jpg",
+    slug: "aanik-lohani",
+  },
 ];
 
 export const included = [
