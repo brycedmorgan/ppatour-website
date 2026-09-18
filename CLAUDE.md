@@ -101,10 +101,18 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   public) and prints category / route / status / answer per message. Run it before turning
   replies on. tsc clean, `next build` green, eslint at the volunteer page's pre-existing
   baseline. Deps added: `@anthropic-ai/sdk`, `zod`.
-- **Open:** the key (Bryce) · `reactions:write` on the PPA Website Forms Slack app (Wesley)
-  or ✅ never appears · a channel note to Tyler/Jeff/Hailey/Wesley once it is live · then
-  the website gaps `triageOpen` keeps naming (bag/cooler/umbrella policy, shade, food per
-  venue belong in `lib/onsite.ts` and land in the answers for free).
+- **Later the same night, LIVE.** Bryce added `ANTHROPIC_API_KEY` to the project (as a
+  sensitive var — it cannot be pulled locally, so the eval still needs a key pasted into
+  `.env.local` by hand). `FORM_TRIAGE_REPLY=off` set (prod + preview): answers land in Slack
+  and the sheet, no fan gets an email yet. Redeployed; aliased to www.ppatour.com. The
+  approved note went to #ppa-marketing-form. ⚠ Bryce is NOT a collaborator on the "PPA
+  Website Forms" Slack app (api.slack.com/apps lists only Jackalope + OpenClaw), so the
+  `reactions:write` scope is with Wesley — DM sent.
+- **Open:** Wesley adds the scope (or adds Bryce as collaborator) · read the first real
+  auto-answers in the channel threads, then decide when `FORM_TRIAGE_REPLY` comes off · the
+  eval (`scripts/triage-eval.ts`) once a key is in `.env.local` · the website gaps
+  `triageOpen` keeps naming (bag/cooler/umbrella policy, shade, food per venue belong in
+  `lib/onsite.ts` and land in the answers for free).
 
 ### 2026-09-17 — /europe/eventlinks: the page behind the QR on Europe credentials
 
