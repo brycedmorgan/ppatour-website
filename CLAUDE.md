@@ -65,6 +65,17 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-18 — Challenger Series: fold ppachallenger.com into `/tour/challenger`
+
+- Bryce asked (9:02 AM) whether to fold ppachallenger.com (WordPress on Flywheel) into this site. Answer: yes. Full plan in [`docs/CHALLENGER.md`](docs/CHALLENGER.md). **Nothing built yet.**
+- Inventory pulled from the three WP sitemaps: **43 URLs** — 13 pages, 29 tournament posts, 1 empty points archive. Every tournament post has a matching feed event; the 1:1 map is in the doc.
+- Home is `/tour/challenger`, not `/challenger/` — the five other programs already live under `/tour/*`.
+- ⚠ Challengers have **no internal event page** (`hasInternalPage: !isChallenger` in `lib/events-api.ts`). Flip that for U.S. Challengers before the tournament-post redirects go live, or they all collapse onto one page.
+- ⚠ Points disagree: WP says four 250s (Punta Gorda, Newport Beach, Grand Rapids, Seattle); the feed marks Newport Beach 125, Opelika 250, and 500 on Wilson/Boise/Portland/Wisconsin. Jeff Watson settles it.
+- ⚠ WP rankings are a hand-typed table, last updated July 27. No data source exists for a rankings page; ask Kenan/Egon.
+- Timing: Charlotte (Sept 25–27) is the last 2026 U.S. Challenger. **No DNS move before Sept 28.**
+- Next: Bryce exports Search Console + the WP form leads, renews the domain; then build order §8 in the doc.
+
 ### 2026-09-17 — Contact-form triage: tickets → ticketing, volunteers → Hailey, the rest answered from the site
 
 - **Bryce, from #ppa-marketing-form:** route ticket questions to ticketing, volunteer
