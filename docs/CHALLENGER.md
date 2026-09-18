@@ -4,9 +4,26 @@
 `/tour/challenger`, 301 every old URL one to one, and retire the Flywheel plan.
 Bryce asked for thoughts 2026-09-18; the answer was "yes, fold it in."
 
-**Status (2026-09-18):** planned, nothing built. Everything below is the
-inventory, the redirect map, and the copy draft. Nothing in `next.config.ts`
-or `app/` has changed yet.
+**Status (2026-09-18, evening):** BUILT. Bryce: "Do it. Start building it.
+We don't need Jeff for this we have access."
+
+- `/tour/challenger` — `app/(marketing)/tour/challenger/page.tsx`. One page,
+  eight anchored sections (About · Schedule · How It Works · Points · Path to
+  the Tour · Rankings · Sponsors · Host). Schedule is the live feed filtered to
+  U.S. Challengers; past stops list with Results ↗ to pickleballtournaments.com.
+- Rankings — `components/tour/ChallengerRankings.tsx` over
+  `lib/data/challenger-rankings.json`, a snapshot of the five TablePress boards
+  (2,082 rows, "Last Updated July 27th, 2026"). The date prints on the page.
+- Nav: "Challenger Series" first in the Tour menu. `challenger` entry in
+  `lib/tour-programs.ts` (sitemap, search, cross-links). `HAS_OWN_ROUTE`.
+- Host: a Challenger block on `/about/host-tournament#challenger` with both
+  lists from the old page; the old "Classic Series RFP" form is retired.
+- Redirects: `CHALLENGER_DOMAIN_REDIRECTS` in `next.config.ts`, host-scoped to
+  ppachallenger.com + www, inert until DNS moves. Tournament posts go to
+  `/tour/challenger/#schedule` (see §3 note), everything else to its section.
+- **Points copy says 125 or 250** (the old site's own words). Our curated data
+  marks 500 on four 2026 stops; the page states no per-stop level in prose and
+  lets the card badge answer. Still worth one look from Jeff, not a blocker.
 
 ---
 
@@ -292,6 +309,13 @@ bags and local promotion.
 
 Use the existing inquiry form. Retire the WP "Classic Series RFP" form; it
 still asks for 2024 dates.
+
+## 6b. What shipped vs. this draft
+
+The redirect map in §4 was written before the build and had `/tour/challenger/how-it-works`
+and `/rankings` as sub-routes. Shipped as ANCHORS on one page instead
+(`#how-it-works`, `#points`, `#rankings`), the Senior Open pattern. The
+`next.config.ts` rules are the truth; §4 is the draft.
 
 ## 7. Open questions — who answers
 

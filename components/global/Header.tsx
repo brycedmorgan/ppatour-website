@@ -36,6 +36,7 @@ const NAV_ITEMS: NavItem[] = [
     label: "Tour",
     mega: true,
     submenu: [
+      { label: "Challenger Series", href: "/tour/challenger" },
       { label: "Junior PPA", href: "/tour/junior" },
       { label: "Senior Open", href: "/tour/senior" },
       { label: "State Championships", href: "/tour/state-championships" },

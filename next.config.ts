@@ -28,6 +28,55 @@ import type { NextConfig } from "next";
  * was broken. It checked status codes, and a 301 to /news is a 200. **A
  * coverage check that does not compare CONTENT cannot see a wrong destination.**
  */
+/**
+ * ppachallenger.com → /tour/challenger (folded in 2026-09-18, docs/CHALLENGER.md).
+ * Host-scoped, so these fire only once the old domain's DNS points at this
+ * project; until then they are inert. Every old path lands on its real
+ * section, and the 29 tournament posts go to the schedule — U.S. Challengers
+ * have no internal event page (`hasInternalPage: !isChallenger`), so a per-post
+ * 1:1 has nowhere honest to land yet. The last catch-all keeps any unmapped
+ * old URL off a 404.
+ */
+const CHALLENGER_PAGES: Array<[string, string]> = [
+  ["/", "/tour/challenger/"],
+  ["/about", "/tour/challenger/#about"],
+  ["/how-it-works", "/tour/challenger/#how-it-works"],
+  ["/schedule", "/tour/challenger/#schedule"],
+  ["/rankings", "/tour/challenger/#rankings"],
+  ["/points/250-points", "/tour/challenger/#points"],
+  ["/host-a-ppa-tour-tournament", "/about/host-tournament/#challenger"],
+  ["/sponsors", "/tour/challenger/#sponsors"],
+  ["/contact-us", "/about/contact/"],
+  ["/what-is-pickleball", "/about/what-is-pickleball/"],
+  ["/privacy-policy", "/about/privacy/"],
+  ["/terms-of-use", "/about/terms/"],
+  ["/content-policy", "/about/terms/"],
+  ["/opt-out-preferences", "/about/privacy/"],
+];
+const CHALLENGER_DOMAIN_REDIRECTS = ["ppachallenger.com", "www.ppachallenger.com"].flatMap((host) => {
+  const has = [{ type: "host" as const, value: host }];
+  return [
+    ...CHALLENGER_PAGES.map(([source, destination]) => ({
+      source,
+      has,
+      destination: `https://www.ppatour.com${destination}`,
+      permanent: true,
+    })),
+    {
+      source: "/tournament/:slug*",
+      has,
+      destination: "https://www.ppatour.com/tour/challenger/#schedule",
+      permanent: true,
+    },
+    {
+      source: "/:path*",
+      has,
+      destination: "https://www.ppatour.com/tour/challenger/",
+      permanent: true,
+    },
+  ];
+});
+
 const LEGACY_REDIRECTS = [
   /**
    * Consolidate the old standalone Pickleball Vacations app: everything on
@@ -346,6 +395,10 @@ const nextConfig: NextConfig = {
     return [
       // First, so the domain rule wins on that host before any path rule.
       ...EUROPE_DOMAIN_REDIRECTS.map((r) => ({ ...r, permanent: false })),
+      // ppachallenger.com, also host-scoped and also first: LEGACY_REDIRECTS
+      // below maps /schedule, /how-it-works, /sponsors on ANY host, and those
+      // paths exist on the old Challenger site with different homes.
+      ...CHALLENGER_DOMAIN_REDIRECTS,
       // Same path on any other host (ppatour.com, europe.ppatour.com) lands on
       // the Europe links page too, so a mistyped QR domain still works.
       // ⚠ `missing` host: redirects run BEFORE beforeFiles rewrites, so without

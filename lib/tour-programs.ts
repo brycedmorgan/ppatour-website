@@ -23,6 +23,9 @@ const REGISTER = "https://www.pickleballtournaments.com/";
  *  Dave Rogers 7/27: "register a junior player takes you to the wrong spot"
  *  (it landed on the pickleballtournaments.com homepage). */
 const REGISTER_PPA = "https://www.pickleballtournaments.com/search?partner=sanction_ppa";
+/** The Challenger Series' own PT.com partner tag — what ppachallenger.com's
+ *  "Register to Play" pointed at. `sanction_ppa` lists the whole tour. */
+const REGISTER_CHALLENGER = "https://www.pickleballtournaments.com/search?partner=sanction_ppa_cs";
 
 export const tourPrograms: TourProgram[] = [
   {
@@ -42,6 +45,31 @@ export const tourPrograms: TourProgram[] = [
     ],
     cta: { label: "Register a Junior Player", href: REGISTER_PPA, external: true },
     image: "/ppa/action-singles.jpg",
+  },
+  /**
+   * ⚠ THIS ENTRY DOES NOT RENDER A PAGE — /tour/challenger is its own route
+   * (app/(marketing)/tour/challenger/page.tsx), same as junior and senior. It
+   * stays here so nav, the sitemap, site search and the other programs'
+   * cross-link grids read it. Facts are ppachallenger.com's own copy, folded
+   * into this site 2026-09-18 (docs/CHALLENGER.md).
+   */
+  {
+    slug: "challenger",
+    label: "Challenger Series",
+    eyebrow: "Pathway to the Pro Tour",
+    headline: "PPA Tour Challenger Series",
+    body: [
+      "The PPA Tour Challenger Series, powered by JOOLA, brings a PPA-run tournament to clubs across the country. Every stop runs skill divisions 3.0 through 5.0 and a Pro Division that earns PPA ranking points, prize money and a wild card into a PPA Tour Open.",
+      "It is the pathway from amateur play to the Carvana PPA Tour.",
+    ],
+    bullets: [
+      { title: "Who plays", detail: "Skill divisions 3.0 to 5.0, plus a Pro Division." },
+      { title: "Points", detail: "125 or 250 ranking points to the champion of each pro event." },
+      { title: "Prize money", detail: "A $10,000 pro prize pool at every stop." },
+      { title: "Wild card", detail: "Win a pro event and earn a main-draw entry into a PPA Tour Open." },
+    ],
+    cta: { label: "Register to Play", href: REGISTER_CHALLENGER, external: true },
+    image: "/ppa/events/seattle-ppa-challenger.jpg",
   },
   /**
    * ⚠ THIS ENTRY NO LONGER RENDERS A PAGE — /tour/senior is its own route, same

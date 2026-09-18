@@ -22,6 +22,31 @@ const WHAT_YOU_GET = [
   "Amateur & junior brackets that fill mid-week hotel nights",
 ];
 
+/** ppachallenger.com/host-a-ppa-tour-tournament, one line per item. */
+const CHALLENGER_PPA_PROVIDES = [
+  "pickleballtournaments.com registration and an experienced event team",
+  "Ticket and tournament registration management",
+  "Professional play management",
+  "Live streaming of the event",
+  "Pickleballs",
+  "Marketing support from the PPA",
+  "Customized signage",
+  "Prize money",
+];
+
+const CHALLENGER_HOST_PROVIDES = [
+  "A minimum of 16 courts",
+  "A championship court that seats at least 250",
+  "WiFi that supports livestreaming",
+  "A DJ or MC",
+  "Parking for players and spectators",
+  "Volunteers and venue staff",
+  "Ticketing, check-in and player-hospitality staff",
+  "A podium, medals and trophies",
+  "Player swag bags",
+  "Local awareness and marketing support",
+];
+
 export default function HostTournamentPage() {
   return (
     <>
@@ -83,6 +108,48 @@ export default function HostTournamentPage() {
               <Link href="/about/private-events" className="mt-5 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue">Or host a private event →</Link>
             </aside>
           </div>
+        </div>
+      </section>
+
+      {/* Challenger Series — folded in from ppachallenger.com/host-a-ppa-tour-tournament (2026-09-18).
+          Both lists are that page's own copy, trimmed to one line each. The old
+          "Classic Series RFP" form there asked for 2024 dates; the form below
+          replaces it. */}
+      <section id="challenger" className="bg-white scroll-mt-24">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">Challenger Series</p>
+          <h2 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">Host a Challenger Stop</h2>
+          <p className="mt-3 max-w-2xl text-sm text-ppa-navy/55 sm:text-base">
+            A three-day PPA-run tournament at your club: skill divisions 3.0 to 5.0 and a Pro Division playing for ranking points. Smaller footprint than a tour stop, same registration system, same broadcast.{" "}
+            <Link href="/tour/challenger" className="font-bold text-ppa-blue hover:text-ppa-navy">About the Challenger Series →</Link>
+          </p>
+          <div className="mt-6 grid gap-6 lg:grid-cols-2">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">What the PPA provides</p>
+              <ul className="mt-2 grid gap-px border border-ppa-line bg-ppa-line">
+                {CHALLENGER_PPA_PROVIDES.map((b) => (
+                  <li key={b} className="flex items-start gap-3 bg-white p-3 text-sm text-ppa-navy/75">
+                    <span className="mt-2 size-1.5 shrink-0 bg-ppa-blue" />
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">What the host provides</p>
+              <ul className="mt-2 grid gap-px border border-ppa-line bg-ppa-line">
+                {CHALLENGER_HOST_PROVIDES.map((b) => (
+                  <li key={b} className="flex items-start gap-3 bg-white p-3 text-sm text-ppa-navy/75">
+                    <span className="mt-2 size-1.5 shrink-0 bg-ppa-blue" />
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <a href="#rfp" className="mt-6 inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white hover:bg-ppa-blue-deep">
+            Apply to Host →
+          </a>
         </div>
       </section>
 

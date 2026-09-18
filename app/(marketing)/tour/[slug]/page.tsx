@@ -27,7 +27,7 @@ function titleFromSlug(slug: string): string {
  * The entries STAY in lib/tour-programs.ts — nav, sitemap, site search and the
  * other programs' cross-links all read that list.
  */
-const HAS_OWN_ROUTE = new Set(["junior", "senior"]);
+const HAS_OWN_ROUTE = new Set(["junior", "senior", "challenger"]);
 
 export function generateStaticParams() {
   return tourPrograms

@@ -65,6 +65,18 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-18 (pt. 2) — `/tour/challenger` BUILT: ppachallenger.com folded in
+
+- Bryce, on the plan below: *"Do it. Start building it. We don't need Jeff for this we have access."* Built the same evening. Runbook: [`docs/CHALLENGER.md`](docs/CHALLENGER.md).
+- **New route `app/(marketing)/tour/challenger/page.tsx`** — eight anchored sections on one page (the Senior Open pattern, not sub-routes). Every fact is ppachallenger.com's own copy: 3.0–5.0 + Pro Division, $10k pool, the wild card into an Open (max two per Open), the top-20 rule, the 125/250 ladders, 52-week + calendar-year window, best 16 finishes, the Showdown at Worlds. **No dates for the Showdown** — the old page still carried 2025's.
+- **Schedule = the live feed** (`tierKey === "challenger"` and no `country`), rendered through `FeaturedEvents`; past stops in a table with Results ↗ to PT.com. Points per stop come from the card badge only; the prose says "125 or 250" and names no stop, because our curated 500s on Wilson/Boise/Portland/Wisconsin disagree with the old site.
+- **Rankings are a dated SNAPSHOT.** `lib/data/challenger-rankings.json` = the five TablePress boards scraped from the old site (WS 168 · WD 307 · MS 361 · MD 650 · XD 596, "Last Updated July 27th, 2026"). `components/tour/ChallengerRankings.tsx` prints the date. Nothing refreshes it; a live source is still the open ask (Kenan/Egon, `partner_rankings` has no confirmed Challenger scope).
+- Nav "Challenger Series" first in the Tour menu · `challenger` in `lib/tour-programs.ts` (sitemap/search/cross-links) · `HAS_OWN_ROUTE` · Register CTA is the old site's own PT.com tag `partner=sanction_ppa_cs` (PT.com 403s curl — the known bot block, not a dead link).
+- **Host block** on `/about/host-tournament#challenger` — both lists from the old page; the stale "Classic Series RFP" form (asked for 2024 dates) is not carried over.
+- **`CHALLENGER_DOMAIN_REDIRECTS` in `next.config.ts`**, host-scoped to ppachallenger.com + www and placed BEFORE `LEGACY_REDIRECTS` (which maps `/schedule`, `/how-it-works`, `/sponsors` on any host to different homes). Inert until DNS. The 29 tournament posts → `/tour/challenger/#schedule`: U.S. Challengers still have no internal event page and the event template would invent gate times and broadcast windows for one, so a 1:1 has nowhere honest to land yet.
+- **Verified:** tsc clean, eslint clean on every changed file, `next build` green, rendered on a real server (see the verification line at the end of this entry).
+- **Next:** Bryce — Search Console export, WP form leads, renew the domain, `vercel domains add ppachallenger.com --scope bryce-pickleballs-projects` + www, DNS after Sept 28 (Charlotte is Sept 25–27). Me — a live rankings source; internal Challenger event pages once the template can render one honestly.
+
 ### 2026-09-18 — Challenger Series: fold ppachallenger.com into `/tour/challenger`
 
 - Bryce asked (9:02 AM) whether to fold ppachallenger.com (WordPress on Flywheel) into this site. Answer: yes. Full plan in [`docs/CHALLENGER.md`](docs/CHALLENGER.md). **Nothing built yet.**
