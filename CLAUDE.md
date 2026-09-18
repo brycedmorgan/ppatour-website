@@ -65,6 +65,17 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-18 — Anna Leigh Waters reads 196 career titles (`eac3613`, LIVE)
+
+- Rail + bio showed 172: that is the PB medals feed (untiered 2023 tournaments, 2 Hanoi phantom golds,
+  missing Selkirk 2022). Truth is **196 (64 S / 66 D / 66 MX)** — Hannah Johns, confirmed by Jim Ramsey 9/17.
+- `lib/athlete-stats.ts` `VERIFIED_GOLDS`: a per-division FLOOR, max(live, verified), applied in `build()`
+  so the rail, the division rows and `reconcileBio` all agree. Upstream fix (Kenan) or new wins take over
+  automatically. **Delete the entry once the feed reads ≥196.**
+- Fixed her scraped bio's "Women's Singles, Women's Singles" (×3) → Singles/Doubles/Mixed.
+- Deploy note: the git webhook fired ~8 min late; verified live with a cache-busted fetch.
+- Still stale in her bio: "the 18-year-old" (she is 19) and "39 triple crowns" (not sourced from the feed).
+
 ### 2026-09-18 (pt. 3) — Aanik Lohani added to the Turks & Caicos pro lineup
 
 - Lainey O'Connor's Slack DM: add Aanik next to Hayden on `/vacations` and keep "More pros to come". Shipped `175f2c3` and checked on production.
