@@ -3,9 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
+import { TitleRace } from "@/components/rankings/TitleRace";
 import { ExplainerVideos } from "@/components/video/ExplainerVideos";
 import { EXPLAINER_SERIES, RANKINGS_VIDEOS } from "@/lib/explainer-videos";
 import { FULL_PAGE_SIZE, getRankings } from "@/lib/rankings-api";
+import { getTitleRace } from "@/lib/title-race";
 
 /**
  * ISR. The complete boards are ~2,000 rows. Rendering that per request is the
@@ -130,6 +132,7 @@ export default async function RankingsPage() {
    * `usePagedBoards` in RankingsBoard.
    */
   const ranking = await getRankings(FULL_PAGE_SIZE);
+  const titleRace = await getTitleRace();
 
   // Current No. 1's: the top man + top woman.
   const leaders = ranking.divisions
@@ -280,6 +283,16 @@ export default async function RankingsPage() {
           </div>
         </div>
       </section>
+
+      {/* All-time titles race (9/18, Bryce: "an HTML version of this on the
+          rankings page"). Paper, so it reads as its own band between the white
+          No. 1's and the navy board. Shows the final all-time standings at
+          rest; it plays when scrolled into view. See components/rankings/TitleRace. */}
+      <div id="titles" className="scroll-mt-24 bg-ppa-paper">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <TitleRace data={titleRace} />
+        </div>
+      </div>
 
       {/* Full standings */}
       <section className="bg-ppa-navy">
