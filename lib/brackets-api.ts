@@ -23,7 +23,7 @@ import {
   type BracketRound,
   type BracketSide,
 } from "@/lib/bracket-types";
-import { pbGetJson } from "@/lib/pb-fetch";
+import { pbCachedJson } from "@/lib/pb-cache";
 import { FINISHED_RESULTS_CACHE_TAG, LIVE_SCORES_CACHE_TAG } from "@/lib/cache-tags";
 import { fetchPlannedStarts } from "@/lib/ticker-api";
 import {
@@ -42,7 +42,6 @@ import {
   type ScoresStage,
 } from "@/lib/scores-api";
 
-const TIMEOUT_MS = 6000;
 const TTL_MS = 60_000;
 
 /**
@@ -139,15 +138,10 @@ async function get(
   path: string,
   revalidateS: number = SHARED_REVALIDATE_S,
 ): Promise<unknown> {
-  return pbGetJson(`${base}${path}`, { "PB-API-TOKEN": token }, {
-    timeoutMs: TIMEOUT_MS,
-    retries: 3,
-    revalidate: revalidateS,
-    // ⚠ THE TAG FOLLOWS THE WINDOW. A one-year entry sitting on a tag something
-    // purges is not a one-year entry — see FINISHED_RESULTS_CACHE_TAG for why
-    // settled data gets its own, and why no cron may touch it.
-    tags: [revalidateS === FINISHED_WINDOW_S ? FINISHED_RESULTS_CACHE_TAG : LIVE_SCORES_CACHE_TAG],
-  });
+  // ⚠ THE TAG FOLLOWS THE WINDOW. A one-year entry sitting on a tag something
+  // purges is not a one-year entry — see FINISHED_RESULTS_CACHE_TAG.
+  const tag = revalidateS === FINISHED_WINDOW_S ? FINISHED_RESULTS_CACHE_TAG : LIVE_SCORES_CACHE_TAG;
+  return pbCachedJson(`${base}${path}`, revalidateS, tag);
 }
 
 const G1 = ["teamOneGameOneScore","teamOneGameTwoScore","teamOneGameThreeScore","teamOneGameFourScore","teamOneGameFiveScore"];

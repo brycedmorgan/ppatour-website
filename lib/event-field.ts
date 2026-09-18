@@ -24,11 +24,10 @@ import {
   noteWindow,
   windowFromProEvents,
 } from "@/lib/live-cache-window";
-import { pbGetJson } from "@/lib/pb-fetch";
+import { pbCachedJson } from "@/lib/pb-cache";
 
 /** Draws drop mid-week without warning, so keep this fresher than a day. */
 const REVALIDATE_S = 60 * 30;
-const TIMEOUT_MS = 8000;
 
 export type FieldPlayer = {
   /** API player_slug is absent from the match feed, so name is the join key. */
@@ -139,36 +138,34 @@ export async function getEventField(uuid: string | undefined): Promise<EventFiel
    * by the daily /api/revalidate-content cron, so a one-year entry left on it
    * would have re-fetched once a day regardless of the window.
    */
-  const buildOpts = (revalidate: number) => ({
-    timeoutMs: TIMEOUT_MS,
-    revalidate,
-    tags: [
-      revalidate === FINISHED_WINDOW_S ? FINISHED_RESULTS_CACHE_TAG : TOURNAMENT_DETAILS_CACHE_TAG,
-    ],
-  });
+  // The window decides the tag: settled data must not sit on a tag the daily
+  // cron purges. See FINISHED_RESULTS_CACHE_TAG.
+  const tagFor = (revalidate: number) =>
+    revalidate === FINISHED_WINDOW_S ? FINISHED_RESULTS_CACHE_TAG : TOURNAMENT_DETAILS_CACHE_TAG;
 
   // The list call picks the window for the per-division calls behind it, and can
   // only use the long one itself once this instance has seen it finished.
-  const listed = (await pbGetJson(
+  const listWindow = listWindowFor(uuid, REVALIDATE_S);
+  const listed = (await pbCachedJson(
     `${base}/v1/ppa/tournaments/${uuid}/tournament_events?bracket_level=Pro`,
-    { "PB-API-TOKEN": token },
-    buildOpts(listWindowFor(uuid, REVALIDATE_S)),
+    listWindow,
+    tagFor(listWindow),
   )) as { results?: ApiEvent[] } | null;
 
   const rows = listed?.results ?? [];
   const window = windowFromProEvents(rows, REVALIDATE_S);
   noteWindow(uuid, window);
-  const opts = buildOpts(window);
+  const tag = tagFor(window);
 
   const mains = rows.filter((e) => e.eventType === "MAIN_EVENT_TYPE" && e.eventId);
   if (!mains.length) return EMPTY;
 
   const byName = new Map<string, FieldPlayer>();
   for (const ev of mains) {
-    const detail = (await pbGetJson(
+    const detail = (await pbCachedJson(
       `${base}/v1/ppa/tournaments/${uuid}/tournament_events/${ev.eventId}`,
-      { "PB-API-TOKEN": token },
-      opts,
+      window,
+      tag,
     )) as { results?: ApiMatch[] } | null;
 
     const division = divisionLabel(ev.divisionType);

@@ -14,7 +14,7 @@
  */
 
 import { LIVE_SCORES_CACHE_TAG } from "@/lib/cache-tags";
-import { pbGetJson } from "@/lib/pb-fetch";
+import { pbCachedJson } from "@/lib/pb-cache";
 
 export type TickerPlayer = { name: string; headshot: string | null };
 export type TickerTeam = { players: TickerPlayer[]; games: (number | null)[] };
@@ -320,7 +320,6 @@ function mapMatch(m: ApiMatch): TickerMatch {
  * the edge, /watch streams this under its own Suspense boundary, and a warm
  * instance serves from `resultCache` without calling at all.
  */
-const TIMEOUT_MS = 10_000;
 
 type CacheEntry<T> = { value: T; expires: number };
 // Which partner is live changes slowly; the match window changes fast.
@@ -360,7 +359,25 @@ const RESULT_TTL_MS = 15_000;
  * honours an explicit revalidate anyway; the evidence, and what to re-check on
  * a Next upgrade, is written up on `pbGetJson` in lib/pb-fetch.ts.
  */
-const RESULT_REVALIDATE_S = 10;
+const RESULT_REVALIDATE_S = 15;
+
+/**
+ * How coarsely the ±1-day window bounds are rounded before they go in the URL.
+ *
+ * ⚠ THIS WAS 10 SECONDS AND THAT IS WHY THE TICKER COULD NEVER BE CACHED. The
+ * bounds were quantized to the revalidate window so that callers inside the same
+ * window asked for byte-identical URLs — correct reasoning for a cache keyed on
+ * the URL, but it also minted a brand-new key every 10s, so no entry was ever
+ * reused and the endpoint ran at ~1,116 calls/hour: the single largest path on
+ * the site.
+ *
+ * An hour is safe because the bounds are ±86,400s. Shifting the anchor by up to
+ * an hour can only change which matches fall in range at the very edge of a
+ * ±1-day window — a match a full day away — and the ticker only renders what is
+ * live, just finished or up next. The freshness that matters now comes from the
+ * revalidate window, not from the URL.
+ */
+const WINDOW_QUANTUM_S = 3600;
 /** Which partner is live — changes over hours, not seconds. */
 const PARTNER_REVALIDATE_S = 60;
 /**
@@ -475,18 +492,12 @@ async function pickActivePartner(token: string, base: string): Promise<string | 
         bracket_level_ids: "2",
         use_camel_case: "true",
       });
-      const res = await fetch(`${base}/v2/data/homepage_ticker_activity?${params}`, {
-        headers: { "PB-API-TOKEN": token },
-        // Shared across instances — see RESULT_REVALIDATE_S. Which tour has
-        // matches running is a question that changes over hours.
-        next: { revalidate: PARTNER_REVALIDATE_S, tags: [LIVE_SCORES_CACHE_TAG] },
-        signal: AbortSignal.timeout(TIMEOUT_MS),
-      });
-      if (!res.ok) return null;
-      const json = (await res.json()) as {
-        activeTickers?: { partnersFlag: string; hasActiveMatches: boolean }[];
-      };
-      return json.activeTickers?.find((t) => t.hasActiveMatches)?.partnersFlag ?? null;
+      const json = (await pbCachedJson(
+        `${base}/v2/data/homepage_ticker_activity?${params}`,
+        PARTNER_REVALIDATE_S,
+        LIVE_SCORES_CACHE_TAG,
+            )) as { activeTickers?: { partnersFlag: string; hasActiveMatches: boolean }[] } | null;
+      return json?.activeTickers?.find((t) => t.hasActiveMatches)?.partnersFlag ?? null;
     } catch {
       return null;
     }
@@ -518,7 +529,7 @@ async function fetchScores(
    * Safe because the bounds are ±1 day: moving the anchor by up to ten seconds
    * cannot change which matches fall in range.
    */
-  const now = Math.floor(Date.now() / 1000 / RESULT_REVALIDATE_S) * RESULT_REVALIDATE_S;
+  const now = Math.floor(Date.now() / 1000 / WINDOW_QUANTUM_S) * WINDOW_QUANTUM_S;
   const params = new URLSearchParams({
     start_date: String(now - 86400),
     end_date: String(now + 86400),
@@ -529,54 +540,18 @@ async function fetchScores(
     use_camel_case: "true",
   });
 
-  const res = await fetch(`${base}/v2/data/homepage_score_ticker?${params}`, {
-    headers: { "PB-API-TOKEN": token },
-    /**
-     * ⚠ SHARED, AND A FAILURE CACHED HERE IS THE CORRECT OUTCOME, NOT A BUG.
-     * The module-level guards in `fetchLiveTicker` still refuse to cache a
-     * failed RESULT — only a working call reaches `resultCache` and
-     * `lastGoodResult`. If a 429 lands in the Data Cache it simply means the
-     * fleet stops asking a throttling endpoint for ten seconds and every
-     * viewer is served the last good board instead, which is exactly what
-     * FAILURE_COOLDOWN_MS was added to do by hand.
-     */
-    next: { revalidate: RESULT_REVALIDATE_S, tags: [LIVE_SCORES_CACHE_TAG] },
-    signal: AbortSignal.timeout(TIMEOUT_MS),
-  });
-  // ⚠ THROW, DON'T RETURN EMPTY. A 429 or a 500 is not "no matches on court";
-  // resolving it to an empty list is what published that claim mid-tournament.
-  if (!res.ok) {
-    /**
-     * ⚠ DIAGNOSTIC ONLY — NO BEHAVIOUR CHANGE. `fetchLiveTicker` catches this
-     * and serves the last good board either way; this line only makes the
-     * failure legible in Vercel's runtime logs.
-     *
-     * It is here because of an unexplained 404 rate measured 9/17: this
-     * endpoint returns **~300 404s per hour, flat, for 24 hours straight** —
-     * 25-30% of every call it receives — and the count does NOT move with
-     * traffic while the 200s swing from 641 to 880 an hour. So it is a
-     * fixed-cadence condition, not a share of requests.
-     *
-     * Every request shape this file actually emits was replayed by hand
-     * against the live API (both date windows, page_size 20/50/100, every
-     * partner in `homepage_ticker_activity`, empty partner, camelCase on and
-     * off): **all 200.** Nothing follows the `nextPage` link. So the shape is
-     * not the cause and a fix would have been a guess — which is the one thing
-     * not to ship into the live-scores path during a tournament.
-     *
-     * The partner and the window are logged because they are the only inputs
-     * that vary between a call that works and one that does not. WHEN THIS IS
-     * SOLVED, DELETE THIS BLOCK — it is a probe, not a feature.
-     */
-    if (res.status === 404) {
-      console.warn(
-        `[ticker] homepage_score_ticker 404 · partner=${JSON.stringify(partner)} · window=${params.get("start_date")}..${params.get("end_date")}`,
-      );
-    }
-    throw new Error(`homepage_score_ticker ${res.status}`);
-  }
+  /**
+   * ⚠ THROW, DON'T RETURN EMPTY. A failed call is not "no matches on court";
+   * resolving it to an empty list is what published that claim mid-tournament.
+   * `fetchLiveTicker` catches this and serves the last good board.
+   */
+  const json = (await pbCachedJson(
+    `${base}/v2/data/homepage_score_ticker?${params}`,
+    RESULT_REVALIDATE_S,
+    LIVE_SCORES_CACHE_TAG,
+  )) as { results?: { results?: ApiMatch[] } } | null;
+  if (!json) throw new Error("homepage_score_ticker failed");
 
-  const json = (await res.json()) as { results?: { results?: ApiMatch[] } };
   const rows = json.results?.results ?? [];
   const matches = rows.map(mapMatch);
   const first = rows[0];
@@ -685,7 +660,7 @@ export async function fetchPlannedStarts(): Promise<Map<string, string>> {
       const partner =
         process.env.PB_TICKER_PARTNER || (await pickActivePartner(token, base)) || "PPA";
       const now =
-        Math.floor(Date.now() / 1000 / PLANNED_REVALIDATE_S) * PLANNED_REVALIDATE_S;
+        Math.floor(Date.now() / 1000 / WINDOW_QUANTUM_S) * WINDOW_QUANTUM_S;
       const params = new URLSearchParams({
         start_date: String(now - 86400),
         end_date: String(now + 7 * 86400),
@@ -715,16 +690,10 @@ export async function fetchPlannedStarts(): Promise<Map<string, string>> {
        * is cached for PARTNER_TTL_MS, so this is a handful of requests per ten
        * minutes per instance, not one per poll.
        */
-      const json = (await pbGetJson(
+      const json = (await pbCachedJson(
         `${base}/v2/data/homepage_score_ticker?${params}`,
-        { "PB-API-TOKEN": token },
-        {
-          timeoutMs: TIMEOUT_MS,
-          retries: 2,
-          // Same quantizing rule as fetchScores, at this endpoint's own window.
-          revalidate: PLANNED_REVALIDATE_S,
-          tags: [LIVE_SCORES_CACHE_TAG],
-        },
+        PLANNED_REVALIDATE_S,
+        LIVE_SCORES_CACHE_TAG,
       )) as { results?: { results?: ApiMatch[] } } | null;
       for (const row of json?.results?.results ?? []) {
         if (row.matchUuid && row.localDateMatchPlannedStart) {
