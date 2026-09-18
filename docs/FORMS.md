@@ -370,7 +370,7 @@ Slack still hold the row and the log says `inbox email FAILED`.
 |---|---|
 | `ANTHROPIC_API_KEY` | **Required for triage to run at all.** Unset → old path. |
 | `FORM_TRIAGE=off` | Disable triage without removing the key. |
-| `FORM_TRIAGE_REPLY=off` | Keep tagging + routing, never email a fan (the answer still lands in Slack + the sheet). Use this to watch the answers for a week before letting them out. |
+| `FORM_TRIAGE_REPLY` | `off` = never email a fan (answers still land in Slack + the sheet). `answered` = email only when the answer covers everything; partials stay in the Slack thread for a person. unset/`on` = email answered and partial. **9/18 replay of 38 real questions: 4 answered, 9 partial, 4 routed to ticketing, 8 to volunteers, 20 to a person, 1 spam; every drafted answer grounded.** Start on `answered`. |
 | `FORM_TRIAGE_MODEL` | Model id override (default `claude-opus-5`). |
 | `FORM_INBOX_VOLUNTEER` / `FORM_SLACK_CHANNEL_VOLUNTEER` | The volunteer route's inbox and channel. Set 9/17. |
 

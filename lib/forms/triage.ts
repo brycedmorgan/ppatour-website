@@ -159,8 +159,21 @@ export function triageEnabled(): boolean {
   return Boolean(process.env.ANTHROPIC_API_KEY);
 }
 
+/**
+ * off       — never email a submitter (answers still land in Slack + the sheet).
+ * answered  — email only when the answer covers everything (status "answered");
+ *             a partial answer stays in the Slack thread for a person to finish.
+ * on/unset  — email answered AND partial replies.
+ * The 9/18 replay over 38 real questions: 4 answered, 9 partial, all grounded —
+ * "answered" is the setting to start on.
+ */
+export type ReplyMode = "off" | "answered" | "on";
+export function triageReplyMode(): ReplyMode {
+  const v = process.env.FORM_TRIAGE_REPLY?.trim().toLowerCase();
+  return v === "off" ? "off" : v === "answered" ? "answered" : "on";
+}
 export function triageReplyEnabled(): boolean {
-  return process.env.FORM_TRIAGE_REPLY?.trim().toLowerCase() !== "off";
+  return triageReplyMode() !== "off";
 }
 
 /** Where a contact topic goes with no triage at all — the pre-triage routing, as a Route. */
@@ -199,6 +212,8 @@ Whether to answer:
 - Write an answer ONLY for event_info, volunteer, rankings, registration and other, and ONLY when the knowledge pack contains the fact or the page that answers it. Otherwise set answer to null.
 - Never answer tickets, media, partnership, vendor, donation, feedback, legal, careers or spam. A person replies to those.
 - Never invent a fact, a policy, a price, a time, a date or a name. If the pack does not say whether coolers, umbrellas, chairs, pets, re-entry, alcohol, cameras, strollers or bags are allowed, whether seats are shaded, what the weather will be, or when a specific match is, do not say. Put it in open_questions instead.
+- When the person names a city or an event, use the SOONEST upcoming stop in that city from the pack (a September question about "the Mesa event" means the stop in Mesa that is happening now or next, not a later one whose name contains the word). If two stops fit, name both.
+- Quote only the FAQ entries that answer what was asked. Do not add the age rule or other entries unprompted.
 - Parking copy in the pack may say "see map below"; the map is on the event page, so say that and give the event page URL rather than repeating those words.
 - Pointing the person at the page that holds the answer IS a valid answer when the pack says the page holds it (for example: the day-by-day order of play with gates and first-serve times is on the event page). Give the exact URL from the pack.
 - Anything about a person's own order, seat, purchase or refund is tickets, never answered here.

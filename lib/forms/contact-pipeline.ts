@@ -36,7 +36,7 @@ import {
   CATEGORY_LABEL,
   ROUTE_LABEL,
   triageContact,
-  triageReplyEnabled,
+  triageReplyMode,
   type Route,
   type TriageResult,
 } from "@/lib/forms/triage";
@@ -214,8 +214,9 @@ export async function runContactPipeline(s: ContactSubmission): Promise<void> {
 
   // 4) The fan's reply.
   if (answer && s.submitterEmail) {
-    if (!triageReplyEnabled()) {
-      console.log(`[${s.label}] auto-reply drafted but FORM_TRIAGE_REPLY=off — not sent`);
+    const mode = triageReplyMode();
+    if (mode === "off" || (mode === "answered" && t.status !== "answered")) {
+      console.log(`[${s.label}] auto-reply drafted but not sent (FORM_TRIAGE_REPLY=${mode}, status ${t.status})`);
     } else {
       const r = await sendAutoReply({
         to: s.submitterEmail,
