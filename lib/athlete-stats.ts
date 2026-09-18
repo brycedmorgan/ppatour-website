@@ -199,6 +199,8 @@ async function build(slug: string): Promise<AthleteStats | null> {
         }
       : null;
 
+  applyVerifiedGolds(slug, medals);
+
   const country = r.country as Obj | undefined;
   const state = r.state as Obj | undefined;
   const city = str(r.city);
@@ -233,6 +235,38 @@ async function build(slug: string): Promise<AthleteStats | null> {
       medals || dupr.singles || dupr.doubles || wpr.singles || wpr.doubles || wpr.mixed,
     ),
   };
+}
+
+/**
+ * Verified career-title floors, for athletes whose live medals feed is known
+ * to be short.
+ *
+ * Anna Leigh Waters: the PB database counts 172 golds. The reconciled count is
+ * 196 (64 singles / 66 doubles / 66 mixed): Hannah Johns' season recap,
+ * confirmed independently by Jim Ramsey on 9/17/26. The feed is short because
+ * 23 golds sit on 9 tournaments with no tier uuid, it credits her with 2 Hanoi
+ * golds she did not win, and it is missing the Aug 2022 Selkirk Labs Showdown
+ * women's doubles. Kenan owns the upstream fix (C0BTTEN8F40).
+ *
+ * A FLOOR, not an override: the page shows max(live, verified) per division
+ * and in total. When upstream is corrected, or she wins more, the live number
+ * takes over on its own and this entry does nothing. Delete the entry once the
+ * feed reads at least 196.
+ */
+const VERIFIED_GOLDS: Record<string, { singles: number; doubles: number; mixed: number; asOf: string }> = {
+  "anna-leigh-waters": { singles: 64, doubles: 66, mixed: 66, asOf: "2026-09-17" },
+};
+
+function applyVerifiedGolds(slug: string, medals: AthleteStats["medals"]): void {
+  const v = VERIFIED_GOLDS[slug];
+  if (!v || !medals) return;
+  medals.singles.gold = Math.max(medals.singles.gold, v.singles);
+  medals.doubles.gold = Math.max(medals.doubles.gold, v.doubles);
+  medals.mixed.gold = Math.max(medals.mixed.gold, v.mixed);
+  medals.total.gold = Math.max(
+    medals.total.gold,
+    medals.singles.gold + medals.doubles.gold + medals.mixed.gold,
+  );
 }
 
 const cache = new Map<string, { value: AthleteStats | null; expires: number }>();
