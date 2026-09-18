@@ -65,6 +65,13 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-18 (pt. 3) — Aanik Lohani added to the Turks & Caicos pro lineup
+
+- Lainey O'Connor's Slack DM: add Aanik next to Hayden on `/vacations` and keep "More pros to come". Shipped `175f2c3` and checked on production.
+- The new row is in `pros` in `lib/vacations/content.ts`. It links to `/athletes/aanik-lohani`. `prosMoreComing` stays `true`.
+- The headshot is `public/vacations/pros/aanik-lohani-ppa.jpg`. It is a 700px square cropped from Lainey's studio photo to match Hayden's framing.
+- Lainey's group DM with Jacob also names Juan Benitez as staff for the trip. Juan is not on the page, and nobody asked to add him.
+
 ### 2026-09-18 (pt. 2) — `/tour/challenger` BUILT: ppachallenger.com folded in
 
 - Bryce, on the plan below: *"Do it. Start building it. We don't need Jeff for this we have access."* Built the same evening. Runbook: [`docs/CHALLENGER.md`](docs/CHALLENGER.md).
