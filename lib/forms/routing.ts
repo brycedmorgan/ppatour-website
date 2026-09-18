@@ -35,6 +35,10 @@ const DEFAULT_INBOX = "info@ppatour.com";
  * misconfigured var misroutes a lead to a real human instead of dropping it.
  * Value may be a comma-separated list.
  */
+export function inboxFor(envVar: string): string {
+  return inbox(envVar);
+}
+
 function inbox(envVar: string): string {
   const v = process.env[envVar]?.trim();
   if (v) return v;

@@ -65,6 +65,47 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-17 — Contact-form triage: tickets → ticketing, volunteers → Hailey, the rest answered from the site
+
+- **Bryce, from #ppa-marketing-form:** route ticket questions to ticketing, volunteer
+  questions to the volunteer team, answer the questions marketing answers by hand, and keep
+  every submission in the channel marked as handled so the questions can shape the site.
+  Read all 38 real submissions since 8/6 first: volunteers (8), ticket holders (5), event
+  logistics (7 — coolers, umbrellas, shade, food, RV parking, start times), rankings (3),
+  vendor pitches / partnerships / donations (9), feedback (4), one music-licence claim.
+  Tyler Dodd has been forwarding by hand and marking ✅.
+- **Built in this repo, not Jackalope** — `/api/form-submit` already owns the submission,
+  the sheet, the Slack bot, Customer.io and every `FORM_INBOX_*` address. Four new modules
+  under `lib/forms/`: `triage.ts` (Claude classifies into 14 categories with structured
+  output; the route is a TABLE in code, applied only to Other/Marketing topics),
+  `knowledge.ts` (the only thing an answer may cite: curated calendar, Tixr index, parking
+  copy, on-site facts, volunteer FAQ, site URLs — read, never written), `reply.ts` (the
+  fan's email, reply-to = the routed inbox), `contact-pipeline.ts` (sheet → routed Slack
+  channel + marketing mirror with a status line, answer threaded, ✅ → routed inbox email
+  with the outcome in the subject → fan reply). Volunteer FAQ moved to
+  `lib/volunteer-faq.ts` so the page and the answers share one copy. Runbook:
+  [`docs/FORMS.md`](docs/FORMS.md) § Contact-form triage.
+- **⚠ The contact form now answers the visitor BEFORE the fan-out**, via `after()` from
+  `next/server` (`maxDuration = 60`). Measured locally: 200 in 10 ms, pipeline runs after,
+  an invalid key degrades to `skipped` and the old sheet/Slack/email path continues. Cost:
+  a failed inbox send no longer 502s the visitor. Every other form is byte-for-byte on the
+  old path.
+- **⚠ SHIPPED DARK.** `ANTHROPIC_API_KEY` is not in this project's Vercel env — Jackalope's
+  is a sensitive var and `vercel env pull` returns it blank — so triage is off and nothing
+  changes for anyone until Bryce adds the key and redeploys. `FORM_INBOX_VOLUNTEER` IS set
+  (prod + preview, hailey.lunt@pickleball.com, the same default `/api/volunteer-apply`
+  ships). `FORM_TRIAGE_REPLY=off` exists to watch answers in Slack for a week before any fan
+  gets one.
+- **The model was never exercised** — no key on this machine either. `scripts/triage-eval.ts`
+  replays a fixture (the 38 real messages, in the session scratchpad, NOT the repo — it is
+  public) and prints category / route / status / answer per message. Run it before turning
+  replies on. tsc clean, `next build` green, eslint at the volunteer page's pre-existing
+  baseline. Deps added: `@anthropic-ai/sdk`, `zod`.
+- **Open:** the key (Bryce) · `reactions:write` on the PPA Website Forms Slack app (Wesley)
+  or ✅ never appears · a channel note to Tyler/Jeff/Hailey/Wesley once it is live · then
+  the website gaps `triageOpen` keeps naming (bag/cooler/umbrella policy, shade, food per
+  venue belong in `lib/onsite.ts` and land in the answers for free).
+
 ### 2026-09-17 — /europe/eventlinks: the page behind the QR on Europe credentials
 
 - **Payton Pemberton (DM, 9/17 1:23pm MT):** the Europe team prints a QR code on every

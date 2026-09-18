@@ -1,5 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { FORM_SCHEMAS, type FormField, formNeedsTurnstile } from "@/lib/forms/schema";
+import { runContactPipeline } from "@/lib/forms/contact-pipeline";
+import { triageEnabled } from "@/lib/forms/triage";
 import { FORM_ROUTING } from "@/lib/forms/routing";
 import { appendToSheet } from "@/lib/google-sheet";
 import { cioIdentifyAndTrack } from "@/lib/customerio";
@@ -28,7 +30,22 @@ import { postFormToSlack } from "@/lib/forms/slack";
  * /api/sponsor-inquiry — that form has its own route because it also forwards to
  * the Jackalope sales pipeline, and a second copy of the template and sender
  * address is the kind of duplication that drifts.
+ *
+ * ⚠ THE CONTACT FORM TAKES A DIFFERENT PATH WHEN TRIAGE IS ON (Bryce, 9/17).
+ * After validation it answers the visitor immediately and hands the record to
+ * lib/forms/contact-pipeline.ts inside `after()`: a model classifies the
+ * message, routes it (ticket questions → ticketing, volunteer → volunteer team,
+ * …), answers it from the site's own facts when it can, and only then does the
+ * sheet / Slack / email fan-out run — with the outcome on every copy. Two
+ * consequences worth knowing: the model call (seconds) never sits on the
+ * visitor's request, and a failed inbox send no longer 502s the visitor (the
+ * sheet and Slack still hold the submission and the log says so). Every other
+ * form is untouched, and with no ANTHROPIC_API_KEY the contact form runs the
+ * old path too.
  */
+
+/** `after()` work counts against the route's duration; the model call is the long pole. */
+export const maxDuration = 60;
 
 type Raw = Record<string, unknown>;
 
@@ -134,6 +151,35 @@ export async function POST(request: Request) {
 
   console.log(`[form-submit:${formType}]`, record);
 
+  const submitterEmail = typeof body.email === "string" ? body.email.trim() : "";
+  const submitterName = `${record.firstName ?? ""} ${record.lastName ?? record.name ?? ""}`.trim();
+  const notifyTo = typeof routing.notifyTo === "function" ? routing.notifyTo(record) : routing.notifyTo;
+
+  // Contact form with triage on: respond now, do everything else after the response.
+  if (formType === "contact" && triageEnabled()) {
+    const submission = {
+      heading: schema.heading,
+      sheetTab: routing.sheetTab,
+      record,
+      rows,
+      submittedAtLocal,
+      submitterEmail,
+      submitterName,
+      topicInbox: notifyTo ?? "",
+      topic: record.topic ?? "",
+      label: `form-submit:${formType}`,
+    };
+    after(async () => {
+      try {
+        await runContactPipeline(submission);
+      } catch (err) {
+        // The pipeline catches per step; this is the belt for the braces.
+        console.error(`[form-submit:${formType}] pipeline crashed`, err, submission.record);
+      }
+    });
+    return NextResponse.json({ ok: true });
+  }
+
   // 1) Durable record — best-effort.
   const sheetOk = await appendToSheet(routing.sheetTab, record);
 
@@ -153,10 +199,6 @@ export async function POST(request: Request) {
   });
 
   // 3) Notification email (if the form routes to an inbox).
-  const submitterEmail = typeof body.email === "string" ? body.email.trim() : "";
-  const submitterName = `${record.firstName ?? ""} ${record.lastName ?? record.name ?? ""}`.trim();
-  const notifyTo = typeof routing.notifyTo === "function" ? routing.notifyTo(record) : routing.notifyTo;
-
   if (notifyTo) {
     const result = await sendFormNotification({
       to: notifyTo,

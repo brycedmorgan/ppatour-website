@@ -317,3 +317,68 @@ repo from earlier: **sponsorship** (`/api/sponsor-inquiry` → Jackalope leads),
 The remaining inquiry forms are each ~2 edits (schema + routing) once this
 pattern is approved. Email-only signups reuse the existing lead-capture route
 with a new `variant`. Fan video is the one true custom case (file upload).
+
+
+## Contact-form triage (added 9/17)
+
+Bryce, on #ppa-marketing-form, 9/17: ticket questions should go straight to
+ticketing, volunteer questions to the volunteer team, and the questions
+marketing answers by hand every week should be answered automatically — with
+the channel still showing every submission, marked as handled, so the pattern
+of questions can shape the website.
+
+**What happens now on a `contact` submission** (`lib/forms/contact-pipeline.ts`,
+run inside `after()` so the visitor's request returns in milliseconds):
+
+1. `lib/forms/triage.ts` classifies the message with Claude into one of 14
+   categories and, for the answerable ones, drafts a reply **only from
+   `lib/forms/knowledge.ts`** — the curated calendar, the Tixr price index, the
+   event team's parking copy, on-site facts, the volunteer FAQ, and a list of
+   site URLs. Nothing in the pack is typed for the purpose of answering. A fan
+   asking about coolers gets no answer because no page says so; the fix is a
+   page, never a sentence in the pack.
+2. The **route is a table in code** (`ROUTE_BY_CATEGORY`): tickets → Ticketing,
+   volunteer → Volunteer team, media → PR, registration → Registrations, careers
+   → Careers, everything else → Marketing. A re-route applies **only when the
+   submitter picked Other or Marketing**; someone who chose Tickets is believed.
+3. The sheet row carries `triageStatus / triageCategory / triageRoute /
+   triageSummary / triageAnswer / triageOpen / triageConfidence / triageModel /
+   triageNote` (the Apps Script adds new columns on first sight).
+4. Slack: the **routed** channel gets the post with a status line under the
+   header; when the route moved it off marketing, the marketing channel gets a
+   **mirror** marked as such. The answer is threaded under the post. ✅ is added
+   on `answered` and `routed` — Tyler's own "handled" convention — **once the
+   app has the `reactions:write` scope** (see below).
+5. Email to the **routed** inbox, subject prefixed `[Answered automatically]` /
+   `[Partly answered]` / `[Spam?]`, with the answer and any open questions in
+   the body so a person can catch a bad one. Marketing is NOT also mailed for a
+   re-routed message — one inbox owns it.
+6. If there is an answer, the fan gets it from `info@ppatour.com` with
+   `reply_to` = the routed inbox (`lib/forms/reply.ts`).
+
+Statuses: `answered` (reply sent, nothing left) · `partial` (reply sent, a
+person still owes the rest — listed) · `routed` (no reply, sent to a team) ·
+`needs_human` · `spam` · `skipped` (triage off or failed → the pre-9/17 path).
+
+**Every failure degrades to the old behaviour.** No key, a timeout, a refusal,
+malformed output → `skipped`, and the submission routes by its topic exactly as
+before. Nothing here can lose a message. ⚠ One semantic change: a failed inbox
+send no longer 502s the visitor (it happens after the response); the sheet and
+Slack still hold the row and the log says `inbox email FAILED`.
+
+| Var | Effect |
+|---|---|
+| `ANTHROPIC_API_KEY` | **Required for triage to run at all.** Unset → old path. |
+| `FORM_TRIAGE=off` | Disable triage without removing the key. |
+| `FORM_TRIAGE_REPLY=off` | Keep tagging + routing, never email a fan (the answer still lands in Slack + the sheet). Use this to watch the answers for a week before letting them out. |
+| `FORM_TRIAGE_MODEL` | Model id override (default `claude-opus-5`). |
+| `FORM_INBOX_VOLUNTEER` / `FORM_SLACK_CHANNEL_VOLUNTEER` | The volunteer route's inbox and channel. Set 9/17. |
+
+**Replay the real questions before trusting a prompt change:**
+`npx tsx scripts/triage-eval.ts <fixture.json> --answers`. It calls the model
+only — no email, no Slack, no sheet. ⚠ Fixtures are fans' messages; keep them
+out of this public repo (the 9/17 set lives in the session scratchpad).
+
+**Reactions need a scope.** api.slack.com/apps → PPA Website Forms → OAuth &
+Permissions → add `reactions:write` → reinstall. Until then `reactions.add`
+answers `missing_scope`, logged and ignored; posts simply have no check mark.

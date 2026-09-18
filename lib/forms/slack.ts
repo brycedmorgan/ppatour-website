@@ -109,8 +109,58 @@ function resolveChannel(formType: string, topic?: string): string | undefined {
   const key =
     (formType === "contact" && topic ? CONTACT_CHANNEL_ENV[topic] : undefined) ??
     FORM_CHANNEL_ENV[formType];
-  const routed = key ? process.env[key]?.trim() : "";
+  return channelFor(key);
+}
+
+/**
+ * A destination channel by its env var name (`FORM_SLACK_CHANNEL_*`), with the
+ * same fall-through to the default channel. Exported for the contact triage,
+ * which routes by outcome rather than by the topic the submitter picked.
+ */
+export function channelFor(envVar: string | undefined): string | undefined {
+  const routed = envVar ? process.env[envVar]?.trim() : "";
   return routed || process.env.FORM_SLACK_CHANNEL_DEFAULT?.trim() || undefined;
+}
+
+/** One bot-token call. Returns Slack's parsed body; `{ok:false}` on transport failure. */
+async function slackApi(method: string, body: Record<string, unknown>, label: string): Promise<{ ok?: boolean; error?: string; ts?: string; channel?: string }> {
+  const token = process.env.FORM_SLACK_BOT_TOKEN;
+  if (!token) return { ok: false, error: "no_token" };
+  try {
+    const res = await fetch(`https://slack.com/api/${method}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8", Authorization: `Bearer ${token}` },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(5000),
+    });
+    const data = (await res.json().catch(() => null)) as { ok?: boolean; error?: string; ts?: string; channel?: string } | null;
+    if (!data?.ok) console.error(`[${label}] Slack ${method} failed:`, data?.error ?? res.status);
+    return data ?? { ok: false, error: "bad_json" };
+  } catch (err) {
+    console.error(`[${label}] Slack ${method} error`, err);
+    return { ok: false, error: "network" };
+  }
+}
+
+/** A reply in the thread under a posted submission — where the auto-answer goes. */
+export async function postThreadReply(opts: { channel: string; ts: string; text: string; label: string }): Promise<boolean> {
+  const r = await slackApi(
+    "chat.postMessage",
+    { channel: opts.channel, thread_ts: opts.ts, text: opts.text.slice(0, 3900), unfurl_links: false },
+    opts.label,
+  );
+  return Boolean(r.ok);
+}
+
+/**
+ * Best-effort reaction. ⚠ Needs the `reactions:write` scope on the PPA Website
+ * Forms app; without it Slack answers `missing_scope` and the post simply has no
+ * check mark. Add the scope + reinstall (docs/FORMS.md) and this starts working
+ * with no deploy.
+ */
+export async function addReaction(opts: { channel: string; ts: string; name: string; label: string }): Promise<boolean> {
+  const r = await slackApi("reactions.add", { channel: opts.channel, timestamp: opts.ts, name: opts.name }, opts.label);
+  return Boolean(r.ok);
 }
 
 /**
@@ -156,6 +206,9 @@ function chunk(lines: string[]): string[] {
 
 export type SlackResult = "posted" | "skipped" | "failed";
 
+/** What a post produced. `channel` + `ts` identify it for a thread reply or a reaction. */
+export type SlackPost = { status: SlackResult; channel?: string; ts?: string };
+
 /**
  * Post a submission to its channel. Returns:
  *   "posted"  — Slack accepted it.
@@ -170,17 +223,27 @@ export async function postFormToSlack(opts: {
   formType: string;
   /** Contact form's Inquiry Topic, which picks the channel. Ignored otherwise. */
   topic?: string;
+  /**
+   * Explicit destination channel id, overriding the topic/form lookup. Set by
+   * the contact triage, which routes by outcome. Unset → resolveChannel().
+   */
+  channel?: string;
+  /**
+   * One mrkdwn line rendered under the header — the triage outcome ("Answered
+   * automatically", "Sent to Ticketing"). Unset → no line, the pre-triage post.
+   */
+  statusText?: string;
   /** Human title, e.g. "Careers Application". */
   heading: string;
   rows: [string, string][];
   submittedAtLocal: string;
   /** Log prefix, e.g. "form-submit:careers". */
   label: string;
-}): Promise<SlackResult> {
-  if (!formPostsToSlack(opts.formType)) return "skipped";
+}): Promise<SlackPost> {
+  if (!formPostsToSlack(opts.formType)) return { status: "skipped" };
 
   const token = process.env.FORM_SLACK_BOT_TOKEN;
-  const channel = resolveChannel(opts.formType, opts.topic);
+  const channel = opts.channel?.trim() || resolveChannel(opts.formType, opts.topic);
   const webhook = process.env.FORM_SLACK_WEBHOOK_URL;
 
   /**
@@ -196,7 +259,7 @@ export async function postFormToSlack(opts: {
       console.warn(
         `[${opts.label}] no FORM_SLACK_BOT_TOKEN/channel and no FORM_SLACK_WEBHOOK_URL — Slack post skipped`,
       );
-      return "skipped";
+      return { status: "skipped" };
     }
     if (!token) {
       console.warn(`[${opts.label}] FORM_SLACK_BOT_TOKEN unset — posting to the webhook's channel`);
@@ -220,6 +283,9 @@ export async function postFormToSlack(opts: {
       type: "header",
       text: { type: "plain_text", text: truncate(`📥 ${opts.heading}`, 150), emoji: true },
     },
+    ...(opts.statusText
+      ? [{ type: "context", elements: [{ type: "mrkdwn", text: truncate(opts.statusText, 2000) }] }]
+      : []),
     ...shown.map((text) => ({ type: "section", text: { type: "mrkdwn", text } })),
     {
       type: "context",
@@ -258,7 +324,7 @@ export async function postFormToSlack(opts: {
     if (!res.ok) {
       const detail = await res.text().catch(() => "");
       console.error(`[${opts.label}] Slack post failed`, res.status, detail);
-      return "failed";
+      return { status: "failed" };
     }
 
     /**
@@ -271,19 +337,20 @@ export async function postFormToSlack(opts: {
      */
     if (viaApi) {
       const data = (await res.json().catch(() => null)) as
-        | { ok?: boolean; error?: string }
+        | { ok?: boolean; error?: string; ts?: string; channel?: string }
         | null;
       if (!data?.ok) {
         console.error(
           `[${opts.label}] Slack rejected the post to ${channel}:`,
           data?.error ?? "unparseable response",
         );
-        return "failed";
+        return { status: "failed" };
       }
+      return { status: "posted", channel: data.channel ?? channel, ts: data.ts };
     }
-    return "posted";
+    return { status: "posted" };
   } catch (err) {
     console.error(`[${opts.label}] Slack post error`, err);
-    return "failed";
+    return { status: "failed" };
   }
 }
