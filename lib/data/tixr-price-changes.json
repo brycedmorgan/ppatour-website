@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-17T17:21:47Z",
+  "updated_at": "2026-09-18T16:47:48Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -6059,6 +6059,83 @@
         "from": "OPEN",
         "to": "HIDE"
       }
+    },
+    {
+      "at": "2026-09-18T16:47:48Z",
+      "type": "price_change",
+      "event_id": "195335",
+      "event": "Veolia PPA Mesa Friday - Quarterfinals",
+      "ticket": "Friday VIP",
+      "base_price": {
+        "from": null,
+        "to": 400
+      },
+      "all_in_price": {
+        "from": 329.54,
+        "to": 437.59
+      }
+    },
+    {
+      "at": "2026-09-18T16:47:48Z",
+      "type": "availability_change",
+      "event_id": "195335",
+      "event": "Veolia PPA Mesa Friday - Quarterfinals",
+      "ticket": "Friday VIP",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-09-18T16:47:48Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": 140,
+        "to": 120
+      },
+      "all_in_price": {
+        "from": 156.66,
+        "to": 135.05
+      }
+    },
+    {
+      "at": "2026-09-18T16:47:48Z",
+      "type": "event_removed",
+      "event_id": "195336",
+      "event": "Veolia PPA Mesa Thursday - Round of 16"
+    },
+    {
+      "at": "2026-09-18T16:47:48Z",
+      "type": "event_removed",
+      "event_id": "181370",
+      "event": "Veolia PPA Cincinnati"
+    },
+    {
+      "at": "2026-09-18T16:47:48Z",
+      "type": "event_removed",
+      "event_id": "186575",
+      "event": "Veolia PPA Cincinnati Thursday - Round of 16"
+    },
+    {
+      "at": "2026-09-18T16:47:48Z",
+      "type": "event_removed",
+      "event_id": "186574",
+      "event": "Veolia PPA Cincinnati Friday - Quarterfinals"
+    },
+    {
+      "at": "2026-09-18T16:47:48Z",
+      "type": "event_removed",
+      "event_id": "186573",
+      "event": "Veolia PPA Cincinnati Saturday - Semifinals"
+    },
+    {
+      "at": "2026-09-18T16:47:48Z",
+      "type": "event_removed",
+      "event_id": "185682",
+      "event": "Veolia PPA Cincinnati Sunday - Championships"
     }
   ]
 }

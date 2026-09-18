@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-17T17:21:47Z",
+  "generated_at": "2026-09-18T16:47:48Z",
   "prices": {
     "166229": {
       "from": 15,
@@ -53,26 +53,6 @@
       "from": 25,
       "onSale": true
     },
-    "181370": {
-      "from": 25,
-      "onSale": true
-    },
-    "185682": {
-      "from": 25,
-      "onSale": true
-    },
-    "186573": {
-      "from": 25,
-      "onSale": true
-    },
-    "186574": {
-      "from": 25,
-      "onSale": true
-    },
-    "186575": {
-      "from": 25,
-      "onSale": true
-    },
     "190874": {
       "from": 15,
       "onSale": true
@@ -94,10 +74,6 @@
       "onSale": true
     },
     "195335": {
-      "from": 25,
-      "onSale": true
-    },
-    "195336": {
       "from": 25,
       "onSale": true
     },
