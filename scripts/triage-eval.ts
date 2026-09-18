@@ -26,6 +26,7 @@ if (!file) {
 type Row = { name?: string; topic?: string; message: string };
 const rows = JSON.parse(fs.readFileSync(file, "utf8")) as Row[];
 
+async function main() {
 const counts: Record<string, number> = {};
 for (const [i, r] of rows.entries()) {
   const [firstName, ...rest] = (r.name || "").split(" ");
@@ -46,3 +47,5 @@ for (const [i, r] of rows.entries()) {
   if (showAnswers && t.answer) console.log(`\n${t.answer.replace(/^/gm, "      ")}\n`);
 }
 console.log("\n", counts);
+}
+main().catch((e) => { console.error(e); process.exit(1); });
