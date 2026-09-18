@@ -50,7 +50,13 @@
  * keys are needed. PB_NEWS_* stay as overrides for the Canada build.
  */
 
+import { pbCachedJsonStrict } from "@/lib/pb-cache";
+
 const DEFAULT_BASE = "https://api.pickleball.com";
+
+/** Ten minutes: fresh enough for news, and it keeps a busy page off the API. */
+const NEWS_TTL_S = 600;
+const NEWS_CACHE_TAG = "pb-news";
 const NEWS_PATH = "/v2/data/news";
 
 /**
@@ -204,22 +210,20 @@ export async function getPickleballNews(limit = 6): Promise<PbNewsResult> {
       page_size: String(size),
     });
 
+  /**
+   * ⚠ CACHED IN OUR OWN TABLE, NOT NEXT'S. This carried `next: { revalidate: 600 }`
+   * and still ran at ~460 calls/hour — a ten-minute window being read every ten
+   * seconds. Every Next cache entry is invalidated by every deployment (see
+   * lib/pb-cache.ts), and at 24 deploys a day nothing survives long enough to
+   * matter. The strict variant is used so the 401/403 branch below still works.
+   */
   async function get(page: number, size: number): Promise<ApiEnvelope> {
-    const res = await fetch(endpoint(page, size), {
-      headers: { "PB-API-TOKEN": cfg!.key },
-      // 10 minutes: fresh enough for news, and it keeps a busy page off the API.
-      next: { revalidate: 600, tags: ["pb-news"] },
-      signal: AbortSignal.timeout(8000),
-    });
-    if (!res.ok) {
-      const body = await res.text().catch(() => "");
-      const err = new Error(`HTTP ${res.status} ${body.slice(0, 180)}`) as Error & {
-        status?: number;
-      };
-      err.status = res.status;
-      throw err;
-    }
-    return (await res.json()) as ApiEnvelope;
+    return (await pbCachedJsonStrict(
+      endpoint(page, size),
+      NEWS_TTL_S,
+      NEWS_CACHE_TAG,
+      cfg!.key,
+    )) as ApiEnvelope;
   }
 
   try {
@@ -298,18 +302,14 @@ export async function getPickleballNewsPage(page = 1, pageSize = 24): Promise<Pb
       page_size: String(size),
     });
 
+  /** Same durable cache as above — see the note on the other `get`. */
   async function get(p: number, size: number): Promise<ApiEnvelope> {
-    const res = await fetch(endpoint(p, size), {
-      headers: { "PB-API-TOKEN": cfg!.key },
-      next: { revalidate: 600, tags: ["pb-news"] },
-      signal: AbortSignal.timeout(8000),
-    });
-    if (!res.ok) {
-      const err = new Error(`HTTP ${res.status}`) as Error & { status?: number };
-      err.status = res.status;
-      throw err;
-    }
-    return (await res.json()) as ApiEnvelope;
+    return (await pbCachedJsonStrict(
+      endpoint(p, size),
+      NEWS_TTL_S,
+      NEWS_CACHE_TAG,
+      cfg!.key,
+    )) as ApiEnvelope;
   }
 
   try {

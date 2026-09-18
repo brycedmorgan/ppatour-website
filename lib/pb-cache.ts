@@ -144,8 +144,8 @@ async function timeboxed<T>(work: Promise<T>): Promise<T | null> {
  * ⚠ IT THROWS RATHER THAN RETURNING NULL. See the header: only a resolved value
  * is ever written, so a rate-limited response cannot become a cached one.
  */
-async function fetchJson(url: string): Promise<unknown> {
-  const token = process.env.PB_API_TOKEN;
+async function fetchJson(url: string, tokenOverride?: string): Promise<unknown> {
+  const token = tokenOverride ?? process.env.PB_API_TOKEN;
   if (!token) throw new Error("PB_API_TOKEN unset");
   for (let attempt = 0; ; attempt++) {
     const res = await fetch(url, {
@@ -158,7 +158,12 @@ async function fetchJson(url: string): Promise<unknown> {
       await new Promise((r) => setTimeout(r, backoffMs(attempt, res.headers.get("retry-after"))));
       continue;
     }
-    throw new Error(`${new URL(url).pathname} ${res.status}`);
+    // ⚠ THE STATUS RIDES ON THE ERROR. lib/pb-news branches on 401/403 to tell
+    // "not authorised for this endpoint" apart from "something broke", and that
+    // distinction is the only thing that makes a denied feed diagnosable.
+    const err = new Error(`${new URL(url).pathname} ${res.status}`) as Error & { status?: number };
+    err.status = res.status;
+    throw err;
   }
 }
 
@@ -178,11 +183,12 @@ const inFlight = new Map<string, Promise<unknown | null>>();
  * `tag` groups entries so they can be purged together — see
  * {@link purgeCacheTag}. Returns null on any failure.
  */
-export async function pbCachedJson(
+async function load(
   url: string,
   ttlSeconds: number,
   tag: string,
-): Promise<unknown | null> {
+  token?: string,
+): Promise<unknown> {
   const key = keyFor(url);
 
   const hit = memo.get(key);
@@ -215,9 +221,9 @@ export async function pbCachedJson(
 
     let value: unknown;
     try {
-      value = await fetchJson(url);
-    } catch {
-      return null;
+      value = await fetchJson(url, token);
+    } catch (err) {
+      throw err;
     }
 
     memo.set(key, { value, expires: Date.now() + MEMO_MS });
@@ -250,6 +256,42 @@ export async function pbCachedJson(
   } finally {
     inFlight.delete(key);
   }
+}
+
+/**
+ * GET `url`, served from the durable cache for `ttlSeconds`.
+ *
+ * Returns null on any failure, matching the old `pbGetJson` contract that the
+ * live-data adapters already handle. `tag` groups entries for {@link purgeCacheTag}.
+ */
+export async function pbCachedJson(
+  url: string,
+  ttlSeconds: number,
+  tag: string,
+  token?: string,
+): Promise<unknown | null> {
+  try {
+    return await load(url, ttlSeconds, tag, token);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The same, but rethrows instead of returning null.
+ *
+ * ⚠ FOR CALLERS THAT BRANCH ON THE STATUS. lib/pb-news distinguishes a 401/403
+ * ("this token is not authorised for the news endpoint") from any other failure,
+ * and collapsing that into null would turn a precise, actionable message into a
+ * blank feed with no explanation. The error carries `.status`.
+ */
+export async function pbCachedJsonStrict(
+  url: string,
+  ttlSeconds: number,
+  tag: string,
+  token?: string,
+): Promise<unknown> {
+  return load(url, ttlSeconds, tag, token);
 }
 
 /**
