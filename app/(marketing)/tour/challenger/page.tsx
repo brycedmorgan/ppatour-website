@@ -106,7 +106,16 @@ function dateRange(start: string, end: string): string {
   return `${left}–${right}, ${e.getFullYear()}`;
 }
 
-const isUsChallenger = (t: Tournament) => t.tierKey === "challenger" && !t.country;
+/**
+ * ⚠ THE TIER ALONE IS NOT THE TEST. `inferTier` in lib/events-api.ts files any
+ * sub-three-day or college/qualifier/camp event under `challenger` so it stays
+ * off The Tour — so on 9/18 the feed's one-day "Utah Super Regional - College
+ * Pickleball Tour" rendered here as a 500-point Challenger stop. A Challenger
+ * Series event says "Challenger" in its name (that is how the mapper sets
+ * `isChallenger` itself), so the name is required too.
+ */
+const isUsChallenger = (t: Tournament) =>
+  t.tierKey === "challenger" && !t.country && /\bchallenger\b/i.test(t.name);
 
 export const revalidate = 3600;
 export const dynamic = "force-static";
