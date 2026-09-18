@@ -1,4 +1,5 @@
 import { revalidateTag } from "next/cache";
+import { purgeCacheTag, sweepCache } from "@/lib/pb-cache";
 import { NextResponse } from "next/server";
 import {
   REGISTRATIONS_CACHE_TAG,
@@ -55,12 +56,21 @@ export async function GET(request: Request) {
       );
     }
     revalidateTag(requested, "max");
-    return NextResponse.json({ ok: true, revalidated: [requested], at: new Date().toISOString() });
+    // ⚠ AND OUR OWN TABLE, WHICH revalidateTag CANNOT REACH. lib/pb-cache.ts
+    // keys entries itself precisely so they survive deployments, which also
+    // means Next has no idea they exist. Purging only one of the two layers
+    // would leave a corrected result still being served from the other.
+    const purged = await purgeCacheTag(requested);
+    return NextResponse.json({ ok: true, revalidated: [requested], purged, at: new Date().toISOString() });
   }
 
   // "max" → stale-while-revalidate: serve cached data on the next visit while
   // the fresh copy is fetched in the background.
   for (const tag of TAGS) revalidateTag(tag, "max");
+  for (const tag of TAGS) await purgeCacheTag(tag);
+  // Expired rows are already ignored by reads; this just stops the table
+  // growing without bound.
+  const swept = await sweepCache();
 
-  return NextResponse.json({ ok: true, revalidated: TAGS, at: new Date().toISOString() });
+  return NextResponse.json({ ok: true, revalidated: TAGS, swept, at: new Date().toISOString() });
 }

@@ -19,7 +19,7 @@
  */
 
 import { cache } from "react";
-import { unstable_cache } from "next/cache";
+import { pbCachedJson } from "@/lib/pb-cache";
 import { asiaTourUrlForDetailsUrl } from "@/lib/asia-tour-links";
 import { australiaTourUrlForEvent } from "@/lib/australia-tour-links";
 import { canadaTourUrlForEvent } from "@/lib/canada-tour-links";
@@ -51,7 +51,6 @@ const PATH = "/v2/data/ppa_tournaments";
 export const EVENTS_CACHE_TAG = "events";
 /** Backstop TTL (24h) in case the daily cron ever fails to fire. */
 const REVALIDATE_SECONDS = 60 * 60 * 24;
-const TIMEOUT_MS = 8000;
 
 /** The US org — the only one whose events get a rich internal event page. */
 const US_ORG = "Pro Pickleball Association";
@@ -631,28 +630,38 @@ function withComingSoon(events: Tournament[]): Tournament[] {
  * doing that work two or three times for no reason.
  */
 /**
- * The uncached work: one call to `ppa_tournaments`, mapped and enriched.
+ * Every tour event from the API (quality-gated, mapped, curated-enriched),
+ * chronological. Falls back to the curated list if the API is unconfigured,
+ * errors, or returns nothing.
  *
- * ⚠ IT THROWS INSTEAD OF FALLING BACK, AND THAT IS WHAT KEEPS A BLIP FROM
- * SETTING FOR A DAY. `unstable_cache` stores whatever this resolves to, so a
- * `fallback()` returned in here would pin the curated list for the full 24-hour
- * window on one bad response. Throwing leaves the cache empty; the caller below
- * catches and falls back for that request only.
+ * ⚠ CACHED IN OUR OWN TABLE, NOT NEXT'S. This fetch carried
+ * `next: { revalidate: 86400 }` for months and ran at 620 calls/hour; moving it
+ * to `unstable_cache` only got it to ~250. The reason is in lib/pb-cache.ts:
+ * every deployment invalidates every Next cache entry by design, and at 24
+ * deploys a day a 24-hour window behaves like an 18-minute one. Keys we own
+ * survive builds.
+ *
+ * ⚠ MAPPING HAPPENS PER REQUEST, AND THAT IS FINE. Only the raw response is
+ * cached, so the ~225 rows are re-filtered and re-mapped on each call — pure CPU,
+ * measured in single-digit milliseconds, against a network call it replaces. The
+ * React `cache()` wrapper below collapses repeat calls within one render anyway.
  */
-async function fetchEvents(): Promise<Tournament[]> {
+export const getEvents = cache(async function getEvents(): Promise<{
+  events: Tournament[];
+  source: "live" | "fallback";
+}> {
   const { token, baseUrl } = config();
-  if (!token) throw new Error("PB_API_TOKEN unset");
+  if (!token) return fallback();
 
-  const res = await fetch(`${baseUrl}${PATH}?current_page=1&page_size=300`, {
-    headers: { "PB-API-TOKEN": token },
-    next: { revalidate: REVALIDATE_SECONDS, tags: [EVENTS_CACHE_TAG] },
-    signal: AbortSignal.timeout(TIMEOUT_MS),
-  });
-  if (!res.ok) throw new Error(`ppa_tournaments ${res.status}`);
+  const json = (await pbCachedJson(
+    `${baseUrl}${PATH}?current_page=1&page_size=300`,
+    REVALIDATE_SECONDS,
+    EVENTS_CACHE_TAG,
+  )) as { results?: { tournaments?: ApiTournament[] } } | null;
+  if (!json) return fallback();
 
-  const json = (await res.json()) as { results?: { tournaments?: ApiTournament[] } };
   const raw = json.results?.tournaments ?? [];
-  if (raw.length === 0) throw new Error("ppa_tournaments returned no rows");
+  if (raw.length === 0) return fallback();
 
   const seen = new Set<string>();
   const events = raw
@@ -660,56 +669,8 @@ async function fetchEvents(): Promise<Tournament[]> {
     .sort((a, b) => a.start_date.localeCompare(b.start_date))
     .map((t, i) => mapTournament(t, seen, i));
 
-  if (events.length === 0) throw new Error("every ppa_tournaments row was filtered out");
-  return withComingSoon(events);
-}
-
-/**
- * ⚠ THIS IS A PROBE, AND IT IS THE FIRST PLACE THE DATA CACHE HAS BEEN REPLACED
- * RATHER THAN RE-TUNED.
- *
- * The fetch above has carried `next: { revalidate: 86400 }` for months. Measured
- * on production 9/18, in a single region (`serverlessFunctionRegion: iad1`, so
- * there is no regional multiplication to hide behind): **620 upstream calls an
- * hour against a 24-hour window** — roughly 15,000x what that window allows. The
- * same comparison on other paths: a one-year window reading 213/hr, a ten-minute
- * window reading 351/hr. The fetch-level Data Cache is not retaining these
- * entries at all, so every window in this codebase has been decorative and what
- * actually bounds upstream volume is the edge cache and the per-instance module
- * caches.
- *
- * That possibility was written down on 9/9 and never verified — "NOTHING HAS YET
- * MEASURED A DATA CACHE HIT… if it still reads a dash after a day, the answer is
- * to move the fetches out of the force-dynamic segment" — and the contingency
- * named there was exactly this: a cached function, not re-tuned windows.
- *
- * ⚠ `unstable_cache` IS DEPRECATED IN NEXT 16 IN FAVOUR OF `use cache`, and that
- * is deliberate here. `use cache` requires `cacheComponents: true`, which changes
- * caching semantics for the whole app — far too large a change to test a
- * hypothesis with. If this probe works, converting the rest is the follow-up and
- * `use cache` is the destination.
- *
- * ⚠ THE PASS MARK IS SPECIFIC: `/v2/data/ppa_tournaments` drops from ~620/hr to
- * roughly one call a day. If it does not move, the incremental cache is broken
- * for this project at a level below Next, and the next step is Vercel support
- * rather than more code.
- */
-const loadEvents = unstable_cache(fetchEvents, ["ppa-tournaments"], {
-  revalidate: REVALIDATE_SECONDS,
-  tags: [EVENTS_CACHE_TAG],
-});
-
-export const getEvents = cache(async function getEvents(): Promise<{
-  events: Tournament[];
-  source: "live" | "fallback";
-}> {
-  try {
-    return { events: await loadEvents(), source: "live" };
-  } catch {
-    // Any problem at all — no token, a bad status, an empty or unusable payload
-    // — serves the curated calendar for this request and caches nothing.
-    return fallback();
-  }
+  if (events.length === 0) return fallback();
+  return { events: withComingSoon(events), source: "live" };
 });
 
 /**
