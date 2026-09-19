@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-18T16:47:48Z",
+  "updated_at": "2026-09-19T16:09:21Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -6136,6 +6136,30 @@
       "type": "event_removed",
       "event_id": "185682",
       "event": "Veolia PPA Cincinnati Sunday - Championships"
+    },
+    {
+      "at": "2026-09-19T16:09:21Z",
+      "type": "ticket_added",
+      "event_id": "195857",
+      "event": "PPA Las Vegas",
+      "ticket": "Free Youth Clinic",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-09-19T16:09:21Z",
+      "type": "ticket_added",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Free Youth Clinic",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-09-19T16:09:21Z",
+      "type": "event_removed",
+      "event_id": "195335",
+      "event": "Veolia PPA Mesa Friday - Quarterfinals"
     }
   ]
 }
