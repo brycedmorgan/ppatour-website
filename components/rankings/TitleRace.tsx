@@ -35,6 +35,11 @@ const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct
 const ease = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 const initials = (n: string) =>
   n.split(" ").filter(Boolean).map((s) => s[0]).slice(0, 2).join("");
+/** "Anna Leigh Waters" → "A. Waters". Used only where the full name will not fit. */
+const shortName = (n: string) => {
+  const parts = n.split(" ").filter(Boolean);
+  return parts.length < 2 ? n : `${parts[0][0]}. ${parts[parts.length - 1]}`;
+};
 const when = (iso: string) => {
   const [y, m] = iso.split("-").map(Number);
   return { month: MON[m - 1], year: y };
@@ -313,7 +318,7 @@ export function TitleRace({ data }: { data: TitleRaceData }) {
 
           {/* Grid: vertical lines at nice steps, labelled above. The bar track
               starts after the name column and leaves room for avatar + count. */}
-          <div aria-hidden className="absolute inset-y-0 right-0 left-[8rem] sm:left-[12rem]">
+          <div aria-hidden className="absolute inset-y-0 right-0 left-[6.75rem] sm:left-[12rem]">
             <div className="absolute inset-y-0 left-0 w-[calc(100%-4.75rem)] sm:w-[calc(100%-6rem)]">
               <div className="absolute inset-y-0 left-0 w-px bg-ppa-navy/20" />
               {ticks.map((v) => (
@@ -332,12 +337,21 @@ export function TitleRace({ data }: { data: TitleRaceData }) {
               const color = pl.g === "W" ? WOMEN : MEN;
               const f = r.v / view.max;
               const a = Math.max(0, Math.min(1, TOPN - r.y));
+              /* Phones get "A. Waters": the full name truncated to "Anna Leigh
+                 Wat…" reads worse than an initial, and the column cannot grow
+                 without eating the bar it labels. */
+              const label = (
+                <>
+                  <span className="sm:hidden">{shortName(r.name)}</span>
+                  <span className="hidden sm:inline">{r.name}</span>
+                </>
+              );
               const name = pl.slug ? (
                 <Link href={`/athletes/${pl.slug}`} className="hover:text-ppa-blue">
-                  {r.name}
+                  {label}
                 </Link>
               ) : (
-                r.name
+                label
               );
               return (
                 <li
@@ -348,7 +362,7 @@ export function TitleRace({ data }: { data: TitleRaceData }) {
                   <span className="w-5 shrink-0 text-[11px] font-bold tabular-nums text-ppa-navy/40">
                     {Math.min(TOPN, Math.round(r.y) + 1)}
                   </span>
-                  <span className="w-[6.75rem] shrink-0 truncate pr-2 text-right text-[10.5px] font-bold text-ppa-navy sm:w-[10.75rem] sm:pr-3 sm:text-sm">
+                  <span className="w-[5.5rem] shrink-0 truncate pr-2 text-right text-[11px] font-bold text-ppa-navy sm:w-[10.75rem] sm:pr-3 sm:text-sm">
                     {name}
                   </span>
                   <span className="relative h-full min-w-0 flex-1">
