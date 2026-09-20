@@ -149,13 +149,14 @@ export function getEventSchedule(slug: string): EventSchedule | undefined {
  * the evening, and a gate time is the single fact on this page that decides
  * when a family physically arrives.
  *
- * ⚠ THIS SETS THE GATE AND NOTHING ELSE. First serve stays on the template
- * (Wesley, 9/18) — order of play and gates are separate facts here, and we hold
- * no transcribed first-serve times for these stops. So a day can read a gate
- * later than its first serve: that is the templated first serve being a
- * placeholder, not the gate being wrong. Replace the whole stop with a real
- * `eventSchedules` entry the moment the event team publishes its order of play,
- * and delete its line here.
+ * ⚠ THIS SETS THE GATE AND NOTHING ELSE. First serve is a separate fact and
+ * lives in FIRST_SERVE_BY_SLUG below — order of play and gates are two different
+ * things (Wesley, 8/27), and neither is derived from the other. A day with a
+ * supplied gate and no supplied first serve therefore still shows the TEMPLATED
+ * first serve, and can read a gate later than it; that is the placeholder, not a
+ * wrong gate. Replace the whole stop with a real `eventSchedules` entry the
+ * moment the event team publishes a full order of play, and delete its lines
+ * from both maps.
  *
  * ⚠ Never write a plausible time. One entry per stop, from the event team.
  */
@@ -187,4 +188,82 @@ export function gatesFor(slug: string, templated: string): string {
  */
 export function hasGatesOverride(slug: string): boolean {
   return slug in GATES_BY_SLUG;
+}
+
+/**
+ * Per-event, per-DAY FIRST SERVE overrides, for the same templated stops
+ * GATES_BY_SLUG serves. Keyed by slug, then by the day's ISO date.
+ *
+ * The template's first serve is a house default (9:00 AM on the two lead-in
+ * days, 10:00 AM through the week, 11:00 AM on Championship Sunday). It is a
+ * placeholder, and this map is the only way a real time reaches the page short
+ * of a full `eventSchedules` entry — which needs a time for EVERY day, and so
+ * would mean inventing the ones nobody has sent.
+ *
+ * ⚠ ONE DAY PER LINE, EACH FROM THE EVENT TEAM. A stop playing in the evening
+ * today did not necessarily do so on Tuesday, so a time supplied for one day
+ * says nothing about any other. A day with no line keeps the template.
+ *
+ * ⚠ THE KEY IS THE DAY'S ISO DATE, DERIVED FROM THE EVENT'S OWN START DATE. If
+ * a stop's dates ever move, a line here stops matching and that day silently
+ * falls back to the template — re-check this map whenever a date changes.
+ */
+const FIRST_SERVE_BY_SLUG: Record<string, Record<string, string>> = {
+  /**
+   * Veolia Arizona Open — Sep 14–20, Arizona Athletic Grounds, Mesa.
+   * Parker Roberts and Tyler Petersen, 9/19, mid-tournament: first serve is
+   * 2:00 PM Saturday and Sunday. Consistent with the noon gates and with the
+   * 9/10 broadcast sheet's evening windows (PBTV opens 5PM ET = 2PM local —
+   * Arizona keeps no DST, so ET is local + 3 in September).
+   *
+   * ⚠ Sep 14–18 are deliberately absent. Nobody sent times for them, they have
+   * been played, and a plausible 2:00 PM written across the whole week would be
+   * an invention wearing a correction's clothes.
+   */
+  "veolia-arizona-open": {
+    "2026-09-19": "2:00 PM",
+    "2026-09-20": "2:00 PM",
+  },
+};
+
+/**
+ * First serve for a templated day at this stop: the event team's own when they
+ * have sent one for that date, otherwise whatever the template worked out.
+ * Both copies of `buildSchedule` read this, so the order-of-play table, the
+ * `-live` route and the concierge cannot disagree about it.
+ */
+export function firstServeFor(slug: string, iso: string, templated: string): string {
+  return FIRST_SERVE_BY_SLUG[slug]?.[iso] ?? templated;
+}
+
+/** Did the event team set this specific day's first serve? */
+export function hasFirstServeOverride(slug: string, iso: string): boolean {
+  return FIRST_SERVE_BY_SLUG[slug]?.[iso] !== undefined;
+}
+
+/**
+ * A sentence naming the days whose first serve the event team has actually
+ * given us, for the concierge — which answers "what time is first serve?" and
+ * would otherwise reply with the gate time alone while the table on the same
+ * page carries the real one.
+ *
+ * Built from the rendered rows rather than from the map, so the chat bubble
+ * cannot name a day or a time the order of play does not. Null when the stop
+ * has no supplied times — i.e. every other event on the template.
+ */
+export function firstServeNote(
+  slug: string,
+  days: { iso: string; date: string; firstServe: string }[],
+): string | null {
+  const set = days.filter((d) => hasFirstServeOverride(slug, d.iso));
+  if (set.length === 0) return null;
+  const dates = set.map((d) => d.date);
+  const list =
+    dates.length === 1
+      ? dates[0]
+      : `${dates.slice(0, -1).join(", ")} and ${dates[dates.length - 1]}`;
+  // One time across every supplied day reads as one fact; otherwise name each.
+  const times = new Set(set.map((d) => d.firstServe));
+  if (times.size === 1) return `First serve is ${set[0].firstServe} on ${list}.`;
+  return `First serve is ${set.map((d) => `${d.firstServe} on ${d.date}`).join(", ")}.`;
 }

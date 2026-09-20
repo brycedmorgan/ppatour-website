@@ -19,7 +19,13 @@ import { channelsByDay, watchCardsFor, weekdayOf } from "@/lib/event-watch";
 import { getEventGuide, parkingFor, parkingText } from "@/lib/event-guides";
 import { ticketsOnSale } from "@/lib/tixr-prices";
 import { ParkingDetails } from "@/components/events/ParkingDetails";
-import { gatesFor, getEventSchedule, hasGatesOverride } from "@/lib/event-schedule";
+import {
+  firstServeFor,
+  firstServeNote,
+  gatesFor,
+  getEventSchedule,
+  hasGatesOverride,
+} from "@/lib/event-schedule";
 import { playersToWatch } from "@/lib/home-content";
 import { getArticlesForEvent } from "@/lib/news-articles";
 import {
@@ -153,11 +159,11 @@ function buildSchedule(startIso: string, endIso: string, slug: string): Day[] {
       date: formatDate(iso),
       iso,
       label,
-      // The event team's own gate time when this stop has one, otherwise the
-      // template's. First serve is deliberately NOT shifted with it — see the
-      // note on GATES_BY_SLUG in lib/event-schedule.ts.
+      // The event team's own gate time and first serve where this stop has
+      // them, otherwise the template's. The two move independently — see the
+      // notes on GATES_BY_SLUG and FIRST_SERVE_BY_SLUG in lib/event-schedule.ts.
       gates: gatesFor(slug, gates),
-      firstServe,
+      firstServe: firstServeFor(slug, iso, firstServe),
       live,
     });
     cursor.setUTCDate(cursor.getUTCDate() + 1);
@@ -299,6 +305,10 @@ export function NationalsLive({
     dates: formatDateRange(t.startDate, t.endDate, true),
     gates: days[0]?.gates ?? "an hour before first serve",
     gatesTemplated: !hasGatesOverride(t.slug),
+    // The days this stop's own first serve is known for, or null. Without it
+    // the concierge answers a “what time does play start?” with the gate time
+    // alone, while the order of play on the same page carries the real one.
+    firstServeNote: firstServeNote(t.slug, days),
     ticketFrom: t.ticketPriceFrom,
     ticketsUrl: withUtm(t.ticketsUrl, {
       campaign: t.eventCode ?? t.slug,
@@ -976,6 +986,11 @@ export function NationalsLive({
                   </span>
                   <span className="block text-[11px] uppercase tracking-wide text-ppa-navy/40">
                     Gates {d.gates}
+                    {/* The First Serve column is sm+ only, so without this a
+                        phone reads the gate and never the time play starts. */}
+                    <span className="sm:hidden">
+                      {" · "}First serve {d.firstServe}
+                    </span>
                   </span>
                 </span>
                 <span className="hidden text-right text-sm font-bold tabular-nums text-ppa-navy sm:block">

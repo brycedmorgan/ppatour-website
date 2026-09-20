@@ -26,6 +26,13 @@ export type ConciergeFacts = {
    */
   gatesTemplated: boolean;
   /**
+   * “First serve is 2:00 PM on Sep 19 and Sep 20.” — the days the event team
+   * has actually given a start time for, built from the rendered order of play
+   * (firstServeNote in lib/event-schedule.ts). Null on every stop still running
+   * the templated placeholder, where naming a time would be inventing one.
+   */
+  firstServeNote: string | null;
+  /**
    * Null when tickets aren't on sale (unlisted on Tixr, or held back by hand —
    * see TICKETS_HIDDEN). The concierge must not quote a price or hand out a
    * ticket link in that state: it was answering "Tickets start at $39" off the
@@ -94,7 +101,7 @@ const INTENTS: Intent[] = [
   {
     test: /schedule|time|when|gate|start|first serve|hours|session/i,
     answer: (f) => ({
-      text: `${f.name} runs ${f.dates}. Gates open ${f.gates}${f.gatesTemplated ? " — about an hour before first serve each day. Finals move to a late-morning start for the broadcast window." : " daily."} The full order of play is on this page under "Order of Play."`,
+      text: `${f.name} runs ${f.dates}. Gates open ${f.gates}${f.gatesTemplated ? " — about an hour before first serve each day. Finals move to a late-morning start for the broadcast window." : " daily."}${f.firstServeNote ? ` ${f.firstServeNote}` : ""} The full order of play is on this page under "Order of Play."`,
     }),
   },
   {
