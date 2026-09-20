@@ -203,6 +203,31 @@ const UPCOMING_KEY = "9999-12-31";
 const UPCOMING_LABEL = "Date TBA";
 
 function normalize(m: ApiMatch, division: string, divisionId: string): ScoreMatch | null {
+  /**
+   * ⚠ THE FEED HAS ITS OWN "DO NOT SHOW THIS" FLAG, AND IT IS WHAT TAKES THE
+   * PHANTOM BRONZE MATCH OFF THE BOARD (Wesley, 9/20).
+   *
+   * There is no third-place match at a 1,000-point stop (Connor, 7/23) — but
+   * the draw still carries one row per division for it, so the board published
+   * a whole Bronze round of fixtures that would never be played: 5 at the
+   * Arizona Open, 5 at Nationals, 5 at the Kuala Lumpur Cup, every one of them
+   * sitting at "Date TBA" forever.
+   *
+   * ⚠ AND IT IS `inBracketType`, NOT THE ROUND NAME, BECAUSE BRONZE IS REAL
+   * BELOW 1,000 AND DELETING IT BY NAME WOULD ERASE MEDAL MATCHES PEOPLE
+   * ACTUALLY PLAYED. Measured across the stops in the feed: the phantom rows
+   * come through as `HIDE / Bronze` (Arizona), while the Shenzhen 500, the
+   * Seattle and Grand Rapids Challengers and the Gold Coast 125 send
+   * `B / Bronze` with real winners, real dates and a bronze medallist on the
+   * Final Standings podium of the same page. Dropping those would put the board
+   * in contradiction with the podium beside it.
+   *
+   * ⚠ NOTHING FLAGGED `HIDE` HAS EVER BEEN PLAYED — 0 of the 27 such rows across
+   * every stop sampled had a start or a completion time, so this cannot swallow
+   * a result. It also clears the 9–13 nameless `HIDE` rows a Challenger draw
+   * carries, which is the same class of thing and was never anything either.
+   */
+  if (str(m, "inBracketType", "in_bracket_type").toUpperCase() === "HIDE") return null;
   const start = str(m, "matchStart", "match_start", "date_started");
   const completed = str(m, "matchCompleted", "match_completed", "date_completed");
   const status: ScoreMatch["status"] = completed ? "final" : start ? "live" : "scheduled";

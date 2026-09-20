@@ -13,10 +13,13 @@ export function ScoresBracketToggle({
   eventId,
   expandHref,
   light = false,
+  roundByDay,
 }: {
   eventId: string;
   expandHref?: string;
   light?: boolean;
+  /** Passed straight to ScoresBoard — see the prop there. */
+  roundByDay?: Record<string, string>;
 }) {
   const [view, setView] = useState<"scores" | "bracket">("scores");
 
@@ -49,7 +52,7 @@ export function ScoresBracketToggle({
 
       <div className="mt-6">
         {view === "scores" ? (
-          <ScoresBoard eventId={eventId} light={light} />
+          <ScoresBoard eventId={eventId} light={light} roundByDay={roundByDay} />
         ) : (
           <BracketPanel eventId={eventId} expandHref={expandHref} light={light} />
         )}

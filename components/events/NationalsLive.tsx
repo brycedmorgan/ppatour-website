@@ -26,6 +26,7 @@ import {
   getEventSchedule,
   hasGatesOverride,
 } from "@/lib/event-schedule";
+import { proDayLabel } from "@/lib/order-of-play";
 import { playersToWatch } from "@/lib/home-content";
 import { getArticlesForEvent } from "@/lib/news-articles";
 import {
@@ -104,14 +105,10 @@ type Day = {
 // main draw" days. Rounds are named by distance from the final so this holds for
 // any event length. Kept identical to app/events/[year]/[slug]/page.tsx — the two
 // schedule builders drift silently otherwise.
-const PRO_ROUNDS = [
-  "Championship Sunday — Finals", // fromEnd 0
-  "Pro semifinals", //               fromEnd 1
-  "Pro quarterfinals", //            fromEnd 2
-  "Pro round of 16", //              fromEnd 3
-  "Pro round of 32", //              fromEnd 4
-  "Pro round of 64", //              fromEnd 5
-];
+// ⚠ THE LADDER ITSELF NOW LIVES IN lib/order-of-play.ts, and it moved because a
+// second reader appeared: the scores board opens on the round this table says is
+// being played today, so the names had to stop being a private constant of the
+// two files that print them. `proDayLabel` is that same ladder, verbatim.
 
 /**
  * ⚠ `live` IS NO LONGER INVENTED HERE. This used to hardcode "FOX · PBTV" on
@@ -130,27 +127,18 @@ function buildSchedule(startIso: string, endIso: string, slug: string): Day[] {
   const last = Math.round((end.getTime() - start.getTime()) / 86_400_000);
   let i = 0;
   while (cursor <= end) {
-    let label = "Pro main draw";
+    const fromEnd = last - i;
+    // Round names come from lib/order-of-play; gates and first serve stay here,
+    // because they are this function's own and both can be overridden per stop.
+    const label = proDayLabel(i, fromEnd);
     let gates = "9:00 AM";
     let firstServe = "10:00 AM";
-    const fromEnd = last - i;
-    if (i === 0) {
-      label = "Amateur & junior brackets";
-      gates = "8:00 AM";
-      firstServe = "9:00 AM";
-    } else if (i === 1) {
-      label = "Senior Open + pro qualifying";
+    if (i === 0 || i === 1) {
       gates = "8:00 AM";
       firstServe = "9:00 AM";
     } else if (fromEnd === 0) {
-      label = PRO_ROUNDS[0];
       gates = "10:00 AM";
       firstServe = "11:00 AM";
-    } else if (fromEnd <= 5) {
-      label = PRO_ROUNDS[fromEnd];
-    } else {
-      // Longer lead-in than a 64-draw ladder — earliest pro rounds still play.
-      label = PRO_ROUNDS[5];
     }
     const iso = cursor.toISOString().slice(0, 10);
     // Real channels for this weekday, or none. Never a guess.
@@ -691,6 +679,10 @@ export function NationalsLive({
 
           <div className="mt-6">
             {started ? (
+              // ⚠ No `roundByDay` on the board below: this demo reads ATLANTA's
+              // scores under the Nationals name, so handing it Nationals' order
+              // of play would key a round off dates its own matches never had.
+              // It falls back to the data.
               scoreView === "scores" ? (
                 <ScoresBoard eventId={ATLANTA_EVENT_ID} />
               ) : (

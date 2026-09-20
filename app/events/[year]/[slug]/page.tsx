@@ -40,6 +40,7 @@ import {
   getEventSchedule,
   hasGatesOverride,
 } from "@/lib/event-schedule";
+import { orderOfPlayByDay, proDayLabel } from "@/lib/order-of-play";
 import { stageScheduleFor } from "@/lib/event-stage";
 import { StageSchedule } from "@/components/events/StageSchedule";
 import { getEvents } from "@/lib/events-api";
@@ -203,14 +204,10 @@ type Day = {
 // any event length: a smaller 1,000-point Open simply enters the ladder later
 // than a full 64-draw. Nationals carries its own override in lib/event-schedule.ts;
 // this template is every other stop — opens, cups and slams.
-const PRO_ROUNDS = [
-  "Championship Sunday — Finals", // fromEnd 0
-  "Pro semifinals", //               fromEnd 1
-  "Pro quarterfinals", //            fromEnd 2
-  "Pro round of 16", //              fromEnd 3
-  "Pro round of 32", //              fromEnd 4
-  "Pro round of 64", //              fromEnd 5
-];
+// ⚠ THE LADDER ITSELF NOW LIVES IN lib/order-of-play.ts, and it moved because a
+// second reader appeared: the scores board opens on the round this table says is
+// being played today, so the names had to stop being a private constant of the
+// two files that print them. `proDayLabel` is that same ladder, verbatim.
 
 /**
  * ⚠ `live` IS NO LONGER INVENTED HERE. This used to hardcode "FOX · PBTV" on
@@ -229,27 +226,18 @@ function buildSchedule(startIso: string, endIso: string, slug: string): Day[] {
   const last = Math.round((end.getTime() - start.getTime()) / 86_400_000);
   let i = 0;
   while (cursor <= end) {
-    let label = "Pro main draw";
+    const fromEnd = last - i;
+    // Round names come from lib/order-of-play; gates and first serve stay here,
+    // because they are this function's own and both can be overridden per stop.
+    const label = proDayLabel(i, fromEnd);
     let gates = "9:00 AM";
     let firstServe = "10:00 AM";
-    const fromEnd = last - i;
-    if (i === 0) {
-      label = "Amateur & junior brackets";
-      gates = "8:00 AM";
-      firstServe = "9:00 AM";
-    } else if (i === 1) {
-      label = "Senior Open + pro qualifying";
+    if (i === 0 || i === 1) {
       gates = "8:00 AM";
       firstServe = "9:00 AM";
     } else if (fromEnd === 0) {
-      label = PRO_ROUNDS[0];
       gates = "10:00 AM";
       firstServe = "11:00 AM";
-    } else if (fromEnd <= 5) {
-      label = PRO_ROUNDS[fromEnd];
-    } else {
-      // Longer lead-in than a 64-draw ladder — earliest pro rounds still play.
-      label = PRO_ROUNDS[5];
     }
     const iso = cursor.toISOString().slice(0, 10);
     // Real channels for this weekday, or none. Never a guess.
@@ -286,6 +274,9 @@ export default async function EventPage({ params }: Params) {
 
   const countdown = daysUntil(t.startDate);
   const days = buildSchedule(t.startDate, t.endDate, t.slug);
+  // The same order of play, keyed by date, for the scores board to open on —
+  // see the `roundByDay` prop on ScoresBoard.
+  const roundByDay = orderOfPlayByDay(t.slug, t.startDate, t.endDate);
   const broadcast = getBroadcast(t.slug);
   // The channels THIS event is actually on — see lib/event-watch.ts.
   const watchCards = watchCardsFor(t.slug);
@@ -863,7 +854,11 @@ export default async function EventPage({ params }: Params) {
               {t.name} Live Scores
             </h2>
             <div className="mt-6">
-              <ScoresBracketToggle eventId={uuid} expandHref={`/brackets?event=${uuid}`} />
+              <ScoresBracketToggle
+                eventId={uuid}
+                expandHref={`/brackets?event=${uuid}`}
+                roundByDay={roundByDay}
+              />
             </div>
           </div>
         </section>
@@ -916,6 +911,7 @@ export default async function EventPage({ params }: Params) {
                   eventId={uuid}
                   showBracket={showBracket}
                   expandHref={showBracket ? `/brackets?event=${uuid}` : undefined}
+                  roundByDay={roundByDay}
                 />
               </div>
             </div>

@@ -2,15 +2,24 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { StageBadge } from "@/components/live/StageBadge";
-import { localDayKey, showQualifierBoard } from "@/lib/scores-stage";
+import { localDayKey, roundForDayLabel, showQualifierBoard } from "@/lib/scores-stage";
 import { normalizeScoreName } from "@/lib/score-names";
 import { isTabHidden, onTabVisible } from "@/components/live/poll-visibility";
 import type { ScoreMatch, ScoresResult, ScoreTeam } from "@/lib/scores-api";
 
 /**
- * All-scores board: every played match for the tournament's pro divisions,
- * separated by division (tabs) and date (sections). Fetches /api/scores and
- * polls every 30s. Shows a live dot on in-progress divisions/matches.
+ * All-scores board: every match for the tournament's pro divisions, picked by
+ * ROUND (dropdown) and division (pills). Fetches /api/scores and polls every
+ * 30s. Shows a live dot on in-progress divisions and matches.
+ *
+ * ⚠ IT USED TO PICK BY DAY, AND THE DRAW DOES NOT RESPECT THE CALENDAR.
+ * Measured on the live Arizona Open: Women's Doubles Round 32 was played on
+ * BOTH Tue Sep 15 and Thu Sep 17, and Men's Singles Round 16 on Thu and Fri —
+ * so a day picker split one round across two entries, and a fan looking for the
+ * round of 32 had to know which half fell on which day. The reverse too: Friday
+ * held three different rounds at once. A round is what somebody means by
+ * “where is the tournament up to”, and it is how the bracket tab beside this
+ * one is already organised.
  */
 const POLL_MS = 30000;
 
@@ -130,8 +139,13 @@ function ScoreCard({ m, headshots }: { m: ScoreMatch; headshots: Record<string, 
   return (
     <article className="overflow-hidden rounded-md border border-ppa-line bg-white">
       <div className="flex items-center justify-between gap-2 px-3 py-1.5">
+        {/* ⚠ THE DAY, NOT THE ROUND. The picker above names the round, so this
+            line spent the most prominent text on a card restating the current
+            selection — while the day, which a round can straddle, had nowhere to
+            appear at all. A fixture with no published date reads “Date TBA”, the
+            feed's own words for it. */}
         <span className="truncate font-display text-sm uppercase leading-none text-ppa-navy">
-          {m.roundLabel}
+          {m.dateLabel}
         </span>
         <div className="flex shrink-0 items-center gap-1.5">
           {m.status === "live" && (
@@ -174,10 +188,32 @@ function ScoreCard({ m, headshots }: { m: ScoreMatch; headshots: Record<string, 
   );
 }
 
-export function ScoresBoard({ eventId, light = false }: { eventId: string; light?: boolean }) {
+export function ScoresBoard({
+  eventId,
+  light = false,
+  roundByDay,
+}: {
+  eventId: string;
+  light?: boolean;
+  /**
+   * ISO date -> the round this stop's ORDER OF PLAY has it playing that day,
+   * from `orderOfPlayByDay` in lib/order-of-play. What the board opens on.
+   *
+   * ⚠ THE MAP IS BUILT ON THE SERVER AND READ WITH THE DEVICE'S CLOCK, and the
+   * split is deliberate. Which round a given day plays is a fact about the
+   * tournament, the same one the Order of Play table prints; which day it is
+   * right now is a fact about the person looking, and this page is prerendered
+   * and CDN-cached for viewers in every timezone. Same division of labour as
+   * the qualifier switch above.
+   *
+   * Optional: the /brackets page and the Atlanta demo board have no schedule to
+   * hand, and fall back to what the data shows.
+   */
+  roundByDay?: Record<string, string>;
+}) {
   const [data, setData] = useState<ScoresResult | null>(null);
   const [loaded, setLoaded] = useState(false);
-  const [daySel, setDay] = useState<string | null>(null);
+  const [roundSel, setRound] = useState<string | null>(null);
   /**
    * The device's date, re-read every minute so a tab left open across midnight
    * moves to the pro draw on its own rather than sitting on yesterday's
@@ -232,13 +268,36 @@ export function ScoresBoard({ eventId, light = false }: { eventId: string; light
   const isQualifier = showQualifierBoard(data, todayKey);
   const shown = isQualifier && data?.qualifier ? data.qualifier : data;
 
-  // Distinct tournament days (ascending), derived from the matches.
-  const days = useMemo(() => {
-    const m = new Map<string, string>();
-    for (const x of shown?.matches ?? []) m.set(x.dateKey, x.dateLabel);
-    return [...m.entries()]
-      .sort((a, b) => a[0].localeCompare(b[0]))
-      .map(([key, label]) => ({ key, label }));
+  /**
+   * The rounds in this bracket, earliest first.
+   *
+   * ⚠ GROUPED BY THE FEED'S ROUND LABEL AND ORDERED BY A DERIVED DEPTH — not
+   * keyed on `roundNumber`, which is only meaningful WITHIN a division. It counts
+   * up from 1 at that division's own first round, so at a stop where one division
+   * draws 64 and another draws 32, `roundNumber` 1 is Round 64 in the first and
+   * Round 32 in the second. Keying on it would file two different rounds under one
+   * entry and print the wrong name over half of them. The label cannot do that.
+   *
+   * Depth is rounds-from-the-last — `max(roundNumber in that division) - roundNumber`
+   * — which agrees across draw sizes: the final is depth 1 whether its division
+   * started at 64 or at 32. Nothing here reads a round NAME, so there is no
+   * hardcoded ladder of “Quarter Finals before Semi-Finals” to drift out of step
+   * with whatever the feed decides to call a round.
+   */
+  const rounds = useMemo(() => {
+    const ms = shown?.matches ?? [];
+    const lastOf = new Map<string, number>();
+    for (const m of ms) lastOf.set(m.divisionId, Math.max(lastOf.get(m.divisionId) ?? 0, m.roundNumber));
+    const depth = new Map<string, number>();
+    for (const m of ms) {
+      const d = (lastOf.get(m.divisionId) ?? m.roundNumber) - m.roundNumber;
+      // Deepest wins a disagreement, so a round that is early in ANY division is
+      // placed early rather than buried among the later ones.
+      depth.set(m.roundLabel, Math.max(depth.get(m.roundLabel) ?? d, d));
+    }
+    return [...depth.entries()]
+      .map(([label, d]) => ({ label, depth: d }))
+      .sort((a, b) => b.depth - a.depth);
   }, [shown]);
 
   /**
@@ -255,17 +314,70 @@ export function ScoresBoard({ eventId, light = false }: { eventId: string; light
    * cost a second render pass and a `set-state-in-effect` lint error, and this
    * is derived data, not state.
    */
-  const day = days.some((d) => d.key === daySel) ? daySel : null;
+  const round = rounds.some((r) => r.label === roundSel) ? roundSel : null;
 
-  // Default day on first load: today if it's a tournament day; otherwise the
-  // most recent day on/before today (so a finished event opens on its last day,
-  // and a future date falls back to the first day). Uses the same `todayKey`
-  // the bracket switch reads — one definition of "today" on this board.
+  /**
+   * Open on the round THE ORDER OF PLAY says the tournament is playing today
+   * (Wesley, 9/20) — Championship Sunday reads "Championship Sunday — Finals",
+   * so the board opens on Finals.
+   *
+   * ⚠ THE SCHEDULE LEADS, THE DATA DOES NOT, and on the day that matters most
+   * they disagree. At 8am on Championship Sunday nothing in the final has been
+   * played and the deepest PLAYED round is the semifinals — so a data-derived
+   * default opens the board on yesterday's business on the one morning everybody
+   * arrives looking for the final. The schedule already knows. It is also the
+   * table printed further up the same page, so the two now answer alike.
+   *
+   * The fallbacks, in order, for a board with no schedule (the /brackets page,
+   * the Atlanta demo) or a lead-in day that names no round at all ("Amateur &
+   * junior brackets"): the deepest round with a live match, then the deepest
+   * round anyone has played, then the first round.
+   *
+   * ⚠ "PLAYED" IS WHAT KEEPS THE FALLBACK OFF THE BRONZE MATCH, and it is the
+   * fallback that carries every finished event. The feed publishes a Bronze
+   * round for every division and numbers it one deeper than the final — but
+   * there is no third-place match at a 1,000-point stop (Connor, 7/23), so it is
+   * never played and stays "Date TBA" forever. Measured on the completed
+   * Nationals board: Finals 5 played, Bronze 5 still scheduled. Taking the
+   * deepest round outright would land a finished event on five fixtures that
+   * never happened.
+   *
+   * ⚠ A DAY LABEL THAT NAMES TWO ROUNDS RESOLVES TO NEITHER RELIABLY, so word
+   * a new one after the round the feed plays, not after the medals. Nationals'
+   * transcribed Sunday reads "Championship Sunday — Gold & Bronze" where the
+   * feed splits those into Finals and Bronze: it used to land on Bronze, and now
+   * lands on nothing and takes the fallback, because the phantom bronze round is
+   * filtered out of a 1,000-point board upstream (see `normalize` in
+   * lib/scores-api). Right answer, reached by luck.
+   *
+   * ⚠ A GUARD ON `champions` WAS TRIED HERE AND REMOVED. `standingsOf` falls
+   * back to the deepest COMPLETED match when no gold-medal match has been
+   * played, so mid-event it reports five champions off the semifinals — five of
+   * them on the live Arizona board on Championship Sunday morning. Nothing
+   * renders those (the banner is gated on the event being completed), but it is
+   * not a signal anything here can lean on.
+   */
   useEffect(() => {
-    if (day || !days.length || !todayKey) return;
-    const onOrBefore = days.filter((d) => d.key <= todayKey);
-    setDay(onOrBefore.length ? onOrBefore[onOrBefore.length - 1].key : days[0].key);
-  }, [days, day, todayKey]);
+    if (round || !rounds.length) return;
+    const ms = shown?.matches ?? [];
+    const deepest = (want: (m: ScoreMatch) => boolean) => {
+      const set = new Set(ms.filter(want).map((m) => m.roundLabel));
+      const hit = rounds.filter((r) => set.has(r.label));
+      return hit.length ? hit[hit.length - 1] : null;
+    };
+
+    // What the order of play says is on court today. Undefined on any date
+    // outside the event, so a completed stop always takes the fallbacks.
+    const today = todayKey ? roundByDay?.[todayKey] : undefined;
+    const fromSchedule = today ? roundForDayLabel(today, rounds) : null;
+
+    const open =
+      fromSchedule ??
+      deepest((m) => m.status === "live")?.label ??
+      deepest((m) => m.status !== "scheduled")?.label ??
+      rounds[0].label;
+    setRound(open);
+  }, [rounds, round, shown, roundByDay, todayKey]);
 
   const liveAny = useMemo(
     () => (shown?.matches ?? []).some((m) => m.status === "live"),
@@ -280,40 +392,40 @@ export function ScoresBoard({ eventId, light = false }: { eventId: string; light
   /**
    * Open on a division that actually has matches on the chosen day.
    *
-   * ⚠ IT USED TO OPEN ON divisions[0] BLIND, and that started landing on "No
-   * matches on this day for this division." the moment the board could hold
-   * more than one kind of day: a tournament's first day may have Men's Doubles
-   * on court while the Women's Doubles times are still unpublished, and
-   * Women's Doubles is first in the list. Falls back to the first division, so
-   * a day with nothing in it still selects something.
+   * ⚠ IT USED TO OPEN ON divisions[0] BLIND, and that started landing on an
+   * empty grid the moment the picker could hold more than one kind of bucket: a
+   * division may have nothing yet in the round on screen while the Women's
+   * Doubles that leads the list does. Falls back to the first division, so a
+   * round with nothing in it still selects something.
    */
   useEffect(() => {
-    // ⚠ Wait for `day`. The day picker is chosen by the effect above, and this
-    // one is otherwise free to run first — with `day` still null nothing matches
-    // it, so this fell straight through to divisions[0] and then never re-ran,
-    // which is how the board kept opening on "No matches on this day".
-    if (division || !divisions[0] || !day) return;
+    // ⚠ Wait for `round`. The round picker is chosen by the effect above, and
+    // this one is otherwise free to run first — with `round` still null nothing
+    // matches it, so this fell straight through to divisions[0] and then never
+    // re-ran, which is how the board kept opening on an empty grid.
+    if (division || !divisions[0] || !round) return;
     const populated = divisions.find((d) =>
-      (shown?.matches ?? []).some((m) => m.divisionId === d.id && m.dateKey === day),
+      (shown?.matches ?? []).some((m) => m.divisionId === d.id && m.roundLabel === round),
     );
     setDivision((populated ?? divisions[0]).id);
-  }, [divisions, division, shown, day]);
+  }, [divisions, division, shown, round]);
 
 
-  // Divisions with a live match on the selected day (button dots).
-  const liveDivsToday = useMemo(() => {
+  // Divisions with a live match in the selected round (button dots).
+  const liveDivsInRound = useMemo(() => {
     const set = new Set<string>();
-    for (const m of shown?.matches ?? []) if (m.dateKey === day && m.status === "live") set.add(m.divisionId);
+    for (const m of shown?.matches ?? []) if (m.roundLabel === round && m.status === "live") set.add(m.divisionId);
     return set;
-  }, [shown, day]);
+  }, [shown, round]);
 
-  // Matches for the selected day + division, finals first.
+  // Matches for the selected round + division, in bracket order. Every match on
+  // screen is now the same round, so there is nothing left for a round sort to do.
   const matches = useMemo(
     () =>
       (shown?.matches ?? [])
-        .filter((m) => m.dateKey === day && m.divisionId === division)
-        .sort((a, b) => b.roundNumber - a.roundNumber || a.matchNumber - b.matchNumber),
-    [shown, day, division],
+        .filter((m) => m.roundLabel === round && m.divisionId === division)
+        .sort((a, b) => a.matchNumber - b.matchNumber),
+    [shown, round, division],
   );
 
   const panel = light ? "border-ppa-line bg-ppa-paper" : "border-white/10 bg-ppa-navy-deep";
@@ -330,7 +442,7 @@ export function ScoresBoard({ eventId, light = false }: { eventId: string; light
     );
   }
 
-  if (!days.length) {
+  if (!rounds.length) {
     return (
       <div className={`rounded-lg border px-6 py-10 text-center text-sm ${panel} ${muted}`}>
         No scores available yet.
@@ -348,28 +460,28 @@ export function ScoresBoard({ eventId, light = false }: { eventId: string; light
       )}
 
 
-      {/* Day picker */}
+      {/* Round picker */}
       <div className="flex flex-wrap items-center gap-3">
-        {/* ⚠ "Matches", not "Results". The picker can now hold an "Upcoming"
-            bucket of confirmed fixtures that have not been played, and before a
-            tournament starts that is the ONLY entry — "Results by day" over a
-            list of matches nobody has played yet describes the wrong thing. */}
-        <label htmlFor="scores-day" className={`text-[11px] font-bold uppercase tracking-[0.16em] ${muted}`}>
-          Matches by day
+        {/* ⚠ "Matches", not "Results". A round can be wholly unplayed — the final
+            is a real entry here all week — and before a tournament starts every
+            entry is. "Results by round" over a list of matches nobody has played
+            yet describes the wrong thing. */}
+        <label htmlFor="scores-round" className={`text-[11px] font-bold uppercase tracking-[0.16em] ${muted}`}>
+          Matches by round
         </label>
         <select
-          id="scores-day"
-          value={day ?? ""}
-          onChange={(e) => setDay(e.target.value)}
+          id="scores-round"
+          value={round ?? ""}
+          onChange={(e) => setRound(e.target.value)}
           className={`rounded-md border px-3 py-2 text-sm font-semibold focus:outline-none ${
             light
               ? "border-ppa-line bg-white text-ppa-navy focus:border-ppa-navy/50"
               : "border-white/20 bg-ppa-navy-deep text-white focus:border-white/50"
           }`}
         >
-          {days.map((d) => (
-            <option key={d.key} value={d.key}>
-              {d.label}
+          {rounds.map((r) => (
+            <option key={r.label} value={r.label}>
+              {r.label}
             </option>
           ))}
         </select>
@@ -400,17 +512,17 @@ export function ScoresBoard({ eventId, light = false }: { eventId: string; light
                     : "border border-white/20 text-white/70 hover:border-white/50 hover:text-white"
               }`}
             >
-              {liveDivsToday.has(d.id) && <span className="size-1.5 animate-pulse rounded-full bg-ppa-live" />}
+              {liveDivsInRound.has(d.id) && <span className="size-1.5 animate-pulse rounded-full bg-ppa-live" />}
               {d.name}
             </button>
           );
         })}
       </div>
 
-      {/* Matches for the selected day + division */}
+      {/* Matches for the selected round + division */}
       <div className="mt-6">
         {matches.length === 0 ? (
-          <p className={`text-sm ${muted}`}>No matches on this day for this division.</p>
+          <p className={`text-sm ${muted}`}>No matches in this round for this division.</p>
         ) : (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {matches.map((m) => (

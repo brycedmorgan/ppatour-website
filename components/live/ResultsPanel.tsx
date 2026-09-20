@@ -15,10 +15,13 @@ export function ResultsPanel({
   eventId,
   showBracket = false,
   expandHref,
+  roundByDay,
 }: {
   eventId: string;
   showBracket?: boolean;
   expandHref?: string;
+  /** Passed straight to ScoresBoard — see the prop there. */
+  roundByDay?: Record<string, string>;
 }) {
   const [view, setView] = useState<View>("standings");
 
@@ -52,7 +55,7 @@ export function ResultsPanel({
 
       <div className="mt-6">
         {view === "standings" && <FinalStandings eventId={eventId} />}
-        {view === "scores" && <ScoresBoard eventId={eventId} />}
+        {view === "scores" && <ScoresBoard eventId={eventId} roundByDay={roundByDay} />}
         {view === "bracket" && showBracket && (
           <BracketPanel eventId={eventId} expandHref={expandHref} />
         )}

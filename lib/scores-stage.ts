@@ -66,3 +66,42 @@ export function showQualifierBoard(data: ScoresResult | null, todayKey: string |
   }
   return firstQualifyingDay !== undefined && firstQualifyingDay !== UPCOMING_KEY && todayKey <= firstQualifyingDay;
 }
+
+/**
+ * Which of the feed's rounds an ORDER OF PLAY day label is naming.
+ *
+ * The two vocabularies are written by different people and never match exactly:
+ * the schedule says "Pro round of 16" and "Championship Sunday — Finals", the
+ * feed says "Round 16" and "Finals". So both sides are reduced to letters and
+ * digits — "of" dropped, because only the schedule uses it — and a round is a
+ * candidate when its reduced label appears inside the day's.
+ *
+ * ⚠ TWO ROUNDS CAN BOTH MATCH, AND THE NAIVE ANSWER IS THE WRONG ONE.
+ * "finals" is a substring of "semifinals" and of "quarterfinals", so a
+ * Saturday reading "Pro semifinals" matches BOTH Semi-Finals and Finals. The
+ * tie is broken on `depth` — rounds-from-the-last, so a bigger number is an
+ * earlier round — and the EARLIEST match wins. That picks Semi-Finals over
+ * Finals, which is both the right answer and the conservative one: an
+ * ambiguous label sends a viewer to the round before, never to a round the
+ * tournament has not reached.
+ *
+ * Returns null when nothing matches, which is the normal case for the lead-in
+ * days ("Amateur & junior brackets", "Senior Open + pro qualifying") — there is
+ * no pro round on those, and the board falls back to what the data shows.
+ */
+const reduce = (s: string) => s.toLowerCase().replace(/\bof\b/g, "").replace(/[^a-z0-9]/g, "");
+
+export function roundForDayLabel(
+  dayLabel: string,
+  rounds: { label: string; depth: number }[],
+): string | null {
+  const day = reduce(dayLabel);
+  if (!day) return null;
+  let best: { label: string; depth: number } | null = null;
+  for (const r of rounds) {
+    const key = reduce(r.label);
+    if (!key || !day.includes(key)) continue;
+    if (!best || r.depth > best.depth) best = r;
+  }
+  return best?.label ?? null;
+}

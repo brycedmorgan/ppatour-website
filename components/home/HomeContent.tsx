@@ -5,6 +5,7 @@ import { PartnerSpotlight } from "@/components/home/PartnerSpotlight";
 import { PartnerWall } from "@/components/global/PartnerWall";
 import { HomeHero, type HeroVariant } from "@/components/home/HomeHero";
 import { ScoresBracketToggle } from "@/components/live/ScoresBracketToggle";
+import { orderOfPlayByDay } from "@/lib/order-of-play";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
 import { getRankings } from "@/lib/rankings-api";
 import { getEvents } from "@/lib/events-api";
@@ -284,6 +285,19 @@ export async function HomeContent({
       (await getEvents()).events.find((e) => e.slug === next.slug)?.tournamentUuid)
     : undefined;
   const showLiveScores = isLive && Boolean(liveEventId);
+  /**
+   * The running stop's order of play, keyed by date, so the scores board below
+   * opens on the round the tournament says it is playing — see `roundByDay` on
+   * ScoresBoard. Built from the SAME record `liveEventId` was resolved from, so
+   * the schedule and the scores cannot end up describing two tournaments.
+   */
+  const liveRoundByDay = showLiveScores
+    ? orderOfPlayByDay(
+        (liveEventOverride ?? next).slug,
+        (liveEventOverride ?? next).startDate,
+        (liveEventOverride ?? next).endDate,
+      )
+    : undefined;
   // Live pickleball.com coverage. Empty until the API grant lands, in which case
   // the rail is omitted rather than showing the invented headlines it replaced.
   const ecosystem = (await getPickleballNews(4)).articles;
@@ -382,7 +396,7 @@ export async function HomeContent({
               <div className="mt-4">
                 {/* The section's "View Full Bracket" link opens the full-page
                     bracket, so the in-panel link is omitted (no expandHref). */}
-                <ScoresBracketToggle eventId={liveEventId!} light />
+                <ScoresBracketToggle eventId={liveEventId!} light roundByDay={liveRoundByDay} />
               </div>
             ) : latestChampions ? (
               <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
