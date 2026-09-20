@@ -224,6 +224,44 @@ const FIRST_SERVE_BY_SLUG: Record<string, Record<string, string>> = {
     "2026-09-19": "2:00 PM",
     "2026-09-20": "2:00 PM",
   },
+
+  /**
+   * Rate Las Vegas Open — Sep 28 – Oct 4, Red Rock Casino Resort, Las Vegas.
+   * The event team's official per-day start times, sent 9/20. A flat "first
+   * serve at 2pm" came first; these superseded it the same afternoon, and three
+   * of the seven days are NOT 2pm — so this is the transcription, day by day.
+   *
+   * ⚠ EVERY DAY THE BROADCAST SHEET COVERS AGREES WITH THIS, WHICH IS WHY THE
+   * ODD-LOOKING DAYS ARE THE RIGHT ONES. Nevada is Pacific, so ET is local + 3
+   * in October, and the live 9/10 sheet reads: Thu 5PM ET and Fri 5PM ET (= 2PM
+   * local), Sat 4PM ET (= 1PM), Sun PBTV 1PM ET and Tennis Channel 1PM–5PM ET
+   * (= 10AM–4PM). Saturday's 1pm and Sunday's 10am land exactly on those, and
+   * Championship Sunday now finishes inside its Tennis Channel window instead of
+   * starting as it closed — which is what the flat 2pm reading would have done.
+   * Two independent sources, same answer, so these are about as well supported
+   * as a first-serve time on this site gets.
+   *
+   * ⚠ MONDAY IS 8AM AND THAT IS NOT A TYPO — it is the amateur and junior
+   * bracket day, which starts in the morning and has nothing to do with the
+   * evening pro sessions that follow it.
+   *
+   * ⚠ GATES ARE DELIBERATELY LEFT ON THE TEMPLATE (Wesley, 9/20). Nobody has
+   * sent one, so the table reads a templated 8/9/10 AM gate against these — five
+   * hours early mid-week, and EQUAL to first serve on Mon and Sun, where the
+   * template happens to land on the same number. That is the placeholder gate,
+   * not a supplied one, and `gatesFollowFirstServe` stops the page claiming the
+   * gate is an hour before first serve. Add a GATES_BY_SLUG line the moment a
+   * real gate time arrives; this is the stop most in need of one.
+   */
+  "rate-las-vegas-open": {
+    "2026-09-28": "8:00 AM", // Mon — amateur & junior brackets
+    "2026-09-29": "2:00 PM", // Tue
+    "2026-09-30": "2:00 PM", // Wed
+    "2026-10-01": "2:00 PM", // Thu
+    "2026-10-02": "2:00 PM", // Fri
+    "2026-10-03": "1:00 PM", // Sat
+    "2026-10-04": "10:00 AM", // Sun — Championship Sunday
+  },
 };
 
 /**
@@ -239,6 +277,21 @@ export function firstServeFor(slug: string, iso: string, templated: string): str
 /** Did the event team set this specific day's first serve? */
 export function hasFirstServeOverride(slug: string, iso: string): boolean {
   return FIRST_SERVE_BY_SLUG[slug]?.[iso] !== undefined;
+}
+
+/**
+ * May a surface say "gates open about an hour before first serve" at this stop?
+ *
+ * Only where BOTH times are still the template's, because that is the only case
+ * in which the relationship is real — the template derives the gate an hour
+ * before its own first serve. A supplied gate has no derivable relationship to
+ * first serve, and a supplied FIRST SERVE breaks it just as thoroughly from the
+ * other side: Las Vegas keeps the templated 9:00 AM gate, so a 2:00 PM first
+ * serve would leave the page claiming an hour where the table beside it shows
+ * five.
+ */
+export function gatesFollowFirstServe(slug: string): boolean {
+  return !(slug in GATES_BY_SLUG) && !(slug in FIRST_SERVE_BY_SLUG);
 }
 
 /**

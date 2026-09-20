@@ -18,13 +18,15 @@ export type ConciergeFacts = {
   dates: string;
   gates: string;
   /**
-   * True when `gates` is the templated default, which is derived as an hour
-   * before the templated first serve — and so the only case in which we may
-   * say so. A stop whose gate time came from the event team (GATES_BY_SLUG in
-   * lib/event-schedule.ts) has no such relationship to its first serve, and
-   * claiming one contradicts the order of play printed on the same page.
+   * True only when BOTH the gate and first serve are still the template's —
+   * the one case in which "gates open about an hour before first serve" is a
+   * real relationship, because the template derives the gate from its own first
+   * serve. A supplied gate (GATES_BY_SLUG) has no such relationship, and a
+   * supplied FIRST SERVE (FIRST_SERVE_BY_SLUG) breaks it from the other side.
+   * Either way, claiming the hour contradicts the order of play printed on the
+   * same page.
    */
-  gatesTemplated: boolean;
+  gatesFollowFirstServe: boolean;
   /**
    * “First serve is 2:00 PM on Sep 19 and Sep 20.” — the days the event team
    * has actually given a start time for, built from the rendered order of play
@@ -101,7 +103,7 @@ const INTENTS: Intent[] = [
   {
     test: /schedule|time|when|gate|start|first serve|hours|session/i,
     answer: (f) => ({
-      text: `${f.name} runs ${f.dates}. Gates open ${f.gates}${f.gatesTemplated ? " — about an hour before first serve each day. Finals move to a late-morning start for the broadcast window." : " daily."}${f.firstServeNote ? ` ${f.firstServeNote}` : ""} The full order of play is on this page under "Order of Play."`,
+      text: `${f.name} runs ${f.dates}. Gates open ${f.gates}${f.gatesFollowFirstServe ? " — about an hour before first serve each day. Finals move to a late-morning start for the broadcast window." : " daily."}${f.firstServeNote ? ` ${f.firstServeNote}` : ""} The full order of play is on this page under "Order of Play."`,
     }),
   },
   {

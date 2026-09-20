@@ -22,6 +22,7 @@ import { ParkingDetails } from "@/components/events/ParkingDetails";
 import {
   firstServeFor,
   firstServeNote,
+  gatesFollowFirstServe,
   gatesFor,
   getEventSchedule,
   hasGatesOverride,
@@ -292,7 +293,7 @@ export function NationalsLive({
     venue: t.venue,
     dates: formatDateRange(t.startDate, t.endDate, true),
     gates: days[0]?.gates ?? "an hour before first serve",
-    gatesTemplated: !hasGatesOverride(t.slug),
+    gatesFollowFirstServe: gatesFollowFirstServe(t.slug),
     // The days this stop's own first serve is known for, or null. Without it
     // the concierge answers a “what time does play start?” with the gate time
     // alone, while the order of play on the same page carries the real one.
@@ -818,13 +819,18 @@ export function NationalsLive({
           </h2>
           <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
             All times local.{" "}
-            {hasGatesOverride(t.slug) ? (
-              <>Gates open {days[0]?.gates} daily.</>
-            ) : (
+            {gatesFollowFirstServe(t.slug) ? (
               <>
                 Gates open an hour before first serve; finals move to a
                 late-morning start for the broadcast window.
               </>
+            ) : hasGatesOverride(t.slug) ? (
+              <>Gates open {days[0]?.gates} daily.</>
+            ) : (
+              // A stop with supplied first-serve times and no supplied gate:
+              // the per-day gate is still the template's, so say nothing about
+              // it here rather than claim a relationship that no longer holds.
+              <>Gate times are listed per day below.</>
             )}
           </p>
           {realSchedule ? (
