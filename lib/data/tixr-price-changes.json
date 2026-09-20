@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-19T16:09:21Z",
+  "updated_at": "2026-09-20T16:37:36Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -6160,6 +6160,12 @@
       "type": "event_removed",
       "event_id": "195335",
       "event": "Veolia PPA Mesa Friday - Quarterfinals"
+    },
+    {
+      "at": "2026-09-20T16:37:36Z",
+      "type": "event_removed",
+      "event_id": "195334",
+      "event": "Veolia PPA Mesa Saturday - Semifinals"
     }
   ]
 }
