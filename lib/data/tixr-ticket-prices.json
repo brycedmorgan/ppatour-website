@@ -1,12 +1,12 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-09-20T16:37:36Z",
-  "event_count": 42,
-  "ticket_type_count": 680,
+  "generated_at": "2026-09-21T18:23:16Z",
+  "event_count": 39,
+  "ticket_type_count": 644,
   "series_breakdown": {
-    "PPA Tour": 39,
-    "PPA Challenger Series": 2,
+    "PPA Challenger Series": 1,
+    "PPA Tour": 37,
     "Major League Pickleball": 1
   },
   "field_notes": {
@@ -16,310 +16,6 @@
     "status": "Tixr event publication status."
   },
   "events": [
-    {
-      "event_id": "195027",
-      "name": "Veolia Arizona Open",
-      "series": "PPA Tour",
-      "status": "PUBLISHED",
-      "start_date": "2026-09-14",
-      "end_date": "2026-09-21",
-      "venue": {
-        "name": "Arizona Athletic Grounds",
-        "city": "Mesa",
-        "state": "AZ"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/veolia-arizona-open-195027",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Championships",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 370,
-          "all_in_price": 405.17
-        },
-        {
-          "name": "Quarterfinals",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Register Here",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 16",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Semifinals",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Thursday, Sept. 17 — Play with a Pro Clinic",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Tuesday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 25,
-          "all_in_price": 30.35
-        },
-        {
-          "name": "Tuesday, Sept. 15 — On Court with PPA Pros",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Wednesday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 25,
-          "all_in_price": 30.35
-        },
-        {
-          "name": "Wednesday, Sept. 16 — King’s Court",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 0,
-          "all_in_price": 0
-        },
-        {
-          "name": "Weeklong Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
-        },
-        {
-          "name": "Thursday-Sunday Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 200,
-          "all_in_price": 221.49
-        },
-        {
-          "name": "Thursday-Sunday Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 250,
-          "all_in_price": 275.51
-        },
-        {
-          "name": "Thursday-Sunday Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 350,
-          "all_in_price": 383.56
-        },
-        {
-          "name": "Thursday-Sunday VIP",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 900,
-          "all_in_price": 977.82
-        },
-        {
-          "name": "Thursday-Sunday VIP",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 1100,
-          "all_in_price": 1193.91
-        },
-        {
-          "name": "Thursday-Sunday VIP",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 1300,
-          "all_in_price": 1410.01
-        }
-      ]
-    },
-    {
-      "event_id": "166229",
-      "name": "PPA Challenger Series - Grand Rapids",
-      "series": "PPA Challenger Series",
-      "status": "PUBLISHED",
-      "start_date": "2026-09-18",
-      "end_date": "2026-09-21",
-      "venue": {
-        "name": "Meijer Sports Complex",
-        "city": "Rockford",
-        "state": "MI"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/ppa-challenger-series-grand-rapids-166229",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Friday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 15,
-          "all_in_price": 19.55
-        },
-        {
-          "name": "Saturday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 15,
-          "all_in_price": 19.55
-        },
-        {
-          "name": "Sunday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 15,
-          "all_in_price": 19.55
-        },
-        {
-          "name": "Weekend Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        }
-      ]
-    },
-    {
-      "event_id": "195032",
-      "name": "Veolia PPA Mesa Sunday - Championships",
-      "series": "PPA Tour",
-      "status": "PUBLISHED",
-      "start_date": "2026-09-20",
-      "end_date": "2026-09-21",
-      "venue": {
-        "name": "Arizona Athletic Grounds",
-        "city": "Mesa",
-        "state": "AZ"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/veolia-ppa-mesa-sunday-championships-195032",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Quarterfinals",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Register Here",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 16",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 32",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 64",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Semifinals",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Sunday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 25,
-          "all_in_price": 30.35
-        },
-        {
-          "name": "Weeklong Passes",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Sunday Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 60,
-          "all_in_price": 70.23
-        },
-        {
-          "name": "Sunday Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 91.83
-        },
-        {
-          "name": "Sunday Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
-        },
-        {
-          "name": "Sunday VIP",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 350,
-          "all_in_price": 383.56
-        },
-        {
-          "name": "Sunday VIP",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 400,
-          "all_in_price": 437.59
-        },
-        {
-          "name": "Sunday VIP",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 500,
-          "all_in_price": 545.63
-        }
-      ],
-      "parent_event_id": "195027"
-    },
     {
       "event_id": "190874",
       "name": "PPA Challenger Series - Charlotte",
@@ -2017,8 +1713,8 @@
         {
           "name": "Wednesday Courtside Chair",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 100,
           "all_in_price": 113.69
         },
         {
@@ -2491,8 +2187,8 @@
         {
           "name": "Friday Morning Courtside Chair",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 150,
           "all_in_price": 167.84
         },
         {
@@ -2953,14 +2649,14 @@
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 113.69
+          "all_in_price": 135.35
         },
         {
           "name": "Sunday Courtside Bleacher",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 135.35
+          "all_in_price": 113.69
         },
         {
           "name": "Sunday Courtside Chair",
@@ -2973,7 +2669,14 @@
           "name": "Sunday VIP",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 350,
+          "base_price": 400,
+          "all_in_price": 438.58
+        },
+        {
+          "name": "Sunday VIP",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 384.43
         },
         {
@@ -2982,13 +2685,6 @@
           "sale_state": "HIDE",
           "base_price": null,
           "all_in_price": 546.87
-        },
-        {
-          "name": "Sunday VIP",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 438.58
         }
       ],
       "parent_event_id": "166345"

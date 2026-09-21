@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-20T16:37:36Z",
+  "updated_at": "2026-09-21T18:23:16Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -6166,6 +6166,106 @@
       "type": "event_removed",
       "event_id": "195334",
       "event": "Veolia PPA Mesa Saturday - Semifinals"
+    },
+    {
+      "at": "2026-09-21T18:23:16Z",
+      "type": "price_change",
+      "event_id": "166402",
+      "event": "Opendoor Pickleball World Championships Wednesday - Round of 32",
+      "ticket": "Wednesday Courtside Chair",
+      "base_price": {
+        "from": null,
+        "to": 100
+      },
+      "all_in_price": {
+        "from": 113.69,
+        "to": 113.69
+      }
+    },
+    {
+      "at": "2026-09-21T18:23:16Z",
+      "type": "availability_change",
+      "event_id": "166402",
+      "event": "Opendoor Pickleball World Championships Wednesday - Round of 32",
+      "ticket": "Wednesday Courtside Chair",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-09-21T18:23:16Z",
+      "type": "price_change",
+      "event_id": "166397",
+      "event": "Opendoor Pickleball World Championships Friday Morning - Singles and Mxd Double Quarterfinals",
+      "ticket": "Friday Morning Courtside Chair",
+      "base_price": {
+        "from": null,
+        "to": 150
+      },
+      "all_in_price": {
+        "from": 167.84,
+        "to": 167.84
+      }
+    },
+    {
+      "at": "2026-09-21T18:23:16Z",
+      "type": "availability_change",
+      "event_id": "166397",
+      "event": "Opendoor Pickleball World Championships Friday Morning - Singles and Mxd Double Quarterfinals",
+      "ticket": "Friday Morning Courtside Chair",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-09-21T18:23:16Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday Courtside Bleacher",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 135.35,
+        "to": 113.69
+      }
+    },
+    {
+      "at": "2026-09-21T18:23:16Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 438.58,
+        "to": 546.87
+      }
+    },
+    {
+      "at": "2026-09-21T18:23:16Z",
+      "type": "event_removed",
+      "event_id": "195027",
+      "event": "Veolia Arizona Open"
+    },
+    {
+      "at": "2026-09-21T18:23:16Z",
+      "type": "event_removed",
+      "event_id": "166229",
+      "event": "PPA Challenger Series - Grand Rapids"
+    },
+    {
+      "at": "2026-09-21T18:23:16Z",
+      "type": "event_removed",
+      "event_id": "195032",
+      "event": "Veolia PPA Mesa Sunday - Championships"
     }
   ]
 }
