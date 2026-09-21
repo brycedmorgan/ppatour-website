@@ -189,14 +189,23 @@ export const tvSchedule: TvEvent[] = [
     endIso: "2026-10-04",
     slug: "rate-las-vegas-open",
     days: [
-      { date: "Oct 1", dow: "Thu", windows: [{ channel: "PBTV", window: "1PM – 9PM", round: "Round of 16" }] },
-      { date: "Oct 2", dow: "Fri", windows: [{ channel: "PBTV", window: "1PM – 9PM", round: "Quarterfinals" }] },
-      { date: "Oct 3", dow: "Sat", windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Semifinals" }] },
+      // ⚠ RESCHEDULED INTO THE EVENING on the 9/10 sheet — Thu and Fri 1PM–9PM
+      // → 5PM–1AM, Sat 12PM–8PM → 4PM–12AM. Confirmed independently by the event
+      // team's own PBTV start times (9/20: Thu 5PM ET, Fri 5PM ET, Sat 4PM ET,
+      // Sun 1PM ET) and by their order of play, which puts first serve at 2PM
+      // local Thu/Fri and 1PM Sat — Nevada is Pacific, so ET is local + 3.
+      // Championship Sunday did NOT move.
+      { date: "Oct 1", dow: "Thu", windows: [{ channel: "PBTV", window: "5PM – 1AM", round: "Round of 16" }] },
+      { date: "Oct 2", dow: "Fri", windows: [{ channel: "PBTV", window: "5PM – 1AM", round: "Quarterfinals" }] },
+      { date: "Oct 3", dow: "Sat", windows: [{ channel: "PBTV", window: "4PM – 12AM", round: "Semifinals" }] },
       {
         date: "Oct 4",
         dow: "Sun",
         windows: [
-          { channel: "PBTV", window: "1PM – 7PM", round: "Championship Sunday" },
+          // Sunday's START did not move (1PM ET, confirmed by the event team
+          // 9/20) but the 9/10 sheet shortened the PBTV window by an hour,
+          // 1PM–7PM → 1PM–6PM. The Tennis Channel simulcast is unchanged.
+          { channel: "PBTV", window: "1PM – 6PM", round: "Championship Sunday" },
           { channel: "Tennis Channel", window: "1PM – 5PM", round: "Championship Sunday" },
         ],
       },

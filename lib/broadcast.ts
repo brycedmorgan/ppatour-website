@@ -150,11 +150,13 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
     { round: "Championship", day: "Sunday", window: "7PM ET - 9PM ET", platform: "FS1", type: "LIVE" },
     { round: "Championship", day: "Sunday", window: "9PM ET - 10PM ET", platform: "PBTV", type: "LIVE" },
   ],
+  // ⚠ RESCHEDULED INTO THE EVENING on the 9/10 sheet, and kept in lockstep with
+  // lib/tv-schedule.ts — see the note there. Championship Sunday did not move.
   "rate-las-vegas-open": [
-    { round: "RD 16", day: "Thursday", window: "1PM ET - 9PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "QF's", day: "Friday", window: "1PM ET - 9PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "SF's", day: "Saturday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "Championship", day: "Sunday", window: "1PM ET - 7PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "RD 16", day: "Thursday", window: "5PM ET - 1AM ET", platform: "PBTV", type: "LIVE" },
+    { round: "QF's", day: "Friday", window: "5PM ET - 1AM ET", platform: "PBTV", type: "LIVE" },
+    { round: "SF's", day: "Saturday", window: "4PM ET - 12AM ET", platform: "PBTV", type: "LIVE" },
+    { round: "Championship", day: "Sunday", window: "1PM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
     { round: "Championship", day: "Sunday", window: "1PM ET - 5PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
   ],
   // 8/13 sheet: Thursday gained a TC window, FOX added four (FS1 Thu + Sun,
