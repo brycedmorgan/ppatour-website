@@ -1242,10 +1242,90 @@ function startOfEvent(t: Tournament): number {
   return new Date(t.startDate + "T00:00:00").getTime();
 }
 
-/** The END of the final day, not its midnight boundary — a Sunday final is
- *  still live on Sunday afternoon. */
+/**
+ * IANA timezone for a US stop, keyed on the state the record already carries.
+ * Every state on the calendar is here; see `endOfEvent` for why an unknown one
+ * deliberately changes nothing.
+ */
+const TZ_BY_STATE: Record<string, string> = {
+  // ⚠ Arizona keeps no DST, which is exactly why it gets its own zone rather
+  // than riding on Mountain — in September it is UTC-7 while Utah is UTC-6.
+  AZ: "America/Phoenix",
+  CA: "America/Los_Angeles",
+  NV: "America/Los_Angeles",
+  WA: "America/Los_Angeles",
+  UT: "America/Denver",
+  IL: "America/Chicago",
+  KS: "America/Chicago",
+  MN: "America/Chicago",
+  TX: "America/Chicago",
+  WI: "America/Chicago",
+  FL: "America/New_York",
+  GA: "America/New_York",
+  MI: "America/New_York",
+  NC: "America/New_York",
+  OH: "America/New_York",
+  VA: "America/New_York",
+};
+
+/** How far `tz` is from UTC at a given instant, in ms (negative in the US). */
+function tzOffsetMs(utcMs: number, tz: string): number {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: tz,
+    hour12: false,
+    year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", second: "2-digit",
+  }).formatToParts(new Date(utcMs));
+  const p: Record<string, string> = {};
+  for (const x of parts) p[x.type] = x.value;
+  // `hour12: false` renders midnight as "24" in some engines.
+  const asIfUtc = Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute, +p.second);
+  return asIfUtc - utcMs;
+}
+
+/** The instant that reads midnight, start of `iso`, in `tz`. */
+function zonedMidnight(iso: string, tz: string): number {
+  const naive = Date.parse(`${iso}T00:00:00Z`);
+  if (!Number.isFinite(naive)) return NaN;
+  // One pass is exact here: US DST switches at 2am local, never at midnight.
+  return naive - tzOffsetMs(naive, tz);
+}
+
+/** The calendar day after `iso`, as yyyy-mm-dd. */
+function nextIsoDay(iso: string): string {
+  const ms = Date.parse(`${iso}T00:00:00Z`);
+  return Number.isFinite(ms) ? new Date(ms + 86_400_000).toISOString().slice(0, 10) : iso;
+}
+
+/**
+ * The END of the final day — a Sunday final is still live on Sunday afternoon.
+ *
+ * ⚠ MIDNIGHT AT THE VENUE, NOT ON THE SERVER, AND THE DIFFERENCE TOOK THE
+ * ARIZONA OPEN OFF THE SITE DURING ITS OWN FINALS. This used to be
+ * `new Date(endDate + "T00:00:00")` — no zone, so parsed in the RUNTIME's
+ * timezone. That is the visitor's browser on the client, which is what the
+ * note above intends, and it is **UTC on the server**, which is where the
+ * homepage hero, the Next on Tour strip, the header panel and the ticker all
+ * read it from. So every US stop ended at UTC midnight: 8pm Eastern, and 5pm
+ * in Mesa. On 9/20 the site declared the Arizona Open over and advanced to Las
+ * Vegas at 5:00 PM local, three hours after first serve, with two finals still
+ * to play.
+ *
+ * ⚠ ONLY THE END MOVED. `startOfEvent` is deliberately untouched: the hero's
+ * countdown is a CLIENT component reading the visitor's own clock, and pulling
+ * the server's go-live moment to venue midnight would leave that countdown
+ * sitting at zero for hours in an eastern timezone. That asymmetry is
+ * pre-existing and is not what broke tonight.
+ *
+ * ⚠ AN UNKNOWN STATE CHANGES NOTHING — international stops carry a country in
+ * `state` and the one TBD row carries none, so they keep the old behaviour
+ * rather than being handed a US timezone. This can only ever fix a stop we can
+ * place on a map.
+ */
 function endOfEvent(t: Tournament): number {
-  return new Date(t.endDate + "T00:00:00").getTime() + 24 * 60 * 60 * 1000;
+  const tz = t.state ? TZ_BY_STATE[t.state] : undefined;
+  if (!tz) return new Date(t.endDate + "T00:00:00").getTime() + 24 * 60 * 60 * 1000;
+  return zonedMidnight(nextIsoDay(t.endDate), tz);
 }
 
 /** Is this event being played right now? `now` overrides the clock (preview). */
