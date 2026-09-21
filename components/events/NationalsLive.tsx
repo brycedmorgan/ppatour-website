@@ -20,12 +20,14 @@ import { getEventGuide, parkingFor, parkingText } from "@/lib/event-guides";
 import { ticketsOnSale } from "@/lib/tixr-prices";
 import { ParkingDetails } from "@/components/events/ParkingDetails";
 import {
+  type AmateurSession,
   firstServeFor,
   firstServeNote,
   gatesFollowFirstServe,
   gatesFor,
   getEventSchedule,
   hasGatesOverride,
+  sideEventsFor,
 } from "@/lib/event-schedule";
 import { proDayLabel } from "@/lib/order-of-play";
 import { playersToWatch } from "@/lib/home-content";
@@ -98,6 +100,13 @@ type Day = {
   gates: string;
   firstServe: string;
   live?: string;
+  /**
+   * A separate tournament playing at this stop on this day — kept in lockstep
+   * with the event page's copy of buildSchedule, which is the only reason it
+   * is here: this route serves Nationals, which hosts none and renders its own
+   * eventSchedules entry rather than the templated table below.
+   */
+  side?: AmateurSession[];
 };
 
 // Progression draw — the format the pros play at every stop (Dillon Segur,
@@ -154,6 +163,7 @@ function buildSchedule(startIso: string, endIso: string, slug: string): Day[] {
       gates: gatesFor(slug, gates),
       firstServe: firstServeFor(slug, iso, firstServe),
       live,
+      side: sideEventsFor(slug, iso),
     });
     cursor.setUTCDate(cursor.getUTCDate() + 1);
     i++;
@@ -990,6 +1000,16 @@ export function NationalsLive({
                       {" · "}First serve {d.firstServe}
                     </span>
                   </span>
+                  {d.side && d.side.length > 0 && (
+                    <span className="mt-1.5 block border-l-2 border-ppa-line pl-2">
+                      {d.side.map((s) => (
+                        <span key={s.label} className="block text-[12px] text-ppa-navy/60">
+                          <span className="font-semibold text-ppa-navy/75">{s.label}</span>
+                          {s.detail ? ` — ${s.detail}` : ""}
+                        </span>
+                      ))}
+                    </span>
+                  )}
                 </span>
                 <span className="hidden text-right text-sm font-bold tabular-nums text-ppa-navy sm:block">
                   {d.firstServe}

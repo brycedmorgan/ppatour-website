@@ -34,13 +34,16 @@ import { onSiteFor } from "@/lib/onsite";
 import { spotlightFor } from "@/lib/event-spotlight";
 import { ParkingDetails } from "@/components/events/ParkingDetails";
 import {
+  type AmateurSession,
   firstServeFor,
   firstServeNote,
   gatesFollowFirstServe,
   gatesFor,
   getEventSchedule,
   hasGatesOverride,
+  sideEventsFor,
 } from "@/lib/event-schedule";
+import { challengerShowdown, showdownDaysFor } from "@/lib/challenger-showdown";
 import { orderOfPlayByDay, proDayLabel } from "@/lib/order-of-play";
 import { stageScheduleFor } from "@/lib/event-stage";
 import { StageSchedule } from "@/components/events/StageSchedule";
@@ -196,6 +199,12 @@ type Day = {
   gates: string;
   firstServe: string;
   live?: string;
+  /**
+   * A separate tournament played at this stop on this day — the Challenger
+   * Showdown inside Worlds is the live case. Templated stops only; see
+   * SIDE_EVENTS_BY_SLUG in lib/event-schedule.ts.
+   */
+  side?: AmateurSession[];
 };
 
 // Progression draw — the format the pros play at every stop (Dillon Segur,
@@ -253,6 +262,10 @@ function buildSchedule(startIso: string, endIso: string, slug: string): Day[] {
       gates: gatesFor(slug, gates),
       firstServe: firstServeFor(slug, iso, firstServe),
       live,
+      // A companion event playing here today, or nothing. Everything with a
+      // published day goes on that day (Bryce, 7/31) — the template has no
+      // amateur column, so it folds under the session instead.
+      side: sideEventsFor(slug, iso),
     });
     cursor.setUTCDate(cursor.getUTCDate() + 1);
     i++;
@@ -275,6 +288,9 @@ export default async function EventPage({ params }: Params) {
 
   const countdown = daysUntil(t.startDate);
   const days = buildSchedule(t.startDate, t.endDate, t.slug);
+  // The companion tournament playing inside this stop, if any — see the
+  // callout under the order of play. Empty at every event but Worlds.
+  const showdownDays = showdownDaysFor(t.slug, t.startDate, t.endDate);
   // The same order of play, keyed by date, for the scores board to open on —
   // see the `roundByDay` prop on ScoresBoard.
   const roundByDay = orderOfPlayByDay(t.slug, t.startDate, t.endDate);
@@ -1392,6 +1408,19 @@ export default async function EventPage({ params }: Params) {
                       {" · "}First serve {d.firstServe}
                     </span>
                   </span>
+                  {/* A separate tournament playing here today. The template has
+                      no amateur column, so it folds under the pro session on
+                      the day it actually happens. */}
+                  {d.side && d.side.length > 0 && (
+                    <span className="mt-1.5 block border-l-2 border-ppa-line pl-2">
+                      {d.side.map((s) => (
+                        <span key={s.label} className="block text-[12px] text-ppa-navy/60">
+                          <span className="font-semibold text-ppa-navy/75">{s.label}</span>
+                          {s.detail ? ` — ${s.detail}` : ""}
+                        </span>
+                      ))}
+                    </span>
+                  )}
                 </span>
                 <span className="hidden text-right text-sm font-bold tabular-nums text-ppa-navy sm:block">
                   {d.firstServe}
@@ -1406,6 +1435,45 @@ export default async function EventPage({ params }: Params) {
               </div>
             ))}
           </div>
+          )}
+
+          {/* The Challenger Showdown at Worlds — a separate tournament with its
+              own field, played inside this event. It sits OUTSIDE the branch
+              above so it survives this stop ever gaining a full eventSchedules
+              entry. Every fact is lib/challenger-showdown.ts, which the section
+              on /tour/challenger reads too. */}
+          {showdownDays.length > 0 && (
+            <div className="mt-4 border-l-2 border-[var(--event-accent)] bg-white px-5 py-4">
+              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+                Also this week
+              </p>
+              <h3 className="mt-1 event-display text-lg uppercase leading-tight text-ppa-navy">
+                {challengerShowdown.name}
+              </h3>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ppa-navy/65">
+                The PPA Challenger Series season ends here. The highest-ranked
+                players without a PPA Tour contract are invited to {t.venue} to
+                play for one — {challengerShowdown.contracts} of them leave with
+                a {challengerShowdown.contractSeason} PPA Tour contract.
+              </p>
+              <div className="mt-3 flex flex-col gap-1.5 sm:flex-row sm:flex-wrap sm:gap-x-8">
+                {showdownDays.map((d) => (
+                  <span key={d.iso} className="block text-[12px] text-ppa-navy/55">
+                    <span className="font-bold uppercase tracking-wide text-ppa-navy/75">
+                      {d.dow} {formatDate(d.iso)}
+                    </span>
+                    {" — "}
+                    {d.label}
+                  </span>
+                ))}
+              </div>
+              <Link
+                href="/tour/challenger#showdown"
+                className="mt-3 inline-flex text-xs font-bold uppercase tracking-[0.12em] text-[var(--event-accent)] hover:underline"
+              >
+                Format &amp; who qualifies →
+              </Link>
+            </div>
           )}
         </div>
       </section>

@@ -6,7 +6,8 @@ import { ChallengerRankings } from "@/components/tour/ChallengerRankings";
 import { getEvents } from "@/lib/events-api";
 import { partners } from "@/lib/home-content";
 import { partnerLink } from "@/lib/partner-link";
-import { type Tournament, tierPoints } from "@/lib/placeholder-data";
+import { challengerShowdown, showdownDaysFor } from "@/lib/challenger-showdown";
+import { type Tournament, eventHref, tierPoints } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
 
 /**
@@ -16,9 +17,14 @@ import { withUtm } from "@/lib/utm";
  * 2026-09-18 on Bryce's call. Inventory, redirect map and the reasoning live in
  * docs/CHALLENGER.md. Every fact below is that site's own copy — divisions,
  * the $10k pool, the wild card, the top-20 rule, the 125/250 tables, the
- * 52-week window, the Showdown. Nothing here was invented to fill a section,
- * and where the old site was stale (it still described the 2025 Showdown
- * dates) the date was dropped rather than guessed.
+ * 52-week window. Nothing here was invented to fill a section.
+ *
+ * ⚠ THE SHOWDOWN SECTION IS THE ONE EXCEPTION TO THAT PROVENANCE, and it is a
+ * later source rather than a looser one: Brooke Ansley's 9/21 website request,
+ * which replaced the old site's stale 2025 description. Its facts live in
+ * lib/challenger-showdown.ts because the Worlds event page renders the same
+ * days inside its own order of play — read that file's header before editing
+ * any of them, especially the dates, which are derived.
  *
  * ⚠ THE SCHEDULE IS THE LIVE FEED, NOT A LIST. `getEvents()` filtered to
  * `tierKey === "challenger"` with no `country` (U.S.). The old site's per-stop
@@ -49,6 +55,7 @@ const SECTIONS = [
   { id: "how-it-works", label: "How It Works" },
   { id: "points", label: "Points" },
   { id: "path", label: "Path to the Tour" },
+  { id: "showdown", label: "Showdown" },
   { id: "rankings", label: "Rankings" },
   { id: "sponsors", label: "Sponsors" },
   { id: "host", label: "Host a Stop" },
@@ -106,6 +113,13 @@ function dateRange(start: string, end: string): string {
   return `${left}–${right}, ${e.getFullYear()}`;
 }
 
+/** "Nov 5" from one ISO date, parsed as a local calendar day. */
+function shortDate(iso: string): string {
+  return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(
+    new Date(`${iso}T00:00:00`),
+  );
+}
+
 /**
  * ⚠ THE TIER ALONE IS NOT THE TEST. `inferTier` in lib/events-api.ts files any
  * sub-three-day or college/qualifier/camp event under `challenger` so it stays
@@ -129,6 +143,25 @@ export default async function ChallengerPage() {
     .filter((t) => t.status === "completed" || t.endDate < today)
     .sort((a, b) => (a.startDate < b.startDate ? 1 : -1))
     .slice(0, 18);
+
+  /**
+   * The event the Showdown is played inside, from the same feed as the schedule
+   * above — so the link goes to a page that exists, or there is no link.
+   *
+   * ⚠ MATCHED ON THE WINDOW, NOT THE SLUG. Annual editions share a slug here:
+   * the feed carries `pickleball-world-championships` for both the completed
+   * 2025 edition and this one, and linking the first match would send a player
+   * to last year's event page.
+   */
+  const host = events.find(
+    (e) => showdownDaysFor(e.slug, e.startDate, e.endDate).length > 0,
+  );
+  const hostHref = host ? eventHref(host) : null;
+  const showdownDays = challengerShowdown.days;
+  const showdownDates = dateRange(
+    showdownDays[0].iso,
+    showdownDays[showdownDays.length - 1].iso,
+  );
 
   const joola = partners.find((p) => p.name === "JOOLA");
   const joolaLink = joola ? partnerLink(joola).href : null;
@@ -452,6 +485,122 @@ export default async function ChallengerPage() {
             >
               World Pickleball Rankings
             </Link>
+          </div>
+        </div>
+      </section>
+
+
+      {/* -------------------------------------------------------- Showdown */}
+      <section id="showdown" className="scroll-mt-24 bg-ppa-paper">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <SectionHead eyebrow="Showdown" title="The PPA Challenger Showdown" />
+          <div className="mt-5 grid gap-4 lg:grid-cols-[1.5fr_1fr]">
+            <div className="min-w-0 border-l-2 border-ppa-blue bg-white p-6">
+              <p className="text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
+                The Challenger Series season ends at the{" "}
+                {hostHref ? (
+                  <Link href={hostHref} className="font-semibold text-ppa-blue hover:underline">
+                    {challengerShowdown.hostName}
+                  </Link>
+                ) : (
+                  <span className="font-semibold text-ppa-navy">
+                    {challengerShowdown.hostName}
+                  </span>
+                )}
+                , the largest event in pickleball. The highest-ranked players
+                without a PPA Tour contract are invited to{" "}
+                {challengerShowdown.venue} to play for one.
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
+                {challengerShowdown.contracts} players leave signed: a{" "}
+                {challengerShowdown.contractSeason} PPA Tour contract and
+                professional status on the tour.
+              </p>
+            </div>
+            <ul className="grid gap-px border border-ppa-line bg-ppa-line">
+              {[
+                { label: "When", value: showdownDates },
+                {
+                  label: "Where",
+                  value: `${challengerShowdown.venue} · ${challengerShowdown.city}`,
+                },
+                { label: "Field", value: "8 teams per event, in two pools" },
+                {
+                  label: "On the line",
+                  value: `${challengerShowdown.contracts} PPA Tour contracts for ${challengerShowdown.contractSeason}`,
+                },
+              ].map((row) => (
+                <li key={row.label} className="min-w-0 bg-white p-4">
+                  <span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+                    {row.label}
+                  </span>
+                  <span className="mt-1 block text-sm font-semibold text-ppa-navy">
+                    {row.value}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="mt-6 overflow-hidden border border-ppa-line">
+            <div className="grid grid-cols-[5.5rem_1fr] gap-3 border-b border-ppa-line bg-white px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+              <span>Day</span>
+              <span>What is played</span>
+            </div>
+            {showdownDays.map((d) => (
+              <div
+                key={d.iso}
+                className="grid grid-cols-[5.5rem_1fr] items-center gap-3 border-b border-ppa-line bg-white px-4 py-3 last:border-b-0"
+              >
+                <span className="font-display text-base uppercase leading-tight text-ppa-blue">
+                  <span className="block font-sans text-[10px] font-bold leading-none text-ppa-navy/40">
+                    {d.dow}
+                  </span>
+                  {shortDate(d.iso)}
+                </span>
+                <span className="text-sm font-semibold text-ppa-navy">{d.label}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-4 grid gap-4 lg:grid-cols-2">
+            <div className="min-w-0 border border-ppa-line bg-white p-6">
+              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+                Who qualifies
+              </p>
+              <ul className="mt-3 flex flex-col gap-3">
+                {challengerShowdown.qualifying.map((q) => (
+                  <li key={q.division}>
+                    <span className="block text-sm font-semibold text-ppa-navy">
+                      {q.division}
+                    </span>
+                    <span className="block text-sm leading-relaxed text-ppa-navy/60">
+                      {q.detail}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="min-w-0 border border-ppa-line bg-white p-6">
+              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+                Format
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-ppa-navy/65">
+                Eight teams — eight players in singles — are seeded into two
+                pools on Challenger ranking. Pool play is round robin, and the
+                top two from each pool reach the semifinals. Every match is best
+                of three.
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-ppa-navy/65">
+                In both doubles events the top seed picks a partner, and the
+                picks run down the rankings from there. Both players have to
+                agree, and every team is confirmed by{" "}
+                <span className="font-semibold text-ppa-navy">
+                  {challengerShowdown.partnerDeadline}
+                </span>
+                .
+              </p>
+            </div>
           </div>
         </div>
       </section>

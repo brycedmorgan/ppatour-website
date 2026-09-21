@@ -6,6 +6,8 @@
  * registration deadline; sync from Wesley's PT.com API when it lands.
  */
 
+import { challengerShowdown } from "@/lib/challenger-showdown";
+
 export type AmateurSession = {
   label: string;
   detail?: string;
@@ -136,6 +138,55 @@ export const eventSchedules: Record<string, EventSchedule> = {
 
 export function getEventSchedule(slug: string): EventSchedule | undefined {
   return eventSchedules[slug];
+}
+
+/**
+ * Companion events running INSIDE a tour stop on a known day — a separate
+ * tournament with its own field, played on the same site, in the same week.
+ *
+ * ⚠ THIS IS THE TEMPLATED TABLE'S VERSION OF ProDay.amateur, AND IT EXISTS
+ * BECAUSE THE ALTERNATIVE WAS INVENTING SEVEN FIRST-SERVE TIMES. Everything
+ * with a published day belongs on that day (Bryce, 7/31: one calendar block) —
+ * but only Nationals has a full `eventSchedules` entry, so every other stop
+ * renders the template, which has no amateur column to put a session in.
+ * Writing an `eventSchedules` entry just to hang one session off it would mean
+ * supplying a gate and a first serve for every day of the event: seven invented
+ * numbers to publish one real fact. Same reasoning as GATES_BY_SLUG.
+ *
+ * ⚠ IT FEEDS THE TEMPLATED TABLE ONLY. A stop that later gains a real
+ * `eventSchedules` entry stops reading this map, and its companion events would
+ * silently vanish from the order of play — carry them into that entry's per-day
+ * `amateur` arrays in the same commit, and delete the lines here.
+ *
+ * ⚠ KEYED BY ISO DATE, so a stop whose dates move silently un-matches and the
+ * day falls back to pro play alone. Re-check on any date change.
+ */
+const SIDE_EVENTS_BY_SLUG: Record<string, Record<string, AmateurSession[]>> = {
+  /**
+   * Opendoor Pickleball World Championships — Nov 2–8, Brookhaven Country Club.
+   * The PPA Challenger Showdown is played here on the Thursday, Friday and
+   * Saturday: the Challenger season's closing event, with PPA Tour contracts on
+   * the line.
+   *
+   * ⚠ Built from lib/challenger-showdown.ts rather than typed out, so this table
+   * and the Showdown section on /tour/challenger cannot disagree about which day
+   * plays what. The dates there are DERIVED — read that file's header before
+   * touching them.
+   */
+  [challengerShowdown.hostSlug]: Object.fromEntries(
+    challengerShowdown.days.map((d) => [
+      d.iso,
+      [{ label: challengerShowdown.name, detail: d.label }],
+    ]),
+  ),
+};
+
+/**
+ * Companion events running at this stop on this date, for the templated order
+ * of play. Empty for almost every day of almost every event.
+ */
+export function sideEventsFor(slug: string, iso: string): AmateurSession[] {
+  return SIDE_EVENTS_BY_SLUG[slug]?.[iso] ?? [];
 }
 
 /**

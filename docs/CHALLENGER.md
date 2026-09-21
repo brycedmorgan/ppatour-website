@@ -281,11 +281,30 @@ the series, and they get you into the room.
 
 1. **Win a stop** and you hold a wild card into a PPA Tour Open main draw.
 2. **Finish the season near the top** and you are invited to the PPA Challenger
-   Showdown, played at Brookhaven Country Club during the PPA World
-   Championships. The highest-ranked players without a PPA contract compete for
-   a spot on the PPA Tour. **[CONFIRM 2026 dates, format and qualifying counts.
-   The old page still shows the 2025 schedule (Nov 6–8) and calls it the
-   "inaugural" season.]**
+   Showdown, played at Brookhaven Country Club during the Opendoor Pickleball
+   World Championships. The highest-ranked players without a PPA contract
+   compete for a spot on the PPA Tour.
+
+**✅ ANSWERED 9/21 by Brooke Ansley** (website request, "Update Challenger
+Showdown Information"), which supersedes the old page's 2025 description. It is
+now its own section, `/tour/challenger#showdown`, and the same facts render
+inside the Worlds event page's order of play. **Both read
+`lib/challenger-showdown.ts` — edit there, never on a page.**
+
+Shipped: the three playing days, who qualifies per discipline, the pool /
+round-robin format, the partner-selection deadline (Oct 26) and the eight PPA
+Tour contracts. Two things did **not** ship and are in §7:
+
+- **The dates are DERIVED, not supplied.** Her request has a "When" heading with
+  nothing under it. It does name the weekday of each block, and Worlds is Nov
+  2–8, 2026 — one Thursday, Friday and Saturday — so the days render as Nov 5,
+  6 and 7. Confirmed against the live feed, which carries the same window. The
+  helper only returns them when they fall inside the host event's dates, so if
+  Worlds moves the section goes quiet instead of publishing a stale week.
+- **The multiple-discipline rule is withheld.** Her closing line gives it to
+  "the 2027 Challenger Showdown" while the body describes "the 2026 Challenger
+  Showdown" awarding 2027 contracts. A player enters a second draw on a rule
+  like that; it ships when she says which edition it belongs to.
 
 ### Sponsors
 
@@ -323,7 +342,9 @@ and `/rankings` as sub-routes. Shipped as ANCHORS on one page instead
 |---|---|---|
 | Where do Challenger rankings live as data? WP is a hand-typed table, 7 weeks stale. Ask for a rankings endpoint or a scoped WPR call. | Kenan / Egon (pickleball.com API) | `/tour/challenger/rankings` has no source without it |
 | Points per event: 125 vs 250 disagreements between WP and the feed (Newport Beach, Opelika, and the feed's 500s on Wilson, Boise, Portland, Wisconsin) | Jeff Watson | The points table and event cards must agree |
-| Showdown 2026: dates, format, who qualifies | Jeff Watson / Connor | The "path to the pro tour" section |
+| ~~Showdown 2026: dates, format, who qualifies~~ — **answered 9/21, Brooke Ansley.** Built as `/tour/challenger#showdown` + the Worlds order of play | — | — |
+| Showdown dates: confirm Nov 5–7, 2026. Derived from her weekdays + the Worlds window, never supplied | Brooke Ansley | The days printed on two pages |
+| Does "players may compete in multiple disciplines" apply to this November or the next one? Her request says 2027; the body calls this one the 2026 Showdown | Brooke Ansley | An eligibility rule, withheld until it is clear |
 | Where do the WP host and sponsor Gravity Forms leads go today? Export before the site goes dark. | Bryce (WP admin) | Leads in flight |
 | Renew ppachallenger.com and keep it forever; point DNS at Vercel after Sept 28 | Bryce / Jason (GoDaddy) | Redirects |
 | Search Console: export top pages and queries for ppachallenger.com before cutover | Bryce | Confirms the map covers what ranks |
