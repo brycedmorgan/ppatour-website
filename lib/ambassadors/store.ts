@@ -30,7 +30,10 @@ export function hasBlob(): boolean {
 async function blobPut(key: string, body: string | Buffer, contentType: string): Promise<void> {
   const { put } = await import("@vercel/blob");
   await put(`${PREFIX}/${key}`, body, {
-    access: "public", // NOTE: switch to "private" at prod wiring — see store docs.
+    // PRIVATE: the object is never publicly readable; reads use head()'s signed
+    // downloadUrl in blobGet(). This is what keeps portal.json and the ambassador
+    // images off the public web.
+    access: "private",
     contentType,
     allowOverwrite: true,
     addRandomSuffix: false,
