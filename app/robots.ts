@@ -21,6 +21,9 @@ export default function robots(): MetadataRoute.Robots {
         "/hero-preview/",
         // Private partnership deck — noindex on the page too; nothing links here.
         "/partners/",
+        // Private ambassador dashboard — noindex + X-Robots-Tag (proxy.ts)
+        // and never in the sitemap or nav. Nothing links here.
+        "/ambassadors/",
       ],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
