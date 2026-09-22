@@ -124,7 +124,7 @@ Payton Pemberton's three asks in #ppa-tour-europe (9/22): WPR looks unsynced, pr
 - **`/europe/athletes/[slug]`** mounts the same profile inside the Europe chrome. Body moved to `app/athletes/[slug]/profile.tsx` (`AthleteProfile`, `region` prop); `page.tsx` keeps route config. Canonical stays `/athletes/[slug]` — one page per athlete. Europe roster cards link here.
 - **Launched (Bryce, 9/22): `EUROPE_PUBLIC = true`, canonical host = ppatoureurope.com** (`EUROPE_SITE_URL`). ppatour.com/europe and europe.ppatour.com now **308** to it; www.ppatoureurope.com now 308 too. Nav, footer, site search and sitemap link to ppatoureurope.com directly.
 - ⚠ Sitemap lists ppatoureurope.com cross-host; valid because ppatoureurope.com/robots.txt names the ppatour.com sitemap.
-- ⚠ 10 Europe pros still lack a portrait (Protzek among them) — Catie's Drive folder.
+- **Catie Preis, 9/22 (thread):** the 7 truly unranked didn't play Portorož; all but Jesús Campos play **Barcelona next weekend**, so re-check their ranks the week of 9/29. She also sent **Alexia Alvarez's portrait** — imported, live, 25 of 26 done. ⚠ **Tom Protzek is the only pro left without one** (the folder's file is a phone screenshot of a file viewer). Alexia still has **no bio** in the sheet.
 - **Next:** add ppatoureurope.com as a Search Console property and submit it (Bryce — needs his Google login). Ranking takes weeks; Europe socials + Joola/LT 48 partner logos help.
 
 ### 2026-09-22 (pt. 3) — Las Vegas parking lands; three lots, and the tow warning needed the map with it
