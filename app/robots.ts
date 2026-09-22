@@ -24,6 +24,8 @@ export default function robots(): MetadataRoute.Robots {
         // Private ambassador dashboard — noindex + X-Robots-Tag (proxy.ts)
         // and never in the sitemap or nav. Nothing links here.
         "/ambassadors/",
+        // Private corporate hub (Ambassador HQ) — same treatment.
+        "/hq/",
       ],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,

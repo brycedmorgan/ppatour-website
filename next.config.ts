@@ -350,6 +350,12 @@ const EUROPE_DOMAIN_REDIRECTS = [
 
 
 const nextConfig: NextConfig = {
+  // The /hq route reads lib/hq/hq-template.html with fs at request time; it is
+  // not imported, so trace it into that function's bundle or production 500s
+  // when it tries to read it.
+  outputFileTracingIncludes: {
+    "/hq": ["./lib/hq/hq-template.html"],
+  },
   /**
    * Every WordPress URL ended in a slash — all 811 migrated posts carry a Yoast
    * canonical of `https://ppatour.com/{slug}/`. With the default (false) each of

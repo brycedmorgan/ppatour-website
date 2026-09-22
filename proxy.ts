@@ -51,12 +51,15 @@ function challenge(): NextResponse {
 export default function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Private ambassador area: stamp every response noindex at the HTTP layer
-  // (belt-and-suspenders with the per-page robots meta and robots.ts disallow).
-  // No auth here — the pages guard themselves on the session; the chrome-free
-  // frame is handled in CSS (app/ambassadors/ambassadors.css), not here, so the
-  // rest of the site keeps its static rendering.
-  if (pathname === "/ambassadors" || pathname.startsWith("/ambassadors/")) {
+  // Private ambassador + HQ areas: stamp every response noindex at the HTTP
+  // layer (belt-and-suspenders with the per-page robots meta and robots.ts
+  // disallow). No auth here — the pages/routes guard themselves on the session.
+  if (
+    pathname === "/ambassadors" ||
+    pathname.startsWith("/ambassadors/") ||
+    pathname === "/hq" ||
+    pathname.startsWith("/hq/")
+  ) {
     const res = NextResponse.next();
     res.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
     return res;
@@ -101,5 +104,5 @@ export default function proxy(request: NextRequest) {
  * stays so the gate survives someone turning `trailingSlash` off.
  */
 export const config = {
-  matcher: ["/paddle-lab", "/paddle-lab/:path*", "/ambassadors", "/ambassadors/:path*"],
+  matcher: ["/paddle-lab", "/paddle-lab/:path*", "/ambassadors", "/ambassadors/:path*", "/hq", "/hq/:path*"],
 };
