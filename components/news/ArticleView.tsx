@@ -126,6 +126,8 @@ function PlayerRow({ p, rank }: { p: NewsPlayer; rank: { rank: number } | undefi
 }
 
 export async function ArticleView({ detail }: { detail: NewsDetail }) {
+  // A ctaUrl beginning with "/" is a path on this site, not an outbound link.
+  const ctaIsInternal = !!detail.card.ctaUrl?.startsWith("/");
   const { card } = detail;
   const related = relatedNews(card.slug, card.category, 3);
   const next = getNextTournament();
@@ -326,26 +328,57 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
               </div>
             )}
 
+            {/**
+              * Footer CTA. By default it sells the next tour stop and offers
+              * the TV guide beside it.
+              *
+              * A post may override it with its own destination (`ctaUrl`) —
+              * an announcement that is not about a pro stop, where a ticket
+              * link for an unrelated event is simply the wrong action.
+              *
+              * ⚠ AN INTERNAL PATH IS NOT THE SAME LINK. The default is an
+              * outbound commerce link, so it is UTM-tagged and opens in a new
+              * tab. Both are wrong for a path on this site: UTM tagging only
+              * means anything once a click leaves us, and sending someone to
+              * another page of the same site in a new tab is a bug, not a
+              * feature. So an internal ctaUrl renders as a plain same-tab
+              * Link with no query string.
+              *
+              * ⚠ AND THE TV BUTTON STANDS DOWN WHEN A POST NAMES ITS OWN
+              * DESTINATION. The override exists because the default action is
+              * wrong for that post; leaving a second, unrelated button beside
+              * it competes with the one thing we do want clicked. Delete this
+              * condition to bring it back everywhere.
+              */}
             <div className="mt-9 flex flex-wrap gap-2.5 border-t border-ppa-line pt-6">
-              {/* An announcement selling its own ticket overrides this; every
-                  other article keeps pointing at the next stop. */}
-              <a
-                href={withUtm(card.ctaUrl ?? next.ticketsUrl, {
-                  campaign: next.eventCode ?? next.slug,
-                  content: `article-${card.slug}`,
-                })}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-10 items-center bg-ppa-blue px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-ppa-blue-deep active:scale-[0.98]"
-              >
-                {card.ctaLabel ?? `See It Live — ${next.name} Tickets`}
-              </a>
-              <Link
-                href="/watch/tv"
-                className="flex h-10 items-center border border-ppa-line px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy transition hover:border-ppa-blue hover:text-ppa-blue active:scale-[0.98]"
-              >
-                TV Schedule
-              </Link>
+              {ctaIsInternal ? (
+                <Link
+                  href={card.ctaUrl!}
+                  className="flex h-10 items-center bg-ppa-blue px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-ppa-blue-deep active:scale-[0.98]"
+                >
+                  {card.ctaLabel ?? "Read More"}
+                </Link>
+              ) : (
+                <a
+                  href={withUtm(card.ctaUrl ?? next.ticketsUrl, {
+                    campaign: next.eventCode ?? next.slug,
+                    content: `article-${card.slug}`,
+                  })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-10 items-center bg-ppa-blue px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-ppa-blue-deep active:scale-[0.98]"
+                >
+                  {card.ctaLabel ?? `See It Live — ${next.name} Tickets`}
+                </a>
+              )}
+              {!card.ctaUrl && (
+                <Link
+                  href="/watch/tv"
+                  className="flex h-10 items-center border border-ppa-line px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy transition hover:border-ppa-blue hover:text-ppa-blue active:scale-[0.98]"
+                >
+                  TV Schedule
+                </Link>
+              )}
             </div>
           </div>
 

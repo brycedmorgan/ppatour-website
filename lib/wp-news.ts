@@ -80,6 +80,14 @@ export type WpPost = {
   wpCategories: string[];
   embeds: string[];
   inlineImages: string[];
+  /**
+   * Optional override for the footer CTA, which otherwise sells tickets to
+   * the next tour stop. A post about something other than a pro stop wants
+   * its own destination — an internal path is rendered as a same-tab link
+   * with no UTM, since UTM tagging only means anything leaving the site.
+   */
+  ctaUrl?: string;
+  ctaLabel?: string;
   /** Original root-level ppatour.com URL — source of the 301 map. */
   legacyUrl: string;
   seo: { title: string; description: string; canonical: string };

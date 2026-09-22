@@ -184,6 +184,8 @@ function wpToCard(p: {
   series: string | null;
   postType: WpPostType;
   image: { url: string; alt: string } | null;
+  ctaUrl?: string;
+  ctaLabel?: string;
 }): NewsCard {
   return {
     slug: p.slug,
@@ -199,6 +201,8 @@ function wpToCard(p: {
     source: "wordpress",
     series: p.series,
     postType: p.postType,
+    ctaUrl: p.ctaUrl,
+    ctaLabel: p.ctaLabel,
   };
 }
 

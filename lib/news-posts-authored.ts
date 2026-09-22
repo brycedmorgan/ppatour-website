@@ -310,6 +310,12 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
     wpCategories: [],
     embeds: [],
     inlineImages: [],
+    // The default footer CTA sells tickets to the next PRO stop, which is the
+    // wrong action on a junior announcement. Points at the Junior PPA page
+    // instead — internal, so it renders same-tab with no UTM, and the TV
+    // Schedule button stands down beside it.
+    ctaUrl: "/tour/junior/",
+    ctaLabel: "Explore the Junior PPA Tour",
     // Never existed on WordPress, so its canonical home is this site.
     legacyUrl: "https://www.ppatour.com/junior-ppa-tour-announces-the-junior-ppa-select-team/",
     seo: {
