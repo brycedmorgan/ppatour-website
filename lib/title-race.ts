@@ -84,6 +84,12 @@ async function liveRace(base: TitleRaceData): Promise<TitleRaceData> {
     if (!res.ok) return base;
     const feed = (await res.json()) as TitlesFeed;
     if (!feed.events?.length || !feed.through || feed.events.length < base.events.length) return base;
+    // One malformed event would break sorting and bucketing for an hour: all or nothing.
+    const DISC = new Set(["WS", "MS", "MX", "WD", "MD"]);
+    const ok = (e: RaceEvent) =>
+      /^\d{4}-\d{2}-\d{2}$/.test(e?.d ?? "") && typeof e?.n === "string" && e.n.length > 0 &&
+      Array.isArray(e?.w) && e.w.every((x) => Array.isArray(x) && typeof x[0] === "string" && DISC.has(x[1]));
+    if (!feed.events.every(ok)) return base;
     const players = { ...base.players };
     const byName = new Map(athletes.map((a) => [norm(a.name), a]));
     for (const e of feed.events) {
