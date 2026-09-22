@@ -1,7 +1,7 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-09-21T18:23:16Z",
+  "generated_at": "2026-09-22T17:25:47Z",
   "event_count": 39,
   "ticket_type_count": 644,
   "series_breakdown": {
@@ -531,8 +531,8 @@
         {
           "name": "Saturday VIP",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 350,
           "all_in_price": 383.56
         }
       ],
@@ -640,8 +640,8 @@
         {
           "name": "Sunday VIP",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 350,
           "all_in_price": 383.56
         }
       ],
@@ -3226,8 +3226,8 @@
         {
           "name": "Sunday Courtside",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 80,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 91.83
         },
         {
