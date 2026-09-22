@@ -31,7 +31,18 @@
  * contentless result. Noindex WITH crawling allowed is the state that actually
  * keeps a page out of the index.
  */
-export const EUROPE_PUBLIC = false;
+export const EUROPE_PUBLIC = true;
+
+/**
+ * ✅ LAUNCHED 2026-09-22 (Bryce), for Payton Pemberton's ask that the site rank
+ * for "PPA Tour Europe". A noindex page cannot rank for anything.
+ *
+ * The canonical host is ppatoureurope.com (Bryce, 9/22) — the exact-match domain
+ * for the search Europe cares about, and the address Bryce named the "real site"
+ * on 9/11. ppatour.com/europe and europe.ppatour.com 308 to it (next.config.ts).
+ * Every Europe canonical, og:url and nav link reads this constant.
+ */
+export const EUROPE_SITE_URL = "https://ppatoureurope.com";
 
 /** Metadata `robots` value for a Europe surface. Indexable only once launched. */
 export const europeRobots = EUROPE_PUBLIC

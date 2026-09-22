@@ -7,11 +7,10 @@ import { InquiryForm } from "@/components/forms/InquiryForm";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { RegionSwitcher } from "@/components/global/RegionSwitcher";
 import { getEvents } from "@/lib/events-api";
-import { europeRobots } from "@/lib/europe-launch";
+import { EUROPE_SITE_URL, europeRobots } from "@/lib/europe-launch";
 import { europeRoster } from "@/lib/europe-roster";
 import { countryCodeFor } from "@/lib/published-athletes";
 import { getWprIndex } from "@/lib/rankings-api";
-import { SITE_URL } from "@/lib/site";
 
 /**
  * PPA Tour Europe — a REGION of ppatour.com, not a fifth website.
@@ -86,14 +85,15 @@ export const metadata: Metadata = {
   title: { absolute: "PPA Tour Europe" },
   description:
     "PPA Tour Europe — the European professional pickleball tour. Schedule, signed pros, event tiers, entry priority and the rules that differ from the US tour.",
-  alternates: { canonical: `${SITE_URL}/europe` },
+  metadataBase: new URL(EUROPE_SITE_URL),
+  alternates: { canonical: `${EUROPE_SITE_URL}/` },
   openGraph: {
     type: "website",
     siteName: "PPA Tour Europe",
     title: "PPA Tour Europe",
     description:
       "The European professional pickleball tour — schedule, signed pros, event tiers and entry priority.",
-    url: `${SITE_URL}/europe`,
+    url: `${EUROPE_SITE_URL}/`,
   },
   twitter: {
     card: "summary_large_image",

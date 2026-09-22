@@ -65,6 +65,17 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-22 — PPA Tour Europe LAUNCHED on ppatoureurope.com; Europe pros open inside the Europe site
+
+Payton Pemberton's three asks in #ppa-tour-europe (9/22): WPR looks unsynced, profiles open the Carvana site, rank for "PPA Tour Europe".
+
+- **WPR was already synced — no code change.** 16 of 26 Europe pros show a live rank. The other 10 (Karbownik, O'Donoghue, Amaro, Ling, Tomkinson, Dahlin, Jiménez, Rodrigues, Alvarez, Campos) have **0 WPR points on pickleball.com itself** — checked its own board filtered by country. They show a rank once they earn WPR points.
+- **`/europe/athletes/[slug]`** mounts the same profile inside the Europe chrome. Body moved to `app/athletes/[slug]/profile.tsx` (`AthleteProfile`, `region` prop); `page.tsx` keeps route config. Canonical stays `/athletes/[slug]` — one page per athlete. Europe roster cards link here.
+- **Launched (Bryce, 9/22): `EUROPE_PUBLIC = true`, canonical host = ppatoureurope.com** (`EUROPE_SITE_URL`). ppatour.com/europe and europe.ppatour.com now **308** to it; www.ppatoureurope.com now 308 too. Nav, footer, site search and sitemap link to ppatoureurope.com directly.
+- ⚠ Sitemap lists ppatoureurope.com cross-host; valid because ppatoureurope.com/robots.txt names the ppatour.com sitemap.
+- ⚠ 10 Europe pros still lack a portrait (Protzek among them) — Catie's Drive folder.
+- **Next:** add ppatoureurope.com as a Search Console property and submit it (Bryce — needs his Google login). Ranking takes weeks; Europe socials + Joola/LT 48 partner logos help.
+
 ### 2026-09-21 — ppachallenger.com DNS is on Vercel; the old site is archived
 
 - **Bryce flipped GoDaddy DNS 9/21** (A @ and www → 76.76.21.21, confirmed at `ns17.domaincontrol.com`). `vercel certs issue ppachallenger.com www.ppachallenger.com --scope bryce-pickleballs-projects` issued in 8s (valid to Dec 21). **Verified against the Vercel edge by IP** (`curl --resolve`, no `-L`): `/`, `/how-it-works/`, `/rankings/`, `/sponsors/`, `/tournament/2026-tucson-az/`, `/host-a-ppa-tour-tournament/` all 308 to their mapped ppatour.com sections on both hosts; http → https first.

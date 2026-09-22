@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { EUROPE_PUBLIC } from "@/lib/europe-launch";
+import { EUROPE_PUBLIC, EUROPE_SITE_URL } from "@/lib/europe-launch";
 import { PADDLE_LAB_PUBLIC } from "@/lib/paddle-lab-access";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -63,7 +63,7 @@ const NAV_ITEMS: NavItem[] = [
       // ⚠ Unlisted until EUROPE_PUBLIC flips; the page is live for anyone with
       // the link, it just isn't advertised here yet (Bryce, 9/4).
       ...(EUROPE_PUBLIC
-        ? [{ label: "PPA Tour Europe", href: "/europe" }]
+        ? [{ label: "PPA Tour Europe", href: EUROPE_SITE_URL }]
         : []),
       { label: "Contact", href: "/about/contact" },
     ],
@@ -339,7 +339,7 @@ function MegaPanelContent({
           <li>
             <SmallLink href="/about/how-it-works" label="How It Works" detail="Season format, points, and divisions" onNavigate={onNavigate} />
             {EUROPE_PUBLIC && (
-              <SmallLink href="/europe" label="PPA Tour Europe" detail="European schedule, pros, and entry rules" onNavigate={onNavigate} />
+              <SmallLink href={EUROPE_SITE_URL} label="PPA Tour Europe" detail="European schedule, pros, and entry rules" onNavigate={onNavigate} />
             )}
           </li>
           <li>

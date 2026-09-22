@@ -553,3 +553,11 @@ suggest one; the URL is never decided by an IP address.
 false, a site-wide switcher naming Europe would advertise the page the flag
 exists to keep unlisted. Promote it into `Header.tsx` in the same change that
 flips the flag.
+
+
+## Launch — 2026-09-22
+
+- `EUROPE_PUBLIC = true`. Canonical host is **ppatoureurope.com** (Bryce, 9/22) — `EUROPE_SITE_URL` in `lib/europe-launch.ts`.
+- ppatour.com/europe, www.ppatour.com/europe and europe.ppatour.com 308 to ppatoureurope.com. This settles the open "which host is canonical" question at line ~419.
+- Europe pros have a Europe-chrome profile at `/europe/athletes/[slug]`; its canonical is `/athletes/[slug]`.
+- Search Console: ppatoureurope.com needs its own property + sitemap submission.

@@ -316,8 +316,11 @@ const RETIRED_ATHLETE_REDIRECTS = [
  * see the rewrite in `rewrites()` — and this rule only folds www onto the apex so
  * the site answers at one address.
  *
- * ⚠ TEMPORARY (307) WHILE `EUROPE_PUBLIC` IS FALSE, so nothing gets cached in
- * browsers while the Europe setup is still moving. Make it permanent at launch.
+ * ✅ PERMANENT SINCE LAUNCH (9/22). Bryce made ppatoureurope.com the canonical
+ * host, so the other two addresses of the Europe page now 308 to it rather than
+ * serving a duplicate: ppatour.com/europe and europe.ppatour.com. Scoped by host
+ * on purpose — localhost and Vercel previews keep serving /europe so it can be
+ * tested. See EUROPE_SITE_URL in lib/europe-launch.ts.
  */
 const EUROPE_DOMAIN_REDIRECTS = [
   {
@@ -325,6 +328,24 @@ const EUROPE_DOMAIN_REDIRECTS = [
     has: [{ type: "host" as const, value: "www.ppatoureurope.com" }],
     destination: "https://ppatoureurope.com/:path*",
   },
+  {
+    source: "/",
+    has: [{ type: "host" as const, value: "europe.ppatour.com" }],
+    destination: "https://ppatoureurope.com/",
+  },
+  // Explicit hosts, not a regex, so nothing else can ever match.
+  ...["ppatour.com", "www.ppatour.com"].flatMap((host) => [
+    {
+      source: "/europe",
+      has: [{ type: "host" as const, value: host }],
+      destination: "https://ppatoureurope.com/",
+    },
+    {
+      source: "/europe/eventlinks",
+      has: [{ type: "host" as const, value: host }],
+      destination: "https://ppatoureurope.com/eventlinks",
+    },
+  ]),
 ];
 
 
@@ -394,7 +415,7 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       // First, so the domain rule wins on that host before any path rule.
-      ...EUROPE_DOMAIN_REDIRECTS.map((r) => ({ ...r, permanent: false })),
+      ...EUROPE_DOMAIN_REDIRECTS.map((r) => ({ ...r, permanent: true })),
       // ppachallenger.com, also host-scoped and also first: LEGACY_REDIRECTS
       // below maps /schedule, /how-it-works, /sponsors on ANY host, and those
       // paths exist on the old Challenger site with different homes.

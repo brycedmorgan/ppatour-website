@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { EUROPE_PUBLIC } from "@/lib/europe-launch";
+import { EUROPE_PUBLIC, EUROPE_SITE_URL } from "@/lib/europe-launch";
 import { PADDLE_LAB_PUBLIC } from "@/lib/paddle-lab-access";
 import Link from "next/link";
 import { footerPartners, showsDesignation } from "@/lib/home-content";
@@ -39,7 +39,7 @@ const PPA_LINKS: FooterLink[] = [
   // ⚠ Unlisted until EUROPE_PUBLIC flips — see lib/europe-launch.ts. The page is
   // live for anyone with the link; it just isn't advertised here yet.
   ...(EUROPE_PUBLIC
-    ? [{ label: "PPA Tour Europe", href: "/europe" }]
+    ? [{ label: "PPA Tour Europe", href: EUROPE_SITE_URL }]
     : []),
   { label: "About the PPA Tour", href: "/about" },
   // ⚠ Gated and unlinked since 9/10 — see lib/paddle-lab-access.ts.

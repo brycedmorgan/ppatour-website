@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { athletes } from "@/lib/athletes";
-import { EUROPE_PUBLIC } from "@/lib/europe-launch";
+import { EUROPE_PUBLIC, EUROPE_SITE_URL } from "@/lib/europe-launch";
 import { isUnlistedEuropeAthlete } from "@/lib/europe-visibility";
 import { CURATED_TO_CANONICAL, publishedAthletes } from "@/lib/published-athletes";
 import { eventHref, tournaments } from "@/lib/placeholder-data";
@@ -116,7 +116,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // invitation to index, which is exactly what "not live for everyone yet"
     // rules out. The seven Europe pros who already had a scraped profile stay,
     // because they were public before any of this.
-    ...(EUROPE_PUBLIC ? [{ url: url("/europe"), changeFrequency: "weekly" as const, priority: 0.7 }] : []),
+    // Cross-host entry: valid because ppatoureurope.com/robots.txt names this sitemap.
+    ...(EUROPE_PUBLIC ? [{ url: `${EUROPE_SITE_URL}/`, changeFrequency: "weekly" as const, priority: 0.7 }] : []),
     ...[...athleteSlugs].filter((slug) => !isUnlistedEuropeAthlete(slug)).map((slug) => ({
       url: url(`/athletes/${slug}`),
       changeFrequency: "weekly" as const,

@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { eventHref, formatDateRange, type Tournament } from "@/lib/placeholder-data";
 import { getEvents } from "@/lib/events-api";
-import { europeRobots } from "@/lib/europe-launch";
+import { EUROPE_SITE_URL, europeRobots } from "@/lib/europe-launch";
 import { EUROPE_EVENT_LINKS, EUROPE_GENERAL_LINKS, type EventLink } from "@/lib/europe-eventlinks";
-import { SITE_URL } from "@/lib/site";
 
 /**
  * /europe/eventlinks — the page behind the QR code on every PPA Tour Europe
@@ -35,13 +34,13 @@ export const revalidate = 300;
 export const metadata: Metadata = {
   title: { absolute: "Event Links · PPA Tour Europe" },
   description: "Links for this PPA Tour Europe stop: event page, map, brackets and the tour's essentials.",
-  alternates: { canonical: `${SITE_URL}/europe/eventlinks` },
+  alternates: { canonical: `${EUROPE_SITE_URL}/eventlinks` },
   openGraph: {
     type: "website",
     siteName: "PPA Tour Europe",
     title: "Event Links · PPA Tour Europe",
     description: "Links for this PPA Tour Europe stop.",
-    url: `${SITE_URL}/europe/eventlinks`,
+    url: `${EUROPE_SITE_URL}/eventlinks`,
   },
   twitter: { card: "summary", title: "Event Links · PPA Tour Europe" },
   robots: europeRobots,
