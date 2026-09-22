@@ -184,6 +184,41 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
       body: ["Rideshare drop-off is welcome in any parking lot."],
     },
   ],
+  // Las Vegas — the event team, 9/22, with the map. All of it is their wording.
+  //
+  // ⚠ RIDESHARE IS INSIDE GENERAL PARKING, NOT ITS OWN SECTION, AND THAT IS
+  // DELIBERATE. Cary and Arizona both carry a "Rideshare" heading, so the tidy
+  // move is to lift the sentence out into one here — but they wrote it as the
+  // middle paragraph of general parking, and filing a sentence under a heading
+  // they did not write is the same class of edit as rewording it.
+  //
+  // ⚠ NO "Premium Parking" SECTION AND NO PRICE. Their submission says parking
+  // is on-site and first-come, first-served, and says nothing about a paid lot
+  // or a pass. Cary sells one; on what we have been told, this stop does not.
+  "rate-las-vegas-open": [
+    {
+      heading: "General Parking",
+      body: [
+        "On-site parking is available at Darling Tennis Center. All three parking lots are available for public use on a first-come, first-served basis.",
+        "Rideshare and public transportation are also available options.",
+        "Parking in the drop-off/pickup loop shown in red on the map below is strictly prohibited and will be enforced by towing.",
+      ],
+      // Their copy says "shown in red on the map below", so the map ships in
+      // this section, under the paragraph that points at it. Supplied art.
+      image: {
+        src: "/ppa/parking/rate-las-vegas-open.webp",
+        alt: "Aerial map of Darling Tennis Center and Kellogg Zaher Park in Las Vegas, NV. The three public parking lots are highlighted in yellow, running west to east on the south side of W Washington Avenue, and the drop-off and pickup loop at the tennis center entrance is outlined in red.",
+        width: 2000,
+        height: 636,
+      },
+    },
+    {
+      heading: "ADA Parking",
+      body: [
+        "Accessible parking is available in all three parking lots. ADA drop-off is also available in the drop-off/pickup loop.",
+      ],
+    },
+  ],
 };
 
 /** Parking details for an event page — finalized sections, or the holding line. */
