@@ -90,8 +90,14 @@ function Select<T extends string>({
 export function AthleteRoster({
   athletes,
   placeholderMark = { src: "/ppa/logos/ppa-horizontal-white.svg", width: 1408 },
+  profileBase = "/athletes",
 }: {
   athletes: RosterAthlete[];
+  /**
+   * Where a card links. /europe passes "/europe/athletes" so a Europe pro's
+   * profile opens inside the Europe chrome, not the Carvana site (Payton, 9/22).
+   */
+  profileBase?: string;
   /**
    * The lockup drawn on the "Photo Coming" card for a pro with no portrait.
    *
@@ -237,7 +243,7 @@ export function AthleteRoster({
           {shown.map((a) => (
             <Link
               key={a.slug}
-              href={`/athletes/${a.slug}`}
+              href={`${profileBase}/${a.slug}`}
               className="group flex flex-col overflow-hidden border border-ppa-line bg-white"
             >
               <div className="relative aspect-square overflow-hidden bg-gradient-to-b from-ppa-paper to-white">

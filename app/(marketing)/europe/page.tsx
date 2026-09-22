@@ -332,6 +332,7 @@ export default async function EuropePage() {
                 no portrait today, so this card renders on this page. */}
             <AthleteRoster
               athletes={roster}
+              profileBase="/europe/athletes"
               placeholderMark={{
                 src: "/ppa/logos/ppa-tour-horizontal-white.svg",
                 width: 670,

@@ -110,7 +110,7 @@ export function StickyBuyBar() {
     pathname === "/brackets" ||
     pathname === "/brackets/" ||
     pathname === "/europe" ||
-    pathname === "/europe/";
+    pathname.startsWith("/europe/");
 
   /**
    * Publish how much bottom edge this bar is actually covering right now, so
