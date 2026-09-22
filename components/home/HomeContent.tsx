@@ -322,12 +322,20 @@ export async function HomeContent({
    * `lastCompletedChampions()` came back null — a transient `getEvents()` or
    * `getScores()` failure, i.e. the 429s this codebase has been fighting since
    * 7/31 — the band fell through to `<ScoreRail />`, which rendered the
-   * hand-authored `matches` placeholder from lib/home-content: invented players
-   * (Jade Rau, Priya Anand, Bricker/Hartman) with a pulsing red LIVE chip, under
-   * a "Live & Latest" heading, on the homepage, out of season. That is exactly
-   * the failure the 7/29 rankings ruling exists to prevent — an API blip must
-   * never turn into made-up data that looks completely plausible. The component
-   * and the placeholder array are both deleted, so it cannot come back.
+   * hand-authored `matches` placeholder from lib/home-content: invented
+   * scorelines (Priya Anand, Bricker/Hartman) with a pulsing red LIVE chip,
+   * under a "Live & Latest" heading, on the homepage, out of season. That is
+   * exactly the failure the 7/29 rankings ruling exists to prevent — an API blip
+   * must never turn into made-up data that looks completely plausible. The
+   * component and the placeholder array are both deleted, so it cannot come back.
+   *
+   * ⚠ ONE NAME IN THAT PLACEHOLDER WAS A REAL PRO, WHICH IS WORSE, NOT BETTER.
+   * The original note listed Jade Rau among the invented players. She is not
+   * invented — women's world No. 87 on the live WPR board, in real Atlanta draw
+   * fixtures this repo ships, and since 9/22 a published profile. So that band
+   * was not merely publishing fiction, it was putting a fabricated LIVE
+   * scoreline against a named working professional. Never seed a placeholder
+   * from a real roster.
    */
   const scoresSection = !showLiveScores && !latestChampions ? null : (
     <>

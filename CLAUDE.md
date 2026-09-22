@@ -65,6 +65,57 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-22 — Jade Rau was on the roster we said she didn't exist on; half the athlete pages carried an empty heading
+
+- Wesley asked whether Jade Rau is on the site. She was not — no record in `published-athletes.json`,
+  so no card on `/athletes`, no site-search hit, and she is outside `getWprRoster()`'s top-25 cap so
+  no prerender either. `/athletes/jade-rau/` still rendered on demand off the board alone, under the
+  **generic fallback bio**. Added: one record, women's world **No. 87**, 679.7 pts, Naples FL.
+- **⚠ AND SHE IS THE PLAYER THE 8/5 pt. 9 ENTRY NAMED AS ONE WHO DOES NOT EXIST.** That entry, and the
+  tombstone comment in `HomeContent.tsx`, both listed her among the invented players in the deleted
+  `matches` placeholder. She is real — on the live board, and in the **Atlanta fixtures this repo
+  ships** (women's singles seed 37, mixed doubles with Wil Shaffer). So that band was not merely
+  publishing fiction, it hung a **fabricated LIVE scoreline on a named working professional**, which
+  is the worse version of the bug. Both notes corrected rather than left standing.
+- **⚠ EVERY FIELD IS FROM THE LIVE API AND THE BLANKS ARE DELIBERATE.** `dob` and `height` are null
+  because the API does not carry them — the page still prints **Age 16** from the stats endpoint, so
+  inventing a birthday would have bought nothing and risked being wrong. `quick_info.paddle` stays
+  null per the standing rule, and the live feed already resolves her to a **Proton Series Three
+  Flamingo** with the partner badge. Divisions are the three boards she is actually ranked on
+  (singles 57, doubles 91, mixed 78), not a guess off the bio.
+- **⚠ THE BIO IS TWO SENTENCES ON PURPOSE.** She has no questionnaire submission and `player_medals`
+  returns nothing, so there are no podiums to cite. Rank, DUPR and events-played were all considered
+  and rejected for prose: WPR is a 52-week rolling window, so every one of them can move DOWN, and a
+  stale number in the bio would contradict the live tile beside it. Thin and true over padded.
+- **⚠ THE JSON IS CRLF, SO A RE-SERIALIZE REWRITES ALL 3,927 LINES.** `JSON.stringify(…, null, 2)`
+  with `
+` → `
+` is byte-identical to the file, verified before writing — so the diff is exactly
+  the 20-line insertion and none of the other 203 records moved. Check that before editing this file.
+- **⚠ FOUND WHILE VERIFYING, AND IT WAS LIVE ON ABOUT HALF THE ROSTER: an empty "PPA Tour / By the
+  Numbers" heading with nothing under it.** The section's only body is the medal tiles, but its gate
+  was `stats?.hasStats || hasAnyDivRank` — and `hasStats` is true for anyone carrying a DUPR or WPR
+  value, which is nearly everyone. **Measured across the first 60 published profiles: 29 of them**,
+  Ava Ignatowich and Andre Mercado included. Same shape as the two features removed from that section
+  on 7/29 — the body came out and the heading stayed. Now gated on `stats?.medals`.
+  ⚠ `divRanks` is consequently read by nothing; the fetch is kept (`void`) because dropping three
+  board calls per render is a question about this route's upstream budget, not part of a gate fix.
+- Verified on rendered pages, not by grep: her page 200s with the new bio, Quick Info, live rank and
+  her real headshot, and **0 occurrences of the generic fallback bio**; she is on `/athletes` with a
+  live card and in site search; **Jade Kawamoto — a different pro — is untouched**. Gate controls:
+  **Ben Johns and ALW keep their medal tiles; Jade Rau and Ava Ignatowich now render no section at
+  all.** `npm run athletes:audit` PASS (204 records, 0 duplicate slugs or names), tsc clean, eslint
+  clean on both changed files, `next build` exit 0.
+- ⚠ Method, both already documented and both hit again: `next build` needs `scratchpad/
+  probe-platform-denied.ts` and `probe-rounds.ts` moved aside, and `BUILD_DIST_DIR=.next-buildcheck`
+  appends two entries to `tsconfig.json` (reverted). `wpr-snapshot.json` was NOT rewritten this time.
+- ⚠ Committed by explicit pathspec: another session had `lib/news-posts-authored.ts` **staged**, and
+  a bare `git commit` would have taken it. The index is global — see 8/5 pt. 13.
+- **Open:** six more questionnaire signings are built and waiting on the team's go-ahead (Harrison
+  Brown, Carlota Trevino, Natalia Simson, Maverick Messinger, Jace Howard, Francis Chi) · three of
+  those are minors · **Trevino and Chi have no pickleball.com profile image at all, and Messinger's
+  is a full-body thumbs-up, not a headshot** — the Ellie Tomkinson case, found by looking at the
+  files rather than at the filenames.
 ### 2026-09-22 — PPA Tour Europe LAUNCHED on ppatoureurope.com; Europe pros open inside the Europe site
 
 Payton Pemberton's three asks in #ppa-tour-europe (9/22): WPR looks unsynced, profiles open the Carvana site, rank for "PPA Tour Europe".
@@ -3871,10 +3922,16 @@ until that site is rebuilt.
   even if we are not live."* It is worse than a wrong section: **the scores it showed were invented.**
 - **Root cause.** The band had THREE states, and the third was fiction. `live` → real bracket;
   `latestChampions` → the last completed stop's champions; **neither → `<ScoreRail />`**, which
-  rendered the hand-authored `matches` placeholder from `lib/home-content.ts` — six matches between
-  **players who do not exist** (Jade Rau, Priya Anand, Bricker/Hartman, Reyes/Tanaka), **two of them
+  rendered the hand-authored `matches` placeholder from `lib/home-content.ts` — six invented matches
+  (Priya Anand, Bricker/Hartman, Reyes/Tanaka), **two of them
   `status: "live"` with a pulsing red LIVE chip**, under a *"Live & Latest"* heading, on the
   homepage, out of season.
+- **⚠ CORRECTION (9/22): THIS ENTRY ORIGINALLY LISTED JADE RAU AS A PLAYER WHO DOES NOT EXIST. SHE
+  DOES.** She is women's world **No. 87** on the live WPR board (679.7 pts, Naples FL, turned pro
+  2025) and appears in the real Atlanta fixtures this repo ships — women's singles seed 37 and mixed
+  doubles with Wil Shaffer. So the placeholder was not purely fictional: it hung a **fabricated live
+  scoreline on a named working professional**, which is a worse version of the same bug, not a
+  lesser one. She now has a published profile (9/22). The rest of this entry stands.
 - **⚠ THE TRIGGER IS AN UPSTREAM BLIP, WHICH IS WHY IT WAS INTERMITTENT.**
   `lastCompletedChampions()` returns null when `getEvents()` or any of its four `getScores()` calls
   fails — i.e. **the same partner-API 429s this repo has been fighting since 7/31**. So the homepage's

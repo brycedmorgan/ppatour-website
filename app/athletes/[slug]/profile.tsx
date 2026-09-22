@@ -521,10 +521,13 @@ export async function AthleteProfile({
      */
   ].filter((f) => f.value);
 
-  // `divRanks` still tells us which boards the athlete sits on, which is what
-  // decides whether the By-the-Numbers section renders at all. The three
-  // per-discipline cards it used to feed are gone (Connor, 7/29).
-  const hasAnyDivRank = Boolean(divRanks.singles || divRanks.doubles || divRanks.mixed);
+  // ⚠ `divRanks` USED TO GATE THE BY-THE-NUMBERS SECTION AND NO LONGER DOES,
+  // so nothing on this page reads it — see the ⚠ on that section for why the
+  // gate moved. The three per-discipline cards it originally fed were removed
+  // on 7/29 (Connor). The fetch is kept only because `getDivisionRanks` is
+  // what resolves which boards an athlete sits on, and dropping it is a
+  // separate call about this route's upstream budget, not part of a gate fix.
+  void divRanks;
   const medalRows = stats?.medals
     ? ([
         ["Singles", stats.medals.singles],
@@ -1132,7 +1135,17 @@ export async function AthleteProfile({
           without it), and `app`/`usap`/`mlp` are not recognised partner keys, so
           there is no third setting. Until pickleball.com backfills the tag, the
           honest move is to stop calling an undercount a career total. */}
-      {(stats?.hasStats || hasAnyDivRank) && (
+      {/* ⚠ GATED ON `medals`, NOT `hasStats`, BECAUSE THE MEDAL BLOCK BELOW IS
+          THE ONLY THING THIS SECTION RENDERS. The old gate was
+          `stats?.hasStats || hasAnyDivRank`, and `hasStats` is true for anyone
+          carrying a DUPR or WPR value — so every pro with no PPA podium got
+          the eyebrow and heading with literally nothing underneath.
+          Measured 9/22 across the first 60 published profiles: 29 of them, i.e.
+          about half the roster, Ava Ignatowich and Andre Mercado included.
+          It is the same shape as the two removed blocks noted below — the body
+          was taken out and the heading stayed behind. A pro with no PPA podium
+          finishes now renders no section at all. */}
+      {stats?.medals && (
         <section className="bg-white">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
