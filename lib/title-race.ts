@@ -14,6 +14,7 @@
  * down: the row shows initials. Never a guessed face.
  */
 import raw from "@/lib/data/title-race.json";
+import { athletes } from "@/lib/athletes";
 import { ATHLETES_CACHE_TAG } from "@/lib/cache-tags";
 
 export type RaceDiscipline = "WS" | "MS" | "MX" | "WD" | "MD";
@@ -26,6 +27,15 @@ export type TitleRaceData = {
 };
 
 const FEED = "https://jackalopehq.vercel.app/api/public/paddles";
+/**
+ * The LIVE race (21 Sept 2026). Jackalope counts each Tour stop the morning
+ * after it ends, from the PB Tournaments API, on top of the verified history
+ * (api/titles/ingest.js). Reading it here means the section moves after every
+ * event with no deploy. The committed JSON stays as the fallback: if the feed
+ * is down or somehow SHORTER than what we ship, we render the file.
+ */
+const TITLES_FEED = "https://jackalopehq.vercel.app/api/public/titles";
+const TITLES_REVALIDATE_S = 60 * 60;
 /** 24h, like every other athlete data source. See the ISR note in lib/player-overrides.ts. */
 const REVALIDATE_S = 60 * 60 * 24;
 /** The sheet's spelling → the spelling on Jackalope's player rows, where they differ. */
@@ -61,8 +71,39 @@ async function feedHeadshots(): Promise<Map<string, string>> {
   return map;
 }
 
+type TitlesFeed = {
+  through?: { date: string; event: string };
+  events?: RaceEvent[];
+  gender?: Record<string, "W" | "M">;
+};
+
+/** Merge Jackalope's live events over the committed file. Never goes backwards. */
+async function liveRace(base: TitleRaceData): Promise<TitleRaceData> {
+  try {
+    const res = await fetch(TITLES_FEED, { next: { revalidate: TITLES_REVALIDATE_S, tags: [ATHLETES_CACHE_TAG] } });
+    if (!res.ok) return base;
+    const feed = (await res.json()) as TitlesFeed;
+    if (!feed.events?.length || !feed.through || feed.events.length < base.events.length) return base;
+    const players = { ...base.players };
+    const byName = new Map(athletes.map((a) => [norm(a.name), a]));
+    for (const e of feed.events) {
+      for (const [name] of e.w) {
+        if (players[name]) continue;
+        const g = feed.gender?.[name];
+        if (!g) continue; // unknown gender → leave them out rather than guess a colour
+        const a = byName.get(norm(name));
+        players[name] = a ? { g, slug: a.slug, head: a.headshot } : { g };
+      }
+    }
+    const events = feed.events.filter((e) => e.w.every(([n]) => players[n]));
+    return { ...base, through: feed.through, events, players };
+  } catch {
+    return base;
+  }
+}
+
 export async function getTitleRace(): Promise<TitleRaceData> {
-  const data = raw as unknown as TitleRaceData;
+  const data = await liveRace(raw as unknown as TitleRaceData);
   const missing = Object.entries(data.players).filter(([, p]) => !p.head);
   if (!missing.length) return data;
   const shots = await feedHeadshots();
