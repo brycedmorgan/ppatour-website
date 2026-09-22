@@ -19,6 +19,8 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { staffFromRequest } from "@/lib/hq/staff";
 import { getJson } from "@/lib/ambassadors/store";
+import { previewEnabled } from "@/lib/ambassadors/config";
+import demoHq from "@/lib/hq/demo-hq.json";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -48,7 +50,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL("/hq/signin", request.url));
   }
 
-  const data = await getJson("hq.json");
+  // Real snapshot when uploaded; off-production, fall back to the committed
+  // FICTIONAL demo dataset so /hq is shareable on staging with no upload.
+  let data = await getJson("hq.json");
+  if (!data && previewEnabled()) data = demoHq;
   if (!data) {
     return new Response("Ambassador HQ data hasn't been loaded yet.", {
       status: 503,
