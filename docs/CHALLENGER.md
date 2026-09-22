@@ -27,6 +27,13 @@ We don't need Jeff for this we have access."
 
 ---
 
+## 0. Cutover status (2026-09-21)
+
+DNS moved 9/21, cert issued, redirects verified on the Vercel edge. Old site
+archived at `~/pickleball/_archive/ppachallenger.com-2026-09-21/` (local, 120 MB).
+Flywheel: cancel after the Gravity Forms lead export. The WP REST API exposes
+only 151 of 303 attachments; the archive adds 51 more from page references.
+
 ## 1. Why `/tour/challenger`, not `/challenger/`
 
 The site already puts every extended-tour program under `/tour/*`

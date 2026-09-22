@@ -65,6 +65,15 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-21 — ppachallenger.com DNS is on Vercel; the old site is archived
+
+- **Bryce flipped GoDaddy DNS 9/21** (A @ and www → 76.76.21.21, confirmed at `ns17.domaincontrol.com`). `vercel certs issue ppachallenger.com www.ppachallenger.com --scope bryce-pickleballs-projects` issued in 8s (valid to Dec 21). **Verified against the Vercel edge by IP** (`curl --resolve`, no `-L`): `/`, `/how-it-works/`, `/rankings/`, `/sponsors/`, `/tournament/2026-tucson-az/`, `/host-a-ppa-tour-tournament/` all 308 to their mapped ppatour.com sections on both hosts; http → https first.
+- **Old-site archive at `~/pickleball/_archive/ppachallenger.com-2026-09-21/`** (120 MB, NOT in any repo): 202 media files, the REST export (14 pages with content), rendered HTML + plain text of all 43 sitemap URLs, `media-manifest.csv`, README. Bryce asked for it "for history".
+- **⚠ THE PUBLIC REST API EXPOSES ONLY 151 OF THE 303 ATTACHMENTS** — `x-wp-total` says 303, but each page comes back permission-filtered (55/39/54/3), so `len(page) < per_page` is NOT "last page"; loop until a page is empty. The rest were recovered by pulling every `/wp-content/uploads/` URL out of the 43 saved pages + sitemaps (475 refs → 73 originals, 51 new). What is still missing is neither API-visible nor displayed anywhere — orphans and drafts — and needs a WP-admin export.
+- **⚠ Once DNS moved, the origin was only reachable by pinning the Flywheel IP** (`--resolve ppachallenger.com:443:151.101.194.159`). The Flywheel temporary host `ppa-challengers.mysites.io` 301s to ppachallenger.com (WordPress home URL), so it is useless as a mirror. The first archive run, started minutes before the flip, was fetching through the redirect and was killed.
+- **Flywheel is safe to cancel once Bryce has pulled the two things the public site cannot give:** Gravity Forms entries (host + sponsor leads) and, if wanted, Tools → Export for the full media list.
+- Still open: Tanner's 2026 Showdown dates + per-stop points; a live rankings source; internal Challenger event pages for 1:1 post redirects.
+
 ### 2026-09-21 — The Challenger Showdown lands on two pages from one file; the shared slug would have put it on last year's Worlds
 
 - Brooke Ansley's website request: update the Challenger Showdown information. It closes the `Showdown 2026: dates, format, who qualifies` ask that had been open in [`docs/CHALLENGER.md`](docs/CHALLENGER.md) §7 since the ppachallenger.com fold-in on 9/18 — the old WordPress page still described the 2025 edition, so `/tour/challenger` shipped with two sentences inside a list item and no dates.
