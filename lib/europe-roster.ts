@@ -21,10 +21,11 @@
  * NOT build a parallel /europe/players/[slug] route; that is exactly the
  * duplicate-profile problem `lib/athlete-slugs.ts` exists to clean up.
  *
- * ⚠ ONE MISSING RECORD IS DELIBERATE. Alexia Alvarez has a pickleball.com
- * profile but no portrait and no bio in the sheet. She ships as a card with a
- * silhouette so the gap is visible to Catie rather than hidden by omission.
- * Fill `portrait` and `bio` when they arrive; nothing else needs to change.
+ * ⚠ ALEXIA ALVAREZ'S PORTRAIT LANDED 2026-09-22 — Catie Preis sent it in
+ * #ppa-tour-europe after the silhouette card made the gap visible to her, which
+ * is what that card was for. SHE STILL HAS NO BIO in the sheet, so her card
+ * links out and prints none. Tom Protzek is now the one shipping without a
+ * portrait; see the note in scripts/import-europe-portraits.mjs.
  *
  * Bios are Catie's text. Two arrived in the first person (Biedermann,
  * Tomkinson) and were put into the third person to match the other 23 and every
@@ -458,6 +459,7 @@ export const europeRoster: EuroPro[] = [
     age: 25,
     divisions: [...WS, ...WD, ...XD],
     sponsors: [],
+    portrait: P("alexia-alvarez"),
     tagline: "Professional pickleball player on PPA Tour Europe",
     bio: [],
   },

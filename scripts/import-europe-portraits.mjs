@@ -57,6 +57,8 @@ const BY_FILE = {
   "Marina Sicic Portrait": "marina-sicic",
   "Jesus Campos Portrait": "jesus-campos",
   "Giovanna Mandon Portrait": "giovanna-mandon",
+  // Sent by Catie Preis in #ppa-tour-europe 2026-09-22, the last missing one.
+  "Alexia Alvarez Portrait": "alexia-alvarez",
 };
 
 /**
