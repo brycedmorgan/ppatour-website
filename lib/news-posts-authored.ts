@@ -251,4 +251,100 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
 <p><strong>For the comprehensive stats of all these gold medal matches, please visit: </strong><a href="https://facebook.com/groups/propickleballstats" target="_blank" rel="noreferrer noopener"><strong>facebook.com/groups/propickleballstats</strong></a></p>
 `.trim(),
   },
+  {
+    // Bryan Renahan's request, 9/21: the Junior PPA Select Team press release
+    // as a post. Body is the release verbatim (Google Doc
+    // 1omskvlw37hBSBg84k4DHUwON0y2_Qg7IYJDej0Q21yA, linked from Asana
+    // 1218609240918483). Nothing is added, cut or reordered.
+    //
+    // ⚠ EMBARGOED TO 2026-09-22 10:00 CT, AND THE DATE BELOW DOES NOT ENFORCE
+    // THAT. Nothing filters posts on publishedAt — it is the sort key and the
+    // displayed date, nothing more — so this post is live the moment it is
+    // deployed. The embargo is held by not deploying, exactly like the Select
+    // Team section on /tour/junior.
+    //
+    // Title and dek are the release's own headline and sub-heading. The
+    // earlier draft had neither and they had to be written; this revision
+    // supplies both, so nothing on this post is authored here.
+    slug: "junior-ppa-tour-announces-the-junior-ppa-select-team",
+    wpId: 900002,
+    status: "published",
+    source: "wordpress",
+    // Chosen by hand: this is an announcement, and "Tour News" is what the
+    // archive's other 343 announcements carry.
+    category: "Tour News",
+    series: null,
+    categoryResolvedBy: "fallback",
+    title: "Carvana Junior PPA Tour Launches Junior PPA Select Team to Develop Elite Youth Pickleball Talent",
+    dek: "18u and 14u Junior PPA Select Team player selections to take place after Junior PPA competition at Opendoor Pickleball World Championships",
+    // The release carries no byline. "PPA Tour" is the archive's house byline
+    // for unsigned tour announcements (154 posts) — inventing a writer would
+    // attribute a real person's name to copy they may not have written.
+    author: "PPA Tour",
+    publishedAt: "2026-09-22T10:00:00",
+    publishedAtGmt: "2026-09-22T15:00:00",
+    modifiedAt: "2026-09-22T15:00:00",
+    image: {
+      // Supplied by Wesley on launch morning, 9/22 — Junior PPA stadium-court
+      // doubles under the lights. Replaces the interim gallery frame.
+      //
+      // ⚠ NO NAMES. House style on this archive is a generic description, and
+      // these are photographs of minors — the same rule the Junior PPA gallery
+      // ships under. A spectator sign reading "ELLA" is visible in the crowd;
+      // it is a fan's sign, not an identification of either player, and
+      // nothing here captions anyone.
+      //
+      // Encoded to the house news standard: 2048x1365, mozjpeg q64, 4:4:4.
+      url: "/ppa/news/junior-ppa-select-team.jpg",
+      alt: "Junior PPA Tour players competing in a doubles match on stadium court.",
+      width: 2048,
+      height: 1365,
+    },
+    // Empty on purpose: detectAthleteMentions reads the body and resolves the
+    // roster itself. This release names no pros, so it correctly finds none.
+    players: [],
+    playerNames: [],
+    wpEvent: null,
+    tags: [],
+    tagsRaw: [],
+    wpCategories: [],
+    embeds: [],
+    inlineImages: [],
+    // Never existed on WordPress, so its canonical home is this site.
+    legacyUrl: "https://www.ppatour.com/junior-ppa-tour-announces-the-junior-ppa-select-team/",
+    seo: {
+      title: "Carvana Junior PPA Tour Launches Junior PPA Select Team | PPA Tour",
+      description:
+        "The Junior PPA Select Team commences Jan. 1, 2027 with 18u and 14u development squads, with players selected after the Junior Pickleball World Championships in Dallas, Nov. 5-8, 2026.",
+      canonical:
+        "https://www.ppatour.com/junior-ppa-tour-announces-the-junior-ppa-select-team/",
+    },
+    bodyHtml: `
+<p>The Carvana Junior PPA Tour has announced the formation of the Junior PPA Select Team, a premier development pathway aimed at identifying, training, and elevating the next generation of elite pickleball athletes. The program is set to commence on Jan. 1, 2027, following player selections made after the Junior Pickleball World Championships in Dallas, Texas, scheduled for Nov. 5-8, 2026, as part of the larger <a href="/events/2026/pickleball-world-championships/">Opendoor Pickleball World Championships</a> held at Brookhaven Country Club from Nov. 2-8.</p>
+
+
+
+<p>The Junior PPA Select Team will consist of two high-level development squads: 18-and-under (18u) and 14-and-under (14u). Each team is designed to cultivate rising talent and prepare young athletes for future competition on the Carvana PPA Tour. Players selected for the Junior PPA Select Team will receive exclusive competition perks, advanced training sessions, specialized coaching, significant exposure, and mentorship from PPA Tour professionals.</p>
+
+
+
+<p>Selection criteria for the Junior PPA Select Team include commitment, work ethic, professional potential, Junior PPA ranking points, and past achievements across PPA competitions. This initiative aligns with the Junior PPA&#8217;s mission to promote, encourage, and advance youth pickleball by maximizing the physical and mental development of promising athletes on the Junior PPA Tour.</p>
+
+
+
+<p>&#8220;Junior pickleball players have been making their mark on the broader pickleball community in extraordinary ways, and now it&#8217;s time to take the next step in advancing the elite talent nurtured in the Junior PPA ranks,&#8221; said Jake Weinbach, Director of Junior PPA Tour, Professional Pickleball Association. &#8220;The PPA has worked incredibly hard to create an encouraging and inclusive environment where kids can unlock their skill set, potential, and have fun playing the fastest-growing sport in the country. The Junior PPA Select Team is the stage where elite talents can further enhance their game and elevate their mental and physical development on the road to becoming the next pickleball superstar.&#8221;</p>
+
+
+
+<p>The Junior PPA Select Team aims to provide a structured environment for young athletes to develop their skills and gain exposure to higher levels of competition. By offering specialized coaching and mentorship, the program seeks to bridge the gap between junior and professional levels, ensuring a seamless transition for athletes aspiring to compete on the PPA Tour.</p>
+
+
+
+<p>The Junior Pickleball World Championships in Dallas will serve as a pivotal event for the selection process, bringing together top junior players from across the country. The championships will feature a series of competitive matches, providing a platform for athletes to showcase their skills and vie for a spot on the Junior PPA Select Team.</p>
+
+
+
+<p>The Junior PPA Tour has experienced significant growth since its inception, with over 1,200 junior pickleball players registered in the program. The introduction of the Junior PPA Select Team represents a strategic expansion of the tour&#8217;s commitment to fostering young talent and elevating the sport&#8217;s profile nationally and internationally.</p>
+`.trim(),
+  },
 ];

@@ -213,6 +213,40 @@ const SERVES = [
   },
 ];
 
+/**
+ * Junior PPA Select Team — announced 2026-09-22.
+ *
+ * Copy is Bryan Renahan's, verbatim, from the website request (Asana
+ * 1218609240918483). The deck attached to that request is marked Confidential
+ * and the request itself says it is "attached for background only" — so it is
+ * not linked, hosted or quoted here.
+ *
+ * ⚠ THE DECK'S ELIGIBILITY RULES ARE DELIBERATELY NOT ON THIS PAGE: the 18U
+ * headcount (8 players, 4 boys and 4 girls), the 10 PPA/Challenger/Junior PPA
+ * events in the last year for 18U, and the top-8 age-division ranking for 14U.
+ * None of them are in the approved copy OR in the press release. A junior
+ * plans a season around an eligibility rule — do not add one until the program
+ * publishes it itself.
+ *
+ * The selection window IS public (the press release says rosters are picked
+ * after the Junior Pickleball World Championships, Dallas, Nov 5–8 2026); it
+ * is simply not in the copy Bryan approved for this section.
+ */
+/**
+ * The UPA-A's own approved-paddle list. Same host as the rulebook /europe
+ * links to, and it is the only place this requirement can honestly point:
+ * the list changes as paddles are certified and de-listed, so nothing on this
+ * site should ever restate it.
+ */
+const UPAA_PADDLES = "https://upaa.unitedpickleball.com/approved-paddles/";
+
+const SELECT_TEAM_BENEFITS = [
+  "Advanced training camps",
+  "Mentorship from PPA Tour professionals",
+  "Increased exposure across Junior PPA, PPA Challenger Series, and PPA Tour qualifiers",
+  "A clear pathway to the PPA Tour",
+];
+
 const FINALS_2025 = [
   ["Girls Singles 12U", "Scout Johnson"],
   ["Boys Singles 12U", "Ari Chandra"],
@@ -289,6 +323,7 @@ const SECTIONS = [
   { id: "compete", label: "How to Compete" },
   { id: "register", label: "How to Register" },
   { id: "finals", label: "Junior PPA Finals" },
+  { id: "select-team", label: "Junior PPA Select Team" },
   { id: "serves", label: "Junior PPA Serves" },
   { id: "connected", label: "Stay Connected" },
   { id: "gallery", label: "Gallery" },
@@ -657,6 +692,51 @@ export default async function JuniorPage() {
             </div>
           </div>
 
+          {/**
+            * Equipment — Bryan Renahan's website request, 9/21. His copy,
+            * with two edits noted below.
+            *
+            * ⚠ THE DATE IS HIS AND IS IN THE PAST. He wrote "starting August
+            * 30th, 2026" and that is three weeks before this shipped, so the
+            * requirement reads as already in force rather than upcoming.
+            * Published as written — a date in a competition rule is not ours
+            * to reinterpret — but it was queried with him.
+            *
+            * ⚠ A PADDLE RULE CAN COST A JUNIOR THEIR ENTRY, so it sits on its
+            * own rather than inside a draw-size card: it applies to every
+            * division and every draw, unlike everything else under Format.
+            */}
+          <div className="mt-6 border-l-2 border-ppa-blue bg-ppa-paper p-5">
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+              Equipment
+            </p>
+            <h3 className="mt-1.5 font-display text-lg uppercase text-ppa-navy">
+              UPA-A Approved Paddle Requirement
+            </h3>
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-ppa-navy/70">
+              To ensure a level playing field and in spirit of fair competition,
+              starting August 30th, 2026 all those competing in Junior PPA Tour
+              events will be required to use paddles on the UPA-A Approved
+              Paddle List. The Junior PPA Tour works tirelessly to ensure fair
+              competition, and taking this step was deemed necessary.
+            </p>
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-ppa-navy/70">
+              Please confirm your paddle is eligible prior to the tournament.
+            </p>
+            {/* His copy reads "Click here to view the UPA-A Approved Paddle
+                List." Nothing on this site says "click here" — it tells a
+                screen reader nothing out of context — so the sentence is the
+                link, same treatment as the UPA-A rulebook link on /europe. */}
+            <a
+              href={UPAA_PADDLES}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex items-center gap-2 border-b-2 border-ppa-blue pb-0.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy hover:text-ppa-blue"
+            >
+              View the UPA-A Approved Paddle List ↗
+            </a>
+          </div>
+
           {/* Points */}
           <div className="mt-10">
             <h3 className="font-display text-lg uppercase text-ppa-navy">
@@ -801,8 +881,46 @@ export default async function JuniorPage() {
         </div>
       </section>
 
+      {/* ----------------------------------------- Junior PPA Select Team */}
+      {/**
+       * Sits between the Finals and Sportsmanship, which is why the three
+       * sections below it flip ground colour: this page alternates
+       * white / paper the whole way down, and inserting a section without
+       * flipping them would have run two paper sections together with no
+       * divider between the Select Team and Sportsmanship.
+       */}
+      <section id="select-team" className="scroll-mt-24 bg-ppa-paper">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12">
+          <SectionHead eyebrow="Coming 2027" title="Junior PPA Select Team" />
+          <p className="mt-4 max-w-3xl text-sm leading-relaxed text-ppa-navy/70">
+            The Junior PPA Select Team is a new elite development program
+            bridging the Junior PPA Tour and the pro PPA Tour. Launching
+            January 1, 2027, the program features two development teams, 18U
+            and 14U, built to prepare rising junior talent for the next level
+            of competition. Players are selected by committee based on
+            performance, rankings, and character.
+          </p>
+          <div className="mt-8 max-w-3xl border border-ppa-line bg-white p-6">
+            <h3 className="font-display text-base uppercase text-ppa-navy">
+              Player Benefits
+            </h3>
+            <ul className="mt-3 space-y-1.5">
+              {SELECT_TEAM_BENEFITS.map((b) => (
+                <li
+                  key={b}
+                  className="flex min-w-0 gap-2.5 text-sm leading-relaxed text-ppa-navy/65"
+                >
+                  <span className="mt-2 size-1.5 shrink-0 bg-ppa-blue" />
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* -------------------------------------- Sportsmanship + Serves */}
-      <section id="serves" className="scroll-mt-24 bg-ppa-paper">
+      <section id="serves" className="scroll-mt-24 bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <SectionHead eyebrow="On and Off the Court" title="Sportsmanship" />
           <p className="mt-4 max-w-3xl text-sm leading-relaxed text-ppa-navy/70">
@@ -871,7 +989,7 @@ export default async function JuniorPage() {
        * section and above the handbook, which is where she wanted it
        * ("Between Stay Connected and Learn more"). Her photos arrived 9/9.
        */}
-      <section id="connected" className="scroll-mt-24 bg-white">
+      <section id="connected" className="scroll-mt-24 bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <SectionHead eyebrow="Follow Along" title="Stay Connected" />
           <p className="mt-4 max-w-3xl text-sm leading-relaxed text-ppa-navy/70">
@@ -967,7 +1085,7 @@ export default async function JuniorPage() {
        * reproducing the site's look while re-implementing its behaviour reads
        * as almost-right, which is worse than obviously wrong.
        */}
-      <section id="gallery" className="scroll-mt-24 bg-ppa-paper">
+      <section id="gallery" className="scroll-mt-24 bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <SectionHead eyebrow="The Scene" title="Junior PPA Gallery" />
           <p className="mt-4 max-w-3xl text-sm leading-relaxed text-ppa-navy/70">
