@@ -187,7 +187,7 @@ export default async function EuropePage() {
   );
 
   const roster: RosterAthlete[] = europeRoster.map((p) => {
-    const wpr = wprIndex[p.slug];
+    const wpr = wprIndex[p.rankSlug ?? p.slug];
     return {
       slug: p.slug,
       name: p.name,

@@ -35,6 +35,13 @@
 export type EuroPro = {
   /** pickleball.com / WPR board slug. See the warning above. */
   slug: string;
+  /**
+   * The WPR board's slug, ONLY when it differs from `slug`. Rank lookups only —
+   * it never names a page. Raquel Amaro read "Unranked" with 9 WPR points
+   * (9/22) because the board keys her `raquel-amaro-veloso`. Check a new
+   * signing's board entry BY NAME; the profile URL does not tell you.
+   */
+  rankSlug?: string;
   name: string;
   /** Country as Catie's sheet records it — the flag the player competes under. */
   country: string;
@@ -177,6 +184,7 @@ export const europeRoster: EuroPro[] = [
   },
   {
     slug: "raquel-amaro",
+    rankSlug: "raquel-amaro-veloso",
     name: "Raquel Amaro",
     country: "Spain",
     countryCode: "ESP",
@@ -211,6 +219,7 @@ export const europeRoster: EuroPro[] = [
   },
   {
     slug: "james-ling",
+    rankSlug: "james-ling-2",
     name: "James Ling",
     country: "United Kingdom",
     countryCode: "GBR",
@@ -228,6 +237,7 @@ export const europeRoster: EuroPro[] = [
   },
   {
     slug: "eleanor-tomkinson",
+    rankSlug: "ellie-tomkinson-1",
     name: "Ellie Tomkinson",
     country: "United Kingdom",
     countryCode: "GBR",
@@ -510,3 +520,8 @@ export const europeRoster: EuroPro[] = [
 export function getEuroPro(slug: string): EuroPro | undefined {
   return europeRoster.find((p) => p.slug === slug);
 }
+
+/** Europe roster slug → WPR board slug, for the pros where they differ. */
+export const EUROPE_RANK_SLUGS: Record<string, string> = Object.fromEntries(
+  europeRoster.filter((p) => p.rankSlug).map((p) => [p.slug, p.rankSlug!]),
+);

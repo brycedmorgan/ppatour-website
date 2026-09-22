@@ -2,6 +2,7 @@ import { getAthlete } from "@/lib/athletes";
 import wprSnapshot from "@/lib/data/wpr-snapshot.json";
 import { RANKINGS_CACHE_TAG } from "@/lib/cache-tags";
 import { type Division, type DivisionKey, divisionRankings } from "@/lib/home-content";
+import { EUROPE_RANK_SLUGS } from "@/lib/europe-roster";
 import { pbGetJson } from "@/lib/pb-fetch";
 import { CURATED_TO_CANONICAL, getPublishedAthlete } from "@/lib/published-athletes";
 import {
@@ -777,7 +778,8 @@ export type AthleteRanking = { rank: number; gender: "men" | "women"; points: nu
 
 // Our curated athlete slugs that differ from the API's player_slug (shared
 // with the published-athletes layer, which is keyed by the canonical slug).
-const SLUG_ALIAS: Record<string, string> = CURATED_TO_CANONICAL;
+// Europe rank slugs are lookup-only: they never feed page slugs (see rankSlug).
+const SLUG_ALIAS: Record<string, string> = { ...CURATED_TO_CANONICAL, ...EUROPE_RANK_SLUGS };
 
 /**
  * Live WPR ranking for every ranked player, keyed by slug (both the API's

@@ -28,6 +28,7 @@
  * which covers the ranked pros we feature.
  */
 import { pbGetJson } from "@/lib/pb-fetch";
+import { EUROPE_RANK_SLUGS } from "@/lib/europe-roster";
 import { RANKINGS_CACHE_TAG } from "@/lib/cache-tags";
 import wprSnapshot from "@/lib/data/wpr-snapshot.json";
 
@@ -157,9 +158,11 @@ export async function getDivisionRanks(
     fetchBoard(3, g),
   ]);
   const out: AthleteDivisionRanks = {};
-  const s = singlesBoard.get(slug);
-  const d = doublesBoard.get(slug);
-  const m = mixedBoard.get(slug);
+  // Some Europe pros rank under a different board slug (see rankSlug).
+  const key = EUROPE_RANK_SLUGS[slug] ?? slug;
+  const s = singlesBoard.get(key);
+  const d = doublesBoard.get(key);
+  const m = mixedBoard.get(key);
   if (s) out.singles = s;
   if (d) out.doubles = d;
   if (m) out.mixed = m;
