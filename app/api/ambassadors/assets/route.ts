@@ -26,7 +26,9 @@ function bearerOk(header: string | null): boolean {
 }
 
 // Only these folders, only safe characters — no path traversal.
-const SAFE = /^(t|logos)\/[A-Za-z0-9._-]+$/;
+// `blob/` holds HQ graphic assets keyed by opaque assetId (served via
+// /ambassadors/asset/<id>, i.e. the /_blob/<id> rewrite).
+const SAFE = /^(t|logos|blob)\/[A-Za-z0-9._-]+$/;
 
 export async function POST(request: Request) {
   if (!bearerOk(request.headers.get("authorization"))) {

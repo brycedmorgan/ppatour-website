@@ -496,7 +496,13 @@ const nextConfig: NextConfig = {
         // Per-show pages under the same static deck (public/pbtv/shows/<slug>/).
         { source: "/pbtv/shows/:slug", destination: "/pbtv/shows/:slug/index.html" },
       ],
-      afterFiles: [],
+      afterFiles: [
+        // The Ambassador HQ page (lib/hq/hq-template.html, shared with the
+        // claude.ai artifact) loads every graphic from `/_blob/<assetId>`. On
+        // claude.ai the runtime serves that path; here we map it to the private
+        // asset route, which streams the image from the ambassador Blob store.
+        { source: "/_blob/:id", destination: "/ambassadors/asset/:id" },
+      ],
       fallback: [],
     };
   },
