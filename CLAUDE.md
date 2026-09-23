@@ -65,6 +65,74 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-23 — The Challenger board is the event team's own workbook now; the "About" tail pointed at this page
+
+- Amie Feliza's two website requests, both submitted 9/22 through the form (Asana `1218756871077842`
+  and `1218756087985593`): the Challenger Series leaderboard update, and the official "this is what
+  the Challenger series is about" copy. Both shipped on `/tour/challenger`.
+- **The board moved off the scrape and onto the source.** `lib/data/challenger-rankings.json` was
+  five hand-typed TablePress tables read off ppachallenger.com on 9/18, stamped **"Last Updated July
+  27th, 2026"**. It is now the sheet those tables were typed FROM — Jacob Guidry's **"(UPDATED)
+  CHALLENGER TOUR POINTS 2026 SEASON"**, modified 19:03 and sent at 19:09 the same evening. So the
+  page went from a two-month-old transcription to the workbook, and the printed date reads
+  **September 22, 2026**. 2,082 → **2,076 rows**: WS 168→169 · WD 307→311 · MS 361→370 · MD 650→**623**
+  · XD 596→603.
+- **⚠ THE BOARD MOVES IN BOTH DIRECTIONS AND A MISSING PLAYER IS NOT A PARSE ERROR.** Rankings run a
+  52-week window and signing with the Tour takes a player off, so **Carlota Trevino — who led THREE
+  divisions in the old file (WS 675, WD 587, XD 712) — is absent from all five boards**, along with
+  Helena Jansen, Armaan Jiwa Mawji and Rio Newcombe. Every men's/mixed leader changed hands
+  (MS: Burkhardt → **Tristan Dussault 475**; XD: Trevino → **Garrison Eaby 183**). Do **not**
+  reconcile a name against the old file — it is not a fuller list, it is an older one, and Trevino is
+  one of the six questionnaire signings already built and waiting (9/22 pt. 1).
+- **⚠ THE SHEET IS COMPETITION-RANKED AND THE OLD FILE WAS NOT, WHICH IS WHY THE IMPORT FAILED FIRST
+  TIME.** Exactly one tie in 2,076 rows: **Men's Doubles No. 1, Kyle Koszuta and Riley Inn both on
+  475**, with the next row at rank 3. The old snapshot had **zero** ties across all five boards, so
+  the first guard asserted rank == position and rejected it. The guard now allows a repeat only when
+  the points tie. **This is survivable only because `ChallengerRankings` keys its rows on rank + name**
+  — a rank-only key would have silently dropped one of the two, which is the /events duplicate-key
+  bug (8/3 pt. 4) in a table where the dropped row is a person's ranking. Verified in a browser: two
+  rank-1 rows render, **0 console warnings**.
+- The importer refuses rather than guesses: unknown `EVENT` value, non-numeric rank or points, empty
+  name, non-contiguous rank, rising points or a duplicate name inside a division all collect as
+  problems and **`--write` exits 1 if any survive**. It ran clean at 0. Division labels are read out
+  of the existing JSON rather than retyped from the sheet's "Womens Singles Pro Main Draw", so the
+  picker, the "found in other divisions" chips and the search keep working.
+- **The About section is now marketing's own boilerplate, verbatim**, replacing the two paragraphs
+  written here on 9/18 from ppachallenger.com's copy because nothing official existed yet.
+- **⚠ ONE SENTENCE OF HERS IS DELIBERATELY NOT PUBLISHED, AND BOTH HALVES OF IT FAIL ON THIS PAGE
+  SPECIFICALLY.** *"For more information, go to www.ppachallenger.com and follow us on social:
+  Instagram, Twitter/X, YouTube, and Facebook."* That is a press-release tail: **ppachallenger.com has
+  308'd to this exact page since 9/21**, so the pointer is a circle, and the four platforms are named
+  with **no handles**, which cannot be linked without guessing.
+- **⚠ AND THE HANDLES ARE NOT DERIVABLE FROM EACH OTHER, WHICH IS THE WHOLE REASON THIS IS AN ASK AND
+  NOT A LOOKUP.** Instagram is **@ppa.challenger — WITH a dot** (verified directly: 15K followers, bio
+  *"@ppatour Challenger Series 💥 Powered by @joolapickleball"*), while X is **@ppachallenger, without
+  one**. Either one inferred from the other lands on the wrong account. Facebook resolves only to a
+  numeric `/p/` page and **YouTube is genuinely ambiguous** — the Challenger broadcasts live on
+  @ppatour's channel and there is a separate unverified "Challenger Series" channel. So nothing was
+  published: same rule as the four sponsors left unlinked on 7/29 and the athlete socials on 9/1,
+  **URL in, label out**. Amie has the four URLs; they land as a Stay Connected row, the Junior PPA
+  shape.
+- **⚠ "SHOWDOWN IN DALLAS" IS CORROBORATION, NOT A CONFLICT, AND IT IS LINKED RATHER THAN RETYPED.**
+  Her copy names the *"PPA Challenger Showdown in Dallas"*; Brooke Ansley's 9/21 request put the
+  Showdown inside Worlds at **Brookhaven Country Club, Farmers Branch TX** — Dallas metro, which this
+  repo's own metro aliases already map (8/5 pt. 12). Two sources, same answer. The phrase links to
+  this page's `#showdown` section rather than repeating a date or a qualifying count, per that file's
+  standing rule that nothing there is typed twice.
+- Verified on rendered pages at 1440 and 390, not by grep over source: the three paragraphs and
+  "Founded in 2025" present, the `#showdown` link resolving to a section that exists, **0 occurrences
+  of either old paragraph, of "ppachallenger.com", of "follow us on social" or of "July 27, 2026"**,
+  the board reading "September 22, 2026" with Jada Bui at No. 1, and the Men's Doubles tie intact.
+  **0 horizontal overflow at both widths, and 0 of the 28 wider-than-viewport elements are in the new
+  copy** — all 28 are the pre-existing `overflow-x-auto` tables in `schedule` and `points`, the 9/21
+  baseline. **Control: the Worlds event page still carries the Showdown, unchanged.** tsc clean,
+  eslint clean on both changed files, `next build` green.
+- ⚠ Method, both already documented and both hit again: `next build` needs `scratchpad/
+  probe-platform-denied.ts` and `probe-rounds.ts` moved aside, and `BUILD_DIST_DIR=.next-buildcheck`
+  appends two entries to `tsconfig.json` (reverted). `wpr-snapshot.json` was NOT rewritten this time.
+- **Open, all with Amie:** the four social URLs · whether "Founded in 2025" is the Series' own line to
+  keep as the board ages · and the standing one from 9/18 — **nothing refreshes this JSON**, so every
+  leaderboard update is a commit until `partner_rankings` grows a Challenger scope (docs/CHALLENGER.md §7).
 ### 2026-09-22 (pt. 6) — Sticky trip bar under the header on every Vacations page
 
 - Bryce, after pt. 5 shipped: "at the top of this page it just shows the Turks and Caicos thing… I have

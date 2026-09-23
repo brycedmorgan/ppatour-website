@@ -1,43 +1,43 @@
 {
- "updated": "July 27, 2026",
- "source": "ppachallenger.com/rankings (TablePress tables 12\u201316), captured 2026-09-18",
+ "updated": "September 22, 2026",
+ "source": "Google Sheet \"(UPDATED) CHALLENGER TOUR POINTS 2026 SEASON\" (Jacob Guidry), supplied by Amie Feliza via the website request form, captured 2026-09-22",
  "divisions": [
   {
    "label": "Women's Singles",
    "rows": [
     [
      1,
-     "Carlota Trevino",
-     675
-    ],
-    [
-     2,
      "Jada Bui",
      414
     ],
     [
-     3,
+     2,
      "Samantha Buyckx",
      252
     ],
     [
-     4,
+     3,
      "Seone Mendez",
      250
     ],
     [
+     4,
+     "Masa Grgan",
+     248
+    ],
+    [
      5,
+     "Eileen Wang",
+     243
+    ],
+    [
+     6,
      "Janet Liu",
      236
     ],
     [
-     6,
-     "Amber Policare",
-     225
-    ],
-    [
      7,
-     "Helena Jansen",
+     "Amber Policare",
      225
     ],
     [
@@ -57,18 +57,18 @@
     ],
     [
      11,
-     "Masa Grgan",
-     208
+     "Chantal Mabie",
+     212
     ],
     [
      12,
-     "Chantal Mabie",
+     "Jessica Ho",
      200
     ],
     [
      13,
      "Helen To",
-     187
+     199
     ],
     [
      14,
@@ -82,28 +82,28 @@
     ],
     [
      16,
-     "Eileen Wang",
-     143
+     "Audrey Banada",
+     151
     ],
     [
      17,
-     "Audrey Banada",
-     139
-    ],
-    [
-     18,
      "Chloe Diskin",
      128
     ],
     [
+     18,
+     "Morgan Downing",
+     118
+    ],
+    [
      19,
-     "Jessica Ho",
-     125
+     "Natalia Simson",
+     118
     ],
     [
      20,
-     "Natalia Simson",
-     118
+     "Madalina Grigoriu",
+     115
     ],
     [
      21,
@@ -117,442 +117,442 @@
     ],
     [
      23,
-     "Morgan Downing",
-     93
-    ],
-    [
-     24,
      "Alexis Almy",
      87
     ],
     [
-     25,
+     24,
      "Courtenay Leonard",
      84
     ],
     [
-     26,
+     25,
      "Caitlin Klaassen",
      83
     ],
     [
+     26,
+     "Caroline Maguire",
+     81
+    ],
+    [
      27,
-     "Madalina Grigoriu",
-     75
+     "Frida Mudsam",
+     80
     ],
     [
      28,
-     "Frida Mudsam",
-     74
-    ],
-    [
-     29,
      "Averee Beck",
      72
     ],
     [
-     30,
-     "Melissa Ber\u00e9",
+     29,
+     "Melissa Beré",
      72
     ],
     [
-     31,
+     30,
      "Adelie Osher",
      65
     ],
     [
-     32,
+     31,
      "Anna Lenhart",
      64
     ],
     [
-     33,
+     32,
      "Louise Kwong",
      62
     ],
     [
-     34,
+     33,
      "Alicia Lai",
      58
     ],
     [
-     35,
-     "Caroline Maguire",
-     56
-    ],
-    [
-     36,
+     34,
      "Kayla Williams",
      55
     ],
     [
-     37,
+     35,
      "Emmaline Nichols",
      53
     ],
     [
-     38,
+     36,
      "Angela Morisette",
      51
     ],
     [
-     39,
+     37,
      "Jing Robinson",
      50
     ],
     [
-     40,
+     38,
      "Lauren Hidalgo-Smith",
      50
     ],
     [
-     41,
+     39,
      "Natalie Hur",
      50
     ],
     [
-     42,
+     40,
      "Sophie Abrams",
      50
     ],
     [
-     43,
+     41,
      "Hannah Shin",
      49
     ],
     [
-     44,
+     42,
      "Lily Goodwin",
      37
     ],
     [
-     45,
+     43,
      "Spencer Liang",
      37
     ],
     [
-     46,
+     44,
      "Stevie Petropouleas",
      37
     ],
     [
-     47,
+     45,
      "Sydney Sonday",
      37
     ],
     [
-     48,
+     46,
      "Alia Brown",
      36
     ],
     [
-     49,
-     "Circa Luna S",
+     47,
+     "Sharienne Ricardo",
      36
     ],
     [
-     50,
+     48,
      "Monika Wynne",
      31
     ],
     [
-     51,
+     49,
      "Brittany Yang",
      30
     ],
     [
-     52,
+     50,
+     "Chloe Zigliara",
+     30
+    ],
+    [
+     51,
      "Jillian Niemann",
      30
     ],
     [
-     53,
+     52,
      "Kamyla Held",
      30
     ],
     [
-     54,
+     53,
      "Olivia Phillips",
      30
     ],
     [
-     55,
+     54,
      "Rachel Janssen",
      30
     ],
     [
-     56,
+     55,
      "Samantha Morgan",
      30
     ],
     [
-     57,
-     "Sharienne Ricardo",
-     30
-    ],
-    [
-     58,
+     56,
      "Ashley Longoria",
      28
     ],
     [
-     59,
+     57,
      "Ariana Ajani",
      25
     ],
     [
-     60,
+     58,
      "Lina Romero Alarcon",
      25
     ],
     [
-     61,
+     59,
      "Frankee Hendricks",
      24
     ],
     [
-     62,
+     60,
      "Hilary Toole",
      24
     ],
     [
-     63,
+     61,
      "Lizzie McFarland",
      24
     ],
     [
-     64,
+     62,
      "Madalena Flores",
      24
     ],
     [
-     65,
+     63,
      "Mara Curry",
      24
     ],
     [
-     66,
+     64,
      "Meggan William",
      24
     ],
     [
-     67,
+     65,
      "Rachael Fitzgerald",
      24
     ],
     [
-     68,
+     66,
      "Tatiana Diaz",
      24
     ],
     [
-     69,
+     67,
      "Jazz Hearn",
      21
     ],
     [
-     70,
+     68,
      "Beatriz Lopez",
      18
     ],
     [
-     71,
+     69,
      "Catrina Coyner",
      18
     ],
     [
-     72,
-     "Cc Eleven Sacca",
-     18
-    ],
-    [
-     73,
-     "Chloe Zigliara",
-     18
-    ],
-    [
-     74,
+     70,
      "Eden Malloy",
      18
     ],
     [
-     75,
+     71,
      "Kendall Hunt",
      18
     ],
     [
-     76,
+     72,
      "Mary Monson",
      18
     ],
     [
-     77,
+     73,
      "Mya Barron",
      18
     ],
     [
-     78,
+     74,
      "Serena C",
      18
     ],
     [
-     79,
+     75,
+     "V. Mary Rivas",
+     18
+    ],
+    [
+     76,
      "Caroline Barnes",
      15
     ],
     [
-     80,
+     77,
      "Alexa Brent",
      12
     ],
     [
-     81,
+     78,
      "Alexa Quintanilla",
      12
     ],
     [
-     82,
+     79,
      "Ana Gordon",
      12
     ],
     [
-     83,
+     80,
      "Annelise Nguyen",
      12
     ],
     [
-     84,
+     81,
      "Audrey Viator",
      12
     ],
     [
-     85,
+     82,
      "Botum Bennett",
      12
     ],
     [
-     86,
+     83,
      "Brittni Tonnessen",
      12
     ],
     [
-     87,
+     84,
      "Cassie Postma",
      12
     ],
     [
-     88,
+     85,
      "Christee Chargot",
      12
     ],
     [
-     89,
+     86,
      "Christina Jordan",
      12
     ],
     [
-     90,
+     87,
      "Daniella Patton",
      12
     ],
     [
-     91,
+     88,
      "Dayna La Belle",
      12
     ],
     [
-     92,
+     89,
      "Dora Kurdi",
      12
     ],
     [
-     93,
+     90,
      "Eliana Ling",
      12
     ],
     [
-     94,
+     91,
      "Finne Jones",
      12
     ],
     [
-     95,
+     92,
+     "Frances Altick",
+     12
+    ],
+    [
+     93,
      "Grace Thomas",
      12
     ],
     [
-     96,
+     94,
      "Hannah Fife",
      12
     ],
     [
-     97,
+     95,
      "Hannah Friend",
      12
     ],
     [
-     98,
+     96,
      "Jahna Gregory",
      12
     ],
     [
-     99,
+     97,
+     "Jessica Evanier",
+     12
+    ],
+    [
+     98,
      "Jessica Improta",
      12
     ],
     [
-     100,
+     99,
      "Jessica Jones",
      12
     ],
     [
-     101,
+     100,
      "Kelly Jensen",
      12
     ],
     [
-     102,
+     101,
      "Kelsey Brading",
      12
     ],
     [
-     103,
+     102,
      "Leah Jones",
      12
     ],
     [
-     104,
+     103,
      "Lesa Ritchie",
      12
     ],
     [
-     105,
+     104,
      "Lorna Morris",
      12
     ],
     [
-     106,
+     105,
      "Madeleine Rasmusen",
      12
     ],
     [
-     107,
+     106,
      "Maria Vyshkina",
      12
     ],
     [
-     108,
+     107,
      "Megan McCray",
      12
     ],
     [
-     109,
+     108,
      "Meghan Sutherland",
      12
     ],
     [
-     110,
+     109,
      "Melissa Ching",
+     12
+    ],
+    [
+     110,
+     "Mila Messinger",
      12
     ],
     [
@@ -592,257 +592,262 @@
     ],
     [
      118,
-     "V. Mary Rivas",
-     12
+     "Mariana Negreiros Mariano",
+     9
     ],
     [
      119,
+     "Rose S",
+     9
+    ],
+    [
+     120,
      "Abigail Okelley",
      6
     ],
     [
-     120,
+     121,
      "Alexis Burkhalter",
      6
     ],
     [
-     121,
+     122,
      "Alika Vyshkina",
      6
     ],
     [
-     122,
+     123,
      "Andrea McDaniel",
      6
     ],
     [
-     123,
+     124,
      "Ava Pisacrita",
      6
     ],
     [
-     124,
+     125,
      "Carolina Correia",
      6
     ],
     [
-     125,
+     126,
      "Christina Nguyen",
      6
     ],
     [
-     126,
+     127,
      "Claudia Flores",
      6
     ],
     [
-     127,
+     128,
      "Erin Rasmussen",
      6
     ],
     [
-     128,
+     129,
      "Eva Kohutova",
      6
     ],
     [
-     129,
+     130,
      "Francesca Fakidis",
      6
     ],
     [
-     130,
+     131,
      "Jen Shviadok",
      6
     ],
     [
-     131,
+     132,
      "Jenna Vlach",
      6
     ],
     [
-     132,
-     "Jia Yi Tan",
-     6
-    ],
-    [
      133,
-     "Jordan Wesel",
+     "Jhia Horn",
      6
     ],
     [
      134,
-     "Journey Barajas",
+     "Jia Yi Tan",
      6
     ],
     [
      135,
-     "Kate S",
+     "Jordan Wesel",
      6
     ],
     [
      136,
-     "Kavya Rachapalli",
+     "Journey Barajas",
      6
     ],
     [
      137,
-     "Komal Safdar",
+     "Kate S",
      6
     ],
     [
      138,
-     "Kylie Imperial",
+     "Kavya Rachapalli",
      6
     ],
     [
      139,
-     "Linda Yang",
+     "Komal Safdar",
      6
     ],
     [
      140,
-     "Lisa Borowsky",
+     "Kylie Imperial",
      6
     ],
     [
      141,
-     "Maddy Stone-Wheatley",
+     "Linda Yang",
      6
     ],
     [
      142,
-     "Mara Schmidt",
+     "Lisa Borowsky",
      6
     ],
     [
      143,
-     "Mayu Omori",
+     "Maddy Stone-Wheatley",
      6
     ],
     [
      144,
-     "Melani Dizon",
+     "Mara Schmidt",
      6
     ],
     [
      145,
-     "Mia Turcsany",
+     "Maya Steines",
      6
     ],
     [
      146,
-     "Mikaela Smith",
+     "Mayu Omori",
      6
     ],
     [
      147,
-     "Mila Messinger",
+     "Melani Dizon",
      6
     ],
     [
      148,
-     "Monica Perez",
+     "Mia Turcsany",
      6
     ],
     [
      149,
-     "Natalie Kim",
+     "Mikaela Smith",
      6
     ],
     [
      150,
-     "Sarah Beeston",
+     "Monica Perez",
      6
     ],
     [
      151,
-     "Sarah Bowman",
+     "Natalie Kim",
      6
     ],
     [
      152,
-     "Sofia Manzanares",
+     "Pie Kipnes",
      6
     ],
     [
      153,
-     "Stephanie Mazurek",
+     "Sarah Beeston",
      6
     ],
     [
      154,
-     "Tomoko Taniguchi",
+     "Sarah Bowman",
      6
     ],
     [
      155,
-     "Veera Selanne",
+     "Sofia Manzanares",
      6
     ],
     [
      156,
-     "Victoria Shinkaretzky",
+     "Stephanie Mazurek",
      6
     ],
     [
      157,
+     "Tomoko Taniguchi",
+     6
+    ],
+    [
+     158,
+     "Veera Selanne",
+     6
+    ],
+    [
+     159,
+     "Victoria Shinkaretzky",
+     6
+    ],
+    [
+     160,
      "Alison Wagner",
      3
     ],
     [
-     158,
+     161,
      "Chrissy Fleischer",
      3
     ],
     [
-     159,
+     162,
      "Darinka Tiboldi",
      3
     ],
     [
-     160,
+     163,
      "Emma Cook",
      3
     ],
     [
-     161,
+     164,
      "Fatyha Berjane",
      3
     ],
     [
-     162,
+     165,
      "Francesca Randazzo",
      3
     ],
     [
-     163,
+     166,
      "Jessica Williamson",
      3
     ],
     [
-     164,
+     167,
      "Katie Queen",
      3
     ],
     [
-     165,
-     "Mariana Negreiros Mariano",
-     3
-    ],
-    [
-     166,
+     168,
      "Martina Wynia",
      3
     ],
     [
-     167,
+     169,
      "Mika Matteo",
-     3
-    ],
-    [
-     168,
-     "Rose S",
      3
     ]
    ]
@@ -852,13 +857,13 @@
    "rows": [
     [
      1,
-     "Carlota Trevino",
-     587
+     "Allie Reichert",
+     275
     ],
     [
      2,
-     "Allie Reichert",
-     250
+     "Maddy Rasmusen",
+     233
     ],
     [
      3,
@@ -882,23 +887,23 @@
     ],
     [
      7,
-     "Maddy Rasmusen",
-     193
-    ],
-    [
-     8,
      "Rachael James",
      190
     ],
     [
-     9,
+     8,
      "Amber Policare",
      175
     ],
     [
-     10,
+     9,
      "Marisa Ruiz",
-     163
+     175
+    ],
+    [
+     10,
+     "Madalina Grigoriu",
+     155
     ],
     [
      11,
@@ -912,63 +917,63 @@
     ],
     [
      13,
-     "Madalina Grigoriu",
-     149
-    ],
-    [
-     14,
      "Janet Liu",
      142
     ],
     [
-     15,
+     14,
      "Averee Beck",
      141
     ],
     [
-     16,
+     15,
      "Anne-Sophie Courteau",
      136
     ],
     [
-     17,
+     16,
      "Bella Nelson",
      131
     ],
     [
-     18,
+     17,
      "Chloe Diskin",
      129
     ],
     [
-     19,
+     18,
      "Aibika Kalsarieva",
      125
     ],
     [
-     20,
+     19,
      "Alia Brown",
      124
     ],
     [
+     20,
+     "Haley Ferguson",
+     121
+    ],
+    [
      21,
-     "Eileen Wang",
-     112
+     "Yolena Carlon",
+     121
     ],
     [
      22,
+     "Eileen Wang",
+     118
+    ],
+    [
+     23,
      "Adelie Osher",
      111
     ],
     [
-     23,
-     "Haley Ferguson",
-     109
-    ],
-    [
      24,
-     "Yolena Carlon",
-     109
+     "Anna Lenhart",
+     107
     ],
     [
      25,
@@ -982,32 +987,32 @@
     ],
     [
      27,
-     "Cc Eleven Sacca",
-     105
-    ],
-    [
-     28,
-     "Anna Lenhart",
-     101
-    ],
-    [
-     29,
      "Gina Li",
      100
     ],
     [
-     30,
+     28,
      "Kayla Williams",
      100
     ],
     [
-     31,
+     29,
      "Sophie Abrams",
      100
     ],
     [
-     32,
+     30,
+     "Helen To",
+     99
+    ],
+    [
+     31,
      "Kelsey Laurente",
+     99
+    ],
+    [
+     32,
+     "Mary McGowan",
      99
     ],
     [
@@ -1017,33 +1022,33 @@
     ],
     [
      34,
-     "Helen To",
-     93
+     "Masa Grgan",
+     88
     ],
     [
      35,
-     "Mary McGowan",
-     93
-    ],
-    [
-     36,
      "Stevie Petropouleas",
      80
     ],
     [
-     37,
+     36,
      "Elise Fortino",
      76
     ],
     [
-     38,
+     37,
      "Olivia Phillips",
      76
     ],
     [
-     39,
+     38,
      "Amanda Hendry",
      75
+    ],
+    [
+     39,
+     "Alexa Quintanilla",
+     74
     ],
     [
      40,
@@ -1062,8 +1067,8 @@
     ],
     [
      43,
-     "Alexa Quintanilla",
-     62
+     "Abigail Okelley",
+     61
     ],
     [
      44,
@@ -1077,98 +1082,98 @@
     ],
     [
      46,
-     "Abigail Okelley",
-     55
-    ],
-    [
-     47,
      "Evie Kenna",
      52
     ],
     [
-     48,
+     47,
      "Chelsea Purcell",
      50
     ],
     [
-     49,
+     48,
      "Dana Raugust",
      50
     ],
     [
-     50,
+     49,
      "Jamie Haas",
      50
     ],
     [
-     51,
+     50,
      "Leah Tauber",
      50
     ],
     [
-     52,
+     51,
      "Madison Grollman",
      50
     ],
     [
-     53,
+     52,
      "Brianna Kemp",
      49
     ],
     [
-     54,
+     53,
      "Mayu Omori",
      49
     ],
     [
-     55,
+     54,
      "Deanna Pham",
      48
     ],
     [
+     55,
+     "Melissa Beré",
+     48
+    ],
+    [
      56,
-     "Masa Grgan",
-     48
-    ],
-    [
-     57,
-     "Melissa Ber\u00e9",
-     48
-    ],
-    [
-     58,
      "Naomi De Hart",
      48
     ],
     [
-     59,
+     57,
+     "Jessica Haywood",
+     43
+    ],
+    [
+     58,
      "Stephanie Vogt",
      42
     ],
     [
-     60,
+     59,
      "Mary Monson",
      40
     ],
     [
-     61,
+     60,
      "Allie Davis",
      37
     ],
     [
-     62,
+     61,
      "Ava Pisacrita",
      37
     ],
     [
-     63,
+     62,
      "Cynthia McPherson",
      37
     ],
     [
-     64,
+     63,
      "Kelly Chen",
      37
+    ],
+    [
+     64,
+     "Adalynn Lund",
+     36
     ],
     [
      65,
@@ -1177,67 +1182,67 @@
     ],
     [
      66,
-     "Christie Mead",
+     "Caroline Maguire",
      36
     ],
     [
      67,
-     "Frida Mudsam",
+     "Christie Mead",
      36
     ],
     [
      68,
-     "Isabella Hoang",
+     "Frida Mudsam",
      36
     ],
     [
      69,
-     "Jillian Niemann",
+     "Isabella Hoang",
      36
     ],
     [
      70,
-     "Katie Neils",
+     "Jillian Niemann",
      36
     ],
     [
      71,
-     "Leah J",
+     "Katie Neils",
      36
     ],
     [
      72,
-     "Maria Klokotzky",
+     "Leah J",
      36
     ],
     [
      73,
-     "Natalia Simson",
+     "Maria Klokotzky",
      36
     ],
     [
      74,
-     "Sienna Hitzeman",
+     "Natalia Simson",
      36
     ],
     [
      75,
+     "Sienna Hitzeman",
+     36
+    ],
+    [
+     76,
      "Ana Gordon",
      33
     ],
     [
-     76,
+     77,
      "Rachael Fitzgerald",
      33
     ],
     [
-     77,
-     "Alicia Lai",
-     31
-    ],
-    [
      78,
-     "Jessica Haywood",
+     "Alicia Lai",
      31
     ],
     [
@@ -1262,17 +1267,17 @@
     ],
     [
      83,
-     "Adalynn Lund",
+     "Chantal Mabie",
      30
     ],
     [
      84,
-     "Caroline Maguire",
+     "Monica Perez",
      30
     ],
     [
      85,
-     "Monica Perez",
+     "Morgan Downing",
      30
     ],
     [
@@ -1287,277 +1292,277 @@
     ],
     [
      88,
+     "Spencer Liang",
+     30
+    ],
+    [
+     89,
+     "V. Mary Rivas",
+     30
+    ],
+    [
+     90,
      "Jazz Hearn",
      27
     ],
     [
-     89,
+     91,
      "Cassidy Hoag",
      25
     ],
     [
-     90,
+     92,
      "Chantal Van Winkle",
      25
     ],
     [
-     91,
+     93,
      "Charleen Calvin",
      25
     ],
     [
-     92,
+     94,
      "Christina Nguyen",
      25
     ],
     [
-     93,
+     95,
      "Constanza Gorches",
      25
     ],
     [
-     94,
+     96,
      "Giorgia Vitale",
      25
     ],
     [
-     95,
+     97,
      "Alexandra Valenstein",
      24
     ],
     [
-     96,
+     98,
      "Antoaneta Toskova",
      24
     ],
     [
-     97,
+     99,
      "Brie Aldridge",
      24
     ],
     [
-     98,
+     100,
      "Brittany Yang",
      24
     ],
     [
-     99,
-     "Chantal Mabie",
-     24
-    ],
-    [
-     100,
+     101,
      "Courtney Clark",
      24
     ],
     [
-     101,
+     102,
      "Eileen Tran",
      24
     ],
     [
-     102,
+     103,
      "Hannah Shin",
      24
     ],
     [
-     103,
+     104,
      "Kamyla Held",
      24
     ],
     [
-     104,
-     "Lesa Ritchie",
-     24
-    ],
-    [
      105,
-     "Lily Goodwin",
+     "Karen Lu",
      24
     ],
     [
      106,
-     "Marie Lutz",
+     "Kendall Warren",
      24
     ],
     [
      107,
-     "Morgan Downing",
+     "Lesa Ritchie",
      24
     ],
     [
      108,
-     "Nicole Kalhorn",
+     "Lily Goodwin",
      24
     ],
     [
      109,
-     "Nina Rhoades",
+     "Marie Lutz",
      24
     ],
     [
      110,
-     "Riley Bohnert",
+     "Nicole Kalhorn",
      24
     ],
     [
      111,
-     "Simone Leonard",
+     "Nina Rhoades",
      24
     ],
     [
      112,
-     "Tiffany Wang",
+     "Riley Bohnert",
      24
     ],
     [
      113,
-     "V. Mary Rivas",
+     "Simone Leonard",
      24
     ],
     [
      114,
-     "Asako Pastrana",
-     18
+     "Tiffany Wang",
+     24
     ],
     [
      115,
-     "Caraline Cox",
-     18
+     "Emma Cook",
+     21
     ],
     [
      116,
-     "Catrina Coyner",
+     "Andi Godwin",
      18
     ],
     [
      117,
-     "Fatyha Berjane",
+     "Asako Pastrana",
      18
     ],
     [
      118,
-     "Karen Lu",
+     "Ashley Lu",
      18
     ],
     [
      119,
-     "Karolina Fleming",
+     "Caraline Cox",
      18
     ],
     [
      120,
-     "Kasia Carr",
+     "Catrina Coyner",
      18
     ],
     [
      121,
-     "Katie O\u2019Riley",
+     "Fatyha Berjane",
      18
     ],
     [
      122,
-     "Kendall Warren",
+     "Karolina Fleming",
      18
     ],
     [
      123,
-     "Keri Lu",
+     "Kasia Carr",
      18
     ],
     [
      124,
-     "Louise Kwong",
+     "Katie O'Riley",
      18
     ],
     [
      125,
-     "Meggan William",
+     "Keri Lu",
      18
     ],
     [
      126,
-     "Patara Tezduyar",
+     "Louise Kwong",
      18
     ],
     [
      127,
-     "Regina Goldberg",
+     "Madelyn Porter",
      18
     ],
     [
      128,
-     "Spencer Liang",
+     "Meggan William",
      18
     ],
     [
      129,
+     "Mikaela Smith",
+     18
+    ],
+    [
+     130,
+     "Patara Tezduyar",
+     18
+    ],
+    [
+     131,
+     "Regina Goldberg",
+     18
+    ],
+    [
+     132,
      "Arianna Raga",
      15
     ],
     [
-     130,
-     "Emma Cook",
-     15
-    ],
-    [
-     131,
+     133,
      "Abby Trieu",
      12
     ],
     [
-     132,
+     134,
      "Adrienn Hidvegi",
      12
     ],
     [
-     133,
+     135,
      "Alexa Brent",
      12
     ],
     [
-     134,
+     136,
      "Alexis Almy",
      12
     ],
     [
-     135,
+     137,
      "Alexis Hayden",
      12
     ],
     [
-     136,
+     138,
      "Ali Quintero",
      12
     ],
     [
-     137,
+     139,
      "Aliese Pedro",
      12
     ],
     [
-     138,
-     "Andi Godwin",
-     12
-    ],
-    [
-     139,
+     140,
      "Angela Morisette",
      12
     ],
     [
-     140,
+     141,
      "Ariana Ajani",
      12
     ],
     [
-     141,
-     "Arielle Butler",
-     12
-    ],
-    [
      142,
-     "Ashley Lu",
+     "Arielle Butler",
      12
     ],
     [
@@ -1602,117 +1607,117 @@
     ],
     [
      151,
-     "Circa Luna S",
-     12
-    ],
-    [
-     152,
      "Clarissa Year",
      12
     ],
     [
-     153,
+     152,
      "Crystal Sorem",
      12
     ],
     [
-     154,
+     153,
      "Danica Wolf",
      12
     ],
     [
-     155,
+     154,
      "Darinka Tiboldi",
      12
     ],
     [
-     156,
+     155,
      "Darlene Mulkins",
      12
     ],
     [
-     157,
+     156,
      "Dayna La Belle",
      12
     ],
     [
-     158,
+     157,
      "Diana Kozenyatko",
      12
     ],
     [
-     159,
+     158,
      "Eden Malloy",
      12
     ],
     [
-     160,
+     159,
      "Elissa L",
      12
     ],
     [
-     161,
+     160,
      "Emma Van Hee",
      12
     ],
     [
-     162,
+     161,
      "Gabi Dekkers",
      12
     ],
     [
-     163,
+     162,
      "Hannah Fife",
      12
     ],
     [
-     164,
+     163,
      "Hannah Pardus",
      12
     ],
     [
-     165,
+     164,
      "Heather Kim",
      12
     ],
     [
-     166,
+     165,
      "Heather Schallenberger",
      12
     ],
     [
-     167,
-     "Helena Jansen",
-     12
-    ],
-    [
-     168,
+     166,
      "Jamie Voelker",
      12
     ],
     [
-     169,
+     167,
+     "Jessica Evanier",
+     12
+    ],
+    [
+     168,
      "Jessica Improta",
      12
     ],
     [
-     170,
+     169,
      "Jessica Lyng",
      12
     ],
     [
-     171,
+     170,
      "Jessica Warren",
      12
     ],
     [
-     172,
+     171,
      "Kaitlin Tran",
      12
     ],
     [
-     173,
+     172,
      "Kathryn Glavinovich",
+     12
+    ],
+    [
+     173,
+     "Kayla Nesbitt",
      12
     ],
     [
@@ -1782,12 +1787,12 @@
     ],
     [
      187,
-     "Madelyn Porter",
+     "Mara Schmidt",
      12
     ],
     [
      188,
-     "Mara Schmidt",
+     "Marygrace Rudd",
      12
     ],
     [
@@ -1802,22 +1807,22 @@
     ],
     [
      191,
-     "Mikaela Smith",
-     12
-    ],
-    [
-     192,
      "Mila Messinger",
      12
     ],
     [
-     193,
+     192,
      "Mya Barron",
      12
     ],
     [
-     194,
+     193,
      "Mylin Lemke",
+     12
+    ],
+    [
+     194,
+     "Nancy Suiugan",
      12
     ],
     [
@@ -1952,436 +1957,456 @@
     ],
     [
      221,
-     "Alexandra Strange",
+     "Alexa Smith",
      6
     ],
     [
      222,
-     "Alison Bruggeman",
+     "Alexandra Strange",
      6
     ],
     [
      223,
-     "Alli Hazrati",
+     "Alison Bruggeman",
      6
     ],
     [
      224,
-     "Alyssia Fossorier",
+     "Alli Hazrati",
      6
     ],
     [
      225,
-     "Anastasia Outekhine",
+     "Alyssia Fossorier",
      6
     ],
     [
      226,
-     "Andrea McDaniel",
+     "Anastasia Outekhine",
      6
     ],
     [
      227,
-     "Ariana Rodriguez",
+     "Andrea McDaniel",
      6
     ],
     [
      228,
-     "Beatriz Lopez",
+     "Ariana Rodriguez",
      6
     ],
     [
      229,
-     "Belani Soto",
+     "Beatriz Lopez",
      6
     ],
     [
      230,
-     "Brenna Murray",
+     "Belani Soto",
      6
     ],
     [
      231,
-     "Brianna McCullock",
+     "Brenna Murray",
      6
     ],
     [
      232,
-     "Chloe Zigliara",
+     "Brianna McCullock",
      6
     ],
     [
      233,
-     "Claire Thompson",
+     "Chloe Zigliara",
      6
     ],
     [
      234,
-     "Claudia Flores",
+     "Claire Thompson",
      6
     ],
     [
      235,
-     "Dora Kurdi",
+     "Claudia Birthisel",
      6
     ],
     [
      236,
-     "Eliana Ling",
+     "Claudia Flores",
      6
     ],
     [
      237,
-     "Elizabeth Roy",
+     "Dayana Fahey",
      6
     ],
     [
      238,
-     "Elyssa Wisner",
+     "Dora Kurdi",
      6
     ],
     [
      239,
-     "Emily Monk",
+     "Eliana Ling",
      6
     ],
     [
      240,
-     "Emma Wang",
+     "Elizabeth Roy",
      6
     ],
     [
      241,
-     "Emmaline Nichols",
+     "Elyssa Wisner",
      6
     ],
     [
      242,
-     "Estephany Tan",
+     "Emily Monk",
      6
     ],
     [
      243,
-     "Francesca Fakidis",
+     "Emma Wang",
      6
     ],
     [
      244,
-     "Francesca Marto",
+     "Emmaline Nichols",
      6
     ],
     [
      245,
-     "Francesca Randazzo",
+     "Estephany Tan",
      6
     ],
     [
      246,
-     "Frankee Hendricks",
+     "Frances Altick",
      6
     ],
     [
      247,
-     "Grace Nguyen",
+     "Francesca Fakidis",
      6
     ],
     [
      248,
-     "Hailee Haymore",
+     "Francesca Marto",
      6
     ],
     [
      249,
-     "Jaiden Sam",
+     "Francesca Randazzo",
      6
     ],
     [
      250,
-     "Jennifer Grady",
+     "Frankee Hendricks",
      6
     ],
     [
      251,
-     "Jessica Jones",
+     "Grace Nguyen",
      6
     ],
     [
      252,
-     "Jessica Wilcox",
+     "Hailee Haymore",
      6
     ],
     [
      253,
-     "Jocelyn Bedoya",
+     "Jaiden Sam",
      6
     ],
     [
      254,
-     "Journey Barajas",
+     "Jennifer Grady",
      6
     ],
     [
      255,
-     "Joy Leising",
+     "Jessica Jones",
      6
     ],
     [
      256,
-     "Julie Azzolina",
+     "Jessica Wilcox",
      6
     ],
     [
      257,
-     "Karina Lam",
+     "Jocelyn Bedoya",
      6
     ],
     [
      258,
-     "Katelyn Hilliard",
+     "Journey Barajas",
      6
     ],
     [
      259,
-     "Kayla Field",
+     "Joy Leising",
      6
     ],
     [
      260,
-     "Kayla Nesbitt",
+     "Julie Azzolina",
      6
     ],
     [
      261,
-     "Kelly Jensen",
+     "Karina Lam",
      6
     ],
     [
      262,
-     "Kelsey Roundtree",
+     "Kate S",
      6
     ],
     [
      263,
-     "Kristin Kennedy",
+     "Katelyn Hilliard",
      6
     ],
     [
      264,
-     "Lauren Hidalgo-Smith",
+     "Kayla Field",
      6
     ],
     [
      265,
-     "Linda Yang",
+     "Kelly Jensen",
      6
     ],
     [
      266,
-     "Lisa Borowsky",
+     "Kelsey Roundtree",
      6
     ],
     [
      267,
-     "Lorie Caelwaerts",
+     "Kiki Onyeagocha",
      6
     ],
     [
      268,
-     "Lucia Changkuon",
+     "Kristen Van Dernoot",
      6
     ],
     [
      269,
-     "Maddy Stone-Wheatley",
+     "Kristin Kennedy",
      6
     ],
     [
      270,
-     "Maggie Bullins",
+     "Lauren Hidalgo-Smith",
      6
     ],
     [
      271,
-     "Mara Vasvatekis",
+     "Linda Yang",
      6
     ],
     [
      272,
-     "Marygrace Rudd",
+     "Lisa Borowsky",
      6
     ],
     [
      273,
-     "Mia Turcsany",
+     "Lorie Caelwaerts",
      6
     ],
     [
      274,
-     "Nancy Suiugan",
+     "Lucia Changkuon",
      6
     ],
     [
      275,
-     "Natalia Sanchez",
+     "Maddy Stone-Wheatley",
      6
     ],
     [
      276,
-     "Natalie Araya",
+     "Maggie Bullins",
      6
     ],
     [
      277,
-     "Nikita Pradeep",
+     "Mara Vasvatekis",
      6
     ],
     [
      278,
-     "Noelle Cerone",
+     "Mia Turcsany",
      6
     ],
     [
      279,
-     "Patricia Martins",
+     "Natalia Sanchez",
      6
     ],
     [
      280,
-     "Putri Insani",
+     "Natalie Araya",
      6
     ],
     [
      281,
-     "Rifanty Kahfiani",
+     "Nikita Pradeep",
      6
     ],
     [
      282,
-     "Riley Hanks",
+     "Noelle Cerone",
      6
     ],
     [
      283,
-     "Sable Yrjanson",
+     "Patricia Martins",
      6
     ],
     [
      284,
-     "Sara Bochte",
+     "Putri Insani",
      6
     ],
     [
      285,
-     "Sarah Carpenter",
+     "Rifanty Kahfiani",
      6
     ],
     [
      286,
-     "Sarah Kaufman",
+     "Riley Hanks",
      6
     ],
     [
      287,
-     "Shailla Alda",
+     "Sable Yrjanson",
      6
     ],
     [
      288,
-     "Shayla Molnar",
+     "Sara Bochte",
      6
     ],
     [
      289,
-     "Shea Donahue",
+     "Sarah Carpenter",
      6
     ],
     [
      290,
-     "Skylar Amos",
+     "Sarah Kaufman",
      6
     ],
     [
      291,
-     "Stephanie Mazurek",
+     "Shailla Alda",
      6
     ],
     [
      292,
-     "Victoria Mikuta",
+     "Shayla Molnar",
      6
     ],
     [
      293,
-     "Yulia Krylova",
+     "Shea Donahue",
      6
     ],
     [
      294,
-     "Zoe Reavis",
+     "Skylar Amos",
      6
     ],
     [
      295,
+     "Stephanie Mazurek",
+     6
+    ],
+    [
+     296,
+     "Victoria Mikuta",
+     6
+    ],
+    [
+     297,
+     "Yulia Krylova",
+     6
+    ],
+    [
+     298,
+     "Zoe Reavis",
+     6
+    ],
+    [
+     299,
      "Ansley Drenner",
      3
     ],
     [
-     296,
+     300,
      "Cheyenne Jones",
      3
     ],
     [
-     297,
+     301,
      "Dominique Canale",
      3
     ],
     [
-     298,
+     302,
      "Jessica Mason",
      3
     ],
     [
-     299,
+     303,
      "Julianna Hess",
      3
     ],
     [
-     300,
+     304,
      "Kathryne Yung",
      3
     ],
     [
-     301,
+     305,
      "Kylie Imperial",
      3
     ],
     [
-     302,
+     306,
      "Lina Romero",
      3
     ],
     [
-     303,
+     307,
      "Mackenzie Lee",
      3
     ],
     [
-     304,
+     308,
      "Martina Wynia",
      3
     ],
     [
-     305,
+     309,
      "Rachel Janssen",
      3
     ],
     [
-     306,
+     310,
      "Valentina Martin",
      3
     ],
     [
-     307,
+     311,
      "Veronica Villegas",
      3
     ]
@@ -2392,83 +2417,83 @@
    "rows": [
     [
      1,
-     "Matt Burkhardt",
-     387
+     "Tristan Dussault",
+     475
     ],
     [
      2,
+     "William Hsieh",
+     420
+    ],
+    [
+     3,
+     "Matt Burkhardt",
+     412
+    ],
+    [
+     4,
      "Bret Berryman",
      370
     ],
     [
-     3,
-     "Tristan Dussault",
-     350
-    ],
-    [
-     4,
-     "Armaan Jiwa Mawji",
-     336
-    ],
-    [
      5,
-     "William Hsieh",
-     320
+     "Vincent Rettke",
+     243
     ],
     [
      6,
-     "Vincent Rettke",
-     231
-    ],
-    [
-     7,
      "Eddy Kim",
      223
     ],
     [
-     8,
+     7,
      "Martin Stanchev",
      200
     ],
     [
-     9,
+     8,
      "Troy Akin",
      198
     ],
     [
-     10,
+     9,
      "Luke Kusmider",
      153
     ],
     [
-     11,
+     10,
      "William Sobek",
      150
     ],
     [
-     12,
+     11,
      "Parth Mody",
      149
     ],
     [
-     13,
+     12,
      "Jae Centonze",
+     143
+    ],
+    [
+     13,
+     "Eli Steiner",
      137
     ],
     [
      14,
-     "Eli Steiner",
-     131
+     "Connor McCartney",
+     129
     ],
     [
      15,
-     "Juan Varon",
-     113
+     "Wade Heerboth",
+     124
     ],
     [
      16,
-     "Wade Heerboth",
-     112
+     "Juan Varon",
+     113
     ],
     [
      17,
@@ -2477,13 +2502,13 @@
     ],
     [
      18,
-     "Connor McCartney",
-     104
+     "Zach Gonnering",
+     102
     ],
     [
      19,
-     "Zach Gonnering",
-     96
+     "Patrik Kevin Tsati-Onla",
+     87
     ],
     [
      20,
@@ -2492,8 +2517,8 @@
     ],
     [
      21,
-     "Patrik Kevin Tsati-Onla",
-     81
+     "Ethan Bakalinsky",
+     80
     ],
     [
      22,
@@ -2512,18 +2537,18 @@
     ],
     [
      25,
-     "Rodrigo Grajales",
+     "Jarryd Woog",
      72
     ],
     [
      26,
-     "George Bulger",
-     69
+     "Rodrigo Grajales",
+     72
     ],
     [
      27,
-     "Ethan Bakalinsky",
-     68
+     "George Bulger",
+     69
     ],
     [
      28,
@@ -2537,128 +2562,128 @@
     ],
     [
      30,
-     "Jarryd Woog",
-     60
-    ],
-    [
-     31,
      "TJ Rudden",
      57
     ],
     [
-     32,
+     31,
      "Trevor Schwarzmann",
      55
     ],
     [
-     33,
+     32,
      "Emilien Burnel",
      52
     ],
     [
-     34,
+     33,
      "Mackonner Dy",
      52
     ],
     [
-     35,
+     34,
      "Dylan Lewis",
      50
     ],
     [
+     35,
+     "Francis Chi",
+     49
+    ],
+    [
      36,
-     "Hayden Rand",
+     "Daniel Miron",
      48
     ],
     [
      37,
-     "Kendall Kikkawa",
+     "Hayden Rand",
      48
     ],
     [
      38,
+     "Jay Evans",
+     48
+    ],
+    [
+     39,
+     "Kendall Kikkawa",
+     48
+    ],
+    [
+     40,
+     "Casey Markulike",
+     45
+    ],
+    [
+     41,
+     "Jackson Ayotte",
+     45
+    ],
+    [
+     42,
      "Dan Nguyen",
      42
     ],
     [
-     39,
-     "Daniel Miron",
-     42
-    ],
-    [
-     40,
-     "Jay Evans",
-     42
-    ],
-    [
-     41,
+     43,
      "Oliver Frank",
      40
     ],
     [
-     42,
-     "Casey Markulike",
-     39
-    ],
-    [
-     43,
-     "Jackson Ayotte",
-     39
-    ],
-    [
      44,
-     "Francis Chi",
-     37
-    ],
-    [
-     45,
      "Jace Howard",
      36
     ],
     [
-     46,
+     45,
      "Jemere Plummer",
      36
     ],
     [
-     47,
+     46,
      "Justin Dages",
      36
     ],
     [
-     48,
+     47,
      "Brenden Everhart",
      33
     ],
     [
-     49,
+     48,
      "Noah Torres",
      33
     ],
     [
-     50,
+     49,
      "Ajit Kurki",
      30
     ],
     [
-     51,
+     50,
      "Edward Kim",
      30
     ],
     [
-     52,
+     51,
      "Hunter Merritt",
      30
     ],
     [
-     53,
-     "Maverick Messinger",
+     52,
+     "Nicholas Wade",
      30
     ],
     [
+     53,
+     "Blake Goodman",
+     27
+    ],
+    [
      54,
-     "Nicholas Wade",
-     30
+     "Braylon Ohrel",
+     27
     ],
     [
      55,
@@ -2667,132 +2692,132 @@
     ],
     [
      56,
-     "Kyle Yates",
+     "Demetric Marrero Jr",
      25
     ],
     [
      57,
+     "Kyle Yates",
+     25
+    ],
+    [
+     58,
      "Brock Rzesnowiecky",
      24
     ],
     [
-     58,
+     59,
      "Domenico Geminiani",
      24
     ],
     [
-     59,
-     "Hudson De Risi",
-     24
-    ],
-    [
      60,
-     "Lucas Pascoe",
+     "Emanuel Dickson",
      24
     ],
     [
      61,
-     "Martin Thomas",
+     "Hudson De Risi",
      24
     ],
     [
      62,
-     "Mattias Johansson",
+     "Luis Rojas",
      24
     ],
     [
      63,
-     "Michael Coleman",
+     "Martin Thomas",
      24
     ],
     [
      64,
-     "Mouaad Alhouni",
+     "Mattias Johansson",
      24
     ],
     [
      65,
-     "Nicolas Almeida",
+     "Michael Coleman",
      24
     ],
     [
      66,
-     "Blake Goodman",
-     21
+     "Mouaad Alhouni",
+     24
     ],
     [
      67,
+     "Nicolas Almeida",
+     24
+    ],
+    [
+     68,
+     "Will Lieberman",
+     24
+    ],
+    [
+     69,
      "Grayson Brandon",
      21
     ],
     [
-     68,
+     70,
      "Jaikin Gomez",
      21
     ],
     [
-     69,
-     "Luis Rojas",
+     71,
+     "James Singer",
      21
     ],
     [
-     70,
+     72,
      "Peter Le",
      21
     ],
     [
-     71,
-     "Emanuel Dickson",
-     18
-    ],
-    [
-     72,
-     "Evan Pratt",
-     18
-    ],
-    [
      73,
-     "Immanuel Zion",
+     "Brayden Nguyen",
      18
     ],
     [
      74,
-     "James Singer",
+     "Evan Pratt",
      18
     ],
     [
      75,
-     "Kyle Borawski",
+     "Immanuel Zion",
      18
     ],
     [
      76,
-     "Lova Metor",
+     "Kyle Borawski",
      18
     ],
     [
      77,
-     "Preston Engel",
+     "Lova Metor",
      18
     ],
     [
      78,
-     "Tanner Suard",
+     "Preston Engel",
      18
     ],
     [
      79,
+     "Tanner Suard",
+     18
+    ],
+    [
+     80,
      "Andrew Angulo",
      15
     ],
     [
-     80,
-     "Benjamin Pepion",
-     15
-    ],
-    [
      81,
-     "Braylon Ohrel",
+     "Benjamin Pepion",
      15
     ],
     [
@@ -2817,1382 +2842,1427 @@
     ],
     [
      86,
-     "Gavin Fowler",
+     "Evan T",
      15
     ],
     [
      87,
-     "Jack Maline",
+     "Gavin Fowler",
      15
     ],
     [
      88,
-     "James Seagraves",
+     "Jack Maline",
      15
     ],
     [
      89,
-     "Lorin Schlecht",
+     "James Seagraves",
      15
     ],
     [
      90,
-     "Michael Vallejo",
+     "Justin Guiltinan",
      15
     ],
     [
      91,
-     "Mina Ghobrial",
+     "Lincoln M",
      15
     ],
     [
      92,
-     "Nicholas Romano",
+     "Lorin Schlecht",
      15
     ],
     [
      93,
-     "Ryder Brown",
+     "Michael Vallejo",
      15
     ],
     [
      94,
-     "Usama Khalid",
+     "Mina Ghobrial",
      15
     ],
     [
      95,
+     "Nicholas Romano",
+     15
+    ],
+    [
+     96,
+     "Ryder Brown",
+     15
+    ],
+    [
+     97,
+     "Tobias Moreno",
+     15
+    ],
+    [
+     98,
+     "Usama Khalid",
+     15
+    ],
+    [
+     99,
      "Austin Romaguera",
      12
     ],
     [
-     96,
-     "Brayden Nguyen",
-     12
-    ],
-    [
-     97,
+     100,
      "Bruno Barrueto Deza",
      12
     ],
     [
-     98,
+     101,
      "Cadell Traya",
      12
     ],
     [
-     99,
+     102,
      "Carson Calhoun",
      12
     ],
     [
-     100,
+     103,
      "Cheng En Tsai",
      12
     ],
     [
-     101,
+     104,
      "Christopher Jaques",
      12
     ],
     [
-     102,
+     105,
      "Claudio Quinones Garcia",
      12
     ],
     [
-     103,
+     106,
      "Connor Duvally",
      12
     ],
     [
-     104,
+     107,
      "Daniel Byun",
      12
     ],
     [
-     105,
+     108,
      "David Kimmel",
      12
     ],
     [
-     106,
+     109,
      "Duncan Mulenga",
      12
     ],
     [
-     107,
-     "Justin Graham",
-     12
-    ],
-    [
-     108,
-     "Keaten Kappes",
-     12
-    ],
-    [
-     109,
-     "Kenneth Lee",
-     12
-    ],
-    [
      110,
-     "Lincoln M",
+     "George Wolf",
      12
     ],
     [
      111,
-     "Luke Williams",
+     "Jacob Conway",
      12
     ],
     [
      112,
-     "Matthew Melgar",
+     "Justin Graham",
      12
     ],
     [
      113,
-     "Mike Leslie",
+     "Keaten Kappes",
      12
     ],
     [
      114,
-     "MJ Marrero",
+     "Kenneth Lee",
      12
     ],
     [
      115,
-     "Noah Waddell",
+     "Luke Williams",
      12
     ],
     [
      116,
-     "Poongi Hong",
+     "Matthew Melgar",
      12
     ],
     [
      117,
-     "Sean Bailey",
+     "Mike Leslie",
      12
     ],
     [
      118,
-     "Siddharth Patil",
+     "MJ Marrero",
      12
     ],
     [
      119,
-     "Tanner Tomassi",
+     "Noah Waddell",
      12
     ],
     [
      120,
-     "Thiago Soto",
+     "Poongi Hong",
      12
     ],
     [
      121,
-     "Tobias Moreno",
+     "Sam Brothman",
      12
     ],
     [
      122,
-     "Tyler Glowaki",
+     "Sean Bailey",
      12
     ],
     [
      123,
-     "Will Lieberman",
+     "Siddharth Patil",
      12
     ],
     [
      124,
-     "Ben Bailey",
-     9
+     "Tanner Tomassi",
+     12
     ],
     [
      125,
-     "Benjamin Bramblett",
-     9
+     "Thiago Soto",
+     12
     ],
     [
      126,
-     "Charlie Schuls",
-     9
+     "Tristan Cooley",
+     12
     ],
     [
      127,
-     "Damon Little",
-     9
+     "Tyler Glowaki",
+     12
     ],
     [
      128,
-     "Dave Conley",
+     "Ari Chandra",
      9
     ],
     [
      129,
-     "Evan T",
+     "Ben Bailey",
      9
     ],
     [
      130,
-     "George Wolf",
+     "Benjamin Bramblett",
      9
     ],
     [
      131,
-     "Jacob Conway",
+     "Charlie Schuls",
      9
     ],
     [
      132,
-     "JJ B",
+     "Damon Little",
      9
     ],
     [
      133,
-     "Justin Guiltinan",
+     "Dave Conley",
      9
     ],
     [
      134,
-     "Levi Daniel",
+     "David Creswell",
      9
     ],
     [
      135,
-     "Lucas Coutinho",
+     "Jesse Berkowitz",
      9
     ],
     [
      136,
-     "Markal Luckett-Smith",
+     "JJ B",
      9
     ],
     [
      137,
-     "Matt Bozoian",
+     "Levi Daniel",
      9
     ],
     [
      138,
-     "MJ Greiner",
+     "Lucas Coutinho",
      9
     ],
     [
      139,
-     "Riley Durkin",
+     "Markal Luckett-Smith",
      9
     ],
     [
      140,
-     "Sam Brothman",
+     "Matt Bozoian",
      9
     ],
     [
      141,
-     "Sonny Dackman",
+     "MJ Greiner",
      9
     ],
     [
      142,
-     "Teano Balducci",
+     "Riley Durkin",
      9
     ],
     [
      143,
-     "Tristan Cooley",
+     "Samuel Dickson",
      9
     ],
     [
      144,
-     "Victor Camilo Iii",
+     "Sonny Dackman",
      9
     ],
     [
      145,
+     "Teano Balducci",
+     9
+    ],
+    [
+     146,
+     "Victor Camilo Iii",
+     9
+    ],
+    [
+     147,
+     "Will Wimbish",
+     9
+    ],
+    [
+     148,
      "Adym Pham",
      6
     ],
     [
-     146,
+     149,
      "Ahmad El-Zarif",
      6
     ],
     [
-     147,
+     150,
      "Akshay Harishankar",
      6
     ],
     [
-     148,
+     151,
      "Alan Schiller",
      6
     ],
     [
-     149,
+     152,
      "Angel Hernandez",
      6
     ],
     [
-     150,
-     "Ari Chandra",
-     6
-    ],
-    [
-     151,
+     153,
      "Beau Covell",
      6
     ],
     [
-     152,
+     154,
      "Ben Baravik",
      6
     ],
     [
-     153,
+     155,
      "Benjamin Klein",
      6
     ],
     [
-     154,
+     156,
      "Blake Suard",
      6
     ],
     [
-     155,
+     157,
      "Boris Paque",
      6
     ],
     [
-     156,
+     158,
      "Brian Buzianis",
      6
     ],
     [
-     157,
+     159,
      "Bryan Lundberg",
      6
     ],
     [
-     158,
+     160,
      "Cade Edwards",
      6
     ],
     [
-     159,
+     161,
      "Cagkan Yilmaz",
      6
     ],
     [
-     160,
+     162,
      "Caleb Herrick",
      6
     ],
     [
-     161,
+     163,
      "Cameron Szazynski",
      6
     ],
     [
-     162,
+     164,
      "Casey Garretson",
      6
     ],
     [
-     163,
+     165,
      "Charlie Konkachbaev",
      6
     ],
     [
-     164,
+     166,
      "Colton Thielman",
      6
     ],
     [
-     165,
+     167,
      "Connor Gibbs",
      6
     ],
     [
-     166,
+     168,
      "Cristobal Del Castillo",
      6
     ],
     [
-     167,
+     169,
      "Dale Kim",
      6
     ],
     [
-     168,
+     170,
      "Dane Lalliss",
      6
     ],
     [
-     169,
-     "David Creswell",
-     6
-    ],
-    [
-     170,
+     171,
      "Dylan Song",
      6
     ],
     [
-     171,
+     172,
      "Elijah Chernoff",
      6
     ],
     [
-     172,
+     173,
      "Garrett Ivey",
      6
     ],
     [
-     173,
+     174,
      "Garrett Whitehead",
      6
     ],
     [
-     174,
+     175,
      "Glenn Dickerson",
      6
     ],
     [
-     175,
+     176,
      "Hudson Lee",
      6
     ],
     [
-     176,
+     177,
      "Itziar Rios",
      6
     ],
     [
-     177,
+     178,
      "Jack Foster",
      6
     ],
     [
-     178,
-     "Jeffrey Moulton",
-     6
-    ],
-    [
      179,
-     "Jesse Berkowitz",
+     "James Wolf",
      6
     ],
     [
      180,
-     "Jon Baker",
+     "Jason Ma",
      6
     ],
     [
      181,
-     "Jordan Flink",
+     "Jeffrey Moulton",
      6
     ],
     [
      182,
-     "Jordan Tacheny",
+     "Jon Baker",
      6
     ],
     [
      183,
-     "Jorge Mata",
+     "Jordan Flink",
      6
     ],
     [
      184,
-     "JP Gorby",
+     "Jordan Tacheny",
      6
     ],
     [
      185,
-     "Juan Ram\u00edrez",
+     "Jorge Mata",
      6
     ],
     [
      186,
-     "Kace Heiner",
+     "JP Gorby",
      6
     ],
     [
      187,
-     "Karlo Krstanovic",
+     "Juan Ramírez",
      6
     ],
     [
      188,
-     "Keagan Cummings",
+     "Kace Heiner",
      6
     ],
     [
      189,
-     "Kevin Rushton",
+     "Karlo Krstanovic",
      6
     ],
     [
      190,
-     "Kleyton Martins da Silva",
+     "Keagan Cummings",
      6
     ],
     [
      191,
-     "Koji Pedersen",
+     "Kevin Rushton",
      6
     ],
     [
      192,
-     "Kyle Pham",
+     "Kleyton Martins da Silva",
      6
     ],
     [
      193,
-     "Landon Ivey",
+     "Koji Pedersen",
      6
     ],
     [
      194,
-     "Louis Laville",
+     "Kyle Pham",
      6
     ],
     [
      195,
-     "Lucas Severo",
+     "Landon Ivey",
      6
     ],
     [
      196,
-     "Luke Wasson",
+     "Louis Laville",
      6
     ],
     [
      197,
-     "Magnus Violet",
+     "Lucas Severo",
      6
     ],
     [
      198,
-     "Maksims Kazijevs",
+     "Magnus Violet",
      6
     ],
     [
      199,
-     "Manfred Jeske",
+     "Maksims Kazijevs",
      6
     ],
     [
      200,
-     "Mark Dancuart",
+     "Manfred Jeske",
      6
     ],
     [
      201,
-     "Matthew Powley",
+     "Mark Dancuart",
      6
     ],
     [
      202,
-     "Mike Radermacher",
+     "Matthew Powley",
      6
     ],
     [
      203,
-     "Mulima Mulenga",
+     "Mike Radermacher",
      6
     ],
     [
      204,
-     "Myles Martin",
+     "Mulima Mulenga",
      6
     ],
     [
      205,
-     "Nicolas Lopez",
+     "Myles Martin",
      6
     ],
     [
      206,
-     "Noah Zwiren",
+     "Nicolas Lopez",
      6
     ],
     [
      207,
-     "Nolan O\u2019Brien",
+     "Nicolas Martinez",
      6
     ],
     [
      208,
-     "Nolan Smyth",
+     "Noah Zwiren",
      6
     ],
     [
      209,
-     "Oscar Clarke",
+     "Nolan O'Brien",
      6
     ],
     [
      210,
-     "Ram Kotnana",
+     "Nolan Smyth",
      6
     ],
     [
      211,
-     "Ryan Camras",
+     "Oscar Clarke",
      6
     ],
     [
      212,
-     "Ryan Lucci",
+     "Ram Kotnana",
      6
     ],
     [
      213,
-     "Ryder Boydston",
+     "Ryan Camras",
      6
     ],
     [
      214,
-     "Selim Ben Ali",
+     "Ryan Lucci",
      6
     ],
     [
      215,
-     "Stefan Svicevic",
+     "Ryder Boydston",
      6
     ],
     [
      216,
-     "Taylor Rhinehart",
+     "Selim Ben Ali",
      6
     ],
     [
      217,
-     "Timothy Aurelio",
+     "Stefan Svicevic",
      6
     ],
     [
      218,
-     "Timothy Hughes",
+     "Taylor Rhinehart",
      6
     ],
     [
      219,
-     "Trinity Parriman",
+     "Timothy Aurelio",
      6
     ],
     [
      220,
-     "Tucker Segars",
+     "Timothy Hughes",
      6
     ],
     [
      221,
-     "Vimuktha De Alwis",
+     "Trinity Parriman",
      6
     ],
     [
      222,
-     "Will Connelly",
+     "Tucker Segars",
      6
     ],
     [
      223,
-     "Will Wimbish",
+     "Vimuktha De Alwis",
      6
     ],
     [
      224,
-     "William East",
+     "Will Connelly",
      6
     ],
     [
      225,
-     "Xavier Richard",
+     "William East",
      6
     ],
     [
      226,
+     "Xavier Richard",
+     6
+    ],
+    [
+     227,
      "Adam Charbit",
      3
     ],
     [
-     227,
+     228,
      "Adam Yeager",
      3
     ],
     [
-     228,
+     229,
      "Adnan Aidi",
      3
     ],
     [
-     229,
+     230,
      "Adrian Migacz",
      3
     ],
     [
-     230,
+     231,
      "Alexander Cherman",
      3
     ],
     [
-     231,
+     232,
      "Alexander Duverger",
      3
     ],
     [
-     232,
+     233,
      "Andre Vu",
      3
     ],
     [
-     233,
+     234,
      "Andrew Kutsch",
      3
     ],
     [
-     234,
+     235,
      "Aneesh Kodali",
      3
     ],
     [
-     235,
+     236,
      "Antonio Medina",
      3
     ],
     [
-     236,
+     237,
      "Armando Ferreira",
      3
     ],
     [
-     237,
+     238,
      "Ashton Bradley",
      3
     ],
     [
-     238,
-     "Beau Martin",
-     3
-    ],
-    [
      239,
-     "Ben Aybar",
+     "Aubin Duchier",
      3
     ],
     [
      240,
-     "Ben Herrick",
+     "Beau Martin",
      3
     ],
     [
      241,
-     "Billy Buchhauser",
+     "Ben Aybar",
      3
     ],
     [
      242,
-     "Brent Koch",
+     "Ben Grunert",
      3
     ],
     [
      243,
-     "Brenton Jolley",
+     "Ben Herrick",
      3
     ],
     [
      244,
-     "Brett Huffer",
+     "Billy Buchhauser",
      3
     ],
     [
      245,
-     "Brian Sarkozy",
+     "Blake Hardesty",
      3
     ],
     [
      246,
-     "Brooks Toth",
+     "Brent Koch",
      3
     ],
     [
      247,
-     "Bruce Hale",
+     "Brenton Jolley",
      3
     ],
     [
      248,
-     "Bruno Faletto",
+     "Brett Huffer",
      3
     ],
     [
      249,
-     "Caden Salefsky",
+     "Brian Sarkozy",
      3
     ],
     [
      250,
-     "Caedmon Rux",
+     "Brooks Toth",
      3
     ],
     [
      251,
-     "Carson Stovall",
+     "Bruce Hale",
      3
     ],
     [
      252,
-     "Carter Norrie",
+     "Caden Cox",
      3
     ],
     [
      253,
-     "Chris Cooprider",
+     "Caden Salefsky",
      3
     ],
     [
      254,
-     "Chris Huebner",
+     "Caedmon Rux",
      3
     ],
     [
      255,
-     "Christian Gonzales",
+     "Carson Stovall",
      3
     ],
     [
      256,
-     "Cobi Gibson",
+     "Carter Norrie",
      3
     ],
     [
      257,
-     "Cole Wilcox",
+     "Chris Cooprider",
      3
     ],
     [
      258,
-     "Colin Kozlowski",
+     "Chris Huebner",
      3
     ],
     [
      259,
-     "Connor McNaughton",
+     "Christian Gonzales",
      3
     ],
     [
      260,
-     "Cooper Anderson",
+     "Cobi Gibson",
      3
     ],
     [
      261,
-     "Dan Clark",
+     "Cole Wilcox",
      3
     ],
     [
      262,
-     "Daniel Ortiz",
+     "Colin Kozlowski",
      3
     ],
     [
      263,
-     "Daniel Woolsey",
+     "Connor McNaughton",
      3
     ],
     [
      264,
-     "David Katilius",
+     "Cooper Anderson",
      3
     ],
     [
      265,
-     "Dmitry Ivanenko",
+     "Dan Clark",
      3
     ],
     [
      266,
-     "Dominic Denardo",
+     "Daniel Ortiz",
      3
     ],
     [
      267,
-     "Dr Leslie Danjou",
+     "Daniel Woolsey",
      3
     ],
     [
      268,
-     "Dylan Wilhelm",
+     "David Katilius",
      3
     ],
     [
      269,
-     "Eduardo Correia",
+     "Dmitry Ivanenko",
      3
     ],
     [
      270,
-     "Eli Trumeter",
+     "Dominic Denardo",
      3
     ],
     [
      271,
-     "Elisha Turner",
+     "Dr Leslie Danjou",
      3
     ],
     [
      272,
-     "Eliyahu Pinkney",
+     "Dylan Unkert",
      3
     ],
     [
      273,
-     "Emmett Dehaan",
+     "Dylan Wilhelm",
      3
     ],
     [
      274,
-     "Ethan Dysert",
+     "Eduardo Correia",
      3
     ],
     [
      275,
-     "Ethan Varney",
+     "Eli Trumeter",
      3
     ],
     [
      276,
-     "Evan Zoeteman",
+     "Elisha Turner",
      3
     ],
     [
      277,
-     "Frank Davis",
+     "Eliyahu Pinkney",
      3
     ],
     [
      278,
-     "Harrison Holman",
+     "Emmett Dehaan",
      3
     ],
     [
      279,
-     "Heath Lucas",
+     "Ethan Dysert",
      3
     ],
     [
      280,
-     "Hridhay P",
+     "Ethan Varney",
      3
     ],
     [
      281,
-     "Hudson Hall",
+     "Evan Zoeteman",
      3
     ],
     [
      282,
-     "Hudson Yeager",
+     "Frank Davis",
      3
     ],
     [
      283,
-     "Jack Holloway",
+     "Harrison Holman",
      3
     ],
     [
      284,
-     "Jacob Becker",
+     "Heath Lucas",
      3
     ],
     [
      285,
-     "Jak Crow",
+     "Hridhay P",
      3
     ],
     [
      286,
-     "Jake Wilson",
+     "Hudson Hall",
      3
     ],
     [
      287,
-     "James Broker",
+     "Hudson Yeager",
      3
     ],
     [
      288,
-     "James Hallewell",
+     "Jack Holloway",
      3
     ],
     [
      289,
-     "James Wolf",
+     "Jacob Becker",
      3
     ],
     [
      290,
-     "Jamie Hafner",
+     "Jak Crow",
      3
     ],
     [
      291,
-     "Jared Brungard",
+     "Jake Wilson",
      3
     ],
     [
      292,
-     "Jason Cooney",
+     "James Broker",
      3
     ],
     [
      293,
-     "Jason Ma",
+     "James Hallewell",
      3
     ],
     [
      294,
-     "Jason Parker",
+     "Jamie Hafner",
      3
     ],
     [
      295,
-     "Jaxon T",
+     "Jared Brungard",
      3
     ],
     [
      296,
-     "Jayce Park",
+     "Jason Cooney",
      3
     ],
     [
      297,
-     "John Kircher",
+     "Jason Parker",
      3
     ],
     [
      298,
-     "Jordan Boland",
+     "Jaxon T",
      3
     ],
     [
      299,
-     "Joseph Campbell",
+     "Jayce Park",
      3
     ],
     [
      300,
-     "Joseph Rojas",
+     "John Kircher",
      3
     ],
     [
      301,
-     "Joshua Chisanga",
+     "Jordan Boland",
      3
     ],
     [
      302,
-     "Joshua Cornett",
+     "Joseph Campbell",
      3
     ],
     [
      303,
-     "Joshua Spencer",
+     "Joseph Rojas",
      3
     ],
     [
      304,
-     "Josiah Russell",
+     "Joshua Chisanga",
      3
     ],
     [
      305,
-     "Justin Simpson",
+     "Joshua Cornett",
      3
     ],
     [
      306,
-     "Justin Tzou",
+     "Joshua McKinley",
      3
     ],
     [
      307,
-     "Kalen Harbaugh",
+     "Joshua Spencer",
      3
     ],
     [
      308,
-     "Kalev Nelsen",
+     "Josiah Russell",
      3
     ],
     [
      309,
-     "Karthik Ganesh",
+     "Justin Simpson",
      3
     ],
     [
      310,
-     "Keegan Allahyarian",
+     "Justin Tzou",
      3
     ],
     [
      311,
-     "Kenai Rios",
+     "Kalen Harbaugh",
      3
     ],
     [
      312,
-     "Kevin Thornton",
+     "Kalev Nelsen",
      3
     ],
     [
      313,
-     "Kolton Youngblood",
+     "Karthik Ganesh",
      3
     ],
     [
      314,
-     "Kristian K",
+     "Keegan Allahyarian",
      3
     ],
     [
      315,
-     "Kyle Morris",
+     "Kenai Rios",
      3
     ],
     [
      316,
-     "Kyle Rinck",
+     "Kevin Thornton",
      3
     ],
     [
      317,
-     "Landon Davis",
+     "Kolton Youngblood",
      3
     ],
     [
      318,
-     "Lawson D",
+     "Kristian K",
      3
     ],
     [
      319,
-     "Leo Castillo",
+     "Kyle Morris",
      3
     ],
     [
      320,
-     "Levi Despain",
+     "Kyle Rinck",
      3
     ],
     [
      321,
-     "Loren Hsiao",
+     "Landon Davis",
      3
     ],
     [
      322,
-     "Marcus Yandall",
+     "Lawson D",
      3
     ],
     [
      323,
-     "Martin Vladimirov",
+     "Leo Castillo",
      3
     ],
     [
      324,
-     "Matteo Odone",
+     "Levi Despain",
      3
     ],
     [
      325,
-     "Matthew Boyett",
+     "Loren Hsiao",
      3
     ],
     [
      326,
-     "Matthew Weise",
+     "Marcus Yandall",
      3
     ],
     [
      327,
-     "Mavryk Nelsen",
+     "Martin Vladimirov",
      3
     ],
     [
      328,
-     "Michael Conde",
+     "Matt Ngo",
      3
     ],
     [
      329,
-     "Michael Connors",
+     "Matteo Odone",
      3
     ],
     [
      330,
-     "Michael Furuya",
+     "Matthew Boyett",
      3
     ],
     [
      331,
-     "Michael Rosen",
+     "Matthew Weise",
      3
     ],
     [
      332,
-     "Nathan Geldmeier",
+     "Mavryk Nelsen",
      3
     ],
     [
      333,
-     "Neil Wu",
+     "Michael Conde",
      3
     ],
     [
      334,
-     "Nicolas Acevedo",
+     "Michael Connors",
      3
     ],
     [
      335,
-     "Nicolas Martinez",
+     "Michael Furuya",
      3
     ],
     [
      336,
-     "Noah Hlavac",
+     "Michael Rosen",
      3
     ],
     [
      337,
-     "Noah Ivey",
+     "Nathan Geldmeier",
      3
     ],
     [
      338,
-     "Otavio Perim",
+     "Neil Wu",
      3
     ],
     [
      339,
-     "Parth Patel",
+     "Nicolas Acevedo",
      3
     ],
     [
      340,
-     "Peyton Gatti",
+     "Noah Hlavac",
      3
     ],
     [
      341,
-     "Pieter De Vries",
+     "Noah Ivey",
      3
     ],
     [
      342,
-     "Piyush Mavanur",
+     "Otavio Perim",
      3
     ],
     [
      343,
-     "Rafael Kayo",
+     "Parth Patel",
      3
     ],
     [
      344,
-     "Raymond Lawton",
+     "Peyton Bernstein",
      3
     ],
     [
      345,
-     "Ruben Kellam",
+     "Peyton Gatti",
      3
     ],
     [
      346,
-     "Russell K",
+     "Pieter De Vries",
      3
     ],
     [
      347,
-     "Ryan Brooks",
+     "Piyush Mavanur",
      3
     ],
     [
      348,
-     "Sam Libo",
+     "Rafael Kayo",
      3
     ],
     [
      349,
-     "Samuel Dickson",
+     "Raymond Lawton",
      3
     ],
     [
      350,
-     "Santiago Castillo",
+     "Ruben Kellam",
      3
     ],
     [
      351,
-     "Scott Harrison",
+     "Russell K",
      3
     ],
     [
      352,
-     "Seth Goodman",
+     "Ryan Brooks",
      3
     ],
     [
      353,
-     "Shay Hugo",
+     "Ryland M",
      3
     ],
     [
      354,
-     "Sherwin Torres",
+     "Sam Libo",
      3
     ],
     [
      355,
-     "Sowmik Garishakurti",
+     "Santiago Castillo",
      3
     ],
     [
      356,
-     "Stephen Small",
+     "Scott Harrison",
      3
     ],
     [
      357,
-     "Tanner Petrick",
+     "Seth Goodman",
      3
     ],
     [
      358,
-     "Troy Olson",
+     "Shay Hugo",
      3
     ],
     [
      359,
-     "Tyler Kane",
+     "Sherwin Torres",
      3
     ],
     [
      360,
-     "Wes Wahlin",
+     "Sowmik Garishakurti",
      3
     ],
     [
      361,
+     "Stephen Small",
+     3
+    ],
+    [
+     362,
+     "Sumit Sharma",
+     3
+    ],
+    [
+     363,
+     "Tanner Petrick",
+     3
+    ],
+    [
+     364,
+     "Thomas Provost",
+     3
+    ],
+    [
+     365,
+     "Troy Olson",
+     3
+    ],
+    [
+     366,
+     "Tyler Kane",
+     3
+    ],
+    [
+     367,
+     "Wes Wahlin",
+     3
+    ],
+    [
+     368,
      "Wesley Hanson",
+     3
+    ],
+    [
+     369,
+     "Will Sornberger",
+     3
+    ],
+    [
+     370,
+     "Z Malvern",
      3
     ]
    ]
@@ -4202,23 +4272,23 @@
    "rows": [
     [
      1,
+     "Kyle Koszuta",
+     475
+    ],
+    [
+     1,
      "Riley Inn",
      475
     ],
     [
-     2,
-     "Kyle Koszuta",
-     350
-    ],
-    [
      3,
      "Eli Steiner",
-     329
+     341
     ],
     [
      4,
      "Sanil Jagtiani",
-     312
+     318
     ],
     [
      5,
@@ -4237,103 +4307,103 @@
     ],
     [
      8,
-     "Rio Newcombe",
-     261
-    ],
-    [
-     9,
      "Aidan Schenk",
      250
     ],
     [
-     10,
+     9,
      "Alex Emery",
      250
     ],
     [
+     10,
+     "Mike Radermacher",
+     225
+    ],
+    [
      11,
      "Jake Anderson",
-     186
+     192
     ],
     [
      12,
-     "Mike Radermacher",
-     185
+     "Matt Burkhardt",
+     181
     ],
     [
      13,
-     "Tristan Dussault",
-     174
+     "Juan Varon",
+     179
     ],
     [
      14,
-     "Nicholas Wade",
-     172
+     "Tristan Dussault",
+     177
     ],
     [
      15,
      "Connor McCartney",
-     169
+     175
     ],
     [
      16,
-     "Dale Kim",
-     153
+     "Nicholas Wade",
+     172
     ],
     [
      17,
-     "Jackson Ayotte",
-     146
+     "Dale Kim",
+     159
     ],
     [
      18,
-     "Jae Centonze",
-     143
+     "Jackson Ayotte",
+     158
     ],
     [
      19,
-     "Usama Khalid",
-     142
+     "Jae Centonze",
+     155
     ],
     [
      20,
-     "Matt Burkhardt",
-     141
+     "Ryan Camras",
+     152
     ],
     [
      21,
      "Vincent Rettke",
-     140
+     152
     ],
     [
      22,
+     "Usama Khalid",
+     142
+    ],
+    [
+     23,
+     "Zach Gonnering",
+     139
+    ],
+    [
+     24,
      "Etienne Blaszkewycz",
      137
     ],
     [
-     23,
+     25,
      "Liam Duffin",
      136
     ],
     [
-     24,
-     "Zach Gonnering",
-     133
-    ],
-    [
-     25,
+     26,
      "Bret Berryman",
      132
     ],
     [
-     26,
-     "Juan Varon",
-     129
-    ],
-    [
      27,
-     "Ryan Camras",
-     127
+     "Parth Mody",
+     131
     ],
     [
      28,
@@ -4347,188 +4417,188 @@
     ],
     [
      30,
-     "Parth Mody",
-     125
-    ],
-    [
-     31,
      "Garrett Whitehead",
      117
     ],
     [
-     32,
-     "Armaan Jiwa Mawji",
-     101
-    ],
-    [
-     33,
+     31,
      "Alvaro Terron",
      100
     ],
     [
-     34,
+     32,
      "Tanner Tomassi",
      100
     ],
     [
-     35,
-     "Maverick Messinger",
-     92
+     33,
+     "Ethan Bakalinsky",
+     91
     ],
     [
-     36,
+     34,
      "Martin Stanchev",
      90
     ],
     [
-     37,
+     35,
+     "Edward Kim",
+     88
+    ],
+    [
+     36,
      "Jace Howard",
      86
     ],
     [
-     38,
+     37,
      "Jose Martinez",
      86
     ],
     [
-     39,
+     38,
      "Victor Rodrigo",
      86
     ],
     [
-     40,
-     "Edward Kim",
-     82
-    ],
-    [
-     41,
+     39,
      "Kendall Kikkawa",
      81
     ],
     [
-     42,
+     40,
      "Dylan Goldman",
      80
     ],
     [
-     43,
+     41,
      "Garrison Eaby",
      80
     ],
     [
-     44,
-     "Ethan Bakalinsky",
-     79
+     42,
+     "Wade Heerboth",
+     80
     ],
     [
-     45,
+     43,
      "Edgaras Zilys",
      75
     ],
     [
-     46,
+     44,
      "Connor Duvally",
      74
     ],
     [
-     47,
+     45,
+     "Jarryd Woog",
+     70
+    ],
+    [
+     46,
      "Billy Buchhauser",
      69
     ],
     [
-     48,
+     47,
      "David Litvinov",
      68
     ],
     [
-     49,
+     48,
      "Sammy Lee",
      68
     ],
     [
-     50,
-     "Wade Heerboth",
-     68
-    ],
-    [
-     51,
+     49,
      "Troy Akin",
      67
     ],
     [
-     52,
+     50,
+     "Casey Garretson",
+     64
+    ],
+    [
+     51,
      "Ben Slive",
      62
     ],
     [
-     53,
+     52,
      "Daniel Traxler",
      61
     ],
     [
-     54,
+     53,
      "Jaikin Gomez",
      61
     ],
     [
-     55,
+     54,
      "Daniel Byun",
      58
     ],
     [
+     55,
+     "William Hsieh",
+     57
+    ],
+    [
      56,
-     "Jarryd Woog",
-     58
+     "Blake Goodman",
+     55
     ],
     [
      57,
-     "Sunny Krittayaweth",
+     "Kentaro Hamaguchi",
      55
     ],
     [
      58,
+     "Sunny Krittayaweth",
+     55
+    ],
+    [
+     59,
      "Blake Suard",
      54
     ],
     [
-     59,
-     "William Hsieh",
+     60,
+     "Daniel Miron",
      54
     ],
     [
-     60,
+     61,
      "Ninh Nguyen",
      52
     ],
     [
-     61,
+     62,
      "Caio Bardauil",
      50
     ],
     [
-     62,
+     63,
      "Rey Greenlaw",
      50
     ],
     [
-     63,
+     64,
      "Shay Hugo",
      50
     ],
     [
-     64,
+     65,
      "Stephen Bass",
      50
     ],
     [
-     65,
+     66,
      "William Sobek",
      50
-    ],
-    [
-     66,
-     "Blake Goodman",
-     49
     ],
     [
      67,
@@ -4547,7 +4617,7 @@
     ],
     [
      70,
-     "Daniel Miron",
+     "Emanuel Dickson",
      48
     ],
     [
@@ -4572,377 +4642,377 @@
     ],
     [
      75,
-     "Eddy Kim",
+     "Ahmad El-Zarif",
      42
     ],
     [
      76,
-     "Emanuel Dickson",
+     "Andrew Loftin",
      42
     ],
     [
      77,
-     "Mark Growcott",
+     "Braylon Ohrel",
      42
     ],
     [
      78,
-     "Matthew Mead",
+     "Eddy Kim",
      42
     ],
     [
      79,
-     "TJ Rudden",
+     "Mark Growcott",
      42
     ],
     [
      80,
+     "Matthew Mead",
+     42
+    ],
+    [
+     81,
+     "Stephen Preissler",
+     42
+    ],
+    [
+     82,
+     "TJ Rudden",
+     42
+    ],
+    [
+     83,
+     "Tobias Moreno",
+     42
+    ],
+    [
+     84,
      "Kyle Rinck",
      40
     ],
     [
-     81,
+     85,
      "Louis Laville",
      40
     ],
     [
-     82,
+     86,
      "Preston Gordon",
      40
     ],
     [
-     83,
-     "Andrew Loftin",
-     39
-    ],
-    [
-     84,
-     "Braylon Ohrel",
-     39
-    ],
-    [
-     85,
-     "Casey Garretson",
-     39
-    ],
-    [
-     86,
+     87,
      "Dan Nguyen",
      39
     ],
     [
-     87,
+     88,
+     "Jay Evans",
+     39
+    ],
+    [
+     89,
      "Preston Engel",
      37
     ],
     [
-     88,
+     90,
      "Ant Tran",
      36
     ],
     [
-     89,
+     91,
      "Bassem Kheireddin",
      36
     ],
     [
-     90,
+     92,
      "Grayson Brandon",
      36
     ],
     [
-     91,
-     "Jay Evans",
-     36
-    ],
-    [
-     92,
-     "Michael Leonard",
-     36
-    ],
-    [
      93,
-     "Tobias Moreno",
+     "Joshua Giannelli",
      36
     ],
     [
      94,
+     "Michael Leonard",
+     36
+    ],
+    [
+     95,
+     "Michael Shaw",
+     36
+    ],
+    [
+     96,
      "Benjamin Bramblett",
      33
     ],
     [
-     95,
+     97,
      "Brenden Everhart",
      33
     ],
     [
-     96,
+     98,
+     "Dylan Lewis",
+     33
+    ],
+    [
+     99,
      "Hudson De Risi",
      33
     ],
     [
-     97,
+     100,
+     "Yaamunan Venkatesan",
+     33
+    ],
+    [
+     101,
      "Tommy Labat",
      31
     ],
     [
-     98,
-     "Ahmad El-Zarif",
-     30
-    ],
-    [
-     99,
+     102,
      "Amir Evgamukov",
      30
     ],
     [
-     100,
-     "Dylan Lewis",
-     30
-    ],
-    [
-     101,
-     "Justin Graham",
-     30
-    ],
-    [
-     102,
-     "Karson Feyereisen",
-     30
-    ],
-    [
      103,
-     "Kevin Caulfield",
+     "Evan Ankrom",
      30
     ],
     [
      104,
-     "Luke Kusmider",
+     "Justin Graham",
      30
     ],
     [
      105,
-     "Michael Shaw",
+     "Karson Feyereisen",
      30
     ],
     [
      106,
-     "Michael Vallejo",
+     "Kevin Caulfield",
      30
     ],
     [
      107,
-     "Stephen Preissler",
+     "Luke Kusmider",
      30
     ],
     [
      108,
+     "Matthew Pokorny",
+     30
+    ],
+    [
+     109,
+     "Michael Vallejo",
+     30
+    ],
+    [
+     110,
+     "Theo Yun",
+     30
+    ],
+    [
+     111,
      "Jason Loyd",
      28
     ],
     [
-     109,
-     "Evan Ankrom",
-     27
-    ],
-    [
-     110,
-     "Lova Metor",
-     27
-    ],
-    [
-     111,
-     "Matthew Pokorny",
-     27
-    ],
-    [
      112,
-     "Theo Yun",
+     "Francis Chi",
      27
     ],
     [
      113,
-     "Yaamunan Venkatesan",
+     "Jack Hared",
      27
     ],
     [
      114,
+     "Lova Metor",
+     27
+    ],
+    [
+     115,
      "Alexander Qi",
      25
     ],
     [
-     115,
+     116,
      "Alvaro Regalado",
      25
     ],
     [
-     116,
+     117,
      "Cobi Moore",
      25
     ],
     [
-     117,
+     118,
      "Collin Shick",
      25
     ],
     [
-     118,
+     119,
      "Joel Cassens",
      25
     ],
     [
-     119,
+     120,
      "Jorge Nunez",
      25
     ],
     [
-     120,
+     121,
      "Moty Rad",
      25
     ],
     [
-     121,
+     122,
      "Nisal Liyanage",
      25
     ],
     [
-     122,
+     123,
      "Patricio Pereyra",
      25
     ],
     [
-     123,
+     124,
      "Zak Parks",
      25
     ],
     [
-     124,
+     125,
      "Albert Wan",
      24
     ],
     [
-     125,
-     "Alexander Grubbs",
-     24
-    ],
-    [
      126,
-     "Angel Hernandez",
+     "Alex Guy",
      24
     ],
     [
      127,
-     "Brodie Smith",
+     "Alexander Grubbs",
      24
     ],
     [
      128,
-     "Evan Pratt",
+     "Angel Hernandez",
      24
     ],
     [
      129,
-     "Francis Chi",
+     "Brodie Smith",
      24
     ],
     [
      130,
-     "Gavin Fowler",
+     "Evan Pratt",
      24
     ],
     [
      131,
-     "Jacob Bolkowy",
+     "Gavin Fowler",
      24
     ],
     [
      132,
-     "James Seagraves",
+     "Jacob Bolkowy",
      24
     ],
     [
      133,
-     "Joey Campagna",
+     "James Seagraves",
      24
     ],
     [
      134,
-     "Joshua Giannelli",
+     "Jasraj Sethi",
      24
     ],
     [
      135,
-     "Levi Daniel",
+     "Joey Campagna",
      24
     ],
     [
      136,
-     "Lucas Pereyra",
+     "Levi Daniel",
      24
     ],
     [
      137,
-     "Mouaad Alhouni",
+     "Lucas Pereyra",
      24
     ],
     [
      138,
-     "Nicolas Almeida",
+     "Mouaad Alhouni",
      24
     ],
     [
      139,
-     "Omar Garcia-Heredia",
+     "Nicolas Almeida",
      24
     ],
     [
      140,
-     "Pieter De Vries",
+     "Omar Garcia-Heredia",
      24
     ],
     [
      141,
-     "Robert Laidlaw",
+     "Pieter De Vries",
      24
     ],
     [
      142,
-     "Wesley Hanson",
+     "Robert Laidlaw",
      24
     ],
     [
      143,
-     "William Hart",
+     "Wesley Hanson",
      24
     ],
     [
      144,
+     "William Hart",
+     24
+    ],
+    [
+     145,
      "Colby Hill",
      21
     ],
     [
-     145,
+     146,
      "Cristobal Del Castillo",
      21
     ],
     [
-     146,
+     147,
      "Devon Sikora",
      21
     ],
     [
-     147,
-     "Jack Hared",
-     21
-    ],
-    [
      148,
-     "Jasraj Sethi",
+     "Ram Kotnana",
      21
     ],
     [
      149,
-     "Alex Guy",
+     "Adair Garcia",
      18
     ],
     [
@@ -4962,2492 +5032,2357 @@
     ],
     [
      153,
-     "Brent Werbeck",
+     "Brendan Gallagher",
      18
     ],
     [
      154,
-     "Chris Walker",
+     "Brent Werbeck",
      18
     ],
     [
      155,
-     "Cole Whitaker",
+     "Cade Edwards",
      18
     ],
     [
      156,
-     "Daniel Couzens",
+     "Chris Walker",
      18
     ],
     [
      157,
-     "Dylan Flippin",
+     "Cole Whitaker",
      18
     ],
     [
      158,
-     "Evan Zoeteman",
+     "Daniel Couzens",
      18
     ],
     [
      159,
-     "Hayden Rand",
+     "Dylan Flippin",
      18
     ],
     [
      160,
-     "Ishan Balakrishnan",
+     "Evan Zoeteman",
      18
     ],
     [
      161,
-     "Jeffrey Moulton",
+     "Hayden Rand",
      18
     ],
     [
      162,
-     "Jimmy Terzian",
+     "Ishan Balakrishnan",
      18
     ],
     [
      163,
-     "Lucas Coutinho",
+     "Jeffrey Moulton",
      18
     ],
     [
      164,
-     "Luke Williams",
+     "Jimmy Terzian",
      18
     ],
     [
      165,
-     "Maksims Kazijevs",
+     "Justin Guiltinan",
      18
     ],
     [
      166,
-     "Martin Thomas",
+     "Lucas Coutinho",
      18
     ],
     [
      167,
-     "Max Carrol",
+     "Luke Williams",
      18
     ],
     [
      168,
-     "Michael McCaffrey",
+     "Maksims Kazijevs",
      18
     ],
     [
      169,
-     "Mikar Larenzo Fisher",
+     "Martin Thomas",
      18
     ],
     [
      170,
-     "MJ Greiner",
+     "Max Carrol",
      18
     ],
     [
      171,
-     "Oliver Hu",
+     "Michael McCaffrey",
      18
     ],
     [
      172,
-     "Ryan Gilbert",
+     "Mikar Larenzo Fisher",
      18
     ],
     [
      173,
-     "Sam Kim",
+     "MJ Greiner",
      18
     ],
     [
      174,
-     "Thomas Romano",
+     "Oliver Hu",
      18
     ],
     [
      175,
-     "Adair Garcia",
-     15
+     "Ryan Gilbert",
+     18
     ],
     [
      176,
+     "Sam Kim",
+     18
+    ],
+    [
+     177,
+     "Samuel Wells",
+     18
+    ],
+    [
+     178,
+     "Scott McRee",
+     18
+    ],
+    [
+     179,
+     "Thomas Romano",
+     18
+    ],
+    [
+     180,
      "Ajit Kurki",
      15
     ],
     [
-     177,
+     181,
      "Ben Davis",
      15
     ],
     [
-     178,
-     "Chase Mason",
-     15
-    ],
-    [
-     179,
-     "Connor Gibbs",
-     15
-    ],
-    [
-     180,
-     "Daniel Johnson",
-     15
-    ],
-    [
-     181,
-     "Daniel Weber",
-     15
-    ],
-    [
      182,
-     "Diego Lebron Perez",
+     "Brayden Nguyen",
      15
     ],
     [
      183,
-     "Elisha Turner",
+     "Brian Johnson",
      15
     ],
     [
      184,
-     "Jayce Landheer",
+     "Chase Mason",
      15
     ],
     [
      185,
-     "Kentaro Hamaguchi",
+     "Connor Gibbs",
      15
     ],
     [
      186,
-     "Poongi Hong",
+     "Daniel Johnson",
      15
     ],
     [
      187,
-     "Ram Kotnana",
+     "Daniel Weber",
      15
     ],
     [
      188,
-     "Samuel Wells",
+     "Diego Lebron Perez",
      15
     ],
     [
      189,
-     "Scott McRee",
+     "Elisha Turner",
      15
     ],
     [
      190,
-     "Selim Ben Ali",
+     "Garrett Ivey",
      15
     ],
     [
      191,
-     "Tanner Suard",
+     "Jayce Landheer",
      15
     ],
     [
      192,
+     "Joshua Elliott",
+     15
+    ],
+    [
+     193,
+     "Landon Ivey",
+     15
+    ],
+    [
+     194,
+     "Matt Ngo",
+     15
+    ],
+    [
+     195,
+     "Poongi Hong",
+     15
+    ],
+    [
+     196,
+     "Selim Ben Ali",
+     15
+    ],
+    [
+     197,
+     "Tanner Suard",
+     15
+    ],
+    [
+     198,
      "Alex Long",
      12
     ],
     [
-     193,
+     199,
      "Armando Ferreira",
      12
     ],
     [
-     194,
+     200,
      "Austin Ciampini",
      12
     ],
     [
-     195,
+     201,
      "Austin Hardy",
      12
     ],
     [
-     196,
+     202,
      "Beau Covell",
      12
     ],
     [
-     197,
+     203,
      "Ben Cawston",
      12
     ],
     [
-     198,
+     204,
      "Benson Parry",
      12
     ],
     [
-     199,
+     205,
      "Boris Paque",
      12
     ],
     [
-     200,
-     "Brayden Nguyen",
-     12
-    ],
-    [
-     201,
-     "Brendan Gallagher",
-     12
-    ],
-    [
-     202,
-     "Brian Johnson",
-     12
-    ],
-    [
-     203,
+     206,
      "Bryce Larson",
      12
     ],
     [
-     204,
-     "Cade Edwards",
-     12
-    ],
-    [
-     205,
+     207,
      "Cadell Traya",
      12
     ],
     [
-     206,
+     208,
      "Chase Brautman",
      12
     ],
     [
-     207,
+     209,
      "Chase Womack",
      12
     ],
     [
-     208,
+     210,
      "Cheng En Tsai",
      12
     ],
     [
-     209,
+     211,
      "Chris Turvey",
      12
     ],
     [
-     210,
+     212,
      "Claudio Quinones Garcia",
      12
     ],
     [
-     211,
+     213,
      "Damon Little",
      12
     ],
     [
-     212,
+     214,
      "Dave Weinbach",
      12
     ],
     [
-     213,
+     215,
      "David George",
      12
     ],
     [
-     214,
+     216,
      "David Yahng",
      12
     ],
     [
-     215,
+     217,
      "Don Alto",
      12
     ],
     [
-     216,
+     218,
      "Ethan Hall",
      12
     ],
     [
-     217,
-     "Hudson G",
-     12
-    ],
-    [
-     218,
-     "Jack Maline",
-     12
-    ],
-    [
      219,
-     "James Broker",
+     "Evan T",
      12
     ],
     [
      220,
-     "Jason Weidman",
+     "Frank Welsher Iii",
      12
     ],
     [
      221,
-     "Joel Waiwaiole",
+     "Hudson G",
      12
     ],
     [
      222,
-     "Johan Nilsson",
+     "Jack Maline",
      12
     ],
     [
      223,
-     "Joshua Carpenter",
+     "James Broker",
      12
     ],
     [
      224,
-     "Joshua Elliott",
+     "Jason Weidman",
      12
     ],
     [
      225,
-     "Julian Slive",
+     "Joel Waiwaiole",
      12
     ],
     [
      226,
-     "Justin Fullmer",
+     "Johan Nilsson",
      12
     ],
     [
      227,
-     "Justin Guiltinan",
+     "Joshua Carpenter",
      12
     ],
     [
      228,
-     "Kamden Bradstreet",
+     "Julian Slive",
      12
     ],
     [
      229,
-     "Kevin Dong",
+     "Justin Fullmer",
      12
     ],
     [
      230,
-     "Kyle Borawski",
+     "Kamden Bradstreet",
      12
     ],
     [
      231,
-     "Lorin Schlecht",
+     "Kevin Dong",
      12
     ],
     [
      232,
-     "Luke W",
+     "Kyle Borawski",
      12
     ],
     [
      233,
-     "Mackonner Dy",
+     "Lincoln M",
      12
     ],
     [
      234,
-     "Maddox Castellanos",
+     "Lorin Schlecht",
      12
     ],
     [
      235,
-     "Matthew Mino",
+     "Luke W",
      12
     ],
     [
      236,
-     "Matthew Nesbitt",
+     "Mackonner Dy",
      12
     ],
     [
      237,
-     "Matthew Sah",
+     "Maddox Castellanos",
      12
     ],
     [
      238,
-     "Michael Benash",
+     "Matthew Mino",
      12
     ],
     [
      239,
-     "Mikael Vollbach",
+     "Matthew Nesbitt",
      12
     ],
     [
      240,
-     "Mulima Mulenga",
+     "Matthew Sah",
      12
     ],
     [
      241,
-     "Naveen Beasley",
+     "Michael Benash",
      12
     ],
     [
      242,
-     "Noah Torres",
+     "Mikael Vollbach",
      12
     ],
     [
      243,
-     "Noah Waddell",
+     "Mulima Mulenga",
      12
     ],
     [
      244,
-     "Patrik Kevin Tsati-Onla",
+     "Naveen Beasley",
      12
     ],
     [
      245,
-     "Prycen Haas",
+     "Noah Torres",
      12
     ],
     [
      246,
-     "Rafael Kayo",
+     "Noah Waddell",
      12
     ],
     [
      247,
-     "Raymond Velarde",
+     "Patrik Kevin Tsati-Onla",
      12
     ],
     [
      248,
-     "Rosen Naydenov",
+     "Prycen Haas",
      12
     ],
     [
      249,
-     "Rouzbeh Ghotbi",
+     "Rafael Kayo",
      12
     ],
     [
      250,
-     "Ryder Brown",
+     "Raymond Velarde",
      12
     ],
     [
      251,
-     "Sam Angelo",
+     "Rosen Naydenov",
      12
     ],
     [
      252,
-     "Sam Weinbach",
+     "Rouzbeh Ghotbi",
      12
     ],
     [
      253,
-     "Sebastian Gutierrez",
+     "Ryder Brown",
      12
     ],
     [
      254,
-     "Spencer Duane",
+     "Sam Angelo",
      12
     ],
     [
      255,
-     "Tendai Tapfuma",
+     "Sam Weinbach",
      12
     ],
     [
      256,
-     "Trevor Machek",
+     "Samuel Dickson",
      12
     ],
     [
      257,
-     "Victor Camilo Iii",
+     "Sebastian Gutierrez",
      12
     ],
     [
      258,
-     "William Owens",
+     "Spencer Duane",
      12
     ],
     [
      259,
-     "Zachary Card",
+     "Tendai Tapfuma",
      12
     ],
     [
      260,
+     "Trevor Machek",
+     12
+    ],
+    [
+     261,
+     "Tristan Cooley",
+     12
+    ],
+    [
+     262,
+     "Victor Camilo Iii",
+     12
+    ],
+    [
+     263,
+     "Will Lieberman",
+     12
+    ],
+    [
+     264,
+     "Will Wimbish",
+     12
+    ],
+    [
+     265,
+     "William Owens",
+     12
+    ],
+    [
+     266,
+     "Zachary Card",
+     12
+    ],
+    [
+     267,
      "Adam Charbit",
      9
     ],
     [
-     261,
-     "Arnav Duarah",
-     9
-    ],
-    [
-     262,
-     "Ben Baravik",
-     9
-    ],
-    [
-     263,
-     "Bradon Ly",
-     9
-    ],
-    [
-     264,
-     "Bruno Barrueto Deza",
-     9
-    ],
-    [
-     265,
-     "Christopher Depetro",
-     9
-    ],
-    [
-     266,
-     "Dave Conley",
-     9
-    ],
-    [
-     267,
-     "Django Chassang",
-     9
-    ],
-    [
      268,
-     "Duncan Mulenga",
+     "Aidan Gorneau",
      9
     ],
     [
      269,
-     "Evan T",
+     "Arnav Duarah",
      9
     ],
     [
      270,
-     "Garrett Ivey",
+     "Ben Baravik",
      9
     ],
     [
      271,
-     "Gautham Bondugula",
+     "Bradon Ly",
      9
     ],
     [
      272,
-     "Hridhay P",
+     "Bruno Barrueto Deza",
      9
     ],
     [
      273,
-     "Hunter Merritt",
+     "Christian Lund",
      9
     ],
     [
      274,
-     "Jaden Lam",
+     "Christopher Depetro",
      9
     ],
     [
      275,
-     "Kalen Harbaugh",
+     "Dave Conley",
      9
     ],
     [
      276,
-     "Karthik Ganesh",
+     "Django Chassang",
      9
     ],
     [
      277,
-     "Keaten Kappes",
+     "Duncan Mulenga",
      9
     ],
     [
      278,
-     "Landon Ivey",
+     "Gautham Bondugula",
      9
     ],
     [
      279,
-     "Matt Ngo",
+     "George Wolf",
      9
     ],
     [
      280,
-     "Matthew Melgar",
+     "Hridhay P",
      9
     ],
     [
      281,
-     "Perry Wang",
+     "Hunter Merritt",
      9
     ],
     [
      282,
-     "Rian Weston-Dodds",
+     "Jack Wasserman",
      9
     ],
     [
      283,
-     "Ross Hopkins",
+     "Jaden Lam",
      9
     ],
     [
      284,
-     "Teano Balducci",
+     "Justin Moore",
      9
     ],
     [
      285,
-     "Tristan Cooley",
+     "Kalen Harbaugh",
      9
     ],
     [
      286,
-     "Tyler Glowaki",
+     "Karthik Ganesh",
      9
     ],
     [
      287,
-     "Tyson Tuiloma-T",
+     "Keaten Kappes",
      9
     ],
     [
      288,
+     "Logan Thompson",
+     9
+    ],
+    [
+     289,
+     "Matthew Melgar",
+     9
+    ],
+    [
+     290,
+     "Perry Wang",
+     9
+    ],
+    [
+     291,
+     "Rian Weston-Dodds",
+     9
+    ],
+    [
+     292,
+     "Ross Hopkins",
+     9
+    ],
+    [
+     293,
+     "Teano Balducci",
+     9
+    ],
+    [
+     294,
+     "Tyler Glowaki",
+     9
+    ],
+    [
+     295,
+     "Tyson Tuiloma-T",
+     9
+    ],
+    [
+     296,
      "Aaron Li",
      6
     ],
     [
-     289,
+     297,
      "Aaron Sandoval",
      6
     ],
     [
-     290,
+     298,
      "Adam Lattman",
      6
     ],
     [
-     291,
+     299,
      "Aditya Ratnala",
      6
     ],
     [
-     292,
-     "Aidan Gorneau",
-     6
-    ],
-    [
-     293,
+     300,
      "Aiden Schliekelman",
      6
     ],
     [
-     294,
+     301,
      "AJ Carney",
      6
     ],
     [
-     295,
+     302,
      "Albin Cehic",
      6
     ],
     [
-     296,
+     303,
      "Alec Weller",
      6
     ],
     [
-     297,
+     304,
      "Alejandro Trevino",
      6
     ],
     [
-     298,
+     305,
      "Alex Chanthaphaeng",
      6
     ],
     [
-     299,
+     306,
      "Alex Lantz",
      6
     ],
     [
-     300,
+     307,
      "Alexandre Medawar",
      6
     ],
     [
-     301,
+     308,
      "Andre Vu",
      6
     ],
     [
-     302,
-     "Andy Lum",
-     6
-    ],
-    [
-     303,
-     "Anthony Miller",
-     6
-    ],
-    [
-     304,
-     "Ashton Bradley",
-     6
-    ],
-    [
-     305,
-     "Austin Mireles",
-     6
-    ],
-    [
-     306,
-     "Austin Romaguera",
-     6
-    ],
-    [
-     307,
-     "Ben McNair",
-     6
-    ],
-    [
-     308,
-     "Benjamin Pepion",
-     6
-    ],
-    [
      309,
-     "Blake Lowe",
+     "Andrew Phanmanee",
      6
     ],
     [
      310,
-     "Brensten Chan",
+     "Andy Lum",
      6
     ],
     [
      311,
-     "Brett Barrette",
+     "Anthony Miller",
      6
     ],
     [
      312,
-     "Brian Buzianis",
+     "Ashton Bradley",
      6
     ],
     [
      313,
-     "Brian Chamberlin",
+     "Austin Mireles",
      6
     ],
     [
      314,
-     "Brock Rzesnowiecky",
+     "Austin Romaguera",
      6
     ],
     [
      315,
-     "Bryan Lundberg",
+     "Ben McNair",
      6
     ],
     [
      316,
-     "Cameron Luhring",
+     "Benjamin Pepion",
      6
     ],
     [
      317,
-     "Carlos Miranda",
+     "Blake Lowe",
      6
     ],
     [
      318,
-     "Carlos Pavon",
+     "Brensten Chan",
      6
     ],
     [
      319,
-     "Carson Nguyen",
+     "Brett Barrette",
      6
     ],
     [
      320,
-     "Charles Case",
+     "Brian Buzianis",
      6
     ],
     [
      321,
-     "Chase Nuttall",
+     "Brian Chamberlin",
      6
     ],
     [
      322,
-     "Chiron Burl",
+     "Brock Rzesnowiecky",
      6
     ],
     [
      323,
-     "Chris Jammal",
+     "Bryan Lundberg",
      6
     ],
     [
      324,
-     "Christian Lund",
+     "Cameron Luhring",
      6
     ],
     [
      325,
-     "Christian Tanner",
+     "Carlos Miranda",
      6
     ],
     [
      326,
-     "Christopher Anderson",
+     "Carlos Pavon",
      6
     ],
     [
      327,
-     "Clayton Boydston",
+     "Carson Nguyen",
      6
     ],
     [
      328,
-     "Clayton Truex",
+     "Charles Case",
      6
     ],
     [
      329,
-     "Colby Holcomb",
+     "Chase Nuttall",
      6
     ],
     [
      330,
-     "Cole Wilcox",
+     "Chiron Burl",
      6
     ],
     [
      331,
-     "Colton Thielman",
+     "Chris Jammal",
      6
     ],
     [
      332,
-     "Conner Koga",
+     "Christian Tanner",
      6
     ],
     [
      333,
-     "Craig Johnson",
+     "Christopher Anderson",
      6
     ],
     [
      334,
-     "Curtis Hoyt",
+     "Clayton Boydston",
      6
     ],
     [
      335,
-     "Dan Caticha",
+     "Clayton Truex",
      6
     ],
     [
      336,
-     "Daniel Colon",
+     "Colby Holcomb",
      6
     ],
     [
      337,
-     "Daniel Gallegos",
+     "Cole Wilcox",
      6
     ],
     [
      338,
-     "Dave Bacalla",
+     "Colton Thielman",
      6
     ],
     [
      339,
-     "Dawson Davis",
+     "Conner Koga",
      6
     ],
     [
      340,
-     "Dillon Hageman",
+     "Craig Johnson",
      6
     ],
     [
      341,
-     "Domenico Geminiani",
+     "Curtis Hoyt",
      6
     ],
     [
      342,
-     "Dustin Maylath-Bryant",
+     "Dan Caticha",
      6
     ],
     [
      343,
-     "Dylan Fullmer",
+     "Daniel Colon",
      6
     ],
     [
      344,
-     "Dylan Payne",
+     "Daniel Gallegos",
      6
     ],
     [
      345,
-     "Dylan Taylor",
+     "Dave Bacalla",
      6
     ],
     [
      346,
-     "Dylan Unkert",
+     "David Creswell",
      6
     ],
     [
      347,
-     "Easton Horricks",
+     "Dawson Davis",
      6
     ],
     [
      348,
-     "Eddie Kang",
+     "Dillon Hageman",
      6
     ],
     [
      349,
-     "Eduardo Correia",
+     "Domenico Geminiani",
      6
     ],
     [
      350,
-     "Elijah Chernoff",
+     "Dustin Maylath-Bryant",
      6
     ],
     [
      351,
-     "Enrique Porchas",
+     "Dylan Fullmer",
      6
     ],
     [
      352,
-     "Eric Diaz",
+     "Dylan Payne",
      6
     ],
     [
      353,
-     "Ernesto Fajardo",
+     "Dylan Taylor",
      6
     ],
     [
      354,
-     "Eugene Mak",
+     "Dylan Unkert",
      6
     ],
     [
      355,
-     "Federico Nani",
+     "Easton Horricks",
      6
     ],
     [
      356,
-     "Frank Welsher Iii",
+     "Eddie Kang",
      6
     ],
     [
      357,
-     "Garrett Peterson",
+     "Eduardo Correia",
      6
     ],
     [
      358,
-     "Geancarlo Nieto",
+     "Elijah Chernoff",
      6
     ],
     [
      359,
-     "George Wolf",
+     "Enrique Porchas",
      6
     ],
     [
      360,
-     "Gonzalo Nunez",
+     "Eric Diaz",
      6
     ],
     [
      361,
-     "Gregorie Vinueza-Daly",
+     "Ernesto Fajardo",
      6
     ],
     [
      362,
-     "Gregory Messina",
+     "Eugene Mak",
      6
     ],
     [
      363,
-     "Gregory Zukeran",
+     "Federico Nani",
      6
     ],
     [
      364,
-     "Haddow Thul",
+     "Garrett Peterson",
      6
     ],
     [
      365,
-     "Harrison Yee",
+     "Geancarlo Nieto",
      6
     ],
     [
      366,
-     "Ian Dube",
+     "Gonzalo Nunez",
      6
     ],
     [
      367,
-     "Isaac Hall",
+     "Gregorie Vinueza-Daly",
      6
     ],
     [
      368,
-     "Jack Dipietro",
+     "Gregory Messina",
      6
     ],
     [
      369,
-     "Jack Wasserman",
+     "Gregory Zukeran",
      6
     ],
     [
      370,
-     "Jackson Wurzer",
+     "Haddow Thul",
      6
     ],
     [
      371,
-     "Jacob Lee",
+     "Harrison Yee",
      6
     ],
     [
      372,
-     "Jake Benjamin",
+     "Hunter Bassett",
      6
     ],
     [
      373,
-     "Jake Wilson",
+     "Ian Dube",
      6
     ],
     [
      374,
-     "James Kaoma",
+     "Isaac Hall",
      6
     ],
     [
      375,
-     "James Krause",
+     "Jack Dipietro",
      6
     ],
     [
      376,
-     "James Yu",
+     "Jackson Wurzer",
      6
     ],
     [
      377,
-     "Jamie Hafner",
+     "Jacob Lee",
      6
     ],
     [
      378,
-     "Jason McCrary",
+     "Jake Benjamin",
      6
     ],
     [
      379,
-     "Jaxon T",
+     "Jake Wilson",
      6
     ],
     [
      380,
-     "Jayce Fitzpatrick",
+     "James Kaoma",
      6
     ],
     [
      381,
-     "Jensen Kim",
+     "James Krause",
      6
     ],
     [
      382,
-     "Jericho Grollman",
+     "James Yu",
      6
     ],
     [
      383,
-     "Jerry Worsham",
+     "Jamie Hafner",
      6
     ],
     [
      384,
-     "Joe Prince",
+     "Jason McCrary",
      6
     ],
     [
      385,
-     "Joe Wiencek",
+     "Jaxon T",
      6
     ],
     [
      386,
-     "Joel Pelletier",
+     "Jayce Fitzpatrick",
      6
     ],
     [
      387,
-     "John Hopkins",
+     "Jensen Kim",
      6
     ],
     [
      388,
-     "John Moorin",
+     "Jericho Grollman",
      6
     ],
     [
      389,
-     "Johnny Goldberg",
+     "Jerry Worsham",
      6
     ],
     [
      390,
-     "Jonas Daehler",
+     "Joe Prince",
      6
     ],
     [
      391,
-     "Jonathan Clark",
+     "Joe Wiencek",
      6
     ],
     [
      392,
-     "Jordan Tacheny",
+     "Joel Pelletier",
      6
     ],
     [
      393,
-     "Jorge Garcia",
+     "John Hopkins",
      6
     ],
     [
      394,
-     "Joseluis Herrera",
+     "John Moorin",
      6
     ],
     [
      395,
-     "Joshua Wallace",
+     "Johnny Goldberg",
      6
     ],
     [
      396,
-     "Junho Son",
+     "Jonas Daehler",
      6
     ],
     [
      397,
-     "Justin Moore",
+     "Jonathan Clark",
      6
     ],
     [
      398,
-     "Justin Simpson",
+     "Jordan Tacheny",
      6
     ],
     [
      399,
-     "Kace Heiner",
+     "Jorge Garcia",
      6
     ],
     [
      400,
-     "Kenneth Lee",
+     "Joseluis Herrera",
      6
     ],
     [
      401,
-     "Khalijawan Barber",
+     "Joshua Cornett",
      6
     ],
     [
      402,
-     "Kleyton Martins da Silva",
+     "Joshua McKinley",
      6
     ],
     [
      403,
-     "Kory Tran",
+     "Joshua Wallace",
      6
     ],
     [
      404,
-     "Kyle Morris",
+     "Junho Son",
      6
     ],
     [
      405,
-     "Larry Diep",
+     "Justin Simpson",
      6
     ],
     [
      406,
-     "Lincoln M",
+     "Kace Heiner",
      6
     ],
     [
      407,
-     "Logan Luc",
+     "Kenneth Lee",
      6
     ],
     [
      408,
-     "Logan Rowe",
+     "Khalijawan Barber",
      6
     ],
     [
      409,
-     "Logan Thompson",
+     "Kleyton Martins da Silva",
      6
     ],
     [
      410,
-     "Loren Hsiao",
+     "Kory Tran",
      6
     ],
     [
      411,
-     "Louis Vayo",
+     "Kyle Morris",
      6
     ],
     [
      412,
-     "Lucas Cancelier",
+     "Larry Diep",
      6
     ],
     [
      413,
-     "Luis Fernando Myers Martinez",
+     "Logan Luc",
      6
     ],
     [
      414,
-     "Luis Rojas",
+     "Logan Rowe",
      6
     ],
     [
      415,
-     "Magnus Violet",
+     "Loren Hsiao",
      6
     ],
     [
      416,
-     "Makiyah Cormick",
+     "Louis Vayo",
      6
     ],
     [
      417,
-     "Markal Luckett-Smith",
+     "Lucas Cancelier",
      6
     ],
     [
      418,
-     "Matthew Denny",
+     "Luis Fernando Myers Martinez",
      6
     ],
     [
      419,
-     "Matthew Gilbert",
+     "Luis Rojas",
      6
     ],
     [
      420,
-     "Matvey Radionov",
+     "Magnus Violet",
      6
     ],
     [
      421,
-     "Max Zhang",
+     "Makiyah Cormick",
      6
     ],
     [
      422,
-     "Michael Coleman",
+     "Markal Luckett-Smith",
      6
     ],
     [
      423,
-     "Michael Hollings",
+     "Matthew Denny",
      6
     ],
     [
      424,
-     "Mike Block",
+     "Matthew Gilbert",
      6
     ],
     [
      425,
-     "Nate Evensen",
+     "Matvey Radionov",
      6
     ],
     [
      426,
-     "Nathan Reeve",
+     "Max Zhang",
      6
     ],
     [
      427,
-     "Nathan Tsai",
+     "Michael Coleman",
      6
     ],
     [
      428,
-     "Nicholas Garza",
+     "Michael Hollings",
      6
     ],
     [
      429,
-     "Nick Petterson",
+     "Mike Block",
      6
     ],
     [
      430,
-     "Nick Werner",
+     "Nate Evensen",
      6
     ],
     [
      431,
-     "Noah Hlavac",
+     "Nathan Reeve",
      6
     ],
     [
      432,
-     "Noah Zwiren",
+     "Nathan Tsai",
      6
     ],
     [
      433,
-     "Oliver Frank",
+     "Nicholas Garza",
      6
     ],
     [
      434,
-     "Pally Ray",
+     "Nick Petterson",
      6
     ],
     [
      435,
-     "Patrick Matetich",
+     "Nick Werner",
      6
     ],
     [
      436,
-     "Payton Weber",
+     "Noah Hlavac",
      6
     ],
     [
      437,
-     "Peter Dorward",
+     "Noah Zwiren",
      6
     ],
     [
      438,
-     "Peyton Gatti",
+     "Oliver Frank",
      6
     ],
     [
      439,
-     "Piercarlo Usai",
+     "Pablo Copetti",
      6
     ],
     [
      440,
-     "Preston Ducrest",
+     "Pally Ray",
      6
     ],
     [
      441,
-     "Priyank Soni",
+     "Patrick Matetich",
      6
     ],
     [
      442,
-     "Rajul Chikkalingaiah",
+     "Payton Weber",
      6
     ],
     [
      443,
-     "Randy Blanco",
+     "Peter Dorward",
      6
     ],
     [
      444,
-     "Riley Durkin",
+     "Peyton Gatti",
      6
     ],
     [
      445,
-     "Robby Greenlaw",
+     "Piercarlo Usai",
      6
     ],
     [
      446,
-     "Rodrigo Reyes",
+     "Preston Ducrest",
      6
     ],
     [
      447,
-     "Roger Dugas",
+     "Priyank Soni",
      6
     ],
     [
      448,
-     "Ross English",
+     "Rajul Chikkalingaiah",
      6
     ],
     [
      449,
-     "Russell K",
+     "Randy Blanco",
      6
     ],
     [
      450,
-     "Ryan Huynh",
+     "Riley Durkin",
      6
     ],
     [
      451,
-     "Ryan Lucci",
+     "Robby Greenlaw",
      6
     ],
     [
      452,
-     "Ryan Nolan",
+     "Rodrigo Reyes",
      6
     ],
     [
      453,
-     "Ryan Rabidou",
+     "Roger Dugas",
      6
     ],
     [
      454,
-     "Ryan Smith",
+     "Ross English",
      6
     ],
     [
      455,
-     "Samuel Dickson",
+     "Russell K",
      6
     ],
     [
      456,
-     "Samuel Higginson",
+     "Ryan Huynh",
      6
     ],
     [
      457,
-     "Scott Nguyen",
+     "Ryan Lucci",
      6
     ],
     [
      458,
-     "Shamus Flanagan",
+     "Ryan Nolan",
      6
     ],
     [
      459,
-     "Shay Payne",
+     "Ryan Rabidou",
      6
     ],
     [
      460,
-     "Siddharth Kusuma",
+     "Ryan Smith",
      6
     ],
     [
      461,
-     "Stavro Sophocleous",
+     "Samuel Higginson",
      6
     ],
     [
      462,
-     "Thiago Braga",
+     "Scott Nguyen",
      6
     ],
     [
      463,
-     "Tim Ahlersmeyer",
+     "Shamus Flanagan",
      6
     ],
     [
      464,
-     "Timothy Aurelio",
+     "Shay Payne",
      6
     ],
     [
      465,
-     "Tommy Shin",
+     "Siddharth Kusuma",
      6
     ],
     [
      466,
-     "Trevor Schwarzmann",
+     "Stavro Sophocleous",
      6
     ],
     [
      467,
-     "Tristan Watson",
+     "Thiago Braga",
      6
     ],
     [
      468,
-     "Tuny Betancourt",
+     "Thomas Provost",
      6
     ],
     [
      469,
-     "Tyler Kane",
+     "Tim Ahlersmeyer",
      6
     ],
     [
      470,
-     "Tyler Miller",
+     "Timothy Aurelio",
      6
     ],
     [
      471,
-     "Vikram Kumar",
+     "Tommy Shin",
      6
     ],
     [
      472,
-     "Wade Bryant",
+     "Trevor Schwarzmann",
      6
     ],
     [
      473,
-     "Warren Tamanaha",
+     "Tristan Watson",
      6
     ],
     [
      474,
-     "Will Kayal",
+     "Tuny Betancourt",
      6
     ],
     [
      475,
-     "Will Lieberman",
+     "Tyler Kane",
      6
     ],
     [
      476,
-     "Will Wimbish",
+     "Tyler Miller",
      6
     ],
     [
      477,
-     "William Dau",
+     "Vikram Kumar",
      6
     ],
     [
      478,
-     "William Gardner",
+     "Wade Bryant",
      6
     ],
     [
      479,
-     "Xavier Richard",
+     "Warren Tamanaha",
      6
     ],
     [
      480,
-     "Zach Drost",
+     "Will Kayal",
      6
     ],
     [
      481,
-     "Zach Hatzenbeler",
+     "William Dau",
      6
     ],
     [
      482,
-     "Zachary Higginson",
+     "William Gardner",
      6
     ],
     [
      483,
+     "Xavier Richard",
+     6
+    ],
+    [
+     484,
+     "Zach Drost",
+     6
+    ],
+    [
+     485,
+     "Zach Hatzenbeler",
+     6
+    ],
+    [
+     486,
+     "Zachary Higginson",
+     6
+    ],
+    [
+     487,
      "Aaron Allen",
      3
     ],
     [
-     484,
+     488,
      "Aaron Schorch",
      3
     ],
     [
-     485,
+     489,
      "Adam Yeager",
      3
     ],
     [
-     486,
-     "Ahmad Soussi",
-     3
-    ],
-    [
-     487,
-     "Alex Gee",
-     3
-    ],
-    [
-     488,
-     "Alexander Cherman",
-     3
-    ],
-    [
-     489,
-     "Amit Verma",
-     3
-    ],
-    [
      490,
-     "Amory Yagar",
+     "Aditya Suresh",
      3
     ],
     [
      491,
-     "Andrew Curtis",
+     "Ahmad Soussi",
      3
     ],
     [
      492,
-     "Andrew Phanmanee",
+     "Alan Toleu",
      3
     ],
     [
      493,
-     "Aneesh Kodali",
+     "Alex Gee",
      3
     ],
     [
      494,
-     "Anthony Lacqua",
+     "Alexander Cherman",
      3
     ],
     [
      495,
-     "Anudeep Kodali",
+     "Amit Verma",
      3
     ],
     [
      496,
-     "Arsh Bassan",
+     "Ammol Ramchandani",
      3
     ],
     [
      497,
-     "Ashton Patterson",
+     "Amory Yagar",
      3
     ],
     [
      498,
-     "Austin Keefer",
+     "Andrew Curtis",
      3
     ],
     [
      499,
-     "Axel Morgan",
+     "Aneesh Kodali",
      3
     ],
     [
      500,
-     "Beau Martin",
+     "Anthony Lacqua",
      3
     ],
     [
      501,
-     "Ben Bailey",
+     "Anudeep Kodali",
      3
     ],
     [
      502,
-     "Ben Rice",
+     "Arsh Bassan",
      3
     ],
     [
      503,
-     "Brady Madrid",
+     "Ashton Patterson",
      3
     ],
     [
      504,
-     "Brandon Contratto",
+     "Aubin Duchier",
      3
     ],
     [
      505,
-     "Brayden Brown",
+     "Austin Keefer",
      3
     ],
     [
      506,
-     "Braydon Unsicker",
+     "Axel Morgan",
      3
     ],
     [
      507,
-     "Brenton Jolley",
+     "Beau Martin",
      3
     ],
     [
      508,
-     "Bret Balka",
+     "Ben Bailey",
      3
     ],
     [
      509,
-     "Brian Tober",
+     "Ben Rice",
      3
     ],
     [
      510,
-     "Brian Williams",
+     "Blake Hardesty",
      3
     ],
     [
      511,
-     "Brookes Jones",
+     "Brady Madrid",
      3
     ],
     [
      512,
-     "Caden Salefsky",
+     "Brandon Contratto",
      3
     ],
     [
      513,
-     "Caleb Thompson",
+     "Brayden Brown",
      3
     ],
     [
      514,
-     "Carlos Zambrano",
+     "Braydon Unsicker",
      3
     ],
     [
      515,
-     "Casey Markulike",
+     "Brenton Jolley",
      3
     ],
     [
      516,
-     "Cayden Sprowl",
+     "Bret Balka",
      3
     ],
     [
      517,
-     "Chance Myers",
+     "Brian Tober",
      3
     ],
     [
      518,
-     "Charlie Schuls",
+     "Brian Williams",
      3
     ],
     [
      519,
-     "Chase Parker",
+     "Brookes Jones",
      3
     ],
     [
      520,
-     "Colin Root",
+     "Bryce Johnson",
      3
     ],
     [
      521,
-     "Connor Henning",
+     "Caden Salefsky",
      3
     ],
     [
      522,
-     "Dan Clark",
+     "Caleb Thompson",
      3
     ],
     [
      523,
-     "Daniel Adsit",
+     "Carlo Ares",
      3
     ],
     [
      524,
-     "Daniel Connell",
+     "Carlos Zambrano",
      3
     ],
     [
      525,
-     "Daniel Shepard",
+     "Casey Markulike",
      3
     ],
     [
      526,
-     "David Angel Rosales",
+     "Cayden Sprowl",
      3
     ],
     [
      527,
-     "David Creswell",
+     "Chance Myers",
      3
     ],
     [
      528,
-     "Denson H",
+     "Charlie Schuls",
      3
     ],
     [
      529,
-     "Dhanvin Sureshbabbu",
+     "Chase Parker",
      3
     ],
     [
      530,
-     "Divin Sarthak",
+     "Christian Franke",
      3
     ],
     [
      531,
-     "Dixon Doege",
+     "Colin Root",
      3
     ],
     [
      532,
-     "DJ Zeiler",
+     "Connor Henning",
      3
     ],
     [
      533,
-     "Dmitry Ivanenko",
+     "Dan Clark",
      3
     ],
     [
      534,
-     "Dustin Parks",
+     "Daniel Adsit",
      3
     ],
     [
      535,
-     "Dylan Wilhelm",
+     "Daniel Connell",
      3
     ],
     [
      536,
-     "Eduardo Garcia",
+     "Daniel Shepard",
      3
     ],
     [
      537,
-     "Eli Butts",
+     "David Angel Rosales",
      3
     ],
     [
      538,
-     "Eli Curls",
+     "Denson H",
      3
     ],
     [
      539,
-     "Eli Trumeter",
+     "Derek Ferrer",
      3
     ],
     [
      540,
-     "Emir Hamzic",
+     "Dhanvin Sureshbabbu",
      3
     ],
     [
      541,
-     "Enrique Castillo",
+     "Divin Sarthak",
      3
     ],
     [
      542,
-     "Eric Davidson",
+     "Dixon Doege",
      3
     ],
     [
      543,
-     "Eric Gettler",
+     "DJ Zeiler",
      3
     ],
     [
      544,
-     "Eric Gilbert",
+     "Dmitry Ivanenko",
      3
     ],
     [
      545,
-     "Eric Landau",
+     "Dustin Parks",
      3
     ],
     [
      546,
-     "Eric Levy",
+     "Dylan Wilhelm",
      3
     ],
     [
      547,
-     "Eric Lewandowski",
+     "Eduardo Garcia",
      3
     ],
     [
      548,
-     "Eshaan Mylavarapu",
+     "Eli Butts",
      3
     ],
     [
      549,
-     "Ethan Dysert",
+     "Eli Curls",
      3
     ],
     [
      550,
-     "Ethan Miller",
+     "Eli Trumeter",
      3
     ],
     [
      551,
-     "Ethan Varney",
+     "Emir Hamzic",
      3
     ],
     [
      552,
-     "Ethan Westdorp",
+     "Enrique Castillo",
      3
     ],
     [
      553,
-     "Francis Pawloski",
+     "Eric Davidson",
      3
     ],
     [
      554,
-     "Gabe Falls",
+     "Eric Gettler",
      3
     ],
     [
      555,
-     "Garrett Swaney",
+     "Eric Gilbert",
      3
     ],
     [
      556,
-     "Gianni Mancini",
+     "Eric Landau",
      3
     ],
     [
      557,
-     "Harrison Kircher",
+     "Eric Levy",
      3
     ],
     [
      558,
-     "Heath Helms",
+     "Eric Lewandowski",
      3
     ],
     [
      559,
-     "Heath Lucas",
+     "Eshaan Mylavarapu",
      3
     ],
     [
      560,
-     "Hirav Vachhrajani",
+     "Ethan Dysert",
      3
     ],
     [
      561,
-     "Hudson Hall",
+     "Ethan Miller",
      3
     ],
     [
      562,
-     "Hudson Yeager",
+     "Ethan Varney",
      3
     ],
     [
      563,
-     "Hunter Weinberg",
+     "Ethan Westdorp",
      3
     ],
     [
      564,
-     "Ian Anderson",
+     "Francis Pawloski",
      3
     ],
     [
      565,
-     "Immanuel Zion",
+     "Gabe Falls",
      3
     ],
     [
      566,
-     "Jack Holloway",
+     "Garrett Swaney",
      3
     ],
     [
      567,
-     "Jacob Becker",
+     "Gianni Mancini",
      3
     ],
     [
      568,
-     "Jak Crow",
+     "Hanson H",
      3
     ],
     [
      569,
-     "James Singer",
+     "Harrison Kircher",
      3
     ],
     [
      570,
-     "Jamie Carmichael",
+     "Heath Helms",
      3
     ],
     [
      571,
-     "Jared Brungard",
+     "Heath Lucas",
      3
     ],
     [
      572,
-     "Jase V",
+     "Hirav Vachhrajani",
      3
     ],
     [
      573,
-     "Jason Horychuk",
+     "Hudson Hall",
      3
     ],
     [
      574,
-     "Jason Parker",
+     "Hudson Yeager",
      3
     ],
     [
      575,
-     "Javier De Le\u00f3n Albors",
+     "Hunter Weinberg",
      3
     ],
     [
      576,
-     "Javon Turcsany",
+     "Ian Anderson",
      3
     ],
     [
      577,
-     "Jay Patel",
+     "Immanuel Zion",
      3
     ],
     [
      578,
-     "Jeffrey Stone",
+     "Jack Holloway",
      3
     ],
     [
      579,
-     "Jemere Plummer",
+     "Jacob Becker",
      3
     ],
     [
      580,
-     "Jerry Huang",
+     "Jak Crow",
      3
     ],
     [
      581,
-     "Jesse Berkowitz",
+     "James Singer",
      3
     ],
     [
      582,
-     "John Kircher",
+     "James Wolf",
      3
     ],
     [
      583,
-     "Jon Mikolajczak",
+     "Jamie Carmichael",
      3
     ],
     [
      584,
-     "Jonathon Hart",
+     "Jared Brungard",
      3
     ],
     [
      585,
-     "Joseph Campbell",
+     "Jase V",
      3
     ],
     [
      586,
-     "Joseph Evans",
+     "Jason Horychuk",
      3
     ],
     [
      587,
-     "Josh Oakman",
+     "Jason Ma",
      3
     ],
     [
      588,
-     "Joshua Cornett",
+     "Jason Parker",
      3
     ],
     [
      589,
-     "Joshua McKinley",
+     "Javier De León Albors",
      3
     ],
     [
      590,
-     "Joshua Spencer",
+     "Javon Turcsany",
      3
     ],
     [
      591,
-     "JP Gorby",
+     "Jay Buxton",
      3
     ],
     [
      592,
-     "Justin Chock",
+     "Jay Patel",
      3
     ],
     [
      593,
-     "Justin Dages",
+     "Jeffrey Stone",
      3
     ],
     [
      594,
-     "Kallan Arledge",
+     "Jemere Plummer",
      3
     ],
     [
      595,
-     "Karthikeya Jagadish",
+     "Jerry Huang",
      3
     ],
     [
      596,
-     "Keith Gyory",
+     "Jesse Berkowitz",
      3
     ],
     [
      597,
-     "Kevin Chen",
+     "John Kircher",
      3
     ],
     [
      598,
-     "Kevin N",
+     "John L",
      3
     ],
     [
      599,
-     "Kurt Lau",
+     "Jon Mikolajczak",
      3
     ],
     [
      600,
-     "Kush Vasaiwala",
+     "Jonathon Hart",
      3
     ],
     [
      601,
-     "Landon Davis",
+     "Joseph Campbell",
      3
     ],
     [
      602,
-     "Lawson D",
+     "Joseph Evans",
      3
     ],
     [
      603,
-     "Maddox G",
+     "Josh Oakman",
      3
     ],
     [
      604,
-     "Manfred Jeske",
+     "Joshua Reason",
      3
     ],
     [
      605,
-     "Mats Dolese",
+     "Joshua Spencer",
      3
     ],
     [
      606,
-     "Mc Dranreb Africa",
+     "JP Gorby",
      3
     ],
     [
      607,
-     "Micah Lopez",
+     "Justin Chock",
      3
     ],
     [
      608,
-     "Michael Burdakin",
+     "Justin Dages",
      3
     ],
     [
      609,
-     "Michael Connors",
+     "Kallan Arledge",
      3
     ],
     [
      610,
-     "Michael Jenson",
+     "Karthikeya Jagadish",
      3
     ],
     [
      611,
-     "Michael Pento",
+     "Keith Gyory",
      3
     ],
     [
      612,
-     "Neil Westdorp",
+     "Kevin Chen",
      3
     ],
     [
      613,
-     "Nicholas Dehmer",
+     "Kevin N",
      3
     ],
     [
      614,
-     "Nicholas Lefavor",
+     "Krishna Rao",
      3
     ],
     [
      615,
-     "Nicolas Lopez",
+     "Kurt Lau",
      3
     ],
     [
      616,
-     "Noah Ivey",
+     "Kush Vasaiwala",
      3
     ],
     [
      617,
-     "Nolan Smyth",
+     "Landon Davis",
      3
     ],
     [
      618,
-     "Pablo Copetti",
+     "Lawson D",
      3
     ],
     [
      619,
-     "Parth Patel",
+     "Maddox G",
      3
     ],
     [
      620,
-     "Paul Davis",
+     "Manfred Jeske",
      3
     ],
     [
      621,
-     "Paul Sin",
+     "Mateo Mejia",
      3
     ],
     [
      622,
-     "Piyush Mavanur",
+     "Mats Dolese",
      3
     ],
     [
      623,
-     "Prapav Patel",
-     3
-    ],
-    [
-     624,
-     "R Kedam",
-     3
-    ],
-    [
-     625,
-     "Rajendra K",
-     3
-    ],
-    [
-     626,
-     "Rey Bacalla",
-     3
-    ],
-    [
-     627,
-     "Rikk Shimizu",
-     3
-    ],
-    [
-     628,
-     "Rodrigo Yoshikata",
-     3
-    ],
-    [
-     629,
-     "Ruben Osorio",
-     3
-    ],
-    [
-     630,
-     "Ryder Boydston",
-     3
-    ],
-    [
-     631,
-     "Sam Libo",
-     3
-    ],
-    [
-     632,
-     "Santiago Castillo",
-     3
-    ],
-    [
-     633,
-     "Sarinreach Leng",
-     3
-    ],
-    [
-     634,
-     "Saurav Santhosh Nair",
-     3
-    ],
-    [
-     635,
-     "Spencer Johnson",
-     3
-    ],
-    [
-     636,
-     "Stanton Long",
-     3
-    ],
-    [
-     637,
-     "Tanner Petrick",
-     3
-    ],
-    [
-     638,
-     "Ted Holway",
-     3
-    ],
-    [
-     639,
-     "Thomas Provost",
-     3
-    ],
-    [
-     640,
-     "Timothy Hughes",
-     3
-    ],
-    [
-     641,
-     "Trevor Horstmann",
-     3
-    ],
-    [
-     642,
-     "Troy Huynh Jr",
-     3
-    ],
-    [
-     643,
-     "Troy Jenike",
-     3
-    ],
-    [
-     644,
-     "Troy Jolley",
-     3
-    ],
-    [
-     645,
-     "Tyrel F",
-     3
-    ],
-    [
-     646,
-     "Uriah Werner",
-     3
-    ],
-    [
-     647,
-     "Vamsi Krishna Suddapalli",
-     3
-    ],
-    [
-     648,
-     "Vladimir Orellana",
-     3
-    ],
-    [
-     649,
-     "William Kammerait",
-     3
-    ],
-    [
-     650,
-     "Zack Bosshard",
+     "Mc Dranreb Africa",
      3
     ]
    ]
@@ -7457,13 +7392,13 @@
    "rows": [
     [
      1,
-     "Carlota Trevino",
-     712
+     "Garrison Eaby",
+     183
     ],
     [
      2,
-     "Garrison Eaby",
-     183
+     "Kyle Koszuta",
+     177
     ],
     [
      3,
@@ -7472,8 +7407,8 @@
     ],
     [
      4,
-     "Rio Newcombe",
-     175
+     "Tristan Dussault",
+     156
     ],
     [
      5,
@@ -7482,73 +7417,73 @@
     ],
     [
      6,
-     "Kyle Koszuta",
-     137
-    ],
-    [
-     7,
      "Anne-Sophie Courteau",
      136
     ],
     [
-     8,
-     "Tristan Dussault",
-     131
-    ],
-    [
-     9,
+     7,
      "Juan Varon",
-     126
+     132
     ],
     [
-     10,
+     8,
      "Lucas Coutinho",
      125
     ],
     [
-     11,
+     9,
      "Marianna Petrei",
      125
     ],
     [
-     12,
+     10,
      "Jake Anderson",
      121
     ],
     [
-     13,
+     11,
+     "Matt Burkhardt",
+     119
+    ],
+    [
+     12,
      "Nicholas Wade",
      117
     ],
     [
-     14,
-     "Matt Burkhardt",
-     116
+     13,
+     "Maddy Rasmusen",
+     115
     ],
     [
-     15,
+     14,
      "Mark Dancuart",
      111
     ],
     [
-     16,
-     "Maddy Rasmusen",
-     109
-    ],
-    [
-     17,
+     15,
      "Monika Wynne",
      109
     ],
     [
-     18,
+     16,
      "Arielle Butler",
      106
     ],
     [
-     19,
+     17,
+     "Zach Gonnering",
+     93
+    ],
+    [
+     18,
      "Sydney Sonday",
      90
+    ],
+    [
+     19,
+     "Marisa Ruiz",
+     88
     ],
     [
      20,
@@ -7557,33 +7492,33 @@
     ],
     [
      21,
-     "Zach Gonnering",
-     87
-    ],
-    [
-     22,
-     "Marisa Ruiz",
-     85
-    ],
-    [
-     23,
      "Aidan Schenk",
      80
     ],
     [
-     24,
+     22,
      "Janet Liu",
      79
     ],
     [
-     25,
+     23,
      "Usama Khalid",
      73
     ],
     [
-     26,
+     24,
+     "Ryan Camras",
+     71
+    ],
+    [
+     25,
      "Eli Steiner",
      69
+    ],
+    [
+     26,
+     "Yolena Carlon",
+     66
     ],
     [
      27,
@@ -7592,23 +7527,23 @@
     ],
     [
      28,
-     "Yolena Carlon",
+     "Audrey Banada",
      63
     ],
     [
      29,
-     "Ella Boydston",
+     "Alexa Quintanilla",
      62
     ],
     [
      30,
-     "Wendy Weston",
-     61
+     "Ella Boydston",
+     62
     ],
     [
      31,
-     "Audrey Banada",
-     60
+     "Wendy Weston",
+     61
     ],
     [
      32,
@@ -7618,96 +7553,96 @@
     [
      33,
      "Mary McGowan",
-     55
+     58
     ],
     [
      34,
-     "Cc Eleven Sacca",
-     54
+     "Haley Ferguson",
+     57
     ],
     [
      35,
-     "Haley Ferguson",
-     54
+     "MJ Marrero",
+     57
     ],
     [
      36,
-     "Liam Duffin",
-     54
+     "Vincent Rettke",
+     57
     ],
     [
      37,
-     "MJ Marrero",
+     "Dale Kim",
      54
     ],
     [
      38,
-     "Vincent Rettke",
+     "Liam Duffin",
      54
     ],
     [
      39,
+     "Mike Radermacher",
+     54
+    ],
+    [
+     40,
      "Natalie Hur",
      52
     ],
     [
-     40,
+     41,
      "Preston Gordon",
      52
     ],
     [
-     41,
-     "Mike Radermacher",
-     51
-    ],
-    [
      42,
-     "Parth Mody",
+     "Anna Lenhart",
      51
     ],
     [
      43,
+     "Jae Centonze",
+     51
+    ],
+    [
+     44,
+     "Parth Mody",
+     51
+    ],
+    [
+     45,
      "Caio Bardauil",
      50
     ],
     [
-     44,
+     46,
      "Cameron Luhring",
      50
     ],
     [
-     45,
+     47,
      "Jayda Maldonado",
      50
     ],
     [
-     46,
+     48,
      "Michelle Esquivel",
      50
     ],
     [
-     47,
+     49,
      "Sabrina Barisano",
      50
     ],
     [
-     48,
+     50,
      "William Sobek",
      50
     ],
     [
-     49,
-     "Adelie Osher",
-     48
-    ],
-    [
-     50,
-     "Anna Lenhart",
-     48
-    ],
-    [
      51,
-     "Jae Centonze",
+     "Adelie Osher",
      48
     ],
     [
@@ -7722,38 +7657,38 @@
     ],
     [
      54,
-     "Ryan Camras",
-     46
+     "Jackson Ayotte",
+     45
     ],
     [
      55,
-     "Samantha Buyckx",
+     "Masa Grgan",
      43
     ],
     [
      56,
-     "Dale Kim",
-     42
+     "Samantha Buyckx",
+     43
     ],
     [
      57,
-     "Jackson Ayotte",
-     42
-    ],
-    [
-     58,
      "Aibika Kalsarieva",
      40
     ],
     [
-     59,
+     58,
      "Hannah Fife",
      40
     ],
     [
-     60,
+     59,
      "Victoria Nguyen",
      40
+    ],
+    [
+     60,
+     "Madalina Grigoriu",
+     39
     ],
     [
      61,
@@ -7762,92 +7697,92 @@
     ],
     [
      62,
-     "Alexa Quintanilla",
-     37
-    ],
-    [
-     63,
      "Daniel Miron",
      37
     ],
     [
+     63,
+     "Francis Chi",
+     37
+    ],
+    [
      64,
-     "Courtenay Leonard",
+     "Allie Reichert",
      36
     ],
     [
      65,
-     "Jemere Plummer",
+     "Ashley Lu",
      36
     ],
     [
      66,
-     "Francis Chi",
-     34
+     "Courtenay Leonard",
+     36
     ],
     [
      67,
+     "Jarryd Woog",
+     36
+    ],
+    [
+     68,
+     "Jemere Plummer",
+     36
+    ],
+    [
+     69,
+     "Eileen Wang",
+     34
+    ],
+    [
+     70,
      "Antonio Medina",
      33
     ],
     [
-     68,
+     71,
      "Averee Beck",
      33
     ],
     [
-     69,
+     72,
      "Caitlin Klaassen",
      33
     ],
     [
-     70,
-     "Madalina Grigoriu",
-     33
-    ],
-    [
-     71,
+     73,
      "Brianna Kemp",
      31
     ],
     [
-     72,
-     "Eileen Wang",
-     31
-    ],
-    [
-     73,
+     74,
      "Komal Safdar",
      31
     ],
     [
-     74,
+     75,
      "Luke Williams",
      31
     ],
     [
-     75,
-     "Allie Reichert",
-     30
-    ],
-    [
      76,
-     "Colby Hill",
+     "Abigail Okelley",
      30
     ],
     [
      77,
-     "David Litvinov",
+     "Colby Hill",
      30
     ],
     [
      78,
-     "Jamie Voelker",
+     "David Litvinov",
      30
     ],
     [
      79,
-     "Jarryd Woog",
+     "Jamie Voelker",
      30
     ],
     [
@@ -7862,7 +7797,7 @@
     ],
     [
      82,
-     "Melissa Ber\u00e9",
+     "Melissa Beré",
      30
     ],
     [
@@ -7877,62 +7812,62 @@
     ],
     [
      85,
-     "Abigail Okelley",
-     27
-    ],
-    [
-     86,
      "Ana Gordon",
      27
     ],
     [
+     86,
+     "Andrew Loftin",
+     27
+    ],
+    [
      87,
-     "Maverick Messinger",
+     "Chantal Mabie",
      27
     ],
     [
      88,
-     "Stevie Petropouleas",
+     "Emma Cook",
      27
     ],
     [
      89,
+     "Stevie Petropouleas",
+     27
+    ],
+    [
+     90,
      "Ariana Ajani",
      25
     ],
     [
-     90,
+     91,
      "Dawson Davis",
      25
     ],
     [
-     91,
-     "Ashley Lu",
-     24
-    ],
-    [
      92,
-     "Chantal Mabie",
-     24
-    ],
-    [
-     93,
      "Christie Mead",
      24
     ],
     [
-     94,
+     93,
      "Daniel Byun",
      24
     ],
     [
-     95,
+     94,
      "Devon Sikora",
      24
     ],
     [
+     95,
+     "Ethan Bakalinsky",
+     24
+    ],
+    [
      96,
-     "Emma Cook",
+     "Helen To",
      24
     ],
     [
@@ -7962,707 +7897,707 @@
     ],
     [
      102,
-     "Riley Bohnert",
+     "Kendall Warren",
      24
     ],
     [
      103,
-     "Zach (ernesto) Hunter",
+     "Morgan Downing",
      24
     ],
     [
      104,
-     "Alicia Lai",
-     21
+     "Riley Bohnert",
+     24
     ],
     [
      105,
-     "Andrew Loftin",
-     21
+     "Zach (ernesto) Hunter",
+     24
     ],
     [
      106,
-     "Brie Aldridge",
+     "Adalynn Lund",
      21
     ],
     [
      107,
-     "Ethan Bakalinsky",
+     "Alicia Lai",
      21
     ],
     [
      108,
-     "Kendall Warren",
+     "Brie Aldridge",
      21
     ],
     [
      109,
-     "Lova Metor",
+     "Jessica Mason",
      21
     ],
     [
      110,
-     "Michael Vallejo",
+     "Lova Metor",
      21
     ],
     [
      111,
+     "Michael Vallejo",
+     21
+    ],
+    [
+     112,
      "Adair Garcia",
      18
     ],
     [
-     112,
+     113,
      "Allie Davis",
      18
     ],
     [
-     113,
+     114,
      "Amber Policare",
      18
     ],
     [
-     114,
+     115,
      "Amir Tabatabaeian",
      18
     ],
     [
-     115,
-     "Angela Morisette",
-     18
-    ],
-    [
      116,
-     "Ben Slive",
+     "Andi Godwin",
      18
     ],
     [
      117,
-     "Billy Buchhauser",
+     "Angela Morisette",
      18
     ],
     [
      118,
-     "Brittany Levkulich",
+     "Ben Slive",
      18
     ],
     [
      119,
-     "Circa Luna S",
+     "Billy Buchhauser",
      18
     ],
     [
      120,
-     "Deanna Pham",
+     "Brittany Levkulich",
      18
     ],
     [
      121,
-     "Hailee Haymore",
+     "Cade Edwards",
      18
     ],
     [
      122,
-     "Helen To",
+     "Christian Lund",
      18
     ],
     [
      123,
-     "Jace Howard",
+     "Deanna Pham",
      18
     ],
     [
      124,
-     "Jaikin Gomez",
+     "Edward Kim",
      18
     ],
     [
      125,
-     "Jessica Mason",
+     "Giorgia Vitale",
      18
     ],
     [
      126,
-     "Julian Slive",
+     "Hailee Haymore",
      18
     ],
     [
      127,
-     "Kentaro Hamaguchi",
+     "Jace Howard",
      18
     ],
     [
      128,
-     "Levi Daniel",
+     "Jaikin Gomez",
      18
     ],
     [
      129,
-     "Mackonner Dy",
+     "Julian Slive",
      18
     ],
     [
      130,
-     "Mary Monson",
+     "Kentaro Hamaguchi",
      18
     ],
     [
      131,
-     "Masa Grgan",
+     "Levi Daniel",
      18
     ],
     [
      132,
-     "Natalia Simson",
+     "Mackonner Dy",
      18
     ],
     [
      133,
-     "Olivia Phillips",
+     "Mary Monson",
      18
     ],
     [
      134,
-     "Oscar Serra",
+     "Natalia Simson",
      18
     ],
     [
      135,
-     "Patara Tezduyar",
+     "Olivia Phillips",
      18
     ],
     [
      136,
-     "Roger Dugas",
+     "Oscar Serra",
      18
     ],
     [
      137,
-     "Shannon Pretorius",
+     "Patara Tezduyar",
      18
     ],
     [
      138,
-     "Sienna Hitzeman",
+     "Roger Dugas",
      18
     ],
     [
      139,
-     "Stephanie Vogt",
+     "Shannon Pretorius",
      18
     ],
     [
      140,
-     "Tiffany Wang",
+     "Sienna Hitzeman",
      18
     ],
     [
      141,
-     "Vritti Sethi",
+     "Stephanie Vogt",
      18
     ],
     [
      142,
-     "Adalynn Lund",
-     15
+     "Tiffany Wang",
+     18
     ],
     [
      143,
-     "Andi Godwin",
-     15
+     "Vritti Sethi",
+     18
     ],
     [
      144,
-     "Armaan Jiwa Mawji",
-     15
+     "Wade Heerboth",
+     18
     ],
     [
      145,
-     "Arnav Duarah",
-     15
+     "Wesley Hanson",
+     18
     ],
     [
      146,
-     "Bassem Kheireddin",
+     "Ahmad El-Zarif",
      15
     ],
     [
      147,
-     "Brittni Tonnessen",
+     "Arnav Duarah",
      15
     ],
     [
      148,
-     "Edward Kim",
+     "Bassem Kheireddin",
      15
     ],
     [
      149,
-     "Frida Mudsam",
+     "Brittni Tonnessen",
      15
     ],
     [
      150,
-     "Jay Evans",
+     "Connor McCartney",
      15
     ],
     [
      151,
-     "Jillian Niemann",
+     "Emanuel Dickson",
      15
     ],
     [
      152,
-     "Johnny Goldberg",
+     "Frida Mudsam",
      15
     ],
     [
      153,
-     "Kelly Chen",
+     "Jay Evans",
      15
     ],
     [
      154,
-     "Lily Goodwin",
+     "Jessica Haywood",
      15
     ],
     [
      155,
-     "Lyn Yuen Choo",
+     "Jillian Niemann",
      15
     ],
     [
      156,
-     "Maria Klokotzky",
+     "Johnny Goldberg",
      15
     ],
     [
      157,
-     "Meggan William",
+     "Kelly Chen",
      15
     ],
     [
      158,
-     "Naomi De Hart",
+     "Lily Goodwin",
      15
     ],
     [
      159,
-     "Nicolas Almeida",
+     "Lyn Yuen Choo",
      15
     ],
     [
      160,
-     "Perry Wang",
+     "Maria Klokotzky",
      15
     ],
     [
      161,
-     "Ryan Gilbert",
+     "Meggan William",
      15
     ],
     [
      162,
-     "Sophie Abrams",
+     "Naomi De Hart",
      15
     ],
     [
      163,
-     "Wade Heerboth",
+     "Nicolas Almeida",
      15
     ],
     [
      164,
+     "Perry Wang",
+     15
+    ],
+    [
+     165,
+     "Ryan Gilbert",
+     15
+    ],
+    [
+     166,
+     "Sophie Abrams",
+     15
+    ],
+    [
+     167,
+     "V. Mary Rivas",
+     15
+    ],
+    [
+     168,
      "Alexandra Valenstein",
      12
     ],
     [
-     165,
+     169,
      "Alia Brown",
      12
     ],
     [
-     166,
+     170,
      "Alyssia Fossorier",
      12
     ],
     [
-     167,
+     171,
      "Amanda Hendry",
      12
     ],
     [
-     168,
+     172,
      "Andrew Angulo",
      12
     ],
     [
-     169,
+     173,
      "Ariana Rodriguez",
      12
     ],
     [
-     170,
+     174,
      "Blake Suard",
      12
     ],
     [
-     171,
-     "Cade Edwards",
-     12
-    ],
-    [
-     172,
-     "Caleb Herrick",
-     12
-    ],
-    [
-     173,
-     "Chris Jammal",
-     12
-    ],
-    [
-     174,
-     "Christian Lund",
-     12
-    ],
-    [
      175,
-     "Connor McCartney",
+     "Braylon Ohrel",
      12
     ],
     [
      176,
-     "Courtney Clark",
+     "Caleb Herrick",
      12
     ],
     [
      177,
-     "Cynthia McPherson",
+     "Caroline Maguire",
      12
     ],
     [
      178,
-     "Domenico Geminiani",
+     "Casey Garretson",
      12
     ],
     [
      179,
-     "Don Alto",
+     "Chris Jammal",
      12
     ],
     [
      180,
-     "Edgaras Zilys",
+     "Courtney Clark",
      12
     ],
     [
      181,
-     "Eileen Tran",
+     "Cynthia McPherson",
      12
     ],
     [
      182,
-     "Eliel Herminas",
+     "Domenico Geminiani",
      12
     ],
     [
      183,
-     "Elisha Turner",
+     "Don Alto",
      12
     ],
     [
      184,
-     "Eric Diaz",
+     "Dylan Lewis",
      12
     ],
     [
      185,
-     "Federico Nani",
+     "Edgaras Zilys",
      12
     ],
     [
      186,
-     "Garrett Whitehead",
+     "Eileen Tran",
      12
     ],
     [
      187,
-     "Giorgia Vitale",
+     "Eliel Herminas",
      12
     ],
     [
      188,
-     "Hudson De Risi",
+     "Elisha Turner",
      12
     ],
     [
      189,
-     "Isabella Hoang",
+     "Eric Diaz",
      12
     ],
     [
      190,
-     "Jessica Warren",
+     "Federico Nani",
      12
     ],
     [
      191,
-     "Jing Robinson",
+     "Garrett Whitehead",
      12
     ],
     [
      192,
-     "Joel Cassens",
+     "Hudson De Risi",
      12
     ],
     [
      193,
-     "Kailas Shekar",
+     "Isabella Hoang",
      12
     ],
     [
      194,
-     "Kamyla Held",
+     "Jessica Warren",
      12
     ],
     [
      195,
-     "Keaten Kappes",
+     "Jing Robinson",
      12
     ],
     [
      196,
-     "Kelly Jensen",
+     "Joel Cassens",
      12
     ],
     [
      197,
-     "Kelsey Laurente",
+     "Joshua Giannelli",
      12
     ],
     [
      198,
-     "Kimberly Bacalla",
+     "Kailas Shekar",
      12
     ],
     [
      199,
-     "Kyle Morris",
+     "Kamyla Held",
      12
     ],
     [
      200,
-     "Lauren Cole",
+     "Karen Lu",
      12
     ],
     [
      201,
-     "Leah J",
+     "Keaten Kappes",
      12
     ],
     [
      202,
-     "Lexi Jensen",
+     "Kelly Jensen",
      12
     ],
     [
      203,
-     "Maksims Kazijevs",
+     "Kelsey Laurente",
      12
     ],
     [
      204,
-     "Maria Vyshkina",
+     "Kimberly Bacalla",
      12
     ],
     [
      205,
-     "Martin Thomas",
+     "Kyle Morris",
      12
     ],
     [
      206,
-     "Matthew Sah",
+     "Lauren Cole",
      12
     ],
     [
      207,
-     "Mayu Omori",
+     "Leah J",
      12
     ],
     [
      208,
-     "Michael McCaffrey",
+     "Lexi Jensen",
      12
     ],
     [
      209,
-     "Morgan Downing",
+     "Maksims Kazijevs",
      12
     ],
     [
      210,
-     "Mya Barron",
+     "Maria Vyshkina",
      12
     ],
     [
      211,
-     "Natalia Maynetto",
+     "Martin Thomas",
      12
     ],
     [
      212,
-     "Nina Rhoades",
+     "Matthew Sah",
      12
     ],
     [
      213,
-     "Nisal Liyanage",
+     "Mayu Omori",
      12
     ],
     [
      214,
-     "Noah Zwiren",
+     "Michael McCaffrey",
      12
     ],
     [
      215,
-     "Poongi Hong",
+     "Mya Barron",
      12
     ],
     [
      216,
-     "Regina Goldberg",
+     "Natalia Maynetto",
      12
     ],
     [
      217,
-     "Sarah Beeston",
+     "Nina Rhoades",
      12
     ],
     [
      218,
-     "Scott McRee",
+     "Nisal Liyanage",
      12
     ],
     [
      219,
-     "Seone Mendez",
+     "Noah Zwiren",
      12
     ],
     [
      220,
-     "Simone Leonard",
+     "Poongi Hong",
      12
     ],
     [
      221,
-     "Tanner Tomassi",
+     "Regina Goldberg",
      12
     ],
     [
      222,
-     "Tiffany Ash",
+     "Sarah Beeston",
      12
     ],
     [
      223,
-     "TJ Rudden",
+     "Scott McRee",
      12
     ],
     [
      224,
-     "Tobias Moreno",
+     "Seone Mendez",
      12
     ],
     [
      225,
-     "Tomoko Taniguchi",
+     "Simone Leonard",
      12
     ],
     [
      226,
-     "Troy Akin",
+     "Spencer Liang",
      12
     ],
     [
      227,
-     "V. Mary Rivas",
+     "Tanner Tomassi",
      12
     ],
     [
      228,
-     "Wesley Hanson",
+     "Tiffany Ash",
      12
     ],
     [
      229,
-     "Xavier Richard",
+     "TJ Rudden",
      12
     ],
     [
      230,
-     "Zach Drost",
+     "Tobias Moreno",
      12
     ],
     [
      231,
-     "Ahmad El-Zarif",
-     9
+     "Tomoko Taniguchi",
+     12
     ],
     [
      232,
+     "Troy Akin",
+     12
+    ],
+    [
+     233,
+     "Xavier Richard",
+     12
+    ],
+    [
+     234,
+     "Zach Drost",
+     12
+    ],
+    [
+     235,
      "Albert Wan",
      9
     ],
     [
-     233,
+     236,
      "Alexa Brent",
      9
     ],
     [
-     234,
+     237,
      "Alexander Grubbs",
      9
     ],
     [
-     235,
+     238,
      "Alvaro Regalado",
      9
     ],
     [
-     236,
+     239,
      "Arianna Raga",
      9
     ],
     [
-     237,
+     240,
      "Beatriz Lopez",
      9
     ],
     [
-     238,
-     "Braylon Ohrel",
-     9
-    ],
-    [
-     239,
+     241,
      "Brendan Gallagher",
      9
     ],
     [
-     240,
-     "Brittany Yang",
-     9
-    ],
-    [
-     241,
-     "Caroline Maguire",
-     9
-    ],
-    [
      242,
-     "Casey Garretson",
+     "Brittany Yang",
      9
     ],
     [
@@ -8697,92 +8632,92 @@
     ],
     [
      249,
-     "Dylan Lewis",
-     9
-    ],
-    [
-     250,
      "Elizabeth Boydston",
      9
     ],
     [
-     251,
+     250,
      "Emmaline Nichols",
      9
     ],
     [
-     252,
+     251,
      "Evie Kenna",
      9
     ],
     [
-     253,
+     252,
      "Francesca Marto",
      9
     ],
     [
-     254,
+     253,
      "Jason Loyd",
      9
     ],
     [
+     254,
+     "Javier De León Albors",
+     9
+    ],
+    [
      255,
-     "Javier De Le\u00f3n Albors",
+     "Jessica Ho",
      9
     ],
     [
      256,
-     "Jessica Haywood",
-     9
-    ],
-    [
-     257,
-     "Joshua Giannelli",
-     9
-    ],
-    [
-     258,
-     "Karen Lu",
-     9
-    ],
-    [
-     259,
      "Karthik Ganesh",
      9
     ],
     [
-     260,
+     257,
      "Kasia Carr",
      9
     ],
     [
-     261,
+     258,
      "Katelyn Hilliard",
      9
     ],
     [
-     262,
+     259,
+     "Logan Thompson",
+     9
+    ],
+    [
+     260,
      "Louise Kwong",
      9
     ],
     [
-     263,
+     261,
      "Lucas Pereyra",
      9
     ],
     [
-     264,
+     262,
+     "Madelyn Porter",
+     9
+    ],
+    [
+     263,
      "Madison Turosinski",
      9
     ],
     [
-     265,
+     264,
      "Maya Wilson",
      9
     ],
     [
-     266,
+     265,
      "Megan Poe",
+     9
+    ],
+    [
+     266,
+     "Mikaela Smith",
      9
     ],
     [
@@ -8817,427 +8752,427 @@
     ],
     [
      273,
-     "Thomas Romano",
+     "Teresa Romero",
      9
     ],
     [
      274,
-     "Tommy Labat",
+     "Thomas Romano",
      9
     ],
     [
      275,
-     "Victor Camilo Iii",
+     "Tommy Labat",
      9
     ],
     [
      276,
+     "Victor Camilo Iii",
+     9
+    ],
+    [
+     277,
      "Abbie Monski",
      6
     ],
     [
-     277,
+     278,
      "Abby Trieu",
      6
     ],
     [
-     278,
+     279,
      "Adela Umannova",
      6
     ],
     [
-     279,
+     280,
      "Aidan Gorneau",
      6
     ],
     [
-     280,
+     281,
      "Alex Chanthaphaeng",
      6
     ],
     [
-     281,
+     282,
      "Ali Quintero",
      6
     ],
     [
-     282,
+     283,
      "Alison Bruggeman",
      6
     ],
     [
-     283,
+     284,
      "Alli Hazrati",
      6
     ],
     [
-     284,
+     285,
      "Andrea Miller",
      6
     ],
     [
-     285,
+     286,
      "Andy Lum",
      6
     ],
     [
-     286,
+     287,
      "Anri Ferris",
      6
     ],
     [
-     287,
+     288,
      "Antoaneta Toskova",
      6
     ],
     [
-     288,
+     289,
      "Asako Pastrana",
      6
     ],
     [
-     289,
+     290,
      "Auburn Smith",
      6
     ],
     [
-     290,
+     291,
      "Belani Soto",
      6
     ],
     [
-     291,
+     292,
      "Ben Baravik",
      6
     ],
     [
-     292,
+     293,
      "Ben Cawston",
      6
     ],
     [
-     293,
+     294,
      "Ben Davis",
      6
     ],
     [
-     294,
+     295,
      "Ben Herrick",
      6
     ],
     [
-     295,
+     296,
      "Ben McNair",
      6
     ],
     [
-     296,
+     297,
      "Benson Parry",
      6
     ],
     [
-     297,
+     298,
      "Brandon Johnson",
      6
     ],
     [
-     298,
+     299,
      "Brenna Murray",
      6
     ],
     [
-     299,
+     300,
      "Bret Berryman",
      6
     ],
     [
-     300,
+     301,
      "Brianna McCullock",
      6
     ],
     [
-     301,
+     302,
      "Brodie Smith",
      6
     ],
     [
-     302,
+     303,
      "Bruno Barrueto Deza",
      6
     ],
     [
-     303,
+     304,
      "Bryce Larson",
      6
     ],
     [
-     304,
+     305,
      "Caraline Cox",
      6
     ],
     [
-     305,
+     306,
      "Carlos Pavon",
      6
     ],
     [
-     306,
+     307,
      "Caroline Stepnowski",
      6
     ],
     [
-     307,
+     308,
      "Carson Nguyen",
      6
     ],
     [
-     308,
+     309,
      "Cassidy Hoag",
      6
     ],
     [
-     309,
+     310,
      "Chantal Van Winkle",
      6
     ],
     [
-     310,
+     311,
      "Chase Brautman",
      6
     ],
     [
-     311,
+     312,
      "Chase Mason",
      6
     ],
     [
-     312,
+     313,
      "Chotika Wannachinda",
      6
     ],
     [
-     313,
+     314,
      "Chris Turvey",
      6
     ],
     [
-     314,
-     "Constanza Gorches",
-     6
-    ],
-    [
      315,
-     "Cori Elliott",
+     "Christian Franke",
      6
     ],
     [
      316,
-     "Dallas Fahr",
+     "Constanza Gorches",
      6
     ],
     [
      317,
-     "Dan Nguyen",
+     "Cori Elliott",
      6
     ],
     [
      318,
-     "David Perez",
+     "Dallas Fahr",
      6
     ],
     [
      319,
-     "David Yahng",
+     "Dan Nguyen",
      6
     ],
     [
      320,
-     "Dean Loock",
+     "David Perez",
      6
     ],
     [
      321,
-     "Diana Kozenyatko",
+     "David Yahng",
      6
     ],
     [
      322,
-     "Duncan Mulenga",
+     "Dean Loock",
      6
     ],
     [
      323,
-     "Dylan Taylor",
+     "Diana Kozenyatko",
      6
     ],
     [
      324,
-     "Eden Malloy",
+     "Duncan Mulenga",
      6
     ],
     [
      325,
-     "Eliana Ling",
+     "Dylan Taylor",
      6
     ],
     [
      326,
-     "Elizabeth Roy",
+     "Eden Malloy",
      6
     ],
     [
      327,
-     "Emilien Burnel",
+     "Eliana Ling",
      6
     ],
     [
      328,
-     "Erica Johnson",
+     "Elizabeth Roy",
      6
     ],
     [
      329,
-     "Erik Forsythe",
+     "Emilien Burnel",
      6
     ],
     [
      330,
-     "Ernesto Fajardo",
+     "Erica Johnson",
      6
     ],
     [
      331,
-     "Ethan Hall",
+     "Erik Forsythe",
      6
     ],
     [
      332,
-     "Eva Kohutova",
+     "Ernesto Fajardo",
      6
     ],
     [
      333,
-     "Evan Zoeteman",
+     "Ethan Hall",
      6
     ],
     [
      334,
-     "Fatyha Berjane",
+     "Eva Kohutova",
      6
     ],
     [
      335,
-     "Florencia Rossi Luque",
+     "Evan Zoeteman",
      6
     ],
     [
      336,
-     "Francesca Fakidis",
+     "Fatyha Berjane",
      6
     ],
     [
      337,
-     "Gina Li",
+     "Florencia Rossi Luque",
      6
     ],
     [
      338,
-     "Gregory Perkins",
+     "Francesca Fakidis",
      6
     ],
     [
      339,
-     "Hailey Munz",
+     "Gina Li",
      6
     ],
     [
      340,
-     "Hannah Shin",
+     "Gregory Perkins",
      6
     ],
     [
      341,
-     "Hayden Rand",
+     "Hailey Munz",
      6
     ],
     [
      342,
-     "Heather Kim",
+     "Hannah Shin",
      6
     ],
     [
      343,
-     "Heather Schallenberger",
+     "Hayden Rand",
      6
     ],
     [
      344,
-     "Helena Jansen",
+     "Heather Kim",
      6
     ],
     [
      345,
-     "Hilary Toole",
+     "Heather Schallenberger",
      6
     ],
     [
      346,
-     "Ishan Balakrishnan",
+     "Hilary Toole",
      6
     ],
     [
      347,
-     "Ivy Bewley",
+     "Ishan Balakrishnan",
      6
     ],
     [
      348,
-     "Jacob Bolkowy",
+     "Ivy Bewley",
      6
     ],
     [
      349,
-     "Jacob Dubas",
+     "Jacob Bolkowy",
      6
     ],
     [
      350,
-     "Jaden Lam",
+     "Jacob Dubas",
      6
     ],
     [
      351,
-     "Jake Benjamin",
+     "Jaden Lam",
      6
     ],
     [
      352,
-     "James Broker",
+     "Jake Benjamin",
      6
     ],
     [
      353,
-     "James Seagraves",
+     "James Broker",
      6
     ],
     [
      354,
-     "Jared Brungard",
+     "James Seagraves",
      6
     ],
     [
      355,
-     "Jericho Grollman",
+     "Jared Brungard",
      6
     ],
     [
      356,
-     "Jerry Worsham",
+     "Jericho Grollman",
      6
     ],
     [
      357,
-     "Jessica Ho",
+     "Jerry Worsham",
      6
     ],
     [
@@ -9317,72 +9252,72 @@
     ],
     [
      373,
-     "Kenai Rios",
+     "Kayla Nesbitt",
      6
     ],
     [
      374,
-     "Kendall Kikkawa",
+     "Kenai Rios",
      6
     ],
     [
      375,
-     "Keri Lu",
+     "Kendall Kikkawa",
      6
     ],
     [
      376,
-     "Kevin Dong",
+     "Keri Lu",
      6
     ],
     [
      377,
-     "Kevin Rushton",
+     "Kevin Dong",
      6
     ],
     [
      378,
-     "Kyle Yates",
+     "Kevin Rushton",
      6
     ],
     [
      379,
-     "Kylie Imperial",
+     "Kyle Yates",
      6
     ],
     [
      380,
-     "Leah Black",
+     "Kylie Imperial",
      6
     ],
     [
      381,
-     "Lesa Ritchie",
+     "Leah Black",
      6
     ],
     [
      382,
-     "Linda Loch",
+     "Lesa Ritchie",
      6
     ],
     [
      383,
-     "Lingzhe X",
+     "Linda Loch",
      6
     ],
     [
      384,
-     "Lizzie McFarland",
+     "Lingzhe X",
      6
     ],
     [
      385,
-     "Logan Luc",
+     "Lizzie McFarland",
      6
     ],
     [
      386,
-     "Logan Thompson",
+     "Logan Luc",
      6
     ],
     [
@@ -9402,27 +9337,27 @@
     ],
     [
      390,
-     "Madelyn Porter",
-     6
-    ],
-    [
-     391,
      "Madison Grollman",
      6
     ],
     [
-     392,
+     391,
      "Mandy Gabriel",
      6
     ],
     [
-     393,
+     392,
      "Mara Schmidt",
      6
     ],
     [
-     394,
+     393,
      "Marie Lutz",
+     6
+    ],
+    [
+     394,
+     "Matt Ngo",
      6
     ],
     [
@@ -9442,12 +9377,12 @@
     ],
     [
      398,
-     "Mikael Vollbach",
+     "Michael Shaw",
      6
     ],
     [
      399,
-     "Mikaela Smith",
+     "Mikael Vollbach",
      6
     ],
     [
@@ -9582,7 +9517,7 @@
     ],
     [
      426,
-     "Spencer Liang",
+     "Stephen Preissler",
      6
     ],
     [
@@ -9602,62 +9537,62 @@
     ],
     [
      430,
-     "Teresa Romero",
-     6
-    ],
-    [
-     431,
      "Tuny Betancourt",
      6
     ],
     [
-     432,
+     431,
      "Veronica Alteri",
      6
     ],
     [
-     433,
+     432,
      "Victoria Shinkaretzky",
      6
     ],
     [
-     434,
+     433,
      "Vladimir Orellana",
      6
     ],
     [
-     435,
+     434,
      "Warren Robinson",
      6
     ],
     [
-     436,
+     435,
      "Zachary Higginson",
      6
     ],
     [
-     437,
+     436,
      "Adaline Machado",
      3
     ],
     [
-     438,
+     437,
      "AJ Carney",
      3
     ],
     [
-     439,
+     438,
      "Alex Cortright",
      3
     ],
     [
-     440,
+     439,
      "Alex Guy",
      3
     ],
     [
-     441,
+     440,
      "Alex Lantz",
+     3
+    ],
+    [
+     441,
+     "Alexa Smith",
      3
     ],
     [
@@ -9667,771 +9602,806 @@
     ],
     [
      443,
-     "Alexis Hayden",
+     "Alexander Valencia",
      3
     ],
     [
      444,
-     "Ali Evans",
+     "Alexis Hayden",
      3
     ],
     [
      445,
-     "Anastasia Outekhine",
+     "Ali Evans",
      3
     ],
     [
      446,
-     "Andrew Wang",
+     "Alyssa C",
      3
     ],
     [
      447,
-     "Aurora Arvelo",
+     "Anastasia Outekhine",
      3
     ],
     [
      448,
-     "Austin Mireles",
+     "Andrew Wang",
      3
     ],
     [
      449,
-     "Ava Pisacrita",
+     "Aurora Arvelo",
      3
     ],
     [
      450,
-     "Axel Morgan",
+     "Austin Mireles",
      3
     ],
     [
      451,
-     "Ben Rice",
+     "Ava Pisacrita",
      3
     ],
     [
      452,
-     "Benjamin Bramblett",
+     "Axel Morgan",
      3
     ],
     [
      453,
-     "Benjamin Huynh",
+     "Ben Rice",
      3
     ],
     [
      454,
-     "Bolaji Kukoyi",
+     "Benjamin Bramblett",
      3
     ],
     [
      455,
-     "Brandon Contratto",
+     "Benjamin Huynh",
      3
     ],
     [
      456,
-     "Brandon Macdonough",
+     "Blake Hardesty",
      3
     ],
     [
      457,
-     "Brandon Nsekpong",
+     "Bolaji Kukoyi",
      3
     ],
     [
      458,
-     "Brent Werbeck",
+     "Brandon Contratto",
      3
     ],
     [
      459,
-     "Brian Buzianis",
+     "Brandon Macdonough",
      3
     ],
     [
      460,
-     "Brookes Jones",
+     "Brandon Nsekpong",
      3
     ],
     [
      461,
-     "Brooks Toth",
+     "Brent Werbeck",
      3
     ],
     [
      462,
-     "Carlos Zambrano",
+     "Brian Buzianis",
      3
     ],
     [
      463,
-     "Cassie Quast",
+     "Brookes Jones",
      3
     ],
     [
      464,
-     "Chance Myers",
+     "Brooks Toth",
      3
     ],
     [
      465,
-     "Charles Case",
+     "Carlo Ares",
      3
     ],
     [
      466,
-     "Cheyenne Jones",
+     "Carlos Zambrano",
      3
     ],
     [
      467,
-     "Christopher Anderson",
+     "Cassie Quast",
      3
     ],
     [
      468,
-     "Claire Thompson",
+     "Chance Myers",
      3
     ],
     [
      469,
-     "Claudia Flores",
+     "Charles Case",
      3
     ],
     [
      470,
-     "Cody Temple",
+     "Cheyenne Jones",
      3
     ],
     [
      471,
-     "Courtney Kendall",
+     "Chloe Zigliara",
      3
     ],
     [
      472,
-     "Damon Little",
+     "Christopher Anderson",
      3
     ],
     [
      473,
-     "Daniel Adsit",
+     "Claire Thompson",
      3
     ],
     [
      474,
-     "Daniel Couzens",
+     "Claudia Flores",
      3
     ],
     [
      475,
-     "Diego Diaz Sanchez",
+     "Cody Temple",
      3
     ],
     [
      476,
-     "DJ Zeiler",
+     "Courtney Kendall",
      3
     ],
     [
      477,
-     "Dora Kurdi",
+     "Damon Little",
      3
     ],
     [
      478,
-     "Dustin Spalding",
+     "Daniel Adsit",
      3
     ],
     [
      479,
-     "Eli Curls",
+     "Daniel Couzens",
      3
     ],
     [
      480,
-     "Eli Trumeter",
+     "Diego Diaz Sanchez",
      3
     ],
     [
      481,
-     "Emanuel Dickson",
+     "DJ Zeiler",
      3
     ],
     [
      482,
-     "Emma Van Hee",
+     "Dora Kurdi",
      3
     ],
     [
      483,
-     "Emma Wang",
+     "Dustin Spalding",
      3
     ],
     [
      484,
-     "Eric Davidson",
+     "Eli Curls",
      3
     ],
     [
      485,
-     "Eric Lewandowski",
+     "Eli Trumeter",
      3
     ],
     [
      486,
-     "Ethan Aycock",
+     "Emma Van Hee",
      3
     ],
     [
      487,
-     "Evan Pratt",
+     "Emma Wang",
      3
     ],
     [
      488,
-     "Forest Dennis",
+     "Eric Davidson",
      3
     ],
     [
      489,
-     "Foster Johnson",
+     "Eric Lewandowski",
      3
     ],
     [
      490,
-     "Francesca Randazzo",
+     "Ethan Aycock",
      3
     ],
     [
      491,
-     "Gabi Dekkers",
+     "Evan Pratt",
      3
     ],
     [
      492,
-     "Georgia Pooley",
+     "Forest Dennis",
      3
     ],
     [
      493,
-     "Grace Nguyen",
+     "Foster Johnson",
      3
     ],
     [
      494,
-     "Harrison Yee",
+     "Frances Altick",
      3
     ],
     [
      495,
-     "Heath Helms",
+     "Francesca Randazzo",
      3
     ],
     [
      496,
-     "Henry Boyle",
+     "Frank Welsher Iii",
      3
     ],
     [
      497,
-     "Hudson G",
+     "Gabi Dekkers",
      3
     ],
     [
      498,
-     "Iryna Kostirko",
+     "Georgia Pooley",
      3
     ],
     [
      499,
-     "Jack Hared",
+     "Grace Nguyen",
      3
     ],
     [
      500,
-     "Jack Holloway",
+     "Harrison Yee",
      3
     ],
     [
      501,
-     "Jack Matistic",
+     "Heath Helms",
      3
     ],
     [
      502,
-     "Jacky Lau",
+     "Henry Boyle",
      3
     ],
     [
      503,
-     "Jacob Bradshaw",
+     "Hudson G",
      3
     ],
     [
      504,
-     "Jayce Fitzpatrick",
+     "Iryna Kostirko",
      3
     ],
     [
      505,
-     "Jayce Landheer",
+     "Jack Hared",
      3
     ],
     [
      506,
-     "Jemi Aguilar",
+     "Jack Holloway",
      3
     ],
     [
      507,
-     "Jen Werbeck",
+     "Jack Matistic",
      3
     ],
     [
      508,
-     "Jenna Vlach",
+     "Jacky Lau",
      3
     ],
     [
      509,
-     "Jessica Brock",
+     "Jacob Bradshaw",
      3
     ],
     [
      510,
-     "Jessica Wilcox",
+     "James Wolf",
      3
     ],
     [
      511,
-     "Jia Yi Tan",
+     "Jayce Fitzpatrick",
      3
     ],
     [
      512,
-     "Jocelyn Bedoya",
+     "Jayce Landheer",
      3
     ],
     [
      513,
-     "Joel Pelletier",
+     "Jemi Aguilar",
      3
     ],
     [
      514,
-     "Joey Campagna",
+     "Jen Werbeck",
      3
     ],
     [
      515,
-     "Jojo Henderson",
+     "Jenna Vlach",
      3
     ],
     [
      516,
-     "Jonas Daehler",
+     "Jessica Brock",
      3
     ],
     [
      517,
-     "Jorge Nunez",
+     "Jessica Wilcox",
      3
     ],
     [
      518,
-     "Josh Oakman",
+     "Jia Yi Tan",
      3
     ],
     [
      519,
-     "Joshua Cornett",
+     "Jocelyn Bedoya",
      3
     ],
     [
      520,
-     "Julianna Hess",
+     "Joel Pelletier",
      3
     ],
     [
      521,
-     "Justin Fullmer",
+     "Joey Campagna",
      3
     ],
     [
      522,
-     "Kade Andrus",
+     "Jojo Henderson",
      3
     ],
     [
      523,
-     "Kaitlin Tran",
+     "Jonas Daehler",
      3
     ],
     [
      524,
-     "Katie O\u2019Riley",
+     "Jorge Nunez",
      3
     ],
     [
      525,
-     "Kavya Rachapalli",
+     "Josh Oakman",
      3
     ],
     [
      526,
-     "Kay Fischer",
+     "Joshua Cornett",
      3
     ],
     [
      527,
-     "Kayla Nesbitt",
+     "Julianna Hess",
      3
     ],
     [
      528,
-     "Kendall Clay",
+     "Justin Fullmer",
      3
     ],
     [
      529,
-     "Kendall Hunt",
+     "Kade Andrus",
      3
     ],
     [
      530,
-     "Khalijawan Barber",
+     "Kaitlin Tran",
      3
     ],
     [
      531,
-     "Kirsten Myers",
+     "Katie O'Riley",
      3
     ],
     [
      532,
-     "Kolton Youngblood",
+     "Kavya Rachapalli",
      3
     ],
     [
      533,
-     "Kristin Gobberg",
+     "Kay Fischer",
      3
     ],
     [
      534,
-     "Lauralei Singsank",
+     "Kendall Clay",
      3
     ],
     [
      535,
-     "Lina Romero Alarcon",
+     "Kendall Hunt",
      3
     ],
     [
      536,
-     "Linda Yang",
+     "Khalijawan Barber",
      3
     ],
     [
      537,
-     "Liza Klyachkin",
+     "Kirsten Myers",
      3
     ],
     [
      538,
-     "Mackenzie Cassady",
+     "Kolton Youngblood",
      3
     ],
     [
      539,
-     "Mackenzie Lee",
+     "Kristen Van Dernoot",
      3
     ],
     [
      540,
-     "Maiz Sinclair",
+     "Kristin Gobberg",
      3
     ],
     [
      541,
-     "Makiyah Cormick",
+     "Lauralei Singsank",
      3
     ],
     [
      542,
-     "Mara Vasvatekis",
+     "Leo Castillo",
      3
     ],
     [
      543,
-     "Mark Growcott",
+     "Lina Romero Alarcon",
      3
     ],
     [
      544,
-     "Matt Ngo",
+     "Linda Yang",
      3
     ],
     [
      545,
-     "Matthew Kawamoto",
+     "Liza Klyachkin",
      3
     ],
     [
      546,
-     "Matvey Radionov",
+     "Mackenzie Cassady",
      3
     ],
     [
      547,
-     "Meray Maalouf",
+     "Mackenzie Lee",
      3
     ],
     [
      548,
-     "Mia Turcsany",
+     "Maiz Sinclair",
      3
     ],
     [
      549,
-     "Michael Hollings",
+     "Makiyah Cormick",
      3
     ],
     [
      550,
-     "Michael Shaw",
+     "Mara Vasvatekis",
      3
     ],
     [
      551,
-     "Mila Bonfitto",
+     "Mark Growcott",
      3
     ],
     [
      552,
-     "Missy Turasky",
+     "Matthew Kawamoto",
      3
     ],
     [
      553,
-     "MJ Greiner",
+     "Matvey Radionov",
      3
     ],
     [
      554,
-     "Nadia Echeverria",
+     "Meray Maalouf",
      3
     ],
     [
      555,
-     "Nancy Suiugan",
+     "Mia Turcsany",
      3
     ],
     [
      556,
-     "Natalie Araya",
+     "Michael Hollings",
      3
     ],
     [
      557,
-     "Nicholas Dehmer",
+     "Mila Bonfitto",
      3
     ],
     [
      558,
-     "Nikita Pradeep",
+     "Missy Turasky",
      3
     ],
     [
      559,
-     "Noah Hlavac",
+     "MJ Greiner",
      3
     ],
     [
      560,
-     "Noah Ivey",
+     "Nadia Echeverria",
      3
     ],
     [
      561,
-     "Noelle Cerone",
+     "Nancy Suiugan",
      3
     ],
     [
      562,
-     "Patrick Smith",
+     "Natalie Araya",
      3
     ],
     [
      563,
-     "Paul Davis",
+     "Nicholas Dehmer",
      3
     ],
     [
      564,
-     "Preston Ducrest",
+     "Nikita Pradeep",
      3
     ],
     [
      565,
-     "Princess Gbadamosi",
+     "Noah Hlavac",
      3
     ],
     [
      566,
-     "Putri Insani",
+     "Noah Ivey",
      3
     ],
     [
      567,
-     "Rachel Janssen",
+     "Noelle Cerone",
      3
     ],
     [
      568,
-     "Rafael Kayo",
+     "Patrick Smith",
      3
     ],
     [
      569,
-     "Risa Hirano",
+     "Paul Davis",
      3
     ],
     [
      570,
-     "Rodrigo Yoshikata",
+     "Preston Ducrest",
      3
     ],
     [
      571,
-     "Rosen Naydenov",
+     "Princess Gbadamosi",
      3
     ],
     [
      572,
-     "Rubelle Yoo",
+     "Putri Insani",
      3
     ],
     [
      573,
-     "Ruben Osorio",
+     "Rachel Janssen",
      3
     ],
     [
      574,
-     "Rujira Peaw O\u2019Neill",
+     "Rafael Kayo",
      3
     ],
     [
      575,
-     "Russell K",
+     "Risa Hirano",
      3
     ],
     [
      576,
-     "Sable Yrjanson",
+     "Rodrigo Yoshikata",
      3
     ],
     [
      577,
-     "Sammi Ma",
+     "Rosen Naydenov",
      3
     ],
     [
      578,
-     "Sarah Carpenter",
+     "Rubelle Yoo",
      3
     ],
     [
      579,
-     "Sarah McGee",
+     "Ruben Osorio",
      3
     ],
     [
      580,
-     "Savanna Ticknor",
+     "Rujira Peaw O'Neill",
      3
     ],
     [
      581,
-     "Sebastian Gutierrez",
+     "Russell K",
      3
     ],
     [
      582,
-     "Shailla Alda",
+     "Sable Yrjanson",
      3
     ],
     [
      583,
-     "Shamus Flanagan",
+     "Sammi Ma",
      3
     ],
     [
      584,
-     "Shea Donahue",
+     "Sarah Carpenter",
      3
     ],
     [
      585,
-     "Sofia Manzanares",
+     "Sarah McGee",
      3
     ],
     [
      586,
-     "Stephen Bass",
+     "Savanna Ticknor",
      3
     ],
     [
      587,
-     "Stephen Preissler",
+     "Sebastian Gutierrez",
      3
     ],
     [
      588,
-     "Tammy Kim",
+     "Shailla Alda",
      3
     ],
     [
      589,
-     "Thomas Provost",
+     "Shamus Flanagan",
      3
     ],
     [
      590,
-     "Trevor Machek",
+     "Shea Donahue",
      3
     ],
     [
      591,
-     "Tucker Segars",
+     "Sofia Manzanares",
      3
     ],
     [
      592,
-     "Tyler Glowaki",
+     "Stephen Bass",
      3
     ],
     [
      593,
-     "Tyler Kane",
+     "Tammy Kim",
      3
     ],
     [
      594,
-     "Volly Johnson",
+     "Thomas Provost",
      3
     ],
     [
      595,
-     "Will Lieberman",
+     "Trevor Machek",
      3
     ],
     [
      596,
+     "Tucker Segars",
+     3
+    ],
+    [
+     597,
+     "Tyler Glowaki",
+     3
+    ],
+    [
+     598,
+     "Tyler Kane",
+     3
+    ],
+    [
+     599,
+     "Volly Johnson",
+     3
+    ],
+    [
+     600,
+     "Weston Spence",
+     3
+    ],
+    [
+     601,
+     "Will Lieberman",
+     3
+    ],
+    [
+     602,
+     "Will Wimbish",
+     3
+    ],
+    [
+     603,
      "William Kammerait",
      3
     ]
