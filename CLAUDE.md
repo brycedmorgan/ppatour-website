@@ -65,6 +65,103 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-23 (pt. 3) — The Challenger socials land, and one of the four is the tour's own channel
+
+- Wesley sent the four accounts the 9/23 About copy had named but could not link, so the Follow row
+  is built and the only clause of Amie Feliza's sentence still withheld is the ppachallenger.com
+  pointer — that domain 308s to this page, so it remains a circle.
+- **Placed at the foot of the About section, not in a section of its own.** Her sentence sits at the
+  end of that paragraph; four links do not earn a tenth entry in the page's section nav.
+- **⚠ THE HANDLES CONFIRM WHY THESE HAD TO COME FROM A PERSON.** Instagram is `ppa.challenger`
+  **with a dot** and X is `ppachallenger` **without one**, so either derived from the other is the
+  wrong account — and the YouTube channel Wesley sent, `UCSP6HlrMmRqogym2aHBPHpw`, is **not** the one
+  a search surfaces (`UCFuprEMnAw5uMo_LzE5hc7w`, "Challenger Series"). Every guess available on 9/22
+  would have been wrong.
+- **⚠ AND THAT YOUTUBE URL IS THE MAIN PPA TOUR CHANNEL — THIS SITE ALREADY SAYS SO.** It is the
+  channel the **global footer** links and the site-wide **`SportsOrganization` JSON-LD lists in
+  `sameAs`**, beside `x.com/ppatour` and `facebook.com/OfficialPPATour`. Which is consistent with
+  where Challenger broadcasts actually live, so it is a correct destination and it ships — but the
+  row prints the **platform name** for it rather than an account name, because "PPA Challenger
+  Series" set over the tour's own channel is a claim nothing supports. Found by reading the rendered
+  HTML rather than the four URLs in isolation. **Flagged to Wesley**; if a dedicated Challenger
+  channel exists, the URL swaps and the note goes with it.
+- Facebook is genuinely the Series' own — `61569510944398` is the id behind the "PPA Challenger
+  Series" page — and Instagram is the account whose bio reads *"@ppatour Challenger Series 💥 Powered
+  by @joolapickleball"*.
+- **The row reads `socialLinks()`** (`lib/social-links.ts`, built for athlete profiles on 9/1) for the
+  label and the billing order, so this page bills platforms the same way every athlete page does. The
+  handle is **read out of the URL, never inferred**: Instagram and X carry one in the path, YouTube's
+  `/channel/UC…` and Facebook's `profile.php?id=` do not, and those two render the platform name
+  alone rather than a plausible-looking guess.
+- Verified on the rendered page: **all four anchors present with the right destinations and labels**
+  — `Instagram @ppa.challenger`, `X @ppachallenger`, `YouTube`, `Facebook` — still **0 occurrences of
+  "ppachallenger.com", "For more information" or "Twitter/X"**, and at 1440 and 390 the row is one
+  line and three lines respectively with **0 horizontal overflow** and every link inside `#about`.
+  tsc clean, eslint clean, `next build` green.
+
+### 2026-09-23 (pt. 2) — Las Vegas' site map; the map dimensions were a comment, not a contract
+
+- Bryan Renahan's website request, 9/22 (Asana `1218759481113360`, due 9/24): *"Attached is a site map.
+  Please add this to the Las Vegas event webpage like we have done previously for NC and AZ."* Third
+  stop to get one, and the stop starts in five days.
+- **The same kiosk template a third time**, so it takes the same treatment: `vegas-open-2026-site-map-
+  kiosk-v3.png`, 2593×3457 against Cary's and Mesa's 2592×3456, encoded to 2000px webp at q78 —
+  **187 KB, against Mesa's 179 KB and Cary's 279 KB**. Courts 1–34, Humana Championship Court, Carvana
+  Grandstand, Pro Showcase SC1–SC4, tournament ops, vendor village, ticketing, VIP, food trucks,
+  medical, water stations.
+- **⚠ NO CROP, AND THIS ONE HAS THE MOST WHITESPACE OF THE THREE, SO THE TIDY MOVE WAS AVAILABLE AND
+  WAS REFUSED.** Measured on the ink bounding box: the artwork is **82% of the canvas height where
+  Mesa's is 89% and Cary's is 100%**. Trimming to the ink would make this stop's map a **0.91:1 where
+  the other two are 0.75:1** — the same slot rendering a visibly different shape per stop, for no
+  reason a reader could see. And it buys nothing: the art already spans **99% of the WIDTH**, and the
+  column is width-driven, so all the whitespace costs is empty bands above and below. Same call as the
+  parking map on 9/22 — supplied art ships as supplied.
+- Legibility was checked **by looking at it at the real rendered size**, not by arithmetic: the desktop
+  column draws it at **500px wide**, i.e. 0.25× of the source, and at that size every label reads
+  (Tournament Operations, Ticketing Entrance, Pro Showcase Courts, Vendor Village). The court numbers
+  sit at the edge of legibility there, which is exactly why the slot links to the full file — "Grounds
+  Map — Tap to Enlarge". A 1:1 crop confirmed q78 leaves no artifacting on the flat vector art or text.
+- **⚠ THE REAL FIND, AND IT WAS ALREADY LIVE ON TWO STOPS: `venueMapWidth`/`venueMapHeight` WERE
+  DOCUMENTED "REQUIRED ALONGSIDE `venueMapUrl`" AND NEITHER RENDERER READ THEM.** The type comment even
+  names the failure it was written to prevent — *"hardcoding one in the page would squash the next
+  stop's map if it arrives in the other orientation"* — and then:
+  - the **event page hardcoded `width={2000} height={2667}`**, correct only because the first two maps
+    happened to be exactly that; and
+  - the on-site **`/today` screen hardcoded `width={1600} height={1200}` — 4:3 LANDSCAPE for three maps
+    that are all 3:4 portrait.** So the one screen someone opens standing in the venue reserved a box
+    of the wrong shape and shifted layout the moment the map decoded. Shipped on Cary since 8/31 and
+    Mesa since 9/17.
+  - **⚠ AND VEGAS IS THE ONE-PIXEL CASE THAT MAKES IT UNARGUABLE.** 3457/2593 × 2000 = **2666**, where
+    3456/2592 × 2000 = 2667. Copying the other two's numbers would have been wrong by a pixel on the
+    first stop that didn't share their exact source dimensions.
+  - Fixed with **`venueMapFor(slug)` in `lib/onsite.ts`**, which returns url + width + height together
+    or null, so the invariant lives in the type rather than in a comment two renderers ignored. Both
+    call sites read it; the event page's now-dead `onsite` binding and its `onSiteFor` import went with
+    it, and `mapIsPortrait` narrows on the result instead of carrying three non-null assertions.
+- **⚠ THE SITE MAP AND THE PARKING MAP ARE BOTH ON THIS PAGE NOW AND THEY ARE DELIBERATELY NOT MERGED.**
+  Dana Summers' three-lot map (9/22) stays on the parking section in `lib/event-guides.ts`; this one is
+  the grounds. A spectator looking for court 22 and a driver looking for the tow-away loop are asking
+  different questions — the same split the Mesa entry already records.
+- Verified on rendered pages at 1440 and 390, not by grep over source: the event page and `/today` both
+  serve `venue-maps/darling-tennis-center.webp`, the aerial fallback is correctly **gone** (0
+  occurrences of "The Grounds") and the parking map and tow warning are **still there** beside it.
+  Measured in a real browser with the map scrolled into view — **natural and rendered aspect agree to
+  four decimals on all four surfaces (0.75), the reserved ratio matches, and horizontal overflow is 0
+  at both widths.** ⚠ Measuring without scrolling first reports `naturalWidth: 0` and a false
+  "squashed" — the map is below the fold and lazy-loaded.
+  **Controls: `/today` for Cary and Mesa now reserve 2000×2667 where they reserved 1600×1200 before**,
+  Virginia Beach and Worlds (upcoming, no map) still render the aerial fallback and no map, and
+  Mesa/Cary's event pages render no venue section at all — that section is gated `!completed` and both
+  events have finished, which is not a regression. tsc clean, eslint clean on all three changed files,
+  `next build` green (2,098 pages).
+- ⚠ Method, both already documented and both hit again: `next build` needs `scratchpad/
+  probe-platform-denied.ts` and `probe-rounds.ts` moved aside, and `BUILD_DIST_DIR=.next-buildcheck`
+  appends two entries to `tsconfig.json` (reverted). `wpr-snapshot.json` was NOT rewritten.
+- **Still open at this stop, carried from 9/20 and now the only gap left on it: gates are the
+  template's** — 8/9/10 AM against a 2 PM mid-week first serve, and EQUAL to first serve on Mon and
+  Sun. Neither this submission nor the parking one carried gate times. Las Vegas remains the stop most
+  in need of a `GATES_BY_SLUG` line, and it is now five days out.
+
 ### 2026-09-23 — The Challenger board is the event team's own workbook now; the "About" tail pointed at this page
 
 - Amie Feliza's two website requests, both submitted 9/22 through the form (Asana `1218756871077842`
