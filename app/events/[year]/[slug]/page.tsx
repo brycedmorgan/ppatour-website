@@ -30,7 +30,7 @@ import { Countdown } from "@/components/motion/Countdown";
 import { getBroadcast } from "@/lib/broadcast";
 import { channelsByDay, watchCardsFor, weekdayOf } from "@/lib/event-watch";
 import { getEventGuide, parkingFor, parkingText } from "@/lib/event-guides";
-import { onSiteFor } from "@/lib/onsite";
+import { venueMapFor } from "@/lib/onsite";
 import { spotlightFor } from "@/lib/event-spotlight";
 import { ParkingDetails } from "@/components/events/ParkingDetails";
 import {
@@ -518,17 +518,14 @@ export default async function EventPage({ params }: Params) {
    * file. Absent on every stop whose owner has not supplied one, and the venue
    * slot falls back to the aerial photo it has always used.
    */
-  const onsite = onSiteFor(t.slug);
-  const venueMapUrl = onsite.venueMapUrl;
+  const venueMap = venueMapFor(t.slug);
   /**
    * A portrait map gets a NARROWER column than the landscape aerial. At the
    * 1.5fr the photo uses, a 3:4 map runs ~890px tall and strands the essentials
    * column beside a wall of green. Read off the supplied dimensions rather than
    * hardcoded, so whichever orientation the ops team sends next lays out sanely.
    */
-  const mapIsPortrait =
-    Boolean(venueMapUrl) &&
-    (onsite.venueMapHeight ?? 0) > (onsite.venueMapWidth ?? 0);
+  const mapIsPortrait = venueMap !== null && venueMap.height > venueMap.width;
 
   /**
    * One featured on-site happening, pulled from its own announcement article.
@@ -1630,7 +1627,7 @@ export default async function EventPage({ params }: Params) {
             {/* The ops team's grounds map where one exists, otherwise a real
                 aerial of the venue (gallery photo → event hero). */}
             <div data-reveal className="self-start">
-              {venueMapUrl ? (
+              {venueMap ? (
                 /* ⚠ A MAP GETS THE OPPOSITE TREATMENT TO THE AERIAL. No
                    `object-cover`, no Ken Burns pan and no bottom scrim: each
                    of those crops, drifts or covers part of the artwork, and on
@@ -1639,7 +1636,7 @@ export default async function EventPage({ params }: Params) {
                    links to the full file, because the point of a grounds map
                    is pinch-zooming it at the gate. */
                 <a
-                  href={venueMapUrl}
+                  href={venueMap.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group block overflow-hidden border border-ppa-line bg-white"
@@ -1650,10 +1647,10 @@ export default async function EventPage({ params }: Params) {
                       width/height lets the slot size to whatever the ops team
                       supplies. */}
                   <Image
-                    src={venueMapUrl}
+                    src={venueMap.url}
                     alt={`${t.venue} grounds map — courts, entry, parking and amenities`}
-                    width={2000}
-                    height={2667}
+                    width={venueMap.width}
+                    height={venueMap.height}
                     sizes="(min-width: 1024px) 55vw, 100vw"
                     className="h-auto w-full object-contain"
                   />

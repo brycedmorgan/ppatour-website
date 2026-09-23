@@ -8,7 +8,7 @@ import { getBroadcast } from "@/lib/broadcast";
 import { getEventSchedule } from "@/lib/event-schedule";
 import { getEvents } from "@/lib/events-api";
 import { parkingFor } from "@/lib/event-guides";
-import { onSiteFor } from "@/lib/onsite";
+import { onSiteFor, venueMapFor } from "@/lib/onsite";
 import { eventHref, formatDateRange, type Tournament } from "@/lib/placeholder-data";
 import { resolveEvent } from "@/lib/resolve-event";
 import { VENUE_LOCATIONS } from "@/lib/venue-locations";
@@ -106,6 +106,7 @@ export default async function TodayPage({ params }: Params) {
   const schedule = getEventSchedule(slug);
   const parking = parkingFor(slug);
   const onsite = onSiteFor(slug);
+  const venueMap = venueMapFor(slug);
   const broadcast = getBroadcast(slug);
   const loc = VENUE_LOCATIONS[t.venue];
   const ticketsUrl = t.ticketsOnSale
@@ -151,13 +152,17 @@ export default async function TodayPage({ params }: Params) {
             </a>
           </Block>
 
-          {onsite.venueMapUrl && (
+          {venueMap && (
             <Block heading="Venue map">
+              {/* ⚠ Dimensions come from lib/onsite.ts, never hardcoded: this
+                  block reserved 1600×1200 — 4:3 LANDSCAPE — for maps that are
+                  all 3:4 portrait, so the one screen someone opens standing in
+                  the venue shifted layout the moment the map loaded. */}
               <Image
-                src={onsite.venueMapUrl}
+                src={venueMap.url}
                 alt={`${t.venue} site map`}
-                width={1600}
-                height={1200}
+                width={venueMap.width}
+                height={venueMap.height}
                 className="h-auto w-full border border-white/10 bg-white"
               />
             </Block>
