@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getStripe } from "@/lib/vacations/stripe";
 import { logo, trip } from "@/lib/vacations/content";
+import { tripByDestination } from "@/lib/vacations/trip-config";
 
 export const metadata: Metadata = {
   title: "You're In — Pickleball Vacations",
@@ -45,6 +46,11 @@ export default async function VacationsSuccessPage({
       // Keep a graceful, generic confirmation if retrieval isn't possible.
     }
   }
+
+  // Where "Back to the Trip" goes: the guest's own trip page, resolved from
+  // the same session metadata as everything else here. A Cancún guest who has
+  // just paid must not be dropped on the Turks & Caicos page.
+  const tripHref = tripByDestination(destination)?.href ?? "/vacations/";
 
   const place = destination.includes("Punta Cana")
     ? "Punta Cana"
@@ -121,7 +127,7 @@ export default async function VacationsSuccessPage({
 
         <div className="mt-10 flex flex-wrap justify-center gap-3">
           <Link
-            href="/vacations/"
+            href={tripHref}
             className="inline-flex h-11 items-center border border-white/30 px-7 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-white/10"
           >
             Back to the Trip
