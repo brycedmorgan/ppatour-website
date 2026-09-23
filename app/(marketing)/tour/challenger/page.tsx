@@ -238,18 +238,56 @@ export default async function ChallengerPage() {
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <SectionHead eyebrow="About" title="What Is the Challenger Series?" />
           <div className="mt-5 grid gap-4 lg:grid-cols-[1.5fr_1fr]">
+            {/*
+              ⚠ THIS IS THE EVENT TEAM'S OWN BOILERPLATE AND IT IS VERBATIM.
+              Amie Feliza's website request, 9/22/26 ("this is what the Challenger
+              series is about"). It supersedes the two paragraphs that shipped on
+              9/18, which were written here from ppachallenger.com's own copy
+              because nothing official existed yet. Do not reword it, do not
+              re-split the sentences, and do not fold the fact list beside it into
+              the prose — this is the paragraph marketing sends to press.
+
+              ⚠ ONE SENTENCE OF HERS IS DELIBERATELY NOT HERE, and it is the only
+              omission: "For more information, go to www.ppachallenger.com and
+              follow us on social: Instagram, Twitter/X, YouTube, and Facebook."
+              That is a press-release tail, and on this page both halves of it
+              fail. ppachallenger.com has 308'd to THIS PAGE since 9/21, so the
+              pointer is a circle; and the four platforms are named with no
+              handles, which cannot be linked without guessing — they are not even
+              derivable from each other (Instagram is @ppa.challenger WITH a dot,
+              X is @ppachallenger without). Amie has been asked for the four URLs;
+              they land as a Stay Connected row, the Junior PPA shape, and never
+              as a guess.
+
+              ⚠ "Showdown in Dallas" LINKS to this page's own #showdown section
+              rather than repeating any of it. Her phrase and Brooke Ansley's 9/21
+              data agree: the Showdown is played inside Worlds at Brookhaven
+              Country Club, Farmers Branch TX, which is Dallas metro. That is
+              corroboration from a second source, not a fact typed twice.
+            */}
             <div className="min-w-0 border-l-2 border-ppa-blue bg-white p-6">
               <p className="text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
-                The PPA Tour runs the Challenger Series to grow the game from the
-                ground up. Amateur players get a PPA-run event in their own
-                region. Rising pros get a place to earn points, prize money and a
-                shot at the Carvana PPA Tour.
+                Founded in 2025, the PPA Challenger Series is a grassroots tour
+                designed to provide aspiring pickleball professionals a pathway to
+                the PPA Tour, the pinnacle tour of global pickleball.
               </p>
               <p className="mt-3 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
-                Every stop brings the PPA Tour to a local club: professional play
-                management, live streaming and the same registration system as
-                the Tour. It is the avenue for players across America to break
-                into professional pickleball.
+                The PPA Challenger Rankings award players points based on their
+                results at PPA Challenger tournaments, and top finishers will earn
+                their spot in the{" "}
+                <Link
+                  href="#showdown"
+                  className="font-semibold text-ppa-blue underline-offset-2 hover:underline"
+                >
+                  &ldquo;PPA Challenger Showdown in Dallas,&rdquo;
+                </Link>{" "}
+                where players will battle for a PPA Tour contract.
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
+                With a deep commitment to fostering growth and development within
+                the pickleball community, the PPA Challenger Series nurtures
+                emerging talent, encourages participation, and ultimately elevates
+                the sport at all levels.
               </p>
             </div>
             <ul className="grid gap-px border border-ppa-line bg-ppa-line">
