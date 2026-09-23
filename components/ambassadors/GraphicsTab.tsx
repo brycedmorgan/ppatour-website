@@ -320,7 +320,7 @@ function Uploader({ events }: { events: Ev[] }) {
           {msg && <span className="sub">{msg}</span>}
         </div>
         <span className="sub">
-          The code auto-stamps as each ambassador&apos;s own code. Fine-tune the exact spot in HQ → Edit code box. Max ~4 MB (WebP or JPG).
+          After it uploads, use the <b>Code box</b> button on the graphic to place the code exactly where you want it. Max ~4 MB (WebP or JPG).
         </span>
       </form>
     </div>
