@@ -103,9 +103,23 @@ vs event side" view Bryce asked for, without a second org chart.
    Commerce Summit 2026.
 7. **Elsewhere** — LinkedIn, brycedmorgan.com, X/Instagram.
 
-Bryce supplies: the Pardoe-family meeting as he tells it (2–3 paragraphs voice
-memo is enough), the agency name and years, and any photo he wants that isn't in
-the deck folder. Everything else is drafted from what we hold.
+**The agency (Bryce, 9/23):** Cereal Growth LLC — "like the cereal you eat" —
+small-to-medium marketing projects: lead generation, websites, that sort of
+thing. ⚠ Same entity is still live today behind brycedmorgan.com / consulting,
+so the story says "my agency, Cereal Growth", past tense about the work, not
+about the company.
+
+**Events he has been to — from Jackalope, not memory.** `ziff/events-history.js`
+holds 129 events 2020→2026 (5 · 23 · 22 · 26 · 24 · 19 · 10 per year). Kim's
+"PPA Team Travel - The Truth 2.0" workbook was already mined for rooming pairs
+(`scripts/import-rooming-history.py`); extend that importer to emit
+person → event attendance for every tab, then Bryce ticks the misses off a
+checklist of the 129 (execs often self-book, so the sheet undercounts him).
+Renders as a count, a US map (ziff has `usmap.js`), and a year-by-year strip.
+The same per-person attendance feeds "events worked" for the whole team.
+
+Bryce still supplies: the Pardoe-family meeting as he tells it (2–3 paragraphs,
+voice memo is enough) and any photo not already in the deck folder.
 
 ## 4. Photos
 

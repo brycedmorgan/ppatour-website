@@ -95,8 +95,9 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   qualified queries already return his site/LinkedIn. Targets in TEAM.md §5.
 - **Bryce, same day: UPA only on ppatour.com.** PBC, Play Solutions and Pickleball Link stay off.
   MLP-only people go on the MLP site; crossover shows on both. Export gets `brand: ppa|mlp|both`
-  (ADP can't split them). **Still open:** agency name + years; the Pardoe meeting in his words.
-  Week-1 target Mon 9/29.
+  (ADP can't split them). 9/23: agency = **Cereal Growth LLC** (lead gen, websites, SMB marketing). Wants his events-attended
+  record pulled from Jackalope — `events-history.js` has 129 events 2020→26; extend Kim's workbook
+  importer to per-person attendance. **Still open:** the Pardoe meeting in his words. Week-1 target Mon 9/29.
 
 ### 2026-09-22 (pt. 5) — Header lists every Vacations trip; Punta Cana reads "Completed · Sold Out"
 
