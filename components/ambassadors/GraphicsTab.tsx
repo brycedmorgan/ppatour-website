@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { FormEvent } from "react";
 import type { Ev, Graphic, Me, Shared } from "@/components/ambassadors/types";
 import { fmtDate, logoBox } from "@/components/ambassadors/format";
 
@@ -16,7 +17,6 @@ function useStamp(): boolean {
         setReady(true);
       }
     };
-    // Already present: mark asynchronously (avoids a synchronous effect setState).
     if (window.Stamp) {
       queueMicrotask(mark);
       return;
@@ -42,7 +42,11 @@ function srcFor(file: string): string {
 
 type Rendered = { url: string; blob: Blob; name: string };
 
-export function GraphicsTab({ me, shared }: { me: Me; shared: Shared }) {
+// Vertical position presets for a freshly-uploaded code box (as a fraction of
+// image height). Fine positioning is done in HQ's drag editor.
+const CODE_POS: Record<string, number> = { top: 0.06, middle: 0.44, bottom: 0.8 };
+
+export function GraphicsTab({ me, shared, canUpload = false }: { me: Me; shared: Shared; canUpload?: boolean }) {
   const stampReady = useStamp();
   const [rendered, setRendered] = useState<Record<string, Rendered>>({});
   const started = useRef(false);
@@ -106,12 +110,31 @@ export function GraphicsTab({ me, shared }: { me: Me; shared: Shared }) {
     a.remove();
   }
 
+  async function remove(item: Graphic) {
+    if (!confirm(`Remove "${item.title || item.kind}" for everyone?`)) return;
+    const assetId = item.file.replace("/_blob/", "").replace(/\/$/, "");
+    try {
+      await fetch(`/api/hq/assets?id=${encodeURIComponent(assetId)}`, { method: "DELETE" });
+      const r = await fetch("/api/hq/graphics", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ op: "delete", id: item.id }),
+      });
+      if (!r.ok) throw new Error();
+      window.location.reload();
+    } catch {
+      alert("Couldn't remove that graphic. Try again.");
+    }
+  }
+
   return (
     <section className="sec">
       <div className="sec-h">
         <h2>Your graphics</h2>
         <span className="sub">Your code is already on every graphic — save it, then post.</span>
       </div>
+
+      {canUpload && <Uploader events={shared.events} />}
 
       {withArt.length ? (
         withArt.map((g) => (
@@ -144,9 +167,21 @@ export function GraphicsTab({ me, shared }: { me: Me; shared: Shared }) {
                         <div className="t">{item.title || item.kind}</div>
                         <div className="k">{item.kind}</div>
                       </div>
-                      <button className="btn" disabled={!r} onClick={() => r && download(r)}>
-                        {r ? "Save graphic" : "Preparing…"}
-                      </button>
+                      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                        {canUpload && (
+                          <button
+                            className="btn"
+                            style={{ background: "transparent", color: "#c0392b", border: "1px solid #c0392b", padding: "6px 10px" }}
+                            onClick={() => remove(item)}
+                            title="Remove for everyone"
+                          >
+                            Delete
+                          </button>
+                        )}
+                        <button className="btn" disabled={!r} onClick={() => r && download(r)}>
+                          {r ? "Save graphic" : "Preparing…"}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 );
@@ -162,5 +197,104 @@ export function GraphicsTab({ me, shared }: { me: Me; shared: Shared }) {
         <p className="sub">Artwork coming soon for: {withoutArt.map((g) => g.ev.name).join(", ")}.</p>
       )}
     </section>
+  );
+}
+
+/** Team-only upload panel (shown when the shared editor cookie is present). */
+function Uploader({ events }: { events: Ev[] }) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [event, setEvent] = useState<string>(events[0]?.id ?? "");
+  const [title, setTitle] = useState("");
+  const [pos, setPos] = useState("bottom");
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState("");
+
+  async function submit(e: FormEvent) {
+    e.preventDefault();
+    const f = fileRef.current?.files?.[0];
+    if (!f) return setMsg("Choose an image first.");
+    if (!f.type || !/^image\/(png|jpeg|webp|gif)$/.test(f.type)) return setMsg("Use a PNG, JPG, WebP or GIF.");
+    if (f.size > 4_000_000) return setMsg("That file is over ~4 MB — save it as WebP or JPG and try again.");
+    if (!event) return setMsg("Pick a tournament.");
+    setBusy(true);
+    setMsg("Uploading…");
+    try {
+      const up = await fetch("/api/hq/assets", { method: "POST", headers: { "Content-Type": f.type }, body: f });
+      const a = await up.json();
+      if (!up.ok) throw new Error(a.error || "upload failed");
+      const stamp = {
+        x: 0.15,
+        y: CODE_POS[pos] ?? 0.8,
+        w: 0.7,
+        h: 0.12,
+        text: "USE CODE {CODE}",
+        font: "Barlow Condensed|700",
+        color: "#FFFFFF",
+        bg: "#0C2B44",
+        radius: 0.15,
+        align: "center",
+        upper: true,
+      };
+      const doc = {
+        event,
+        kind: "Graphic",
+        title: title.trim(),
+        fileName: f.name,
+        assetId: a.id,
+        contentType: a.contentType,
+        sizeBytes: a.sizeBytes,
+        stamp,
+        at: new Date().toISOString(),
+      };
+      const cr = await fetch("/api/hq/graphics", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ op: "add", doc }),
+      });
+      if (!cr.ok) throw new Error("save failed");
+      const evName = events.find((x) => x.id === event)?.name ?? "that tournament";
+      setMsg(`Added! It's live for ambassadors promoting ${evName}. Reloading…`);
+      setTimeout(() => window.location.reload(), 900);
+    } catch (err) {
+      setBusy(false);
+      setMsg(err instanceof Error ? err.message : "Something went wrong. Try again.");
+    }
+  }
+
+  return (
+    <div className="sec" style={{ border: "1px dashed #9db3c9", borderRadius: 12, padding: 14, marginBottom: 18 }}>
+      <div className="sec-h">
+        <h3 style={{ fontSize: "1.15rem" }}>
+          Add a graphic <span className="sub">· PPA team edit mode</span>
+        </h3>
+      </div>
+      <form onSubmit={submit} style={{ display: "grid", gap: 10 }}>
+        <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <select value={event} onChange={(e) => setEvent(e.target.value)} aria-label="Tournament">
+            {events.map((ev) => (
+              <option key={ev.id} value={ev.id}>
+                {ev.name}
+              </option>
+            ))}
+          </select>
+          <select value={pos} onChange={(e) => setPos(e.target.value)} aria-label="Code position">
+            <option value="top">Code near top</option>
+            <option value="middle">Code in middle</option>
+            <option value="bottom">Code near bottom</option>
+          </select>
+          <input placeholder="Title (optional)" value={title} onChange={(e) => setTitle(e.target.value)} />
+        </div>
+        <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+          <button className="btn" type="submit" disabled={busy}>
+            {busy ? "Working…" : "Upload graphic"}
+          </button>
+          {msg && <span className="sub">{msg}</span>}
+        </div>
+        <span className="sub">
+          The code auto-stamps as each ambassador&apos;s own code. Fine-tune the exact spot in HQ → Edit code box. Max ~4 MB (WebP or JPG).
+        </span>
+      </form>
+    </div>
   );
 }

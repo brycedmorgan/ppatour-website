@@ -13,7 +13,7 @@ const TABS: [string, string][] = [
   ["how", "How it works"],
 ];
 
-export function Dashboard({ data }: { data: MeData }) {
+export function Dashboard({ data, canUpload = false }: { data: MeData; canUpload?: boolean }) {
   const { me, shared } = data;
   const [tab, setTab] = useState<string>("home");
   const showComm = !me.hideCommission;
@@ -74,7 +74,7 @@ export function Dashboard({ data }: { data: MeData }) {
         {tab === "home" && <Home me={me} ev={ev} go={go} showComm={showComm} />}
         {tab === "results" && <Results me={me} go={go} showComm={showComm} payoutMin={shared.program.payoutMinimum} />}
         {tab === "boards" && <Boards shared={shared} ev={ev} />}
-        {tab === "graphics" && <GraphicsTab me={me} shared={shared} />}
+        {tab === "graphics" && <GraphicsTab me={me} shared={shared} canUpload={canUpload} />}
         {tab === "how" && <How shared={shared} />}
       </main>
     </>
