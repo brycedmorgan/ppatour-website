@@ -1,6 +1,7 @@
 import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { EVENTS_CACHE_TAG } from "@/lib/events-api";
+import { purgeCacheTag } from "@/lib/pb-cache";
 
 /**
  * Daily cache refresh for the /events calendar. Invoked by the Vercel Cron
@@ -24,9 +25,21 @@ export async function GET(request: Request) {
   // the fresh calendar is fetched in the background (Next 16 recommended form).
   revalidateTag(EVENTS_CACHE_TAG, "max");
 
+  /**
+   * ⚠ AND OUR OWN TABLE — THIS CRON HAD BEEN PURGING NOTHING (found 9/23).
+   * `lib/events-api.ts` reads through `pbCachedJson`, which keys entries itself
+   * so they survive a deployment, and `revalidateTag` cannot see them. So the
+   * calendar was not refreshing on this schedule at all: it turned over
+   * whenever its own 24-hour TTL happened to expire, which drifts, and a new or
+   * changed event could sit unseen most of a day after the cron said it had
+   * refreshed. Same both-layers rule as /api/revalidate-content.
+   */
+  const purged = await purgeCacheTag(EVENTS_CACHE_TAG);
+
   return NextResponse.json({
     ok: true,
     revalidated: EVENTS_CACHE_TAG,
+    purged,
     at: new Date().toISOString(),
   });
 }

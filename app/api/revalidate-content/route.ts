@@ -7,6 +7,7 @@ import {
   TOURNAMENT_DETAILS_CACHE_TAG,
   FINISHED_RESULTS_CACHE_TAG,
   LIVE_SCORES_CACHE_TAG,
+  RANKINGS_CACHE_TAG,
 } from "@/lib/cache-tags";
 
 /**
@@ -23,7 +24,17 @@ export const dynamic = "force-dynamic";
 const TAGS = [TOURNAMENT_DETAILS_CACHE_TAG, REGISTRATIONS_CACHE_TAG, REPLAYS_CACHE_TAG];
 
 /** Tags `?tag=` may purge on demand. See the note in the handler. */
-const PURGEABLE = [...TAGS, FINISHED_RESULTS_CACHE_TAG, LIVE_SCORES_CACHE_TAG];
+const PURGEABLE = [
+  ...TAGS,
+  FINISHED_RESULTS_CACHE_TAG,
+  LIVE_SCORES_CACHE_TAG,
+  // ⚠ PURGEABLE BUT DELIBERATELY NOT IN `TAGS` (9/23). The ranking boards roll
+  // themselves over via their `rank=<today>` URL and must not be dropped on a
+  // schedule — see RANKINGS_CACHE_TAG. They are listed here only so a bad board
+  // can be cleared by hand, now that the boards and the prebuild snapshot both
+  // write to the durable table.
+  RANKINGS_CACHE_TAG,
+];
 
 export async function GET(request: Request) {
   const secret = process.env.CRON_SECRET;

@@ -139,6 +139,59 @@ async function timeboxed<T>(work: Promise<T>): Promise<T | null> {
 }
 
 /**
+ * ⚠ THE PARTNER API LIMITS CONCURRENCY, NOT VOLUME, AND THIS GATE IS THE ONLY
+ * THING ENFORCING THAT NOW (moved here 9/23).
+ *
+ * Measured 9/15 against api.pickleball.com, same token, same endpoint, same
+ * minute: 40 requests fired in parallel returned 5x 200 and 35x 429, while 15
+ * sent sequentially 200ms apart returned 15/15 OK. The budget is roughly five
+ * in flight; total calls per hour is not what it counts.
+ *
+ * ⚠ IT USED TO LIVE IN lib/pb-fetch.ts, IN FRONT OF `pbGetJson`. As callers
+ * migrated here one at a time for the deploy-durability the header describes,
+ * each one silently left the gate behind, and by 9/23 nothing called `pbGetJson`
+ * at all — so the protection was guarding an empty room. `lib/scores-api.ts`
+ * is the caller that makes this matter: it fans out with `Promise.all` across a
+ * tournament's divisions, which on the live Arizona event measured 16 calls at a
+ * PEAK OF 6 CONCURRENT and took 4x 429.
+ *
+ * ⚠ THIS BOUNDS ONE PROCESS, NOT THE FLEET. The limit is per platform token,
+ * shared across every lambda instance and every build worker, and nothing here
+ * can see the others. What it fixes is the self-inflicted burst: no single
+ * render can put more than {@link MAX_IN_FLIGHT} of our own requests on the wire
+ * at once. Fleet-wide headroom comes from the cache above it.
+ *
+ * Tune with `PB_MAX_CONCURRENCY` if the API team gives us a real number; the
+ * default is deliberately one under the five measured, since the budget is
+ * shared with every other instance.
+ */
+const MAX_IN_FLIGHT = Math.max(1, Number(process.env.PB_MAX_CONCURRENCY) || 4);
+
+let live = 0;
+const waiting: (() => void)[] = [];
+
+/**
+ * Run `fn` holding a concurrency slot.
+ *
+ * ⚠ THE SLOT COVERS THE NETWORK CALL AND NOTHING ELSE. It is never held across
+ * a retry backoff, so a gated call can never sit on a slot waiting for
+ * something that needs one — the only way a gate like this deadlocks.
+ */
+async function gated<T>(fn: () => Promise<T>): Promise<T> {
+  if (live < MAX_IN_FLIGHT) live++;
+  else await new Promise<void>((resolve) => waiting.push(resolve));
+  try {
+    return await fn();
+  } finally {
+    // Hand the slot straight to the next waiter rather than decrementing and
+    // letting it re-race for it.
+    const next = waiting.shift();
+    if (next) next();
+    else live--;
+  }
+}
+
+/**
  * The uncached call, with the same 429 backoff the old `pbGetJson` did.
  *
  * ⚠ IT THROWS RATHER THAN RETURNING NULL. See the header: only a resolved value
@@ -148,22 +201,32 @@ async function fetchJson(url: string, tokenOverride?: string): Promise<unknown> 
   const token = tokenOverride ?? process.env.PB_API_TOKEN;
   if (!token) throw new Error("PB_API_TOKEN unset");
   for (let attempt = 0; ; attempt++) {
-    const res = await fetch(url, {
-      headers: { "PB-API-TOKEN": token },
-      cache: "no-store",
-      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
-    });
-    if (res.ok) return (await res.json()) as unknown;
-    if ((res.status === 429 || res.status >= 500) && attempt < FETCH_RETRIES) {
-      await new Promise((r) => setTimeout(r, backoffMs(attempt, res.headers.get("retry-after"))));
-      continue;
-    }
-    // ⚠ THE STATUS RIDES ON THE ERROR. lib/pb-news branches on 401/403 to tell
-    // "not authorised for this endpoint" apart from "something broke", and that
-    // distinction is the only thing that makes a denied feed diagnosable.
-    const err = new Error(`${new URL(url).pathname} ${res.status}`) as Error & { status?: number };
-    err.status = res.status;
-    throw err;
+    // One attempt inside a slot. Returning rather than sleeping in here is what
+    // keeps the backoff OUTSIDE the gate.
+    const outcome = await gated(
+      async (): Promise<{ done: true; value: unknown } | { done: false; retryAfter: string | null }> => {
+        const res = await fetch(url, {
+          headers: { "PB-API-TOKEN": token },
+          cache: "no-store",
+          signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+        });
+        if (res.ok) return { done: true, value: (await res.json()) as unknown };
+        if ((res.status === 429 || res.status >= 500) && attempt < FETCH_RETRIES) {
+          return { done: false, retryAfter: res.headers.get("retry-after") };
+        }
+        // ⚠ THE STATUS RIDES ON THE ERROR. lib/pb-news branches on 401/403 to
+        // tell "not authorised for this endpoint" apart from "something broke",
+        // and that distinction is the only thing that makes a denied feed
+        // diagnosable.
+        const err = new Error(`${new URL(url).pathname} ${res.status}`) as Error & {
+          status?: number;
+        };
+        err.status = res.status;
+        throw err;
+      },
+    );
+    if (outcome.done) return outcome.value;
+    await new Promise((r) => setTimeout(r, backoffMs(attempt, outcome.retryAfter)));
   }
 }
 

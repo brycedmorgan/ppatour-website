@@ -1,6 +1,7 @@
 import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { ATHLETES_CACHE_TAG } from "@/lib/cache-tags";
+import { purgeCacheTag } from "@/lib/pb-cache";
 
 /**
  * Daily cache refresh for the athlete pages. Invoked by the Vercel Cron in
@@ -65,9 +66,21 @@ export async function GET(request: Request) {
   // the fresh player data is fetched in the background.
   revalidateTag(ATHLETES_CACHE_TAG, "max");
 
+  /**
+   * ⚠ AND OUR OWN TABLE, WHICH `revalidateTag` CANNOT REACH (9/23). Athlete
+   * stats and highlight videos moved onto lib/pb-cache.ts so they stop being
+   * re-fetched on every deployment; the cost of owning the keys is that Next
+   * knows nothing about them. Purging only the Next layer would leave a
+   * Jackalope save invisible until the 24-hour TTL expired — which is the exact
+   * failure this route was added to fix. Both layers or neither, same as
+   * /api/revalidate-content.
+   */
+  const purged = await purgeCacheTag(ATHLETES_CACHE_TAG);
+
   return NextResponse.json({
     ok: true,
     revalidated: ATHLETES_CACHE_TAG,
+    purged,
     at: new Date().toISOString(),
   });
 }

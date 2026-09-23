@@ -1,6 +1,6 @@
 /**
  * Athlete highlight videos — Pickleball.com player endpoints (two-call flow,
- * server-only, retry-aware via pbGetJson).
+ * server-only, retry-aware via pbCachedJson).
  *
  *   GET {base}/v2/data/users/{slug}/list_player_highlight_tournaments?type=ARCHIVED&use_camel_case=true
  *     → tournaments the player has highlights in (dropdown).
@@ -22,14 +22,22 @@
  *   2. The DEFAULT tournament is the player's marquee event (Worlds → majors →
  *      cups → opens), not simply their most recent one.
  */
-import { pbGetJson } from "@/lib/pb-fetch";
+import { pbCachedJson } from "@/lib/pb-cache";
 import { ATHLETES_CACHE_TAG } from "@/lib/cache-tags";
 import { playerOverrideFor } from "@/lib/player-overrides";
 
-const TIMEOUT_MS = 8000;
 const TTL_MS = 60 * 60 * 1000;
-const REVALIDATE_S = 60 * 60 * 24; // Data Cache; the daily cron refreshes it
-const CACHE_OPTS = { timeoutMs: TIMEOUT_MS, revalidate: REVALIDATE_S, tags: [ATHLETES_CACHE_TAG] };
+/** Only the YouTube statistics call below still sets its own timeout. */
+const TIMEOUT_MS = 8000;
+/**
+ * ⚠ THE CACHE IS OUR POSTGRES TABLE, NOT NEXT'S — SEE lib/pb-cache.ts (9/23).
+ * A Next cache entry dies with the deployment, and both calls below run on
+ * every one of the ~245 athlete profiles the build prerenders, so on the old
+ * `pbGetJson` path this 24-hour window was really "until the next push".
+ * /api/revalidate-athletes purges {@link ATHLETES_CACHE_TAG} in both layers, so
+ * a Jackalope save still lands in seconds.
+ */
+const REVALIDATE_S = 60 * 60 * 24; // durable cache; the daily cron refreshes it
 
 export type VideoTournament = { uuid: string; title: string };
 export type AthleteVideo = {
@@ -208,10 +216,11 @@ async function rankByQuality(videos: AthleteVideo[]): Promise<AthleteVideo[]> {
 async function fetchTournaments(slug: string): Promise<VideoTournament[]> {
   const { token, base } = config();
   if (!token) return [];
-  const json = (await pbGetJson(
+  const json = (await pbCachedJson(
     `${base}/v2/data/users/${encodeURIComponent(slug)}/list_player_highlight_tournaments?type=ARCHIVED&use_camel_case=true`,
-    { "PB-API-TOKEN": token },
-    CACHE_OPTS,
+    REVALIDATE_S,
+    ATHLETES_CACHE_TAG,
+    token,
   )) as { results?: { tournaments?: Obj[] } } | null;
   const rows = (json?.results?.tournaments ?? [])
     .map((t) => ({
@@ -229,10 +238,11 @@ async function fetchTournaments(slug: string): Promise<VideoTournament[]> {
 async function fetchHighlights(slug: string, uuid: string): Promise<AthleteVideo[]> {
   const { token, base } = config();
   if (!token) return [];
-  const json = (await pbGetJson(
+  const json = (await pbCachedJson(
     `${base}/v2/data/users/${encodeURIComponent(slug)}/player_highlight_links_extended?type=archived&page_size=24&current_page=1&use_camel_case=true&tournament_uuid=${uuid}`,
-    { "PB-API-TOKEN": token },
-    CACHE_OPTS,
+    REVALIDATE_S,
+    ATHLETES_CACHE_TAG,
+    token,
   )) as { results?: { highlights?: Obj[] } } | null;
   const out: AthleteVideo[] = [];
   for (const h of json?.results?.highlights ?? []) {

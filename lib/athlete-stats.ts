@@ -12,12 +12,11 @@
  * header  PB-API-TOKEN: <token>. Never throws — returns null on any problem.
  * Cached 1h (matches the WordPress theme's transients) + in-flight coalescing.
  */
-import { pbGetJson } from "@/lib/pb-fetch";
+import { pbCachedJson } from "@/lib/pb-cache";
 import { ATHLETES_CACHE_TAG } from "@/lib/cache-tags";
 
-const TIMEOUT_MS = 8000;
 const TTL_MS = 60 * 60 * 1000;
-const REVALIDATE_S = 60 * 60 * 24; // Data Cache; the daily cron refreshes it
+const REVALIDATE_S = 60 * 60 * 24; // durable cache; the daily cron refreshes it
 
 export type MedalSet = {
   /** Won it. */
@@ -150,12 +149,29 @@ function medalSet(m: Obj, prefix: string): MedalSet {
   };
 }
 
+/**
+ * One player endpoint GET, served from the durable cache in `lib/pb-cache.ts`.
+ *
+ * ⚠ IT IS OUR POSTGRES TABLE AND NOT NEXT'S DATA CACHE, AND THE REASON IS THE
+ * DEPLOY (9/23). This route prerenders ~219 US athlete pages plus the 26 Europe
+ * ones, and every one of them calls BOTH endpoints below. A Next cache entry
+ * does not survive a new deployment — the header of lib/pb-cache.ts has the key
+ * mechanism and the measurement — so on the old `pbGetJson` path the 24-hour
+ * window above really meant "until the next push", and a day with two dozen
+ * deploys paid ~900 calls each time for data that had not changed.
+ *
+ * Keyed on the URL in a table we own, this build reads what the last build
+ * wrote, so a redeploy costs nothing upstream.
+ *
+ * ⚠ THE TAG IS THE OTHER HALF, AND IT IS NOT OPTIONAL. `revalidateTag` cannot
+ * reach this table, so /api/revalidate-athletes purges it explicitly — that is
+ * what keeps a Jackalope player save landing in seconds rather than waiting out
+ * the TTL. Both layers or neither.
+ */
 async function get(base: string, token: string, path: string): Promise<Obj | null> {
-  return (await pbGetJson(`${base}${path}`, { "PB-API-TOKEN": token }, {
-    timeoutMs: TIMEOUT_MS,
-    revalidate: REVALIDATE_S,
-    tags: [ATHLETES_CACHE_TAG],
-  })) as Obj | null;
+  return (await pbCachedJson(`${base}${path}`, REVALIDATE_S, ATHLETES_CACHE_TAG, token)) as
+    | Obj
+    | null;
 }
 
 async function build(slug: string): Promise<AthleteStats | null> {

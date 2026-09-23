@@ -65,6 +65,86 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-23 (pt. 4) — Every pickleball.com call is now deploy-proof; the concurrency gate was guarding an empty room
+
+- Wesley: *"Is there any way we can avoid refreshing the pickleball.com api cache every time we deploy?"*
+  Then, on the options: *"do whatever will reduce the amount of pickleball.com api calls the most."*
+- **The answer already existed and was half-adopted.** `lib/pb-cache.ts` (`pbCachedJson`) was built on
+  9/18 for exactly this — a Postgres table keyed on the URL, unaffected by builds — after measuring 24
+  production deploys in 24 hours turning a 24-hour window into an 18-minute one. Five modules had moved
+  onto it (events, ticker, scores, brackets, event-field); **six had not**, and those six were the ones
+  the build pays for per page.
+- **⚠ THE COST WAS ~900 CALLS PER DEPLOY AND IT WAS ALMOST ALL ONE ROUTE.** `generateStaticParams`
+  prerenders ~219 US athlete pages plus 26 Europe ones, and `profile.tsx` calls `getAthleteStats` (2
+  calls: `users/{slug}` + `player_medals`) and `getAthleteVideoData` (2 more) on every one. All four
+  were on Next's Data Cache, which does not survive a deployment, so each push re-read the lot.
+  `athlete-stats`, `athlete-videos`, `senior-rankings`, `division-rankings` and `rankings-api` are now
+  on `pbCachedJson`; **`pbGetJson` has zero callers.**
+- **⚠ AND THE RANKINGS FALLBACK MATTERED MOST, BECAUSE IT IS THE DISASTER PATH.** `wpr-snapshot.json`
+  normally answers every board read, so `fetchBoardPage` only runs when the snapshot is missing or past
+  its 7-day expiry — i.e. precisely the 9/15 state where `/athletes/[slug]` made 27K
+  `partner_rankings` calls in six hours. On the Next cache, **every deploy re-opened that hole.**
+  The ⚠ on `fetchBoardPage` warning not to replace its cache is about `unstable_cache`, which failed
+  because it wrapped a `fetch` that then ran `no-store`; `pbCachedJson` is not that mechanism — it makes
+  the call itself — and it also closes the retry-does-not-persist problem that note left open, since
+  only a resolved value is written and it is written whichever attempt produced it.
+- **⚠ THE REAL FIND: THE 9/15 CONCURRENCY GATE WAS GUARDING AN EMPTY ROOM.** `MAX_IN_FLIGHT = 4` lives
+  in `lib/pb-fetch.ts` in front of `pbGetJson`, and exists because the API limits **concurrency, not
+  volume** — 40 parallel requests measured 5x 200 / 35x 429, 15 sequential ones 15/15 OK. As callers
+  migrated to `pb-cache` one at a time they each left it behind, and `pb-cache` never had one: it has
+  single-flight per KEY, which dedupes but does not cap. So the protection had been eroding for days,
+  and finishing the migration would have removed it entirely — `lib/scores-api.ts` fans out with
+  `Promise.all` across a tournament's divisions and was measured at a peak of 6 concurrent. **Ported
+  into `pb-cache.ts` and measured: 20 concurrent requests, peak 4 in flight, all 20 completed.**
+  ⚠ It is DUPLICATED, not moved — `pb-fetch` keeps its copy so a future caller is not ungated, and the
+  two are independent counters. Keep them in step, or delete `pb-fetch.ts`.
+- **⚠ FOUND WHILE HERE AND LIVE SINCE 9/18: `/api/revalidate-events` HAD BEEN PURGING NOTHING.**
+  `events-api.ts` moved to `pbCachedJson`, but that cron still only called `revalidateTag`, which cannot
+  see our table. So the calendar was not refreshing on its 05:00/06:00 schedule at all — it turned over
+  whenever its own 24-hour TTL happened to expire, and a new or changed event could sit unseen most of a
+  day after the cron reported success. It now purges both layers, as `/api/revalidate-content` already
+  did. `/api/revalidate-athletes` gained the same call, which it now NEEDS: Jackalope calls it on every
+  player save, and without it a paddle edit would wait out a 24-hour TTL.
+- **⚠ SKIPPING THE PREBUILD SNAPSHOT BY FILE AGE LOOKS RIGHT AND CANNOT WORK. Worth writing down,
+  because it is the obvious fix.** `prebuild` runs `snapshot-rankings.mjs` on every build — 16
+  `partner_rankings` calls — and the boards move once a day, so ~24 deploys is ~384 calls for one day's
+  data. But **Vercel builds from a fresh git checkout**, so the file the script sees is always the
+  COMMITTED one, last committed 9/15 and already 8.2 days old, never the one the previous deploy wrote.
+  An age gate could never fire there, and making it fire would mean deliberately shipping an expired
+  snapshot — the 9/15 incident. Built it, measured it, deleted it.
+  **Instead the script now reads through the same Postgres table**, same sha256-of-URL key, same
+  `rankings` tag, same 24h window: the first deploy of a day pays 16 calls and every deploy after it
+  writes a fully fresh snapshot for zero. ⚠ `--check` and `--force` bypass the cache on purpose — a
+  `--check` served from cache would have reported OK through the whole of 9/15, and that run is what
+  finally exposed it. ⚠ The key function is COPIED from `lib/pb-cache.ts` because a `.mjs` build step
+  cannot import the `.ts`; if it drifts, these become a second, unpurgeable set of rows.
+- Verified rather than reasoned about: a stubbed Neon driver run of the snapshot script gives **16
+  upstream / 0 cached cold, then 0 upstream / 16 cached warm**, both writing an identical-shaped
+  snapshot (M 1472 · F 841 · 1500 division rows), with `--check` and `--force` both going upstream; the
+  16 rows it writes all carry tag `rankings` and **0 key-scheme mismatches** against `pb-cache`'s
+  `keyFor`. `RANKINGS_CACHE_TAG` added to `PURGEABLE` (NOT to the scheduled `TAGS` — the boards roll
+  themselves over via `rank=<today>`).
+- **⚠ THE ONE THING THAT COULD HAVE BROKEN THE BROWSER BUNDLE, CHECKED DIRECTLY:** three CLIENT
+  components import these modules — `AthleteVideos`, `SeniorRankings`, `RankingsBoard` — and
+  `pb-cache` pulls in `@neondatabase/serverless` where `pb-fetch` pulled in nothing. All three are
+  `import type`, so they erase at compile time and no driver reaches the client. **Check this before
+  moving any further module onto `pb-cache`.**
+- `next build` green, **2,098 pages, exit 0**, and the render modes are unchanged where it matters:
+  `/athletes/[slug]` and `/europe/athletes/[slug]` still ● SSG on the 1d window, `/rankings` still ○.
+  tsc clean, eslint clean on all 11 changed files.
+- ⚠ Method, both already documented and both hit again: `next build` needs `scratchpad/
+  probe-platform-denied.ts`, `probe-rounds.ts` **and now `probe-cs-results.ts`** moved aside, and
+  `BUILD_DIST_DIR=.next-buildcheck` appends two entries to `tsconfig.json` (reverted).
+  `wpr-snapshot.json` was regenerated by the runs above and **reverted** — the committed copy is always
+  stale by design, because every build rewrites it.
+- **⚠ FOUND, NOT FIXED, AND IT IS NOT PICKLEBALL.COM:** the YouTube `videos.list` call in
+  `lib/athlete-videos.ts` is still on Next's cache and so also re-runs per deploy — roughly one batched
+  call per athlete profile, ~245 a build, against a 10,000-unit daily quota. Deliberately left there:
+  routing it through `pbCachedJson` would send our **PB-API-TOKEN header to googleapis.com**. It needs
+  its own cached path, not this one.
+- **Open:** whether `PB_API_TOKEN` is set in Vercel's **Preview** scope — if it is, every preview deploy
+  pays the same bill as production, and nothing in this session could read the env scopes.
+
 ### 2026-09-23 (pt. 3) — The Challenger socials land, and one of the four is the tour's own channel
 
 - Wesley sent the four accounts the 9/23 About copy had named but could not link, so the Follow row

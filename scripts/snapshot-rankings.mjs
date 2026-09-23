@@ -22,8 +22,13 @@
  * every athlete prerenders and a page view makes no ranking request at all.
  *
  * Usage:
- *   node scripts/snapshot-rankings.mjs          # write the snapshot
+ *   node scripts/snapshot-rankings.mjs          # write it, unless it is fresh
+ *   node scripts/snapshot-rankings.mjs --force  # write it regardless of age
  *   node scripts/snapshot-rankings.mjs --check  # verify without writing
+ *
+ * ⚠ THE BARE FORM READS THROUGH THE DURABLE CACHE, so the second and later
+ * deploys of a day write a fresh snapshot without calling upstream at all.
+ * `--force` bypasses it. See the cache block below.
  *
  * ⚠ FAILS SOFT ON PURPOSE. If the API is unreachable or throttled this exits 0
  * and leaves the previous snapshot in place, because a stale board is a far
@@ -33,6 +38,8 @@
  */
 import { writeFileSync, readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
+import { createHash } from "node:crypto";
+import { neon } from "@neondatabase/serverless";
 
 const OUT = resolve("lib/data/wpr-snapshot.json");
 const PAGE_SIZE = 250;
@@ -55,6 +62,101 @@ const SNAPSHOT_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
  * incident, and it should stop a deploy rather than ride along inside one.
  */
 const STALE_WARNING_MS = 2 * 24 * 60 * 60 * 1000;
+/**
+ * ── THE DURABLE CACHE IN FRONT OF THE 16 CALLS ───────────────────────────────
+ *
+ * ⚠ `prebuild` RUNS ON EVERY DEPLOY, NOT ONCE A DAY, AND THAT IS NOT OPTIONAL
+ * (9/23). A refresh is 16 `partner_rankings` calls — ten board pages plus six
+ * division boards — against an endpoint that has rate-limited us repeatedly,
+ * and the boards move once a day. On 9/18 there were 24 production deploys in
+ * 24 hours: ~384 calls to regenerate a file whose contents changed once.
+ *
+ * ⚠ AND SKIPPING BY FILE AGE DOES NOT WORK HERE, WHICH IS WORTH WRITING DOWN
+ * BECAUSE IT IS THE OBVIOUS FIX. Vercel builds from a fresh git checkout, so the
+ * file this script sees is always the COMMITTED one — last committed 9/15, i.e.
+ * eight days stale and already past {@link SNAPSHOT_MAX_AGE_MS} — never the one
+ * the previous deploy generated. An age gate would therefore never fire on
+ * Vercel, and making it fire would mean deliberately shipping an expired
+ * snapshot, which is the 9/15 incident.
+ *
+ * So the calls go through the same Postgres table `lib/pb-cache.ts` uses:
+ * first deploy of the day pays 16 calls, every deploy after it reads the rows
+ * that one wrote and still writes a fully fresh snapshot. Same table, same
+ * 24-hour window, same tag, so a `?tag=rankings` purge reaches these too.
+ *
+ * ⚠ IT FAILS OPEN AT EVERY POINT, LIKE THE MODULE IT MIRRORS. No DATABASE_URL,
+ * no table yet, a slow query, a malformed row — all fall through to the live
+ * API, which is exactly the behaviour this script had before. The cache may
+ * never be the reason a snapshot does not get written.
+ *
+ * ⚠ THE KEY SCHEME IS COPIED, NOT IMPORTED, because a .mjs build step cannot
+ * import the .ts module. It is sha256 of the full URL — keep it identical to
+ * `keyFor` in lib/pb-cache.ts or these rows become a second, unpurgeable set.
+ */
+const CACHE_TTL_S = 60 * 60 * 24;
+/** Must match RANKINGS_CACHE_TAG in lib/cache-tags.ts. */
+const CACHE_TAG = "rankings";
+
+const dbUrl = () => env("DATABASE_URL");
+
+let sqlClient;
+function cacheSql() {
+  if (sqlClient === undefined) {
+    const url = dbUrl();
+    sqlClient = url ? neon(url) : null;
+  }
+  return sqlClient;
+}
+
+const keyFor = (url) => createHash("sha256").update(url).digest("hex");
+
+/** A cached response for `url`, or null for "ask upstream". Never throws. */
+async function cacheGet(url) {
+  const sql = cacheSql();
+  if (!sql) return null;
+  try {
+    const rows = await sql`SELECT value FROM api_cache WHERE key = ${keyFor(url)} AND expires_at > now()`;
+    const raw = rows?.[0]?.value;
+    return raw == null ? null : JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+/** Store a response for the next deploy to read. Never throws. */
+async function cacheSet(url, value) {
+  const sql = cacheSql();
+  if (!sql) return;
+  try {
+    await sql`
+      INSERT INTO api_cache (key, url, tag, value, expires_at)
+      VALUES (${keyFor(url)}, ${url}, ${CACHE_TAG}, ${JSON.stringify(value)},
+              now() + ${CACHE_TTL_S} * interval '1 second')
+      ON CONFLICT (key) DO UPDATE
+        SET value = EXCLUDED.value, expires_at = EXCLUDED.expires_at, updated_at = now()`;
+  } catch {
+    // The table is created by lib/pb-cache.ts at runtime; if this build is the
+    // first thing to run, the write simply does not happen and the next one
+    // fetches again.
+  }
+}
+
+/** Counted for the summary line, so a build log says what it actually cost. */
+let cacheHits = 0;
+let upstreamCalls = 0;
+
+/**
+ * The 250ms spacing between calls, applied only when something actually went
+ * upstream. On an all-cache run it would otherwise add four seconds of sleep to
+ * every build for no reason — the pacing exists to be gentle on an API we are
+ * being throttled by, not on Postgres.
+ */
+let lastPaced = 0;
+async function pace() {
+  if (upstreamCalls === lastPaced) return;
+  lastPaced = upstreamCalls;
+  await sleep(250);
+}
 
 /** Age of the snapshot already on disk, or null if there isn't a readable one. */
 function existingSnapshotAgeMs() {
@@ -132,6 +234,16 @@ function env(name) {
   return undefined;
 }
 
+/**
+ * When to ignore the durable cache and go to the API.
+ *
+ * ⚠ `--check` BYPASSES IT DELIBERATELY. Its job is to answer "can we reach the
+ * boards right now", and on 9/15 the thing that finally exposed the outage was
+ * a --check dying on an HTTP 429. A --check served from cache would have
+ * reported OK through the whole incident.
+ */
+const BYPASS_CACHE =
+  process.argv.includes("--force") || process.argv.includes("--check");
 const TOKEN = env("PB_API_TOKEN");
 const BASE = (env("PB_API_BASE_URL") || "https://api.pickleball.com").replace(/\/$/, "");
 
@@ -172,6 +284,16 @@ function backoffMs(attempt, retryAfter) {
  */
 async function getJson(params, label) {
   const url = `${BASE}/v2/data/partner_rankings?${params}`;
+
+  // The deploy-proof layer.
+  if (!BYPASS_CACHE) {
+    const hit = await cacheGet(url);
+    if (hit) {
+      cacheHits++;
+      return hit;
+    }
+  }
+
   for (let attempt = 0; ; attempt++) {
     let res;
     try {
@@ -184,7 +306,12 @@ async function getJson(params, label) {
       await sleep(backoffMs(attempt, null));
       continue;
     }
-    if (res.ok) return res.json();
+    if (res.ok) {
+      const json = await res.json();
+      upstreamCalls++;
+      await cacheSet(url, json);
+      return json;
+    }
     if ((res.status === 429 || res.status >= 500) && attempt < RETRIES) {
       const wait = backoffMs(attempt, res.headers.get("retry-after"));
       console.log(
@@ -240,7 +367,7 @@ async function board(gender) {
     players.push(...got.players.map(pick));
     total = got.total;
     // Gentle on an API we have been throttled by today.
-    if (players.length < total) await sleep(250);
+    if (players.length < total) await pace();
   }
   return { total: Number.isFinite(total) ? total : players.length, players };
 }
@@ -293,6 +420,7 @@ async function divisionBoard(dt, gender) {
 
 async function main() {
   const check = process.argv.includes("--check");
+
   if (!TOKEN) {
     // ⚠ A BUILD WITHOUT THE TOKEN CANNOT REFRESH, AND THAT IS NOT AUTOMATICALLY
     // FINE. It is fine on a fork or a local checkout with a fresh file on disk;
@@ -309,7 +437,7 @@ async function main() {
     // is the one thing this run cannot afford: the whole point is to get a
     // complete snapshot written, and it has all the time in the world to do it.
     const M = await board("M");
-    await sleep(250);
+    await pace();
     const F = await board("F");
     boards = { M, F };
     // Sequential and spaced: six more calls against an API that has been
@@ -317,7 +445,7 @@ async function main() {
     divisions = {};
     for (const d of DIVISIONS) {
       divisions[`${d.dt}:${d.gender}`] = await divisionBoard(d.dt, d.gender);
-      await sleep(250);
+      await pace();
     }
   } catch (err) {
     reportRefreshFailure(`upstream unavailable (${err.message})`);
@@ -344,7 +472,9 @@ async function main() {
   const summary =
     Object.entries(boards)
       .map(([g, b]) => `${g} ${b.players.length}/${b.total}`)
-      .join(" · ") + ` · ${Object.keys(divisions).length} division boards (${divTotal} rows)`;
+      .join(" · ") +
+    ` · ${Object.keys(divisions).length} division boards (${divTotal} rows)` +
+    ` · ${upstreamCalls} upstream, ${cacheHits} cached`;
 
   if (check) {
     console.log(`[wpr-snapshot] --check OK: ${summary}`);
