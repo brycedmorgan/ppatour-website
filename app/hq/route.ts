@@ -22,6 +22,8 @@ import path from "node:path";
 import { staffFromRequest } from "@/lib/hq/staff";
 import { editorFromRequest } from "@/lib/hq/editor";
 import { getGraphics, putGraphics, type Graphic } from "@/lib/hq/graphics-store";
+import { getLiveApplicants } from "@/lib/ambassadors/applicants-store";
+import type { Applicant } from "@/lib/ambassadors/applicant-record";
 import { getJson } from "@/lib/ambassadors/store";
 import { previewEnabled } from "@/lib/ambassadors/config";
 import demoHq from "@/lib/hq/demo-hq.json";
@@ -122,8 +124,29 @@ export async function GET(request: NextRequest) {
     await putGraphics(live);
   }
 
+  // Live application feed → Applicants tab. Merge in applicants that arrived via
+  // the site form (lib/ambassadors/applicants-store), newest first, de-duped
+  // against the sheet import so nobody shows twice. Best-effort. A fresh doc is
+  // built rather than mutating the (possibly shared) snapshot object.
+  const liveApps = await getLiveApplicants().catch(() => [] as Applicant[]);
+  const a1 = data.docs?.["program/applicants-1"] as { applicants?: Applicant[] } | undefined;
+  const a2 = data.docs?.["program/applicants-2"] as { applicants?: Applicant[] } | undefined;
+  const seen = new Set<string>();
+  for (const d of [a1, a2]) {
+    for (const p of d?.applicants ?? []) {
+      const e = String((p as { email?: string }).email ?? "").toLowerCase().trim();
+      if (e) seen.add(e);
+    }
+  }
+  const fresh = liveApps.filter((p) => {
+    const e = (p.email ?? "").toLowerCase().trim();
+    return e && !seen.has(e);
+  });
+  const mergedApps1 = fresh.length ? { ...(a1 ?? {}), applicants: [...fresh, ...(a1?.applicants ?? [])] } : a1;
+
   const inject: HqData & { canUpload: boolean } = {
     ...data,
+    docs: { ...(data.docs ?? {}), ...(mergedApps1 ? { "program/applicants-1": mergedApps1 } : {}) },
     colls: { ...(data.colls ?? {}), graphics: live },
     canUpload,
   };
