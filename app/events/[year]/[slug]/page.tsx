@@ -10,8 +10,8 @@ import { EventGallery } from "@/components/events/EventGallery";
 import { EventSponsors } from "@/components/events/EventSponsors";
 import { RegisteredCount } from "@/components/events/RegisteredCount";
 import { VolunteerModalButton } from "@/components/events/VolunteerModalButton";
-import { BookGroupRateLink } from "@/components/events/BookGroupRateLink";
-import { EngineHotelLink, EngineStay } from "@/components/events/EngineStay";
+import { EngineStay } from "@/components/events/EngineStay";
+import { WhereToStay } from "@/components/events/WhereToStay";
 import { publishedHotelsFor } from "@/lib/published-hotels";
 import { TripBuilder } from "@/components/events/TripBuilder";
 import type { TripEvent } from "@/lib/trip";
@@ -1914,9 +1914,19 @@ export default async function EventPage({ params }: Params) {
             </div>
 
             {/* Stay / Eat / Do */}
-            <div className="mt-4 grid gap-4 lg:grid-cols-3">
+            {/* Where to Stay — its own row: the tour's negotiated blocks beside
+                Engine's nearby inventory. See components/events/WhereToStay.tsx for
+                why the two are columns rather than one stacked list. */}
+            <WhereToStay
+              hotels={stayHotels}
+              event={engineEvent}
+              eventSlug={t.slug}
+              venueName={t.venue}
+            />
+
+            {/* Eat / Do */}
+            <div className="mt-4 grid gap-4 lg:grid-cols-2">
               {[
-                { heading: "Where to Stay", items: stayHotels },
                 { heading: "Where to Eat", items: guide.dining },
                 { heading: "Things to Do", items: guide.doing },
               ].map((col) => (
@@ -1928,50 +1938,17 @@ export default async function EventPage({ params }: Params) {
                     {col.items.map((p) => (
                       <li key={p.name} className="px-4 py-3">
                         <div className="flex items-baseline justify-between gap-2">
-                          <span className="flex min-w-0 items-center gap-2">
-                            {p.brand && (
-                              <Image
-                                src={`/ppa/hotels/${p.brand}.png`}
-                                alt=""
-                                width={32}
-                                height={32}
-                                className="size-5 shrink-0 rounded-[3px] object-contain"
-                              />
-                            )}
-                            <span className="font-display text-sm uppercase leading-tight text-ppa-navy">
-                              {p.name}
-                            </span>
+                          <span className="font-display text-sm uppercase leading-tight text-ppa-navy">
+                            {p.name}
                           </span>
-                          <span
-                            className={`shrink-0 text-[9px] font-bold uppercase tracking-[0.1em] ${
-                              p.tag === "Official"
-                                ? "bg-[var(--event-accent)] px-1.5 py-0.5 text-white"
-                                : "text-ppa-blue"
-                            }`}
-                          >
+                          <span className="shrink-0 text-[9px] font-bold uppercase tracking-[0.1em] text-ppa-blue">
                             {p.tag}
                           </span>
                         </div>
-                        <p className="mt-0.5 text-xs text-ppa-navy/55">
-                          {p.note}
-                        </p>
-                        {(p.rate || p.cutoff) && (
-                          <p className="mt-1 text-[11px] font-bold text-ppa-navy/70">
-                            {[p.rate, p.cutoff].filter(Boolean).join(" · ")}
-                          </p>
-                        )}
-                        {p.href && col.heading === "Where to Stay" && (
-                          <BookGroupRateLink href={p.href} eventSlug={t.slug} />
-                        )}
-                        {col.heading === "Where to Stay" && (
-                          <EngineHotelLink hotelName={p.name} event={engineEvent} />
-                        )}
+                        <p className="mt-0.5 text-xs text-ppa-navy/55">{p.note}</p>
                       </li>
                     ))}
                   </ul>
-                  {/* Engine sits UNDER the hotel list, never above it — the rows
-                      above are negotiated group rates with a cutoff. */}
-                  {col.heading === "Where to Stay" && <EngineStay event={engineEvent} />}
                 </div>
               ))}
             </div>

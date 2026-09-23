@@ -23,6 +23,26 @@ export type VenueLocation = {
   postalCode?: string;
   /** ISO 3166-1 alpha-2. */
   addressCountry: string;
+  /**
+   * The venue's own coordinates, when we hold a verified pair.
+   *
+   * ⚠ ONLY EVER A MEASURED VALUE, NEVER A GUESS — the same rule as the street
+   * address above, and it matters more here because a plausible-looking pair of
+   * decimals carries no visible clue that it is wrong. These are used as the
+   * centre point of Engine's hotel search (scripts/engine-nearby.ts); a pair that
+   * is a mile out lists the wrong hotels as "near the venue" and nothing on the
+   * page would look broken.
+   *
+   * HOW THE PINNED ONES WERE OBTAINED: Engine's ListProperties returns each
+   * property's coordinates AND its distance from the search centre, so sending
+   * the verified street address above and then solving for the point that
+   * satisfies every returned distance recovers the exact centre their geocoder
+   * used. Fitted over 11-20 properties per venue, residual RMS 0.001-0.004 mi.
+   * Pinning it makes later pulls reproducible instead of depending on their
+   * geocoder behaving identically next time.
+   */
+  latitude?: number;
+  longitude?: number;
 };
 
 export const VENUE_LOCATIONS: Record<string, VenueLocation> = {
@@ -32,6 +52,9 @@ export const VENUE_LOCATIONS: Record<string, VenueLocation> = {
     addressRegion: "NC",
     postalCode: "27519",
     addressCountry: "US",
+    // Engine geocode of the address above, recovered from 20 property distances (RMS 0.001 mi).
+    latitude: 35.80355,
+    longitude: -78.86243,
   },
   "Darling Tennis Center": {
     streetAddress: "7901 W Washington Ave",
@@ -39,6 +62,9 @@ export const VENUE_LOCATIONS: Record<string, VenueLocation> = {
     addressRegion: "NV",
     postalCode: "89128",
     addressCountry: "US",
+    // Engine geocode of the address above, recovered from 11 property distances (RMS 0.004 mi).
+    latitude: 36.17958,
+    longitude: -115.26971,
   },
   "Virginia Beach Sports Center": {
     streetAddress: "1045 19th St",
@@ -53,6 +79,9 @@ export const VENUE_LOCATIONS: Record<string, VenueLocation> = {
     addressRegion: "IL",
     postalCode: "60062",
     addressCountry: "US",
+    // Engine geocode of the address above, recovered from 13 property distances (RMS 0.002 mi).
+    latitude: 42.12952,
+    longitude: -87.78803,
   },
   // The complex uses two published street addresses (1 Legacy Dr / 6321 S
   // Ellsworth Rd), so the street is left off rather than guessed — locality +

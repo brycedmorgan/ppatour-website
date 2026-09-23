@@ -1,4 +1,16 @@
 import { withUtm } from "@/lib/utm";
+import {
+  ENGINE_ENV,
+  type EngineProperty,
+  type EventStay,
+  campaignFor,
+  enginePropertyBase,
+  stayDates,
+} from "@/lib/engine-booking";
+
+// Re-exported so callers keep one import site for "the Engine module".
+export { engineBookingUrl, type EngineProperty } from "@/lib/engine-booking";
+import snapshot from "@/lib/data/engine-properties.json";
 
 /**
  * Engine — the tour's Official Travel Partner (see `partners` in
@@ -22,34 +34,20 @@ import { withUtm } from "@/lib/utm";
  */
 
 /**
- * The co-branded PPA front door. Engine maintains this page — it reads "Sign up
- * to claim your PPA offer" and carries the member login.
+ * ⚠ THE CO-BRANDED FRONT DOOR (engine.com/partner/ppa) WAS REMOVED ON 9/23 AND
+ * SHOULD NOT COME BACK AS A FAN-FACING BUTTON. Wesley: "it doesn't work." The
+ * URL is not dead — it 200s and is genuinely co-branded, and a bogus partner
+ * slug 404s, so the page is real. The problem is what it IS: its own title reads
+ * "Pro Pickleball Association + Engine | Business Travel Done Better". It is a
+ * B2B travel-programme signup, not a place a fan books a room for a tournament,
+ * and it sat in Where to Stay under a heading promising hotels.
  *
- * ⚠ USED INSTEAD OF `members.engine.com/join/:slug`, ON PURPOSE. The docs' custom
- * landing form needs a partner slug issued with the Omni agreement, and we do not
- * hold one.
- *
- * ⚠ WE DO NOW HOLD AN ENGINE CREDENTIAL, AND IT IS NOT A SLUG (this note used to
- * say there was none anywhere — that stopped being true). `.env.local` carries a
- * SANDBOX mTLS pair — `ENGINE_CLIENT_CERT` / `ENGINE_CLIENT_KEY`, with
- * `ENGINE_API_BASE_URL` and `ENGINE_API_ENV=sandbox` — issued to
- * "O=United Pickleball Association, OU=Tech Evaluation", valid 30 Jul 2026 to
- * 9 Aug 2027 by "Engine Partner API Sandbox". It authenticates the partner API,
- * not the member-facing join form, so it does not unblock a custom landing page.
- * Still nothing in any Vercel environment, which is correct: the cert is only ever
- * used by a script on a dev machine (scripts/engine-properties.mjs).
- * A guessed slug cannot be verified from outside either —
- * `members.engine.com/join/ppa` and `/join/zzz-not-a-real-slug` return
- * byte-identical 12,054-byte SPA shells, so a wrong guess would 200 in a link
- * check and fail in a fan's browser. This page is verified co-branded and live.
+ * It was defensible only while it was the ONLY Engine link we could render.
+ * `enginePropertiesFor` now returns real properties with dated deep links, so
+ * the front door is both wrong for the audience and redundant. If a partner
+ * landing page is ever wanted again it belongs somewhere that addresses
+ * businesses, not on an event page's hotel list.
  */
-const ENGINE_PARTNER_URL = "https://engine.com/partner/ppa";
-
-/** Engine's group / RFP tool. Takes a city + dates with no credentials. */
-const ENGINE_GROUPS_URL = "https://groups.engine.com/new-trip";
-
-/** A single property on Engine's member site, per the deep-linking guide. */
-const ENGINE_PROPERTY_BASE = "https://members.engine.com/properties";
 
 /**
  * Engine property IDs for hotels we publish, keyed by `normalizeHotel(name)`.
@@ -84,7 +82,7 @@ const ENGINE_PROPERTY_BASE = "https://members.engine.com/properties";
 const ENGINE_PROPERTY_BY_HOTEL: Record<string, string> = {};
 
 /** Lowercase, strip punctuation and collapse whitespace, so "Home2 Suites — RDU" matches. */
-function normalizeHotel(name: string): string {
+export function normalizeHotel(name: string): string {
   return name
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, " ")
@@ -95,68 +93,21 @@ export function enginePropertyIdFor(hotelName: string): string | null {
   return ENGINE_PROPERTY_BY_HOTEL[normalizeHotel(hotelName)] ?? null;
 }
 
-type EventStay = {
-  /** The event's own slug — only used as the UTM campaign fallback. */
-  slug: string;
-  /** Canonical `MMYY-PPA-CITY-ST-USA` code, when the event has one. */
-  eventCode?: string | null;
-  city: string;
-  state?: string;
-  /** `YYYY-MM-DD`. */
-  startDate: string;
-  /** `YYYY-MM-DD`. */
-  endDate: string;
-};
-
 /**
- * ⚠ THE DATES ARE PASSED THROUGH AS STRINGS AND NEVER PARSED. `startDate` /
- * `endDate` are already the ISO calendar dates Engine's `checkIn` / `checkOut`
- * ask for, and `new Date("2026-09-26")` is UTC midnight — which is the previous
- * day in every US timezone, i.e. it would prefill a fan's stay one night early.
- * The repo has been bitten by this before (see `isEventRunning` in
- * placeholder-data, which parses local midnight on purpose).
+ * ⚠ THE GROUP / RFP LINK (groups.engine.com/new-trip) WAS REMOVED ON 9/23, AFTER
+ * THE FRONT-DOOR BUTTON WENT THE SAME DAY. Wesley's call, and the two removals
+ * are the same judgement: an event page's Where to Stay is read by one fan
+ * looking for one room. A block-of-rooms rate request is a different product for
+ * a different buyer, and it was the second thing in a card that should answer a
+ * single question.
  *
- * The stay offered is the event's own window, start to end. That is a PREFILL a
- * fan can change on Engine, so it deliberately does not invent an extra night
- * either side — we know the tournament's dates, not their travel plans.
+ * ⚠ IF IT COMES BACK IT NEEDS ITS OWN HOME AND ITS OWN DATE HANDLING. It
+ * prefilled `checkin` with the event's start date, which is why it was pre-event
+ * only — on a stop already being played it would have asked Engine to quote a
+ * stay beginning in the past. It also carried Engine's own `sc=` attribution
+ * parameter, so anything replacing it should keep that or the handoff stops
+ * being countable on their side.
  */
-function stayDates(e: EventStay): { checkIn: string; checkOut: string } {
-  return { checkIn: e.startDate, checkOut: e.endDate };
-}
-
-function campaignFor(e: EventStay): string {
-  return e.eventCode ?? e.slug;
-}
-
-/** The co-branded partner front door, tagged to the event it was clicked from. */
-export function engineStayUrl(e: EventStay): string {
-  return withUtm(ENGINE_PARTNER_URL, {
-    campaign: campaignFor(e),
-    content: "event-stay-engine",
-  });
-}
-
-/**
- * Engine's group tool with the event's city and dates prefilled.
- *
- * A distinct PRODUCT from the link above, not a variant of it — it raises a rate
- * request for a block of rooms, which is what a club or a team travelling to a
- * stop actually wants, and it is labelled as such in the UI. `sc` is Engine's own
- * custom-attribution parameter, so the handoff is countable on their side as well
- * as ours.
- */
-export function engineGroupUrl(e: EventStay): string {
-  const { checkIn, checkOut } = stayDates(e);
-  const url = new URL(ENGINE_GROUPS_URL);
-  url.searchParams.set("checkin", checkIn);
-  url.searchParams.set("checkout", checkOut);
-  url.searchParams.set("city", e.state ? `${e.city}, ${e.state}` : e.city);
-  url.searchParams.set("sc", `ppatour-${campaignFor(e)}`);
-  return withUtm(url.toString(), {
-    campaign: campaignFor(e),
-    content: "event-stay-engine-group",
-  });
-}
 
 /**
  * A dated deep link to one property — the actual Swift handoff.
@@ -168,7 +119,7 @@ export function engineHotelUrl(hotelName: string, e: EventStay): string | null {
   const propertyId = enginePropertyIdFor(hotelName);
   if (!propertyId) return null;
   const { checkIn, checkOut } = stayDates(e);
-  const url = new URL(`${ENGINE_PROPERTY_BASE}/${encodeURIComponent(propertyId)}`);
+  const url = new URL(`${enginePropertyBase()}/${encodeURIComponent(propertyId)}`);
   url.searchParams.set("checkIn", checkIn);
   url.searchParams.set("checkOut", checkOut);
   return withUtm(url.toString(), {
@@ -179,3 +130,93 @@ export function engineHotelUrl(hotelName: string, e: EventStay): string | null {
     term: propertyId,
   });
 }
+
+/* ==========================================================================
+ * THE PROPERTY LIST — hotels within a radius of the event venue.
+ * ======================================================================== */
+
+type EngineSnapshotEvent = {
+  /** The venue the radius was centred on, for the reader of the JSON. */
+  venue?: string;
+  /** How the centre point was expressed — an address, coordinates or freeform text. */
+  searchedBy?: string;
+  properties: EngineProperty[];
+};
+
+type EngineSnapshot = {
+  generatedAt: string | null;
+  engineEnv: string | null;
+  radiusMiles: number;
+  events: Record<string, EngineSnapshotEvent>;
+};
+
+/**
+ * Properties near an event's venue, from the committed snapshot.
+ *
+ * ⚠ A SNAPSHOT, NOT A LIVE CALL, AND THAT IS THE DESIGN. Resolving at render
+ * time would mean shipping the mTLS private key to Vercel, paying a handshake on
+ * page renders, and — the part that actually matters — handing Engine's uptime a
+ * veto over whether the Where to Stay section has any content during event week,
+ * which is exactly when the page is busiest. The set of hotels within five miles
+ * of a tennis centre changes about never. `npm run engine:properties -- --write`
+ * refreshes it; production stays static and fail-safe.
+ *
+ * ⚠ THE ENVIRONMENT MUST MATCH OR THE LIST IS DROPPED. A snapshot built against
+ * the sandbox holds sandbox property IDs, which may name a different building in
+ * production — so flipping `ENGINE_ENV` without re-running the script makes this
+ * return nothing rather than publish links that resolve to the wrong hotel. Same
+ * rule as the hand-filled map above: no link beats a wrong link.
+ *
+ * Returns [] for an event with no snapshot, which is every event today. Callers
+ * must treat [] as "render the partner card alone", which is the behaviour that
+ * shipped before any of this existed.
+ */
+export function enginePropertiesFor(slug: string): EngineProperty[] {
+  const snap = snapshot as EngineSnapshot;
+  if (snap.engineEnv !== ENGINE_ENV) return [];
+  return snap.events[slug]?.properties ?? [];
+}
+
+/**
+ * The properties a page should actually show: near the venue, minus any hotel
+ * already published as an official block, capped.
+ *
+ * ⚠ ONE FUNCTION SO THE CARD AND THE LIST CANNOT DISAGREE. The card has to know
+ * whether there is anything to show before it decides to render at all — and if
+ * it counted properties one way while the list filtered them another, a stop
+ * whose only nearby hotels are already official blocks would draw an empty card.
+ *
+ * ⚠ EXCLUSION IS BY HOTEL NAME, WHICH CATCHES AN EXACT MATCH AND NOTHING ELSE.
+ * Verified against real data: a 5-mile search on Darling Tennis Center returns
+ * the JW Marriott Las Vegas Resort & Spa and Best Western Plus Las Vegas West,
+ * both of which are blocks on that same page, and both are dropped. It will NOT
+ * catch a hotel the two sources spell differently — Kristen's "La Quinta Las
+ * Vegas Red Rock / Summerlin" against Engine's "La Quinta Inn & Suites by
+ * Wyndham Las Vegas Summerlin Tech" cannot be resolved from names, and they may
+ * or may not be the same building. The fix is an Engine property ID stored
+ * against each official block so this matches on ID; that is an ask, not code.
+ */
+export function enginePropertiesNear(
+  slug: string,
+  { exclude = [] }: { exclude?: string[] } = {},
+): EngineProperty[] {
+  const blocked = new Set(exclude.map(normalizeHotel));
+  return enginePropertiesFor(slug).filter((p) => !blocked.has(normalizeHotel(p.name)));
+}
+
+/**
+ * How many properties the card shows before the rest move into the modal.
+ *
+ * ⚠ THE CARD SHOWS FOUR AND THE MODAL SHOWS EVERY ONE, INCLUDING THOSE FOUR.
+ * A "view all" that opened on the hotels you had NOT already seen would make the
+ * modal a different list from the one it claims to complete, and its count would
+ * disagree with the button that opened it.
+ */
+export const ENGINE_VISIBLE_PROPERTIES = 4;
+
+/** When the committed snapshot was built, for the "as of" line. */
+export function enginePropertiesGeneratedAt(): string | null {
+  const snap = snapshot as EngineSnapshot;
+  return snap.engineEnv === ENGINE_ENV ? snap.generatedAt : null;
+}
+

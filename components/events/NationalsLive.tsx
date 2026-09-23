@@ -19,7 +19,8 @@ import { channelsByDay, watchCardsFor, weekdayOf } from "@/lib/event-watch";
 import { getEventGuide, parkingFor, parkingText } from "@/lib/event-guides";
 import { ticketsOnSale } from "@/lib/tixr-prices";
 import { ParkingDetails } from "@/components/events/ParkingDetails";
-import { EngineHotelLink, EngineStay } from "@/components/events/EngineStay";
+import { EngineStay } from "@/components/events/EngineStay";
+import { WhereToStay } from "@/components/events/WhereToStay";
 import {
   type AmateurSession,
   firstServeFor,
@@ -1317,9 +1318,20 @@ export function NationalsLive({
             </div>
 
             {/* Stay / Eat / Do */}
-            <div className="mt-4 grid gap-4 lg:grid-cols-3">
+            {/* Where to Stay — its own row: the tour's negotiated blocks beside
+                Engine's nearby inventory. Shared with the event page so the two
+                surfaces cannot drift on it again — this file used to hand-roll the
+                "Book the Group Rate" anchor that BookGroupRateLink already owned. */}
+            <WhereToStay
+              hotels={guide.hotels}
+              event={engineEvent}
+              eventSlug={t.slug}
+              venueName={t.venue}
+            />
+
+            {/* Eat / Do */}
+            <div className="mt-4 grid gap-4 lg:grid-cols-2">
               {[
-                { heading: "Where to Stay", items: guide.hotels },
                 { heading: "Where to Eat", items: guide.dining },
                 { heading: "Things to Do", items: guide.doing },
               ].map((col) => (
@@ -1331,58 +1343,17 @@ export function NationalsLive({
                     {col.items.map((p) => (
                       <li key={p.name} className="px-4 py-3">
                         <div className="flex items-baseline justify-between gap-2">
-                          <span className="flex min-w-0 items-center gap-2">
-                            {p.brand && (
-                              <Image
-                                src={`/ppa/hotels/${p.brand}.png`}
-                                alt=""
-                                width={32}
-                                height={32}
-                                className="size-5 shrink-0 rounded-[3px] object-contain"
-                              />
-                            )}
-                            <span className="font-display text-sm uppercase leading-tight text-ppa-navy">
-                              {p.name}
-                            </span>
+                          <span className="font-display text-sm uppercase leading-tight text-ppa-navy">
+                            {p.name}
                           </span>
-                          <span
-                            className={`shrink-0 text-[9px] font-bold uppercase tracking-[0.1em] ${
-                              p.tag === "Official"
-                                ? "bg-[var(--event-accent)] px-1.5 py-0.5 text-white"
-                                : "text-ppa-blue"
-                            }`}
-                          >
+                          <span className="shrink-0 text-[9px] font-bold uppercase tracking-[0.1em] text-ppa-blue">
                             {p.tag}
                           </span>
                         </div>
-                        <p className="mt-0.5 text-xs text-ppa-navy/55">
-                          {p.note}
-                        </p>
-                        {(p.rate || p.cutoff) && (
-                          <p className="mt-1 text-[11px] font-bold text-ppa-navy/70">
-                            {[p.rate, p.cutoff].filter(Boolean).join(" · ")}
-                          </p>
-                        )}
-                        {p.href && (
-                          <a
-                            href={p.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group/book mt-2 inline-flex items-center gap-1.5 bg-ppa-navy px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-[var(--event-accent)] active:scale-[0.98]"
-                          >
-                            Book the Group Rate
-                            <span aria-hidden className="transition-transform duration-300 group-hover/book:translate-x-0.5">↗</span>
-                          </a>
-                        )}
-                        {col.heading === "Where to Stay" && (
-                          <EngineHotelLink hotelName={p.name} event={engineEvent} />
-                        )}
+                        <p className="mt-0.5 text-xs text-ppa-navy/55">{p.note}</p>
                       </li>
                     ))}
                   </ul>
-                  {/* Same placement as the event page, from the same component —
-                      under the negotiated blocks, never above them. */}
-                  {col.heading === "Where to Stay" && <EngineStay event={engineEvent} />}
                 </div>
               ))}
             </div>

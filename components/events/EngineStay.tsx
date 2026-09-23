@@ -1,5 +1,12 @@
 import Image from "next/image";
-import { engineGroupUrl, engineHotelUrl, engineStayUrl } from "@/lib/engine";
+import { EngineMoreHotels } from "@/components/events/EngineMoreHotels";
+import { EnginePropertyRow } from "@/components/events/EnginePropertyRow";
+import {
+  type EngineProperty,
+  engineHotelUrl,
+  ENGINE_VISIBLE_PROPERTIES,
+  enginePropertiesNear,
+} from "@/lib/engine";
 
 type EngineEvent = {
   slug: string;
@@ -48,6 +55,49 @@ export function EngineHotelLink({
 }
 
 /**
+ * The hotels Engine holds within a radius of the event venue, each linking
+ * straight to that property on the PPA's co-branded booking host.
+ *
+ * ⚠ IT RENDERS NOTHING WITHOUT A SNAPSHOT, WHICH IS EVERY EVENT TODAY. The list
+ * comes from `lib/data/engine-properties.json`, refreshed by
+ * `npm run engine:properties -- --write`, and that script cannot reach Engine's
+ * API yet. An empty list is a working state: the partner card below still does
+ * its job, exactly as it did before this existed.
+ *
+ * ⚠ HOTELS ALREADY IN KRISTEN'S BLOCK ARE DROPPED, AND THIS IS THE POINT MOST
+ * WORTH KEEPING. A five-mile radius around Darling Tennis Center returns the JW
+ * Marriott Las Vegas Resort — which is one of the tour's own negotiated blocks on
+ * that same page. Listed twice, a fan sees one hotel at two prices and the
+ * contracted rate is the better one, so the published block wins and Engine's
+ * copy of it is suppressed. Matching is on the normalized hotel NAME, the same
+ * key the hand-filled property map uses.
+ *
+ * ⚠ `<img>`, NOT `next/image`. `heroImageUri` points at Engine's own CDN, which
+ * has no `remotePatterns` entry in next.config — the optimizer would 400 every
+ * one of them. Same call as the scraped paddle photo. Sized and lazy so it costs
+ * nothing above the fold.
+ */
+export function EnginePropertyList({
+  event,
+  properties,
+}: {
+  event: EngineEvent;
+  /** Already filtered by `enginePropertiesNear` — this component only draws them. */
+  properties: EngineProperty[];
+}) {
+  if (properties.length === 0) return null;
+  return (
+    <ul className="mt-3 flex flex-col gap-px bg-ppa-line">
+      {properties.map((property) => (
+        <li key={property.id} className="bg-white">
+          <EnginePropertyRow property={property} event={event} chipLimit={3} />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/**
  * The Engine card at the foot of "Where to Stay" — the tour's Official Travel
  * Partner, offered ALONGSIDE the official room blocks above it and never instead
  * of them. Kristen's blocks are negotiated group rates with a book-by cutoff;
@@ -82,11 +132,16 @@ export function EngineHotelLink({
 export function EngineStay({
   event,
   variant = "plan",
+  excludeHotels = [],
+  venueName,
   className = "",
 }: {
   event: EngineEvent;
   /**
-   * `plan` — under the hotel list in Where to Stay, before the stop starts.
+   * `column` — its own card beside the official room blocks, in the Where to
+   *   Stay row. The main placement.
+   * `plan` — a footer strip under a hotel list, kept for any caller that still
+   *   nests this inside another card.
    * `onsite` — in the Venue Guide while the stop is being played.
    *
    * ⚠ IT DRIVES THE WRAPPER CLASSES RATHER THAN TAKING A `className` OVERRIDE,
@@ -95,69 +150,92 @@ export function EngineStay({
    * placement — and cancelling it from outside would mean shipping `border-t` and
    * `border-t-0` together and trusting Tailwind's emit order to settle which wins.
    */
-  variant?: "plan" | "onsite";
+  variant?: "plan" | "onsite" | "column";
+  /**
+   * Hotels already published as official blocks on this page. Engine's copy of
+   * any of them is suppressed — see the ⚠ on `EnginePropertyList`.
+   */
+  excludeHotels?: string[];
+  /** The venue, named in the modal's heading so "near the venue" is concrete. */
+  venueName?: string;
   className?: string;
 }) {
   const onsite = variant === "onsite";
+  const column = variant === "column";
+  const properties = enginePropertiesNear(event.slug, { exclude: excludeHotels });
+  const visible = properties.slice(0, ENGINE_VISIBLE_PROPERTIES);
+
+  /**
+   * ⚠ NO PROPERTIES MEANS NO CARD, IN EITHER PLACEMENT. Both of this card's
+   * fixed links were removed on 9/23 — the "Book with Engine" front door and the
+   * group rate request — so the property list is now the only thing in it that
+   * does anything. Without one, all that remains is a partner logo and a sentence,
+   * which is an advertisement rather than an answer to "where do I stay". A stop
+   * with no snapshot therefore renders exactly what it rendered before any of this
+   * existed: the official room blocks alone.
+   */
+  if (properties.length === 0) return null;
+
+  const partnerMark = (
+    <span className="flex items-center gap-2">
+      <Image
+        src="/ppa/sponsors/engine.png"
+        alt="Engine"
+        width={900}
+        height={310}
+        className="h-3.5 w-auto object-contain"
+        sizes="60px"
+      />
+      <span className="text-[9px] font-bold uppercase tracking-[0.1em] text-ppa-navy/40">
+        Official Travel Partner
+      </span>
+    </span>
+  );
+
+  /**
+   * ⚠ THE COLUMN VARIANT MIRRORS THE OFFICIAL-BLOCKS CARD BESIDE IT, DELIBERATELY.
+   * Same border, same paper ground, same header metrics — so the two read as two
+   * answers to one question rather than a section and an advertisement bolted to
+   * it. What differs is the heading and the partner mark, which is the whole
+   * distinction a fan needs: a contracted rate on the left, public inventory on
+   * the right.
+   */
+  if (column) {
+    return (
+      <div className={`border border-ppa-line bg-ppa-paper ${className}`}>
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-ppa-line px-4 py-3">
+          <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-navy/50">
+            Hotels Near the Venue
+          </p>
+          {partnerMark}
+        </div>
+        <div className="px-4 pb-3 pt-1">
+          <EnginePropertyList event={event} properties={visible} />
+          {properties.length > visible.length && (
+            <EngineMoreHotels properties={properties} event={event} venueName={venueName} />
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className={`bg-white px-4 py-3 ${onsite ? "" : "border-t border-ppa-line"} ${className}`}
     >
-      <div className="flex items-center gap-2">
-        <Image
-          src="/ppa/sponsors/engine.png"
-          alt="Engine"
-          width={900}
-          height={310}
-          className="h-3.5 w-auto object-contain"
-          sizes="60px"
-        />
-        <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-ppa-navy/50">
-          Official Travel Partner
-        </p>
-      </div>
+      <div className="flex items-center gap-2">{partnerMark}</div>
       <p className="mt-1.5 text-xs text-ppa-navy/55">
         {onsite
-          ? `Still need a room in ${event.city}? Book through the tour's travel partner.`
-          : `More rooms near ${event.city}, plus flights and cars, through the tour's travel partner.`}
+          ? "Still need a room? Book near the venue through the tour's travel partner."
+          : "More rooms near the venue, through the tour's travel partner."}
       </p>
-      <a
-        href={engineStayUrl(event)}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="group/engine mt-2 inline-flex items-center gap-1.5 border border-ppa-navy px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-ppa-navy transition hover:bg-ppa-navy hover:text-white active:scale-[0.98]"
-      >
-        Book with Engine
-        <span
-          aria-hidden
-          className="transition-transform duration-300 group-hover/engine:translate-x-0.5"
-        >
-          ↗
-        </span>
-      </a>
-      {/* A different product, labelled as one — a rate request for a block of
-          rooms, which is what a club travelling to a stop needs.
-
-          ⚠ PRE-EVENT ONLY, AND THE REASON IS THE PREFILL. `engineGroupUrl` fills
-          `checkin` with the event's own start date, so on a stop that is already
-          being played this link would ask Engine to quote a stay beginning in the
-          past. The right check-in for a fan standing at the venue is tonight, and
-          this page is prerendered — a server date is the wrong timezone (the same
-          trap the /today route solves on the device). A block quote is a pre-trip
-          product anyway: on site you need one room now, not a group rate. So the
-          onsite placement offers the front door alone rather than a stale date. */}
-      {!onsite && (
-        <p className="mt-2 text-[11px] text-ppa-navy/45">
-          Travelling as a group?{" "}
-          <a
-            href={engineGroupUrl(event)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-bold text-ppa-blue underline decoration-ppa-blue/30 underline-offset-2 hover:text-ppa-navy"
-          >
-            Request rates for these dates ↗
-          </a>
-        </p>
+      <EnginePropertyList event={event} properties={visible} />
+      {properties.length > visible.length && (
+        <EngineMoreHotels
+          properties={properties}
+          event={event}
+          venueName={venueName}
+        />
       )}
     </div>
   );
