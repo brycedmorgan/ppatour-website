@@ -65,6 +65,20 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-23 (pt. 2) — SEO plan + roadmap for ppatour.com (and PBC, in ziff)
+
+- Bryce: "Go dig deeper and build a plan and roadmap for both sites." Full crawl of all 1,135
+  sitemap URLs + redirect tests + code read. Plan, dated roadmap and asks: [`docs/SEO.md`](docs/SEO.md).
+  PBC plan: `~/pickleball/ziff/docs/PBC-SEO-PLAN.md` (subordinate to the Jan 18 Shopify cutover).
+- Findings that became tickets: no Article schema on 822 legacy posts or 37 ppa-blog posts; 825 titles
+  over 60 chars from the " · Carvana PPA Tour" template; 2 duplicate athlete pairs (raquel-amaro/-veloso,
+  james-ling/-2); Newport Beach 2025/2027 share a title; legacy `/athlete/` redirects take 3 hops;
+  homepage H1 is the event card; rankings/leaderboards have no schema; athletes/events lack lastmod.
+- Phase 0 is measurement and is blocked on Bryce: GSC access, a SEMrush API seat, the GA4 split.
+- Phase 1 (13 code items, 9/29–10/17) · Phase 2 content (12 pillars, 10/20–12/12, none Nov 2–8) ·
+  Phase 3 authority (Dec–Feb). Checkpoints 10/31, 12/15, 2/27.
+- Shareable page published for Connor/Taylor (link in the session that made it).
+
 ### 2026-09-23 — SEO portfolio review (PPA / PBC / pickleball.com)
 
 - Bryce asked for a read on SEO "across the board." Live-crawled all three sites; findings + sequence in
