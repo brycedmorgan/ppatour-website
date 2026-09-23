@@ -179,7 +179,7 @@ export function GraphicsTab({ me, shared, canUpload = false }: { me: Me; shared:
                           </button>
                         )}
                         <button className="btn" disabled={!r} onClick={() => r && download(r)}>
-                          {r ? "Save graphic" : "Preparing…"}
+                          {r ? "Download" : "Preparing…"}
                         </button>
                       </div>
                     </div>
