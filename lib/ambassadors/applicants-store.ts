@@ -63,3 +63,16 @@ export async function appendApplicant(a: Applicant): Promise<void> {
   without.push(a);
   await writeAll(without);
 }
+
+/** Remove one applicant by email, or (no email) clear the whole live feed. */
+export async function removeApplicant(email?: string): Promise<number> {
+  if (!email) {
+    await writeAll([]);
+    return 0;
+  }
+  const e = email.toLowerCase().trim();
+  const list = await getLiveApplicants();
+  const next = list.filter((x) => (x.email || "").toLowerCase().trim() !== e);
+  await writeAll(next);
+  return next.length;
+}

@@ -10,7 +10,8 @@
  */
 import { NextResponse } from "next/server";
 import crypto from "node:crypto";
-import { appendApplicant } from "@/lib/ambassadors/applicants-store";
+import type { NextRequest } from "next/server";
+import { appendApplicant, removeApplicant } from "@/lib/ambassadors/applicants-store";
 import { buildApplicant, type Applicant } from "@/lib/ambassadors/applicant-record";
 import { dataSecret } from "@/lib/ambassadors/config";
 
@@ -45,4 +46,14 @@ export async function POST(request: Request) {
   applicant.count = applicant.count ?? 1;
   await appendApplicant(applicant);
   return NextResponse.json({ ok: true, id: applicant.id });
+}
+
+/** DELETE /api/hq/applicants?email=<x> removes one; no email clears the feed. */
+export async function DELETE(request: NextRequest) {
+  if (!bearerOk(request.headers.get("authorization"))) {
+    return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
+  }
+  const email = request.nextUrl.searchParams.get("email") ?? undefined;
+  const remaining = await removeApplicant(email);
+  return NextResponse.json({ ok: true, remaining });
 }
