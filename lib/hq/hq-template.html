@@ -982,6 +982,11 @@ document.addEventListener('click', async ev => {
   else if (act === 'ed-close') closeEditor();
   else if (act === 'ed-save' || act === 'ed-remove') {
     const g = ED.g; if (!g) return; const st = act === 'ed-save' ? Object.assign({}, ED.st) : null;
+    // Guard the #1 mistake: text with no {CODE}, so every ambassador sees the
+    // same thing instead of their own code. Let them go back and fix it.
+    if (st && !/\{(CODE|FIRST|NAME)\}/i.test(String(st.text || ''))) {
+      if (confirm('Heads up: your text has no {CODE}, so every ambassador would see exactly this text — not their own code. {CODE} is automatically swapped for each ambassador’s code.\n\nOK = go back and add {CODE}\nCancel = save it the same for everyone')) return;
+    }
     closeEditor();
     await write(() => S.db.doc('graphics/' + g._id).update({ stamp: st }), st ? 'Code box saved. The ambassador kit picks it up at the next refresh.' : 'Code box removed');
   }
