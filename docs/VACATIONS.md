@@ -17,6 +17,7 @@ stop working if someone changes it without reading.
 | `/vacations/` | The trip — hero, itinerary, stay, pros, pricing, calendar | Static, ISR |
 | `/vacations/register/` | Traveler form → Stripe Checkout | `force-dynamic`, noindex |
 | `/vacations/success/` | Post-payment confirmation | `force-dynamic`, noindex |
+| `/vacations/trips/cancun/` | Cancún, Jan 26–30 2027 — ON SALE (same template as `/vacations`) | Static, ISR |
 | `/vacations/trips/punta-cana/` | Sept 2026 guest archive | Static, noindex |
 | `/api/vacations/checkout` | Creates the Stripe Checkout Session | Node runtime |
 | `/api/vacations/availability` | Rooms left (count-only, public) | Node runtime |
@@ -221,6 +222,26 @@ levels, and that is the part the resort needs.
   writes the rows without touching email.
 
 ---
+
+## Two trips on sale at once (since 2026-09-22)
+
+`/vacations` and `/vacations/trips/cancun/` both render
+`components/vacations/TripPage.tsx`. A trip is three files:
+
+1. **Content** — `lib/vacations/trips/<slug>.ts` exporting a `TripContent`
+   (`lib/vacations/trip-content.ts`). Turks is the `turkoise` export of
+   `content.ts`, which is still the only home for that trip's facts.
+2. **Config** — a `TripConfig` in `trip-config.ts`: slug, `href`, the exact
+   `destination` string Jackalope/Stripe key on, **prices** (the checkout
+   charges these), fallback capacity, waitlist copy.
+3. **Page** — `app/vacations/trips/<slug>/page.tsx`, ~30 lines: metadata +
+   `<TripPage content cfg availability>`.
+
+Plus a card in `trips.ts` (the calendar), a line in `app/sitemap.ts`, a branch
+in `tripDestinationForPath()` so the funnel beacon files views under the right
+trip, and a `vac_trips` row in Jackalope with that exact destination string —
+until that row exists the site runs on `fallbackCapacity` and treats the trip
+as open.
 
 ## Things that will bite you
 

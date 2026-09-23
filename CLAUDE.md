@@ -65,6 +65,35 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-22 (pt. 4) — Cancún (Jan 26–30, 2027, Connor Garnett) goes ON SALE beside Turks; /vacations became a template
+
+- Lainey: "Cancun, January 26-30 with Connor Garnett is good to go live" + listing doc. Live at
+  **`/vacations/trips/cancun/`**, booking through the existing `/vacations/register/?trip=cancun` →
+  `/api/vacations/checkout` path. **$3,600 single / $6,400 double ($3,200 pp)**, block **10 + 10**,
+  pay in full. Prices are in `lib/vacations/trip-config.ts` (`CANCUN`) — that IS the "Stripe update"
+  her doc asked for; checkout charges `price_data` off that config, nothing lives in the Stripe dashboard.
+- **⚠ FIRST TIME TWO TRIPS SELL AT ONCE**, so `app/vacations/page.tsx` stopped being the Turks trip and
+  became a 30-line wrapper around **`components/vacations/TripPage.tsx`** (the old JSX, verbatim, with
+  every "Grace Bay"/"islands" headline lifted into `content.copy.*`). Both pages render it; Turks copy
+  is byte-identical to before (verified on the built app: "Play the islands", "Superior rooms on Grace
+  Bay", $3,800, "Adults only" all still there). Content contract: `lib/vacations/trip-content.ts`.
+  `content.ts` still exports its named pieces (register/success/email read `trip`, `logo`) plus one
+  assembled `turkoise` object. Cancún content: `lib/vacations/trips/cancun.ts`.
+- **Two corrections to Lainey's doc, both told to her:** inclusions said "Providenciales (PLS)" — paste
+  from Turks, site says **CUN**; header said "January 26-30, **2026**" — past, site says **2027**
+  (Tue–Sat, same pattern as every trip). No "adults-only" anywhere on Cancún — Club Med Cancún is a
+  family resort and her doc never claims 18+; `trip.who` is optional and reads "All skill levels welcome".
+- Images: the Club Med approved Drive folder (13 files), pulled with `curl uc?export=download`, resized
+  to 1600px under `public/vacations/clubmed/cancun/`. Connor's headshot is a 6000×4000 Leica studio
+  shot, centre-cropped square to `pros/connor-garnett-ppa.jpg` (800²), linked to `/athletes/connor-garnett/`.
+- Register page's "← Back to the trip" now goes to **`cfg.href`** (Cancún guests were going to land on
+  Turks). Success page names "Cancún". Sitemap lists the page. Trip calendar card added (`trips.ts`).
+- **Jackalope:** `vac-plan?destination=Club Med Cancun` 404'd, so the site is on `fallbackCapacity` 10/10
+  and status null (= open) until the row exists. Seed added to ziff `api/vacations/trips.js`
+  (`cancun-2027`) but **ziff NOT pushed** — it carries an unfinished Erin Shannon commit. Lainey can also
+  just add the trip in Jackalope → Vacations with Destination exactly `Club Med Cancun`.
+- Still open: the `StickyBuyBar` cross-sell question from `docs/VACATIONS.md` now applies to two pages.
+
 ### 2026-09-22 — Jade Rau was on the roster we said she didn't exist on; half the athlete pages carried an empty heading
 
 - Wesley asked whether Jade Rau is on the site. She was not — no record in `published-athletes.json`,

@@ -50,7 +50,9 @@ export default async function VacationsSuccessPage({
     ? "Punta Cana"
     : destination.includes("Turkoise")
       ? "Turks & Caicos"
-      : destination.replace(/^Club Med\s+/i, "");
+      : destination.includes("Cancun")
+        ? "Cancún"
+        : destination.replace(/^Club Med\s+/i, "");
 
   return (
     <section className="flex min-h-[100svh] items-center justify-center bg-ppa-navy px-4 py-28 text-center text-white">

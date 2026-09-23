@@ -147,6 +147,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly" as const,
       priority: 0.8,
     },
+    // Cancún (Jan 26–30, 2027) — on sale 9/22, indexed like the featured trip.
+    {
+      url: url("/vacations/trips/cancun"),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    },
     /**
      * Native articles, the 811 migrated WordPress posts, and the 39 PPA Blog
      * posts. `lastModified` matters here: these carry real publication dates

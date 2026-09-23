@@ -54,6 +54,19 @@ export const tripsCalendar: TripEntry[] = [
     status: "open",
     href: "/vacations",
   },
+  {
+    slug: "cancun",
+    name: "Cancún",
+    resort: "Club Med Cancun",
+    location: "Cancún, Mexico",
+    datesLabel: "January 26–30, 2027",
+    startIso: "2027-01-26",
+    endIso: "2027-01-30",
+    image: "/vacations/clubmed/cancun/cancun-aerial.jpg",
+    lineup: "Led by Connor Garnett · more pros announced soon",
+    status: "open",
+    href: "/vacations/trips/cancun",
+  },
 ];
 
 export function tripStatus(t: TripEntry, now = new Date()): TripStatus {

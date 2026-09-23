@@ -40,6 +40,8 @@ export type TripWaitlist = {
 
 export type TripConfig = {
   slug: string;
+  /** The trip's own page on this site — where "back to the trip" goes. */
+  href: string;
   /** The exact string Jackalope's vac_trips row and Stripe metadata key on. */
   destination: string;
   location: string;
@@ -59,6 +61,7 @@ export type TripConfig = {
  */
 const TURKOISE: TripConfig = {
   slug: "turkoise",
+  href: "/vacations/",
   destination: turkoiseTrip.destination,
   location: turkoiseTrip.location,
   datesLabel: turkoiseTrip.datesLabel,
@@ -85,6 +88,7 @@ const PUNTA_CANA_CONTACT = "vacations@pickleball.com";
  */
 const PUNTA_CANA: TripConfig = {
   slug: "punta-cana",
+  href: "/vacations/trips/punta-cana/",
   destination: "Club Med Punta Cana",
   location: "Punta Cana, Dominican Republic",
   datesLabel: "September 8–12, 2026",
@@ -124,9 +128,60 @@ const PUNTA_CANA: TripConfig = {
   },
 };
 
+const CANCUN_CONTACT = "vacations@pickleball.com";
+
+/**
+ * Cancún — January 26–30, 2027, led by Connor Garnett. On sale 2026-09-22 while
+ * Turks is still selling: the first time two trips have been bookable at once.
+ * Pay in full at checkout (Lainey's listing doc). $3,600 single / $6,400 double
+ * ($3,200 pp), block of 10 + 10 (30 guests). Content: lib/vacations/trips/cancun.ts.
+ */
+const CANCUN: TripConfig = {
+  slug: "cancun",
+  href: "/vacations/trips/cancun/",
+  destination: "Club Med Cancun",
+  location: "Cancún, Mexico",
+  datesLabel: "January 26–30, 2027",
+  nights: 4,
+  contactEmail: CANCUN_CONTACT,
+  pricing: {
+    single: {
+      id: "single",
+      label: "Single Occupancy",
+      total: 3600,
+      amountCents: 360000,
+      travelers: 1,
+      blurb: "A Superior room to yourself.",
+    },
+    double: {
+      id: "double",
+      label: "Double Occupancy",
+      total: 6400,
+      amountCents: 640000,
+      travelers: 2,
+      perPersonNote: "$3,200 per person",
+      blurb: "Share a Superior room — choose King or Twin beds.",
+    },
+  },
+  fallbackCapacity: { single: 10, double: 10 },
+  waitlist: {
+    badge: "Sold Out",
+    headline: "This trip is officially sold out",
+    message:
+      "Thank you for the incredible response — every room for Club Med Cancún is booked. Join the waiting list and be the first to hear when our next vacation is announced.",
+    cta: "Join the Waiting List",
+    mailto: `mailto:${CANCUN_CONTACT}?subject=${encodeURIComponent(
+      "Waiting List — Next Pickleball Vacation"
+    )}&body=${encodeURIComponent(
+      "Please add me to the waiting list for the next Pickleball Vacations trip.\n\nName:\nPhone:\n"
+    )}`,
+  },
+};
+
 export const TRIPS: Record<string, TripConfig> = {
   [TURKOISE.slug]: TURKOISE,
   [PUNTA_CANA.slug]: PUNTA_CANA,
+  [CANCUN.slug]: CANCUN,
 };
 
 /** The trip the booking path assumes when no `?trip=` is given — stays Turks. */
@@ -150,5 +205,6 @@ export function tripByDestination(destination: string): TripConfig | undefined {
  */
 export function tripDestinationForPath(path: string): string {
   if (path.includes("/vacations/trips/punta-cana")) return PUNTA_CANA.destination;
+  if (path.includes("/vacations/trips/cancun")) return CANCUN.destination;
   return DEFAULT_TRIP.destination;
 }
