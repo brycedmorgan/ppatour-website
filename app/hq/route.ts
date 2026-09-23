@@ -76,7 +76,23 @@ window.claude = {
         delete: function (id) { return fetch('/api/hq/assets?id=' + encodeURIComponent(id), { method: 'DELETE' }).then(function (r) { if (!r.ok) throw new Error('delete failed'); return true; }); }
       };
     }
-    return null; // downloads -> unavailable (ZIP export hides)
+    if (name === 'downloads') {
+      // Real browser download for the per-graphic Download button and the
+      // "All versions (ZIP)" export. Same-origin blob, so a plain link works.
+      return {
+        save: function (opts) {
+          try {
+            var url = URL.createObjectURL(opts.data);
+            var a = document.createElement('a');
+            a.href = url; a.download = (opts && opts.filename) || 'download';
+            document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(function () { try { URL.revokeObjectURL(url); } catch (e) {} }, 1500);
+            return Promise.resolve(true);
+          } catch (e) { return Promise.reject(e); }
+        }
+      };
+    }
+    return null;
   }
 };`;
 
