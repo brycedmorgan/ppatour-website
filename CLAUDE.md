@@ -77,8 +77,10 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   goes public first; it is the SEO entity page (Person JSON-LD mirrored on brycedmorgan.com).
 - SERP today: bare "Bryce Morgan" is a film director + two law/accounting partners; the pickleball
   qualified queries already return his site/LinkedIn. Targets in TEAM.md §5.
-- **Open for Bryce:** UPA-only or all four BUs; agency name + years; the Pardoe meeting in his
-  words. Week-1 target Mon 9/29.
+- **Bryce, same day: UPA only on ppatour.com.** PBC, Play Solutions and Pickleball Link stay off.
+  MLP-only people go on the MLP site; crossover shows on both. Export gets `brand: ppa|mlp|both`
+  (ADP can't split them). **Still open:** agency name + years; the Pardoe meeting in his words.
+  Week-1 target Mon 9/29.
 
 ### 2026-09-22 (pt. 5) — Header lists every Vacations trip; Punta Cana reads "Completed · Sold Out"
 
