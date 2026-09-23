@@ -7,6 +7,9 @@ paths that emit metadata, `docs/seo-baseline` (SEMrush 8/8), SERP spot checks. *
 read, Core Web Vitals field data, a fresh SEMrush pull (no key on this machine). Those are the
 first three items in the plan. The PBC plan lives in `~/pickleball/ziff/docs/PBC-SEO-PLAN.md`.
 
+**Shareable version (private artifact, share from its own menu):**
+https://claude.ai/artifact/V77Y5AsxHDavMPXrQmuMxp
+
 ## 1. What this is, and why it is not small
 
 ppatour.com is a 1,135-page content site rebuilt on Next.js and launched 2026-08-04, sitting on a
