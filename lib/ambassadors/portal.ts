@@ -9,6 +9,12 @@
 import { getJson } from "@/lib/ambassadors/store";
 import { demoPortal } from "@/lib/ambassadors/demo";
 import { previewEnabled } from "@/lib/ambassadors/config";
+import { getGraphics } from "@/lib/hq/graphics-store";
+
+/** Filename-safe slug for a stamped-graphic download name. */
+function slugify(s: string): string {
+  return (s || "graphic").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "graphic";
+}
 
 export type LbRow = { rank: number; name: string; points: number; id?: string; isYou?: boolean };
 type Board = { registrations: LbRow[]; tickets: LbRow[] };
@@ -128,11 +134,34 @@ export async function buildMe(email: string): Promise<MePayload | null> {
   const { tier: _tier, ...mePublic } = entry; // never expose the internal tier
   void _tier;
 
+  // Graphics come from the shared live store (the same one HQ uploads to), so a
+  // graphic uploaded + given a code box in HQ appears here automatically. Only
+  // graphics WITH a code box (stamp) are ambassador-ready; the image is served
+  // same-origin at /_blob/<assetId> so stamp.js can draw the code and save it.
+  // Falls back to whatever the portal file carried if the store isn't seeded.
+  const live = await getGraphics();
+  const graphics = live
+    ? live
+        .filter((g) => g.stamp && g.assetId)
+        .map((g) => ({
+          id: g._id,
+          event: g.event ?? "",
+          kind: g.kind ?? "",
+          title: g.title ?? "",
+          file: `/_blob/${g.assetId}`,
+          type: g.contentType ?? "image/webp",
+          stamp: g.stamp,
+          slug: slugify(g.title || g.fileName || g._id),
+          w: 0,
+          h: 0,
+        }))
+    : portal.shared.graphics;
+
   return {
     generatedAt: portal.generatedAt,
     season: portal.season,
     preview: (portal as Portal & { __demo?: boolean }).__demo === true || undefined,
-    shared: { ...portal.shared, leaderboards: cleanedLeaderboards },
+    shared: { ...portal.shared, leaderboards: cleanedLeaderboards, graphics },
     me: mePublic,
   };
 }
