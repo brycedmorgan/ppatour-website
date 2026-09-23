@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import type { Ev, Graphic, Me, Shared } from "@/components/ambassadors/types";
 import { fmtDate, logoBox } from "@/components/ambassadors/format";
+import { StampEditor } from "@/components/ambassadors/StampEditor";
 
 /** Loads stamp.js once and reports when window.Stamp is ready. */
 function useStamp(): boolean {
@@ -49,6 +50,7 @@ const CODE_POS: Record<string, number> = { top: 0.06, middle: 0.44, bottom: 0.8 
 export function GraphicsTab({ me, shared, canUpload = false }: { me: Me; shared: Shared; canUpload?: boolean }) {
   const stampReady = useStamp();
   const [rendered, setRendered] = useState<Record<string, Rendered>>({});
+  const [editing, setEditing] = useState<{ g: Graphic; code: string } | null>(null);
   const started = useRef(false);
 
   const evById = (id: string): Ev | undefined => shared.events.find((e) => e.id === id);
@@ -174,7 +176,17 @@ export function GraphicsTab({ me, shared, canUpload = false }: { me: Me; shared:
                         <div className="t">{item.title || item.kind}</div>
                         <div className="k">{item.kind}</div>
                       </div>
-                      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                      <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+                        {canUpload && (
+                          <button
+                            className="btn"
+                            style={{ background: "transparent", color: "#0C2B44", border: "1px solid #9db3c9", padding: "6px 10px" }}
+                            onClick={() => setEditing({ g: item, code: g.code })}
+                            title="Place the ambassador code on this graphic"
+                          >
+                            Code box
+                          </button>
+                        )}
                         {canUpload && (
                           <button
                             className="btn"
@@ -202,6 +214,15 @@ export function GraphicsTab({ me, shared, canUpload = false }: { me: Me; shared:
 
       {withoutArt.length > 0 && (
         <p className="sub">Artwork coming soon for: {withoutArt.map((g) => g.ev.name).join(", ")}.</p>
+      )}
+
+      {editing && (
+        <StampEditor
+          graphic={editing.g}
+          sampleCode={editing.code}
+          onClose={() => setEditing(null)}
+          onSaved={() => window.location.reload()}
+        />
       )}
     </section>
   );
