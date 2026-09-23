@@ -65,6 +65,18 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-23 — SEO portfolio review (PPA / PBC / pickleball.com)
+
+- Bryce asked for a read on SEO "across the board." Live-crawled all three sites; findings + sequence in
+  [`docs/SEO.md`](docs/SEO.md). MLP deliberately skipped (off-season, new site coming).
+- ppatour.com: technically sound; keyword count fell 46k→12k Feb→Aug **before** the rebuild — needs a Sept SEMrush re-pull.
+  Gaps: no Article schema on ~800 legacy posts, `/ppa-blog/` stale since Feb, homepage H1 = event card, rankings has no schema.
+- pickleballcentral.com: ranks top-2 for "pickleball paddles"; product schema good. Housekeeping: no lastmod, no Article schema/dates
+  on 724 posts, old paddle guide robots-blocked instead of 301'd, Google Optimize still loading, client-rendered category grids.
+- pickleball.com: the under-earning asset. Empty sitemaps, "Search Icon" player titles, numeric news URLs, zero JSON-LD,
+  hub-links to 6 other domains. Recommendation: rework architecture, not just skin; decide in Q4 alongside the MLP build.
+- Could not verify: GSC, CWV field data (PSI quota), real-Googlebot access to pickleball.com (CloudFront 403 on spoofed UAs).
+
 ### 2026-09-22 (pt. 6) — Sticky trip bar under the header on every Vacations page
 
 - Bryce, after pt. 5 shipped: "at the top of this page it just shows the Turks and Caicos thing… I have
