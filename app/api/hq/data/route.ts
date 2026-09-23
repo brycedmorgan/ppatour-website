@@ -43,7 +43,19 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "expected { docs, colls }" }, { status: 400 });
   }
 
-  await putBytes("hq.json", raw, "application/json");
+  try {
+    await putBytes("hq.json", raw, "application/json");
+  } catch (e) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: e instanceof Error ? e.message : String(e),
+        name: e instanceof Error ? e.name : undefined,
+        hasBlob: !!process.env.BLOB_READ_WRITE_TOKEN,
+      },
+      { status: 500 },
+    );
+  }
 
   const docs = Object.keys(parsed.docs as object).length;
   const colls = Object.keys(parsed.colls as object).length;
