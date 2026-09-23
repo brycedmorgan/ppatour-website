@@ -65,6 +65,21 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-22 (pt. 6) — Team page + Bryce Morgan page: planned, not built
+
+- Bryce wants **every employee on ppatour.com** (travel side vs event side visible, road crew
+  included, "pride for the whole staff") and **his own story page**, and to **rank #1 for
+  "Bryce Morgan"** on both ppatour.com and brycedmorgan.com. Plan + roadmap: [`docs/TEAM.md`](docs/TEAM.md).
+- Data spine is Jackalope, not hand-typing: ADP roster (158 people, 4 BUs), Slack avatars, travel
+  assignments → "travels the tour" + events-worked count. New self-service "My card" in Jackalope
+  is the consent/bio/preferred-name step. Public JSON never carries email, manager, hire date.
+- Visibility: Basic auth (like Paddle Lab) → unlisted (like Europe) → `TEAM_PUBLIC`. Bryce's page
+  goes public first; it is the SEO entity page (Person JSON-LD mirrored on brycedmorgan.com).
+- SERP today: bare "Bryce Morgan" is a film director + two law/accounting partners; the pickleball
+  qualified queries already return his site/LinkedIn. Targets in TEAM.md §5.
+- **Open for Bryce:** UPA-only or all four BUs; agency name + years; the Pardoe meeting in his
+  words. Week-1 target Mon 9/29.
+
 ### 2026-09-22 (pt. 5) — Header lists every Vacations trip; Punta Cana reads "Completed · Sold Out"
 
 - Bryce: clicking Vacations "just takes me directly to the Turks and Caicos one" — Cancún was invisible
