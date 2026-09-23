@@ -600,9 +600,9 @@ export function TripPage({ content, cfg, availability }: TripPageProps) {
               ) : (
                 <>
                   {trip.destination} · {trip.datesLabel}.
-                  {trip.who ? ` ${trip.who}.` : ""} Rooms are held under a
-                  fixed resort block — when they&apos;re gone, they&apos;re
-                  gone.
+                  {trip.who ? ` ${trip.who}.` : ""}{" "}
+                  Rooms are held under a fixed resort block — when they&apos;re
+                  gone, they&apos;re gone.
                 </>
               )}
             </p>
