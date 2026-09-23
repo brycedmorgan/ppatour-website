@@ -19,36 +19,45 @@ import path from "node:path";
 const DEV_DIR = path.join(process.cwd(), ".ambassadors-dev");
 const PREFIX = "ambassadors";
 
+/**
+ * The read-write token for the ambassador Blob store. Prefer the dedicated
+ * PRIVATE store (AMB_READ_WRITE_TOKEN); fall back to the project's default
+ * store token. The token identifies the store, so no storeId is needed.
+ */
+function blobToken(): string | undefined {
+  return process.env.AMB_READ_WRITE_TOKEN || process.env.BLOB_READ_WRITE_TOKEN;
+}
+
 export function hasBlob(): boolean {
-  return !!process.env.BLOB_READ_WRITE_TOKEN;
+  return !!blobToken();
 }
 
 /* ----------------------------- blob helpers ----------------------------- */
-// Isolated so the rest of the app is Blob-agnostic. Uses PRIVATE access; reads
-// go through head()'s signed downloadUrl, so the object is never public.
+// Isolated so the rest of the app is Blob-agnostic. Uses PRIVATE access: the
+// object requires the store token to read (get()), so portal.json, hq.json and
+// the ambassador images are never reachable at a public URL.
 
 async function blobPut(key: string, body: string | Buffer, contentType: string): Promise<void> {
   const { put } = await import("@vercel/blob");
   await put(`${PREFIX}/${key}`, body, {
-    // PRIVATE: the object is never publicly readable; reads use head()'s signed
-    // downloadUrl in blobGet(). This is what keeps portal.json and the ambassador
-    // images off the public web.
     access: "private",
     contentType,
     allowOverwrite: true,
     addRandomSuffix: false,
     cacheControlMaxAge: 0,
-    token: process.env.BLOB_READ_WRITE_TOKEN,
+    token: blobToken(),
   });
 }
 
 async function blobGet(key: string): Promise<Buffer | null> {
-  const { head } = await import("@vercel/blob");
+  const { get } = await import("@vercel/blob");
   try {
-    const meta = await head(`${PREFIX}/${key}`, { token: process.env.BLOB_READ_WRITE_TOKEN });
-    const res = await fetch(meta.downloadUrl ?? meta.url, { cache: "no-store" });
-    if (!res.ok) return null;
-    return Buffer.from(await res.arrayBuffer());
+    // Private read: get() streams the bytes back for a caller holding the token.
+    // useCache:false so a just-uploaded portal.json/hq.json is read from origin,
+    // not a stale CDN copy.
+    const r = await get(`${PREFIX}/${key}`, { access: "private", token: blobToken(), useCache: false });
+    if (!r || !r.stream) return null;
+    return Buffer.from(await new Response(r.stream).arrayBuffer());
   } catch {
     return null;
   }
@@ -57,7 +66,7 @@ async function blobGet(key: string): Promise<Buffer | null> {
 async function blobDel(key: string): Promise<void> {
   const { del } = await import("@vercel/blob");
   try {
-    await del(`${PREFIX}/${key}`, { token: process.env.BLOB_READ_WRITE_TOKEN });
+    await del(`${PREFIX}/${key}`, { token: blobToken() });
   } catch {
     /* already gone */
   }
