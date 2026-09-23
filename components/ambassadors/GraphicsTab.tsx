@@ -92,15 +92,22 @@ export function GraphicsTab({ me, shared, canUpload = false }: { me: Me; shared:
   }, [stampReady, me, shared]);
 
   async function download(item: Rendered) {
-    try {
-      const file = new File([item.blob], item.name, { type: item.blob.type });
-      const nav = navigator as Navigator & { canShare?: (d: { files: File[] }) => boolean };
-      if (nav.canShare && nav.canShare({ files: [file] })) {
-        await navigator.share({ files: [file] } as ShareData);
-        return;
+    // iOS Safari can't download a blob to the Files/Photos app, so there the
+    // share sheet is the only way to save. Everywhere else (desktop, Android)
+    // do a real file download rather than opening a share dialog.
+    const ua = navigator.userAgent || "";
+    const isIOS = /iP(hone|ad|od)/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    if (isIOS) {
+      try {
+        const file = new File([item.blob], item.name, { type: item.blob.type });
+        const nav = navigator as Navigator & { canShare?: (d: { files: File[] }) => boolean };
+        if (nav.canShare && nav.canShare({ files: [file] })) {
+          await navigator.share({ files: [file] } as ShareData);
+          return;
+        }
+      } catch {
+        /* fall through to a download link */
       }
-    } catch {
-      /* fall through to a download link */
     }
     const a = document.createElement("a");
     a.href = item.url;
