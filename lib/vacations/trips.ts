@@ -30,7 +30,7 @@ export type TripEntry = {
 export const tripsCalendar: TripEntry[] = [
   {
     slug: "punta-cana",
-    name: "The Inaugural Trip",
+    name: "Punta Cana",
     resort: "Club Med Punta Cana",
     location: "Punta Cana, Dominican Republic",
     datesLabel: "September 8–12, 2026",

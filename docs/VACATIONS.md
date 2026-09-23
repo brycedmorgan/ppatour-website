@@ -252,6 +252,14 @@ sold-out trip whose end date has passed reads **"Completed · Sold Out"**
 (Bryce, 9/22) on the calendar cards, the header, and the Punta Cana hero.
 `/vacations` itself still IS the Turks page — there is no index page.
 
+**Sticky trip bar (`components/vacations/TripNav.tsx`, since 9/22 pt. 6).**
+Mounted in `app/vacations/layout.tsx`, so every Vacations page carries a bar
+directly under the site header: each trip's name, dates and status, current
+page underlined. Bryce: "I have to scroll all the way to the bottom to find
+anything on Punta Cana." Same `trips.ts` source. `top-16` matches the 64px
+Header the sticky chrome collapses to on scroll — if `Header.tsx` changes
+height, change that. Hidden on `/register` and `/success` (checkout funnel).
+
 ## Things that will bite you
 
 - **`lib/vacations/content.ts` is the ONLY home for trip facts.** `/tour/travel`

@@ -65,6 +65,22 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-22 (pt. 6) — Sticky trip bar under the header on every Vacations page
+
+- Bryce, after pt. 5 shipped: "at the top of this page it just shows the Turks and Caicos thing… I have
+  to scroll all the way to the bottom to find anything on Punta Cana." New **`TripNav.tsx`**, mounted in
+  `app/vacations/layout.tsx`: a navy bar pinned under the header with every trip — Punta Cana (Sept 8–12,
+  "Completed · Sold Out"), Turks & Caicos (Dec 8–12, "Booking Open"), Cancún (Jan 26–30, "Booking Open") —
+  current page underlined in teal. Horizontal-scrolls on narrow screens. Hidden on `/register` + `/success`.
+- ⚠ `sticky top-16`, not `top-0`: the site chrome (`TopBar.tsx`) is itself sticky z-50 and collapses to
+  the 64px Header on scroll, so `top-0` put the bar BEHIND the header once you scrolled (caught in the
+  browser, not by build). Measured 64px live. z-40 sits under the chrome and mega panels.
+- Punta Cana's calendar `name` changed "The Inaugural Trip" → "Punta Cana" so the bar and mobile menu
+  say a place; the calendar card never used `name` (it prints `resort`), so nothing else moved.
+- Verified in Chrome on the dev server: bar renders on /vacations, stays pinned at 1000px scroll,
+  click-through to Punta Cana moves the underline and that hero reads "Completed · Sold Out"; register
+  page renders no bar. tsc + eslint clean. Pushed to main → Vercel.
+
 ### 2026-09-22 (pt. 6) — Team page + Bryce Morgan page: planned, not built
 
 - Bryce wants **every employee on ppatour.com** (travel side vs event side visible, road crew
