@@ -74,6 +74,27 @@ export function tripStatus(t: TripEntry, now = new Date()): TripStatus {
   return t.status;
 }
 
+/**
+ * Badge text for a trip. A trip that sold out and then ran says both — Bryce
+ * (9/22): Punta Cana "should say completed and sold out", not just one or the
+ * other. A completed trip that never sold out just says Completed.
+ */
+export function tripStatusLabel(t: TripEntry, now = new Date()): string {
+  const status = tripStatus(t, now);
+  if (status === "completed" && t.status === "sold-out") return "Completed · Sold Out";
+  return STATUS_META[status].label;
+}
+
+/** Trips guests can still book — what the header menu lists first. */
+export function openTrips(now = new Date()): TripEntry[] {
+  return tripsCalendar.filter((t) => tripStatus(t, now) === "open");
+}
+
+/** Every trip, soonest first, for menus that also show past trips. */
+export function tripsByDate(): TripEntry[] {
+  return [...tripsCalendar].sort((a, b) => a.startIso.localeCompare(b.startIso));
+}
+
 export const STATUS_META: Record<
   TripStatus,
   { label: string; classes: string }

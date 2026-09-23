@@ -65,6 +65,23 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-22 (pt. 5) — Header lists every Vacations trip; Punta Cana reads "Completed · Sold Out"
+
+- Bryce: clicking Vacations "just takes me directly to the Turks and Caicos one" — Cancún was invisible
+  from the nav. **Tour mega panel now has a "Pickleball Vacations" column** (`Header.tsx`) listing all
+  trips soonest-first with dates + status, past trips dimmed. **Mobile drawer** expands the single
+  "Vacations" line into "Vacations · Turks & Caicos" / "Vacations · Cancún" — open trips only.
+- Both are driven by `lib/vacations/trips.ts` (new `openTrips()`, `tripsByDate()`, `tripStatusLabel()`),
+  evaluated at render, not module load, so a trip drops out of the menu the day it ends. No trip name
+  is hard-coded in the header. Events panel's "Pickleball Vacations" BigLink still goes to `/vacations`.
+- **Punta Cana** (ended 9/12) now reads **"Completed · Sold Out"** on the calendar cards and its own hero
+  badge, per Bryce. Rule: completed + was `sold-out` → both words; completed otherwise → "Completed".
+  Verified on the dev server: `/vacations` and `/trips/cancun` show 2× "Completed · Sold Out" (calendar
+  card) + 4× "Booking Open"; Punta Cana page shows only "Completed · Sold Out". tsc + eslint clean.
+- ⚠ Deliberately NOT done: `/vacations` is still the Turks page, not an index. Lainey's collateral and
+  the Stripe/redirect table all point there. If Bryce wants a landing page, that's a separate call.
+- Committed locally, **not pushed** — Bryce's call.
+
 ### 2026-09-22 (pt. 4) — Cancún (Jan 26–30, 2027, Connor Garnett) goes ON SALE beside Turks; /vacations became a template
 
 - Lainey: "Cancun, January 26-30 with Connor Garnett is good to go live" + listing doc. Live at

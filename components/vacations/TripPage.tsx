@@ -6,7 +6,7 @@ import { logo, scarcityThreshold } from "@/lib/vacations/content";
 import { formatUSD, type Occupancy } from "@/lib/vacations/pricing";
 import type { TripConfig } from "@/lib/vacations/trip-config";
 import type { TripContent } from "@/lib/vacations/trip-content";
-import { tripsCalendar, tripStatus, STATUS_META } from "@/lib/vacations/trips";
+import { tripsCalendar, tripStatus, tripStatusLabel, STATUS_META } from "@/lib/vacations/trips";
 
 /**
  * The trip page — hero, stat band, welcome, court band, experience, inclusions,
@@ -806,7 +806,7 @@ export function TripPage({ content, cfg, availability }: TripPageProps) {
                     <span
                       className={`absolute left-0 top-4 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] ${meta.classes}`}
                     >
-                      {meta.label}
+                      {tripStatusLabel(t)}
                     </span>
                   </div>
                   <div className="p-5">

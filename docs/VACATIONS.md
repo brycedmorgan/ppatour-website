@@ -243,6 +243,15 @@ trip, and a `vac_trips` row in Jackalope with that exact destination string —
 until that row exists the site runs on `fallbackCapacity` and treats the trip
 as open.
 
+**The header reads `trips.ts` too (since 9/22).** The Tour mega panel has a
+"Pickleball Vacations" column listing every trip, soonest first, with dates
+and status; the mobile drawer lists one "Vacations · <name>" line per trip
+that is on sale. Nothing in `Header.tsx` names a trip, so a new card in
+`trips.ts` is all it takes. Status labels come from `tripStatusLabel()`: a
+sold-out trip whose end date has passed reads **"Completed · Sold Out"**
+(Bryce, 9/22) on the calendar cards, the header, and the Punta Cana hero.
+`/vacations` itself still IS the Turks page — there is no index page.
+
 ## Things that will bite you
 
 - **`lib/vacations/content.ts` is the ONLY home for trip facts.** `/tour/travel`
