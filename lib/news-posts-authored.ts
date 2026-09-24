@@ -623,4 +623,132 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
 <p><strong>For the comprehensive stats of all these gold medal matches, please visit: </strong><a href="https://facebook.com/groups/propickleballstats" target="_blank" rel="noreferrer noopener"><strong>facebook.com/groups/propickleballstats</strong></a></p>
 `.trim(),
   },
+  {
+    // Partner story, supplied by Wesley 9/24 with the featured photograph.
+    // Proton is an Official Platinum Partner (lib/home-content.ts), so this is
+    // filed copy about a partner's product, not editorial about a paddle we
+    // picked — the same footing the sponsor pages sit on.
+    //
+    // ⚠ BOTH RESULTS CLAIMS WERE VERIFIED AGAINST THE LIVE FEED, NOT TAKEN ON
+    // TRUST, because a wrong finish attributed to a named pro is the one thing
+    // a gear post cannot get away with. Arizona women's singles: Jalina Ingram
+    // (13 seed) reached the SEMI-FINALS, beating Catherine Parenteau (7) in the
+    // quarters before losing to Anna Leigh Waters. Grand Rapids PPA Challenger
+    // men's singles podium: gold Matthew Finnerty, silver Eli Steiner, BRONZE
+    // MILES HOOVER. Both read straight off `getScores`.
+    slug: "project-coyote-brings-the-heat-as-proton-players-celebrate-14-medals-in-mesa",
+    wpId: 900004,
+    status: "published",
+    source: "wordpress",
+    // "Tour News" is what the archive's other 343 announcements carry, and this
+    // is an announcement about a partner's product rather than match coverage.
+    category: "Tour News",
+    series: null,
+    categoryResolvedBy: "fallback",
+    title: "Project Coyote Brings the Heat as Proton Players Celebrate 14 Medals in Mesa",
+    dek: "Jalina Ingram reached the women's singles semifinals at the Veolia Arizona Open, part of 14 medals won on Project Coyote across the professional and amateur draws.",
+    // No byline supplied. "PPA Tour" is the archive's house byline for unsigned
+    // tour copy (154 posts) — inventing a writer would attribute a real
+    // person's name to copy they did not write.
+    author: "PPA Tour",
+    publishedAt: "2026-09-24T10:00:00",
+    publishedAtGmt: "2026-09-24T15:00:00",
+    modifiedAt: "2026-09-24T15:00:00",
+    image: {
+      // Supplied by Wesley with the copy. Encoded to the house news standard:
+      // 2048x1365, mozjpeg q64, 4:4:4, from a 5345x3563 original.
+      //
+      // ⚠ NO NAMES, AND NO PADDLE MODEL EITHER. House style on this archive is
+      // a generic description, and naming a player from a frame is how the
+      // wrong athlete gets captioned. The paddle in shot carries a legible
+      // Proton wordmark but nothing identifies WHICH Proton paddle it is, so
+      // calling it a Project Coyote under a post about the Coyote would be a
+      // guess doing the work of a caption.
+      url: "/ppa/news/proton-project-coyote-mesa-medals.jpg",
+      alt: "Pro reaching for a forehand volley at the net during a PPA Tour match.",
+      width: 2048,
+      height: 1365,
+    },
+    // Empty on purpose: detectAthleteMentions reads the body and resolves the
+    // roster itself. Jalina Ingram and Catherine Parenteau both have published
+    // profiles and link automatically; Miles Hoover has none, so he correctly
+    // stays plain text rather than pointing at a page that does not exist.
+    players: [],
+    playerNames: [],
+    // WP-category form, matching the other three posts in this file. Inert —
+    // nothing resolves it to an internal event slug (see lib/news.ts).
+    wpEvent: { slug: "2026-veolia-arizona-open", name: "2026 Veolia Arizona Open" },
+    tags: [],
+    tagsRaw: [],
+    wpCategories: [],
+    embeds: [],
+    inlineImages: [],
+    // ⚠ CTA LEFT ON THE DEFAULT (next stop's tickets + TV Schedule) ON PURPOSE.
+    // The override exists for posts where a ticket link is the wrong action —
+    // a junior announcement, say. This post is about pros at a PPA stop, so
+    // selling the next one is a fair ask, and the copy's own call to action
+    // (Proton's shop and the PPA discount code) is the closing line of the
+    // body, where the supplied copy puts it. One `ctaUrl` field flips it.
+    //
+    // Never existed on WordPress, so its canonical home is this site.
+    legacyUrl: "https://www.ppatour.com/project-coyote-brings-the-heat-as-proton-players-celebrate-14-medals-in-mesa/",
+    seo: {
+      title: "Project Coyote: 14 Medals in Mesa for Proton Players | PPA Tour",
+      description:
+        "Jalina Ingram reached the women's singles semifinals at the Veolia Arizona Open as players on Proton's Project Coyote earned 14 medals in Mesa, with a men's singles bronze for Miles Hoover in Grand Rapids.",
+      canonical:
+        "https://www.ppatour.com/project-coyote-brings-the-heat-as-proton-players-celebrate-14-medals-in-mesa/",
+    },
+    bodyHtml: `
+<p>Rising star Jalina Ingram delivered a standout performance at the Carvana PPA Tour&#8217;s <a href="/events/2026/veolia-arizona-open/">Veolia Arizona Open</a> in Mesa, battling her way to the women&#8217;s singles semifinals.</p>
+
+
+
+<p>Unsigned top female pro Catherine Parenteau was also seen competing with Project Coyote, adding another notable name to the paddle&#8217;s presence on court.</p>
+
+
+
+<h4 class="wp-block-heading"><strong>Beyond the Pros</strong></h4>
+
+
+
+<p>Ingram&#8217;s run was only part of the story. Players using the Project Coyote earned 14 total medals across professional and amateur divisions in Mesa.</p>
+
+
+
+<p>And the momentum stretched beyond Arizona. Across the country, Miles Hoover earned bronze in men&#8217;s singles at the Grand Rapids PPA Challenger.</p>
+
+
+
+<p>These results drove us to take a closer look at what the Coyote brings to the court.</p>
+
+
+
+<h4 class="wp-block-heading"><strong>Power That Fits the Whole Game</strong></h4>
+
+
+
+<p>The Coyote is a 15mm elongated paddle and Proton&#8217;s most powerful paddle yet. Built around a polypropylene honeycomb core with a reinforced-foam perimeter, its approximately 7.7-ounce average weight emphasizes maneuverability, while a 5.5-inch handle and refined throat taper provide room for comfortable two-handed play. Proton designed that combination to deliver power without sacrificing stability and responsiveness.</p>
+
+
+
+<p>The Kitchen&#8217;s August 26 review offered a strong endorsement of that balance, calling Project Coyote &#8220;the company&#8217;s best paddle to date&#8221; and highlighting its combination of high power and a stable, connected feel.</p>
+
+
+
+<h4 class="wp-block-heading"><strong>Accessible Performance</strong></h4>
+
+
+
+<p>At $195, Project Coyote brings Proton&#8217;s power-focused design below the $200 mark, with construction intended to support everything from controlled dinks and soft resets to powerful drives and fast kitchen exchanges.</p>
+
+
+
+<p>But specifications tell only part of the story. The real question is whether a paddle fits the way a player wants to compete. Fourteen medals in Mesa, along with another professional podium across the country, give players a compelling reason to take a closer look at the Coyote.</p>
+
+
+
+<p>You can visit <a href="https://protonsports.com/?utm_source=ppatour&#038;utm_medium=website&#038;utm_campaign=news&#038;utm_content=article-project-coyote-brings-the-heat-as-proton-players-celebrate-14-medals-in-mesa">Protonsports.com</a> and use the code &#8220;PPA&#8221; for 10% off of your order.</p>
+`.trim(),
+  },
 ];
