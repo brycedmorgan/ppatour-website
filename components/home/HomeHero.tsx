@@ -231,6 +231,18 @@ export function HomeHero({
             in the eyebrow is what marks the state now. */}
 
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-7 pt-16">
+          {/* The page's one <h1> is the brand/topic, not the event on the hero.
+              Until 9/24 the event name below was the only h1, so the homepage
+              told Google it was about "Rate Las Vegas Open" (docs/SEO.md,
+              Phase 1 item 6). Set as a small eyebrow line — visible, not
+              sr-only — so the design reads as it did; the event name keeps
+              its display type as an h2. */}
+          <h1
+            className="mb-2 text-[11px] font-bold uppercase tracking-[0.2em] text-white/60 motion-safe:animate-rise"
+            style={{ animationDelay: "40ms" }}
+          >
+            Carvana PPA Tour — Professional Pickleball
+          </h1>
           <div
             className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] font-bold uppercase tracking-[0.16em] motion-safe:animate-rise"
             style={{ animationDelay: "80ms" }}
@@ -273,15 +285,16 @@ export function HomeHero({
             </span>
           </div>
 
-          <h1
+          <h2
             className="mt-3 max-w-[18ch] font-display text-[clamp(1.9rem,5.4vw,3.25rem)] uppercase leading-[0.98] motion-safe:animate-rise"
             style={{ animationDelay: "160ms" }}
           >
             {/* The full event name — "Veolia Pickleball National Championships",
                 never the short form (Jeff Watson, 8/3). The short form stays on
-                the scores-band chip below. */}
+                the scores-band chip below. An h2 since 9/24: the h1 is the
+                brand line above. */}
             {next.name}
-          </h1>
+          </h2>
 
           <div
             className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold uppercase tracking-wide text-white/75 motion-safe:animate-rise"
