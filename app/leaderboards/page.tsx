@@ -10,7 +10,14 @@ import {
   type RegionFilter,
   toRegionFilter,
 } from "@/lib/ranking-filters";
-import { countRankingMatches, getRankingPage, RANKING_GENDERS } from "@/lib/rankings-api";
+import {
+  countRankingMatches,
+  getRankingPage,
+  RANKING_GENDERS,
+  rankingsAsOf,
+} from "@/lib/rankings-api";
+import { buildRankingsJsonLd } from "@/lib/rankings-schema";
+import { SITE_URL } from "@/lib/site";
 
 /**
  * ⚠ THE BOARD FETCHES HERE ARE ONLY CACHED BECAUSE OF THIS LINE (9/5). This
@@ -269,6 +276,25 @@ async function LeaderboardResults({
 
   return (
     <>
+      {/* Dataset + this board's top 10 as an ItemList — only on the unfiltered
+          first page of a live board, which is the page Google lands on. Streams
+          inside the Suspense boundary with the rows it describes. */}
+      {data.source === "live" && page === 1 && !filtered && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(
+              buildRankingsJsonLd({
+                url: `${SITE_URL}/leaderboards/`,
+                name: `World Pickleball Rankings — ${data.label}`,
+                description: `The complete ${data.label.toLowerCase()} World Pickleball Rankings, every ranked pro on the Carvana PPA Tour's 52-week composite board.`,
+                dateModified: rankingsAsOf(),
+                boards: [{ label: data.label, entries: data.entries }],
+              }),
+            ),
+          }}
+        />
+      )}
       {/* What's on screen, in the same slot the skeleton's line occupied. */}
       <p className="mb-3 mt-6 h-4 text-[11px] font-bold uppercase tracking-[0.12em] text-white/45">
         {total === 0

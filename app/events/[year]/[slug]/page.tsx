@@ -634,7 +634,20 @@ export default async function EventPage({ params }: Params) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildEventJsonLd(t, { onSale, description })),
+          __html: JSON.stringify(
+            buildEventJsonLd(t, {
+              onSale,
+              description,
+              // Top eight seeds once the pro draw is published; nothing before.
+              performers: field.published
+                ? field.players
+                    .filter((p) => p.seed != null)
+                    .sort((a, b) => (a.seed ?? 99) - (b.seed ?? 99))
+                    .slice(0, 8)
+                    .map((p) => ({ name: p.name, url: playerProfileHref(p.name) }))
+                : [],
+            }),
+          ),
         }}
       />
       <script

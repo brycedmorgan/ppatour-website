@@ -330,6 +330,21 @@ const boardInFlight = new Map<string, Promise<Board | null>>();
 const boardDay = () => new Date().toISOString().slice(0, 10);
 
 /**
+ * The date the board we are publishing was taken — for `dateModified` on the
+ * Dataset JSON-LD on /rankings and /leaderboards. The committed snapshot's
+ * `generatedAt` while it is what answers board reads (it normally is); the
+ * current UTC day otherwise, because the live board is re-read daily
+ * ({@link boardDay}) and that is the finest resolution we actually hold.
+ */
+export function rankingsAsOf(): string {
+  if (!config().token && (snapshotBoard("M") || snapshotBoard("F"))) {
+    const at = (wprSnapshot as { generatedAt?: string }).generatedAt;
+    if (at && /^\d{4}-\d{2}-\d{2}/.test(at)) return at.slice(0, 10);
+  }
+  return boardDay();
+}
+
+/**
  * The upstream fetch for one board page.
  *
  * ⚠ READ THE 9/5 HISTORY BEFORE CHANGING THIS AGAIN. It briefly wrapped the
