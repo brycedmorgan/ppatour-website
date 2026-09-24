@@ -268,6 +268,39 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   removes every partner not named, so a partial list is worse than none. Today it correctly falls back
   to the tour roster.
 - **Asked Bryan for a zip or Drive folder plus the sponsor names.** ⚠ The stop starts **Sept 28**.
+### 2026-09-24 (pt. 2) — SEO Phase 1 shipped on branch `seo/phase-1` (not pushed)
+
+- All 13 Phase 1 items from [`docs/SEO.md`](docs/SEO.md) are code on `seo/phase-1`, 8 commits, not pushed.
+  `tsc`, `eslint`, `next build` (into `.next-buildcheck`) all clean; the three new pure-module tests pass
+  (`node --experimental-strip-types scripts/{seo-text,autolink,athlete-bio}.test.ts`).
+- **Schema:** `lib/article-schema.ts` → NewsArticle on the 822 root articles, BlogPosting on /ppa-blog
+  (one builder, emitted from ArticleView). `lib/rankings-schema.ts` → Dataset + top-10 ItemList per board on
+  /rankings and /leaderboards (live board only — the demo/unavailable states publish nothing, so it does NOT
+  render locally while `wpr-snapshot.json` is past its 7-day expiry; check on production). Events: Offline
+  attendance mode, performer = top 8 seeds from a PUBLISHED draw, offers.url = the Tixr listing.
+- **Titles/descriptions:** `lib/seo-text.ts` — layout template kept under 60 chars, else " · PPA Tour" under
+  65, else the bare title; descriptions cut at 155 on a word boundary. Applied to articles, blog, athletes
+  (incl. the Europe suffix), events. Event titles carry the year ("Newport Beach Open 2027").
+- **Redirects:** every legacy destination now ends in "/" so trailingSlash adds no hop — `/athlete/x/` is one
+  308 on www. ⚠ The apex hop is a **Vercel domain-level redirect** (ppatour.com → www, confirmed via the API),
+  which runs before next.config; `APEX_LEGACY_REDIRECTS` is in place and inert until that setting is switched
+  off (comment in next.config.ts says how). Slashless legacy forms (`/player-rankings`) still take 2 hops
+  because Next's internal trailing-slash redirect has priority over custom rules.
+- **Duplicates:** `/athletes/raquel-amaro-veloso` and `/athletes/james-ling-2` (the board slugs the scrape
+  keyed on) 308 to the short slugs the Europe roster publishes; sitemap resolves through `curatedSlugFor` so
+  only the canonical is listed. Homepage h1 is now "Carvana PPA Tour — Professional Pickleball" (small,
+  visible eyebrow); the hero event name is an h2.
+- **Sitemap lastmod:** completed events carry their end date; future events and ALL athletes omit it — no
+  per-athlete date exists in any source (scrape, `player_medals`, Jackalope overrides), and the WPR snapshot
+  day would mean "rank moved", not "page changed". `/stats-wrap-vulcan-indoor-national-championships-finals/`
+  exists in `news-posts.json`; the 9/23 connection failure was transient, entry kept.
+- **Thin athletes:** `lib/athlete-bio.ts` builds a paragraph only from fields the page already renders; the
+  generic "ranked among the world's best" placeholder is dropped. Also fixed while here: Europe-roster bios
+  rendered only `p.bio[0]` — all paragraphs now reach the page (James Ling 1 → 3).
+- **Autolinking** moved into `lib/autolink.ts` (tokenizer, first mention, max 8, never in a/h1–h6/figcaption,
+  lookaround boundaries). **Google News sitemap** at `/news-sitemap.xml` (48h, newsroom only), listed in
+  robots.txt; submit in GSC once GSC access exists (Phase 0 ask). Verify after deploy: Rich Results Test on one
+  article, one blog post, /rankings/, one event; `curl -sI https://www.ppatour.com/athlete/ben-johns/` = one 308.
 
 ### 2026-09-24 — Turks lineup final: Chris Crouch + Giovanna Morelli added
 
