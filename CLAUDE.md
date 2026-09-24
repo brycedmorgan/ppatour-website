@@ -65,6 +65,29 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-24 — ppatoureurope.com: Carvana painted into the footer on iPhone; contact form's Turnstile is dead
+
+- Payton (Slack #ppa-tour-europe, 11:43): *"I'm seeing Carvana hidden at the bottom of the landing page
+  on my iPhone."* Screenshot: footer reads "CARVANA PPA TOUR" spilling off the left edge.
+- **⚠ CAUSE: `public/ppa/logos/ppa-tour-horizontal-{white,blue}.svg` WERE THE FULL CARVANA LOCKUP WITH
+  `viewBox="738 0 670 149"` HIDING THE LEFT HALF.** All 14 paths + the badge polygon were still in the
+  file. iOS Safari does not clip a lazy-loaded `<img>` SVG to its viewBox, so the footer (lazy) painted
+  the whole lockup while the header (`priority`, eager) happened to crop. Fix: deleted the Carvana `<g>`
+  (7 paths + polygon); the seven PPA TOUR paths and the viewBox are unchanged. 13.9 KB → 6.9 KB each.
+  **Rule: never hide a sponsor with a viewBox crop — delete the paths.** Commit `8fd126a`.
+- **⚠ FOUND WHILE VERIFYING, NOT FIXED — THE EUROPE CONTACT FORM CANNOT BE SUBMITTED.** The Turnstile
+  widget on ppatoureurope.com fails with **error 110200 (hostname not allowed)** in desktop Chrome too;
+  it is the grey "Unable to connect to website" box in Payton's screenshot, not her signal. The
+  Turnstile widget's hostname list is `ppatour.com` + the Vercel preview domain
+  (`docs/FORMS.md`); ppatoureurope.com was never added when it became the canonical Europe host on
+  9/22. `InquiryForm` requires a token for `formType="europe"`, so "Send Message" always fails. **Fix
+  is in the Cloudflare dashboard → Turnstile → the widget → Hostnames → add `ppatoureurope.com`.** No
+  Cloudflare API token on this machine. The fan-guide signup is Turnstile-exempt and works.
+- main was 11 ahead (SEO Phase 1 + this) and origin/main had 3 new commits from other sessions (Vegas
+  sponsor wall, Coyote post, four website requests). Rebased onto origin/main; both CLAUDE.md conflicts
+  were the two sessions' log entries and both are kept. Pushed — **SEO Phase 1 is on production now.**
+- Next: add the hostname in Cloudflare; ask Payton to re-check the footer on her phone after deploy.
+
 ### 2026-09-24 — Las Vegas gets its own sponsor wall; the tour title partner nearly fell off the page
 
 - Wesley, forwarding the event team's pack: *"Here is a link to download all of the logos that are
