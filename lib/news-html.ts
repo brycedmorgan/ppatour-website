@@ -12,16 +12,21 @@
  *      unstyled WP HTML renders as one undifferentiated wall. Classes are
  *      injected per tag to match the hand-built article layout.
  *   3. Link athletes — the same "Players in This Story" behavior the native
- *      articles get, but done on text nodes only.
+ *      articles get, but done on text nodes only. This is a SECOND PASS over
+ *      the sanitized output, in `lib/autolink.ts`: first plain-text mention
+ *      per player, at most {@link DEFAULT_MAX_LINKS} per article, never inside
+ *      an <a>, a heading or a figcaption, with letter/number lookaround
+ *      boundaries so "Ben Johnson" is never Ben Johns (9/24; it used to run
+ *      inline here with no boundaries, no cap and no heading skip).
  *
  * ⚠ Why not reuse `linkifyPlayers` from the article page: it does
  * `text.includes(name)` then splits the whole string. Against HTML that
  * matches inside tags and attributes — an alt text or URL containing a
  * player's name would get an <a> spliced into the middle of a tag and corrupt
- * the markup. Here linkification only ever touches text runs, and never
- * inside an existing <a>.
+ * the markup. The autolinker only ever touches text runs.
  */
 
+import { autolinkHtml, DEFAULT_MAX_LINKS } from "@/lib/autolink";
 import { isDeadAsset, resolveAsset, resolveLink } from "@/lib/wp-media";
 import { athleteProfileHref } from "@/lib/published-athletes";
 
@@ -119,8 +124,6 @@ const escapeAttr = (s: string) =>
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 
-const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
 function isSafeUrl(raw: string): boolean {
   // Strip whitespace and control chars first -- they are how `java\nscript:`
   // and tab/newline-obfuscated payloads slip past a naive prefix check.
@@ -184,27 +187,26 @@ export type LinkablePlayer = { name: string; slug: string };
  */
 export function renderPostHtml(html: string, players: LinkablePlayer[] = []): string {
   if (!html) return "";
-
-  // Longest name first so "Anna Leigh Waters" wins over a nested "Leigh Waters".
-  const linkable = [...players].sort((a, b) => b.name.length - a.name.length);
-  const nameRe = linkable.length
-    ? new RegExp(`(${linkable.map((p) => escapeRe(p.name)).join("|")})`, "g")
-    : null;
-  const slugOf = new Map(linkable.map((p) => [p.name, p.slug]));
   /**
-   * ⚠ FIRST MENTION ONLY, per player.
+   * ⚠ FIRST MENTION ONLY, per player, and at most eight per article.
    *
-   * The rail is now driven by names detected in the copy rather than by
-   * WordPress tags alone, so a Championship Sunday recap can carry thirty-plus
-   * linkable players — and linking every occurrence turned a stats wrap into a
-   * wall of blue. One link the first time a player is named is the newsroom
-   * convention and it is what the reader needs; the rail carries the rest.
+   * The rail is driven by names detected in the copy rather than by WordPress
+   * tags alone, so a Championship Sunday recap can carry thirty-plus linkable
+   * players — and linking every occurrence turned a stats wrap into a wall of
+   * blue. One link the first time a player is named is the newsroom convention
+   * and it is what the reader needs; the rail carries the rest.
    */
-  const linked = new Set<string>();
+  return autolinkHtml(sanitizeHtml(html), players, {
+    max: DEFAULT_MAX_LINKS,
+    hrefFor: (slug) => `/athletes/${slug}`,
+    className: CLASSES.a,
+  });
+}
 
+/** The sanitize + style pass, without athlete links. */
+function sanitizeHtml(html: string): string {
   const out: string[] = [];
   let dropDepth = 0; // inside a DROP_TREE element
-  let anchorDepth = 0; // inside an <a> — never nest another link
   const dropStack: string[] = [];
   /**
    * Open tags we emitted nothing for (a non-allowlisted iframe host, a dead
@@ -216,16 +218,7 @@ export function renderPostHtml(html: string, players: LinkablePlayer[] = []): st
   for (const tok of tokenize(html)) {
     if (tok.t === "text") {
       if (dropDepth > 0) continue;
-      let text = tok.raw;
-      if (nameRe && anchorDepth === 0 && text.trim()) {
-        text = text.replace(nameRe, (match) => {
-          const slug = slugOf.get(match);
-          if (!slug || linked.has(slug)) return match;
-          linked.add(slug);
-          return `<a href="/athletes/${slug}" class="${CLASSES.a}">${match}</a>`;
-        });
-      }
-      out.push(text);
+      out.push(tok.raw);
       continue;
     }
 
@@ -249,7 +242,6 @@ export function renderPostHtml(html: string, players: LinkablePlayer[] = []): st
         orphanedCloses[name] -= 1;
         continue; // its open tag was dropped — swallow the close too
       }
-      if (name === "a") anchorDepth = Math.max(0, anchorDepth - 1);
       out.push(`</${name}>`);
       continue;
     }
@@ -261,8 +253,6 @@ export function renderPostHtml(html: string, players: LinkablePlayer[] = []): st
       if (!selfClose) orphanedCloses[name] = (orphanedCloses[name] ?? 0) + 1;
       continue;
     }
-
-    if (name === "a" && !selfClose) anchorDepth += 1;
 
     const parsed = parseAttrs(attrs);
     const keep = ATTRS[name];

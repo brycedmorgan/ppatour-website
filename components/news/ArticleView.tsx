@@ -4,6 +4,7 @@ import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { withAliasNames } from "@/lib/athlete-aliases";
 
 import { buildArticleJsonLd } from "@/lib/article-schema";
+import { DEFAULT_MAX_LINKS } from "@/lib/autolink";
 import { newsPlayersFor, relatedNews, type NewsDetail, type NewsPlayer } from "@/lib/news";
 import { renderPostHtml, readingMinutes } from "@/lib/news-html";
 import { playerInitials } from "@/lib/player-photos";
@@ -40,12 +41,22 @@ import { withUtm } from "@/lib/utm";
  * calls out by name. It mattered less over 40 names and matters more over 200,
  * and the detector has always been strict here while this was not.
  */
+/**
+ * Per-article link budget for the native path — the same first-mention,
+ * max-eight rule the HTML path gets from lib/autolink.ts, carried across the
+ * dek and every body paragraph so a name linked in the dek is plain in the
+ * body.
+ */
+type LinkBudget = { linked: Set<string>; count: number };
+const newLinkBudget = (): LinkBudget => ({ linked: new Set(), count: 0 });
+
 function linkifyPlayers(
   text: string,
   players: { name: string; slug: string }[],
+  budget: LinkBudget,
 ) {
   const inText = players.filter((p) => text.includes(p.name));
-  if (inText.length === 0) return text;
+  if (inText.length === 0 || budget.count >= DEFAULT_MAX_LINKS) return text;
   const pattern = new RegExp(
     `(?<![\\p{L}\\p{N}])(${inText
       .map((p) => p.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
@@ -54,6 +65,13 @@ function linkifyPlayers(
   );
   return text.split(pattern).map((part, i) => {
     const athlete = inText.find((p) => p.name === part);
+    if (athlete && (budget.linked.has(athlete.slug) || budget.count >= DEFAULT_MAX_LINKS)) {
+      return part;
+    }
+    if (athlete) {
+      budget.linked.add(athlete.slug);
+      budget.count += 1;
+    }
     return athlete ? (
       <Link
         key={i}
@@ -168,6 +186,8 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
   const minutes = detail.source === "wordpress" ? readingMinutes(detail.post.bodyHtml) : null;
   const tags = detail.source === "wordpress" ? detail.post.tags : [];
   const isBlog = card.postType === "ppa-blog";
+  // One budget for the whole native article (dek + body), see linkifyPlayers.
+  const linkBudget = newLinkBudget();
 
   // The eyebrow row + headline + standfirst. Shared by the two hero layouts:
   // overlaid on a photo, or set on a plain band beneath a designed graphic.
@@ -287,7 +307,7 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
             {card.dek && (
               <p className="text-lg leading-relaxed text-ppa-navy/80">
                 {detail.source === "native"
-                  ? linkifyPlayers(card.dek, playersForLinkify)
+                  ? linkifyPlayers(card.dek, playersForLinkify, linkBudget)
                   : card.dek}
               </p>
             )}
@@ -307,7 +327,7 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
               <div className="mt-7 space-y-5">
                 {detail.article.body.map((p, i) => (
                   <p key={i} className="text-[15px] leading-[1.75] text-ppa-navy/75">
-                    {linkifyPlayers(p, playersForLinkify)}
+                    {linkifyPlayers(p, playersForLinkify, linkBudget)}
                   </p>
                 ))}
               </div>
