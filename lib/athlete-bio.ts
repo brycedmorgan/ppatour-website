@@ -62,6 +62,18 @@ function prettyDivision(d: string): string {
     .toLowerCase();
 }
 
+/** "USA" → "the United States"; countries whose English name takes an article. */
+const COUNTRY_PHRASE: Record<string, string> = {
+  USA: "the United States",
+  "United States": "the United States",
+  "United Kingdom": "the United Kingdom",
+  Netherlands: "the Netherlands",
+  Philippines: "the Philippines",
+  "Czech Republic": "the Czech Republic",
+  "Dominican Republic": "the Dominican Republic",
+};
+const countryPhrase = (c: string) => COUNTRY_PHRASE[c.trim()] ?? c.trim();
+
 function handedness(plays: string | null | undefined): string | null {
   if (!plays) return null;
   const p = plays.toLowerCase();
@@ -70,18 +82,25 @@ function handedness(plays: string | null | undefined): string | null {
   return null;
 }
 
-export function generatedBio(f: BioFacts): string[] {
+/**
+ * @param opts.skipIdentity — leave out the "X is a professional pickleball
+ *   player…" sentence. Set when a sourced bio already opens the section, so
+ *   the backfill adds facts under it instead of re-introducing the person.
+ */
+export function generatedBio(f: BioFacts, opts: { skipIdentity?: boolean } = {}): string[] {
   const name = f.name.trim();
   if (!name) return [];
   const first = name.split(/\s+/)[0];
   const divisions = (f.divisions ?? []).map(prettyDivision).filter(Boolean);
 
   const opening: string[] = [];
-  opening.push(
-    `${name} is a professional pickleball player${f.country ? ` from ${f.country}` : ""} on the Carvana PPA Tour${
-      divisions.length ? `, competing in ${listJoin(divisions)}` : ""
-    }.`,
-  );
+  if (!opts.skipIdentity) {
+    opening.push(
+      `${name} is a professional pickleball player${f.country ? ` from ${countryPhrase(f.country)}` : ""} on the Carvana PPA Tour${
+        divisions.length ? `, competing in ${listJoin(divisions)}` : ""
+      }.`,
+    );
+  }
   if (f.rank && f.rank > 0) {
     opening.push(
       `${first} is currently No. ${f.rank} in the ${f.board ? `${f.board} ` : ""}World Pickleball Rankings${

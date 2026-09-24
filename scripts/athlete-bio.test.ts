@@ -62,6 +62,16 @@ assert.equal(generatedBio({ name: "A B", plays: "Ambidextrous" }).length, 1);
 const one = generatedBio({ name: "Jesus Campos", medals: { gold: 1, silver: 0, semifinals: 1 } });
 assert.equal(one[1], "On tour, Jesus has won 1 PPA Tour title and made 1 semifinal.");
 
+// Country names that take an article read naturally.
+assert.ok(generatedBio({ name: "Danny Phillips", country: "USA" })[0].includes("from the United States on"));
+assert.ok(generatedBio({ name: "James Ling", country: "United Kingdom" })[0].includes("from the United Kingdom on"));
+assert.ok(generatedBio({ name: "Boris Paque", country: "Belgium" })[0].includes("from Belgium on"));
+
+// skipIdentity: no intro sentence; facts only. Nothing at all when there are no facts.
+const under = generatedBio({ name: "Boris Paque", country: "Belgium", rank: 143, board: "Men's" }, { skipIdentity: true });
+assert.deepEqual(under, ["Boris is currently No. 143 in the Men's World Pickleball Rankings."]);
+assert.deepEqual(generatedBio({ name: "Boris Paque", country: "Belgium" }, { skipIdentity: true }), []);
+
 // The generic placeholder is recognisable so the page can drop it.
 assert.ok(genericBio("X Y").startsWith("X Y is a professional pickleball player ranked"));
 

@@ -119,9 +119,15 @@ async function loadAthlete(slug: string) {
   const divisions = published?.divisions.length
     ? published.divisions
     : (curated?.divisions ?? []);
+  /**
+   * ⚠ SPLIT ON BLANK LINES. `Athlete.bio` is one string, and the Europe roster
+   * joins Catie's paragraphs with "\n\n" (lib/athletes.ts) so all of them reach
+   * the page — until 9/24 only `p.bio[0]` did, which is how James Ling's page
+   * showed one of his three paragraphs and read as thin.
+   */
   const bio: string[] = published?.bio.length
     ? published.bio
-    : [curated?.bio || genericBio(name)];
+    : (curated?.bio || genericBio(name)).split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
 
   return {
     slug,
@@ -650,7 +656,8 @@ export async function AthleteProfile({
   const isPlaceholder = sourcedBio.length === 1 && sourcedBio[0] === genericBio(a.name);
   const backfill =
     isPlaceholder || sourcedText.length < THIN_BIO_CHARS
-      ? generatedBio({
+      ? generatedBio(
+          {
           name: a.name,
           country: a.country,
           divisions: a.divisions,
@@ -669,7 +676,10 @@ export async function AthleteProfile({
               }
             : null,
           paddle: SHOW_EQUIPMENT ? effPaddle : null,
-        })
+          },
+          // A real (if short) bio already introduces the pro — add facts under it.
+          { skipIdentity: !isPlaceholder },
+        )
       : [];
   const profileParagraphs = [...(isPlaceholder ? [] : sourcedBio), ...backfill];
 
