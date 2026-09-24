@@ -31,7 +31,7 @@ export const trip = {
   intro:
     "Combining luxury travel with world-class pickleball, Pickleball Vacations delivers unforgettable escapes to premium destinations alongside PPA & MLP professionals, top coaches, and fellow pickleball enthusiasts. From beachfront resorts and all-inclusive amenities to daily clinics, organized play, social events, and exclusive experiences, every trip is built to create the perfect balance of competition, connection, and relaxation.",
   inauguralNote:
-    "This December, Pickleball Vacations heads to the adults-only Club Med Turkoise — set along world-famous Grace Bay in Providenciales, Turks & Caicos. Four nights of sun, sand, and pickleball, led by PPA professional Hayden Patriquin. More pros to be announced soon.",
+    "This December, Pickleball Vacations heads to the adults-only Club Med Turkoise — set along world-famous Grace Bay in Providenciales, Turks & Caicos. Four nights of sun, sand, and pickleball, led by PPA professional Hayden Patriquin alongside Aanik Lohani, Chris Crouch, and Giovanna Morelli.",
   lineup: "Led by Hayden Patriquin · Adults-only (18+)",
 };
 
@@ -154,7 +154,7 @@ export const excursions = [
  */
 export const prosAnnounced = true;
 
-export const prosMoreComing = true;
+export const prosMoreComing = false;
 
 export const pros: {
   name: string;
@@ -176,6 +176,17 @@ export const pros: {
     role: "PPA Professional",
     image: "/vacations/pros/aanik-lohani-ppa.jpg",
     slug: "aanik-lohani",
+  },
+  {
+    name: "Chris Crouch",
+    role: "PPA Professional",
+    image: "/vacations/pros/chris-crouch.jpg",
+    slug: "christopher-crouch",
+  },
+  {
+    name: "Giovanna Morelli",
+    role: "PPA Professional",
+    image: "/vacations/pros/giovanna-morelli.jpg",
   },
 ];
 

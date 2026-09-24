@@ -65,6 +65,15 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-24 — Turks lineup final: Chris Crouch + Giovanna Morelli added
+
+- Lainey (Slack, 7:59 AM): add Chris Crouch & Giovanna Morelli as pros on Turks — "closes us out
+  with 4 pros." Added both to `lib/vacations/content.ts` pros (photos already in
+  `public/vacations/pros/` from Punta Cana). `prosMoreComing` → false; intro note and the trip-card
+  `lineup` in `lib/vacations/trips.ts` now name all four (Hayden, Aanik, Chris, Giovanna).
+- Chris links to `/athlete/christopher-crouch`; Giovanna has no athlete profile on the site, so no slug.
+- Cancún card still says "more pros announced soon" — untouched, Lainey hasn't sent its lineup.
+
 ### 2026-09-23 (pt. 2) — SEO plan + roadmap for ppatour.com (and PBC, in ziff)
 
 - Bryce: "Go dig deeper and build a plan and roadmap for both sites." Full crawl of all 1,135

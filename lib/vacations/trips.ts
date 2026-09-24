@@ -50,7 +50,7 @@ export const tripsCalendar: TripEntry[] = [
     startIso: "2026-12-08",
     endIso: "2026-12-12",
     image: "/vacations/clubmed/turkoise-aerial.jpg",
-    lineup: "Led by Hayden Patriquin · more pros announced soon",
+    lineup: "Hayden Patriquin, Aanik Lohani, Chris Crouch & Giovanna Morelli",
     status: "open",
     href: "/vacations",
   },
