@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-22T17:25:47Z",
+  "updated_at": "2026-09-23T17:33:57Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -6343,6 +6343,130 @@
       "sale_state": {
         "from": "OPEN",
         "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-09-23T17:33:57Z",
+      "type": "ticket_added",
+      "event_id": "195857",
+      "event": "PPA Las Vegas",
+      "ticket": "On Court with PPA Pros",
+      "base_price": 75,
+      "all_in_price": 86.44
+    },
+    {
+      "at": "2026-09-23T17:33:57Z",
+      "type": "price_change",
+      "event_id": "197214",
+      "event": "PPA Las Vegas Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "base_price": {
+        "from": 350,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 383.56,
+        "to": 383.56
+      }
+    },
+    {
+      "at": "2026-09-23T17:33:57Z",
+      "type": "availability_change",
+      "event_id": "197214",
+      "event": "PPA Las Vegas Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-09-23T17:33:57Z",
+      "type": "ticket_added",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "On Court with Catherine Parenteau",
+      "base_price": 175,
+      "all_in_price": 194.48
+    },
+    {
+      "at": "2026-09-23T17:33:57Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday Courtside Bleacher",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 113.69,
+        "to": 135.35
+      }
+    },
+    {
+      "at": "2026-09-23T17:33:57Z",
+      "type": "ticket_added",
+      "event_id": "203020",
+      "event": "PPA Daytona Beach",
+      "ticket": "On Court with Catherine Parenteau",
+      "base_price": 175,
+      "all_in_price": 194.48
+    },
+    {
+      "at": "2026-09-23T17:33:57Z",
+      "type": "price_change",
+      "event_id": "204335",
+      "event": "PPA Palm Springs Sunday - Championships",
+      "ticket": "Sunday Courtside+",
+      "base_price": {
+        "from": 200,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 221.49,
+        "to": 178.27
+      }
+    },
+    {
+      "at": "2026-09-23T17:33:57Z",
+      "type": "availability_change",
+      "event_id": "204335",
+      "event": "PPA Palm Springs Sunday - Championships",
+      "ticket": "Sunday Courtside+",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-09-23T17:33:57Z",
+      "type": "price_change",
+      "event_id": "206222",
+      "event": "PPA Cape Coral",
+      "ticket": "Friday Courtside",
+      "base_price": {
+        "from": 40,
+        "to": 50
+      },
+      "all_in_price": {
+        "from": 46.56,
+        "to": 57.36
+      }
+    },
+    {
+      "at": "2026-09-23T17:33:57Z",
+      "type": "price_change",
+      "event_id": "206222",
+      "event": "PPA Cape Coral",
+      "ticket": "Saturday Courtside",
+      "base_price": {
+        "from": 60,
+        "to": 80
+      },
+      "all_in_price": {
+        "from": 70.23,
+        "to": 91.83
       }
     }
   ]

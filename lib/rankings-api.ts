@@ -3,7 +3,7 @@ import wprSnapshot from "@/lib/data/wpr-snapshot.json";
 import { RANKINGS_CACHE_TAG } from "@/lib/cache-tags";
 import { type Division, type DivisionKey, divisionRankings } from "@/lib/home-content";
 import { EUROPE_RANK_SLUGS } from "@/lib/europe-roster";
-import { pbGetJson } from "@/lib/pb-fetch";
+import { pbCachedJson } from "@/lib/pb-cache";
 import { CURATED_TO_CANONICAL, getPublishedAthlete } from "@/lib/published-athletes";
 import {
   isFiltering,
@@ -34,7 +34,7 @@ import {
  * CACHING (7/31 — we were being throttled on this endpoint). Every consumer in
  * this file reads through {@link boardPage}, which layers three things:
  *
- *   1. `pbGetJson` — retry with backoff, so a 429 is absorbed instead of
+ *   1. `pbCachedJson` — retry with backoff, so a 429 is absorbed instead of
  *      collapsing the board to "unavailable" on the first throttle.
  *   2. A durable 24h cache of the RESULT, tagged {@link RANKINGS_CACHE_TAG} —
  *      across requests, builds and deploys. It caches the assembled value
@@ -43,7 +43,7 @@ import {
  *      makes a rate limit recoverable instead of self-sustaining.
  *   3. A module-scope memo + in-flight map — collapses the parallel page
  *      renders of one build (or one warm instance) into a single upstream call,
- *      which the Data Cache alone can't do while it's still cold.
+ *      which the durable cache alone can't do while it's still cold.
  *
  * And critically, ONE page size for all of them: this file used to ask for 25,
  * 50, 100 and 150 rows of the same board, so each variant was its own cache
@@ -80,8 +80,7 @@ const REVALIDATE_SECONDS = 60 * 60 * 24;
 const BOARD_PAGE_SIZE = 250;
 /** Runaway guard when paging the full board. */
 const MAX_BOARD_PAGES = 10;
-const TIMEOUT_MS = 8000;
-/** In-process memo lifetime. The Data Cache behind it is the durable layer. */
+/** In-process memo lifetime. The table behind it is the durable layer. */
 const BOARD_TTL_MS = 6 * 60 * 60 * 1000;
 
 type GenderQuery = { key: string; label: string; short: string; gender: "M" | "F" };
@@ -331,37 +330,38 @@ const boardInFlight = new Map<string, Promise<Board | null>>();
 const boardDay = () => new Date().toISOString().slice(0, 10);
 
 /**
- * Retries for a board page. Deliberately lower than {@link pbGetJson}'s default
- * of 4: {@link boardAll} walks up to {@link MAX_BOARD_PAGES} pages, so a cold
- * board against a throttled API multiplies by every page — at the default that
- * is up to fifty upstream calls from a single render, which is a way of
- * ATTACKING a rate limit rather than backing off from it.
- */
-const BOARD_RETRIES = 2;
-
-/**
  * The upstream fetch for one board page.
  *
- * ⚠ THE DURABLE LAYER IS `pbGetJson`'s OWN Next Data Cache ENTRY, AND IT STAYS
- * THAT WAY. On 9/5 this briefly wrapped the call in `unstable_cache` instead, to
- * fix a real but narrower problem: `pbGetJson` retries with `cache: "no-store"`,
- * which does not WRITE, so a page that only succeeded on a RETRY cached nothing.
- * Caching the assembled result rather than the fetch would have persisted it.
+ * ⚠ READ THE 9/5 HISTORY BEFORE CHANGING THIS AGAIN. It briefly wrapped the
+ * call in `unstable_cache`, to fix a real problem: `pbGetJson` retried with
+ * `cache: "no-store"`, which does not WRITE, so a page that only succeeded on a
+ * RETRY cached nothing. That was reverted the same day, because Next's own docs
+ * scope `unstable_cache` to non-`fetch` work — wrapping a `fetch` in it meant
+ * the inner call ran `no-store` on every attempt and the only thing between us
+ * and upstream was that outer layer persisting. It did not visibly do so on
+ * Vercel: `partner_rankings` hit ~1.7K calls in fifteen minutes, the shape of
+ * "every render re-pages the whole board".
  *
- * That was reverted the same day, and the reason is worth keeping. Next's own
- * docs scope `unstable_cache` to non-`fetch` work — database queries and async
- * functions — and wrapping a `fetch` in it meant the inner call ran `no-store`
- * on every attempt, so the ONLY thing standing between us and an upstream
- * request was that outer layer persisting. It did not visibly do so on Vercel:
- * `partner_rankings` went to ~1.7K calls in fifteen minutes, which is the shape
- * of "every render re-pages the whole board" — roughly ten calls per athlete
- * page, news article, /athletes and /europe render, instead of ten per DAY.
+ * ⚠ `pbCachedJson` IS NOT THAT MECHANISM, WHICH IS WHY IT IS SAFE HERE (9/23).
+ * It does not wrap a `fetch` in a Next cache — it performs the call itself and
+ * writes the JSON to a Postgres table we own, keyed on the URL, already proven
+ * on the events, ticker, scores, brackets and event-field paths. Two things
+ * follow. It fixes the retry-does-not-persist problem the reverted attempt was
+ * aiming at, because only a RESOLVED value is ever written and it is written
+ * whichever attempt produced it. And it survives a deployment, which the Next
+ * Data Cache does not — see the header of lib/pb-cache.ts. That mattered here
+ * more than anywhere: the snapshot in lib/data/wpr-snapshot.json normally
+ * answers every board read, so this path only runs when the snapshot is missing
+ * or expired, i.e. exactly the 9/15 state where /athletes/[slug] made 27K
+ * partner_rankings calls in six hours. Every deploy used to re-open that hole.
  *
- * The fetch-level Data Cache is the mechanism that demonstrably held this
- * endpoint for months. Do not replace it with a cleverer one during an
- * incident. The retry-does-not-persist problem is real and still open, but it
- * only bites while we are ALREADY being throttled, and it is a far smaller
- * problem than the one trading it away created.
+ * ⚠ RETRIES ARE NOW pbCachedJson's FIXED 3, NOT THE 2 THIS USED TO PASS. The old
+ * number was deliberately under `pbGetJson`'s default of 4 because
+ * {@link boardAll} walks up to {@link MAX_BOARD_PAGES} pages and a cold board
+ * against a throttled API multiplies by every page. That concern has not gone
+ * away; what has changed is how rarely a cold board happens now. If this path
+ * is ever hot again, give `pbCachedJson` a retries argument rather than
+ * reverting the cache.
  */
 async function fetchBoardPage(gender: "M" | "F", page: number): Promise<Board | null> {
   const { token, baseUrl } = config();
@@ -379,15 +379,11 @@ async function fetchBoardPage(gender: "M" | "F", page: number): Promise<Board | 
     rank: boardDay(),
   });
 
-  const json = (await pbGetJson(
+  const json = (await pbCachedJson(
     `${baseUrl}/v2/data/partner_rankings?${params}`,
-    { "PB-API-TOKEN": token },
-    {
-      timeoutMs: TIMEOUT_MS,
-      retries: BOARD_RETRIES,
-      revalidate: REVALIDATE_SECONDS,
-      tags: [RANKINGS_CACHE_TAG],
-    },
+    REVALIDATE_SECONDS,
+    RANKINGS_CACHE_TAG,
+    token,
   )) as { total_records?: number; results?: { player_rankings?: ApiPlayer[] } } | null;
   if (!json) return null;
 

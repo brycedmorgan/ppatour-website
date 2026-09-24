@@ -1,9 +1,9 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-09-22T17:25:47Z",
+  "generated_at": "2026-09-23T17:33:57Z",
   "event_count": 39,
-  "ticket_type_count": 644,
+  "ticket_type_count": 647,
   "series_breakdown": {
     "PPA Challenger Series": 1,
     "PPA Tour": 37,
@@ -117,6 +117,13 @@
           "sale_state": "OPEN",
           "base_price": 15,
           "all_in_price": 19.55
+        },
+        {
+          "name": "On Court with PPA Pros",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 75,
+          "all_in_price": 86.44
         },
         {
           "name": "Pickleball Vacations",
@@ -640,8 +647,8 @@
         {
           "name": "Sunday VIP",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 350,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 383.56
         }
       ],
@@ -738,6 +745,13 @@
           "sale_state": "OPEN",
           "base_price": 15,
           "all_in_price": 19.55
+        },
+        {
+          "name": "On Court with Catherine Parenteau",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 175,
+          "all_in_price": 194.48
         },
         {
           "name": "Pickleball Vacations",
@@ -2649,14 +2663,14 @@
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 135.35
+          "all_in_price": 113.69
         },
         {
           "name": "Sunday Courtside Bleacher",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 113.69
+          "all_in_price": 135.35
         },
         {
           "name": "Sunday Courtside Chair",
@@ -2669,15 +2683,15 @@
           "name": "Sunday VIP",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 400,
-          "all_in_price": 438.58
+          "base_price": 350,
+          "all_in_price": 384.43
         },
         {
           "name": "Sunday VIP",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 384.43
+          "sale_state": "OPEN",
+          "base_price": 400,
+          "all_in_price": 438.58
         },
         {
           "name": "Sunday VIP",
@@ -2738,6 +2752,13 @@
           "sale_state": "OPEN",
           "base_price": 15,
           "all_in_price": 19.55
+        },
+        {
+          "name": "On Court with Catherine Parenteau",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 175,
+          "all_in_price": 194.48
         },
         {
           "name": "Pickleball Vacations",
@@ -4219,15 +4240,15 @@
           "name": "Sunday Courtside+",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 160,
-          "all_in_price": 178.27
+          "base_price": 200,
+          "all_in_price": 221.49
         },
         {
           "name": "Sunday Courtside+",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 200,
-          "all_in_price": 221.49
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 178.27
         },
         {
           "name": "Sunday VIP",
@@ -4593,8 +4614,8 @@
           "name": "Friday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
+          "base_price": 50,
+          "all_in_price": 57.36
         },
         {
           "name": "Friday Grounds Pass",
@@ -4684,8 +4705,8 @@
           "name": "Saturday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 60,
-          "all_in_price": 70.23
+          "base_price": 80,
+          "all_in_price": 91.83
         },
         {
           "name": "Saturday Grounds Pass",

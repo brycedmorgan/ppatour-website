@@ -353,4 +353,274 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
 <p>The Junior PPA Tour has experienced significant growth since its inception, with over 1,200 junior pickleball players registered in the program. The introduction of the Junior PPA Select Team represents a strategic expansion of the tour&#8217;s commitment to fostering young talent and elevating the sport&#8217;s profile nationally and internationally.</p>
 `.trim(),
   },
+  {
+    // Jim Ramsey's Championship Sunday stats wrap for the Veolia Arizona Open,
+    // supplied 9/23. Third post in this series written after the migration, and
+    // the 38th "Championship Sunday Standout Stats" in the archive.
+    //
+    // ⚠ EVERY RESULT WAS CHECKED AGAINST THE LIVE FEED BEFORE PUBLISHING AND
+    // ALL FIVE MATCH EXACTLY — winners, losers, seeds and every game score,
+    // including the (15) seed on Acevedo/Funemizu and the 15-13 third game. The
+    // changeover line checks out too: the five finals ran 2+3+3+3+2 = 13 games,
+    // which is the denominator it quotes.
+    //
+    // ⚠ THE DATELINE WAS CORRECTED FROM "September 22" TO "September 20", AND
+    // IT IS THE ONE SUBSTANTIVE EDIT TO THE SUPPLIED COPY. Championship Sunday
+    // at this stop was Sunday, Sep 20: the curated record ends the event
+    // 2026-09-20, Dave Fleming's own preview says "Sept. 14-20", and the feed
+    // has the men's doubles final on Sun Sep 20 — the other four roll to "Mon,
+    // Sep 21" only because a 2 PM Mesa first serve pushes them past UTC
+    // midnight, the same rollover `endOfEvent` was fixed for on 9/20. Sep 22 is
+    // a Tuesday, i.e. the day the document was written. Across all 37 archived
+    // posts in this series the dateline is the SUNDAY and never the writing
+    // date (May 10, May 3, Apr 19, Mar 29, Mar 15, Mar 8 — every one a Sunday),
+    // and the headline says "Championship Sunday". One edit to revert.
+    //
+    // ⚠ ONE NAME FIXED: "Funemuzu" -> "Funemizu", in the bullet about his first
+    // domestic medal. The supplied document spells it Funemizu twice and
+    // Funemuzu once, and the feed and published-athletes.json both say **Yuta
+    // Funemizu**, so it is an internal typo rather than a claim. Name spellings
+    // are checked against the roster; punctuation and house style are left as
+    // filed (the stray comma in "Waters 67, Johns, 80" is theirs and stays).
+    //
+    // ⚠ "Chris Haworth" and "Nico Acevedo" are deliberately left as written.
+    // Haworth is published as Christopher Haworth and resolves through
+    // ATHLETE_NAME_ALIASES, so the rail entry and the inline link both work.
+    // Acevedo is `nicolas-acevedo` on the WPR board with no profile on this
+    // site, so there is nothing to link and nothing to alias — deriving one is
+    // the "Zoey Wang" failure.
+    slug: "championship-sunday-standout-stats-from-the-veolia-arizona-open",
+    wpId: 900003,
+    status: "published",
+    source: "wordpress",
+    category: "Recap",
+    series: "stats-wrap",
+    categoryResolvedBy: "series",
+    title: "Championship Sunday Standout Stats from the Veolia Arizona Open",
+    dek: "Mesa, Arizona. September 20, 2026. Anna Leigh Waters doubles up in singles and mixed, Chris Haworth lands his first title of the season, and Rachel Rohrabacher plays two finals on Championship Sunday.",
+    author: "Jim Ramsey",
+    publishedAt: "2026-09-23T10:00:00",
+    publishedAtGmt: "2026-09-23T15:00:00",
+    modifiedAt: "2026-09-23T15:00:00",
+    image: {
+      // ⚠ NOT THE EVENT'S OWN FEATURED SHOT AND NOT THE STORYLINES FRAME.
+      // `featured-mesa-cup.jpg` is pinned as this event's hero, card and OG
+      // image in HERO_OVERRIDE_BY_EVENT_SLUG and `crowd-04.jpg` carries Dave
+      // Fleming's 9/9 preview, so either would print the same picture twice
+      // wherever two of those cards share a page.
+      //
+      // ⚠ AND THE CROWD FRAMES WERE RULED OUT BY LOOKING AT THEM, NOT BY
+      // FILENAME. crowd-01..05 were all shot at the CARVANA MESA CUP in
+      // February and carry "MESA ARIZONA CUP" readable on the court-side
+      // banner — a different event, four months earlier, at the same venue. On
+      // an article about the Arizona Open that is a caption a reader can catch.
+      // This aerial is the grounds themselves at dusk with no event-specific
+      // signage, which is true of this stop and of every other played here.
+      url: "/ppa/venues/aag-mesa/aerial-02.jpg",
+      // ⚠ NO NAMES. House style on this series is a generic description, and
+      // nobody in this frame is identifiable or identified.
+      alt: "Aerial view of the tournament courts at Arizona Athletic Grounds in Mesa at sunset.",
+      width: 1800,
+      height: 1200,
+    },
+    // Left empty deliberately: `detectAthleteMentions` reads the body and
+    // resolves the roster itself, which is how every post in this series works.
+    players: [],
+    playerNames: [],
+    wpEvent: { slug: "2026-veolia-arizona-open", name: "2026 Veolia Arizona Open" },
+    tags: [],
+    tagsRaw: [],
+    wpCategories: ["2026-veolia-arizona-open", "stats-wrap"],
+    embeds: [],
+    inlineImages: [],
+    // Never existed on WordPress, so its canonical home is this site and the
+    // URL is the one it will be served at here.
+    legacyUrl: "https://www.ppatour.com/championship-sunday-standout-stats-from-the-veolia-arizona-open/",
+    seo: {
+      title: "Veolia Arizona Open: Championship Sunday Stats | PPA Tour",
+      description:
+        "Championship Sunday stats from the Veolia Arizona Open in Mesa: Anna Leigh Waters wins singles and mixed, Chris Haworth takes men's singles, and Rohrabacher and Todd win women's doubles.",
+      canonical:
+        "https://www.ppatour.com/championship-sunday-standout-stats-from-the-veolia-arizona-open/",
+    },
+    bodyHtml: `
+<p><strong>Mesa, Arizona.</strong></p>
+
+
+
+<p><strong>September 20, 2026.</strong></p>
+
+
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+
+
+<h4 class="wp-block-heading"><strong>MIXED DOUBLES FINAL:&nbsp; (1) Anna Leigh Waters and Ben Johns def. (2) Rachel Rohrabacher and Christian Alshon, 11-3, 11-6.</strong>&nbsp;</h4>
+
+
+
+<ul class="wp-block-list">
+<li>Waters and Johns are 65-3 in finals together. (Career titles: Waters 67, Johns, 80)</li>
+
+
+
+<li>Waters and Johns won a silver here in February, losing to Bright and Patriquin.</li>
+
+
+
+<li>Waters and Johns won the last eight points of Game Two to finish the match.</li>
+
+
+
+<li>Waters kept every Serve, Return, Third Shot and Dink &#8220;in play.&#8221;</li>
+
+
+
+<li>Alshon had a match-high nine Clean Winners.</li>
+
+
+
+<li>Longest rally: 36 shots.</li>
+</ul>
+
+
+
+<h4 class="wp-block-heading"><strong>MEN&#8217;S DOUBLES FINAL:&nbsp; (2) Christian Alshon and Andrei Daescu def. (15) Nico Acevedo and Yuta Funemizu, 11-7, 7-11, 15-13.</strong>&nbsp;</h4>
+
+
+
+<ul class="wp-block-list">
+<li>Fourth career title together for Alshon and Daescu.</li>
+
+
+
+<li>First domestic PPA Tour medals for both Acevedo and Funemizu.</li>
+
+
+
+<li>Acevedo and Funemizu had seven Match Points in Game Three.</li>
+
+
+
+<li>Acevedo had a match-high 17 Clean Winners.</li>
+
+
+
+<li>Longest rally: 44 shots.</li>
+</ul>
+
+
+
+<h4 class="wp-block-heading"><strong>WOMEN&#8217;S DOUBLES FINAL:&nbsp; (1) Rachel Rohrabacher and Parris Todd def. (2) Tyra Black and Meghan Dizon, 11-4, 10-12, 11-6.</strong>&nbsp;</h4>
+
+
+
+<ul class="wp-block-list">
+<li>Rohrabacher&#8217;s tenth career Women&#8217;s Doubles title (eight with Anna Bright).</li>
+
+
+
+<li>Todd&#8217;s fourth career Women&#8217;s Doubles title, and second with Rohrabacher.</li>
+
+
+
+<li>Rohrabacher and Todd kept every Serve, Return and Third Shot &#8220;in play.&#8221;</li>
+
+
+
+<li>Rohrabacher and Todd had three Match Points in Game Two.</li>
+
+
+
+<li>Black had a match-high ten Clean Winners.</li>
+
+
+
+<li>Longest rally: 54 shots.</li>
+</ul>
+
+
+
+<h4 class="wp-block-heading"><strong>MEN&#8217;S SINGLES FINAL:&nbsp; (1) Chris Haworth def. (2) Federico Staksrud, 10-12, 11-9, 11-6.</strong>&nbsp;</h4>
+
+
+
+<ul class="wp-block-list">
+<li>Haworth&#8217;s ninth title, all since 2024, and first this season.</li>
+
+
+
+<li>Staksrud has 20 Men&#8217;s Singles titles, and his 20 silver medals are the most all-time.</li>
+
+
+
+<li>Haworth won the last eight points of Game Three.</li>
+
+
+
+<li>Haworth had more Clean Winners, 18-11.</li>
+
+
+
+<li>Longest rally: 16 shots.</li>
+</ul>
+
+
+
+<h4 class="wp-block-heading"><strong>WOMEN&#8217;S SINGLES FINAL:&nbsp; (1) Anna Leigh Waters def. (2) Kate Fahey, 11-9, 11-4.</strong>&nbsp;</h4>
+
+
+
+<ul class="wp-block-list">
+<li>Waters has a 65-3 career record in Singles finals.</li>
+
+
+
+<li>Waters is 54-0 in Finals since losing in June 2022.</li>
+
+
+
+<li>Waters has won the last 27 tournaments that she has entered, including eight finals vs Fahey this year.</li>
+
+
+
+<li>Waters had fewer baseline Drive Errors, 12-4.</li>
+
+
+
+<li>Longest rally: 12 shots.</li>
+</ul>
+
+
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+
+
+<h4 class="wp-block-heading"><strong>LEADING AT THE CHANGEOVER:</strong></h4>
+
+
+
+<p>Did the players or teams leading a game when they changed sides at six points go on to win that game?</p>
+
+
+
+<ul class="wp-block-list">
+<li>This tournament: Yes. 8 times in 13 games.</li>
+
+
+
+<li>This season: Yes. 21 times in 28 games (75%).</li>
+</ul>
+
+
+
+<p><em>All career records are &#8220;Domestic PPA Tour only.&#8221;</em></p>
+
+
+
+<p><strong>For the comprehensive stats of all these gold medal matches, please visit: </strong><a href="https://facebook.com/groups/propickleballstats" target="_blank" rel="noreferrer noopener"><strong>facebook.com/groups/propickleballstats</strong></a></p>
+`.trim(),
+  },
 ];

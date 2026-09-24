@@ -6,6 +6,7 @@ import { ChallengerRankings } from "@/components/tour/ChallengerRankings";
 import { getEvents } from "@/lib/events-api";
 import { partners } from "@/lib/home-content";
 import { partnerLink } from "@/lib/partner-link";
+import { socialLinks } from "@/lib/social-links";
 import { challengerShowdown, showdownDaysFor } from "@/lib/challenger-showdown";
 import { type Tournament, eventHref, tierPoints } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
@@ -85,6 +86,58 @@ const HOW = [
     body: "Win a Challenger pro event and you earn a wild-card entry into the main draw of a PPA Tour Open of your choosing. Each Open takes at most two wild-card winners.",
   },
 ];
+
+/**
+ * The Challenger Series' own accounts. Wesley, 9/23, after Amie Feliza's About
+ * copy named the four platforms without linking any of them.
+ *
+ * ⚠ SUPPLIED, NOT LOOKED UP, AND THE YOUTUBE ONE IS WHY THAT MATTERS. A search
+ * for the Challenger's channel surfaces `UCFuprEMnAw5uMo_LzE5hc7w` ("Challenger
+ * Series") plus the Challenger broadcasts that live on @ppatour's channel —
+ * neither of which is this. The handles do not agree with each other either:
+ * Instagram is `ppa.challenger` WITH a dot where X is `ppachallenger` without
+ * one, so deriving any of these from any other lands on the wrong account.
+ * Publishing a social link under the tour's name is a claim that the tour owns
+ * that account; it comes from a person or it does not ship.
+ *
+ * ⚠ THE YOUTUBE URL IS THE MAIN PPA TOUR CHANNEL, NOT A CHALLENGER ONE, and
+ * this site already says so: `UCSP6HlrMmRqogym2aHBPHpw` is the channel the
+ * global footer links and the site-wide SportsOrganization JSON-LD lists in
+ * `sameAs`, beside x.com/ppatour and facebook.com/OfficialPPATour. That is
+ * consistent with where Challenger broadcasts actually live, so the link is a
+ * correct destination and it stays — but the row therefore prints the PLATFORM
+ * NAME for it rather than an account name, because "PPA Challenger Series" over
+ * the tour's own channel would be a claim nothing supports. Instagram and
+ * Facebook are genuinely the Series' own (Facebook's `61569510944398` is the
+ * "PPA Challenger Series" page). Flagged to Wesley; if a dedicated Challenger
+ * channel exists, swap the URL and this note goes with it.
+ */
+const SOCIALS = [
+  "https://www.instagram.com/ppa.challenger/",
+  "https://x.com/ppachallenger",
+  "https://www.youtube.com/channel/UCSP6HlrMmRqogym2aHBPHpw",
+  "https://www.facebook.com/profile.php?id=61569510944398",
+];
+
+/**
+ * The @handle a URL actually contains, or null.
+ *
+ * ⚠ IT READS THE URL AND NEVER INFERS ONE. Instagram and X carry the handle in
+ * the path, so printing it is transcription. YouTube's is a `/channel/UC…` id
+ * and Facebook's a `profile.php?id=` — those carry no handle at all, and the
+ * row prints the account name instead of a plausible-looking guess.
+ */
+function handleFromUrl(raw: string): string | null {
+  try {
+    const u = new URL(raw);
+    const host = u.hostname.toLowerCase().replace(/^www\./, "");
+    if (host !== "instagram.com" && host !== "x.com" && host !== "twitter.com") return null;
+    const seg = u.pathname.split("/").filter(Boolean)[0];
+    return seg ? `@${seg}` : null;
+  } catch {
+    return null;
+  }
+}
 
 function SectionHead({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
@@ -238,18 +291,51 @@ export default async function ChallengerPage() {
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <SectionHead eyebrow="About" title="What Is the Challenger Series?" />
           <div className="mt-5 grid gap-4 lg:grid-cols-[1.5fr_1fr]">
+            {/*
+              ⚠ THIS IS THE EVENT TEAM'S OWN BOILERPLATE AND IT IS VERBATIM.
+              Amie Feliza's website request, 9/22/26 ("this is what the Challenger
+              series is about"). It supersedes the two paragraphs that shipped on
+              9/18, which were written here from ppachallenger.com's own copy
+              because nothing official existed yet. Do not reword it, do not
+              re-split the sentences, and do not fold the fact list beside it into
+              the prose — this is the paragraph marketing sends to press.
+
+              ⚠ ONE CLAUSE OF HERS IS STILL NOT HERE, and it is now the only
+              omission: "For more information, go to www.ppachallenger.com".
+              ppachallenger.com has 308'd to THIS PAGE since 9/21, so on this
+              page that pointer is a circle. The rest of that sentence — "follow
+              us on social: Instagram, Twitter/X, YouTube, and Facebook" — is the
+              Follow row below, once Wesley supplied the four accounts on 9/23.
+
+              ⚠ "Showdown in Dallas" LINKS to this page's own #showdown section
+              rather than repeating any of it. Her phrase and Brooke Ansley's 9/21
+              data agree: the Showdown is played inside Worlds at Brookhaven
+              Country Club, Farmers Branch TX, which is Dallas metro. That is
+              corroboration from a second source, not a fact typed twice.
+            */}
             <div className="min-w-0 border-l-2 border-ppa-blue bg-white p-6">
               <p className="text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
-                The PPA Tour runs the Challenger Series to grow the game from the
-                ground up. Amateur players get a PPA-run event in their own
-                region. Rising pros get a place to earn points, prize money and a
-                shot at the Carvana PPA Tour.
+                Founded in 2025, the PPA Challenger Series is a grassroots tour
+                designed to provide aspiring pickleball professionals a pathway to
+                the PPA Tour, the pinnacle tour of global pickleball.
               </p>
               <p className="mt-3 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
-                Every stop brings the PPA Tour to a local club: professional play
-                management, live streaming and the same registration system as
-                the Tour. It is the avenue for players across America to break
-                into professional pickleball.
+                The PPA Challenger Rankings award players points based on their
+                results at PPA Challenger tournaments, and top finishers will earn
+                their spot in the{" "}
+                <Link
+                  href="#showdown"
+                  className="font-semibold text-ppa-blue underline-offset-2 hover:underline"
+                >
+                  &ldquo;PPA Challenger Showdown in Dallas,&rdquo;
+                </Link>{" "}
+                where players will battle for a PPA Tour contract.
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
+                With a deep commitment to fostering growth and development within
+                the pickleball community, the PPA Challenger Series nurtures
+                emerging talent, encourages participation, and ultimately elevates
+                the sport at all levels.
               </p>
             </div>
             <ul className="grid gap-px border border-ppa-line bg-ppa-line">
@@ -268,6 +354,51 @@ export default async function ChallengerPage() {
                   </span>
                 </li>
               ))}
+            </ul>
+          </div>
+
+          {/*
+            The socials half of Amie's closing sentence, now that the accounts
+            have been supplied. It sits at the foot of About because that is
+            where her sentence sits — not in a section of its own with a tenth
+            nav entry for four links.
+          */}
+          <div className="mt-4 border border-ppa-line bg-white p-5">
+            <h3 className="text-[11px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+              Follow the Challenger Series
+            </h3>
+            <ul className="mt-3 flex flex-wrap gap-x-8 gap-y-3">
+              {socialLinks(SOCIALS).map((sm) => {
+                const handle = handleFromUrl(sm.href);
+                return (
+                  <li key={sm.label} className="min-w-0">
+                    <a
+                      href={sm.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex min-w-0 items-baseline gap-2 text-sm hover:text-ppa-blue"
+                    >
+                      {handle ? (
+                        <>
+                          <span className="shrink-0 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+                            {sm.label}
+                          </span>
+                          <span className="min-w-0 truncate font-semibold text-ppa-navy group-hover:text-ppa-blue">
+                            {handle}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="min-w-0 truncate font-semibold text-ppa-navy group-hover:text-ppa-blue">
+                          {sm.label}
+                        </span>
+                      )}
+                      <span aria-hidden className="shrink-0 text-ppa-blue">
+                        ↗
+                      </span>
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>
