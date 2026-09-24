@@ -71,6 +71,7 @@ import { buildTicketGrid } from "@/lib/ticket-grid";
 import { TicketGrid } from "@/components/events/TicketGrid";
 import { buildEventJsonLd } from "@/lib/event-schema";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
+import { pageTitle, seoDescription } from "@/lib/seo-text";
 
 type Params = { params: Promise<{ year: string; slug: string }> };
 
@@ -172,11 +173,18 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   // metadata. Setting a raw off-ratio photo here emitted a SECOND og:image that
   // competed with (and on most scrapers preceded) the designed card. Let the
   // file convention be the single source of the share card.
+  /**
+   * The year is in the title because the same stop has a page per season —
+   * Newport Beach 2025 and 2027 both rendered "Newport Beach Open · Carvana PPA
+   * Tour" (9/23 crawl), two URLs with one title competing for the same query.
+   * `pageTitle` then sizes the brand suffix to fit 60 chars.
+   */
+  const title = `${t.name} ${eventYear(t)}`;
   return {
-    title: t.name,
-    description,
+    title: pageTitle(title),
+    description: seoDescription(description),
     openGraph: {
-      title: `${t.name} — Carvana PPA Tour`,
+      title: `${title} — Carvana PPA Tour`,
       description,
     },
     twitter: { card: "summary_large_image" },

@@ -39,6 +39,7 @@ import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 import { isUnlistedEuropeAthlete } from "@/lib/europe-visibility";
 import { europeRobots } from "@/lib/europe-launch";
 import { europeRoster } from "@/lib/europe-roster";
+import { BRAND_SUFFIX, fitTitle, seoDescription, SHORT_SUFFIX } from "@/lib/seo-text";
 
 /**
  * Equipment is back ON, now that it has a source worth publishing (Wesley,
@@ -225,7 +226,18 @@ function athleteTitle(a: {
         : a.rank > 10
           ? "Pro Pickleball Player, Ranking & Stats"
           : "Pro Pickleball Player Profile";
-  return `${a.name} — ${descriptor} · Carvana PPA Tour`;
+  return `${a.name} — ${descriptor}`;
+}
+
+/**
+ * The suffix a profile title carries, sized to fit. 216 of 217 athlete titles
+ * were over 60 chars in the 9/23 crawl, every one because of the 19-char brand
+ * suffix — so the suffix gives way first (" · PPA Tour"), then drops, and the
+ * name + descriptor always survive intact. See lib/seo-text.ts.
+ */
+const EUROPE_SUFFIX = " · PPA Tour Europe";
+function fitAthleteTitle(base: string, europe: boolean): string {
+  return europe ? fitTitle(base, [EUROPE_SUFFIX]) : fitTitle(base, [BRAND_SUFFIX, SHORT_SUFFIX]);
 }
 
 function initials(name: string): string {
@@ -276,12 +288,12 @@ export async function athleteMetadata(
    * `absolute` — this title carries its own brand suffix, so it must NOT also
    * get the root layout's `%s · Carvana PPA Tour` template appended.
    */
-  const title = europe
-    ? athleteTitle(a).replace(/ · Carvana PPA Tour$/, " · PPA Tour Europe")
-    : athleteTitle(a);
+  const title = fitAthleteTitle(athleteTitle(a), europe);
   return {
     title: { absolute: title },
-    description,
+    // 155 on a word boundary — 63 profiles were over 160 (9/23 crawl). The
+    // OG description below keeps the full sentence; social cards show more.
+    description: seoDescription(description),
     // The Europe mount points search engines at the one real profile.
     ...(europe && { alternates: { canonical: `/athletes/${a.slug}` } }),
     /**

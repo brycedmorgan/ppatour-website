@@ -3,6 +3,7 @@ import Link from "next/link";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { withAliasNames } from "@/lib/athlete-aliases";
 
+import { buildArticleJsonLd } from "@/lib/article-schema";
 import { newsPlayersFor, relatedNews, type NewsDetail, type NewsPlayer } from "@/lib/news";
 import { renderPostHtml, readingMinutes } from "@/lib/news-html";
 import { playerInitials } from "@/lib/player-photos";
@@ -214,6 +215,13 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
 
   return (
     <>
+      {/* NewsArticle (newsroom) / BlogPosting (/ppa-blog) — one builder for
+          both archives, see lib/article-schema.ts. Every field is a fact this
+          page already renders. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildArticleJsonLd(detail)) }}
+      />
       {/* Article hero — two layouts.
 
           Default: the headline overlays a full-bleed PHOTO, darkened by a

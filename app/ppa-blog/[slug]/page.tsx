@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticleView } from "@/components/news/ArticleView";
 import { allBlog, getNewsDetail } from "@/lib/news";
+import { pageTitle, seoDescription } from "@/lib/seo-text";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -54,8 +55,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const title = seo?.title?.trim() || card.title;
   const description = seo?.description?.trim() || card.dek;
   return {
-    title: card.title,
-    description,
+    // Same 60-char rule as the newsroom — see lib/seo-text.ts.
+    title: pageTitle(card.title),
+    description: seoDescription(description),
     // No `images` here: the folder's file-based opengraph-image.tsx generates
     // the branded article card; a raw `images` entry produced a competing
     // second og:image tag.
