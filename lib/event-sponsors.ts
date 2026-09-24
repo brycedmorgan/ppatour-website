@@ -100,6 +100,71 @@ const EVENT_SPONSORS_BY_SLUG: Record<string, EventSponsorRef[]> = {
     "Rate",
     "Zimmer Biomet",
   ],
+
+  /**
+   * Las Vegas — the event team's "logos activating at Las Vegas" pack, sent by
+   * Wesley 9/24 with the NC list named as the model. Eleven marks; everything
+   * else on the tour roster is deliberately off this page.
+   *
+   * ⚠ RATE AND JOOLA ALSO RENDER ABOVE THIS GRID AND ARE NOT DUPLICATES OF IT.
+   * The section's marquee is built from the event record, not from this list:
+   * Rate is the title partner (its `eventNamePrefix` matches "Rate Las Vegas
+   * Open") and JOOLA is the presenting partner (`PRESENTER_BY_SLUG`). Both keep
+   * that billing untouched. Rate is in this list as well because it is in the
+   * pack and because Nationals does the same with Veolia — a stop's own title
+   * partner leads its wall.
+   *
+   * ⚠ CARVANA IS IN THIS LIST FOR A REASON THAT IS EASY TO UNDO BY ACCIDENT.
+   * Until a stop has an entry here the section falls back to `PartnerWall`,
+   * which gives the tour's title partner its own wide hero card above the grid.
+   * Naming this stop replaces that whole wall — so leaving Carvana out would
+   * have taken the tour title partner off the page altogether, which is not
+   * what "Carvana is good as is" meant. It is a grid tile here, exactly as at
+   * Nationals. Restoring the hero on a stop that has its own list is a change
+   * to `EventSponsors`, not to this file.
+   *
+   * ⚠ TWO ENTRIES ARE OBJECTS BECAUSE NEITHER IS ON THE TOUR ROSTER, and a
+   * string that matches no partner is dropped silently rather than rendered:
+   *
+   *  • SHARP has never been on it. No designation came with the pack, so it
+   *    carries no `role` — inventing one puts words in a sponsor's mouth on
+   *    their own card. The destination was checked rather than assumed: Sharp
+   *    Electronics' US home page, canonical https://www.sharpusa.com ("Sharp
+   *    USA delivers reliable technology for businesses and homes").
+   *  • Picklebalm came OFF the roster with the 8/4 approved list; its tombstone
+   *    is in lib/home-content.ts. It is activating here, so it is named here.
+   *    ⚠ Do NOT "fix" this by putting Picklebalm back on the tour roster —
+   *    that republishes it in the footer, the homepage marquee and every other
+   *    event page, which is marketing's call and not this task's.
+   */
+  "rate-las-vegas-open": [
+    "Rate",
+    "Carvana",
+    {
+      name: "Sharp",
+      website: "https://www.sharpusa.com",
+      logo: "/ppa/sponsors/sharp.png",
+      logoWidth: 900,
+      logoHeight: 134,
+    },
+    "Zimmer Biomet",
+    "Humana",
+    "Six Zero",
+    "Joma",
+    "Mineragua",
+    {
+      name: "Picklebalm",
+      website: "https://picklebalm.com/",
+      logo: "/ppa/sponsors/picklebalm.png",
+      logoWidth: 900,
+      logoHeight: 201,
+    },
+    "Ensure Max Protein",
+    // The pack's file reads "MOJO ENERGY POUCHES"; the roster name is the full
+    // one, and a short "MOJO" would resolve to nothing and be dropped — the
+    // same trap Bryan's Nationals list set.
+    "MOJO Energy Pouches",
+  ],
 };
 
 /** What the section actually renders: a resolved mark plus where it links. */

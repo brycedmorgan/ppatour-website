@@ -65,6 +65,77 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-24 — Las Vegas gets its own sponsor wall; the tour title partner nearly fell off the page
+
+- Wesley, forwarding the event team's pack: *"Here is a link to download all of the logos that are
+  activating at Las Vegas. Can you update the page with these, similar to what you did with NC? Rate,
+  JOOLA, and Carvana are good as is, the rest below those can be replaced."* Eleven marks, done the
+  same way as Nationals — a `rate-las-vegas-open` entry in `lib/event-sponsors.ts`. Branch
+  `vegas-sponsors`.
+- **⚠ "THE REST BELOW THOSE" WAS 30 TOUR PARTNERS, AND IT WAS READ OFF THE RENDERED PAGE RATHER THAN
+  GUESSED AT.** Before this, Vegas had no entry, so the section fell back to `PartnerWall`: marquee
+  Rate (Title Partner) + JOOLA (Presenting Partner), then a Carvana hero card, then every partner on
+  the roster — Journavx, Tixr, PlaySight, PBC and 26 others, none of whom bought anything at this
+  stop. That is the exact problem the 8/27 per-event list was built to fix.
+- **⚠ NAMING A STOP REPLACES THE WHOLE WALL, INCLUDING THE CARVANA HERO — so leaving Carvana out of
+  the list would have taken the tour's title partner OFF the page while the request said he was fine
+  as is.** He is a grid tile now, exactly as at Nationals. ⚠ One visible consequence, flagged to
+  Wesley rather than quietly fixed: his tile reads a bare **"Title Partner"** two rows under the
+  marquee's **"Title Partner · Rate Las Vegas Open"** (Rate). Both are true — one is the tour, one is
+  the stop — and the `PartnerWall` hero used to disambiguate with a sentence the tile has no room
+  for. Nationals has the same shape. A clearer string is a one-line change if marketing wants it.
+- **⚠ NINE OF THE ELEVEN MARKS WERE ALREADY ON DISK AND ARE REFERENCED AS STRINGS, NOT RE-IMPORTED.**
+  That is the module's own rule — a string reuses the roster partner's logo, link and designation, so
+  a future logo refresh reaches every stop at once. Re-importing the pack's copies would have forked
+  nine marks for one event page. Rate leads the list (the stop's own title partner, as Veolia does at
+  Nationals), then Carvana, then the pack.
+- **⚠ TWO ENTRIES ARE OBJECTS BECAUSE NEITHER IS ON THE ROSTER, AND A STRING THAT MATCHES NO PARTNER
+  IS DROPPED SILENTLY.** Both would have vanished without a word:
+  - **SHARP has never been a listed partner and we held no mark at all.** Imported through
+    `scripts/import-sponsor-logos.mjs` like everything else. ⚠ The supplied art is **7053x1943 with
+    the wordmark filling 89% of the width but only 48% of the height** — the trim is what makes it
+    safe, since untrimmed it would draw at roughly half the optical size of its neighbours in the
+    same card box. Ships 900x134, 6.5 KB. **No `role`**: the pack carried no designation and
+    inventing one puts words in a sponsor's mouth on their own card. Destination checked rather than
+    assumed — canonical `https://www.sharpusa.com`, *"Sharp USA delivers reliable technology for
+    businesses and homes"*, i.e. Sharp Electronics' US home page.
+  - **Picklebalm came OFF the roster with the 8/4 approved list** and is activating here anyway, so it
+    is named locally. ⚠ Do **not** "fix" that by re-adding it to the tour roster — that republishes it
+    in the footer, the homepage marquee and every other event page, which is marketing's call.
+- **⚠ THE PICKLEBALM FILE WAS THE SMALLEST MARK ON THE SITE AND THE PACK FIXED IT.** We shipped the
+  media-library PNG at **418x94**, under 3x for its own card; the pack supplies the same lockup at
+  1500x450, now **900x201, 6.8 KB**. Its `REMOTE_JOBS` row is retired in favour of a local job with a
+  ⚠ saying why it must not come back: two jobs on one slug race, `JOBS` runs before `REMOTE_JOBS`, and
+  **the smaller file would win**. Safe to re-encode precisely because Picklebalm is off the roster —
+  the Las Vegas list is the only reader.
+- **⚠ SIX ZERO RENDERS OUR ROSTER LOCKUP, NOT THE PACK'S.** The pack's file carries the "GO NEXT
+  LEVEL!" tagline; ours reads "SIX 6.0 ZERO / PICKLEBALL". Both are the brand's own lockups and
+  swapping would change every page on the site, so the string ref stands. Same reasoning for MOJO,
+  whose pack file is the stacked cut against our horizontal one.
+- Verified on rendered pages at 1440 and 390, not by grep over source: **11 tiles in the event grid,
+  all 11 linking to the company's own home page** with the per-event UTM
+  (`utm_campaign=1026-PPA-LASVEGAS-NV-USA`, `utm_content=event-sponsor-*`), Rate and JOOLA still in
+  the marquee above it, **0 broken or zero-sized images, 0 horizontal overflow, 0 elements wider than
+  the viewport inside the section**. The section is **859px at 1440 against the roster wall's 2097px**.
+  **Controls unchanged: Nationals still renders its own 12 and Chicago still falls back to the full
+  roster of 30 — and neither carries Sharp or Picklebalm.** Both new marks were then looked at as
+  pictures on a contact sheet drawn at the real card geometry (150x44 box): SHARP's ®, Picklebalm's
+  ball dot and ® and MOJO's colour bar all survive the encode. tsc clean (the three known scratchpad
+  probes aside), eslint clean on both changed files, `next build` green, exit 0.
+- ⚠ Method, both already documented and both hit again: `next build` needs `scratchpad/
+  probe-platform-denied.ts`, `probe-rounds.ts` and `probe-cs-results.ts` moved aside, and
+  `BUILD_DIST_DIR=.next-buildcheck` appends two entries to `tsconfig.json` (reverted, along with
+  `wpr-snapshot.json`).
+- ⚠ **`vegas-sponsors` is branched off `engine-live`, not `main`** — that is the branch this tree was
+  on, and rebasing it would have meant moving other sessions' uncommitted work. It carries the two
+  Engine travel-partner commits underneath. The change itself is four paths
+  (`lib/event-sponsors.ts`, `scripts/import-sponsor-logos.mjs`, `public/ppa/sponsors/sharp.png`,
+  `public/ppa/sponsors/picklebalm.png`), so it moves to a `main`-based branch cleanly if wanted.
+- **Open, all with the event team:** whether SHARP carries a designation · whether SHARP is a Las
+  Vegas activation only or a tour partner that belongs on the roster · whether Picklebalm is back on
+  the tour roster generally or Vegas-only · and whether Carvana's tile should say something other
+  than "Title Partner" on a stop whose title partner is someone else.
+
 ### 2026-09-24 — Four of five assigned website requests; the broadcast sheet moved four stops, and Malibu had gone quiet under a rename
 
 - The five tasks sitting in WEBSITE TEAM · Platform = PPA Tour · Stage = Assigned. Four shipped;
