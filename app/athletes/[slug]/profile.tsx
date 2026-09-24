@@ -40,6 +40,7 @@ import { isUnlistedEuropeAthlete } from "@/lib/europe-visibility";
 import { europeRobots } from "@/lib/europe-launch";
 import { europeRoster } from "@/lib/europe-roster";
 import { BRAND_SUFFIX, fitTitle, seoDescription, SHORT_SUFFIX } from "@/lib/seo-text";
+import { generatedBio, genericBio, THIN_BIO_CHARS } from "@/lib/athlete-bio";
 
 /**
  * Equipment is back ON, now that it has a source worth publishing (Wesley,
@@ -120,10 +121,7 @@ async function loadAthlete(slug: string) {
     : (curated?.divisions ?? []);
   const bio: string[] = published?.bio.length
     ? published.bio
-    : [
-        curated?.bio ??
-          `${name} is a professional pickleball player ranked among the world's best in the Carvana PPA Tour's World Pickleball Rankings.`,
-      ];
+    : [curated?.bio || genericBio(name)];
 
   return {
     slug,
@@ -638,6 +636,43 @@ export async function AthleteProfile({
 
   const gender = genderFromDivisions(a.divisions ?? []);
 
+  /**
+   * Thin-bio backfill (docs/SEO.md item 11). When the sourced bio is missing
+   * or under {@link THIN_BIO_CHARS} — 15 profiles at the 9/23 crawl, mostly
+   * Europe signings whose sheet row is empty — a paragraph is generated from
+   * the facts this page ALREADY renders (rank chip, Quick Info, medal strip,
+   * In the Bag). Every clause is conditional on its field; see lib/athlete-bio.
+   * The generic "ranked among the world's best" placeholder is dropped once a
+   * fact-based opening exists, so an unranked pro's page no longer claims it.
+   */
+  const sourcedBio = bioParagraphs.filter((p) => p.trim());
+  const sourcedText = sourcedBio.join(" ");
+  const isPlaceholder = sourcedBio.length === 1 && sourcedBio[0] === genericBio(a.name);
+  const backfill =
+    isPlaceholder || sourcedText.length < THIN_BIO_CHARS
+      ? generatedBio({
+          name: a.name,
+          country: a.country,
+          divisions: a.divisions,
+          turnedPro: stats?.turnedPro ?? a.turnedPro,
+          resides: stats?.hometown ?? qi?.resides,
+          plays: stats?.handed ?? qi?.plays,
+          age: ageVal,
+          rank: a.rank,
+          board: boardLabel,
+          points: a.points,
+          medals: stats?.medals
+            ? {
+                gold: stats.medals.total.gold,
+                silver: stats.medals.total.silver,
+                semifinals: stats.medals.total.semifinals,
+              }
+            : null,
+          paddle: SHOW_EQUIPMENT ? effPaddle : null,
+        })
+      : [];
+  const profileParagraphs = [...(isPlaceholder ? [] : sourcedBio), ...backfill];
+
   return (
     <>
       <script
@@ -659,7 +694,7 @@ export async function AthleteProfile({
             url: `${SITE_URL}/athletes/${a.slug}`,
             // Reconciled, not raw — this is structured data Google reads, so it
             // must not publish a title count the page itself contradicts.
-            description: bioParagraphs.join(" "),
+            description: profileParagraphs.join(" "),
             /**
              * Entity attributes (8/20). Google reconciles a person across the web
              * on facts like these, and we were publishing a Person node with a
@@ -934,7 +969,7 @@ export async function AthleteProfile({
                 About {a.name}
               </h2>
               <div className="mt-4 space-y-4 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
-                {bioParagraphs.map((para, i) => (
+                {profileParagraphs.map((para, i) => (
                   <p key={i}>{para}</p>
                 ))}
               </div>
