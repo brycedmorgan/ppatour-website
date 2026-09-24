@@ -28,6 +28,8 @@ export default function robots(): MetadataRoute.Robots {
         "/hq/",
       ],
     },
-    sitemap: `${SITE_URL}/sitemap.xml`,
+    // The Google News sitemap (last 48h of newsroom posts) alongside the
+    // full one — app/news-sitemap.xml/route.ts.
+    sitemap: [`${SITE_URL}/sitemap.xml`, `${SITE_URL}/news-sitemap.xml`],
   };
 }
