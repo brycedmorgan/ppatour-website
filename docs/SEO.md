@@ -3,9 +3,11 @@
 Written 2026-09-23 (review), expanded same day into a plan after Bryce: "Go dig deeper and build a
 plan and roadmap." Method: full crawl of the 1,135-URL sitemap (every URL fetched, titles,
 descriptions, canonicals, H1s, JSON-LD, word counts, dates), legacy-URL redirect tests, the code
-paths that emit metadata, `docs/seo-baseline` (SEMrush 8/8), SERP spot checks. **Not done:** GSC
-read, Core Web Vitals field data, a fresh SEMrush pull (no key on this machine). Those are the
-first three items in the plan. The PBC plan lives in `~/pickleball/ziff/docs/PBC-SEO-PLAN.md`.
+paths that emit metadata, `docs/seo-baseline` (SEMrush 8/8), SERP spot checks. **Update 2026-09-24:** GSC and SEMrush baselines pulled through Jackalope's `/api/seo/*` endpoints
+(the service account reads both properties; the SEMrush key lives on the Vercel project) →
+[`seo-baseline/gsc-semrush-2026-09-24.md`](seo-baseline/gsc-semrush-2026-09-24.md). Phase 1 shipped
+to `main` the same day (9 commits, branch `seo/phase-1`, not yet pushed). Still not measured: Core Web
+Vitals field data. The PBC plan lives in `~/pickleball/ziff/docs/PBC-SEO-PLAN.md`.
 
 **Shareable version (private artifact, share from its own menu):**
 https://claude.ai/artifact/V77Y5AsxHDavMPXrQmuMxp
@@ -44,16 +46,25 @@ Other facts from the crawl:
 - Backlink profile (SEMrush 8/8): 4,058 referring domains, authority 44, but the top referrers by volume are the old host (`flywheelsites.com`, 7,071 links) and `brubakers.us` (9,421). Worth a look, not a disavow yet.
 - SERP spot checks 9/23: `/rankings/` #1 for "pickleball rankings"; `/athletes/ben-johns/` #3 for "Ben Johns pickleball" behind two pickleball.com results; `/news/` #8 for "pickleball news"; nothing on page 1 for "how to play pickleball" or "pickleball rules"; `/watch/` #7 for "pickleball on tv today" behind DirecTV, TV Guide, Fubo, pickleballtv.com.
 
+## 2b. What Search Console says (Aug 25 – Sep 21 vs prior 28 days)
+
+- **232,471 clicks vs 85,578** (Nationals inside the window; rebuild live since Aug 4); CTR 11.5% vs 5.8%; position 5.5 vs 6.7.
+  So the SEMrush "keywords" decline is breadth, not clicks. Both are true.
+- The gap is CTR on big-impression pages: `/watch/` 1.5% on 206k impressions, `/athletes/` 0.6% on 154k,
+  Anna Leigh Waters 1.5% on 114k, Ben Johns 1.9% on 65k at position 8.1 (pickleball.com holds two results above).
+- "ppa" alone: 126k impressions, 15% CTR at position 3.5–4 — the biggest single term gap.
+- Event pages convert impressions well (Arizona Open 28% CTR, Nationals 18%). Athlete pages for rising players do too (Tama 15.5%, Kate Fahey 14%).
+
 ## 3. The plan
 
 Everything in Phase 1 is code in this repo. Phase 2 is content plus code. Phase 3 is people.
 
-### Phase 0 — Measure (week of 9/29, before anything ships)
-1. Confirm GSC property for `https://www.ppatour.com/` and `sc-domain:ppatour.com`; export the 16-month query and page report as the baseline. **Ask: Bryce grants bryce@pickleball.com or the Jackalope service account.**
-2. Re-pull SEMrush for ppatour.com, pickleballcentral.com, pickleball.com and drop the JSON in `docs/seo-baseline/` monthly. **Ask: a SEMrush API seat (~$140–250/mo, Guru tier or API units). Same seat serves PBC.**
+### Phase 0 — Measure — DONE 9/24 except the GA4 split
+1. ~~GSC access~~ — the Jackalope service account already reads `sc-domain:ppatour.com` (siteFullUser). Baseline saved 9/24.
+2. ~~SEMrush seat~~ — `SEMRUSH_API_KEY` is on the Jackalope Vercel project; `/api/seo/overview?brand=ppa` serves it. Baseline saved 9/24. Next: a monthly cron that writes the JSON here.
 3. GA4: ship Option A from `ANALYTICS.md` (hostname-filtered explorations) so organic sessions for ppatour.com are quotable. Replicate the PBC performance endpoint in Jackalope for PPA.
 
-### Phase 1 — Technical fixes (ship 9/29 → 10/17; nothing risky during Vegas Open 9/28–10/4 finals weekend)
+### Phase 1 — Technical fixes — SHIPPED TO MAIN 9/24 (awaiting push; see CLAUDE.md session log for per-item notes)
 | # | Change | Where | Pages affected |
 |---|---|---|---|
 | 1 | `NewsArticle` JSON-LD (headline, datePublished, dateModified, author, image, publisher) on every article | `app/[slug]/page.tsx`, `components/news/ArticleView` | 822 |
@@ -81,6 +92,11 @@ Everything in Phase 1 is code in this repo. Phase 2 is content plus code. Phase 
 - Digital PR calendar tied to what the tour already produces: schedule release, rankings milestones, prize purse records, Junior PPA Select, PPA Canada/Italy debuts. Each gets a linkable data page on ppatour.com, not just a press release.
 - Owned network links: pickleball.com, MLP, PBC, pickleballtv.com each link to the canonical PPA page for events and athletes (today pickleball.com links to PBC three times and to PPA once, in the footer).
 - Backlink audit of the top 50 referring domains (the flywheel and brubakers volumes look like site-wide footer links from the old host and a fan site).
+
+### Phase 1 — what the branch could not do
+- **Apex hop is a Vercel domain-level 308** (`ppatour.com` → `www`), applied before app redirects. `APEX_LEGACY_REDIRECTS` is in `next.config.ts` and inert until that domain redirect is switched off in Vercel → Domains. Do it outside an event weekend.
+- **Athlete `lastmod`** omitted: no per-athlete date exists in any source we hold.
+- **Rankings `Dataset`** renders only with live rankings (`PB_API_TOKEN`); confirm on production with the Rich Results Test.
 
 ## 4. Measures and checkpoints
 

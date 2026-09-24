@@ -268,6 +268,18 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   removes every partner not named, so a partial list is worse than none. Today it correctly falls back
   to the tour roster.
 - **Asked Bryan for a zip or Drive folder plus the sponsor names.** ⚠ The stop starts **Sept 28**.
+### 2026-09-24 — SEO Phase 1 merged to main; GSC + SEMrush baselines saved
+
+- Bryce: "Fix all these… you should have search console access. We have SEMrush API already."
+  Both were already wired in Jackalope (`/api/seo/gsc`, `/api/seo/overview`); no seat or grant needed.
+  Baseline saved: [`docs/seo-baseline/gsc-semrush-2026-09-24.md`](docs/seo-baseline/gsc-semrush-2026-09-24.md).
+  GSC Aug 25–Sep 21: **232k clicks vs 86k prior 28d** (Nationals inside); SEMrush keywords 11,923.
+- `seo/phase-1` (9 commits, built by a subagent, reviewed: tsc/eslint/build/tests clean) fast-forwarded into
+  main. **Not pushed** — Bryce to say go. Details in the entry below this one.
+- Not fixable in code: apex `ppatour.com` → `www` hop is a Vercel domain redirect (flip in Vercel → Domains,
+  not on an event weekend); athlete lastmod has no source date; rankings Dataset needs prod to verify.
+- Next: push → Rich Results Test on one URL per template → GSC news-sitemap submit → Phase 2 pillars 10/20.
+
 ### 2026-09-24 (pt. 2) — SEO Phase 1 shipped on branch `seo/phase-1` (not pushed)
 
 - All 13 Phase 1 items from [`docs/SEO.md`](docs/SEO.md) are code on `seo/phase-1`, 8 commits, not pushed.
