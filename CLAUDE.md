@@ -65,6 +65,139 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-24 — Four of five assigned website requests; the broadcast sheet moved four stops, and Malibu had gone quiet under a rename
+
+- The five tasks sitting in WEBSITE TEAM · Platform = PPA Tour · Stage = Assigned. Four shipped;
+  the fifth is blocked on an asset nobody outside ScorePlay can read.
+- **⚠ WORKED IN A CLEAN WORKTREE OFF origin/main, AND THAT WAS NOT CEREMONY.** The repo dir is on
+  `engine-live`, **28 commits behind main**, with another session's in-flight "current event" work
+  uncommitted (`lib/current-event.ts`, `components/live/use-current-event.ts`, a modified
+  `Header.tsx`) and a dev server owning :3000. Every tracked file I needed was byte-identical to
+  origin/main already — the branch was simply lagging — so `git worktree add … origin/main` gave a
+  correct base and left their tree untouched. ⚠ The worktree needs its own `npm install`.
+
+#### Broadcast schedule (Keaton Maynard, due 9/25) — reconciled to the 9/21 sheet
+
+- **⚠ `scripts/audit-tv-schedule.mjs` ALREADY POINTED AT KEATON'S SHEET, so the whole task was one
+  command.** It pulls the live CSV and diffs both files; the reissue is stamped **"as of 9/21/26"**.
+  Four stops moved and it named every window.
+- **Chicago** — the entire stop moved into the evening (PBTV opens 3PM Tue–Fri where it opened 11AM),
+  Saturday TC 11AM–3PM → 1–4PM, Sunday PBTV 11AM–5:30 → 11AM–4PM. **⚠ THURSDAY IS NOW TWO PBTV
+  WINDOWS, 3–6 AND 8–11, SPLIT EITHER SIDE OF AN FS1 EXCLUSIVE.** The sheet marks the 6–8PM FS1 row
+  "FS1 EXCL."; closing that gap into one 3–11PM row would advertise PBTV over two hours FOX holds
+  exclusively. **⚠ And Sunday's FS1 window is now TAPE** — it was carried here as live.
+- **Virginia Beach** — 2PM starts Thu/Fri, and a **new Thursday Tennis Channel window**, so TC carries
+  four days there where it carried three. **Daytona** — 2PM starts, Sunday shortened to 10AM–3PM.
+- **⚠ THE REAL FIND: MALIBU HAD BEEN REPORTING AS "NOT ON THIS SHEET" AND IT WAS A RENAME.** The audit
+  joins on the sheet's own event header, `EVENT_MAP`'s key was the 8/13 sheet's "PPA Malibu Cup", and
+  the 9/21 sheet finally adopted the tour's **8/26 rename to "Malibu Showcase"**. So the script
+  reported the stop as ABSENT rather than as six wrong days, and the note above the key said not to
+  change it "until the sheet itself is reissued" — which had now happened. Key updated; **a stop that
+  goes quiet in that audit is a rename until proven otherwise.**
+- **⚠ AND MALIBU IS A SHORTER BROADCAST THAN IT WAS: Tuesday and Wednesday coverage is GONE**, and the
+  four surviving days moved to evening (Thu/Fri PBTV 5PM–1AM). Do not restore Tue/Wed from an older
+  copy. Its row also read **`tier: "Cup · 1,500"`, contradicting the 9/8 board decision** that made the
+  Showcase a PPA 500 Open — `lib/placeholder-data.ts` has had it as `tier: "open", points: 500` since
+  9/15, and the sheet's own header now reads "| 500". Corrected to `Open · 500`.
+- **⚠ CARY IS DELIBERATELY LEFT DISAGREEING WITH THE SHEET, AND THE AUDIT REPORTS IT ON PURPOSE.** The
+  9/21 sheet still shows Saturday's morning PBTV window as the pre-weather 9AM–5PM; the site says
+  9AM–12PM because that is what aired after the 9/3 reschedule, and the event finished 9/6. The
+  sheet was only half-updated for that Saturday — its Friday rows match ours exactly. The site is the
+  record of what happened. Written into both files.
+- Verified by re-running the audit: **every other event ✓ against the sheet (Chicago 15 windows, VB 8,
+  Malibu 8, Daytona 4), and lockstep 8/8 events agree between `lib/broadcast.ts` and
+  `lib/tv-schedule.ts`** — down from 4 mismatches to the 1 deliberate Cary row.
+- **⚠ FOUND, NOT FIXED — THE SHEET CARRIES A STOP WE DO NOT MODEL: "PPA Australia Cup", Oct 14–18, on
+  PPA YouTube.** `TvWindow["channel"]` has no YouTube member, and the sheet's own header for it reads
+  "| Virginia Beach, VA" against an AEDT timezone and an Australian crew, which is plainly a
+  copy-paste error in the source. Not invented into the site. **Ask Keaton.**
+
+#### Tournament history (Hannah Johns, due 9/24) — all four items, none of them in the file she named
+
+- **⚠ `lib/data/tournament-history.json` IS GENERATED, so editing it would have been reverted by the
+  next run** of `scripts/gen-tournament-history.mjs`. Three of her four asks are generator changes and
+  the fourth belongs in the archive.
+- **⚠ THE AUSTRALIA PICKLEBALL OPEN 2025 IS REGISTERED TWICE AND ONE COPY IS FILED UNDER THE DOMESTIC
+  ORG. That is the whole reason it was on the page, and it is checkable rather than a judgement call:**
+  `b28de702…` under "PPA Tour Australia" and **`a26c60b0…` under "Pro Pickleball Association"**, same
+  event, same week. The second cleared `TOUR_ORGS` and published as a PPA Tour stop. Excluded by uuid,
+  not by title — the Australia-org twin is legitimate and a title match would take both.
+- **International stops now qualify, which is her item 4.** Sister tours were excluded outright; they
+  are admitted on three conditions. **⚠ THE POINTS LEVEL IS IN THE TITLE AND THAT IS THE ONLY PLACE IT
+  IS** — checked every field on the feed row, there is no points column, but sister-tour titles state
+  it ("PPA Asia 1000 …", "PPA1500 - …"), the same read `pointsFromName` already does in
+  `lib/placeholder-data.ts`.
+- **⚠ AND THE SEASON CUTOFF IS AN INFERENCE, FLAGGED TO HANNAH.** Two Asia stops state 1,000: the
+  **MB Hanoi Cup (Apr 1)** and the **Leapmotor Kuala Lumpur Cup (Sep 9)**. She asked for Kuala Lumpur
+  and listed "Hanoi titles are gone for ALW" among the things already working, with Alix Truong's 15
+  Asian golds sitting under overall titles "before the 2026-2027 season". So international results
+  count from **2026-08-31**, the first day of 2026/27 (Nationals). Hanoi is the last stop of 2025/26
+  and stays out. One constant to move if she wants it in.
+- **⚠ BOTH OCTOBER 1,500s JOIN ON THEIR OWN** — the Australia Pickleball Cup and the Hang Seng Bank
+  Hong Kong Slam already satisfy every condition except `Completed`. That is the "continue to add"
+  half; nobody edits the file for them.
+- Sister-tour names are derived, **and cross-checked rather than invented**: `intlName()` reproduces
+  both names `lib/asia-tour-links.ts` already holds from Wade Townsend's own list — "Leapmotor Kuala
+  Lumpur Cup" and "MB Hanoi Cup" — exactly. ⚠ `publishedNames` is keyed by END DATE and covers the
+  domestic record only, so an international stop must not read it or a same-day domestic stop hands it
+  the wrong name.
+- **The 2020 Texas Open men's doubles went into the ARCHIVE**, which the generator passes through
+  untouched — the feed does not reach back past mid-2023. ⚠ Verified the archive round-trips at
+  indent 1 + trailing newline + CRLF **before** writing, so the diff is exactly the six-line insertion
+  and none of the other 115 records moved.
+- Re-ran the generator: **116 → 118 events. Removed the Australia Open; added the Kuala Lumpur Cup —
+  and Nationals and the Arizona Open**, the two domestic stops that have completed since the last run.
+  Hanoi correctly absent. KL carries no bronze in any division, which is right for a 1,000-point stop.
+
+#### Career titles (Hannah Johns, due 9/25) — the same bad record, one surface over
+
+- Same root cause as above: `player_medals?partners=ppa,upa` counts that mis-filed tournament's podium
+  as PPA hardware.
+- **⚠ IT HAD TO BE A SUBTRACTION, NOT A FILTER, because `player_medals` REPORTS AGGREGATES** —
+  gold/silver/bronze per discipline with no per-event breakdown. There is nothing to exclude at the
+  query. So `EXCLUDED_EVENT_MEDALS` takes off exactly what that event contributed, read from the same
+  stored procedure the history generator uses.
+- **⚠ KEYED ON USER UUID, NOT SLUG.** Several of these pros answer to more than one slug, and a
+  slug-keyed row would miss whichever page the visitor opened. ⚠ Case-folded too — CJ Klinger's uuid
+  comes back UPPER-CASE from the user endpoint and a literal key match would have skipped him.
+- **⚠ ALL 15 MEDALLISTS WERE RESOLVED AND THEN VERIFIED, NEVER GUESSED**: each candidate slug was
+  fetched and the endpoint's own firstName/lastName had to match the podium name. 14 resolved
+  automatically; **Somer Dalla-Bona's hyphenated surname defeated the candidate generator** and was
+  resolved by hand. Same rule as the paddle importer, which once read "Zoey Wang" as Chao Yi Wang.
+- **⚠ FOURTH PLACE IS NOT PUBLISHED, so `bronzeLost` is untouched.** Semifinals drop only by the bronze
+  removed, which keeps `semifinals` consistent with `bronze`; anyone who finished FOURTH at that event
+  still reads one semifinal high until upstream is fixed. Stated rather than guessed at.
+- Verified against the live API, all 17 cases: **Lacy Schneemann 3 titles → 1, exactly Hannah's stated
+  check**; Vivian Glozman 1 → 0, Kaitlyn Christian 5 → 4, Gabriel Tardio 30 → 28, Tyson McGuffin 15 →
+  13; every silver and bronze moved in the right division; **no negative or inconsistent counts, and
+  the controls (Ben Johns, Anna Leigh Waters) did not move** — ALW's verified-gold floor still applies.
+  Harness kept at `scratchpad/verify-aus-exclusion.ts` for the day the workaround comes out.
+
+#### Junior PPA rankings (Daniela Almendarez, due 9/28)
+
+- Straight down the documented path: the sheet is not publicly readable, so it came through the Google
+  Drive connector into `scripts/import-junior-rankings.mjs`. Jake Weinbach's sheet was **modified 9/23
+  19:24, eight minutes before Daniela filed the request**, so the stamp is Sep 23.
+- All 24 boards passed the importer's own guards — **positional division assignment confirmed against
+  the existing file at 92–100%**, no board shrank. **2,349 → 2,396 rows**; 1,671 rows changed rank or
+  points over the nine days since the 9/14 import.
+
+#### Las Vegas sponsors (Bryan Renahan, due 9/24) — NOT DONE, and it is an access problem
+
+- **⚠ THE LOGOS ARE IN A SCOREPLAY SHARE LINK THAT CANNOT BE READ WITHOUT A BROWSER SESSION.** The link
+  resolves — `media.scoreplay.io/link/369715?token=…` returns the folder record, named "Sponsor Logos
+  for Website", created 9/24 01:22 by Johnny Teixeira — but it is a **dynamic folder share**
+  (`media_ids: null`, folder 60300 / subfolder 60301) and every media-listing endpoint either 404s or
+  401s: the viewer authenticates with a real session token from localStorage, not the share token.
+  Probed the folder, media, search, download and export routes, and read the app bundle for the route
+  table. **ScorePlay is how this team ships assets** (Johnny posted a second link for JOOLA LEDs the
+  same evening), so this will recur.
+- Nothing was built, because without the folder there is neither the list of activating sponsors nor
+  their marks, and **a stop's list in `lib/event-sponsors.ts` is exhaustive** — naming Las Vegas there
+  removes every partner not named, so a partial list is worse than none. Today it correctly falls back
+  to the tour roster.
+- **Asked Bryan for a zip or Drive folder plus the sponsor names.** ⚠ The stop starts **Sept 28**.
+
 ### 2026-09-24 — Turks lineup final: Chris Crouch + Giovanna Morelli added
 
 - Lainey (Slack, 7:59 AM): add Chris Crouch & Giovanna Morelli as pros on Turks — "closes us out

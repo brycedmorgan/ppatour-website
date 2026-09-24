@@ -1,5 +1,5 @@
 {
-  "updated": "Sep 14, 2026",
+  "updated": "Sep 23, 2026",
   "source": "2026 Junior PPA Points (Jake Weinbach) — supplied by Daniela Almendarez",
   "divisions": [
     {
@@ -13,15 +13,15 @@
         ],
         [
           2,
-          "Soli Mosseri",
-          1300,
-          16
+          "Francis Chi",
+          1800,
+          14
         ],
         [
           3,
-          "Francis Chi",
+          "Soli Mosseri",
           1300,
-          14
+          16
         ],
         [
           4,
@@ -43,27 +43,27 @@
         ],
         [
           7,
+          "Isaac Hall",
+          1035,
+          17
+        ],
+        [
+          8,
           "Austin Romaguera",
           1000,
           16
         ],
         [
-          8,
+          9,
           "Ryder Brown",
           1000,
           14
         ],
         [
-          9,
+          10,
           "Maverick Messinger",
           950,
           15
-        ],
-        [
-          10,
-          "Isaac Hall",
-          935,
-          17
         ],
         [
           11,
@@ -73,21 +73,21 @@
         ],
         [
           12,
+          "Jaxton Bush",
+          825,
+          17
+        ],
+        [
+          13,
           "Dawson Davis",
           750,
           16
         ],
         [
-          13,
+          14,
           "Alexander Mercado",
           625,
           16
-        ],
-        [
-          14,
-          "Jaxton Bush",
-          525,
-          18
         ],
         [
           15,
@@ -127,612 +127,654 @@
         ],
         [
           21,
+          "Rocky Guido",
+          400,
+          16
+        ],
+        [
+          22,
           "Braden Jacobson",
           310,
           17
         ],
         [
-          22,
+          23,
           "Sebastian Santiago",
           307.5,
           17
         ],
         [
-          23,
+          24,
           "Joshua Hill",
           300,
           18
         ],
         [
-          24,
+          25,
           "Ben Baravik",
           300,
           17
         ],
         [
-          25,
+          26,
           "Kai Bonfitto",
           275,
           18
         ],
         [
-          26,
+          27,
           "Andrew Caldarella",
           260,
           17
         ],
         [
-          27,
+          28,
           "Ryland Mehta",
           250,
           14
         ],
         [
-          28,
+          29,
           "Christian K Kononchek",
           225,
           15
         ],
         [
-          29,
+          30,
           "Kayden Nguyen",
           220,
           17
         ],
         [
-          30,
+          31,
           "Xander Trinh",
           200,
           17
         ],
         [
-          31,
+          32,
+          "Bennett Miller",
+          200,
+          14
+        ],
+        [
+          33,
           "Boone Casady",
           162.5,
           17
         ],
         [
-          32,
+          34,
           "Brayden Clark",
           155,
           17
         ],
         [
-          33,
+          35,
           "Gavin Finemel",
           152.5,
           17
         ],
         [
-          34,
+          36,
           "Shae Neville",
           152.5,
           17
         ],
         [
-          35,
+          37,
           "Rudger Eaton",
           150,
           17
         ],
         [
-          36,
+          38,
           "Ethan Miller",
           140,
           17
         ],
         [
-          37,
+          39,
           "Jesse Golden",
           132.5,
           17
         ],
         [
-          38,
+          40,
           "Grant Johnson",
           125,
           16
         ],
         [
-          39,
+          41,
           "Dylan Unkert",
           102.5,
           17
         ],
         [
-          40,
+          42,
           "Tashner Schenkenberger",
           100,
           15
         ],
         [
-          41,
+          43,
           "Buck Quinn",
           100,
           18
         ],
         [
-          42,
+          44,
           "Kolton Youngblood",
           100,
           17
         ],
         [
-          43,
+          45,
           "Lawson Demian",
           100,
           16
         ],
         [
-          44,
+          46,
           "Raphael Esmas",
           75,
           17
         ],
         [
-          45,
+          47,
           "Jacob Bolkowy",
           65,
           17
         ],
         [
-          46,
+          48,
           "Nicklas Yong",
           55,
           17
         ],
         [
-          47,
+          49,
           "Cayden Sprowl",
           55,
           17
         ],
         [
-          48,
+          50,
           "Aidan Quinn",
           55,
           17
         ],
         [
-          49,
+          51,
           "Robby Rivera",
           52.5,
           17
         ],
         [
-          50,
+          52,
           "Lincoln Beuster",
           52.5,
           17
         ],
         [
-          51,
+          53,
           "Chayce Baaske",
           52.5,
           17
         ],
         [
-          52,
+          54,
           "Mikaeel Alibaig",
           50,
           17
         ],
         [
-          53,
+          55,
           "Tommy Parada",
           50,
           17
         ],
         [
-          54,
+          56,
           "Ethan Bakalinsky",
           50,
           15
         ],
         [
-          55,
+          57,
           "Titus Libell",
           50,
           17
         ],
         [
-          56,
+          58,
           "Josiah Agado",
           50,
           18
         ],
         [
-          57,
+          59,
           "Diego Villarroel",
           50,
           18
         ],
         [
-          58,
+          60,
           "Zachary Pulaski",
           50,
           17
         ],
         [
-          59,
+          61,
           "Khoi Dinh",
           50,
           15
         ],
         [
-          60,
+          62,
           "Hridhay Pothunoori",
           50,
           16
         ],
         [
-          61,
+          63,
           "Hudson Yeager",
           50,
           14
         ],
         [
-          62,
+          64,
           "Jude Beziat",
           50,
           17
         ],
         [
-          63,
+          65,
           "Ashton Devane",
           50,
           17
         ],
         [
-          64,
+          66,
           "Vrishab Pola",
           50,
           18
         ],
         [
-          65,
+          67,
           "Jacob Farakas",
           50,
           17
         ],
         [
-          66,
+          68,
           "MJ Fermin",
           50,
           15
         ],
         [
-          67,
+          69,
+          "Kade Rucker",
+          50,
+          17
+        ],
+        [
+          70,
+          "Jonah Karczmer",
+          50,
+          15
+        ],
+        [
+          71,
           "Maddox Castellanos",
           35,
           17
         ],
         [
-          68,
+          72,
           "Chase Ballay",
           30,
           17
         ],
         [
-          69,
+          73,
           "Lincoln McConnell",
           25,
           18
         ],
         [
-          70,
+          74,
           "Harrison Malko",
           25,
           18
         ],
         [
-          71,
+          75,
           "Logan Foust",
           25,
           17
         ],
         [
-          72,
+          76,
           "Ethan Farrington",
           25,
           17
         ],
         [
-          73,
+          77,
           "Luke Geiser",
           25,
           18
         ],
         [
-          74,
-          "Kade Rucker",
-          25,
-          17
-        ],
-        [
-          75,
+          78,
           "Adam Alsabbagh",
           25,
           17
         ],
         [
-          76,
+          79,
           "Nicholas Bond",
           25,
           18
         ],
         [
-          77,
+          80,
           "Isaac Chen",
           25,
           18
         ],
         [
-          78,
+          81,
           "Jackson Furdek",
           25,
           17
         ],
         [
-          79,
+          82,
           "James Clark",
           25,
           18
         ],
         [
-          80,
+          83,
           "Briggs Pew",
           25,
           17
         ],
         [
-          81,
+          84,
           "Richard Fomin",
           25,
           13
         ],
         [
-          82,
+          85,
           "Wade Morrow",
           25,
           17
         ],
         [
-          83,
+          86,
           "Nathanael Rovenstine",
           25,
           18
         ],
         [
-          84,
+          87,
           "Devon Lulla",
           25,
           16
         ],
         [
-          85,
+          88,
           "Kyle Laronge",
           25,
           16
         ],
         [
-          86,
+          89,
           "Nicholas Pena",
           25,
           16
         ],
         [
-          87,
+          90,
           "Leon Esmas",
           25,
           17
         ],
         [
-          88,
+          91,
+          "Leo Hernandez",
+          25,
+          16
+        ],
+        [
+          92,
+          "Adym Pham",
+          25,
+          13
+        ],
+        [
+          93,
+          "Jason Cleveland",
+          25,
+          17
+        ],
+        [
+          94,
+          "Tran Gia Bao Le",
+          25,
+          18
+        ],
+        [
+          95,
           "Jack Sahid",
           20,
           17
         ],
         [
-          89,
+          96,
           "Kaihe Allen",
           20,
           17
         ],
         [
-          90,
+          97,
           "Javon Turcsany",
           15,
           17
         ],
         [
-          91,
+          98,
           "Nicholas Moon",
           12.5,
           17
         ],
         [
-          92,
+          99,
           "Dominic Osborne",
           12.5,
           17
         ],
         [
-          93,
+          100,
           "Abhinav Mishra",
           12.5,
           17
         ],
         [
-          94,
+          101,
           "Giovanni Erro",
           10,
           17
         ],
         [
-          95,
+          102,
           "Suhas Bandlapalli",
           10,
           17
         ],
         [
-          96,
+          103,
           "Houston Hassell",
           10,
           17
         ],
         [
-          97,
+          104,
           "Thomas Abramski",
           10,
           17
         ],
         [
-          98,
+          105,
           "Arsh Bassan",
           7.5,
           17
         ],
         [
-          99,
+          106,
           "Kaidyn Purdy",
           7.5,
           17
         ],
         [
-          100,
+          107,
           "Brock Hammond",
           7.5,
           17
         ],
         [
-          101,
+          108,
           "Andrew Kemp",
           5,
           17
         ],
         [
-          102,
+          109,
           "Aaron Yoon",
           5,
           17
         ],
         [
-          103,
+          110,
           "Jason Bruce",
           5,
           17
         ],
         [
-          104,
+          111,
           "Adam Yousef",
           5,
           17
         ],
         [
-          105,
+          112,
           "Coby Frabott",
           5,
           17
         ],
         [
-          106,
+          113,
           "Mason McCabe",
           5,
           17
         ],
         [
-          107,
+          114,
           "Krish Desai",
           5,
           17
         ],
         [
-          108,
+          115,
           "Lachy Donnelly",
           5,
           17
         ],
         [
-          109,
+          116,
           "Harry Morris",
           5,
           17
         ],
         [
-          110,
+          117,
           "Bennett Choi",
           5,
           17
         ],
         [
-          111,
+          118,
           "Lucas Erlikh",
           2.5,
           17
         ],
         [
-          112,
+          119,
           "Michael Alvarado",
           2.5,
           17
         ],
         [
-          113,
+          120,
           "Ryder Boydston",
           2.5,
           17
         ],
         [
-          114,
+          121,
           "Creighton Mitchell",
           2.5,
           17
         ],
         [
-          115,
+          122,
           "Drake Hall",
           2.5,
           17
         ],
         [
-          116,
+          123,
           "Nic Jimenez",
           2.5,
           17
         ],
         [
-          117,
+          124,
           "Nathan Park",
           2.5,
           17
         ],
         [
-          118,
+          125,
           "Neil Karia",
           2.5,
           17
         ],
         [
-          119,
+          126,
           "Rogelio Gutierrez",
           2.5,
           17
         ],
         [
-          120,
+          127,
           "Aaron Gehlken",
           2.5,
           17
         ],
         [
-          121,
+          128,
           "Aidan Cheung",
           2.5,
           17
         ],
         [
-          122,
+          129,
           "Tyler Mccullough",
           2.5,
           17
@@ -750,21 +792,21 @@
         ],
         [
           2,
+          "Francis Chi",
+          2925,
+          14
+        ],
+        [
+          3,
           "George Wolf",
           2700,
           13
         ],
         [
-          3,
+          4,
           "Rex Thais",
           2430,
           16
-        ],
-        [
-          4,
-          "Francis Chi",
-          2425,
-          14
         ],
         [
           5,
@@ -792,32 +834,32 @@
         ],
         [
           9,
+          "Rocky Guido",
+          1730,
+          16
+        ],
+        [
+          10,
           "Maverick Messinger",
           1690,
           15
         ],
         [
-          10,
+          11,
           "Lawson Demian",
           1610,
           16
         ],
         [
-          11,
+          12,
           "Ethan Bakalinsky",
           1465,
           15
         ],
         [
-          12,
+          13,
           "Austin Romaguera",
           1440,
-          16
-        ],
-        [
-          13,
-          "Rocky Guido",
-          1355,
           16
         ],
         [
@@ -846,15 +888,15 @@
         ],
         [
           18,
-          "Dawson Davis",
-          760,
-          16
+          "Jonah Karczmer",
+          772.5,
+          15
         ],
         [
           19,
-          "Jonah Karczmer",
-          722.5,
-          15
+          "Dawson Davis",
+          760,
+          16
         ],
         [
           20,
@@ -984,912 +1026,924 @@
         ],
         [
           41,
+          "Bennett Miller",
+          200,
+          14
+        ],
+        [
+          42,
           "Phi Trinh",
           190,
           15
         ],
         [
-          42,
+          43,
           "Daniel Kegnovich",
           187.5,
           15
         ],
         [
-          43,
+          44,
           "Walker Brasol",
           177.5,
           15
         ],
         [
-          44,
+          45,
           "Kian Maghamfar",
           165,
           15
         ],
         [
-          45,
+          46,
           "Jackson Lyman",
           145,
           16
         ],
         [
-          46,
+          47,
           "Grant Johnson",
           140,
           16
         ],
         [
-          47,
+          48,
           "Tashner Schenkenberger",
           125,
           15
         ],
         [
-          48,
+          49,
           "Joseph DuBose",
           122.5,
           15
         ],
         [
-          49,
+          50,
           "Max Hydell",
           105,
           16
         ],
         [
-          50,
+          51,
           "Khoi Dinh",
           104,
           15
         ],
         [
-          51,
+          52,
           "Preston Stratton",
           100,
           15
         ],
         [
-          52,
+          53,
           "Britton Shinker",
           100,
           14
         ],
         [
-          53,
+          54,
           "Michael Fermin",
           90,
           15
         ],
         [
-          54,
+          55,
           "William Lindstrom",
           86.5,
           15
         ],
         [
-          55,
+          56,
           "Nicolas Saenz",
           84,
           15
         ],
         [
-          56,
+          57,
           "Rothe Ripley",
           82.5,
           15
         ],
         [
-          57,
+          58,
           "Saaid Morales",
           80,
           16
         ],
         [
-          58,
+          59,
           "Landry Banker",
           80,
           15
         ],
         [
-          59,
+          60,
           "Bryce Walkover",
           75,
           15
         ],
         [
-          60,
+          61,
           "Madden Mehan",
           75,
           16
         ],
         [
-          61,
+          62,
           "Tobin Inacio",
           75,
           16
         ],
         [
-          62,
+          63,
           "MJ Fermin",
           75,
           15
         ],
         [
-          63,
+          64,
+          "Leo Hernandez",
+          65,
+          16
+        ],
+        [
+          65,
           "Reed Strickland",
           60,
           16
         ],
         [
-          64,
+          66,
           "Drew Fahrbach",
           60,
           16
         ],
         [
-          65,
+          67,
           "Nicholas Pena",
           60,
           16
         ],
         [
-          66,
+          68,
           "Daniel Schappacher",
           55,
           16
         ],
         [
-          67,
+          69,
           "Sajid Makhani",
           55,
           15
         ],
         [
-          68,
+          70,
           "Dylan Thomas",
           55,
           16
         ],
         [
-          69,
+          71,
           "Gatlin Collins",
           50,
           16
         ],
         [
-          70,
+          72,
           "Brayden Brown",
           50,
           16
         ],
         [
-          71,
+          73,
           "Johnny Estrada",
           50,
           14
         ],
         [
-          72,
+          74,
           "Matias Duran",
           50,
           15
         ],
         [
-          73,
+          75,
           "Thane Hendershot",
           50,
           15
         ],
         [
-          74,
+          76,
           "Dhanvin Sureshbabbu",
           50,
           15
         ],
         [
-          75,
+          77,
           "Andrew Contonio",
           50,
           16
         ],
         [
-          76,
+          78,
           "Zeke Varela",
           50,
           16
         ],
         [
-          77,
+          79,
           "Jase Volz",
           50,
           13
         ],
         [
-          78,
+          80,
           "Agasthya Aspari",
           50,
           16
         ],
         [
-          79,
+          81,
           "Ryan Rothschild",
           50,
           16
         ],
         [
-          80,
+          82,
           "Braden Perl",
           50,
           15
         ],
         [
-          81,
+          83,
           "Ishaan Gautam",
           50,
           16
         ],
         [
-          82,
+          84,
           "Jeremiah Fung",
           50,
           16
         ],
         [
-          83,
+          85,
           "Ashwath Kapistalam",
           50,
           15
         ],
         [
-          84,
+          86,
           "Hudson Yeager",
           50,
           14
         ],
         [
-          85,
+          87,
           "Mason Fekete",
           40,
           16
         ],
         [
-          86,
+          88,
           "He Yonglin",
           40,
           16
         ],
         [
-          87,
-          "Leo Hernandez",
-          40,
-          16
-        ],
-        [
-          88,
+          89,
           "Casey Hooks",
           39,
           15
         ],
         [
-          89,
+          90,
           "Daniel Suharjoto",
           32.5,
           15
         ],
         [
-          90,
+          91,
           "Timber Gant",
           30,
           16
         ],
         [
-          91,
+          92,
           "Samuel Morelli",
           30,
           16
         ],
         [
-          92,
+          93,
           "Milo Briz",
           30,
           16
         ],
         [
-          93,
+          94,
           "Luke Blackann",
           30,
           15
         ],
         [
-          94,
+          95,
           "Lucas Bonetto",
           30,
           15
         ],
         [
-          95,
+          96,
           "Kyle Laronge",
           30,
           16
         ],
         [
-          96,
+          97,
           "Alexander Ammons",
           29,
           15
         ],
         [
-          97,
+          98,
           "Christopher Loyola",
           27.5,
           15
         ],
         [
-          98,
+          99,
           "Milo Bechtel",
           27.5,
           15
         ],
         [
-          99,
+          100,
           "Oliver Barry",
           27.5,
           15
         ],
         [
-          100,
+          101,
           "Maddox Collier",
           27.5,
           15
         ],
         [
-          101,
+          102,
           "Rocco Monteleon",
           25,
           14
         ],
         [
-          102,
+          103,
           "Cassius Sararo",
           25,
           16
         ],
         [
-          103,
+          104,
           "Hillel Kevelson",
           25,
           16
         ],
         [
-          104,
+          105,
           "Davis Kintz",
           25,
           16
         ],
         [
-          105,
+          106,
           "Maximus Harding",
           25,
           15
         ],
         [
-          106,
+          107,
           "Riley Roy Pagayona",
           25,
           16
         ],
         [
-          107,
+          108,
           "Koki Machita",
           25,
           16
         ],
         [
-          108,
+          109,
           "Gage Ayres",
           25,
           15
         ],
         [
-          109,
+          110,
           "Oren Hertz",
           25,
           16
         ],
         [
-          110,
+          111,
           "John Robert Pittman",
           25,
           16
         ],
         [
-          111,
+          112,
           "Ahmad Farid Rahimi",
           25,
           14
         ],
         [
-          112,
+          113,
           "Zeke Kaelin",
           25,
           16
         ],
         [
-          113,
+          114,
           "Benton Denman",
           25,
           15
         ],
         [
-          114,
+          115,
           "Kallin York",
           25,
           16
         ],
         [
-          115,
+          116,
           "Aaryan Dave",
           25,
           15
         ],
         [
-          116,
+          117,
           "Colton Shock",
           25,
           16
         ],
         [
-          117,
+          118,
           "Richard Fomin",
           25,
           13
         ],
         [
-          118,
+          119,
           "Devon Lulla",
           25,
           16
         ],
         [
-          119,
+          120,
+          "Adym Pham",
+          25,
+          13
+        ],
+        [
+          121,
           "Logan Fasan",
           20,
           16
         ],
         [
-          120,
+          122,
           "Mills Boggs",
           17.5,
           15
         ],
         [
-          121,
+          123,
           "Hudson Moore",
           15,
           16
         ],
         [
-          122,
+          124,
           "Landon Davis",
           15,
           16
         ],
         [
-          123,
+          125,
           "Elijah Schneringer",
           15,
           16
         ],
         [
-          124,
+          126,
           "Skyler Garrigus",
           14,
           15
         ],
         [
-          125,
+          127,
           "Luka Bisharat",
           12.5,
           15
         ],
         [
-          126,
+          128,
           "Lucas Stampe",
           12.5,
           15
         ],
         [
-          127,
+          129,
           "Lucca Clark",
           12.5,
           15
         ],
         [
-          128,
+          130,
           "Asher Baghurst",
           10,
           16
         ],
         [
-          129,
+          131,
           "Micah Metcalf",
           10,
           16
         ],
         [
-          130,
+          132,
           "Heath Helms",
           10,
           16
         ],
         [
-          131,
+          133,
           "Denson Helms",
           10,
           16
         ],
         [
-          132,
+          134,
           "Andrew Gardner",
           10,
           16
         ],
         [
-          133,
+          135,
           "Jayden Tsao",
           10,
           16
         ],
         [
-          134,
+          136,
           "Jaden Tran",
           10,
           16
         ],
         [
-          135,
+          137,
           "Carson Hugo",
           10,
           16
         ],
         [
-          136,
+          138,
           "Andrew Hawkins",
           10,
           16
         ],
         [
-          137,
+          139,
           "Graham Revzin",
           10,
           16
         ],
         [
-          138,
+          140,
           "Raziel Alvarez",
           7.5,
           15
         ],
         [
-          139,
+          141,
           "Shawn Sheridan",
           5,
           16
         ],
         [
-          140,
+          142,
           "Alexander Ibrahim",
           5,
           16
         ],
         [
-          141,
+          143,
           "Landon Metzger",
           5,
           16
         ],
         [
-          142,
+          144,
           "Tanner Brasol",
           5,
           16
         ],
         [
-          143,
+          145,
           "Finn Curran",
           5,
           16
         ],
         [
-          144,
+          146,
           "Chase Sandler",
           5,
           16
         ],
         [
-          145,
+          147,
           "Charlie Spangler",
           5,
           16
         ],
         [
-          146,
+          148,
           "Prathik Aarav Anna Karthick",
           5,
           16
         ],
         [
-          147,
+          149,
           "Chase Robb",
           5,
           16
         ],
         [
-          148,
+          150,
           "Sawyer Terry",
           5,
           16
         ],
         [
-          149,
+          151,
           "Stef Bubulac",
           5,
           16
         ],
         [
-          150,
+          152,
           "Patrick Barrangou",
           5,
           16
         ],
         [
-          151,
+          153,
           "Sam Malament",
           5,
           16
         ],
         [
-          152,
+          154,
           "Luke Andersch",
           5,
           16
         ],
         [
-          153,
+          155,
           "Mackonner Dy",
           5,
           16
         ],
         [
-          154,
+          156,
           "Daniel Phillips",
           5,
           16
         ],
         [
-          155,
+          157,
           "Diego Kilzi",
           5,
           16
         ],
         [
-          156,
+          158,
           "Ryan Mulder",
           5,
           16
         ],
         [
-          157,
+          159,
           "Barghav Naraian Prasanna Kumar",
           5,
           16
         ],
         [
-          158,
+          160,
           "Cooper Onks",
           5,
           16
         ],
         [
-          159,
+          161,
           "Andrew Keller",
           5,
           16
         ],
         [
-          160,
+          162,
           "Jaiden Linnik",
           5,
           16
         ],
         [
-          161,
+          163,
           "Drew Sahid",
           5,
           15
         ],
         [
-          162,
+          164,
           "Jack Mcglinn",
           5,
           15
         ],
         [
-          163,
+          165,
           "Stephen \"Parker\" Cutts",
           5,
           15
         ],
         [
-          164,
+          166,
           "Carson Atles",
           5,
           15
         ],
         [
-          165,
+          167,
           "Pryce Dejneka",
           5,
           15
         ],
         [
-          166,
+          168,
           "Hadi Mawji",
           5,
           15
         ],
         [
-          167,
+          169,
           "Tran Duc Khang",
           5,
           15
         ],
         [
-          168,
+          170,
           "Brennan Ramos",
           5,
           15
         ],
         [
-          169,
+          171,
           "Joey Bukartek",
           5,
           15
         ],
         [
-          170,
+          172,
           "Julian Caceres",
           5,
           15
         ],
         [
-          171,
+          173,
           "Santiago Morales",
           5,
           15
         ],
         [
-          172,
+          174,
           "Ian Casas",
           4,
           15
         ],
         [
-          173,
+          175,
           "Vinay Jagtiani",
           3,
           16
         ],
         [
-          174,
+          176,
           "Samuel Petrusha",
           2.5,
           15
         ],
         [
-          175,
+          177,
           "Logan Russell",
           2.5,
           15
         ],
         [
-          176,
+          178,
           "Christian Lund",
           2.5,
           15
         ],
         [
-          177,
+          179,
           "Zak Mosseri",
           2.5,
           15
         ],
         [
-          178,
+          180,
           "Owen Weaver",
           2.5,
           15
         ],
         [
-          179,
+          181,
           "Rockwell Johnson",
           2.5,
           15
         ],
         [
-          180,
+          182,
           "Jacob Rowan",
           2.5,
           15
         ],
         [
-          181,
+          183,
           "Jack Blaustein",
           2.5,
           15
         ],
         [
-          182,
+          184,
           "Siddhan Sarikonda",
           2.5,
           15
         ],
         [
-          183,
+          185,
           "Evan Beach",
           2.5,
           15
         ],
         [
-          184,
+          186,
           "Max Braun",
           2.5,
           15
         ],
         [
-          185,
+          187,
           "Asa Nguyen",
           2.5,
           15
         ],
         [
-          186,
+          188,
           "Zong Qu",
           2.5,
           15
         ],
         [
-          187,
+          189,
           "Archie Barcelona",
           2.5,
           15
         ],
         [
-          188,
+          190,
           "Finley Monahan",
           2.5,
           15
         ],
         [
-          189,
+          191,
           "Quinn Shaffer",
           2.5,
           15
         ],
         [
-          190,
+          192,
           "Simon Manzuri",
           1.5,
           15
         ],
         [
-          191,
+          193,
           "Mason Sedeno",
           1.5,
           15
         ],
         [
-          192,
+          194,
           "Matteo Introna",
           1.5,
           15
@@ -1902,7 +1956,7 @@
         [
           1,
           "Francis Chi",
-          3875,
+          4350,
           14
         ],
         [
@@ -1925,20 +1979,20 @@
         ],
         [
           5,
+          "Bennett Miller",
+          2880,
+          14
+        ],
+        [
+          6,
           "George Wolf",
           2840,
           13
         ],
         [
-          6,
-          "Bennett Miller",
-          2680,
-          14
-        ],
-        [
           7,
           "Leo Chun",
-          2175,
+          2650,
           14
         ],
         [
@@ -1950,7 +2004,7 @@
         [
           9,
           "Adym Pham",
-          1845,
+          1870,
           13
         ],
         [
@@ -1967,81 +2021,81 @@
         ],
         [
           12,
+          "Jack Loughridge",
+          850,
+          12
+        ],
+        [
+          13,
           "Nate Partidge",
           780,
           14
         ],
         [
-          13,
+          14,
           "Ryland Mehta",
           775,
           14
         ],
         [
-          14,
+          15,
           "Nicholas Zhang",
           720,
           13
         ],
         [
-          15,
+          16,
           "Tyler Yang",
           640,
           13
         ],
         [
-          16,
+          17,
           "Ethan Lefkowitz",
           635,
           13
         ],
         [
-          17,
+          18,
           "Elliott Rouse",
           570,
           14
         ],
         [
-          18,
+          19,
           "MJ Marrero",
           525,
           14
         ],
         [
-          19,
+          20,
           "Jamie Hafner",
           500,
           14
         ],
         [
-          20,
+          21,
           "Emiliano Pena",
           500,
           14
         ],
         [
-          21,
+          22,
           "Nathan Nguyen",
           480,
           14
         ],
         [
-          22,
+          23,
           "Cohen Clarke",
           475,
           12
         ],
         [
-          23,
+          24,
           "Kyle Lewis Trinidad",
           460,
           14
-        ],
-        [
-          24,
-          "Jack Loughridge",
-          450,
-          12
         ],
         [
           25,
@@ -2081,918 +2135,936 @@
         ],
         [
           31,
+          "Luke Kremer",
+          305,
+          14
+        ],
+        [
+          32,
           "Jaden Hsu",
           300,
           14
         ],
         [
-          32,
+          33,
           "Abhav Sharma",
           300,
           14
         ],
         [
-          33,
+          34,
           "Cole Brown",
           275,
           14
         ],
         [
-          34,
+          35,
           "Jase Volz",
           267.5,
           13
         ],
         [
-          35,
+          36,
           "Ari Chandra",
           230,
           13
         ],
         [
-          36,
+          37,
           "Jacob Garcia",
           230,
           13
         ],
         [
-          37,
+          38,
+          "Noah Elbyr",
+          222.5,
+          13
+        ],
+        [
+          39,
           "Cruz Aromi",
           210,
           13
         ],
         [
-          38,
+          40,
           "Jeremy Yan",
           200,
           14
         ],
         [
-          39,
-          "Noah Elbyr",
-          197.5,
-          13
+          41,
+          "Dexton Moser",
+          200,
+          14
         ],
         [
-          40,
+          42,
           "Raphael Halais",
           195,
           13
         ],
         [
-          41,
+          43,
+          "Luis Fernandez Celis",
+          175,
+          14
+        ],
+        [
+          44,
           "Jackson Midgley",
           170,
           14
         ],
         [
-          42,
+          45,
           "Desmond Pututau",
           155,
           13
         ],
         [
-          43,
+          46,
           "Dex Saniuk",
           155,
           14
         ],
         [
-          44,
+          47,
           "Britton Shinker",
           155,
           14
         ],
         [
-          45,
+          48,
           "Hudson Yeager",
           155,
           14
         ],
         [
-          46,
+          49,
           "Liam To",
           152.5,
           13
         ],
         [
-          47,
-          "Luis Fernandez Celis",
-          150,
-          14
-        ],
-        [
-          48,
+          50,
           "Johnny Estrada",
           150,
           14
         ],
         [
-          49,
+          51,
           "Robert Neville",
           127.5,
           13
         ],
         [
-          50,
+          52,
           "Hanson Huynh",
           120,
           14
         ],
         [
-          51,
+          53,
           "Oliver Culbertson",
           112.5,
           13
         ],
         [
-          52,
+          54,
           "Emmett DeHaan",
           110,
           14
         ],
         [
-          53,
+          55,
+          "Knox Seader",
+          105,
+          14
+        ],
+        [
+          56,
           "Kasey Mrgic",
           102.5,
           13
         ],
         [
-          54,
+          57,
+          "Luis Fischer",
+          102.5,
+          13
+        ],
+        [
+          58,
           "Phillip Teng",
           100,
           14
         ],
         [
-          55,
+          59,
           "Nicolas Requarth",
           100,
           13
         ],
         [
-          56,
+          60,
           "Levi Olson",
           90,
           13
         ],
         [
-          57,
+          61,
           "Gabriel Saenz",
           84,
           13
         ],
         [
-          58,
+          62,
           "Aryan Malhotra",
           82.5,
           13
         ],
         [
-          59,
-          "Knox Seader",
-          80,
-          14
-        ],
-        [
-          60,
+          63,
           "Lawerence Liu",
           80,
           13
         ],
         [
-          61,
+          64,
           "Carsen Ngo",
           80,
           13
         ],
         [
-          62,
+          65,
           "Rocco Monteleon",
           75,
           14
         ],
         [
-          63,
+          66,
           "Nate Flores",
           75,
           13
         ],
         [
-          64,
+          67,
           "Max Martin",
           75,
           14
         ],
         [
-          65,
+          68,
+          "Jesvin Cheeran Lijo",
+          75,
+          13
+        ],
+        [
+          69,
           "Martyn Yi",
           65,
           14
         ],
         [
-          66,
+          70,
           "Kove Kandell",
           60,
           14
         ],
         [
-          67,
+          71,
           "Landon Heflin",
           59,
           13
         ],
         [
-          68,
+          72,
           "Christian Pena",
           55,
           13
         ],
         [
-          69,
+          73,
           "Jonathan Wei",
           55,
           14
         ],
         [
-          70,
+          74,
           "Mats Gasparovic",
           52.5,
           13
         ],
         [
-          71,
+          75,
           "Justin Dewey",
           50,
           14
         ],
         [
-          72,
+          76,
           "Theo Benson",
           50,
           14
         ],
         [
-          73,
+          77,
           "Carter Mckibben",
           50,
           14
         ],
         [
-          74,
+          78,
           "Declan Caudill",
           50,
           13
         ],
         [
-          75,
+          79,
           "Benjamin Baguio",
           50,
           14
         ],
         [
-          76,
+          80,
           "Carter Huy Le",
           50,
           13
         ],
         [
-          77,
+          81,
           "Brayden Cheung",
           50,
           14
         ],
         [
-          78,
+          82,
           "Kayan Mehan",
           50,
           14
         ],
         [
-          79,
-          "Jesvin Cheeran Lijo",
-          50,
-          13
-        ],
-        [
-          80,
+          83,
           "Anthom Zurita",
           50,
           13
         ],
         [
-          81,
+          84,
           "Caleb Handford",
           50,
           14
         ],
         [
-          82,
+          85,
           "Lewis Torres",
           50,
           13
         ],
         [
-          83,
+          86,
           "Neil Dedhia",
           50,
           13
         ],
         [
-          84,
+          87,
           "Isaiah Neuman",
           50,
           14
         ],
         [
-          85,
+          88,
           "Lucas Condori",
           50,
           13
         ],
         [
-          86,
+          89,
           "Luke Picciurro",
           50,
           13
         ],
         [
-          87,
+          90,
           "Ryan Obrist",
           50,
           14
         ],
         [
-          88,
+          91,
           "Hridhaan Solanki",
           50,
           12
         ],
         [
-          89,
+          92,
+          "Justin Cleveland",
+          50,
+          14
+        ],
+        [
+          93,
           "Quentin Ware",
           47.5,
           13
         ],
         [
-          90,
+          94,
           "Arjun Khanna",
           38,
           14
         ],
         [
-          91,
+          95,
           "Connor Schultz",
           35,
           14
         ],
         [
-          92,
+          96,
           "Lane Jones",
           35,
           14
         ],
         [
-          93,
+          97,
           "Muhsin Akkoyun",
           35,
           14
         ],
         [
-          94,
+          98,
           "Erick Sevilla",
           35,
           13
         ],
         [
-          95,
+          99,
           "Tyson Faldmo",
           35,
           14
         ],
         [
-          96,
+          100,
           "Bryce Kurtz",
           30,
           14
         ],
         [
-          97,
+          101,
           "Jose Loyola",
           30,
           14
         ],
         [
-          98,
+          102,
           "Logan Sarangi",
           30,
           13
         ],
         [
-          99,
+          103,
           "Oliver Bryson",
           30,
           13
         ],
         [
-          100,
+          104,
           "Braden Nolas",
           30,
           13
         ],
         [
-          101,
+          105,
           "Ahmad Farid Rahimi",
           30,
           14
         ],
         [
-          102,
+          106,
+          "Brody Goodnow",
+          27.5,
+          13
+        ],
+        [
+          107,
           "Noah Rich",
           25,
           13
         ],
         [
-          103,
+          108,
           "Cade Kershaw",
           25,
           13
         ],
         [
-          104,
+          109,
           "Bryson Hyser",
           25,
           14
         ],
         [
-          105,
+          110,
           "Daniel Zavitz",
           25,
           13
         ],
         [
-          106,
+          111,
           "Gentry Washam",
           25,
           13
         ],
         [
-          107,
+          112,
           "Noam Davoodi",
           25,
           14
         ],
         [
-          108,
+          113,
           "David Su",
           25,
           14
         ],
         [
-          109,
+          114,
           "Blake Foust",
           25,
           13
         ],
         [
-          110,
+          115,
           "Damien Flores",
           25,
           14
         ],
         [
-          111,
+          116,
           "Siddarth Nair",
           25,
           14
         ],
         [
-          112,
+          117,
           "Aden Abraham",
           25,
           13
         ],
         [
-          113,
+          118,
           "Bentley Manning",
           25,
           14
         ],
         [
-          114,
+          119,
           "Caden Colwell",
           25,
           14
         ],
         [
-          115,
+          120,
           "Richard Fomin",
           25,
           13
         ],
         [
-          116,
+          121,
           "Zayd El Calamawy",
           25,
           14
         ],
         [
-          117,
+          122,
           "Jett Emery",
           25,
           13
         ],
         [
-          118,
+          123,
+          "Oliver White",
+          25,
+          13
+        ],
+        [
+          124,
           "Aidan Freel",
           20,
           14
         ],
         [
-          119,
+          125,
           "Miles Maurizzio",
           20,
           14
         ],
         [
-          120,
+          126,
           "Andrew Powitzky",
           20,
           14
         ],
         [
-          121,
+          127,
           "Ryan Christy",
           15,
           14
         ],
         [
-          122,
+          128,
           "Nate Brooker",
           15,
           14
         ],
         [
-          123,
+          129,
           "Hyder Zaidi",
           10,
           13
         ],
         [
-          124,
+          130,
           "Gianluca Randazzo",
           10,
           14
         ],
         [
-          125,
+          131,
           "Jamin Weber",
           10,
           14
         ],
         [
-          126,
+          132,
           "Reyansh Tiwari",
           10,
           14
         ],
         [
-          127,
+          133,
           "Ty Simmons",
           10,
           14
         ],
         [
-          128,
+          134,
           "Charles Leeker",
           10,
           14
         ],
         [
-          129,
+          135,
           "Leo Miller",
           10,
           14
         ],
         [
-          130,
+          136,
           "Le Vu Phat Loc",
           10,
           14
         ],
         [
-          131,
+          137,
           "Luke Armstrong",
           10,
           14
         ],
         [
-          132,
+          138,
           "Anish Kala",
           10,
           14
         ],
         [
-          133,
+          139,
           "Trevor Alexander",
           10,
           14
         ],
         [
-          134,
+          140,
           "Oliver Novic",
           10,
           13
         ],
         [
-          135,
+          141,
           "Gabriel Alvarado",
           7.5,
           13
         ],
         [
-          136,
+          142,
           "Hugo Namiki",
           7.5,
           13
         ],
         [
-          137,
+          143,
           "Victor Pragle",
           5,
           14
         ],
         [
-          138,
-          "Luke Kremer",
-          5,
-          14
-        ],
-        [
-          139,
+          144,
           "Jeshua Desque",
           5,
           14
         ],
         [
-          140,
+          145,
           "Lukas Tomas",
           5,
           14
         ],
         [
-          141,
+          146,
           "Caleb Araujo",
           5,
           14
         ],
         [
-          142,
+          147,
           "Lincoln Brunson",
           5,
           14
         ],
         [
-          143,
+          148,
           "Earl Xander Tuzon",
           5,
           14
         ],
         [
-          144,
+          149,
           "Suhas Soleti",
           5,
           14
         ],
         [
-          145,
+          150,
           "Rianvir Bhullar",
           5,
           14
         ],
         [
-          146,
+          151,
           "Angelo Cabrera",
           5,
           14
         ],
         [
-          147,
+          152,
           "Chase Collins",
           5,
           14
         ],
         [
-          148,
+          153,
           "Ryan Lahlou Amine",
           5,
           14
         ],
         [
-          149,
+          154,
           "Caleb Hastman",
           5,
           14
         ],
         [
-          150,
+          155,
           "Elatan Ree",
           5,
           14
         ],
         [
-          151,
+          156,
           "Dean Schulte",
           5,
           14
         ],
         [
-          152,
+          157,
           "Jake Zwahlen",
           5,
           14
         ],
         [
-          153,
+          158,
           "Tyler Ochinang",
           5,
           14
         ],
         [
-          154,
+          159,
           "Johnn Angeles",
           5,
           14
         ],
         [
-          155,
+          160,
           "Anders Smith",
           5,
           14
         ],
         [
-          156,
+          161,
           "Tyler Iskander",
           5,
           13
         ],
         [
-          157,
+          162,
           "Jackson Metcalf",
           5,
           13
         ],
         [
-          158,
+          163,
           "113 智鈞",
           5,
           13
         ],
         [
-          159,
+          164,
           "Tristan Thankamani",
           5,
           13
         ],
         [
-          160,
+          165,
           "Ryan Rezai",
           4,
           13
         ],
         [
-          161,
+          166,
           "Rearden Nguyen",
           3,
           12
         ],
         [
-          162,
+          167,
           "Suhas Jupalli",
           2.5,
           13
         ],
         [
-          163,
+          168,
           "Donovan Caplinger",
           2.5,
           13
         ],
         [
-          164,
+          169,
           "Joseph Petrusha",
           2.5,
           13
         ],
         [
-          165,
+          170,
           "Chandler Craig",
           2.5,
           13
         ],
         [
-          166,
+          171,
           "Taz Oxley",
           2.5,
           13
         ],
         [
-          167,
+          172,
           "Bryson Craig",
           2.5,
           13
         ],
         [
-          168,
-          "Luis Fischer",
-          2.5,
-          13
-        ],
-        [
-          169,
+          173,
           "Sawyer Pendleton",
           2.5,
           13
         ],
         [
-          170,
+          174,
           "Blake Morris",
           2.5,
           13
         ],
         [
-          171,
+          175,
           "Brody McGlinn",
           2.5,
           13
         ],
         [
-          172,
+          176,
           "Gehrig Garcia",
           2.5,
           13
         ],
         [
-          173,
+          177,
           "Liam Whipple",
           2.5,
           13
         ],
         [
-          174,
+          178,
           "Blake Weaver",
           2.5,
           13
         ],
         [
-          175,
+          179,
           "Vihaan Madam",
           2.5,
           13
         ],
         [
-          176,
+          180,
           "Grant Shibl",
           2.5,
           13
         ],
         [
-          177,
+          181,
           "Lucas Lim",
           2.5,
           13
         ],
         [
-          178,
+          182,
           "Benjamin Applegate",
           2.5,
           13
         ],
         [
-          179,
+          183,
           "Liam Miller",
           2.5,
           13
         ],
         [
-          180,
+          184,
           "Nicholas Jenkins",
           2.5,
           13
         ],
         [
-          181,
-          "Brody Goodnow",
-          2.5,
-          13
-        ],
-        [
-          182,
+          185,
           "Arav Pathak",
           2.5,
           13
         ],
         [
-          183,
+          186,
           "Jacob Jensen",
           2.5,
           13
@@ -3016,44 +3088,44 @@
         ],
         [
           3,
+          "Lincoln Reffett",
+          2700,
+          12
+        ],
+        [
+          4,
           "Zaichao Xie",
           2530,
           12
         ],
         [
-          4,
-          "Lincoln Reffett",
-          2300,
+          5,
+          "Ethan Lin",
+          2170,
           12
         ],
         [
-          5,
+          6,
+          "Jack Loughridge",
+          1905,
+          12
+        ],
+        [
+          7,
           "Aidan Gohn",
           1855,
           12
         ],
         [
-          6,
+          8,
           "JZ Holmes",
           1845,
           12
         ],
         [
-          7,
+          9,
           "Cohen Clarke",
           1835,
-          12
-        ],
-        [
-          8,
-          "Ethan Lin",
-          1720,
-          12
-        ],
-        [
-          9,
-          "Jack Loughridge",
-          1505,
           12
         ],
         [
@@ -3070,61 +3142,61 @@
         ],
         [
           12,
+          "Matthew Pak",
+          875,
+          12
+        ],
+        [
+          13,
           "Derek Chiu",
           855,
           12
         ],
         [
-          13,
+          14,
           "Ryker Demian",
           800,
           12
         ],
         [
-          14,
-          "Nolan Schroeder",
-          715,
-          12
-        ],
-        [
           15,
-          "Matthew Pak",
-          600,
+          "Nolan Schroeder",
+          740,
           12
         ],
         [
           16,
+          "Ryan Tran",
+          575,
+          12
+        ],
+        [
+          17,
           "Nixon Emery",
           525,
           11
         ],
         [
-          17,
+          18,
           "Blake Behr",
           505,
           11
         ],
         [
-          18,
+          19,
           "Justin Kada",
           500,
           10
         ],
         [
-          19,
-          "Ryan Tran",
-          475,
-          12
-        ],
-        [
           20,
-          "Avery Bomgren",
-          400,
+          "Fraser Blacklaws",
+          425,
           12
         ],
         [
           21,
-          "Fraser Blacklaws",
+          "Avery Bomgren",
           400,
           12
         ],
@@ -3154,357 +3226,357 @@
         ],
         [
           26,
+          "Josiah Briones",
+          225,
+          10
+        ],
+        [
+          27,
           "Landon Carroll",
           200,
           12
         ],
         [
-          27,
+          28,
           "Preston Chan",
           200,
           12
         ],
         [
-          28,
+          29,
           "Thomas Manzuri",
           170,
           12
         ],
         [
-          29,
+          30,
           "Alec Pisano",
           150,
           11
         ],
         [
-          30,
+          31,
           "Marshall Clark",
           130,
           12
         ],
         [
-          31,
+          32,
           "Calvin Bare",
           130,
           12
         ],
         [
-          32,
+          33,
           "Quinnten Anderson",
           120,
           12
         ],
         [
-          33,
+          34,
           "Rowe Hendershot",
           120,
           10
         ],
         [
-          34,
+          35,
           "Nayan Folga",
           105,
           12
         ],
         [
-          35,
+          36,
           "Libo Zhou",
           100,
           12
         ],
         [
-          36,
+          37,
           "Sahir Ajani",
           100,
           12
         ],
         [
-          37,
+          38,
           "Knox Read",
           100,
           12
         ],
         [
-          38,
+          39,
           "Chase Manlangit",
           100,
           12
         ],
         [
-          39,
+          40,
           "James Dunne",
           100,
           12
         ],
         [
-          40,
+          41,
           "Hay Ching Hayes Chan",
           100,
           11
         ],
         [
-          41,
+          42,
           "Ashwanth Sriram",
           100,
           11
         ],
         [
-          42,
+          43,
           "Elliot Kight",
           100,
           12
         ],
         [
-          43,
+          44,
           "Joshua Davis",
           100,
           11
         ],
         [
-          44,
+          45,
           "Hridhaan Solanki",
           100,
           12
         ],
         [
-          45,
+          46,
           "Brooks Miller",
           95,
           11
         ],
         [
-          46,
+          47,
           "Ramsey Robinson",
           90,
           10
         ],
         [
-          47,
+          48,
           "Brodie Kan",
           85,
           12
         ],
         [
-          48,
+          49,
           "Brooks Blum",
           85,
           11
         ],
         [
-          49,
+          50,
           "Eon Hu",
           80,
           12
         ],
         [
-          50,
+          51,
           "Bert Mu",
           80,
           12
         ],
         [
-          51,
+          52,
           "Miller Talanoa",
           75,
           12
         ],
         [
-          52,
+          53,
           "Finn Reedy",
           75,
           11
         ],
         [
-          53,
+          54,
+          "Ernest De Fauw",
+          75,
+          12
+        ],
+        [
+          55,
           "Lee Newcomb",
           65,
           12
         ],
         [
-          54,
+          56,
           "Hudson Pascoe",
           60,
           12
         ],
         [
-          55,
+          57,
           "Pierce Douglas",
           60,
           12
         ],
         [
-          56,
+          58,
           "Brody Howard",
           60,
           12
         ],
         [
-          57,
+          59,
           "Lucas Lau",
           55,
           11
         ],
         [
-          58,
+          60,
           "Laicheng Buragohain",
           55,
           12
         ],
         [
-          59,
+          61,
           "Rajveer Kulkarni",
           55,
           12
         ],
         [
-          60,
+          62,
           "Kyle Penkov",
           55,
           12
         ],
         [
-          61,
-          "Ernest De Fauw",
-          50,
-          12
-        ],
-        [
-          62,
+          63,
           "Lucas Brook",
           50,
           11
         ],
         [
-          63,
+          64,
           "Ethan Dewey",
           50,
           12
         ],
         [
-          64,
+          65,
           "Michael Yu",
           50,
           10
         ],
         [
-          65,
+          66,
           "Hieu Vo",
           50,
           12
         ],
         [
-          66,
+          67,
           "Lleyton Reeves",
           50,
           12
         ],
         [
-          67,
+          68,
           "Kendrick Hang",
           50,
           11
         ],
         [
-          68,
+          69,
           "Luca Martinelli",
           50,
           12
         ],
         [
-          69,
+          70,
           "Kiaan Chitrapu",
           50,
           11
         ],
         [
-          70,
+          71,
           "Aarav Jha",
           50,
           10
         ],
         [
-          71,
+          72,
           "Hudson McCarthy",
           50,
           9
         ],
         [
-          72,
+          73,
           "Benjamin Comerford",
           50,
           12
         ],
         [
-          73,
+          74,
+          "Hans Fischer",
+          50,
+          10
+        ],
+        [
+          75,
           "Cal Jones",
           35,
           9
         ],
         [
-          74,
+          76,
           "Solomon Garcia",
           30,
           9
         ],
         [
-          75,
+          77,
           "Declan Pacini",
           30,
           11
         ],
         [
-          76,
+          78,
           "Kaleo Allen",
           30,
           12
         ],
         [
-          77,
+          79,
           "Eli Rich",
           25,
           10
         ],
         [
-          78,
+          80,
           "Paulius Stuopis",
           25,
           9
         ],
         [
-          79,
+          81,
           "Mason Fier",
           25,
           12
         ],
         [
-          80,
+          82,
           "Beckett Mallmann",
           25,
           12
         ],
         [
-          81,
+          83,
           "Dangelo Cabrera",
           25,
           10
         ],
         [
-          82,
+          84,
           "Griffin Harding",
           25,
           12
-        ],
-        [
-          83,
-          "Hans Fischer",
-          25,
-          10
-        ],
-        [
-          84,
-          "Josiah Briones",
-          25,
-          10
         ],
         [
           85,
@@ -3586,252 +3658,258 @@
         ],
         [
           98,
+          "Eric Lurian",
+          25,
+          10
+        ],
+        [
+          99,
           "Jonatan Nilsson",
           20,
           12
         ],
         [
-          99,
+          100,
           "Oliver Brooker",
           20,
           11
         ],
         [
-          100,
+          101,
           "Rithik Ramasubbhu",
           20,
           11
         ],
         [
-          101,
+          102,
           "Leo Posillico",
           20,
           12
         ],
         [
-          102,
+          103,
           "Cameron Tran",
           18,
           11
         ],
         [
-          103,
+          104,
           "Eli Posillico",
           15,
           10
         ],
         [
-          104,
+          105,
           "Nolan Hoslar",
           15,
           10
         ],
         [
-          105,
+          106,
           "Benjamin Cardenas",
           15,
           11
         ],
         [
-          106,
+          107,
           "Cason Herold",
           13,
           9
         ],
         [
-          107,
+          108,
           "James Bewley",
           10,
           11
         ],
         [
-          108,
+          109,
           "Joshua Bewley",
           10,
           12
         ],
         [
-          109,
+          110,
           "Sam Tao",
           10,
           12
         ],
         [
-          110,
+          111,
           "Erick Behar Luizelli",
           10,
           11
         ],
         [
-          111,
+          112,
           "Gunner Greiner",
           10,
           11
         ],
         [
-          112,
+          113,
           "John Nathan Sreeram",
           10,
           11
         ],
         [
-          113,
+          114,
           "Mick Jones",
           10,
           11
         ],
         [
-          114,
+          115,
           "Cooper Sugar",
           10,
           10
         ],
         [
-          115,
+          116,
           "Gabriel Rayos",
           10,
           11
         ],
         [
-          116,
+          117,
           "Aakash Mishra",
           10,
           12
         ],
         [
-          117,
+          118,
           "Dalton Hanlin",
           10,
           12
         ],
         [
-          118,
+          119,
           "Aryan Dorsatwar",
           10,
           12
         ],
         [
-          119,
+          120,
           "Kavi Singal",
           10,
           12
         ],
         [
-          120,
+          121,
           "Jake Angulo",
           5,
           11
         ],
         [
-          121,
+          122,
           "Abel Green",
           5,
           10
         ],
         [
-          122,
+          123,
           "Lucas McNamara",
           5,
           12
         ],
         [
-          123,
+          124,
           "Aden Bechtel",
           5,
           11
         ],
         [
-          124,
+          125,
           "Reed Hardinger",
           5,
           12
         ],
         [
-          125,
+          126,
           "Luke Rentschler",
           5,
           11
         ],
         [
-          126,
+          127,
           "Shubhan Sarikonda",
           5,
           11
         ],
         [
-          127,
+          128,
           "Tanay Gasparovic",
           5,
           12
         ],
         [
-          128,
+          129,
           "Cy Dewberry",
           5,
           10
         ],
         [
-          129,
+          130,
           "Connor Spencer",
           5,
           10
         ],
         [
-          130,
+          131,
           "David Lilly",
           5,
           12
         ],
         [
-          131,
+          132,
           "Noah Quirarte",
           5,
           10
         ],
         [
-          132,
+          133,
           "Jett Schultz",
           5,
           11
         ],
         [
-          133,
+          134,
           "Mateo Bucio",
           5,
           10
         ],
         [
-          134,
+          135,
           "Camilo Bucio",
           5,
           12
         ],
         [
-          135,
+          136,
           "Niko Pahang",
           5,
           12
         ],
         [
-          136,
+          137,
           "Soren Anderson",
           5,
           12
         ],
         [
-          137,
+          138,
           "Avery Pamaran",
           5,
           11
         ],
         [
-          138,
+          139,
           "Ethan Nguyen",
           3,
           12
         ],
         [
-          139,
+          140,
           "Greyson Nguyen",
           3,
           10
@@ -3856,7 +3934,7 @@
         [
           3,
           "Madalena Flores",
-          1400,
+          1900,
           14
         ],
         [
@@ -3891,21 +3969,21 @@
         ],
         [
           9,
+          "Serena Chi",
+          600,
+          12
+        ],
+        [
+          10,
           "E. Elenga Satuala",
           500,
           17
         ],
         [
-          10,
+          11,
           "London Leon",
           500,
           15
-        ],
-        [
-          11,
-          "Serena Chi",
-          500,
-          12
         ],
         [
           12,
@@ -3915,216 +3993,234 @@
         ],
         [
           13,
+          "Myda Pham",
+          400,
+          14
+        ],
+        [
+          14,
           "Rosapale Satuala",
           320,
           17
         ],
         [
-          14,
+          15,
           "Lizzie McFarland",
           300,
           16
         ],
         [
-          15,
+          16,
+          "Mila Messinger",
+          300,
+          13
+        ],
+        [
+          17,
           "Elsie Hendershot",
           290,
           13
         ],
         [
-          16,
+          18,
           "Rose Schneider",
           275,
           15
         ],
         [
-          17,
+          19,
           "Ella Cosma",
           250,
           17
         ],
         [
-          18,
+          20,
           "Elaina Clarke",
           225,
           16
         ],
         [
-          19,
+          21,
           "Finne Jones",
           200,
           17
         ],
         [
-          20,
+          22,
           "CC Eleven Sacca",
           200,
           15
         ],
         [
-          21,
+          23,
           "Scout Johnson",
           200,
           13
         ],
         [
-          22,
+          24,
+          "Julia Pantelic",
+          200,
+          18
+        ],
+        [
+          25,
           "Maya Shamir",
           140,
           17
         ],
         [
-          23,
+          26,
           "Amanda Diaz",
           105,
           17
         ],
         [
-          24,
+          27,
           "Jane Cutler",
           100,
           18
         ],
         [
-          25,
+          28,
           "Knightley Houston",
           100,
           17
         ],
         [
-          26,
+          29,
           "Mihika Gajendragadkar",
           100,
           14
         ],
         [
-          27,
+          30,
           "Cami Gonzalez",
           90,
           17
         ],
         [
-          28,
+          31,
           "Cami Shepherd",
           75,
           15
         ],
         [
-          29,
+          32,
           "Lily Goodwin",
           60,
           17
         ],
         [
-          30,
+          33,
           "Emma Hord",
           55,
           17
         ],
         [
-          31,
+          34,
           "Molly Ticknor",
           52.5,
           17
         ],
         [
-          32,
+          35,
           "Ella Yeh",
           50,
           16
         ],
         [
-          33,
+          36,
           "Adalynn Lund",
           50,
           17
         ],
         [
-          34,
+          37,
           "Jayda Maldonado",
           50,
           16
         ],
         [
-          35,
+          38,
           "Elliana Fahrbach",
           50,
           18
         ],
         [
-          36,
+          39,
           "Pie Kipnes",
           50,
           13
         ],
         [
-          37,
+          40,
           "Chloe Essig",
           50,
           14
         ],
         [
-          38,
+          41,
           "Carolina Merry",
           50,
           16
         ],
         [
-          39,
+          42,
           "Parker Godwin",
           25,
           13
         ],
         [
-          40,
+          43,
           "Aila Tomii",
           25,
           15
         ],
         [
-          41,
+          44,
           "Starlyn Little",
           25,
           16
         ],
         [
-          42,
+          45,
           "Emery Hansen",
           25,
           18
         ],
         [
-          43,
+          46,
           "Nellie Cournoyer",
           20,
           17
         ],
         [
-          44,
+          47,
           "Volly Johnson",
           10,
           17
         ],
         [
-          45,
+          48,
           "Mariela Salapura",
           5,
           17
         ],
         [
-          46,
+          49,
           "Horii Yuna",
           5,
           17
         ],
         [
-          47,
+          50,
           "Catherine Hochman",
           5,
           17
         ],
         [
-          48,
+          51,
           "Chiayi Lee",
           5,
           17
@@ -4160,15 +4256,15 @@
         ],
         [
           5,
-          "Serena Chi",
-          1500,
-          12
+          "Madalena Flores",
+          1900,
+          14
         ],
         [
           6,
-          "Madalena Flores",
-          1400,
-          14
+          "Serena Chi",
+          1600,
+          12
         ],
         [
           7,
@@ -4250,210 +4346,222 @@
         ],
         [
           20,
+          "Myda Pham",
+          400,
+          14
+        ],
+        [
+          21,
           "Wynn Fielhaber",
           300,
           15
         ],
         [
-          21,
+          22,
           "Lizzie McFarland",
           300,
           16
         ],
         [
-          22,
+          23,
+          "Mila Messinger",
+          300,
+          13
+        ],
+        [
+          24,
           "Victoria Simon",
           280,
           16
         ],
         [
-          23,
+          25,
           "Elaina Clarke",
           275,
           16
         ],
         [
-          24,
+          26,
           "Pie Kipnes",
           250,
           13
         ],
         [
-          25,
+          27,
           "Francesca Randazzo",
           220,
           16
         ],
         [
-          26,
+          28,
           "Kei Sawaki",
           200,
           16
         ],
         [
-          27,
+          29,
           "Gia Arcieri",
           200,
           13
         ],
         [
-          28,
+          30,
           "CC Eleven Sacca",
           200,
           15
         ],
         [
-          29,
+          31,
           "Nahla Bernhardt",
           165,
           16
         ],
         [
-          30,
+          32,
           "Cami Shepherd",
           147.5,
           15
         ],
         [
-          31,
+          33,
           "Clarice Ouvarova",
           100,
           16
         ],
         [
-          32,
+          34,
           "Ella Oh",
           100,
           12
         ],
         [
-          33,
+          35,
           "Dallas Caudill",
           100,
           16
         ],
         [
-          34,
+          36,
           "Alyssa Castillo",
           80,
           16
         ],
         [
-          35,
+          37,
           "Abigail Bourgeois",
           80,
           15
         ],
         [
-          36,
+          38,
           "Starlyn Little",
           75,
           16
         ],
         [
-          37,
+          39,
           "Sovanna Chhim",
           62.5,
           15
         ],
         [
-          38,
+          40,
           "Olivia Pena",
           50,
           14
         ],
         [
-          39,
+          41,
           "Chloe Essig",
           50,
           14
         ],
         [
-          40,
+          42,
           "Carolina Merry",
           50,
           16
         ],
         [
-          41,
+          43,
           "Pingzhen Liu",
           25,
           15
         ],
         [
-          42,
+          44,
           "Aila Tomii",
           25,
           15
         ],
         [
-          43,
+          45,
           "Ayushi Mehta",
           20,
           16
         ],
         [
-          44,
+          46,
           "Dylan Copenhaver",
           20,
           15
         ],
         [
-          45,
+          47,
           "Madilynn Coppedge",
           20,
           15
         ],
         [
-          46,
+          48,
           "Kate Smith",
           20,
           15
         ],
         [
-          47,
+          49,
           "Sara Powitzky",
           15,
           16
         ],
         [
-          48,
+          50,
           "Ellie Rotterman",
           10,
           16
         ],
         [
-          49,
+          51,
           "An Pham",
           10,
           16
         ],
         [
-          50,
+          52,
           "Layla Hack",
           10,
           16
         ],
         [
-          51,
+          53,
           "Amelia Johnson",
           5,
           16
         ],
         [
-          52,
+          54,
           "Alyssa Sattawhite",
           5,
           16
         ],
         [
-          53,
+          55,
           "Isabella Houghton",
           5,
           15
         ],
         [
-          54,
+          56,
           "Naya Uribe",
           5,
           15
@@ -4466,32 +4574,32 @@
         [
           1,
           "Mila Messinger",
-          2622.5,
+          2872.5,
           13
         ],
         [
           2,
+          "Madalena Flores",
+          2810,
+          14
+        ],
+        [
+          3,
           "Natalia Simson",
           2610,
           14
         ],
         [
-          3,
-          "Pie Kipnes",
-          2515,
-          13
-        ],
-        [
           4,
-          "Madalena Flores",
-          2310,
+          "Myda Pham",
+          2560,
           14
         ],
         [
           5,
-          "Myda Pham",
-          2160,
-          14
+          "Pie Kipnes",
+          2515,
+          13
         ],
         [
           6,
@@ -4502,7 +4610,7 @@
         [
           7,
           "Serena Chi",
-          1950,
+          2050,
           12
         ],
         [
@@ -4897,19 +5005,19 @@
         [
           2,
           "Gal Solomon",
-          3175,
+          3275,
           11
         ],
         [
           3,
           "Serena Chi",
-          2620,
+          2720,
           12
         ],
         [
           4,
           "Arden Kimm",
-          2125,
+          2150,
           12
         ],
         [
@@ -4926,26 +5034,26 @@
         ],
         [
           7,
+          "Madison Escolin",
+          1765,
+          12
+        ],
+        [
+          8,
           "Ellie Rodriguez",
           1700,
           12
         ],
         [
-          8,
+          9,
           "Halina Slowinski",
           1635,
           11
         ],
         [
-          9,
-          "Madison Escolin",
-          1415,
-          12
-        ],
-        [
           10,
           "Josephine Moore",
-          1260,
+          1560,
           12
         ],
         [
@@ -4969,7 +5077,7 @@
         [
           14,
           "Rico Notsu",
-          480,
+          530,
           11
         ],
         [
@@ -4980,45 +5088,45 @@
         ],
         [
           16,
+          "Alina Torres",
+          450,
+          12
+        ],
+        [
+          17,
           "Emmalina Requena",
           360,
           9
         ],
         [
-          17,
+          18,
           "Melody Li",
           340,
           12
         ],
         [
-          18,
+          19,
           "Bella Olaviar",
           325,
           12
         ],
         [
-          19,
+          20,
           "Saki Chihara",
           310,
           12
         ],
         [
-          20,
+          21,
           "Emmaline Neville",
           305,
           11
         ],
         [
-          21,
+          22,
           "Brooklyn Lee",
           275,
           10
-        ],
-        [
-          22,
-          "Alina Torres",
-          250,
-          12
         ],
         [
           23,
@@ -5034,45 +5142,45 @@
         ],
         [
           25,
+          "Luisana Fernandez",
+          175,
+          9
+        ],
+        [
+          26,
           "Ariella Bakalinsky",
           160,
           10
         ],
         [
-          26,
+          27,
           "Alexandria DeMaree",
           100,
           11
         ],
         [
-          27,
+          28,
           "Jacqueline Kay",
           100,
           11
         ],
         [
-          28,
+          29,
           "Maddy Duke",
           100,
           12
         ],
         [
-          29,
+          30,
           "Skye Reedy",
           100,
           12
         ],
         [
-          30,
+          31,
           "Kataryna Misini",
           95,
           11
-        ],
-        [
-          31,
-          "Luisana Fernandez",
-          75,
-          9
         ],
         [
           32,
@@ -5178,42 +5286,54 @@
         ],
         [
           49,
+          "Freyja Quain",
+          25,
+          11
+        ],
+        [
+          50,
+          "Annie Arger",
+          25,
+          11
+        ],
+        [
+          51,
           "Ellie Chung",
           10,
           11
         ],
         [
-          50,
+          52,
           "Laiklyn Dunigan",
           5,
           12
         ],
         [
-          51,
+          53,
           "Chloe Lilly",
           5,
           12
         ],
         [
-          52,
+          54,
           "Mila Escobar",
           5,
           11
         ],
         [
-          53,
+          55,
           "Mckaelynn Lund",
           5,
           11
         ],
         [
-          54,
+          56,
           "Brielle Kurtz",
           5,
           11
         ],
         [
-          55,
+          57,
           "Mira Ouvarova",
           5,
           10
@@ -5255,85 +5375,85 @@
         ],
         [
           6,
+          "Isaac Hall",
+          1890,
+          17
+        ],
+        [
+          7,
+          "Rocky Guido",
+          1800,
+          16
+        ],
+        [
+          8,
+          "Jaxton Bush",
+          1800,
+          17
+        ],
+        [
+          9,
           "Hudson Hall",
           1600,
           16
         ],
         [
-          7,
+          10,
           "Maxi Beck",
           1502.5,
           17
         ],
         [
-          8,
+          11,
           "Benji Beck",
           1502.5,
           17
         ],
         [
-          9,
+          12,
           "Adam Cheney",
           1500,
           15
         ],
         [
-          10,
+          13,
           "Andrew Angulo",
           1500,
           16
         ],
         [
-          11,
-          "Rocky Guido",
+          14,
+          "Aiden Schliekelman",
           1400,
           16
         ],
         [
-          12,
-          "Isaac Hall",
-          1390,
-          17
-        ],
-        [
-          13,
-          "Jaxton Bush",
-          1300,
-          18
-        ],
-        [
-          14,
+          15,
           "Jonah Karczmer",
           1100,
           15
         ],
         [
-          15,
+          16,
           "Ford Casady",
           1067.5,
           17
         ],
         [
-          16,
+          17,
           "Boone Casady",
           1067.5,
           17
         ],
         [
-          17,
+          18,
           "Braylon Ohrel",
           1050,
           15
         ],
         [
-          18,
-          "Rex Thais",
-          1000,
-          16
-        ],
-        [
           19,
-          "Aiden Schliekelman",
+          "Rex Thais",
           1000,
           16
         ],
@@ -5429,792 +5549,798 @@
         ],
         [
           35,
+          "Leo Hernandez",
+          350,
+          16
+        ],
+        [
+          36,
           "Ben Baravik",
           342.5,
           17
         ],
         [
-          36,
+          37,
           "Titus Libell",
           300,
           17
         ],
         [
-          37,
+          38,
           "Wade Morrow",
           300,
           17
         ],
         [
-          38,
+          39,
+          "Logan Russell",
+          300,
+          15
+        ],
+        [
+          40,
           "Ethan Miller",
           295,
           17
         ],
         [
-          39,
+          41,
           "Kayden Nguyen",
           270,
           17
         ],
         [
-          40,
+          42,
           "Brayden Clark",
           267.5,
           17
         ],
         [
-          41,
+          43,
           "Indigo Dagnall",
           240,
           17
         ],
         [
-          42,
+          44,
           "Braden Jacobson",
           220,
           17
         ],
         [
-          43,
+          45,
           "Andrew Caldarella",
           220,
           17
         ],
         [
-          44,
+          46,
           "Nicholas Moon",
           215,
           17
         ],
         [
-          45,
+          47,
           "Zachary Pulaski",
           202.5,
           17
         ],
         [
-          46,
+          48,
           "Jase Volz",
           200,
           13
         ],
         [
-          47,
+          49,
           "Skyler Garrigus",
           200,
           15
         ],
         [
-          48,
+          50,
           "Nicklaus Vu",
           200,
           16
         ],
         [
-          49,
+          51,
           "Joshua Bollinger",
           200,
           14
         ],
         [
-          50,
+          52,
           "Tashner Schenkenberger",
           200,
           15
         ],
         [
-          51,
+          53,
           "Drew Fahrabach",
           200,
           16
         ],
         [
-          52,
+          54,
           "Hudson Yeager",
           200,
           14
         ],
         [
-          53,
+          55,
           "Rudger Eaton",
           175,
           17
         ],
         [
-          54,
+          56,
           "Shae Neville",
           152.5,
           17
         ],
         [
-          55,
+          57,
           "Kaihe Allen",
           150,
           17
         ],
         [
-          56,
+          58,
           "Diego Villarroel",
           150,
           18
         ],
         [
-          57,
+          59,
           "Kai Bonfitto",
           125,
           18
         ],
         [
-          58,
+          60,
           "Oren Hertz",
           125,
           16
         ],
         [
-          59,
+          61,
           "MJ Fermin",
           125,
           15
         ],
         [
-          60,
+          62,
           "Maddox Castellanos",
           120,
           17
         ],
         [
-          61,
+          63,
           "Lincoln Beuster",
           120,
           17
         ],
         [
-          62,
+          64,
           "Jacob Bolkowy",
           100,
           17
         ],
         [
-          63,
+          65,
           "Adam Alsabbagh",
           100,
           17
         ],
         [
-          64,
+          66,
           "Raziel Alvarez",
           100,
           15
         ],
         [
-          65,
+          67,
           "Leo Chun",
           100,
           14
         ],
         [
-          66,
+          68,
           "Hudson Gilbert",
           100,
           17
         ],
         [
-          67,
+          69,
           "Henry James",
           100,
           18
         ],
         [
-          68,
+          70,
           "George Wolf",
           100,
           13
         ],
         [
-          69,
+          71,
           "Kyle Laronge",
           100,
           16
         ],
         [
-          70,
+          72,
           "Kian Maghamfar",
           100,
           15
         ],
         [
-          71,
+          73,
           "Kolton Youngblood",
           100,
           17
         ],
         [
-          72,
+          74,
           "Arsh Bassan",
           80,
           17
         ],
         [
-          73,
+          75,
           "Gavin Finemel",
           77.5,
           17
         ],
         [
-          74,
+          76,
           "Buck Quinn",
           75,
           18
         ],
         [
-          75,
+          77,
           "Cole Brown",
           75,
           14
         ],
         [
-          76,
+          78,
           "Caleb Handford",
           75,
           14
         ],
         [
-          77,
+          79,
           "Kory Tran",
           75,
           18
         ],
         [
-          78,
+          80,
           "Aidan Quinn",
           62.5,
           17
         ],
         [
-          79,
+          81,
           "Javon Turcsany",
           60,
           17
         ],
         [
-          80,
+          82,
           "Dominic Osborne",
           52.5,
           17
         ],
         [
-          81,
+          83,
           "Robby Rivera",
           52.5,
           17
         ],
         [
-          82,
+          84,
           "Aleco Ulloa",
           52.5,
           17
         ],
         [
-          83,
+          85,
           "Maddox Collier",
           50,
           15
         ],
         [
-          84,
+          86,
           "Milo Briz",
           50,
           16
         ],
         [
-          85,
+          87,
           "Max Neumann",
           50,
           15
         ],
         [
-          86,
+          88,
           "Khoi Dinh",
           50,
           15
         ],
         [
-          87,
+          89,
           "David Tran",
           50,
           18
         ],
         [
-          88,
+          90,
           "Isaac Chen",
           50,
           18
         ],
         [
-          89,
-          "Leo Hernandez",
-          50,
-          16
-        ],
-        [
-          90,
+          91,
           "Josiah Aguado",
           50,
           18
         ],
         [
-          91,
+          92,
           "Walker Brasol",
           50,
           15
         ],
         [
-          92,
+          93,
           "Will Webber",
           50,
           18
         ],
         [
-          93,
+          94,
           "Cayden Sprowl",
           50,
           17
         ],
         [
-          94,
+          95,
           "Aven LaPan",
           50,
           18
         ],
         [
-          95,
+          96,
           "Parker Cutts",
           50,
           15
         ],
         [
-          96,
+          97,
           "Chap Crandford",
           50,
           16
         ],
         [
-          97,
+          98,
           "Alexander Murray",
           50,
           18
         ],
         [
-          98,
+          99,
           "Ishaan Gautam",
           50,
           16
         ],
         [
-          99,
+          100,
           "Agasthya Aspari",
           50,
           16
         ],
         [
-          100,
+          101,
           "Drew Engle",
           50,
           15
         ],
         [
-          101,
+          102,
           "Blake Middlebrook",
           50,
           15
         ],
         [
-          102,
+          103,
           "Emmett DeHaan",
           50,
           14
         ],
         [
-          103,
+          104,
           "Vrishab Pola",
           50,
           18
         ],
         [
-          104,
+          105,
           "Houston Hassell",
           47.5,
           17
         ],
         [
-          105,
+          106,
           "Mikaeel Alibaig",
           40,
           17
         ],
         [
-          106,
+          107,
           "Samiu Fatani",
           40,
           17
         ],
         [
-          107,
+          108,
           "Krish Desai",
           40,
           17
         ],
         [
-          108,
+          109,
           "Michael Alvarado",
           30,
           17
         ],
         [
-          109,
+          110,
           "Ryan Corcoran",
           30,
           17
         ],
         [
-          110,
+          111,
           "Abhinav Mishra",
           30,
           17
         ],
         [
-          111,
+          112,
           "Chase Ballay",
           30,
           17
         ],
         [
-          112,
+          113,
           "Cassius Sararo",
           25,
           16
         ],
         [
-          113,
+          114,
           "Lincoln McConnell",
           25,
           18
         ],
         [
-          114,
+          115,
           "Harrison Malko",
           25,
           18
         ],
         [
-          115,
+          116,
           "Logan Foust",
           25,
           17
         ],
         [
-          116,
+          117,
           "Dylan McDermott",
           25,
           17
         ],
         [
-          117,
+          118,
           "Daniel Kegnovich",
           25,
           15
         ],
         [
-          118,
+          119,
           "Noah Allen",
           25,
           14
         ],
         [
-          119,
+          120,
           "Madden Mehan",
           25,
           16
         ],
         [
-          120,
+          121,
           "Tennessee Potter",
           25,
           16
         ],
         [
-          121,
+          122,
           "Christopher Loyola",
           25,
           15
         ],
         [
-          122,
+          123,
           "Jose Loyola",
           25,
           14
         ],
         [
-          123,
+          124,
           "Connor Berry",
           25,
           15
         ],
         [
-          124,
+          125,
           "Jackson Lyman",
           25,
           16
         ],
         [
-          125,
+          126,
           "Nicholas Pena",
           25,
           16
         ],
         [
-          126,
+          127,
           "Raphael Esmas",
           25,
           17
         ],
         [
-          127,
+          128,
           "Vincent Nacua",
           25,
           17
         ],
         [
-          128,
+          129,
           "Luca Cibelli",
           25,
           17
         ],
         [
-          129,
+          130,
           "Cayden Bellino",
           25,
           17
         ],
         [
-          130,
+          131,
           "Nicklas Yong",
           25,
           17
         ],
         [
-          131,
+          132,
           "Nicolas Bond",
           25,
           18
         ],
         [
-          132,
+          133,
           "Kenneth Bond",
           25,
           11
         ],
         [
-          133,
+          134,
           "Kristofer Chesley",
           25,
           17
         ],
         [
-          134,
+          135,
           "Briggs Pew",
           25,
           17
         ],
         [
-          135,
+          136,
           "Charlie Konkachbaev",
           25,
           16
         ],
         [
-          136,
+          137,
           "Grant Johnson",
           25,
           16
         ],
         [
-          137,
+          138,
           "Adam Yousef",
           25,
           17
         ],
         [
-          138,
+          139,
           "Lucas Erlikh",
           22.5,
           17
         ],
         [
-          139,
+          140,
           "Drake Hall",
           22.5,
           17
         ],
         [
-          140,
+          141,
           "Jesse Thomas",
           20,
           17
         ],
         [
-          141,
+          142,
           "Kaidyn Purdy",
           20,
           17
         ],
         [
-          142,
+          143,
           "Gabriel Necaise",
           20,
           17
         ],
         [
-          143,
+          144,
           "Brock Hammond",
           12.5,
           17
         ],
         [
-          144,
+          145,
           "Joshua Canfield",
           10,
           17
         ],
         [
-          145,
+          146,
           "Andrew Kemp",
           10,
           17
         ],
         [
-          146,
+          147,
           "Suhas Bandlapalli",
           10,
           17
         ],
         [
-          147,
+          148,
           "Grant Brock",
           10,
           17
         ],
         [
-          148,
+          149,
           "Tyler Mccullough",
           10,
           17
         ],
         [
-          149,
+          150,
           "Nic Jimenez",
           7.5,
           17
         ],
         [
-          150,
+          151,
           "Aaron Yoon",
           5,
           17
         ],
         [
-          151,
+          152,
           "Jason Bruce",
           5,
           17
         ],
         [
-          152,
+          153,
           "Nathan Le",
           5,
           17
         ],
         [
-          153,
+          154,
           "Lachy Donnelly",
           5,
           17
         ],
         [
-          154,
+          155,
           "Troy Huynh Jr",
           5,
           17
         ],
         [
-          155,
+          156,
           "Camden Raboin",
           2.5,
           17
         ],
         [
-          156,
+          157,
           "Eric Duncan",
           2.5,
           17
         ],
         [
-          157,
+          158,
           "Dillon Thomas",
           2.5,
           17
         ],
         [
-          158,
+          159,
           "Trey Kirwin II",
           2.5,
           17
         ],
         [
-          159,
+          160,
           "Adam Dsouza",
           2.5,
           17
         ],
         [
-          160,
+          161,
           "Alec Petrustas",
           2.5,
           17
         ],
         [
-          161,
+          162,
           "Creighton Mitchell",
           2.5,
           17
         ],
         [
-          162,
+          163,
           "Rogelio Gutierrez",
           2.5,
           17
         ],
         [
-          163,
+          164,
           "Jacob Reyes",
           2.5,
           17
         ],
         [
-          164,
+          165,
           "Mason McCabe",
           2.5,
           17
         ],
         [
-          165,
+          166,
           "Aidan Cheung",
           2.5,
           17
         ],
         [
-          166,
+          167,
           "Aarav Shalia",
           1.5,
           17
@@ -6316,15 +6442,15 @@
         ],
         [
           16,
-          "Adam Cheney",
-          1635,
-          15
+          "Aiden Schliekelman",
+          1980,
+          16
         ],
         [
           17,
-          "Aiden Schliekelman",
-          1580,
-          16
+          "Adam Cheney",
+          1635,
+          15
         ],
         [
           18,
@@ -6484,333 +6610,333 @@
         ],
         [
           44,
+          "Logan Russell",
+          442.5,
+          15
+        ],
+        [
+          45,
           "Kian Maghamfar",
           422.5,
           15
         ],
         [
-          45,
+          46,
           "Dylan Thomas",
           420,
           16
         ],
         [
-          46,
+          47,
           "Alexander Mercado",
           415,
           16
         ],
         [
-          47,
+          48,
           "Heath Helms",
           410,
           16
         ],
         [
-          48,
+          49,
           "Maddox Gleim",
           400,
           16
         ],
         [
-          49,
+          50,
           "Justin Kada",
           400,
           10
         ],
         [
-          50,
+          51,
           "Tom Huang",
           400,
           13
         ],
         [
-          51,
+          52,
           "Landry Banker",
           395,
           15
         ],
         [
-          52,
+          53,
+          "Leo Hernandez",
+          395,
+          16
+        ],
+        [
+          54,
           "Skyler Garrgius",
           380,
           15
         ],
         [
-          53,
+          55,
           "Nate Patridge",
           375,
           14
         ],
         [
-          54,
+          56,
           "Sam Libo",
           372.5,
           15
         ],
         [
-          55,
+          57,
           "Rothe Ripley",
           357.5,
           15
         ],
         [
-          56,
+          58,
           "Phi Trinh",
           345,
           15
         ],
         [
-          57,
+          59,
           "Daniel Suharjoto",
           332.5,
           15
         ],
         [
-          58,
+          60,
           "Nicolas Saenz",
           310,
           15
         ],
         [
-          59,
+          61,
           "Samuel Ocampo",
           300,
           16
         ],
         [
-          60,
+          62,
           "Gabriel Saenz",
           300,
           13
         ],
         [
-          61,
+          63,
           "Joseph DuBose",
           300,
           15
         ],
         [
-          62,
+          64,
           "Jayden Hua",
           290,
           15
         ],
         [
-          63,
+          65,
           "Ryan Rothschild",
           250,
           16
         ],
         [
-          64,
+          66,
           "Rai Allen",
           235,
           15
         ],
         [
-          65,
+          67,
           "Conner Mann",
           225,
           16
         ],
         [
-          66,
+          68,
           "Joshua Bollinger",
           225,
           14
         ],
         [
-          67,
+          69,
           "Tashner Schenkenberger",
           225,
           15
         ],
         [
-          68,
+          70,
           "Milo Bechtel",
           202.5,
           15
         ],
         [
-          69,
+          71,
           "Oliver Barry",
           202.5,
           15
         ],
         [
-          70,
+          72,
           "Asis Garrido Guerrero",
           200,
           15
         ],
         [
-          71,
+          73,
           "Drew Fahrabach",
           200,
           16
         ],
         [
-          72,
+          74,
           "Fraser Blacklaws",
           200,
           12
         ],
         [
-          73,
+          75,
           "Jason Gong",
           200,
           12
         ],
         [
-          74,
+          76,
           "Hudson Yeager",
           200,
           14
         ],
         [
-          75,
+          77,
           "Thane Hendershot",
           185,
           15
         ],
         [
-          76,
+          78,
           "Jackson Lyman",
           185,
           16
         ],
         [
-          77,
+          79,
           "Hridhay Pothunoori",
           160,
           16
         ],
         [
-          78,
+          80,
           "He Yonglin",
           160,
           16
         ],
         [
-          79,
+          81,
           "Kyle Laronge",
           145,
           16
         ],
         [
-          80,
-          "Logan Russell",
-          142.5,
-          15
-        ],
-        [
-          81,
+          82,
           "Diego Kilzi",
           140,
           16
         ],
         [
-          82,
+          83,
           "Casey Hooks",
           127.5,
           15
         ],
         [
-          83,
+          84,
           "Maddox Collier",
           127.5,
           15
         ],
         [
-          84,
+          85,
           "Grant Johnson",
           125,
           16
         ],
         [
-          85,
+          86,
           "Oren Hertz",
           125,
           16
         ],
         [
-          86,
+          87,
           "Timber Gant",
           120,
           16
         ],
         [
-          87,
+          88,
           "Aiden Olson",
           115,
           15
         ],
         [
-          88,
+          89,
           "Khoi Dinh",
           105,
           15
         ],
         [
-          89,
+          90,
           "Brayden Brown",
           100,
           16
         ],
         [
-          90,
+          91,
           "Daniel Ybarra",
           100,
           16
         ],
         [
-          91,
+          92,
           "Matias Duran",
           100,
           15
         ],
         [
-          92,
+          93,
           "Zeke Kaelin",
           100,
           16
         ],
         [
-          93,
+          94,
           "Leo Chun",
           100,
           14
         ],
         [
-          94,
+          95,
           "Kallin York",
           100,
           16
         ],
         [
-          95,
+          96,
           "Preston Stratton",
           100,
           15
         ],
         [
-          96,
+          97,
           "Preston Chan",
           100,
           12
         ],
         [
-          97,
+          98,
           "Hay Ching Hayes Chan",
           100,
           11
-        ],
-        [
-          98,
-          "Leo Hernandez",
-          95,
-          16
         ],
         [
           99,
@@ -7551,27 +7677,27 @@
         ],
         [
           8,
+          "Adym Pham",
+          2445,
+          13
+        ],
+        [
+          9,
           "Francis Chi",
           2410,
           14
         ],
         [
-          9,
-          "Dex Saniuk",
-          2265,
-          14
-        ],
-        [
           10,
           "Bennett Miller",
-          2040,
+          2340,
           14
         ],
         [
           11,
-          "Adym Pham",
-          1945,
-          13
+          "Dex Saniuk",
+          2265,
+          14
         ],
         [
           12,
@@ -7587,38 +7713,38 @@
         ],
         [
           14,
+          "Jack Loughridge",
+          1800,
+          12
+        ],
+        [
+          15,
           "Nathan Nguyen",
           1660,
           14
         ],
         [
-          15,
+          16,
+          "Jett Barber",
+          1632.5,
+          13
+        ],
+        [
+          17,
           "Britton Shinker",
           1455,
           14
         ],
         [
-          16,
-          "Jack Loughridge",
-          1400,
-          12
-        ],
-        [
-          17,
+          18,
           "Owen Underwood",
           1400,
           12
         ],
         [
-          18,
+          19,
           "Nicholas Zhang",
           1380,
-          13
-        ],
-        [
-          19,
-          "Jett Barber",
-          1332.5,
           13
         ],
         [
@@ -7647,92 +7773,92 @@
         ],
         [
           24,
+          "Luis Fernandez-Celis",
+          1025,
+          14
+        ],
+        [
+          25,
           "Liam To",
           997.5,
           13
         ],
         [
-          25,
+          26,
           "Jase Volz",
           907.5,
           13
         ],
         [
-          26,
+          27,
           "Emiliano Pena",
           900,
           14
         ],
         [
-          27,
+          28,
           "Everett Goldsmith",
           800,
           14
         ],
         [
-          28,
+          29,
           "Ethan Lefkowitz",
           780,
           13
         ],
         [
-          29,
+          30,
+          "Noah Elbyr",
+          742.5,
+          13
+        ],
+        [
+          31,
           "Cole Brown",
           675,
           14
         ],
         [
-          30,
+          32,
           "Elliott Rouse",
           670,
           14
         ],
         [
-          31,
+          33,
           "Joshua Lee",
           670,
           13
         ],
         [
-          32,
+          34,
           "Desmond Pututau",
           650,
           13
         ],
         [
-          33,
+          35,
           "Landon Miller",
           640,
           14
         ],
         [
-          34,
+          36,
           "Steven Goldner",
           640,
           13
         ],
         [
-          35,
+          37,
           "Aryan Langote",
           600,
           14
         ],
         [
-          36,
+          38,
           "MJ Greiner",
           560,
-          14
-        ],
-        [
-          37,
-          "Noah Elbyr",
-          542.5,
-          13
-        ],
-        [
-          38,
-          "Luis Fernandez-Celis",
-          525,
           14
         ],
         [
@@ -7743,104 +7869,104 @@
         ],
         [
           40,
+          "Knox Seader",
+          460,
+          14
+        ],
+        [
+          41,
           "Hudson Yeager",
           445,
           14
         ],
         [
-          41,
+          42,
           "Aarin Thyagarajan",
           400,
           12
         ],
         [
-          42,
+          43,
           "Ethan Cheng",
           400,
           13
         ],
         [
-          43,
+          44,
           "Lincoln Reffett",
           400,
           12
         ],
         [
-          44,
+          45,
           "Justin Kada",
           400,
           10
         ],
         [
-          45,
+          46,
           "Tom Huang",
           400,
           13
         ],
         [
-          46,
+          47,
           "Nate Partidge",
           380,
           14
         ],
         [
-          47,
+          48,
           "Cruz Aromi",
           340,
           13
         ],
         [
-          48,
+          49,
           "Gabriel Saenz",
           320,
           13
         ],
         [
-          49,
+          50,
           "Calvin Bare",
           300,
           12
         ],
         [
-          50,
+          51,
           "Ryan Tran",
           300,
           12
         ],
         [
-          51,
+          52,
           "Nayan Folga",
           300,
           12
         ],
         [
-          52,
+          53,
           "Caleb Handford",
           300,
           14
         ],
         [
-          53,
+          54,
           "Quentin Ware",
           295,
           13
         ],
         [
-          54,
+          55,
           "Jackson Midgley",
           285,
           14
         ],
         [
-          55,
+          56,
           "MJ Marrero",
           280,
-          14
-        ],
-        [
-          56,
-          "Knox Seader",
-          260,
           14
         ],
         [
@@ -7941,816 +8067,834 @@
         ],
         [
           73,
+          "Yonglok Roberts",
+          125,
+          11
+        ],
+        [
+          74,
           "Oliver Culbertson",
           112.5,
           13
         ],
         [
-          74,
+          75,
           "Lane Jones",
           105,
           14
         ],
         [
-          75,
+          76,
+          "Luis Fischer",
+          102.5,
+          13
+        ],
+        [
+          77,
           "Cade Kershaw",
           100,
           13
         ],
         [
-          76,
+          78,
           "Noah Rich",
           100,
           13
         ],
         [
-          77,
+          79,
           "Daniel Zavitz",
           100,
           13
         ],
         [
-          78,
+          80,
           "Morgan Pang",
           100,
           14
         ],
         [
-          79,
+          81,
           "Muhsin Akkoyun",
           100,
           14
         ],
         [
-          80,
+          82,
           "Bentley Manning",
           100,
           14
         ],
         [
-          81,
+          83,
           "Jeremy Yan",
           100,
           14
         ],
         [
-          82,
+          84,
           "Ashwadh Yeruva",
           100,
           14
         ],
         [
-          83,
+          85,
           "Chance Huynh",
           100,
           14
         ],
         [
-          84,
+          86,
           "Preston Chan",
           100,
           12
         ],
         [
-          85,
+          87,
           "Hay Ching Hayes Chan",
           100,
           11
         ],
         [
-          86,
+          88,
           "Landon Heflin",
           81.5,
           13
         ],
         [
-          87,
+          89,
           "Braden Nolas",
           80,
           13
         ],
         [
-          88,
+          90,
           "Ryan Christy",
           75,
           14
         ],
         [
-          89,
+          91,
           "Chase Manlangit",
           75,
           12
         ],
         [
-          90,
+          92,
           "Kasey Mrgic",
           75,
           13
         ],
         [
-          91,
+          93,
           "Max Martin",
           75,
           14
         ],
         [
-          92,
+          94,
           "Tyler Iskander",
           70,
           13
         ],
         [
-          93,
+          95,
+          "Luke Kremer",
+          70,
+          14
+        ],
+        [
+          96,
           "Martyn Yi",
           65,
           14
         ],
         [
-          94,
+          97,
           "Tyler Ochinang",
           60,
           14
         ],
         [
-          95,
+          98,
           "Aaron Ochinang",
           60,
           12
         ],
         [
-          96,
+          99,
           "Liam Whipple",
           60,
           13
         ],
         [
-          97,
+          100,
           "Kove Kandell",
           60,
           14
         ],
         [
-          98,
+          101,
           "Lawrence Liu",
           55,
           13
         ],
         [
-          99,
+          102,
           "Arjun Khanna",
           55,
           14
         ],
         [
-          100,
+          103,
           "Christian Pena",
           55,
           13
         ],
         [
-          101,
+          104,
           "Logan Smith",
           55,
           13
         ],
         [
-          102,
+          105,
           "Brody Albini",
           50,
           14
         ],
         [
-          103,
+          106,
           "Jaden Hsu",
           50,
           14
         ],
         [
-          104,
+          107,
           "Jack Dawson",
           50,
           14
         ],
         [
-          105,
+          108,
           "Nelson Brown",
           50,
           13
         ],
         [
-          106,
+          109,
           "Declan Caudill",
           50,
           13
         ],
         [
-          107,
+          110,
           "Carter McKibben",
           50,
           14
         ],
         [
-          108,
+          111,
           "Carter Huy Le",
           50,
           13
         ],
         [
-          109,
+          112,
           "Ethan Dewey",
           50,
           12
         ],
         [
-          110,
+          113,
           "Andrew Ta",
           50,
           14
         ],
         [
-          111,
+          114,
           "Brayden Cheung",
           50,
           14
         ],
         [
-          112,
+          115,
           "Justin Dewey",
           50,
           14
         ],
         [
-          113,
+          116,
           "Benjamin Baguio",
           50,
           14
         ],
         [
-          114,
+          117,
           "Theo Benson",
           50,
           14
         ],
         [
-          115,
+          118,
           "Kayan Mehan",
           50,
           14
         ],
         [
-          116,
+          119,
           "Nate Flores",
           50,
           13
         ],
         [
-          117,
+          120,
           "Anthom Zurita",
           50,
           13
         ],
         [
-          118,
+          121,
           "Mats Gasparovic",
           50,
           13
         ],
         [
-          119,
+          122,
           "Aedan Switzer",
           50,
           14
         ],
         [
-          120,
+          123,
           "Lewis Torres",
           50,
           13
         ],
         [
-          121,
+          124,
           "Ryan Obrist",
           50,
           14
         ],
         [
-          122,
+          125,
           "Luke Picciurro",
           50,
           13
         ],
         [
-          123,
+          126,
           "Lucas Condori",
           50,
           13
         ],
         [
-          124,
+          127,
           "Haidyn McCarthy",
           50,
           14
         ],
         [
-          125,
+          128,
+          "Ethan Wang",
+          50,
+          14
+        ],
+        [
+          129,
           "Jeshua Duque",
           45,
           14
         ],
         [
-          126,
+          130,
           "Aidan Freel",
           45,
           14
         ],
         [
-          127,
+          131,
           "Erick Sevilla",
           45,
           13
         ],
         [
-          128,
+          132,
           "Jose Loyola",
           45,
           14
         ],
         [
-          129,
+          133,
           "Rhett Roberts",
           45,
           13
         ],
         [
-          130,
+          134,
           "Gehrig Garcia",
           40,
           13
         ],
         [
-          131,
+          135,
           "Bryce Kurtz",
           35,
           14
         ],
         [
-          132,
+          136,
           "Samuel Heddings",
           35,
           13
         ],
         [
-          133,
+          137,
           "Kenneth Bond",
           35,
           11
         ],
         [
-          134,
+          138,
           "Aryan Malhotra",
           30,
           13
         ],
         [
-          135,
+          139,
           "Joshua Kallevig",
           27.5,
           13
         ],
         [
-          136,
+          140,
           "Bryson Hyser",
           25,
           14
         ],
         [
-          137,
+          141,
           "Maximus Krayets",
           25,
           14
         ],
         [
-          138,
+          142,
           "Gentry Washam",
           25,
           13
         ],
         [
-          139,
+          143,
           "Adrian Pravak",
           25,
           14
         ],
         [
-          140,
+          144,
           "Anton Pravak",
           25,
           12
         ],
         [
-          141,
-          "Yongkang Roberts",
-          25,
-          11
-        ],
-        [
-          142,
+          145,
           "Blake Foust",
           25,
           13
         ],
         [
-          143,
+          146,
           "Elijah Boone",
           25,
           13
         ],
         [
-          144,
+          147,
           "Levi Bisel",
           25,
           12
         ],
         [
-          145,
+          148,
           "Noam Davoodi",
           25,
           14
         ],
         [
-          146,
+          149,
           "Legend Harry",
           25,
           14
         ],
         [
-          147,
+          150,
           "Damien Flores",
           25,
           14
         ],
         [
-          148,
+          151,
           "Phillip Teng",
           25,
           14
         ],
         [
-          149,
+          152,
           "Sahir Ajani",
           25,
           12
         ],
         [
-          150,
+          153,
           "Siddarth Nair",
           25,
           14
         ],
         [
-          151,
+          154,
           "Aden Abraham",
           25,
           13
         ],
         [
-          152,
+          155,
           "Isaiah Joe",
           25,
           11
         ],
         [
-          153,
+          156,
           "Caden Colwell",
           25,
           14
         ],
         [
-          154,
+          157,
           "Zeke Bajza",
           25,
           13
         ],
         [
-          155,
+          158,
           "Rayann Gupta",
           25,
           14
         ],
         [
-          156,
+          159,
           "Zayd El Calamawy",
           25,
           14
         ],
         [
-          157,
+          160,
           "Jett Emery",
           25,
           13
         ],
         [
-          158,
-          "Luke Kremer",
-          20,
+          161,
+          "Dexton Moser",
+          25,
           14
         ],
         [
-          159,
+          162,
+          "Ernest De Fauw",
+          25,
+          12
+        ],
+        [
+          163,
           "Gianluca Randazzo",
           20,
           14
         ],
         [
-          160,
+          164,
           "Suhas Soleti",
           20,
           14
         ],
         [
-          161,
+          165,
           "Suhas Jupalli",
           20,
           13
         ],
         [
-          162,
+          166,
           "Jackson Metcalf",
           20,
           13
         ],
         [
-          163,
+          167,
           "Cal Boettcher",
           20,
           13
         ],
         [
-          164,
+          168,
           "Ryan Rezai",
           20,
           13
         ],
         [
-          165,
+          169,
           "Leo Miller",
           15,
           14
         ],
         [
-          166,
+          170,
           "Sawyer Pendleton",
           15,
           13
         ],
         [
-          167,
+          171,
           "Charles Leeker",
           15,
           14
         ],
         [
-          168,
+          172,
           "Johnn Angeles",
           10,
           14
         ],
         [
-          169,
+          173,
           "Jamin Weber",
           10,
           14
         ],
         [
-          170,
+          174,
           "Reyansh Tiwari",
           10,
           14
         ],
         [
-          171,
+          175,
           "Ty Simmons",
           10,
           14
         ],
         [
-          172,
+          176,
           "Le Vu Phat Loc",
           10,
           14
         ],
         [
-          173,
+          177,
           "Nate Brooker",
           10,
           14
         ],
         [
-          174,
+          178,
           "Hudson Schneider",
           10,
           14
         ],
         [
-          175,
+          179,
           "Faris Sherif",
           10,
           14
         ],
         [
-          176,
+          180,
           "Gabriel Alvarado",
           10,
           13
         ],
         [
-          177,
+          181,
           "Victor Pragle",
           5,
           14
         ],
         [
-          178,
+          182,
           "Om Bankar",
           5,
           14
         ],
         [
-          179,
+          183,
           "Grayson Dorland",
           5,
           14
         ],
         [
-          180,
+          184,
           "Jayan Raval",
           5,
           14
         ],
         [
-          181,
+          185,
           "Caleb Araujo",
           5,
           14
         ],
         [
-          182,
+          186,
           "Ahmad Farid Rahimi",
           5,
           14
         ],
         [
-          183,
+          187,
           "Daarean Manohar",
           5,
           14
         ],
         [
-          184,
+          188,
           "Lincoln Brunson",
           5,
           14
         ],
         [
-          185,
+          189,
           "Earl Xander Tuzon",
           5,
           14
         ],
         [
-          186,
+          190,
           "Ryan Korman",
           5,
           14
         ],
         [
-          187,
+          191,
           "Chase Collins",
           5,
           14
         ],
         [
-          188,
+          192,
           "Ryan Lahlou Amine",
           5,
           14
         ],
         [
-          189,
+          193,
           "Elatan Ree",
           5,
           14
         ],
         [
-          190,
+          194,
           "Dean Schulte",
           5,
           14
         ],
         [
-          191,
+          195,
           "Jake Zwahlen",
           5,
           14
         ],
         [
-          192,
+          196,
           "Drezden Hatch",
           5,
           13
         ],
         [
-          193,
+          197,
           "Grant Shibl",
           5,
           13
         ],
         [
-          194,
+          198,
           "Shubhan Sarikonda",
           5,
           11
         ],
         [
-          195,
+          199,
           "Solomon Garcia",
           5,
           9
         ],
         [
-          196,
+          200,
           "Joseph Petrusha",
           5,
           13
         ],
         [
-          197,
+          201,
           "Vihaan Madam",
           5,
           13
         ],
         [
-          198,
+          202,
           "Oliver Novic",
           5,
           13
         ],
         [
-          199,
+          203,
           "Nolan Mullens",
           5,
           13
         ],
         [
-          200,
+          204,
           "Reid Morgan",
           3,
           13
         ],
         [
-          201,
+          205,
           "Chandler Craig",
           2.5,
           13
         ],
         [
-          202,
+          206,
           "Donovan Caplinger",
           2.5,
           13
         ],
         [
-          203,
+          207,
           "Bryson Craig",
           2.5,
           13
         ],
         [
-          204,
-          "Luis Fischer",
-          2.5,
-          13
-        ],
-        [
-          205,
+          208,
           "Blake Morris",
           2.5,
           13
         ],
         [
-          206,
+          209,
           "Blake Weaver",
           2.5,
           13
         ],
         [
-          207,
+          210,
           "Lucas Lim",
           2.5,
           13
         ],
         [
-          208,
+          211,
           "Nicholas Jenkins",
           2.5,
           13
@@ -8792,56 +8936,56 @@
         ],
         [
           6,
+          "Ethan Lin",
+          2955,
+          12
+        ],
+        [
+          7,
           "Ryker Demian",
           2845,
           12
         ],
         [
-          7,
-          "Ethan Lin",
-          2755,
+          8,
+          "Lincoln Reffett",
+          2500,
           12
         ],
         [
-          8,
+          9,
           "Cohen Clarke",
           2460,
           12
         ],
         [
-          9,
+          10,
+          "Jack Loughridge",
+          2460,
+          12
+        ],
+        [
+          11,
           "Derek Chiu",
           2450,
           12
         ],
         [
-          10,
+          12,
           "Blake Behr",
           2350,
           11
         ],
         [
-          11,
-          "Lincoln Reffett",
-          2200,
-          12
-        ],
-        [
-          12,
-          "Aarin Thyagarajan",
-          2165,
-          12
-        ],
-        [
           13,
           "Matthew Pak",
-          2123,
+          2323,
           12
         ],
         [
           14,
-          "Jack Loughridge",
-          2060,
+          "Aarin Thyagarajan",
+          2165,
           12
         ],
         [
@@ -8853,49 +8997,49 @@
         [
           16,
           "Ryan Tran",
-          1300,
+          1400,
           12
         ],
         [
           17,
+          "Chase Manlangit",
+          875,
+          12
+        ],
+        [
+          18,
           "Marshall Clark",
           845,
           12
         ],
         [
-          18,
+          19,
           "Benjamin Comerford",
           800,
           12
         ],
         [
-          19,
+          20,
           "Parker Yang",
           695,
           11
         ],
         [
-          20,
+          21,
           "Drake Johnson",
           655,
           11
         ],
         [
-          21,
+          22,
           "Ramsey Robinson",
           610,
           10
         ],
         [
-          22,
+          23,
           "Bert Mu",
           605,
-          12
-        ],
-        [
-          23,
-          "Chase Manlangit",
-          575,
           12
         ],
         [
@@ -8912,483 +9056,483 @@
         ],
         [
           26,
+          "Hans Fischer",
+          405,
+          10
+        ],
+        [
+          27,
           "Avery Bomgren",
           400,
           12
         ],
         [
-          27,
+          28,
           "Justin Kada",
           400,
           10
         ],
         [
-          28,
+          29,
           "Nixon Emery",
           350,
           11
         ],
         [
-          29,
+          30,
           "Nayan Fogla",
           305,
           12
         ],
         [
-          30,
+          31,
           "Libo Zhou",
           300,
           12
         ],
         [
-          31,
+          32,
           "Alec Pisano",
           300,
           11
         ],
         [
-          32,
+          33,
+          "Fraser Blacklaws",
+          300,
+          12
+        ],
+        [
+          34,
           "Thomas Manzuri",
           280,
           12
         ],
         [
-          33,
+          35,
           "Brodie Kan",
           260,
           12
         ],
         [
-          34,
+          36,
+          "Nolan Schroeder",
+          260,
+          12
+        ],
+        [
+          37,
           "Rowe Hendershot",
           225,
           10
         ],
         [
-          35,
-          "Nolan Schroeder",
-          210,
-          12
+          38,
+          "Yongkang Roberts",
+          225,
+          11
         ],
         [
-          36,
-          "Hans Fischer",
-          205,
-          10
-        ],
-        [
-          37,
+          39,
           "Vince Turek",
           200,
           12
         ],
         [
-          38,
+          40,
           "Eli Rich",
           200,
           10
         ],
         [
-          39,
+          41,
           "Landon Carroll",
           200,
           12
         ],
         [
-          40,
+          42,
           "Ethan Tan",
           200,
           11
         ],
         [
-          41,
+          43,
           "Kaleo Allen",
           200,
           12
         ],
         [
-          42,
-          "Fraser Blacklaws",
-          200,
-          12
-        ],
-        [
-          43,
+          44,
           "Jason Gong",
           200,
           12
         ],
         [
-          44,
+          45,
           "Miller Talanoa",
           175,
           12
         ],
         [
-          45,
+          46,
           "Beckett Mallmann",
           150,
           12
         ],
         [
-          46,
+          47,
           "James Dunne",
           125,
           12
         ],
         [
-          47,
+          48,
           "Hudson Pascoe",
           100,
           12
         ],
         [
-          48,
+          49,
           "Sahir Ajani",
           100,
           12
         ],
         [
-          49,
+          50,
           "Lucas Brook",
           100,
           11
         ],
         [
-          50,
+          51,
           "Preston Chan",
           100,
           12
         ],
         [
-          51,
+          52,
           "Hay Ching Hayes Chan",
           100,
           11
         ],
         [
-          52,
+          53,
           "Elliott Kight",
           100,
           12
         ],
         [
-          53,
+          54,
+          "Levi Bisel",
+          100,
+          12
+        ],
+        [
+          55,
+          "Josiah Briones",
+          100,
+          10
+        ],
+        [
+          56,
           "Erick Behar Luizelli",
           95,
           11
         ],
         [
-          54,
+          57,
           "Cal Jones",
           90,
           9
         ],
         [
-          55,
+          58,
+          "Eli Kremer",
+          85,
+          12
+        ],
+        [
+          59,
           "Joshua Bewley",
           80,
           12
         ],
         [
-          56,
+          60,
           "Jonatan Nilsson",
           80,
           12
         ],
         [
-          57,
+          61,
           "James Bewley",
           80,
           11
         ],
         [
-          58,
+          62,
           "Knox Read",
           80,
           12
         ],
         [
-          59,
-          "Levi Bisel",
+          63,
+          "Ernest De Fauw",
           75,
           12
         ],
         [
-          60,
+          64,
           "Quinnten Anderson",
           70,
           12
         ],
         [
-          61,
-          "Eli Kremer",
-          60,
-          12
-        ],
-        [
-          62,
+          65,
           "Soren Anderson",
           60,
           12
         ],
         [
-          63,
+          66,
           "Avery Pamaran",
           60,
           11
         ],
         [
-          64,
+          67,
           "Cole Kremer",
           60,
           10
         ],
         [
-          65,
+          68,
           "Laicheng Buragohain",
           60,
           12
         ],
         [
-          66,
+          69,
           "Brody Howard",
           60,
           12
         ],
         [
-          67,
+          70,
           "Lucas Lau",
           55,
           11
         ],
         [
-          68,
+          71,
           "Rajveer Kulkarni",
           55,
           12
         ],
         [
-          69,
+          72,
           "Lee Newcomb",
           50,
           12
         ],
         [
-          70,
+          73,
           "Aadit Ochani",
           50,
           11
         ],
         [
-          71,
-          "Ernest De Fauw",
-          50,
-          12
-        ],
-        [
-          72,
+          74,
           "Griffin Harding",
           50,
           12
         ],
         [
-          73,
-          "Josiah Briones",
-          50,
-          10
-        ],
-        [
-          74,
+          75,
           "Cooper Langdon",
           50,
           12
         ],
         [
-          75,
+          76,
           "Gray Greer",
           50,
           11
         ],
         [
-          76,
+          77,
           "Westin Case",
           50,
           11
         ],
         [
-          77,
+          78,
           "Truxton Stucki",
           50,
           12
         ],
         [
-          78,
+          79,
           "Rowdy Stucki",
           50,
           10
         ],
         [
-          79,
+          80,
           "Auswin Henderson",
           50,
           9
         ],
         [
-          80,
+          81,
           "Michael Yu",
           50,
           10
         ],
         [
-          81,
+          82,
           "Kavi Singal",
           50,
           12
         ],
         [
-          82,
+          83,
           "Ethan Dewey",
           50,
           12
         ],
         [
-          83,
+          84,
           "Kendrick Hang",
           50,
           11
         ],
         [
-          84,
+          85,
           "Brooks Blum",
           50,
           11
         ],
         [
-          85,
+          86,
           "Finn Reedy",
           50,
           11
         ],
         [
-          86,
+          87,
           "Hudson McCarthy",
           50,
           9
         ],
         [
-          87,
+          88,
           "Luca Martinelli",
           50,
           12
         ],
         [
-          88,
+          89,
           "Sebastian Rodico",
           50,
           12
         ],
         [
-          89,
+          90,
           "Joshua Davis",
           50,
           11
         ],
         [
-          90,
+          91,
           "Ashwanth Sriram",
           50,
           11
         ],
         [
-          91,
+          92,
           "Aarav Jha",
           50,
           10
         ],
         [
-          92,
+          93,
           "Kiaan Chitrapu",
           50,
           11
         ],
         [
-          93,
+          94,
           "Hudson Gable",
           45,
           12
         ],
         [
-          94,
+          95,
           "Drew Maltz",
           40,
           12
         ],
         [
-          95,
+          96,
           "Brooks Miller",
           33,
           11
         ],
         [
-          96,
+          97,
           "Jack Pendleton",
           30,
           12
         ],
         [
-          97,
+          98,
           "Benjamin Cardenas",
           30,
           11
         ],
         [
-          98,
+          99,
           "Daneglo Cabrera",
           25,
           10
         ],
         [
-          99,
+          100,
           "Solomon Garcia",
           25,
           9
         ],
         [
-          100,
+          101,
           "Mason Fier",
           25,
           12
         ],
         [
-          101,
+          102,
           "Abel Green",
           25,
           10
         ],
         [
-          102,
+          103,
           "Arthur Semacon",
           25,
           9
         ],
         [
-          103,
+          104,
           "Arthan Semacon",
           25,
           11
         ],
         [
-          104,
+          105,
           "Anton Pravak",
           25,
           12
-        ],
-        [
-          105,
-          "Yongkang Roberts",
-          25,
-          11
         ],
         [
           106,
@@ -9404,198 +9548,210 @@
         ],
         [
           108,
+          "Viaan Arya",
+          25,
+          12
+        ],
+        [
+          109,
+          "Oscar Rubelt",
+          25,
+          11
+        ],
+        [
+          110,
           "Ethan Nguyen",
           20,
           12
         ],
         [
-          109,
+          111,
           "Camilo Bucio",
           20,
           12
         ],
         [
-          110,
+          112,
           "Oliver Brooker",
           20,
           11
         ],
         [
-          111,
+          113,
           "Mick Jones",
           20,
           11
         ],
         [
-          112,
+          114,
           "Everett Porter",
           20,
           11
         ],
         [
-          113,
+          115,
           "Samuel Nguyen",
           20,
           10
         ],
         [
-          114,
+          116,
           "Greyson Nguyen",
           20,
           10
         ],
         [
-          115,
+          117,
           "Mateo Bucio",
           20,
           10
         ],
         [
-          116,
+          118,
           "Leo Poscillico",
           15,
           12
         ],
         [
-          117,
+          119,
           "Jake Angulo",
           15,
           11
         ],
         [
-          118,
+          120,
           "Eli Poscillico",
           15,
           10
         ],
         [
-          119,
+          121,
           "Cameron Tran",
           13,
           11
         ],
         [
-          120,
+          122,
           "Pierce Douglas",
           10,
           12
         ],
         [
-          121,
+          123,
           "Max Folkringa",
           10,
           12
         ],
         [
-          122,
+          124,
           "Kyle Penkov",
           10,
           12
         ],
         [
-          123,
+          125,
           "Niko Pahang",
           10,
           12
         ],
         [
-          124,
+          126,
           "Aakash Mishra",
           10,
           12
         ],
         [
-          125,
+          127,
           "Luke Rentschler",
           10,
           11
         ],
         [
-          126,
+          128,
           "Gunner Greiner",
           10,
           11
         ],
         [
-          127,
+          129,
           "Arthur Yin",
           10,
           11
         ],
         [
-          128,
+          130,
           "Rithik Ramasubbhu",
           10,
           11
         ],
         [
-          129,
+          131,
           "Gabriel Rayos",
           10,
           11
         ],
         [
-          130,
+          132,
           "Cooper Sugar",
           10,
           10
         ],
         [
-          131,
+          133,
           "Archer Toolson",
           5,
           12
         ],
         [
-          132,
+          134,
           "Elias Hector Mendoza",
           5,
           12
         ],
         [
-          133,
+          135,
           "Tanary Gangatirkar",
           5,
           12
         ],
         [
-          134,
+          136,
           "Eon Hu",
           5,
           12
         ],
         [
-          135,
+          137,
           "David Lilly",
           5,
           12
         ],
         [
-          136,
+          138,
           "Lenny Siari",
           5,
           11
         ],
         [
-          137,
+          139,
           "Julian Santiago",
           5,
           11
         ],
         [
-          138,
+          140,
           "Aden Bechtel",
           5,
           11
         ],
         [
-          139,
+          141,
           "Owen Hilbert",
           5,
           11
         ],
         [
-          140,
+          142,
           "Declan Pacini",
           5,
           11
@@ -9918,33 +10074,33 @@
         ],
         [
           5,
+          "Alexa Smith",
+          1805,
+          15
+        ],
+        [
+          6,
           "Natalia Simson",
           1800,
           14
         ],
         [
-          6,
+          7,
           "Mihika Gajendragadkar",
           1700,
           14
         ],
         [
-          7,
+          8,
           "Rose Schneider",
           1480,
           15
         ],
         [
-          8,
+          9,
           "Francesca Randazzo",
           1340,
           16
-        ],
-        [
-          9,
-          "Alexa Smith",
-          1305,
-          15
         ],
         [
           10,
@@ -10020,270 +10176,306 @@
         ],
         [
           22,
+          "Madalena Flores",
+          500,
+          14
+        ],
+        [
+          23,
           "Pie Kipnes",
           450,
           13
         ],
         [
-          23,
+          24,
+          "Serena Chi",
+          450,
+          12
+        ],
+        [
+          25,
           "Halina Slowinski",
           400,
           11
         ],
         [
-          24,
+          26,
           "Ellie Rodriguez",
           400,
           12
         ],
         [
-          25,
+          27,
           "Ella Oh",
           400,
           12
         ],
         [
-          26,
+          28,
           "Aila Tomii",
           400,
           15
         ],
         [
-          27,
+          29,
           "Yaneli Acosta",
           400,
           13
         ],
         [
-          28,
+          30,
           "Elaina Clarke",
           400,
           16
         ],
         [
-          29,
+          31,
           "Allison To",
           400,
           16
         ],
         [
-          30,
+          32,
+          "Mila Messinger",
+          400,
+          13
+        ],
+        [
+          33,
           "Diane Huynh",
           390,
           15
         ],
         [
-          31,
+          34,
           "Pingzhen Liu",
           385,
           15
         ],
         [
-          32,
+          35,
           "Aveya Elfert",
           300,
           15
         ],
         [
-          33,
+          36,
           "Kiana Soltys",
           300,
           13
         ],
         [
-          34,
+          37,
           "Manoela Baixo",
           300,
           13
         ],
         [
-          35,
+          38,
           "Lavinia Baixo",
           300,
           13
         ],
         [
-          36,
+          39,
           "Charlotte Cox",
           300,
           16
         ],
         [
-          37,
+          40,
           "Lizzie McFarland",
           300,
           16
         ],
         [
-          38,
+          41,
+          "Brooklyn Lord",
+          300,
+          14
+        ],
+        [
+          42,
+          "Myda Pham",
+          300,
+          14
+        ],
+        [
+          43,
           "Nahla Bernhardt",
           280,
           16
         ],
         [
-          39,
+          44,
           "Mely Emmanuel",
           200,
           14
         ],
         [
-          40,
+          45,
           "Soliana Emmanuel",
           200,
           11
         ],
         [
-          41,
+          46,
           "Lolo Williams",
           200,
           13
         ],
         [
-          42,
+          47,
           "Abigail Nguyen",
           200,
           13
         ],
         [
-          43,
+          48,
+          "Ariana Torres",
+          200,
+          14
+        ],
+        [
+          49,
+          "Alina Torres",
+          200,
+          12
+        ],
+        [
+          50,
           "Kei Sawaki",
           160,
           16
         ],
         [
-          44,
+          51,
           "Clarice Ouvarova",
           100,
           16
         ],
         [
-          45,
+          52,
           "Maliya Nalder",
           100,
           16
         ],
         [
-          46,
+          53,
           "Emma Monson",
           100,
           16
         ],
         [
-          47,
+          54,
           "Carolina Merry",
           100,
           16
         ],
         [
-          48,
+          55,
           "Chloe Essig",
           100,
           14
         ],
         [
-          49,
+          56,
           "Bhoomi Patel",
           80,
           16
         ],
         [
-          50,
+          57,
           "Ellie Rotterman",
           80,
           16
         ],
         [
-          51,
+          58,
           "London Leon",
           80,
           15
         ],
         [
-          52,
+          59,
           "Ayushi Mehta",
           60,
           16
         ],
         [
-          53,
+          60,
           "Willow Almond",
           60,
           14
         ],
         [
-          54,
+          61,
           "Sovanna Chhim",
           50,
           15
         ],
         [
-          55,
-          "Serena Chi",
-          50,
-          12
-        ],
-        [
-          56,
+          62,
           "Lily Chung",
           40,
           16
         ],
         [
-          57,
+          63,
           "Naya Uribe",
           40,
           15
         ],
         [
-          58,
+          64,
           "Madilynn Coppedge",
           40,
           15
         ],
         [
-          59,
+          65,
           "Allison Pulaski",
           20,
           15
         ],
         [
-          60,
+          66,
           "Dylan Copenhaver",
           20,
           15
         ],
         [
-          61,
+          67,
           "Kate Smith",
           20,
           15
         ],
         [
-          62,
+          68,
           "Berkley Toolson",
           10,
           15
         ],
         [
-          63,
+          69,
           "Hayden Hall",
           10,
           15
         ],
         [
-          64,
+          70,
           "Ziva Lawson",
           10,
           15
         ],
         [
-          65,
+          71,
           "Zoey Lawson",
           10,
           15
         ],
         [
-          66,
+          72,
           "Ellie Scroggins",
           2.5,
           15
@@ -10301,69 +10493,69 @@
         ],
         [
           2,
+          "Myda Pham",
+          2650,
+          14
+        ],
+        [
+          3,
           "Scout Johnson",
           2620,
           13
         ],
         [
-          3,
+          4,
           "Circa Luna Sacca",
           2545,
           13
         ],
         [
-          4,
-          "Myda Pham",
-          2350,
-          14
+          5,
+          "Mila Messinger",
+          2330,
+          13
         ],
         [
-          5,
+          6,
           "Willa Pendergrast",
           2250,
           14
         ],
         [
-          6,
+          7,
+          "Serena Chi",
+          2250,
+          12
+        ],
+        [
+          8,
           "Mihika Gajendragadkar",
           2240,
           14
         ],
         [
-          7,
+          9,
           "Clarissa Year",
           2000,
           14
         ],
         [
-          8,
+          10,
           "Leah Jones",
           1980,
           14
         ],
         [
-          9,
+          11,
           "Pie Kipnes",
           1960,
           13
         ],
         [
-          10,
-          "Mila Messinger",
-          1930,
-          13
-        ],
-        [
-          11,
+          12,
           "Lolo Williams",
           1900,
           13
-        ],
-        [
-          12,
-          "Serena Chi",
-          1850,
-          12
         ],
         [
           13,
@@ -10391,39 +10583,39 @@
         ],
         [
           17,
+          "Madalena Flores",
+          1630,
+          14
+        ],
+        [
+          18,
+          "Brooklyn Lord",
+          1590,
+          14
+        ],
+        [
+          19,
           "Gia Arcieri",
           1510,
           13
         ],
         [
-          18,
+          20,
           "Ella Oh",
           1450,
           12
         ],
         [
-          19,
-          "Brooklyn Lord",
-          1290,
-          14
-        ],
-        [
-          20,
+          21,
           "Manoela Baixo",
           1275,
           13
         ],
         [
-          21,
+          22,
           "Lavinia Baixo",
           1275,
           13
-        ],
-        [
-          22,
-          "Madalena Flores",
-          1130,
-          14
         ],
         [
           23,
@@ -10529,49 +10721,49 @@
         ],
         [
           40,
+          "Alina Torres",
+          400,
+          12
+        ],
+        [
+          41,
           "Kaitlyn Nishi",
           340,
           14
         ],
         [
-          41,
+          42,
           "Kiana Soltys",
           300,
           13
         ],
         [
-          42,
+          43,
           "Eve Weaver",
           270,
           14
         ],
         [
-          43,
+          44,
           "Mely Emmanuel",
           200,
           14
         ],
         [
-          44,
+          45,
           "Soliana Emmanuel",
           200,
           11
         ],
         [
-          45,
+          46,
           "Maddy Duke",
           200,
           12
         ],
         [
-          46,
-          "Skye Reedy",
-          200,
-          12
-        ],
-        [
           47,
-          "Alina Torres",
+          "Skye Reedy",
           200,
           12
         ],
@@ -10595,168 +10787,174 @@
         ],
         [
           51,
+          "Ariana Torres",
+          200,
+          14
+        ],
+        [
+          52,
           "Estelle Libo",
           170,
           13
         ],
         [
-          52,
+          53,
           "Kataryna Misini",
           100,
           11
         ],
         [
-          53,
+          54,
           "Isabella Mendoza",
           100,
           13
         ],
         [
-          54,
+          55,
           "Tayler Brasol",
           100,
           12
         ],
         [
-          55,
+          56,
           "Margaret Wolf",
           100,
           10
         ],
         [
-          56,
+          57,
           "Sharanya Gadula",
           100,
           13
         ],
         [
-          57,
+          58,
           "Karthika Gadula",
           100,
           11
         ],
         [
-          58,
+          59,
           "Chloe Essig",
           100,
           14
         ],
         [
-          59,
+          60,
           "Alice Pan",
           80,
           14
         ],
         [
-          60,
+          61,
           "Huong Dan Linh",
           80,
           14
         ],
         [
-          61,
+          62,
           "Suri Kaplan",
           52.5,
           13
         ],
         [
-          62,
+          63,
           "Kiera Ouvarova",
           50,
           13
         ],
         [
-          63,
+          64,
           "Brooklyn Lee",
           50,
           10
         ],
         [
-          64,
+          65,
           "Emmaline Neville",
           50,
           11
         ],
         [
-          65,
+          66,
           "Deeksha Karthikeyan",
           50,
           11
         ],
         [
-          66,
+          67,
           "Josephine Moore",
           50,
           12
         ],
         [
-          67,
+          68,
           "Daniela I Rodriguez",
           50,
           12
         ],
         [
-          68,
+          69,
           "Zanaiya Anderson",
           45,
           13
         ],
         [
-          69,
+          70,
           "Piper Pascoe",
           40,
           14
         ],
         [
-          70,
+          71,
           "Winnie Chung",
           40,
           14
         ],
         [
-          71,
+          72,
           "Arden Kimm",
           25,
           12
         ],
         [
-          72,
+          73,
           "Katelyn Jones",
           25,
           13
         ],
         [
-          73,
+          74,
           "Myra Taher",
           20,
           14
         ],
         [
-          74,
+          75,
           "Kiara Kurtz",
           20,
           13
         ],
         [
-          75,
+          76,
           "Tran Thanh",
           20,
           13
         ],
         [
-          76,
+          77,
           "Mary Carlisle",
           10,
           14
         ],
         [
-          77,
+          78,
           "Lynlee Dunigan",
           10,
           13
         ],
         [
-          78,
+          79,
           "Myah Schneringer",
           5,
           14
@@ -10774,26 +10972,26 @@
         ],
         [
           2,
+          "Madison Escolin",
+          3680,
+          12
+        ],
+        [
+          3,
           "Halina Slowinski",
           3640,
           11
         ],
         [
-          3,
-          "Madison Escolin",
-          3480,
-          12
-        ],
-        [
           4,
           "Gal Solomon",
-          3270,
+          3470,
           11
         ],
         [
           5,
           "Serena Chi",
-          2775,
+          3175,
           12
         ],
         [
@@ -10822,27 +11020,27 @@
         ],
         [
           10,
-          "Sunny Stephens",
-          1240,
-          11
+          "Arden Kimm",
+          1525,
+          12
         ],
         [
           11,
           "Josephine Moore",
-          1160,
+          1460,
           12
         ],
         [
           12,
           "Alina Torres",
-          1100,
+          1300,
           12
         ],
         [
           13,
-          "Arden Kimm",
-          1025,
-          12
+          "Sunny Stephens",
+          1240,
+          11
         ],
         [
           14,
@@ -10876,51 +11074,51 @@
         ],
         [
           19,
+          "Saki Chihara",
+          610,
+          12
+        ],
+        [
+          20,
           "Sadie Thompson",
           600,
           12
         ],
         [
-          20,
+          21,
+          "Rico Notsu",
+          415,
+          11
+        ],
+        [
+          22,
+          "Luisana Fernandez",
+          400,
+          9
+        ],
+        [
+          23,
           "Ariella Bakalinsky",
           320,
           10
         ],
         [
-          21,
+          24,
           "Margaret Wolf",
           305,
           10
         ],
         [
-          22,
+          25,
           "Skye Reedy",
           250,
           12
         ],
         [
-          23,
-          "Rico Notsu",
-          215,
-          11
-        ],
-        [
-          24,
-          "Saki Chihara",
-          210,
-          12
-        ],
-        [
-          25,
+          26,
           "Jacqueline Kay",
           200,
           11
-        ],
-        [
-          26,
-          "Luisana Fernandez",
-          200,
-          9
         ],
         [
           27,
@@ -10936,126 +11134,138 @@
         ],
         [
           29,
+          "Annie Arger",
+          200,
+          11
+        ],
+        [
+          30,
           "Center Sky Sacca",
           150,
           11
         ],
         [
-          30,
+          31,
           "Karthika Gadula",
           100,
           11
         ],
         [
-          31,
+          32,
+          "Freyja Quain",
+          100,
+          11
+        ],
+        [
+          33,
           "Laine Clark",
           65,
           10
         ],
         [
-          32,
+          34,
           "Emmalina Requena",
           60,
           9
         ],
         [
-          33,
+          35,
           "Deeksha Karthikeyan",
           50,
           11
         ],
         [
-          34,
+          36,
           "Harper Zhou",
           50,
           9
         ],
         [
-          35,
+          37,
           "Daniela I Rodriguez",
           50,
           12
         ],
         [
-          36,
+          38,
           "Bella Olaivar",
           50,
           12
         ],
         [
-          37,
+          39,
           "Aadya Nair",
           50,
           11
         ],
         [
-          38,
+          40,
           "Alisha Singh",
           50,
           10
         ],
         [
-          39,
+          41,
           "Mira Ouvarova",
           40,
           10
         ],
         [
-          40,
+          42,
           "Jula Thompson",
           25,
           12
         ],
         [
-          41,
+          43,
           "McKinley Kuipers",
           25,
           11
         ],
         [
-          42,
+          44,
           "Madeline Ochinang",
           20,
           12
         ],
         [
-          43,
+          45,
           "Laiklyn Dunigan",
           20,
           11
         ],
         [
-          44,
+          46,
           "Brielle Kurtz",
           20,
           11
         ],
         [
-          45,
+          47,
           "Chloe Lilly",
           10,
           12
         ],
         [
-          46,
+          48,
           "Mirabelle Clark",
           10,
           12
         ],
         [
-          47,
+          49,
           "Sky Chai",
           5,
           12
         ],
         [
-          48,
+          50,
           "Haruka Notsu",
           5,
           11
         ],
         [
-          49,
+          51,
           "Sierra Starkey",
           5,
           11
@@ -11504,20 +11714,20 @@
         ],
         [
           6,
+          "Rocky Guido",
+          2000,
+          16
+        ],
+        [
+          7,
           "Andrew Angulo",
           1920,
           16
         ],
         [
-          7,
+          8,
           "Hudson Hall",
           1540,
-          16
-        ],
-        [
-          8,
-          "Rocky Guido",
-          1500,
           16
         ],
         [
@@ -11552,21 +11762,21 @@
         ],
         [
           14,
+          "Jonah Karczmer",
+          810,
+          15
+        ],
+        [
+          15,
           "Nicklaus Vu",
           740,
           16
         ],
         [
-          15,
+          16,
           "Jase Volz",
           600,
           13
-        ],
-        [
-          16,
-          "Jonah Karczmer",
-          410,
-          15
         ],
         [
           17,
@@ -11612,306 +11822,324 @@
         ],
         [
           24,
+          "Adym Pham",
+          300,
+          13
+        ],
+        [
+          25,
+          "Logan Russell",
+          292.5,
+          15
+        ],
+        [
+          26,
           "Dylan Thomas",
           220,
           16
         ],
         [
-          25,
+          27,
           "Hanson Huynh",
           200,
           14
         ],
         [
-          26,
+          28,
           "Leo Hernandez",
           200,
           16
         ],
         [
-          27,
+          29,
           "Jackson Lyman",
           200,
           16
         ],
         [
-          28,
+          30,
           "Asis Garrido Guerrero",
           200,
           15
         ],
         [
-          29,
+          31,
           "Jayden Hua",
           200,
           15
         ],
         [
-          30,
+          32,
           "Kian Maghamfar",
           195,
           15
         ],
         [
-          31,
+          33,
           "Hudson Yeager",
           160,
           14
         ],
         [
-          32,
+          34,
           "Joseph DuBose",
           160,
           16
         ],
         [
-          33,
+          35,
           "Lawson Demian",
           150,
           16
         ],
         [
-          34,
+          36,
           "Hridhay Pothunoori",
           145,
           16
         ],
         [
-          35,
+          37,
           "Charlie Konkachbaev",
           110,
           16
         ],
         [
-          36,
+          38,
           "Daniel Suharjoto",
           102.5,
           15
         ],
         [
-          37,
+          39,
           "Daniel Kegnovich",
           100,
           15
         ],
         [
-          38,
+          40,
           "Colton Schock",
           100,
           16
         ],
         [
-          39,
-          "Logan Russell",
-          92.5,
-          15
+          41,
+          "Jett Barber",
+          100,
+          13
         ],
         [
-          40,
+          42,
           "Adam Cheney",
           80,
           15
         ],
         [
-          41,
+          43,
           "Logan Formaniuk",
           70,
           15
         ],
         [
-          42,
+          44,
           "Skyler Garrgius",
           55,
           15
         ],
         [
-          43,
+          45,
           "Phi Trinh",
           50,
           16
         ],
         [
-          44,
+          46,
           "Arjun Khanna",
           50,
           14
         ],
         [
-          45,
+          47,
           "Kesler Hansen",
           50,
           16
         ],
         [
-          46,
+          48,
           "Cohen Clarke",
           50,
           12
         ],
         [
-          47,
+          49,
           "Carsen Ngo",
           50,
           13
         ],
         [
-          48,
+          50,
           "Drew Fahrbach",
           50,
           16
         ],
         [
-          49,
+          51,
           "Herman Calloway",
           50,
           14
         ],
         [
-          50,
+          52,
           "Walker Brasol",
           50,
           15
         ],
         [
-          51,
+          53,
+          "Devyn Modrak",
+          50,
+          15
+        ],
+        [
+          54,
           "Luke Andersch",
           40,
           16
         ],
         [
-          52,
+          55,
           "Blake Middlebrook",
           32.5,
           15
         ],
         [
-          53,
+          56,
           "Andrew Powitzky",
           30,
           14
         ],
         [
-          54,
+          57,
           "Sam Libo",
           27.5,
           15
         ],
         [
-          55,
+          58,
           "Lucas Stampe",
           22.5,
           15
         ],
         [
-          56,
+          59,
           "Drew Engle",
           17.5,
           15
         ],
         [
-          57,
+          60,
           "Daniel Schappacher",
           15,
           16
         ],
         [
-          58,
+          61,
           "Grant Johnson",
           10,
           16
         ],
         [
-          59,
+          62,
           "Alexander Mercado",
           10,
           16
         ],
         [
-          60,
+          63,
           "He Yonglin",
           10,
           16
         ],
         [
-          61,
+          64,
           "Dawson Davis",
           10,
           16
         ],
         [
-          62,
+          65,
           "Toma Notsu",
           10,
           16
         ],
         [
-          63,
+          66,
           "Carson Hugo",
           10,
           16
         ],
         [
-          64,
+          67,
           "Zak Mosseri",
           10,
           15
         ],
         [
-          65,
+          68,
           "Tran Duc Khang",
           10,
           15
         ],
         [
-          66,
+          69,
           "Casey Hooks",
           7.5,
           15
         ],
         [
-          67,
+          70,
           "Thane Hendershot",
           7.5,
           15
         ],
         [
-          68,
+          71,
           "Carson Altes",
           5,
           15
         ],
         [
-          69,
+          72,
           "Luka Bisharat",
           5,
           15
         ],
         [
-          70,
+          73,
           "Teo Salapura",
           2.5,
           15
         ],
         [
-          71,
+          74,
           "David Benge",
           2.5,
           15
         ],
         [
-          72,
+          75,
           "Milo Bechtel",
           2.5,
           15
         ],
         [
-          73,
+          76,
           "Raziel Alvarez",
           2.5,
           15
         ],
         [
-          74,
+          77,
           "Jeremiah Jr Cole",
           2.5,
           15
@@ -11935,20 +12163,20 @@
         ],
         [
           3,
-          "Francis Chi",
-          2440,
+          "Leo Chun",
+          2765,
           14
         ],
         [
           4,
-          "Leo Chun",
-          2365,
+          "Bennett Miller",
+          2585,
           14
         ],
         [
           5,
-          "Bennett Miller",
-          2185,
+          "Francis Chi",
+          2440,
           14
         ],
         [
@@ -11971,33 +12199,33 @@
         ],
         [
           9,
+          "Adym Pham",
+          1407.5,
+          13
+        ],
+        [
+          10,
           "Ryland Mehta",
           1355,
           14
         ],
         [
-          10,
+          11,
           "Ethan Lefkowitz",
           1240,
           13
         ],
         [
-          11,
+          12,
           "Hanson Huynh",
           1220,
           14
         ],
         [
-          12,
+          13,
           "Cohen Clarke",
           1150,
           12
-        ],
-        [
-          13,
-          "Adym Pham",
-          1107.5,
-          13
         ],
         [
           14,
@@ -12055,224 +12283,224 @@
         ],
         [
           23,
+          "Jett Barber",
+          362.5,
+          13
+        ],
+        [
+          24,
           "Emmett DeHaan",
           360,
           14
         ],
         [
-          24,
+          25,
           "Tyler Yang",
           352.5,
           13
         ],
         [
-          25,
+          26,
           "Emiliano Pena",
           350,
           14
         ],
         [
-          26,
+          27,
           "Rocco Monteleon",
           350,
           14
         ],
         [
-          27,
+          28,
+          "Hugo Namiki",
+          330,
+          13
+        ],
+        [
+          29,
           "Ari Chandra",
           310,
           13
         ],
         [
-          28,
+          30,
           "Noah Allen",
           310,
           14
         ],
         [
-          29,
+          31,
           "Aarin Thyagarajan",
           300,
           12
         ],
         [
-          30,
+          32,
           "MJ Marrero",
           285,
           14
         ],
         [
-          31,
-          "Jett Barber",
-          262.5,
-          13
-        ],
-        [
-          32,
+          33,
           "MJ Greiner",
           220,
           14
         ],
         [
-          33,
+          34,
           "Ryan Tran",
           200,
           12
         ],
         [
-          34,
+          35,
+          "Komasi Tagaloa",
+          200,
+          13
+        ],
+        [
+          36,
           "Carsen Ngo",
           155,
           13
         ],
         [
-          35,
+          37,
           "Owen Underwood",
           150,
           12
         ],
         [
-          36,
+          38,
           "Noah Elbyr",
           147.5,
           13
         ],
         [
-          37,
+          39,
           "Raphael Halasis",
           120,
           13
         ],
         [
-          38,
+          40,
           "Caleb Handford",
           110,
           14
         ],
         [
-          39,
+          41,
           "Robert Neville",
           105,
           13
         ],
         [
-          40,
+          42,
           "Luis Fernandez-Celis",
           100,
           14
         ],
         [
-          41,
+          43,
           "Liam To",
           90,
           13
         ],
         [
-          42,
+          44,
           "Quentin Ware",
           80,
           13
         ],
         [
-          43,
+          45,
           "Ryan Christy",
           65,
           14
         ],
         [
-          44,
+          46,
           "Desmond Pututau",
           60,
           13
         ],
         [
-          45,
+          47,
           "Lawerence Liu",
           55,
           13
         ],
         [
-          46,
+          48,
           "Knox Seader",
           55,
           14
         ],
         [
-          47,
-          "Devyn Modrak",
-          50,
-          15
-        ],
-        [
-          48,
+          49,
           "Arjun Khanna",
           50,
           14
         ],
         [
-          49,
+          50,
           "Bentley Manning",
           50,
           14
         ],
         [
-          50,
+          51,
           "Elliott Rouse",
           50,
           14
         ],
         [
-          51,
+          52,
           "Lincoln Reffett",
           50,
           12
         ],
         [
-          52,
+          53,
           "Kove Kandell",
           50,
           14
         ],
         [
-          53,
+          54,
           "Brayden Cheung",
           50,
           14
         ],
         [
-          54,
+          55,
           "Herman Calloway",
           50,
           14
         ],
         [
-          55,
+          56,
           "Max Martin",
           50,
           14
         ],
         [
-          56,
+          57,
           "Liam Miller",
           45,
           13
         ],
         [
-          57,
+          58,
           "Bryce Kurtz",
           40,
           14
         ],
         [
-          58,
+          59,
           "Tyler Iskander",
           35,
-          13
-        ],
-        [
-          59,
-          "Hugo Namiki",
-          30,
           13
         ],
         [
@@ -12403,13 +12631,13 @@
         [
           2,
           "JZ Holmes",
-          3520,
+          3620,
           12
         ],
         [
           3,
           "Ethan Lin",
-          2960,
+          3010,
           12
         ],
         [
@@ -12426,26 +12654,26 @@
         ],
         [
           6,
+          "Derek Chiu",
+          1860,
+          12
+        ],
+        [
+          7,
           "Cohen Clarke",
           1570,
           12
         ],
         [
-          7,
-          "Derek Chiu",
-          1485,
-          12
-        ],
-        [
           8,
-          "Aidan Gohn",
-          1295,
+          "Lincoln Reffett",
+          1550,
           12
         ],
         [
           9,
-          "Lincoln Reffett",
-          1050,
+          "Aidan Gohn",
+          1295,
           12
         ],
         [
@@ -12463,7 +12691,7 @@
         [
           12,
           "Matthew Pak",
-          600,
+          625,
           12
         ],
         [
@@ -12480,39 +12708,39 @@
         ],
         [
           15,
+          "Ryan Tran",
+          400,
+          12
+        ],
+        [
+          16,
           "Knox Read",
           275,
           12
         ],
         [
-          16,
+          17,
           "Bert Mu",
           275,
           12
         ],
         [
-          17,
+          18,
           "Blake Behr",
           225,
           11
         ],
         [
-          18,
+          19,
           "Quinnten Anderson",
           200,
           12
         ],
         [
-          19,
+          20,
           "Paulius Stuopis",
           200,
           9
-        ],
-        [
-          20,
-          "Ryan Tran",
-          200,
-          12
         ],
         [
           21,
@@ -12612,114 +12840,126 @@
         ],
         [
           37,
+          "Josiah Briones",
+          50,
+          10
+        ],
+        [
+          38,
           "Hudson Pascoe",
           45,
           12
         ],
         [
-          38,
+          39,
           "Hans Fischer",
           25,
           10
         ],
         [
-          39,
+          40,
           "Jason Sasam",
           25,
           12
         ],
         [
-          40,
+          41,
           "Nolan Schroeder",
           25,
           11
         ],
         [
-          41,
+          42,
           "Kaleo Allen",
           25,
           12
         ],
         [
-          42,
+          43,
           "Lucas Rodriguez-Cruz",
           25,
           11
         ],
         [
-          43,
+          44,
           "Thomas Manzuri",
           25,
           12
         ],
         [
-          44,
+          45,
           "Miller Talanoa",
           25,
           12
         ],
         [
-          45,
+          46,
+          "Eric Iurian",
+          25,
+          10
+        ],
+        [
+          47,
           "Rowe Hendershot",
           15,
           10
         ],
         [
-          46,
+          48,
           "Leo Posillico",
           10,
           12
         ],
         [
-          47,
+          49,
           "Lee Newcomb",
           10,
           12
         ],
         [
-          48,
+          50,
           "Rithik Ramasubbhu",
           10,
           11
         ],
         [
-          49,
+          51,
           "Benjamin Cardenas",
           10,
           11
         ],
         [
-          50,
+          52,
           "Eli Posillico",
           10,
           10
         ],
         [
-          51,
+          53,
           "David Lilly",
           5,
           12
         ],
         [
-          52,
+          54,
           "Aaron Ochinang",
           5,
           12
         ],
         [
-          53,
+          55,
           "Brooks Miller",
           5,
           11
         ],
         [
-          54,
+          56,
           "Avery Pamaran",
           5,
           11
         ],
         [
-          55,
+          57,
           "Solomon Garcia",
           5,
           9
@@ -13144,25 +13384,25 @@
         ],
         [
           7,
+          "Madalena Flores",
+          1600,
+          14
+        ],
+        [
+          8,
           "Natalia Simson",
           1500,
           14
         ],
         [
-          8,
+          9,
           "CIrca Luna Sacca",
           1500,
           13
         ],
         [
-          9,
-          "Leah Jones",
-          1100,
-          14
-        ],
-        [
           10,
-          "Madalena Flores",
+          "Leah Jones",
           1100,
           14
         ],
@@ -13186,342 +13426,348 @@
         ],
         [
           14,
+          "Serena Chi",
+          600,
+          12
+        ],
+        [
+          15,
           "London Leon",
           567.5,
           15
         ],
         [
-          15,
+          16,
           "Alix Ivy",
           550,
           15
         ],
         [
-          16,
+          17,
           "Francesca Randazzo",
           535,
           16
         ],
         [
-          17,
+          18,
           "Madyson Peav",
           500,
           16
         ],
         [
-          18,
+          19,
           "Cami Shepherd",
           480,
           15
         ],
         [
-          19,
+          20,
           "Karina Lam",
           400,
           13
         ],
         [
-          20,
+          21,
           "Aila Tomii",
           400,
           15
         ],
         [
-          21,
+          22,
           "Courtney Hill",
           400,
           16
         ],
         [
-          22,
+          23,
           "Dallas Caudill",
           400,
           16
         ],
         [
-          23,
+          24,
           "Elaina Clarke",
           375,
           16
         ],
         [
-          24,
+          25,
           "Olivia Pena",
           350,
           14
         ],
         [
-          25,
+          26,
+          "Alexa Smith",
+          347.5,
+          15
+        ],
+        [
+          27,
           "Isabella Mendoza",
           300,
           13
         ],
         [
-          26,
+          28,
           "Starlyn Little",
           300,
           16
         ],
         [
-          27,
+          29,
           "Willa Pendergrast",
           300,
           14
         ],
         [
-          28,
+          30,
+          "Ariana Torres",
+          300,
+          14
+        ],
+        [
+          31,
+          "Myda Pham",
+          300,
+          14
+        ],
+        [
+          32,
           "Diane Huynh",
           265,
           15
         ],
         [
-          29,
+          33,
           "Kate Smith",
           265,
           15
         ],
         [
-          30,
-          "Alexa Smith",
-          247.5,
-          15
-        ],
-        [
-          31,
+          34,
           "Pingzhen Liu",
           235,
           15
         ],
         [
-          32,
+          35,
           "Kei Sawaki",
           200,
           16
         ],
         [
-          33,
+          36,
           "Nahla Bernhardt",
           200,
           16
         ],
         [
-          34,
+          37,
           "Grace Kosednar",
           200,
           13
         ],
         [
-          35,
+          38,
           "Abigail Nguyen",
           200,
           13
         ],
         [
-          36,
-          "Serena Chi",
-          200,
-          12
-        ],
-        [
-          37,
+          39,
           "Alyssa Sattawhite",
           190,
           16
         ],
         [
-          38,
+          40,
           "Ayushi Mehta",
           130,
           16
         ],
         [
-          39,
+          41,
           "Manoela Baixo",
           100,
           13
         ],
         [
-          40,
+          42,
           "Maliya Nalder",
           100,
           16
         ],
         [
-          41,
+          43,
           "Lizzie McFarland",
           100,
           16
         ],
         [
-          42,
-          "Ariana Torres",
-          100,
-          14
-        ],
-        [
-          43,
+          44,
           "Maya Solomon",
           100,
           14
         ],
         [
-          44,
+          45,
           "Clarice Ouvarova",
           80,
           16
         ],
         [
-          45,
+          46,
           "Mihika Gajendragadkar",
           75,
           14
         ],
         [
-          46,
+          47,
           "Ellie Rotterman",
           70,
           16
         ],
         [
-          47,
+          48,
           "Clarissa Year",
           60,
           14
         ],
         [
-          48,
+          49,
           "Sovanna Chhim",
           55,
           15
         ],
         [
-          49,
+          50,
           "Bhoomi Patel",
           50,
           16
         ],
         [
-          50,
+          51,
           "Ghada Orellana",
           50,
           16
         ],
         [
-          51,
+          52,
           "Abigail Emery",
           50,
           14
         ],
         [
-          52,
+          53,
           "Emma Monson",
           50,
           16
         ],
         [
-          53,
+          54,
           "Allison To",
           50,
           16
         ],
         [
-          54,
+          55,
           "Melody Li",
           50,
           12
         ],
         [
-          55,
+          56,
           "Leah Parker",
           50,
           15
         ],
         [
-          56,
+          57,
           "Sophie Comerford",
           50,
           14
         ],
         [
-          57,
+          58,
           "Sara Powitzky",
           30,
           16
         ],
         [
-          58,
+          59,
           "Kailee Dio",
           20,
           16
         ],
         [
-          59,
+          60,
           "Alyssa Castillo",
           20,
           16
         ],
         [
-          60,
+          61,
           "Vanessa Simon",
           15,
           16
         ],
         [
-          61,
+          62,
           "Avery Guhl",
           10,
           16
         ],
         [
-          62,
+          63,
           "Dylan Copenhaver",
           10,
           15
         ],
         [
-          63,
+          64,
           "Violet Hackworth",
           5,
           16
         ],
         [
-          64,
+          65,
           "Layla Hack",
           5,
           16
         ],
         [
-          65,
+          66,
           "Kate Mcgrew",
           5,
           15
         ],
         [
-          66,
+          67,
           "Isabella Houghton",
           5,
           15
         ],
         [
-          67,
+          68,
           "Naya Uribe",
           5,
           15
         ],
         [
-          68,
+          69,
           "Nora Sorlie",
           5,
           15
         ],
         [
-          69,
+          70,
           "Hayden Hall",
           5,
           15
         ],
         [
-          70,
+          71,
           "Madilynn Coppedge",
           2.5,
           15
@@ -13533,44 +13779,44 @@
       "rows": [
         [
           1,
+          "Madalena Flores",
+          2885,
+          14
+        ],
+        [
+          2,
           "Circa Luna Sacca",
           2807.5,
           13
         ],
         [
-          2,
+          3,
           "Scout Johnson",
           2805,
           13
         ],
         [
-          3,
+          4,
           "Natalia Simson",
           2480,
           14
         ],
         [
-          4,
-          "Madalena Flores",
-          2385,
+          5,
+          "Brooklyn Lord",
+          2360,
           14
         ],
         [
-          5,
+          6,
           "Pie Kipnes",
           2245,
           13
         ],
         [
-          6,
+          7,
           "Leah Jones",
           2230,
-          14
-        ],
-        [
-          7,
-          "Brooklyn Lord",
-          1960,
           14
         ],
         [
@@ -13587,45 +13833,45 @@
         ],
         [
           10,
+          "Serena Chi",
+          1550,
+          12
+        ],
+        [
+          11,
+          "Mila Messinger",
+          1472.5,
+          13
+        ],
+        [
+          12,
+          "Myda Pham",
+          1230,
+          14
+        ],
+        [
+          13,
           "Clarissa Year",
           1200,
           14
         ],
         [
-          11,
-          "Serena Chi",
-          1175,
-          12
-        ],
-        [
-          12,
+          14,
           "Grayson Erickson",
           1172.5,
           13
         ],
         [
-          13,
+          15,
           "Grace Kosednar",
           1130,
           13
         ],
         [
-          14,
-          "Mila Messinger",
-          972.5,
-          13
-        ],
-        [
-          15,
+          16,
           "Manoela Baixo",
           965,
           13
-        ],
-        [
-          16,
-          "Myda Pham",
-          930,
-          14
         ],
         [
           17,
@@ -13665,306 +13911,312 @@
         ],
         [
           23,
+          "Rico Notsu",
+          600,
+          11
+        ],
+        [
+          24,
           "Loralee James",
           565,
           14
         ],
         [
-          24,
+          25,
           "Karina Lam",
           500,
           13
         ],
         [
-          25,
+          26,
           "Yaneli Acosta",
           460,
           13
         ],
         [
-          26,
+          27,
           "Mihika Gajendragadkar",
           440,
           14
         ],
         [
-          27,
+          28,
           "Gia Arcieri",
           417.5,
           13
         ],
         [
-          28,
+          29,
           "Sunny Stephens",
           400,
           11
         ],
         [
-          29,
+          30,
           "Arden Kimm",
           400,
           12
         ],
         [
-          30,
+          31,
           "Olivia Pena",
           350,
           14
         ],
         [
-          31,
+          32,
           "Abigail Nguyen",
           345,
           13
         ],
         [
-          32,
+          33,
           "Isabella Mendoza",
           300,
           13
         ],
         [
-          33,
-          "Rico Notsu",
+          34,
+          "Ariana Torres",
           300,
-          11
+          14
         ],
         [
-          34,
+          35,
           "Abigail Nguyen",
           282.5,
           13
         ],
         [
-          35,
+          36,
           "Tuli Vainuku",
           250,
           13
         ],
         [
-          36,
+          37,
           "Maya Solomon",
           225,
           14
         ],
         [
-          37,
+          38,
           "Bella Olaviar",
           200,
           12
         ],
         [
-          38,
+          39,
+          "Aanya Khandual",
+          200,
+          12
+        ],
+        [
+          40,
           "Isabel Li",
           155,
           13
         ],
         [
-          39,
+          41,
           "Kyoko Blanchard",
           150,
           14
         ],
         [
-          40,
+          42,
           "Estelle Libo",
           135,
           13
         ],
         [
-          41,
+          43,
           "Emmaline Neville",
           100,
           11
         ],
         [
-          42,
+          44,
           "Juliet Potter",
           100,
           14
         ],
         [
-          43,
-          "Ariana Torres",
-          100,
-          14
-        ],
-        [
-          44,
+          45,
           "Aakriti Yadav",
           100,
           13
         ],
         [
-          45,
+          46,
           "Zanaiya Anderson",
           80,
           13
         ],
         [
-          46,
+          47,
           "Piper Pascoe",
           70,
           14
         ],
         [
-          47,
+          48,
           "Kaitlyn Nishi",
           65,
           14
         ],
         [
-          48,
+          49,
           "Suri Kaplan",
           62.5,
           13
         ],
         [
-          49,
+          50,
           "Alice Pan",
           60,
           14
         ],
         [
-          50,
+          51,
           "Kiera Ouvarova",
           50,
           13
         ],
         [
-          51,
+          52,
           "Olivia Laycock",
           50,
           14
         ],
         [
-          52,
+          53,
           "Eve Weaver",
           50,
           14
         ],
         [
-          53,
+          54,
           "Abigail Emery",
           50,
           14
         ],
         [
-          54,
+          55,
           "Alika Vyshikina",
           50,
           14
         ],
         [
-          55,
+          56,
           "Ella Evans",
           50,
           11
         ],
         [
-          56,
+          57,
           "Chloe Essig",
           50,
           14
         ],
         [
-          57,
+          58,
           "Sophie Comerford",
           50,
           14
         ],
         [
-          58,
+          59,
           "Kiara Kurtz",
           40,
           13
         ],
         [
-          59,
+          60,
           "Emma Tang",
           25,
           14
         ],
         [
-          60,
+          61,
           "Saki Chihara",
           25,
           12
         ],
         [
-          61,
+          62,
           "Jane Ngarupe",
           25,
           14
         ],
         [
-          62,
+          63,
           "Gianna Dio",
           20,
           14
         ],
         [
-          63,
+          64,
           "Huong Dan Linh",
           20,
           14
         ],
         [
-          64,
+          65,
           "Sadie Gierman",
           20,
           13
         ],
         [
-          65,
+          66,
           "Myah Schneringer",
           15,
           14
         ],
         [
-          66,
+          67,
           "Mary Carlisle",
           10,
           14
         ],
         [
-          67,
+          68,
           "Tran Thanh",
           10,
           13
         ],
         [
-          68,
+          69,
           "Sydney Lizell",
           10,
           13
         ],
         [
-          69,
+          70,
           "Devyn Hardinger",
           5,
           13
         ],
         [
-          70,
+          71,
           "Alia Khan",
           5,
           13
         ],
         [
-          71,
+          72,
           "Esther Spina",
           5,
           13
         ],
         [
-          72,
+          73,
           "Abby Powitzky",
           5,
           13
         ],
         [
-          73,
+          74,
           "Allie Goodwin",
           2.5,
           13
@@ -13976,15 +14228,15 @@
       "rows": [
         [
           1,
-          "Elyssa Wisner",
-          3510,
-          12
+          "Gal Solomon",
+          3685,
+          11
         ],
         [
           2,
-          "Gal Solomon",
-          3435,
-          11
+          "Elyssa Wisner",
+          3510,
+          12
         ],
         [
           3,
@@ -13994,26 +14246,26 @@
         ],
         [
           4,
+          "Madison Escolin",
+          2615,
+          12
+        ],
+        [
+          5,
           "Halina Slowinski",
           2575,
           11
         ],
         [
-          5,
-          "Madison Escolin",
-          2515,
-          12
-        ],
-        [
           6,
-          "Ella Oh",
-          2325,
+          "Serena Chi",
+          2435,
           12
         ],
         [
           7,
-          "Serena Chi",
-          2060,
+          "Ella Oh",
+          2325,
           12
         ],
         [
@@ -14036,32 +14288,32 @@
         ],
         [
           11,
-          "Arden Kimm",
-          850,
+          "Alina Torres",
+          975,
           12
         ],
         [
           12,
+          "Arden Kimm",
+          900,
+          12
+        ],
+        [
+          13,
+          "Rico Notsu",
+          710,
+          11
+        ],
+        [
+          14,
           "Sunny Stephens",
           530,
           11
         ],
         [
-          13,
+          15,
           "Kataryna Misini",
           530,
-          11
-        ],
-        [
-          14,
-          "Alina Torres",
-          475,
-          12
-        ],
-        [
-          15,
-          "Rico Notsu",
-          410,
           11
         ],
         [
@@ -14072,162 +14324,174 @@
         ],
         [
           17,
+          "Josephine Moore",
+          285,
+          12
+        ],
+        [
+          18,
           "Brooklyn Lee",
           275,
           10
         ],
         [
-          18,
+          19,
           "Emmalina Requena",
           260,
           9
         ],
         [
-          19,
+          20,
           "Center Sky Sacca",
           235,
           11
         ],
         [
-          20,
+          21,
+          "Saki Chihara",
+          235,
+          12
+        ],
+        [
+          22,
           "Bella Olaviar",
           225,
           12
         ],
         [
-          21,
+          23,
+          "Aanya Khandual",
+          200,
+          12
+        ],
+        [
+          24,
           "Ariella Bakalinsky",
           195,
           10
         ],
         [
-          22,
-          "Josephine Moore",
-          185,
-          12
-        ],
-        [
-          23,
+          25,
           "Tayler Brasol",
           160,
           12
         ],
         [
-          24,
+          26,
           "Sadie Thompson",
           150,
           12
         ],
         [
-          25,
+          27,
           "Chloe Hiers",
           150,
           11
         ],
         [
-          26,
+          28,
           "Luisana Fernandez",
           125,
           9
         ],
         [
-          27,
+          29,
           "Skye Reedy",
           75,
           12
         ],
         [
-          28,
+          30,
           "Maddy Duke",
           50,
           12
         ],
         [
-          29,
+          31,
           "Daniela I Rodriguez",
           50,
           12
         ],
         [
-          30,
+          32,
           "Leah Bourgeois",
           50,
           11
         ],
         [
-          31,
+          33,
           "Harper Zhou",
           50,
           9
         ],
         [
-          32,
+          34,
           "Adhara Diaz",
           50,
           11
         ],
         [
-          33,
+          35,
           "McKaelynn Lund",
           40,
           11
         ],
         [
-          34,
-          "Saki Chihara",
-          35,
-          12
-        ],
-        [
-          35,
+          36,
           "Deeksha Karthikeyan",
           25,
           11
         ],
         [
-          36,
+          37,
           "Hailey Roy",
           25,
           12
         ],
         [
-          37,
+          38,
+          "Annie Arger",
+          25,
+          11
+        ],
+        [
+          39,
           "Alexandira DeMaree",
           20,
           11
         ],
         [
-          38,
+          40,
           "Emma Langdoc",
           10,
           12
         ],
         [
-          39,
+          41,
           "Sky Chai",
           5,
           12
         ],
         [
-          40,
+          42,
           "Chloe Lilly",
           5,
           12
         ],
         [
-          41,
+          43,
           "Madeline Ochinang",
           5,
           12
         ],
         [
-          42,
+          44,
           "Brielle Kurtz",
           5,
           11
         ],
         [
-          43,
+          45,
           "Laine Clark",
           5,
           10

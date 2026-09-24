@@ -40,11 +40,13 @@ const EVENT_MAP = {
   // sheet) lives here rather than being "fixed" on either side.
   "PPA World Pickleball Championships": "Opendoor Pickleball World Championships",
   "PPA Florida Open": "Proton Daytona Beach Open",
-  // ⚠ The 8/13 sheet still calls this one "PPA Malibu Cup"; the tour renamed it
-  // to the Showcase on 8/26. The KEY is the sheet's spelling and the VALUE is
-  // ours, so this row is exactly where that mismatch is supposed to live —
-  // don't "fix" the key until the sheet itself is reissued.
-  "PPA Malibu Cup": "Veolia Malibu Showcase",
+  // ⚠ KEY UPDATED 9/24: the sheet was reissued and finally adopted the tour's
+  // 8/26 rename, so its header is now "PPA Malibu Showcase". While the key
+  // still read "PPA Malibu Cup" this script reported the stop as ABSENT from
+  // the sheet rather than as six wrong days — a stop that goes quiet here is a
+  // rename until proven otherwise, so check the sheet's headers before
+  // believing coverage was dropped.
+  "PPA Malibu Showcase": "Veolia Malibu Showcase",
 };
 
 /** Channels the site models. CBS/FOX/MSG windows exist on the sheet but are not

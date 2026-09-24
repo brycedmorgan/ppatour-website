@@ -215,6 +215,9 @@ async function build(slug: string): Promise<AthleteStats | null> {
         }
       : null;
 
+  // ⚠ ORDER MATTERS: subtract the excluded event FIRST, then apply the floor.
+  // The floor is a max(), so a verified count always wins over a correction.
+  applyExcludedEvents(uuid, medals);
   applyVerifiedGolds(slug, medals);
 
   const country = r.country as Obj | undefined;
@@ -283,6 +286,120 @@ function applyVerifiedGolds(slug: string, medals: AthleteStats["medals"]): void 
     medals.total.gold,
     medals.singles.gold + medals.doubles.gold + medals.mixed.gold,
   );
+}
+
+/**
+ * ── MEDALS FROM EVENTS THAT ARE NOT PPA TOUR TITLES ──────────────────────────
+ *
+ * Hannah Johns, 9/23: the 2025 Australia Pickleball Open still counts toward
+ * career titles — "Lacy Schneemann's profile shows 3 career titles, 2 of them
+ * from the 2025 Australia Pickleball Open".
+ *
+ * ⚠ THE CAUSE IS A DOUBLE REGISTRATION UPSTREAM, AND IT IS CHECKABLE. The feed
+ * carries that tournament twice, and one copy is filed under the DOMESTIC org:
+ *
+ *   b28de702…  org "PPA Tour Australia"          Jan 28 – Feb 2 2025
+ *   a26c60b0…  org "Pro Pickleball Association"  Jan 30 – Feb 2 2025   <- this
+ *
+ * So `player_medals?partners=ppa,upa` counts its podium as PPA Tour hardware.
+ * The permanent fix belongs to Jason's dev team (Hannah is chasing it); this is
+ * the site-side half, and scripts/gen-tournament-history.mjs excludes the same
+ * uuid from the tournament-history page.
+ *
+ * ⚠ IT IS A SUBTRACTION, NOT AN OVERRIDE, because `player_medals` reports
+ * AGGREGATES — gold/silver/bronze per discipline, with no per-event breakdown to
+ * filter. There is nothing to exclude at the query; the only thing we can do is
+ * take off what we know that one event contributed. The amounts below are the
+ * event's own published pro podium, read from the same stored procedure the
+ * history generator uses, so this is arithmetic on a source, not an estimate.
+ *
+ * ⚠ KEYED ON USER UUID, NOT SLUG. Several of these pros answer to more than one
+ * slug (the roster spells one "Tyra Black" and the feed "Tyra Hurricane Black"),
+ * and a slug-keyed row would silently miss whichever page the visitor opened.
+ * Every uuid below was resolved by fetching the user and matching the endpoint's
+ * OWN firstName/lastName against the podium name — none was guessed from a name.
+ *
+ * ⚠ FOURTH PLACE IS NOT PUBLISHED, so `bronzeLost` is deliberately untouched.
+ * Semifinal counts are reduced only by the bronze medals removed here, which
+ * keeps `semifinals` consistent with `bronze`; any player who finished FOURTH
+ * at this event will still read one semifinal high until upstream is fixed.
+ *
+ * DELETE THIS WHOLE BLOCK once `partners=ppa,upa` stops counting the event.
+ */
+type MedalDelta = { gold?: number; silver?: number; bronze?: number };
+
+const EXCLUDED_EVENT_MEDALS: Record<
+  string,
+  { name: string; singles?: MedalDelta; doubles?: MedalDelta; mixed?: MedalDelta }
+> = {
+  // ── 2025 Australia Pickleball Open ──────────────────────────────────────
+  // Tournament a26c60b0-a00a-49cd-b93e-9fa2ac32f433, all five pro divisions.
+  // Alix Truong
+  "646f7432-e6ad-4ccf-95ee-a0e5d9514d28": { name: "Alix Truong", doubles: { bronze: 1 } },
+  // Allyce Jones
+  "efe9989b-5864-48c2-806c-06697024e1da": { name: "Allyce Jones", doubles: { silver: 1 }, mixed: { bronze: 1 } },
+  // Andie Dikosavljevic
+  "b8167e12-0591-4cb4-a950-ecb6da83e1e0": { name: "Andie Dikosavljevic", singles: { bronze: 1 } },
+  // CJ Klinger
+  "ead35052-7367-4296-96d4-064f546cc2b9": { name: "CJ Klinger", doubles: { silver: 1 } },
+  // Collin Johns
+  "6160a7c7-6b90-41f1-96d3-af5fa1623ca5": { name: "Collin Johns", doubles: { bronze: 1 } },
+  // Gabriel Tardio
+  "d50310a6-9378-4228-823f-7fb54f7bd698": { name: "Gabriel Tardio", singles: { gold: 1 }, doubles: { gold: 1 }, mixed: { silver: 1 } },
+  // Jay Devilliers
+  "295e343a-31a0-4e1d-a286-d62592291435": { name: "Jay Devilliers", doubles: { bronze: 1 }, mixed: { bronze: 1 } },
+  // Jessie Irvine
+  "8e2f9629-19d0-409d-81dc-b64fe2f3d3ff": { name: "Jessie Irvine", doubles: { bronze: 1 }, mixed: { silver: 1 } },
+  // Kaitlyn Christian
+  "66a6c35b-33a2-4a23-b5db-fa53c96d643a": { name: "Kaitlyn Christian", singles: { gold: 1 } },
+  // Lacy Schneemann
+  "a3ed7970-35d2-485c-8285-187c298a2d83": { name: "Lacy Schneemann", doubles: { gold: 1 }, mixed: { gold: 1 } },
+  // Quang Duong
+  "14d61e81-14d5-4cb3-ae33-d427fbc1b4f6": { name: "Quang Duong", singles: { bronze: 1 }, doubles: { silver: 1 } },
+  // Somer Dalla-Bona
+  "97b1256e-712c-472d-a037-965e0dd559e8": { name: "Somer Dalla-Bona", singles: { silver: 1 } },
+  // Tyra Hurricane Black
+  "fec65f7e-f2c8-482f-ab5b-541cf53b1064": { name: "Tyra Hurricane Black", doubles: { silver: 1 } },
+  // Tyson McGuffin
+  "dbcb41e9-e983-410b-bc23-d184d034cfc0": { name: "Tyson McGuffin", singles: { silver: 1 }, doubles: { gold: 1 }, mixed: { gold: 1 } },
+  // Vivian Glozman
+  "ff789b9c-80c4-442c-b97e-2e2311298cfb": { name: "Vivian Glozman", doubles: { gold: 1 } },
+};
+
+function applyExcludedEvents(uuid: string, medals: AthleteStats["medals"]): void {
+  // ⚠ Case-folded: the user endpoint returns some uuids upper-case (CJ Klinger's
+  // came back in caps), so a literal key match would silently skip that player.
+  const v = EXCLUDED_EVENT_MEDALS[uuid.toLowerCase()];
+  if (!v || !medals) return;
+
+  let goldOff = 0;
+  let silverOff = 0;
+  let bronzeOff = 0;
+
+  for (const division of ["singles", "doubles", "mixed"] as const) {
+    const delta = v[division];
+    if (!delta) continue;
+    const set = medals[division];
+
+    const g = Math.min(set.gold, delta.gold ?? 0);
+    const s = Math.min(set.silver, delta.silver ?? 0);
+    const b = Math.min(set.bronze, delta.bronze ?? 0);
+
+    set.gold -= g;
+    set.silver -= s;
+    set.bronze -= b;
+    // A bronze medal is a semifinal appearance, so the two move together.
+    set.semifinals = Math.max(0, set.semifinals - b);
+
+    goldOff += g;
+    silverOff += s;
+    bronzeOff += b;
+  }
+
+  medals.total.gold = Math.max(0, medals.total.gold - goldOff);
+  medals.total.silver = Math.max(0, medals.total.silver - silverOff);
+  medals.total.bronze = Math.max(0, medals.total.bronze - bronzeOff);
+  medals.total.semifinals = Math.max(0, medals.total.semifinals - bronzeOff);
 }
 
 const cache = new Map<string, { value: AthleteStats | null; expires: number }>();

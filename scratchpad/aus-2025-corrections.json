@@ -1,0 +1,235 @@
+{
+  "event": "a26c60b0-a00a-49cd-b93e-9fa2ac32f433",
+  "rows": [
+    {
+      "name": "Alix Truong",
+      "slug": "alix-truong",
+      "uuid": "646f7432-e6ad-4ccf-95ee-a0e5d9514d28",
+      "apiName": "Alix Truong",
+      "divisions": {
+        "doubles": {
+          "gold": 0,
+          "silver": 0,
+          "bronze": 1
+        }
+      }
+    },
+    {
+      "name": "Allyce Jones",
+      "slug": "allyce-jones",
+      "uuid": "efe9989b-5864-48c2-806c-06697024e1da",
+      "apiName": "Allyce Jones",
+      "divisions": {
+        "mixed": {
+          "gold": 0,
+          "silver": 0,
+          "bronze": 1
+        },
+        "doubles": {
+          "gold": 0,
+          "silver": 1,
+          "bronze": 0
+        }
+      }
+    },
+    {
+      "name": "Andie Dikosavljevic",
+      "slug": "andie-dikosavljevic",
+      "uuid": "b8167e12-0591-4cb4-a950-ecb6da83e1e0",
+      "apiName": "Andie Dikosavljevic",
+      "divisions": {
+        "singles": {
+          "gold": 0,
+          "silver": 0,
+          "bronze": 1
+        }
+      }
+    },
+    {
+      "name": "CJ Klinger",
+      "slug": "cj-klinger",
+      "uuid": "EAD35052-7367-4296-96D4-064F546CC2B9",
+      "apiName": "CJ Klinger",
+      "divisions": {
+        "doubles": {
+          "gold": 0,
+          "silver": 1,
+          "bronze": 0
+        }
+      }
+    },
+    {
+      "name": "Collin Johns",
+      "slug": "collin-johns",
+      "uuid": "6160a7c7-6b90-41f1-96d3-af5fa1623ca5",
+      "apiName": "Collin Johns",
+      "divisions": {
+        "doubles": {
+          "gold": 0,
+          "silver": 0,
+          "bronze": 1
+        }
+      }
+    },
+    {
+      "name": "Gabriel Tardio",
+      "slug": "gabriel-tardio",
+      "uuid": "d50310a6-9378-4228-823f-7fb54f7bd698",
+      "apiName": "Gabriel Tardio",
+      "divisions": {
+        "doubles": {
+          "gold": 1,
+          "silver": 0,
+          "bronze": 0
+        },
+        "singles": {
+          "gold": 1,
+          "silver": 0,
+          "bronze": 0
+        },
+        "mixed": {
+          "gold": 0,
+          "silver": 1,
+          "bronze": 0
+        }
+      }
+    },
+    {
+      "name": "Jay Devilliers",
+      "slug": "jay-devilliers",
+      "uuid": "295e343a-31a0-4e1d-a286-d62592291435",
+      "apiName": "Jay Devilliers",
+      "divisions": {
+        "doubles": {
+          "gold": 0,
+          "silver": 0,
+          "bronze": 1
+        },
+        "mixed": {
+          "gold": 0,
+          "silver": 0,
+          "bronze": 1
+        }
+      }
+    },
+    {
+      "name": "Jessie Irvine",
+      "slug": "jessie-irvine",
+      "uuid": "8e2f9629-19d0-409d-81dc-b64fe2f3d3ff",
+      "apiName": "Jessie Irvine",
+      "divisions": {
+        "mixed": {
+          "gold": 0,
+          "silver": 1,
+          "bronze": 0
+        },
+        "doubles": {
+          "gold": 0,
+          "silver": 0,
+          "bronze": 1
+        }
+      }
+    },
+    {
+      "name": "Kaitlyn Christian",
+      "slug": "kaitlyn-christian",
+      "uuid": "66a6c35b-33a2-4a23-b5db-fa53c96d643a",
+      "apiName": "Kaitlyn Christian",
+      "divisions": {
+        "singles": {
+          "gold": 1,
+          "silver": 0,
+          "bronze": 0
+        }
+      }
+    },
+    {
+      "name": "Lacy Schneemann",
+      "slug": "lacy-schneemann",
+      "uuid": "a3ed7970-35d2-485c-8285-187c298a2d83",
+      "apiName": "Lacy Schneemann",
+      "divisions": {
+        "mixed": {
+          "gold": 1,
+          "silver": 0,
+          "bronze": 0
+        },
+        "doubles": {
+          "gold": 1,
+          "silver": 0,
+          "bronze": 0
+        }
+      }
+    },
+    {
+      "name": "Quang Duong",
+      "slug": "quang-duong",
+      "uuid": "14d61e81-14d5-4cb3-ae33-d427fbc1b4f6",
+      "apiName": "Quang Duong",
+      "divisions": {
+        "doubles": {
+          "gold": 0,
+          "silver": 1,
+          "bronze": 0
+        },
+        "singles": {
+          "gold": 0,
+          "silver": 0,
+          "bronze": 1
+        }
+      }
+    },
+    {
+      "name": "Tyra Hurricane Black",
+      "slug": "tyra-hurricane-black",
+      "uuid": "fec65f7e-f2c8-482f-ab5b-541cf53b1064",
+      "apiName": "Tyra Hurricane Black",
+      "divisions": {
+        "doubles": {
+          "gold": 0,
+          "silver": 1,
+          "bronze": 0
+        }
+      }
+    },
+    {
+      "name": "Tyson McGuffin",
+      "slug": "tyson-mcguffin",
+      "uuid": "dbcb41e9-e983-410b-bc23-d184d034cfc0",
+      "apiName": "Tyson McGuffin",
+      "divisions": {
+        "doubles": {
+          "gold": 1,
+          "silver": 0,
+          "bronze": 0
+        },
+        "singles": {
+          "gold": 0,
+          "silver": 1,
+          "bronze": 0
+        },
+        "mixed": {
+          "gold": 1,
+          "silver": 0,
+          "bronze": 0
+        }
+      }
+    },
+    {
+      "name": "Vivian Glozman",
+      "slug": "vivian-glozman",
+      "uuid": "ff789b9c-80c4-442c-b97e-2e2311298cfb",
+      "apiName": "Vivian Glozman",
+      "divisions": {
+        "doubles": {
+          "gold": 1,
+          "silver": 0,
+          "bronze": 0
+        }
+      }
+    }
+  ],
+  "unresolved": [
+    "Somer Dalla-Bona"
+  ]
+}

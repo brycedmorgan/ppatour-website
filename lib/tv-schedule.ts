@@ -25,11 +25,29 @@
  * and Friday's FOX window changed network, FS2 → FS1. Its line below therefore
  * reads +1 FS2 +2 FS1, not the +2 FS2 +1 FS1 the 8/13 sheet gave.
  *
- * Reconciled 8/18 vs the 8/13 sheet, Arizona amended 9/15 vs the 9/10 sheet:
- * Cary 22h TC (Thu–Sun) · Arizona +1 FS2 +2 FS1 (no TC) · Las Vegas 4h TC (Sun only) · Chicago 16h TC (Thu–Sun) +2 FS1
- * +2 FS2 · VA Beach 13h TC · MLP Nations Cup PBTV-ONLY (its TC windows were
- * removed from the sheet) · Worlds 2h TC (Wed Pro-Am only) · Malibu 15h TC
- * (Wed–Sun). The hour totals are computed from the windows below.
+ * ⚠ RECONCILED 9/24 VS THE 9/21 SHEET (Keaton Maynard), which moved four of the
+ * remaining stops and is the current source of truth. What changed:
+ *   · Chicago — every day into the evening (PBTV opens 3PM Tue–Fri), Thursday
+ *     PBTV split either side of the FS1 exclusive, Saturday TC 11AM–3PM →
+ *     1–4PM, and Sunday's FS1 window is now TAPE.
+ *   · Virginia Beach — 2PM starts Thu/Fri, and a NEW Thursday TC window, so TC
+ *     carries four days there rather than three.
+ *   · Daytona — 2PM starts, Sunday shortened to 10AM–3PM.
+ *   · Malibu — rebuilt: Tue/Wed coverage dropped entirely, the four remaining
+ *     days moved to evening, and the row's tier corrected to Open · 500.
+ * Las Vegas, Arizona, Worlds and the MLP Cup were checked and are UNCHANGED.
+ *
+ * ⚠ CARY IS DELIBERATELY NOT RECONCILED TO THIS SHEET. The 9/21 sheet still
+ * shows Saturday's morning PBTV window as 9AM–5PM, which is the PRE-weather
+ * time; the site carries 9AM–12PM because that is what actually aired after the
+ * 9/3 reschedule, and the event finished on 9/6. The audit reports that one row
+ * as a mismatch on purpose — the site is the record of what happened, and the
+ * sheet was only half-updated for that Saturday (its Friday rows do match).
+ *
+ * Hour totals, computed from the windows below: Cary 20.5h TC (Thu–Sun) ·
+ * Arizona +1 FS2 +2 FS1 (no TC) · Las Vegas 4h TC (Sun only) · Chicago 12.5h TC
+ * (Thu–Sun) +2 FS1 +2 FS2 · VA Beach 13h TC · MLP Nations Cup PBTV-ONLY ·
+ * Worlds 2h TC (Wed Pro-Am only) · Malibu 19h TC (Thu–Sun).
  */
 
 export type TvWindow = {
@@ -228,23 +246,31 @@ export const tvSchedule: TvEvent[] = [
     endIso: "2026-10-11",
     slug: "veolia-chicago-cup",
     days: [
-      { date: "Oct 6", dow: "Tue", windows: [{ channel: "PBTV", window: "11AM – 7PM", round: "Round of 64" }] },
-      { date: "Oct 7", dow: "Wed", windows: [{ channel: "PBTV", window: "11AM – 7PM", round: "Round of 32" }] },
+      { date: "Oct 6", dow: "Tue", windows: [{ channel: "PBTV", window: "3PM – 11PM", round: "Round of 64" }] },
+      { date: "Oct 7", dow: "Wed", windows: [{ channel: "PBTV", window: "3PM – 11PM", round: "Round of 32" }] },
       {
         date: "Oct 8",
         dow: "Thu",
+        /**
+         * ⚠ TWO PBTV WINDOWS, SPLIT EITHER SIDE OF THE FS1 EXCLUSIVE, and the
+         * gap between them is the point. The 9/21 sheet gives PBTV 3–6, FS1 6–8
+         * marked "FS1 EXCL.", then PBTV back 8–11. Closing that gap into one
+         * 3–11PM row would advertise PBTV coverage of the two hours FOX holds
+         * exclusively.
+         */
         windows: [
-          { channel: "PBTV", window: "11AM – 6PM", round: "Round of 16" },
-          { channel: "Tennis Channel", window: "11AM – 3PM", round: "Round of 16" },
+          { channel: "PBTV", window: "3PM – 6PM", round: "Round of 16" },
+          { channel: "Tennis Channel", window: "3PM – 5:30PM", round: "Round of 16" },
           { channel: "FS1", window: "6PM – 8PM", round: "Round of 16" },
+          { channel: "PBTV", window: "8PM – 11PM", round: "Round of 16" },
         ],
       },
       {
         date: "Oct 9",
         dow: "Fri",
         windows: [
-          { channel: "PBTV", window: "11AM – 8PM", round: "Quarterfinals" },
-          { channel: "Tennis Channel", window: "11AM – 3PM", round: "Quarterfinals" },
+          { channel: "PBTV", window: "3PM – 11PM", round: "Quarterfinals" },
+          { channel: "Tennis Channel", window: "3PM – 6PM", round: "Quarterfinals" },
           { channel: "FS2", window: "6PM – 8PM", round: "Quarterfinals" },
         ],
       },
@@ -252,8 +278,8 @@ export const tvSchedule: TvEvent[] = [
         date: "Oct 10",
         dow: "Sat",
         windows: [
-          { channel: "PBTV", window: "10AM – 6PM", round: "Semifinals" },
-          { channel: "Tennis Channel", window: "11AM – 3PM", round: "Semifinals" },
+          { channel: "PBTV", window: "1PM – 9PM", round: "Semifinals" },
+          { channel: "Tennis Channel", window: "1PM – 4PM", round: "Semifinals" },
           { channel: "FS2", window: "9PM – 11PM", round: "Semifinals", tape: true },
         ],
       },
@@ -261,9 +287,11 @@ export const tvSchedule: TvEvent[] = [
         date: "Oct 11",
         dow: "Sun",
         windows: [
-          { channel: "PBTV", window: "11AM – 5:30PM", round: "Championship Sunday" },
+          { channel: "PBTV", window: "11AM – 4PM", round: "Championship Sunday" },
           { channel: "Tennis Channel", window: "11AM – 3PM", round: "Championship Sunday" },
-          { channel: "FS1", window: "5:30PM – 7:30PM", round: "Championship Sunday" },
+          // ⚠ NOW MARKED TAPE on the 9/21 sheet: it airs 90 minutes after play
+          // ends. It was carried here as a live window until this pass.
+          { channel: "FS1", window: "5:30PM – 7:30PM", round: "Championship Sunday", tape: true },
         ],
       },
     ],
@@ -277,29 +305,38 @@ export const tvSchedule: TvEvent[] = [
     endIso: "2026-10-18",
     slug: "virginia-beach-open",
     days: [
-      { date: "Oct 15", dow: "Thu", windows: [{ channel: "PBTV", window: "10AM – 6PM", round: "Round of 16" }] },
+      {
+        date: "Oct 15",
+        dow: "Thu",
+        // ⚠ THE THURSDAY TENNIS CHANNEL WINDOW IS NEW on the 9/21 sheet. TC now
+        // carries all four days at this stop, where it carried three.
+        windows: [
+          { channel: "PBTV", window: "2PM – 10PM", round: "Round of 16" },
+          { channel: "Tennis Channel", window: "2PM – 5PM", round: "Round of 16" },
+        ],
+      },
       {
         date: "Oct 16",
         dow: "Fri",
         windows: [
-          { channel: "PBTV", window: "10AM – 6PM", round: "Quarterfinals" },
-          { channel: "Tennis Channel", window: "11AM – 3PM", round: "Quarterfinals" },
+          { channel: "PBTV", window: "2PM – 10PM", round: "Quarterfinals" },
+          { channel: "Tennis Channel", window: "2PM – 5PM", round: "Quarterfinals" },
         ],
       },
       {
         date: "Oct 17",
         dow: "Sat",
         windows: [
-          { channel: "PBTV", window: "9AM – 5PM", round: "Semifinals" },
-          { channel: "Tennis Channel", window: "11AM – 3PM", round: "Semifinals" },
+          { channel: "PBTV", window: "12PM – 8PM", round: "Semifinals" },
+          { channel: "Tennis Channel", window: "12PM – 3PM", round: "Semifinals" },
         ],
       },
       {
         date: "Oct 18",
         dow: "Sun",
         windows: [
-          { channel: "PBTV", window: "10AM – 4PM", round: "Championship Sunday" },
-          { channel: "Tennis Channel", window: "11AM – 4PM", round: "Championship Sunday" },
+          { channel: "PBTV", window: "10AM – 3PM", round: "Championship Sunday" },
+          { channel: "Tennis Channel", window: "10AM – 2PM", round: "Championship Sunday" },
         ],
       },
     ],
@@ -360,88 +397,85 @@ export const tvSchedule: TvEvent[] = [
     endIso: "2026-11-22",
     slug: "proton-daytona-beach-open",
     days: [
-      { date: "Nov 19", dow: "Thu", windows: [{ channel: "PBTV", window: "10AM – 6PM", round: "Round of 16" }] },
-      { date: "Nov 20", dow: "Fri", windows: [{ channel: "PBTV", window: "10AM – 6PM", round: "Quarterfinals" }] },
-      { date: "Nov 21", dow: "Sat", windows: [{ channel: "PBTV", window: "9AM – 5PM", round: "Semifinals" }] },
-      { date: "Nov 22", dow: "Sun", windows: [{ channel: "PBTV", window: "10AM – 4PM", round: "Championship Sunday" }] },
+      { date: "Nov 19", dow: "Thu", windows: [{ channel: "PBTV", window: "2PM – 10PM", round: "Round of 16" }] },
+      { date: "Nov 20", dow: "Fri", windows: [{ channel: "PBTV", window: "2PM – 10PM", round: "Quarterfinals" }] },
+      { date: "Nov 21", dow: "Sat", windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Semifinals" }] },
+      { date: "Nov 22", dow: "Sun", windows: [{ channel: "PBTV", window: "10AM – 3PM", round: "Championship Sunday" }] },
     ],
   },
   /**
-   * ✅ DATES CONFIRMED 8/18. This block was shifted +14 days on 8/17 off the
-   * feed alone (it read Dec 1–6, built when the stop was the week of Nov 30),
-   * and the 8/13 sheet independently lists it as 12/15–12/20 — so the week and
-   * every day-of-week are now confirmed by both sources.
+   * ⚠ REBUILT WHOLESALE FROM THE 9/21 SHEET, AND IT IS A SHORTER BROADCAST THAN
+   * IT WAS. Coverage now runs Thu–Sun only: the Tuesday Round-of-64 and
+   * Wednesday Round-of-32 windows this block used to carry are GONE from the
+   * sheet, and the four surviving days all moved into the evening. Don't
+   * restore Tue/Wed from an older copy of the schedule.
    *
-   * ⚠ AND THE TENNIS CHANNEL WINDOWS DID CHANGE WITH THE MOVE, which is exactly
-   * what the old note warned might happen. They were 3–9PM Thu/Fri and 3–7PM
-   * Sat/Sun; the sheet now has a uniform 3:30–6:30PM Wed–Sat, with Sunday at
-   * 2:30–5:30PM. WEDNESDAY IS NEW — TC carries five days here, not four.
+   * ⚠ THE AUDIT COULD NOT SEE ANY OF THAT UNTIL 9/24, and the reason is worth
+   * keeping. `scripts/audit-tv-schedule.mjs` joins on the sheet's own event
+   * header, and the 9/21 sheet finally adopted the "Malibu Showcase" rename the
+   * tour made on 8/26 — so the old EVENT_MAP key ("PPA Malibu Cup") matched
+   * nothing and the script reported the stop as simply absent from the sheet
+   * rather than as six wrong days. A stop that goes quiet in that audit is a
+   * rename until proven otherwise; check the sheet's headers before believing
+   * coverage was dropped.
    */
   {
     /**
      * Renamed and re-dated 8/26 (Bryan Renahan, via the feed): "Veolia Malibu
      * Cup" → "Veolia Malibu Showcase", and the event now opens Dec 14.
      *
-     * ⚠ THE TV WINDOWS BELOW ARE DELIBERATELY UNCHANGED, and the calendar is
-     * why. The event gained a day at the FRONT, not a shift: Dec 14 is a
-     * Monday and Dec 20 is still the Sunday, so Championship Sunday has not
-     * moved and every Tue–Sun row still lands on the weekday the 8/13 sheet
-     * assigned it. Monday carries no window — the sheet has never listed one,
-     * and an opening qualifying day without TV is the Nationals pattern.
-     * ⚠ Do NOT shift these rows back a day to "match" the new start; that
-     * would put Championship Sunday on a Saturday.
+     * ⚠ `startIso` IS THE EVENT'S START (Dec 14) so it agrees with /events; the
+     * `days` array below is TV COVERAGE ONLY, and as of the 9/21 sheet the two
+     * no longer line up — the stop opens on the 14th and television joins it on
+     * the 17th. Nothing derives the days from these two fields, so that is not
+     * a contradiction to reconcile; they drive sorting and the event link's
+     * year, nothing else.
      *
-     * `startIso` is the EVENT's start (Dec 14) so it agrees with /events; the
-     * `days` array below is TV coverage only. Nothing derives the days from
-     * these two fields — they drive sorting and the event link's year.
+     * ⚠ TIER IS `Open · 500`, NOT THE CUP THIS ROW USED TO CLAIM. The 9/8 board
+     * decision made the Showcase a PPA 500 Open (it is `tier: "open", points:
+     * 500` in lib/placeholder-data.ts), and the 9/21 sheet's own header now
+     * reads "| 500" — so this string had been contradicting both the ruling and
+     * the source sheet. It stays a PPA Tour stop; 500 is not a demotion off the
+     * Tour.
      */
     name: "Veolia Malibu Showcase",
     location: "Pepperdine University · Malibu, CA",
-    tier: "Cup · 1,500",
+    tier: "Open · 500",
     league: "PPA",
     startIso: "2026-12-14",
     endIso: "2026-12-20",
     slug: "veolia-malibu-cup",
     days: [
-      { date: "Dec 15", dow: "Tue", windows: [{ channel: "PBTV", window: "1PM – 9PM", round: "Round of 64" }] },
-      {
-        date: "Dec 16",
-        dow: "Wed",
-        windows: [
-          { channel: "PBTV", window: "1PM – 9PM", round: "Round of 32" },
-          { channel: "Tennis Channel", window: "3:30PM – 6:30PM", round: "Round of 32" },
-        ],
-      },
       {
         date: "Dec 17",
         dow: "Thu",
         windows: [
-          { channel: "PBTV", window: "1PM – 9PM", round: "Round of 16" },
-          { channel: "Tennis Channel", window: "3:30PM – 6:30PM", round: "Round of 16" },
+          { channel: "PBTV", window: "5PM – 1AM", round: "Round of 16" },
+          { channel: "Tennis Channel", window: "5PM – 10PM", round: "Round of 16" },
         ],
       },
       {
         date: "Dec 18",
         dow: "Fri",
         windows: [
-          { channel: "PBTV", window: "1PM – 9PM", round: "Quarterfinals" },
-          { channel: "Tennis Channel", window: "3:30PM – 6:30PM", round: "Quarterfinals" },
+          { channel: "PBTV", window: "5PM – 1AM", round: "Quarterfinals" },
+          { channel: "Tennis Channel", window: "5PM – 10PM", round: "Quarterfinals" },
         ],
       },
       {
         date: "Dec 19",
         dow: "Sat",
         windows: [
-          { channel: "PBTV", window: "12PM – 8PM", round: "Semifinals" },
-          { channel: "Tennis Channel", window: "3:30PM – 6:30PM", round: "Semifinals" },
+          { channel: "PBTV", window: "3PM – 11PM", round: "Semifinals" },
+          { channel: "Tennis Channel", window: "4PM – 8PM", round: "Semifinals" },
         ],
       },
       {
         date: "Dec 20",
         dow: "Sun",
         windows: [
-          { channel: "PBTV", window: "1PM – 7PM", round: "Championship Sunday" },
-          { channel: "Tennis Channel", window: "2:30PM – 5:30PM", round: "Championship Sunday" },
+          { channel: "PBTV", window: "1PM – 6PM", round: "Championship Sunday" },
+          { channel: "Tennis Channel", window: "1PM – 6PM", round: "Championship Sunday" },
         ],
       },
     ],
