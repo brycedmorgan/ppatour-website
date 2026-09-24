@@ -2,7 +2,8 @@ import type { MetadataRoute } from "next";
 import { athletes } from "@/lib/athletes";
 import { EUROPE_PUBLIC, EUROPE_SITE_URL } from "@/lib/europe-launch";
 import { isUnlistedEuropeAthlete } from "@/lib/europe-visibility";
-import { CURATED_TO_CANONICAL, publishedAthletes } from "@/lib/published-athletes";
+import { publishedAthletes } from "@/lib/published-athletes";
+import { curatedSlugFor } from "@/lib/rankings-api";
 import { eventHref, tournaments } from "@/lib/placeholder-data";
 import { tourPrograms } from "@/lib/tour-programs";
 import { allNews } from "@/lib/news";
@@ -33,14 +34,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
    */
   const shopHandles = await getShopProductHandles();
 
-  // Every athlete page (curated shorthand slug when we have one, else canonical).
-  const canonicalToCurated: Record<string, string> = Object.fromEntries(
-    Object.entries(CURATED_TO_CANONICAL).map(([ours, api]) => [api, ours]),
-  );
+  /**
+   * Every athlete page (curated shorthand slug when we have one, else canonical).
+   *
+   * ⚠ `curatedSlugFor`, THE SAME RESOLVER `athleteStaticParams` USES — not a
+   * private inversion of CURATED_TO_CANONICAL. That inversion knew nothing
+   * about the Europe roster's `rankSlug` aliases, so the sitemap listed both
+   * `/athletes/raquel-amaro/` (curated) and `/athletes/raquel-amaro-veloso/`
+   * (the scrape's board slug) for one person, and both James Lings (9/23
+   * crawl). The board slugs now 308 to the short ones in next.config.ts.
+   */
   const athleteSlugs = new Set<string>(athletes.map((a) => a.slug));
   for (const p of publishedAthletes) {
-    athleteSlugs.add(canonicalToCurated[p.slug] ?? p.slug);
+    athleteSlugs.add(curatedSlugFor(p.slug) ?? p.slug);
   }
+  /**
+   * No `lastModified` on athletes, deliberately. Nothing in the athlete data
+   * carries a per-player date — the profile scrape is undated, `player_medals`
+   * is career totals, Jackalope's override feed has no updated-at — and the
+   * only date we could emit is the WPR board's snapshot day, which is when the
+   * RANK moved, not the page. A lastmod that means something else is what the
+   * shop products note below rejects; same call here. (SEO plan item 8.)
+   */
+  const today = new Date().toISOString().slice(0, 10);
 
   const staticPaths = [
     "",
@@ -108,6 +124,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       )
       .map((t) => ({
         url: url(eventHref(t)),
+        /**
+         * A finished event's page stops changing when the results land, so its
+         * end date is an honest lastmod. Future and live events omit it — the
+         * record has no edited-at, and the calendar date of a change we did
+         * not observe would be an invention.
+         */
+        ...(t.endDate && t.endDate < today ? { lastModified: new Date(t.endDate) } : {}),
         changeFrequency: "weekly" as const,
         priority: 0.8,
       })),

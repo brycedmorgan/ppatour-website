@@ -92,38 +92,43 @@ const LEGACY_REDIRECTS = [
     destination: "https://www.ppatour.com/:path*",
   },
   // sections
-  { source: "/schedule", destination: "/events" },
-  { source: "/player-rankings", destination: "/rankings" },
-  { source: "/player-rankings-table", destination: "/rankings" },
+  // ⚠ EVERY DESTINATION BELOW ENDS IN A SLASH ON PURPOSE. `trailingSlash: true`
+  // otherwise stacks a second 308 on each of these — the 9/23 crawl measured
+  // ppatour.com/athlete/ben-johns/ at THREE hops (apex → www → /athletes/x →
+  // /athletes/x/). The middle one is the one this file controls; the apex hop
+  // is the Vercel domain redirect, see APEX_LEGACY_REDIRECTS.
+  { source: "/schedule", destination: "/events/" },
+  { source: "/player-rankings", destination: "/rankings/" },
+  { source: "/player-rankings-table", destination: "/rankings/" },
   // about
-  { source: "/pro-tour", destination: "/about/pro-tour" },
-  { source: "/what-is-pickleball", destination: "/about/what-is-pickleball" },
-  { source: "/how-it-works", destination: "/about/how-it-works" },
-  { source: "/tournament-history", destination: "/about/history" },
-  { source: "/sponsors", destination: "/about/sponsors" },
-  { source: "/careers", destination: "/about/careers" },
-  { source: "/contact-us", destination: "/about/contact" },
-  { source: "/reporting", destination: "/about/integrity" },
-  { source: "/ambassador-program", destination: "/about/ambassadors" },
+  { source: "/pro-tour", destination: "/about/pro-tour/" },
+  { source: "/what-is-pickleball", destination: "/about/what-is-pickleball/" },
+  { source: "/how-it-works", destination: "/about/how-it-works/" },
+  { source: "/tournament-history", destination: "/about/history/" },
+  { source: "/sponsors", destination: "/about/sponsors/" },
+  { source: "/careers", destination: "/about/careers/" },
+  { source: "/contact-us", destination: "/about/contact/" },
+  { source: "/reporting", destination: "/about/integrity/" },
+  { source: "/ambassador-program", destination: "/about/ambassadors/" },
   {
     source: "/international-ambassadors",
-    destination: "/about/international-ambassadors",
+    destination: "/about/international-ambassadors/",
   },
   {
     source: "/host-a-ppa-tour-tournament",
-    destination: "/about/host-tournament",
+    destination: "/about/host-tournament/",
   },
   {
     source: "/host-ppa-sponsored-private-event",
-    destination: "/about/private-events",
+    destination: "/about/private-events/",
   },
-  { source: "/privacy-policy", destination: "/about/privacy" },
-  { source: "/terms-of-use", destination: "/about/terms" },
+  { source: "/privacy-policy", destination: "/about/privacy/" },
+  { source: "/terms-of-use", destination: "/about/terms/" },
   // tour programs
-  { source: "/junior-ppa-tour", destination: "/tour/junior" },
-  { source: "/senior-open", destination: "/tour/senior" },
-  { source: "/camps", destination: "/tour/camps" },
-  { source: "/hospitality", destination: "/tour/hospitality" },
+  { source: "/junior-ppa-tour", destination: "/tour/junior/" },
+  { source: "/senior-open", destination: "/tour/senior/" },
+  { source: "/camps", destination: "/tour/camps/" },
+  { source: "/hospitality", destination: "/tour/hospitality/" },
 
   /**
    * Pickleball Vacations moved onto this site (Aug 2026) — it used to be a
@@ -149,9 +154,9 @@ const LEGACY_REDIRECTS = [
   { source: "/trips", destination: "/vacations/" },
   { source: "/trips/punta-cana", destination: "/vacations/trips/punta-cana/" },
   // renamed staging-era event slugs
-  { source: "/events/veolia-chicago-open", destination: "/events/2026/veolia-chicago-cup" },
-  { source: "/events/carvana-mesa-cup", destination: "/events/2026/veolia-arizona-open" },
-  { source: "/events/veolia-cincinnati-cup", destination: "/events" },
+  { source: "/events/veolia-chicago-open", destination: "/events/2026/veolia-chicago-cup/" },
+  { source: "/events/carvana-mesa-cup", destination: "/events/2026/veolia-arizona-open/" },
+  { source: "/events/veolia-cincinnati-cup", destination: "/events/" },
   /**
    * Retired paths linked from inside the migrated blog posts. Found by
    * extracting all 509 ppatour.com links out of the 811 imported bodies and
@@ -160,18 +165,18 @@ const LEGACY_REDIRECTS = [
    * site, so these links are self-referential and would break in-article
    * navigation.
    */
-  { source: "/pro-pickleball-players", destination: "/athletes" },
-  { source: "/ppa-tour", destination: "/about/pro-tour" },
-  { source: "/junior-ppa", destination: "/tour/junior" },
-  { source: "/2021-season", destination: "/about/history" },
+  { source: "/pro-pickleball-players", destination: "/athletes/" },
+  { source: "/ppa-tour", destination: "/about/pro-tour/" },
+  { source: "/junior-ppa", destination: "/tour/junior/" },
+  { source: "/2021-season", destination: "/about/history/" },
   // Old flat event URLs — this site uses /events/{year}/{slug}, and these are
   // 2023–24 stops with no page here. Listed explicitly rather than as
   // `/events/:slug`, which would shadow the real /events/volunteer and
   // /events/veolia-pickleball-national-championships-live routes: next.config
   // redirects are matched BEFORE filesystem routes.
-  { source: "/events/orange-county-cup", destination: "/events" },
-  { source: "/events/skechers-invitational", destination: "/events" },
-  { source: "/events/atlanta-georgia-open", destination: "/events" },
+  { source: "/events/orange-county-cup", destination: "/events/" },
+  { source: "/events/skechers-invitational", destination: "/events/" },
+  { source: "/events/atlanta-georgia-open", destination: "/events/" },
 
   /**
    * Orphans from ppatour.com's page-sitemap, found by crawling all five legacy
@@ -185,9 +190,9 @@ const LEGACY_REDIRECTS = [
    * destination for a sponsor-named campaign page is worse than a 404, the same
    * reasoning that left the Chicago hotel link unmapped on 7/29.
    */
-  { source: "/opt-out-preferences", destination: "/about/privacy" },
-  { source: "/content-policy", destination: "/about/terms" },
-  { source: "/ppa-tour-event-inquiry-form", destination: "/about/host-tournament" },
+  { source: "/opt-out-preferences", destination: "/about/privacy/" },
+  { source: "/content-policy", destination: "/about/terms/" },
+  { source: "/ppa-tour-event-inquiry-form", destination: "/about/host-tournament/" },
   /**
    * The rest of the page-sitemap orphans, ruled on by Bryce 8/3. All were live
    * 200s on ppatour.com and would have 404'd at cutover.
@@ -209,7 +214,7 @@ const LEGACY_REDIRECTS = [
    * the legacy URL forwarding into it so the existing links and search equity
    * still land.
    */
-  { source: "/ppa-pickleball-tour-video-game", destination: "/game" },
+  { source: "/ppa-pickleball-tour-video-game", destination: "/game/" },
 
   /**
    * Duplicate athlete profiles (2026-08-05). WordPress mints a `-2` slug for a
@@ -233,18 +238,34 @@ const LEGACY_REDIRECTS = [
   { source: "/athletes/danna-funaro-2", destination: "/athletes/danna-funaro/" },
   { source: "/athletes/ella-cosma-2", destination: "/athletes/ella-cosma/" },
   { source: "/athletes/edward-perez-2", destination: "/athletes/edward-perez/" },
+  /**
+   * Two more pairs, found by the 9/23 SEO crawl (same title on two URLs). These
+   * are NOT WordPress `-2` posts: `raquel-amaro-veloso` and `james-ling-2` are
+   * the Partner API's own board slugs, which the profile scrape keyed on, while
+   * the PPA Tour Europe roster (lib/europe-roster.ts, `rankSlug`) publishes the
+   * same two people at `raquel-amaro` and `james-ling`. `lib/athlete-slugs.ts`
+   * cannot catch them — its test is "the board does not list this slug", and the
+   * board lists these. Confirmed one person each (same DOB, residence, bio).
+   *
+   * The SHORT slug is canonical: it is what the Europe roster, `curatedSlugFor`
+   * and `athleteStaticParams` already publish, and the board slug is documented
+   * as lookup-only ("never feeds page slugs"). app/sitemap.ts emits only the
+   * canonical via the same `curatedSlugFor`.
+   */
+  { source: "/athletes/raquel-amaro-veloso", destination: "/athletes/raquel-amaro/" },
+  { source: "/athletes/james-ling-2", destination: "/athletes/james-ling/" },
   // The legacy `/athlete/{slug}` form chains through the `/athlete/:slug` rule
   // below into the four above.
 
   // patterns
   // Articles briefly lived at /news/{slug}; fold those into the root URL so the
   // two paths don't compete for the same content.
-  { source: "/news/:slug", destination: "/:slug" },
-  { source: "/athlete/:slug", destination: "/athletes/:slug" },
+  { source: "/news/:slug", destination: "/:slug/" },
+  { source: "/athlete/:slug", destination: "/athletes/:slug/" },
   // `/pro/:slug` was the other legacy profile prefix and had no rule; 6 of the
   // 9 links using it point at athletes who do have a page here.
-  { source: "/pro/:slug", destination: "/athletes/:slug" },
-  { source: "/tournament/:path*", destination: "/events" },
+  { source: "/pro/:slug", destination: "/athletes/:slug/" },
+  { source: "/tournament/:path*", destination: "/events/" },
 
   /**
    * The two PPA Blog posts not carried over (Bryce, 8/4 — the only two with no
@@ -258,8 +279,8 @@ const LEGACY_REDIRECTS = [
    * keeps the posts out, and these two lines are what keeps their URLs alive.
    * Delete one without the other and the pair stops making sense.
    */
-  { source: "/ppa-blog/pickleball-kitchen-rules-what-you-should-know", destination: "/blog" },
-  { source: "/ppa-blog/is-pickleball-an-olympic-sport", destination: "/blog" },
+  { source: "/ppa-blog/pickleball-kitchen-rules-what-you-should-know", destination: "/blog/" },
+  { source: "/ppa-blog/is-pickleball-an-olympic-sport", destination: "/blog/" },
 
   /**
    * The 12 native demo articles, removed 8/5 (Bryce) — see the header of
@@ -305,6 +326,38 @@ const LEGACY_REDIRECTS = [
  * on ppatour.com, and /athletes is where someone following an old link or a
  * search result actually wants to end up.
  */
+/**
+ * The apex-host half of the one-hop rule (docs/SEO.md, Phase 1 item 7).
+ *
+ * Today `ppatour.com` → `www.ppatour.com` is a VERCEL DOMAIN REDIRECT (308,
+ * project Domains settings — confirmed via the Vercel API 9/24), which runs at
+ * the edge before this config is consulted. So an old WordPress link such as
+ * ppatour.com/athlete/ben-johns/ still costs two hops: apex → www at Vercel,
+ * then www/athlete/x/ → /athletes/x/ here. These host-scoped rules send the
+ * legacy paths straight to their https://www destination in one hop, and the
+ * catch-all at the end folds every other apex path onto www with its path and
+ * query intact.
+ *
+ * ⚠ INERT UNTIL THE DOMAIN-LEVEL REDIRECT IS SWITCHED OFF. In Vercel → Project →
+ * Domains → ppatour.com, change "Redirect to www.ppatour.com" to "no redirect"
+ * (the domain must stay assigned to the project). From that moment these rules
+ * take over apex → www with identical 308 semantics, and the legacy paths
+ * become single-hop. Do it outside an event weekend, and re-check
+ * `curl -sI https://ppatour.com/athlete/ben-johns/` shows ONE 308 to
+ * https://www.ppatour.com/athletes/ben-johns/. Harmless while inert.
+ */
+const APEX_HOST = [{ type: "host" as const, value: "ppatour.com" }];
+const APEX_LEGACY_REDIRECTS = [
+  { source: "/athlete/:slug", destination: "https://www.ppatour.com/athletes/:slug/" },
+  { source: "/pro/:slug", destination: "https://www.ppatour.com/athletes/:slug/" },
+  { source: "/schedule", destination: "https://www.ppatour.com/events/" },
+  { source: "/player-rankings", destination: "https://www.ppatour.com/rankings/" },
+  { source: "/player-rankings-table", destination: "https://www.ppatour.com/rankings/" },
+  { source: "/tournament/:path*", destination: "https://www.ppatour.com/events/" },
+  // Everything else on the apex: same path, same query, on www.
+  { source: "/:path*", destination: "https://www.ppatour.com/:path*" },
+].map((r) => ({ ...r, has: APEX_HOST, permanent: true }));
+
 const RETIRED_ATHLETE_REDIRECTS = [
   // Jay Devilliers — contract expired (Conner Ogden, via Wesley, 8/31).
   { source: "/athletes/jay-devilliers", destination: "/athletes/" },
@@ -434,9 +487,12 @@ const nextConfig: NextConfig = {
       {
         source: "/eventlinks",
         missing: [{ type: "host" as const, value: "ppatoureurope.com" }],
-        destination: "/europe/eventlinks",
+        destination: "/europe/eventlinks/",
         permanent: false,
       },
+      // ppatour.com (apex) → https://www in one hop; the /europe rules above
+      // are also host-scoped to the apex and must keep winning, hence the order.
+      ...APEX_LEGACY_REDIRECTS,
       ...LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true })),
       ...RETIRED_ATHLETE_REDIRECTS.map((r) => ({ ...r, permanent: false })),
     ];
