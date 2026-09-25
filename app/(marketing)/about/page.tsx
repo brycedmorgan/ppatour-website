@@ -51,7 +51,7 @@ const LINKS = [
   { label: "Tournament History", href: "/about/history", blurb: "National Champions year-by-year and the tour's milestones." },
   { label: "What is Pickleball?", href: "/about/what-is-pickleball", blurb: "The fastest-growing sport in America, explained in 90 seconds." },
   { label: "Sponsors", href: "/about/sponsors", blurb: "Title partner, official partners, and the brands powering the tour." },
-  { label: "Player Handbook", href: "/about/player-handbook", blurb: "Rules, format, code of conduct, and equipment." },
+  { label: "Player Handbook", href: "/about/player-handbook", blurb: "Rankings, entries, withdrawals, paddle testing, conduct and betting rules." },
   { label: "Ambassadors", href: "/about/ambassadors", blurb: "The community program — creators, club owners, coaches." },
   { label: "International Ambassadors", href: "/about/international-ambassadors", blurb: "The growing global PPA Tour Ambassador network." },
   { label: "Host a Tournament", href: "/about/host-tournament", blurb: "For venues and cities — bid for a tour stop." },
