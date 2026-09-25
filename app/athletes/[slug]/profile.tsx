@@ -766,6 +766,13 @@ export async function AthleteProfile({
        * this repo has already shipped one fabricated `InStock` offer off a
        * fallback number (7/31). Name, brand, image and the page we send buyers
        * to are all facts we hold; that is what goes in.
+       *
+       * 9/24: typed as `Thing` with `additionalType` Product, not `@type: Product`.
+       * Google's Rich Results Test marks a Product without offers/review/rating
+       * as INVALID ("Product snippets: 1 invalid item") and that lands in the
+       * Search Console error report for every athlete page. `Thing` keeps the
+       * athlete → paddle → brand graph for engines that read schema directly and
+       * keeps Google's merchant validator out of a page that sells nothing.
        */}
       {gear && (
         <script
@@ -773,7 +780,8 @@ export async function AthleteProfile({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "Product",
+              "@type": "Thing",
+              additionalType: "https://schema.org/Product",
               "@id": paddleNodeId,
               name: gear.paddle,
               category: "Pickleball Paddle",
