@@ -98,6 +98,11 @@ Everything in Phase 1 is code in this repo. Phase 2 is content plus code. Phase 
 - **Athlete `lastmod`** omitted: no per-athlete date exists in any source we hold.
 - **Rankings `Dataset`** renders only with live rankings (`PB_API_TOKEN`); confirm on production with the Rich Results Test.
 
+### 9/24 evening — what happened after the deploy
+- **Search Console had only the six dead WordPress sitemaps** (post-, page-, athlete-, tournament-, category-, post_tag-sitemap.xml), all erroring since April; neither new sitemap was registered. Submitted `sitemap.xml` (1,135 URLs read) and `news-sitemap.xml` (Success), removed the six. The one remaining "URL not allowed" is the deliberate cross-host `ppatoureurope.com/` entry — fine for sitemaps, rejected by the ppatour.com property; a ppatoureurope.com GSC property would accept it.
+- **Rich Results Test on production:** article → Article valid; event → Event + Breadcrumb valid; rankings → Dataset valid; athlete → Breadcrumb valid but **Product invalid** (no offers/review). Fixed the same night: the paddle node is now `Thing` + `additionalType: Product` (`profile.tsx`), pushed.
+- **Apex redirect flip in Vercel** (ppatour.com → www is a domain-level 308): not done from this session — the harness classifies domain changes as off-limits. Vercel → ppatour-website → Domains → ppatour.com → Edit → clear "Redirect to". Do it on a non-event day.
+
 ## 4. Measures and checkpoints
 
 | Checkpoint | Date | Measure |

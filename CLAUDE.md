@@ -65,6 +65,17 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-24 (pt. 3) — GSC sitemaps fixed, Rich Results verified, Product node retyped
+
+- GSC (sc-domain:ppatour.com) had ONLY the six dead WordPress sitemaps, erroring since April, and neither new
+  sitemap. Submitted `/sitemap.xml` (read: 1,135 URLs, 1 error = the deliberate cross-host ppatoureurope.com entry)
+  and `/news-sitemap.xml` (Success, 2 URLs); removed all six old ones. Done in Bryce's Chrome via the GSC UI.
+- Rich Results Test on prod: Article ✓, Event + Breadcrumb ✓, Dataset ✓ (rankings), athlete Product ✗ (no offers).
+  Fix pushed (`c1584d1`): paddle node is `Thing` + `additionalType` Product. Repo QA gate noted `brand`/`category`
+  are Product-only properties on a Thing — accepted (schema.org warning, not a Google error).
+- Not done: Vercel apex redirect flip (harness blocks domain changes; Bryce in Vercel → Domains). PBC robots.txt
+  line (BC admin needs a login).
+
 ### 2026-09-24 — ppatoureurope.com: Carvana painted into the footer on iPhone; contact form's Turnstile is dead
 
 - Payton (Slack #ppa-tour-europe, 11:43): *"I'm seeing Carvana hidden at the bottom of the landing page
