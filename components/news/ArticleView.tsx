@@ -325,11 +325,26 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
 
             {detail.source === "native" ? (
               <div className="mt-7 space-y-5">
-                {detail.article.body.map((p, i) => (
-                  <p key={i} className="text-[15px] leading-[1.75] text-ppa-navy/75">
-                    {linkifyPlayers(p, playersForLinkify, linkBudget)}
-                  </p>
-                ))}
+
+                {/* A body entry starting "## " is a subheading (a storylines
+                    post's per-draw label). Opt-in per entry, so every other
+                    article renders exactly as before. Not linkified: a heading
+                    names a draw, not a player. */}
+                {detail.article.body.map((p, i) =>
+                  p.startsWith("## ") ? (
+                    <h2
+                      key={i}
+                      className="mt-10! border-b-2 border-ppa-blue pb-1.5 font-display text-xl uppercase tracking-tight text-ppa-navy first:mt-0!"
+                    >
+                      {p.slice(3)}
+                    </h2>
+                  ) : (
+                    <p key={i} className="text-[15px] leading-[1.75] text-ppa-navy/75">
+                      {linkifyPlayers(p, playersForLinkify, linkBudget)}
+                    </p>
+                  ),
+                )}
+
               </div>
             ) : (
               /* Sanitized in lib/news-html.ts: tag/attribute allowlist, no

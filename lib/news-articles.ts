@@ -125,6 +125,107 @@ export type NewsArticle = {
  */
 export const newsArticles: NewsArticle[] = [
   /**
+   * ⚠ HUMAN-AUTHORED EDITORIAL, same provenance and exception path as the
+   * Arizona and Nationals storylines below — Dave Fleming's preview of the
+   * season's third stop, supplied by Wesley on 9/25. The source doc ("#3: RATE
+   * VEGAS OPEN PRESENTED BY JOOLA STORYLINES (SEP 28-OCT 4, 2026)") is owned by
+   * dave@pickleball.com, which is what names him. Ships `status: "published"`;
+   * Dylan can flip it to "draft" in one line.
+   *
+   * ⚠ FAITHFUL TRANSCRIPTION, NOT A REWRITE — same rules as Arizona: one
+   * paragraph per bullet, a label line per draw, his seeds and surname-only
+   * doubles shorthand verbatim, R16/R64 spelled out. His closing past-champions
+   * table becomes one line per year, because a native `body` renders no tables.
+   *
+   * ⚠ HIS TV LINE WAS CHECKED AGAINST `lib/tv-schedule.ts` AND MATCHES: PBTV at
+   * 2PM Thu/Fri, 1PM Sat, 10AM Sun LOCAL = 5PM/5PM/4PM/1PM ET (Nevada is ET − 3
+   * in October), Tennis Channel Sunday. He writes local times, so this one
+   * paragraph is maintained, not transcribed — re-check it if the sheet moves.
+   *
+   * The image is Wesley's (9/25): a sunset drone aerial of Darling Tennis
+   * Center, supplied for this post. Deliberately NOT the event's own featured
+   * shot (`featured-vegas-cup.jpg`, pinned in HERO_OVERRIDE_BY_EVENT_SLUG), so
+   * the article card and the event card never print the same picture twice.
+   * Encoded 2048px wide, mozjpeg q64 — the house hero standard.
+   */
+  {
+    slug: "rate-las-vegas-open-storylines",
+    status: "published",
+    category: "Tour News",
+    title: "Storylines for the Rate Las Vegas Open",
+    subtitle: "Presented by JOOLA · Sept. 28–Oct. 4, 2026 · Las Vegas, NV",
+    date: "Sep 25",
+    image: "/ppa/venues/lv-summerlin/darling-sunset-aerial.jpg",
+    /* The desktop hero crops to ~3.6:1, and a centred crop of this 4:3 frame
+       lands on the dark desert strip between the sunset and the stadium. Anchored
+       high so the band is sky, the Spring Mountains and the lit back courts.
+       Phone widths crop horizontally only, so this changes nothing there. */
+    imagePosition: "center 15%",
+    author: "Dave Fleming",
+    eventSlug: "rate-las-vegas-open",
+    /* Wesley, 9/25: the footer is one link to the event page — no ticket
+       button, no TV Schedule. An internal ctaUrl gives exactly that (plain
+       same-tab Link, TV button stands down); see the CTA note in ArticleView. */
+    ctaUrl: "/events/2026/rate-las-vegas-open/",
+    ctaLabel: "Rate Las Vegas Open Event Page",
+    dek: "Year seven at Darling Tennis Center brings 1,000 points, best-of-three finals in every draw, and Anna Leigh Waters two doubles titles away from career title No. 200.",
+    whyItMatters:
+      "The season's second open is worth 1,000 points, every final is best two out of three, and Anna Leigh Waters — skipping singles — can reach 200 career titles by winning both of her doubles draws.",
+    body: [
+      "## Overall Top 5",
+      "200: Anna Leigh Waters (who is not playing singles) can claim title #200 if she wins both of her doubles draws.",
+      "Blackjack: Hayden Patriquin just turned 21 and returns, as do Shock teammates Anna Bright and Gabe Tardio.",
+      "Royal flush: will Sofia Sewing and Tina Pisnik find the same magic in the PPA as they did in MLP with the Palm Beach Royals?",
+      "Pocket aces: which lower seed will have an ace up their sleeve and make a run like Jalina Ingram (singles), Elliott Schupp / Kiora Kunimoto (mixed) and Nico Acevedo / Yuta Funemizu (men's) did in AZ?",
+      "Open 24/7: 1,000 points to the winners (and remember all finals are best 2 out of 3).",
+      "## Venue, Tourney & TV",
+      "Year 7 of the PPA's annual return to Darling Tennis Center, expecting over 1,400 players. A list of past champions is at the bottom of this article.",
+      "A progressive draw on the pro side, one round per bracket per day and no bronze matches.",
+      "Coverage on PickleballTV begins at 2 p.m. Thursday and Friday, 1 p.m. Saturday, and 10 a.m. on Sunday (all Vegas local times), with coverage on Tennis Channel on Sunday.",
+      "## Women's Singles",
+      "Defending champion and finalist: Anna Leigh Waters and Genie Bouchard.",
+      "Top four seeds: 1) Kate Fahey, 2) Kaitlyn Christian, 3) Lea Jansen, 4) Zoey Wang.",
+      "With Waters out of this draw, it presents a big opportunity for the field.",
+      "Bouchard (7) returns to the court — she beat Fahey on her run to the final last year.",
+      "Potential battle in the round of 16: Kaitlyn Christian (2) vs. Sofia Sewing (23).",
+      "Watch out for Kate Fahey (1) — won her second career title here in 2024 and is poised to hoist the trophy again.",
+      "## Men's Singles",
+      "Defending champion and finalist: Federico Staksrud and Roscoe Bellamy.",
+      "Top four seeds: 1) Chris Haworth, 2) Federico Staksrud, 3) Hunter Johnson, 4) Christian Alshon.",
+      "Ben Johns is the 19 seed and is advanced into the round of 16 based on his World Pickleball Ranking, where he could face Dylan Frazier (11).",
+      "Round-of-64 thriller: Yates Johnson (23) vs. Cam Chaffin (29).",
+      "Watch out for Roscoe Bellamy (5) — made the final in 2025, can lady luck be on his side again in Sin City?",
+      "## Mixed Doubles",
+      "Defending champions and finalists: Anna Leigh Waters / Ben Johns and Jessie Irvine / Gabe Tardio.",
+      "Top four seeds: 1) Anna Leigh Waters / Ben Johns, 2) Anna Bright / Hayden Patriquin, 3) Tina Pisnik / Christian Alshon, 4) Hurricane Tyra Black / Gabe Tardio.",
+      "Fun partner alert: Tina Pisnik and Christian Alshon (3) are playing for only the second time together. They played together in Daytona in November of 2023, losing to Irvine / R. Newman.",
+      "Fun partner alert 2: Catherine Parenteau and Eric Oncins (6) lost in the quarters here last year to Bright / Patriquin.",
+      "First-time partners Andrei Daescu and Jessie Irvine are the 5 seed.",
+      "Round-of-64 barnburner: Jack Sock / Lea Jansen (15) vs. Sofia Sewing / Casey Diamond (44).",
+      "Watch out for Waters and Johns (1) — they have dominated at Darling Tennis Center, winning 4 years in a row.",
+      "## Women's Doubles",
+      "Defending champions and finalists: Anna Bright / Anna Leigh Waters and Hurricane Tyra Black / Parris Todd.",
+      "Top four seeds: 1) Anna Bright / Anna Leigh Waters, 2) Hurricane Tyra Black / Catherine Parenteau, 3) Lacy Schneemann / Kate Fahey, 4) Jamie Wei / Meghan Dizon.",
+      "Zero of the same top four seeds from AZ.",
+      "Not playing in this event: Jorja Johnson, Parris Todd, and the bride to be Rachel Rohrabacher (9/26 wedding day).",
+      "Potential quarterfinal matchup: Schneemann / Fahey (3) vs. Jansen / Irvine (6).",
+      "Watch out for Sofia Sewing and Tina Pisnik (9) — the Palm Beach Royals duo hoping for a royal flush of the draw in Vegas.",
+      "## Men's Doubles",
+      "Defending champions and finalists: Ben Johns / Gabe Tardio and Christian Alshon / Andrei Daescu.",
+      "Top four seeds: 1) Johns / Tardio, 2) Alshon / Daescu, 3) Patriquin / Staksrud, 4) Oncins / Klinger.",
+      "Gabe Tardio is back next to Ben as they hope to keep their perfect 2026 intact.",
+      "Not playing in this event: JW Johnson, Tama Shimabukuro, and Yuta Funemizu.",
+      "Watch out for Alshon and Daescu — they won in AZ, saving 7 match points, and lost a heartbreaker in this event in 2025 (12-10 in the 5th to Johns / Tardio). It was the second-longest match in PPA history at 2 hours and 28 minutes. The longest match ever was just one minute more: the 2025 men's doubles final in Daytona, which JW Johnson and Augie Ge won 11-8 in the 5th over Riley Newman and Noe Khlif.",
+      "## Past Champions at Darling Tennis Center",
+      "2025 — Men's singles: Federico Staksrud · Women's singles: Anna Leigh Waters · Men's doubles: Ben Johns & Gabe Tardio · Women's doubles: Anna Leigh Waters & Anna Bright · Mixed doubles: Anna Leigh Waters & Ben Johns.",
+      "2024 — Men's singles: Quang Duong · Women's singles: Kate Fahey · Men's doubles: Ben Johns & Collin Johns · Women's doubles: Anna Leigh Waters & Catherine Parenteau · Mixed doubles: Anna Leigh Waters & Ben Johns.",
+      "2023 — Men's singles: Ben Johns · Women's singles: Anna Leigh Waters · Men's doubles: Ben Johns & Collin Johns · Women's doubles: Anna Leigh Waters & Anna Bright · Mixed doubles: Anna Leigh Waters & Ben Johns.",
+      "2022 — Men's singles: Ben Johns · Women's singles: Anna Leigh Waters · Men's doubles: Riley Newman & Matt Wright · Women's doubles: Anna Leigh Waters & Leigh Waters · Mixed doubles: Anna Leigh Waters & Ben Johns.",
+      "2021 — Men's singles: Ben Johns · Women's singles: Catherine Parenteau · Men's doubles: Dekel Bar & Adam Stone · Women's doubles: Catherine Parenteau & Jessie Irvine · Mixed doubles: Jessie Irvine & Jay Devilliers.",
+      "2020 — Men's singles: Ben Johns · Women's singles: Simone Jardim · Men's doubles: Ben Johns & Matt Wright · Women's doubles: Simone Jardim & Lucy Kovalova · Mixed doubles: Ben Johns & Simone Jardim.",
+    ],
+  },
+  /**
    * ⚠ OFFICIAL PRESS RELEASE, not editorial — the same exception path as the
    * WPR "BE THE BEST" post below. Supplied by Wesley on 9/17 with the artwork,
    * it is comms copy carrying two real attributed quotes (Mike Burke, CEO of
