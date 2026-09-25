@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-23T17:33:57Z",
+  "updated_at": "2026-09-25T17:37:28Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -6467,6 +6467,136 @@
       "all_in_price": {
         "from": 70.23,
         "to": 91.83
+      }
+    },
+    {
+      "at": "2026-09-25T17:37:28Z",
+      "type": "price_change",
+      "event_id": "203187",
+      "event": "PPA Daytona Beach Thursday - Round of 16",
+      "ticket": "Thursday On Court VIP",
+      "base_price": {
+        "from": null,
+        "to": 300
+      },
+      "all_in_price": {
+        "from": 329.54,
+        "to": 329.54
+      }
+    },
+    {
+      "at": "2026-09-25T17:37:28Z",
+      "type": "availability_change",
+      "event_id": "203187",
+      "event": "PPA Daytona Beach Thursday - Round of 16",
+      "ticket": "Thursday On Court VIP",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-09-25T17:37:28Z",
+      "type": "price_change",
+      "event_id": "203184",
+      "event": "PPA Daytona Beach Friday - Quarterfinals",
+      "ticket": "Friday On Court VIP",
+      "base_price": {
+        "from": null,
+        "to": 350
+      },
+      "all_in_price": {
+        "from": 383.56,
+        "to": 383.56
+      }
+    },
+    {
+      "at": "2026-09-25T17:37:28Z",
+      "type": "availability_change",
+      "event_id": "203184",
+      "event": "PPA Daytona Beach Friday - Quarterfinals",
+      "ticket": "Friday On Court VIP",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-09-25T17:37:28Z",
+      "type": "price_change",
+      "event_id": "203182",
+      "event": "PPA Daytona Beach Saturday - Semifinals",
+      "ticket": "Saturday On Court VIP",
+      "base_price": {
+        "from": null,
+        "to": 350
+      },
+      "all_in_price": {
+        "from": 383.56,
+        "to": 383.56
+      }
+    },
+    {
+      "at": "2026-09-25T17:37:28Z",
+      "type": "availability_change",
+      "event_id": "203182",
+      "event": "PPA Daytona Beach Saturday - Semifinals",
+      "ticket": "Saturday On Court VIP",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-09-25T17:37:28Z",
+      "type": "price_change",
+      "event_id": "203167",
+      "event": "PPA Daytona Beach Sunday - Championships",
+      "ticket": "Sunday On Court VIP",
+      "base_price": {
+        "from": null,
+        "to": 350
+      },
+      "all_in_price": {
+        "from": 383.56,
+        "to": 383.56
+      }
+    },
+    {
+      "at": "2026-09-25T17:37:28Z",
+      "type": "availability_change",
+      "event_id": "203167",
+      "event": "PPA Daytona Beach Sunday - Championships",
+      "ticket": "Sunday On Court VIP",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-09-25T17:37:28Z",
+      "type": "price_change",
+      "event_id": "204335",
+      "event": "PPA Palm Springs Sunday - Championships",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": 120,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 135.05,
+        "to": 135.05
+      }
+    },
+    {
+      "at": "2026-09-25T17:37:28Z",
+      "type": "availability_change",
+      "event_id": "204335",
+      "event": "PPA Palm Springs Sunday - Championships",
+      "ticket": "Sunday Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
       }
     }
   ]
