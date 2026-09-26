@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-25T17:37:28Z",
+  "updated_at": "2026-09-26T16:49:07Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -6598,6 +6598,195 @@
         "from": "OPEN",
         "to": "HIDE"
       }
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "195857",
+      "event": "PPA Las Vegas",
+      "ticket": "50+ Humana Legends Series Clinic",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "Battle of the Badges – Police vs. Fire",
+      "base_price": 15,
+      "all_in_price": 19.59
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "Battle of the Branches – Military Round Robin",
+      "base_price": 15,
+      "all_in_price": 19.59
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "Dink & Disco – 3.5+",
+      "base_price": 40,
+      "all_in_price": 46.66
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "Kids Intro to Pickleball Class",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "King of the Court – 3.0–3.5",
+      "base_price": 30,
+      "all_in_price": 35.83
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "King of the Court – 4.0–4.5",
+      "base_price": 30,
+      "all_in_price": 35.75
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "King of the Court – 4.0+",
+      "base_price": 30,
+      "all_in_price": 35.75
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "King of the Court / Challenge Court – 4.0–4.5",
+      "base_price": 30,
+      "all_in_price": 35.83
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "Meet the Pro",
+      "base_price": 30,
+      "all_in_price": 35.83
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "Oldies but Goodies 60+",
+      "base_price": 30,
+      "all_in_price": 35.83
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "Parent & Child Round Robin",
+      "base_price": 60,
+      "all_in_price": 70.23
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "Pickle Cup Pong",
+      "base_price": 20,
+      "all_in_price": 25
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "Play with the Pro – 3.0",
+      "base_price": 100,
+      "all_in_price": 113.44
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "Play with the Pro – 3.0–3.5",
+      "base_price": 100,
+      "all_in_price": 113.69
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "Play with the Pro – 4.0–4.5",
+      "base_price": 100,
+      "all_in_price": 113.69
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "PPA Camp",
+      "base_price": 200,
+      "all_in_price": 221.99
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "Queen's Court / DJ – 4.0–4.5",
+      "base_price": 40,
+      "all_in_price": 46.66
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "Rowdy Round Robin – Cowboy Themed",
+      "base_price": 35,
+      "all_in_price": 41.16
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "Special Olympics Pickleball",
+      "base_price": 0,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-09-26T16:49:07Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "Wooden Paddle Tournament",
+      "base_price": 35,
+      "all_in_price": 41.16
     }
   ]
 }
