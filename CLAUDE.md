@@ -65,6 +65,752 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-28 — Live-event copy says what is on court, not what the calendar says
+
+- Wesley (Asana "Verbiage Update for Live Events"): the site goes live off the event's DATES, so the
+  hero read "LIVE NOW · Matches in progress" for all seven days — overnight, before first serve,
+  between sessions. The dates still decide it is tournament week; **new `lib/live-status.ts` decides
+  what to SAY**, from the ticker feed plus the order of play.
+- **"In progress" / "Live Now" / "Watch Live" only while the feed has a `status: "live"` match.**
+  Otherwise: "First serve 2:00 PM" (nothing played yet today) · "Up next · 6:30 PM PDT" (between
+  matches; just "Up next" once that planned start has passed — matches run late) · "Play resumes Thu ·
+  2:00 PM" · "Play complete". Badge reads "Tournament Week" when nothing is live. Feed unreachable →
+  the day's round from the order of play, never a claim about play. "Pro Qualifiers in progress" when
+  every live match is a qualifier.
+- **First-serve times come from new `playDays()` in `lib/order-of-play.ts`**, which mirrors
+  buildSchedule's template + `FIRST_SERVE_BY_SLUG` + the transcribed `eventSchedules`. ⚠ If the
+  template in either buildSchedule changes, change it there too.
+- `useLiveTicker` gained `feedOk` (the feed actually answered) — `loaded` also turns true after the
+  retry budget is spent, which is "we could not ask", not "nothing is on".
+- Surfaces: homepage hero (badge, status line, red Watch Live → blue **TV Schedule** when idle),
+  event-page hero (also kills the phone countdown stuck at "0D : 0H : 0M : 0S"), the "Live Now"
+  kickers over both live scores bands, the header marquee (idle link → **Scores & Brackets**, the
+  event's `#results`; pulsing red dots only when live), and StickyBuyBar (it said "Live Now · Watch
+  Live" over up-next/final rows). ScoreTicker and AppScoreBar were already right. **NationalsLive
+  deliberately untouched** — its live state is a simulated 20s countdown over Atlanta fixtures.
+- ⚠ Everything renders the NEUTRAL state before hydration; the server cannot see the feed or the
+  device's day, and must not claim a match is live.
+- Verified against the real Las Vegas feed on its first day (qualifiers between matches): homepage +
+  event page read "Tournament Week / Up next", 0 "in progress", 0 "Watch Live", no overflow at 1440 or
+  390. 12 synthetic cases through `liveEventStatus`. tsc clean, eslint at the StickyBuyBar
+  set-state-in-effect baseline, `next build` green (2,103 pages) — with stale `.next/types` from
+  another branch moved aside, which otherwise fails the typecheck.
+- ⚠ First-serve times print without a zone ("2:00 PM"): venue time, from the schedule, which has none.
+
+### 2026-09-28 — The rankings re-read themselves daily; the deploy hook never fired, and Next was caching our SQL for a year
+
+- Wesley: *"The World Rankings are not accurate currently. Could this be a caching issue?"* Then: *"we need
+  to have the rankings re-read once a day. get that setup and get the rankings updated asap."*
+- **Production was serving a board that no longer existed upstream.** Ben Johns 17,832.5 against a live
+  18,432.5, ALW 20,710 against 22,105, Staksrud and Patriquin swapped at No. 4/5. The 9/27 17:21 UTC deploy's
+  prebuild pulled it (17 upstream, 0 cached — so NOT the 9/23 durable cache), and asking the API for
+  `rank=2026-09-27` today returns different numbers. pickleball.com was mid-recalculation or briefly wrong
+  when we built, and the snapshot is bundled JSON, so it stayed until someone pushed. Fixed within minutes by
+  a production redeploy; the rest is making sure it can't recur.
+- **⚠ THE DAILY REFRESH HAD NEVER RUN.** `/api/cron/rebuild` (9/5) pinged a Deploy Hook so `prebuild` would
+  regenerate the snapshot. `DEPLOY_HOOK_URL` was set 23 days ago and not one production deploy came from it —
+  every "fresh" board since 9/5 was a side effect of a code push. Deleted, not repaired: its premise ("a cron
+  cannot write the snapshot itself") was true of the filesystem, not of the database.
+- **New `/api/cron/rankings`, same 09:00 UTC slot.** Fetches all 16 boards (fresh, bypassing the per-URL
+  cache), stores the whole snapshot as one `api_cache` row (`wpr-snapshot:latest`, own tag `wpr-snapshot` so a
+  `?tag=rankings` purge can't wipe it), then `revalidatePath("/", "layout")` — lazily, because ranks reach
+  nearly every page. A failed run writes nothing and returns 502; the previous snapshot keeps serving.
+  Manual refresh: `GET /api/cron/rankings/` with `Authorization: Bearer $CRON_SECRET`.
+- **`lib/wpr-snapshot.ts` serves whichever is NEWER — the bundled file or the stored row.** One cheap
+  `updated_at` probe per instance per 5s; the ~700 KB value is re-read only when it changed. The in-process
+  board memos in `rankings-api` and `division-rankings` are now keyed on the snapshot's `generatedAt`, or a
+  warm instance would have held yesterday's board for six hours. **Still zero `partner_rankings` calls per
+  page view** — measured 0 across the board, an athlete lookup and division ranks.
+- **`lib/wpr-snapshot-core.mjs` is the one implementation** for the build script and the cron, because the
+  URL is the durable-cache key and two copies drift. Verified the script's output identical in shape
+  (keys, division keys, player fields) and it still fails soft/hard exactly as before.
+- **⚠ THE REAL FIND: NEXT WAS CACHING OUR POSTGRES QUERIES WITH `revalidate: 31536000`.** The Neon HTTP
+  driver sends SQL as a `fetch` POST, and on `force-static` routes (/rankings, the homepage) or
+  `fetchCache = "default-cache"` (/api/rankings) Next's patched fetch stores it. Found in
+  `.next/cache/fetch-cache`: `SELECT`s, `CREATE TABLE`s, a year each. So on those routes `pb-cache` has been
+  returning whatever a query first returned, and a cached `INSERT` never reaches the table again — this
+  predates today (9/18). Fixed in `pb-cache.ts` with `neonConfig.fetchFunction` → Next's
+  `_nextOriginalFetch`. ⚠ **That is a Next internal; if an upgrade drops it, this silently falls back to the
+  bug.** Re-check after any Next upgrade: build, then `grep -l neon.tech .next/cache/fetch-cache/*` must be
+  empty.
+- **Verified on a real production build against the live API and the real table, not by reasoning:** wrote
+  a marker row (Ben 99,999), the build and `/api/rankings` served it; ran the cron locally → **17 upstream,
+  stored, and /rankings, /api/rankings, /athletes/ben-johns, /athletes/anna-leigh-waters and the homepage all
+  read the live board on the next request.** After the fix: 0 Neon entries in the fetch cache, `/api/rankings`
+  back to ○ (it had gone ƒ while the SQL was being cached), `/rankings` ○, athletes ● — unchanged. tsc +
+  eslint clean.
+- ⚠ Method: built with `next build --webpack` because Turbopack refuses the worktree's `node_modules`
+  junction, and the global `npm`/`npx` are broken on this machine (MODULE_NOT_FOUND in npm itself). Node 24's
+  type-stripping plus a 15-line resolve hook for `@/` runs lib code without tsx.
+- **Open:** whether pickleball.com recalculates at a fixed time — 09:00 UTC is a guess, and the 9/27 capture
+  shows a bad moment exists. If a stale board is reported again, check the cron's run log first.
+
+### 2026-09-25 — The Player Handbook page was never the handbook; now it is, with the PDF
+
+- Wesley: *"We need to fix our player handbook"*, with the PDF; then *"have a PDF button at the top"*.
+- **⚠ THE OLD PAGE WAS INVENTED.** Six placeholder cards claiming a round-robin stage, best-of-five
+  finals, visa requirements and replay review — none of it is in the handbook — plus a "Request the Full
+  PDF" mailto. Live since the 5/22 ppatour.com audit.
+- **The whole 2025 PPA Tournament Handbook now renders, verbatim**, from `lib/player-handbook.ts`: six
+  sections, the points-by-round table, the penalty and fine schedules. Clause labels are generated by
+  depth (A) → i) → (1) → (a) → (i) → 1.) so the handbook's own cross-references resolve, and every clause
+  is anchored (`#2-e-iii`). Only PDF line-break artefacts and "price money" were touched, and two broken
+  cross-refs in 5(F) were corrected (Sexual/Criminal Conduct are 5(E)(xii)/(xiii), not (x)/(xi)).
+- **⚠ TWO PDFs EXISTED AND THEY DIFFER.** The attached one was 45 pages; `PPA Tournament Handbook (1).pdf`
+  (46 pages, Google Docs export, 9/25) adds **2(C)(ii) Player Eligibility; MLP Injured Reserve Status**.
+  Word-diffed: that clause is the only change. The newer file is self-hosted at
+  `public/ppa/handbook/ppa-tournament-handbook.pdf` (`HANDBOOK_PDF`) behind a "Handbook (PDF)" button,
+  and the clause is in the page. **Replace the PDF and the data file together**, or they disagree.
+- **⚠ IT IS THE 2025 EDITION AND CONTRADICTS LATER PAGES** — a 3rd-place points row (Connor 7/23: no
+  third-place match), a 1,500-pt "WPC" tier (Worlds is 3,000 on /about/how-it-works), medal-match
+  withdrawal rules, and the USAP rulebook where /europe names UPA-A. Published as supplied; flagged, not
+  reconciled.
+- Verified on the dev server: 0 placeholder strings, PDF 200 `application/pdf`, deep links land 112px
+  clear of the sticky chrome, 0 horizontal overflow at 1440 and 390. tsc + eslint clean.
+
+### 2026-09-24 (pt. 3) — GSC sitemaps fixed, Rich Results verified, Product node retyped
+
+- GSC (sc-domain:ppatour.com) had ONLY the six dead WordPress sitemaps, erroring since April, and neither new
+  sitemap. Submitted `/sitemap.xml` (read: 1,135 URLs, 1 error = the deliberate cross-host ppatoureurope.com entry)
+  and `/news-sitemap.xml` (Success, 2 URLs); removed all six old ones. Done in Bryce's Chrome via the GSC UI.
+- Rich Results Test on prod: Article ✓, Event + Breadcrumb ✓, Dataset ✓ (rankings), athlete Product ✗ (no offers).
+  Fix pushed (`c1584d1`): paddle node is `Thing` + `additionalType` Product. Repo QA gate noted `brand`/`category`
+  are Product-only properties on a Thing — accepted (schema.org warning, not a Google error).
+- Not done: Vercel apex redirect flip (harness blocks domain changes; Bryce in Vercel → Domains). PBC robots.txt
+  line (BC admin needs a login).
+
+### 2026-09-24 — ppatoureurope.com: Carvana painted into the footer on iPhone; contact form's Turnstile is dead
+
+- Payton (Slack #ppa-tour-europe, 11:43): *"I'm seeing Carvana hidden at the bottom of the landing page
+  on my iPhone."* Screenshot: footer reads "CARVANA PPA TOUR" spilling off the left edge.
+- **⚠ CAUSE: `public/ppa/logos/ppa-tour-horizontal-{white,blue}.svg` WERE THE FULL CARVANA LOCKUP WITH
+  `viewBox="738 0 670 149"` HIDING THE LEFT HALF.** All 14 paths + the badge polygon were still in the
+  file. iOS Safari does not clip a lazy-loaded `<img>` SVG to its viewBox, so the footer (lazy) painted
+  the whole lockup while the header (`priority`, eager) happened to crop. Fix: deleted the Carvana `<g>`
+  (7 paths + polygon); the seven PPA TOUR paths and the viewBox are unchanged. 13.9 KB → 6.9 KB each.
+  **Rule: never hide a sponsor with a viewBox crop — delete the paths.** Commit `8fd126a`.
+- **⚠ FOUND WHILE VERIFYING, NOT FIXED — THE EUROPE CONTACT FORM CANNOT BE SUBMITTED.** The Turnstile
+  widget on ppatoureurope.com fails with **error 110200 (hostname not allowed)** in desktop Chrome too;
+  it is the grey "Unable to connect to website" box in Payton's screenshot, not her signal. The
+  Turnstile widget's hostname list is `ppatour.com` + the Vercel preview domain
+  (`docs/FORMS.md`); ppatoureurope.com was never added when it became the canonical Europe host on
+  9/22. `InquiryForm` requires a token for `formType="europe"`, so "Send Message" always fails. **Fix
+  is in the Cloudflare dashboard → Turnstile → the widget → Hostnames → add `ppatoureurope.com`.** No
+  Cloudflare API token on this machine. The fan-guide signup is Turnstile-exempt and works.
+- main was 11 ahead (SEO Phase 1 + this) and origin/main had 3 new commits from other sessions (Vegas
+  sponsor wall, Coyote post, four website requests). Rebased onto origin/main; both CLAUDE.md conflicts
+  were the two sessions' log entries and both are kept. Pushed — **SEO Phase 1 is on production now.**
+- Next: add the hostname in Cloudflare; ask Payton to re-check the footer on her phone after deploy.
+
+### 2026-09-24 — Las Vegas gets its own sponsor wall; the tour title partner nearly fell off the page
+
+- Wesley, forwarding the event team's pack: *"Here is a link to download all of the logos that are
+  activating at Las Vegas. Can you update the page with these, similar to what you did with NC? Rate,
+  JOOLA, and Carvana are good as is, the rest below those can be replaced."* Eleven marks, done the
+  same way as Nationals — a `rate-las-vegas-open` entry in `lib/event-sponsors.ts`. Branch
+  `vegas-sponsors`.
+- **⚠ "THE REST BELOW THOSE" WAS 30 TOUR PARTNERS, AND IT WAS READ OFF THE RENDERED PAGE RATHER THAN
+  GUESSED AT.** Before this, Vegas had no entry, so the section fell back to `PartnerWall`: marquee
+  Rate (Title Partner) + JOOLA (Presenting Partner), then a Carvana hero card, then every partner on
+  the roster — Journavx, Tixr, PlaySight, PBC and 26 others, none of whom bought anything at this
+  stop. That is the exact problem the 8/27 per-event list was built to fix.
+- **⚠ NAMING A STOP REPLACES THE WHOLE WALL, INCLUDING THE CARVANA HERO — so leaving Carvana out of
+  the list would have taken the tour's title partner OFF the page while the request said he was fine
+  as is.** He is a grid tile now, exactly as at Nationals. ⚠ One visible consequence, flagged to
+  Wesley rather than quietly fixed: his tile reads a bare **"Title Partner"** two rows under the
+  marquee's **"Title Partner · Rate Las Vegas Open"** (Rate). Both are true — one is the tour, one is
+  the stop — and the `PartnerWall` hero used to disambiguate with a sentence the tile has no room
+  for. Nationals has the same shape. A clearer string is a one-line change if marketing wants it.
+- **⚠ NINE OF THE ELEVEN MARKS WERE ALREADY ON DISK AND ARE REFERENCED AS STRINGS, NOT RE-IMPORTED.**
+  That is the module's own rule — a string reuses the roster partner's logo, link and designation, so
+  a future logo refresh reaches every stop at once. Re-importing the pack's copies would have forked
+  nine marks for one event page. Rate leads the list (the stop's own title partner, as Veolia does at
+  Nationals), then Carvana, then the pack.
+- **⚠ TWO ENTRIES ARE OBJECTS BECAUSE NEITHER IS ON THE ROSTER, AND A STRING THAT MATCHES NO PARTNER
+  IS DROPPED SILENTLY.** Both would have vanished without a word:
+  - **SHARP has never been a listed partner and we held no mark at all.** Imported through
+    `scripts/import-sponsor-logos.mjs` like everything else. ⚠ The supplied art is **7053x1943 with
+    the wordmark filling 89% of the width but only 48% of the height** — the trim is what makes it
+    safe, since untrimmed it would draw at roughly half the optical size of its neighbours in the
+    same card box. Ships 900x134, 6.5 KB. **No `role`**: the pack carried no designation and
+    inventing one puts words in a sponsor's mouth on their own card. Destination checked rather than
+    assumed — canonical `https://www.sharpusa.com`, *"Sharp USA delivers reliable technology for
+    businesses and homes"*, i.e. Sharp Electronics' US home page.
+  - **Picklebalm came OFF the roster with the 8/4 approved list** and is activating here anyway, so it
+    is named locally. ⚠ Do **not** "fix" that by re-adding it to the tour roster — that republishes it
+    in the footer, the homepage marquee and every other event page, which is marketing's call.
+- **⚠ THE PICKLEBALM FILE WAS THE SMALLEST MARK ON THE SITE AND THE PACK FIXED IT.** We shipped the
+  media-library PNG at **418x94**, under 3x for its own card; the pack supplies the same lockup at
+  1500x450, now **900x201, 6.8 KB**. Its `REMOTE_JOBS` row is retired in favour of a local job with a
+  ⚠ saying why it must not come back: two jobs on one slug race, `JOBS` runs before `REMOTE_JOBS`, and
+  **the smaller file would win**. Safe to re-encode precisely because Picklebalm is off the roster —
+  the Las Vegas list is the only reader.
+- **⚠ SIX ZERO RENDERS OUR ROSTER LOCKUP, NOT THE PACK'S.** The pack's file carries the "GO NEXT
+  LEVEL!" tagline; ours reads "SIX 6.0 ZERO / PICKLEBALL". Both are the brand's own lockups and
+  swapping would change every page on the site, so the string ref stands. Same reasoning for MOJO,
+  whose pack file is the stacked cut against our horizontal one.
+- Verified on rendered pages at 1440 and 390, not by grep over source: **11 tiles in the event grid,
+  all 11 linking to the company's own home page** with the per-event UTM
+  (`utm_campaign=1026-PPA-LASVEGAS-NV-USA`, `utm_content=event-sponsor-*`), Rate and JOOLA still in
+  the marquee above it, **0 broken or zero-sized images, 0 horizontal overflow, 0 elements wider than
+  the viewport inside the section**. The section is **859px at 1440 against the roster wall's 2097px**.
+  **Controls unchanged: Nationals still renders its own 12 and Chicago still falls back to the full
+  roster of 30 — and neither carries Sharp or Picklebalm.** Both new marks were then looked at as
+  pictures on a contact sheet drawn at the real card geometry (150x44 box): SHARP's ®, Picklebalm's
+  ball dot and ® and MOJO's colour bar all survive the encode. tsc clean (the three known scratchpad
+  probes aside), eslint clean on both changed files, `next build` green, exit 0.
+- ⚠ Method, both already documented and both hit again: `next build` needs `scratchpad/
+  probe-platform-denied.ts`, `probe-rounds.ts` and `probe-cs-results.ts` moved aside, and
+  `BUILD_DIST_DIR=.next-buildcheck` appends two entries to `tsconfig.json` (reverted, along with
+  `wpr-snapshot.json`).
+- ⚠ **`vegas-sponsors` is branched off `engine-live`, not `main`** — that is the branch this tree was
+  on, and rebasing it would have meant moving other sessions' uncommitted work. It carries the two
+  Engine travel-partner commits underneath. The change itself is four paths
+  (`lib/event-sponsors.ts`, `scripts/import-sponsor-logos.mjs`, `public/ppa/sponsors/sharp.png`,
+  `public/ppa/sponsors/picklebalm.png`), so it moves to a `main`-based branch cleanly if wanted.
+- **Open, all with the event team:** whether SHARP carries a designation · whether SHARP is a Las
+  Vegas activation only or a tour partner that belongs on the roster · whether Picklebalm is back on
+  the tour roster generally or Vegas-only · and whether Carvana's tile should say something other
+  than "Title Partner" on a stop whose title partner is someone else.
+
+### 2026-09-24 — Four of five assigned website requests; the broadcast sheet moved four stops, and Malibu had gone quiet under a rename
+
+- The five tasks sitting in WEBSITE TEAM · Platform = PPA Tour · Stage = Assigned. Four shipped;
+  the fifth is blocked on an asset nobody outside ScorePlay can read.
+- **⚠ WORKED IN A CLEAN WORKTREE OFF origin/main, AND THAT WAS NOT CEREMONY.** The repo dir is on
+  `engine-live`, **28 commits behind main**, with another session's in-flight "current event" work
+  uncommitted (`lib/current-event.ts`, `components/live/use-current-event.ts`, a modified
+  `Header.tsx`) and a dev server owning :3000. Every tracked file I needed was byte-identical to
+  origin/main already — the branch was simply lagging — so `git worktree add … origin/main` gave a
+  correct base and left their tree untouched. ⚠ The worktree needs its own `npm install`.
+
+#### Broadcast schedule (Keaton Maynard, due 9/25) — reconciled to the 9/21 sheet
+
+- **⚠ `scripts/audit-tv-schedule.mjs` ALREADY POINTED AT KEATON'S SHEET, so the whole task was one
+  command.** It pulls the live CSV and diffs both files; the reissue is stamped **"as of 9/21/26"**.
+  Four stops moved and it named every window.
+- **Chicago** — the entire stop moved into the evening (PBTV opens 3PM Tue–Fri where it opened 11AM),
+  Saturday TC 11AM–3PM → 1–4PM, Sunday PBTV 11AM–5:30 → 11AM–4PM. **⚠ THURSDAY IS NOW TWO PBTV
+  WINDOWS, 3–6 AND 8–11, SPLIT EITHER SIDE OF AN FS1 EXCLUSIVE.** The sheet marks the 6–8PM FS1 row
+  "FS1 EXCL."; closing that gap into one 3–11PM row would advertise PBTV over two hours FOX holds
+  exclusively. **⚠ And Sunday's FS1 window is now TAPE** — it was carried here as live.
+- **Virginia Beach** — 2PM starts Thu/Fri, and a **new Thursday Tennis Channel window**, so TC carries
+  four days there where it carried three. **Daytona** — 2PM starts, Sunday shortened to 10AM–3PM.
+- **⚠ THE REAL FIND: MALIBU HAD BEEN REPORTING AS "NOT ON THIS SHEET" AND IT WAS A RENAME.** The audit
+  joins on the sheet's own event header, `EVENT_MAP`'s key was the 8/13 sheet's "PPA Malibu Cup", and
+  the 9/21 sheet finally adopted the tour's **8/26 rename to "Malibu Showcase"**. So the script
+  reported the stop as ABSENT rather than as six wrong days, and the note above the key said not to
+  change it "until the sheet itself is reissued" — which had now happened. Key updated; **a stop that
+  goes quiet in that audit is a rename until proven otherwise.**
+- **⚠ AND MALIBU IS A SHORTER BROADCAST THAN IT WAS: Tuesday and Wednesday coverage is GONE**, and the
+  four surviving days moved to evening (Thu/Fri PBTV 5PM–1AM). Do not restore Tue/Wed from an older
+  copy. Its row also read **`tier: "Cup · 1,500"`, contradicting the 9/8 board decision** that made the
+  Showcase a PPA 500 Open — `lib/placeholder-data.ts` has had it as `tier: "open", points: 500` since
+  9/15, and the sheet's own header now reads "| 500". Corrected to `Open · 500`.
+- **⚠ CARY IS DELIBERATELY LEFT DISAGREEING WITH THE SHEET, AND THE AUDIT REPORTS IT ON PURPOSE.** The
+  9/21 sheet still shows Saturday's morning PBTV window as the pre-weather 9AM–5PM; the site says
+  9AM–12PM because that is what aired after the 9/3 reschedule, and the event finished 9/6. The
+  sheet was only half-updated for that Saturday — its Friday rows match ours exactly. The site is the
+  record of what happened. Written into both files.
+- Verified by re-running the audit: **every other event ✓ against the sheet (Chicago 15 windows, VB 8,
+  Malibu 8, Daytona 4), and lockstep 8/8 events agree between `lib/broadcast.ts` and
+  `lib/tv-schedule.ts`** — down from 4 mismatches to the 1 deliberate Cary row.
+- **⚠ FOUND, NOT FIXED — THE SHEET CARRIES A STOP WE DO NOT MODEL: "PPA Australia Cup", Oct 14–18, on
+  PPA YouTube.** `TvWindow["channel"]` has no YouTube member, and the sheet's own header for it reads
+  "| Virginia Beach, VA" against an AEDT timezone and an Australian crew, which is plainly a
+  copy-paste error in the source. Not invented into the site. **Ask Keaton.**
+
+#### Tournament history (Hannah Johns, due 9/24) — all four items, none of them in the file she named
+
+- **⚠ `lib/data/tournament-history.json` IS GENERATED, so editing it would have been reverted by the
+  next run** of `scripts/gen-tournament-history.mjs`. Three of her four asks are generator changes and
+  the fourth belongs in the archive.
+- **⚠ THE AUSTRALIA PICKLEBALL OPEN 2025 IS REGISTERED TWICE AND ONE COPY IS FILED UNDER THE DOMESTIC
+  ORG. That is the whole reason it was on the page, and it is checkable rather than a judgement call:**
+  `b28de702…` under "PPA Tour Australia" and **`a26c60b0…` under "Pro Pickleball Association"**, same
+  event, same week. The second cleared `TOUR_ORGS` and published as a PPA Tour stop. Excluded by uuid,
+  not by title — the Australia-org twin is legitimate and a title match would take both.
+- **International stops now qualify, which is her item 4.** Sister tours were excluded outright; they
+  are admitted on three conditions. **⚠ THE POINTS LEVEL IS IN THE TITLE AND THAT IS THE ONLY PLACE IT
+  IS** — checked every field on the feed row, there is no points column, but sister-tour titles state
+  it ("PPA Asia 1000 …", "PPA1500 - …"), the same read `pointsFromName` already does in
+  `lib/placeholder-data.ts`.
+- **⚠ AND THE SEASON CUTOFF IS AN INFERENCE, FLAGGED TO HANNAH.** Two Asia stops state 1,000: the
+  **MB Hanoi Cup (Apr 1)** and the **Leapmotor Kuala Lumpur Cup (Sep 9)**. She asked for Kuala Lumpur
+  and listed "Hanoi titles are gone for ALW" among the things already working, with Alix Truong's 15
+  Asian golds sitting under overall titles "before the 2026-2027 season". So international results
+  count from **2026-08-31**, the first day of 2026/27 (Nationals). Hanoi is the last stop of 2025/26
+  and stays out. One constant to move if she wants it in.
+- **⚠ BOTH OCTOBER 1,500s JOIN ON THEIR OWN** — the Australia Pickleball Cup and the Hang Seng Bank
+  Hong Kong Slam already satisfy every condition except `Completed`. That is the "continue to add"
+  half; nobody edits the file for them.
+- Sister-tour names are derived, **and cross-checked rather than invented**: `intlName()` reproduces
+  both names `lib/asia-tour-links.ts` already holds from Wade Townsend's own list — "Leapmotor Kuala
+  Lumpur Cup" and "MB Hanoi Cup" — exactly. ⚠ `publishedNames` is keyed by END DATE and covers the
+  domestic record only, so an international stop must not read it or a same-day domestic stop hands it
+  the wrong name.
+- **The 2020 Texas Open men's doubles went into the ARCHIVE**, which the generator passes through
+  untouched — the feed does not reach back past mid-2023. ⚠ Verified the archive round-trips at
+  indent 1 + trailing newline + CRLF **before** writing, so the diff is exactly the six-line insertion
+  and none of the other 115 records moved.
+- Re-ran the generator: **116 → 118 events. Removed the Australia Open; added the Kuala Lumpur Cup —
+  and Nationals and the Arizona Open**, the two domestic stops that have completed since the last run.
+  Hanoi correctly absent. KL carries no bronze in any division, which is right for a 1,000-point stop.
+
+#### Career titles (Hannah Johns, due 9/25) — the same bad record, one surface over
+
+- Same root cause as above: `player_medals?partners=ppa,upa` counts that mis-filed tournament's podium
+  as PPA hardware.
+- **⚠ IT HAD TO BE A SUBTRACTION, NOT A FILTER, because `player_medals` REPORTS AGGREGATES** —
+  gold/silver/bronze per discipline with no per-event breakdown. There is nothing to exclude at the
+  query. So `EXCLUDED_EVENT_MEDALS` takes off exactly what that event contributed, read from the same
+  stored procedure the history generator uses.
+- **⚠ KEYED ON USER UUID, NOT SLUG.** Several of these pros answer to more than one slug, and a
+  slug-keyed row would miss whichever page the visitor opened. ⚠ Case-folded too — CJ Klinger's uuid
+  comes back UPPER-CASE from the user endpoint and a literal key match would have skipped him.
+- **⚠ ALL 15 MEDALLISTS WERE RESOLVED AND THEN VERIFIED, NEVER GUESSED**: each candidate slug was
+  fetched and the endpoint's own firstName/lastName had to match the podium name. 14 resolved
+  automatically; **Somer Dalla-Bona's hyphenated surname defeated the candidate generator** and was
+  resolved by hand. Same rule as the paddle importer, which once read "Zoey Wang" as Chao Yi Wang.
+- **⚠ FOURTH PLACE IS NOT PUBLISHED, so `bronzeLost` is untouched.** Semifinals drop only by the bronze
+  removed, which keeps `semifinals` consistent with `bronze`; anyone who finished FOURTH at that event
+  still reads one semifinal high until upstream is fixed. Stated rather than guessed at.
+- Verified against the live API, all 17 cases: **Lacy Schneemann 3 titles → 1, exactly Hannah's stated
+  check**; Vivian Glozman 1 → 0, Kaitlyn Christian 5 → 4, Gabriel Tardio 30 → 28, Tyson McGuffin 15 →
+  13; every silver and bronze moved in the right division; **no negative or inconsistent counts, and
+  the controls (Ben Johns, Anna Leigh Waters) did not move** — ALW's verified-gold floor still applies.
+  Harness kept at `scratchpad/verify-aus-exclusion.ts` for the day the workaround comes out.
+
+#### Junior PPA rankings (Daniela Almendarez, due 9/28)
+
+- Straight down the documented path: the sheet is not publicly readable, so it came through the Google
+  Drive connector into `scripts/import-junior-rankings.mjs`. Jake Weinbach's sheet was **modified 9/23
+  19:24, eight minutes before Daniela filed the request**, so the stamp is Sep 23.
+- All 24 boards passed the importer's own guards — **positional division assignment confirmed against
+  the existing file at 92–100%**, no board shrank. **2,349 → 2,396 rows**; 1,671 rows changed rank or
+  points over the nine days since the 9/14 import.
+
+#### Las Vegas sponsors (Bryan Renahan, due 9/24) — NOT DONE, and it is an access problem
+
+- **⚠ THE LOGOS ARE IN A SCOREPLAY SHARE LINK THAT CANNOT BE READ WITHOUT A BROWSER SESSION.** The link
+  resolves — `media.scoreplay.io/link/369715?token=…` returns the folder record, named "Sponsor Logos
+  for Website", created 9/24 01:22 by Johnny Teixeira — but it is a **dynamic folder share**
+  (`media_ids: null`, folder 60300 / subfolder 60301) and every media-listing endpoint either 404s or
+  401s: the viewer authenticates with a real session token from localStorage, not the share token.
+  Probed the folder, media, search, download and export routes, and read the app bundle for the route
+  table. **ScorePlay is how this team ships assets** (Johnny posted a second link for JOOLA LEDs the
+  same evening), so this will recur.
+- Nothing was built, because without the folder there is neither the list of activating sponsors nor
+  their marks, and **a stop's list in `lib/event-sponsors.ts` is exhaustive** — naming Las Vegas there
+  removes every partner not named, so a partial list is worse than none. Today it correctly falls back
+  to the tour roster.
+- **Asked Bryan for a zip or Drive folder plus the sponsor names.** ⚠ The stop starts **Sept 28**.
+### 2026-09-24 — SEO Phase 1 merged to main; GSC + SEMrush baselines saved
+
+- Bryce: "Fix all these… you should have search console access. We have SEMrush API already."
+  Both were already wired in Jackalope (`/api/seo/gsc`, `/api/seo/overview`); no seat or grant needed.
+  Baseline saved: [`docs/seo-baseline/gsc-semrush-2026-09-24.md`](docs/seo-baseline/gsc-semrush-2026-09-24.md).
+  GSC Aug 25–Sep 21: **232k clicks vs 86k prior 28d** (Nationals inside); SEMrush keywords 11,923.
+- `seo/phase-1` (9 commits, built by a subagent, reviewed: tsc/eslint/build/tests clean) fast-forwarded into
+  main. **Not pushed** — Bryce to say go. Details in the entry below this one.
+- Not fixable in code: apex `ppatour.com` → `www` hop is a Vercel domain redirect (flip in Vercel → Domains,
+  not on an event weekend); athlete lastmod has no source date; rankings Dataset needs prod to verify.
+- Next: push → Rich Results Test on one URL per template → GSC news-sitemap submit → Phase 2 pillars 10/20.
+
+### 2026-09-24 (pt. 2) — SEO Phase 1 shipped on branch `seo/phase-1` (not pushed)
+
+- All 13 Phase 1 items from [`docs/SEO.md`](docs/SEO.md) are code on `seo/phase-1`, 8 commits, not pushed.
+  `tsc`, `eslint`, `next build` (into `.next-buildcheck`) all clean; the three new pure-module tests pass
+  (`node --experimental-strip-types scripts/{seo-text,autolink,athlete-bio}.test.ts`).
+- **Schema:** `lib/article-schema.ts` → NewsArticle on the 822 root articles, BlogPosting on /ppa-blog
+  (one builder, emitted from ArticleView). `lib/rankings-schema.ts` → Dataset + top-10 ItemList per board on
+  /rankings and /leaderboards (live board only — the demo/unavailable states publish nothing, so it does NOT
+  render locally while `wpr-snapshot.json` is past its 7-day expiry; check on production). Events: Offline
+  attendance mode, performer = top 8 seeds from a PUBLISHED draw, offers.url = the Tixr listing.
+- **Titles/descriptions:** `lib/seo-text.ts` — layout template kept under 60 chars, else " · PPA Tour" under
+  65, else the bare title; descriptions cut at 155 on a word boundary. Applied to articles, blog, athletes
+  (incl. the Europe suffix), events. Event titles carry the year ("Newport Beach Open 2027").
+- **Redirects:** every legacy destination now ends in "/" so trailingSlash adds no hop — `/athlete/x/` is one
+  308 on www. ⚠ The apex hop is a **Vercel domain-level redirect** (ppatour.com → www, confirmed via the API),
+  which runs before next.config; `APEX_LEGACY_REDIRECTS` is in place and inert until that setting is switched
+  off (comment in next.config.ts says how). Slashless legacy forms (`/player-rankings`) still take 2 hops
+  because Next's internal trailing-slash redirect has priority over custom rules.
+- **Duplicates:** `/athletes/raquel-amaro-veloso` and `/athletes/james-ling-2` (the board slugs the scrape
+  keyed on) 308 to the short slugs the Europe roster publishes; sitemap resolves through `curatedSlugFor` so
+  only the canonical is listed. Homepage h1 is now "Carvana PPA Tour — Professional Pickleball" (small,
+  visible eyebrow); the hero event name is an h2.
+- **Sitemap lastmod:** completed events carry their end date; future events and ALL athletes omit it — no
+  per-athlete date exists in any source (scrape, `player_medals`, Jackalope overrides), and the WPR snapshot
+  day would mean "rank moved", not "page changed". `/stats-wrap-vulcan-indoor-national-championships-finals/`
+  exists in `news-posts.json`; the 9/23 connection failure was transient, entry kept.
+- **Thin athletes:** `lib/athlete-bio.ts` builds a paragraph only from fields the page already renders; the
+  generic "ranked among the world's best" placeholder is dropped. Also fixed while here: Europe-roster bios
+  rendered only `p.bio[0]` — all paragraphs now reach the page (James Ling 1 → 3).
+- **Autolinking** moved into `lib/autolink.ts` (tokenizer, first mention, max 8, never in a/h1–h6/figcaption,
+  lookaround boundaries). **Google News sitemap** at `/news-sitemap.xml` (48h, newsroom only), listed in
+  robots.txt; submit in GSC once GSC access exists (Phase 0 ask). Verify after deploy: Rich Results Test on one
+  article, one blog post, /rankings/, one event; `curl -sI https://www.ppatour.com/athlete/ben-johns/` = one 308.
+
+### 2026-09-24 — Turks lineup final: Chris Crouch + Giovanna Morelli added
+
+- Lainey (Slack, 7:59 AM): add Chris Crouch & Giovanna Morelli as pros on Turks — "closes us out
+  with 4 pros." Added both to `lib/vacations/content.ts` pros (photos already in
+  `public/vacations/pros/` from Punta Cana). `prosMoreComing` → false; intro note and the trip-card
+  `lineup` in `lib/vacations/trips.ts` now name all four (Hayden, Aanik, Chris, Giovanna).
+- Chris links to `/athlete/christopher-crouch`; Giovanna has no athlete profile on the site, so no slug.
+- Cancún card still says "more pros announced soon" — untouched, Lainey hasn't sent its lineup.
+
+### 2026-09-23 (pt. 2) — SEO plan + roadmap for ppatour.com (and PBC, in ziff)
+
+- Bryce: "Go dig deeper and build a plan and roadmap for both sites." Full crawl of all 1,135
+  sitemap URLs + redirect tests + code read. Plan, dated roadmap and asks: [`docs/SEO.md`](docs/SEO.md).
+  PBC plan: `~/pickleball/ziff/docs/PBC-SEO-PLAN.md` (subordinate to the Jan 18 Shopify cutover).
+- Findings that became tickets: no Article schema on 822 legacy posts or 37 ppa-blog posts; 825 titles
+  over 60 chars from the " · Carvana PPA Tour" template; 2 duplicate athlete pairs (raquel-amaro/-veloso,
+  james-ling/-2); Newport Beach 2025/2027 share a title; legacy `/athlete/` redirects take 3 hops;
+  homepage H1 is the event card; rankings/leaderboards have no schema; athletes/events lack lastmod.
+- Phase 0 is measurement and is blocked on Bryce: GSC access, a SEMrush API seat, the GA4 split.
+- Phase 1 (13 code items, 9/29–10/17) · Phase 2 content (12 pillars, 10/20–12/12, none Nov 2–8) ·
+  Phase 3 authority (Dec–Feb). Checkpoints 10/31, 12/15, 2/27.
+- Shareable page published for Connor/Taylor (link in the session that made it).
+
+### 2026-09-23 — SEO portfolio review (PPA / PBC / pickleball.com)
+
+- Bryce asked for a read on SEO "across the board." Live-crawled all three sites; findings + sequence in
+  [`docs/SEO.md`](docs/SEO.md). MLP deliberately skipped (off-season, new site coming).
+- ppatour.com: technically sound; keyword count fell 46k→12k Feb→Aug **before** the rebuild — needs a Sept SEMrush re-pull.
+  Gaps: no Article schema on ~800 legacy posts, `/ppa-blog/` stale since Feb, homepage H1 = event card, rankings has no schema.
+- pickleballcentral.com: ranks top-2 for "pickleball paddles"; product schema good. Housekeeping: no lastmod, no Article schema/dates
+  on 724 posts, old paddle guide robots-blocked instead of 301'd, Google Optimize still loading, client-rendered category grids.
+- pickleball.com: the under-earning asset. Empty sitemaps, "Search Icon" player titles, numeric news URLs, zero JSON-LD,
+  hub-links to 6 other domains. Recommendation: rework architecture, not just skin; decide in Q4 alongside the MLP build.
+- Could not verify: GSC, CWV field data (PSI quota), real-Googlebot access to pickleball.com (CloudFront 403 on spoofed UAs).
+
+### 2026-09-23 (pt. 4) — Every pickleball.com call is now deploy-proof; the concurrency gate was guarding an empty room
+
+- Wesley: *"Is there any way we can avoid refreshing the pickleball.com api cache every time we deploy?"*
+  Then, on the options: *"do whatever will reduce the amount of pickleball.com api calls the most."*
+- **The answer already existed and was half-adopted.** `lib/pb-cache.ts` (`pbCachedJson`) was built on
+  9/18 for exactly this — a Postgres table keyed on the URL, unaffected by builds — after measuring 24
+  production deploys in 24 hours turning a 24-hour window into an 18-minute one. Five modules had moved
+  onto it (events, ticker, scores, brackets, event-field); **six had not**, and those six were the ones
+  the build pays for per page.
+- **⚠ THE COST WAS ~900 CALLS PER DEPLOY AND IT WAS ALMOST ALL ONE ROUTE.** `generateStaticParams`
+  prerenders ~219 US athlete pages plus 26 Europe ones, and `profile.tsx` calls `getAthleteStats` (2
+  calls: `users/{slug}` + `player_medals`) and `getAthleteVideoData` (2 more) on every one. All four
+  were on Next's Data Cache, which does not survive a deployment, so each push re-read the lot.
+  `athlete-stats`, `athlete-videos`, `senior-rankings`, `division-rankings` and `rankings-api` are now
+  on `pbCachedJson`; **`pbGetJson` has zero callers.**
+- **⚠ AND THE RANKINGS FALLBACK MATTERED MOST, BECAUSE IT IS THE DISASTER PATH.** `wpr-snapshot.json`
+  normally answers every board read, so `fetchBoardPage` only runs when the snapshot is missing or past
+  its 7-day expiry — i.e. precisely the 9/15 state where `/athletes/[slug]` made 27K
+  `partner_rankings` calls in six hours. On the Next cache, **every deploy re-opened that hole.**
+  The ⚠ on `fetchBoardPage` warning not to replace its cache is about `unstable_cache`, which failed
+  because it wrapped a `fetch` that then ran `no-store`; `pbCachedJson` is not that mechanism — it makes
+  the call itself — and it also closes the retry-does-not-persist problem that note left open, since
+  only a resolved value is written and it is written whichever attempt produced it.
+- **⚠ THE REAL FIND: THE 9/15 CONCURRENCY GATE WAS GUARDING AN EMPTY ROOM.** `MAX_IN_FLIGHT = 4` lives
+  in `lib/pb-fetch.ts` in front of `pbGetJson`, and exists because the API limits **concurrency, not
+  volume** — 40 parallel requests measured 5x 200 / 35x 429, 15 sequential ones 15/15 OK. As callers
+  migrated to `pb-cache` one at a time they each left it behind, and `pb-cache` never had one: it has
+  single-flight per KEY, which dedupes but does not cap. So the protection had been eroding for days,
+  and finishing the migration would have removed it entirely — `lib/scores-api.ts` fans out with
+  `Promise.all` across a tournament's divisions and was measured at a peak of 6 concurrent. **Ported
+  into `pb-cache.ts` and measured: 20 concurrent requests, peak 4 in flight, all 20 completed.**
+  ⚠ It is DUPLICATED, not moved — `pb-fetch` keeps its copy so a future caller is not ungated, and the
+  two are independent counters. Keep them in step, or delete `pb-fetch.ts`.
+- **⚠ FOUND WHILE HERE AND LIVE SINCE 9/18: `/api/revalidate-events` HAD BEEN PURGING NOTHING.**
+  `events-api.ts` moved to `pbCachedJson`, but that cron still only called `revalidateTag`, which cannot
+  see our table. So the calendar was not refreshing on its 05:00/06:00 schedule at all — it turned over
+  whenever its own 24-hour TTL happened to expire, and a new or changed event could sit unseen most of a
+  day after the cron reported success. It now purges both layers, as `/api/revalidate-content` already
+  did. `/api/revalidate-athletes` gained the same call, which it now NEEDS: Jackalope calls it on every
+  player save, and without it a paddle edit would wait out a 24-hour TTL.
+- **⚠ SKIPPING THE PREBUILD SNAPSHOT BY FILE AGE LOOKS RIGHT AND CANNOT WORK. Worth writing down,
+  because it is the obvious fix.** `prebuild` runs `snapshot-rankings.mjs` on every build — 16
+  `partner_rankings` calls — and the boards move once a day, so ~24 deploys is ~384 calls for one day's
+  data. But **Vercel builds from a fresh git checkout**, so the file the script sees is always the
+  COMMITTED one, last committed 9/15 and already 8.2 days old, never the one the previous deploy wrote.
+  An age gate could never fire there, and making it fire would mean deliberately shipping an expired
+  snapshot — the 9/15 incident. Built it, measured it, deleted it.
+  **Instead the script now reads through the same Postgres table**, same sha256-of-URL key, same
+  `rankings` tag, same 24h window: the first deploy of a day pays 16 calls and every deploy after it
+  writes a fully fresh snapshot for zero. ⚠ `--check` and `--force` bypass the cache on purpose — a
+  `--check` served from cache would have reported OK through the whole of 9/15, and that run is what
+  finally exposed it. ⚠ The key function is COPIED from `lib/pb-cache.ts` because a `.mjs` build step
+  cannot import the `.ts`; if it drifts, these become a second, unpurgeable set of rows.
+- Verified rather than reasoned about: a stubbed Neon driver run of the snapshot script gives **16
+  upstream / 0 cached cold, then 0 upstream / 16 cached warm**, both writing an identical-shaped
+  snapshot (M 1472 · F 841 · 1500 division rows), with `--check` and `--force` both going upstream; the
+  16 rows it writes all carry tag `rankings` and **0 key-scheme mismatches** against `pb-cache`'s
+  `keyFor`. `RANKINGS_CACHE_TAG` added to `PURGEABLE` (NOT to the scheduled `TAGS` — the boards roll
+  themselves over via `rank=<today>`).
+- **⚠ THE ONE THING THAT COULD HAVE BROKEN THE BROWSER BUNDLE, CHECKED DIRECTLY:** three CLIENT
+  components import these modules — `AthleteVideos`, `SeniorRankings`, `RankingsBoard` — and
+  `pb-cache` pulls in `@neondatabase/serverless` where `pb-fetch` pulled in nothing. All three are
+  `import type`, so they erase at compile time and no driver reaches the client. **Check this before
+  moving any further module onto `pb-cache`.**
+- `next build` green, **2,098 pages, exit 0**, and the render modes are unchanged where it matters:
+  `/athletes/[slug]` and `/europe/athletes/[slug]` still ● SSG on the 1d window, `/rankings` still ○.
+  tsc clean, eslint clean on all 11 changed files.
+- ⚠ Method, both already documented and both hit again: `next build` needs `scratchpad/
+  probe-platform-denied.ts`, `probe-rounds.ts` **and now `probe-cs-results.ts`** moved aside, and
+  `BUILD_DIST_DIR=.next-buildcheck` appends two entries to `tsconfig.json` (reverted).
+  `wpr-snapshot.json` was regenerated by the runs above and **reverted** — the committed copy is always
+  stale by design, because every build rewrites it.
+- **⚠ FOUND, NOT FIXED, AND IT IS NOT PICKLEBALL.COM:** the YouTube `videos.list` call in
+  `lib/athlete-videos.ts` is still on Next's cache and so also re-runs per deploy — roughly one batched
+  call per athlete profile, ~245 a build, against a 10,000-unit daily quota. Deliberately left there:
+  routing it through `pbCachedJson` would send our **PB-API-TOKEN header to googleapis.com**. It needs
+  its own cached path, not this one.
+- **Open:** whether `PB_API_TOKEN` is set in Vercel's **Preview** scope — if it is, every preview deploy
+  pays the same bill as production, and nothing in this session could read the env scopes.
+
+### 2026-09-23 (pt. 3) — The Challenger socials land, and one of the four is the tour's own channel
+
+- Wesley sent the four accounts the 9/23 About copy had named but could not link, so the Follow row
+  is built and the only clause of Amie Feliza's sentence still withheld is the ppachallenger.com
+  pointer — that domain 308s to this page, so it remains a circle.
+- **Placed at the foot of the About section, not in a section of its own.** Her sentence sits at the
+  end of that paragraph; four links do not earn a tenth entry in the page's section nav.
+- **⚠ THE HANDLES CONFIRM WHY THESE HAD TO COME FROM A PERSON.** Instagram is `ppa.challenger`
+  **with a dot** and X is `ppachallenger` **without one**, so either derived from the other is the
+  wrong account — and the YouTube channel Wesley sent, `UCSP6HlrMmRqogym2aHBPHpw`, is **not** the one
+  a search surfaces (`UCFuprEMnAw5uMo_LzE5hc7w`, "Challenger Series"). Every guess available on 9/22
+  would have been wrong.
+- **⚠ AND THAT YOUTUBE URL IS THE MAIN PPA TOUR CHANNEL — THIS SITE ALREADY SAYS SO.** It is the
+  channel the **global footer** links and the site-wide **`SportsOrganization` JSON-LD lists in
+  `sameAs`**, beside `x.com/ppatour` and `facebook.com/OfficialPPATour`. Which is consistent with
+  where Challenger broadcasts actually live, so it is a correct destination and it ships — but the
+  row prints the **platform name** for it rather than an account name, because "PPA Challenger
+  Series" set over the tour's own channel is a claim nothing supports. Found by reading the rendered
+  HTML rather than the four URLs in isolation. **Flagged to Wesley**; if a dedicated Challenger
+  channel exists, the URL swaps and the note goes with it.
+- Facebook is genuinely the Series' own — `61569510944398` is the id behind the "PPA Challenger
+  Series" page — and Instagram is the account whose bio reads *"@ppatour Challenger Series 💥 Powered
+  by @joolapickleball"*.
+- **The row reads `socialLinks()`** (`lib/social-links.ts`, built for athlete profiles on 9/1) for the
+  label and the billing order, so this page bills platforms the same way every athlete page does. The
+  handle is **read out of the URL, never inferred**: Instagram and X carry one in the path, YouTube's
+  `/channel/UC…` and Facebook's `profile.php?id=` do not, and those two render the platform name
+  alone rather than a plausible-looking guess.
+- Verified on the rendered page: **all four anchors present with the right destinations and labels**
+  — `Instagram @ppa.challenger`, `X @ppachallenger`, `YouTube`, `Facebook` — still **0 occurrences of
+  "ppachallenger.com", "For more information" or "Twitter/X"**, and at 1440 and 390 the row is one
+  line and three lines respectively with **0 horizontal overflow** and every link inside `#about`.
+  tsc clean, eslint clean, `next build` green.
+
+### 2026-09-23 (pt. 2) — Las Vegas' site map; the map dimensions were a comment, not a contract
+
+- Bryan Renahan's website request, 9/22 (Asana `1218759481113360`, due 9/24): *"Attached is a site map.
+  Please add this to the Las Vegas event webpage like we have done previously for NC and AZ."* Third
+  stop to get one, and the stop starts in five days.
+- **The same kiosk template a third time**, so it takes the same treatment: `vegas-open-2026-site-map-
+  kiosk-v3.png`, 2593×3457 against Cary's and Mesa's 2592×3456, encoded to 2000px webp at q78 —
+  **187 KB, against Mesa's 179 KB and Cary's 279 KB**. Courts 1–34, Humana Championship Court, Carvana
+  Grandstand, Pro Showcase SC1–SC4, tournament ops, vendor village, ticketing, VIP, food trucks,
+  medical, water stations.
+- **⚠ NO CROP, AND THIS ONE HAS THE MOST WHITESPACE OF THE THREE, SO THE TIDY MOVE WAS AVAILABLE AND
+  WAS REFUSED.** Measured on the ink bounding box: the artwork is **82% of the canvas height where
+  Mesa's is 89% and Cary's is 100%**. Trimming to the ink would make this stop's map a **0.91:1 where
+  the other two are 0.75:1** — the same slot rendering a visibly different shape per stop, for no
+  reason a reader could see. And it buys nothing: the art already spans **99% of the WIDTH**, and the
+  column is width-driven, so all the whitespace costs is empty bands above and below. Same call as the
+  parking map on 9/22 — supplied art ships as supplied.
+- Legibility was checked **by looking at it at the real rendered size**, not by arithmetic: the desktop
+  column draws it at **500px wide**, i.e. 0.25× of the source, and at that size every label reads
+  (Tournament Operations, Ticketing Entrance, Pro Showcase Courts, Vendor Village). The court numbers
+  sit at the edge of legibility there, which is exactly why the slot links to the full file — "Grounds
+  Map — Tap to Enlarge". A 1:1 crop confirmed q78 leaves no artifacting on the flat vector art or text.
+- **⚠ THE REAL FIND, AND IT WAS ALREADY LIVE ON TWO STOPS: `venueMapWidth`/`venueMapHeight` WERE
+  DOCUMENTED "REQUIRED ALONGSIDE `venueMapUrl`" AND NEITHER RENDERER READ THEM.** The type comment even
+  names the failure it was written to prevent — *"hardcoding one in the page would squash the next
+  stop's map if it arrives in the other orientation"* — and then:
+  - the **event page hardcoded `width={2000} height={2667}`**, correct only because the first two maps
+    happened to be exactly that; and
+  - the on-site **`/today` screen hardcoded `width={1600} height={1200}` — 4:3 LANDSCAPE for three maps
+    that are all 3:4 portrait.** So the one screen someone opens standing in the venue reserved a box
+    of the wrong shape and shifted layout the moment the map decoded. Shipped on Cary since 8/31 and
+    Mesa since 9/17.
+  - **⚠ AND VEGAS IS THE ONE-PIXEL CASE THAT MAKES IT UNARGUABLE.** 3457/2593 × 2000 = **2666**, where
+    3456/2592 × 2000 = 2667. Copying the other two's numbers would have been wrong by a pixel on the
+    first stop that didn't share their exact source dimensions.
+  - Fixed with **`venueMapFor(slug)` in `lib/onsite.ts`**, which returns url + width + height together
+    or null, so the invariant lives in the type rather than in a comment two renderers ignored. Both
+    call sites read it; the event page's now-dead `onsite` binding and its `onSiteFor` import went with
+    it, and `mapIsPortrait` narrows on the result instead of carrying three non-null assertions.
+- **⚠ THE SITE MAP AND THE PARKING MAP ARE BOTH ON THIS PAGE NOW AND THEY ARE DELIBERATELY NOT MERGED.**
+  Dana Summers' three-lot map (9/22) stays on the parking section in `lib/event-guides.ts`; this one is
+  the grounds. A spectator looking for court 22 and a driver looking for the tow-away loop are asking
+  different questions — the same split the Mesa entry already records.
+- Verified on rendered pages at 1440 and 390, not by grep over source: the event page and `/today` both
+  serve `venue-maps/darling-tennis-center.webp`, the aerial fallback is correctly **gone** (0
+  occurrences of "The Grounds") and the parking map and tow warning are **still there** beside it.
+  Measured in a real browser with the map scrolled into view — **natural and rendered aspect agree to
+  four decimals on all four surfaces (0.75), the reserved ratio matches, and horizontal overflow is 0
+  at both widths.** ⚠ Measuring without scrolling first reports `naturalWidth: 0` and a false
+  "squashed" — the map is below the fold and lazy-loaded.
+  **Controls: `/today` for Cary and Mesa now reserve 2000×2667 where they reserved 1600×1200 before**,
+  Virginia Beach and Worlds (upcoming, no map) still render the aerial fallback and no map, and
+  Mesa/Cary's event pages render no venue section at all — that section is gated `!completed` and both
+  events have finished, which is not a regression. tsc clean, eslint clean on all three changed files,
+  `next build` green (2,098 pages).
+- ⚠ Method, both already documented and both hit again: `next build` needs `scratchpad/
+  probe-platform-denied.ts` and `probe-rounds.ts` moved aside, and `BUILD_DIST_DIR=.next-buildcheck`
+  appends two entries to `tsconfig.json` (reverted). `wpr-snapshot.json` was NOT rewritten.
+- **Still open at this stop, carried from 9/20 and now the only gap left on it: gates are the
+  template's** — 8/9/10 AM against a 2 PM mid-week first serve, and EQUAL to first serve on Mon and
+  Sun. Neither this submission nor the parking one carried gate times. Las Vegas remains the stop most
+  in need of a `GATES_BY_SLUG` line, and it is now five days out.
+
+### 2026-09-23 — The Challenger board is the event team's own workbook now; the "About" tail pointed at this page
+
+- Amie Feliza's two website requests, both submitted 9/22 through the form (Asana `1218756871077842`
+  and `1218756087985593`): the Challenger Series leaderboard update, and the official "this is what
+  the Challenger series is about" copy. Both shipped on `/tour/challenger`.
+- **The board moved off the scrape and onto the source.** `lib/data/challenger-rankings.json` was
+  five hand-typed TablePress tables read off ppachallenger.com on 9/18, stamped **"Last Updated July
+  27th, 2026"**. It is now the sheet those tables were typed FROM — Jacob Guidry's **"(UPDATED)
+  CHALLENGER TOUR POINTS 2026 SEASON"**, modified 19:03 and sent at 19:09 the same evening. So the
+  page went from a two-month-old transcription to the workbook, and the printed date reads
+  **September 22, 2026**. 2,082 → **2,076 rows**: WS 168→169 · WD 307→311 · MS 361→370 · MD 650→**623**
+  · XD 596→603.
+- **⚠ THE BOARD MOVES IN BOTH DIRECTIONS AND A MISSING PLAYER IS NOT A PARSE ERROR.** Rankings run a
+  52-week window and signing with the Tour takes a player off, so **Carlota Trevino — who led THREE
+  divisions in the old file (WS 675, WD 587, XD 712) — is absent from all five boards**, along with
+  Helena Jansen, Armaan Jiwa Mawji and Rio Newcombe. Every men's/mixed leader changed hands
+  (MS: Burkhardt → **Tristan Dussault 475**; XD: Trevino → **Garrison Eaby 183**). Do **not**
+  reconcile a name against the old file — it is not a fuller list, it is an older one, and Trevino is
+  one of the six questionnaire signings already built and waiting (9/22 pt. 1).
+- **⚠ THE SHEET IS COMPETITION-RANKED AND THE OLD FILE WAS NOT, WHICH IS WHY THE IMPORT FAILED FIRST
+  TIME.** Exactly one tie in 2,076 rows: **Men's Doubles No. 1, Kyle Koszuta and Riley Inn both on
+  475**, with the next row at rank 3. The old snapshot had **zero** ties across all five boards, so
+  the first guard asserted rank == position and rejected it. The guard now allows a repeat only when
+  the points tie. **This is survivable only because `ChallengerRankings` keys its rows on rank + name**
+  — a rank-only key would have silently dropped one of the two, which is the /events duplicate-key
+  bug (8/3 pt. 4) in a table where the dropped row is a person's ranking. Verified in a browser: two
+  rank-1 rows render, **0 console warnings**.
+- The importer refuses rather than guesses: unknown `EVENT` value, non-numeric rank or points, empty
+  name, non-contiguous rank, rising points or a duplicate name inside a division all collect as
+  problems and **`--write` exits 1 if any survive**. It ran clean at 0. Division labels are read out
+  of the existing JSON rather than retyped from the sheet's "Womens Singles Pro Main Draw", so the
+  picker, the "found in other divisions" chips and the search keep working.
+- **The About section is now marketing's own boilerplate, verbatim**, replacing the two paragraphs
+  written here on 9/18 from ppachallenger.com's copy because nothing official existed yet.
+- **⚠ ONE SENTENCE OF HERS IS DELIBERATELY NOT PUBLISHED, AND BOTH HALVES OF IT FAIL ON THIS PAGE
+  SPECIFICALLY.** *"For more information, go to www.ppachallenger.com and follow us on social:
+  Instagram, Twitter/X, YouTube, and Facebook."* That is a press-release tail: **ppachallenger.com has
+  308'd to this exact page since 9/21**, so the pointer is a circle, and the four platforms are named
+  with **no handles**, which cannot be linked without guessing.
+- **⚠ AND THE HANDLES ARE NOT DERIVABLE FROM EACH OTHER, WHICH IS THE WHOLE REASON THIS IS AN ASK AND
+  NOT A LOOKUP.** Instagram is **@ppa.challenger — WITH a dot** (verified directly: 15K followers, bio
+  *"@ppatour Challenger Series 💥 Powered by @joolapickleball"*), while X is **@ppachallenger, without
+  one**. Either one inferred from the other lands on the wrong account. Facebook resolves only to a
+  numeric `/p/` page and **YouTube is genuinely ambiguous** — the Challenger broadcasts live on
+  @ppatour's channel and there is a separate unverified "Challenger Series" channel. So nothing was
+  published: same rule as the four sponsors left unlinked on 7/29 and the athlete socials on 9/1,
+  **URL in, label out**. Amie has the four URLs; they land as a Stay Connected row, the Junior PPA
+  shape.
+- **⚠ "SHOWDOWN IN DALLAS" IS CORROBORATION, NOT A CONFLICT, AND IT IS LINKED RATHER THAN RETYPED.**
+  Her copy names the *"PPA Challenger Showdown in Dallas"*; Brooke Ansley's 9/21 request put the
+  Showdown inside Worlds at **Brookhaven Country Club, Farmers Branch TX** — Dallas metro, which this
+  repo's own metro aliases already map (8/5 pt. 12). Two sources, same answer. The phrase links to
+  this page's `#showdown` section rather than repeating a date or a qualifying count, per that file's
+  standing rule that nothing there is typed twice.
+- Verified on rendered pages at 1440 and 390, not by grep over source: the three paragraphs and
+  "Founded in 2025" present, the `#showdown` link resolving to a section that exists, **0 occurrences
+  of either old paragraph, of "ppachallenger.com", of "follow us on social" or of "July 27, 2026"**,
+  the board reading "September 22, 2026" with Jada Bui at No. 1, and the Men's Doubles tie intact.
+  **0 horizontal overflow at both widths, and 0 of the 28 wider-than-viewport elements are in the new
+  copy** — all 28 are the pre-existing `overflow-x-auto` tables in `schedule` and `points`, the 9/21
+  baseline. **Control: the Worlds event page still carries the Showdown, unchanged.** tsc clean,
+  eslint clean on both changed files, `next build` green.
+- ⚠ Method, both already documented and both hit again: `next build` needs `scratchpad/
+  probe-platform-denied.ts` and `probe-rounds.ts` moved aside, and `BUILD_DIST_DIR=.next-buildcheck`
+  appends two entries to `tsconfig.json` (reverted). `wpr-snapshot.json` was NOT rewritten this time.
+- **Open, all with Amie:** the four social URLs · whether "Founded in 2025" is the Series' own line to
+  keep as the board ages · and the standing one from 9/18 — **nothing refreshes this JSON**, so every
+  leaderboard update is a commit until `partner_rankings` grows a Challenger scope (docs/CHALLENGER.md §7).
+### 2026-09-22 (pt. 6) — Sticky trip bar under the header on every Vacations page
+
+- Bryce, after pt. 5 shipped: "at the top of this page it just shows the Turks and Caicos thing… I have
+  to scroll all the way to the bottom to find anything on Punta Cana." New **`TripNav.tsx`**, mounted in
+  `app/vacations/layout.tsx`: a navy bar pinned under the header with every trip — Punta Cana (Sept 8–12,
+  "Completed · Sold Out"), Turks & Caicos (Dec 8–12, "Booking Open"), Cancún (Jan 26–30, "Booking Open") —
+  current page underlined in teal. Horizontal-scrolls on narrow screens. Hidden on `/register` + `/success`.
+- ⚠ `sticky top-16`, not `top-0`: the site chrome (`TopBar.tsx`) is itself sticky z-50 and collapses to
+  the 64px Header on scroll, so `top-0` put the bar BEHIND the header once you scrolled (caught in the
+  browser, not by build). Measured 64px live. z-40 sits under the chrome and mega panels.
+- Punta Cana's calendar `name` changed "The Inaugural Trip" → "Punta Cana" so the bar and mobile menu
+  say a place; the calendar card never used `name` (it prints `resort`), so nothing else moved.
+- Verified in Chrome on the dev server: bar renders on /vacations, stays pinned at 1000px scroll,
+  click-through to Punta Cana moves the underline and that hero reads "Completed · Sold Out"; register
+  page renders no bar. tsc + eslint clean. Pushed to main → Vercel.
+
+### 2026-09-22 (pt. 6) — Team page + Bryce Morgan page: planned, not built
+
+- Bryce wants **every employee on ppatour.com** (travel side vs event side visible, road crew
+  included, "pride for the whole staff") and **his own story page**, and to **rank #1 for
+  "Bryce Morgan"** on both ppatour.com and brycedmorgan.com. Plan + roadmap: [`docs/TEAM.md`](docs/TEAM.md).
+- Data spine is Jackalope, not hand-typing: ADP roster (158 people, 4 BUs), Slack avatars, travel
+  assignments → "travels the tour" + events-worked count. New self-service "My card" in Jackalope
+  is the consent/bio/preferred-name step. Public JSON never carries email, manager, hire date.
+- Visibility: Basic auth (like Paddle Lab) → unlisted (like Europe) → `TEAM_PUBLIC`. Bryce's page
+  goes public first; it is the SEO entity page (Person JSON-LD mirrored on brycedmorgan.com).
+- SERP today: bare "Bryce Morgan" is a film director + two law/accounting partners; the pickleball
+  qualified queries already return his site/LinkedIn. Targets in TEAM.md §5.
+- **Bryce, same day: UPA only on ppatour.com.** PBC, Play Solutions and Pickleball Link stay off.
+  MLP-only people go on the MLP site; crossover shows on both. Export gets `brand: ppa|mlp|both`
+  (ADP can't split them). 9/23: **`docs/team/bryce-events.md`** = his 129-event tick list from the old travel workbook (20 confirmed, 7 no, 99 not on the sheet — execs self-book). Source: ziff `travel-attendance-history.js`. Agency = **Cereal Growth LLC** (lead gen, websites, SMB marketing). Wants his events-attended
+  record pulled from Jackalope — `events-history.js` has 129 events 2020→26; extend Kim's workbook
+  importer to per-person attendance. **Still open:** the Pardoe meeting in his words. Week-1 target Mon 9/29.
+
+### 2026-09-22 (pt. 5) — Header lists every Vacations trip; Punta Cana reads "Completed · Sold Out"
+
+- Bryce: clicking Vacations "just takes me directly to the Turks and Caicos one" — Cancún was invisible
+  from the nav. **Tour mega panel now has a "Pickleball Vacations" column** (`Header.tsx`) listing all
+  trips soonest-first with dates + status, past trips dimmed. **Mobile drawer** expands the single
+  "Vacations" line into "Vacations · Turks & Caicos" / "Vacations · Cancún" — open trips only.
+- Both are driven by `lib/vacations/trips.ts` (new `openTrips()`, `tripsByDate()`, `tripStatusLabel()`),
+  evaluated at render, not module load, so a trip drops out of the menu the day it ends. No trip name
+  is hard-coded in the header. Events panel's "Pickleball Vacations" BigLink still goes to `/vacations`.
+- **Punta Cana** (ended 9/12) now reads **"Completed · Sold Out"** on the calendar cards and its own hero
+  badge, per Bryce. Rule: completed + was `sold-out` → both words; completed otherwise → "Completed".
+  Verified on the dev server: `/vacations` and `/trips/cancun` show 2× "Completed · Sold Out" (calendar
+  card) + 4× "Booking Open"; Punta Cana page shows only "Completed · Sold Out". tsc + eslint clean.
+- ⚠ Deliberately NOT done: `/vacations` is still the Turks page, not an index. Lainey's collateral and
+  the Stripe/redirect table all point there. If Bryce wants a landing page, that's a separate call.
+- Committed locally, **not pushed** — Bryce's call.
+
+### 2026-09-22 (pt. 4) — Cancún (Jan 26–30, 2027, Connor Garnett) goes ON SALE beside Turks; /vacations became a template
+
+- Lainey: "Cancun, January 26-30 with Connor Garnett is good to go live" + listing doc. Live at
+  **`/vacations/trips/cancun/`**, booking through the existing `/vacations/register/?trip=cancun` →
+  `/api/vacations/checkout` path. **$3,600 single / $6,400 double ($3,200 pp)**, block **10 + 10**,
+  pay in full. Prices are in `lib/vacations/trip-config.ts` (`CANCUN`) — that IS the "Stripe update"
+  her doc asked for; checkout charges `price_data` off that config, nothing lives in the Stripe dashboard.
+- **⚠ FIRST TIME TWO TRIPS SELL AT ONCE**, so `app/vacations/page.tsx` stopped being the Turks trip and
+  became a 30-line wrapper around **`components/vacations/TripPage.tsx`** (the old JSX, verbatim, with
+  every "Grace Bay"/"islands" headline lifted into `content.copy.*`). Both pages render it; Turks copy
+  is byte-identical to before (verified on the built app: "Play the islands", "Superior rooms on Grace
+  Bay", $3,800, "Adults only" all still there). Content contract: `lib/vacations/trip-content.ts`.
+  `content.ts` still exports its named pieces (register/success/email read `trip`, `logo`) plus one
+  assembled `turkoise` object. Cancún content: `lib/vacations/trips/cancun.ts`.
+- **Two corrections to Lainey's doc, both told to her:** inclusions said "Providenciales (PLS)" — paste
+  from Turks, site says **CUN**; header said "January 26-30, **2026**" — past, site says **2027**
+  (Tue–Sat, same pattern as every trip). No "adults-only" anywhere on Cancún — Club Med Cancún is a
+  family resort and her doc never claims 18+; `trip.who` is optional and reads "All skill levels welcome".
+- Images: the Club Med approved Drive folder (13 files), pulled with `curl uc?export=download`, resized
+  to 1600px under `public/vacations/clubmed/cancun/`. Connor's headshot is a 6000×4000 Leica studio
+  shot, centre-cropped square to `pros/connor-garnett-ppa.jpg` (800²), linked to `/athletes/connor-garnett/`.
+- Register page's "← Back to the trip" now goes to **`cfg.href`** (Cancún guests were going to land on
+  Turks). Success page names "Cancún". Sitemap lists the page. Trip calendar card added (`trips.ts`).
+- **Jackalope:** `vac-plan?destination=Club Med Cancun` 404'd, so the site is on `fallbackCapacity` 10/10
+  and status null (= open) until the row exists. Seed added to ziff `api/vacations/trips.js`
+  (`cancun-2027`) but **ziff NOT pushed** — it carries an unfinished Erin Shannon commit. Lainey can also
+  just add the trip in Jackalope → Vacations with Destination exactly `Club Med Cancun`.
+- Still open: the `StickyBuyBar` cross-sell question from `docs/VACATIONS.md` now applies to two pages.
+
 ### 2026-09-22 — Jade Rau was on the roster we said she didn't exist on; half the athlete pages carried an empty heading
 
 - Wesley asked whether Jade Rau is on the site. She was not — no record in `published-athletes.json`,

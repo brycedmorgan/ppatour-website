@@ -30,7 +30,7 @@ export type TripEntry = {
 export const tripsCalendar: TripEntry[] = [
   {
     slug: "punta-cana",
-    name: "The Inaugural Trip",
+    name: "Punta Cana",
     resort: "Club Med Punta Cana",
     location: "Punta Cana, Dominican Republic",
     datesLabel: "September 8–12, 2026",
@@ -50,15 +50,49 @@ export const tripsCalendar: TripEntry[] = [
     startIso: "2026-12-08",
     endIso: "2026-12-12",
     image: "/vacations/clubmed/turkoise-aerial.jpg",
-    lineup: "Led by Hayden Patriquin · more pros announced soon",
+    lineup: "Hayden Patriquin, Aanik Lohani, Chris Crouch & Giovanna Morelli",
     status: "open",
     href: "/vacations",
+  },
+  {
+    slug: "cancun",
+    name: "Cancún",
+    resort: "Club Med Cancun",
+    location: "Cancún, Mexico",
+    datesLabel: "January 26–30, 2027",
+    startIso: "2027-01-26",
+    endIso: "2027-01-30",
+    image: "/vacations/clubmed/cancun/cancun-aerial.jpg",
+    lineup: "Led by Connor Garnett · more pros announced soon",
+    status: "open",
+    href: "/vacations/trips/cancun",
   },
 ];
 
 export function tripStatus(t: TripEntry, now = new Date()): TripStatus {
   if (new Date(`${t.endIso}T23:59:59`) < now) return "completed";
   return t.status;
+}
+
+/**
+ * Badge text for a trip. A trip that sold out and then ran says both — Bryce
+ * (9/22): Punta Cana "should say completed and sold out", not just one or the
+ * other. A completed trip that never sold out just says Completed.
+ */
+export function tripStatusLabel(t: TripEntry, now = new Date()): string {
+  const status = tripStatus(t, now);
+  if (status === "completed" && t.status === "sold-out") return "Completed · Sold Out";
+  return STATUS_META[status].label;
+}
+
+/** Trips guests can still book — what the header menu lists first. */
+export function openTrips(now = new Date()): TripEntry[] {
+  return tripsCalendar.filter((t) => tripStatus(t, now) === "open");
+}
+
+/** Every trip, soonest first, for menus that also show past trips. */
+export function tripsByDate(): TripEntry[] {
+  return [...tripsCalendar].sort((a, b) => a.startIso.localeCompare(b.startIso));
 }
 
 export const STATUS_META: Record<

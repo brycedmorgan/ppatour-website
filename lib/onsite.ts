@@ -100,7 +100,34 @@ const ON_SITE_BY_SLUG: Record<string, OnSiteInfo> = {
     venueMapWidth: 2000,
     venueMapHeight: 2667,
   },
+  // Las Vegas Open — Sep 28–Oct 4, Darling Tennis Center. Bryan Renahan, 9/22,
+  // `vegas-open-2026-site-map-kiosk-v3.png` — the SAME kiosk template again
+  // (2593×3457 against Cary's and Mesa's 2592×3456), so it takes the same
+  // encode: 2000px webp, portrait, `object-contain` with no crop.
+  //
+  // ⚠ NO CROP, THOUGH THIS ONE CARRIES THE MOST WHITESPACE OF THE THREE. Its
+  // artwork is 82% of the canvas height where Mesa's is 89% and Cary's is 100%,
+  // so trimming to the ink box is the tidy-looking move. It would also make this
+  // stop's map a 0.91:1 where the other two are 0.75:1 — the same slot rendering
+  // a visibly different shape per stop, for no reason a reader could see. And it
+  // buys no legibility: the art already spans 99% of the WIDTH and the column is
+  // width-driven, so all the whitespace costs is empty bands above and below.
+  // Supplied art ships as supplied.
+  //
+  // ⚠ 2000×2666, NOT 2667 LIKE THE OTHER TWO. One pixel, and it is why the two
+  // renderers no longer hardcode the pair.
+  //
+  // ⚠ ON-SITE MAP, NOT THE PARKING MAP. Dana Summers' three-lot map shipped
+  // 9/22 and lives on the parking section in lib/event-guides.ts. A spectator
+  // looking for court 22 and a driver looking for the tow-away loop are asking
+  // different questions.
+  "rate-las-vegas-open": {
+    venueMapUrl: "/ppa/venue-maps/darling-tennis-center.webp",
+    venueMapWidth: 2000,
+    venueMapHeight: 2666,
+  },
 };
+
 
 export function onSiteFor(slug: string): OnSiteInfo {
   return ON_SITE_BY_SLUG[slug] ?? {};
@@ -109,4 +136,24 @@ export function onSiteFor(slug: string): OnSiteInfo {
 /** Does this stop have anything on-site to show beyond parking and schedule? */
 export function hasOnSiteInfo(slug: string): boolean {
   return Object.values(onSiteFor(slug)).some((v) => typeof v === "string" && v.trim() !== "");
+}
+
+/**
+ * The grounds map with its dimensions, or null — the one way to read it.
+ *
+ * ⚠ IT EXISTS BECAUSE THE "REQUIRED ALONGSIDE" NOTE ON `venueMapWidth` WAS A
+ * COMMENT AND NOTHING MORE, AND BOTH RENDERERS IGNORED IT. The event page
+ * hardcoded 2000×2667 — right only because the first two maps happened to be
+ * exactly that — and the on-site /today screen hardcoded 1600×1200, a 4:3
+ * LANDSCAPE reservation for three maps that are all 3:4 portrait. That is
+ * precisely the squash the note warns about, already shipped on two stops.
+ * Returning the three together is what stops a fourth stop's landscape map
+ * being squashed by a fourth copy of the same mistake.
+ */
+export function venueMapFor(
+  slug: string,
+): { url: string; width: number; height: number } | null {
+  const o = onSiteFor(slug);
+  if (!o.venueMapUrl || !o.venueMapWidth || !o.venueMapHeight) return null;
+  return { url: o.venueMapUrl, width: o.venueMapWidth, height: o.venueMapHeight };
 }

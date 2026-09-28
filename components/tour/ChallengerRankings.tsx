@@ -7,14 +7,25 @@ import { matchesPlayerName } from "@/lib/ranking-filters";
 /**
  * PPA Challenger Series rankings — five divisions, one board each.
  *
- * ⚠ THE DATA IS A SNAPSHOT, NOT A FEED. `lib/data/challenger-rankings.json`
- * was captured from ppachallenger.com/rankings (five hand-typed TablePress
- * tables, "Last Updated: July 27th, 2026") on 2026-09-18, when that site was
- * folded into this one. Nothing refreshes it. The date it carries is printed
- * on the page so nobody reads a stale board as current. The live source is the
- * open question in docs/CHALLENGER.md §7 — `partner_rankings` has no Challenger
- * scope that anyone has confirmed, so until it does, updating this board means
- * replacing the JSON.
+ * ⚠ THE DATA IS A SNAPSHOT, NOT A FEED. `lib/data/challenger-rankings.json` is
+ * the event team's own points workbook — the Google Sheet "(UPDATED) CHALLENGER
+ * TOUR POINTS 2026 SEASON" (Jacob Guidry), sent by Amie Feliza through the
+ * website request form on 2026-09-22. Nothing refreshes it. The date it carries
+ * is printed on the page so nobody reads a stale board as current, and updating
+ * it means replacing the JSON. A live source is still the open question in
+ * docs/CHALLENGER.md §7 — `partner_rankings` has no confirmed Challenger scope.
+ *
+ * ⚠ IT SUPERSEDES THE SCRAPE, AND THE TWO DISAGREE BY MORE THAN A WEEK'S PLAY.
+ * The first snapshot (2026-09-18) was five hand-typed TablePress tables read off
+ * ppachallenger.com, "Last Updated: July 27th, 2026". This one is the workbook
+ * those tables were typed from, eight weeks later, so names move in both
+ * directions: the rankings run on a 52-week window, and players who sign with
+ * the Tour come off the board entirely. Do not reconcile a missing player
+ * against the old file — it is not a more complete list, it is an older one.
+ *
+ * ⚠ RANKS ARE COMPETITION-RANKED AND CAN REPEAT. Men's Doubles ties at No. 1
+ * (both on 475), so the board reads 1, 1, 3. The row key is rank + name for
+ * exactly that reason; keying on rank alone would drop one of them.
  *
  * Same controls as JuniorRankings (division picker, name search, top-25
  * preview, "found in other divisions" for the wrong-board dead end), rows are

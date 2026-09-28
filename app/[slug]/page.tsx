@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticleView } from "@/components/news/ArticleView";
 import { getNewsDetail, rootNews } from "@/lib/news";
+import { pageTitle, seoDescription } from "@/lib/seo-text";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -53,8 +54,11 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const title = seo?.title?.trim() || card.title;
   const description = seo?.description?.trim() || card.dek;
   return {
-    title: card.title,
-    description,
+    // `pageTitle` keeps the layout's " · Carvana PPA Tour" template while the
+    // result fits in 60 chars, then falls back to " · PPA Tour", then to the
+    // bare headline — 609 of the 822 legacy titles were over 60 (9/23 crawl).
+    title: pageTitle(card.title),
+    description: seoDescription(description),
     // No `images` here: the folder's file-based opengraph-image.tsx generates
     // the branded article card, and Next appends it to whatever metadata sets —
     // a raw `images` entry produced a second, competing og:image tag.

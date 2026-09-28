@@ -43,6 +43,11 @@ const PARTNER_HOSTS = [
   "ppatour.com.au",
   // PPA Tour Canada, same reason again (Wesley, 9/1).
   "ppatourcanada.ca",
+  // Proton's own shop, an Official Platinum Partner, from the Project Coyote
+  // post in the newsroom. That link plus its PPA discount code is the only
+  // conversion on that page, so without this line the one thing the post is
+  // asking for would be the single outbound commerce click nothing counts.
+  "protonsports.com",
   // PPA Pickleball Tour 2025 storefronts (/game). The click out is the only
   // thing measurable — the purchase happens on the platform.
   "store.steampowered.com",

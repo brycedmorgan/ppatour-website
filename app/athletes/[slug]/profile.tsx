@@ -39,6 +39,8 @@ import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 import { isUnlistedEuropeAthlete } from "@/lib/europe-visibility";
 import { europeRobots } from "@/lib/europe-launch";
 import { europeRoster } from "@/lib/europe-roster";
+import { BRAND_SUFFIX, fitTitle, seoDescription, SHORT_SUFFIX } from "@/lib/seo-text";
+import { generatedBio, genericBio, THIN_BIO_CHARS } from "@/lib/athlete-bio";
 
 /**
  * Equipment is back ON, now that it has a source worth publishing (Wesley,
@@ -117,12 +119,15 @@ async function loadAthlete(slug: string) {
   const divisions = published?.divisions.length
     ? published.divisions
     : (curated?.divisions ?? []);
+  /**
+   * ⚠ SPLIT ON BLANK LINES. `Athlete.bio` is one string, and the Europe roster
+   * joins Catie's paragraphs with "\n\n" (lib/athletes.ts) so all of them reach
+   * the page — until 9/24 only `p.bio[0]` did, which is how James Ling's page
+   * showed one of his three paragraphs and read as thin.
+   */
   const bio: string[] = published?.bio.length
     ? published.bio
-    : [
-        curated?.bio ??
-          `${name} is a professional pickleball player ranked among the world's best in the Carvana PPA Tour's World Pickleball Rankings.`,
-      ];
+    : (curated?.bio || genericBio(name)).split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
 
   return {
     slug,
@@ -225,7 +230,18 @@ function athleteTitle(a: {
         : a.rank > 10
           ? "Pro Pickleball Player, Ranking & Stats"
           : "Pro Pickleball Player Profile";
-  return `${a.name} — ${descriptor} · Carvana PPA Tour`;
+  return `${a.name} — ${descriptor}`;
+}
+
+/**
+ * The suffix a profile title carries, sized to fit. 216 of 217 athlete titles
+ * were over 60 chars in the 9/23 crawl, every one because of the 19-char brand
+ * suffix — so the suffix gives way first (" · PPA Tour"), then drops, and the
+ * name + descriptor always survive intact. See lib/seo-text.ts.
+ */
+const EUROPE_SUFFIX = " · PPA Tour Europe";
+function fitAthleteTitle(base: string, europe: boolean): string {
+  return europe ? fitTitle(base, [EUROPE_SUFFIX]) : fitTitle(base, [BRAND_SUFFIX, SHORT_SUFFIX]);
 }
 
 function initials(name: string): string {
@@ -276,12 +292,12 @@ export async function athleteMetadata(
    * `absolute` — this title carries its own brand suffix, so it must NOT also
    * get the root layout's `%s · Carvana PPA Tour` template appended.
    */
-  const title = europe
-    ? athleteTitle(a).replace(/ · Carvana PPA Tour$/, " · PPA Tour Europe")
-    : athleteTitle(a);
+  const title = fitAthleteTitle(athleteTitle(a), europe);
   return {
     title: { absolute: title },
-    description,
+    // 155 on a word boundary — 63 profiles were over 160 (9/23 crawl). The
+    // OG description below keeps the full sentence; social cards show more.
+    description: seoDescription(description),
     // The Europe mount points search engines at the one real profile.
     ...(europe && { alternates: { canonical: `/athletes/${a.slug}` } }),
     /**
@@ -626,6 +642,47 @@ export async function AthleteProfile({
 
   const gender = genderFromDivisions(a.divisions ?? []);
 
+  /**
+   * Thin-bio backfill (docs/SEO.md item 11). When the sourced bio is missing
+   * or under {@link THIN_BIO_CHARS} — 15 profiles at the 9/23 crawl, mostly
+   * Europe signings whose sheet row is empty — a paragraph is generated from
+   * the facts this page ALREADY renders (rank chip, Quick Info, medal strip,
+   * In the Bag). Every clause is conditional on its field; see lib/athlete-bio.
+   * The generic "ranked among the world's best" placeholder is dropped once a
+   * fact-based opening exists, so an unranked pro's page no longer claims it.
+   */
+  const sourcedBio = bioParagraphs.filter((p) => p.trim());
+  const sourcedText = sourcedBio.join(" ");
+  const isPlaceholder = sourcedBio.length === 1 && sourcedBio[0] === genericBio(a.name);
+  const backfill =
+    isPlaceholder || sourcedText.length < THIN_BIO_CHARS
+      ? generatedBio(
+          {
+          name: a.name,
+          country: a.country,
+          divisions: a.divisions,
+          turnedPro: stats?.turnedPro ?? a.turnedPro,
+          resides: stats?.hometown ?? qi?.resides,
+          plays: stats?.handed ?? qi?.plays,
+          age: ageVal,
+          rank: a.rank,
+          board: boardLabel,
+          points: a.points,
+          medals: stats?.medals
+            ? {
+                gold: stats.medals.total.gold,
+                silver: stats.medals.total.silver,
+                semifinals: stats.medals.total.semifinals,
+              }
+            : null,
+          paddle: SHOW_EQUIPMENT ? effPaddle : null,
+          },
+          // A real (if short) bio already introduces the pro — add facts under it.
+          { skipIdentity: !isPlaceholder },
+        )
+      : [];
+  const profileParagraphs = [...(isPlaceholder ? [] : sourcedBio), ...backfill];
+
   return (
     <>
       <script
@@ -647,7 +704,7 @@ export async function AthleteProfile({
             url: `${SITE_URL}/athletes/${a.slug}`,
             // Reconciled, not raw — this is structured data Google reads, so it
             // must not publish a title count the page itself contradicts.
-            description: bioParagraphs.join(" "),
+            description: profileParagraphs.join(" "),
             /**
              * Entity attributes (8/20). Google reconciles a person across the web
              * on facts like these, and we were publishing a Person node with a
@@ -709,6 +766,13 @@ export async function AthleteProfile({
        * this repo has already shipped one fabricated `InStock` offer off a
        * fallback number (7/31). Name, brand, image and the page we send buyers
        * to are all facts we hold; that is what goes in.
+       *
+       * 9/24: typed as `Thing` with `additionalType` Product, not `@type: Product`.
+       * Google's Rich Results Test marks a Product without offers/review/rating
+       * as INVALID ("Product snippets: 1 invalid item") and that lands in the
+       * Search Console error report for every athlete page. `Thing` keeps the
+       * athlete → paddle → brand graph for engines that read schema directly and
+       * keeps Google's merchant validator out of a page that sells nothing.
        */}
       {gear && (
         <script
@@ -716,7 +780,8 @@ export async function AthleteProfile({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "Product",
+              "@type": "Thing",
+              additionalType: "https://schema.org/Product",
               "@id": paddleNodeId,
               name: gear.paddle,
               category: "Pickleball Paddle",
@@ -922,7 +987,7 @@ export async function AthleteProfile({
                 About {a.name}
               </h2>
               <div className="mt-4 space-y-4 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
-                {bioParagraphs.map((para, i) => (
+                {profileParagraphs.map((para, i) => (
                   <p key={i}>{para}</p>
                 ))}
               </div>

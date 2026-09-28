@@ -36,9 +36,14 @@
  * Caching follows lib/rankings-api.ts, for the reason recorded there — we were
  * rate-limited off this exact endpoint on 7/31, and a raw loop over these six
  * boards still 429s today (it did while this was being written). One page size,
- * Next Data Cache 24h tagged {@link RANKINGS_CACHE_TAG}, plus a module memo and
- * in-flight map to collapse the parallel page renders of a single build into one
- * call.
+ * the durable cache in lib/pb-cache.ts for 24h tagged {@link RANKINGS_CACHE_TAG},
+ * plus a module memo and in-flight map to collapse the parallel page renders of a
+ * single build into one call.
+ *
+ * ⚠ THE DURABLE CACHE RATHER THAN NEXT'S, BECAUSE A NEXT ENTRY DIES WITH THE
+ * DEPLOYMENT (9/23). The board URL is day-scoped (`rank=<today>`), so the key
+ * rolls itself over at midnight UTC either way — what changes is that a
+ * redeploy at 3pm no longer re-reads all six boards.
  *
  * ⚠ NOTHING PURGES THAT TAG ON A SCHEDULE, AND IT DOES NOT NEED TO. The board
  * URL carries `rank=<today>`, so it rolls itself over at midnight UTC. It used
@@ -48,7 +53,7 @@
  * Server-only (reads the token). Never throws.
  */
 import { RANKINGS_CACHE_TAG } from "@/lib/cache-tags";
-import { pbGetJson } from "@/lib/pb-fetch";
+import { pbCachedJson } from "@/lib/pb-cache";
 
 /** The senior league. 2 is pro, 5 is junior. */
 const SENIOR_BRACKET = 3;
@@ -67,7 +72,6 @@ const PAGE_SIZE = 250;
 /** Runaway guard. The biggest board (men's doubles) reports 259. */
 const MAX_PAGES = 6;
 const REVALIDATE_SECONDS = 60 * 60 * 24;
-const TIMEOUT_MS = 8000;
 const MEMO_TTL_MS = 6 * 60 * 60 * 1000;
 
 export type SeniorDivision = {
@@ -215,10 +219,11 @@ async function fetchPage(d: SeniorDivision, page: number): Promise<RawPage | nul
     rank: new Date().toISOString().slice(0, 10),
   });
 
-  const json = (await pbGetJson(
+  const json = (await pbCachedJson(
     `${baseUrl}/v2/data/partner_rankings?${params}`,
-    { "PB-API-TOKEN": token },
-    { timeoutMs: TIMEOUT_MS, revalidate: REVALIDATE_SECONDS, tags: [RANKINGS_CACHE_TAG] },
+    REVALIDATE_SECONDS,
+    RANKINGS_CACHE_TAG,
+    token,
   )) as { total_records?: number; results?: { player_rankings?: ApiSeniorPlayer[] } } | null;
   if (!json) return null;
 

@@ -17,6 +17,7 @@ stop working if someone changes it without reading.
 | `/vacations/` | The trip — hero, itinerary, stay, pros, pricing, calendar | Static, ISR |
 | `/vacations/register/` | Traveler form → Stripe Checkout | `force-dynamic`, noindex |
 | `/vacations/success/` | Post-payment confirmation | `force-dynamic`, noindex |
+| `/vacations/trips/cancun/` | Cancún, Jan 26–30 2027 — ON SALE (same template as `/vacations`) | Static, ISR |
 | `/vacations/trips/punta-cana/` | Sept 2026 guest archive | Static, noindex |
 | `/api/vacations/checkout` | Creates the Stripe Checkout Session | Node runtime |
 | `/api/vacations/availability` | Rooms left (count-only, public) | Node runtime |
@@ -221,6 +222,43 @@ levels, and that is the part the resort needs.
   writes the rows without touching email.
 
 ---
+
+## Two trips on sale at once (since 2026-09-22)
+
+`/vacations` and `/vacations/trips/cancun/` both render
+`components/vacations/TripPage.tsx`. A trip is three files:
+
+1. **Content** — `lib/vacations/trips/<slug>.ts` exporting a `TripContent`
+   (`lib/vacations/trip-content.ts`). Turks is the `turkoise` export of
+   `content.ts`, which is still the only home for that trip's facts.
+2. **Config** — a `TripConfig` in `trip-config.ts`: slug, `href`, the exact
+   `destination` string Jackalope/Stripe key on, **prices** (the checkout
+   charges these), fallback capacity, waitlist copy.
+3. **Page** — `app/vacations/trips/<slug>/page.tsx`, ~30 lines: metadata +
+   `<TripPage content cfg availability>`.
+
+Plus a card in `trips.ts` (the calendar), a line in `app/sitemap.ts`, a branch
+in `tripDestinationForPath()` so the funnel beacon files views under the right
+trip, and a `vac_trips` row in Jackalope with that exact destination string —
+until that row exists the site runs on `fallbackCapacity` and treats the trip
+as open.
+
+**The header reads `trips.ts` too (since 9/22).** The Tour mega panel has a
+"Pickleball Vacations" column listing every trip, soonest first, with dates
+and status; the mobile drawer lists one "Vacations · <name>" line per trip
+that is on sale. Nothing in `Header.tsx` names a trip, so a new card in
+`trips.ts` is all it takes. Status labels come from `tripStatusLabel()`: a
+sold-out trip whose end date has passed reads **"Completed · Sold Out"**
+(Bryce, 9/22) on the calendar cards, the header, and the Punta Cana hero.
+`/vacations` itself still IS the Turks page — there is no index page.
+
+**Sticky trip bar (`components/vacations/TripNav.tsx`, since 9/22 pt. 6).**
+Mounted in `app/vacations/layout.tsx`, so every Vacations page carries a bar
+directly under the site header: each trip's name, dates and status, current
+page underlined. Bryce: "I have to scroll all the way to the bottom to find
+anything on Punta Cana." Same `trips.ts` source. `top-16` matches the 64px
+Header the sticky chrome collapses to on scroll — if `Header.tsx` changes
+height, change that. Hidden on `/register` and `/success` (checkout funnel).
 
 ## Things that will bite you
 

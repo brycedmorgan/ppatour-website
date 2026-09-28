@@ -1,5 +1,122 @@
 [
  {
+  "endDate": "2026-09-20",
+  "startDate": "2026-09-14",
+  "name": "Veolia Arizona Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Christopher Haworth",
+    "runnerUp": "Federico Staksrud",
+    "third": ""
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Kate Fahey",
+    "third": ""
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Andrei Daescu / Christian Alshon",
+    "runnerUp": "Yuta Funemizu / Nicolas Acevedo",
+    "third": ""
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Parris Todd / Rachel Rohrabacher",
+    "runnerUp": "Meghan Dizon / Tyra Hurricane Black",
+    "third": ""
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Rachel Rohrabacher / Christian Alshon",
+    "third": ""
+   }
+  ],
+  "uuid": "62c01642-1bb2-4f9a-9998-599f8fdefe5c",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-veolia-arizona-open"
+ },
+ {
+  "endDate": "2026-09-13",
+  "startDate": "2026-09-09",
+  "name": "Leapmotor Kuala Lumpur Cup",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Tama Shimabukuro",
+    "runnerUp": "Noe Khlif",
+    "third": ""
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Kaitlyn Christian",
+    "runnerUp": "Brooke Buckner",
+    "third": ""
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Gabriel Tardio / Noe Khlif",
+    "runnerUp": "Augustus Ge / Len Yang",
+    "third": ""
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Jessie Irvine / Alix Truong",
+    "runnerUp": "Danni-Elle Townsend / Sahra Dennehy",
+    "third": ""
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Jessie Irvine / Gabriel Tardio",
+    "runnerUp": "Danni-Elle Townsend / Joey Wild",
+    "third": ""
+   }
+  ],
+  "uuid": "f06b19fe-9966-4e2b-ad6b-083544b3be1a",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-asia-1000-leapmotor-kuala-lumpur-cup-2026"
+ },
+ {
+  "endDate": "2026-09-06",
+  "startDate": "2026-08-31",
+  "name": "Veolia Pickleball National Championships",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Hunter Johnson",
+    "runnerUp": "Federico Staksrud",
+    "third": ""
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Kate Fahey",
+    "third": ""
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Gabriel Tardio",
+    "runnerUp": "Andrei Daescu / Christian Alshon",
+    "third": ""
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Jorja Johnson / Tyra Hurricane Black",
+    "third": ""
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Bright / Hayden Patriquin",
+    "runnerUp": "Jorja Johnson / JW Johnson",
+    "third": ""
+   }
+  ],
+  "uuid": "b177c3be-53a6-4df8-b1cb-94cb5b0f97d1",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-veolia-pickleball-national-championships"
+ },
+ {
   "endDate": "2026-05-10",
   "startDate": "2026-05-04",
   "name": "PPA Finals",
@@ -1053,45 +1170,6 @@
   "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-proton-tucson-open"
  },
  {
-  "endDate": "2025-02-02",
-  "startDate": "2025-01-30",
-  "name": "Proton Australia Pickleball Open",
-  "divisions": [
-   {
-    "division": "Men's Singles",
-    "champion": "Gabriel Tardio",
-    "runnerUp": "Tyson McGuffin",
-    "third": "Quang Duong"
-   },
-   {
-    "division": "Women's Singles",
-    "champion": "Kaitlyn Christian",
-    "runnerUp": "Somer Dalla-Bona",
-    "third": "Andie Dikosavljevic"
-   },
-   {
-    "division": "Men's Doubles",
-    "champion": "Tyson McGuffin / Gabriel Tardio",
-    "runnerUp": "Quang Duong / CJ Klinger",
-    "third": "Collin Johns / Jay Devilliers"
-   },
-   {
-    "division": "Women's Doubles",
-    "champion": "Vivian Glozman / Lacy Schneemann",
-    "runnerUp": "Allyce Jones / Tyra Hurricane Black",
-    "third": "Jessie Irvine / Alix Truong"
-   },
-   {
-    "division": "Mixed Doubles",
-    "champion": "Lacy Schneemann / Tyson McGuffin",
-    "runnerUp": "Jessie Irvine / Gabriel Tardio",
-    "third": "Allyce Jones / Jay Devilliers"
-   }
-  ],
-  "uuid": "a26c60b0-a00a-49cd-b93e-9fa2ac32f433",
-  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-australia-pickleball-open"
- },
- {
   "endDate": "2025-01-12",
   "startDate": "2025-01-06",
   "name": "The Masters",
@@ -1259,22 +1337,10 @@
     "third": "Hunter Johnson"
    },
    {
-    "division": "Women's Singles",
-    "champion": "Anna Leigh Waters",
-    "runnerUp": "Kate Fahey",
-    "third": "Salome Devidze"
-   },
-   {
     "division": "Men's Doubles",
     "champion": "Riley Newman / Hayden Patriquin",
     "runnerUp": "Pablo Tellez / Dekel Bar",
     "third": "Matt Wright / Federico Staksrud"
-   },
-   {
-    "division": "Women's Doubles",
-    "champion": "Rachel Rohrabacher / Anna Bright",
-    "runnerUp": "Anna Leigh Waters / Catherine Parenteau",
-    "third": "Allyce Jones / Tyra Hurricane Black"
    },
    {
     "division": "Mixed Doubles",
@@ -4157,6 +4223,12 @@
     "champion": "Simone Jardim",
     "runnerUp": "Irina Tereschenko",
     "third": "Catherine Parenteau"
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Ben Johns / Matt Wright",
+    "runnerUp": "Tyson McGuffin / Riley Newman",
+    "third": "Steve Deakin / Joey Farias"
    },
    {
     "division": "Women's Doubles",

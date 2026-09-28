@@ -90,7 +90,7 @@ const STATIC_PAGES: { title: string; meta: string; href: string; extra?: string 
   { title: "Host a Private Event", meta: "Corporate pro-ams and hospitality", href: "/about/private-events", extra: "corporate pro-am hospitality" },
   { title: "Ambassador Program", meta: "Represent the tour in your region", href: "/about/ambassadors" },
   { title: "Careers", meta: "Work at the PPA Tour", href: "/about/careers", extra: "jobs hiring" },
-  { title: "Player Handbook", meta: "Pro and amateur rule reference", href: "/about/player-handbook", extra: "rules code of conduct" },
+  { title: "Player Handbook", meta: "PPA Tournament Handbook", href: "/about/player-handbook", extra: "rules code of conduct withdrawal wild card seeding qualifying paddle testing fines betting" },
   { title: "Integrity Reporting", meta: "Confidential reporting", href: "/about/integrity" },
   { title: "Privacy Policy", meta: "How we handle your data", href: "/about/privacy" },
   { title: "Terms of Use", meta: "Site terms", href: "/about/terms" },

@@ -45,7 +45,7 @@ export default async function VacationsRegisterPage({
       <section className="bg-ppa-navy text-white">
         <div className="mx-auto w-full max-w-6xl px-4 pb-10 pt-24">
           <Link
-            href="/vacations/"
+            href={cfg.href}
             className="text-[11px] font-bold uppercase tracking-[0.14em] text-white/50 transition-colors hover:text-white"
           >
             ← Back to the trip
@@ -88,7 +88,7 @@ export default async function VacationsRegisterPage({
               </a>
               <p className="mt-6">
                 <Link
-                  href="/vacations/"
+                  href={cfg.href}
                   className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy/50 hover:text-ppa-navy"
                 >
                   ← Back to the trip

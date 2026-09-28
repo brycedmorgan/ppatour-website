@@ -13,6 +13,7 @@ import {
   eventHref,
 } from "@/lib/placeholder-data";
 import { tourPrograms } from "@/lib/tour-programs";
+import { openTrips, tripsByDate, tripStatus, tripStatusLabel } from "@/lib/vacations/trips";
 
 type SubLink = { label: string; href: string };
 type NavItem = {
@@ -41,6 +42,7 @@ const NAV_ITEMS: NavItem[] = [
       { label: "Senior Open", href: "/tour/senior" },
       { label: "State Championships", href: "/tour/state-championships" },
       { label: "PPA Camps", href: "/tour/camps" },
+      // Expanded at render into one line per bookable trip — see vacationSubLinks().
       { label: "Vacations", href: "/vacations" },
       { label: "Hospitality", href: "/tour/hospitality" },
     ],
@@ -74,6 +76,23 @@ const NAV_ITEMS: NavItem[] = [
     external: true,
   },
 ];
+
+/**
+ * Vacations in the nav lists every trip that is on sale, not just the one at
+ * /vacations. Bryce (9/22): clicking "Vacations" went straight to Turks &
+ * Caicos with no way to see Cancún was also open. Source of truth is the trip
+ * calendar (lib/vacations/trips.ts) — add a trip there and it appears here.
+ * Evaluated at render, not module load, so a trip drops out the day it ends.
+ */
+function vacationSubLinks(): SubLink[] {
+  const open = openTrips();
+  if (open.length === 0) return [{ label: "Vacations", href: "/vacations" }];
+  return open.map((t) => ({ label: `Vacations · ${t.name}`, href: t.href }));
+}
+
+function expandSubmenu(submenu: SubLink[]): SubLink[] {
+  return submenu.flatMap((s) => (s.href === "/vacations" ? vacationSubLinks() : [s]));
+}
 
 /* ── Mega-panel building blocks ─────────────────────────────── */
 
@@ -285,8 +304,9 @@ function MegaPanelContent({
   }
 
   if (menu === "Tour") {
+    const trips = tripsByDate();
     return (
-      <div className="grid grid-cols-[1.6fr_20rem] gap-10">
+      <div className="grid grid-cols-[1.4fr_1fr_20rem] gap-10">
         <div className={col} style={delay(0)}>
           <PanelEyebrow>Beyond the Pro Draw</PanelEyebrow>
           <div className="mt-4 grid grid-cols-2 gap-x-10 gap-y-4">
@@ -302,6 +322,25 @@ function MegaPanelContent({
           </div>
         </div>
         <div className={col} style={delay(1)}>
+          <PanelEyebrow>Pickleball Vacations</PanelEyebrow>
+          <ul className="mt-4 space-y-3.5">
+            {trips.map((t) => {
+              const status = tripStatus(t);
+              const past = status === "completed";
+              return (
+                <li key={t.slug} className={past ? "opacity-60" : undefined}>
+                  <SmallLink
+                    href={t.href}
+                    label={t.resort}
+                    detail={`${t.datesLabel} · ${tripStatusLabel(t)}`}
+                    onNavigate={onNavigate}
+                  />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <div className={col} style={delay(2)}>
           <PanelEyebrow>Get On Court</PanelEyebrow>
           <div className="mt-4">
             <FeatureCard
@@ -655,7 +694,7 @@ export function Header() {
                   </button>
                   {expanded && (
                     <ul className="bg-white/5 pb-2">
-                      {item.submenu.map((s) => (
+                      {expandSubmenu(item.submenu).map((s) => (
                         <li key={s.href}>
                           <Link
                             href={s.href}

@@ -30,7 +30,7 @@ import { Countdown } from "@/components/motion/Countdown";
 import { getBroadcast } from "@/lib/broadcast";
 import { channelsByDay, watchCardsFor, weekdayOf } from "@/lib/event-watch";
 import { getEventGuide, parkingFor, parkingText } from "@/lib/event-guides";
-import { onSiteFor } from "@/lib/onsite";
+import { venueMapFor } from "@/lib/onsite";
 import { spotlightFor } from "@/lib/event-spotlight";
 import { ParkingDetails } from "@/components/events/ParkingDetails";
 import {
@@ -44,7 +44,12 @@ import {
   sideEventsFor,
 } from "@/lib/event-schedule";
 import { challengerShowdown, showdownDaysFor } from "@/lib/challenger-showdown";
-import { orderOfPlayByDay, proDayLabel } from "@/lib/order-of-play";
+import { orderOfPlayByDay, playDays, proDayLabel } from "@/lib/order-of-play";
+import {
+  LiveEventBadge,
+  LiveEventKicker,
+  LiveEventStatusText,
+} from "@/components/live/LiveEventStatus";
 import { stageScheduleFor } from "@/lib/event-stage";
 import { StageSchedule } from "@/components/events/StageSchedule";
 import { getEvents } from "@/lib/events-api";
@@ -71,6 +76,7 @@ import { buildTicketGrid } from "@/lib/ticket-grid";
 import { TicketGrid } from "@/components/events/TicketGrid";
 import { buildEventJsonLd } from "@/lib/event-schema";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
+import { pageTitle, seoDescription } from "@/lib/seo-text";
 
 type Params = { params: Promise<{ year: string; slug: string }> };
 
@@ -172,11 +178,18 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   // metadata. Setting a raw off-ratio photo here emitted a SECOND og:image that
   // competed with (and on most scrapers preceded) the designed card. Let the
   // file convention be the single source of the share card.
+  /**
+   * The year is in the title because the same stop has a page per season —
+   * Newport Beach 2025 and 2027 both rendered "Newport Beach Open · Carvana PPA
+   * Tour" (9/23 crawl), two URLs with one title competing for the same query.
+   * `pageTitle` then sizes the brand suffix to fit 60 chars.
+   */
+  const title = `${t.name} ${eventYear(t)}`;
   return {
-    title: t.name,
-    description,
+    title: pageTitle(title),
+    description: seoDescription(description),
     openGraph: {
-      title: `${t.name} — Carvana PPA Tour`,
+      title: `${title} — Carvana PPA Tour`,
       description,
     },
     twitter: { card: "summary_large_image" },
@@ -294,6 +307,8 @@ export default async function EventPage({ params }: Params) {
   // The same order of play, keyed by date, for the scores board to open on —
   // see the `roundByDay` prop on ScoresBoard.
   const roundByDay = orderOfPlayByDay(t.slug, t.startDate, t.endDate);
+  // The same order of play with first-serve times, for the live status copy.
+  const liveDays = playDays(t.slug, t.startDate, t.endDate);
   const broadcast = getBroadcast(t.slug);
   // The channels THIS event is actually on — see lib/event-watch.ts.
   const watchCards = watchCardsFor(t.slug);
@@ -518,17 +533,14 @@ export default async function EventPage({ params }: Params) {
    * file. Absent on every stop whose owner has not supplied one, and the venue
    * slot falls back to the aerial photo it has always used.
    */
-  const onsite = onSiteFor(t.slug);
-  const venueMapUrl = onsite.venueMapUrl;
+  const venueMap = venueMapFor(t.slug);
   /**
    * A portrait map gets a NARROWER column than the landscape aerial. At the
    * 1.5fr the photo uses, a 3:4 map runs ~890px tall and strands the essentials
    * column beside a wall of green. Read off the supplied dimensions rather than
    * hardcoded, so whichever orientation the ops team sends next lays out sanely.
    */
-  const mapIsPortrait =
-    Boolean(venueMapUrl) &&
-    (onsite.venueMapHeight ?? 0) > (onsite.venueMapWidth ?? 0);
+  const mapIsPortrait = venueMap !== null && venueMap.height > venueMap.width;
 
   /**
    * One featured on-site happening, pulled from its own announcement article.
@@ -629,7 +641,20 @@ export default async function EventPage({ params }: Params) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildEventJsonLd(t, { onSale, description })),
+          __html: JSON.stringify(
+            buildEventJsonLd(t, {
+              onSale,
+              description,
+              // Top eight seeds once the pro draw is published; nothing before.
+              performers: field.published
+                ? field.players
+                    .filter((p) => p.seed != null)
+                    .sort((a, b) => (a.seed ?? 99) - (b.seed ?? 99))
+                    .slice(0, 8)
+                    .map((p) => ({ name: p.name, url: playerProfileHref(p.name) }))
+                : [],
+            }),
+          ),
         }}
       />
       <script
@@ -672,6 +697,19 @@ export default async function EventPage({ params }: Params) {
               <>
                 <span className="text-white/25">/</span>
                 <span className="text-ppa-yellow">Final</span>
+              </>
+            ) : isTournamentLive(t) ? (
+              <>
+                {/* ⚠ During the event the countdown below would clamp at
+                    "0D : 0H : 0M : 0S". This says what is actually happening —
+                    "Live Now · Matches in progress" only while a match is on
+                    court, first serve / up next / play resumes otherwise
+                    (Wesley, 9/28). Mirrored in NationalsLive. */}
+                <LiveEventBadge days={liveDays} />
+                <span className="text-white/25">/</span>
+                <span className="text-ppa-yellow">
+                  <LiveEventStatusText days={liveDays} />
+                </span>
               </>
             ) : (
               <>
@@ -861,12 +899,8 @@ export default async function EventPage({ params }: Params) {
       {showLiveScores && uuid && (
         <section id="results" className="scroll-mt-[120px] bg-ppa-navy">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
-            <div className="flex items-center gap-2.5">
-              <span className="h-2 w-2 animate-pulse rounded-full bg-ppa-live" />
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
-                Live Now
-              </p>
-            </div>
+            {/* "Live Now" only while a match is on court. */}
+            <LiveEventKicker days={liveDays} />
             <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
               {t.name} Live Scores
             </h2>
@@ -1630,7 +1664,7 @@ export default async function EventPage({ params }: Params) {
             {/* The ops team's grounds map where one exists, otherwise a real
                 aerial of the venue (gallery photo → event hero). */}
             <div data-reveal className="self-start">
-              {venueMapUrl ? (
+              {venueMap ? (
                 /* ⚠ A MAP GETS THE OPPOSITE TREATMENT TO THE AERIAL. No
                    `object-cover`, no Ken Burns pan and no bottom scrim: each
                    of those crops, drifts or covers part of the artwork, and on
@@ -1639,7 +1673,7 @@ export default async function EventPage({ params }: Params) {
                    links to the full file, because the point of a grounds map
                    is pinch-zooming it at the gate. */
                 <a
-                  href={venueMapUrl}
+                  href={venueMap.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group block overflow-hidden border border-ppa-line bg-white"
@@ -1650,10 +1684,10 @@ export default async function EventPage({ params }: Params) {
                       width/height lets the slot size to whatever the ops team
                       supplies. */}
                   <Image
-                    src={venueMapUrl}
+                    src={venueMap.url}
                     alt={`${t.venue} grounds map — courts, entry, parking and amenities`}
-                    width={2000}
-                    height={2667}
+                    width={venueMap.width}
+                    height={venueMap.height}
                     sizes="(min-width: 1024px) 55vw, 100vw"
                     className="h-auto w-full object-contain"
                   />

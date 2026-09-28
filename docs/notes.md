@@ -36,3 +36,13 @@ Facts that outlive a session: decisions, gotchas, who asked for what. The Sessio
 - ⚠ `ANTHROPIC_API_KEY` is not in this project's Vercel env (Jackalope's is a sensitive
   var and cannot be pulled). Until it is set the contact form runs the old path.
 - Slack ✅ reactions need `reactions:write` on the PPA Website Forms app (Wesley owns it).
+
+## 2026-09-24 — Europe logo SVGs and the Turnstile hostname
+
+- `public/ppa/logos/ppa-tour-horizontal-{white,blue}.svg` are the PPA TOUR half of the Carvana lockup
+  with the Carvana paths **deleted**, not viewBox-cropped. iOS Safari ignores the viewBox clip on a
+  lazy-loaded `<img>` SVG and painted Carvana in the /europe footer (Payton, 9/24). Never crop a
+  sponsor out of a shared file with a viewBox; delete the geometry.
+- Cloudflare Turnstile allows hostnames per widget. ppatoureurope.com must be on the list or every
+  form that needs a token (all but the newsletters) fails with error 110200 and the widget shows
+  "Unable to connect to website". Any new host that serves a form needs adding there too.

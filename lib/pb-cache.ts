@@ -51,7 +51,7 @@
  * `pbGetJson` contract its callers already handle.
  */
 import { createHash } from "node:crypto";
-import { neon } from "@neondatabase/serverless";
+import { neon, neonConfig } from "@neondatabase/serverless";
 
 const FETCH_TIMEOUT_MS = 8000;
 const FETCH_RETRIES = 3;
@@ -73,6 +73,30 @@ function backoffMs(attempt: number, retryAfter: string | null): number {
   if (Number.isFinite(ra) && ra > 0) return Math.min(ra * 1000, 6000);
   return Math.min(400 * 2 ** attempt, 4000) + Math.floor(Math.random() * 300);
 }
+
+/**
+ * ⚠ THE DATABASE MUST NOT GO THROUGH NEXT'S PATCHED fetch, AND IT HAD BEEN (found 9/28).
+ * The Neon HTTP driver speaks SQL as a POST over `fetch`, and on a route that
+ * is `force-static` (/rankings, the homepage) or declares `fetchCache =
+ * "default-cache"` (/api/rankings) Next's patched fetch treats that POST as
+ * cacheable. Measured in `.next/cache/fetch-cache` on a production build: our
+ * `SELECT`s, the `CREATE TABLE`s and the rest stored as Data Cache entries with
+ * **revalidate 31536000 — a year.** On those routes a read returned whatever the
+ * table held the first time that exact query ran, and a cached `INSERT` meant the
+ * write never reached the table again. It surfaced when the daily rankings
+ * snapshot (lib/wpr-snapshot.ts) was written and /rankings kept serving the old
+ * one.
+ *
+ * So SQL goes out on the fetch Next wraps, which it keeps as
+ * `_nextOriginalFetch`. Resolved per call, because Next patches the global after
+ * this module may have loaded. ⚠ That property is a Next internal: if an upgrade
+ * drops it this falls back to the patched fetch — i.e. back to the bug, silently.
+ * Re-check with a marker row after a Next upgrade (see docs in the 9/28 log).
+ */
+neonConfig.fetchFunction = (input: RequestInfo | URL, init?: RequestInit) => {
+  const f = globalThis.fetch as typeof fetch & { _nextOriginalFetch?: typeof fetch };
+  return (f._nextOriginalFetch ?? f)(input, init);
+};
 
 function db() {
   const url = process.env.DATABASE_URL;
@@ -139,6 +163,59 @@ async function timeboxed<T>(work: Promise<T>): Promise<T | null> {
 }
 
 /**
+ * ⚠ THE PARTNER API LIMITS CONCURRENCY, NOT VOLUME, AND THIS GATE IS THE ONLY
+ * THING ENFORCING THAT NOW (moved here 9/23).
+ *
+ * Measured 9/15 against api.pickleball.com, same token, same endpoint, same
+ * minute: 40 requests fired in parallel returned 5x 200 and 35x 429, while 15
+ * sent sequentially 200ms apart returned 15/15 OK. The budget is roughly five
+ * in flight; total calls per hour is not what it counts.
+ *
+ * ⚠ IT USED TO LIVE IN lib/pb-fetch.ts, IN FRONT OF `pbGetJson`. As callers
+ * migrated here one at a time for the deploy-durability the header describes,
+ * each one silently left the gate behind, and by 9/23 nothing called `pbGetJson`
+ * at all — so the protection was guarding an empty room. `lib/scores-api.ts`
+ * is the caller that makes this matter: it fans out with `Promise.all` across a
+ * tournament's divisions, which on the live Arizona event measured 16 calls at a
+ * PEAK OF 6 CONCURRENT and took 4x 429.
+ *
+ * ⚠ THIS BOUNDS ONE PROCESS, NOT THE FLEET. The limit is per platform token,
+ * shared across every lambda instance and every build worker, and nothing here
+ * can see the others. What it fixes is the self-inflicted burst: no single
+ * render can put more than {@link MAX_IN_FLIGHT} of our own requests on the wire
+ * at once. Fleet-wide headroom comes from the cache above it.
+ *
+ * Tune with `PB_MAX_CONCURRENCY` if the API team gives us a real number; the
+ * default is deliberately one under the five measured, since the budget is
+ * shared with every other instance.
+ */
+const MAX_IN_FLIGHT = Math.max(1, Number(process.env.PB_MAX_CONCURRENCY) || 4);
+
+let live = 0;
+const waiting: (() => void)[] = [];
+
+/**
+ * Run `fn` holding a concurrency slot.
+ *
+ * ⚠ THE SLOT COVERS THE NETWORK CALL AND NOTHING ELSE. It is never held across
+ * a retry backoff, so a gated call can never sit on a slot waiting for
+ * something that needs one — the only way a gate like this deadlocks.
+ */
+async function gated<T>(fn: () => Promise<T>): Promise<T> {
+  if (live < MAX_IN_FLIGHT) live++;
+  else await new Promise<void>((resolve) => waiting.push(resolve));
+  try {
+    return await fn();
+  } finally {
+    // Hand the slot straight to the next waiter rather than decrementing and
+    // letting it re-race for it.
+    const next = waiting.shift();
+    if (next) next();
+    else live--;
+  }
+}
+
+/**
  * The uncached call, with the same 429 backoff the old `pbGetJson` did.
  *
  * ⚠ IT THROWS RATHER THAN RETURNING NULL. See the header: only a resolved value
@@ -148,22 +225,32 @@ async function fetchJson(url: string, tokenOverride?: string): Promise<unknown> 
   const token = tokenOverride ?? process.env.PB_API_TOKEN;
   if (!token) throw new Error("PB_API_TOKEN unset");
   for (let attempt = 0; ; attempt++) {
-    const res = await fetch(url, {
-      headers: { "PB-API-TOKEN": token },
-      cache: "no-store",
-      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
-    });
-    if (res.ok) return (await res.json()) as unknown;
-    if ((res.status === 429 || res.status >= 500) && attempt < FETCH_RETRIES) {
-      await new Promise((r) => setTimeout(r, backoffMs(attempt, res.headers.get("retry-after"))));
-      continue;
-    }
-    // ⚠ THE STATUS RIDES ON THE ERROR. lib/pb-news branches on 401/403 to tell
-    // "not authorised for this endpoint" apart from "something broke", and that
-    // distinction is the only thing that makes a denied feed diagnosable.
-    const err = new Error(`${new URL(url).pathname} ${res.status}`) as Error & { status?: number };
-    err.status = res.status;
-    throw err;
+    // One attempt inside a slot. Returning rather than sleeping in here is what
+    // keeps the backoff OUTSIDE the gate.
+    const outcome = await gated(
+      async (): Promise<{ done: true; value: unknown } | { done: false; retryAfter: string | null }> => {
+        const res = await fetch(url, {
+          headers: { "PB-API-TOKEN": token },
+          cache: "no-store",
+          signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+        });
+        if (res.ok) return { done: true, value: (await res.json()) as unknown };
+        if ((res.status === 429 || res.status >= 500) && attempt < FETCH_RETRIES) {
+          return { done: false, retryAfter: res.headers.get("retry-after") };
+        }
+        // ⚠ THE STATUS RIDES ON THE ERROR. lib/pb-news branches on 401/403 to
+        // tell "not authorised for this endpoint" apart from "something broke",
+        // and that distinction is the only thing that makes a denied feed
+        // diagnosable.
+        const err = new Error(`${new URL(url).pathname} ${res.status}`) as Error & {
+          status?: number;
+        };
+        err.status = res.status;
+        throw err;
+      },
+    );
+    if (outcome.done) return outcome.value;
+    await new Promise((r) => setTimeout(r, backoffMs(attempt, outcome.retryAfter)));
   }
 }
 
@@ -329,4 +416,78 @@ export async function sweepCache(): Promise<number> {
     })(),
   );
   return (rows as unknown[] | null)?.length ?? 0;
+}
+
+/**
+ * A named value in the same table — for things we assemble ourselves rather
+ * than GET from one URL. The daily WPR snapshot (lib/wpr-snapshot.ts) is the
+ * first: ten board pages plus six division boards stitched into one object.
+ *
+ * `name` is stored as the key verbatim (never a sha256, so it cannot collide
+ * with a URL row) and as the `url` column prefixed `stored:` so a human reading
+ * the table can tell what it is. Returns null on any failure, like everything
+ * else here.
+ */
+export async function readStored(name: string): Promise<{ value: unknown; updatedAt: string } | null> {
+  const sql = db();
+  if (!sql) return null;
+  const rows = await timeboxed(
+    (async () => {
+      await init(sql);
+      return sql`SELECT value, updated_at FROM api_cache WHERE key = ${name} AND expires_at > now()`;
+    })(),
+  );
+  const row = (rows as { value: string; updated_at: string | Date }[] | null)?.[0];
+  if (!row) return null;
+  try {
+    return { value: JSON.parse(row.value), updatedAt: new Date(row.updated_at).toISOString() };
+  } catch {
+    return null;
+  }
+}
+
+/** Just the `updated_at` of a stored value — a cheap "has it changed?" probe. */
+export async function storedVersion(name: string): Promise<string | null> {
+  const sql = db();
+  if (!sql) return null;
+  const rows = await timeboxed(
+    (async () => {
+      await init(sql);
+      return sql`SELECT updated_at FROM api_cache WHERE key = ${name} AND expires_at > now()`;
+    })(),
+  );
+  const at = (rows as { updated_at: string | Date }[] | null)?.[0]?.updated_at;
+  return at ? new Date(at).toISOString() : null;
+}
+
+/**
+ * Write a named value. ⚠ AWAITED AND REPORTED, unlike the fire-and-forget write
+ * in `load`: the caller is a job whose only output is this row, so it needs to
+ * know whether it landed. Uses its own longer timeout — a ~700 KB write is not
+ * a request-path read.
+ */
+export async function writeStored(
+  name: string,
+  tag: string,
+  value: unknown,
+  ttlSeconds: number,
+): Promise<boolean> {
+  const sql = db();
+  if (!sql) return false;
+  const body = JSON.stringify(value);
+  try {
+    await init(sql);
+    await sql`
+      INSERT INTO api_cache (key, url, tag, value, expires_at, updated_at)
+      VALUES (${name}, ${`stored:${name}`}, ${tag}, ${body},
+              now() + ${`${ttlSeconds} seconds`}::interval, now())
+      ON CONFLICT (key) DO UPDATE
+        SET value = EXCLUDED.value,
+            tag = EXCLUDED.tag,
+            expires_at = EXCLUDED.expires_at,
+            updated_at = now()`;
+    return true;
+  } catch {
+    return false;
+  }
 }

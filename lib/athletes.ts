@@ -458,7 +458,11 @@ const europeAthletes: Athlete[] = europeRoster.map((p) => ({
   divisions: p.divisions,
   bestRank: 0,
   tagline: p.tagline,
-  bio: p.bio[0] ?? `${p.name} is a professional pickleball player on PPA Tour Europe.`,
+  // Every paragraph, blank-line separated; `loadAthlete` splits it back.
+  // `p.bio[0]` alone left two thirds of a three-paragraph bio unrendered.
+  bio: p.bio.length
+    ? p.bio.join("\n\n")
+    : `${p.name} is a professional pickleball player on PPA Tour Europe.`,
 }));
 
 export const athletes: Athlete[] = [...curatedUsAthletes, ...europeAthletes];

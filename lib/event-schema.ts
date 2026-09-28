@@ -52,11 +52,15 @@ function eventAddress(t: Tournament) {
   };
 }
 
+/** A pro the schema can name as a performer — top seeds from the published draw. */
+export type EventPerformer = { name: string; url?: string | null };
+
 export function buildEventJsonLd(
   t: Tournament,
-  opts: { onSale: boolean; description: string },
+  opts: { onSale: boolean; description: string; performers?: EventPerformer[] },
 ) {
   const address = eventAddress(t);
+  const performers = (opts.performers ?? []).filter((p) => p.name.trim());
   return {
     "@context": "https://schema.org",
     "@type": "SportsEvent",
@@ -64,8 +68,18 @@ export function buildEventJsonLd(
     sport: "Pickleball",
     startDate: t.startDate,
     endDate: t.endDate,
+    /**
+     * Always Scheduled: a cancelled stop never reaches a `Tournament` — the
+     * events feed drops `is_canceled` / "Cancelled" rows in `isJunk` and a
+     * curated stop that is pulled is removed from the schedule, not flagged.
+     * If a cancelled state is ever kept on the record, map it to
+     * EventCancelled here rather than deleting the page.
+     */
     eventStatus: "https://schema.org/EventScheduled",
-    eventAttendanceMode: "https://schema.org/MixedEventAttendanceMode",
+    // In-person at the venue. It was Mixed, which claims an online attendance
+    // option Google then expects an online `location` for; the stream is a
+    // broadcast of the event, not a way to attend it.
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     location: {
       "@type": "Place",
       ...(t.venue ? { name: t.venue } : {}),
@@ -79,6 +93,17 @@ export function buildEventJsonLd(
       name: "Carvana PPA Tour",
       url: SITE_URL,
     },
+    // Top seeds from the PUBLISHED draw only — never the preview picks, which
+    // are last year's names guessing at this year's field.
+    ...(performers.length
+      ? {
+          performer: performers.map((p) => ({
+            "@type": "Person",
+            name: p.name,
+            ...(p.url ? { url: `${SITE_URL}${p.url}` } : {}),
+          })),
+        }
+      : {}),
     // Only claim an offer when tickets are actually for sale — otherwise this
     // published the tier-fallback price as an InStock buyable offer for an
     // event whose own page correctly reads "Tickets Coming Soon". No `validFrom`
@@ -87,6 +112,8 @@ export function buildEventJsonLd(
       ? {
           offers: {
             "@type": "Offer",
+            // The Tixr listing the page's Buy Tickets button opens (minus its
+            // UTM tags — structured data is not a click we attribute).
             url: t.ticketsUrl,
             price: t.ticketPriceFrom,
             priceCurrency: "USD",

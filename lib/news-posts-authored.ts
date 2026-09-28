@@ -353,4 +353,402 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
 <p>The Junior PPA Tour has experienced significant growth since its inception, with over 1,200 junior pickleball players registered in the program. The introduction of the Junior PPA Select Team represents a strategic expansion of the tour&#8217;s commitment to fostering young talent and elevating the sport&#8217;s profile nationally and internationally.</p>
 `.trim(),
   },
+  {
+    // Jim Ramsey's Championship Sunday stats wrap for the Veolia Arizona Open,
+    // supplied 9/23. Third post in this series written after the migration, and
+    // the 38th "Championship Sunday Standout Stats" in the archive.
+    //
+    // ⚠ EVERY RESULT WAS CHECKED AGAINST THE LIVE FEED BEFORE PUBLISHING AND
+    // ALL FIVE MATCH EXACTLY — winners, losers, seeds and every game score,
+    // including the (15) seed on Acevedo/Funemizu and the 15-13 third game. The
+    // changeover line checks out too: the five finals ran 2+3+3+3+2 = 13 games,
+    // which is the denominator it quotes.
+    //
+    // ⚠ THE DATELINE WAS CORRECTED FROM "September 22" TO "September 20", AND
+    // IT IS THE ONE SUBSTANTIVE EDIT TO THE SUPPLIED COPY. Championship Sunday
+    // at this stop was Sunday, Sep 20: the curated record ends the event
+    // 2026-09-20, Dave Fleming's own preview says "Sept. 14-20", and the feed
+    // has the men's doubles final on Sun Sep 20 — the other four roll to "Mon,
+    // Sep 21" only because a 2 PM Mesa first serve pushes them past UTC
+    // midnight, the same rollover `endOfEvent` was fixed for on 9/20. Sep 22 is
+    // a Tuesday, i.e. the day the document was written. Across all 37 archived
+    // posts in this series the dateline is the SUNDAY and never the writing
+    // date (May 10, May 3, Apr 19, Mar 29, Mar 15, Mar 8 — every one a Sunday),
+    // and the headline says "Championship Sunday". One edit to revert.
+    //
+    // ⚠ ONE NAME FIXED: "Funemuzu" -> "Funemizu", in the bullet about his first
+    // domestic medal. The supplied document spells it Funemizu twice and
+    // Funemuzu once, and the feed and published-athletes.json both say **Yuta
+    // Funemizu**, so it is an internal typo rather than a claim. Name spellings
+    // are checked against the roster; punctuation and house style are left as
+    // filed (the stray comma in "Waters 67, Johns, 80" is theirs and stays).
+    //
+    // ⚠ "Chris Haworth" and "Nico Acevedo" are deliberately left as written.
+    // Haworth is published as Christopher Haworth and resolves through
+    // ATHLETE_NAME_ALIASES, so the rail entry and the inline link both work.
+    // Acevedo is `nicolas-acevedo` on the WPR board with no profile on this
+    // site, so there is nothing to link and nothing to alias — deriving one is
+    // the "Zoey Wang" failure.
+    slug: "championship-sunday-standout-stats-from-the-veolia-arizona-open",
+    wpId: 900003,
+    status: "published",
+    source: "wordpress",
+    category: "Recap",
+    series: "stats-wrap",
+    categoryResolvedBy: "series",
+    title: "Championship Sunday Standout Stats from the Veolia Arizona Open",
+    dek: "Mesa, Arizona. September 20, 2026. Anna Leigh Waters doubles up in singles and mixed, Chris Haworth lands his first title of the season, and Rachel Rohrabacher plays two finals on Championship Sunday.",
+    author: "Jim Ramsey",
+    publishedAt: "2026-09-23T10:00:00",
+    publishedAtGmt: "2026-09-23T15:00:00",
+    modifiedAt: "2026-09-23T15:00:00",
+    image: {
+      // ⚠ NOT THE EVENT'S OWN FEATURED SHOT AND NOT THE STORYLINES FRAME.
+      // `featured-mesa-cup.jpg` is pinned as this event's hero, card and OG
+      // image in HERO_OVERRIDE_BY_EVENT_SLUG and `crowd-04.jpg` carries Dave
+      // Fleming's 9/9 preview, so either would print the same picture twice
+      // wherever two of those cards share a page.
+      //
+      // ⚠ AND THE CROWD FRAMES WERE RULED OUT BY LOOKING AT THEM, NOT BY
+      // FILENAME. crowd-01..05 were all shot at the CARVANA MESA CUP in
+      // February and carry "MESA ARIZONA CUP" readable on the court-side
+      // banner — a different event, four months earlier, at the same venue. On
+      // an article about the Arizona Open that is a caption a reader can catch.
+      // This aerial is the grounds themselves at dusk with no event-specific
+      // signage, which is true of this stop and of every other played here.
+      url: "/ppa/venues/aag-mesa/aerial-02.jpg",
+      // ⚠ NO NAMES. House style on this series is a generic description, and
+      // nobody in this frame is identifiable or identified.
+      alt: "Aerial view of the tournament courts at Arizona Athletic Grounds in Mesa at sunset.",
+      width: 1800,
+      height: 1200,
+    },
+    // Left empty deliberately: `detectAthleteMentions` reads the body and
+    // resolves the roster itself, which is how every post in this series works.
+    players: [],
+    playerNames: [],
+    wpEvent: { slug: "2026-veolia-arizona-open", name: "2026 Veolia Arizona Open" },
+    tags: [],
+    tagsRaw: [],
+    wpCategories: ["2026-veolia-arizona-open", "stats-wrap"],
+    embeds: [],
+    inlineImages: [],
+    // Never existed on WordPress, so its canonical home is this site and the
+    // URL is the one it will be served at here.
+    legacyUrl: "https://www.ppatour.com/championship-sunday-standout-stats-from-the-veolia-arizona-open/",
+    seo: {
+      title: "Veolia Arizona Open: Championship Sunday Stats | PPA Tour",
+      description:
+        "Championship Sunday stats from the Veolia Arizona Open in Mesa: Anna Leigh Waters wins singles and mixed, Chris Haworth takes men's singles, and Rohrabacher and Todd win women's doubles.",
+      canonical:
+        "https://www.ppatour.com/championship-sunday-standout-stats-from-the-veolia-arizona-open/",
+    },
+    bodyHtml: `
+<p><strong>Mesa, Arizona.</strong></p>
+
+
+
+<p><strong>September 20, 2026.</strong></p>
+
+
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+
+
+<h4 class="wp-block-heading"><strong>MIXED DOUBLES FINAL:&nbsp; (1) Anna Leigh Waters and Ben Johns def. (2) Rachel Rohrabacher and Christian Alshon, 11-3, 11-6.</strong>&nbsp;</h4>
+
+
+
+<ul class="wp-block-list">
+<li>Waters and Johns are 65-3 in finals together. (Career titles: Waters 67, Johns, 80)</li>
+
+
+
+<li>Waters and Johns won a silver here in February, losing to Bright and Patriquin.</li>
+
+
+
+<li>Waters and Johns won the last eight points of Game Two to finish the match.</li>
+
+
+
+<li>Waters kept every Serve, Return, Third Shot and Dink &#8220;in play.&#8221;</li>
+
+
+
+<li>Alshon had a match-high nine Clean Winners.</li>
+
+
+
+<li>Longest rally: 36 shots.</li>
+</ul>
+
+
+
+<h4 class="wp-block-heading"><strong>MEN&#8217;S DOUBLES FINAL:&nbsp; (2) Christian Alshon and Andrei Daescu def. (15) Nico Acevedo and Yuta Funemizu, 11-7, 7-11, 15-13.</strong>&nbsp;</h4>
+
+
+
+<ul class="wp-block-list">
+<li>Fourth career title together for Alshon and Daescu.</li>
+
+
+
+<li>First domestic PPA Tour medals for both Acevedo and Funemizu.</li>
+
+
+
+<li>Acevedo and Funemizu had seven Match Points in Game Three.</li>
+
+
+
+<li>Acevedo had a match-high 17 Clean Winners.</li>
+
+
+
+<li>Longest rally: 44 shots.</li>
+</ul>
+
+
+
+<h4 class="wp-block-heading"><strong>WOMEN&#8217;S DOUBLES FINAL:&nbsp; (1) Rachel Rohrabacher and Parris Todd def. (2) Tyra Black and Meghan Dizon, 11-4, 10-12, 11-6.</strong>&nbsp;</h4>
+
+
+
+<ul class="wp-block-list">
+<li>Rohrabacher&#8217;s tenth career Women&#8217;s Doubles title (eight with Anna Bright).</li>
+
+
+
+<li>Todd&#8217;s fourth career Women&#8217;s Doubles title, and second with Rohrabacher.</li>
+
+
+
+<li>Rohrabacher and Todd kept every Serve, Return and Third Shot &#8220;in play.&#8221;</li>
+
+
+
+<li>Rohrabacher and Todd had three Match Points in Game Two.</li>
+
+
+
+<li>Black had a match-high ten Clean Winners.</li>
+
+
+
+<li>Longest rally: 54 shots.</li>
+</ul>
+
+
+
+<h4 class="wp-block-heading"><strong>MEN&#8217;S SINGLES FINAL:&nbsp; (1) Chris Haworth def. (2) Federico Staksrud, 10-12, 11-9, 11-6.</strong>&nbsp;</h4>
+
+
+
+<ul class="wp-block-list">
+<li>Haworth&#8217;s ninth title, all since 2024, and first this season.</li>
+
+
+
+<li>Staksrud has 20 Men&#8217;s Singles titles, and his 20 silver medals are the most all-time.</li>
+
+
+
+<li>Haworth won the last eight points of Game Three.</li>
+
+
+
+<li>Haworth had more Clean Winners, 18-11.</li>
+
+
+
+<li>Longest rally: 16 shots.</li>
+</ul>
+
+
+
+<h4 class="wp-block-heading"><strong>WOMEN&#8217;S SINGLES FINAL:&nbsp; (1) Anna Leigh Waters def. (2) Kate Fahey, 11-9, 11-4.</strong>&nbsp;</h4>
+
+
+
+<ul class="wp-block-list">
+<li>Waters has a 65-3 career record in Singles finals.</li>
+
+
+
+<li>Waters is 54-0 in Finals since losing in June 2022.</li>
+
+
+
+<li>Waters has won the last 27 tournaments that she has entered, including eight finals vs Fahey this year.</li>
+
+
+
+<li>Waters had fewer baseline Drive Errors, 12-4.</li>
+
+
+
+<li>Longest rally: 12 shots.</li>
+</ul>
+
+
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+
+
+<h4 class="wp-block-heading"><strong>LEADING AT THE CHANGEOVER:</strong></h4>
+
+
+
+<p>Did the players or teams leading a game when they changed sides at six points go on to win that game?</p>
+
+
+
+<ul class="wp-block-list">
+<li>This tournament: Yes. 8 times in 13 games.</li>
+
+
+
+<li>This season: Yes. 21 times in 28 games (75%).</li>
+</ul>
+
+
+
+<p><em>All career records are &#8220;Domestic PPA Tour only.&#8221;</em></p>
+
+
+
+<p><strong>For the comprehensive stats of all these gold medal matches, please visit: </strong><a href="https://facebook.com/groups/propickleballstats" target="_blank" rel="noreferrer noopener"><strong>facebook.com/groups/propickleballstats</strong></a></p>
+`.trim(),
+  },
+  {
+    // Partner story, supplied by Wesley 9/24 with the featured photograph.
+    // Proton is an Official Platinum Partner (lib/home-content.ts), so this is
+    // filed copy about a partner's product, not editorial about a paddle we
+    // picked — the same footing the sponsor pages sit on.
+    //
+    // ⚠ BOTH RESULTS CLAIMS WERE VERIFIED AGAINST THE LIVE FEED, NOT TAKEN ON
+    // TRUST, because a wrong finish attributed to a named pro is the one thing
+    // a gear post cannot get away with. Arizona women's singles: Jalina Ingram
+    // (13 seed) reached the SEMI-FINALS, beating Catherine Parenteau (7) in the
+    // quarters before losing to Anna Leigh Waters. Grand Rapids PPA Challenger
+    // men's singles podium: gold Matthew Finnerty, silver Eli Steiner, BRONZE
+    // MILES HOOVER. Both read straight off `getScores`.
+    slug: "project-coyote-brings-the-heat-as-proton-players-celebrate-14-medals-in-mesa",
+    wpId: 900004,
+    status: "published",
+    source: "wordpress",
+    // "Tour News" is what the archive's other 343 announcements carry, and this
+    // is an announcement about a partner's product rather than match coverage.
+    category: "Tour News",
+    series: null,
+    categoryResolvedBy: "fallback",
+    title: "Project Coyote Brings the Heat as Proton Players Celebrate 14 Medals in Mesa",
+    dek: "Jalina Ingram reached the women's singles semifinals at the Veolia Arizona Open, part of 14 medals won on Project Coyote across the professional and amateur draws.",
+    // No byline supplied. "PPA Tour" is the archive's house byline for unsigned
+    // tour copy (154 posts) — inventing a writer would attribute a real
+    // person's name to copy they did not write.
+    author: "PPA Tour",
+    publishedAt: "2026-09-24T10:00:00",
+    publishedAtGmt: "2026-09-24T15:00:00",
+    modifiedAt: "2026-09-24T15:00:00",
+    image: {
+      // Supplied by Wesley with the copy. Encoded to the house news standard:
+      // 2048x1365, mozjpeg q64, 4:4:4, from a 5345x3563 original.
+      //
+      // ⚠ NO NAMES, AND NO PADDLE MODEL EITHER. House style on this archive is
+      // a generic description, and naming a player from a frame is how the
+      // wrong athlete gets captioned. The paddle in shot carries a legible
+      // Proton wordmark but nothing identifies WHICH Proton paddle it is, so
+      // calling it a Project Coyote under a post about the Coyote would be a
+      // guess doing the work of a caption.
+      url: "/ppa/news/proton-project-coyote-mesa-medals.jpg",
+      alt: "Pro reaching for a forehand volley at the net during a PPA Tour match.",
+      width: 2048,
+      height: 1365,
+    },
+    // Empty on purpose: detectAthleteMentions reads the body and resolves the
+    // roster itself. Jalina Ingram and Catherine Parenteau both have published
+    // profiles and link automatically; Miles Hoover has none, so he correctly
+    // stays plain text rather than pointing at a page that does not exist.
+    players: [],
+    playerNames: [],
+    // WP-category form, matching the other three posts in this file. Inert —
+    // nothing resolves it to an internal event slug (see lib/news.ts).
+    wpEvent: { slug: "2026-veolia-arizona-open", name: "2026 Veolia Arizona Open" },
+    tags: [],
+    tagsRaw: [],
+    wpCategories: [],
+    embeds: [],
+    inlineImages: [],
+    // ⚠ CTA LEFT ON THE DEFAULT (next stop's tickets + TV Schedule) ON PURPOSE.
+    // The override exists for posts where a ticket link is the wrong action —
+    // a junior announcement, say. This post is about pros at a PPA stop, so
+    // selling the next one is a fair ask, and the copy's own call to action
+    // (Proton's shop and the PPA discount code) is the closing line of the
+    // body, where the supplied copy puts it. One `ctaUrl` field flips it.
+    //
+    // Never existed on WordPress, so its canonical home is this site.
+    legacyUrl: "https://www.ppatour.com/project-coyote-brings-the-heat-as-proton-players-celebrate-14-medals-in-mesa/",
+    seo: {
+      title: "Project Coyote: 14 Medals in Mesa for Proton Players | PPA Tour",
+      description:
+        "Jalina Ingram reached the women's singles semifinals at the Veolia Arizona Open as players on Proton's Project Coyote earned 14 medals in Mesa, with a men's singles bronze for Miles Hoover in Grand Rapids.",
+      canonical:
+        "https://www.ppatour.com/project-coyote-brings-the-heat-as-proton-players-celebrate-14-medals-in-mesa/",
+    },
+    bodyHtml: `
+<p>Rising star Jalina Ingram delivered a standout performance at the Carvana PPA Tour&#8217;s <a href="/events/2026/veolia-arizona-open/">Veolia Arizona Open</a> in Mesa, battling her way to the women&#8217;s singles semifinals.</p>
+
+
+
+<p>Unsigned top female pro Catherine Parenteau was also seen competing with Project Coyote, adding another notable name to the paddle&#8217;s presence on court.</p>
+
+
+
+<h4 class="wp-block-heading"><strong>Beyond the Pros</strong></h4>
+
+
+
+<p>Ingram&#8217;s run was only part of the story. Players using the Project Coyote earned 14 total medals across professional and amateur divisions in Mesa.</p>
+
+
+
+<p>And the momentum stretched beyond Arizona. Across the country, Miles Hoover earned bronze in men&#8217;s singles at the Grand Rapids PPA Challenger.</p>
+
+
+
+<p>These results drove us to take a closer look at what the Coyote brings to the court.</p>
+
+
+
+<h4 class="wp-block-heading"><strong>Power That Fits the Whole Game</strong></h4>
+
+
+
+<p>The Coyote is a 15mm elongated paddle and Proton&#8217;s most powerful paddle yet. Built around a polypropylene honeycomb core with a reinforced-foam perimeter, its approximately 7.7-ounce average weight emphasizes maneuverability, while a 5.5-inch handle and refined throat taper provide room for comfortable two-handed play. Proton designed that combination to deliver power without sacrificing stability and responsiveness.</p>
+
+
+
+<p>The Kitchen&#8217;s August 26 review offered a strong endorsement of that balance, calling Project Coyote &#8220;the company&#8217;s best paddle to date&#8221; and highlighting its combination of high power and a stable, connected feel.</p>
+
+
+
+<h4 class="wp-block-heading"><strong>Accessible Performance</strong></h4>
+
+
+
+<p>At $195, Project Coyote brings Proton&#8217;s power-focused design below the $200 mark, with construction intended to support everything from controlled dinks and soft resets to powerful drives and fast kitchen exchanges.</p>
+
+
+
+<p>But specifications tell only part of the story. The real question is whether a paddle fits the way a player wants to compete. Fourteen medals in Mesa, along with another professional podium across the country, give players a compelling reason to take a closer look at the Coyote.</p>
+
+
+
+<p>You can visit <a href="https://protonsports.com/?utm_source=ppatour&#038;utm_medium=website&#038;utm_campaign=news&#038;utm_content=article-project-coyote-brings-the-heat-as-proton-players-celebrate-14-medals-in-mesa">Protonsports.com</a> and use the code &#8220;PPA&#8221; for 10% off of your order.</p>
+`.trim(),
+  },
 ];
