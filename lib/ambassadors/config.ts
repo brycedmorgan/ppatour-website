@@ -20,6 +20,12 @@ import { SITE_INDEXABLE, SITE_URL } from "@/lib/site";
  * on a public URL. Leave the flag unset for the real launch.
  */
 export function previewEnabled(): boolean {
+  // Explicit production lock for the ambassador area, independent of whole-site
+  // indexability. Set AMBASSADORS_LIVE=1 to force the REAL emailed-link sign-in
+  // and 404 the one-click "preview as" bypass (and the HQ preview bypass) while
+  // the rest of the rebuild is still staging/noindex — this is what lets the
+  // ambassador dashboard launch ahead of the full ppatour.com cutover.
+  if (process.env.AMBASSADORS_LIVE === "1") return false;
   if (process.env.AMBASSADORS_PREVIEW === "1") return true;
   return SITE_INDEXABLE !== true;
 }
