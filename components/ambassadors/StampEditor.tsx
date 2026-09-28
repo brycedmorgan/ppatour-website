@@ -40,11 +40,21 @@ export function StampEditor({
   sampleCode,
   onClose,
   onSaved,
+  personal = false,
+  firstName = "",
+  lastName = "",
+  downloadName,
 }: {
   graphic: Graphic;
   sampleCode: string;
   onClose: () => void;
   onSaved: () => void;
+  /** Personal mode: the ambassador styles + downloads their own copy (nothing
+   *  is saved to the shared store). Admin mode saves one shared box. */
+  personal?: boolean;
+  firstName?: string;
+  lastName?: string;
+  downloadName?: string;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
@@ -64,7 +74,7 @@ export function StampEditor({
     await S.ensureFont(s.font);
     const ctx = c.getContext("2d");
     if (!ctx) return;
-    S.drawStamp(ctx, img, s, { CODE: sampleCode || "YOURCODE", FIRST: "Alex", NAME: "Alex Sample" });
+    S.drawStamp(ctx, img, s, stampVars());
     const W = c.width;
     const H = c.height;
     ctx.save();
@@ -135,6 +145,12 @@ export function StampEditor({
     void draw(ns);
   }
 
+  function stampVars(): Record<string, string> {
+    const first = firstName || (personal ? "" : "Alex");
+    const full = `${firstName} ${lastName}`.trim() || (personal ? "" : "Alex Sample");
+    return { CODE: sampleCode || "YOURCODE", FIRST: first, NAME: full };
+  }
+
   async function save(remove: boolean) {
     setBusy(true);
     setErr("");
@@ -149,6 +165,65 @@ export function StampEditor({
     } catch {
       setBusy(false);
       setErr("Couldn't save. Try again.");
+    }
+  }
+
+  // Personal mode: render the graphic with the ambassador's own code at full
+  // resolution (no editing guides) and download it. Nothing is saved to the
+  // shared store — this copy is theirs.
+  async function downloadPersonal() {
+    const S = lib();
+    const img = imgRef.current;
+    if (!S || !img) {
+      setErr("Editor is still loading — try again.");
+      return;
+    }
+    setBusy(true);
+    setErr("");
+    try {
+      await S.ensureFont(st.font);
+      const off = document.createElement("canvas");
+      off.width = img.naturalWidth;
+      off.height = img.naturalHeight;
+      const ctx = off.getContext("2d");
+      if (!ctx) throw new Error();
+      S.drawStamp(ctx, img, st, stampVars()); // clean render, no dashed guide
+      const isPng = graphic.type === "image/png";
+      const blob: Blob | null = await new Promise((res) =>
+        off.toBlob((b) => res(b), isPng ? "image/png" : "image/jpeg", 0.92),
+      );
+      if (!blob) throw new Error();
+      const name = downloadName || `${graphic.slug || "graphic"}_${(sampleCode || "code").toLowerCase()}.${isPng ? "png" : "jpg"}`;
+
+      // iOS Safari can't download a blob to Files/Photos, so use the share sheet
+      // there; everywhere else do a real file download.
+      const ua = navigator.userAgent || "";
+      const isIOS = /iP(hone|ad|od)/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+      if (isIOS) {
+        try {
+          const file = new File([blob], name, { type: blob.type });
+          const nav = navigator as Navigator & { canShare?: (d: { files: File[] }) => boolean };
+          if (nav.canShare && nav.canShare({ files: [file] })) {
+            await navigator.share({ files: [file] } as ShareData);
+            setBusy(false);
+            return;
+          }
+        } catch {
+          /* fall through to a download link */
+        }
+      }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+      setBusy(false);
+    } catch {
+      setBusy(false);
+      setErr("Couldn't build your download. Try again.");
     }
   }
 
@@ -172,9 +247,13 @@ export function StampEditor({
         style={{ background: "#fff", color: "#0C2B44", borderRadius: 14, maxWidth: 560, width: "100%", maxHeight: "92vh", overflow: "auto", padding: 18 }}
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 style={{ marginTop: 0 }}>Code box</h3>
+        <h3 style={{ marginTop: 0 }}>{personal ? "Add your code" : "Code box"}</h3>
         <p style={{ marginTop: -4, fontSize: ".86rem", color: "#4a6076" }}>
-          Drag on the image to draw where the code goes. Keep <b>{"{CODE}"}</b> in the text — it becomes each ambassador&apos;s own code.
+          {personal ? (
+            <>Drag on the image to place your code, then pick the color and style. Keep <b>{"{CODE}"}</b> in the text — it becomes your code (<b>{sampleCode}</b>).</>
+          ) : (
+            <>Drag on the image to draw where the code goes. Keep <b>{"{CODE}"}</b> in the text — it becomes each ambassador&apos;s own code.</>
+          )}
         </p>
         <canvas
           ref={canvasRef}
@@ -225,17 +304,25 @@ export function StampEditor({
         </div>
         {err ? <p style={{ color: "#c0392b" }}>{err}</p> : null}
         <div style={{ display: "flex", gap: 8, marginTop: 14, justifyContent: "flex-end", flexWrap: "wrap" }}>
-          {graphic.stamp ? (
-            <button className="btn" style={{ background: "transparent", color: "#c0392b", border: "1px solid #c0392b" }} disabled={busy} onClick={() => save(true)}>
-              Remove
-            </button>
-          ) : null}
           <button className="btn" style={{ background: "#e6ebf0", color: "#334" }} onClick={onClose} disabled={busy}>
             Cancel
           </button>
-          <button className="btn" disabled={busy} onClick={() => save(false)}>
-            {busy ? "Saving…" : "Save code box"}
-          </button>
+          {personal ? (
+            <button className="btn" disabled={busy} onClick={downloadPersonal}>
+              {busy ? "Preparing…" : "Download"}
+            </button>
+          ) : (
+            <>
+              {graphic.stamp ? (
+                <button className="btn" style={{ background: "transparent", color: "#c0392b", border: "1px solid #c0392b" }} disabled={busy} onClick={() => save(true)}>
+                  Remove
+                </button>
+              ) : null}
+              <button className="btn" disabled={busy} onClick={() => save(false)}>
+                {busy ? "Saving…" : "Save code box"}
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

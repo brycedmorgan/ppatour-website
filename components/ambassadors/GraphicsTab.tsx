@@ -50,7 +50,7 @@ const CODE_POS: Record<string, number> = { top: 0.06, middle: 0.44, bottom: 0.8 
 export function GraphicsTab({ me, shared, canUpload = false }: { me: Me; shared: Shared; canUpload?: boolean }) {
   const stampReady = useStamp();
   const [rendered, setRendered] = useState<Record<string, Rendered>>({});
-  const [editing, setEditing] = useState<{ g: Graphic; code: string } | null>(null);
+  const [editing, setEditing] = useState<{ g: Graphic; code: string; personal: boolean } | null>(null);
   const started = useRef(false);
 
   const evById = (id: string): Ev | undefined => shared.events.find((e) => e.id === id);
@@ -67,6 +67,7 @@ export function GraphicsTab({ me, shared, canUpload = false }: { me: Me; shared:
     (async () => {
       for (const u of me.upcoming) {
         for (const g of shared.graphics.filter((x) => x.event === u.event)) {
+          if (!g.stamp) continue; // no shared box — the ambassador adds their own with "Add my code"
           try {
             const img = await window.Stamp!.loadImage(srcFor(g.file));
             const isPng = g.type === "image/png";
@@ -140,7 +141,7 @@ export function GraphicsTab({ me, shared, canUpload = false }: { me: Me; shared:
     <section className="sec">
       <div className="sec-h">
         <h2>Your graphics</h2>
-        <span className="sub">Your code is already on every graphic — save it, then post.</span>
+        <span className="sub">Add your code to any graphic — place it where you want, pick your color, then download and post.</span>
       </div>
 
       {canUpload && <Uploader events={shared.events} />}
@@ -167,8 +168,11 @@ export function GraphicsTab({ me, shared, canUpload = false }: { me: Me; shared:
                       {r ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={r.url} alt={`${item.title} with code ${g.code}`} />
-                      ) : (
+                      ) : item.stamp ? (
                         <span className="wait">Adding your code…</span>
+                      ) : (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={srcFor(item.file)} alt={item.title || item.kind} />
                       )}
                     </div>
                     <div className="gm">
@@ -181,8 +185,8 @@ export function GraphicsTab({ me, shared, canUpload = false }: { me: Me; shared:
                           <button
                             className="btn"
                             style={{ background: "transparent", color: "#0C2B44", border: "1px solid #9db3c9", padding: "6px 10px" }}
-                            onClick={() => setEditing({ g: item, code: g.code })}
-                            title="Place the ambassador code on this graphic"
+                            onClick={() => setEditing({ g: item, code: g.code, personal: false })}
+                            title="Set a default code box for everyone (optional)"
                           >
                             Code box
                           </button>
@@ -197,9 +201,23 @@ export function GraphicsTab({ me, shared, canUpload = false }: { me: Me; shared:
                             Delete
                           </button>
                         )}
-                        <button className="btn" disabled={!r} onClick={() => r && download(r)}>
-                          {r ? "Download" : "Preparing…"}
+                        <button
+                          className="btn"
+                          onClick={() => setEditing({ g: item, code: g.code, personal: true })}
+                          title="Place your code, pick the color, and download your copy"
+                        >
+                          Add my code
                         </button>
+                        {r && (
+                          <button
+                            className="btn"
+                            style={{ background: "transparent", color: "#0C2B44", border: "1px solid #9db3c9", padding: "6px 10px" }}
+                            onClick={() => download(r)}
+                            title="Download with the default placement"
+                          >
+                            Quick download
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -220,6 +238,9 @@ export function GraphicsTab({ me, shared, canUpload = false }: { me: Me; shared:
         <StampEditor
           graphic={editing.g}
           sampleCode={editing.code}
+          personal={editing.personal}
+          firstName={me.firstName}
+          lastName={me.lastName}
           onClose={() => setEditing(null)}
           onSaved={() => window.location.reload()}
         />
