@@ -30,7 +30,7 @@
 import { pbCachedJson } from "@/lib/pb-cache";
 import { EUROPE_RANK_SLUGS } from "@/lib/europe-roster";
 import { RANKINGS_CACHE_TAG } from "@/lib/cache-tags";
-import wprSnapshot from "@/lib/data/wpr-snapshot.json";
+import { getWprSnapshot, type WprSnapshot } from "@/lib/wpr-snapshot";
 
 
 const TTL_MS = 6 * 60 * 60 * 1000;
@@ -73,8 +73,12 @@ const SNAPSHOT_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 
 type SnapshotDivisionRow = { player_slug: string; ranking?: string; points?: number };
 
-function snapshotDivision(dt: number, gender: "M" | "F"): SnapshotDivisionRow[] | null {
-  const snap = wprSnapshot as {
+function snapshotDivision(
+  dt: number,
+  gender: "M" | "F",
+  source: WprSnapshot,
+): SnapshotDivisionRow[] | null {
+  const snap = source as {
     generatedAt?: string;
     divisions?: Record<string, SnapshotDivisionRow[]>;
   };
@@ -86,7 +90,9 @@ function snapshotDivision(dt: number, gender: "M" | "F"): SnapshotDivisionRow[] 
 }
 
 async function fetchBoard(dt: number, gender: "M" | "F"): Promise<Map<string, DivisionRank>> {
-  const key = `${dt}:${gender}`;
+  // Keyed on the snapshot version too, for the reason given in lib/rankings-api.ts.
+  const source = await getWprSnapshot();
+  const key = `${dt}:${gender}:${source.generatedAt ?? ""}:${new Date().toISOString().slice(0, 10)}`;
   const hit = boardCache.get(key);
   if (hit && hit.expires > Date.now()) return hit.value;
   const pending = boardInFlight.get(key);
@@ -103,7 +109,7 @@ async function fetchBoard(dt: number, gender: "M" | "F"): Promise<Map<string, Di
     // Reading them from the same snapshot takes a page render to zero ranking
     // requests. Falls through to the live call below when the snapshot is
     // absent or expired, exactly as lib/rankings-api.ts does.
-    const snapRows = snapshotDivision(dt, gender);
+    const snapRows = snapshotDivision(dt, gender, source);
     if (snapRows) {
       for (const row of snapRows) {
         const slug = row.player_slug;

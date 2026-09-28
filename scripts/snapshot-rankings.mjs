@@ -40,14 +40,11 @@ import { writeFileSync, readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { createHash } from "node:crypto";
 import { neon } from "@neondatabase/serverless";
+import { fetchWprSnapshot, describeSnapshot } from "../lib/wpr-snapshot-core.mjs";
 
 const OUT = resolve("lib/data/wpr-snapshot.json");
-const PAGE_SIZE = 250;
-const MAX_PAGES = 10;
-const PRO_BRACKET = 2;
-const WORLD_DIVISION_TYPE = 8;
-/** Below this a board is not credible — refuse to overwrite a good snapshot. */
-const MIN_PLAYERS = 200;
+// The fetching, the page size, the retry policy and the MIN_PLAYERS floor live
+// in lib/wpr-snapshot-core.mjs, shared with the daily /api/cron/rankings job.
 /**
  * ⚠ MUST MATCH `SNAPSHOT_MAX_AGE_MS` IN lib/rankings-api.ts. That is the age at
  * which the renderer stops trusting this file and every board read falls
@@ -141,23 +138,6 @@ async function cacheSet(url, value) {
   }
 }
 
-/** Counted for the summary line, so a build log says what it actually cost. */
-let cacheHits = 0;
-let upstreamCalls = 0;
-
-/**
- * The 250ms spacing between calls, applied only when something actually went
- * upstream. On an all-cache run it would otherwise add four seconds of sleep to
- * every build for no reason — the pacing exists to be gentle on an API we are
- * being throttled by, not on Postgres.
- */
-let lastPaced = 0;
-async function pace() {
-  if (upstreamCalls === lastPaced) return;
-  lastPaced = upstreamCalls;
-  await sleep(250);
-}
-
 /** Age of the snapshot already on disk, or null if there isn't a readable one. */
 function existingSnapshotAgeMs() {
   if (!existsSync(OUT)) return null;
@@ -247,177 +227,6 @@ const BYPASS_CACHE =
 const TOKEN = env("PB_API_TOKEN");
 const BASE = (env("PB_API_BASE_URL") || "https://api.pickleball.com").replace(/\/$/, "");
 
-/**
- * ⚠ THE REFRESH MUST SURVIVE BEING THROTTLED, OR IT CAN NEVER BREAK THE LOOP IT
- * EXISTS TO PREVENT (9/15).
- *
- * Until today this script had no retry at all: one 429 on any page aborted the
- * whole run and it kept the existing snapshot. That is the right failure mode
- * when the snapshot on disk is fresh — and a trap when it is not, because the
- * two states feed each other. A stale snapshot puts every render back on the
- * live API; that traffic gets us rate-limited; and the rate limit is what stops
- * the next build refreshing the snapshot. Measured today: last regenerated 9/5,
- * expired 9/12, and --check died on page 2 of the women's board with an HTTP
- * 429 while /athletes/[slug] alone was making 27K partner_rankings calls in six
- * hours.
- *
- * So: the same backoff as lib/pb-fetch.ts, honouring Retry-After, and MORE
- * patience than a render path gets rather than less. Nothing is waiting on this
- * — it is a build step that runs once — so minutes of backoff here are cheap
- * against a day of every page view paying for the board.
- */
-const RETRIES = 6;
-const RETRY_BASE_MS = 1000;
-const RETRY_CAP_MS = 30000;
-
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-function backoffMs(attempt, retryAfter) {
-  const ra = retryAfter ? Number(retryAfter) : NaN;
-  if (Number.isFinite(ra) && ra > 0) return Math.min(ra * 1000, RETRY_CAP_MS);
-  return Math.min(RETRY_BASE_MS * 2 ** attempt, RETRY_CAP_MS) + Math.floor(Math.random() * 500);
-}
-
-/**
- * One partner_rankings GET, retried through 429/5xx and network errors.
- * `label` only names the board in the log, so a failure says which one died.
- */
-async function getJson(params, label) {
-  const url = `${BASE}/v2/data/partner_rankings?${params}`;
-
-  // The deploy-proof layer.
-  if (!BYPASS_CACHE) {
-    const hit = await cacheGet(url);
-    if (hit) {
-      cacheHits++;
-      return hit;
-    }
-  }
-
-  for (let attempt = 0; ; attempt++) {
-    let res;
-    try {
-      res = await fetch(url, {
-        headers: { "PB-API-TOKEN": TOKEN },
-        signal: AbortSignal.timeout(20000),
-      });
-    } catch (err) {
-      if (attempt >= RETRIES) throw new Error(`${label}: ${err.message}`);
-      await sleep(backoffMs(attempt, null));
-      continue;
-    }
-    if (res.ok) {
-      const json = await res.json();
-      upstreamCalls++;
-      await cacheSet(url, json);
-      return json;
-    }
-    if ((res.status === 429 || res.status >= 500) && attempt < RETRIES) {
-      const wait = backoffMs(attempt, res.headers.get("retry-after"));
-      console.log(
-        `[wpr-snapshot] ${label}: HTTP ${res.status} — retrying in ${Math.round(wait / 1000)}s ` +
-          `(attempt ${attempt + 1}/${RETRIES})`,
-      );
-      await sleep(wait);
-      continue;
-    }
-    throw new Error(`${label}: HTTP ${res.status}`);
-  }
-}
-
-/** Exactly the fields `mapPlayer` in lib/rankings-api.ts reads — nothing else. */
-const pick = (p) => ({
-  ranking: p.ranking,
-  is_tied: p.is_tied,
-  player_slug: p.player_slug,
-  player_full_name: p.player_full_name,
-  points: p.points,
-  total_events_played: p.total_events_played,
-  prize_money: p.prize_money,
-  country: p.country,
-  player_country_two_digit_abbreviation: p.player_country_two_digit_abbreviation,
-  profile_image: p.profile_image,
-});
-
-async function page(gender, current) {
-  const params = new URLSearchParams({
-    partner: "ppa",
-    division_type: String(WORLD_DIVISION_TYPE),
-    gender,
-    race: "false",
-    is_live: "false",
-    bracket_level_id: String(PRO_BRACKET),
-    current_page: String(current),
-    page_size: String(PAGE_SIZE),
-    rank: new Date().toISOString().slice(0, 10),
-  });
-  const json = await getJson(params, `partner_rankings ${gender} p${current}`);
-  return {
-    players: json.results?.player_rankings ?? [],
-    total: json.total_records ?? 0,
-  };
-}
-
-async function board(gender) {
-  const players = [];
-  let total = Infinity;
-  for (let p = 1; p <= MAX_PAGES && players.length < total; p++) {
-    const got = await page(gender, p);
-    if (got.players.length === 0) break;
-    players.push(...got.players.map(pick));
-    total = got.total;
-    // Gentle on an API we have been throttled by today.
-    if (players.length < total) await pace();
-  }
-  return { total: Number.isFinite(total) ? total : players.length, players };
-}
-
-/**
- * The six DIVISION boards behind the athlete page’s per-discipline ranks.
- *
- * ⚠ THESE ARE A SECOND, SEPARATE `partner_rankings` QUERY, AND MISSING THEM IS
- * WHY THE FIRST SNAPSHOT ONLY GOT US 90% (9/5). Snapshotting the WPR boards took
- * /athletes/[slug] from ~5,000 calls/hour to ~660, and the remainder was all
- * this: every render calls `getDivisionRanks`, which fetches three boards
- * (singles, doubles, mixed) for that pro’s gender. Six combinations cover the
- * whole roster, so they belong on disk for exactly the same reason the WPR
- * boards do.
- *
- * Gender doubles is 4 (women) / 5 (men); mixed is 3. Do NOT swap these — the
- * note in lib/division-rankings.ts explains why they are not symmetrical.
- */
-const DIVISIONS = [
-  { dt: 1, gender: "F" },
-  { dt: 2, gender: "M" },
-  { dt: 4, gender: "F" },
-  { dt: 5, gender: "M" },
-  { dt: 3, gender: "F" },
-  { dt: 3, gender: "M" },
-];
-
-/** Only what lib/division-rankings.ts reads off a row. */
-const pickDivision = (p) => ({
-  player_slug: p.player_slug,
-  ranking: p.ranking,
-  points: p.points,
-});
-
-async function divisionBoard(dt, gender) {
-  const params = new URLSearchParams({
-    partner: "ppa",
-    division_type: String(dt),
-    gender,
-    race: "false",
-    is_live: "false",
-    bracket_level_id: String(PRO_BRACKET),
-    rank: new Date().toISOString().slice(0, 10),
-    current_page: "1",
-    page_size: String(PAGE_SIZE),
-  });
-  const json = await getJson(params, `division ${dt}/${gender}`);
-  return (json.results?.player_rankings ?? []).map(pickDivision);
-}
-
 async function main() {
   const check = process.argv.includes("--check");
 
@@ -429,60 +238,37 @@ async function main() {
     return;
   }
 
-  let boards;
-  let divisions;
+  let result;
   try {
-    // ⚠ SEQUENTIAL, NOT Promise.all. Running both boards at once doubles the
-    // instantaneous pressure on the endpoint we are being throttled by, which
-    // is the one thing this run cannot afford: the whole point is to get a
-    // complete snapshot written, and it has all the time in the world to do it.
-    const M = await board("M");
-    await pace();
-    const F = await board("F");
-    boards = { M, F };
-    // Sequential and spaced: six more calls against an API that has been
-    // throttling us today is not worth saving two seconds over.
-    divisions = {};
-    for (const d of DIVISIONS) {
-      divisions[`${d.dt}:${d.gender}`] = await divisionBoard(d.dt, d.gender);
-      await pace();
-    }
+    result = await fetchWprSnapshot({
+      token: TOKEN,
+      base: BASE,
+      bypassCache: BYPASS_CACHE,
+      cache: { get: cacheGet, set: cacheSet },
+      log: (msg) => console.log(`[wpr-snapshot] ${msg}`),
+    });
   } catch (err) {
+    // A truncated board is "fetched something and it looked wrong" — refuse to
+    // overwrite, loudly. Anything else is upstream being unreachable.
+    if (/players \(floor/.test(err.message)) {
+      console.error(`[wpr-snapshot] ${err.message}. Refusing to overwrite.`);
+      process.exitCode = 1;
+      return;
+    }
     reportRefreshFailure(`upstream unavailable (${err.message})`);
     return;
   }
 
-  for (const [g, b] of Object.entries(boards)) {
-    if (b.players.length < MIN_PLAYERS) {
-      console.error(
-        `[wpr-snapshot] ${g} came back with only ${b.players.length} players (floor ${MIN_PLAYERS}). ` +
-          `Refusing to overwrite — this looks like a truncated response, not a smaller tour.`,
-      );
-      process.exitCode = 1;
-      return;
-    }
-  }
-
-  const payload = {
-    generatedAt: new Date().toISOString(),
-    boards,
-    divisions,
-  };
-  const divTotal = Object.values(divisions).reduce((n, rows) => n + rows.length, 0);
-  const summary =
-    Object.entries(boards)
-      .map(([g, b]) => `${g} ${b.players.length}/${b.total}`)
-      .join(" · ") +
-    ` · ${Object.keys(divisions).length} division boards (${divTotal} rows)` +
-    ` · ${upstreamCalls} upstream, ${cacheHits} cached`;
+  const { snapshot, upstreamCalls, cacheHits } = result;
+  const summary = describeSnapshot(snapshot, upstreamCalls, cacheHits);
 
   if (check) {
     console.log(`[wpr-snapshot] --check OK: ${summary}`);
     return;
   }
 
-  writeFileSync(OUT, `${JSON.stringify(payload)}\n`);
-  const kb = (Buffer.byteLength(JSON.stringify(payload)) / 1024).toFixed(0);
+  writeFileSync(OUT, `${JSON.stringify(snapshot)}\n`);
+  const kb = (Buffer.byteLength(JSON.stringify(snapshot)) / 1024).toFixed(0);
   console.log(`[wpr-snapshot] wrote ${OUT} — ${summary} (${kb} KB)`);
 }
 

@@ -1,5 +1,5 @@
 import { getAthlete } from "@/lib/athletes";
-import wprSnapshot from "@/lib/data/wpr-snapshot.json";
+import { bundledWprSnapshot, getWprSnapshot, type WprSnapshot } from "@/lib/wpr-snapshot";
 import { RANKINGS_CACHE_TAG } from "@/lib/cache-tags";
 import { type Division, type DivisionKey, divisionRankings } from "@/lib/home-content";
 import { EUROPE_RANK_SLUGS } from "@/lib/europe-roster";
@@ -288,8 +288,11 @@ function mapPlayer(p: ApiPlayer): RankingEntry {
  */
 const SNAPSHOT_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 
-function snapshotBoard(gender: "M" | "F"): { total: number; players: ApiPlayer[] } | null {
-  const snap = wprSnapshot as {
+function snapshotBoard(
+  gender: "M" | "F",
+  source: WprSnapshot = bundledWprSnapshot(),
+): { total: number; players: ApiPlayer[] } | null {
+  const snap = source as {
     generatedAt?: string;
     boards?: Record<string, { total: number; players: ApiPlayer[] }>;
   };
@@ -338,7 +341,7 @@ const boardDay = () => new Date().toISOString().slice(0, 10);
  */
 export function rankingsAsOf(): string {
   if (!config().token && (snapshotBoard("M") || snapshotBoard("F"))) {
-    const at = (wprSnapshot as { generatedAt?: string }).generatedAt;
+    const at = bundledWprSnapshot().generatedAt;
     if (at && /^\d{4}-\d{2}-\d{2}/.test(at)) return at.slice(0, 10);
   }
   return boardDay();
@@ -414,7 +417,11 @@ async function fetchBoardPage(gender: "M" | "F", page: number): Promise<Board | 
  * place of live data.
  */
 async function boardPage(gender: "M" | "F", page: number): Promise<Board | null> {
-  const key = `${gender}:${page}`;
+  // ⚠ THE SNAPSHOT'S VERSION IS PART OF THE KEY (9/28). The daily job swaps the
+  // snapshot under a running instance; without this a warm instance would keep
+  // serving the previous board for the rest of BOARD_TTL_MS.
+  const source = await getWprSnapshot();
+  const key = `${gender}:${page}:${source.generatedAt ?? ""}:${boardDay()}`;
   const hit = boardCache.get(key);
   if (hit && hit.expires > Date.now()) return hit.value;
   // Collapse concurrent callers (parallel page renders in a build) into one call.
@@ -425,7 +432,7 @@ async function boardPage(gender: "M" | "F", page: number): Promise<Board | null>
     // ⚠ SNAPSHOT FIRST — this is the whole point of the file on disk. A page
     // served from it costs no upstream request, which is what lets every
     // athlete prerender instead of 71 of them rendering per view.
-    const snap = snapshotBoard(gender);
+    const snap = snapshotBoard(gender, source);
     if (snap) {
       const start = (page - 1) * BOARD_PAGE_SIZE;
       const slice = snap.players.slice(start, start + BOARD_PAGE_SIZE);
@@ -479,7 +486,8 @@ const fullBoardInFlight = new Map<string, Promise<RankingEntry[]>>();
  * instance each re-walk the board and interleave between the per-page awaits.
  */
 async function boardAll(gender: "M" | "F"): Promise<RankingEntry[]> {
-  const key = `${gender}:${boardDay()}`;
+  const source = await getWprSnapshot();
+  const key = `${gender}:${source.generatedAt ?? ""}:${boardDay()}`;
   const hit = fullBoardCache.get(key);
   if (hit && hit.expires > Date.now()) return hit.value;
   const pending = fullBoardInFlight.get(key);
@@ -490,7 +498,7 @@ async function boardAll(gender: "M" | "F"): Promise<RankingEntry[]> {
     // replaces up to MAX_BOARD_PAGES sequential upstream calls with one pass
     // over an array. Mapping ~2,300 players is not free, so it stays inside the
     // memo below rather than being redone per caller.
-    const snap = snapshotBoard(gender);
+    const snap = snapshotBoard(gender, source);
     if (snap) {
       const mapped = snap.players.filter((pl) => (pl.points ?? 0) > 0).map(mapPlayer);
       if (mapped.length > 0) {

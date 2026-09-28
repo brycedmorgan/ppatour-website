@@ -51,7 +51,7 @@
  * `pbGetJson` contract its callers already handle.
  */
 import { createHash } from "node:crypto";
-import { neon } from "@neondatabase/serverless";
+import { neon, neonConfig } from "@neondatabase/serverless";
 
 const FETCH_TIMEOUT_MS = 8000;
 const FETCH_RETRIES = 3;
@@ -73,6 +73,30 @@ function backoffMs(attempt: number, retryAfter: string | null): number {
   if (Number.isFinite(ra) && ra > 0) return Math.min(ra * 1000, 6000);
   return Math.min(400 * 2 ** attempt, 4000) + Math.floor(Math.random() * 300);
 }
+
+/**
+ * ⚠ THE DATABASE MUST NOT GO THROUGH NEXT'S PATCHED fetch, AND IT HAD BEEN (found 9/28).
+ * The Neon HTTP driver speaks SQL as a POST over `fetch`, and on a route that
+ * is `force-static` (/rankings, the homepage) or declares `fetchCache =
+ * "default-cache"` (/api/rankings) Next's patched fetch treats that POST as
+ * cacheable. Measured in `.next/cache/fetch-cache` on a production build: our
+ * `SELECT`s, the `CREATE TABLE`s and the rest stored as Data Cache entries with
+ * **revalidate 31536000 — a year.** On those routes a read returned whatever the
+ * table held the first time that exact query ran, and a cached `INSERT` meant the
+ * write never reached the table again. It surfaced when the daily rankings
+ * snapshot (lib/wpr-snapshot.ts) was written and /rankings kept serving the old
+ * one.
+ *
+ * So SQL goes out on the fetch Next wraps, which it keeps as
+ * `_nextOriginalFetch`. Resolved per call, because Next patches the global after
+ * this module may have loaded. ⚠ That property is a Next internal: if an upgrade
+ * drops it this falls back to the patched fetch — i.e. back to the bug, silently.
+ * Re-check with a marker row after a Next upgrade (see docs in the 9/28 log).
+ */
+neonConfig.fetchFunction = (input: RequestInfo | URL, init?: RequestInit) => {
+  const f = globalThis.fetch as typeof fetch & { _nextOriginalFetch?: typeof fetch };
+  return (f._nextOriginalFetch ?? f)(input, init);
+};
 
 function db() {
   const url = process.env.DATABASE_URL;
@@ -392,4 +416,78 @@ export async function sweepCache(): Promise<number> {
     })(),
   );
   return (rows as unknown[] | null)?.length ?? 0;
+}
+
+/**
+ * A named value in the same table — for things we assemble ourselves rather
+ * than GET from one URL. The daily WPR snapshot (lib/wpr-snapshot.ts) is the
+ * first: ten board pages plus six division boards stitched into one object.
+ *
+ * `name` is stored as the key verbatim (never a sha256, so it cannot collide
+ * with a URL row) and as the `url` column prefixed `stored:` so a human reading
+ * the table can tell what it is. Returns null on any failure, like everything
+ * else here.
+ */
+export async function readStored(name: string): Promise<{ value: unknown; updatedAt: string } | null> {
+  const sql = db();
+  if (!sql) return null;
+  const rows = await timeboxed(
+    (async () => {
+      await init(sql);
+      return sql`SELECT value, updated_at FROM api_cache WHERE key = ${name} AND expires_at > now()`;
+    })(),
+  );
+  const row = (rows as { value: string; updated_at: string | Date }[] | null)?.[0];
+  if (!row) return null;
+  try {
+    return { value: JSON.parse(row.value), updatedAt: new Date(row.updated_at).toISOString() };
+  } catch {
+    return null;
+  }
+}
+
+/** Just the `updated_at` of a stored value — a cheap "has it changed?" probe. */
+export async function storedVersion(name: string): Promise<string | null> {
+  const sql = db();
+  if (!sql) return null;
+  const rows = await timeboxed(
+    (async () => {
+      await init(sql);
+      return sql`SELECT updated_at FROM api_cache WHERE key = ${name} AND expires_at > now()`;
+    })(),
+  );
+  const at = (rows as { updated_at: string | Date }[] | null)?.[0]?.updated_at;
+  return at ? new Date(at).toISOString() : null;
+}
+
+/**
+ * Write a named value. ⚠ AWAITED AND REPORTED, unlike the fire-and-forget write
+ * in `load`: the caller is a job whose only output is this row, so it needs to
+ * know whether it landed. Uses its own longer timeout — a ~700 KB write is not
+ * a request-path read.
+ */
+export async function writeStored(
+  name: string,
+  tag: string,
+  value: unknown,
+  ttlSeconds: number,
+): Promise<boolean> {
+  const sql = db();
+  if (!sql) return false;
+  const body = JSON.stringify(value);
+  try {
+    await init(sql);
+    await sql`
+      INSERT INTO api_cache (key, url, tag, value, expires_at, updated_at)
+      VALUES (${name}, ${`stored:${name}`}, ${tag}, ${body},
+              now() + ${`${ttlSeconds} seconds`}::interval, now())
+      ON CONFLICT (key) DO UPDATE
+        SET value = EXCLUDED.value,
+            tag = EXCLUDED.tag,
+            expires_at = EXCLUDED.expires_at,
+            updated_at = now()`;
+    return true;
+  } catch {
+    return false;
+  }
 }

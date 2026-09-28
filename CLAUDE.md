@@ -65,6 +65,54 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-28 — The rankings re-read themselves daily; the deploy hook never fired, and Next was caching our SQL for a year
+
+- Wesley: *"The World Rankings are not accurate currently. Could this be a caching issue?"* Then: *"we need
+  to have the rankings re-read once a day. get that setup and get the rankings updated asap."*
+- **Production was serving a board that no longer existed upstream.** Ben Johns 17,832.5 against a live
+  18,432.5, ALW 20,710 against 22,105, Staksrud and Patriquin swapped at No. 4/5. The 9/27 17:21 UTC deploy's
+  prebuild pulled it (17 upstream, 0 cached — so NOT the 9/23 durable cache), and asking the API for
+  `rank=2026-09-27` today returns different numbers. pickleball.com was mid-recalculation or briefly wrong
+  when we built, and the snapshot is bundled JSON, so it stayed until someone pushed. Fixed within minutes by
+  a production redeploy; the rest is making sure it can't recur.
+- **⚠ THE DAILY REFRESH HAD NEVER RUN.** `/api/cron/rebuild` (9/5) pinged a Deploy Hook so `prebuild` would
+  regenerate the snapshot. `DEPLOY_HOOK_URL` was set 23 days ago and not one production deploy came from it —
+  every "fresh" board since 9/5 was a side effect of a code push. Deleted, not repaired: its premise ("a cron
+  cannot write the snapshot itself") was true of the filesystem, not of the database.
+- **New `/api/cron/rankings`, same 09:00 UTC slot.** Fetches all 16 boards (fresh, bypassing the per-URL
+  cache), stores the whole snapshot as one `api_cache` row (`wpr-snapshot:latest`, own tag `wpr-snapshot` so a
+  `?tag=rankings` purge can't wipe it), then `revalidatePath("/", "layout")` — lazily, because ranks reach
+  nearly every page. A failed run writes nothing and returns 502; the previous snapshot keeps serving.
+  Manual refresh: `GET /api/cron/rankings/` with `Authorization: Bearer $CRON_SECRET`.
+- **`lib/wpr-snapshot.ts` serves whichever is NEWER — the bundled file or the stored row.** One cheap
+  `updated_at` probe per instance per 5s; the ~700 KB value is re-read only when it changed. The in-process
+  board memos in `rankings-api` and `division-rankings` are now keyed on the snapshot's `generatedAt`, or a
+  warm instance would have held yesterday's board for six hours. **Still zero `partner_rankings` calls per
+  page view** — measured 0 across the board, an athlete lookup and division ranks.
+- **`lib/wpr-snapshot-core.mjs` is the one implementation** for the build script and the cron, because the
+  URL is the durable-cache key and two copies drift. Verified the script's output identical in shape
+  (keys, division keys, player fields) and it still fails soft/hard exactly as before.
+- **⚠ THE REAL FIND: NEXT WAS CACHING OUR POSTGRES QUERIES WITH `revalidate: 31536000`.** The Neon HTTP
+  driver sends SQL as a `fetch` POST, and on `force-static` routes (/rankings, the homepage) or
+  `fetchCache = "default-cache"` (/api/rankings) Next's patched fetch stores it. Found in
+  `.next/cache/fetch-cache`: `SELECT`s, `CREATE TABLE`s, a year each. So on those routes `pb-cache` has been
+  returning whatever a query first returned, and a cached `INSERT` never reaches the table again — this
+  predates today (9/18). Fixed in `pb-cache.ts` with `neonConfig.fetchFunction` → Next's
+  `_nextOriginalFetch`. ⚠ **That is a Next internal; if an upgrade drops it, this silently falls back to the
+  bug.** Re-check after any Next upgrade: build, then `grep -l neon.tech .next/cache/fetch-cache/*` must be
+  empty.
+- **Verified on a real production build against the live API and the real table, not by reasoning:** wrote
+  a marker row (Ben 99,999), the build and `/api/rankings` served it; ran the cron locally → **17 upstream,
+  stored, and /rankings, /api/rankings, /athletes/ben-johns, /athletes/anna-leigh-waters and the homepage all
+  read the live board on the next request.** After the fix: 0 Neon entries in the fetch cache, `/api/rankings`
+  back to ○ (it had gone ƒ while the SQL was being cached), `/rankings` ○, athletes ● — unchanged. tsc +
+  eslint clean.
+- ⚠ Method: built with `next build --webpack` because Turbopack refuses the worktree's `node_modules`
+  junction, and the global `npm`/`npx` are broken on this machine (MODULE_NOT_FOUND in npm itself). Node 24's
+  type-stripping plus a 15-line resolve hook for `@/` runs lib code without tsx.
+- **Open:** whether pickleball.com recalculates at a fixed time — 09:00 UTC is a guess, and the 9/27 capture
+  shows a bad moment exists. If a stale board is reported again, check the cron's run log first.
+
 ### 2026-09-25 — The Player Handbook page was never the handbook; now it is, with the PDF
 
 - Wesley: *"We need to fix our player handbook"*, with the PDF; then *"have a PDF button at the top"*.
