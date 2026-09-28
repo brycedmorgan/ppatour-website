@@ -8,7 +8,12 @@ import sgMail from "@sendgrid/mail";
 
 export async function sendSignInEmail(to: string, link: string): Promise<void> {
   const key = process.env.SENDGRID_API_KEY;
-  const from = process.env.SENDGRID_FROM;
+  // Dedicated ambassador sender, falling back to the shared SENDGRID_FROM so
+  // other flows (vacations) are untouched. Set AMBASSADOR_EMAIL_FROM to e.g.
+  // "PPA Tour Ambassadors <info@ppatour.com>" to brand only the sign-in email.
+  const from = process.env.AMBASSADOR_EMAIL_FROM || process.env.SENDGRID_FROM;
+  // Optional: where replies go (the from can be a no-reply address).
+  const replyTo = process.env.AMBASSADOR_EMAIL_REPLY_TO;
 
   if (!key || !from) {
     console.log(`[ambassadors] sign-in link for ${to}: ${link}`);
@@ -30,6 +35,7 @@ export async function sendSignInEmail(to: string, link: string): Promise<void> {
   await sgMail.send({
     to,
     from,
+    ...(replyTo ? { replyTo } : {}),
     subject: "Your PPA Tour ambassador dashboard",
     text: `Sign in to your PPA Tour ambassador dashboard (works once, expires in 15 minutes): ${link}`,
     html,
