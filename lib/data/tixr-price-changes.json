@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-27T17:21:08Z",
+  "updated_at": "2026-09-28T19:54:01Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -6891,6 +6891,157 @@
         "from": "OPEN",
         "to": "CLOSED"
       }
+    },
+    {
+      "at": "2026-09-28T19:54:01Z",
+      "type": "price_change",
+      "event_id": "195857",
+      "event": "PPA Las Vegas",
+      "ticket": "50+ Humana Legends Series Clinic",
+      "base_price": {
+        "from": 0,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 0,
+        "to": 0
+      }
+    },
+    {
+      "at": "2026-09-28T19:54:01Z",
+      "type": "availability_change",
+      "event_id": "195857",
+      "event": "PPA Las Vegas",
+      "ticket": "50+ Humana Legends Series Clinic",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-09-28T19:54:01Z",
+      "type": "price_change",
+      "event_id": "197226",
+      "event": "PPA Las Vegas Saturday - Semifinals",
+      "ticket": "Saturday VIP",
+      "base_price": {
+        "from": 350,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 383.56,
+        "to": 383.56
+      }
+    },
+    {
+      "at": "2026-09-28T19:54:01Z",
+      "type": "availability_change",
+      "event_id": "197226",
+      "event": "PPA Las Vegas Saturday - Semifinals",
+      "ticket": "Saturday VIP",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-09-28T19:54:01Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday Courtside Bleacher",
+      "base_price": {
+        "from": null,
+        "to": 140
+      },
+      "all_in_price": {
+        "from": 135.35,
+        "to": 157.01
+      }
+    },
+    {
+      "at": "2026-09-28T19:54:01Z",
+      "type": "availability_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday Courtside Bleacher",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-09-28T19:54:01Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 546.87,
+        "to": 438.58
+      }
+    },
+    {
+      "at": "2026-09-28T19:54:01Z",
+      "type": "price_change",
+      "event_id": "203167",
+      "event": "PPA Daytona Beach Sunday - Championships",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": null,
+        "to": 80
+      },
+      "all_in_price": {
+        "from": 91.83,
+        "to": 91.83
+      }
+    },
+    {
+      "at": "2026-09-28T19:54:01Z",
+      "type": "availability_change",
+      "event_id": "203167",
+      "event": "PPA Daytona Beach Sunday - Championships",
+      "ticket": "Sunday Courtside",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-09-28T19:54:01Z",
+      "type": "price_change",
+      "event_id": "204411",
+      "event": "PPA Palm Springs Friday - Quarterfinals",
+      "ticket": "Friday Courtside",
+      "base_price": {
+        "from": 80,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 91.83,
+        "to": 46.56
+      }
+    },
+    {
+      "at": "2026-09-28T19:54:01Z",
+      "type": "availability_change",
+      "event_id": "204411",
+      "event": "PPA Palm Springs Friday - Quarterfinals",
+      "ticket": "Friday Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-09-28T19:54:01Z",
+      "type": "event_removed",
+      "event_id": "190874",
+      "event": "PPA Challenger Series - Charlotte"
     }
   ]
 }
