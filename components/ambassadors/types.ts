@@ -24,7 +24,7 @@ export type Stamp = {
 };
 export type Graphic = {
   id: string; event: string; kind: string; title: string;
-  file: string; type: string; stamp: Stamp; slug: string; w: number; h: number;
+  file: string; type: string; stamp: Stamp | null; slug: string; w: number; h: number;
 };
 
 export type Rank = { rank: number; points: number; of: number } | null;

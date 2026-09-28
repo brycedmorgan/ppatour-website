@@ -142,7 +142,10 @@ export async function buildMe(email: string): Promise<MePayload | null> {
   const live = await getGraphics();
   const graphics = live
     ? live
-        .filter((g) => g.stamp && g.assetId)
+        // Any uploaded graphic is ambassador-ready now: the ambassador places
+        // and styles their own code in the dashboard, so a shared code box is
+        // no longer required. `stamp` (if HQ set one) is only a starting point.
+        .filter((g) => g.assetId)
         .map((g) => ({
           id: g._id,
           event: g.event ?? "",
@@ -150,7 +153,7 @@ export async function buildMe(email: string): Promise<MePayload | null> {
           title: g.title ?? "",
           file: `/_blob/${g.assetId}`,
           type: g.contentType ?? "image/webp",
-          stamp: g.stamp,
+          stamp: g.stamp ?? null,
           slug: slugify(g.title || g.fileName || g._id),
           w: 0,
           h: 0,
