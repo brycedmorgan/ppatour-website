@@ -3,6 +3,8 @@ import Link from "next/link";
 import { HeroBackgroundToggle } from "@/components/home/HeroBackgroundToggle";
 import { Countdown } from "@/components/motion/Countdown";
 import { WatchLiveButton } from "@/components/live/WatchLiveButton";
+import { LiveEventBadge, LiveEventStatusText } from "@/components/live/LiveEventStatus";
+import { playDays } from "@/lib/order-of-play";
 import {
   eventHref,
   formatDateRange,
@@ -149,6 +151,10 @@ export function HomeHero({
    */
   const heightClass = variant === "photo" ? "min-h-[50svh]" : "min-h-[58svh]";
 
+  // The stop's order of play, for the live status line. Plain data — which day
+  // is today is decided on the device.
+  const days = playDays(next.slug, next.startDate, next.endDate);
+
   return (
     <>
       {/* ── Hero (event lead) ───────────────────────────────── */}
@@ -252,10 +258,9 @@ export function HomeHero({
                 said its own thing in the last slot. Only the badge and that last
                 slot differ now, so they cannot drift again. */}
             {live ? (
-              <span className="flex items-center gap-1.5 bg-ppa-live px-2 py-0.5">
-                <span className="size-1.5 animate-pulse rounded-full bg-white" />
-                Live Now
-              </span>
+              /* "Live Now" only while a match is on court; "Tournament Week"
+                 the rest of the event. See lib/live-status. */
+              <LiveEventBadge days={days} />
             ) : (
               <span className="bg-ppa-blue px-2 py-0.5">Next Event</span>
             )}
@@ -272,9 +277,14 @@ export function HomeHero({
               {live ? (
                 /* ⚠ THE ONE PLACE THE LIVE HERO STILL DEPARTS FROM THE HOMEPAGE,
                    and it has to. The countdown clamps at zero, so a literal match
-                   would print "0D : 0H : 0M : 0S" beside a LIVE NOW badge for the
-                   whole tournament. */
-                "Matches in progress"
+                   would print "0D : 0H : 0M : 0S" for the whole tournament.
+
+                   ⚠ AND IT USED TO SAY "Matches in progress" FOR ALL SEVEN DAYS
+                   (Wesley, 9/28) — overnight, before first serve, between
+                   sessions. It now says what is true: in progress only while the
+                   feed has a live match, otherwise first serve / up next / play
+                   resumes. */
+                <LiveEventStatusText days={days} />
               ) : (
                 <Countdown
                   targetIso={next.startDate}
@@ -322,7 +332,25 @@ export function HomeHero({
           >
             {live ? (
               <>
-                <WatchLiveButton className="group flex h-11 items-center justify-center gap-1.5 bg-ppa-live px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:bg-ppa-live-deep active:scale-[0.98]">
+                <WatchLiveButton
+                  className="group flex h-11 items-center justify-center gap-1.5 bg-ppa-live px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:bg-ppa-live-deep active:scale-[0.98]"
+                  idle={{
+                    href: "/watch/tv/",
+                    className:
+                      "group flex h-11 items-center justify-center gap-1.5 bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:bg-ppa-blue-deep active:scale-[0.98]",
+                    children: (
+                      <>
+                        TV Schedule
+                        <span
+                          aria-hidden
+                          className="transition-transform duration-300 group-hover:translate-x-0.5"
+                        >
+                          →
+                        </span>
+                      </>
+                    ),
+                  }}
+                >
                   ▶ Watch Live
                   <span
                     aria-hidden

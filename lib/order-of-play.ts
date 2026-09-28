@@ -14,7 +14,7 @@
  * Gates, first serve and channels stay in `buildSchedule` — only the round
  * naming is shared.
  */
-import { getEventSchedule } from "@/lib/event-schedule";
+import { firstServeFor, getEventSchedule } from "@/lib/event-schedule";
 
 /** The pro ladder, counted back from the final. Index = days from the end. */
 export const PRO_ROUNDS = [
@@ -90,4 +90,49 @@ export function orderOfPlayByDay(
     out[d.iso] = useReal ? real.proDays[i].label : d.label;
   });
   return out;
+}
+
+/** One day of a stop as the live-status copy needs it. */
+export type PlayDay = {
+  /** "2026-09-29" — the venue's calendar date. */
+  iso: string;
+  /** "Tue" */
+  dow: string;
+  /** The order-of-play label, e.g. "Pro quarterfinals". */
+  label: string;
+  /** "2:00 PM", or "TBD" where the event team has not published one. */
+  firstServe: string;
+};
+
+const DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+/**
+ * Every day of a stop with its round and first serve, for the live-status copy
+ * (components/live/LiveEventStatus).
+ *
+ * ⚠ THE TIMES ARE buildSchedule's, NOT A THIRD COPY OF THEM. Same template
+ * (9:00 AM on the two lead-in days, 11:00 AM on the final, 10:00 AM between),
+ * same per-stop override (`firstServeFor`), and the event team's transcribed
+ * schedule where one exists and its day count matches — the same pairing rule
+ * `orderOfPlayByDay` uses. If the template in buildSchedule changes, change it
+ * here too; the hero saying "First serve 10:00 AM" over a table reading 2:00 PM
+ * is exactly the disagreement this module exists to stop.
+ *
+ * Plain data, no clock: the caller decides which day is today, on the device.
+ */
+export function playDays(slug: string, startIso: string, endIso: string): PlayDay[] {
+  const days = proDayLabels(startIso, endIso);
+  const real = getEventSchedule(slug);
+  const useReal = real && real.proDays.length === days.length;
+  const last = days.length - 1;
+  return days.map((d, i) => {
+    const fromEnd = last - i;
+    let templated = "10:00 AM";
+    if (i === 0 || i === 1) templated = "9:00 AM";
+    else if (fromEnd === 0) templated = "11:00 AM";
+    const dow = DOW[new Date(`${d.iso}T00:00:00Z`).getUTCDay()];
+    return useReal
+      ? { iso: d.iso, dow, label: real.proDays[i].label, firstServe: real.proDays[i].firstServe }
+      : { iso: d.iso, dow, label: d.label, firstServe: firstServeFor(slug, d.iso, templated) };
+  });
 }

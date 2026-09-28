@@ -65,6 +65,38 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-28 — Live-event copy says what is on court, not what the calendar says
+
+- Wesley (Asana "Verbiage Update for Live Events"): the site goes live off the event's DATES, so the
+  hero read "LIVE NOW · Matches in progress" for all seven days — overnight, before first serve,
+  between sessions. The dates still decide it is tournament week; **new `lib/live-status.ts` decides
+  what to SAY**, from the ticker feed plus the order of play.
+- **"In progress" / "Live Now" / "Watch Live" only while the feed has a `status: "live"` match.**
+  Otherwise: "First serve 2:00 PM" (nothing played yet today) · "Up next · 6:30 PM PDT" (between
+  matches; just "Up next" once that planned start has passed — matches run late) · "Play resumes Thu ·
+  2:00 PM" · "Play complete". Badge reads "Tournament Week" when nothing is live. Feed unreachable →
+  the day's round from the order of play, never a claim about play. "Pro Qualifiers in progress" when
+  every live match is a qualifier.
+- **First-serve times come from new `playDays()` in `lib/order-of-play.ts`**, which mirrors
+  buildSchedule's template + `FIRST_SERVE_BY_SLUG` + the transcribed `eventSchedules`. ⚠ If the
+  template in either buildSchedule changes, change it there too.
+- `useLiveTicker` gained `feedOk` (the feed actually answered) — `loaded` also turns true after the
+  retry budget is spent, which is "we could not ask", not "nothing is on".
+- Surfaces: homepage hero (badge, status line, red Watch Live → blue **TV Schedule** when idle),
+  event-page hero (also kills the phone countdown stuck at "0D : 0H : 0M : 0S"), the "Live Now"
+  kickers over both live scores bands, the header marquee (idle link → **Scores & Brackets**, the
+  event's `#results`; pulsing red dots only when live), and StickyBuyBar (it said "Live Now · Watch
+  Live" over up-next/final rows). ScoreTicker and AppScoreBar were already right. **NationalsLive
+  deliberately untouched** — its live state is a simulated 20s countdown over Atlanta fixtures.
+- ⚠ Everything renders the NEUTRAL state before hydration; the server cannot see the feed or the
+  device's day, and must not claim a match is live.
+- Verified against the real Las Vegas feed on its first day (qualifiers between matches): homepage +
+  event page read "Tournament Week / Up next", 0 "in progress", 0 "Watch Live", no overflow at 1440 or
+  390. 12 synthetic cases through `liveEventStatus`. tsc clean, eslint at the StickyBuyBar
+  set-state-in-effect baseline, `next build` green (2,103 pages) — with stale `.next/types` from
+  another branch moved aside, which otherwise fails the typecheck.
+- ⚠ First-serve times print without a zone ("2:00 PM"): venue time, from the schedule, which has none.
+
 ### 2026-09-28 — The rankings re-read themselves daily; the deploy hook never fired, and Next was caching our SQL for a year
 
 - Wesley: *"The World Rankings are not accurate currently. Could this be a caching issue?"* Then: *"we need

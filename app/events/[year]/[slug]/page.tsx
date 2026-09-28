@@ -44,7 +44,12 @@ import {
   sideEventsFor,
 } from "@/lib/event-schedule";
 import { challengerShowdown, showdownDaysFor } from "@/lib/challenger-showdown";
-import { orderOfPlayByDay, proDayLabel } from "@/lib/order-of-play";
+import { orderOfPlayByDay, playDays, proDayLabel } from "@/lib/order-of-play";
+import {
+  LiveEventBadge,
+  LiveEventKicker,
+  LiveEventStatusText,
+} from "@/components/live/LiveEventStatus";
 import { stageScheduleFor } from "@/lib/event-stage";
 import { StageSchedule } from "@/components/events/StageSchedule";
 import { getEvents } from "@/lib/events-api";
@@ -302,6 +307,8 @@ export default async function EventPage({ params }: Params) {
   // The same order of play, keyed by date, for the scores board to open on —
   // see the `roundByDay` prop on ScoresBoard.
   const roundByDay = orderOfPlayByDay(t.slug, t.startDate, t.endDate);
+  // The same order of play with first-serve times, for the live status copy.
+  const liveDays = playDays(t.slug, t.startDate, t.endDate);
   const broadcast = getBroadcast(t.slug);
   // The channels THIS event is actually on — see lib/event-watch.ts.
   const watchCards = watchCardsFor(t.slug);
@@ -691,6 +698,19 @@ export default async function EventPage({ params }: Params) {
                 <span className="text-white/25">/</span>
                 <span className="text-ppa-yellow">Final</span>
               </>
+            ) : isTournamentLive(t) ? (
+              <>
+                {/* ⚠ During the event the countdown below would clamp at
+                    "0D : 0H : 0M : 0S". This says what is actually happening —
+                    "Live Now · Matches in progress" only while a match is on
+                    court, first serve / up next / play resumes otherwise
+                    (Wesley, 9/28). Mirrored in NationalsLive. */}
+                <LiveEventBadge days={liveDays} />
+                <span className="text-white/25">/</span>
+                <span className="text-ppa-yellow">
+                  <LiveEventStatusText days={liveDays} />
+                </span>
+              </>
             ) : (
               <>
                 {/* Countdown here only below lg — the "First Serve In" block
@@ -879,12 +899,8 @@ export default async function EventPage({ params }: Params) {
       {showLiveScores && uuid && (
         <section id="results" className="scroll-mt-[120px] bg-ppa-navy">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
-            <div className="flex items-center gap-2.5">
-              <span className="h-2 w-2 animate-pulse rounded-full bg-ppa-live" />
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
-                Live Now
-              </p>
-            </div>
+            {/* "Live Now" only while a match is on court. */}
+            <LiveEventKicker days={liveDays} />
             <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
               {t.name} Live Scores
             </h2>

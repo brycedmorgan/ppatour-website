@@ -5,7 +5,8 @@ import { PartnerSpotlight } from "@/components/home/PartnerSpotlight";
 import { PartnerWall } from "@/components/global/PartnerWall";
 import { HomeHero, type HeroVariant } from "@/components/home/HomeHero";
 import { ScoresBracketToggle } from "@/components/live/ScoresBracketToggle";
-import { orderOfPlayByDay } from "@/lib/order-of-play";
+import { orderOfPlayByDay, playDays } from "@/lib/order-of-play";
+import { LiveEventKicker } from "@/components/live/LiveEventStatus";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
 import { getRankings } from "@/lib/rankings-api";
 import { getEvents } from "@/lib/events-api";
@@ -99,15 +100,18 @@ function SectionHead({
   title,
   dark = false,
   pulse = false,
+  kicker,
 }: {
   label: string;
   title: string;
   dark?: boolean;
   pulse?: boolean;
+  /** Replaces the dot + label row — the live band's feed-driven kicker. */
+  kicker?: React.ReactNode;
 }) {
   return (
     <div data-reveal>
-      <div className="flex items-center gap-2.5">
+      {kicker ?? <div className="flex items-center gap-2.5">
         <span
           className={`h-2 w-2 ${pulse ? "animate-pulse rounded-full bg-ppa-live" : "bg-ppa-blue"}`}
         />
@@ -118,7 +122,7 @@ function SectionHead({
         >
           {label}
         </p>
-      </div>
+      </div>}
       <h2
         className={`mt-2 font-display text-2xl uppercase leading-[1.02] sm:text-3xl ${
           dark ? "text-white" : "text-ppa-navy"
@@ -347,6 +351,16 @@ export async function HomeContent({
                 label={showLiveScores ? "Live Now" : "Champions"}
                 title={showLiveScores ? "Live & Latest" : "Latest Champions"}
                 pulse={showLiveScores}
+                // "Live Now" with a pulsing dot only while a match is on court;
+                // the rest of tournament week it names first serve / up next.
+                kicker={
+                  showLiveScores ? (
+                    <LiveEventKicker
+                      days={playDays(next.slug, next.startDate, next.endDate)}
+                      dark={false}
+                    />
+                  ) : undefined
+                }
               />
               {/* In the champions state "Full Results" moves down beside the
                   tournament name — Dave Rogers 7/27: over here on the right it
