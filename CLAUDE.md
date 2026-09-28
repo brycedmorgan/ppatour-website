@@ -96,6 +96,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   set-state-in-effect baseline, `next build` green (2,103 pages) — with stale `.next/types` from
   another branch moved aside, which otherwise fails the typecheck.
 - ⚠ First-serve times print without a zone ("2:00 PM"): venue time, from the schedule, which has none.
+- **Follow-up, same day (Wesley):** the homepage hero keeps **"▶ Watch Live" for the whole playing day** —
+  before first serve, between matches, while a match is on — and only once the day's matches are all
+  done (`done-today` / `done`) becomes blue **"▶ Watch PickleballTV"** → the PBTV stream.
+  `DayWatchButton` in `components/live/LiveEventStatus.tsx`. The header marquee keeps its idle
+  "Scores & Brackets" link.
 
 ### 2026-09-28 — The rankings re-read themselves daily; the deploy hook never fired, and Next was caching our SQL for a year
 

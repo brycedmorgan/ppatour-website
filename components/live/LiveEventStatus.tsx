@@ -1,7 +1,12 @@
 "use client";
 
-import { Suspense, useSyncExternalStore } from "react";
-import { useLiveTicker, useTourIsLive } from "@/components/live/use-live-ticker";
+import { Suspense, useSyncExternalStore, type ReactNode } from "react";
+import {
+  liveWatchUrl,
+  PBTV_STREAM_URL,
+  useLiveTicker,
+  useTourIsLive,
+} from "@/components/live/use-live-ticker";
 import { deviceTodayIso, liveEventStatus, type LiveStatus } from "@/lib/live-status";
 import type { PlayDay } from "@/lib/order-of-play";
 
@@ -101,6 +106,56 @@ function KickerView({ status, dark }: { status: LiveStatus; dark: boolean }) {
         {status.matchLive ? "Live Now" : status.label}
       </p>
     </div>
+  );
+}
+
+function DayWatch({
+  days,
+  className,
+  doneClassName,
+  children,
+  doneChildren,
+}: DayWatchProps) {
+  const s = useLiveEventStatus(days);
+  const { ordered } = useLiveTicker();
+  const done = s.kind === "done-today" || s.kind === "done";
+  return (
+    <a
+      href={done ? PBTV_STREAM_URL : liveWatchUrl(ordered)}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={done ? (doneClassName ?? className) : className}
+    >
+      {done ? doneChildren : children}
+    </a>
+  );
+}
+
+type DayWatchProps = {
+  days: PlayDay[];
+  className?: string;
+  doneClassName?: string;
+  children: ReactNode;
+  doneChildren: ReactNode;
+};
+
+/**
+ * The event-day watch button (Wesley, 9/28): "Watch Live" for the whole playing
+ * day — before first serve, between matches, while a match is on — pointing at
+ * the first match's stream or PickleballTV. Once the day's matches are all done
+ * it becomes `doneChildren`, linking to the PickleballTV stream by default.
+ */
+export function DayWatchButton(props: DayWatchProps) {
+  return (
+    <Suspense
+      fallback={
+        <a href={PBTV_STREAM_URL} target="_blank" rel="noopener noreferrer" className={props.className}>
+          {props.children}
+        </a>
+      }
+    >
+      <DayWatch {...props} />
+    </Suspense>
   );
 }
 

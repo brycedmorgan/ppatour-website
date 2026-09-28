@@ -2,8 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { HeroBackgroundToggle } from "@/components/home/HeroBackgroundToggle";
 import { Countdown } from "@/components/motion/Countdown";
-import { WatchLiveButton } from "@/components/live/WatchLiveButton";
-import { LiveEventBadge, LiveEventStatusText } from "@/components/live/LiveEventStatus";
+import {
+  DayWatchButton,
+  LiveEventBadge,
+  LiveEventStatusText,
+} from "@/components/live/LiveEventStatus";
 import { playDays } from "@/lib/order-of-play";
 import {
   eventHref,
@@ -332,24 +335,23 @@ export function HomeHero({
           >
             {live ? (
               <>
-                <WatchLiveButton
+                {/* Watch Live for the whole playing day, until the day's last
+                    match is done; then PickleballTV (Wesley, 9/28). */}
+                <DayWatchButton
+                  days={days}
                   className="group flex h-11 items-center justify-center gap-1.5 bg-ppa-live px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:bg-ppa-live-deep active:scale-[0.98]"
-                  idle={{
-                    href: "/watch/tv/",
-                    className:
-                      "group flex h-11 items-center justify-center gap-1.5 bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:bg-ppa-blue-deep active:scale-[0.98]",
-                    children: (
-                      <>
-                        TV Schedule
-                        <span
-                          aria-hidden
-                          className="transition-transform duration-300 group-hover:translate-x-0.5"
-                        >
-                          →
-                        </span>
-                      </>
-                    ),
-                  }}
+                  doneClassName="group flex h-11 items-center justify-center gap-1.5 bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:bg-ppa-blue-deep active:scale-[0.98]"
+                  doneChildren={
+                    <>
+                      ▶ Watch PickleballTV
+                      <span
+                        aria-hidden
+                        className="transition-transform duration-300 group-hover:translate-x-0.5"
+                      >
+                        →
+                      </span>
+                    </>
+                  }
                 >
                   ▶ Watch Live
                   <span
@@ -358,7 +360,7 @@ export function HomeHero({
                   >
                     →
                   </span>
-                </WatchLiveButton>
+                </DayWatchButton>
                 {/* ⚠ The event's OWN scores section, not /watch. That page is
                     the broadcast hub — where to watch, the TV guide — and answers
                     a different question than "what is the score". The event page
