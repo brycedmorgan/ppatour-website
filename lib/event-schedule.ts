@@ -56,10 +56,28 @@ export type AmateurItem = {
 };
 
 export type EventSchedule = {
+  /**
+   * The edition this schedule belongs to, as the event's ISO start date.
+   *
+   * ⚠ REQUIRED WHERE A SLUG IS SHARED ACROSS YEARS. Annual editions share a slug
+   * here — the feed carries `pickleball-world-championships` for both the 2025
+   * and the 2026 Worlds, and `/events/[year]/[slug]` renders a page for each —
+   * so an entry keyed on the slug alone would publish this November's order of
+   * play on last year's page. Both editions run seven days, so the day-count
+   * check in lib/order-of-play would not catch it either. With `start` set,
+   * {@link getEventSchedule} returns the entry only to the edition it names.
+   */
+  start?: string;
   proDays: ProDay[];
   amateur: AmateurItem[];
   amateurNote: string;
 };
+
+/** The Challenger Showdown's session on this date, if it plays that day. */
+function showdownOn(iso: string): AmateurSession[] {
+  const day = challengerShowdown.days.find((d) => d.iso === iso);
+  return day ? [{ label: challengerShowdown.name, detail: day.label }] : [];
+}
 
 export const eventSchedules: Record<string, EventSchedule> = {
   // Source: pickleballtournaments.com/tournaments/
@@ -134,10 +152,75 @@ export const eventSchedules: Record<string, EventSchedule> = {
     amateurNote:
       "Per-division day and time assignments publish after registration closes (Aug 24) — check your bracket on pickleballtournaments.com.",
   },
+
+  /**
+   * Opendoor Pickleball World Championships — Nov 2–8, 2026, Brookhaven Country
+   * Club. Pro rounds from the event's own schedule,
+   * worlds.unitedpickleball.com/schedule, pulled 9/28/26.
+   *
+   * ⚠ THE PRO ROUNDS ARE THE WORLDS SITE'S, AND THEY CORRECT THE TEMPLATE. The
+   * template would have read Mon "Amateur & junior brackets" and Tue "Senior
+   * Open + pro qualifying"; Worlds actually plays pro qualifiers Monday and the
+   * round of 64 Tuesday.
+   *
+   * ⚠ GATES AND FIRST SERVE ARE "TBD" ON PURPOSE. The Worlds schedule publishes
+   * rounds, not times, and the template's 8/9/10 AM numbers are a house default,
+   * not this event's. A real entry holding invented times would be worse than
+   * the template, because it reads as the event team's. Fill them in the moment
+   * the events team sends them, and the intro line + concierge follow on their
+   * own (see {@link gatesPublished}).
+   *
+   * ⚠ THE DAILY PROGRAMMING (King of the Court, clinics, round robins) IS NOT
+   * HERE ON PURPOSE — it has its own section on the page (Wesley, 9/28), read
+   * from lib/event-programming.ts. Don't fold it into the amateur column.
+   *
+   * ⚠ THE SHOWDOWN IS DERIVED from lib/challenger-showdown.ts, not typed here, so
+   * this table and /tour/challenger cannot disagree. It moved out of
+   * SIDE_EVENTS_BY_SLUG with this entry — that map only feeds the template.
+   */
+  "pickleball-world-championships": {
+    start: "2026-11-02",
+    proDays: [
+      { date: "Nov 2", dow: "Mon", label: "Pro Qualifying — all pro events", firstServe: "TBD", gates: "TBD" },
+      { date: "Nov 3", dow: "Tue", label: "Main Draw — Round of 64", firstServe: "TBD", gates: "TBD" },
+      { date: "Nov 4", dow: "Wed", label: "Main Draw — Round of 32", firstServe: "TBD", gates: "TBD" },
+      { date: "Nov 5", dow: "Thu", label: "Main Draw — Round of 16", firstServe: "TBD", gates: "TBD", amateur: showdownOn("2026-11-05") },
+      { date: "Nov 6", dow: "Fri", label: "Quarterfinals", firstServe: "TBD", gates: "TBD", amateur: showdownOn("2026-11-06") },
+      { date: "Nov 7", dow: "Sat", label: "Semifinals", firstServe: "TBD", gates: "TBD", amateur: showdownOn("2026-11-07") },
+      { date: "Nov 8", dow: "Sun", label: "Championship Sunday — Finals", firstServe: "TBD", gates: "TBD" },
+    ],
+    amateur: [],
+    amateurNote:
+      "Pro first-serve and gate times are still to be announced. Amateur division days and times are on your bracket at pickleballtournaments.com.",
+  },
 };
 
-export function getEventSchedule(slug: string): EventSchedule | undefined {
-  return eventSchedules[slug];
+/**
+ * The transcribed order of play for this stop, or undefined for the template.
+ *
+ * Pass the event's start date wherever you have it: an entry that names its
+ * edition (`start`) is returned only to that edition, so a slug shared across
+ * years cannot hand one year's schedule to another. Called without it, a dated
+ * entry is withheld — failing to the template is the safe direction.
+ */
+export function getEventSchedule(slug: string, startIso?: string): EventSchedule | undefined {
+  const entry = eventSchedules[slug];
+  if (!entry) return undefined;
+  if (entry.start && entry.start !== startIso) return undefined;
+  return entry;
+}
+
+const CLOCK_TIME = /\d{1,2}:\d{2}\s*(AM|PM)/i;
+
+/**
+ * Has this stop published its gate times? False only for a transcribed schedule
+ * that still reads "TBD" — the template always has a (house-default) number.
+ * The order-of-play intro and the concierge read this so neither claims a gate
+ * time, or a relationship between gate and first serve, the table does not show.
+ */
+export function gatesPublished(slug: string, startIso: string): boolean {
+  const real = getEventSchedule(slug, startIso);
+  return !real || real.proDays.every((d) => CLOCK_TIME.test(d.gates));
 }
 
 /**
@@ -162,23 +245,10 @@ export function getEventSchedule(slug: string): EventSchedule | undefined {
  * day falls back to pro play alone. Re-check on any date change.
  */
 const SIDE_EVENTS_BY_SLUG: Record<string, Record<string, AmateurSession[]>> = {
-  /**
-   * Opendoor Pickleball World Championships — Nov 2–8, Brookhaven Country Club.
-   * The PPA Challenger Showdown is played here on the Thursday, Friday and
-   * Saturday: the Challenger season's closing event, with PPA Tour contracts on
-   * the line.
-   *
-   * ⚠ Built from lib/challenger-showdown.ts rather than typed out, so this table
-   * and the Showdown section on /tour/challenger cannot disagree about which day
-   * plays what. The dates there are DERIVED — read that file's header before
-   * touching them.
-   */
-  [challengerShowdown.hostSlug]: Object.fromEntries(
-    challengerShowdown.days.map((d) => [
-      d.iso,
-      [{ label: challengerShowdown.name, detail: d.label }],
-    ]),
-  ),
+  // ⚠ Worlds' Challenger Showdown lived here until 9/28, when Worlds gained a
+  // full `eventSchedules` entry; it is now on those days' `amateur` arrays
+  // (via showdownOn). Empty for now, kept for the next templated stop that
+  // hosts a companion event.
 };
 
 /**
@@ -341,7 +411,9 @@ export function hasFirstServeOverride(slug: string, iso: string): boolean {
  * serve would leave the page claiming an hour where the table beside it shows
  * five.
  */
-export function gatesFollowFirstServe(slug: string): boolean {
+export function gatesFollowFirstServe(slug: string, startIso: string): boolean {
+  // A transcribed schedule still reading "TBD" has no gate to relate to anything.
+  if (!gatesPublished(slug, startIso)) return false;
   return !(slug in GATES_BY_SLUG) && !(slug in FIRST_SERVE_BY_SLUG);
 }
 

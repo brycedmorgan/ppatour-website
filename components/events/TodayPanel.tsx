@@ -157,7 +157,7 @@ export function TodayPanel({
             {day.amateur && day.amateur.length > 0 && (
               <ul className="mt-4 space-y-1 border-t border-white/10 pt-3 text-xs text-white/55">
                 {day.amateur.map((a) => (
-                  <li key={a.label}>
+                  <li key={`${a.label}|${a.detail ?? ""}`}>
                     · {a.label}
                     {a.detail ? ` — ${a.detail}` : ""}
                   </li>

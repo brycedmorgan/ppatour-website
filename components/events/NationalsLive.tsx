@@ -243,7 +243,7 @@ export function NationalsLive({
         content: "event-parking-premium",
       })
     : null;
-  const realSchedule = getEventSchedule(t.slug);
+  const realSchedule = getEventSchedule(t.slug, t.startDate);
   // Same source as the real event page — see the note there. The hand-authored
   // override credited Tennis Channel on Sunday only; the sheet has it Thu–Sun.
   const dayChannels = channelsByDay(t.slug);
@@ -303,7 +303,7 @@ export function NationalsLive({
     venue: t.venue,
     dates: formatDateRange(t.startDate, t.endDate, true),
     gates: days[0]?.gates ?? "an hour before first serve",
-    gatesFollowFirstServe: gatesFollowFirstServe(t.slug),
+    gatesFollowFirstServe: gatesFollowFirstServe(t.slug, t.startDate),
     // The days this stop's own first serve is known for, or null. Without it
     // the concierge answers a “what time does play start?” with the gate time
     // alone, while the order of play on the same page carries the real one.
@@ -829,7 +829,7 @@ export function NationalsLive({
           </h2>
           <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
             All times local.{" "}
-            {gatesFollowFirstServe(t.slug) ? (
+            {gatesFollowFirstServe(t.slug, t.startDate) ? (
               <>
                 Gates open an hour before first serve; finals move to a
                 late-morning start for the broadcast window.
@@ -885,7 +885,7 @@ export function NationalsLive({
                       {d.amateur && d.amateur.length > 0 && (
                         <span className="mt-1.5 block border-l-2 border-ppa-line pl-2 lg:hidden">
                           {d.amateur.map((a) => (
-                            <span key={a.label} className="block text-[12px] text-ppa-navy/60">
+                            <span key={`${a.label}|${a.detail ?? ""}`} className="block text-[12px] text-ppa-navy/60">
                               {a.label}
                               {a.detail ? ` — ${a.detail}` : ""}
                             </span>
@@ -896,7 +896,7 @@ export function NationalsLive({
                     <span className="hidden lg:block">
                       {d.amateur && d.amateur.length > 0 ? (
                         d.amateur.map((a) => (
-                          <span key={a.label} className="mt-1 block first:mt-0">
+                          <span key={`${a.label}|${a.detail ?? ""}`} className="mt-1 block first:mt-0">
                             <span className={`block text-sm font-semibold ${dayDone ? "text-ppa-navy/50" : "text-ppa-navy"}`}>
                               {a.label}
                             </span>
@@ -914,7 +914,7 @@ export function NationalsLive({
                     <span className="hidden text-right text-sm font-bold tabular-nums text-ppa-navy lg:block">
                       {d.firstServe}
                     </span>
-                    <span className="text-right text-[10px] font-bold uppercase tracking-[0.1em]">
+                    <span className="max-w-[5.5rem] justify-self-end text-right text-[10px] lg:max-w-none lg:justify-self-auto font-bold uppercase tracking-[0.1em]">
                       {dayLive ? (
                         <span className="inline-flex items-center gap-1 text-ppa-live">
                           <span className="size-1.5 animate-pulse rounded-full bg-ppa-live" />

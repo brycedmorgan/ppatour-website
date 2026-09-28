@@ -38,11 +38,13 @@ import {
   firstServeFor,
   firstServeNote,
   gatesFollowFirstServe,
+  gatesPublished,
   gatesFor,
   getEventSchedule,
   hasGatesOverride,
   sideEventsFor,
 } from "@/lib/event-schedule";
+import { programmingFor } from "@/lib/event-programming";
 import { challengerShowdown, showdownDaysFor } from "@/lib/challenger-showdown";
 import { orderOfPlayByDay, playDays, proDayLabel } from "@/lib/order-of-play";
 import {
@@ -316,7 +318,9 @@ export default async function EventPage({ params }: Params) {
   // Finalized details for this stop, or the approved holding line. Every parking
   // surface on the page (and the concierge) reads this one value.
   const parking = parkingFor(t.slug);
-  const realSchedule = getEventSchedule(t.slug);
+  const realSchedule = getEventSchedule(t.slug, t.startDate);
+  // Daily fan programming, rendered in its own section after the order of play.
+  const programming = programmingFor(t.slug, t.startDate);
   /**
    * ⚠ THE OVERRIDE'S OWN `live` VALUES ARE NOT USED, and the reason is that
    * they were wrong. lib/event-schedule.ts is hand-authored, and Nationals'
@@ -572,6 +576,7 @@ export default async function EventPage({ params }: Params) {
           // scroll past the thing you clicked.
           { id: "tickets", label: "Tickets" },
           { id: "schedule", label: "Order of Play" },
+          ...(programming ? [{ id: "programming", label: "Programming" }] : []),
           /* No separate stage tab — the programme lives inside the venue
              section now, and two tabs scrolling into one section reads as a
              bug. "Venue Guide" covers it. */
@@ -596,8 +601,11 @@ export default async function EventPage({ params }: Params) {
     state: t.state,
     venue: t.venue,
     dates: formatDateRange(t.startDate, t.endDate, true),
-    gates: days[0]?.gates ?? "an hour before first serve",
-    gatesFollowFirstServe: gatesFollowFirstServe(t.slug),
+    // The transcribed schedule's gate where there is one (it wins over the
+    // template on this page), so the bubble can't name a templated time over a
+    // table that reads TBD.
+    gates: realSchedule?.proDays[0]?.gates ?? days[0]?.gates ?? "an hour before first serve",
+    gatesFollowFirstServe: gatesFollowFirstServe(t.slug, t.startDate),
     // The days this stop's own first serve is known for, or null. Without it
     // the concierge answers a “what time does play start?” with the gate time
     // alone, while the order of play on the same page carries the real one.
@@ -1282,11 +1290,15 @@ export default async function EventPage({ params }: Params) {
           </h2>
           <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
             All times local.{" "}
-            {gatesFollowFirstServe(t.slug) ? (
+            {gatesFollowFirstServe(t.slug, t.startDate) ? (
               <>
                 Gates open an hour before first serve; finals move to a
                 late-morning start for the broadcast window.
               </>
+            ) : !gatesPublished(t.slug, t.startDate) ? (
+              // A transcribed schedule whose times haven't been sent yet — the
+              // table reads TBD, so the intro says so rather than a number.
+              <>Gate and first-serve times will be posted closer to the event.</>
             ) : hasGatesOverride(t.slug) ? (
               <>Gates open {days[0]?.gates} daily.</>
             ) : (
@@ -1334,7 +1346,7 @@ export default async function EventPage({ params }: Params) {
                       {d.amateur && d.amateur.length > 0 && (
                         <span className="mt-1.5 block border-l-2 border-ppa-line pl-2 lg:hidden">
                           {d.amateur.map((a) => (
-                            <span key={a.label} className="block text-[12px] text-ppa-navy/60">
+                            <span key={`${a.label}|${a.detail ?? ""}`} className="block text-[12px] text-ppa-navy/60">
                               {a.label}
                               {a.detail ? ` — ${a.detail}` : ""}
                             </span>
@@ -1345,7 +1357,7 @@ export default async function EventPage({ params }: Params) {
                     <span className="hidden lg:block">
                       {d.amateur && d.amateur.length > 0 ? (
                         d.amateur.map((a) => (
-                          <span key={a.label} className="mt-1 block first:mt-0">
+                          <span key={`${a.label}|${a.detail ?? ""}`} className="mt-1 block first:mt-0">
                             <span className="block text-sm font-semibold text-ppa-navy">
                               {a.label}
                             </span>
@@ -1363,7 +1375,7 @@ export default async function EventPage({ params }: Params) {
                     <span className="hidden text-right text-sm font-bold tabular-nums text-ppa-navy lg:block">
                       {d.firstServe}
                     </span>
-                    <span className="text-right text-[10px] font-bold uppercase tracking-[0.1em]">
+                    <span className="max-w-[5.5rem] justify-self-end text-right text-[10px] lg:max-w-none lg:justify-self-auto font-bold uppercase tracking-[0.1em]">
                       {dayChannels.get(d.dow) ?? d.live ? (
                         <span className="text-[var(--event-accent)]">
                           {dayChannels.get(d.dow) ?? d.live}
@@ -1511,6 +1523,60 @@ export default async function EventPage({ params }: Params) {
           )}
         </div>
       </section>
+
+      {/* Daily programming — clinics, King of the Court, round robins. Its own
+          section, NOT a column in the Order of Play (Wesley, 9/28): the order
+          of play is the tournament, this is what fans can join around it.
+          Worlds only today; lib/event-programming.ts. */}
+      {programming && !completed && (
+        <section id="programming" className="scroll-mt-[120px] bg-white">
+          <div className="mx-auto w-full max-w-6xl px-4 py-12">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
+              Programming
+            </p>
+            <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+              Play, Learn &amp; Meet the Pros
+            </h2>
+            <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
+              Clinics, King of the Court, round robins and meet-the-pro sessions
+              every day of the week. All times local and subject to change.
+            </p>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {programming.days.map((d) => (
+                <div key={d.iso} className="border border-ppa-line bg-ppa-paper px-4 py-4">
+                  <p className="font-display text-base uppercase leading-tight text-[var(--event-accent)]">
+                    <span className="mr-1.5 text-[10px] font-sans font-bold text-ppa-navy/40">
+                      {weekdayOf(d.iso).slice(0, 3)}
+                    </span>
+                    {formatDate(d.iso)}
+                  </p>
+                  <ul className="mt-3 space-y-2.5">
+                    {d.sessions.map((s) => (
+                      <li key={`${s.title}|${s.time}`}>
+                        <span className="block text-sm font-semibold text-ppa-navy">
+                          {s.title}
+                        </span>
+                        <span className="block text-[11px] uppercase tracking-wide text-ppa-navy/45">
+                          {s.time}
+                          {s.level ? ` · Level ${s.level}` : ""}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <a
+              href={programming.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex text-xs font-bold uppercase tracking-[0.12em] text-[var(--event-accent)] hover:underline"
+            >
+              Full Worlds schedule ↗
+            </a>
+          </div>
+        </section>
+      )}
 
       {/* Watch at home — PGA-style */}
       <section id="watch" className="scroll-mt-[120px] bg-ppa-navy text-white">

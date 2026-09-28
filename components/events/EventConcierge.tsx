@@ -103,7 +103,13 @@ const INTENTS: Intent[] = [
   {
     test: /schedule|time|when|gate|start|first serve|hours|session/i,
     answer: (f) => ({
-      text: `${f.name} runs ${f.dates}. Gates open ${f.gates}${f.gatesFollowFirstServe ? " — about an hour before first serve each day. Finals move to a late-morning start for the broadcast window." : " daily."}${f.firstServeNote ? ` ${f.firstServeNote}` : ""} The full order of play is on this page under "Order of Play."`,
+      // A gate of "TBD" (a transcribed schedule whose times aren't in yet) is
+      // not a time, so the answer says it's coming rather than "Gates open TBD".
+      text: `${f.name} runs ${f.dates}. ${
+        /\d/.test(f.gates)
+          ? `Gates open ${f.gates}${f.gatesFollowFirstServe ? " — about an hour before first serve each day. Finals move to a late-morning start for the broadcast window." : " daily."}`
+          : "Gate and first-serve times will be posted closer to the event."
+      }${f.firstServeNote ? ` ${f.firstServeNote}` : ""} The full order of play is on this page under "Order of Play."`,
     }),
   },
   {

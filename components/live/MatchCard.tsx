@@ -233,14 +233,24 @@ export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: s
             {m.time}
           </span>
         ) : m.status === "live" ? (
-          // Live — the mark of whichever service the link actually opens.
+          // Live — the mark of whichever service the link actually opens, with
+          // "Watch" beside it so the logo reads as a link to THIS match (Wesley,
+          // 9/28: the mark alone didn't say you could click it).
           <a
             href={watchHref}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Watch live on ${platformLabel}`}
-            className="flex items-center transition hover:opacity-70"
+            className="flex items-center gap-1.5 transition hover:opacity-70"
           >
+            {platform !== "other" && (
+              <span
+                aria-hidden
+                className="text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-blue"
+              >
+                Watch
+              </span>
+            )}
             {platform === "youtube" ? (
               <YouTubeMark />
             ) : platform === "pbtv" ? (

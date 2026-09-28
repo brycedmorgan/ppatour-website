@@ -65,6 +65,34 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-09-28 (pt. 2) — Worlds gets its real order of play and a Programming section
+
+- Wesley: add the Worlds schedule (worlds.unitedpickleball.com/schedule, built in
+  `pickleball-world-championship-new`) to the Opendoor Pickleball World Championships page.
+  Then: *"Dont put it as part of the order of play. it should be in it's own section."*
+- **Order of Play** now has a real `eventSchedules` entry for Worlds: Mon qualifiers → Tue R64 →
+  … → Sun Championship (the template had Mon "Amateur & junior brackets", Tue "Senior Open + pro
+  qualifying"). The Challenger Showdown moved out of `SIDE_EVENTS_BY_SLUG` into Thu/Fri/Sat
+  `amateur` (derived via `showdownOn`, still from `lib/challenger-showdown.ts`).
+- **⚠ GATES + FIRST SERVE ARE "TBD"**: the Worlds site publishes rounds, not times. New
+  `gatesPublished()` makes the intro line and the concierge say times are coming instead of
+  claiming "an hour before first serve" / "Gates open TBD".
+- **⚠ `EventSchedule.start` — annual editions share the `pickleball-world-championships` slug**,
+  and both run 7 days, so the day-count check would not have stopped the 2026 schedule printing on
+  the 2025 page. `getEventSchedule(slug, startIso)` now withholds a dated entry from other
+  editions; every caller passes the start date. Verified: 2025 page unchanged.
+- **Programming** (King of the Court, clinics, round robins, Meet the Pro) is its own section +
+  tab after Order of Play, from new `lib/event-programming.ts` (same `start` guard), hidden once
+  the event completes. ⚠ It is a SNAPSHOT of the events team's live Google Sheet — re-pull before
+  the week. Music and the MLP Nations Cup (Oct 30–Nov 1) deliberately left out.
+- Also: amateur-row React keys include `detail` (a day can repeat a session name); the real-schedule
+  table's Live column caps at 5.5rem below `lg` so "PBTV · Tennis Channel" wraps instead of
+  crushing Pro Play on phones.
+- Shipped in the same push, from a parallel session: a "Watch" label beside the platform mark on
+  live `MatchCard`s. (That session's hero `DayWatchButton` was already on main as `4f09e02`.)
+- Verified on the dev server at 1440 + 390: 0 overflow, 2025 Worlds + Las Vegas/Chicago/VB controls
+  unchanged. tsc clean; eslint at the TodayPanel/NationalsLive set-state-in-effect baseline.
+
 ### 2026-09-28 — Live-event copy says what is on court, not what the calendar says
 
 - Wesley (Asana "Verbiage Update for Live Events"): the site goes live off the event's DATES, so the

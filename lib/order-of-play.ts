@@ -83,7 +83,7 @@ export function orderOfPlayByDay(
   endIso: string,
 ): Record<string, string> {
   const days = proDayLabels(startIso, endIso);
-  const real = getEventSchedule(slug);
+  const real = getEventSchedule(slug, startIso);
   const useReal = real && real.proDays.length === days.length;
   const out: Record<string, string> = {};
   days.forEach((d, i) => {
@@ -122,7 +122,7 @@ const DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
  */
 export function playDays(slug: string, startIso: string, endIso: string): PlayDay[] {
   const days = proDayLabels(startIso, endIso);
-  const real = getEventSchedule(slug);
+  const real = getEventSchedule(slug, startIso);
   const useReal = real && real.proDays.length === days.length;
   const last = days.length - 1;
   return days.map((d, i) => {
