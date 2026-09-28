@@ -310,7 +310,7 @@ const FIRST_SERVE_BY_SLUG: Record<string, Record<string, string>> = {
     "2026-09-30": "2:00 PM", // Wed
     "2026-10-01": "2:00 PM", // Thu
     "2026-10-02": "2:00 PM", // Fri
-    "2026-10-03": "1:00 PM", // Sat
+    "2026-10-03": "12:00 PM", // Sat — moved up from 1PM with the broadcast (9/28)
     "2026-10-04": "10:00 AM", // Sun — Championship Sunday
   },
 };

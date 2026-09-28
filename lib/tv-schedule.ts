@@ -215,7 +215,8 @@ export const tvSchedule: TvEvent[] = [
       // Championship Sunday did NOT move.
       { date: "Oct 1", dow: "Thu", windows: [{ channel: "PBTV", window: "5PM – 1AM", round: "Round of 16" }] },
       { date: "Oct 2", dow: "Fri", windows: [{ channel: "PBTV", window: "5PM – 1AM", round: "Quarterfinals" }] },
-      { date: "Oct 3", dow: "Sat", windows: [{ channel: "PBTV", window: "4PM – 12AM", round: "Semifinals" }] },
+      // 9/28: Saturday moved an hour EARLIER — noon local, 3PM–11PM ET (was 4PM–12AM).
+      { date: "Oct 3", dow: "Sat", windows: [{ channel: "PBTV", window: "3PM – 11PM", round: "Semifinals" }] },
       {
         date: "Oct 4",
         dow: "Sun",

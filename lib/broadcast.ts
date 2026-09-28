@@ -163,7 +163,7 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
   "rate-las-vegas-open": [
     { round: "RD 16", day: "Thursday", window: "5PM ET - 1AM ET", platform: "PBTV", type: "LIVE" },
     { round: "QF's", day: "Friday", window: "5PM ET - 1AM ET", platform: "PBTV", type: "LIVE" },
-    { round: "SF's", day: "Saturday", window: "4PM ET - 12AM ET", platform: "PBTV", type: "LIVE" },
+    { round: "SF's", day: "Saturday", window: "3PM ET - 11PM ET", platform: "PBTV", type: "LIVE" },
     { round: "Championship", day: "Sunday", window: "1PM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
     { round: "Championship", day: "Sunday", window: "1PM ET - 5PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
   ],
