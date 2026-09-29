@@ -47,8 +47,18 @@ export const VENUE_LOCATIONS: Record<string, VenueLocation> = {
     postalCode: "23451",
     addressCountry: "US",
   },
+  // 1300 Techny Rd is the event team's address (9/29); the 1100 Skokie Blvd
+  // this carried before was wrong. Keyed under the curated name AND the feed's,
+  // since the live venue name is what the page actually renders.
   "Life Time — Northbrook": {
-    streetAddress: "1100 Skokie Blvd",
+    streetAddress: "1300 Techny Rd",
+    addressLocality: "Northbrook",
+    addressRegion: "IL",
+    postalCode: "60062",
+    addressCountry: "US",
+  },
+  "Life Time North Shore Sport & Racquetball": {
+    streetAddress: "1300 Techny Rd",
     addressLocality: "Northbrook",
     addressRegion: "IL",
     postalCode: "60062",

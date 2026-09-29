@@ -340,11 +340,13 @@ export const eventGuides: Record<string, EventGuide> = {
       { name: "Red Rock Canyon", tag: "Outdoors", note: "20 min · hikes + scenic drive" },
     ],
   },
-  // ⚠ No mapQuery — it derives from the feed's venue, which registers this stop
-  // as "Life Time North Shore Sport & Racquetball". Still in Northbrook, so the
-  // getting-there line below stands. The pin used to be typed here and so could
-  // not follow a rename.
+  // ⚠ mapQuery IS THE STREET ADDRESS, ON PURPOSE (event team, 9/29). The feed
+  // registers this stop as "Life Time North Shore Sport & Racquetball", and
+  // Google resolves that name to the wrong building as its first result. The
+  // address is the event team's own, so it can't drift the way a hand-typed
+  // venue name did at Virginia Beach. If the stop moves, change it here.
   "veolia-chicago-cup": {
+    mapQuery: "1300 Techny Rd, Northbrook, IL 60062",
     airport: "ORD",
     airportNote: "O'Hare · ~20 min to venue",
     gettingThere:
