@@ -63,11 +63,12 @@ export type Me = {
   seasonRank: { registrations: { rank: number } | null; tickets: { rank: number } | null };
   tournaments: Tournament[];
   upcoming: { event: string; code: string }[];
+  year?: { tournaments: number; registrations: number; tickets: number; revenue: number; commission: number };
 };
 
 export type Shared = {
   events: Ev[];
-  leaderboards: { season: Board; events: Record<string, Board>; pods: Record<string, Board> };
+  leaderboards: { season: Board; events: Record<string, Board>; pods: Record<string, Board>; year: Board };
   graphics: Graphic[];
   program: Program;
 };
