@@ -379,15 +379,18 @@ function Results({
 /* ----------------------------- Leaderboards ---------------------------- */
 
 function Boards({ shared, ev, pod }: { shared: Shared; ev: (id: string) => Ev | undefined; pod: Me["pod"] }) {
-  const [scope, setScope] = useState<string>("season");
   const podBoard = shared.leaderboards.pods?.[pod.id];
+  const yearBoard = shared.leaderboards.year;
+  const [scope, setScope] = useState<string>(yearBoard && yearBoard.registrations.length ? "year" : "season");
   const scopes: [string, string][] = [
+    ...(yearBoard && yearBoard.registrations.length ? [["year", "2026 season \u00b7 nationwide"] as [string, string]] : []),
     ["season", "Fall season \u00b7 nationwide"],
     ...(podBoard ? [["pod", `${pod.name} pod`] as [string, string]] : []),
     ...Object.keys(shared.leaderboards.events).map((id) => [id, ev(id)?.name ?? id] as [string, string]),
   ];
   const board: Board =
-    scope === "season" ? shared.leaderboards.season
+    scope === "year" ? (yearBoard ?? { registrations: [], tickets: [] })
+    : scope === "season" ? shared.leaderboards.season
     : scope === "pod" ? (podBoard ?? { registrations: [], tickets: [] })
     : shared.leaderboards.events[scope];
 
