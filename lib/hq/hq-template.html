@@ -312,7 +312,7 @@
 <header class="bar">
   <div class="bar-in">
     <div class="bar-top">
-      <div class="brand"><h1>Ambassador HQ</h1><span class="eyebrow">PPA Tour · Fall 2026</span></div>
+      <div class="brand"><h1>Ambassador HQ</h1><span class="eyebrow">PPA Tour · 2026 season</span></div>
       <div class="fresh" id="fresh"><span class="dot"></span><span>Loading…</span></div>
     </div>
     <nav class="tabs" id="tabs" aria-label="Sections"></nav>
@@ -474,7 +474,7 @@ function vOverview() {
       <div class="bars">${bars || '<div class="empty">No sales yet</div>'}</div></div>
   </section>
   <section class="sec">
-    <div class="sec-h"><h2>Season leaderboards</h2><span class="sub">Points = headcount. 1 point per registration, 1 per ticket. Top 5 earn rewards.</span></div>
+    <div class="sec-h"><h2>2026 leaderboards</h2><span class="sub">Points = headcount. 1 point per registration, 1 per ticket. Top 5 earn rewards.</span></div>
     ${boards(AMBS.map(a => ({ a, r: a.season.regs, t: a.season.tix })))}
   </section>`;
 }
@@ -544,7 +544,7 @@ function vAmbassadors() {
       <select class="sel" id="f-status" data-in="status" aria-label="Status"><option value="all">All statuses</option>${STATUSES.map(x => `<option ${UI.status === x ? 'selected' : ''}>${x}</option>`).join('')}</select>
       <span class="count">${L.length} shown</span>
     </div>
-    <div class="tscroll"><table><thead><tr>${th('name', 'Ambassador')}${th('region', 'Pod')}${th('tier', 'Tier')}${th('status', 'Status')}${th('season', 'Fall revenue', 1)}<th class="r">Regs · Tix</th>${th('po', 'Fall comm.', 1)}${th('life', 'Lifetime', 1)}${th('events', 'Events', 1)}${th('touch', 'Last touch')}</tr></thead>
+    <div class="tscroll"><table><thead><tr>${th('name', 'Ambassador')}${th('region', 'Pod')}${th('tier', 'Tier')}${th('status', 'Status')}${th('season', '2026 revenue', 1)}<th class="r">Regs · Tix</th>${th('po', '2026 comm.', 1)}${th('life', 'Lifetime', 1)}${th('events', 'Events', 1)}${th('touch', 'Last touch')}</tr></thead>
     <tbody>${L.map(a => `<tr class="click" data-act="amb" data-id="${a.id}" tabindex="0">
       <td><div class="nm">${esc(name(a))}</div><div class="code">${esc(a.codes.join(' · '))}</div></td>
       <td>${a.region === 'unassigned' ? '<span class="pill p-amb">No pod</span>' : esc(regionName(a.region))}</td>
@@ -686,7 +686,7 @@ function drawDrawer() {
           <dt>Pod</dt><dd>${esc(regionName(a.region))}${lead ? ` · lead <b>${esc(lead)}</b>` : a.region !== 'unassigned' ? ' · <span class="muted">no pod lead set</span>' : ''}</dd>
           <dt>Instagram</dt><dd>${esc(a.ig || '—')}${a.igFollowers ? ` <span class="muted">(${esc(a.igFollowers)})</span>` : ''}</dd>
         </dl>
-        <div class="mini"><div><div class="v">${kmoney(a.season.revenue)}</div><div class="l">Fall revenue</div></div><div><div class="v">${money2(a.season.payout)}</div><div class="l">Fall commission</div></div>
+        <div class="mini"><div><div class="v">${kmoney(a.season.revenue)}</div><div class="l">2026 revenue</div></div><div><div class="v">${money2(a.season.payout)}</div><div class="l">2026 commission</div></div>
           <div><div class="v">${kmoney(a.lifetime.revenue)}</div><div class="l">Lifetime revenue</div></div><div><div class="v">${a.lifetime.events}</div><div class="l">Events worked</div></div></div>
         <div class="sec"><h3>Record</h3>
           <div class="fields">
@@ -697,7 +697,7 @@ function drawDrawer() {
           </div></div>
         <div class="sec"><h3>Tournaments</h3>
           ${a.lines.length ? `<div class="tscroll"><table><thead><tr><th>Event</th><th class="r">Regs</th><th class="r">Reg rev</th><th class="r">Tix</th><th class="r">Tix rev</th><th class="r">Comm.</th></tr></thead><tbody>
-          ${a.lines.slice().sort((x, y) => (evById(y.event)?.start || '').localeCompare(evById(x.event)?.start || '')).map(l => `<tr class="click" data-act="event" data-id="${l.event}"><td>${esc(evById(l.event)?.name || l.event)} <span class="code">${esc(l.code)}</span></td><td class="r num">${l.regs}</td><td class="r num">${money(l.regRev)}</td><td class="r num">${l.tix}</td><td class="r num">${money(l.tixRev)}</td><td class="r num">${money2(l.po)}</td></tr>`).join('')}</tbody></table></div>`
+          ${a.lines.slice().sort((x, y) => (evById(y.event)?.start || '').localeCompare(evById(x.event)?.start || '')).map(l => `<tr class="click" data-act="event" data-id="${l.event}"><td>${esc(l.eventName || evById(l.event)?.name || l.event)} <span class="code">${esc(l.code)}</span></td><td class="r num">${l.regs}</td><td class="r num">${money(l.regRev)}</td><td class="r num">${l.tix}</td><td class="r num">${money(l.tixRev)}</td><td class="r num">${money2(l.po)}</td></tr>`).join('')}</tbody></table></div>`
           : '<div class="empty">No codes at this fall\'s tournaments yet.</div>'}
           <p class="muted" style="font-size:.8rem">Lifetime figures combine the Command Center history (through July 2026) with this fall's tracked tournaments: ${int(a.lifetime.regs)} registrations and ${money(a.lifetime.payout)} commission in total.</p></div>
         <div class="sec"><h3>Touches &amp; notes</h3>
@@ -759,7 +759,7 @@ function vPods() {
       ${r.id !== 'unassigned' ? `<div class="lead">${S.admin ? `<span class="muted">Pod lead</span><input class="inp" style="flex:1" id="lead-${r.id}" value="${esc(lead)}" placeholder="Name"><button class="btn sm" data-act="lead" data-id="${r.id}">Save</button>` : `<span class="muted">Pod lead</span> <b>${esc(lead || 'Not assigned yet')}</b>`}</div>` : ''}
       <div class="mix" title="${tiers.map(t => t[0] + ': ' + t[1]).join(', ')}">${tiers.map(([t, n], i) => `<span style="width:${n / tot * 100}%;background:${['var(--accent)', 'var(--accent-ink)', 'var(--line-2)'][i]};${i === 1 ? 'opacity:.55' : ''}"></span>`).join('')}</div>
       <div class="states">${tiers.map(t => `${t[1]} ${t[0]}`).join(' · ')}</div>
-      <div class="podstats"><div><div class="v">${kmoney(rev)}</div><div class="l">Fall revenue</div></div><div><div class="v">${act}<span class="muted" style="font-size:.8rem"> / ${onr.length}</span></div><div class="l">Selling this fall</div></div><div><div class="v">${vol}</div><div class="l">Open to volunteering</div></div></div>
+      <div class="podstats"><div><div class="v">${kmoney(rev)}</div><div class="l">2026 revenue</div></div><div><div class="v">${act}<span class="muted" style="font-size:.8rem"> / ${onr.length}</span></div><div class="l">Selling in 2026</div></div><div><div class="v">${vol}</div><div class="l">Open to volunteering</div></div></div>
       ${top.length ? `<div class="podtop">${top.map(a => `<div><button class="chip" data-act="amb" data-id="${a.id}">${esc(name(a))}</button><span class="mono">${kmoney(a.season.revenue)}</span></div>`).join('')}</div>` : ''}
       <div><button class="btn sm" data-act="podlist" data-id="${r.id}">See all ${L.length}</button></div>
     </div>`;
