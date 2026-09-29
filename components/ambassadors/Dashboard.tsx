@@ -105,7 +105,7 @@ function Home({
         <div className="stats">
           <div className="stat">
             <span className="v hi">{showComm ? money2(s.commission) : "—"}</span>
-            <span className="l">Commission earned this fall</span>
+            <span className="l">Commission earned this year</span>
           </div>
           <div className="stat">
             <span className="v">{int(s.registrations)}</span>
@@ -268,7 +268,7 @@ function Results({
           <h2>My tournaments</h2>
         </div>
         <div className="empty">
-          No sales yet this fall. Share your graphics and code for an on-sale tournament. Your numbers show up here the morning after your first sale.
+          No sales yet in 2026. Share your graphics and code for an on-sale tournament. Your numbers show up here the morning after your first sale.
         </div>
         <div>
           <button className="btn" onClick={() => go("graphics")}>
@@ -286,7 +286,7 @@ function Results({
       <section className="sec">
         <div className="sec-h">
           <h2>My tournaments</h2>
-          <span className="sub">Updated every morning</span>
+          <span className="sub">Full 2026 season</span>
         </div>
         <div className="tscroll">
           <table>
@@ -331,7 +331,7 @@ function Results({
             </tbody>
             <tfoot>
               <tr>
-                <td>This fall</td>
+                <td>This year</td>
                 <td />
                 <td className="r num">{int(sum("registrations"))}</td>
                 <td />
