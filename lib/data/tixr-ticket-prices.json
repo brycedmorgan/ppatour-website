@@ -1,9 +1,9 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-09-28T19:54:01Z",
+  "generated_at": "2026-09-29T18:22:30Z",
   "event_count": 38,
-  "ticket_type_count": 668,
+  "ticket_type_count": 667,
   "series_breakdown": {
     "PPA Tour": 37,
     "Major League Pickleball": 1
@@ -47,8 +47,8 @@
         {
           "name": "Free Youth Clinic",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 0,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 0
         },
         {
@@ -78,13 +78,6 @@
           "sale_state": "OPEN",
           "base_price": 15,
           "all_in_price": 19.55
-        },
-        {
-          "name": "On Court with PPA Pros",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 75,
-          "all_in_price": 86.44
         },
         {
           "name": "Pickleball Vacations",
