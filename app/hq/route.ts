@@ -102,7 +102,7 @@ export async function GET(request: NextRequest) {
   // Access needs a staff session OR edit-mode (team password) cookie.
   const canUpload = !!editorFromRequest(request);
   if (!staffFromRequest(request) && !canUpload) {
-    return NextResponse.redirect(new URL("/hq/signin", request.url));
+    return NextResponse.redirect(new URL("/hq/edit", request.url));
   }
 
   // Real snapshot when uploaded; off-production, fall back to the committed

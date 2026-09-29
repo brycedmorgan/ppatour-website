@@ -39,8 +39,8 @@ export function HqEditSignIn() {
         <span className="eyebrow" style={{ color: "#E8BC4E" }}>
           PPA Tour · Ambassador Program
         </span>
-        <h1>HQ edit mode</h1>
-        <p>Enter the team password to upload and manage graphics. Everything else stays read-only.</p>
+        <h1>Ambassador HQ</h1>
+        <p>Enter the team password to open Ambassador HQ.</p>
         <form onSubmit={submit} className="preview-as" style={{ display: "grid", gap: 12 }}>
           <input
             type="password"
