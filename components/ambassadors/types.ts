@@ -67,7 +67,7 @@ export type Me = {
 
 export type Shared = {
   events: Ev[];
-  leaderboards: { season: Board; events: Record<string, Board> };
+  leaderboards: { season: Board; events: Record<string, Board>; pods: Record<string, Board> };
   graphics: Graphic[];
   program: Program;
 };

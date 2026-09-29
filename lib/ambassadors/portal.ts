@@ -18,7 +18,7 @@ function slugify(s: string): string {
 
 export type LbRow = { rank: number; name: string; points: number; id?: string; isYou?: boolean };
 type Board = { registrations: LbRow[]; tickets: LbRow[] };
-export type Leaderboards = { season: Board; events: Record<string, Board> };
+export type Leaderboards = { season: Board; events: Record<string, Board>; pods: Record<string, Board> };
 
 export type Ambassador = {
   id: string;
@@ -128,6 +128,9 @@ export async function buildMe(email: string): Promise<MePayload | null> {
     season: cleanBoard(lb?.season, myCodes),
     events: Object.fromEntries(
       Object.entries(lb?.events ?? {}).map(([id, b]) => [id, cleanBoard(b, myCodes)]),
+    ),
+    pods: Object.fromEntries(
+      Object.entries((lb as Leaderboards & { pods?: Record<string, Board> })?.pods ?? {}).map(([id, b]) => [id, cleanBoard(b, myCodes)]),
     ),
   };
 

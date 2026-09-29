@@ -73,7 +73,7 @@ export function Dashboard({ data, canUpload = false }: { data: MeData; canUpload
         )}
         {tab === "home" && <Home me={me} ev={ev} go={go} showComm={showComm} />}
         {tab === "results" && <Results me={me} go={go} showComm={showComm} payoutMin={shared.program.payoutMinimum} />}
-        {tab === "boards" && <Boards shared={shared} ev={ev} />}
+        {tab === "boards" && <Boards shared={shared} ev={ev} pod={me.pod} />}
         {tab === "graphics" && <GraphicsTab me={me} shared={shared} canUpload={canUpload} />}
         {tab === "how" && <How shared={shared} />}
       </main>
@@ -378,10 +378,18 @@ function Results({
 
 /* ----------------------------- Leaderboards ---------------------------- */
 
-function Boards({ shared, ev }: { shared: Shared; ev: (id: string) => Ev | undefined }) {
+function Boards({ shared, ev, pod }: { shared: Shared; ev: (id: string) => Ev | undefined; pod: Me["pod"] }) {
   const [scope, setScope] = useState<string>("season");
-  const scopes: [string, string][] = [["season", "Fall season"], ...Object.keys(shared.leaderboards.events).map((id) => [id, ev(id)?.name ?? id] as [string, string])];
-  const board: Board = scope === "season" ? shared.leaderboards.season : shared.leaderboards.events[scope];
+  const podBoard = shared.leaderboards.pods?.[pod.id];
+  const scopes: [string, string][] = [
+    ["season", "Fall season \u00b7 nationwide"],
+    ...(podBoard ? [["pod", `${pod.name} pod`] as [string, string]] : []),
+    ...Object.keys(shared.leaderboards.events).map((id) => [id, ev(id)?.name ?? id] as [string, string]),
+  ];
+  const board: Board =
+    scope === "season" ? shared.leaderboards.season
+    : scope === "pod" ? (podBoard ?? { registrations: [], tickets: [] })
+    : shared.leaderboards.events[scope];
 
   const renderRow = (r: LbRow) => (
     <li className={`${r.rank <= 5 ? "prize" : ""} ${r.isYou ? "me" : ""}`} key={`${r.rank}-${r.name}`}>

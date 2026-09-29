@@ -158,6 +158,7 @@ export function demoPortal(): Portal {
             ],
           },
         },
+        pods: { west: { registrations: seasonRegs, tickets: seasonTix } },
       },
       graphics,
       program,
