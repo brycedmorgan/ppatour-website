@@ -438,7 +438,7 @@ function Boards({ shared, ev }: { shared: Shared; ev: (id: string) => Ev | undef
         </select>
       </div>
       <p className="sub">
-        1 point for every player who registers with your code, 1 point for every ticket. The top 5 on each board earn rewards (paddle, VIP tickets, free events).
+        1 point for every player who registers with your code, 1 point for every ticket. Top performers can earn extra rewards, tickets, and more.
       </p>
       <div className="boards">
         {renderOne(board.registrations, "Registrations")}
@@ -508,7 +508,7 @@ function How({ shared }: { shared: Shared }) {
         </details>
         <details>
           <summary>How do the leaderboards work?</summary>
-          <p>You earn 1 point for every player who registers with your code and 1 point for every ticket. The top 5 on each board earn rewards. Everyone earns commission no matter where they finish.</p>
+          <p>You earn 1 point for every player who registers with your code and 1 point for every ticket. Top performers can earn extra rewards, tickets, and more. Everyone earns commission no matter where they finish.</p>
         </details>
       </div>
     </section>
