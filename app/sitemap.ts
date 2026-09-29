@@ -85,6 +85,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/about/player-handbook",
     "/about/privacy",
     "/about/terms",
+    "/about/transgender-policy",
     "/search",
     /**
      * ⚠ /shop is listed only when the catalogue actually resolved. The page

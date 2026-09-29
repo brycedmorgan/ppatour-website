@@ -94,6 +94,7 @@ const STATIC_PAGES: { title: string; meta: string; href: string; extra?: string 
   { title: "Integrity Reporting", meta: "Confidential reporting", href: "/about/integrity" },
   { title: "Privacy Policy", meta: "How we handle your data", href: "/about/privacy" },
   { title: "Terms of Use", meta: "Site terms", href: "/about/terms" },
+  { title: "Transgender Policy", meta: "UPA participation and competition policy", href: "/about/transgender-policy", extra: "transgender eligibility women men mixed doubles sex assigned at birth" },
   { title: "Volunteer", meta: "Work a tour stop", href: "/events/volunteer", extra: "volunteering help staff" },
 ];
 
