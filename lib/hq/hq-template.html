@@ -333,7 +333,15 @@ const S = { apps1: [], apps2: [], appRev: {}, appDet: {}, appParts: {}, roster: 
   loaded: false, dbOk: null, admin: false, owner: false, me: null, user: null, db: null, assets: null, dl: null, profiles: {} };
 const store = { get(k, d) { try { const v = localStorage.getItem('hq.' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem('hq.' + k, JSON.stringify(v)); } catch (e) {} } };
-const UI = Object.assign({ aq: '', aRegion: 'all', aStatus: 'all', aHideAmb: false, aSort: 'az', q: '', region: 'all', tier: 'all', status: 'all', sort: 'season', dir: -1, event: null, gEvent: 'all', lbScope: 'season' }, store.get('ui', {}));
+const UI = Object.assign({ aq: '', aRegion: 'all', aStatus: 'all', aHideAmb: false, aSort: 'az', q: '', region: 'all', tier: 'all', status: 'all', sort: 'season', dir: -1, event: null, gEvent: 'all', lbScope: 'season', tf: 'year' }, store.get('ui', {}));
+// Overview time-frame windows (filter events by start date). `opt` is the dropdown
+// label, `label` completes "Revenue driven …", `title` prefixes "… leaderboards".
+const TF = {
+  year:   { opt: 'Full year 2026',        label: 'in 2026',           title: '2026',        lo: '2026-01-01', hi: '2026-12-31' },
+  spring: { opt: 'Spring tour (Jan–May)', label: 'on the spring tour', title: 'Spring tour', lo: '2026-01-01', hi: '2026-05-31' },
+  summer: { opt: 'MLP season (Jun–Aug)',  label: 'in MLP season',      title: 'MLP season',  lo: '2026-06-01', hi: '2026-08-30' },
+  fall:   { opt: 'Fall tour (Sep–Nov)',   label: 'this fall',          title: 'Fall',        lo: '2026-08-31', hi: '2026-12-31' },
+};
 UI.amb = null; UI.app = null; UI.confirmDel = null;
 const TABS = [['overview', 'Overview'], ['ambassadors', 'Ambassadors'], ['applicants', 'Applicants'], ['tournaments', 'Tournaments'], ['pods', 'Pods'], ['volunteers', 'Volunteers'], ['graphics', 'Graphics']];
 const STATUSES = ['Prospect', 'Applied', 'Onboarding', 'Active', 'At risk', 'Dormant', 'Offboarded'];
@@ -440,32 +448,44 @@ function delta(key) {
   return ` · <span style="color:var(--${d > 0 ? 'good' : 'crit'})">${d > 0 ? '+' : '−'}${lab}</span> since ${fmtD(ref.date)}`;
 }
 function vOverview() {
-  const ev = S.events, live = ev.filter(e => e.totals.ambassadors);
+  const tf = TF[UI.tf] || TF.year, isYear = (UI.tf || 'year') === 'year';
+  const ev = S.events.filter(e => e.start >= tf.lo && e.start <= tf.hi);
+  const live = ev.filter(e => e.totals.ambassadors);
   const T = k => live.reduce((s, e) => s + (e.totals[k] || 0), 0);
-  const active = AMBS.filter(a => a.season.regs + a.season.tix > 0).length;
+  // Per-ambassador headcount within the window, from each event's rows — drives
+  // both the "with a sale" count and the leaderboard so they track the filter.
+  const perAmb = {};
+  live.forEach(e => (e.rows || []).forEach(r => { const x = perAmb[r.amb] || (perAmb[r.amb] = { regs: 0, tix: 0 }); x.regs += r.regs || 0; x.tix += r.tix || 0; }));
+  const active = Object.values(perAmb).filter(x => x.regs + x.tix > 0).length;
   const onRoster = AMBS.filter(a => a.onRoster).length;
   const rev = T('revenue'), po = T('po');
   const kp = [
-    ['Revenue driven this fall', kmoney(rev), 'hi', 'revenue'],
+    ['Revenue driven ' + tf.label, kmoney(rev), 'hi', 'revenue'],
     ['Commission owed', kmoney(po), '', 'po'],
     ['Revenue per $1 of commission', po ? '$' + (rev / po).toFixed(2) : '—', '', null],
     ['Registrations', int(T('regs')), '', 'regs'],
     ['Tickets sold', int(T('tix')), '', 'tix'],
     ['Ambassadors with a sale', `${active}<span class="muted" style="font-size:1rem"> / ${onRoster}</span>`, '', 'activeAmbassadors'],
   ];
-  const kpis = `<div class="kpis">${kp.map(([l, v, c, k]) => `<div class="kpi"><span class="v ${c}">${v}</span><span class="l">${l}${k ? delta(k) : ''}</span>${k ? spark(S.snaps, k) : ''}</div>`).join('')}</div>`;
+  // Trend sparks/deltas compare against program-wide daily snapshots, so they only
+  // make sense for the full-year view; hide them when a narrower window is picked.
+  const kpis = `<div class="kpis">${kp.map(([l, v, c, k]) => `<div class="kpi"><span class="v ${c}">${v}</span><span class="l">${l}${k && isYear ? delta(k) : ''}</span>${k && isYear ? spark(S.snaps, k) : ''}</div>`).join('')}</div>`;
+  const tfSel = `<select class="sel" data-in="tf" aria-label="Time frame">${Object.entries(TF).map(([k, v]) => `<option value="${k}" ${UI.tf === k ? 'selected' : ''}>${esc(v.opt)}</option>`).join('')}</select>`;
   const upcoming = ev.filter(e => evStatus(e) !== 'Final').sort((a, b) => a.start.localeCompare(b.start));
   const finals = ev.filter(e => evStatus(e) === 'Final').sort((a, b) => b.start.localeCompare(a.start));
   const cards = [...upcoming, ...finals].map(tcard).join('');
   const maxR = Math.max(1, ...live.map(e => e.totals.revenue));
   const bars = live.slice().sort((a, b) => b.totals.revenue - a.totals.revenue).map(e => `<div class="brow"><span class="bn">${esc(e.name)}</span><span class="btrack"><span class="bfill" style="width:${(e.totals.revenue / maxR * 100).toFixed(1)}%"></span><span class="bfill tix" style="width:${(e.totals.tixRev / maxR * 100).toFixed(1)}%"></span></span><span class="bv">${kmoney(e.totals.revenue)}</span></div>`).join('');
   return `
-  <section class="sec">${kpis}
-    ${S.snaps.length < 2 ? `<p class="muted" style="font-size:.84rem">Trend lines start filling in with the daily refresh. The first snapshot was ${S.snaps[0] ? fmtD(S.snaps[0].date) : 'today'}.</p>` : ''}
+  <section class="sec">
+    <div class="sec-h"><h2>${esc(tf.title)} overview</h2><span class="sub">Every number below is scoped to this window — ${live.length} tournament${live.length === 1 ? '' : 's'}.</span></div>
+    <div class="toolbar">${tfSel}</div>
+    ${kpis}
+    ${isYear && S.snaps.length < 2 ? `<p class="muted" style="font-size:.84rem">Trend lines start filling in with the daily refresh. The first snapshot was ${S.snaps[0] ? fmtD(S.snaps[0].date) : 'today'}.</p>` : ''}
   </section>
   <section class="sec">
     <div class="sec-h"><h2>Tournaments</h2><span class="sub">Tap a tournament for its leaderboard, payouts and graphics</span></div>
-    <div class="rail">${cards}</div>
+    <div class="rail">${cards || '<div class="empty">No tournaments in this window.</div>'}</div>
   </section>
   <section class="grid2">
     <div class="panel panel-pad sec"><div class="sec-h"><h3>Needs attention</h3></div>${attention()}</div>
@@ -474,8 +494,8 @@ function vOverview() {
       <div class="bars">${bars || '<div class="empty">No sales yet</div>'}</div></div>
   </section>
   <section class="sec">
-    <div class="sec-h"><h2>2026 leaderboards</h2><span class="sub">Points = headcount. 1 point per registration, 1 per ticket. Top 5 earn rewards.</span></div>
-    ${boards(AMBS.map(a => ({ a, r: a.season.regs, t: a.season.tix })))}
+    <div class="sec-h"><h2>${esc(tf.title)} leaderboards</h2><span class="sub">Points = headcount. 1 point per registration, 1 per ticket. Top 5 earn rewards.</span></div>
+    ${boards(AMBS.map(a => ({ a, r: perAmb[a.id] ? perAmb[a.id].regs : 0, t: perAmb[a.id] ? perAmb[a.id].tix : 0 })))}
   </section>`;
 }
 function tcard(e) {
@@ -1026,7 +1046,7 @@ document.addEventListener('keydown', e => {
 });
 document.addEventListener('input', e => {
   const k = e.target.dataset.in; if (!k) return;
-  UI[k] = e.target.value; store.set('ui', { aq: UI.aq, aRegion: UI.aRegion, aStatus: UI.aStatus, aHideAmb: UI.aHideAmb, aSort: UI.aSort, q: UI.q, region: UI.region, tier: UI.tier, status: UI.status, sort: UI.sort, dir: UI.dir, gEvent: UI.gEvent }); render();
+  UI[k] = e.target.value; store.set('ui', { aq: UI.aq, aRegion: UI.aRegion, aStatus: UI.aStatus, aHideAmb: UI.aHideAmb, aSort: UI.aSort, q: UI.q, region: UI.region, tier: UI.tier, status: UI.status, sort: UI.sort, dir: UI.dir, gEvent: UI.gEvent, tf: UI.tf }); render();
 });
 document.addEventListener('change', async e => {
   const t = e.target;
