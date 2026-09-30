@@ -751,4 +751,80 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
 <p>You can visit <a href="https://protonsports.com/?utm_source=ppatour&#038;utm_medium=website&#038;utm_campaign=news&#038;utm_content=article-project-coyote-brings-the-heat-as-proton-players-celebrate-14-medals-in-mesa">Protonsports.com</a> and use the code &#8220;PPA&#8221; for 10% off of your order.</p>
 `.trim(),
   },
+  {
+    // Jim Ramsey's stats study, supplied by Wesley 9/30. Filed like his May
+    // study ("The Defense Does NOT Rest…"): Recap, stats-wrap series. Copy is
+    // verbatim; only "Of the 30,15" gained its missing space, and the sign-off
+    // block (name, date, ###) became the byline and publish date.
+    slug: "offensive-lobs-lets-look-at-the-numbers",
+    wpId: 900005,
+    status: "published",
+    source: "wordpress",
+    category: "Recap",
+    series: "stats-wrap",
+    categoryResolvedBy: "series",
+    title: "Offensive Lobs: Let's Look at the Numbers!",
+    dek: "A Pro Pickleball Stats Study: 453 Offensive Lobs across 90 doubles finals, from the Masters in January 2025 through the Veolia Arizona Open in September.",
+    author: "Jim Ramsey",
+    publishedAt: "2026-09-30T10:00:00",
+    publishedAtGmt: "2026-09-30T15:00:00",
+    modifiedAt: "2026-09-30T15:00:00",
+    image: {
+      // Supplied by Wesley with the post, 9/30: a Carvana Masters frame.
+      // ⚠ NO NAMES — house style on this series, and the scoreboard in frame
+      // is not an identification. Encoded 2048x1365, mozjpeg q64, 4:4:4.
+      url: "/ppa/news/offensive-lobs-by-the-numbers.jpg",
+      alt: "Pickleball pro stretching wide for a backhand in front of a packed crowd at the Carvana Masters.",
+      width: 2048,
+      height: 1365,
+    },
+    // Left empty deliberately: `detectAthleteMentions` reads the body.
+    players: [],
+    playerNames: [],
+    wpEvent: null,
+    tags: [],
+    tagsRaw: [],
+    wpCategories: ["stats-wrap"],
+    embeds: [],
+    inlineImages: [],
+    legacyUrl: "https://www.ppatour.com/offensive-lobs-lets-look-at-the-numbers/",
+    seo: {
+      title: "Offensive Lobs: Let's Look at the Numbers | PPA Tour",
+      description:
+        "How often does an Offensive Lob win the rally? PPA Tour statistician Jim Ramsey tracked 453 of them across 90 doubles finals: 42% won, 44% lost, 14% out.",
+      canonical: "https://www.ppatour.com/offensive-lobs-lets-look-at-the-numbers/",
+    },
+    bodyHtml: `
+<p><em>(A Pro Pickleball Stats Study)</em></p>
+
+<p>An Offensive Lob is a rare shot in pickleball. It can be an effective surprise, instantly disastrous, or somewhere in between. Rather than simply relying on conventional wisdom and speculation, let&#8217;s look at the numbers.</p>
+
+<p>Offensive Lobs are among the several stats I track as the PPA Tour&#8217;s Statistician and Broadcast Researcher. The results fall into three categories:</p>
+
+<ul class="wp-block-list">
+<li>The lob was in and that team won the rally.</li>
+<li>The lob was in and that team lost the rally.</li>
+<li>The lob was out.</li>
+</ul>
+
+<p><em>(Yes, a team could win or lose the rally on the next shot, or several shots later)</em></p>
+
+<p>I took the stats from thirty PPA Tour tournaments from the Masters in January 2025 through the Veolia Arizona Open in September. Those tournaments had 90 doubles finals (Men&#8217;s, Women&#8217;s and Mixed), and 453 Offensive Lobs.</p>
+
+<ul class="wp-block-list">
+<li>The lob was in and that team won the rally 42% of the time, 191 of 453.</li>
+<li>The lob was in and that team lost the rally 44% of the time, 199 of 453.</li>
+<li>The lob was out 14% of the time, 63/453.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>Observations and Notes:</strong></h4>
+
+<ul class="wp-block-list">
+<li>The pros kept 86 percent of Offensive Lobs &#8220;in play.&#8221;</li>
+<li>Teams lost 58 percent of the rallies in which they hit an Offensive Lob. (44% + 14%).</li>
+<li>There were no Offensive Lobs in eight of those 30 finals.</li>
+<li>The Mixed Doubles final at the 2026 Masters had 30 Offensive Lobs, 24 by Anna Bright and Hayden Patriquin and six by Anna Leigh Waters and Ben Johns. Of the 30, 15 were in with rallies won, 12 were in with rallies lost, and three were out.</li>
+</ul>
+`.trim(),
+  },
 ];
