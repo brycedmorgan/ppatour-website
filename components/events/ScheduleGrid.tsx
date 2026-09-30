@@ -339,9 +339,16 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
                     )}
                   </p>
                   <span className="mt-3 flex items-center justify-between gap-3">
+                    {/* ⚠ `pointer-events-none` is load-bearing. This is a label,
+                        not a link — the card's link is the title's ::after
+                        overlay. On a branded card the hover `brightness-90`
+                        gives this span a filter, a filtered element paints
+                        above the positioned overlay, and so the click landed
+                        on the span and went nowhere: every branded card's
+                        button was dead on hover (Las Vegas, 9/30). */}
                     <span
                       style={t.brand ? { backgroundColor: t.brand.accent } : undefined}
-                      className={`inline-flex h-8 items-center gap-1.5 px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-all ${
+                      className={`pointer-events-none inline-flex h-8 items-center gap-1.5 px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-all ${
                         t.brand ? "group-hover:brightness-90" : "bg-ppa-blue group-hover:bg-ppa-blue-deep"
                       }`}
                     >

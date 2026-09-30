@@ -554,7 +554,20 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     // curated row already answers this question explicitly (`r.type === "ppa"`),
     // for exactly the reason the 8/6 gate note gives, so ask it rather than
     // inferring from its existence. `isUsOrg` is untouched, so no US stop moves.
-    hasInternalPage: !isChallenger && (isUsOrg || curated?.hasInternalPage === true),
+    //
+    // ⚠ THE CARD MUST ASK WHAT THE PAGE ASKS, OR ITS BUTTON 404s (9/30).
+    // resolveEvent serves no page for `tierKey === "challenger"` or a curated
+    // `detailsComingSoon`, and this flag is what the /events card links on:
+    //   - `tier`, not `isChallenger`: inferTier files one-day / college events
+    //     as challenger without the word in the name, so the "Utah Super
+    //     Regional - College Pickleball Tour" card said Event Guide → 404.
+    //   - the curated `detailsComingSoon` rides along once the feed publishes
+    //     the stop, so the 2027 Texas Open card keeps "Details Coming Soon"
+    //     rather than linking the page the flag deliberately withholds. Drop
+    //     the flag on the curated row to open the page.
+    hasInternalPage:
+      tier !== "challenger" && !curated?.detailsComingSoon && (isUsOrg || curated?.hasInternalPage === true),
+    detailsComingSoon: curated?.detailsComingSoon,
     logoUrl: t.logo_url || undefined,
     source: "api",
   };
