@@ -732,7 +732,12 @@ function drawDrawer() {
 
 /* ================= tournaments ================= */
 function vTournaments() {
-  const evs = S.events.slice().sort((a, b) => a.start.localeCompare(b.start));
+  // Up-and-coming first (soonest upcoming on the left), then finished events
+  // most-recent first — the same "what's next" order as the Overview rail.
+  const evs = [
+    ...S.events.filter(e => evStatus(e) !== 'Final').sort((a, b) => a.start.localeCompare(b.start)),
+    ...S.events.filter(e => evStatus(e) === 'Final').sort((a, b) => b.start.localeCompare(a.start)),
+  ];
   if (!UI.event || !evById(UI.event)) UI.event = (evs.find(e => evStatus(e) !== 'Final') || evs[0] || {}).id;
   const e = evById(UI.event); if (!e) return '<div class="empty">No tournaments yet.</div>';
   const s = evStatus(e), t = e.totals, ps = S.payouts[e.id]?.status || 'Not started';
