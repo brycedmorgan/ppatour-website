@@ -115,10 +115,15 @@ function DayWatch({
   doneClassName,
   children,
   doneChildren,
+  dayLabel,
 }: DayWatchProps) {
   const s = useLiveEventStatus(days);
   const { ordered } = useLiveTicker();
+  const { now } = useTourIsLive();
+  const mounted = useMounted();
   const done = s.kind === "done-today" || s.kind === "done";
+  // Read on the device, after mount — the prerendered HTML can't know the day.
+  const label = mounted && dayLabel && deviceTodayIso(now) === dayLabel.iso ? dayLabel.children : children;
   return (
     <a
       href={done ? PBTV_STREAM_URL : liveWatchUrl(ordered)}
@@ -126,7 +131,7 @@ function DayWatch({
       rel="noopener noreferrer"
       className={done ? (doneClassName ?? className) : className}
     >
-      {done ? doneChildren : children}
+      {done ? doneChildren : label}
     </a>
   );
 }
@@ -137,6 +142,11 @@ type DayWatchProps = {
   doneClassName?: string;
   children: ReactNode;
   doneChildren: ReactNode;
+  /**
+   * A one-day replacement for `children` (the pre-done state), shown only when
+   * the device's date is `iso`. It expires on its own the next day.
+   */
+  dayLabel?: { iso: string; children: ReactNode };
 };
 
 /**

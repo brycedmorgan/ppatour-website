@@ -339,6 +339,22 @@ export function HomeHero({
                     match is done; then PickleballTV (Wesley, 9/28). */}
                 <DayWatchButton
                   days={days}
+                  // One day only (Wesley, 9/30). Expires by itself on 10/1;
+                  // delete this prop after.
+                  dayLabel={{
+                    iso: "2026-09-30",
+                    children: (
+                      <>
+                        ▶ Watch FireFight Zone
+                        <span
+                          aria-hidden
+                          className="transition-transform duration-300 group-hover:translate-x-0.5"
+                        >
+                          →
+                        </span>
+                      </>
+                    ),
+                  }}
                   className="group flex h-11 items-center justify-center gap-1.5 bg-ppa-live px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:bg-ppa-live-deep active:scale-[0.98]"
                   doneClassName="group flex h-11 items-center justify-center gap-1.5 bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:bg-ppa-blue-deep active:scale-[0.98]"
                   doneChildren={
