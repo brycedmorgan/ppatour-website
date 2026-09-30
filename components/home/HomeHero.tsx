@@ -343,6 +343,7 @@ export function HomeHero({
                   // delete this prop after.
                   dayLabel={{
                     iso: "2026-09-30",
+                    href: "https://www.youtube.com/live/ym1GmtdjG58",
                     children: (
                       <>
                         ▶ Watch FireFight Zone
