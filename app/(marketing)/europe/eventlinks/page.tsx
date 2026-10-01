@@ -3,7 +3,7 @@ import Link from "next/link";
 import { eventHref, formatDateRange, type Tournament } from "@/lib/placeholder-data";
 import { getEvents } from "@/lib/events-api";
 import { EUROPE_SITE_URL, europeRobots } from "@/lib/europe-launch";
-import { EUROPE_EVENT_LINKS, EUROPE_GENERAL_LINKS, EUROPE_SOCIAL_LINKS, isUnconfirmedEuropeStop, type EventLink } from "@/lib/europe-eventlinks";
+import { EUROPE_EVENT_LINKS, EUROPE_GENERAL_LINKS, EUROPE_SOCIAL_LINKS, EUROPE_FORM_LINKS, isUnconfirmedEuropeStop, type EventLink } from "@/lib/europe-eventlinks";
 
 /**
  * /europe/eventlinks — the page behind the QR code on every PPA Tour Europe
@@ -147,6 +147,15 @@ export default async function EuropeEventLinksPage() {
           <h2 className="text-[12px] font-bold uppercase tracking-[0.16em] text-ppa-navy/55">Watch &amp; follow</h2>
           <div className="mt-3 flex flex-col gap-2">
             {EUROPE_SOCIAL_LINKS.map((l) => (
+              <LinkRow key={l.href} link={l} external />
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-10">
+          <h2 className="text-[12px] font-bold uppercase tracking-[0.16em] text-ppa-navy/55">Media &amp; referees</h2>
+          <div className="mt-3 flex flex-col gap-2">
+            {EUROPE_FORM_LINKS.map((l) => (
               <LinkRow key={l.href} link={l} external />
             ))}
           </div>

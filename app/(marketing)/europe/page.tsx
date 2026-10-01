@@ -6,7 +6,7 @@ import { FeaturedEvents } from "@/components/events/FeaturedEvents";
 import { EuropeSocialLinks } from "@/components/europe/EuropeSocialLinks";
 import { EuropeGallery } from "@/components/europe/EuropeGallery";
 import { getEuropeGallery } from "@/lib/europe-gallery";
-import { isUnconfirmedEuropeStop } from "@/lib/europe-eventlinks";
+import { EUROPE_FORM_LINKS, isUnconfirmedEuropeStop } from "@/lib/europe-eventlinks";
 import { InquiryForm } from "@/components/forms/InquiryForm";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { RegionSwitcher } from "@/components/global/RegionSwitcher";
@@ -574,7 +574,27 @@ export default async function EuropePage() {
       {/* ------------------------------------------------------- Contact */}
       <section id="contact" className="scroll-mt-24 border-t border-ppa-line bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <div className="mx-auto w-full max-w-3xl">
+          <div className="mx-auto grid w-full max-w-3xl gap-8">
+            <div>
+              <SectionHead eyebrow="Get Involved" title="Media and Referees" />
+              <div className="mt-4 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-2">
+                {EUROPE_FORM_LINKS.map((l) => (
+                  <a
+                    key={l.href}
+                    href={l.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center justify-between gap-4 bg-white p-5 transition-colors hover:bg-ppa-paper"
+                  >
+                    <span className="min-w-0">
+                      <span className="block font-display text-sm uppercase text-ppa-navy">{l.label}</span>
+                      <span className="mt-1 block text-xs leading-relaxed text-ppa-navy/60">{l.note}</span>
+                    </span>
+                    <span aria-hidden className="text-ppa-blue transition-transform group-hover:translate-x-0.5">↗</span>
+                  </a>
+                ))}
+              </div>
+            </div>
             <InquiryForm formType="europe" />
           </div>
         </div>

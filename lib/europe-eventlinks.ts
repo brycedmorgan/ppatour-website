@@ -63,3 +63,15 @@ const EUROPE_UNCONFIRMED = /brescia/i;
 export function isUnconfirmedEuropeStop(t: { name: string; city: string; slug: string }): boolean {
   return EUROPE_UNCONFIRMED.test(`${t.name} ${t.city} ${t.slug}`);
 }
+
+/**
+ * The Europe team's own forms (Typeform, owned by them so they can edit without
+ * a deploy). Catie, #ppa-tour-europe 10/1. ⚠ Typeform is a stopgap: Bryce, 10/1,
+ * "we should get away from Typeform eventually" — the plan is to move these
+ * onto the site's own forms (InquiryForm → europe@ppatour.com). The pro-player
+ * survey link was not sent; add it when it is.
+ */
+export const EUROPE_FORM_LINKS: EventLink[] = [
+  { label: "Media credentials", href: "https://ppatour.typeform.com/europe", note: "Apply for press access at a PPA Tour Europe stop" },
+  { label: "Referee interest", href: "https://ppatour.typeform.com/referee", note: "Officiate at PPA Tour Europe events" },
+];
