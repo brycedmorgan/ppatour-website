@@ -22,6 +22,9 @@ commerce surface needs the same conversation those two had.
 
 | Item | State | Blocker |
 |---|---|---|
+| **SSO with sso.pickleball.com — NEXT PRIORITY** (Bryce, 10/1) | Ask emailed to Jason Santerre 10/1 (Gmail thread `1a0f8ccd8a4087ec`): OIDC client + secret, redirect URIs (prod + one fixed staging host), PKCE public client for the app, claims (sub/email/name + PT.com player ID), logout/refresh, account deletion, staging SSO + test accounts, consent/opt-in owner. Our side ~1 wk once creds land: Auth.js generic OIDC, `/account`, follows move device → Neon keyed by `sub`, personal data via client-side `/api/me` so pages stay ISR | Jason's reply + client credentials |
+| **Mobile app (store) — after SSO** | Capacitor shell around the installable site (app-plan Phase 5): login via system browser + PKCE, APNs/FCM push, offline, universal links. ~3–4 wks after SSO + store review. Likely no Sign in with Apple needed (own account system, guideline 4.8 — unconfirmed) | SSO live; Apple $99 / Google $25 accounts |
+| **Follow-a-player filter on event pages** (Stephen Venegas, 10/1) | Scoped, not started: `?player=` on the event page — played / upcoming / how to watch across every division, from `brackets-api` + `athlete-aliases` + `broadcast`. ~2–3 days | Watch info is per day/round only (no streamed-court list); feed has team names, not player IDs — SSO player-ID claim or a feed field fixes matching |
 | **SEO plan** | **Phase 1 SHIPPED to main 9/24** (Article/BlogPosting schema, 60-char titles, one-hop redirects, dup athletes folded, Dataset on rankings, thin-athlete bios, autolinking, news sitemap). GSC + SEMrush baselines in `seo-baseline/`. Phase 2 content starts 10/20: [`SEO.md`](SEO.md) | Push to deploy · Vercel apex-domain redirect flip (outside event weekends) · GA4 hostname split |
 | **Team page + Bryce Morgan page** | **PLANNED 9/22** — every employee on `/team` grouped by what they do, "travels the tour" from Jackalope travel data, a page per person; `/team/bryce-morgan` as the entity page to rank for his name. Hidden (Basic auth → unlisted → public). Plan + dated roadmap: [`TEAM.md`](TEAM.md) | Bryce: agency name/years, the Pardoe story in his words (BU decision made 9/22: UPA only, MLP-only staff on the MLP site) · Kate: staff "check your card" note · a headshot slot at a Fall stop |
 | **Challenger Series → `/tour/challenger`** | **BUILT 9/18** — page, live schedule, snapshot rankings (July 27), host block, host-scoped redirects in `next.config.ts` (inert until DNS). Retires ppachallenger.com (WordPress on Flywheel). [`CHALLENGER.md`](CHALLENGER.md) | Bryce: Search Console + WP form-lead export, renew domain, add ppachallenger.com + www to the Vercel project, DNS after Sept 28 · a live rankings source (Kenan/Egon) · internal Challenger event pages for the 1:1 post redirects |
@@ -41,7 +44,8 @@ commerce surface needs the same conversation those two had.
 
 ppatour.com is installable as of 8/18 — manifest, app shell, always-on score
 bar. The full plan, the decisions behind it and what is still blocked live in
-[`app-plan.md`](app-plan.md). Next up there: a service worker for offline, an
+[`app-plan.md`](app-plan.md). **Order set 10/1 (Bryce): SSO with
+sso.pickleball.com first, then the store app (Phase 5).** Next up there: a service worker for offline, an
 install prompt, a follow list, then the on-site event mode (blocked on an
 owner per event, not on code).
 
