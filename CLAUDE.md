@@ -65,6 +65,19 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-10-01 — Player filter idea (Stephen Venegas) + SSO with sso.pickleball.com is next priority
+
+- Stephen Venegas asked for a per-player filter on event pages (matches played, upcoming, how to watch). Scoped:
+  `?player=` on the event page, built from `lib/brackets-api.ts` + `athlete-aliases.ts` + `broadcast.ts`. ~2–3 days.
+  Gaps: watch info is by day/round only (no streamed-court data), and the feed has team names, not player IDs.
+- Bryce: **SSO with Jason's sso.pickleball.com is the next priority, then the mobile app** (app-plan Phase 5, Capacitor).
+- Ask emailed to jason@pickleball.com 10/1 (Gmail thread `1a0f8ccd8a4087ec`): OIDC client + secret, redirect URIs
+  (prod + one fixed staging host), PKCE public client for the app, claims (sub/email/name + PT.com player ID),
+  logout/refresh, account deletion (Apple), staging SSO + test accounts, consent/opt-in ownership.
+- Plan once creds land (~1 wk): Auth.js generic OIDC, `/account`, follows move from device to Neon keyed by `sub`,
+  personal data via client-side `/api/me` so pages stay static/ISR.
+- Next: chase Jason's reply; then SSO build; then the app shell.
+
 ### 2026-10-01 — Europe: socials on the site, Europe-only schedule with past stops, no Carvana link
 
 - Payton (#ppa-tour-europe, 10/1, for Albert): socials + event link, Europe-only schedule incl. past events, no
