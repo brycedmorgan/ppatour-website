@@ -98,6 +98,19 @@ const BY_SLUG: Record<string, PaddleUpdate> = {
     supersedes: "Hit Pickleball Hand Cannon",
     note: "Event team via Wesley, 9/3. Jackalope still says Hit Pickleball Hand Cannon; he is not in the broadcast masterlist at all.",
   },
+  "tama-shimabukuro": {
+    paddle: "LUZZ Pro4 Inferno Pickleball Paddle",
+    searchTerm: "LUZZ Pro4 Inferno",
+    brand: "Luzz",
+    // Pickleball Central does carry this one; pinned to its exact product page
+    // (Wesley sent the link) rather than a search, minus the Google
+    // `srsltid` click parameter.
+    buyUrl: "https://pickleballcentral.com/luzz-pro4-inferno-pickleball-paddle/",
+    // Supplied by Wesley, 10/1; knocked out with scripts/import-paddle-image.mjs --file.
+    image: { src: "/ppa/paddles/luzz-pro4-inferno.png", width: 214, height: 480 },
+    supersedes: "Selkirk Project Boomstik Elongated",
+    note: "Wesley, 10/1 — Jackalope wasn't saving the change. Page published the masterlist's Selkirk Project Boomstik Elongated.",
+  },
 };
 
 /** Loose compare — spacing and case only; the model string itself must match. */
