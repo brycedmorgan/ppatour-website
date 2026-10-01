@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { AthleteRoster, type RosterAthlete } from "@/components/athletes/AthleteRoster";
 import { FeaturedEvents } from "@/components/events/FeaturedEvents";
 import { EuropeSocialLinks } from "@/components/europe/EuropeSocialLinks";
