@@ -76,8 +76,15 @@ const SOCIAL = [
   },
 ];
 
-export function LiveBar() {
+/**
+ * `hideWhenEmpty`: render nothing while the feed has no matches, the same
+ * gate as the score rail under it (Wesley, 10/1) — a marquee over an empty
+ * header is the half of the broken state that is left. It reappears with the
+ * first match, since useLiveTicker keeps polling.
+ */
+export function LiveBar({ hideWhenEmpty = false }: { hideWhenEmpty?: boolean } = {}) {
   const { ordered, tournament } = useLiveTicker();
+  if (hideWhenEmpty && ordered.length === 0) return null;
   const featured = pickFeaturedMatch(ordered);
   const isLive = featured?.status === "live";
   const phrase = marqueePhrase(roundLabel(featured), tournament?.title, isLive);

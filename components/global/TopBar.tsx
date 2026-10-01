@@ -85,16 +85,18 @@ export function TopBar() {
             These two sit OUTSIDE the `.site-chrome` wrapper below, so the rule
             that hides that one never touched them. See globals.css. */}
         <div className="site-broadcast-chrome">
-          <Suspense fallback={<div className="h-[41px] bg-ppa-navy" />}>
-            <LiveBar />
+          <Suspense fallback={null}>
+            <LiveBar hideWhenEmpty />
           </Suspense>
-          <Suspense fallback={<div className="h-[104px] bg-ppa-navy" />}>
+          {/* No placeholder: the rail renders nothing until it has matches
+              (hideWhenEmpty), so a reserved 104px band would only flash. */}
+          <Suspense fallback={null}>
             {/* ⚠ No logo/href passed on purpose. These were pinned to the Veolia
                 Atlanta Championships — the April test event — so the broadcast
                 header wore a finished tournament's crest over whatever was
                 genuinely live. The rail takes the live tournament's own crest
                 from the feed now. */}
-            <LiveScoreTicker />
+            <LiveScoreTicker hideWhenEmpty />
           </Suspense>
         </div>
         <div className="site-chrome sticky top-0 z-50">
