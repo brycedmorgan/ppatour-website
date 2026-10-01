@@ -171,3 +171,11 @@ source). Today's projection is labelled as a projection everywhere it appears.
 **Want:** the "Coverage" section repopulated.
 **Blocked on:** mapping the 322 migrated WP posts carrying an event category onto
 this site's event slugs. Data work, not access.
+
+## Europe: move forms off Typeform (Bryce, 2026-10-01)
+
+Media credentials (`ppatour.typeform.com/europe`) and referee interest (`/referee`) are linked from /europe and
+/eventlinks as a stopgap (`EUROPE_FORM_LINKS`). Bryce: "we should get away from Typeform eventually." Plan: rebuild
+both as site forms (InquiryForm pattern → `/api/form-submit` → europe@ppatour.com), once the Turnstile hostname for
+ppatoureurope.com is fixed. Keep the Europe team able to change questions without a deploy, which was their reason for
+Typeform (Payton, 9/15). Pro-player survey link still to come.
