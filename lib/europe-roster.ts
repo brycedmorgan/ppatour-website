@@ -21,11 +21,10 @@
  * NOT build a parallel /europe/players/[slug] route; that is exactly the
  * duplicate-profile problem `lib/athlete-slugs.ts` exists to clean up.
  *
- * ⚠ ALEXIA ALVAREZ'S PORTRAIT LANDED 2026-09-22 — Catie Preis sent it in
- * #ppa-tour-europe after the silhouette card made the gap visible to her, which
- * is what that card was for. SHE STILL HAS NO BIO in the sheet, so her card
- * links out and prints none. Tom Protzek is now the one shipping without a
- * portrait; see the note in scripts/import-europe-portraits.mjs.
+ * ✅ 2026-10-01: ALL 26 PORTRAITS REPLACED with the matching Barcelona studio set
+ * (white background, 4:5) from Smash's "profile pics" Drive folder, shared by
+ * Catie in #ppa-tour-europe. Tom Protzek has one for the first time; Alexia has
+ * a bio. Files are 900x1125 in public/europe/pros/<slug>.jpg.
  *
  * Bios are Catie's text. Two arrived in the first person (Biedermann,
  * Tomkinson) and were put into the third person to match the other 23 and every
@@ -450,8 +449,7 @@ export const europeRoster: EuroPro[] = [
     ],
   },
   {
-    // ⚠ NO PORTRAIT AND NO BIO — the gap is real, not an oversight. See the
-    // header note. Catie owns both.
+    // Bio: Catie, #ppa-tour-europe 10/1, verbatim.
     slug: "alexia-alvarez",
     name: "Alexia Alvarez",
     country: "Spain",
@@ -460,8 +458,11 @@ export const europeRoster: EuroPro[] = [
     divisions: [...WS, ...WD, ...XD],
     sponsors: [],
     portrait: P("alexia-alvarez"),
-    tagline: "Professional pickleball player on PPA Tour Europe",
-    bio: [],
+    tagline: "Former Division I tennis player, pro since 2023",
+    bio: [
+      "Alexia Alvarez is a former Division I tennis player who transitioned to professional pickleball in 2023. She quickly established herself on the competitive scene, earning podium finishes and competing in PPA Tour and international events across the U.S. and Europe.",
+      "Originally from Spain, Alexia is now based in Madrid and continues to compete internationally while growing her career in pickleball.",
+    ],
   },
   {
     slug: "jesus-campos",
@@ -487,15 +488,8 @@ export const europeRoster: EuroPro[] = [
     age: 25,
     divisions: [...MS, ...MD, ...XD],
     sponsors: [],
-    /**
-     * ⚠ NO PORTRAIT ON PURPOSE, AND NOT FOR THE SAME REASON AS ALEXIA'S. Catie's
-     * file for him is a PHONE SCREENSHOT OF A FILE VIEWER — close button, Share
-     * button, an Edit/Comment/Resize toolbar, and a small studio photo in the
-     * middle. Cropping the photo out of it would publish an upscaled screenshot.
-     * He is on the WPR board, so the roster falls through to his real
-     * pickleball.com headshot, which is better than anything that file can give.
-     * Add `portrait: P("tom-protzek")` the day Catie sends the actual image.
-     */
+    // Barcelona studio portrait, Catie/Smash 10/1 (the earlier file was a screenshot).
+    portrait: P("tom-protzek"),
     tagline: "Took world No. 1 Federico Staksrud to three sets in his second tournament",
     bio: [
       "Tom Protzek moved from a Division I soccer career at the University of Tulsa to professional pickleball, making his PPA debut in November 2024. In only his second tournament he reached the round of 16 in singles and pushed world No. 1 Federico Staksrud to three sets.",
