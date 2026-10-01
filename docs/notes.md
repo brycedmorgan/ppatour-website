@@ -46,3 +46,14 @@ Facts that outlive a session: decisions, gotchas, who asked for what. The Sessio
 - Cloudflare Turnstile allows hostnames per widget. ppatoureurope.com must be on the list or every
   form that needs a token (all but the newsletters) fails with error 110200 and the widget shows
   "Unable to connect to website". Any new host that serves a form needs adding there too.
+
+## 2026-10-01 — Turnstile moved to a widget we control
+
+- The original widget (site key `0x4AAAAAAEAJwehS1p…`, from the WordPress era) lives on a Cloudflare account
+  we couldn't reach, and never listed ppatoureurope.com, so the Europe contact form failed 9/22 → 10/1.
+- New widget **"PPA Tour Stuff"** on Bryce's Cloudflare account: site key `0x4AAAAAAFLXjYidBFcMOiPZ`,
+  hostnames ppatour.com, www.ppatour.com, ppatoureurope.com. Both keys set in Vercel **Production** 10/1;
+  deployed and tested (token issued on both contact forms).
+- ⚠ **Preview env has no Turnstile keys** (removed during the swap; re-adding was blocked). Previews skip
+  the check. Bryce: Vercel → Settings → Environment Variables → add both for Preview.
+- New domain for any form? Add its hostname to that widget first.
