@@ -80,6 +80,12 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   PPA Europe banners, live play). Folder isn't link-shared; needs a browser download Bryce OKs.
 - **Not done — card photos.** Brescia card shows Melbourne, Portorož shows Gold Coast (generic fallback images in
   `lib/events-api.ts`). Needs real Italy/Slovenia photos from the Europe team.
+- **Later 10/1 (Bryce: "find anything else they asked that we haven't done"):** full channel audit → artifact
+  https://claude.ai/artifact/Ssog1Z6FE9cqP1bW85iBr3. Also shipped: Brescia pulled (Payton: not confirmed; matched
+  on name/city in `isUnconfirmedEuropeStop`), 9/30 entry copy verbatim, Official Partners strip (LT PRO48 ball,
+  JOOLA net, logos from Payton's 9/22 post). **Still open on us:** Turnstile hostname (since 9/24!), FFT deck
+  "done" never posted (edits applied 9/17), gallery, edit-access answer (asked 9/15), Typeform links, US pages
+  still served on ppatoureurope.com by URL.
 - **Gallery:** not built. Drive auto-sync is possible (shared folder + service account or Drive API key, pulled at
   build/ISR) — waiting on the photos and a decision. Brescia: Payton said "don't move over that brescia event"
   (Italy rollover thread) — it still shows on the Europe schedule; asked.
