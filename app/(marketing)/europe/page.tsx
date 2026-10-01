@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AthleteRoster, type RosterAthlete } from "@/components/athletes/AthleteRoster";
 import { FeaturedEvents } from "@/components/events/FeaturedEvents";
+import { EuropeSocialLinks } from "@/components/europe/EuropeSocialLinks";
 import { InquiryForm } from "@/components/forms/InquiryForm";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { RegionSwitcher } from "@/components/global/RegionSwitcher";
@@ -171,9 +172,21 @@ function genderFromDivisions(divisions: string[]): "male" | "female" {
 
 export default async function EuropePage() {
   const { events } = await getEvents();
-  const europeEvents = events
-    .filter((e) => e.country === "Europe" && e.status !== "completed")
+  /**
+   * ⚠ SPLIT ON THE END DATE, NOT `status`. The feed still marks Portorož (Jul)
+   * and Barcelona (Sep) "upcoming" after they finished, so status alone would
+   * list them as next. Past stops are SHOWN (Payton/Albert, 10/1: "should show
+   * past events, at least for now") — with one stop confirmed ahead, an
+   * upcoming-only calendar read as an empty tour.
+   */
+  const today = new Date().toISOString().slice(0, 10);
+  const europeAll = events.filter((e) => e.country === "Europe");
+  const europeEvents = europeAll
+    .filter((e) => e.endDate >= today && e.status !== "completed")
     .sort((a, b) => a.startDate.localeCompare(b.startDate));
+  const pastEvents = europeAll
+    .filter((e) => e.endDate < today || e.status === "completed")
+    .sort((a, b) => b.startDate.localeCompare(a.startDate));
 
   /**
    * Live world rank for any Europe pro who is on the board. This is the payoff
@@ -271,6 +284,12 @@ export default async function EuropePage() {
               Entry &amp; Rules
             </a>
           </div>
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
+              Follow
+            </span>
+            <EuropeSocialLinks />
+          </div>
         </div>
       </section>
 
@@ -287,7 +306,7 @@ export default async function EuropePage() {
                the table further down this page says so; the house badge would
                print the US sub-1,000 word and contradict it. */
             tierName="PPA Tour Europe"
-            subtitle="Every PPA Tour Europe stop, from the same live feed that runs the global calendar. Filter the full tour by region on Find an Event."
+            subtitle="Every upcoming PPA Tour Europe stop. Past stops are below."
           />
         ) : (
           /* ⚠ NOT AN ERROR STATE. The feed is authoritative; with no Europe stop
@@ -303,13 +322,18 @@ export default async function EuropePage() {
             </div>
           </div>
         )}
-        <div className="border-b border-ppa-line bg-white">
-          <div className="mx-auto w-full max-w-6xl px-4 pb-10 text-sm">
-            <Link href="/events" className="text-ppa-blue hover:text-ppa-navy">
-              See the full tour schedule →
-            </Link>
-          </div>
-        </div>
+        {/* ⚠ NO LINK TO /events. That is the US site's all-tour calendar,
+            Carvana-branded — Payton/Albert, 10/1: "We'd prefer to not link to
+            Carvana at all." The Europe schedule lives on this page, whole. */}
+        {pastEvents.length > 0 && (
+          <FeaturedEvents
+            events={pastEvents}
+            kicker="Results"
+            title="Past Europe Events"
+            tierName="PPA Tour Europe"
+            subtitle="Stops already played on PPA Tour Europe, most recent first."
+          />
+        )}
       </section>
 
       {/* ----------------------------------------------------------- Pros */}

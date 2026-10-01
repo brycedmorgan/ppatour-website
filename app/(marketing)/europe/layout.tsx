@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { EuropeSocialLinks } from "@/components/europe/EuropeSocialLinks";
 
 /**
  * Europe-scoped chrome.
@@ -84,9 +85,9 @@ function EuropeHeader() {
  * Tixr tickets, How It Works and the Player Handbook, all US. Only the legal
  * pages are genuinely site-wide, so only they survive.
  *
- * ⚠ NO SOCIAL ICONS. The global footer links five @ppatour accounts, which are
- * the US tour's. A @ppatoureurope Instagram exists but this file is not the
- * place to assert a handle nobody has confirmed.
+ * ⚠ EUROPE'S OWN SOCIALS ONLY. The global footer links five @ppatour accounts,
+ * which are the US tour's. These are the three @ppatoureurope accounts Payton
+ * confirmed (lib/europe-socials.ts), added 10/1 after two asks (9/22, 9/23).
  */
 function EuropeFooter() {
   return (
@@ -114,6 +115,12 @@ function EuropeFooter() {
               Terms
             </Link>
           </nav>
+        </div>
+        <div className="mt-8 flex flex-wrap items-center gap-4">
+          <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
+            Follow PPA Tour Europe
+          </span>
+          <EuropeSocialLinks />
         </div>
         <p className="mt-8 text-[12px] text-white/45">
           PPA Tour Europe. © {new Date().getFullYear()} Pickleball Inc.

@@ -65,6 +65,25 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-10-01 — Europe: socials on the site, Europe-only schedule with past stops, no Carvana link
+
+- Payton (#ppa-tour-europe, 10/1, for Albert): socials + event link, Europe-only schedule incl. past events, no
+  Carvana link, "more European" header, gallery that syncs from Google Drive.
+- **⚠ THE SOCIALS WERE ASKED FOR TWICE BEFORE AND DROPPED.** 9/22 (Instagram + Facebook @ppatoureurope, in the
+  WPR thread) and 9/23 (YouTube + Instagram on /eventlinks); Bryce said "done shortly" 9/25. The 9/22 entry here
+  logged it as a "Next" and nothing picked it up, and `europe/layout.tsx` still carried a "don't assert an
+  unconfirmed handle" comment. Shipped now: `lib/europe-socials.ts` (URLs curl-verified) → hero "Follow" row,
+  Europe footer, and a "Watch & follow" block on /eventlinks.
+- Schedule: split on END DATE (feed leaves finished stops "upcoming"); "Past Europe Events" band added; the
+  "See the full tour schedule →" link to /events (Carvana, all tours) is gone.
+- **Not done — header photo.** Pick: Katherina's "Venue Impressions Barcelona" Drive folder, DSC04289 (wide court,
+  PPA Europe banners, live play). Folder isn't link-shared; needs a browser download Bryce OKs.
+- **Not done — card photos.** Brescia card shows Melbourne, Portorož shows Gold Coast (generic fallback images in
+  `lib/events-api.ts`). Needs real Italy/Slovenia photos from the Europe team.
+- **Gallery:** not built. Drive auto-sync is possible (shared folder + service account or Drive API key, pulled at
+  build/ISR) — waiting on the photos and a decision. Brescia: Payton said "don't move over that brescia event"
+  (Italy rollover thread) — it still shows on the Europe schedule; asked.
+
 ### 2026-09-28 (pt. 2) — Worlds gets its real order of play and a Programming section
 
 - Wesley: add the Worlds schedule (worlds.unitedpickleball.com/schedule, built in

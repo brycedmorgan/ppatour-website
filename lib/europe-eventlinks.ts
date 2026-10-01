@@ -1,3 +1,5 @@
+import { EUROPE_SOCIALS } from "@/lib/europe-socials";
+
 /**
  * Per-stop links for the PPA Tour Europe credential QR code.
  *
@@ -40,3 +42,10 @@ export const EUROPE_GENERAL_LINKS: EventLink[] = [
   { label: "Entry & rules", href: "/europe#rules", note: "How Europe events differ from the US tour" },
   { label: "Contact the Europe team", href: "/europe#contact" },
 ];
+
+/** The tour's own socials, for the "Follow" block on /eventlinks. */
+export const EUROPE_SOCIAL_LINKS: EventLink[] = EUROPE_SOCIALS.map((s) => ({
+  label: s.name,
+  href: s.href,
+  note: s.name === "YouTube" ? `${s.handle} · live streams of the feature courts` : s.handle,
+}));
