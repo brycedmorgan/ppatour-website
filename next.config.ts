@@ -402,6 +402,34 @@ const EUROPE_DOMAIN_REDIRECTS = [
 ];
 
 
+/**
+ * ⚠ ppatoureurope.com MUST NOT SERVE THE US SITE. Its host rewrites only map
+ * "/" and "/eventlinks" onto /europe, so every other path (/events, /watch,
+ * /rankings, /about…) fell through to the Carvana-branded US page on the Europe
+ * domain (Payton's 9/14 list; still true 10/1). Those US sections go home to
+ * the Europe page instead. Explicit list, host-scoped: /europe/* (pro profiles),
+ * /about/privacy, /about/terms, /api/* (the contact form posts there), /_next
+ * and static assets are untouched. Temporary (307) so a future Europe section
+ * at one of these paths can take it back.
+ */
+const EUROPE_HOST_US_SECTIONS = [
+  "events", "watch", "athletes", "rankings", "news", "blog", "ppa-blog", "play",
+  "tour", "brackets", "leaderboards", "live", "shop", "vacations", "partners",
+  "ambassadors", "following", "search", "paddle-lab", "hq",
+];
+const EUROPE_HOST_US_REDIRECTS = [
+  ...EUROPE_HOST_US_SECTIONS.flatMap((p) => [
+    { source: `/${p}`, has: [{ type: "host" as const, value: "ppatoureurope.com" }], destination: "/" },
+    { source: `/${p}/:rest*`, has: [{ type: "host" as const, value: "ppatoureurope.com" }], destination: "/" },
+  ]),
+  { source: "/about", has: [{ type: "host" as const, value: "ppatoureurope.com" }], destination: "/" },
+  {
+    source: "/about/:page((?!privacy|terms).*)",
+    has: [{ type: "host" as const, value: "ppatoureurope.com" }],
+    destination: "/",
+  },
+];
+
 const nextConfig: NextConfig = {
   // The /hq route reads lib/hq/hq-template.html with fs at request time; it is
   // not imported, so trace it into that function's bundle or production 500s
@@ -479,6 +507,7 @@ const nextConfig: NextConfig = {
     return [
       // First, so the domain rule wins on that host before any path rule.
       ...EUROPE_DOMAIN_REDIRECTS.map((r) => ({ ...r, permanent: true })),
+      ...EUROPE_HOST_US_REDIRECTS.map((r) => ({ ...r, permanent: false })),
       // ppachallenger.com, also host-scoped and also first: LEGACY_REDIRECTS
       // below maps /schedule, /how-it-works, /sponsors on ANY host, and those
       // paths exist on the old Challenger site with different homes.
