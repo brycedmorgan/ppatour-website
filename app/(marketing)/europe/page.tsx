@@ -144,6 +144,11 @@ const ENTRY_PRIORITY = [
   },
 ];
 
+const EUROPE_PARTNERS = [
+  { name: "LT PRO48", role: "Official Ball", logo: "/ppa/europe/partners/lt-pro48.png", w: 900, h: 168 },
+  { name: "JOOLA", role: "Official Net", logo: "/ppa/europe/partners/joola.png", w: 384, h: 121 },
+];
+
 const DIFFERENCES = [
   "Its own calendar, events and player operations across the region.",
   "Four event tiers — 75, 125, 250 and 500 points — rather than the US Worlds / Majors / Cups / Opens structure.",
@@ -338,6 +343,25 @@ export default async function EuropePage() {
             subtitle="Stops already played on PPA Tour Europe, most recent first."
           />
         )}
+      </section>
+
+      {/* -------------------------------------------------------- Partners */}
+      {/* ⚠ EUROPE'S partners, not the US sponsor wall. Payton, 9/14 + 9/22:
+          tour-wide partners are LT PRO48 (ball) and JOOLA (net), called
+          "Official Partners". Logos are the files she posted 9/22. Unlinked on
+          purpose — nobody gave us a destination URL. */}
+      <section id="partners" className="scroll-mt-24 border-y border-ppa-line bg-white">
+        <div className="mx-auto w-full max-w-6xl px-4 py-10">
+          <SectionHead eyebrow="Official Partners" title="Partners of PPA Tour Europe" />
+          <div className="mt-6 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-2">
+            {EUROPE_PARTNERS.map((p) => (
+              <div key={p.name} className="flex flex-col items-center justify-center gap-4 bg-white px-6 py-8">
+                <Image src={p.logo} alt={p.name} width={p.w} height={p.h} className="h-10 w-auto sm:h-12" />
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">{p.role}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* ----------------------------------------------------------- Pros */}
