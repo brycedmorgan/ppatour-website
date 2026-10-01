@@ -56,4 +56,9 @@ export const EUROPE_SOCIAL_LINKS: EventLink[] = EUROPE_SOCIALS.map((s) => ({
  * have anything online for Brescia right now because this event is not
  * confirmed." Remove a slug the day they confirm it.
  */
-export const EUROPE_UNCONFIRMED_SLUGS = new Set(["ppa-italy-125-brescia"]);
+const EUROPE_UNCONFIRMED = /brescia/i;
+
+/** Matched on name + city, not slug: the feed's titles drift (see Barcelona's alias in events-api). */
+export function isUnconfirmedEuropeStop(t: { name: string; city: string; slug: string }): boolean {
+  return EUROPE_UNCONFIRMED.test(`${t.name} ${t.city} ${t.slug}`);
+}

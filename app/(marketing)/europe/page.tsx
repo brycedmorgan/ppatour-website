@@ -4,7 +4,7 @@ import Link from "next/link";
 import { AthleteRoster, type RosterAthlete } from "@/components/athletes/AthleteRoster";
 import { FeaturedEvents } from "@/components/events/FeaturedEvents";
 import { EuropeSocialLinks } from "@/components/europe/EuropeSocialLinks";
-import { EUROPE_UNCONFIRMED_SLUGS } from "@/lib/europe-eventlinks";
+import { isUnconfirmedEuropeStop } from "@/lib/europe-eventlinks";
 import { InquiryForm } from "@/components/forms/InquiryForm";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { RegionSwitcher } from "@/components/global/RegionSwitcher";
@@ -183,7 +183,7 @@ export default async function EuropePage() {
    */
   const today = new Date().toISOString().slice(0, 10);
   const europeAll = events.filter(
-    (e) => e.country === "Europe" && !EUROPE_UNCONFIRMED_SLUGS.has(e.slug),
+    (e) => e.country === "Europe" && !isUnconfirmedEuropeStop(e),
   );
   const europeEvents = europeAll
     .filter((e) => e.endDate >= today && e.status !== "completed")
