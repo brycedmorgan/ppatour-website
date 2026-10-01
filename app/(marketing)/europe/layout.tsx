@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { EuropeSocialLinks } from "@/components/europe/EuropeSocialLinks";
+import { EUROPE_PARTNERS } from "@/lib/europe-partners";
 
 /**
  * Europe-scoped chrome.
@@ -77,9 +78,9 @@ function EuropeHeader() {
 }
 
 /**
- * ⚠ NO PARTNER STRIP. The global footer renders ten US partner marks, Carvana
- * among them, each linking to the partner's own site. That strip is the single
- * worst item on this page for a sponsor meeting.
+ * ⚠ EUROPE'S PARTNERS ONLY. The global footer renders ten US partner marks,
+ * Carvana among them; none of those may appear here. The strip below is
+ * Europe's own two (lib/europe-partners.ts), same tile style as ppatour.com.
  *
  * ⚠ NO US TOUR LINKS either — the global footer's Pro Tour column carries
  * Tixr tickets, How It Works and the Player Handbook, all US. Only the legal
@@ -93,6 +94,20 @@ function EuropeFooter() {
   return (
     <footer className="bg-ppa-navy text-white">
       <div className="mx-auto w-full max-w-6xl px-4 py-12">
+        <div className="mb-10 border-b border-white/10 pb-10">
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">Our Sponsors</p>
+          <ul className="mt-4 flex flex-wrap gap-3">
+            {EUROPE_PARTNERS.map((p) => (
+              <li
+                key={p.name}
+                title={`${p.name} · ${p.role}`}
+                className="flex h-16 w-40 items-center justify-center bg-white px-4 sm:h-[72px] sm:w-48"
+              >
+                <Image src={p.logo} alt={`${p.name}, ${p.role}`} width={p.w} height={p.h} className="max-h-8 w-auto" />
+              </li>
+            ))}
+          </ul>
+        </div>
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <Image
             src="/ppa/logos/ppa-tour-horizontal-white.svg"
