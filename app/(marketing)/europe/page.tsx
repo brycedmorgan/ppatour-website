@@ -522,12 +522,16 @@ export default async function EuropePage() {
                 >
                   Read the UPA-A Rulebook ↗
                 </a>
-                <Link
-                  href="/about/how-it-works"
+                {/* Absolute on purpose: ppatoureurope.com sends /about/* (except
+                    privacy/terms) home, so a relative link would just reload this page. */}
+                <a
+                  href="https://www.ppatour.com/about/how-it-works/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center border border-ppa-line px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy transition-colors hover:border-ppa-blue hover:text-ppa-blue"
                 >
-                  How the US Tour Works
-                </Link>
+                  How the US Tour Works ↗
+                </a>
               </div>
             </div>
             <div className="min-w-0 border border-ppa-line bg-ppa-paper p-5">
