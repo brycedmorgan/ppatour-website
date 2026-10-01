@@ -98,12 +98,16 @@ function EuropeFooter() {
           <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">Our Sponsors</p>
           <ul className="mt-4 flex flex-wrap gap-3">
             {EUROPE_PARTNERS.map((p) => (
-              <li
-                key={p.name}
-                title={`${p.name} · ${p.role}`}
-                className="flex h-16 w-40 items-center justify-center bg-white px-4 sm:h-[72px] sm:w-48"
-              >
-                <Image src={p.logo} alt={`${p.name}, ${p.role}`} width={p.w} height={p.h} className="max-h-8 w-auto" />
+              <li key={p.name}>
+                <a
+                  href={p.href}
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  title={`${p.name} · ${p.role}`}
+                  className="flex h-16 w-40 items-center justify-center bg-white px-4 transition-opacity hover:opacity-85 sm:h-[72px] sm:w-48"
+                >
+                  <Image src={p.logo} alt={`${p.name}, ${p.role}`} width={p.w} height={p.h} className="max-h-8 w-auto" />
+                </a>
               </li>
             ))}
           </ul>

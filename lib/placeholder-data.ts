@@ -733,7 +733,8 @@ const SCHEDULE: RawEvent[] = [
   // July 2026
   { name: "PPA Australia 250 Melbourne", start: "2026-07-15", end: "2026-07-19", city: "Melbourne", state: "Australia", type: "international", country: "Australia" },
   { name: "Macon PPA Challenger", start: "2026-07-17", end: "2026-07-19", city: "Macon", state: "GA", type: "challenger" },
-  { name: "PPA Italy 125 Portoroz", start: "2026-07-22", end: "2026-07-26", city: "Portoroz", state: "Italy", type: "international", country: "Europe" },
+  // Photo: Payton, #ppa-tour-europe 10/1 (PPA_DAY3_350.jpg) — the card was drawing the Gold Coast.
+  { name: "PPA Italy 125 Portoroz", start: "2026-07-22", end: "2026-07-26", city: "Portoroz", state: "Italy", type: "international", country: "Europe", image: "/ppa/event-portoroz.jpg" },
   { name: "PPA Asia 500 Singapore Open", start: "2026-07-23", end: "2026-07-26", city: "Singapore", state: "", type: "international", country: "Asia" },
   { name: "Wisconsin PPA Challenger", start: "2026-07-31", end: "2026-08-02", city: "Lake Hallie", state: "WI", type: "challenger" },
 
@@ -781,7 +782,9 @@ const SCHEDULE: RawEvent[] = [
   // illustrated with Macao and the P500 with the Gold Coast, and the FEED row (the
   // one /events actually serves) drew Melbourne. Same bug Bryce flagged on 7/28
   // when Las Vegas was showing the Brisbane skyline, one continent over.
-  { name: "PPA Spain P250 Barcelona", start: "2026-09-23", end: "2026-09-27", city: "Barcelona", state: "Spain", type: "international", country: "Europe", image: "/ppa/event-barcelona.jpg" },
+  // Tournament photo from the event itself (Payton 10/1, 238-PPA-250-BCN-MENS-DOUBLES.jpg); the
+  // waterfront shot stays the /europe hero.
+  { name: "PPA Spain P250 Barcelona", start: "2026-09-23", end: "2026-09-27", city: "Barcelona", state: "Spain", type: "international", country: "Europe", image: "/ppa/event-barcelona-p250.jpg" },
   { name: "Charlotte PPA Challenger", start: "2026-09-25", end: "2026-09-27", city: "Charlotte", state: "NC", type: "challenger", points: 125 },
   { name: "Rate Las Vegas Open", start: "2026-09-28", end: "2026-10-04", city: "Las Vegas", state: "NV", venue: "Darling Tennis Center", type: "ppa", tier: "open" },
 
