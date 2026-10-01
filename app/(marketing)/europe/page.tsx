@@ -4,6 +4,8 @@ import Link from "next/link";
 import { AthleteRoster, type RosterAthlete } from "@/components/athletes/AthleteRoster";
 import { FeaturedEvents } from "@/components/events/FeaturedEvents";
 import { EuropeSocialLinks } from "@/components/europe/EuropeSocialLinks";
+import { EuropeGallery } from "@/components/europe/EuropeGallery";
+import { getEuropeGallery } from "@/lib/europe-gallery";
 import { isUnconfirmedEuropeStop } from "@/lib/europe-eventlinks";
 import { InquiryForm } from "@/components/forms/InquiryForm";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
@@ -204,6 +206,8 @@ export default async function EuropePage() {
    * request. Degrades to rank 0 (the roster's own "unranked" state) with no
    * token or on a 429 — never a fabricated number.
    */
+  const gallery = await getEuropeGallery();
+
   const wprIndex = await getWprIndex().catch(
     () => ({}) as Awaited<ReturnType<typeof getWprIndex>>,
   );
@@ -393,6 +397,21 @@ export default async function EuropePage() {
           </div>
         </div>
       </section>
+
+      {/* --------------------------------------------------------- Gallery */}
+      {/* ⚠ Runs itself. Catie/Payton add photos to the Drive folder and they
+          show here within the hour, no deploy. See lib/europe-gallery.ts.
+          Renders nothing if the folder is empty or made private. */}
+      {gallery.length > 0 && (
+        <section id="gallery" className="scroll-mt-24 border-t border-ppa-line bg-white">
+          <div className="mx-auto w-full max-w-6xl px-4 py-12">
+            <SectionHead eyebrow="Gallery" title="On Court in Europe" />
+            <div className="mt-6">
+              <EuropeGallery albums={gallery} />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* --------------------------------------------------- Event types */}
       <section id="events" className="scroll-mt-24 border-t border-ppa-line bg-white">

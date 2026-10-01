@@ -40,6 +40,7 @@ export const EUROPE_GENERAL_LINKS: EventLink[] = [
   { label: "Schedule", href: "/europe#schedule", note: "Every Europe stop" },
   { label: "The Pros", href: "/europe#pros", note: "Signed PPA Tour Europe players" },
   { label: "Entry & rules", href: "/europe#rules", note: "How Europe events differ from the US tour" },
+  { label: "Gallery", href: "/europe#gallery", note: "Photos from every stop" },
   { label: "Contact the Europe team", href: "/europe#contact" },
 ];
 
