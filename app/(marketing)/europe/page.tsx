@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AthleteRoster, type RosterAthlete } from "@/components/athletes/AthleteRoster";
 import { FeaturedEvents } from "@/components/events/FeaturedEvents";
 import { EuropeSocialLinks } from "@/components/europe/EuropeSocialLinks";
+import { EUROPE_UNCONFIRMED_SLUGS } from "@/lib/europe-eventlinks";
 import { InquiryForm } from "@/components/forms/InquiryForm";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { RegionSwitcher } from "@/components/global/RegionSwitcher";
@@ -124,21 +125,22 @@ const EVENT_TIERS = [
   { points: "500", note: "Touring pros and aspiring touring pros only." },
 ];
 
+/** Payton's copy, #ppa-tour-europe 9/30 — verbatim. */
 const ENTRY_PRIORITY = [
   {
     n: "01",
-    title: "Signed Touring Pros",
-    body: "Only players on a PPA contract are guaranteed a spot in the main draw. Any signed player who does not make the main draw is guaranteed a place in qualifying.",
+    title: "Signed Players & Pairs",
+    body: "Players on a PPA contract, and pairs where both players are contracted, enter the main draw first. Entry priority within this group is based on PPA Points in that category. Any signed player who does not make the main draw is guaranteed a place in qualifying.",
   },
   {
     n: "02",
-    title: "Pairs with one contracted player",
-    body: "In doubles and mixed doubles, a pair with one PPA-contracted player has a stronger chance of direct main-draw entry than a pair where neither player is contracted.",
+    title: "Pairs with One Contracted Player",
+    body: "In doubles and mixed doubles, a pair with one PPA-contracted player has a stronger chance of direct main-draw entry than a pair where neither player is contracted. Entry priority for these pairs is based on the contracted player's PPA Points in that category.",
   },
   {
     n: "03",
-    title: "PPA Points, then DUPR",
-    body: "Remaining spots are ordered by PPA Points (World Pickleball Ranking), then by DUPR rating. Once the main draw is full, remaining teams fill qualifying in the same order.",
+    title: "Unsigned Players & Pairs",
+    body: "Unsigned players and pairs are usually required to play a qualifying round to enter the main draw. Qualifying is typically seeded by PPA Points (World Pickleball Ranking), then DUPR. If an event has no qualifying round, unsigned teams are seeded by DUPR after the signed players, so the draw reflects playing strength as accurately as possible.",
   },
 ];
 
@@ -180,7 +182,9 @@ export default async function EuropePage() {
    * upcoming-only calendar read as an empty tour.
    */
   const today = new Date().toISOString().slice(0, 10);
-  const europeAll = events.filter((e) => e.country === "Europe");
+  const europeAll = events.filter(
+    (e) => e.country === "Europe" && !EUROPE_UNCONFIRMED_SLUGS.has(e.slug),
+  );
   const europeEvents = europeAll
     .filter((e) => e.endDate >= today && e.status !== "completed")
     .sort((a, b) => a.startDate.localeCompare(b.startDate));
@@ -421,11 +425,11 @@ export default async function EuropePage() {
                 ))}
               </ol>
               <p className="mt-4 text-xs leading-relaxed text-ppa-navy/55">
-                There is no fixed entry threshold. Whether a pair needs to play
-                the qualifying round depends on how many PPA-contracted players
-                register in that category and how big the draw is. Pairs where
-                neither player holds a PPA contract are likely to compete in the
-                qualifying round.
+                There is no fixed entry threshold. How many main-draw spots
+                remain for unsigned pairs depends on how many PPA-contracted
+                players register in that category and how big the draw is. Pairs
+                where neither player holds a PPA contract should expect to compete
+                in the qualifying round.
               </p>
             </div>
 

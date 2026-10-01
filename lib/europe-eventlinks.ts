@@ -49,3 +49,11 @@ export const EUROPE_SOCIAL_LINKS: EventLink[] = EUROPE_SOCIALS.map((s) => ({
   href: s.href,
   note: s.name === "YouTube" ? `${s.handle} · live streams of the feature courts` : s.handle,
 }));
+
+/**
+ * Feed stops the Europe team says are NOT confirmed and must not be shown
+ * anywhere on the Europe site. Payton, #ppa-tour-europe 10/1: "We shouldn't
+ * have anything online for Brescia right now because this event is not
+ * confirmed." Remove a slug the day they confirm it.
+ */
+export const EUROPE_UNCONFIRMED_SLUGS = new Set(["ppa-italy-125-brescia"]);

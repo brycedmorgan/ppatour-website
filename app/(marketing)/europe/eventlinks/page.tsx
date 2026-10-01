@@ -3,7 +3,7 @@ import Link from "next/link";
 import { eventHref, formatDateRange, type Tournament } from "@/lib/placeholder-data";
 import { getEvents } from "@/lib/events-api";
 import { EUROPE_SITE_URL, europeRobots } from "@/lib/europe-launch";
-import { EUROPE_EVENT_LINKS, EUROPE_GENERAL_LINKS, EUROPE_SOCIAL_LINKS, type EventLink } from "@/lib/europe-eventlinks";
+import { EUROPE_EVENT_LINKS, EUROPE_GENERAL_LINKS, EUROPE_SOCIAL_LINKS, EUROPE_UNCONFIRMED_SLUGS, type EventLink } from "@/lib/europe-eventlinks";
 
 /**
  * /europe/eventlinks — the page behind the QR code on every PPA Tour Europe
@@ -95,7 +95,7 @@ export default async function EuropeEventLinksPage() {
   // page is worse than none.
   const today = new Date().toISOString().slice(0, 10);
   const stops = events
-    .filter((e) => e.country === "Europe" && e.status !== "completed" && e.endDate >= today)
+    .filter((e) => e.country === "Europe" && !EUROPE_UNCONFIRMED_SLUGS.has(e.slug) && e.status !== "completed" && e.endDate >= today)
     .sort((a, b) => a.startDate.localeCompare(b.startDate));
   const [current, ...later] = stops;
 
