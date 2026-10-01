@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-30T18:11:56Z",
+  "updated_at": "2026-10-01T18:37:25Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -8071,6 +8071,378 @@
       "sale_state": {
         "from": "OPEN",
         "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "price_change",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "King of the Court – 3.0–3.5",
+      "base_price": {
+        "from": 30,
+        "to": 30
+      },
+      "all_in_price": {
+        "from": 35.83,
+        "to": 35.75
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "price_change",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "King of the Court – 4.0–4.5",
+      "base_price": {
+        "from": 30,
+        "to": 30
+      },
+      "all_in_price": {
+        "from": 35.83,
+        "to": 35.75
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "price_change",
+      "event_id": "166404",
+      "event": "Opendoor Pickleball World Championships Tuesday - Round of 64",
+      "ticket": "Tuesday Courtside Bleacher",
+      "base_price": {
+        "from": null,
+        "to": 80
+      },
+      "all_in_price": {
+        "from": 46.66,
+        "to": 92.03
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "availability_change",
+      "event_id": "166404",
+      "event": "Opendoor Pickleball World Championships Tuesday - Round of 64",
+      "ticket": "Tuesday Courtside Bleacher",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "price_change",
+      "event_id": "166402",
+      "event": "Opendoor Pickleball World Championships Wednesday - Round of 32",
+      "ticket": "Wednesday Courtside Bleacher",
+      "base_price": {
+        "from": null,
+        "to": 80
+      },
+      "all_in_price": {
+        "from": 46.66,
+        "to": 92.03
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "availability_change",
+      "event_id": "166402",
+      "event": "Opendoor Pickleball World Championships Wednesday - Round of 32",
+      "ticket": "Wednesday Courtside Bleacher",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "price_change",
+      "event_id": "166399",
+      "event": "Opendoor Pickleball World Championships Thursday - Round of 16",
+      "ticket": "Thursday Courtside Bleacher",
+      "base_price": {
+        "from": null,
+        "to": 80
+      },
+      "all_in_price": {
+        "from": 46.66,
+        "to": 92.03
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "availability_change",
+      "event_id": "166399",
+      "event": "Opendoor Pickleball World Championships Thursday - Round of 16",
+      "ticket": "Thursday Courtside Bleacher",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "price_change",
+      "event_id": "166399",
+      "event": "Opendoor Pickleball World Championships Thursday - Round of 16",
+      "ticket": "Thursday Courtside Chair",
+      "base_price": {
+        "from": null,
+        "to": 120
+      },
+      "all_in_price": {
+        "from": 135.35,
+        "to": 135.35
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "availability_change",
+      "event_id": "166399",
+      "event": "Opendoor Pickleball World Championships Thursday - Round of 16",
+      "ticket": "Thursday Courtside Chair",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "price_change",
+      "event_id": "166399",
+      "event": "Opendoor Pickleball World Championships Thursday - Round of 16",
+      "ticket": "Thursday VIP",
+      "base_price": {
+        "from": null,
+        "to": 350
+      },
+      "all_in_price": {
+        "from": 384.43,
+        "to": 384.43
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "availability_change",
+      "event_id": "166399",
+      "event": "Opendoor Pickleball World Championships Thursday - Round of 16",
+      "ticket": "Thursday VIP",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "price_change",
+      "event_id": "166396",
+      "event": "Opendoor Pickleball World Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening Courtside Bleacher",
+      "base_price": {
+        "from": null,
+        "to": 80
+      },
+      "all_in_price": {
+        "from": 46.66,
+        "to": 92.03
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "availability_change",
+      "event_id": "166396",
+      "event": "Opendoor Pickleball World Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening Courtside Bleacher",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "price_change",
+      "event_id": "166396",
+      "event": "Opendoor Pickleball World Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening VIP",
+      "base_price": {
+        "from": null,
+        "to": 400
+      },
+      "all_in_price": {
+        "from": 438.58,
+        "to": 438.58
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "availability_change",
+      "event_id": "166396",
+      "event": "Opendoor Pickleball World Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening VIP",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "price_change",
+      "event_id": "166381",
+      "event": "Opendoor Pickleball World Championships Saturday Evening - Men's and Women's Doubles Semifinals",
+      "ticket": "Saturday Evening VIP",
+      "base_price": {
+        "from": null,
+        "to": 400
+      },
+      "all_in_price": {
+        "from": 438.58,
+        "to": 438.58
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "availability_change",
+      "event_id": "166381",
+      "event": "Opendoor Pickleball World Championships Saturday Evening - Men's and Women's Doubles Semifinals",
+      "ticket": "Saturday Evening VIP",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "price_change",
+      "event_id": "166387",
+      "event": "Opendoor Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning Courtside Bleacher",
+      "base_price": {
+        "from": null,
+        "to": 80
+      },
+      "all_in_price": {
+        "from": 46.66,
+        "to": 92.03
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "availability_change",
+      "event_id": "166387",
+      "event": "Opendoor Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning Courtside Bleacher",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "price_change",
+      "event_id": "166387",
+      "event": "Opendoor Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning VIP",
+      "base_price": {
+        "from": null,
+        "to": 400
+      },
+      "all_in_price": {
+        "from": 438.58,
+        "to": 438.58
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "availability_change",
+      "event_id": "166387",
+      "event": "Opendoor Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning VIP",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday Courtside Chair",
+      "base_price": {
+        "from": null,
+        "to": 250
+      },
+      "all_in_price": {
+        "from": 276.13,
+        "to": 276.13
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "availability_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday Courtside Chair",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "base_price": {
+        "from": null,
+        "to": 500
+      },
+      "all_in_price": {
+        "from": 546.87,
+        "to": 546.87
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "availability_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "price_change",
+      "event_id": "204335",
+      "event": "PPA Palm Springs Sunday - Championships",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 134.8,
+        "to": 156.41
+      }
+    },
+    {
+      "at": "2026-10-01T18:37:25Z",
+      "type": "price_change",
+      "event_id": "204335",
+      "event": "PPA Palm Springs Sunday - Championships",
+      "ticket": "Sunday Courtside+",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 178.01,
+        "to": 199.62
       }
     }
   ]
