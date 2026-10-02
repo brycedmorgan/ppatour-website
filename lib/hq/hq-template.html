@@ -447,6 +447,41 @@ function delta(key) {
   const lab = key === 'revenue' || key === 'po' ? kmoney(Math.abs(d)) : int(Math.abs(d));
   return ` · <span style="color:var(--${d > 0 ? 'good' : 'crit'})">${d > 0 ? '+' : '−'}${lab}</span> since ${fmtD(ref.date)}`;
 }
+// Multi-year ambassador acquisition study (first-ever PPA buyers acquired via an
+// ambassador code, checked against all prior-year Tixr history). Static snapshot
+// — refresh the numbers here when the study is re-run.
+const NEW_CUSTOMERS = {
+  asOf: '2026-10-02',
+  rows: [
+    { year: 2023, buyers: 0, nu: 0 },
+    { year: 2024, buyers: 63, nu: 42 },
+    { year: 2025, buyers: 1284, nu: 921 },
+    { year: 2026, buyers: 5965, nu: 4305 },
+  ],
+};
+function newCustomers() {
+  const R = NEW_CUSTOMERS.rows, last = R[R.length - 1], prev = R[R.length - 2];
+  const shown = R.filter(r => r.buyers);
+  const maxN = Math.max(1, ...shown.map(r => r.nu));
+  const rate = r => r.buyers ? Math.round(r.nu / r.buyers * 100) : 0;
+  const bars = shown.map(r => `<div class="brow"><span class="bn">${r.year}</span><span class="btrack"><span class="bfill" style="width:${(r.nu / maxN * 100).toFixed(1)}%"></span></span><span class="bv">${int(r.nu)}</span></div>`).join('');
+  const mult = prev.nu ? (last.nu / prev.nu).toFixed(1) + '×' : '—';
+  const rows = R.map(r => `<tr><td>${r.year}</td><td class="r num">${int(r.buyers)}</td><td class="r num">${int(r.nu)}</td><td class="r num">${rate(r)}%</td></tr>`).join('');
+  return `<section class="sec">
+    <div class="sec-h"><h2>New customers from ambassadors</h2><span class="sub">First-ever PPA ticket buyers acquired through an ambassador code, checked against every prior year · as of ${fmtD(NEW_CUSTOMERS.asOf)}</span></div>
+    <div class="kpis">
+      <div class="kpi"><span class="v hi">${int(last.nu)}</span><span class="l">New customers in ${last.year}</span></div>
+      <div class="kpi"><span class="v">${rate(last)}%</span><span class="l">of ambassador buyers were first-timers</span></div>
+      <div class="kpi"><span class="v">${mult}</span><span class="l">vs ${prev.year} (${int(prev.nu)} new)</span></div>
+    </div>
+    <div class="grid2">
+      <div class="panel panel-pad sec"><div class="sec-h"><h3>New customers by year</h3></div><div class="bars">${bars}</div></div>
+      <div class="panel panel-pad sec"><div class="sec-h"><h3>Detail</h3></div>
+        <table><thead><tr><th>Year</th><th class="r">Ambassador buyers</th><th class="r">New customers</th><th class="r">New rate</th></tr></thead><tbody>${rows}</tbody></table></div>
+    </div>
+    <p class="muted" style="font-size:.8rem">New customer = their first-ever PPA ticket purchase (checked against all Tixr history back to 2022). The program's acquisition has scaled ~5× year over year while holding a ~72% first-timer rate.</p>
+  </section>`;
+}
 function vOverview() {
   const tf = TF[UI.tf] || TF.year, isYear = (UI.tf || 'year') === 'year';
   const ev = S.events.filter(e => e.start >= tf.lo && e.start <= tf.hi);
@@ -483,6 +518,7 @@ function vOverview() {
     ${kpis}
     ${isYear && S.snaps.length < 2 ? `<p class="muted" style="font-size:.84rem">Trend lines start filling in with the daily refresh. The first snapshot was ${S.snaps[0] ? fmtD(S.snaps[0].date) : 'today'}.</p>` : ''}
   </section>
+  ${newCustomers()}
   <section class="sec">
     <div class="sec-h"><h2>Tournaments</h2><span class="sub">Tap a tournament for its leaderboard, payouts and graphics</span></div>
     <div class="rail">${cards || '<div class="empty">No tournaments in this window.</div>'}</div>
