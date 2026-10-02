@@ -65,6 +65,33 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-10-02 — api.pickleball.com 429s: one instance refreshes, the rest serve what they have
+
+- Wesley asked for a per-tournament comparison of api.pickleball.com calls; published as an artifact
+  (https://claude.ai/artifact/7DziJU2YFWxvjK869NB5re) from `vercel metrics vercel.external_api_request.count`.
+  ⚠ The destination host is `request_hostname`, not `origin_hostname` (that is OUR host); `fetch_type origin`
+  = reached pickleball.com, `cache-get` = Data Cache. Vercel keeps 36 days only. Upstream calls per day:
+  Nationals 140K · Arizona 42K · Las Vegas 12K (first 5 days).
+- **Kenan said there were no 429s; there were ~10K during Las Vegas.** They come from their app
+  (`pb-instance-id`, `request_id` headers; CloudFront only passes them through) and the body reads
+  `platform access denied: platformID=9`, so a search for "rate limit" misses them. Sample request_id
+  `39678703056452`, 10/2 15:26:44 GMT. A 12-request probe got 11 refusals.
+- **Cause: every warm instance refreshed the same expired row at once**, each retrying 3x. Fixed in
+  `lib/pb-cache.ts`: a 10s refresh lease in `api_cache` (new nullable `lease_until` column, added by the
+  idempotent `init`), stale-copy fallback on refusal (up to max(6x window, 2 min)), the unreleased lease
+  doubles as a fleet-wide cooldown, runtime retries 1 (0 with a stale copy), build keeps 3 via `NEXT_PHASE`.
+- ⚠ **Freshness is now the row's AGE against each caller's own window, not `expires_at`.** Scores (20s) and
+  brackets (90s) read the same `tournament_events/{id}` URLs and share rows; under `expires_at` the last
+  writer set freshness for both. `expires_at` is still written for the sweep and for skew-protected old
+  deployments.
+- Brackets (`lib/brackets-api.ts`): divisions fetched in sequence, not `Promise.all`; a division with an
+  `endDate` accepts 30-min-old rows, one with no match on court 3-min (cost: the live dot can lag a match
+  start by up to 3 min; the scoreboard does not).
+- Verified with a PGlite harness (10 module copies = 10 instances, fake upstream refusing >2 in flight):
+  per expiry 28–40 upstream calls → 1, and 10/10 got data even while upstream refused. NOT run: `next build`
+  or the dev server, both of which write to the production table via `.env.local`. Pushed mid-event at
+  Wesley's call. Next: re-pull the 429 counts after a day live.
+
 ### 2026-10-01 — Player filter idea (Stephen Venegas) + SSO with sso.pickleball.com is next priority
 
 - Stephen Venegas asked for a per-player filter on event pages (matches played, upcoming, how to watch). Scoped:

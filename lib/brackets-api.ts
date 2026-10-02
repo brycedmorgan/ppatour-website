@@ -665,6 +665,53 @@ async function eventMatches(
   return mj?.results ?? [];
 }
 
+/**
+ * ⚠ ONE DIVISION AT A TIME, NOT `Promise.all` (10/2). A bracket build fans out
+ * across ten or twelve divisions, and firing them together put that many
+ * requests in flight from one instance into a limit of a few, per token, across
+ * the whole fleet. In sequence, a cold build is slower by a second or two. A warm
+ * one is a handful of database reads either way.
+ */
+async function inSequence<T, R>(items: T[], fn: (item: T) => Promise<R>): Promise<R[]> {
+  const out: R[] = [];
+  for (const item of items) out.push(await fn(item));
+  return out;
+}
+
+/** A division whose final is played changes only by correction. */
+const DIVISION_DONE_WINDOW_S = 30 * 60;
+/**
+ * A division with no match on court the last time this instance looked.
+ *
+ * ⚠ SAFE ONLY BECAUSE FRESHNESS IS NOW PER CALLER (lib/pb-cache, 10/2). These
+ * URLs are the same ones the scoreboard reads on its 20s window; a longer window
+ * here only lets the BRACKET accept an older row and can no longer hold the
+ * scoreboard back. The cost is the live dot in BracketView: when a match starts
+ * in an idle division, the draw can take up to this long to show it on court,
+ * while the scoreboard beside it shows it within its own window.
+ */
+const DIVISION_IDLE_WINDOW_S = 3 * 60;
+
+const onCourt = new Map<string, boolean>();
+/** Remember whether any match in this division was in progress. */
+function noteOnCourt(eventId: string, raws: ApiMatch[]): void {
+  onCourt.set(
+    eventId,
+    raws.some((m) => str(m, "matchStart", "match_start") && !str(m, "matchCompleted", "match_completed")),
+  );
+}
+
+/**
+ * The cache window for one division's draw. Never shorter than the tournament's
+ * own window, so an upcoming or finished event keeps its day- or year-long one.
+ */
+function divisionWindow(e: ApiEvent, tournamentWindow: number): number {
+  // A non-null endDate means that division is over (see lib/live-cache-window).
+  if (e.endDate) return Math.max(tournamentWindow, DIVISION_DONE_WINDOW_S);
+  if (onCourt.get(e.eventId as string) === false) return Math.max(tournamentWindow, DIVISION_IDLE_WINDOW_S);
+  return tournamentWindow;
+}
+
 /** Has anybody stepped on court in this draw? */
 function drawHasPlay(raws: ApiMatch[]): boolean {
   return raws.some((m) => str(m, "matchStart", "match_start") || str(m, "matchCompleted", "match_completed"));
@@ -781,14 +828,17 @@ async function buildAll(uuid: string): Promise<BuiltAll> {
    * so on the one morning it is consulted it costs nothing extra, and on every
    * other day it is never called at all.
    */
-  const mainRaws = await Promise.all(
-    events.main.map((e) => eventMatches(base, token, uuid, e.eventId as string, revalidateS)),
-  );
+  const fetchDivision = (e: ApiEvent) => {
+    const eid = e.eventId as string;
+    return eventMatches(base, token, uuid, eid, divisionWindow(e, revalidateS)).then((raws) => {
+      noteOnCourt(eid, raws);
+      return raws;
+    });
+  };
+  const mainRaws = await inSequence(events.main, fetchDivision);
   const qualifierRaws =
     !mainRaws.some(drawHasPlay) && events.qualifier.length
-      ? await Promise.all(
-          events.qualifier.map((e) => eventMatches(base, token, uuid, e.eventId as string, revalidateS)),
-        )
+      ? await inSequence(events.qualifier, fetchDivision)
       : null;
   const qualifierPlayed = qualifierRaws !== null && qualifierRaws.some(drawHasPlay);
   // Only asked when qualifying exists and has not been played — i.e. the one
@@ -815,7 +865,7 @@ async function buildAll(uuid: string): Promise<BuiltAll> {
       const eid = e.eventId as string;
       const name = chosenName(e.eventTitle as string);
       const format = bracketTypeFromFormatId(e.bracketFormatId);
-      const matches = cached?.[i] ?? (await eventMatches(base, token, uuid, eid, revalidateS));
+      const matches = cached?.[i] ?? (await fetchDivision(e));
 
       // Qualifier draws hide their closing rounds behind `HIDE` — see `inStage`.
       const meta = { eventId: uuid, divisionId: eid, divisionName: name, format, includeHidden: showQualifier };
