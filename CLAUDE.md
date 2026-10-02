@@ -99,7 +99,16 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   JOOLA net, logos from Payton's 9/22 post). **Still open on us:** Turnstile hostname (since 9/24!), FFT deck
   "done" never posted (edits applied 9/17), gallery, edit-access answer (asked 9/15), Typeform links, US pages
   still served on ppatoureurope.com by URL.
-- **Gallery:** not built. Drive auto-sync is possible (shared folder + service account or Drive API key, pulled at
+- **Rest of 10/1 (all live unless noted):** Drive-synced gallery (lib/europe-gallery.ts, served via next/image —
+  lh3 /d/ links fail in a Google-signed-in browser); 26 new Barcelona studio portraits incl. Tom Protzek's first;
+  Alexia bio; Typeform media + referee links (survey stays off, Payton); sponsor strip moved above the footer with
+  links (JOOLA, LT PRO48 → PBC product page); US sections on ppatoureurope.com 307 to the Europe home; Portorož +
+  Barcelona card photos (show after the nightly events-cache refresh); Barcelona ranks 25/26.
+- **Turnstile fixed:** new widget on Bryce's Cloudflare ("PPA Tour Stuff", ppatour.com + www + ppatoureurope.com),
+  Production keys swapped, both contact forms tested passing. ⚠ Preview env has no Turnstile keys (see docs/notes.md).
+- **Slack sweep routine** (trig_01CWLtiK2x5JjovkzvVB5via) now does this work 4x daily across all of Bryce's channels;
+  hourly FFT routine paused. Open: header photo DSC04289 (needs Bryce's OK to download), Europe menu links (team).
+- **Gallery:** done (see above). Drive auto-sync is possible (shared folder + service account or Drive API key, pulled at
   build/ISR) — waiting on the photos and a decision. Brescia: Payton said "don't move over that brescia event"
   (Italy rollover thread) — it still shows on the Europe schedule; asked.
 
