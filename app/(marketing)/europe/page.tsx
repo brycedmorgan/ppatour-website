@@ -245,10 +245,13 @@ export default async function EuropePage() {
 
       {/* ------------------------------------------------------------ Hero */}
       {/* Same hero as /tour/[slug] and the event pages: full-bleed photograph,
-          the house `.scrim-hero`, eyebrow, display headline, CTA row. */}
+          the house `.scrim-hero`, eyebrow, display headline, CTA row.
+          Photo: PPA Tour Europe P250 Barcelona venue, Catie Preis (DSC04289), swapped in
+          10/1 for the stock waterfront at Payton's ask for a tournament image. The
+          link-preview card (opengraph-image.tsx) still uses the waterfront. */}
       <section className="relative isolate overflow-hidden bg-ppa-navy text-white">
         <Image
-          src="/ppa/event-barcelona.jpg"
+          src="/ppa/europe-hero-barcelona.jpg"
           alt=""
           fill
           priority
