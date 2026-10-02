@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-01T18:37:25Z",
+  "generated_at": "2026-10-02T18:07:08Z",
   "prices": {
     "166345": {
       "from": 25,
@@ -86,10 +86,6 @@
       "onSale": true
     },
     "197234": {
-      "from": 25,
-      "onSale": true
-    },
-    "197261": {
       "from": 25,
       "onSale": true
     },
