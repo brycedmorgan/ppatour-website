@@ -5,11 +5,12 @@ import { EUROPE_SOCIALS } from "@/lib/europe-socials";
  * #ppa-tour-europe 10/2: "make the social media icons white", top right of the
  * main menu). Monochrome on purpose: no brand colours, no Instagram gradient.
  */
-export function EuropeSocialLinks({ size = "md" }: { size?: "sm" | "md" }) {
-  const box = size === "sm" ? "size-8" : "size-10";
-  const icon = size === "sm" ? "size-4" : "size-5";
+export function EuropeSocialLinks({ size = "md" }: { size?: "xs" | "sm" | "md" }) {
+  // "xs" is the header: 28px targets on phones, 32px from sm up, so the bar fits 360px.
+  const box = size === "xs" ? "size-7 sm:size-8" : size === "sm" ? "size-8" : "size-10";
+  const icon = size === "md" ? "size-5" : "size-4";
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center sm:gap-1">
       {EUROPE_SOCIALS.map((s) => (
         <a
           key={s.name}
