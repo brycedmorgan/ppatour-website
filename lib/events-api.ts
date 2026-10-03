@@ -130,6 +130,11 @@ const CURATED_ALIASES: Record<string, string> = {
   // line above, and the same class of drift as the Asia stops (8/6), where the
   // feed and curated paths built two different slugs for one event.
   "ppa-tour-spain-p250-barcelona-open": "ppa-spain-p250-barcelona",
+  // The feed renamed both Europe stops again (seen 10/3): "PPA TOUR EUROPE - P250
+  // BARCELONA OPEN" and "PPA ITALY P125 PORTOROZ". Without these the cards fall
+  // back to VENUE_IMAGES (Macao / Gold Coast) instead of Payton's event photos.
+  "ppa-tour-europe-p250-barcelona-open": "ppa-spain-p250-barcelona",
+  "ppa-italy-p125-portoroz": "ppa-italy-125-portoroz",
   // ⚠ THIS ONE IS LOAD-BEARING AND WAS ADDED BEFORE IT COULD BITE. The feed
   // renamed the Malibu Cup to "Veolia Malibu Showcase" on 8/26 (Bryan Renahan);
   // production had not regenerated yet, so /events was still serving the old

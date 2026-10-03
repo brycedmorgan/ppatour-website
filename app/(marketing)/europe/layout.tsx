@@ -35,8 +35,9 @@ import { EUROPE_PARTNERS } from "@/lib/europe-partners";
  */
 
 /**
- * ⚠ NO NAV LINKS, DELIBERATELY. Europe has no routes of its own — every section
- * lives on /europe itself. The global header's links (Events, Watch, Athletes,
+ * ⚠ EUROPE-ONLY NAV (Payton, 10/2: add the Gallery page "to the menu"). Every
+ * link points at a section of /europe or a /europe/* route, never a US page.
+ * Historical note, kept because the rule still holds: Europe has no US routes. The global header's links (Events, Watch, Athletes,
  * Rankings, the Tour submenu, How It Works, Player Handbook) all lead to US
  * pages, which is precisely what Chris reported: "the links go to the wrong
  * place and there are lots that should not be on there." Inventing section
@@ -46,6 +47,13 @@ import { EUROPE_PARTNERS } from "@/lib/europe-partners";
  * The page renders its own RegionSwitcher, so a visitor can still reach the
  * other regional tours.
  */
+const EUROPE_NAV = [
+  { label: "Schedule", href: "/europe#schedule", mobile: false },
+  { label: "The Pros", href: "/europe#pros", mobile: false },
+  { label: "Gallery", href: "/europe/gallery", mobile: true },
+  { label: "Contact", href: "/europe#contact", mobile: false },
+];
+
 function EuropeHeader() {
   return (
     <header className="sticky top-0 z-50 bg-ppa-navy">
@@ -72,6 +80,21 @@ function EuropeHeader() {
             Europe
           </span>
         </Link>
+        <nav aria-label="PPA Tour Europe" className="ml-auto flex items-center gap-1">
+          {EUROPE_NAV.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className={`px-2.5 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-white/75 transition-colors hover:text-white ${l.mobile ? "" : "hidden md:block"}`}
+            >
+              {l.label}
+            </Link>
+          ))}
+        </nav>
+        {/* Top right of the main menu, white (Albert + Payton, 10/2). */}
+        <div className="border-l border-white/20 pl-1 sm:pl-2">
+          <EuropeSocialLinks size="sm" />
+        </div>
       </div>
     </header>
   );

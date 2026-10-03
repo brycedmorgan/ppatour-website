@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Image from "next/image";
 import { AthleteRoster, type RosterAthlete } from "@/components/athletes/AthleteRoster";
 import { FeaturedEvents } from "@/components/events/FeaturedEvents";
-import { EuropeSocialLinks } from "@/components/europe/EuropeSocialLinks";
 import { EuropeGallery } from "@/components/europe/EuropeGallery";
-import { getEuropeGallery } from "@/lib/europe-gallery";
+import { getEuropeGallery, sortAlbumsByEvent } from "@/lib/europe-gallery";
 import { EUROPE_FORM_LINKS, isUnconfirmedEuropeStop } from "@/lib/europe-eventlinks";
 import { InquiryForm } from "@/components/forms/InquiryForm";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
@@ -200,7 +200,7 @@ export default async function EuropePage() {
    * request. Degrades to rank 0 (the roster's own "unranked" state) with no
    * token or on a 429 — never a fabricated number.
    */
-  const gallery = await getEuropeGallery();
+  const gallery = sortAlbumsByEvent(await getEuropeGallery(), events);
 
   const wprIndex = await getWprIndex().catch(
     () => ({}) as Awaited<ReturnType<typeof getWprIndex>>,
@@ -294,12 +294,7 @@ export default async function EuropePage() {
               Entry &amp; Rules
             </a>
           </div>
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
-              Follow
-            </span>
-            <EuropeSocialLinks />
-          </div>
+
         </div>
       </section>
 
@@ -385,8 +380,13 @@ export default async function EuropePage() {
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
             <SectionHead eyebrow="Gallery" title="On Court in Europe" />
             <div className="mt-6">
-              <EuropeGallery albums={gallery} />
+              <EuropeGallery albums={gallery} perAlbum={2} />
             </div>
+            <p className="mt-6 text-sm">
+              <Link href="/europe/gallery" className="font-bold text-ppa-blue hover:text-ppa-navy">
+                See the full gallery →
+              </Link>
+            </p>
           </div>
         </section>
       )}

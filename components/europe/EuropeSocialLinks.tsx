@@ -1,25 +1,15 @@
-import { useId } from "react";
 import { EUROPE_SOCIALS } from "@/lib/europe-socials";
 
-/** The three @ppatoureurope accounts as icon buttons. Same treatment as the global footer's. */
-export function EuropeSocialLinks({ tone = "dark" }: { tone?: "dark" | "light" }) {
-  // Renders twice on /europe (hero + footer), so the gradient id must be per instance.
-  const igId = `eu-ig-${useId().replace(/:/g, "")}`;
-  const box =
-    tone === "dark"
-      ? "border-white/15 hover:border-white/40 hover:bg-white/10"
-      : "border-ppa-line bg-white hover:border-ppa-navy/40";
+/**
+ * The three @ppatoureurope accounts as WHITE icon buttons (Payton + Albert,
+ * #ppa-tour-europe 10/2: "make the social media icons white", top right of the
+ * main menu). Monochrome on purpose: no brand colours, no Instagram gradient.
+ */
+export function EuropeSocialLinks({ size = "md" }: { size?: "sm" | "md" }) {
+  const box = size === "sm" ? "size-8" : "size-10";
+  const icon = size === "sm" ? "size-4" : "size-5";
   return (
-    <div className="flex gap-2">
-      {/* Instagram's mark is a gradient, not a flat color. */}
-      <svg width="0" height="0" aria-hidden className="absolute">
-        <linearGradient id={igId} x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#FFD521" />
-          <stop offset="35%" stopColor="#F50000" />
-          <stop offset="70%" stopColor="#B900B4" />
-          <stop offset="100%" stopColor="#4F5BD5" />
-        </linearGradient>
-      </svg>
+    <div className="flex items-center gap-1">
       {EUROPE_SOCIALS.map((s) => (
         <a
           key={s.name}
@@ -27,9 +17,9 @@ export function EuropeSocialLinks({ tone = "dark" }: { tone?: "dark" | "light" }
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`PPA Tour Europe on ${s.name}`}
-          className={`flex size-10 items-center justify-center border transition-colors ${box}`}
+          className={`flex ${box} items-center justify-center text-white transition-opacity hover:opacity-70`}
         >
-          <svg viewBox="0 0 24 24" className="size-5" fill={s.color === "url(#eu-ig-gradient)" ? `url(#${igId})` : s.color} aria-hidden>
+          <svg viewBox="0 0 24 24" className={icon} fill="currentColor" aria-hidden>
             <path d={s.path} />
           </svg>
         </a>

@@ -68,6 +68,32 @@ export async function getEuropeGallery(): Promise<GalleryAlbum[]> {
   }
 }
 
+/**
+ * Newest event first (Payton, 10/2: "sort the photos by event, most recent to
+ * least recent"). Drive's public listing carries no dates, so each album is
+ * dated by matching its folder name to a Europe stop in the events feed: the
+ * stop's city must appear in the folder name ("P250 Barcelona" -> Barcelona).
+ * Albums with no match keep Drive's order, after the dated ones.
+ */
+export function sortAlbumsByEvent(
+  albums: GalleryAlbum[],
+  events: { city: string; startDate: string }[],
+): GalleryAlbum[] {
+  const norm = (x: string) => x.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const today = new Date().toISOString().slice(0, 10);
+  const dated = albums.map((a, i) => {
+    const t = norm(a.title);
+    const hits = events
+      .filter((e) => e.city && e.startDate <= today && t.includes(norm(e.city)))
+      .map((e) => e.startDate)
+      .sort();
+    return { a, i, date: hits.at(-1) ?? "" };
+  });
+  return dated
+    .sort((x, y) => (y.date || "").localeCompare(x.date || "") || x.i - y.i)
+    .map((d) => d.a);
+}
+
 export function photoSrc(id: string, width: number): string {
   return `https://lh3.googleusercontent.com/d/${id}=w${width}`;
 }

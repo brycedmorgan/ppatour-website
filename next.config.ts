@@ -580,6 +580,12 @@ const nextConfig: NextConfig = {
           has: [{ type: "host", value: "ppatoureurope.com" }],
           destination: "/europe/eventlinks",
         },
+        // Full Europe gallery (Payton, 10/2). Served at ppatoureurope.com/gallery.
+        {
+          source: "/gallery",
+          has: [{ type: "host", value: "ppatoureurope.com" }],
+          destination: "/europe/gallery",
+        },
         { source: "/app-tour", destination: "/app-tour/index.html" },
         { source: "/pbtv", destination: "/pbtv/index.html" },
         // Per-show pages under the same static deck (public/pbtv/shows/<slug>/).
