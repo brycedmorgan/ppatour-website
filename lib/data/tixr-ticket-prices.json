@@ -1,11 +1,11 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-10-02T18:07:08Z",
-  "event_count": 37,
-  "ticket_type_count": 665,
+  "generated_at": "2026-10-03T16:53:35Z",
+  "event_count": 36,
+  "ticket_type_count": 652,
   "series_breakdown": {
-    "PPA Tour": 36,
+    "PPA Tour": 35,
     "Major League Pickleball": 1
   },
   "field_notes": {
@@ -171,115 +171,6 @@
           "all_in_price": 1085.87
         }
       ]
-    },
-    {
-      "event_id": "197234",
-      "name": "PPA Las Vegas Friday - Quarterfinals",
-      "series": "PPA Tour",
-      "status": "PUBLISHED",
-      "start_date": "2026-10-02",
-      "end_date": "2026-10-03",
-      "venue": {
-        "name": "Darling Tennis Center",
-        "city": "Las Vegas",
-        "state": "NV"
-      },
-      "url": "https://www.tixr.com/groups/ppa/events/ppa-las-vegas-friday-quarterfinals-197234",
-      "currency": "USD",
-      "tickets": [
-        {
-          "name": "Championships",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Friday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 25,
-          "all_in_price": 30.35
-        },
-        {
-          "name": "GovX Discount",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Pickleball Vacations",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Register Here",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 16",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 32",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 64",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Semifinals",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Weeklong Passes",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Friday Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.56
-        },
-        {
-          "name": "Friday Courtside Chair",
-          "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
-          "all_in_price": 70.23
-        },
-        {
-          "name": "Friday VIP",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 300,
-          "all_in_price": 329.54
-        }
-      ],
-      "parent_event_id": "195857"
     },
     {
       "event_id": "197226",
@@ -658,8 +549,8 @@
           "name": "Sunday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 120,
-          "all_in_price": 135.05
+          "base_price": 140,
+          "all_in_price": 156.66
         },
         {
           "name": "Sunday Grounds Pass",
@@ -1878,20 +1769,6 @@
           "name": "Thursday Courtside Bleacher",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.66
-        },
-        {
-          "name": "Thursday Courtside Bleacher",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.66
-        },
-        {
-          "name": "Thursday Courtside Bleacher",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 60,
           "all_in_price": 70.37
         },
@@ -1901,6 +1778,20 @@
           "sale_state": "OPEN",
           "base_price": 80,
           "all_in_price": 92.03
+        },
+        {
+          "name": "Thursday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.66
+        },
+        {
+          "name": "Thursday Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.66
         },
         {
           "name": "Thursday Courtside Chair",
@@ -1926,8 +1817,8 @@
         {
           "name": "Thursday VIP",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 350,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 384.43
         }
       ],
@@ -3454,8 +3345,8 @@
           "name": "Sunday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 60,
-          "all_in_price": 71.77
+          "base_price": 80,
+          "all_in_price": 93.38
         },
         {
           "name": "Sunday Grounds Pass",

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-02T18:07:08Z",
+  "updated_at": "2026-10-03T16:53:35Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -9334,6 +9334,94 @@
       "type": "event_removed",
       "event_id": "197261",
       "event": "PPA Las Vegas Thursday"
+    },
+    {
+      "at": "2026-10-03T16:53:35Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": 120,
+        "to": 140
+      },
+      "all_in_price": {
+        "from": 135.05,
+        "to": 156.66
+      }
+    },
+    {
+      "at": "2026-10-03T16:53:35Z",
+      "type": "price_change",
+      "event_id": "166399",
+      "event": "Opendoor Pickleball World Championships Thursday - Round of 16",
+      "ticket": "Thursday Courtside Bleacher",
+      "base_price": {
+        "from": 80,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 92.03,
+        "to": 46.66
+      }
+    },
+    {
+      "at": "2026-10-03T16:53:35Z",
+      "type": "availability_change",
+      "event_id": "166399",
+      "event": "Opendoor Pickleball World Championships Thursday - Round of 16",
+      "ticket": "Thursday Courtside Bleacher",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-10-03T16:53:35Z",
+      "type": "price_change",
+      "event_id": "166399",
+      "event": "Opendoor Pickleball World Championships Thursday - Round of 16",
+      "ticket": "Thursday VIP",
+      "base_price": {
+        "from": 350,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 384.43,
+        "to": 384.43
+      }
+    },
+    {
+      "at": "2026-10-03T16:53:35Z",
+      "type": "availability_change",
+      "event_id": "166399",
+      "event": "Opendoor Pickleball World Championships Thursday - Round of 16",
+      "ticket": "Thursday VIP",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-10-03T16:53:35Z",
+      "type": "price_change",
+      "event_id": "176502",
+      "event": "Veolia PPA Malibu",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": 60,
+        "to": 80
+      },
+      "all_in_price": {
+        "from": 71.77,
+        "to": 93.38
+      }
+    },
+    {
+      "at": "2026-10-03T16:53:35Z",
+      "type": "event_removed",
+      "event_id": "197234",
+      "event": "PPA Las Vegas Friday - Quarterfinals"
     }
   ]
 }
