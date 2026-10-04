@@ -65,15 +65,31 @@ export type ParkingSection = {
    */
   ticketLinkText?: string;
   /**
-   * The event team's own parking map, rendered under this section's paragraphs.
+   * The event team's own parking maps, rendered with this section's paragraphs.
    *
-   * ⚠ THE FILE IS SUPPLIED ART, NEVER A MAP WE DRAW OR DERIVE. It is the same
-   * class of claim as the copy above it — a lot outlined on a satellite photo
-   * tells a driver where to leave their car, and a guessed outline sends them to
-   * the wrong field. One entry per event, or nothing. `parkingText()` omits it,
-   * so the concierge and the search index never describe an image they can't show.
+   * ⚠ THE FILES ARE SUPPLIED ART, NEVER A MAP WE DRAW OR DERIVE. They are the
+   * same class of claim as the copy around them — a lot outlined on a satellite
+   * photo tells a driver where to leave their car, and a guessed outline sends
+   * them to the wrong field. `parkingText()` omits them, so the concierge and the
+   * search index never describe an image they can't show.
+   *
+   * An array because Chicago's General Parking names two lots on different days,
+   * each with its own map placed under the paragraph about it.
    */
-  image?: { src: string; alt: string; width: number; height: number };
+  images?: ParkingMap[];
+};
+
+export type ParkingMap = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  /**
+   * Index into `body` to render this map directly after. Omitted = after the
+   * last paragraph. Exists so a map lands under the paragraph that describes its
+   * lot rather than under a later one about a different lot.
+   */
+  after?: number;
 };
 
 /**
@@ -115,12 +131,14 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
       ],
       // The event team's map of the Phillips Farms lot, with the shuttle pickup
       // marked. Sits under the copy that says "refer to the attached map".
-      image: {
-        src: "/ppa/parking/veolia-pickleball-national-championships.jpg",
-        alt: "Aerial map of the Phillips Farms parking lot in Cary, NC, with the free grass parking area outlined in blue and the shuttle pickup point marked at its northeast corner.",
-        width: 1600,
-        height: 1107,
-      },
+      images: [
+        {
+          src: "/ppa/parking/veolia-pickleball-national-championships.jpg",
+          alt: "Aerial map of the Phillips Farms parking lot in Cary, NC, with the free grass parking area outlined in blue and the shuttle pickup point marked at its northeast corner.",
+          width: 1600,
+          height: 1107,
+        },
+      ],
     },
     {
       heading: "Premium Parking",
@@ -168,12 +186,14 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
       ],
       // Her copy says "See map below", so the words and the thing they point at
       // have to ship together. Supplied art — the venue's own lot map.
-      image: {
-        src: "/ppa/parking/veolia-arizona-open.webp",
-        alt: "Map of the Arizona Athletic Grounds in Mesa, AZ, with the eight parking lots numbered. Lots 1, 2 and 3 sit along the west and north side of the fieldhouses, closest to the pickleball center.",
-        width: 1470,
-        height: 1070,
-      },
+      images: [
+        {
+          src: "/ppa/parking/veolia-arizona-open.webp",
+          alt: "Map of the Arizona Athletic Grounds in Mesa, AZ, with the eight parking lots numbered. Lots 1, 2 and 3 sit along the west and north side of the fieldhouses, closest to the pickleball center.",
+          width: 1470,
+          height: 1070,
+        },
+      ],
     },
     {
       heading: "ADA Parking",
@@ -205,17 +225,84 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
       ],
       // Their copy says "shown in red on the map below", so the map ships in
       // this section, under the paragraph that points at it. Supplied art.
-      image: {
-        src: "/ppa/parking/rate-las-vegas-open.webp",
-        alt: "Aerial map of Darling Tennis Center and Kellogg Zaher Park in Las Vegas, NV. The three public parking lots are highlighted in yellow, running west to east on the south side of W Washington Avenue, and the drop-off and pickup loop at the tennis center entrance is outlined in red.",
-        width: 2000,
-        height: 636,
-      },
+      images: [
+        {
+          src: "/ppa/parking/rate-las-vegas-open.webp",
+          alt: "Aerial map of Darling Tennis Center and Kellogg Zaher Park in Las Vegas, NV. The three public parking lots are highlighted in yellow, running west to east on the south side of W Washington Avenue, and the drop-off and pickup loop at the tennis center entrance is outlined in red.",
+          width: 2000,
+          height: 636,
+        },
+      ],
     },
     {
       heading: "ADA Parking",
       body: [
         "Accessible parking is available in all three parking lots. ADA drop-off is also available in the drop-off/pickup loop.",
+      ],
+    },
+  ],
+  // Chicago Cup — Dana Summers, 10/3 (Asana 1219139745966275), with both maps.
+  // All of it is her wording; her bullets became paragraphs and her
+  // "(Insert … parking map)" notes became the maps themselves.
+  //
+  // ⚠ PARKING MOVES MID-EVENT. Mon–Tue is the east on-site lot; Wed–Sun is
+  // off-site at Techny Prairie with a shuttle. Each map is anchored (`after`)
+  // under the paragraph about its lot, so the on-site map is never read as the
+  // Wed–Sun answer.
+  //
+  // ⚠ THE ON-SITE MAP APPEARS TWICE ON PURPOSE: she asked for it under General
+  // (Mon–Tue) and again under Premium (Wed–Sun), which is the same lot sold as a
+  // pass. Same file, so the second render costs no download.
+  "veolia-chicago-cup": [
+    {
+      heading: "General Parking",
+      body: [
+        "Mon 10/5 & Tues 10/6: Complimentary event parking is available in the east on-site lot.",
+        "Wed 10/7 – Sun 10/11: Complimentary off-site parking is available with continuous shuttle service to and from the venue.",
+        "Location: Techny Prairie Park & Fields South Lot (closest to Techny Rd)\nAddress: 1750 Techny Rd, Northbrook, IL 60062",
+        "Shuttle Service: Shuttles will operate approximately one hour before the first match and continue until approximately one hour after the final match each day.",
+      ],
+      images: [
+        {
+          src: "/ppa/parking/veolia-chicago-cup-onsite.webp",
+          alt: "Aerial map of Life Time Northbrook with the east on-site parking lot, beside the building and next to the outdoor tennis courts, outlined in green.",
+          width: 1600,
+          height: 878,
+          after: 0,
+        },
+        {
+          src: "/ppa/parking/veolia-chicago-cup-offsite.webp",
+          alt: "Aerial map of Techny Prairie Park and Fields in Northbrook, IL, with the south parking lot along Techny Road, east of Anets Drive, outlined in green.",
+          width: 1600,
+          height: 867,
+        },
+      ],
+    },
+    {
+      heading: "Premium Parking",
+      body: [
+        "On-site premium parking for Wed 10/7 – Sun 10/11 will be available for purchase through Tixr. No on-site purchases will be available.",
+      ],
+      ticketLinkText: "Tixr",
+      images: [
+        {
+          src: "/ppa/parking/veolia-chicago-cup-onsite.webp",
+          alt: "Aerial map of Life Time Northbrook with the on-site premium parking lot, east of the building, outlined in green.",
+          width: 1600,
+          height: 878,
+        },
+      ],
+    },
+    {
+      heading: "ADA Parking",
+      body: [
+        "Accessible parking spaces are available in the on-site lot. Guests may also be dropped off at the venue entrance.",
+      ],
+    },
+    {
+      heading: "Rideshare",
+      body: [
+        "Uber, Lyft, and other rideshare services may pick up and drop off at the tournament venue.",
       ],
     },
   ],

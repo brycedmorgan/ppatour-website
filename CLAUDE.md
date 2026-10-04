@@ -67,6 +67,23 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-04 — Chicago Cup parking lands; a section can now carry more than one map
+
+- Dana Summers' request (Asana `1219139745966275`, due 10/4, event starts 10/5): her four sections
+  verbatim in `PARKING_BY_SLUG["veolia-chicago-cup"]`, with her two maps. Fourth finalized stop.
+- **⚠ PARKING MOVES MID-EVENT.** Mon–Tue is the east on-site lot; Wed–Sun is off-site at Techny
+  Prairie (1750 Techny Rd) with a shuttle. So General Parking has two maps, and the single
+  `ParkingSection.image` became **`images: ParkingMap[]` with an optional `after` paragraph index**.
+  Each map renders under the paragraph about its lot. Cary, Arizona and Vegas were converted
+  mechanically and render unchanged.
+- The on-site map also appears under Premium, because she asked for it there (same lot, sold as a
+  Wed–Sun pass). Same file, so it costs no extra download.
+- Maps: 1600px webp q70, 223 / 215 KB (Arizona is 223). Premium's "Tixr" links to the Chicago listing
+  with `utm_content=event-parking-premium`.
+- Verified on rendered pages: event page + `/today` carry the copy and both maps, in the right order.
+  Vegas and Cary controls are unchanged. tsc clean apart from stale `.next` validator stubs; eslint
+  clean.
+
 ### 2026-10-02 — api.pickleball.com 429s: one instance refreshes, the rest serve what they have
 
 - Wesley asked for a per-tournament comparison of api.pickleball.com calls; published as an artifact
