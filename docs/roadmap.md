@@ -183,3 +183,14 @@ Media credentials (`ppatour.typeform.com/europe`) and referee interest (`/refere
 both as site forms (InquiryForm pattern → `/api/form-submit` → europe@ppatour.com), once the Turnstile hostname for
 ppatoureurope.com is fixed. Keep the Europe team able to change questions without a deploy, which was their reason for
 Typeform (Payton, 9/15). Pro-player survey link still to come.
+
+## Europe (ppatoureurope.com), status 2026-10-04
+
+- **Audit page** (every request since 7/31, status checked live): https://claude.ai/artifact/Ssog1Z6FE9cqP1bW85iBr3. Nothing open on
+  our side; 116 changes shipped across 84 commits. Bryce shares it with Chris/Connor from its Share menu.
+- **How requests flow:** #ppa-tour-europe → Slack sweep routine (trig_01CWLtiK2x5JjovkzvVB5via), 6x daily incl. 10:30 and 15:30
+  CEST. It ships, confirms the deploy, and replies done or asks for exactly what's missing. Never "on it".
+- **Waiting on the Europe team:** more menu links, photographers' finals (header/card photos), official sponsor tracking links
+  (Payton ↔ Johnny), media credential form, licensee email seats (Kate), Spain/Italy domain redirects (Wesley / their team).
+- **Next on us:** move the media and referee forms off Typeform onto site forms (see "Europe: move forms off Typeform" above);
+  add Preview Turnstile keys in Vercel (Bryce); keep CLAUDE.md small (archive old Session Log entries) or the routine fails.
