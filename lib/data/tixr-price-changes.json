@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-03T16:53:35Z",
+  "updated_at": "2026-10-04T17:10:49Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -9422,6 +9422,38 @@
       "type": "event_removed",
       "event_id": "197234",
       "event": "PPA Las Vegas Friday - Quarterfinals"
+    },
+    {
+      "at": "2026-10-04T17:10:49Z",
+      "type": "price_change",
+      "event_id": "166399",
+      "event": "Opendoor Pickleball World Championships Thursday - Round of 16",
+      "ticket": "Thursday Courtside Chair",
+      "base_price": {
+        "from": 120,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 135.35,
+        "to": 135.35
+      }
+    },
+    {
+      "at": "2026-10-04T17:10:49Z",
+      "type": "availability_change",
+      "event_id": "166399",
+      "event": "Opendoor Pickleball World Championships Thursday - Round of 16",
+      "ticket": "Thursday Courtside Chair",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-10-04T17:10:49Z",
+      "type": "event_removed",
+      "event_id": "197226",
+      "event": "PPA Las Vegas Saturday - Semifinals"
     }
   ]
 }
