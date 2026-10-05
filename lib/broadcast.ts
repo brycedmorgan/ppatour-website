@@ -183,12 +183,12 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
     { round: "QF's", day: "Friday", window: "6PM ET - 8PM ET", platform: "FS2", secondary: "PBTV", type: "LIVE" },
     { round: "SF's", day: "Saturday", window: "1PM ET - 9PM ET", platform: "PBTV", type: "LIVE" },
     { round: "SF's", day: "Saturday", window: "1PM ET - 4PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
-    // TAPE replay of the semifinals.
-    { round: "SF's", day: "Saturday", window: "9PM ET - 11PM ET", platform: "FS2", type: "TAPE" },
+    // 10/5 FOX update: LIVE now, 6–8PM ET (was a 9–11PM tape replay).
+    { round: "SF's", day: "Saturday", window: "6PM ET - 8PM ET", platform: "FS2", type: "LIVE" },
     { round: "Championship", day: "Sunday", window: "11AM ET - 4PM ET", platform: "PBTV", type: "LIVE" },
     { round: "Championship", day: "Sunday", window: "11AM ET - 3PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
-    // ⚠ TAPE as of the 9/21 sheet — it was carried as LIVE here until 9/24.
-    { round: "Championship", day: "Sunday", window: "5:30PM ET - 7:30PM ET", platform: "FS1", type: "TAPE" },
+    // Still TAPE; the 10/5 FOX update moved it to 6–8PM ET (was 5:30–7:30).
+    { round: "Championship", day: "Sunday", window: "6PM ET - 8PM ET", platform: "FS1", type: "TAPE" },
   ],
   "virginia-beach-open": [
     { round: "RD 16", day: "Thursday", window: "2PM ET - 10PM ET", platform: "PBTV", type: "LIVE" },

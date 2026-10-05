@@ -283,7 +283,8 @@ export const tvSchedule: TvEvent[] = [
         windows: [
           { channel: "PBTV", window: "1PM – 9PM", round: "Semifinals" },
           { channel: "Tennis Channel", window: "1PM – 4PM", round: "Semifinals" },
-          { channel: "FS2", window: "9PM – 11PM", round: "Semifinals", tape: true },
+          // 10/5 FOX update: LIVE now, 6–8PM ET (was a 9–11PM tape replay).
+          { channel: "FS2", window: "6PM – 8PM", round: "Semifinals" },
         ],
       },
       {
@@ -292,9 +293,8 @@ export const tvSchedule: TvEvent[] = [
         windows: [
           { channel: "PBTV", window: "11AM – 4PM", round: "Championship Sunday" },
           { channel: "Tennis Channel", window: "11AM – 3PM", round: "Championship Sunday" },
-          // ⚠ NOW MARKED TAPE on the 9/21 sheet: it airs 90 minutes after play
-          // ends. It was carried here as a live window until this pass.
-          { channel: "FS1", window: "5:30PM – 7:30PM", round: "Championship Sunday", tape: true },
+          // Still TAPE; the 10/5 FOX update moved it to 6–8PM ET (was 5:30–7:30).
+          { channel: "FS1", window: "6PM – 8PM", round: "Championship Sunday", tape: true },
         ],
       },
     ],
