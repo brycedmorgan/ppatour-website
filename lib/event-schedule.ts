@@ -298,8 +298,25 @@ const GATES_BY_SLUG: Record<string, string> = {
  * `buildSchedule` read this, so the event page, the `-live` route, the Know
  * Before You Go line and the concierge cannot disagree about it.
  */
-export function gatesFor(slug: string, templated: string): string {
+export function gatesFor(slug: string, templated: string, firstServe?: string): string {
+  if (firstServe && GATES_AT_FIRST_SERVE.has(slug)) return firstServe;
   return GATES_BY_SLUG[slug] ?? templated;
+}
+
+/**
+ * Stops whose gate time is set to equal each day's first serve, as a stopgap
+ * until the event team sends real gate times.
+ *
+ * ⚠ Chicago Cup, 10/5 (Wesley): "Have the gates opening match with the order
+ * of play for now." The template's 8/9/10 AM gates sat five hours ahead of a
+ * 2 PM first serve. Delete the line once real gate times arrive, and add them
+ * to GATES_BY_SLUG instead.
+ */
+const GATES_AT_FIRST_SERVE = new Set<string>(["veolia-chicago-cup"]);
+
+/** Does this stop's gate time follow each day's first serve (see above)? */
+export function gatesAtFirstServe(slug: string): boolean {
+  return GATES_AT_FIRST_SERVE.has(slug);
 }
 
 /**
@@ -383,6 +400,26 @@ const FIRST_SERVE_BY_SLUG: Record<string, Record<string, string>> = {
     "2026-10-03": "12:00 PM", // Sat — moved up from 1PM with the broadcast (9/28)
     "2026-10-04": "10:00 AM", // Sun — Championship Sunday
   },
+
+  /**
+   * Veolia Chicago Cup — Oct 5–11, Life Time Northbrook.
+   * Wesley, 10/5: publish first serve from the PBTV broadcast start times
+   * (the 10/5 PBTV note), converted to Central (ET is local + 1). That is the
+   * pattern Las Vegas' official times followed exactly. Tue–Fri PBTV opens
+   * 3PM ET, Sat 1PM ET, Sun 11AM ET.
+   *
+   * ⚠ MONDAY 10/5 IS ABSENT. It is not broadcast, so nothing implies a time,
+   * and it keeps the template. Replace these with the event team's own times
+   * the moment they send them.
+   */
+  "veolia-chicago-cup": {
+    "2026-10-06": "2:00 PM", // Tue — RD64
+    "2026-10-07": "2:00 PM", // Wed — RD32
+    "2026-10-08": "2:00 PM", // Thu — RD16
+    "2026-10-09": "2:00 PM", // Fri — QF
+    "2026-10-10": "12:00 PM", // Sat — SF
+    "2026-10-11": "10:00 AM", // Sun — Finals
+  },
 };
 
 /**
@@ -414,7 +451,11 @@ export function hasFirstServeOverride(slug: string, iso: string): boolean {
 export function gatesFollowFirstServe(slug: string, startIso: string): boolean {
   // A transcribed schedule still reading "TBD" has no gate to relate to anything.
   if (!gatesPublished(slug, startIso)) return false;
-  return !(slug in GATES_BY_SLUG) && !(slug in FIRST_SERVE_BY_SLUG);
+  return (
+    !(slug in GATES_BY_SLUG) &&
+    !(slug in FIRST_SERVE_BY_SLUG) &&
+    !GATES_AT_FIRST_SERVE.has(slug)
+  );
 }
 
 /**

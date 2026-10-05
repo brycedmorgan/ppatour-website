@@ -23,6 +23,7 @@ import {
   type AmateurSession,
   firstServeFor,
   firstServeNote,
+  gatesAtFirstServe,
   gatesFollowFirstServe,
   gatesFor,
   getEventSchedule,
@@ -160,7 +161,7 @@ function buildSchedule(startIso: string, endIso: string, slug: string): Day[] {
       // The event team's own gate time and first serve where this stop has
       // them, otherwise the template's. The two move independently — see the
       // notes on GATES_BY_SLUG and FIRST_SERVE_BY_SLUG in lib/event-schedule.ts.
-      gates: gatesFor(slug, gates),
+      gates: gatesFor(slug, gates, firstServeFor(slug, iso, firstServe)),
       firstServe: firstServeFor(slug, iso, firstServe),
       live,
       side: sideEventsFor(slug, iso),
@@ -304,6 +305,7 @@ export function NationalsLive({
     dates: formatDateRange(t.startDate, t.endDate, true),
     gates: days[0]?.gates ?? "an hour before first serve",
     gatesFollowFirstServe: gatesFollowFirstServe(t.slug, t.startDate),
+    gatesAtFirstServe: gatesAtFirstServe(t.slug),
     // The days this stop's own first serve is known for, or null. Without it
     // the concierge answers a “what time does play start?” with the gate time
     // alone, while the order of play on the same page carries the real one.

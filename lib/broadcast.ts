@@ -169,21 +169,21 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
   ],
   // 8/13 sheet: Thursday gained a TC window, FOX added four (FS1 Thu + Sun,
   // FS2 Fri + Sat), and the RD 64 / RD 32 days were missing here entirely.
+  // 10/5: Thu + Fri Tennis Channel dropped (live sheet + PBTV's start-times
+  // note agree) — TC is Sat + Sun only.
   "veolia-chicago-cup": [
     { round: "RD 64", day: "Tuesday", window: "3PM ET - 11PM ET", platform: "PBTV", type: "LIVE" },
     { round: "RD 32", day: "Wednesday", window: "3PM ET - 11PM ET", platform: "PBTV", type: "LIVE" },
     // ⚠ Thursday's PBTV coverage is TWO windows either side of the FS1 exclusive
     // (6–8PM, marked "FS1 EXCL." on the sheet). Don't merge them into 3–11PM.
     { round: "RD 16", day: "Thursday", window: "3PM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "RD 16", day: "Thursday", window: "3PM ET - 5:30PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
     { round: "RD 16", day: "Thursday", window: "6PM ET - 8PM ET", platform: "FS1", type: "LIVE" },
     { round: "RD 16", day: "Thursday", window: "8PM ET - 11PM ET", platform: "PBTV", type: "LIVE" },
     { round: "QF's", day: "Friday", window: "3PM ET - 11PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "QF's", day: "Friday", window: "3PM ET - 6PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
     { round: "QF's", day: "Friday", window: "6PM ET - 8PM ET", platform: "FS2", secondary: "PBTV", type: "LIVE" },
     { round: "SF's", day: "Saturday", window: "1PM ET - 9PM ET", platform: "PBTV", type: "LIVE" },
     { round: "SF's", day: "Saturday", window: "1PM ET - 4PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
-    // TAPE — airs at 9PM on a day whose play ends at 9PM.
+    // TAPE replay of the semifinals.
     { round: "SF's", day: "Saturday", window: "9PM ET - 11PM ET", platform: "FS2", type: "TAPE" },
     { round: "Championship", day: "Sunday", window: "11AM ET - 4PM ET", platform: "PBTV", type: "LIVE" },
     { round: "Championship", day: "Sunday", window: "11AM ET - 3PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },

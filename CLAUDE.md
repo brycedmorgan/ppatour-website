@@ -67,6 +67,21 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-05 — Chicago Cup: first serve from the broadcast starts, gates at first serve, Thu/Fri TC dropped
+
+- PBTV's Chicago start-times note matched the site except **Tennis Channel Thu 3–5:30 and Fri 3–6 ET**,
+  which the live sheet had also dropped. Removed from `tv-schedule.ts` and `broadcast.ts`; the audit
+  passes for Chicago in both.
+- The order of play was still the template (gates 8/9/10, first serve 9/10/11). First serve now comes
+  from the broadcast starts in Central (Wesley's call): Tue–Fri 2 PM, Sat 12 PM, Sun 10 AM.
+  **Monday 10/5 keeps the template's 9 AM**: it isn't broadcast, so nothing implies a time.
+- **Gates = first serve "for now"** (Wesley): new `GATES_AT_FIRST_SERVE` in `lib/event-schedule.ts`.
+  `gatesFor` takes the resolved first serve. The intro, the venue section's Gates & Sessions card and
+  the concierge (new required `ConciergeFacts.gatesAtFirstServe`) all say "Gates open at first serve
+  each day". When real gate times arrive, delete the line and use `GATES_BY_SLUG`.
+- ⚠ Every local event page 404'd for a few minutes on a fresh dev server, then served 200 with the
+  same code. It was the cold feed, not the change; production was 200 throughout.
+
 ### 2026-10-04 — Chicago Cup parking lands; a section can now carry more than one map
 
 - Dana Summers' request (Asana `1219139745966275`, due 10/4, event starts 10/5): her four sections

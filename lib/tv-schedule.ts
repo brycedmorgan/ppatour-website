@@ -232,11 +232,15 @@ export const tvSchedule: TvEvent[] = [
   },
   /**
    * ⚠ THE MOST-CHANGED EVENT ON THE 8/13 SHEET. Thursday gained a Tennis
-   * Channel window (the site had Fri–Sun only, so TC is now Thu–Sun / 16h), and
+   * Channel window (since dropped again — see 10/5 below), and
    * FOX Sports added four: FS1 on Thursday and Sunday, FS2 on Friday and
    * Saturday. Three PBTV windows moved to make room (Thu 11–7 → 11–6, Fri
    * 11–7 → 11–8, Sun 11–5 → 11–5:30). The Saturday FS2 window is a TAPE replay,
    * not live — it airs at 9PM on a day whose play ends at 6PM.
+   *
+   * ⚠ 10/5: TENNIS CHANNEL IS SAT + SUN ONLY. The live sheet dropped the Thu
+   * 3–5:30PM and Fri 3–6PM TC windows, and PBTV's own Chicago start-times note
+   * (10/5) lists TC on Sat and Sun alone. Two sources, so both rows are gone.
    */
   {
     name: "Veolia Chicago Cup",
@@ -261,7 +265,6 @@ export const tvSchedule: TvEvent[] = [
          */
         windows: [
           { channel: "PBTV", window: "3PM – 6PM", round: "Round of 16" },
-          { channel: "Tennis Channel", window: "3PM – 5:30PM", round: "Round of 16" },
           { channel: "FS1", window: "6PM – 8PM", round: "Round of 16" },
           { channel: "PBTV", window: "8PM – 11PM", round: "Round of 16" },
         ],
@@ -271,7 +274,6 @@ export const tvSchedule: TvEvent[] = [
         dow: "Fri",
         windows: [
           { channel: "PBTV", window: "3PM – 11PM", round: "Quarterfinals" },
-          { channel: "Tennis Channel", window: "3PM – 6PM", round: "Quarterfinals" },
           { channel: "FS2", window: "6PM – 8PM", round: "Quarterfinals" },
         ],
       },
