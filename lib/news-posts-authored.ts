@@ -827,4 +827,130 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
 </ul>
 `.trim(),
   },
+  {
+    // Jim Ramsey's Las Vegas stats wrap, supplied by Wesley on 10/5 (Google Doc
+    // "Championship Sunday Standout Stats from the Rate Las Vegas Open"). Same
+    // series and shape as the Arizona wrap above; every line is his, verbatim.
+    //
+    // ⚠ "Tyra Black" and "Gabe Tardio" are left as he wrote them. Both resolve
+    // through ATHLETE_NAME_ALIASES (Hurricane Tyra Black, Gabriel Tardio).
+    slug: "championship-sunday-standout-stats-from-the-rate-las-vegas-open",
+    wpId: 900006,
+    status: "published",
+    source: "wordpress",
+    category: "Recap",
+    series: "stats-wrap",
+    categoryResolvedBy: "series",
+    title: "Championship Sunday Standout Stats from the Rate Las Vegas Open",
+    dek: "Las Vegas, Nevada. October 4, 2026. Hunter Johnson beats Ben Johns for the first time, Bright and Patriquin top Waters and Johns again, and Johns and Tardio's 17-final streak ends.",
+    author: "Jim Ramsey",
+    publishedAt: "2026-10-05T10:00:00",
+    publishedAtGmt: "2026-10-05T15:00:00",
+    modifiedAt: "2026-10-05T15:00:00",
+    image: {
+      // Wesley's pick, 10/5. Encoded 2048px wide, mozjpeg q64 (house standard).
+      url: "/ppa/news/championship-sunday-standout-stats-las-vegas-2026.jpg",
+      // ⚠ NO NAMES — house style on this series, and nobody is identified.
+      alt: "A pro player in a white cap moves to his right with his paddle back, spectators seated in the stands behind him.",
+      width: 2048,
+      height: 1365,
+      // His face sits in the top third, so a centred ~3.6:1 desktop crop would
+      // cut it off; 15% keeps cap to waist. 70% across keeps him and the paddle
+      // in a phone's horizontal crop.
+      position: "70% 15%",
+    },
+    // Left empty deliberately: `detectAthleteMentions` reads the body.
+    players: [],
+    playerNames: [],
+    wpEvent: { slug: "2026-rate-las-vegas-open", name: "2026 Rate Las Vegas Open" },
+    tags: [],
+    tagsRaw: [],
+    wpCategories: ["2026-rate-las-vegas-open", "stats-wrap"],
+    embeds: [],
+    inlineImages: [],
+    legacyUrl: "https://www.ppatour.com/championship-sunday-standout-stats-from-the-rate-las-vegas-open/",
+    seo: {
+      title: "Rate Las Vegas Open: Championship Sunday Stats | PPA Tour",
+      description:
+        "Championship Sunday stats from the Rate Las Vegas Open: Hunter Johnson takes men's singles, Kaitlyn Christian women's singles, and Bright and Patriquin win mixed.",
+      canonical:
+        "https://www.ppatour.com/championship-sunday-standout-stats-from-the-rate-las-vegas-open/",
+    },
+    bodyHtml: `
+<p><strong>Las Vegas, Nevada.</strong></p>
+
+<p><strong>October 4, 2026.</strong></p>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<h4 class="wp-block-heading"><strong>MIXED DOUBLES FINAL:&nbsp; (2) Anna Bright and Hayden Patriquin def. (1) Anna Leigh Waters and Ben Johns, 11-9, 11-7.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Bright and Patriquin&#8217;s third career title together. (Bright has seven total; Patriquin has four.)</li>
+<li>Bright is part of five teams to beat Waters and Johns.</li>
+<li>Waters and Johns&#8217;s first loss in a final since&#8230;losing to Bright and Patriquin in Mesa in February.</li>
+<li>Patriquin had a match-high eight Clean Winners.</li>
+<li>96 degrees at first serve.</li>
+<li>Longest rally: 52 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>MEN&#8217;S DOUBLES FINAL:&nbsp; (2) Christian Alshon and Andrei Daescu def. (1) Ben Johns and Gabe Tardio, 11-6, 12-10.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Alshon and Daescu&#8217;s fifth title together and second this season.</li>
+<li>First loss of 2026 for Johns and Tardio.</li>
+<li>Johns and Tardio had won 17 straight finals since losing in Atlanta in May 2025.</li>
+<li>Alshon&#8217;s ten Clean Winners were more than Johns and Tardio combined (9).</li>
+<li>Alshon and Daescu had fewer Volleys into the Net, 13-4.</li>
+<li>Longest rally: 44 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>WOMEN&#8217;S DOUBLES FINAL:&nbsp; (1) Anna Bright and Anna Leigh Waters def. (2) Tyra Black and Catherine Parenteau, 11-8, 10-12, 11-5.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Bright and Waters&#8217;s 25th title together, and second this season.</li>
+<li>Waters&#8217;s 12 Clean Winners were more than Black and Parenteau combined (11).</li>
+<li>Black and Parenteau kept every Serve, Return and Third Shot &#8220;in play.&#8221;</li>
+<li>Black and Parenteau lost Game Two 12-10 after trailing 9-0.</li>
+<li>Longest rally: 54 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>MEN&#8217;S SINGLES FINAL:&nbsp; (1) Hunter Johnson def. (19) Ben Johns, 11-1, 11-3.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Johnson&#8217;s tenth career title and second this season.</li>
+<li>Johnson entered this match 0-6 lifetime against Johns.</li>
+<li>Johns&#8217; fourth career loss in a final, and second this year.</li>
+<li>Johnson had more Clean Winners, 11-2.</li>
+<li>Longest rally: 29 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>WOMEN&#8217;S SINGLES FINAL:&nbsp; (2) Kaitlyn Christian def. (5) Kiora Kunimoto, 11-8, 2-11, 11-4.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Christian&#8217;s fifth PPA Tour title and second this season.</li>
+<li>Kunimoto&#8217;s first career PPA Tour medal and final.</li>
+<li>Christian had fewer Baseline Drive Errors, 11-3.</li>
+<li>Kunimoto had more Clean Winners, 18-9.</li>
+<li>Longest rally: 13 shots.</li>
+</ul>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<h4 class="wp-block-heading"><strong>LEADING AT THE CHANGEOVER:</strong></h4>
+
+<p>Did the players or teams leading a game when they changed sides at six points go on to win that game?</p>
+
+<ul class="wp-block-list">
+<li>This tournament: Yes. 10 times in 12 games.</li>
+<li>This season: Yes. 31 times in 40 games. (77.5%)</li>
+</ul>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<p><em>All stats are from PPA Tour events only.</em></p>
+
+<p><strong>For the comprehensive stats of all these gold medal matches, please visit: </strong><a href="https://facebook.com/groups/propickleballstats" target="_blank" rel="noreferrer noopener"><strong>facebook.com/groups/propickleballstats</strong></a></p>
+`.trim(),
+  },
 ];

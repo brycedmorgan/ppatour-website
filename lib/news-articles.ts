@@ -125,6 +125,80 @@ export type NewsArticle = {
  */
 export const newsArticles: NewsArticle[] = [
   /**
+   * ⚠ HUMAN-AUTHORED EDITORIAL — Dave Fleming's preview of the Chicago Cup,
+   * supplied by Wesley on 10/5 ("VEOLIA CHICAGO CUP STORYLINES (OCT 5 - OCT 11,
+   * 2026)"). Same exception path and transcription rules as the Las Vegas
+   * preview below: one paragraph per bullet, a heading per draw, his seeds and
+   * slash-separated doubles shorthand verbatim. Ships `status: "published"`;
+   * Dylan can flip it to "draft" in one line.
+   *
+   * ⚠ HIS TV LINE WAS CHECKED AND MATCHES: PBTV 2PM Central Tue–Fri, noon Sat,
+   * 10AM Sun = 3PM/3PM/1PM/11AM ET in lib/tv-schedule.ts; FS1 Thu + Sun; Tennis
+   * Channel Sat + Sun only (Thu/Fri TC was dropped 10/5).
+   *
+   * ⚠ THE IMAGE IS THE EVENT'S OWN HERO (`lt-northbrook/featured-aerial.jpg`),
+   * because it is the only Northbrook photo in the repo. That means the Coverage
+   * card on the Chicago event page shows the same picture as the page's hero.
+   * Swap it when photography from the week lands.
+   */
+  {
+    slug: "veolia-chicago-cup-storylines",
+    status: "published",
+    category: "Tour News",
+    title: "Storylines for the Veolia Chicago Cup",
+    subtitle: "Presented by STORM · Oct. 5–11, 2026 · Northbrook, IL",
+    date: "Oct 5",
+    image: "/ppa/venues/lt-northbrook/featured-aerial.jpg",
+    author: "Dave Fleming",
+    eventSlug: "veolia-chicago-cup",
+    ctaUrl: "/events/2026/veolia-chicago-cup/",
+    ctaLabel: "Veolia Chicago Cup Event Page",
+    dek: "The tour's first stop in Chicago is indoors at Life Time Northbrook, worth 1,500 points, and gives Anna Leigh Waters three chances at career title No. 200.",
+    whyItMatters:
+      "A debut event with no defending champions, 1,500 points to the winners and best-of-three finals in every draw — and Anna Leigh Waters, back in singles, is one title from 200.",
+    body: [
+      "## Overall Top 5",
+      "199: Anna Leigh Waters did not get win number 200 in Las Vegas — has 3 chances in Chicago.",
+      "Twinning: Jade and Jackie Kawamoto return to the draws… and might play each other early in mixed.",
+      "Here comes the bride: Rachel Rohrabacher battled a Nor'easter, got married, and returns to the court in Chicago.",
+      "Not so windy debut: First PPA Tour stop in Chicago will be played indoors, so climate controlled.",
+      "Cup of tea: 1,500 points to the winners (and remember all finals are best 2 out of 3).",
+      "## Venue, Tourney & TV",
+      "Life Time Northbrook will host this debut event — no defending champs.",
+      "A progressive draw on the pro side, one round per bracket per day and no bronze matches.",
+      "Coverage on PickleballTV begins at 2 p.m. Central (local Chicago time) on Tuesday–Friday, noon Saturday, and 10 a.m. Sunday. FS1 windows on Thursday and Sunday with Tennis Channel coverage Saturday and Sunday.",
+      "## Women's Singles",
+      "Top four seeds: 1) Anna Leigh Waters, 2) Kate Fahey, 3) Kaitlyn Christian, 4) Brooke Buckner.",
+      "Waters returns to singles — 858 days since her last loss in this discipline.",
+      "Potential round-of-32 showdown: Sofia Sewing (32) vs. Catherine Parenteau (7).",
+      "Potential battle in the round of 16: Vegas finalist Kiora Kunimoto (8) vs. Judit Castillo (9).",
+      "Watch out for Kaitlyn Christian (3) — won her 5th title last week in Las Vegas, so she arrives with confidence and momentum in Illinois.",
+      "## Men's Singles",
+      "Top four seeds: 1) Chris Haworth, 2) Federico Staksrud, 3) Hunter Johnson, 4) Roscoe Bellamy.",
+      "Roscoe Bellamy claims a top 4 seed but could face Vegas finalist Ben Johns (36) in the round of 32.",
+      "Round-of-64 thriller: Yates Johnson (22) vs. Nico Acevedo (48).",
+      "Watch out for Hunter Johnson (3) — impressive run to his 10th title in Las Vegas, beating Federico Staksrud in the semis and Ben Johns in the final.",
+      "## Mixed Doubles",
+      "Top four seeds: 1) Anna Leigh Waters / Ben Johns, 2) Anna Bright / Hayden Patriquin, 3) Jorja / JW Johnson, 4) Rachel Rohrabacher / Andrei Daescu.",
+      "After a 2 tournament hiatus, JW and Jorja Johnson return; they are in the Bright / Patriquin half.",
+      "Kawamoto Bowl watch: Jade plus Dylan Frazier (23) could face Jackie plus Tama Shimabukuro (15) in the round of 32.",
+      "Round-of-16 potential thriller: Eric Oncins / Hurricane Tyra Black (5) vs. Catherine Parenteau / Riley Newman (9).",
+      "Watch out for Bright and Patriquin (2) — 2 for 2 in the win column in the 26/27 season.",
+      "## Women's Doubles",
+      "Top four seeds: 1) Anna Bright / Anna Leigh Waters, 2) Hurricane Tyra Black / Catherine Parenteau, 3) Rachel Rohrabacher / Tina Pisnik, 4) Sofia Sewing / Jorja Johnson.",
+      "Will there be a Chicago rematch of the epic 3 game final between the same top 2 seeds from Vegas?",
+      "Sewing and Johnson (4) are a dangerous duo for a one time only pairing.",
+      "Potential quarterfinal matchup: Bright / Waters (1) vs. Kawamotos (5) — one of only 2 teams to beat the top seeds.",
+      "Watch out for Catherine Parenteau and Hurricane Tyra Black (2) — phenomenal play throughout the Vegas Open including rallying from 11-8, 9-0 down to force a game 3 in the final vs. Bright / Waters.",
+      "## Men's Doubles",
+      "Top four seeds: 1) Patriquin / Staksrud, 2) Johns / Sock, 3) Oncins / Klinger, 4) Shimabukuro / JW Johnson.",
+      "Gabe Tardio is playing overseas which opened up the spot next to Ben for Jack Sock.",
+      "No 3-peat: Christian Alshon is out of this tourney (heading overseas) so Andrei Daescu is paired with Will Howells (Alshon / Daescu won back to back in Arizona and Vegas).",
+      "Legend of the game Kyle Yates returns to the main draw of the PPA as the 37 seed with Eli Steiner (if they win their opening match, they will play Patriquin / Staksrud).",
+      "Watch out for Nico Acevedo and Jaume Martinez Vich (14): semifinal run at the Rate Las Vegas Open — what do they have for an encore?",
+    ],
+  },
+  /**
    * ⚠ HUMAN-AUTHORED EDITORIAL, same provenance and exception path as the
    * Arizona and Nationals storylines below — Dave Fleming's preview of the
    * season's third stop, supplied by Wesley on 9/25. The source doc ("#3: RATE

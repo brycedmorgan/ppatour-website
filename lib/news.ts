@@ -63,7 +63,7 @@ export type NewsCard = {
    */
   ctaUrl?: string;
   ctaLabel?: string;
-  /** Hero-only `object-position` override; unset = `object-center`. Native only. */
+  /** Hero-only `object-position` override; unset = `object-center`. */
   imagePosition?: string;
   /**
    * Hero image is a designed GRAPHIC (its own lockup/logos/type), not a photo.
@@ -183,7 +183,7 @@ function wpToCard(p: {
   publishedAt: string;
   series: string | null;
   postType: WpPostType;
-  image: { url: string; alt: string } | null;
+  image: { url: string; alt: string; position?: string } | null;
   ctaUrl?: string;
   ctaLabel?: string;
 }): NewsCard {
@@ -195,6 +195,7 @@ function wpToCard(p: {
     dek: cleanDek(p.dek),
     image: p.image ? resolveAsset(p.image.url) : null,
     imageAlt: p.image?.alt ?? "",
+    imagePosition: p.image?.position,
     author: p.author,
     publishedAt: p.publishedAt,
     displayDate: displayDateFromIso(p.publishedAt),

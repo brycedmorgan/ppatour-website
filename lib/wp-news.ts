@@ -35,6 +35,12 @@ export type WpImage = {
   alt: string;
   width: number | null;
   height: number | null;
+  /**
+   * Hero-only CSS `object-position`, for hand-authored posts whose subject
+   * sits off-centre (the article hero crops to ~3.6:1). Unset = centred, which
+   * is every imported post. Same field as `NewsArticle.imagePosition`.
+   */
+  position?: string;
 };
 
 /**

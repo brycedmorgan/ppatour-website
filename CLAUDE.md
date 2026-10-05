@@ -67,6 +67,19 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-05 (pt. 2) — Fleming's Chicago storylines + Ramsey's Las Vegas stats wrap
+
+- Both from Google Docs Wesley sent (link-shared; `export?format=txt` works with no auth). Fleming →
+  native `veolia-chicago-cup-storylines` in `lib/news-articles.ts` (Las Vegas preview rules, his TV line
+  checked against today's TC fix). Ramsey → `championship-sunday-standout-stats-from-the-rate-las-vegas-open`
+  in `lib/news-posts-authored.ts` (wpId 900006).
+- **Ramsey's photo is Wesley's pick** (`public/ppa/news/championship-sunday-standout-stats-las-vegas-2026.jpg`,
+  2048 q64, no names in alt). The subject sits high, so `WpImage.position` (new, optional) carries a hero
+  `object-position` through `wpToCard` — native articles already had `imagePosition`.
+- ⚠ **Fleming's post still uses `lt-northbrook/featured-aerial.jpg`, the event's own hero.** Wesley picked a
+  Championship Sunday photo (Veolia + STORM signage) but it arrived inline, not as a file. Swap it in when
+  it lands. A first pick was rejected: Toys "R" Us PPA Finals signage across half the frame (Connor, 7/20).
+
 ### 2026-10-05 — Chicago Cup: first serve from the broadcast starts, gates at first serve, Thu/Fri TC dropped
 
 - PBTV's Chicago start-times note matched the site except **Tennis Channel Thu 3–5:30 and Fri 3–6 ET**,
