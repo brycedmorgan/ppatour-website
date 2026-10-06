@@ -151,6 +151,19 @@ lab's PBC product shot when the feed has none.
 
 ### Near-misses to confirm (alias table)
 
+**Joseph's pass is in (2026-10-06).** Hannah returned the 9/18 master list on 10/2
+with a "Joseph Adjustments" tab (sheet `1p5jDyiQaUZH-xEgwgrTn19N7QW-hANEYYn_5bqctre0`).
+67 of his new matches are now `ALIASES` lines; PBC was re-crawled the same day
+(497 products). **Matched: 153 of 468**, up from 87. Every automatic match agrees
+with his verdicts. Eight of his rows were NOT loaded, waiting on Hannah/Joseph:
+
+- Diadem Edge 18K, Edge BluCore Hybrid, Edge BluCore Pro — live on PBC but absent
+  from PBC's product sitemap, so the crawler can't see them.
+- Engage Alpha Pro Elongated 14mm, Honolulu J3CR Blue Grit — marked Matched, no URL.
+- RPM Q2 Widebody 14 → the Q2 *Elongated* product (shape mismatch).
+- Diadem Warrior BluCore Pro 14mm → a *19mm* product (thickness mismatch).
+- Vulcan White Matter → "White Noise" (different name).
+
 Review sheet sent to Hannah, Samin and Taylor on 2026-09-04 (73 rows, Y/N in
 the last column):
 https://docs.google.com/spreadsheets/d/1hOCvqEgXsKXVA5r0Sy6SqjMWWLhBSGfwQ7kQe2rhm20/edit

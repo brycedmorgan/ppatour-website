@@ -67,6 +67,16 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-06 — Paddle Lab: Joseph's reconciliations loaded, 87 → 153 PBC matches
+
+- Hannah returned the Kew-vs-PBC master list 10/2 with Joseph's "Joseph Adjustments" tab; 67 confirmed
+  pairs are now `ALIASES` in `scripts/import-pbc-paddles.mjs`. PBC re-crawled (497 products). Matched 153/468.
+- 8 rows held (URL missing, shape/thickness/name mismatch, or not in PBC's sitemap) — listed in
+  `docs/PADDLE-LAB.md` "Near-misses to confirm". Need Hannah/Joseph before loading.
+- Lab is still gated (password, no links). Bryce emailed Jason 10/6 about hosting it on pickleball.com,
+  Hannah cc'd. No answer yet.
+- ⚠ Local `npm run build` refuses without `PB_API_TOKEN` (stale rankings snapshot); `npx next build` passed.
+
 ### 2026-10-05 (pt. 2) — Fleming's Chicago storylines + Ramsey's Las Vegas stats wrap
 
 - Both from Google Docs Wesley sent (link-shared; `export?format=txt` works with no auth). Fleming →
