@@ -241,6 +241,7 @@ function match(paddles, catalog) {
   const result = {};
   const ambiguous = [];
   const nearMisses = [];
+  const stale = [];
   let matched = 0;
   for (const lab of paddles) {
     const alias = ALIASES[lab.slug];
@@ -249,7 +250,7 @@ function match(paddles, catalog) {
       // A delisted PBC product must not abort the import (the crawl has already
       // rewritten the catalogue by now). Report it and fall through to the matcher.
       if (!p) {
-        console.warn(`⚠ stale alias: ${lab.slug} → ${alias} is not in the catalogue (delisted?)`);
+        stale.push(`${lab.slug} → ${alias}`);
       } else {
         matched++;
         result[lab.slug] = { url: p.url, title: p.title, image: p.image, price: p.price, availability: p.availability, sku: p.sku };
@@ -304,7 +305,7 @@ function match(paddles, catalog) {
     const { url, title, image, price, availability, sku } = best.p;
     result[lab.slug] = { url, title, image, price, availability, sku };
   }
-  return { result, ambiguous, matched, nearMisses };
+  return { result, ambiguous, matched, nearMisses, stale };
 }
 
 /* ---------------- main ---------------- */
@@ -315,7 +316,11 @@ async function main() {
   else catalog = JSON.parse(readFileSync(CATALOG, "utf8")).products;
 
   const paddles = JSON.parse(readFileSync(PADDLES, "utf8")).paddles;
-  const { result, ambiguous, matched, nearMisses } = match(paddles, catalog);
+  const { result, ambiguous, matched, nearMisses, stale } = match(paddles, catalog);
+  // One or two delisted products is PBC's catalogue moving; more than that is a
+  // partial crawl, and writing would silently drop human-confirmed matches.
+  if (stale.length) console.warn(`⚠ ${stale.length} alias(es) not in the catalogue:\n  ${stale.join("\n  ")}`);
+  if (stale.length > 3) throw new Error(`${stale.length} confirmed aliases missing from the catalogue — likely a partial crawl. Nothing written. Re-crawl, or remove delisted aliases by hand.`);
   console.log(`matched ${matched} of ${paddles.length} lab paddles to a PBC product (${catalog.length} in catalogue)`);
   for (const a of ambiguous) console.log(`  ambiguous, skipped: ${a}`);
   console.log(`${nearMisses.length} near-misses for human review (brand+model agree, a stray token blocked it)`);
