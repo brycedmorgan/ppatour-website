@@ -75,6 +75,9 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   `docs/PADDLE-LAB.md` "Near-misses to confirm". Need Hannah/Joseph before loading.
 - Lab is still gated (password, no links). Bryce emailed Jason 10/6 about hosting it on pickleball.com,
   Hannah cc'd. No answer yet.
+- Import guard: a stale alias now warns; >3 missing at once refuses to write (partial-crawl protection).
+- Hannah emailed 10/6 with the 8 held rows + 2 questions (Franklin Aurelius shared photo, Selkirk Luxx II vs
+  original). Next: load Joseph's answers; chase Jason if no reply by ~10/9.
 - ⚠ Local `npm run build` refuses without `PB_API_TOKEN` (stale rankings snapshot); `npx next build` passed.
 
 ### 2026-10-05 (pt. 2) — Fleming's Chicago storylines + Ramsey's Las Vegas stats wrap
