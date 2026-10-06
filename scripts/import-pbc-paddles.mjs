@@ -246,10 +246,15 @@ function match(paddles, catalog) {
     const alias = ALIASES[lab.slug];
     if (alias) {
       const p = products.find((x) => x.url === alias);
-      if (!p) throw new Error(`alias for ${lab.slug} points at a URL not in the catalogue: ${alias}`);
-      matched++;
-      result[lab.slug] = { url: p.url, title: p.title, image: p.image, price: p.price, availability: p.availability, sku: p.sku };
-      continue;
+      // A delisted PBC product must not abort the import (the crawl has already
+      // rewritten the catalogue by now). Report it and fall through to the matcher.
+      if (!p) {
+        console.warn(`⚠ stale alias: ${lab.slug} → ${alias} is not in the catalogue (delisted?)`);
+      } else {
+        matched++;
+        result[lab.slug] = { url: p.url, title: p.title, image: p.image, price: p.price, availability: p.availability, sku: p.sku };
+        continue;
+      }
     }
     const brand = tight(lab.brand);
     const model = tokens(lab.model.replace(/\b\d{1,2}(?:\.\d)?\s?mm\b/gi, " "));
