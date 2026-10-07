@@ -67,6 +67,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-07 (pt. 2) — Ticket questions: email only, no ticketing Slack channel (Parker)
+- Parker: "We would like these to all go through the ticketing@ppatour.com email not through slack."
+- Contact → *Tickets* and the triage TICKETING route now post only to the marketing channel (#ppa-marketing-form), status "📧 Emailed to ticketing@ppatour.com". Nothing goes to FORM_SLACK_CHANNEL_TICKETING (left set, now unused).
+- Email unchanged: FORM_INBOX_TICKETING = ticketing@pickleball.com + ticketing@ppatour.com. Misfiled ticket questions on other topics still get re-routed there by triage.
+
 ### 2026-10-07 — SEO re-audit: Phase 1 confirmed live; /watch + /athletes titles
 
 - Full crawl of 1,139 sitemap URLs: all 200, self-canonical, one H1 each. Phase 1 is live, not "awaiting push" (SEO.md updated, new §3b).

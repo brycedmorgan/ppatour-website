@@ -63,9 +63,15 @@ const INBOX_ENV: Record<Route, string> = {
   REGISTRATIONS: "FORM_INBOX_REGISTRATIONS",
   CAREERS: "FORM_INBOX_CAREERS",
 };
+/**
+ * ⚠ TICKETING HAS NO SLACK CHANNEL (Parker, 10/7): ticket questions go to the
+ * ticketing inbox only. Naming the marketing channel here makes the routed post
+ * and the mirror the same post, so #ppa-marketing-form gets exactly one copy
+ * and the ticketing channel gets none. Same rule as Tickets in ./slack.ts.
+ */
 const CHANNEL_ENV: Record<Route, string> = {
   MARKETING: "FORM_SLACK_CHANNEL_MARKETING",
-  TICKETING: "FORM_SLACK_CHANNEL_TICKETING",
+  TICKETING: "FORM_SLACK_CHANNEL_MARKETING",
   VOLUNTEER: "FORM_SLACK_CHANNEL_VOLUNTEER",
   PR: "FORM_SLACK_CHANNEL_PR",
   REGISTRATIONS: "FORM_SLACK_CHANNEL_REGISTRATIONS",
@@ -80,6 +86,7 @@ function statusLine(t: TriageResult): string | undefined {
     case "partial":
       return `🟡 *Partly answered* · ${cat} · reply emailed, answer in thread · still owed: ${t.openQuestions.join("; ")}`;
     case "routed":
+      if (t.route === "TICKETING") return `📧 *Emailed to ticketing@ppatour.com* · ${cat} · no reply sent yet`;
       return `➡️ *Sent to ${ROUTE_LABEL[t.route ?? "MARKETING"]}* · ${cat} · no reply sent yet`;
     case "needs_human":
       return `🙋 *Needs a person* · ${cat}`;
