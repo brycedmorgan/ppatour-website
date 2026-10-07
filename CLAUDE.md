@@ -70,6 +70,7 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 ### 2026-10-07 (pt. 2) — Ticket questions: email only, no ticketing Slack channel (Parker)
 - Parker: "We would like these to all go through the ticketing@ppatour.com email not through slack."
 - Contact → *Tickets* and the triage TICKETING route now post only to the marketing channel (#ppa-marketing-form), status "📧 Emailed to ticketing@ppatour.com". Nothing goes to FORM_SLACK_CHANNEL_TICKETING (left set, now unused).
+- Verified live 10/7 1:40 PM MT with a TEST submission (topic Tickets): triage routed TICKETING, one post in #ppa-marketing-form with the new label, nothing in #ppa-ticketing-form, no email failure in logs. Side note: `reactions.add` → not_in_channel in #ppa-marketing-form (bot not a member), so no ✅ there.
 - Email unchanged: FORM_INBOX_TICKETING = ticketing@pickleball.com + ticketing@ppatour.com. Misfiled ticket questions on other topics still get re-routed there by triage.
 
 ### 2026-10-07 — SEO re-audit: Phase 1 confirmed live; /watch + /athletes titles
