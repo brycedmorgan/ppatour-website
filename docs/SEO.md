@@ -6,7 +6,7 @@ descriptions, canonicals, H1s, JSON-LD, word counts, dates), legacy-URL redirect
 paths that emit metadata, `docs/seo-baseline` (SEMrush 8/8), SERP spot checks. **Update 2026-09-24:** GSC and SEMrush baselines pulled through Jackalope's `/api/seo/*` endpoints
 (the service account reads both properties; the SEMrush key lives on the Vercel project) →
 [`seo-baseline/gsc-semrush-2026-09-24.md`](seo-baseline/gsc-semrush-2026-09-24.md). Phase 1 shipped
-to `main` the same day (9 commits, branch `seo/phase-1`, not yet pushed). Still not measured: Core Web
+to `main` the same day (9 commits; **live on www since, verified by full 1,139-URL crawl 10/7**). Still not measured: Core Web
 Vitals field data. The PBC plan lives in `~/pickleball/ziff/docs/PBC-SEO-PLAN.md`.
 
 **Shareable version (private artifact, share from its own menu):**
@@ -64,7 +64,7 @@ Everything in Phase 1 is code in this repo. Phase 2 is content plus code. Phase 
 2. ~~SEMrush seat~~ — `SEMRUSH_API_KEY` is on the Jackalope Vercel project; `/api/seo/overview?brand=ppa` serves it. Baseline saved 9/24. Next: a monthly cron that writes the JSON here.
 3. GA4: ship Option A from `ANALYTICS.md` (hostname-filtered explorations) so organic sessions for ppatour.com are quotable. Replicate the PBC performance endpoint in Jackalope for PPA.
 
-### Phase 1 — Technical fixes — SHIPPED TO MAIN 9/24 (awaiting push; see CLAUDE.md session log for per-item notes)
+### Phase 1 — Technical fixes — LIVE (verified 10/7; see §3b for what's still partial)
 | # | Change | Where | Pages affected |
 |---|---|---|---|
 | 1 | `NewsArticle` JSON-LD (headline, datePublished, dateModified, author, image, publisher) on every article | `app/[slug]/page.tsx`, `components/news/ArticleView` | 822 |
@@ -102,6 +102,31 @@ Everything in Phase 1 is code in this repo. Phase 2 is content plus code. Phase 
 - **Search Console had only the six dead WordPress sitemaps** (post-, page-, athlete-, tournament-, category-, post_tag-sitemap.xml), all erroring since April; neither new sitemap was registered. Submitted `sitemap.xml` (1,135 URLs read) and `news-sitemap.xml` (Success), removed the six. The one remaining "URL not allowed" is the deliberate cross-host `ppatoureurope.com/` entry — fine for sitemaps, rejected by the ppatour.com property; a ppatoureurope.com GSC property would accept it.
 - **Rich Results Test on production:** article → Article valid; event → Event + Breadcrumb valid; rankings → Dataset valid; athlete → Breadcrumb valid but **Product invalid** (no offers/review). Fixed the same night: the paddle node is now `Thing` + `additionalType: Product` (`profile.tsx`), pushed.
 - **Apex redirect flip in Vercel** (ppatour.com → www is a domain-level 308): not done from this session — the harness classifies domain changes as off-limits. Vercel → ppatour-website → Domains → ppatour.com → Edit → clear "Redirect to". Do it on a non-event day.
+
+## 3b. Re-audit 2026-10-07 (full crawl, 1,139 sitemap URLs)
+
+All 200, none noindex, every canonical self-referencing, exactly one H1 per page. Phase 1 is live
+except where noted. Raw crawl: session scratchpad `ppa/crawl.jsonl` (not kept).
+
+| Item | Status |
+|---|---|
+| P1-3 title cap | Partial — the cap shortens the suffix only. 385 article titles still >60 (177 >70, some >200); 112 athletes >60 (max 65). Next: cut the headline itself at a word boundary in `lib/news.ts` |
+| P1-7 one-hop redirects | www only. `ppatour.com/athlete/x/` and `http://ppatour.com` still 2 hops until the Vercel apex flip (do it on a non-event day, after Chicago 10/11) |
+| P1-8 lastmod | Athletes 0/215, events 11/28 |
+| P1-10 event schema | `subEvent` missing — not in code on main |
+| P1-11 thin athletes | 3 left <300 words: augie-ge, danny-phillips, connor-allen-mogle |
+
+**Shipped 10/7:** `/watch/` and `/athletes/` titles, descriptions, H1s rewritten around the query
+(206k impr @ 1.5% CTR and 154k @ 0.6%). Check GSC CTR on 10/31 against the 9/24 baseline.
+
+**New issues found 10/7, ranked:**
+1. Unknown athlete slugs 307 → /athletes/ (soft 404). Return 404, or 301 when an alias matches.
+2. `/tournament/<slug>/` all land on /events/, not the matching event page.
+3. Athlete Person `sameAs` is socials only — no pickleball.com profile (Phase 2 entity work needs it).
+4. No `og:url` site-wide; athletes also lack `og:type`, `og:site_name`.
+5. `/ppa-blog/` index 404s (noindex, no H1) while its 37 posts are in the sitemap.
+6. `/search/` in the sitemap; `/favicon.ico` 404.
+7. Duplicate article: `/championship-sunday-standout-stats-from-the-carvana-mesa-cup/` and its `-2`.
 
 ## 4. Measures and checkpoints
 

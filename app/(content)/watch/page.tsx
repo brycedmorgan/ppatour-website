@@ -60,9 +60,11 @@ async function LiveNowBand() {
 }
 
 export const metadata: Metadata = {
-  title: "Watch",
+  // SEO 10/7: /watch/ had 206k impressions at 1.5% CTR on "Watch · …";
+  // the title now says the query people search ("pickleball on TV").
+  title: { absolute: "How to Watch Pro Pickleball on TV & Streaming | PPA Tour" },
   description:
-    "Where to watch the Carvana PPA Tour — national television windows, every round streaming live on PickleballTV, the full TV guide, and live scores.",
+    "Watch pro pickleball live: Carvana PPA Tour national TV windows, every round streaming on PickleballTV, the full TV schedule, and live scores.",
 };
 
 /**
@@ -184,8 +186,11 @@ export default function WatchPage() {
             </p>
           </div>
           <h1 className="mt-2 font-display text-3xl uppercase leading-[1.02] sm:text-4xl">
-            As Seen On
+            Watch Pro Pickleball
           </h1>
+          <p className="mt-2 text-sm font-bold uppercase tracking-[0.2em] text-white/70">
+            As Seen On
+          </p>
 
           {/* The confirmed networks in their real marks — white tiles because
               network logos are colour-locked and a knocked-out version isn't

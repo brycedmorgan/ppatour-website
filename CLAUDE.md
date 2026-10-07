@@ -67,6 +67,13 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-07 — SEO re-audit: Phase 1 confirmed live; /watch + /athletes titles
+
+- Full crawl of 1,139 sitemap URLs: all 200, self-canonical, one H1 each. Phase 1 is live, not "awaiting push" (SEO.md updated, new §3b).
+- `/watch/` → "How to Watch Pro Pickleball on TV & Streaming | PPA Tour", H1 "Watch Pro Pickleball" ("As Seen On" kept as the line above the network logos). `/athletes/` → "Pro Pickleball Players: Rankings & Profiles | PPA Tour", H1 "Pro Pickleball Players". Re-check GSC CTR 10/31.
+- Open (SEO.md §3b): headline-length cap, apex flip after Chicago, soft-404 athlete slugs, /tournament/ mapping, subEvent, og:url, /ppa-blog/ index, Mesa `-2` dupe.
+- Same-day audits of MLP and PBC: notes in mlp-website `docs/SEO.md` and ziff `docs/PBC-SEO-PLAN.md`.
+
 ### 2026-10-06 — Paddle Lab: Joseph's reconciliations loaded, 87 → 153 PBC matches
 
 - Hannah returned the Kew-vs-PBC master list 10/2 with Joseph's "Joseph Adjustments" tab; 67 confirmed

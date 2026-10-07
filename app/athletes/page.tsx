@@ -24,9 +24,10 @@ import { curatedSlugFor, getRankings, getWprIndex } from "@/lib/rankings-api";
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "Athletes",
+  // SEO 10/7: /athletes/ had 154k impressions at 0.6% CTR on "Athletes · …".
+  title: { absolute: "Pro Pickleball Players: Rankings & Profiles | PPA Tour" },
   description:
-    "The full roster of Carvana PPA Tour pros — profiles, quick facts, live World Pickleball Rankings, and the season-long points race.",
+    "Every Carvana PPA Tour pro pickleball player — profiles, paddles, live World Pickleball Rankings, and the season points race. Search by name or country.",
 };
 
 function genderFromDivisions(divisions: string[]): "male" | "female" {
@@ -101,7 +102,7 @@ export default async function AthletesPage() {
             </p>
           </div>
           <h1 className="mt-2 font-display text-3xl uppercase leading-[1.02] sm:text-4xl">
-            Meet the Pros
+            Pro Pickleball Players
           </h1>
           <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
             The full roster of Carvana PPA Tour pros. Search by name or country,
