@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-04T17:10:49Z",
+  "updated_at": "2026-10-07T19:09:17Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -9454,6 +9454,612 @@
       "type": "event_removed",
       "event_id": "197226",
       "event": "PPA Las Vegas Saturday - Semifinals"
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Friday Courtside",
+      "base_price": {
+        "from": 60,
+        "to": 80
+      },
+      "all_in_price": {
+        "from": 70.23,
+        "to": 91.83
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "ticket_added",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Friday Premium Parking Pass",
+      "base_price": 30,
+      "all_in_price": 35.75
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "JOOLA 2-Day PPA 3.0/4.0 Level Camp",
+      "base_price": {
+        "from": 370,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 405.17,
+        "to": 405.17
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "availability_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "JOOLA 2-Day PPA 3.0/4.0 Level Camp",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "CLOSED"
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "JOOLA 2-Day PPA 3.0/4.0 Level Camp + Weeklong Courtside",
+      "base_price": {
+        "from": 580,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 632.07,
+        "to": 632.07
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "availability_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "JOOLA 2-Day PPA 3.0/4.0 Level Camp + Weeklong Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "JOOLA 2-Day PPA 3.0/4.0 Level Camp + Weeklong VIP",
+      "base_price": {
+        "from": 1100,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 1193.91,
+        "to": 1193.91
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "availability_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "JOOLA 2-Day PPA 3.0/4.0 Level Camp + Weeklong VIP",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "ticket_added",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Saturday Premium Parking Pass",
+      "base_price": 40,
+      "all_in_price": 46.56
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Saturday VIP",
+      "base_price": {
+        "from": 350,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 383.56,
+        "to": 383.56
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "availability_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Saturday VIP",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": 140,
+        "to": 160
+      },
+      "all_in_price": {
+        "from": 156.66,
+        "to": 178.27
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "ticket_added",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Sunday Premium Parking Pass",
+      "base_price": 40,
+      "all_in_price": 46.56
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Sunday VIP",
+      "base_price": {
+        "from": 350,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 383.56,
+        "to": 383.56
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "availability_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Sunday VIP",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "ticket_added",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Thursday Premium Parking Pass",
+      "base_price": 30,
+      "all_in_price": 35.75
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "ticket_added",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Wednesday Premium Parking Pass",
+      "base_price": 30,
+      "all_in_price": 35.75
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "ticket_added",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Wednesday-Sunday Premium Parking Pass",
+      "base_price": 170,
+      "all_in_price": 189.08
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Weeklong Courtside",
+      "base_price": {
+        "from": 300,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 329.54,
+        "to": 329.54
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "availability_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Weeklong Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Weeklong VIP",
+      "base_price": {
+        "from": 900,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 977.82,
+        "to": 977.82
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "availability_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Weeklong VIP",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "ticket_removed",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Connor Garnett Skills Lab Powered by the PPA"
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "ticket_added",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "Celebrity Pickleball Showdown",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "King of the Court – 4.0–4.5",
+      "base_price": {
+        "from": 30,
+        "to": 30
+      },
+      "all_in_price": {
+        "from": 35.75,
+        "to": 35.83
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "166404",
+      "event": "Opendoor Pickleball World Championships Tuesday - Round of 64",
+      "ticket": "Tuesday Courtside Bleacher",
+      "base_price": {
+        "from": 80,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 92.03,
+        "to": 46.66
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "availability_change",
+      "event_id": "166404",
+      "event": "Opendoor Pickleball World Championships Tuesday - Round of 64",
+      "ticket": "Tuesday Courtside Bleacher",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "event_added",
+      "event_id": "210184",
+      "event": "MUNICIPAL Celebrity Pickleball Showdown"
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "166396",
+      "event": "Opendoor Pickleball World Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening Courtside Bleacher",
+      "base_price": {
+        "from": 80,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 92.03,
+        "to": 46.66
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "availability_change",
+      "event_id": "166396",
+      "event": "Opendoor Pickleball World Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening Courtside Bleacher",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "166396",
+      "event": "Opendoor Pickleball World Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening Courtside Chair",
+      "base_price": {
+        "from": 180,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 200.33,
+        "to": 200.33
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "availability_change",
+      "event_id": "166396",
+      "event": "Opendoor Pickleball World Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening Courtside Chair",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "166396",
+      "event": "Opendoor Pickleball World Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening VIP",
+      "base_price": {
+        "from": 400,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 438.58,
+        "to": 438.58
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "availability_change",
+      "event_id": "166396",
+      "event": "Opendoor Pickleball World Championships Friday Evening - Men's and Women's Doubles Quarterfinals",
+      "ticket": "Friday Evening VIP",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "166387",
+      "event": "Opendoor Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning Courtside Bleacher",
+      "base_price": {
+        "from": 80,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 92.03,
+        "to": 46.66
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "availability_change",
+      "event_id": "166387",
+      "event": "Opendoor Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning Courtside Bleacher",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "166387",
+      "event": "Opendoor Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning VIP",
+      "base_price": {
+        "from": 400,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 438.58,
+        "to": 438.58
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "availability_change",
+      "event_id": "166387",
+      "event": "Opendoor Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning VIP",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday Courtside Bleacher",
+      "base_price": {
+        "from": 140,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 157.01,
+        "to": 135.35
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "availability_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday Courtside Bleacher",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday Courtside Chair",
+      "base_price": {
+        "from": null,
+        "to": 250
+      },
+      "all_in_price": {
+        "from": 276.13,
+        "to": 276.13
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "availability_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday Courtside Chair",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "203182",
+      "event": "PPA Daytona Beach Saturday - Semifinals",
+      "ticket": "Saturday Courtside",
+      "base_price": {
+        "from": 80,
+        "to": 100
+      },
+      "all_in_price": {
+        "from": 91.83,
+        "to": 113.44
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "203167",
+      "event": "PPA Daytona Beach Sunday - Championships",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": 80,
+        "to": 100
+      },
+      "all_in_price": {
+        "from": 91.83,
+        "to": 113.44
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "176502",
+      "event": "Veolia PPA Malibu",
+      "ticket": "Saturday Courtside",
+      "base_price": {
+        "from": 50,
+        "to": 60
+      },
+      "all_in_price": {
+        "from": 58.91,
+        "to": 71.77
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "price_change",
+      "event_id": "204411",
+      "event": "PPA Palm Springs Friday - Quarterfinals",
+      "ticket": "Friday Courtside",
+      "base_price": {
+        "from": null,
+        "to": 80
+      },
+      "all_in_price": {
+        "from": 48.1,
+        "to": 93.38
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "availability_change",
+      "event_id": "204411",
+      "event": "PPA Palm Springs Friday - Quarterfinals",
+      "ticket": "Friday Courtside",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "event_added",
+      "event_id": "210307",
+      "event": "PPA Mesa"
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "event_added",
+      "event_id": "210311",
+      "event": "PPA Mesa Sunday - Championships"
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "event_removed",
+      "event_id": "195857",
+      "event": "PPA Las Vegas"
+    },
+    {
+      "at": "2026-10-07T19:09:17Z",
+      "type": "event_removed",
+      "event_id": "197214",
+      "event": "PPA Las Vegas Sunday - Championships"
     }
   ]
 }
