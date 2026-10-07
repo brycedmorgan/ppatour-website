@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { ArticleView } from "@/components/news/ArticleView";
+import { athletes } from "@/lib/athletes";
 import { getNewsDetail, rootNews } from "@/lib/news";
+import { publishedAthletes } from "@/lib/published-athletes";
+import { curatedSlugFor } from "@/lib/rankings-api";
 import { pageTitle, seoDescription } from "@/lib/seo-text";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -73,9 +76,27 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   };
 }
 
+/**
+ * WordPress also answered athlete profiles at the root (`/ben-johns/`), and
+ * Google still holds those URLs — GSC listed them among the 589 404s on 10/7
+ * (docs/SEO.md §3b). Only reached when no article owns the slug, so a post can
+ * never be shadowed. Same slug set as app/sitemap.ts.
+ */
+function athletePathFor(slug: string): string | undefined {
+  if (athletes.some((a) => a.slug === slug)) return `/athletes/${slug}/`;
+  if (publishedAthletes.some((p) => p.slug === slug)) {
+    return `/athletes/${curatedSlugFor(slug) ?? slug}/`;
+  }
+  return undefined;
+}
+
 export default async function ArticlePage({ params }: Params) {
   const { slug } = await params;
   const detail = rootDetail(slug);
-  if (!detail) notFound();
+  if (!detail) {
+    const athletePath = athletePathFor(slug);
+    if (athletePath) permanentRedirect(athletePath);
+    notFound();
+  }
   return <ArticleView detail={detail} />;
 }

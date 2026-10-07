@@ -67,6 +67,12 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-07 (pt. 3) — 404 redirects from the GSC report
+- `/players/<slug>/` and root `/<athlete-slug>/` → `/athletes/<slug>/`; `/meet-the-team/` → /about/ (repoint to /team at launch); `/blog-category/*` → /blog/; `/<post>/feed/` → the post. Tested on a local build.
+- Root athlete slugs live in app/[slug]/page.tsx (only after no article matches), not next.config — a pattern there would shadow posts.
+- Handbook PDF rules → /about/player-handbook/ are inert: Vercel denies /wp-content/ at the edge; needs a dashboard allow rule.
+- Local `npm run build` refuses without PB_API_TOKEN (stale snapshot); `npx next build` skips prebuild for testing.
+
 ### 2026-10-07 (pt. 2) — Ticket questions: email only, no ticketing Slack channel (Parker)
 - Parker: "We would like these to all go through the ticketing@ppatour.com email not through slack."
 - Contact → *Tickets* and the triage TICKETING route now post only to the marketing channel (#ppa-marketing-form), status "📧 Emailed to ticketing@ppatour.com". Nothing goes to FORM_SLACK_CHANNEL_TICKETING (left set, now unused).

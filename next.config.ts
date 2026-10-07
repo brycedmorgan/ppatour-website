@@ -268,6 +268,27 @@ const LEGACY_REDIRECTS = [
   { source: "/tournament/:path*", destination: "/events/" },
 
   /**
+   * Old WordPress URL shapes from the GSC "Not found (404)" report, 10/7 (589
+   * URLs; docs/SEO.md §3b). Root athlete slugs (`/ben-johns/`) are handled in
+   * app/[slug]/page.tsx instead — a pattern here would shadow every article.
+   * `/meet-the-team` goes to /about/ until /team ships (docs/TEAM.md), then
+   * repoint it.
+   */
+  { source: "/players/:slug", destination: "/athletes/:slug/" },
+  { source: "/meet-the-team", destination: "/about/" },
+  { source: "/blog-category/:path*", destination: "/blog/" },
+  // WordPress gave every post and blog post a `/feed/` URL.
+  { source: "/:path+/feed", destination: "/:path+/" },
+  /**
+   * The old handbook PDFs (GSC "Blocked (403)", 10/7). ⚠ CURRENTLY INERT:
+   * Vercel denies all of /wp-content/ at the edge (`x-vercel-mitigated: deny`)
+   * before this config runs, and the project has no custom firewall config, so
+   * these only fire once that path is allowed through.
+   */
+  { source: "/wp-content/uploads/2025/05/PPA-Tour-Player-Handbook.pdf", destination: "/about/player-handbook/" },
+  { source: "/wp-content/uploads/2026/01/PPA-Tournament-Handbook.pdf", destination: "/about/player-handbook/" },
+
+  /**
    * The two PPA Blog posts not carried over (Bryce, 8/4 — the only two with no
    * `blog-category` in WordPress). Both are live 200s on ppatour.com today, so
    * without these they become brand-new 404s the moment DNS moves. 301'd to

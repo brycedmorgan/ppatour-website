@@ -127,9 +127,12 @@ not yet crawled": newer international athletes like arwid-dahlin, bartosz-karbow
   variants, a few athletes. Noise, not lost pages.
 - 611 × 401: gated Paddle Lab (`/paddle-lab/*`, Basic auth + `X-Robots-Tag: noindex` since 9/10). Expected.
 - 589 × 404: old WordPress patterns — `/players/<slug>/`, root `/<athlete-slug>/`, `/meet-the-team/`,
-  `/blog-category/*`, `/<post>/feed/`, junk (`/At`, `/default.htm`). First four are worth 301s.
+  `/blog-category/*`, `/<post>/feed/`, junk (`/At`, `/default.htm`). **First four 308 since 10/7** (next.config.ts +
+  root athlete slugs in app/[slug]/page.tsx); `/meet-the-team/` → /about/ until /team ships. Junk stays 404.
 - 47 × 403: old `/wp-content/uploads/*.pdf` (draws, Player/Tournament Handbooks), denied by the Vercel
-  firewall (`x-vercel-mitigated: deny`). Handbooks deserve a firewall exception + redirect to current copies.
+  firewall (`x-vercel-mitigated: deny`). Handbook rules → /about/player-handbook/
+  added 10/7 but INERT: the deny comes from a Vercel-managed rule (project has no custom firewall config),
+  so it needs an allow rule for those two paths in the dashboard first.
 - 139 "Google chose different canonical" (email 10/7): all last crawled Aug 4–6, 9/10 on the apex host;
   launch-week leftovers, falling. Clears with the apex flip; then Validate fix.
 
