@@ -278,8 +278,8 @@ const LEGACY_REDIRECTS = [
   { source: "/meet-the-team", destination: "/about/" },
   { source: "/blog-category/:path*", destination: "/blog/" },
   // WordPress gave every post and blog post a `/feed/` URL. ⚠ Scoped to those
-  // two shapes on purpose: `/:path+/feed` also caught the live RSS route
-  // /api/newsletter/feed (qa-gate, 10/7).
+  // two shapes on purpose: `/:path+/feed` would swallow any future `*/feed`
+  // route (e.g. an /api/.../feed RSS endpoint).
   { source: "/:slug/feed", destination: "/:slug/" },
   { source: "/ppa-blog/:slug/feed", destination: "/ppa-blog/:slug/" },
   /**
