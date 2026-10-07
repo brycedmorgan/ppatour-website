@@ -67,6 +67,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-07 (pt. 4) — Paddle Lab → pickleball.com/paddles (Jason)
+- Jason replied: pickleball.com will rebuild the lab in its own components (header/footer/CSS) at `pickleball.com/paddles`; he's reviewing the gated build for brand/UI first.
+- Sent: URL + user `ppa` by email (Hannah cc'd), password by Slack DM. Told him it's static JSON (paddles.json, paddle-pbc.json, editorial), not an API — we can expose one or hand over files.
+- Next: Jason's review → pick API vs files. Before public: Kew terms, UPA-A RPM conflict, JOOLA position; Hannah owes 8 rows + 2 questions from 10/6.
+
 ### 2026-10-07 (pt. 3) — 404 redirects from the GSC report
 - `/players/<slug>/` and root `/<athlete-slug>/` → `/athletes/<slug>/`; `/meet-the-team/` → /about/ (repoint to /team at launch); `/blog-category/*` → /blog/; `/<post>/feed/` → the post. Tested on a local build.
 - Root athlete slugs live in app/[slug]/page.tsx (only after no article matches), not next.config — a pattern there would shadow posts.
