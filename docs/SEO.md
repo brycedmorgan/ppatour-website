@@ -119,6 +119,20 @@ except where noted. Raw crawl: session scratchpad `ppa/crawl.jsonl` (not kept).
 **Shipped 10/7:** `/watch/` and `/athletes/` titles, descriptions, H1s rewritten around the query
 (206k impr @ 1.5% CTR and 154k @ 0.6%). Check GSC CTR on 10/31 against the 9/24 baseline.
 
+**GSC page indexing, read 10/7 (report last updated 10/3):** 1.54K indexed, 11.2K not indexed —
+but filtered to `sitemap.xml`, **~1.11K of 1,139 are indexed and only 28 are not** (27 "discovered,
+not yet crawled": newer international athletes like arwid-dahlin, bartosz-karbownik, plus
+/events/2022/miami-open/; 1 duplicate). The 11.2K are URLs Google found elsewhere:
+- 5,635 crawled-not-indexed: mostly `/_next/static/chunks/*?dpl=` script/style files, `/leaderboards/?gender=&page=`
+  variants, a few athletes. Noise, not lost pages.
+- 611 × 401: gated Paddle Lab (`/paddle-lab/*`, Basic auth + `X-Robots-Tag: noindex` since 9/10). Expected.
+- 589 × 404: old WordPress patterns — `/players/<slug>/`, root `/<athlete-slug>/`, `/meet-the-team/`,
+  `/blog-category/*`, `/<post>/feed/`, junk (`/At`, `/default.htm`). First four are worth 301s.
+- 47 × 403: old `/wp-content/uploads/*.pdf` (draws, Player/Tournament Handbooks), denied by the Vercel
+  firewall (`x-vercel-mitigated: deny`). Handbooks deserve a firewall exception + redirect to current copies.
+- 139 "Google chose different canonical" (email 10/7): all last crawled Aug 4–6, 9/10 on the apex host;
+  launch-week leftovers, falling. Clears with the apex flip; then Validate fix.
+
 **New issues found 10/7, ranked:**
 1. Unknown athlete slugs 307 → /athletes/ (soft 404). Return 404, or 301 when an alias matches.
 2. `/tournament/<slug>/` all land on /events/, not the matching event page.
