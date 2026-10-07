@@ -277,8 +277,11 @@ const LEGACY_REDIRECTS = [
   { source: "/players/:slug", destination: "/athletes/:slug/" },
   { source: "/meet-the-team", destination: "/about/" },
   { source: "/blog-category/:path*", destination: "/blog/" },
-  // WordPress gave every post and blog post a `/feed/` URL.
-  { source: "/:path+/feed", destination: "/:path+/" },
+  // WordPress gave every post and blog post a `/feed/` URL. ⚠ Scoped to those
+  // two shapes on purpose: `/:path+/feed` also caught the live RSS route
+  // /api/newsletter/feed (qa-gate, 10/7).
+  { source: "/:slug/feed", destination: "/:slug/" },
+  { source: "/ppa-blog/:slug/feed", destination: "/ppa-blog/:slug/" },
   /**
    * The old handbook PDFs (GSC "Blocked (403)", 10/7). ⚠ CURRENTLY INERT:
    * Vercel denies all of /wp-content/ at the edge (`x-vercel-mitigated: deny`)
