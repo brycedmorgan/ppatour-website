@@ -29,7 +29,7 @@ import { getPlaylistVideos } from "@/lib/youtube";
 import { Countdown } from "@/components/motion/Countdown";
 import { getBroadcast } from "@/lib/broadcast";
 import { channelsByDay, watchCardsFor, weekdayOf } from "@/lib/event-watch";
-import { getEventGuide, parkingFor, parkingText } from "@/lib/event-guides";
+import { getEventGuide, hotelPhoto, parkingFor, parkingText } from "@/lib/event-guides";
 import { venueMapFor } from "@/lib/onsite";
 import { spotlightFor } from "@/lib/event-spotlight";
 import { ParkingDetails } from "@/components/events/ParkingDetails";
@@ -2013,6 +2013,15 @@ export default async function EventPage({ params }: Params) {
                   <ul className="divide-y divide-ppa-line">
                     {col.items.map((p) => (
                       <li key={p.name} className="px-4 py-3">
+                        {col.heading === "Where to Stay" && (p.photo ?? hotelPhoto(p.name)) && (
+                          <Image
+                            src={(p.photo ?? hotelPhoto(p.name))!}
+                            alt={p.name}
+                            width={600}
+                            height={338}
+                            className="mb-2 aspect-video w-full object-cover"
+                          />
+                        )}
                         <div className="flex items-baseline justify-between gap-2">
                           <span className="flex min-w-0 items-center gap-2">
                             {p.brand && (

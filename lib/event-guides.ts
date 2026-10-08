@@ -16,7 +16,18 @@ export type Place = {
   brand?: "marriott" | "hilton" | "ihg" | "bestwestern" | "wyndhamhotels";
   rate?: string;
   cutoff?: string;
+  /** Hotel photo (from the hotel's own site) → /public/ppa/hotels/photos. */
+  photo?: string;
 };
+
+/** Hotel photos by name, so Jackalope-published hotels get them too. */
+const HOTEL_PHOTOS: [RegExp, string][] = [
+  [/sheraton dallas.*galleria/i, "/ppa/hotels/photos/sheraton-dallas-galleria.jpg"],
+  [/renaissance dallas north/i, "/ppa/hotels/photos/renaissance-dallas-north.jpg"],
+];
+export function hotelPhoto(name: string): string | undefined {
+  return HOTEL_PHOTOS.find(([re]) => re.test(name))?.[1];
+}
 
 export type EventGuide = {
   /**
@@ -772,17 +783,24 @@ export const eventGuides: Record<string, EventGuide> = {
       {
         name: "Sheraton Dallas by the Galleria",
         tag: "Official",
-        note: "2026 World Pickleball fans block",
-        href: "https://app.marriott.com/reslink?id=73858550544&key=GRP&app=resvlink",
+        note: "Fans, spectators + sponsors block",
+        href: "https://app.marriott.com/resview2?id=1791395166995&key=GRP&app=resvlink",
         brand: "marriott",
         rate: "$139/night",
         cutoff: "Book by Oct 16",
       },
       {
+        name: "Sheraton Dallas by the Galleria — Pro Players",
+        tag: "Official",
+        note: "Players block — breakfast for 2 + free parking. Sponsors welcome too.",
+        href: "https://app.marriott.com/resview2?id=1791394819759&key=GRP&app=resvlink",
+        brand: "marriott",
+      },
+      {
         name: "Renaissance Dallas North",
         tag: "Official",
         note: "1590 LBJ Fwy — breakfast for 2, free parking + wi-fi",
-        href: "https://app.marriott.com/resview2?id=80516175834&key=GRP&app=resvlink",
+        href: "https://app.marriott.com/resview2?id=1780516175834&key=GRP&app=resvlink",
         brand: "marriott",
         rate: "$125/night",
         cutoff: "Book by Oct 26",
@@ -791,7 +809,7 @@ export const eventGuides: Record<string, EventGuide> = {
         name: "DoubleTree Dallas Near the Galleria",
         tag: "Official",
         note: "4099 Valley View Ln — breakfast for 2, free parking + wi-fi",
-        href: "https://www.hilton.com/en/book/reservation/deeplink/?ctyhocn=DALVVDT&groupCode=DTPKL&arrivaldate=2026-11-02&departuredate=2026-11-08&cid=OM,WW,HILTONLINK,EN,DirectLink&fromId=HILTONLINKDIRECT",
+        href: "https://www.hilton.com/en/book/reservation/deeplink/?ctyhocn=DALVVDT&groupCode=CDTPKL&arrivaldate=2026-11-02&departuredate=2026-11-08&cid=OM,WW,HILTONLINK,EN,DirectLink&fromId=HILTONLINKDIRECT",
         brand: "hilton",
         rate: "$135/night",
         cutoff: "Book by Sep 30",

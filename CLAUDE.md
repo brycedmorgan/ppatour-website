@@ -67,6 +67,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-08 (pt. 3) — Worlds hotels + hotel photos
+- Sheraton Galleria split into Fans ($139, by 10/16) + Pro Players blocks per Kristen 10/8; Renaissance + DoubleTree links corrected (`lib/event-guides.ts`).
+- New `photo` on hotel cards: `hotelPhoto(name)` maps names → `/public/ppa/hotels/photos/*.jpg`, so Jackalope-feed hotels get photos too. Sheraton + Renaissance pulled from marriott.com; Hilton/IHG sites block automation — add more by dropping a jpg + one regex line.
+- Jackalope now publishes Worlds hotels (was 0 — seed regex bug), so the feed overrides the static list where the city matches.
+
 ### 2026-10-08 (pt. 2) — Black Desert vacation on sale
 - New trip `/vacations/trips/black-desert/`: Greater Zion Cup VIP weekend + 2 days of clinics with Dave Fleming, Mar 26–31 2027, Black Desert Resort. Lainey's listing doc + Drive photos (Drive folder "BLACK DESERT: MARCH").
 - New pricing shape: ONE King room at $6,500 for 1 or 2 guests, 15 rooms in any mix. `TripConfig.roomPool` makes both occupancies draw from one block (single+double from Jackalope); `bedOptions: ["King"]` hides the bed picker; `domestic` swaps passport wording for government ID.
