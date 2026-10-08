@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-07T19:09:17Z",
+  "updated_at": "2026-10-08T19:04:05Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -10060,6 +10060,546 @@
       "type": "event_removed",
       "event_id": "197214",
       "event": "PPA Las Vegas Sunday - Championships"
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Free Youth Clinic",
+      "base_price": {
+        "from": 0,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 0,
+        "to": 0
+      }
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "availability_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Free Youth Clinic",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "CLOSED"
+      }
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Tuesday Grounds Pass",
+      "base_price": {
+        "from": 25,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 30.35,
+        "to": 30.35
+      }
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "availability_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Tuesday Grounds Pass",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "CLOSED"
+      }
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Wednesday Grounds Pass",
+      "base_price": {
+        "from": 25,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 30.35,
+        "to": 30.35
+      }
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "availability_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Wednesday Grounds Pass",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "CLOSED"
+      }
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "price_change",
+      "event_id": "198728",
+      "event": "2026 Major League Pickleball Nations Cup",
+      "ticket": "Championship Sunday VIP",
+      "base_price": {
+        "from": 150,
+        "to": 250
+      },
+      "all_in_price": {
+        "from": 167.84,
+        "to": 276.13
+      }
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "price_change",
+      "event_id": "198728",
+      "event": "2026 Major League Pickleball Nations Cup",
+      "ticket": "Friday VIP",
+      "base_price": {
+        "from": 150,
+        "to": 250
+      },
+      "all_in_price": {
+        "from": 167.84,
+        "to": 276.13
+      }
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "price_change",
+      "event_id": "198728",
+      "event": "2026 Major League Pickleball Nations Cup",
+      "ticket": "Saturday VIP",
+      "base_price": {
+        "from": 150,
+        "to": 250
+      },
+      "all_in_price": {
+        "from": 167.84,
+        "to": 276.13
+      }
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "price_change",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "King of the Court – 4.0–4.5",
+      "base_price": {
+        "from": 30,
+        "to": 30
+      },
+      "all_in_price": {
+        "from": 35.83,
+        "to": 35.75
+      }
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "price_change",
+      "event_id": "166381",
+      "event": "Opendoor Pickleball World Championships Saturday Evening - Men's and Women's Doubles Semifinals",
+      "ticket": "Saturday Evening VIP",
+      "base_price": {
+        "from": null,
+        "to": 400
+      },
+      "all_in_price": {
+        "from": 438.58,
+        "to": 438.58
+      }
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "availability_change",
+      "event_id": "166381",
+      "event": "Opendoor Pickleball World Championships Saturday Evening - Men's and Women's Doubles Semifinals",
+      "ticket": "Saturday Evening VIP",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "price_change",
+      "event_id": "166387",
+      "event": "Opendoor Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning VIP",
+      "base_price": {
+        "from": null,
+        "to": 400
+      },
+      "all_in_price": {
+        "from": 438.58,
+        "to": 438.58
+      }
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "availability_change",
+      "event_id": "166387",
+      "event": "Opendoor Pickleball World Championships Saturday Morning - Singles and Mxd Doubles Semifinals",
+      "ticket": "Saturday Morning VIP",
+      "sale_state": {
+        "from": "HIDE",
+        "to": "OPEN"
+      }
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday Courtside Chair",
+      "base_price": {
+        "from": 250,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 276.13,
+        "to": 276.13
+      }
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "availability_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday Courtside Chair",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "price_change",
+      "event_id": "166349",
+      "event": "Opendoor Pickleball World Championships Championships Sunday - Championships",
+      "ticket": "Sunday VIP",
+      "base_price": {
+        "from": null,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 438.58,
+        "to": 546.87
+      }
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Championships",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "GovX Discount",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Pickleball Vacations",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Quarterfinals",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Register Here",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Round of 16",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Round of 32",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Round of 64",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Semifinals",
+      "base_price": null,
+      "all_in_price": 0
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Tuesday Grounds Pass",
+      "base_price": 25,
+      "all_in_price": 30.35
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Wednesday Grounds Pass",
+      "base_price": 25,
+      "all_in_price": 30.35
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Weeklong Grounds Pass",
+      "base_price": 100,
+      "all_in_price": 113.44
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Thursday-Sunday Courtside Row A-D",
+      "base_price": 100,
+      "all_in_price": 113.44
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Thursday-Sunday Courtside Row E-H",
+      "base_price": 100,
+      "all_in_price": 113.44
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Thursday-Sunday Courtside Row I-L",
+      "base_price": 100,
+      "all_in_price": 113.44
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Thursday-Sunday VIP Row A-B",
+      "base_price": 100,
+      "all_in_price": 113.44
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Thursday-Sunday VIP Row C-E",
+      "base_price": 100,
+      "all_in_price": 113.44
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Thursday-Sunday VIP Row F-H",
+      "base_price": 100,
+      "all_in_price": 113.44
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_removed",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Courtside Tier 1"
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_removed",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Courtside Tier 2"
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_removed",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "Courtside Tier 3"
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_removed",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "VIP Tier 1"
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_removed",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "VIP Tier 2"
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_removed",
+      "event_id": "210307",
+      "event": "PPA Mesa",
+      "ticket": "VIP Tier 3"
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "event_added",
+      "event_id": "210339",
+      "event": "PPA Mesa Thursday - Round of 16"
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "event_added",
+      "event_id": "210337",
+      "event": "PPA Mesa Friday Evening - Quarterfinals"
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "event_added",
+      "event_id": "210338",
+      "event": "PPA Mesa Friday Morning - Quarterfinals"
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "event_added",
+      "event_id": "210334",
+      "event": "PPA Mesa Saturday Evening - Semifinals"
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "event_added",
+      "event_id": "210336",
+      "event": "PPA Mesa Saturday Morning - Semifinals"
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210311",
+      "event": "PPA Mesa Sunday - Championships",
+      "ticket": "Sunday Courtside Row A-D",
+      "base_price": 100,
+      "all_in_price": 113.44
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210311",
+      "event": "PPA Mesa Sunday - Championships",
+      "ticket": "Sunday Courtside Row E-H",
+      "base_price": 80,
+      "all_in_price": 91.83
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210311",
+      "event": "PPA Mesa Sunday - Championships",
+      "ticket": "Sunday Courtside Row I-L",
+      "base_price": 50,
+      "all_in_price": 57.36
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210311",
+      "event": "PPA Mesa Sunday - Championships",
+      "ticket": "Sunday VIP Row A-B",
+      "base_price": null,
+      "all_in_price": 437.59
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210311",
+      "event": "PPA Mesa Sunday - Championships",
+      "ticket": "Sunday VIP Row C-E",
+      "base_price": 350,
+      "all_in_price": 383.56
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_added",
+      "event_id": "210311",
+      "event": "PPA Mesa Sunday - Championships",
+      "ticket": "Sunday VIP Row F-H",
+      "base_price": null,
+      "all_in_price": 329.54
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_removed",
+      "event_id": "210311",
+      "event": "PPA Mesa Sunday - Championships",
+      "ticket": "Championships"
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_removed",
+      "event_id": "210311",
+      "event": "PPA Mesa Sunday - Championships",
+      "ticket": "Sunday Courtside"
+    },
+    {
+      "at": "2026-10-08T19:04:05Z",
+      "type": "ticket_removed",
+      "event_id": "210311",
+      "event": "PPA Mesa Sunday - Championships",
+      "ticket": "Sunday VIP"
     }
   ]
 }
