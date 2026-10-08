@@ -235,7 +235,7 @@ export function TripPage({ content, cfg, availability }: TripPageProps) {
                   {[
                     ["Where", trip.location],
                     ["When", trip.datesLabel],
-                    ["Nights", `${trip.nights} nights, all-inclusive`],
+                    ["Nights", `${trip.nights} nights, ${trip.nightsNote ?? "all-inclusive"}`],
                     ["Fly into", `${trip.airportName} (${trip.airportCode})`],
                     ...(trip.who ? [["Who", trip.who]] : []),
                   ].map(([k, v]) => (

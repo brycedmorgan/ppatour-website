@@ -67,6 +67,13 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-08 (pt. 2) — Black Desert vacation on sale
+- New trip `/vacations/trips/black-desert/`: Greater Zion Cup VIP weekend + 2 days of clinics with Dave Fleming, Mar 26–31 2027, Black Desert Resort. Lainey's listing doc + Drive photos (Drive folder "BLACK DESERT: MARCH").
+- New pricing shape: ONE King room at $6,500 for 1 or 2 guests, 15 rooms in any mix. `TripConfig.roomPool` makes both occupancies draw from one block (single+double from Jackalope); `bedOptions: ["King"]` hides the bed picker; `domestic` swaps passport wording for government ID.
+- `trip.nightsNote` replaces the hard-coded "all-inclusive" in the trip card (Black Desert isn't).
+- Jackalope `vac_trips` row `black-desert-2027` (destination "Black Desert Resort", pooled) + spine code `0327-VAC-IVINS-USA`.
+- Open: "more pros to come"; spa details TBD in Lainey's doc; no Sage class yet.
+
 ### 2026-10-08 — Paddle Lab → pickleball.com: Jason gets the files; PBC photos mirrored
 - Jason Santerre is rebuilding Paddle Lab at pickleball.com/paddles from our JSON (his call: files, not an API). GitHub `JsonTerre` invited (write — personal repos can't do read-only).
 - All 497 PBC paddle photos now live in `public/ppa/paddles/pbc/` (34 MB) via new `scripts/mirror-pbc-images.mjs`; catalogue `image` = local path, `sourceImage` = old BigCommerce URL. Reason: BigCommerce CDN dies at the Shopify cutover on 18 Jan 2027. `lab:pbc:crawl` = crawl → mirror → match.

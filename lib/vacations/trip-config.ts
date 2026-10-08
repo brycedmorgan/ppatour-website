@@ -15,6 +15,7 @@
  * card — that stays in typed, reviewed config, and a change is a deploy.
  */
 import { PRICING, type Occupancy } from "./pricing";
+import type { BedType } from "./registration";
 import { trip as turkoiseTrip, capacity as turkoiseCapacity, soldOut as turkoiseSoldOut } from "./content";
 
 export type TripPricingOption = {
@@ -52,6 +53,18 @@ export type TripConfig = {
   /** Used only when Jackalope's plan endpoint can't be reached. */
   fallbackCapacity: Record<Occupancy, number>;
   waitlist: TripWaitlist;
+  /**
+   * One shared room block instead of separate single + double blocks: the
+   * contracted total is single + double from Jackalope, and every booking of
+   * either occupancy draws from it. Black Desert sells 15 King rooms at one
+   * price for 1 or 2 guests, so "10 singles + 5 doubles" would be a block that
+   * doesn't exist.
+   */
+  roomPool?: boolean;
+  /** Bed choices on a double. Omit for King or Twin; one entry = no picker. */
+  bedOptions?: BedType[];
+  /** Domestic trips ask for names as on a government ID, not a passport. */
+  domestic?: boolean;
 };
 
 /**
@@ -178,10 +191,65 @@ const CANCUN: TripConfig = {
   },
 };
 
+const BLACK_DESERT_CONTACT = "vacations@pickleball.com";
+
+/**
+ * Black Desert — March 26–31, 2027, Ivins/St. George, Utah, around the Greater
+ * Zion Cup. Led by Dave Fleming. First non-Club Med trip and first domestic
+ * one: not all-inclusive, no passports. One room type — a King room at $6,500
+ * for 1 or 2 guests, 15 rooms total in any mix (Lainey's listing doc, 10/8),
+ * so both occupancies draw from one pool. Pay in full.
+ */
+const BLACK_DESERT: TripConfig = {
+  slug: "black-desert",
+  href: "/vacations/trips/black-desert/",
+  destination: "Black Desert Resort",
+  location: "St. George, Utah",
+  datesLabel: "March 26–31, 2027",
+  nights: 5,
+  contactEmail: BLACK_DESERT_CONTACT,
+  pricing: {
+    single: {
+      id: "single",
+      label: "Single Occupancy",
+      total: 6500,
+      amountCents: 650000,
+      travelers: 1,
+      blurb: "A King room to yourself.",
+    },
+    double: {
+      id: "double",
+      label: "Double Occupancy",
+      total: 6500,
+      amountCents: 650000,
+      travelers: 2,
+      perPersonNote: "$3,250 per person",
+      blurb: "Share a King room — same price, two guests.",
+    },
+  },
+  fallbackCapacity: { single: 15, double: 0 },
+  roomPool: true,
+  bedOptions: ["King"],
+  domestic: true,
+  waitlist: {
+    badge: "Sold Out",
+    headline: "This trip is officially sold out",
+    message:
+      "Thank you for the incredible response — every room at Black Desert Resort is booked. Join the waiting list and be the first to hear when our next vacation is announced.",
+    cta: "Join the Waiting List",
+    mailto: `mailto:${BLACK_DESERT_CONTACT}?subject=${encodeURIComponent(
+      "Waiting List — Next Pickleball Vacation"
+    )}&body=${encodeURIComponent(
+      "Please add me to the waiting list for the next Pickleball Vacations trip.\n\nName:\nPhone:\n"
+    )}`,
+  },
+};
+
 export const TRIPS: Record<string, TripConfig> = {
   [TURKOISE.slug]: TURKOISE,
   [PUNTA_CANA.slug]: PUNTA_CANA,
   [CANCUN.slug]: CANCUN,
+  [BLACK_DESERT.slug]: BLACK_DESERT,
 };
 
 /** The trip the booking path assumes when no `?trip=` is given — stays Turks. */
@@ -206,5 +274,6 @@ export function tripByDestination(destination: string): TripConfig | undefined {
 export function tripDestinationForPath(path: string): string {
   if (path.includes("/vacations/trips/punta-cana")) return PUNTA_CANA.destination;
   if (path.includes("/vacations/trips/cancun")) return CANCUN.destination;
+  if (path.includes("/vacations/trips/black-desert")) return BLACK_DESERT.destination;
   return DEFAULT_TRIP.destination;
 }

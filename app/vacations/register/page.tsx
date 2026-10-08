@@ -110,6 +110,8 @@ export default async function VacationsRegisterPage({
                 datesLabel={cfg.datesLabel}
                 nights={cfg.nights}
                 pricing={cfg.pricing}
+                bedOptions={cfg.bedOptions}
+                domestic={cfg.domestic}
               />
             </Suspense>
           )}

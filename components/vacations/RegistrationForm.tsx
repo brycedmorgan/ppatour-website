@@ -51,6 +51,8 @@ export function RegistrationForm({
   datesLabel = DEFAULT_TRIP.datesLabel,
   nights = DEFAULT_TRIP.nights,
   pricing = DEFAULT_TRIP.pricing,
+  bedOptions = BED_OPTIONS,
+  domestic = false,
 }: {
   soldOutOptions?: Occupancy[];
   tripSlug?: string;
@@ -58,6 +60,8 @@ export function RegistrationForm({
   datesLabel?: string;
   nights?: number;
   pricing?: Record<Occupancy, TripPricingOption>;
+  bedOptions?: BedType[];
+  domestic?: boolean;
 }) {
   const isGone = (id: Occupancy) =>
     !!pricing[id].soldOut || soldOutOptions.includes(id);
@@ -73,7 +77,12 @@ export function RegistrationForm({
   const canceled = params.get("canceled") === "1";
 
   const [occupancy, setOccupancy] = useState<Occupancy>(initialOcc);
-  const [bedType, setBedType] = useState<BedType | "">("");
+  // One bed option (Black Desert: King only) means nothing to choose.
+  const [bedType, setBedType] = useState<BedType | "">(
+    bedOptions.length === 1 ? bedOptions[0] : ""
+  );
+  const idDoc = domestic ? "government-issued ID" : "passport";
+  const nameLabel = domestic ? "Legal" : "Passport legal";
   const [travelers, setTravelers] = useState<Traveler[]>([
     emptyTraveler(),
     emptyTraveler(),
@@ -251,11 +260,11 @@ export function RegistrationForm({
             })}
           </div>
 
-          {occupancy === "double" && (
+          {occupancy === "double" && bedOptions.length > 1 && (
             <div className="mt-5">
               <span className={labelCls}>Bed preference</span>
               <div className="flex gap-3">
-                {BED_OPTIONS.map((b) => (
+                {bedOptions.map((b) => (
                   <button
                     type="button"
                     key={b}
@@ -280,7 +289,7 @@ export function RegistrationForm({
             2 · Traveler details
           </legend>
           <p className="mt-2 text-sm text-ppa-navy/60">
-            Enter names exactly as they appear on each traveler&apos;s passport.
+            Enter names exactly as they appear on each traveler&apos;s {idDoc}.
           </p>
 
           <div className="mt-6 space-y-8">
@@ -290,7 +299,7 @@ export function RegistrationForm({
                   {count > 1 ? `Traveler ${i + 1}` : "Your details"}
                 </p>
                 <div className="grid gap-5 sm:grid-cols-2">
-                  <Field label="Passport legal first name">
+                  <Field label={`${nameLabel} first name`}>
                     <input
                       className={inputCls}
                       value={travelers[i].firstName}
@@ -300,7 +309,7 @@ export function RegistrationForm({
                       autoComplete="off"
                     />
                   </Field>
-                  <Field label="Passport legal last name">
+                  <Field label={`${nameLabel} last name`}>
                     <input
                       className={inputCls}
                       value={travelers[i].lastName}

@@ -18,6 +18,7 @@ stop working if someone changes it without reading.
 | `/vacations/register/` | Traveler form → Stripe Checkout | `force-dynamic`, noindex |
 | `/vacations/success/` | Post-payment confirmation | `force-dynamic`, noindex |
 | `/vacations/trips/cancun/` | Cancún, Jan 26–30 2027 — ON SALE (same template as `/vacations`) | Static, ISR |
+| `/vacations/trips/black-desert/` | Black Desert, Mar 26–31 2027 — ON SALE 10/8. Pooled block (see below) | Static, ISR |
 | `/vacations/trips/punta-cana/` | Sept 2026 guest archive | Static, noindex |
 | `/api/vacations/checkout` | Creates the Stripe Checkout Session | Node runtime |
 | `/api/vacations/availability` | Rooms left (count-only, public) | Node runtime |
@@ -259,6 +260,16 @@ page underlined. Bryce: "I have to scroll all the way to the bottom to find
 anything on Punta Cana." Same `trips.ts` source. `top-16` matches the 64px
 Header the sticky chrome collapses to on scroll — if `Header.tsx` changes
 height, change that. Hidden on `/register` and `/success` (checkout funnel).
+
+## Pooled room blocks (Black Desert, 10/8)
+
+Black Desert sells ONE room type: a King room, $6,500, 1 or 2 guests, 15 rooms
+in any mix. `roomPool: true` on its TripConfig makes `capacity.ts` treat
+single + double contracted rooms from Jackalope as one block, and every sale of
+either occupancy draws it down. Jackalope's row is `pooled = true` with
+`rooms_single = 15, rooms_double = 0`; Lainey edits the block in "Single rooms".
+Labels stay "Single Occupancy" / "Double Occupancy" because the room count maps
+Stripe metadata back by those exact labels — renaming them un-counts sales.
 
 ## Things that will bite you
 

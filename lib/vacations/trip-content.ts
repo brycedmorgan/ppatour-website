@@ -36,11 +36,14 @@ export type TripContent = {
     /** Day 1 of the itinerary. Each itinerary day's date is derived from this. */
     startIso: string;
     nights: number;
+    /** After "N nights," in the trip card. Defaults to "all-inclusive". */
+    nightsNote?: string;
     airportCode: string;
     airportName: string;
     /** "Who" row in the trip card, e.g. "Adults only · 18+". Omit to hide. */
     who?: string;
     contactEmail: string;
+    /** "See the resort" link. Named for Club Med; any resort site works. */
     clubMedUrl: string;
     tagline: string;
     intro: string;

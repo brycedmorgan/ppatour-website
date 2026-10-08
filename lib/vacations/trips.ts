@@ -67,6 +67,19 @@ export const tripsCalendar: TripEntry[] = [
     status: "open",
     href: "/vacations/trips/cancun",
   },
+  {
+    slug: "black-desert",
+    name: "Black Desert",
+    resort: "Black Desert Resort",
+    location: "St. George, Utah",
+    datesLabel: "March 26–31, 2027",
+    startIso: "2027-03-26",
+    endIso: "2027-03-31",
+    image: "/vacations/black-desert/excursions/golf.jpg",
+    lineup: "Greater Zion Cup VIP weekend · led by Dave Fleming",
+    status: "open",
+    href: "/vacations/trips/black-desert",
+  },
 ];
 
 export function tripStatus(t: TripEntry, now = new Date()): TripStatus {
