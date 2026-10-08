@@ -11,6 +11,7 @@ import { Analytics } from "@/components/global/Analytics";
 import { OutboundClickTracker } from "@/components/global/OutboundClickTracker";
 import { MetaPixel } from "@/components/global/MetaPixel";
 import { MarketingTags } from "@/components/global/MarketingTags";
+import { CustomerioTracker } from "@/components/global/CustomerioTracker";
 import { AccessibilityWidget } from "@/components/global/AccessibilityWidget";
 import { AppChrome } from "@/components/app/AppChrome";
 import { JackalopeAnalytics } from "@/components/global/JackalopeAnalytics";
@@ -209,6 +210,11 @@ export default function RootLayout({
         <Analytics />
         <MetaPixel />
         <MarketingTags />
+        {/* Site ID is public (ships in every Customer.io snippet); same
+            Pickleball Inc. workspace lib/customerio.ts writes to. */}
+        <CustomerioTracker
+          siteId={process.env.NEXT_PUBLIC_CUSTOMERIO_SITE_ID ?? process.env.CUSTOMERIO_SITE_ID}
+        />
         <OutboundClickTracker />
         {/**
          * Vercel Web Analytics + Speed Insights.
