@@ -28,6 +28,13 @@ export async function POST(req: NextRequest) {
   // resolve to its own destination, price and dates.
   const cfg = getTripConfig(payload.trip);
   const option = cfg.pricing[payload.occupancy];
+  // King-only trips (Black Desert) can't be booked as Twin by a crafted POST.
+  if (payload.bedType && cfg.bedOptions && !cfg.bedOptions.includes(payload.bedType)) {
+    return NextResponse.json(
+      { error: `${cfg.destination} rooms are ${cfg.bedOptions.join(" or ")} only.` },
+      { status: 400 }
+    );
+  }
   const origin = req.headers.get("origin") ?? req.nextUrl.origin;
 
   // Hard stop at the contracted room block AND Lainey's on-sale switch. The

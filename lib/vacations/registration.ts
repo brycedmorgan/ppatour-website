@@ -56,8 +56,8 @@ const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 export function travelerErrors(t: Traveler, index: number): string[] {
   const who = `Traveler ${index + 1}`;
   const errs: string[] = [];
-  if (!t.firstName.trim()) errs.push(`${who}: passport first name is required`);
-  if (!t.lastName.trim()) errs.push(`${who}: passport last name is required`);
+  if (!t.firstName.trim()) errs.push(`${who}: legal first name is required`);
+  if (!t.lastName.trim()) errs.push(`${who}: legal last name is required`);
   if (!t.dob.trim()) errs.push(`${who}: date of birth is required`);
   if (!t.gender.trim()) errs.push(`${who}: gender is required`);
   if (!isEmail(t.email)) errs.push(`${who}: a valid email is required`);

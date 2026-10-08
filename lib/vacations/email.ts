@@ -85,7 +85,7 @@ function internalHtml(b: ParsedBooking): string {
       <thead>
         <tr style="background:#12294c;color:#fff;">
           <th style="padding:6px 10px;border:1px solid #e2e8f0;">#</th>
-          <th style="padding:6px 10px;border:1px solid #e2e8f0;">Passport name</th>
+          <th style="padding:6px 10px;border:1px solid #e2e8f0;">Legal name</th>
           <th style="padding:6px 10px;border:1px solid #e2e8f0;">Preferred</th>
           <th style="padding:6px 10px;border:1px solid #e2e8f0;">DOB</th>
           <th style="padding:6px 10px;border:1px solid #e2e8f0;">Gender</th>
