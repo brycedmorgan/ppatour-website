@@ -67,6 +67,12 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-08 — Paddle Lab → pickleball.com: Jason gets the files; PBC photos mirrored
+- Jason Santerre is rebuilding Paddle Lab at pickleball.com/paddles from our JSON (his call: files, not an API). GitHub `JsonTerre` invited (write — personal repos can't do read-only).
+- All 497 PBC paddle photos now live in `public/ppa/paddles/pbc/` (34 MB) via new `scripts/mirror-pbc-images.mjs`; catalogue `image` = local path, `sourceImage` = old BigCommerce URL. Reason: BigCommerce CDN dies at the Shopify cutover on 18 Jan 2027. `lab:pbc:crawl` = crawl → mirror → match.
+- Bryce 10/8: Kew is fine with the data on pickleball.com; JOOLA's objection is a PPA-sponsorship issue only, not a blocker for pickleball.com.
+- Open: Hannah's team owes 8 rows + 2 questions (reminded 10/8); editorial JSON still empty; repo is PUBLIC.
+
 ### 2026-10-08 — Europe contact: photographer Typeform + Contact Us heading (Katherina)
 - Katherina, 10:54 AM: third Typeform "Photographer Interest — Apply for PPA Tour Europe" (ppatour.typeform.com/WFHeurope) added to `EUROPE_FORM_LINKS` → shows on /europe#contact and /europe/eventlinks.
 - /europe#contact: the three form links are now separate stacked cards (3-up was too cramped in max-w-3xl) instead of one joined strip; "Get Involved / Media and Referees" kept as the head over all three; new "Contact Us" head over the embedded InquiryForm.

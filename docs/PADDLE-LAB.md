@@ -185,6 +185,13 @@ reads each paddle product page's `og:image` + JSON-LD offer, and writes
 lab paddles to catalogue products and writes `lib/data/paddle-pbc.json`
 (slug → url, title, image, price, availability, sku).
 
+**Photos are mirrored locally (10/8).** `scripts/mirror-pbc-images.mjs` downloads
+every catalogue photo to `public/ppa/paddles/pbc/<pbc-slug>.jpg` (497 files, 34 MB)
+and rewrites `image` to that path, keeping the BigCommerce URL in `sourceImage`.
+PBC moves to Shopify on 18 Jan 2027 and the BigCommerce CDN dies with it. Jason's
+team (pickleball.com/paddles) builds from these same files. `lab:pbc:crawl` runs
+crawl → mirror → match.
+
 ```
 npm run lab:pbc          # re-match from the committed catalogue
 npm run lab:pbc:crawl    # re-crawl PBC (~800 pages, a few minutes), then match
