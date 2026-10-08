@@ -137,7 +137,7 @@ export const blackDesert: TripContent = {
   highlights: [
     { stat: "5", label: "Nights at Black Desert" },
     { stat: "2", label: "Days in a VIP box suite" },
-    { stat: "14", label: "Hours on court" },
+    { stat: "8+", label: "Hours on court" },
     { stat: "7", label: "On-site restaurants" },
   ],
   about: {
