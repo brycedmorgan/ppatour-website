@@ -125,3 +125,48 @@ password hashes and cron tokens verbatim. Never commit it.)
 - 6 public buckets. Object bytes are NOT in the export; copy by hand.
 - Chris's HAND-CARRY-CHECKLIST.md in the export is the secrets list and the
   cutover order. It is good. Use it as the runbook skeleton.
+
+## Status check + new plan (2026-10-08)
+
+Nothing moved between 9/3 and 10/8. pblfg.com still on Lovable hosting
+(185.158.133.1); app still on Lovable Cloud (`grwhdhnlafqrcmiuqhhi`). Chris made
+~3,780 commits in Lovable since 9/3. Lovable spend per Jason: Aug $6,203, Sep
+$5,100 by 9/23 (build credits only). "Out of funds" mails 9/22, 9/27, 9/28.
+Jason's "hosting on AWS since June" (9/23) does not match the live DNS.
+
+Decision (Bryce, 10/8): full move, switch week **Nov 9–15**.
+
+New findings from the 10/8 code read:
+- Email also runs on Lovable: `notify.pblfg.com` NS is delegated to
+  ns3/ns4.lovable.cloud; `process-email-queue` uses `@lovable.dev/email-js`,
+  suppression webhooks use `@lovable.dev/webhooks-js`. Replace with Resend
+  (Jackalope already uses it) and re-point `notify.pblfg.com` at switch.
+- pblfg.com DNS is GoDaddy (ns29/30.domaincontrol.com). Owner of the GoDaddy
+  account unknown; asked Chris 10/8.
+- Native builds bake in the backend URL/key. Plan: the Oct store build reads
+  the backend from a remote JSON config (next launch only, falls back to the
+  bundled value), so the switch needs no second store release.
+- "Emergency web override" (app_settings `emergency_web_override`) can redirect
+  the native app to `pbpulse.lovable.app`. Retarget to the Vercel host.
+- APNs functions fall back to a Lovable bundle id if APNS_BUNDLE_ID is unset.
+- Lovable AI gateway used by `parse-bracket-pdf` and `generate-event-guide`
+  → Anthropic API.
+- GitHub org for the transfer: **Pickleball-Inc-Crew** (Bryce is admin).
+
+Prep in flight (10/8, local branches in `~/pickleball/pbpulse`, NOT pushed;
+the repo is still Chris's personal one):
+- `off-lovable`: runtime backend switch, Lovable code removed, AI → Anthropic,
+  email → Resend. Notes in that branch's `docs/OFF-LOVABLE.md`.
+- `migration-scripts`: preflight, schema, data dump/restore, auth import,
+  storage copy, cron rewrite, verify, cutover runbook in
+  `scripts/migration/README.md`.
+
+Bryce's order of steps:
+1. Send Chris the 10/8 draft (Gmail, cc Jason). Invite `chriscantino` to Pickleball-Inc-Crew.
+2. Create the company Supabase org + project (company card, same region as old).
+3. Guardrails for Chris's work with Taylor (scope, monthly cap, approver).
+4. Get Owner on the Lovable workspace; swap the card.
+5. Secrets from Chris via 1Password → straight into Supabase.
+6. Approve + submit the store build by **Oct 31**.
+7. Switch week Nov 9–15 (≈2 h freeze, on call). DNS for pblfg.com + notify.pblfg.com.
+8. Cancel Lovable ~Dec 15; only then bank savings row 16.
