@@ -125,6 +125,55 @@ export type NewsArticle = {
  */
 export const newsArticles: NewsArticle[] = [
   /**
+   * ⚠ HUMAN-AUTHORED PRESS RELEASE — the official MUNICIPAL Celebrity Pickleball
+   * Showdown / Mark Wahlberg announcement (comms doc dated "DALLAS, Oct. 6,
+   * 2026"), supplied by Tyler on 10/8 to post. Same exception path as the Jeff
+   * Watson rankings release: official comms copy with real attributed quotes,
+   * not AI-written coverage — ships `status: "published"`; Dylan can flip it to
+   * "draft" in one line. Hero is the event's own Showdown lockup (a designed
+   * graphic → `heroGraphic`). The ticket CTA points at the Showdown's OWN Tixr
+   * listing (210184), not the next tour stop. Press-wire footer (hi-res image
+   * link, YouTube-tag rule, Corient legal disclaimers) intentionally dropped
+   * for the web article; inline links are not supported in native body, so the
+   * ticket link lives on the CTA button.
+   */
+  {
+    slug: "municipal-celebrity-pickleball-showdown-wahlberg",
+    status: "published",
+    category: "Tour News",
+    title: "Mark Wahlberg to Headline MUNICIPAL Celebrity Pickleball Showdown",
+    subtitle:
+      "Powerball Championship Court · Brookhaven Country Club · Thursday, Nov. 5, 7 p.m. CT · Live on Tennis Channel",
+    date: "Oct 6",
+    image: "/ppa/news/municipal-celebrity-showdown-wahlberg.png",
+    heroGraphic: true,
+    eventSlug: "pickleball-world-championships",
+    ctaUrl:
+      "https://www.tixr.com/groups/ppa/events/municipal-celebrity-pickleball-showdown-210184",
+    ctaLabel: "Get Celebrity Showdown Tickets",
+    dek: "Actor and entrepreneur Mark Wahlberg leads a star-studded celebrity lineup for the MUNICIPAL Celebrity Pickleball Showdown at the 2026 Opendoor Pickleball World Championships — Nov. 5 on Championship Court at Brookhaven Country Club, live on Tennis Channel.",
+    whyItMatters:
+      "A marquee celebrity exhibition headlined by a global movie star and MUNICIPAL co-founder brings mainstream star power to Worlds week on Championship Court, broadcast live on Tennis Channel.",
+    body: [
+      "The MUNICIPAL Celebrity Pickleball Showdown returns to the 2026 Opendoor Pickleball World Championships, with actor and entrepreneur Mark Wahlberg leading a star-studded lineup of celebrities and sports personalities set to take the court alongside the Carvana PPA Tour's top pickleball pros. The marquee event will take place on Powerball Championship Court at Brookhaven Country Club on Thursday, November 5, at 7 p.m. CT and will be broadcast live on Tennis Channel.",
+      "Known for blockbuster films such as The Fighter, Boogie Nights and The Departed, hit television projects like Entourage and Boardwalk Empire, and a growing business empire where he holds a stake in prominent companies including Flecha Azul Tequila and title sponsor MUNICIPAL, Wahlberg will take the court in what promises to be one of the most entertaining nights of the week-long Opendoor Pickleball World Championships.",
+      "“The pickleball community aligns with the founding principles of MUNICIPAL: dream, plan, hustle, repeat. And with the support of people who strive to be the best versions of themselves, on and off the court,” said Wahlberg.",
+      "“As the title sponsor for the Celebrity Pickleball Showdown, we're excited to introduce the MUNICIPAL brand to America's fastest-growing sport,” said Michael Pratt, MUNICIPAL CEO. “Our brand is built on core values of being your best, putting in the work, betting on yourself, and building community — all of which the PPA and its athletes embody. We look forward to joining the pickleball community at the Opendoor Pickleball World Championships.”",
+      "The MUNICIPAL Celebrity Pickleball Showdown will bring together celebrities, professional athletes and some of the biggest names in pickleball for a one-night exhibition in front of a packed crowd on Powerball Championship Court. Additional participants will be announced in the coming weeks, and fans should expect plenty of competition, big personalities, and memorable moments under the lights.",
+      "The MUNICIPAL Celebrity Pickleball Showdown is supported by Corient, a key partner for the event.",
+      "The Opendoor Pickleball World Championships has become a staple event on the sports calendar, with last year's edition shattering numerous records and becoming the benchmark for fan attendance and amateur participation. The 2025 event saw over 60,000 fans attend and a record 4,400 total participants, including players representing 38 countries competing in more than 6,000 matches throughout the week.",
+      "Tickets for the MUNICIPAL Celebrity Pickleball Showdown are available now via Tixr. Tickets for the Opendoor Pickleball World Championships at large, along with week-long passes, pickleball clinics and other special programming, are also available now.",
+      "## About Carvana PPA Tour",
+      "The Carvana PPA Tour engages and amplifies fans, partners and pickleball communities worldwide by encouraging everyone to BE THE BEST.",
+      "Founded in 2019, the Carvana PPA Tour is the only place to see pickleball's biggest names compete for the sport's most important championships and titles. The Carvana PPA Tour cements professional pickleball in the global sports ecosystem by attracting numerous multi-national partners, while consistently elevating the profile of pickleball globally via the sport's largest international footprint. With a steadfast commitment to the greatest community in sports, Carvana PPA Tour amateur divisions attract thousands of players competing alongside the elite professional athletes at each tour stop.",
+      "## About MUNICIPAL",
+      "MUNICIPAL is a premium performance apparel and footwear brand co-founded by Mark Wahlberg. Since 2019, MUNICIPAL has built a culture around ambitious people who believe that being at their best — mentally and physically — is the most powerful path to achieving their wildest dreams. The brand brings that complete performance mindset to life through uncompromising apparel and footwear, inspiring storytelling, memorable in-person experiences, and a community built around putting in the work and betting on yourself.",
+      "## About Corient",
+      "Corient is the world's largest multi-family office and non-bank wealth manager focused on serving ultra-high- and high-net-worth clients. As the industry's only global professional services partnership, it combines the personal service and objectivity of a boutique with the scale and resources of a global institution. Corient delivers comprehensive solutions across investment management, wealth strategy and family office services to help clients simplify their lives, manage their wealth and establish lasting legacies. For more information, visit corient.com.",
+      "Media Contact: Nathan Boschult, Carvana PPA Tour.",
+    ],
+  },
+  /**
    * ⚠ HUMAN-AUTHORED EDITORIAL — Dave Fleming's preview of the Chicago Cup,
    * supplied by Wesley on 10/5 ("VEOLIA CHICAGO CUP STORYLINES (OCT 5 - OCT 11,
    * 2026)"). Same exception path and transcription rules as the Las Vegas
