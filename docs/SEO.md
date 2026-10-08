@@ -133,7 +133,8 @@ not yet crawled": newer international athletes like arwid-dahlin, bartosz-karbow
   firewall (`x-vercel-mitigated: deny`). Handbook PDFs → /about/player-handbook/
   live 10/7 via a Firewall bypass rule for those two paths only; other /wp-content/ stays 403.
 - 139 "Google chose different canonical" (email 10/7): all last crawled Aug 4–6, 9/10 on the apex host;
-  launch-week leftovers, falling. Clears with the apex flip; then Validate fix.
+  launch-week leftovers, falling. **Apex flip done 10/8** (Vercel domain redirect off; next.config
+  APEX_LEGACY_REDIRECTS now serve apex → www in one hop, verified live); GSC Validate fix started 10/8.
 
 **New issues found 10/7, ranked:**
 1. Unknown athlete slugs 307 → /athletes/ (soft 404). Return 404, or 301 when an alias matches.

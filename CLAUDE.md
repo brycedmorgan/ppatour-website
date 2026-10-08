@@ -83,6 +83,14 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - Sent: URL + user `ppa` by email (Hannah cc'd), password by Slack DM. Told him it's static JSON (paddles.json, paddle-pbc.json, editorial), not an API — we can expose one or hand over files.
 - Next: Jason's review → pick API vs files. Before public: Kew terms, UPA-A RPM conflict, JOOLA position; Hannah owes 8 rows + 2 questions from 10/6.
 
+### 2026-10-08 — Apex flip live; GSC canonical validation started
+- Bryce switched ppatour.com in Vercel Domains from "Redirect to www" to Production; next.config APEX_LEGACY_REDIRECTS now handle apex → www. Verified live: every apex path is ONE 308 (ppatour.com/athlete/ben-johns/ → www/athletes/ben-johns/).
+- Fixed first (a4cca7b): the apex `/:path*` catch-all dropped the trailing slash (2 hops); now root, files and paths each keep their shape.
+- GSC "Duplicate, Google chose different canonical" (139): Validate fix started 10/8.
+- Handbook PDFs → /about/player-handbook/ live (Bryce added the Firewall bypass 10/7).
+- MLP team-page contact leak emailed to Caitlin + Wesley 10/7; re-check view-source when they reply.
+- Open: PBC MPN trim + blog descriptions — Bryce said go; blocked by the auto-mode classifier, needs a non-auto session.
+
 ### 2026-10-07 (pt. 3) — 404 redirects from the GSC report
 - `/players/<slug>/` and root `/<athlete-slug>/` → `/athletes/<slug>/`; `/meet-the-team/` → /about/ (repoint to /team at launch); `/blog-category/*` → /blog/; `/<post>/feed/` → the post. Tested on a local build.
 - Root athlete slugs live in app/[slug]/page.tsx (only after no article matches), not next.config — a pattern there would shadow posts.
