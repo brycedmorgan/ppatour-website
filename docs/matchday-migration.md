@@ -170,3 +170,21 @@ Bryce's order of steps:
 6. Approve + submit the store build by **Oct 31**.
 7. Switch week Nov 9–15 (≈2 h freeze, on call). DNS for pblfg.com + notify.pblfg.com.
 8. Cancel Lovable ~Dec 15; only then bank savings row 16.
+
+### Prep results (2026-10-08, evening)
+
+- `off-lovable` (worktree `~/pickleball/pbpulse-offlovable`, 8 commits): typecheck +
+  build pass; deno check clean on changed functions. Details in its `docs/OFF-LOVABLE.md`.
+  Still open: verify `notify.pblfg.com` in Resend + swap its GoDaddy records;
+  point new project's Auth SMTP at Resend; 5 fonts load from old storage;
+  backend config file host (proposed `app.pblfg.com/backend.json`); delete `bun.lockb`.
+- `migration-scripts` (worktree `~/pickleball/pbpulse-migration`): schema replay,
+  data dump/restore, auth import (3,449 users, hashes kept), URL rewrite, cron
+  (45 jobs) and verify all tested on local Postgres 16. Storage copy untested.
+- Old project region: **eu-west-1 (Ireland)**. Users are US. Recommend new project
+  in US East unless Bryce says match.
+- Prod has columns/functions no migration creates; `15-schema-diff` patches them.
+- `notification_history` is the push de-dup log for 16 functions. Copy last 30 days.
+- Needs Chris (only he can run SQL/deploys on Lovable Cloud): deploy
+  `migration-dump` to the old project, and run `old-disable.sql` at switch time.
+- Supabase CLI not installed locally yet.
