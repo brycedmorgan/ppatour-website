@@ -130,9 +130,8 @@ not yet crawled": newer international athletes like arwid-dahlin, bartosz-karbow
   `/blog-category/*`, `/<post>/feed/`, junk (`/At`, `/default.htm`). **First four 308 since 10/7** (next.config.ts +
   root athlete slugs in app/[slug]/page.tsx); `/meet-the-team/` → /about/ until /team ships. Junk stays 404.
 - 47 × 403: old `/wp-content/uploads/*.pdf` (draws, Player/Tournament Handbooks), denied by the Vercel
-  firewall (`x-vercel-mitigated: deny`). Handbook rules → /about/player-handbook/
-  added 10/7 but INERT: the deny comes from a Vercel-managed rule (project has no custom firewall config),
-  so it needs an allow rule for those two paths in the dashboard first.
+  firewall (`x-vercel-mitigated: deny`). Handbook PDFs → /about/player-handbook/
+  live 10/7 via a Firewall bypass rule for those two paths only; other /wp-content/ stays 403.
 - 139 "Google chose different canonical" (email 10/7): all last crawled Aug 4–6, 9/10 on the apex host;
   launch-week leftovers, falling. Clears with the apex flip; then Validate fix.
 

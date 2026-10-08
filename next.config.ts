@@ -283,10 +283,11 @@ const LEGACY_REDIRECTS = [
   { source: "/:slug/feed", destination: "/:slug/" },
   { source: "/ppa-blog/:slug/feed", destination: "/ppa-blog/:slug/" },
   /**
-   * The old handbook PDFs (GSC "Blocked (403)", 10/7). ⚠ CURRENTLY INERT:
-   * Vercel denies all of /wp-content/ at the edge (`x-vercel-mitigated: deny`)
-   * before this config runs, and the project has no custom firewall config, so
-   * these only fire once that path is allowed through.
+   * The old handbook PDFs (GSC "Blocked (403)", 10/7). Vercel's system
+   * mitigations deny all of /wp-content/ at the edge (`x-vercel-mitigated:
+   * deny`) before this config runs; a Firewall bypass rule for exactly these
+   * two paths (added by Bryce, 10/7) lets them reach it. Rename either path
+   * here and the firewall rule must change with it.
    */
   { source: "/wp-content/uploads/2025/05/PPA-Tour-Player-Handbook.pdf", destination: "/about/player-handbook/" },
   { source: "/wp-content/uploads/2026/01/PPA-Tournament-Handbook.pdf", destination: "/about/player-handbook/" },

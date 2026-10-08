@@ -75,7 +75,7 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 ### 2026-10-07 (pt. 3) — 404 redirects from the GSC report
 - `/players/<slug>/` and root `/<athlete-slug>/` → `/athletes/<slug>/`; `/meet-the-team/` → /about/ (repoint to /team at launch); `/blog-category/*` → /blog/; `/<post>/feed/` → the post. Tested on a local build.
 - Root athlete slugs live in app/[slug]/page.tsx (only after no article matches), not next.config — a pattern there would shadow posts.
-- Handbook PDF rules → /about/player-handbook/ are inert: Vercel denies /wp-content/ at the edge; needs a dashboard allow rule.
+- Handbook PDFs → /about/player-handbook/ live: Bryce added a Firewall bypass for just those two paths (Vercel system mitigations deny /wp-content/). Other /wp-content/ still 403.
 - Local `npm run build` refuses without PB_API_TOKEN (stale snapshot); `npx next build` skips prebuild for testing.
 
 ### 2026-10-07 (pt. 2) — Ticket questions: email only, no ticketing Slack channel (Parker)
