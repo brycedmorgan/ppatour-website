@@ -379,8 +379,15 @@ const APEX_LEGACY_REDIRECTS = [
   { source: "/player-rankings", destination: "https://www.ppatour.com/rankings/" },
   { source: "/player-rankings-table", destination: "https://www.ppatour.com/rankings/" },
   { source: "/tournament/:path*", destination: "https://www.ppatour.com/events/" },
-  // Everything else on the apex: same path, same query, on www.
-  { source: "/:path*", destination: "https://www.ppatour.com/:path*" },
+  // Everything else on the apex: same path, same query, on www — in ONE hop.
+  // ⚠ `/:path*` drops the trailing slash, so a bare catch-all sent
+  // ppatour.com/events/x/ to www/events/x, which `trailingSlash: true` then
+  // 308s AGAIN (found simulating the apex flip locally, 10/7). Root and files
+  // (anything with an extension: sitemap.xml, robots.txt, PDFs) go as-is;
+  // every other path gets its slash back.
+  { source: "/", destination: "https://www.ppatour.com/" },
+  { source: "/:file(.*\\.[A-Za-z0-9]+)", destination: "https://www.ppatour.com/:file" },
+  { source: "/:path*", destination: "https://www.ppatour.com/:path*/" },
 ].map((r) => ({ ...r, has: APEX_HOST, permanent: true }));
 
 const RETIRED_ATHLETE_REDIRECTS = [
