@@ -559,14 +559,14 @@ export default async function EuropePage() {
           <div className="mx-auto grid w-full max-w-3xl gap-8">
             <div>
               <SectionHead eyebrow="Get Involved" title="Media and Referees" />
-              <div className="mt-4 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-2">
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
                 {EUROPE_FORM_LINKS.map((l) => (
                   <a
                     key={l.href}
                     href={l.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center justify-between gap-4 bg-white p-5 transition-colors hover:bg-ppa-paper"
+                    className="group flex items-center justify-between gap-4 border border-ppa-line bg-white p-5 transition-colors hover:border-ppa-blue"
                   >
                     <span className="min-w-0">
                       <span className="block font-display text-sm uppercase text-ppa-navy">{l.label}</span>
@@ -577,7 +577,12 @@ export default async function EuropePage() {
                 ))}
               </div>
             </div>
-            <InquiryForm formType="europe" />
+            <div>
+              <SectionHead eyebrow="Questions" title="Contact Us" />
+              <div className="mt-4">
+                <InquiryForm formType="europe" />
+              </div>
+            </div>
           </div>
         </div>
       </section>

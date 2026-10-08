@@ -67,6 +67,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-08 — Europe contact: photographer Typeform + Contact Us heading (Katherina)
+- Katherina, 10:54 AM: third Typeform "Photographer Interest — Apply for PPA Tour Europe" (ppatour.typeform.com/WFHeurope) added to `EUROPE_FORM_LINKS` → shows on /europe#contact and /europe/eventlinks.
+- /europe#contact: the three form links are now separate cards (gap, 3-up) instead of one joined strip; "Get Involved / Media and Referees" kept as the head over all three; new "Contact Us" head over the embedded InquiryForm.
+- She's still asking why Typeform: answer is the roadmap item "Europe: move forms off Typeform".
+
 ### 2026-10-07 (pt. 4) — Paddle Lab → pickleball.com/paddles (Jason)
 - Jason replied: pickleball.com will rebuild the lab in its own components (header/footer/CSS) at `pickleball.com/paddles`; he's reviewing the gated build for brand/UI first.
 - Sent: URL + user `ppa` by email (Hannah cc'd), password by Slack DM. Told him it's static JSON (paddles.json, paddle-pbc.json, editorial), not an API — we can expose one or hand over files.

@@ -74,4 +74,5 @@ export function isUnconfirmedEuropeStop(t: { name: string; city: string; slug: s
 export const EUROPE_FORM_LINKS: EventLink[] = [
   { label: "Media credentials", href: "https://ppatour.typeform.com/europe", note: "Apply for press access at a PPA Tour Europe stop" },
   { label: "Referee interest", href: "https://ppatour.typeform.com/referee", note: "Officiate at PPA Tour Europe events" },
+  { label: "Photographer Interest", href: "https://ppatour.typeform.com/WFHeurope", note: "Apply for PPA Tour Europe" }, // Katherina, 10/8
 ];

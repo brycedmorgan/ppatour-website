@@ -153,7 +153,7 @@ export default async function EuropeEventLinksPage() {
         </section>
 
         <section className="mt-10">
-          <h2 className="text-[12px] font-bold uppercase tracking-[0.16em] text-ppa-navy/55">Media &amp; referees</h2>
+          <h2 className="text-[12px] font-bold uppercase tracking-[0.16em] text-ppa-navy/55">Media, referees &amp; photographers</h2>
           <div className="mt-3 flex flex-col gap-2">
             {EUROPE_FORM_LINKS.map((l) => (
               <LinkRow key={l.href} link={l} external />
