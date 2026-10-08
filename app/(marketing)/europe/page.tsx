@@ -559,7 +559,7 @@ export default async function EuropePage() {
           <div className="mx-auto grid w-full max-w-3xl gap-8">
             <div>
               <SectionHead eyebrow="Get Involved" title="Media and Referees" />
-              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              <div className="mt-4 grid gap-3">
                 {EUROPE_FORM_LINKS.map((l) => (
                   <a
                     key={l.href}
