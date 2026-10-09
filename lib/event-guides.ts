@@ -783,18 +783,11 @@ export const eventGuides: Record<string, EventGuide> = {
       {
         name: "Sheraton Dallas by the Galleria",
         tag: "Official",
-        note: "Fans, spectators + sponsors block",
+        note: "Fans, spectators, amateur players + sponsors block",
         href: "https://app.marriott.com/resview2?id=1791395166995&key=GRP&app=resvlink",
         brand: "marriott",
         rate: "$139/night",
         cutoff: "Book by Oct 16",
-      },
-      {
-        name: "Sheraton Dallas by the Galleria — Pro Players",
-        tag: "Official",
-        note: "Players block — breakfast for 2 + free parking. Sponsors welcome too.",
-        href: "https://app.marriott.com/resview2?id=1791394819759&key=GRP&app=resvlink",
-        brand: "marriott",
       },
       {
         name: "Renaissance Dallas North",
