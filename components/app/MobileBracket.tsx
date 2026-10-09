@@ -200,6 +200,9 @@ function RoundSwiper({ bracket }: { bracket: Bracket }) {
   const goTo = (i: number, smooth = true) => {
     const el = scroller.current;
     if (!el) return;
+    // Set the round now rather than waiting on scroll events: they are
+    // throttled (and in a background tab, skipped) during a smooth scroll.
+    setActive(i);
     el.scrollTo({ left: i * colStep(), behavior: smooth ? "smooth" : "auto" });
   };
 
@@ -252,6 +255,7 @@ function RoundSwiper({ bracket }: { bracket: Bracket }) {
       <div
         ref={scroller}
         onScroll={onScroll}
+        onScrollEnd={onScroll}
         className="-mx-4 mt-3 flex snap-x snap-mandatory items-start gap-3 overflow-x-auto overflow-y-hidden scroll-px-4 px-4 transition-[height] duration-300 ease-out [scrollbar-width:none]"
         style={{ height }}
       >
