@@ -67,6 +67,19 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-09 (pt. 2) — App: Rankings tab + "Your players" on Scores; TestFlight archive ready
+
+- **Rankings tab → `/rankings/app/`** (`components/app/AppRankings.tsx`): same navy header + pill as Scores, Men|Women,
+  name search, top 100 per board with headshots, follow chip per pro (local profiles only), pinned "Your players".
+  `/rankings` (marketing page) unchanged; the tab's footer links to it. No movement arrows: the WPR feed has no prior rank.
+- **Scores: "Your players" section first** — matches with a followed pro, pulled out of Live/Up next/Final. Matched by
+  folded name (ticker has names, not slugs). No follows → a "Follow your players" card to the Rankings tab.
+- Follows are still device-local (`components/app/follows.ts`, Aug build). **MLP teams not added**: no team data in this repo.
+- TestFlight: `mobile/ios/exportOptions.plist` added. Archive + upload is blocked for Claude by the auto-mode classifier;
+  Bryce runs `mobile/testflight.sh` (bundle `com.ppatour.game`, version 1.0 build 2 — the arcade uploaded 1.0 build 1).
+- Jason chased 10/9 for the ppatour.com OIDC client (redirect `/api/auth/callback/pickleball`), asked by Tuesday.
+- Connor texted home-screen install steps 10/9.
+
 ### 2026-10-09 — Virginia Beach parking lands (Ocean Breeze, $10/day, golf-cart shuttle)
 
 - Dana Summers' request (Asana `1219328269479333`, due 10/8, event starts 10/12): her copy verbatim in

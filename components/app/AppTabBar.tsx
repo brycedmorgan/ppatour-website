@@ -24,7 +24,9 @@ const TABS = [
     match: (p: string) => p === "/" || p.startsWith("/scores") || p.startsWith("/live"),
   },
   {
-    href: "/rankings/",
+    // The app's own board (components/app/AppRankings), not the /rankings
+    // marketing page; its "Full rankings" link still reaches that page.
+    href: "/rankings/app/",
     label: "Rankings",
     icon: Trophy,
     match: (p: string) => p.startsWith("/rankings") || p.startsWith("/leaderboards"),

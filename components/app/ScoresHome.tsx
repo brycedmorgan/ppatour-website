@@ -8,6 +8,7 @@ import type { TickerMatch, TickerResult } from "@/lib/ticker-api";
 import { MatchCard, MatchCardSkeleton } from "@/components/live/MatchCard";
 import { PBTV_WATCH_URL, useLiveTicker } from "@/components/live/use-live-ticker";
 import { MobileBracket } from "@/components/app/MobileBracket";
+import { useFollows } from "@/components/app/follows";
 
 /**
  * The app's first screen: scores, then brackets. Bryce, 10/8 — "more like
@@ -26,6 +27,12 @@ const DIVISIONS = [
 ] as const;
 
 const key = (v: string) => v.toLowerCase().replace(/[^a-z]/g, "");
+
+/** Accent- and punctuation-blind name key, so "Jade Kawamoto" in the ticker
+ *  finds the follow saved from her profile. The ticker carries names, not
+ *  slugs, so a follow is matched by the name stored beside its slug. */
+const nameKey = (v: string) =>
+  v.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z]/g, "");
 
 function dateRange(start: string, end: string): string {
   const f = (iso: string, opts: Intl.DateTimeFormatOptions) =>
@@ -49,13 +56,22 @@ export function ScoresHome({ event, initialTicker }: { event: ScoresEvent | null
   const { ordered: matches, loaded } = useLiveTicker({ initialData: initialTicker });
   const [division, setDivision] = useState<string | null>(null);
   const [view, setView] = useState<"scores" | "bracket">("scores");
+  const { follows } = useFollows();
 
   const shown = useMemo(() => {
     const ms = division ? matches.filter((m) => key(m.division) === key(division)) : matches;
+    // The pros this fan follows come first, pulled out of the status lists so
+    // a match never shows twice. Finals sink to the end of their section.
+    const followed = new Set(follows.map((f) => nameKey(f.name)));
+    const isMine = (m: TickerMatch) => m.teams.some((t) => t.players.some((p) => followed.has(nameKey(p.name))));
+    const mine = ms.filter(isMine);
+    const rest = ms.filter((m) => !isMine(m));
     // `ordered` is already sorted by the hook; this only splits it by status.
-    const by = (s: TickerMatch["status"]) => ms.filter((m) => m.status === s);
-    return { live: by("live"), next: by("upnext"), final: by("final") };
-  }, [matches, division]);
+    const by = (s: TickerMatch["status"]) => rest.filter((m) => m.status === s);
+    const rank = { live: 0, upnext: 1, final: 2 } as const;
+    mine.sort((a, b) => rank[a.status] - rank[b.status]);
+    return { mine, live: by("live"), next: by("upnext"), final: by("final") };
+  }, [matches, division, follows]);
 
   const liveCount = (name: string) =>
     matches.filter((m) => m.status === "live" && key(m.division) === key(name)).length;
@@ -157,7 +173,7 @@ export function ScoresHome({ event, initialTicker }: { event: ScoresEvent | null
             <MatchCardSkeleton />
             <MatchCardSkeleton />
           </Section>
-        ) : shown.live.length + shown.next.length + shown.final.length === 0 ? (
+        ) : shown.mine.length + shown.live.length + shown.next.length + shown.final.length === 0 ? (
           <div className="mt-6 rounded-xl border border-ppa-line bg-ppa-paper px-6 py-8 text-center">
             <p className="text-[14px] text-ppa-navy/65">
               {event.live ? "Nothing on court in this division right now." : "No live matches — the draw has every result."}
@@ -172,6 +188,21 @@ export function ScoresHome({ event, initialTicker }: { event: ScoresEvent | null
           </div>
         ) : (
           <>
+            {shown.mine.length > 0 ? (
+              <Section title="Your players" count={shown.mine.length}>
+                {shown.mine.map((m) => <MatchCard key={m.id} m={m} />)}
+              </Section>
+            ) : (
+              follows.length === 0 && (
+                <Link
+                  href="/rankings/app/"
+                  className="mt-5 flex items-center justify-between rounded-xl bg-ppa-paper px-4 py-3 text-[13px] text-ppa-navy/70"
+                >
+                  <span>Follow your players to see their matches first.</span>
+                  <span className="shrink-0 pl-3 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-blue">Find →</span>
+                </Link>
+              )
+            )}
             {shown.live.length > 0 && (
               <Section title="Live now" count={shown.live.length}>
                 {shown.live.map((m) => <MatchCard key={m.id} m={m} />)}
