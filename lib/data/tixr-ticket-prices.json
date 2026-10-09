@@ -1,9 +1,9 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-10-08T19:04:05Z",
+  "generated_at": "2026-10-09T18:34:42Z",
   "event_count": 41,
-  "ticket_type_count": 758,
+  "ticket_type_count": 765,
   "series_breakdown": {
     "PPA Tour": 40,
     "Major League Pickleball": 1
@@ -54,8 +54,8 @@
         {
           "name": "Friday Premium Parking Pass",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 30,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 35.75
         },
         {
@@ -307,6 +307,13 @@
       "currency": "USD",
       "tickets": [
         {
+          "name": "Free Youth Clinic",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 0,
+          "all_in_price": 0
+        },
+        {
           "name": "Friday Courtside",
           "category": "GA",
           "sale_state": "OPEN",
@@ -354,6 +361,13 @@
           "sale_state": "OPEN",
           "base_price": 1000,
           "all_in_price": 1085.87
+        },
+        {
+          "name": "Junior On-Court Experience",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
         },
         {
           "name": "King of the Court (3.0-3.5)",
@@ -754,20 +768,13 @@
           "category": "GA",
           "sale_state": "OPEN",
           "base_price": 30,
-          "all_in_price": 35.83
+          "all_in_price": 35.75
         },
         {
           "name": "King of the Court – 3.0–3.5",
           "category": "GA",
           "sale_state": "OPEN",
           "base_price": 30,
-          "all_in_price": 35.75
-        },
-        {
-          "name": "King of the Court – 4.0–4.5",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 30,
           "all_in_price": 35.83
         },
         {
@@ -776,6 +783,13 @@
           "sale_state": "OPEN",
           "base_price": 30,
           "all_in_price": 35.75
+        },
+        {
+          "name": "King of the Court – 4.0–4.5",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 30,
+          "all_in_price": 35.83
         },
         {
           "name": "King of the Court – 4.0+",
@@ -1152,6 +1166,13 @@
           "all_in_price": 113.69
         },
         {
+          "name": "Tuesday Grandstand Bleacher (Round of 64)",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.66
+        },
+        {
           "name": "Tuesday VIP",
           "category": "STANDARD",
           "sale_state": "OPEN",
@@ -1310,6 +1331,13 @@
           "all_in_price": 113.69
         },
         {
+          "name": "Wednesday Grandstand Bleacher (Round of 32)",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.66
+        },
+        {
           "name": "Wednesday VIP",
           "category": "STANDARD",
           "sale_state": "OPEN",
@@ -1466,6 +1494,13 @@
           "sale_state": "HIDE",
           "base_price": null,
           "all_in_price": 135.35
+        },
+        {
+          "name": "Thursday Grandstand Bleacher (Round of 16)",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.66
         },
         {
           "name": "Thursday VIP",
@@ -1764,9 +1799,16 @@
         {
           "name": "Friday Evening Courtside Chair",
           "category": "STANDARD",
-          "sale_state": "HIDE",
-          "base_price": null,
+          "sale_state": "OPEN",
+          "base_price": 180,
           "all_in_price": 200.33
+        },
+        {
+          "name": "Friday Evening Grandstand Bleacher (Mens and Womens Doubles Quarterfinals)",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.66
         },
         {
           "name": "Friday Evening VIP",
@@ -1925,6 +1967,13 @@
           "sale_state": "OPEN",
           "base_price": 150,
           "all_in_price": 167.84
+        },
+        {
+          "name": "Friday Morning Grandstand Bleacher (Singles and Mxd Quarterfinals)",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 40,
+          "all_in_price": 46.66
         },
         {
           "name": "Friday Morning VIP",
@@ -2127,8 +2176,8 @@
           "name": "Saturday Full Day Box Suite",
           "category": "BOOTH",
           "sale_state": "OPEN",
-          "base_price": 7500,
-          "all_in_price": 8127.48
+          "base_price": 9000,
+          "all_in_price": 9751.9
         },
         {
           "name": "Championships",
@@ -2211,13 +2260,6 @@
           "name": "Saturday Morning Courtside Bleacher",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 46.66
-        },
-        {
-          "name": "Saturday Morning Courtside Bleacher",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 60,
           "all_in_price": 70.37
         },
@@ -2227,6 +2269,13 @@
           "sale_state": "OPEN",
           "base_price": 80,
           "all_in_price": 92.03
+        },
+        {
+          "name": "Saturday Morning Courtside Bleacher",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 46.66
         },
         {
           "name": "Saturday Morning Courtside Bleacher",
@@ -2412,14 +2461,14 @@
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 438.58
+          "all_in_price": 546.87
         },
         {
           "name": "Sunday VIP",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 546.87
+          "all_in_price": 438.58
         }
       ],
       "parent_event_id": "166345"
@@ -2447,6 +2496,13 @@
           "all_in_price": 0
         },
         {
+          "name": "Free Youth Clinic",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 0,
+          "all_in_price": 0
+        },
+        {
           "name": "GovX Discount",
           "category": "GA",
           "sale_state": "SOLD_OUT",
@@ -2459,6 +2515,13 @@
           "sale_state": "OPEN",
           "base_price": 370,
           "all_in_price": 405.17
+        },
+        {
+          "name": "Junior On-Court Experience with Catherine Parenteau",
+          "category": "GA",
+          "sale_state": "OPEN",
+          "base_price": 50,
+          "all_in_price": 57.36
         },
         {
           "name": "King of the Court (3.0-3.5)",
@@ -5089,20 +5152,6 @@
           "all_in_price": 0
         },
         {
-          "name": "Round of 32",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
-          "name": "Round of 64",
-          "category": "GA",
-          "sale_state": "SOLD_OUT",
-          "base_price": null,
-          "all_in_price": 0
-        },
-        {
           "name": "Semifinals",
           "category": "GA",
           "sale_state": "SOLD_OUT",
@@ -5141,43 +5190,43 @@
           "name": "Thursday-Sunday Courtside Row A-D",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
+          "base_price": 400,
+          "all_in_price": 437.59
         },
         {
           "name": "Thursday-Sunday Courtside Row E-H",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
+          "base_price": 300,
+          "all_in_price": 329.54
         },
         {
           "name": "Thursday-Sunday Courtside Row I-L",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
+          "base_price": 200,
+          "all_in_price": 221.49
         },
         {
           "name": "Thursday-Sunday VIP Row A-B",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
+          "base_price": 1800,
+          "all_in_price": 1950.24
         },
         {
           "name": "Thursday-Sunday VIP Row C-E",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
+          "base_price": 1200,
+          "all_in_price": 1301.96
         },
         {
           "name": "Thursday-Sunday VIP Row F-H",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
+          "base_price": 900,
+          "all_in_price": 977.82
         }
       ]
     },
@@ -5284,22 +5333,22 @@
           "name": "Thursday Courtside Row A-D",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
+          "base_price": 80,
+          "all_in_price": 91.83
         },
         {
           "name": "Thursday Courtside Row E-H",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 91.83
+          "base_price": 60,
+          "all_in_price": 70.23
         },
         {
           "name": "Thursday Courtside Row I-L",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 50,
-          "all_in_price": 57.36
+          "base_price": 40,
+          "all_in_price": 46.56
         },
         {
           "name": "Thursday VIP Row A-B",
@@ -5312,15 +5361,15 @@
           "name": "Thursday VIP Row C-E",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 350,
-          "all_in_price": 383.56
+          "base_price": 300,
+          "all_in_price": 329.54
         },
         {
           "name": "Thursday VIP Row F-H",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 329.54
+          "all_in_price": 275.51
         }
       ],
       "parent_event_id": "210307"
@@ -5428,22 +5477,22 @@
           "name": "Friday Evening Courtside Row A-D",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
+          "base_price": 80,
+          "all_in_price": 91.83
         },
         {
           "name": "Friday Evening Courtside Row E-H",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 91.83
+          "base_price": 60,
+          "all_in_price": 70.23
         },
         {
           "name": "Friday Evening Courtside Row I-L",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 50,
-          "all_in_price": 57.36
+          "base_price": 40,
+          "all_in_price": 46.56
         },
         {
           "name": "Friday Evening VIP Row A-B",
@@ -5456,15 +5505,15 @@
           "name": "Friday Evening VIP Row C-E",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 350,
-          "all_in_price": 383.56
+          "base_price": 300,
+          "all_in_price": 329.54
         },
         {
           "name": "Friday Evening VIP Row F-H",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 329.54
+          "all_in_price": 275.51
         }
       ],
       "parent_event_id": "210307"
@@ -5572,22 +5621,22 @@
           "name": "Friday Morning Courtside Row A-D",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
+          "base_price": 80,
+          "all_in_price": 91.83
         },
         {
           "name": "Friday Morning Courtside Row E-H",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 91.83
+          "base_price": 60,
+          "all_in_price": 70.23
         },
         {
           "name": "Friday Morning Courtside Row I-L",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 50,
-          "all_in_price": 57.36
+          "base_price": 40,
+          "all_in_price": 46.56
         },
         {
           "name": "Friday Morning VIP Row A-B",
@@ -5600,15 +5649,15 @@
           "name": "Friday Morning VIP Row C-E",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 350,
-          "all_in_price": 383.56
+          "base_price": 300,
+          "all_in_price": 329.54
         },
         {
           "name": "Friday Morning VIP Row F-H",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 329.54
+          "all_in_price": 275.51
         }
       ],
       "parent_event_id": "210307"
@@ -5716,22 +5765,22 @@
           "name": "Saturday Evening Courtside Row A-D",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
+          "base_price": 80,
+          "all_in_price": 91.83
         },
         {
           "name": "Saturday Evening Courtside Row E-H",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 91.83
+          "base_price": 60,
+          "all_in_price": 70.23
         },
         {
           "name": "Saturday Evening Courtside Row I-L",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 50,
-          "all_in_price": 57.36
+          "base_price": 40,
+          "all_in_price": 46.56
         },
         {
           "name": "Saturday Evening VIP Row A-B",
@@ -5744,15 +5793,15 @@
           "name": "Saturday Evening VIP Row C-E",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 350,
-          "all_in_price": 383.56
+          "base_price": 300,
+          "all_in_price": 329.54
         },
         {
           "name": "Saturday Evening VIP Row F-H",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 329.54
+          "all_in_price": 275.51
         }
       ],
       "parent_event_id": "210307"
@@ -5860,22 +5909,22 @@
           "name": "Saturday Morning Courtside Row A-D",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 100,
-          "all_in_price": 113.44
+          "base_price": 80,
+          "all_in_price": 91.83
         },
         {
           "name": "Saturday Morning Courtside Row E-H",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 91.83
+          "base_price": 60,
+          "all_in_price": 70.23
         },
         {
           "name": "Saturday Morning Courtside Row I-L",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 50,
-          "all_in_price": 57.36
+          "base_price": 40,
+          "all_in_price": 46.56
         },
         {
           "name": "Saturday Morning VIP Row A-B",
@@ -5888,15 +5937,15 @@
           "name": "Saturday Morning VIP Row C-E",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 350,
-          "all_in_price": 383.56
+          "base_price": 300,
+          "all_in_price": 329.54
         },
         {
           "name": "Saturday Morning VIP Row F-H",
           "category": "STANDARD",
           "sale_state": "HIDE",
           "base_price": null,
-          "all_in_price": 329.54
+          "all_in_price": 275.51
         }
       ],
       "parent_event_id": "210307"
