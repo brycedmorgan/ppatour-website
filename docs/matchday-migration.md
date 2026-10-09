@@ -188,3 +188,9 @@ Bryce's order of steps:
 - Needs Chris (only he can run SQL/deploys on Lovable Cloud): deploy
   `migration-dump` to the old project, and run `old-disable.sql` at switch time.
 - Supabase CLI not installed locally yet.
+
+## Chris reply (2026-10-09)
+- No company 1Password exists (checked Gmail + Slack). Chris shares secrets to bryce@pickleball.com as 1Password expiring share links; once the new Supabase project exists he's added as Developer and enters keys directly.
+- Told Chris: GitHub invite re-sent to chriscantino@gmail.com; Claude seat coming (Bryce to set up); staging Supabase + Vercel branch previews; rollback = backend switch flips back; final sync on switch week with old cron off.
+- Paddletek integration: hold until after the switch (Bryce + Taylor decide if Chris says it can't wait).
+- Still on Bryce: card + Create organization in Supabase (form is filled in), Claude seat for Chris.
