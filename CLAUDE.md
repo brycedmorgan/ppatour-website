@@ -67,7 +67,13 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
-### 2026-10-08 (pt. 4) — App goes scores-first (branch `app-scores-first`, NOT merged)
+### 2026-10-08 (pt. 5) — Scores-first LIVE + iPhone shell on Bryce's phone
+- Bryce: "build it… get the changes live tonight". `app-scores-first` merged to main (54e745e) + qa-gate fix 7bbc7c4: bracket chip and draw always agree (no divs[0] fallback), pool play shown.
+- `mobile/` = Capacitor iOS shell loading ppatour.com/scores in app mode (excluded from tsc/eslint/Vercel). Installed + launched on Bryce's iPhone via personal team (com.brycemorgan.ppatour.dev, 7-day expiry). See mobile/README.md.
+- TestFlight upload NOT done: OpCo team works for signing but the only app record is the shelved arcade's com.ppatour.game — awaiting Bryce's OK, or a new com.ppatour.app record from Jason/Tom.
+- SSO: confirmed the company login is oidc.pickleball.com (MATCHDAY's issuer). Our client creds from Jason still outstanding (asked 10/1, no reply).
+
+### 2026-10-08 (pt. 4) — App goes scores-first (branch `app-scores-first`, merged in pt. 5)
 - Bryce: app should feel like ESPN — scores + brackets first, schedule/events deeper. Found why "Live does nothing": the Live tab and score bar pointed at `/live`, the homepage **rehearsal harness**, which renders the homepage again.
 - New `/scores` (`app/scores`, `components/app/ScoresHome.tsx`, `lib/app-scores.ts`): event header (LIVE, Watch, Event info), Scores | Bracket toggle, one set of division chips (All/WD/MD/Mixed/WS/MS) driving both. Opens on the running stop, else the last finished one — never a future stop.
 - `components/app/MobileBracket.tsx`: phone bracket = round tabs + stacked matchups, opens on the round in play; replaces the shrunk tree in the app.

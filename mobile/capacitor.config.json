@@ -1,0 +1,15 @@
+{
+  "appId": "com.ppatour.game",
+  "appName": "PPA Tour",
+  "webDir": "www",
+  "backgroundColor": "#0c2b44",
+  "server": {
+    "url": "https://www.ppatour.com/scores/?source=pwa",
+    "allowNavigation": ["www.ppatour.com", "ppatour.com"]
+  },
+  "ios": {
+    "contentInset": "never",
+    "appendUserAgent": "PPATourApp",
+    "backgroundColor": "#0c2b44"
+  }
+}
