@@ -67,6 +67,16 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-09 — Virginia Beach parking lands (Ocean Breeze, $10/day, golf-cart shuttle)
+
+- Dana Summers' request (Asana `1219328269479333`, due 10/8, event starts 10/12): her copy verbatim in
+  `PARKING_BY_SLUG["virginia-beach-open"]` plus her Ocean Breeze map (`public/ppa/parking/virginia-beach-open.webp`,
+  1536px q70, 374 KB; it's mostly foliage, and q60 saved only 10%). Fifth finalized stop.
+- **⚠ Mon qualifiers park on-site; Tue–Sun has NO on-site public parking.** The map shows the Tue–Sun lots only.
+  Only two sections, General + Rideshare: she sent no Premium or ADA section.
+- Verified on the dev server: the event page and `/today` carry the copy and the map, the holding line is gone,
+  Chicago is still 200. eslint clean.
+
 ### 2026-10-08 (pt. 5) — Scores-first LIVE + iPhone shell on Bryce's phone
 - Bryce: "build it… get the changes live tonight". `app-scores-first` merged to main (54e745e) + qa-gate fix 7bbc7c4: bracket chip and draw always agree (no divs[0] fallback), pool play shown.
 - `mobile/` = Capacitor iOS shell loading ppatour.com/scores in app mode (excluded from tsc/eslint/Vercel). Installed + launched on Bryce's iPhone via personal team (com.brycemorgan.ppatour.dev, 7-day expiry). See mobile/README.md.

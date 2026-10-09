@@ -317,6 +317,45 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
       ],
     },
   ],
+  // Virginia Beach — Dana Summers, 10/8 (Asana 1219328269479333), with the
+  // Ocean Breeze map. All of it is her wording; her bullets became paragraphs
+  // and her "(Ocean Breeze Parking map)" note became the map itself.
+  //
+  // ⚠ PARKING MOVES AFTER MONDAY. Qualifiers (Mon) park on-site; Tue–Sun there
+  // is NO on-site public parking, only Ocean Breeze at $10/day with a golf-cart
+  // shuttle. The map is the Tue–Sun lots, so it sits at the end, under the
+  // shuttle line, never under the Monday paragraph.
+  //
+  // ⚠ NO "Premium Parking" OR "ADA Parking" SECTION. Her submission has neither;
+  // don't carry Chicago's or Cary's over.
+  "virginia-beach-open": [
+    {
+      heading: "General Parking",
+      body: [
+        "Monday, 10/12 – Qualifiers\nParking is available on-site and in nearby public lots.",
+        "Tuesday, 10/13 – Sunday, 10/18\nThere is no general public parking available on-site. All event parking will be located at Ocean Breeze Waterpark.",
+        "Address: 849 General Booth Blvd, Virginia Beach, VA 23451",
+        "Parking Location: Continue past the main waterpark entrance. Event parking lots are located approximately halfway down Ocean Breeze Parkway.",
+        "Parking Fee: $10 per day, collected by Ocean Breeze Waterpark.",
+        "Payment Methods: Cash, credit/debit cards, and mobile payments accepted.",
+        "Shuttle Service: Complimentary golf cart shuttles will run between the event parking lots and the venue's North Ticketing Entrance.",
+      ],
+      images: [
+        {
+          src: "/ppa/parking/virginia-beach-open.webp",
+          alt: "Map of Ocean Breeze Waterpark in Virginia Beach, VA, showing two event parking lots at $10 per day on the north side of the park, the shuttle pickup at the eastern lot, and the shuttle route along the park road to the event entrance on General Booth Boulevard.",
+          width: 1536,
+          height: 1024,
+        },
+      ],
+    },
+    {
+      heading: "Rideshare",
+      body: [
+        "Uber, Lyft, and other rideshare services may drop off guests directly at the venue's North Entrance parking lot.",
+      ],
+    },
+  ],
 };
 
 /** Parking details for an event page — finalized sections, or the holding line. */
