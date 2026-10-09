@@ -17,11 +17,11 @@ import { isTabHidden, onTabVisible } from "@/components/live/poll-visibility";
 const POLL_MS = 30000;
 
 /** Map a chip's division name to the draw's division id. */
-export function matchDivision(divs: BracketDivision[], name: string | null): BracketDivision | undefined {
-  if (!divs.length) return undefined;
-  if (!name) return divs[0];
+export function matchDivision(divs: BracketDivision[], name: string): BracketDivision | undefined {
+  // ⚠ NO FALLBACK TO divs[0]. A chip with no draw behind it (no singles at
+  // this stop) must say so, not show another division's bracket under its name.
   const key = (v: string) => v.toLowerCase().replace(/[^a-z]/g, "");
-  return divs.find((d) => key(d.name) === key(name)) ?? divs[0];
+  return divs.find((d) => key(d.name) === key(name));
 }
 
 /** The round worth opening on: the earliest one still being played, else the last. */
@@ -89,7 +89,7 @@ function Matchup({ m }: { m: BracketMatch }) {
   );
 }
 
-export function MobileBracket({ eventId, division }: { eventId: string; division: string | null }) {
+export function MobileBracket({ eventId, division }: { eventId: string; division: string }) {
   const [divs, setDivs] = useState<BracketDivision[] | null>(null);
 
   useEffect(() => {
@@ -105,15 +105,16 @@ export function MobileBracket({ eventId, division }: { eventId: string; division
 
   const div = useMemo(() => (divs ? matchDivision(divs, division) : undefined), [divs, division]);
 
-  if (divs && !divs.length) return <Empty text="No draw posted for this event yet." />;
-  if (!div) return <Loading />;
+  if (!divs) return <Loading />;
+  if (!divs.length) return <Empty text="No draw posted for this event yet." />;
+  if (!div) return <Empty text={`No ${division} draw at this event.`} />;
   // Keyed: a new division is a fresh draw, round and Winners/Losers side.
   return <DivisionDraw key={div.id} eventId={eventId} divisionId={div.id} />;
 }
 
 function DivisionDraw({ eventId, divisionId }: { eventId: string; divisionId: string }) {
-  const [draw, setDraw] = useState<{ main: Bracket | null; losers: Bracket | null } | null>(null);
-  const [side, setSide] = useState<"main" | "losers">("main");
+  const [draw, setDraw] = useState<{ main: Bracket | null; losers: Bracket | null; pools: Bracket | null } | null>(null);
+  const [side, setSide] = useState<"main" | "losers" | "pools" | null>(null);
   const [roundSel, setRound] = useState<number | null>(null);
 
   useEffect(() => {
@@ -125,7 +126,7 @@ function DivisionDraw({ eventId, divisionId }: { eventId: string; divisionId: st
         .then((r) => (r.ok ? r.json() : null))
         .then((d) => {
           if (!active || !d) return;
-          setDraw({ main: d.bracket ?? null, losers: d.losers ?? null });
+          setDraw({ main: d.bracket ?? null, losers: d.losers ?? null, pools: d.pools ?? null });
         })
         .catch(() => {});
     load();
@@ -138,7 +139,16 @@ function DivisionDraw({ eventId, divisionId }: { eventId: string; divisionId: st
     };
   }, [eventId, divisionId]);
 
-  const bracket = side === "losers" ? draw?.losers : draw?.main;
+  // Group+knockout events (Finals "Top 8 Ranked"): open on pool play until the
+  // knockout has a match in it.
+  const knockoutStarted = Boolean(draw?.main?.rounds.some((r) => r.matches.some((m) => m.status !== "scheduled")));
+  const shownSide = side ?? (draw?.pools && !knockoutStarted ? "pools" : "main");
+  const bracket = shownSide === "losers" ? draw?.losers : shownSide === "pools" ? draw?.pools : draw?.main;
+  const sides: { v: "main" | "losers" | "pools"; label: string }[] = draw?.losers
+    ? [{ v: "main", label: "Winners" }, { v: "losers", label: "Losers" }]
+    : draw?.pools
+      ? [{ v: "pools", label: "Pools" }, { v: "main", label: "Bracket" }]
+      : [];
   const round = bracket ? Math.min(roundSel ?? openingRound(bracket), bracket.rounds.length - 1) : 0;
 
   if (!draw) return <Loading />;
@@ -146,9 +156,9 @@ function DivisionDraw({ eventId, divisionId }: { eventId: string; divisionId: st
 
   return (
     <div>
-      {draw.losers && (
+      {sides.length > 0 && (
         <div className="mb-3 inline-flex rounded-full border border-ppa-line p-0.5">
-          {(["main", "losers"] as const).map((v) => (
+          {sides.map(({ v, label }) => (
             <button
               key={v}
               type="button"
@@ -157,10 +167,10 @@ function DivisionDraw({ eventId, divisionId }: { eventId: string; divisionId: st
                 setRound(null);
               }}
               className={`rounded-full px-4 py-1 text-[11px] font-bold uppercase tracking-[0.12em] ${
-                side === v ? "bg-ppa-navy text-white" : "text-ppa-navy/55"
+                shownSide === v ? "bg-ppa-navy text-white" : "text-ppa-navy/55"
               }`}
             >
-              {v === "main" ? "Winners" : "Losers"}
+              {label}
             </button>
           ))}
         </div>

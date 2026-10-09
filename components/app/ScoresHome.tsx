@@ -150,7 +150,7 @@ export function ScoresHome({ event, initialTicker }: { event: ScoresEvent | null
       <div className="px-4">
         {view === "bracket" ? (
           <div className="mt-4">
-            <MobileBracket eventId={event.eventId} division={division} />
+            <MobileBracket eventId={event.eventId} division={division ?? DIVISIONS[0].name} />
           </div>
         ) : !loaded ? (
           <Section title="On court">
