@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { Bracket, BracketDivision, BracketMatch, BracketSide } from "@/lib/bracket-types";
 import { isTabHidden, onTabVisible } from "@/components/live/poll-visibility";
 
@@ -115,7 +115,6 @@ export function MobileBracket({ eventId, division }: { eventId: string; division
 function DivisionDraw({ eventId, divisionId }: { eventId: string; divisionId: string }) {
   const [draw, setDraw] = useState<{ main: Bracket | null; losers: Bracket | null; pools: Bracket | null } | null>(null);
   const [side, setSide] = useState<"main" | "losers" | "pools" | null>(null);
-  const [roundSel, setRound] = useState<number | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -149,7 +148,6 @@ function DivisionDraw({ eventId, divisionId }: { eventId: string; divisionId: st
     : draw?.pools
       ? [{ v: "pools", label: "Pools" }, { v: "main", label: "Bracket" }]
       : [];
-  const round = bracket ? Math.min(roundSel ?? openingRound(bracket), bracket.rounds.length - 1) : 0;
 
   if (!draw) return <Loading />;
   if (!bracket?.rounds.length) return <Empty text="No draw to show yet. Checks again every 30 seconds." />;
@@ -162,10 +160,7 @@ function DivisionDraw({ eventId, divisionId }: { eventId: string; divisionId: st
             <button
               key={v}
               type="button"
-              onClick={() => {
-                setSide(v);
-                setRound(null);
-              }}
+              onClick={() => setSide(v)}
               className={`rounded-full px-4 py-1 text-[11px] font-bold uppercase tracking-[0.12em] ${
                 shownSide === v ? "bg-ppa-navy text-white" : "text-ppa-navy/55"
               }`}
@@ -176,6 +171,65 @@ function DivisionDraw({ eventId, divisionId }: { eventId: string; divisionId: st
         </div>
       )}
 
+      <RoundSwiper key={shownSide} bracket={bracket} />
+    </div>
+  );
+}
+
+/**
+ * Rounds side by side, each ~88% of the screen so the next round peeks in;
+ * swipe (scroll-snap) or tap a round tab to move. Bryce, 10/8: "it should take
+ * up about 90%… as you swipe to the next page, it should readjust to fill the
+ * screen" — the strip's height follows the round in view, so a 1-match Final
+ * does not sit above 31 rows of R64-sized empty space.
+ */
+function RoundSwiper({ bracket }: { bracket: Bracket }) {
+  const scroller = useRef<HTMLDivElement>(null);
+  const cols = useRef<(HTMLDivElement | null)[]>([]);
+  const [active, setActive] = useState(() => openingRound(bracket));
+  const [height, setHeight] = useState<number | undefined>(undefined);
+
+  const colStep = () => {
+    const el = scroller.current;
+    const c0 = cols.current[0];
+    const c1 = cols.current[1];
+    if (!el || !c0) return 1;
+    return c1 ? c1.offsetLeft - c0.offsetLeft : c0.offsetWidth;
+  };
+
+  const goTo = (i: number, smooth = true) => {
+    const el = scroller.current;
+    if (!el) return;
+    el.scrollTo({ left: i * colStep(), behavior: smooth ? "smooth" : "auto" });
+  };
+
+  // Open on the round in play, without an animated scroll on first paint.
+  useLayoutEffect(() => {
+    goTo(openingRound(bracket), false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Height follows the round in view; re-measured as the draw refreshes.
+  useLayoutEffect(() => {
+    const col = cols.current[active];
+    if (!col) return;
+    const measure = () => setHeight(col.offsetHeight);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(col);
+    return () => ro.disconnect();
+  }, [active, bracket]);
+
+  const onScroll = () => {
+    const el = scroller.current;
+    if (!el) return;
+    const i = Math.round(el.scrollLeft / colStep());
+    const clamped = Math.max(0, Math.min(bracket.rounds.length - 1, i));
+    if (clamped !== active) setActive(clamped);
+  };
+
+  return (
+    <div>
       <div className="-mx-4 flex gap-1 overflow-x-auto px-4 pb-1 [scrollbar-width:none]">
         {bracket.rounds.map((r, i) => {
           const live = r.matches.some((m) => m.status === "live");
@@ -183,9 +237,9 @@ function DivisionDraw({ eventId, divisionId }: { eventId: string; divisionId: st
             <button
               key={r.name + i}
               type="button"
-              onClick={() => setRound(i)}
-              className={`relative shrink-0 rounded-lg px-3.5 py-2 text-[12px] font-bold uppercase tracking-[0.08em] ${
-                i === round ? "bg-ppa-navy text-white" : "bg-ppa-paper text-ppa-navy/60"
+              onClick={() => goTo(i)}
+              className={`relative shrink-0 rounded-lg px-3.5 py-2 text-[12px] font-bold uppercase tracking-[0.08em] transition-colors ${
+                i === active ? "bg-ppa-navy text-white" : "bg-ppa-paper text-ppa-navy/60"
               }`}
             >
               {shortRound(r.name)}
@@ -195,13 +249,34 @@ function DivisionDraw({ eventId, divisionId }: { eventId: string; divisionId: st
         })}
       </div>
 
-      <p className="mt-3 text-[11px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
-        {bracket.rounds[round].name} · {bracket.rounds[round].matches.length} matches
-      </p>
-      <div className="mt-2 space-y-2.5">
-        {bracket.rounds[round].matches.map((m) => (
-          <Matchup key={m.id} m={m} />
+      <div
+        ref={scroller}
+        onScroll={onScroll}
+        className="-mx-4 mt-3 flex snap-x snap-mandatory items-start gap-3 overflow-x-auto overflow-y-hidden scroll-px-4 px-4 transition-[height] duration-300 ease-out [scrollbar-width:none]"
+        style={{ height }}
+      >
+        {bracket.rounds.map((r, i) => (
+          <div
+            key={r.name + i}
+            ref={(el) => {
+              cols.current[i] = el;
+            }}
+            className={`w-[88%] shrink-0 snap-start transition-opacity duration-300 ${
+              i === active ? "opacity-100" : "opacity-60"
+            }`}
+          >
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+              {r.name} · {r.matches.length} {r.matches.length === 1 ? "match" : "matches"}
+            </p>
+            <div className="mt-2 space-y-2.5 pb-1">
+              {r.matches.map((m) => (
+                <Matchup key={m.id} m={m} />
+              ))}
+            </div>
+          </div>
         ))}
+        {/* Lets the last round snap flush left like the others. */}
+        <div aria-hidden className="w-[8%] shrink-0" />
       </div>
     </div>
   );
