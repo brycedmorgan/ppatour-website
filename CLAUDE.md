@@ -71,6 +71,8 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - Bryce: "build it… get the changes live tonight". `app-scores-first` merged to main (54e745e) + qa-gate fix 7bbc7c4: bracket chip and draw always agree (no divs[0] fallback), pool play shown.
 - `mobile/` = Capacitor iOS shell loading ppatour.com/scores in app mode (excluded from tsc/eslint/Vercel). Installed + launched on Bryce's iPhone via personal team (com.brycemorgan.ppatour.dev, 7-day expiry). See mobile/README.md.
 - TestFlight upload NOT done: OpCo team works for signing but the only app record is the shelved arcade's com.ppatour.game — awaiting Bryce's OK, or a new com.ppatour.app record from Jason/Tom.
+- Bryce 10/8 mid-session: bracket rounds ~90% wide so the next round peeks, swipe between them, height re-fits the round in view → `RoundSwiper` in MobileBracket (scroll-snap, 88% columns). Verified on prod deploy: R16 995px → Final 141px, tabs follow. Tab tap sets the round directly (scroll events skip during smooth scroll).
+- iOS default bundle now `com.ppatour.app` (qa-gate: don't default onto the arcade's record).
 - SSO: confirmed the company login is oidc.pickleball.com (MATCHDAY's issuer). Our client creds from Jason still outstanding (asked 10/1, no reply).
 
 ### 2026-10-08 (pt. 4) — App goes scores-first (branch `app-scores-first`, merged in pt. 5)
