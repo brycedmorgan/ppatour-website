@@ -9,6 +9,7 @@ import { MatchCard, MatchCardSkeleton } from "@/components/live/MatchCard";
 import { PBTV_WATCH_URL, useLiveTicker } from "@/components/live/use-live-ticker";
 import { MobileBracket } from "@/components/app/MobileBracket";
 import { useFollows } from "@/components/app/follows";
+import { useAppMode } from "@/components/app/use-app-mode";
 
 /**
  * The app's first screen: scores, then brackets. Bryce, 10/8 — "more like
@@ -56,7 +57,9 @@ export function ScoresHome({ event, initialTicker }: { event: ScoresEvent | null
   const { ordered: matches, loaded } = useLiveTicker({ initialData: initialTicker });
   const [division, setDivision] = useState<string | null>(null);
   const [view, setView] = useState<"scores" | "bracket">("scores");
-  const { follows } = useFollows();
+  const { follows, ready: followsReady } = useFollows();
+  // Follow buttons exist only in the installed app, so the nudge does too.
+  const isApp = useAppMode();
 
   const shown = useMemo(() => {
     const ms = division ? matches.filter((m) => key(m.division) === key(division)) : matches;
@@ -193,7 +196,7 @@ export function ScoresHome({ event, initialTicker }: { event: ScoresEvent | null
                 {shown.mine.map((m) => <MatchCard key={m.id} m={m} />)}
               </Section>
             ) : (
-              follows.length === 0 && (
+              isApp && followsReady && follows.length === 0 && (
                 <Link
                   href="/rankings/app/"
                   className="mt-5 flex items-center justify-between rounded-xl bg-ppa-paper px-4 py-3 text-[13px] text-ppa-navy/70"

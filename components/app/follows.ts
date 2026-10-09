@@ -55,9 +55,14 @@ function write(next: Followed[]) {
  */
 export function useFollows() {
   const [follows, setFollows] = useState<Followed[]>([]);
+  /** False until localStorage has been read — empty before then means "unknown", not "none". */
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const sync = () => setFollows(readFollows());
+    const sync = () => {
+      setFollows(readFollows());
+      setReady(true);
+    };
     sync();
     window.addEventListener(EVENT, sync);
     window.addEventListener("storage", sync);
@@ -81,5 +86,5 @@ export function useFollows() {
     [follows],
   );
 
-  return { follows, toggle, isFollowing };
+  return { follows, ready, toggle, isFollowing };
 }
