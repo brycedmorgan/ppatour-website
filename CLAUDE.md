@@ -67,6 +67,15 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-08 (pt. 4) — App goes scores-first (branch `app-scores-first`, NOT merged)
+- Bryce: app should feel like ESPN — scores + brackets first, schedule/events deeper. Found why "Live does nothing": the Live tab and score bar pointed at `/live`, the homepage **rehearsal harness**, which renders the homepage again.
+- New `/scores` (`app/scores`, `components/app/ScoresHome.tsx`, `lib/app-scores.ts`): event header (LIVE, Watch, Event info), Scores | Bracket toggle, one set of division chips (All/WD/MD/Mixed/WS/MS) driving both. Opens on the running stop, else the last finished one — never a future stop.
+- `components/app/MobileBracket.tsx`: phone bracket = round tabs + stacked matchups, opens on the round in play; replaces the shrunk tree in the app.
+- Tabs now Scores · Rankings · Events · Watch · You (no Home/Live). Manifest start_url → `/scores/`; app-mode `/` forwards to `/scores/` (old installs keep the old start_url); score bar links `/scores/` and hides on it.
+- Verified on preview against live Chicago R16 (WD/MD live, finals, MD bracket). ⚠ Local dev has no `PB_API_TOKEN` → events feed falls back with no UUIDs → "no scores". Test on a preview.
+- Matchday research (for SSO/push): MATCHDAY is a *client* of `oidc.pickleball.com`, not an IdP; favorites = `mlp_team_follows` (team_uuid) + `user_notification_preferences` (free-text player_name), keyed by MATCHDAY user id; no partner API. See `docs/app-plan.md` 10/8.
+- Next: Bryce OK to merge; then our own OIDC client from Jason → follows on `sub` → native push (Phase 5).
+
 ### 2026-10-08 (pt. 3) — Worlds hotels + hotel photos
 - Sheraton Galleria split into Fans ($139, by 10/16) + Pro Players blocks per Kristen 10/8; Renaissance + DoubleTree links corrected (`lib/event-guides.ts`).
 - New `photo` on hotel cards: `hotelPhoto(name)` maps names → `/public/ppa/hotels/photos/*.jpg`, so Jackalope-feed hotels get photos too. Sheraton + Renaissance pulled from marriott.com; Hilton/IHG sites block automation — add more by dropping a jpg + one regex line.

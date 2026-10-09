@@ -1,6 +1,7 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { AppLinkRouter } from "@/components/app/AppLinkRouter";
 import { AppScoreBar } from "@/components/app/AppScoreBar";
 import { AppTabBar } from "@/components/app/AppTabBar";
@@ -24,16 +25,35 @@ import { useAppMode } from "@/components/app/use-app-mode";
  */
 export function AppChrome() {
   const isApp = useAppMode();
+  const pathname = usePathname() || "/";
+  const router = useRouter();
+
+  /**
+   * In the app, "/" IS the Scores screen. The manifest's start_url says so for
+   * new installs, but an existing home-screen icon keeps the start_url it was
+   * installed with (iOS never re-reads it), so those launches land on "/" and
+   * are forwarded here. The website's "/" is untouched — this only runs inside
+   * an installed window.
+   */
+  useEffect(() => {
+    if (isApp && pathname === "/") router.replace("/scores/");
+  }, [isApp, pathname, router]);
+
   if (!isApp) return null;
+  // The Scores screen IS the live view; a ticker cycling the same matches
+  // underneath it is the same information twice.
+  const onScores = pathname.startsWith("/scores");
 
   return (
     <>
       <AppLinkRouter />
       <RegisterServiceWorker />
       {/* Suspense: useLiveTicker reads useSearchParams (?partner=). */}
-      <Suspense fallback={null}>
-        <AppScoreBar />
-      </Suspense>
+      {!onScores && (
+        <Suspense fallback={null}>
+          <AppScoreBar />
+        </Suspense>
+      )}
       <AppTabBar />
     </>
   );

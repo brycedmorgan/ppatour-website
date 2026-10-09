@@ -2,21 +2,27 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CalendarDays, Home, MapPin, Radio, Star, Trophy } from "lucide-react";
-import { eventHref, getNextTournament } from "@/lib/placeholder-data";
+import { CalendarDays, PlayCircle, Radio, Star, Trophy } from "lucide-react";
 
 /**
  * The app's primary navigation, pinned to the bottom edge and shown only inside
  * an installed window (see `AppChrome`).
  *
- * Bryce's three asks plus a home and a you: scores, then standings and
- * schedule, then the event you are standing at, then the pros you follow. The
- * Event tab points at the next tour stop until the on-site experience exists —
- * a tab that leads somewhere real beats a tab that leads to "coming soon".
+ * ⚠ SCORES FIRST, AND THERE IS NO "HOME" TAB (Bryce, 10/8). The old Home tab
+ * was the marketing homepage and the old Live tab was /live — the homepage
+ * rehearsal harness, which renders the same homepage — so two of five tabs
+ * showed one page and the app read as a website wrapper. ESPN's order instead:
+ * scores (with brackets) up front, rankings next, schedule and events one tab
+ * deeper, then watch and the pros you follow. The event-day screen
+ * (`/today`) is reached from the Scores header and the event pages.
  */
 const TABS = [
-  { href: "/", label: "Home", icon: Home, match: (p: string) => p === "/" },
-  { href: "/live/", label: "Live", icon: Radio, match: (p: string) => p.startsWith("/live") },
+  {
+    href: "/scores/",
+    label: "Scores",
+    icon: Radio,
+    match: (p: string) => p === "/" || p.startsWith("/scores") || p.startsWith("/live"),
+  },
   {
     href: "/rankings/",
     label: "Rankings",
@@ -25,31 +31,17 @@ const TABS = [
   },
   {
     href: "/events/",
-    label: "Schedule",
+    label: "Events",
     icon: CalendarDays,
-    match: (p: string) => p === "/events/" || p === "/events",
+    match: (p: string) => p.startsWith("/events"),
   },
+  { href: "/watch/", label: "Watch", icon: PlayCircle, match: (p: string) => p.startsWith("/watch") },
+  { href: "/following/", label: "You", icon: Star, match: (p: string) => p.startsWith("/following") },
 ] as const;
 
 export function AppTabBar() {
   const pathname = usePathname() || "/";
-  const next = getNextTournament();
-  const eventTab = {
-    // Straight to the on-site screen — courts, today's play, gates, parking.
-    // The app's Event tab is for someone who is at the tournament, or about to
-    // be; the marketing page is one tap back from there.
-    href: `${eventHref(next)}/today`,
-    label: "Event",
-    icon: MapPin,
-    match: (p: string) => p.startsWith("/events/") && p !== "/events/",
-  };
-  const youTab = {
-    href: "/following/",
-    label: "You",
-    icon: Star,
-    match: (p: string) => p.startsWith("/following"),
-  };
-  const tabs = [...TABS, eventTab, youTab];
+  const tabs = TABS;
 
   return (
     <nav
