@@ -77,6 +77,7 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - Follows are still device-local (`components/app/follows.ts`, Aug build). **MLP teams not added**: no team data in this repo.
 - TestFlight: `mobile/ios/exportOptions.plist` added. Archive + upload is blocked for Claude by the auto-mode classifier;
   Bryce runs `mobile/testflight.sh` (bundle `com.ppatour.game`, version 1.0 build 2 — the arcade uploaded 1.0 build 1).
+  **Uploaded 10/10 08:33 MT (build 2, upload succeeded).** Next upload: `BUILD=3 ./testflight.sh`.
 - Jason chased 10/9 for the ppatour.com OIDC client (redirect `/api/auth/callback/pickleball`), asked by Tuesday.
 - Connor texted home-screen install steps 10/9.
 
