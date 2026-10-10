@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-09T18:34:42Z",
+  "updated_at": "2026-10-10T17:31:26Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -11271,6 +11271,84 @@
       "all_in_price": {
         "from": 329.54,
         "to": 275.51
+      }
+    },
+    {
+      "at": "2026-10-10T17:31:26Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Saturday Premium Parking Pass",
+      "base_price": {
+        "from": 40,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 46.56,
+        "to": 46.56
+      }
+    },
+    {
+      "at": "2026-10-10T17:31:26Z",
+      "type": "availability_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Saturday Premium Parking Pass",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-10-10T17:31:26Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Sunday Premium Parking Pass",
+      "base_price": {
+        "from": 40,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 46.56,
+        "to": 46.56
+      }
+    },
+    {
+      "at": "2026-10-10T17:31:26Z",
+      "type": "availability_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Sunday Premium Parking Pass",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-10-10T17:31:26Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Wednesday-Sunday Premium Parking Pass",
+      "base_price": {
+        "from": 170,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 189.08,
+        "to": 189.08
+      }
+    },
+    {
+      "at": "2026-10-10T17:31:26Z",
+      "type": "availability_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Wednesday-Sunday Premium Parking Pass",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
       }
     }
   ]

@@ -1,7 +1,7 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-10-09T18:34:42Z",
+  "generated_at": "2026-10-10T17:31:26Z",
   "event_count": 41,
   "ticket_type_count": 765,
   "series_breakdown": {
@@ -166,8 +166,8 @@
         {
           "name": "Saturday Premium Parking Pass",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 40,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 46.56
         },
         {
@@ -194,8 +194,8 @@
         {
           "name": "Sunday Premium Parking Pass",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 40,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 46.56
         },
         {
@@ -264,8 +264,8 @@
         {
           "name": "Wednesday-Sunday Premium Parking Pass",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 170,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 189.08
         },
         {
