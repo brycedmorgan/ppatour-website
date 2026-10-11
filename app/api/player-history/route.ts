@@ -24,7 +24,9 @@ export async function GET(request: Request) {
   const result = await playerHistory(name);
   // Empty can mean "no results" or "upstream 429'd on a cold pull" — the two
   // look the same from here, so an empty answer is only held for a minute.
-  const empty = result.events.length === 0;
+  // `partial`: a stop's draws failed to load, so a result they played may be
+  // missing. Same minute, so the next request can fill it in.
+  const empty = result.events.length === 0 || Boolean(result.partial);
   return NextResponse.json(result, {
     headers: { "Cache-Control": empty ? "public, s-maxage=60" : CACHE_CONTROL },
   });

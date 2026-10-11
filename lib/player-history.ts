@@ -24,6 +24,7 @@
  */
 import { getEvents } from "@/lib/events-api";
 import { eventHref, hasTournamentEnded, isTourStop, type Tournament } from "@/lib/placeholder-data";
+import { getBracketDraw, getBracketIndex } from "@/lib/brackets-api";
 import { playerRuns, type PlayerStep } from "@/lib/player-event";
 import { scoreHeadshots } from "@/lib/score-headshots";
 import { normalizeScoreName } from "@/lib/score-names";
@@ -67,6 +68,8 @@ export type PlayerHistory = {
    * namesake's photo.
    */
   faces: Record<string, string>;
+  /** A stop's draws failed to load, so a result may be missing — cache briefly. */
+  partial?: boolean;
 };
 
 /**
@@ -131,20 +134,41 @@ function roundDepth(round: string): number {
  * stopping once they have {@link EVENT_COUNT} stops with a result. A top pro
  * is done in about four batches; a pro who plays less reaches further back.
  */
+/**
+ * Did this stop's draws actually load? `playerRuns` returns [] both for "not
+ * in this draw" and for a fetch that failed (a 429 builds an empty index), and
+ * the two must not look alike: on 10/11 the live answer for Anna Leigh Waters
+ * dropped Las Vegas and Atlanta, both of which she played, for an hour at a
+ * time. Same memo as playerRuns (lib/brackets-api `load`), so no extra fetch.
+ */
+async function stopLoaded(eventId: string): Promise<boolean> {
+  const { divisions } = await getBracketIndex(eventId);
+  if (!divisions.length) return false;
+  const draws = await Promise.all(divisions.map((d) => getBracketDraw(eventId, d.id)));
+  return draws.every(Boolean);
+}
+
 async function runsUntilFull(stops: Tournament[], name: string) {
   const out: Awaited<ReturnType<typeof playerRuns>>[] = [];
   let played = 0;
+  let readEmpty = 0;
+  let partial = false;
   for (let i = 0; i < stops.length && played < EVENT_COUNT; i += CONCURRENCY) {
     const batch = await Promise.all(
-      stops.slice(i, i + CONCURRENCY).map((t) => playerRuns(t.tournamentUuid as string, name)),
+      stops.slice(i, i + CONCURRENCY).map(async (t) => {
+        const runs = await playerRuns(t.tournamentUuid as string, name);
+        return { runs, loaded: runs.length > 0 || (await stopLoaded(t.tournamentUuid as string)) };
+      }),
     );
-    out.push(...batch);
-    played += batch.filter((r) => r.length > 0).length;
-    // Nobody in a year's first dozen stops: a typo, a namesake or a casual
+    out.push(...batch.map((b) => b.runs));
+    played += batch.filter((b) => b.runs.length > 0).length;
+    readEmpty += batch.filter((b) => b.runs.length === 0 && b.loaded).length;
+    partial ||= batch.some((b) => !b.loaded);
+    // Absent from a dozen stops that DID load: a typo, a namesake or a casual
     // player. Don't walk all MAX_STOPS cold draws for them (public route).
-    if (played === 0 && i + CONCURRENCY >= GIVE_UP_AFTER) break;
+    if (played === 0 && readEmpty >= GIVE_UP_AFTER) break;
   }
-  return out;
+  return { runsByStop: out, partial };
 }
 
 /** Never throws — an empty history just hides the section. */
@@ -152,7 +176,7 @@ export async function playerHistory(name: string, now?: number): Promise<PlayerH
   if (!name.trim()) return { events: [], matches: [], faces: {} };
   try {
     const stops = await recentStops(now);
-    const runsByStop = await runsUntilFull(stops, name);
+    const { runsByStop, partial } = await runsUntilFull(stops, name);
 
     const events: HistoryEvent[] = [];
     const matches: HistoryMatch[] = [];
@@ -200,7 +224,7 @@ export async function playerHistory(name: string, now?: number): Promise<PlayerH
         if (shots[k]) faces[k] = shots[k];
       }
     }
-    return { events, matches: recent, faces };
+    return { events, matches: recent, faces, ...(partial ? { partial } : {}) };
   } catch {
     return { events: [], matches: [], faces: {} };
   }
