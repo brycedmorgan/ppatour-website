@@ -111,11 +111,32 @@ export type PlayerStep = {
 
 export type PlayerRun = {
   division: string;
-  /** "Gold" / "Silver" / "Bronze", "On court now", "Next: QF", "Out in R16". */
+  /** "Champion" / "Finalist" / "Semifinalist", "On court now", "Next: QF", "Round of 16", "Pools". */
   summary: string;
-  medal: "gold" | "silver" | "bronze" | null;
+  /** 1 won it · 2 lost the final · 3 third place; null otherwise. */
+  place: 1 | 2 | 3 | null;
   sections: { label: string | null; steps: PlayerStep[] }[];
 };
+
+/**
+ * How far a pro got, in words — from the round they went out in.
+ *
+ * ⚠ NO MEDAL WORDS OR COLOURS (Hannah, 7/28 — see RankBadge in
+ * components/rankings/RankingTable): "Champion" / "Finalist", never "Gold" /
+ * "Silver". The feed's gold/silver/bronze fields are read for WHO placed, and
+ * that is all they are used for.
+ */
+export function finishLabel(round: string, pools = false): string {
+  if (pools) return "Pools";
+  if (/^final$|^gold/i.test(round)) return "Finalist";
+  if (/semi|^sf\b|bronze/i.test(round)) return "Semifinalist";
+  if (/quarter|^qf\b/i.test(round)) return "Quarterfinalist";
+  const r = /^r(?:ound of )?\s*(\d+)$/i.exec(round.trim());
+  if (r) return `Round of ${r[1]}`;
+  return round;
+}
+
+export const PLACE_LABEL = { 1: "Champion", 2: "Finalist", 3: "Semifinalist" } as const;
 
 const names = (s: BracketSide) => (s.participant?.name ?? "").split(" / ").map((n) => n.trim()).filter(Boolean);
 
@@ -171,7 +192,7 @@ export async function playerRuns(eventId: string, name: string): Promise<PlayerR
       if (!sections.length) return;
 
       const all = sections.flatMap((s) => s.steps);
-      const medal = has(div.gold, key) ? "gold" : has(div.silver, key) ? "silver" : has(div.bronze, key) ? "bronze" : null;
+      const place = has(div.gold, key) ? 1 : has(div.silver, key) ? 2 : has(div.bronze, key) ? 3 : null;
       const live = all.find((s) => s.status === "live");
       const next = all.find((s) => s.status === "scheduled");
       // "Out" only when the loss is in their LAST stage: a winners-bracket or
@@ -185,18 +206,18 @@ export async function playerRuns(eventId: string, name: string): Promise<PlayerR
         lastLoss?.round === "Final" ||
         (lastSection.label === "Pools" && knockoutStarted);
       const lastDone = terminal ? lastLoss : undefined;
-      const summary = medal
-        ? medal[0].toUpperCase() + medal.slice(1)
+      const summary = place
+        ? PLACE_LABEL[place]
         : live
           ? "On court now"
           : next
             ? `Next: ${next.round}`
             : lastDone && lastDone.won === false
-              ? lastDone.round === "Final"
-                ? "Silver"
-                : `Out in ${lastDone.round}`
+              ? finishLabel(lastDone.round, lastSection.label === "Pools")
               : "";
-      runs.push({ division: div.name, summary, medal, sections });
+      // A lost Final is second place even when the feed left silver empty.
+      const placed = place ?? (summary === "Finalist" ? 2 : null);
+      runs.push({ division: div.name, summary, place: placed, sections });
     });
     return runs;
   } catch {

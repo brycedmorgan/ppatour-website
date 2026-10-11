@@ -36,7 +36,8 @@ function shortRound(name: string): string {
   const n = name.toLowerCase();
   if (n.includes("quarter")) return "QF";
   if (n.includes("semi")) return "SF";
-  if (n.includes("bronze") || n.includes("3rd")) return "Bronze";
+  // The third-place match — no medal words on tour surfaces (Hannah, 7/28).
+  if (n.includes("bronze") || n.includes("3rd")) return "3rd";
   if (n.includes("final")) return "Final";
   const m = n.match(/(\d+)/);
   return m ? `R${m[1]}` : name;

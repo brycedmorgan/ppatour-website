@@ -25,6 +25,8 @@
 import { getEvents } from "@/lib/events-api";
 import { eventHref, hasTournamentEnded, isTourStop, type Tournament } from "@/lib/placeholder-data";
 import { playerRuns, type PlayerStep } from "@/lib/player-event";
+import { scoreHeadshots } from "@/lib/score-headshots";
+import { normalizeScoreName } from "@/lib/score-names";
 
 /** Tour stops THIS PLAYER played — not stops on the calendar (see recentStops). */
 const EVENT_COUNT = 10;
@@ -43,7 +45,9 @@ export type HistoryEvent = {
   href: string | null;
   startDate: string;
   endDate: string;
-  divisions: { division: string; partners: string[]; finish: string; medal: "gold" | "silver" | "bronze" | null }[];
+  logoUrl: string | null;
+  /** `place`: 1 won · 2 final · 3 third — drives the top-finish styling, never a medal colour. */
+  divisions: { division: string; partners: string[]; finish: string; place: 1 | 2 | 3 | null }[];
 };
 
 export type HistoryMatch = PlayerStep & {
@@ -53,7 +57,17 @@ export type HistoryMatch = PlayerStep & {
   division: string;
 };
 
-export type PlayerHistory = { events: HistoryEvent[]; matches: HistoryMatch[] };
+export type PlayerHistory = {
+  events: HistoryEvent[];
+  matches: HistoryMatch[];
+  /**
+   * Headshots for the people in the LATEST match only (the profile's box-score
+   * card), keyed by normalizeScoreName. Unambiguous names only — the
+   * score-headshots rule — so a missing face is an initials chip, never a
+   * namesake's photo.
+   */
+  faces: Record<string, string>;
+};
 
 /**
  * Finished tour stops with a draw to read, newest first.
@@ -135,7 +149,7 @@ async function runsUntilFull(stops: Tournament[], name: string) {
 
 /** Never throws — an empty history just hides the section. */
 export async function playerHistory(name: string, now?: number): Promise<PlayerHistory> {
-  if (!name.trim()) return { events: [], matches: [] };
+  if (!name.trim()) return { events: [], matches: [], faces: {} };
   try {
     const stops = await recentStops(now);
     const runsByStop = await runsUntilFull(stops, name);
@@ -153,17 +167,15 @@ export async function playerHistory(name: string, now?: number): Promise<PlayerH
         href: t.region === "international" ? null : eventHref(t),
         startDate: t.startDate,
         endDate: t.endDate,
+        logoUrl: t.logoUrl ?? null,
         divisions: runs.map((r) => {
           const steps = r.sections.flatMap((s) => s.steps);
           // The partner is whoever stood beside them most recently.
           const partners = [...steps].reverse().find((s) => s.partners.length)?.partners ?? [];
           // A finished event can still read "Next: …" when the feed never
           // placed a result; no finish beats a stale one.
-          const finish = /^(Next|On court)/.test(r.summary) ? "" : r.summary.replace(/^Out in /, "");
-          // A lost Final reads "Silver" even when the feed left the silver
-          // field empty; style it as the medal it is.
-          const medal = r.medal ?? (finish === "Silver" ? "silver" : null);
-          return { division: r.division, partners, finish, medal };
+          const finish = /^(Next|On court)/.test(r.summary) ? "" : r.summary;
+          return { division: r.division, partners, finish, place: r.place };
         }),
       });
       // Deepest round first across every division at this stop, so a pro in
@@ -179,8 +191,17 @@ export async function playerHistory(name: string, now?: number): Promise<PlayerH
       atStop.sort((a, b) => roundDepth(b.round) - roundDepth(a.round));
       matches.push(...atStop);
     });
-    return { events, matches: matches.slice(0, MATCH_COUNT) };
+    const recent = matches.slice(0, MATCH_COUNT);
+    const faces: Record<string, string> = {};
+    if (recent[0]) {
+      const shots = await scoreHeadshots().catch(() => ({}) as Record<string, string>);
+      for (const n of [name, ...recent[0].partners, ...recent[0].opponents]) {
+        const k = normalizeScoreName(n);
+        if (shots[k]) faces[k] = shots[k];
+      }
+    }
+    return { events, matches: recent, faces };
   } catch {
-    return { events: [], matches: [] };
+    return { events: [], matches: [], faces: {} };
   }
 }

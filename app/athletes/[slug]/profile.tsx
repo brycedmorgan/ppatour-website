@@ -25,6 +25,7 @@ import { getAthleteVideoData } from "@/lib/athlete-videos";
 import { AthleteVideos } from "@/components/athletes/AthleteVideos";
 import { FollowButton } from "@/components/app/FollowButton";
 import { FollowChip } from "@/components/app/FollowChip";
+import { LatestResult } from "@/components/athletes/LatestResult";
 import { RecentResults } from "@/components/athletes/RecentResults";
 import { resolveGear } from "@/lib/athlete-gear";
 import { paddleImageFor } from "@/lib/paddle-images";
@@ -1084,6 +1085,12 @@ export async function AthleteProfile({
                 Full World Rankings →
               </Link>
 
+              {/* Latest Result — last match as a box score + their finish at that
+                  stop (Bryce, 10/11). Loads after the page, with the Recent
+                  Results band below (one shared request); renders nothing for a
+                  pro with no recent main-draw match. */}
+              <LatestResult name={a.name} />
+
               {/**
                * In the Bag — the athlete's paddle + the buy link.
                *
@@ -1300,12 +1307,12 @@ export async function AthleteProfile({
         </section>
       )}
 
-      {/* Recent tournaments + matches — loads after the page (components/athletes
-          RecentResults; this page is force-static and builds ~1,100 at once).
-          Renders nothing for a pro with no recent main-draw results. */}
-      <div className="bg-white">
-        <RecentResults name={a.name} className="mx-auto w-full max-w-3xl px-4 empty:hidden [&>section:last-child]:mb-12" />
-      </div>
+      {/* Recent Results — tournaments rail + box scores, a navy band of its own
+          (components/athletes/RecentResults). Loads after the page: this page
+          is force-static and builds ~1,100 at once. Renders nothing for a pro
+          with no recent main-draw results. The Latest Result card's "See all
+          results" jumps here (#recent-results). */}
+      <RecentResults name={a.name} variant="profile" />
 
       {/* Highlights — player video clips from the API */}
       {highlights && (
