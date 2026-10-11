@@ -20,7 +20,7 @@ const CACHE_CONTROL = "public, s-maxage=3600, stale-while-revalidate=86400";
 
 export async function GET(request: Request) {
   const name = (new URL(request.url).searchParams.get("name") ?? "").trim().slice(0, 80);
-  if (!name) return NextResponse.json({ events: [], matches: [] }, { status: 400 });
+  if (!name) return NextResponse.json({ events: [], matches: [], faces: {} }, { status: 400 });
   const result = await playerHistory(name);
   // Empty can mean "no results" or "upstream 429'd on a cold pull" — the two
   // look the same from here, so an empty answer is only held for a minute.

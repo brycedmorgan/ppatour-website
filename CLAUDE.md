@@ -67,6 +67,22 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-11 (pt. 4) — Profile results redesign: Latest Result card, navy Recent Results band, no medal words
+
+- **Right column → "Latest Result"** (`components/athletes/LatestResult.tsx`, under Quick Info): navy strip with the
+  last stop's logo + best finish there (Champion > Finalist > Semifinalist > Quarterfinalist > Round of N), then an
+  ESPN-style box score of the last match (`components/athletes/BoxScore.tsx`: team rows, G1–G3 columns, winner bold,
+  headshots from `faces`), then "See all results →" to `#recent-results`.
+- **Recent Results is its own navy band** in the page's grammar (eyebrow, font-display h2, square cards, top colour
+  bar): tournaments as a swipeable rail with event logos + finish chips, matches as box scores grouped by event.
+  App player screen uses the same component, `variant="app"` (light, compact).
+- **No medal language (Hannah 7/28):** `PlayerRun.medal`/history `medal` → `place: 1|2|3|null`; labels via
+  `finishLabel()` in lib/player-event ("Champion", "Finalist", "Semifinalist", "Round of 16", "Pools" — pool exits no
+  longer read "Round 3"). Top finish = tour yellow, finalist = navy/yellow ring. Bracket tab "Bronze" → "3rd".
+- One shared request: `components/athletes/use-player-history.ts` (module memo, empties not memoized, 10-min TTL,
+  state keyed to the request so the app never shows the previous player's results).
+- `/api/player-history` now also returns `logoUrl` per event and `faces` (latest match only, unambiguous names).
+
 ### 2026-10-11 (pt. 3) — Player history: the missing spring stops (Texas, Greater Zion)
 
 - **Root cause:** `recentStops` took the 10 newest tour stops, not 10 the player played. The feed tags the college

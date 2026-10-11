@@ -12,6 +12,7 @@ import { MatchCard } from "@/components/live/MatchCard";
 import { useLiveTicker } from "@/components/live/use-live-ticker";
 import { FollowButton } from "@/components/app/FollowButton";
 import { RecentResults } from "@/components/athletes/RecentResults";
+import { finishChipClass } from "@/components/athletes/BoxScore";
 
 /**
  * One pro, ESPN-style (Bryce, 10/9: "click one player, see all their scores,
@@ -103,7 +104,7 @@ function Run({ run, eventId }: { run: PlayerRun; eventId: string }) {
         {run.summary && (
           <span
             className={`shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.1em] ${
-              run.medal === "gold" ? "bg-ppa-yellow text-ppa-navy" : "bg-white text-ppa-navy/70"
+              run.place ? finishChipClass(run.place, "light") : "bg-white text-ppa-navy/70"
             }`}
           >
             {run.summary}
