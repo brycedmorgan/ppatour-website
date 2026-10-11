@@ -49,7 +49,12 @@ function Names({ list, eventId }: { list: string[]; eventId: string }) {
 }
 
 function Step({ s, eventId }: { s: PlayerStep; eventId: string }) {
-  const score = s.games[0].map((g, i) => `${g}–${s.games[1][i] ?? "?"}`).join(", ");
+  // The feed sends 0–0 for a game nobody played (a 2–0 match's third game).
+  const score = s.games[0]
+    .map((g, i) => [g, s.games[1][i] ?? 0] as const)
+    .filter(([a, b]) => a > 0 || b > 0)
+    .map(([a, b]) => `${a}–${b}`)
+    .join(", ");
   const badge =
     s.status === "live"
       ? { text: "Live", cls: "bg-ppa-live text-white" }
