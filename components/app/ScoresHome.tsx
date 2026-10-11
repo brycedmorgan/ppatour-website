@@ -67,7 +67,7 @@ export function ScoresHome({ event, initialTicker }: { event: ScoresEvent | null
     // The pros this fan follows come first, pulled out of the status lists so
     // a match never shows twice. Finals sink to the end of their section.
     const followed = new Set(follows.map((f) => nameKey(f.name)));
-    const isMine = (m: TickerMatch) => m.teams.some((t) => t.players.some((p) => followed.has(nameKey(p.name))));
+    const isMine = (m: TickerMatch) => m.teams.some((t) => t.players.some((p) => followed.has(nameKey(p.fullName ?? p.name))));
     const mine = ms.filter(isMine);
     const rest = ms.filter((m) => !isMine(m));
     // `ordered` is already sorted by the hook; this only splits it by status.

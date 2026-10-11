@@ -150,7 +150,7 @@ export function PlayerScreen({
     () =>
       ordered.filter(
         (m) =>
-          m.status !== "final" && m.teams.some((t) => t.players.some((p) => normalizeScoreName(p.name) === key)),
+          m.status !== "final" && m.teams.some((t) => t.players.some((p) => normalizeScoreName(p.fullName ?? p.name) === key)),
       ),
     [ordered, key],
   );
@@ -158,7 +158,7 @@ export function PlayerScreen({
   // in which case this is still THIS match's player, not a guess).
   const tickerShot = useMemo(() => {
     for (const m of ordered)
-      for (const t of m.teams) for (const p of t.players) if (normalizeScoreName(p.name) === key && p.headshot) return p.headshot;
+      for (const t of m.teams) for (const p of t.players) if (normalizeScoreName(p.fullName ?? p.name) === key && p.headshot) return p.headshot;
     return null;
   }, [ordered, key]);
   const headshot = profile.headshot ?? tickerShot;

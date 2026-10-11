@@ -77,6 +77,8 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - `lib/player-event.ts`: `resolvePlayer` (name → ranked pro; ambiguous names resolve to our profile only if exactly one
   is ours, else no rank/profile/follow) and `playerRuns` (all draws via getBracketIndex/getBracketDraw, one cached build).
   Boards memoized 1h per instance; non-live results not cached.
+- ⚠ Ticker names are short ("B. Johns"); `TickerPlayer.fullName` added and used for every lookup (player links, On court,
+  and Scores "Your players", which had never matched since 10/9 for the same reason). `?event=` must be a known tour UUID.
 - Verify against a Vercel deployment (no PB_API_TOKEN locally).
 
 ### 2026-10-10 — Chicago weekend parking at Crate & Barrel; VB broadcast Tue/Wed added, Thu/Fri PBTV 12–8

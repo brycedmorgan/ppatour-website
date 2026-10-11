@@ -179,7 +179,7 @@ export function MatchCard({
                     ? team.players.map((p, pi) => (
                         <Fragment key={pi}>
                           {pi > 0 && " / "}
-                          <Link href={playerHref(p.name)} className="underline-offset-2 active:underline">
+                          <Link href={playerHref(p.fullName ?? p.name)} className="underline-offset-2 active:underline">
                             {p.name}
                           </Link>
                         </Fragment>

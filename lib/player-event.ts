@@ -174,7 +174,12 @@ export async function playerRuns(eventId: string, name: string): Promise<PlayerR
       const medal = has(div.gold, key) ? "gold" : has(div.silver, key) ? "silver" : has(div.bronze, key) ? "bronze" : null;
       const live = all.find((s) => s.status === "live");
       const next = all.find((s) => s.status === "scheduled");
-      const lastDone = [...all].reverse().find((s) => s.won !== null);
+      // "Out" only when the loss is in their LAST stage: a winners-bracket or
+      // pool loss is not elimination until the feed places them in the next
+      // stage, which can lag the result.
+      const lastSection = sections[sections.length - 1];
+      const terminal = lastSection.label !== "Winners" && lastSection.label !== "Pools";
+      const lastDone = terminal ? [...lastSection.steps].reverse().find((s) => s.won !== null) : undefined;
       const summary = medal
         ? medal[0].toUpperCase() + medal.slice(1)
         : live

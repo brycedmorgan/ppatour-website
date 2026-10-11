@@ -30,18 +30,22 @@ export default async function PlayerPage({
     return <p className="px-4 pt-10 text-center text-ppa-navy/60">No player picked.</p>;
   }
   const current = await resolveScoresEvent();
-  const eventId = eventParam || current?.eventId || "";
+  // Only a tour event we know: an arbitrary ?event= would start a fresh
+  // upstream draw build per string (lib/brackets-api caches by event id).
+  const known =
+    eventParam && eventParam !== current?.eventId
+      ? await getEvents()
+          .then(({ events }) => events.find((e) => e.tournamentUuid === eventParam))
+          .catch(() => undefined)
+      : undefined;
+  const eventId = known ? eventParam! : current?.eventId || "";
   const isCurrent = Boolean(current && current.eventId === eventId);
 
   const [profile, runs, ticker, eventName] = await Promise.all([
     resolvePlayer(name),
     playerRuns(eventId, name),
     isCurrent && current?.live ? fetchLiveTicker() : Promise.resolve(undefined),
-    isCurrent
-      ? Promise.resolve(current?.name ?? "")
-      : getEvents()
-          .then(({ events }) => events.find((e) => e.tournamentUuid === eventId)?.name ?? "")
-          .catch(() => ""),
+    Promise.resolve(isCurrent ? (current?.name ?? "") : (known?.name ?? "")),
   ]);
 
   return (
