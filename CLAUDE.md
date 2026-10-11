@@ -67,6 +67,17 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-11 (pt. 3) — Player history: the missing spring stops (Texas, Greater Zion)
+
+- **Root cause:** `recentStops` took the 10 newest tour stops, not 10 the player played. The feed tags the college
+  tour's "The Nationals" a slam and PickleSlam an Open, so they took two slots and the Texas Open and Greater Zion Cup
+  (both ALW/Bright WD titles, draws fine on `/api/brackets`) fell off.
+- **Fix** (`lib/player-history.ts`): stops in a 400-day window (max 30, college-tour names skipped), read newest first
+  3 at a time until the player has 10 events with a result. Skipped stops cost a cached fetch, never a slot.
+- **The May 10 – Aug 31 hole is real:** the feed has no US tour stop between the PPA Finals and Nationals (MLP summer).
+  Curated `orlando-open` / `los-angeles-slam` rows in lib/placeholder-data are not in the feed and have no draw.
+- Not fixed (flag): `isTourStop` counts the college "Nationals" (slam) and PickleSlam (open) elsewhere too.
+
 ### 2026-10-11 — Recent tournaments + recent matches on player screen and athlete profile
 
 - Bryce: "we should be adding their recent scores and tournaments to the players pages too". Shipped on the app
