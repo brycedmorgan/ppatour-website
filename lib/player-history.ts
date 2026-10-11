@@ -33,6 +33,8 @@ const CONCURRENCY = 3;
 /** How far back to look, and the most stops one request may read. */
 const WINDOW_DAYS = 400;
 const MAX_STOPS = 30;
+/** Stops read with no result for this name before giving up. */
+const GIVE_UP_AFTER = 12;
 
 export type HistoryEvent = {
   eventId: string;
@@ -124,6 +126,9 @@ async function runsUntilFull(stops: Tournament[], name: string) {
     );
     out.push(...batch);
     played += batch.filter((r) => r.length > 0).length;
+    // Nobody in a year's first dozen stops: a typo, a namesake or a casual
+    // player. Don't walk all MAX_STOPS cold draws for them (public route).
+    if (played === 0 && i + CONCURRENCY >= GIVE_UP_AFTER) break;
   }
   return out;
 }
