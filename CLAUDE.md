@@ -67,6 +67,16 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-11 (pt. 5) — Player history: failed draw loads no longer read as "didn't play"
+
+- A 429/failed draw fetch looked identical to "not in this event" and got cached 1h (Waters lost Las Vegas + Atlanta on one pull).
+  Now: failed stop → answer flagged `partial`, cached 60s, keep reading (0b5cdd4). `lib/brackets-api` won't pin a finished
+  stop's build for a year if any division came back empty (754b38f). International stop with no Pro divisions = genuinely empty.
+- **The May 10 – Aug 31 hole is real**: the `ppa_tournaments` feed has no US stop between PPA Finals and Nationals; Orlando /
+  LA Slam exist only as curated rows in `lib/placeholder-data.ts` with no draw.
+- Live 10/11: Waters 10 events (Las Vegas → Mesa), all finishes Champion/Finalist/Semifinalist, not partial.
+- ⚠ `isTourStop` still counts the college "The Nationals" and PickleSlam as tour stops elsewhere on the site.
+
 ### 2026-10-11 (pt. 4) — Profile results redesign: Latest Result card, navy Recent Results band, no medal words
 
 - **Right column → "Latest Result"** (`components/athletes/LatestResult.tsx`, under Quick Info): navy strip with the
