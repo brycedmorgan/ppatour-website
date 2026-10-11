@@ -11,6 +11,7 @@ import { normalizeScoreName } from "@/lib/score-names";
 import { MatchCard } from "@/components/live/MatchCard";
 import { useLiveTicker } from "@/components/live/use-live-ticker";
 import { FollowButton } from "@/components/app/FollowButton";
+import { RecentResults } from "@/components/athletes/RecentResults";
 
 /**
  * One pro, ESPN-style (Bryce, 10/9: "click one player, see all their scores,
@@ -238,6 +239,8 @@ export function PlayerScreen({
             {profile.name} isn&rsquo;t in a draw at this event.
           </p>
         )}
+
+        <RecentResults name={profile.name} excludeEventId={eventId} />
       </div>
     </div>
   );

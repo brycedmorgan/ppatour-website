@@ -25,6 +25,7 @@ import { getAthleteVideoData } from "@/lib/athlete-videos";
 import { AthleteVideos } from "@/components/athletes/AthleteVideos";
 import { FollowButton } from "@/components/app/FollowButton";
 import { FollowChip } from "@/components/app/FollowChip";
+import { RecentResults } from "@/components/athletes/RecentResults";
 import { resolveGear } from "@/lib/athlete-gear";
 import { paddleImageFor } from "@/lib/paddle-images";
 import { athleteHeroFor } from "@/lib/athlete-heroes";
@@ -1298,6 +1299,13 @@ export async function AthleteProfile({
           </div>
         </section>
       )}
+
+      {/* Recent tournaments + matches — loads after the page (components/athletes
+          RecentResults; this page is force-static and builds ~1,100 at once).
+          Renders nothing for a pro with no recent main-draw results. */}
+      <div className="bg-white">
+        <RecentResults name={a.name} className="mx-auto w-full max-w-3xl px-4 empty:hidden [&>section:last-child]:mb-12" />
+      </div>
 
       {/* Highlights — player video clips from the API */}
       {highlights && (
