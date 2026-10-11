@@ -14,8 +14,15 @@ import { useAppMode } from "@/components/app/use-app-mode";
  * a match, so Quick Info never shifts for a pro with no recent results.
  *
  * "How far they got" is their BEST finish at that stop across divisions —
- * a champion in doubles who went out early in mixed reads Champion.
+ * a champion in doubles who went out early in mixed reads Champion, and a
+ * quarterfinal beats a round of 32.
  */
+function finishRank(finish: string): number {
+  const fixed: Record<string, number> = { Champion: 1, Finalist: 2, Semifinalist: 3, Quarterfinalist: 4, Pools: 99 };
+  if (fixed[finish]) return fixed[finish];
+  const r = /^Round of (\d+)$/.exec(finish);
+  return r ? 4 + Math.log2(Number(r[1]) || 2) : 50;
+}
 export function LatestResult({ name }: { name: string }) {
   const isApp = useAppMode();
   const data = usePlayerHistory(name);
@@ -24,7 +31,7 @@ export function LatestResult({ name }: { name: string }) {
 
   const e = data.events.find((x) => x.eventId === m.eventId) ?? data.events[0];
   const best = e
-    ? [...e.divisions].filter((d) => d.finish).sort((a, b) => (a.place ?? 9) - (b.place ?? 9))[0]
+    ? [...e.divisions].filter((d) => d.finish).sort((a, b) => finishRank(a.finish) - finishRank(b.finish))[0]
     : undefined;
 
   return (
