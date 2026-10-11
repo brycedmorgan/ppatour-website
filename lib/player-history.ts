@@ -24,6 +24,7 @@
  */
 import { getEvents } from "@/lib/events-api";
 import { eventHref, hasTournamentEnded, isTourStop, type Tournament } from "@/lib/placeholder-data";
+import { getBracketDraw, getBracketIndex, isEmptyDraw } from "@/lib/brackets-api";
 import { playerRuns, type PlayerStep } from "@/lib/player-event";
 
 /** Tour stops THIS PLAYER played — not stops on the calendar (see recentStops). */
@@ -53,7 +54,12 @@ export type HistoryMatch = PlayerStep & {
   division: string;
 };
 
-export type PlayerHistory = { events: HistoryEvent[]; matches: HistoryMatch[] };
+export type PlayerHistory = {
+  events: HistoryEvent[];
+  matches: HistoryMatch[];
+  /** A stop's draws failed to load, so a result may be missing — cache briefly. */
+  partial?: boolean;
+};
 
 /**
  * Finished tour stops with a draw to read, newest first.
@@ -117,20 +123,44 @@ function roundDepth(round: string): number {
  * stopping once they have {@link EVENT_COUNT} stops with a result. A top pro
  * is done in about four batches; a pro who plays less reaches further back.
  */
+/**
+ * Did this stop's draws load? `playerRuns` returns [] both for "not in this
+ * draw" and for a failed fetch, and the two must not look alike: on 10/11 the
+ * live answer for Anna Leigh Waters dropped Las Vegas and Atlanta, both of
+ * which she played, for an hour at a time. A 429 on one division's match call
+ * builds that division as an EMPTY draw, so an empty draw at a finished stop
+ * means "failed". A stop with no Pro divisions at all is taken as genuinely
+ * empty (the mis-tiered PickleSlam row), or it would mark every answer that
+ * reaches it partial forever. Same memo as playerRuns, so no extra fetch.
+ */
+async function stopLoaded(eventId: string): Promise<boolean> {
+  const { divisions } = await getBracketIndex(eventId);
+  const draws = await Promise.all(divisions.map((d) => getBracketDraw(eventId, d.id)));
+  return draws.every((d) => d !== null && !isEmptyDraw(d));
+}
+
 async function runsUntilFull(stops: Tournament[], name: string) {
   const out: Awaited<ReturnType<typeof playerRuns>>[] = [];
   let played = 0;
+  let readEmpty = 0;
+  let partial = false;
   for (let i = 0; i < stops.length && played < EVENT_COUNT; i += CONCURRENCY) {
     const batch = await Promise.all(
-      stops.slice(i, i + CONCURRENCY).map((t) => playerRuns(t.tournamentUuid as string, name)),
+      stops.slice(i, i + CONCURRENCY).map(async (t) => {
+        const runs = await playerRuns(t.tournamentUuid as string, name);
+        return { runs, loaded: runs.length > 0 || (await stopLoaded(t.tournamentUuid as string)) };
+      }),
     );
-    out.push(...batch);
-    played += batch.filter((r) => r.length > 0).length;
-    // Nobody in a year's first dozen stops: a typo, a namesake or a casual
-    // player. Don't walk all MAX_STOPS cold draws for them (public route).
-    if (played === 0 && i + CONCURRENCY >= GIVE_UP_AFTER) break;
+    out.push(...batch.map((b) => b.runs));
+    played += batch.filter((b) => b.runs.length > 0).length;
+    readEmpty += batch.filter((b) => b.runs.length === 0 && b.loaded).length;
+    partial ||= batch.some((b) => !b.loaded);
+    // Absent from a dozen stops that DID load: a typo, a namesake or a casual
+    // player. Don't walk all MAX_STOPS cold draws for them (public route) —
+    // and during a 429 storm, when nothing loads, stop at twice that anyway.
+    if (played === 0 && (readEmpty >= GIVE_UP_AFTER || i + CONCURRENCY >= 2 * GIVE_UP_AFTER)) break;
   }
-  return out;
+  return { runsByStop: out, partial };
 }
 
 /** Never throws — an empty history just hides the section. */
@@ -138,7 +168,7 @@ export async function playerHistory(name: string, now?: number): Promise<PlayerH
   if (!name.trim()) return { events: [], matches: [] };
   try {
     const stops = await recentStops(now);
-    const runsByStop = await runsUntilFull(stops, name);
+    const { runsByStop, partial } = await runsUntilFull(stops, name);
 
     const events: HistoryEvent[] = [];
     const matches: HistoryMatch[] = [];
@@ -179,7 +209,7 @@ export async function playerHistory(name: string, now?: number): Promise<PlayerH
       atStop.sort((a, b) => roundDepth(b.round) - roundDepth(a.round));
       matches.push(...atStop);
     });
-    return { events, matches: matches.slice(0, MATCH_COUNT) };
+    return { events, matches: matches.slice(0, MATCH_COUNT), ...(partial ? { partial } : {}) };
   } catch {
     return { events: [], matches: [] };
   }
