@@ -65,13 +65,20 @@ async function recentStops(now?: number): Promise<Tournament[]> {
  * division. Pools are earliest; an unrecognised name sits mid-pack.
  */
 function roundDepth(round: string): number {
+  // Names as lib/brackets-api writes them: "Final", "SF", "QF", "R16"… for a
+  // knockout; "Losers Round N" / "Losers Final"; "Round N" for pools and
+  // round-robin.
+  const losers = /^losers round (\d+)/i.exec(round);
+  if (losers) return 40 + Number(losers[1]);
+  if (/^losers final/i.test(round)) return 85;
+  const rr = /^round (\d+)/i.exec(round);
+  if (rr) return 10 + Number(rr[1]);
   if (/semi|^sf\b/i.test(round)) return 90;
   if (/bronze/i.test(round)) return 95;
   if (/final|gold/i.test(round) && !/quarter/i.test(round)) return 100;
   if (/quarter|^qf\b/i.test(round)) return 80;
-  const r = /r(?:ound of )?\s*(\d+)/i.exec(round);
+  const r = /^r(?:ound of )?\s*(\d+)/i.exec(round);
   if (r) return 70 - Math.log2(Number(r[1]) || 2);
-  if (/pool|group|rr/i.test(round)) return 10;
   return 50;
 }
 
@@ -119,6 +126,8 @@ export async function playerHistory(name: string, now?: number): Promise<PlayerH
         r.sections
           .flatMap((s) => s.steps)
           .filter((s) => s.status === "final")
+          // Newest first before the sort, so equal depths keep that order.
+          .reverse()
           .map((s) => ({ ...s, eventId, eventName: t.name, endDate: t.endDate, division: r.division })),
       );
       atStop.sort((a, b) => roundDepth(b.round) - roundDepth(a.round));
