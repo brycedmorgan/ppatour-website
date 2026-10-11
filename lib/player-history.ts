@@ -58,6 +58,23 @@ async function recentStops(now?: number): Promise<Tournament[]> {
     .slice(0, EVENT_COUNT);
 }
 
+/**
+ * How deep in a draw a round is, for ordering one event's matches newest
+ * first across divisions. The draws carry no per-match date we can sort on,
+ * so depth stands in: a semifinal was played after a quarterfinal in any
+ * division. Pools are earliest; an unrecognised name sits mid-pack.
+ */
+function roundDepth(round: string): number {
+  if (/semi|^sf\b/i.test(round)) return 90;
+  if (/bronze/i.test(round)) return 95;
+  if (/final|gold/i.test(round) && !/quarter/i.test(round)) return 100;
+  if (/quarter|^qf\b/i.test(round)) return 80;
+  const r = /r(?:ound of )?\s*(\d+)/i.exec(round);
+  if (r) return 70 - Math.log2(Number(r[1]) || 2);
+  if (/pool|group|rr/i.test(round)) return 10;
+  return 50;
+}
+
 async function inBatches<T, R>(items: T[], size: number, fn: (t: T) => Promise<R>): Promise<R[]> {
   const out: R[] = [];
   for (let i = 0; i < items.length; i += size) out.push(...(await Promise.all(items.slice(i, size + i).map(fn))));
@@ -90,14 +107,22 @@ export async function playerHistory(name: string, now?: number): Promise<PlayerH
           // A finished event can still read "Next: …" when the feed never
           // placed a result; no finish beats a stale one.
           const finish = /^(Next|On court)/.test(r.summary) ? "" : r.summary.replace(/^Out in /, "");
-          return { division: r.division, partners, finish, medal: r.medal };
+          // A lost Final reads "Silver" even when the feed left the silver
+          // field empty; style it as the medal it is.
+          const medal = r.medal ?? (finish === "Silver" ? "silver" : null);
+          return { division: r.division, partners, finish, medal };
         }),
       });
-      // Latest round first within each division, divisions in feed order.
-      for (const r of runs) {
-        const played = r.sections.flatMap((s) => s.steps).filter((s) => s.status === "final");
-        for (const s of played.reverse()) matches.push({ ...s, eventId, eventName: t.name, endDate: t.endDate, division: r.division });
-      }
+      // Deepest round first across every division at this stop, so a pro in
+      // three draws shows all three finals before anyone's round of 32.
+      const atStop = runs.flatMap((r) =>
+        r.sections
+          .flatMap((s) => s.steps)
+          .filter((s) => s.status === "final")
+          .map((s) => ({ ...s, eventId, eventName: t.name, endDate: t.endDate, division: r.division })),
+      );
+      atStop.sort((a, b) => roundDepth(b.round) - roundDepth(a.round));
+      matches.push(...atStop);
     });
     return { events, matches: matches.slice(0, MATCH_COUNT) };
   } catch {

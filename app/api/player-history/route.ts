@@ -22,5 +22,10 @@ export async function GET(request: Request) {
   const name = (new URL(request.url).searchParams.get("name") ?? "").trim().slice(0, 80);
   if (!name) return NextResponse.json({ events: [], matches: [] }, { status: 400 });
   const result = await playerHistory(name);
-  return NextResponse.json(result, { headers: { "Cache-Control": CACHE_CONTROL } });
+  // Empty can mean "no results" or "upstream 429'd on a cold pull" — the two
+  // look the same from here, so an empty answer is only held for a minute.
+  const empty = result.events.length === 0;
+  return NextResponse.json(result, {
+    headers: { "Cache-Control": empty ? "public, s-maxage=60" : CACHE_CONTROL },
+  });
 }
