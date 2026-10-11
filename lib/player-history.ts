@@ -127,16 +127,23 @@ function roundDepth(round: string): number {
  * Did this stop's draws load? `playerRuns` returns [] both for "not in this
  * draw" and for a failed fetch, and the two must not look alike: on 10/11 the
  * live answer for Anna Leigh Waters dropped Las Vegas and Atlanta, both of
- * which she played, for an hour at a time. A 429 on one division's match call
- * builds that division as an EMPTY draw, so an empty draw at a finished stop
- * means "failed". A stop with no Pro divisions at all is taken as genuinely
- * empty (the mis-tiered PickleSlam row), or it would mark every answer that
- * reaches it partial forever. Same memo as playerRuns, so no extra fetch.
+ * which she played, for an hour at a time. A 429 builds an EMPTY division
+ * draw, or no divisions at all when the list call itself fails — both read as
+ * "failed". The one exception is an international stop with no Pro divisions,
+ * which can be genuinely empty (the mis-tiered PickleSlam row); counting it as
+ * failed would mark every answer that reaches it partial forever. Same memo
+ * as playerRuns (lib/brackets-api `load`), so no extra fetch.
  */
-async function stopLoaded(eventId: string): Promise<boolean> {
-  const { divisions } = await getBracketIndex(eventId);
-  const draws = await Promise.all(divisions.map((d) => getBracketDraw(eventId, d.id)));
-  return draws.every((d) => d !== null && !isEmptyDraw(d));
+async function stopLoaded(t: Tournament): Promise<boolean> {
+  try {
+    const eventId = t.tournamentUuid as string;
+    const { divisions } = await getBracketIndex(eventId);
+    if (!divisions.length) return t.region === "international";
+    const draws = await Promise.all(divisions.map((d) => getBracketDraw(eventId, d.id)));
+    return draws.every((d) => d !== null && !isEmptyDraw(d));
+  } catch {
+    return false;
+  }
 }
 
 async function runsUntilFull(stops: Tournament[], name: string) {
@@ -148,7 +155,7 @@ async function runsUntilFull(stops: Tournament[], name: string) {
     const batch = await Promise.all(
       stops.slice(i, i + CONCURRENCY).map(async (t) => {
         const runs = await playerRuns(t.tournamentUuid as string, name);
-        return { runs, loaded: runs.length > 0 || (await stopLoaded(t.tournamentUuid as string)) };
+        return { runs, loaded: runs.length > 0 || (await stopLoaded(t)) };
       }),
     );
     out.push(...batch.map((b) => b.runs));

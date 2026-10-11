@@ -930,7 +930,14 @@ async function load(uuid: string) {
       // every minute forever is what kept Nationals calling upstream eleven days
       // after it ended — each rebuild re-reads six fetches. `settled` was just
       // written by `proEvents`, so this asks the same question it did.
-      const ttl = isSettled(uuid) ? FINISHED_MEMO_MS : TTL_MS;
+      //
+      // ⚠ …UNLESS A DIVISION BUILT EMPTY (10/11). One division's match call
+      // 429ing builds that division as an empty draw while the rest load, and
+      // pinning THAT for a year hid a pro's result on every page reading this
+      // instance (lib/player-history). A finished stop with an empty division
+      // is rebuilt on the normal 60s window until every division has content.
+      const partial = [...value.draws.values()].some(isEmptyDraw);
+      const ttl = isSettled(uuid) && !partial ? FINISHED_MEMO_MS : TTL_MS;
 
       /**
        * ⚠ AN EMPTY BUILD IS NOW CACHED BRIEFLY, AND THAT REVERSES HALF OF THE 8/26
