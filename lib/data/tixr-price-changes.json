@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-10T17:31:26Z",
+  "updated_at": "2026-10-11T17:50:40Z",
   "note": "Append-only log of ticket price / availability changes detected by scripts/sync-tixr-prices.mjs. Baseline snapshot captured on this date; entries accumulate on each daily run when something changes.",
   "entries": [
     {
@@ -11349,6 +11349,214 @@
       "sale_state": {
         "from": "OPEN",
         "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-10-11T17:50:40Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Friday Courtside",
+      "base_price": {
+        "from": 80,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 91.83,
+        "to": 91.83
+      }
+    },
+    {
+      "at": "2026-10-11T17:50:40Z",
+      "type": "availability_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Friday Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "CLOSED"
+      }
+    },
+    {
+      "at": "2026-10-11T17:50:40Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Saturday Evening Courtside",
+      "base_price": {
+        "from": 100,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 113.44,
+        "to": 113.44
+      }
+    },
+    {
+      "at": "2026-10-11T17:50:40Z",
+      "type": "availability_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Saturday Evening Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "CLOSED"
+      }
+    },
+    {
+      "at": "2026-10-11T17:50:40Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Saturday Morning Courtside",
+      "base_price": {
+        "from": 100,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 113.44,
+        "to": 113.44
+      }
+    },
+    {
+      "at": "2026-10-11T17:50:40Z",
+      "type": "availability_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Saturday Morning Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "CLOSED"
+      }
+    },
+    {
+      "at": "2026-10-11T17:50:40Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Sunday Courtside",
+      "base_price": {
+        "from": 160,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 178.27,
+        "to": 178.27
+      }
+    },
+    {
+      "at": "2026-10-11T17:50:40Z",
+      "type": "availability_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Sunday Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-10-11T17:50:40Z",
+      "type": "price_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Thursday Courtside",
+      "base_price": {
+        "from": 40,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 46.56,
+        "to": 46.56
+      }
+    },
+    {
+      "at": "2026-10-11T17:50:40Z",
+      "type": "availability_change",
+      "event_id": "176687",
+      "event": "Veolia PPA Chicago",
+      "ticket": "Thursday Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "CLOSED"
+      }
+    },
+    {
+      "at": "2026-10-11T17:50:40Z",
+      "type": "price_change",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "Play with the Pro – 3.0",
+      "base_price": {
+        "from": 100,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 113.44,
+        "to": 113.44
+      }
+    },
+    {
+      "at": "2026-10-11T17:50:40Z",
+      "type": "availability_change",
+      "event_id": "166345",
+      "event": "Opendoor Pickleball World Championships",
+      "ticket": "Play with the Pro – 3.0",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "SOLD_OUT"
+      }
+    },
+    {
+      "at": "2026-10-11T17:50:40Z",
+      "type": "price_change",
+      "event_id": "204411",
+      "event": "PPA Palm Springs Friday - Quarterfinals",
+      "ticket": "Friday Courtside",
+      "base_price": {
+        "from": 80,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 93.38,
+        "to": 48.1
+      }
+    },
+    {
+      "at": "2026-10-11T17:50:40Z",
+      "type": "availability_change",
+      "event_id": "204411",
+      "event": "PPA Palm Springs Friday - Quarterfinals",
+      "ticket": "Friday Courtside",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
+      }
+    },
+    {
+      "at": "2026-10-11T17:50:40Z",
+      "type": "price_change",
+      "event_id": "204411",
+      "event": "PPA Palm Springs Friday - Quarterfinals",
+      "ticket": "Friday Courtside+",
+      "base_price": {
+        "from": 160,
+        "to": null
+      },
+      "all_in_price": {
+        "from": 179.82,
+        "to": 136.6
+      }
+    },
+    {
+      "at": "2026-10-11T17:50:40Z",
+      "type": "availability_change",
+      "event_id": "204411",
+      "event": "PPA Palm Springs Friday - Quarterfinals",
+      "ticket": "Friday Courtside+",
+      "sale_state": {
+        "from": "OPEN",
+        "to": "HIDE"
       }
     }
   ]

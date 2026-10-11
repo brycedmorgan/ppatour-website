@@ -1,7 +1,7 @@
 {
   "source": "https://www.tixr.com/groups/ppa",
   "group": "Professional Pickleball Association",
-  "generated_at": "2026-10-10T17:31:26Z",
+  "generated_at": "2026-10-11T17:50:40Z",
   "event_count": 41,
   "ticket_type_count": 765,
   "series_breakdown": {
@@ -40,8 +40,8 @@
         {
           "name": "Friday Courtside",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 80,
+          "sale_state": "CLOSED",
+          "base_price": null,
           "all_in_price": 91.83
         },
         {
@@ -145,8 +145,8 @@
         {
           "name": "Saturday Evening Courtside",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 100,
+          "sale_state": "CLOSED",
+          "base_price": null,
           "all_in_price": 113.44
         },
         {
@@ -159,8 +159,8 @@
         {
           "name": "Saturday Morning Courtside",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 100,
+          "sale_state": "CLOSED",
+          "base_price": null,
           "all_in_price": 113.44
         },
         {
@@ -180,8 +180,8 @@
         {
           "name": "Sunday Courtside",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 160,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 178.27
         },
         {
@@ -208,8 +208,8 @@
         {
           "name": "Thursday Courtside",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 40,
+          "sale_state": "CLOSED",
+          "base_price": null,
           "all_in_price": 46.56
         },
         {
@@ -857,8 +857,8 @@
         {
           "name": "Play with the Pro – 3.0",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 100,
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
           "all_in_price": 113.44
         },
         {
@@ -2452,8 +2452,8 @@
         {
           "name": "Sunday VIP",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 350,
+          "sale_state": "HIDE",
+          "base_price": null,
           "all_in_price": 384.43
         },
         {
@@ -3662,13 +3662,6 @@
           "name": "Friday Courtside",
           "category": "STANDARD",
           "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 48.1
-        },
-        {
-          "name": "Friday Courtside",
-          "category": "STANDARD",
-          "sale_state": "OPEN",
           "base_price": 60,
           "all_in_price": 71.77
         },
@@ -3680,11 +3673,11 @@
           "all_in_price": 93.38
         },
         {
-          "name": "Friday Courtside+",
+          "name": "Friday Courtside",
           "category": "STANDARD",
-          "sale_state": "OPEN",
-          "base_price": 120,
-          "all_in_price": 136.6
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 48.1
         },
         {
           "name": "Friday Courtside+",
@@ -3692,6 +3685,13 @@
           "sale_state": "OPEN",
           "base_price": 160,
           "all_in_price": 179.82
+        },
+        {
+          "name": "Friday Courtside+",
+          "category": "STANDARD",
+          "sale_state": "HIDE",
+          "base_price": null,
+          "all_in_price": 136.6
         },
         {
           "name": "Friday VIP",
