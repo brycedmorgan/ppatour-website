@@ -67,6 +67,17 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-10 — Chicago weekend parking at Crate & Barrel; VB broadcast Tue/Wed added, Thu/Fri PBTV 12–8
+
+- **Chicago (Dana, Slack + updated Asana `1219139745966275`):** Sat 10/10 & Sun 10/11 park at Crate & Barrel
+  HQ (1250 Techny Rd), Techny Prairie as overflow; the Techny paragraph now reads Wed–Fri. No map for C&B, so
+  the Techny map got `after: 3` to stay under its own paragraph.
+- **VB broadcast (Bryce's patch, he can't push):** Tue 10/13 RD64 + Wed 10/14 RD32 PBTV 12–8PM ET (Matt, 10/10:
+  start only, "until End of Day"; 8PM is Bryce's). Thu/Fri PBTV 2–10 → 12–8 (Keaton, 10/9); the live sheet
+  already carries 12–8 for Thu/Fri. TC unchanged. `tv-schedule` VB `startIso` → 10-13.
+- Audit: VB flags only the two Tue/Wed rows (ahead of the sheet); broadcast ↔ tv-schedule 10/10 agree.
+- ⚠ **Keaton's 10/9 revision also moved Worlds, Daytona and Malibu windows; not applied yet.**
+
 ### 2026-10-09 (pt. 2) — App: Rankings tab + "Your players" on Scores; TestFlight archive ready
 
 - **Rankings tab → `/rankings/app/`** (`components/app/AppRankings.tsx`): same navy header + pill as Scores, Men|Women,

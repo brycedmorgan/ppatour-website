@@ -256,10 +256,11 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
   // All of it is her wording; her bullets became paragraphs and her
   // "(Insert … parking map)" notes became the maps themselves.
   //
-  // ⚠ PARKING MOVES MID-EVENT. Mon–Tue is the east on-site lot; Wed–Sun is
-  // off-site at Techny Prairie with a shuttle. Each map is anchored (`after`)
-  // under the paragraph about its lot, so the on-site map is never read as the
-  // Wed–Sun answer.
+  // ⚠ PARKING MOVES TWICE. Mon–Tue is the east on-site lot; Wed–Fri is
+  // off-site at Techny Prairie with a shuttle; Sat–Sun is Crate & Barrel HQ
+  // across the street, with Techny as overflow (Dana, 10/9). Each map is
+  // anchored (`after`) under the paragraph about its lot, so neither is read as
+  // the weekend answer.
   //
   // ⚠ THE ON-SITE MAP APPEARS TWICE ON PURPOSE: she asked for it under General
   // (Mon–Tue) and again under Premium (Wed–Sun), which is the same lot sold as a
@@ -269,9 +270,15 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
       heading: "General Parking",
       body: [
         "Mon 10/5 & Tues 10/6: Complimentary event parking is available in the east on-site lot.",
-        "Wed 10/7 – Sun 10/11: Complimentary off-site parking is available with continuous shuttle service to and from the venue.",
+        "Wed 10/7 – Fri 10/9: Complimentary off-site parking is available with continuous shuttle service to and from the venue.",
         "Location: Techny Prairie Park & Fields South Lot (closest to Techny Rd)\nAddress: 1750 Techny Rd, Northbrook, IL 60062",
         "Shuttle Service: Shuttles will operate approximately one hour before the first match and continue until approximately one hour after the final match each day.",
+        // Dana, 10/9 (same Asana task, updated): the weekend moves to Crate &
+        // Barrel HQ across the street, with Techny Prairie kept as overflow. She
+        // sent no map for it, so the Techny map above stays the last image.
+        "Sat 10/10 & Sun 10/11: Complimentary event parking is available at Crate & Barrel HQ across the street from the venue",
+        "Address: 1250 Techny Rd, Northbrook, IL 60062",
+        "Overflow parking and shuttle service will still be available at Techny Prairie Park baseball fields",
       ],
       images: [
         {
@@ -286,6 +293,8 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
           alt: "Aerial map of Techny Prairie Park and Fields in Northbrook, IL, with the south parking lot along Techny Road, east of Anets Drive, outlined in green.",
           width: 1600,
           height: 867,
+          // Under the shuttle line, ahead of the weekend's Crate & Barrel lot.
+          after: 3,
         },
       ],
     },

@@ -304,17 +304,31 @@ export const tvSchedule: TvEvent[] = [
     location: "Virginia Beach, VA",
     tier: "Open · 1,000",
     league: "PPA",
-    startIso: "2026-10-15",
+    // Starts Tue 10/13 now that Matt's 10/10 note adds Tue/Wed PBTV coverage.
+    startIso: "2026-10-13",
     endIso: "2026-10-18",
     slug: "virginia-beach-open",
     days: [
+      // ⚠ Tue/Wed are NEW (Matt Mayfield, 10/10) and Thu/Fri PBTV moved to a
+      // 12PM start (Keaton Maynard, 10/9); both post-date the 9/21 sheet. The 8PM
+      // ends are Bryce's, keeping the window length: neither source published one.
+      {
+        date: "Oct 13",
+        dow: "Tue",
+        windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Round of 64" }],
+      },
+      {
+        date: "Oct 14",
+        dow: "Wed",
+        windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Round of 32" }],
+      },
       {
         date: "Oct 15",
         dow: "Thu",
         // ⚠ THE THURSDAY TENNIS CHANNEL WINDOW IS NEW on the 9/21 sheet. TC now
         // carries all four days at this stop, where it carried three.
         windows: [
-          { channel: "PBTV", window: "2PM – 10PM", round: "Round of 16" },
+          { channel: "PBTV", window: "12PM – 8PM", round: "Round of 16" },
           { channel: "Tennis Channel", window: "2PM – 5PM", round: "Round of 16" },
         ],
       },
@@ -322,7 +336,7 @@ export const tvSchedule: TvEvent[] = [
         date: "Oct 16",
         dow: "Fri",
         windows: [
-          { channel: "PBTV", window: "2PM – 10PM", round: "Quarterfinals" },
+          { channel: "PBTV", window: "12PM – 8PM", round: "Quarterfinals" },
           { channel: "Tennis Channel", window: "2PM – 5PM", round: "Quarterfinals" },
         ],
       },

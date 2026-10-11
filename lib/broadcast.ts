@@ -191,10 +191,23 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
     { round: "Championship", day: "Sunday", window: "6PM ET - 8PM ET", platform: "FS1", type: "TAPE" },
   ],
   "virginia-beach-open": [
-    { round: "RD 16", day: "Thursday", window: "2PM ET - 10PM ET", platform: "PBTV", type: "LIVE" },
+    // ⚠ TUESDAY AND WEDNESDAY ARE NEW, and they post-date the 9/21 sheet — the
+    // audit will report them as extra rows until the sheet is reissued. Source is
+    // Matt Mayfield, #marketing-general 10/10: "Firefight Zone" whiparound of all
+    // pro courts incl. Humana Championship Court, 12PM ET Tue 10/13 (RD 64) and
+    // Wed 10/14 (RD 32), triple streamed on the PBTV app, PBTV YouTube and the
+    // PPA Tour channel. He gave the START only and said "until End of Day", so the
+    // 8PM end is this stop's own weekday length, not a time he published.
+    { round: "RD 64", day: "Tuesday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "RD 32", day: "Wednesday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
+    // ⚠ THU/FRI PBTV MOVED TO A 12PM START on Keaton Maynard's 10/9 revision
+    // (was 2PM, which is what the 9/21 sheet carries). Tennis Channel did NOT
+    // move and still opens at 2PM, so the PBTV window now starts two hours ahead
+    // of the simulcast rather than with it. "No changes to Sat & Sun."
+    { round: "RD 16", day: "Thursday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
     // ⚠ Thursday Tennis Channel is NEW on the 9/21 sheet — four TC days here now.
     { round: "RD 16", day: "Thursday", window: "2PM ET - 5PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
-    { round: "QF's", day: "Friday", window: "2PM ET - 10PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "QF's", day: "Friday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
     { round: "QF's", day: "Friday", window: "2PM ET - 5PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
     { round: "SF's", day: "Saturday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
     { round: "SF's", day: "Saturday", window: "12PM ET - 3PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
