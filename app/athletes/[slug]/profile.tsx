@@ -1056,7 +1056,10 @@ export async function AthleteProfile({
               )}
             </div>
 
-            <aside>
+            {/* min-w-0: the Latest Result box score truncates long team names, and a
+                grid item's default min-width would let them widen the column
+                past a phone screen instead. */}
+            <aside className="min-w-0">
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 Quick Info
               </p>

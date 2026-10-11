@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Fragment } from "react";
 import type { HistoryMatch } from "@/lib/player-history";
 import { playerHref } from "@/lib/app-player";
 import { normalizeScoreName } from "@/lib/score-names";
@@ -93,11 +92,12 @@ function Faces({ names, faces, tone }: { names: string[]; faces: Record<string, 
 
 function Names({ list, link, strong, tone }: { list: string[]; link: boolean; strong: boolean; tone: Tone }) {
   const base = tone === "dark" ? (strong ? "text-white" : "text-white/60") : strong ? "text-ppa-navy" : "text-ppa-navy/60";
+  // One player per line: "Tyra Hurricane Black / Catherine Parenteau" on one
+  // line truncates to nothing useful at phone width.
   return (
-    <span className={`min-w-0 truncate text-[13px] ${strong ? "font-bold" : "font-medium"} ${base}`}>
+    <span className={`flex min-w-0 flex-col text-[13px] leading-tight ${strong ? "font-bold" : "font-medium"} ${base}`}>
       {list.map((n, i) => (
-        <Fragment key={n + i}>
-          {i > 0 && " / "}
+        <span key={n + i} className="truncate">
           {link ? (
             <Link href={playerHref(n)} className="underline-offset-2 active:underline">
               {n}
@@ -105,7 +105,7 @@ function Names({ list, link, strong, tone }: { list: string[]; link: boolean; st
           ) : (
             n
           )}
-        </Fragment>
+        </span>
       ))}
     </span>
   );
@@ -142,7 +142,9 @@ export function BoxScore({
   const muted = dark ? "text-white/45" : "text-ppa-navy/45";
 
   return (
-    <div className={bare ? "" : dark ? "border border-white/10 bg-white/[0.04]" : "border border-ppa-line bg-white"}>
+    // min-w-0: inside a grid the box score's nowrap names would otherwise set
+    // the column's minimum width and push the page sideways at phone widths.
+    <div className={`min-w-0 ${bare ? "" : dark ? "border border-white/10 bg-white/[0.04]" : "border border-ppa-line bg-white"}`}>
       <div className={`flex items-center justify-between gap-3 px-3 pt-2.5 ${muted}`}>
         <p className="min-w-0 truncate text-[10px] font-bold uppercase tracking-[0.14em]">
           {m.round} · {m.division}
@@ -162,7 +164,7 @@ export function BoxScore({
       </div>
       <div className="px-3 pb-2.5 pt-1">
         {rows.map((r) => (
-          <div key={r.side} className="flex items-center gap-2.5 py-1">
+          <div key={r.side} className="flex items-center gap-2.5 py-1.5">
             {faces && <Faces names={r.names} faces={faces} tone={tone} />}
             <Names list={r.names} link={link && r.names[0] !== "TBD"} strong={r.won} tone={tone} />
             <span className="ml-auto flex shrink-0 tabular-nums">
@@ -184,6 +186,8 @@ export function BoxScore({
                   );
                 })
               )}
+              {/* Under the header's W/L chip, so the game columns line up with G1–G3. */}
+              <span className="ml-3 w-6" aria-hidden />
             </span>
           </div>
         ))}
