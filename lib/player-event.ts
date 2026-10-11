@@ -178,8 +178,13 @@ export async function playerRuns(eventId: string, name: string): Promise<PlayerR
       // pool loss is not elimination until the feed places them in the next
       // stage, which can lag the result.
       const lastSection = sections[sections.length - 1];
-      const terminal = lastSection.label !== "Winners" && lastSection.label !== "Pools";
-      const lastDone = terminal ? [...lastSection.steps].reverse().find((s) => s.won !== null) : undefined;
+      const knockoutStarted = draw.bracket.rounds.some((r) => r.matches.some((m) => m.status !== "scheduled"));
+      const lastLoss = [...lastSection.steps].reverse().find((s) => s.won !== null);
+      const terminal =
+        (lastSection.label !== "Winners" && lastSection.label !== "Pools") ||
+        lastLoss?.round === "Final" ||
+        (lastSection.label === "Pools" && knockoutStarted);
+      const lastDone = terminal ? lastLoss : undefined;
       const summary = medal
         ? medal[0].toUpperCase() + medal.slice(1)
         : live
