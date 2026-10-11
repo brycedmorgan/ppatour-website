@@ -67,6 +67,20 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-11 — Recent tournaments + recent matches on player screen and athlete profile
+
+- Bryce: "we should be adding their recent scores and tournaments to the players pages too". Shipped on the app
+  player screen (`/scores/player/`, current event excluded) and every `/athletes/<slug>` profile.
+- **No per-player results endpoint exists.** Our token reaches `users/{slug}` + `player_medals` only; pickleball.com
+  player pages are CloudFront-blocked; MATCHDAY syncs per-event matches too. So `lib/player-history.ts` runs
+  `playerRuns` (lib/player-event) over the last 10 finished tour stops (3 at a time; finished draws cached a year).
+- Served by `/api/player-history/?name=` (CDN 1h + 1d SWR; empty answers 60s) and rendered client-side by
+  `components/athletes/RecentResults.tsx`: profiles are force-static ×1,100, so no draw work in the build.
+- Live-checked: Anna Leigh Waters (6 stops, Gold/Silver + partners, Vegas WD Final 11-8 10-12 11-5), Ben Johns (7),
+  Chris Haworth (6), Hunter Johnson (6). May–Sep gap = summer, not a bug.
+- Gaps: losers-bracket rounds sort below winners knockout rounds in "Recent matches"; a pool exit reads "Round 3";
+  name-keyed (a namesake in the same draws would merge). Only the last 10 stops (no 2025).
+
 ### 2026-10-10 (pt. 2) — App: tap any player → player screen (`/scores/player/?name=&event=`)
 
 - Bryce 10/9: "click one player, see all their scores, profiles". Every name on Scores cards (MatchCard `playerHref`

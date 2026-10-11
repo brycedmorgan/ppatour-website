@@ -78,7 +78,7 @@ export function RecentResults({
 
   useEffect(() => {
     let alive = true;
-    fetch(`/api/player-history?name=${encodeURIComponent(name)}`)
+    fetch(`/api/player-history/?name=${encodeURIComponent(name)}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((d: PlayerHistory | null) => {
         if (!alive || !d || !Array.isArray(d.events)) return;
