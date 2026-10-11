@@ -10,6 +10,7 @@ import { PBTV_WATCH_URL, useLiveTicker } from "@/components/live/use-live-ticker
 import { MobileBracket } from "@/components/app/MobileBracket";
 import { useFollows } from "@/components/app/follows";
 import { useAppMode } from "@/components/app/use-app-mode";
+import { playerHref } from "@/lib/app-player";
 
 /**
  * The app's first screen: scores, then brackets. Bryce, 10/8 — "more like
@@ -78,6 +79,8 @@ export function ScoresHome({ event, initialTicker }: { event: ScoresEvent | null
 
   const liveCount = (name: string) =>
     matches.filter((m) => m.status === "live" && key(m.division) === key(name)).length;
+
+  const toPlayer = (name: string) => playerHref(name, event?.eventId);
 
   if (!event) {
     return (
@@ -193,7 +196,7 @@ export function ScoresHome({ event, initialTicker }: { event: ScoresEvent | null
           <>
             {shown.mine.length > 0 ? (
               <Section title="Your players" count={shown.mine.length}>
-                {shown.mine.map((m) => <MatchCard key={m.id} m={m} />)}
+                {shown.mine.map((m) => <MatchCard key={m.id} m={m} playerHref={toPlayer} />)}
               </Section>
             ) : (
               isApp && followsReady && follows.length === 0 && (
@@ -208,17 +211,17 @@ export function ScoresHome({ event, initialTicker }: { event: ScoresEvent | null
             )}
             {shown.live.length > 0 && (
               <Section title="Live now" count={shown.live.length}>
-                {shown.live.map((m) => <MatchCard key={m.id} m={m} />)}
+                {shown.live.map((m) => <MatchCard key={m.id} m={m} playerHref={toPlayer} />)}
               </Section>
             )}
             {shown.next.length > 0 && (
               <Section title="Up next" count={shown.next.length}>
-                {shown.next.map((m) => <MatchCard key={m.id} m={m} />)}
+                {shown.next.map((m) => <MatchCard key={m.id} m={m} playerHref={toPlayer} />)}
               </Section>
             )}
             {shown.final.length > 0 && (
               <Section title="Final" count={shown.final.length}>
-                {shown.final.map((m) => <MatchCard key={m.id} m={m} />)}
+                {shown.final.map((m) => <MatchCard key={m.id} m={m} playerHref={toPlayer} />)}
               </Section>
             )}
           </>

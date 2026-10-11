@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import { playerHref } from "@/lib/app-player";
 import type { Bracket, BracketDivision, BracketMatch, BracketSide } from "@/lib/bracket-types";
 import { isTabHidden, onTabVisible } from "@/components/live/poll-visibility";
 
@@ -40,7 +42,23 @@ function shortRound(name: string): string {
   return m ? `R${m[1]}` : name;
 }
 
-function Side({ side, status }: { side: BracketSide; status: BracketMatch["status"] }) {
+/** Each name in a team links to that pro's player screen. */
+function Names({ name, eventId }: { name: string; eventId: string }) {
+  return (
+    <>
+      {name.split(" / ").map((n, i) => (
+        <Fragment key={i}>
+          {i > 0 && " / "}
+          <Link href={playerHref(n, eventId)} className="underline-offset-2 active:underline">
+            {n.trim()}
+          </Link>
+        </Fragment>
+      ))}
+    </>
+  );
+}
+
+function Side({ side, status, eventId }: { side: BracketSide; status: BracketMatch["status"]; eventId: string }) {
   const p = side.participant;
   const games = side.games.filter((g): g is number => g !== null);
   const lost = status === "final" && !side.winner;
@@ -50,7 +68,7 @@ function Side({ side, status }: { side: BracketSide; status: BracketMatch["statu
         {p?.seed ?? ""}
       </span>
       <span className={`min-w-0 flex-1 truncate text-[14px] ${side.winner ? "font-bold" : "font-medium"}`}>
-        {p?.name ?? <span className="italic text-ppa-navy/35">TBD</span>}
+        {p?.name ? <Names name={p.name} eventId={eventId} /> : <span className="italic text-ppa-navy/35">TBD</span>}
       </span>
       <span className="flex shrink-0 gap-2.5 tabular-nums">
         {games.map((g, i) => (
@@ -63,7 +81,7 @@ function Side({ side, status }: { side: BracketSide; status: BracketMatch["statu
   );
 }
 
-function Matchup({ m }: { m: BracketMatch }) {
+function Matchup({ m, eventId }: { m: BracketMatch; eventId: string }) {
   return (
     <article className="overflow-hidden rounded-xl border border-ppa-line bg-white">
       <div className="flex items-center justify-between gap-2 bg-ppa-paper px-3 py-1.5">
@@ -82,9 +100,9 @@ function Matchup({ m }: { m: BracketMatch }) {
           <span className="text-[9px] font-bold uppercase tracking-[0.1em] text-ppa-navy/50">Final</span>
         ) : null}
       </div>
-      <Side side={m.sides[0]} status={m.status} />
+      <Side side={m.sides[0]} status={m.status} eventId={eventId} />
       <div className="h-px bg-ppa-line" />
-      <Side side={m.sides[1]} status={m.status} />
+      <Side side={m.sides[1]} status={m.status} eventId={eventId} />
     </article>
   );
 }
@@ -171,7 +189,7 @@ function DivisionDraw({ eventId, divisionId }: { eventId: string; divisionId: st
         </div>
       )}
 
-      <RoundSwiper key={shownSide} bracket={bracket} />
+      <RoundSwiper key={shownSide} bracket={bracket} eventId={eventId} />
     </div>
   );
 }
@@ -183,7 +201,7 @@ function DivisionDraw({ eventId, divisionId }: { eventId: string; divisionId: st
  * screen" — the strip's height follows the round in view, so a 1-match Final
  * does not sit above 31 rows of R64-sized empty space.
  */
-function RoundSwiper({ bracket }: { bracket: Bracket }) {
+function RoundSwiper({ bracket, eventId }: { bracket: Bracket; eventId: string }) {
   const scroller = useRef<HTMLDivElement>(null);
   const cols = useRef<(HTMLDivElement | null)[]>([]);
   const [active, setActive] = useState(() => openingRound(bracket));
@@ -274,7 +292,7 @@ function RoundSwiper({ bracket }: { bracket: Bracket }) {
             </p>
             <div className="mt-2 space-y-2.5 pb-1">
               {r.matches.map((m) => (
-                <Matchup key={m.id} m={m} />
+                <Matchup key={m.id} m={m} eventId={eventId} />
               ))}
             </div>
           </div>

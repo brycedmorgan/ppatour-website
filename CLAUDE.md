@@ -67,6 +67,18 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-10 (pt. 2) — App: tap any player → player screen (`/scores/player/?name=&event=`)
+
+- Bryce 10/9: "click one player, see all their scores, profiles". Every name on Scores cards (MatchCard `playerHref`
+  prop, opt-in, website ticker unchanged) and in the app bracket (`MobileBracket` `Names`) links to the screen.
+- `components/app/PlayerScreen.tsx`: photo, WPR rank/board/points, Follow + Full profile (our slug only), On court
+  (live ticker), then their path through every draw at the event (pools/winners/losers, round, opponents, score, W/L,
+  medal or "Next: QF"/"Out in R16"). Partners and opponents are tappable, so fans walk player to player.
+- `lib/player-event.ts`: `resolvePlayer` (name → ranked pro; ambiguous names resolve to our profile only if exactly one
+  is ours, else no rank/profile/follow) and `playerRuns` (all draws via getBracketIndex/getBracketDraw, one cached build).
+  Boards memoized 1h per instance; non-live results not cached.
+- Verify against a Vercel deployment (no PB_API_TOKEN locally).
+
 ### 2026-10-10 — Chicago weekend parking at Crate & Barrel; VB broadcast Tue/Wed added, Thu/Fri PBTV 12–8
 
 - **Chicago (Dana, Slack + updated Asana `1219139745966275`):** Sat 10/10 & Sun 10/11 park at Crate & Barrel
