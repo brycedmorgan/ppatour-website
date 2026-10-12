@@ -16,6 +16,9 @@ const FILTERS: { key: ChannelFilter; label: string }[] = [
   // FS1 + FS2 under one pill — FOX splits its windows across both networks.
   { key: "FOX", label: "FOX Sports" },
   { key: "PBTV", label: "PickleballTV" },
+  // Sister-tour stops that never reach PBTV or a US network stream here — see
+  // the PPA Australia Cup block in lib/tv-schedule.ts.
+  { key: "YouTube", label: "YouTube" },
 ];
 
 export function TvScheduleList() {

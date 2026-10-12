@@ -17,6 +17,9 @@ export const CHANNEL_LABEL: Record<TvWindow["channel"], string> = {
   // windows are billed on the schedule sheet or on air.
   FS1: "FS1",
   FS2: "FS2",
+  // Both destinations are YouTube channels (PPA Tour and PPA Australia), so the
+  // badge names the platform rather than picking one of the two.
+  YouTube: "YouTube",
 };
 
 export function channelLabel(channel: TvWindow["channel"]): string {
@@ -28,7 +31,7 @@ export function isFoxChannel(channel: TvWindow["channel"]): boolean {
   return channel === "FS1" || channel === "FS2";
 }
 
-export type ChannelFilter = "all" | "PBTV" | "Tennis Channel" | "FOX";
+export type ChannelFilter = "all" | "PBTV" | "Tennis Channel" | "FOX" | "YouTube";
 
 /**
  * ⚠ EVERY CHANNEL MUST BE REACHABLE BY SOME FILTER. A window no filter can

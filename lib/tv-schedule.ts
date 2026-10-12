@@ -51,7 +51,15 @@
  */
 
 export type TvWindow = {
-  channel: "PBTV" | "Tennis Channel" | "FS1" | "FS2";
+  /**
+   * ⚠ "YouTube" IS NOT ON THE CHAMPIONSHIP COURT SHEET and never will be. It
+   * exists for the sister-tour stops that never reach PBTV or a US network —
+   * today only the PPA Australia Cup, which streams to the PPA Tour and PPA
+   * Australia YouTube channels and nothing else. Adding a channel here forces
+   * a label in `lib/tv-channels.ts`, a filter that can reach it, and badge
+   * colours in BOTH `components/watch/TvGuide.tsx` maps.
+   */
+  channel: "PBTV" | "Tennis Channel" | "FS1" | "FS2" | "YouTube";
   window: string;
   round: string;
   /** Tape-delayed replay, not a live window. The sheet marks these TAPE, and a
@@ -355,6 +363,76 @@ export const tvSchedule: TvEvent[] = [
           { channel: "PBTV", window: "10AM – 3PM", round: "Championship Sunday" },
           { channel: "Tennis Channel", window: "10AM – 2PM", round: "Championship Sunday" },
         ],
+      },
+    ],
+  },
+  /**
+   * THE FIRST YOUTUBE-ONLY STOP ON THIS PAGE (Keaton Maynard, #marketing-general
+   * 10/10: "Yea on the PPA website watch page", answering whether these windows
+   * belong here at all). Source is his own production grid, posted in that
+   * thread the same day — "PPA Australia Cup: Queensland Tennis Centre |
+   * Brisbane (Cup) 1,500", five rows, every one LIVE on PPA YouTube with PPA
+   * Australia YouTube as the second destination.
+   *
+   * ⚠ THE DAYS BELOW ARE ET, AND THEY ARE A DAY BEHIND BRISBANE. Queensland is
+   * UTC+10 and does NOT keep daylight saving, so it runs 14 hours ahead of EDT:
+   * the local 10AM–6PM play day is 8PM–4AM ET the NIGHT BEFORE, and Brisbane
+   * Wednesday is the Tuesday row here. An earlier draft of Keaton's grid had
+   * both the day slip and Sydney's offset (7PM–3AM); both were corrected before
+   * this was built. Don't "fix" these back by a day.
+   *
+   * ⚠ NO `slug` ON PURPOSE. Brisbane is a link-out stop — `hasInternalPage`
+   * is false for the non-challenger international 1,000/1,500s, so there is no
+   * /events page of ours to point at (see lib/resolve-event.ts). No slug also
+   * means `scripts/audit-tv-schedule.mjs` skips it in the lockstep check, which
+   * is right: `lib/broadcast.ts` is keyed by OUR event-page slugs and drives
+   * event pages we do not publish for this stop, so it gets no entry there and
+   * the two files are not out of step.
+   *
+   * ⚠ NO `tier` ON PURPOSE EITHER. The sheet calls it "(Cup) 1,500", but this
+   * field renders as "<tier> pts" beside our own Majors/Cups/Opens, and whether
+   * a sister-tour Cup counts as a PPA Tour stop is a question for Bryce and
+   * Connor, not a line of copy. Leaving it off states the windows without
+   * making the claim.
+   *
+   * ⚠ IT WILL SHOW AS "not on this sheet" IN THE AUDIT. That script joins on
+   * the Championship Court production sheet, which carries PBTV/TC/FOX only.
+   * Expected — do not add an EVENT_MAP row to silence it.
+   */
+  {
+    name: "PPA Australia Cup",
+    location: "Queensland Tennis Centre · Brisbane, Australia",
+    league: "PPA",
+    /** Sort order and when the block stops showing, nothing else. `startIso` is
+     *  the first ET window (Tue 10/13, Brisbane's Wed 10/14); `endIso` is
+     *  Brisbane's final day, so the Sat-night ET final stays up. */
+    startIso: "2026-10-13",
+    endIso: "2026-10-18",
+    days: [
+      {
+        date: "Oct 13",
+        dow: "Tue",
+        windows: [{ channel: "YouTube", window: "8PM – 4AM", round: "Round of 64 + Round of 32" }],
+      },
+      {
+        date: "Oct 14",
+        dow: "Wed",
+        windows: [{ channel: "YouTube", window: "8PM – 4AM", round: "Round of 16" }],
+      },
+      {
+        date: "Oct 15",
+        dow: "Thu",
+        windows: [{ channel: "YouTube", window: "8PM – 4AM", round: "Quarterfinals" }],
+      },
+      {
+        date: "Oct 16",
+        dow: "Fri",
+        windows: [{ channel: "YouTube", window: "8PM – 4AM", round: "Semifinals" }],
+      },
+      {
+        date: "Oct 17",
+        dow: "Sat",
+        windows: [{ channel: "YouTube", window: "8PM – 2AM", round: "Championship" }],
       },
     ],
   },

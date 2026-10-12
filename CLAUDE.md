@@ -67,6 +67,29 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-12 (pt. 3) — PPA Australia Cup on /watch: new YouTube channel for the first stream-only stop
+
+- Bryce's four blocks (Slack DM 10/11), applied by Wesley; Asana `1219412868556797`. Keaton Maynard,
+  #marketing-general 10/10 7:23 PM: "Yea on the PPA website watch page", answering whether the Australia Cup
+  windows belong there. Source is his own production grid in that thread ("PPA Australia Cup: Queensland Tennis
+  Centre | Brisbane (Cup) 1,500", five LIVE rows, PPA YouTube + PPA Australia YouTube).
+- New `"YouTube"` channel in `lib/tv-schedule.ts`. The type forces the rest: a label in `lib/tv-channels.ts`, a
+  reachable `ChannelFilter` + pill on /watch/tv, and badge colours in BOTH `TvGuide` maps (sky, not YouTube red —
+  there is no red in the palette).
+- **⚠ THE DAYS ARE ET AND SIT A DAY BEHIND BRISBANE.** Queensland is UTC+10 with no daylight saving, 14h ahead of
+  EDT, so local 10AM–6PM is 8PM–4AM ET the night before and Brisbane Wednesday is the Tuesday row. Keaton's first
+  grid had both the day slip and Sydney's offset (7PM–3AM); corrected before this was built. Don't shift it back.
+- **No `slug` and no `tier`, both deliberate.** Brisbane is a link-out stop (`hasInternalPage: false`), so there is
+  no /events page of ours and no `lib/broadcast.ts` entry — the audit's lockstep check skips slugless rows. Tier
+  renders as "<x> pts" next to our Majors/Cups/Opens, and whether a sister-tour Cup is a PPA Tour stop is Bryce +
+  Connor's call. **Open for them.**
+- ⚠ `scripts/audit-tv-schedule.mjs` lists it as "not on this sheet". Expected: that sheet is Championship Court,
+  PBTV/TC/FOX only. Do not add an EVENT_MAP row to quiet it.
+- Keaton's 10/10 "Disregard the changes for other events, Wesley has those handled" means the Worlds/Daytona/Malibu
+  sync (pt. 1, from the 10/10 sheet) is ours to keep current, not Bryce's.
+- Verified on the dev server: /watch and /watch/tv render the Cup between VB and MLP Cup, 5 ET days, YouTube pill
+  + sky badges. tsc clean, eslint clean on the four files.
+
 ### 2026-10-12 — Broadcast windows synced to the 10/10 sheet: Worlds, Daytona, Malibu, MLP Cup
 
 - Keaton's Asana `1219361358300308` (his 10/9 revision). Applied from the production sheet "as of 10/10",

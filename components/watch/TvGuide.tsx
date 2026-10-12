@@ -24,6 +24,9 @@ const CHANNEL_BADGE: Record<Channel, string> = {
   PBTV: "bg-ppa-blue text-white",
   FS1: "bg-ppa-navy text-white",
   FS2: "bg-ppa-navy/75 text-white",
+  // Sky, not YouTube red — there is no red in the palette, and the only job
+  // here is to read apart from PBTV's blue on white.
+  YouTube: "bg-ppa-sky text-ppa-navy",
 };
 
 const CHANNEL_CHIP: Record<Channel, string> = {
@@ -31,10 +34,11 @@ const CHANNEL_CHIP: Record<Channel, string> = {
   PBTV: "bg-ppa-blue text-white",
   FS1: "bg-white text-ppa-navy",
   FS2: "bg-white/85 text-ppa-navy",
+  YouTube: "bg-ppa-sky text-ppa-navy",
 };
 
 /** Streaming first, then TV in the order a viewer would scan for it. */
-const CHANNEL_ORDER: Channel[] = ["PBTV", "Tennis Channel", "FS1", "FS2"];
+const CHANNEL_ORDER: Channel[] = ["PBTV", "YouTube", "Tennis Channel", "FS1", "FS2"];
 
 /** Distinct channels carrying an event, in a fixed order. */
 function channelsFor(event: TvEvent): Channel[] {
