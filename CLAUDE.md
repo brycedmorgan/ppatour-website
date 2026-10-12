@@ -90,6 +90,15 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - Verified on the dev server: /watch and /watch/tv render the Cup between VB and MLP Cup, 5 ET days, YouTube pill
   + sky badges. tsc clean, eslint clean on the four files.
 
+### 2026-10-12 (pt. 2) — Junior PPA rankings refreshed (Daniela, Asana `1219331697654163`)
+
+- Jake's sheet (edited 10/8) → `lib/data/junior-rankings.json`, `updated: "Oct 8, 2026"`. All 24 boards
+  confirmed 94–100% against their own division, none shrank, +82 players (2,471 rows); no age warnings.
+- **The sheet is now link-shared**, and the Drive connector had stopped returning cell values. New
+  `scripts/fetch-junior-rankings.mjs <out.md>` pulls the 24 tabs via gviz into the importer's input, so a
+  refresh is fetch → import `--check` → import. ⚠ gviz returns the FIRST tab for an unknown name; both
+  scripts guard against it.
+
 ### 2026-10-12 — Broadcast windows synced to the 10/10 sheet: Worlds, Daytona, Malibu, MLP Cup
 
 - Keaton's Asana `1219361358300308` (his 10/9 revision). Applied from the production sheet "as of 10/10",
