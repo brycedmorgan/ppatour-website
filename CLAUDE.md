@@ -67,6 +67,16 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-12 — Broadcast windows synced to the 10/10 sheet: Worlds, Daytona, Malibu, MLP Cup
+
+- Keaton's Asana `1219361358300308` (his 10/9 revision). Applied from the production sheet "as of 10/10",
+  which is newer than his note and differs from it twice: **Worlds Sat/Sun also moved** (he said unchanged),
+  and **Malibu Sat TC is 4–7PM** (was 4–8, not in his note).
+- **⚠ Worlds' Celebrity Pro-Am moved Wed → Thu 8–10PM ET**, now on PBTV and Tennis Channel.
+- MLP Cup synced too (Fri/Sat to 8PM; Sunday split into SF 11–2 and Finals 3–4:30).
+- Audit: every upcoming stop matches the sheet except VB Tue/Wed (Matt's 10/10 note, ahead of the sheet);
+  broadcast ↔ tv-schedule agree for all. Event pages + /watch/tv verified on the dev server.
+
 ### 2026-10-11 (pt. 5) — Player history: failed draw loads no longer read as "didn't play"
 
 - A 429/failed draw fetch looked identical to "not in this event" and got cached 1h (Waters lost Las Vegas + Atlanta on one pull).

@@ -215,32 +215,42 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
     { round: "Championship", day: "Sunday", window: "10AM ET - 2PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
   ],
   "proton-daytona-beach-open": [
-    { round: "RD 16", day: "Thursday", window: "2PM ET - 10PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "QF's", day: "Friday", window: "2PM ET - 10PM ET", platform: "PBTV", type: "LIVE" },
+    // ⚠ THU/FRI MOVED TO 12–8PM ET (was 2–10) AND SUNDAY TO 12–5PM ET (was
+    // 10AM–3PM): Keaton's 10/9 revision, as the 10/10 sheet carries it. Sat unchanged.
+    { round: "RD 16", day: "Thursday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "QF's", day: "Friday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
     { round: "SF's", day: "Saturday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "Championship", day: "Sunday", window: "10AM ET - 3PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "Championship", day: "Sunday", window: "12PM ET - 5PM ET", platform: "PBTV", type: "LIVE" },
   ],
   "veolia-malibu-cup": [
     // ⚠ TUESDAY AND WEDNESDAY COVERAGE IS GONE as of the 9/21 sheet — this stop
     // is now a Thu–Sun broadcast, all four days in the evening. Don't restore
     // the RD 64 / RD 32 rows from an older copy of the schedule.
-    { round: "RD 16", day: "Thursday", window: "5PM ET - 1AM ET", platform: "PBTV", type: "LIVE" },
-    { round: "RD 16", day: "Thursday", window: "5PM ET - 10PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
-    { round: "QF's", day: "Friday", window: "5PM ET - 1AM ET", platform: "PBTV", type: "LIVE" },
-    { round: "QF's", day: "Friday", window: "5PM ET - 10PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
+    // ⚠ THU/FRI MOVED UP (Keaton's 10/9 revision, the 10/10 sheet): PBTV 3–11PM ET
+    // (was 5PM–1AM), Tennis Channel 4–11PM ET (was 5–10). Saturday's TC window
+    // is now 4–7PM ET on the sheet (was 4–8), a change his note did not mention.
+    { round: "RD 16", day: "Thursday", window: "3PM ET - 11PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "RD 16", day: "Thursday", window: "4PM ET - 11PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
+    { round: "QF's", day: "Friday", window: "3PM ET - 11PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "QF's", day: "Friday", window: "4PM ET - 11PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
     { round: "SF's", day: "Saturday", window: "3PM ET - 11PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "SF's", day: "Saturday", window: "4PM ET - 8PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
+    { round: "SF's", day: "Saturday", window: "4PM ET - 7PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
     { round: "Championship", day: "Sunday", window: "1PM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
     { round: "Championship", day: "Sunday", window: "1PM ET - 6PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
   ],
   "pickleball-world-championships": [
-    { round: "RD 64", day: "Tuesday", window: "11AM ET - 7PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "RD 32", day: "Wednesday", window: "11AM ET - 10PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "Celebrity Pro-Am", day: "Wednesday", window: "8PM ET - 10PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
-    { round: "RD 16", day: "Thursday", window: "11AM ET - 7PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "QF's", day: "Friday", window: "11AM ET - 7PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "SF's", day: "Saturday", window: "10AM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "Championship", day: "Sunday", window: "11AM ET - 5PM ET", platform: "PBTV", type: "LIVE" },
+    // ⚠ EVERY DAY MOVED TO A 12PM ET START (Keaton Maynard's 10/9 revision, Asana
+    // 1219361358300308; the 10/10 sheet). The sheet also moved Sat/Sun, which his
+    // note said were unchanged — the sheet is newer and wins. ⚠ THE CELEBRITY
+    // PRO-AM MOVED FROM WEDNESDAY TO THURSDAY 8–10PM ET, on PBTV and Tennis Channel.
+    { round: "RD 64", day: "Tuesday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "RD 32", day: "Wednesday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "RD 16", day: "Thursday", window: "12PM ET - 7PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "Celebrity Pro-Am", day: "Thursday", window: "8PM ET - 10PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "Celebrity Pro-Am", day: "Thursday", window: "8PM ET - 10PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
+    { round: "QF's", day: "Friday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "SF's", day: "Saturday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "Championship", day: "Sunday", window: "12PM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
   ],
 };
 

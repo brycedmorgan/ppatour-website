@@ -375,9 +375,17 @@ export const tvSchedule: TvEvent[] = [
     startIso: "2026-10-30",
     endIso: "2026-11-01",
     days: [
-      { date: "Oct 30", dow: "Fri", windows: [{ channel: "PBTV", window: "11AM – 7PM", round: "Premier Pool Play" }] },
-      { date: "Oct 31", dow: "Sat", windows: [{ channel: "PBTV", window: "11AM – 7PM", round: "Premier Pool Play" }] },
-      { date: "Nov 1", dow: "Sun", windows: [{ channel: "PBTV", window: "11AM – 7PM", round: "Semifinals & Finals" }] },
+      // 10/10 sheet: Fri/Sat run to 8PM, and Sunday splits into semis and finals.
+      { date: "Oct 30", dow: "Fri", windows: [{ channel: "PBTV", window: "11AM – 8PM", round: "Premier Pool Play" }] },
+      { date: "Oct 31", dow: "Sat", windows: [{ channel: "PBTV", window: "11AM – 8PM", round: "Premier Pool Play" }] },
+      {
+        date: "Nov 1",
+        dow: "Sun",
+        windows: [
+          { channel: "PBTV", window: "11AM – 2PM", round: "Semifinals" },
+          { channel: "PBTV", window: "3PM – 4:30PM", round: "Finals" },
+        ],
+      },
     ],
   },
   {
@@ -390,19 +398,22 @@ export const tvSchedule: TvEvent[] = [
     endIso: "2026-11-08",
     slug: "pickleball-world-championships",
     days: [
-      { date: "Nov 3", dow: "Tue", windows: [{ channel: "PBTV", window: "11AM – 7PM", round: "Round of 64" }] },
+      // ⚠ 12PM ET STARTS ALL WEEK and the Celebrity Pro-Am moved Wed → Thu
+      // (Keaton's 10/9 revision, the 10/10 sheet). See lib/broadcast.ts.
+      { date: "Nov 3", dow: "Tue", windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Round of 64" }] },
+      { date: "Nov 4", dow: "Wed", windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Round of 32" }] },
       {
-        date: "Nov 4",
-        dow: "Wed",
+        date: "Nov 5",
+        dow: "Thu",
         windows: [
-          { channel: "PBTV", window: "11AM – 10PM", round: "Round of 32" },
+          { channel: "PBTV", window: "12PM – 7PM", round: "Round of 16" },
+          { channel: "PBTV", window: "8PM – 10PM", round: "Celebrity Pro-Am" },
           { channel: "Tennis Channel", window: "8PM – 10PM", round: "Celebrity Pro-Am" },
         ],
       },
-      { date: "Nov 5", dow: "Thu", windows: [{ channel: "PBTV", window: "11AM – 7PM", round: "Round of 16" }] },
-      { date: "Nov 6", dow: "Fri", windows: [{ channel: "PBTV", window: "11AM – 7PM", round: "Quarterfinals" }] },
-      { date: "Nov 7", dow: "Sat", windows: [{ channel: "PBTV", window: "10AM – 6PM", round: "Semifinals" }] },
-      { date: "Nov 8", dow: "Sun", windows: [{ channel: "PBTV", window: "11AM – 5PM", round: "Championship Sunday" }] },
+      { date: "Nov 6", dow: "Fri", windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Quarterfinals" }] },
+      { date: "Nov 7", dow: "Sat", windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Semifinals" }] },
+      { date: "Nov 8", dow: "Sun", windows: [{ channel: "PBTV", window: "12PM – 6PM", round: "Championship Sunday" }] },
     ],
   },
   {
@@ -414,10 +425,11 @@ export const tvSchedule: TvEvent[] = [
     endIso: "2026-11-22",
     slug: "proton-daytona-beach-open",
     days: [
-      { date: "Nov 19", dow: "Thu", windows: [{ channel: "PBTV", window: "2PM – 10PM", round: "Round of 16" }] },
-      { date: "Nov 20", dow: "Fri", windows: [{ channel: "PBTV", window: "2PM – 10PM", round: "Quarterfinals" }] },
+      // Thu/Fri/Sun moved to 12PM ET starts (Keaton's 10/9 revision, the 10/10 sheet).
+      { date: "Nov 19", dow: "Thu", windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Round of 16" }] },
+      { date: "Nov 20", dow: "Fri", windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Quarterfinals" }] },
       { date: "Nov 21", dow: "Sat", windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Semifinals" }] },
-      { date: "Nov 22", dow: "Sun", windows: [{ channel: "PBTV", window: "10AM – 3PM", round: "Championship Sunday" }] },
+      { date: "Nov 22", dow: "Sun", windows: [{ channel: "PBTV", window: "12PM – 5PM", round: "Championship Sunday" }] },
     ],
   },
   /**
@@ -466,17 +478,18 @@ export const tvSchedule: TvEvent[] = [
       {
         date: "Dec 17",
         dow: "Thu",
+        // Thu/Fri moved up and Sat TC is now 4–7 (Keaton's 10/9 revision, the 10/10 sheet).
         windows: [
-          { channel: "PBTV", window: "5PM – 1AM", round: "Round of 16" },
-          { channel: "Tennis Channel", window: "5PM – 10PM", round: "Round of 16" },
+          { channel: "PBTV", window: "3PM – 11PM", round: "Round of 16" },
+          { channel: "Tennis Channel", window: "4PM – 11PM", round: "Round of 16" },
         ],
       },
       {
         date: "Dec 18",
         dow: "Fri",
         windows: [
-          { channel: "PBTV", window: "5PM – 1AM", round: "Quarterfinals" },
-          { channel: "Tennis Channel", window: "5PM – 10PM", round: "Quarterfinals" },
+          { channel: "PBTV", window: "3PM – 11PM", round: "Quarterfinals" },
+          { channel: "Tennis Channel", window: "4PM – 11PM", round: "Quarterfinals" },
         ],
       },
       {
@@ -484,7 +497,7 @@ export const tvSchedule: TvEvent[] = [
         dow: "Sat",
         windows: [
           { channel: "PBTV", window: "3PM – 11PM", round: "Semifinals" },
-          { channel: "Tennis Channel", window: "4PM – 8PM", round: "Semifinals" },
+          { channel: "Tennis Channel", window: "4PM – 7PM", round: "Semifinals" },
         ],
       },
       {
