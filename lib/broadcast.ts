@@ -198,8 +198,15 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
     // Wed 10/14 (RD 32), triple streamed on the PBTV app, PBTV YouTube and the
     // PPA Tour channel. He gave the START only and said "until End of Day", so the
     // 8PM end is this stop's own weekday length, not a time he published.
-    { round: "RD 64", day: "Tuesday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "RD 32", day: "Wednesday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
+    //
+    // ⚠ "PBTV App", NOT "PBTV": Keaton Maynard, #marketing-general 10/12 —
+    // "Matt is streaming to the PBTV (APP only) for Tuesday and Wednesday. TC
+    // comes in to do production starting thursday." That overrides Matt's 10/10
+    // "triple streamed" note (YouTube too); Bryce asked Matt to confirm, and if
+    // YouTube does carry these days, add it here and in lib/tv-schedule.ts.
+    // `lib/event-watch.ts` groups "PBTV App" under the PBTV card.
+    { round: "RD 64", day: "Tuesday", window: "12PM ET - 8PM ET", platform: "PBTV App", type: "LIVE" },
+    { round: "RD 32", day: "Wednesday", window: "12PM ET - 8PM ET", platform: "PBTV App", type: "LIVE" },
     // ⚠ THU/FRI PBTV MOVED TO A 12PM START on Keaton Maynard's 10/9 revision
     // (was 2PM, which is what the 9/21 sheet carries). Tennis Channel did NOT
     // move and still opens at 2PM, so the PBTV window now starts two hours ahead

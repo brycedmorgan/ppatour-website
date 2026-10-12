@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { tvSchedule } from "@/lib/tv-schedule";
 import {
-  channelLabel,
+  windowLabel,
   isFoxChannel,
   matchesFilter,
   type ChannelFilter,
@@ -144,7 +144,7 @@ export function TvScheduleList() {
                     }`}
                   >
                     {w.channel === "Tennis Channel" ? "📺 " : ""}
-                    {channelLabel(w.channel)}
+                    {windowLabel(w)}
                   </span>
                   <span className="text-left text-sm font-bold tabular-nums text-ppa-navy sm:text-right">
                     {w.window}

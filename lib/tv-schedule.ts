@@ -65,6 +65,10 @@ export type TvWindow = {
   /** Tape-delayed replay, not a live window. The sheet marks these TAPE, and a
    *  replay presented as live coverage sends people to a finished match. */
   tape?: boolean;
+  /** Streamed on the PickleballTV app only — not the PBTV YouTube or web
+   *  stream. Renders as "PickleballTV App"; still a PBTV window for filters
+   *  and the sheet audit. VB Tue/Wed (Keaton, 10/12). */
+  appOnly?: boolean;
 };
 
 export type TvDay = {
@@ -320,15 +324,16 @@ export const tvSchedule: TvEvent[] = [
       // ⚠ Tue/Wed are NEW (Matt Mayfield, 10/10) and Thu/Fri PBTV moved to a
       // 12PM start (Keaton Maynard, 10/9); both post-date the 9/21 sheet. The 8PM
       // ends are Bryce's, keeping the window length: neither source published one.
+      // ⚠ Tue/Wed are the PBTV APP ONLY (Keaton, 10/12); see lib/broadcast.ts.
       {
         date: "Oct 13",
         dow: "Tue",
-        windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Round of 64" }],
+        windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Round of 64", appOnly: true }],
       },
       {
         date: "Oct 14",
         dow: "Wed",
-        windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Round of 32" }],
+        windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Round of 32", appOnly: true }],
       },
       {
         date: "Oct 15",

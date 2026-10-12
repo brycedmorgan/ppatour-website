@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { tvSchedule, type TvEvent, type TvWindow } from "@/lib/tv-schedule";
-import { channelLabel } from "@/lib/tv-channels";
+import { channelLabel, windowLabel } from "@/lib/tv-channels";
 
 /**
  * The TV guide — one block per upcoming event, day by day, channel by channel.
@@ -157,7 +157,7 @@ export function TvGuide({ limit }: { limit?: number }) {
                         CHANNEL_BADGE[w.channel] ?? "bg-ppa-navy text-white"
                       }`}
                     >
-                      {channelLabel(w.channel)}
+                      {windowLabel(w)}
                     </span>
                   </span>
                 </div>

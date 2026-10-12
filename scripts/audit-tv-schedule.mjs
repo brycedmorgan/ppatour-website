@@ -192,7 +192,10 @@ for (const ev of site) {
     console.log(`   – ${ev.slug} — no entry; its event page renders the templated table`);
     continue;
   }
+  // "PBTV App" (app-only stream) is still a PBTV window; tv-schedule.ts marks the
+  // same rows `appOnly` on channel "PBTV".
   const have = slots
+    .map((s) => (s.platform === "PBTV App" ? { ...s, platform: "PBTV" } : s))
     .filter((s) => MODELLED.includes(s.platform))
     .map((s) => bKey(s.platform, bWindow(s.window), s.type === "TAPE"))
     .sort();

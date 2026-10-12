@@ -67,6 +67,18 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-12 (pt. 4) — VB Tue/Wed are the PickleballTV app only
+
+- Trey Thayer flagged it; Keaton, #marketing-general 10/12: "Matt is streaming to the PBTV (APP only) for Tuesday
+  and Wednesday. TC comes in to do production starting thursday." Bryce asked for it in the thread; built here
+  (his 6-file patch never arrived).
+- `lib/broadcast.ts` VB Tue/Wed `platform: "PBTV App"` (event page table + Order of Play read it as written);
+  `lib/event-watch.ts` groups it under the PBTV card. `lib/tv-schedule.ts` keeps channel "PBTV" with new
+  `appOnly: true`, rendered "PickleballTV App" by new `windowLabel()` in `lib/tv-channels.ts` (TvGuide +
+  /watch/tv). The audit maps "PBTV App" → PBTV for the lockstep check.
+- **⚠ OPEN: Matt's 10/10 note said Tue/Wed were triple streamed (app + PBTV YouTube + PPA Tour YouTube).** Bryce
+  asked him to confirm; if YouTube carries them, add it to both files.
+
 ### 2026-10-12 (pt. 3) — PPA Australia Cup on /watch: new YouTube channel for the first stream-only stop
 
 - Bryce's four blocks (Slack DM 10/11), applied by Wesley; Asana `1219412868556797`. Keaton Maynard,

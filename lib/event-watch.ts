@@ -44,6 +44,8 @@ const PBTV_URL =
  */
 const GROUP: Record<string, string> = {
   PBTV: "PBTV",
+  // App-only streams (VB Tue/Wed, 10/12) are still PickleballTV — one card.
+  "PBTV App": "PBTV",
   "Tennis Channel": "Tennis Channel",
   FS1: "FOX Sports",
   FS2: "FOX Sports",

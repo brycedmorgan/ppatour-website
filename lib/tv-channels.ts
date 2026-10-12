@@ -26,6 +26,11 @@ export function channelLabel(channel: TvWindow["channel"]): string {
   return CHANNEL_LABEL[channel] ?? channel;
 }
 
+/** One window's label — the channel's, except an app-only PBTV stream. */
+export function windowLabel(w: Pick<TvWindow, "channel" | "appOnly">): string {
+  return w.appOnly ? `${channelLabel(w.channel)} App` : channelLabel(w.channel);
+}
+
 /** FOX splits its windows across FS1 and FS2, so they group under one filter. */
 export function isFoxChannel(channel: TvWindow["channel"]): boolean {
   return channel === "FS1" || channel === "FS2";
