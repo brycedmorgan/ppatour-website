@@ -40,6 +40,7 @@ import {
   gatesAtFirstServe,
   gatesFollowFirstServe,
   gatesPublished,
+  gatesDaily,
   gatesFor,
   getEventSchedule,
   hasGatesOverride,
@@ -275,7 +276,7 @@ function buildSchedule(startIso: string, endIso: string, slug: string): Day[] {
       // The event team's own gate time and first serve where this stop has
       // them, otherwise the template's. The two move independently — see the
       // notes on GATES_BY_SLUG and FIRST_SERVE_BY_SLUG in lib/event-schedule.ts.
-      gates: gatesFor(slug, gates, firstServeFor(slug, iso, firstServe)),
+      gates: gatesFor(slug, gates, firstServeFor(slug, iso, firstServe), iso),
       firstServe: firstServeFor(slug, iso, firstServe),
       live,
       // A companion event playing here today, or nothing. Everything with a
@@ -608,6 +609,7 @@ export default async function EventPage({ params }: Params) {
     gates: realSchedule?.proDays[0]?.gates ?? days[0]?.gates ?? "an hour before first serve",
     gatesFollowFirstServe: gatesFollowFirstServe(t.slug, t.startDate),
     gatesAtFirstServe: gatesAtFirstServe(t.slug),
+    gatesDaily: gatesDaily(t.slug, realSchedule?.proDays[0]?.gates ?? days[0]?.gates ?? ""),
     // The days this stop's own first serve is known for, or null. Without it
     // the concierge answers a “what time does play start?” with the gate time
     // alone, while the order of play on the same page carries the real one.
@@ -1304,7 +1306,7 @@ export default async function EventPage({ params }: Params) {
             ) : gatesAtFirstServe(t.slug) ? (
               <>Gates open at first serve each day.</>
             ) : hasGatesOverride(t.slug) ? (
-              <>Gates open {days[0]?.gates} daily.</>
+              <>Gates open {gatesDaily(t.slug, days[0]?.gates ?? "")}.</>
             ) : (
               // A stop with supplied first-serve times and no supplied gate:
               // the per-day gate is still the template's, so say nothing about
@@ -1793,7 +1795,7 @@ export default async function EventPage({ params }: Params) {
               {[
                 {
                   k: "Gates & Sessions",
-                  v: `${gatesAtFirstServe(t.slug) ? "Gates open at first serve each day — see the Order of Play for times." : `Gates open ${days[0]?.gates ?? "an hour before first serve"} daily.`} Morning and evening sessions are ticketed separately at Championship Court; a grounds pass covers the outer courts all day.`,
+                  v: `${gatesAtFirstServe(t.slug) ? "Gates open at first serve each day — see the Order of Play for times." : `Gates open ${days[0]?.gates ? gatesDaily(t.slug, days[0].gates) : "an hour before first serve daily"}.`} Morning and evening sessions are ticketed separately at Championship Court; a grounds pass covers the outer courts all day.`,
                 },
                 {
                   k: "Parking & Shuttle",

@@ -29,6 +29,9 @@ export type ConciergeFacts = {
   gatesFollowFirstServe: boolean;
   /** Gates open at each day's first serve (a stopgap; see GATES_AT_FIRST_SERVE). */
   gatesAtFirstServe: boolean;
+  /** "12:00 PM daily", or "12:00 PM daily from Tue 10/13" for a gate that
+   *  changes mid-event — `gatesDaily()` in lib/event-schedule.ts. */
+  gatesDaily: string;
   /**
    * “First serve is 2:00 PM on Sep 19 and Sep 20.” — the days the event team
    * has actually given a start time for, built from the rendered order of play
@@ -111,7 +114,9 @@ const INTENTS: Intent[] = [
         f.gatesAtFirstServe
           ? "Gates open at first serve each day."
           : /\d/.test(f.gates)
-          ? `Gates open ${f.gates}${f.gatesFollowFirstServe ? " — about an hour before first serve each day. Finals move to a late-morning start for the broadcast window." : " daily."}`
+          ? f.gatesFollowFirstServe
+            ? `Gates open ${f.gates} — about an hour before first serve each day. Finals move to a late-morning start for the broadcast window.`
+            : `Gates open ${f.gatesDaily}.`
           : "Gate and first-serve times will be posted closer to the event."
       }${f.firstServeNote ? ` ${f.firstServeNote}` : ""} The full order of play is on this page under "Order of Play."`,
     }),

@@ -293,14 +293,50 @@ const GATES_BY_SLUG: Record<string, string> = {
 };
 
 /**
+ * A gate time for a run of days mid-event: every day from `from` through
+ * `through` (inclusive) opens at `time`; days outside it keep the template.
+ *
+ * ⚠ Mojo Energy Pouches Virginia Beach Open, Oct 12–18 (Wesley, 10/13): "fix
+ * the gates open time … to be noon for today and onward." Monday's qualifier
+ * day had already been played on the template's 8:00 AM gate, so it is left as
+ * it was rather than rewritten after the fact. ⚠ SUNDAY IS OUT ON PURPOSE
+ * (Wesley, same day): its broadcast opens 10AM ET, so a noon gate would open
+ * after the finals start — it keeps the template's 10:00 AM gate.
+ */
+const GATES_FROM_BY_SLUG: Record<string, { from: string; through: string; time: string }> = {
+  "virginia-beach-open": { from: "2026-10-13", through: "2026-10-17", time: "12:00 PM" },
+};
+
+/**
  * The gate time for a templated day at this stop: the event team's own if we
  * have it, otherwise whatever the template worked out. Both copies of
  * `buildSchedule` read this, so the event page, the `-live` route, the Know
  * Before You Go line and the concierge cannot disagree about it.
  */
-export function gatesFor(slug: string, templated: string, firstServe?: string): string {
+export function gatesFor(slug: string, templated: string, firstServe?: string, iso?: string): string {
   if (firstServe && GATES_AT_FIRST_SERVE.has(slug)) return firstServe;
+  const from = GATES_FROM_BY_SLUG[slug];
+  if (from && iso && iso >= from.from && iso <= from.through) return from.time;
   return GATES_BY_SLUG[slug] ?? templated;
+}
+
+/**
+ * "12:00 PM daily" — or "12:00 PM Tue 10/13 – Sat 10/17" for a gate that only
+ * covers part of the event — for every sentence that states one gate for the
+ * whole stop (the schedule intro, Know Before You Go, the concierge). Without it
+ * those read the FIRST day's gate, which for a mid-event change is the old one.
+ */
+export function gatesDaily(slug: string, firstDayGates: string): string {
+  const run = GATES_FROM_BY_SLUG[slug];
+  if (run) {
+    const short = (iso: string) => {
+      const d = new Date(`${iso}T12:00:00Z`);
+      const dow = d.toLocaleDateString("en-US", { weekday: "short", timeZone: "UTC" });
+      return `${dow} ${d.getUTCMonth() + 1}/${d.getUTCDate()}`;
+    };
+    return `${run.time} ${short(run.from)} – ${short(run.through)}`;
+  }
+  return `${GATES_BY_SLUG[slug] ?? firstDayGates} daily`;
 }
 
 /**
@@ -325,7 +361,7 @@ export function gatesAtFirstServe(slug: string): boolean {
  * may describe it as "an hour before first serve".
  */
 export function hasGatesOverride(slug: string): boolean {
-  return slug in GATES_BY_SLUG;
+  return slug in GATES_BY_SLUG || slug in GATES_FROM_BY_SLUG;
 }
 
 /**
@@ -420,6 +456,25 @@ const FIRST_SERVE_BY_SLUG: Record<string, Record<string, string>> = {
     "2026-10-10": "12:00 PM", // Sat — SF
     "2026-10-11": "10:00 AM", // Sun — Finals
   },
+
+  /**
+   * Mojo Energy Pouches Virginia Beach Open — Oct 12–18, Pickleball Virginia
+   * Beach. Wesley, 10/13: first serve matches the PBTV broadcast starts, the
+   * Chicago pattern (Virginia is Eastern, so ET is local): Tue–Sat 12PM ET
+   * (Matt's 10/10 note for Tue/Wed, Keaton's 10/9 revision for Thu/Fri, the
+   * sheet for Sat), Sun 10AM ET. Set alongside the noon gates, which otherwise
+   * read two hours after a templated 10:00 AM first serve.
+   *
+   * ⚠ MONDAY 10/12 IS ABSENT: qualifiers, already played, never broadcast.
+   */
+  "virginia-beach-open": {
+    "2026-10-13": "12:00 PM", // Tue — RD64
+    "2026-10-14": "12:00 PM", // Wed — RD32
+    "2026-10-15": "12:00 PM", // Thu — RD16
+    "2026-10-16": "12:00 PM", // Fri — QF
+    "2026-10-17": "12:00 PM", // Sat — SF
+    "2026-10-18": "10:00 AM", // Sun — Finals
+  },
 };
 
 /**
@@ -453,6 +508,7 @@ export function gatesFollowFirstServe(slug: string, startIso: string): boolean {
   if (!gatesPublished(slug, startIso)) return false;
   return (
     !(slug in GATES_BY_SLUG) &&
+    !(slug in GATES_FROM_BY_SLUG) &&
     !(slug in FIRST_SERVE_BY_SLUG) &&
     !GATES_AT_FIRST_SERVE.has(slug)
   );

@@ -67,6 +67,17 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-13 — VB gates at noon Tue–Sat; first serve from the broadcast starts
+
+- Wesley, mid-event: gates noon "for today and onward". Then (asked): **Sunday stays on the template's 10:00 AM
+  gate** (broadcast opens 10AM ET), and first serve matches the PBTV starts, the Chicago pattern: Tue–Sat
+  12:00 PM, Sun 10:00 AM. Monday (qualifiers, played) untouched: 8:00 AM gate, 9:00 AM first serve.
+- New `GATES_FROM_BY_SLUG` (`from`/`through` run) in `lib/event-schedule.ts`; `gatesFor` now takes the day's
+  ISO. **New `gatesDaily()`** feeds every "Gates open … daily" sentence (schedule intro, Know Before You Go, the
+  concierge's new required `gatesDaily`): they used to print `days[0].gates`, i.e. Monday's old gate.
+- Verified on the dev server: per-day gate = first serve Tue–Sun; intro, KBYG and concierge read "12:00 PM
+  Tue 10/13 – Sat 10/17". Daytona (template) unchanged. tsc clean; eslint at the NationalsLive baseline.
+
 ### 2026-10-12 (pt. 4) — VB Tue/Wed are the PickleballTV app only
 
 - Trey Thayer flagged it; Keaton, #marketing-general 10/12: "Matt is streaming to the PBTV (APP only) for Tuesday
