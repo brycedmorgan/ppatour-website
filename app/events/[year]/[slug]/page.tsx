@@ -48,7 +48,7 @@ import {
 } from "@/lib/event-schedule";
 import { programmingFor } from "@/lib/event-programming";
 import { challengerShowdown, showdownDaysFor } from "@/lib/challenger-showdown";
-import { orderOfPlayByDay, playDays, proDayLabel } from "@/lib/order-of-play";
+import { orderOfPlayByDay, playDays, proDayLabel, dayLabelFor } from "@/lib/order-of-play";
 import {
   LiveEventBadge,
   LiveEventKicker,
@@ -256,7 +256,7 @@ function buildSchedule(startIso: string, endIso: string, slug: string, state?: s
     const fromEnd = last - i;
     // Round names come from lib/order-of-play; gates and first serve stay here,
     // because they are this function's own and both can be overridden per stop.
-    const label = proDayLabel(i, fromEnd);
+    const label = dayLabelFor(slug, cursor.toISOString().slice(0, 10), proDayLabel(i, fromEnd));
     let gates = "9:00 AM";
     let firstServe = "10:00 AM";
     if (i === 0 || i === 1) {

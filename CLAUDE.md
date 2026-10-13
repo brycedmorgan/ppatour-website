@@ -67,6 +67,18 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-13 (pt. 3) — Mesa tickets on; VB order of play corrected (Asana sweep)
+
+- **Carvana Mesa Cup** (Asana `1219412594134889`, Tanner Thygerson 10/8): `carvana-mesa-cup` mapped to Tixr
+  `ppa-mesa-210307` (in the price snapshot, on sale, from $25) and register `ppa-tour-carvana-mesa-cup-2`.
+- **VB order of play** (Asana `1219460793907394`, Matt Mayfield 10/12–13): Oct 12 "Pro qualifying" (no amateurs
+  or juniors), Oct 13 "Pro round of 64"; noon start was already done (pt. 1/2). New `LABELS_BY_SLUG` +
+  `dayLabelFor()` in `lib/order-of-play.ts`, used by both `buildSchedule`s and `proDayLabels` so the scores
+  board agrees. ⚠ The template's Monday/Tuesday ("Amateur & junior brackets" / "Senior Open + pro qualifying")
+  drops the R64 on every 7-day stop — fix per stop as the schedule owners confirm.
+- ⚠ **Schedule owners going forward: Andrew DeHennis and Ben Smyth** split the calendar; confirm with them before
+  publishing a stop's schedule. VB not yet confirmed with Andrew.
+
 ### 2026-10-13 (pt. 2) — Standing rule: gates and first serve = the day's earliest broadcast start
 
 - **Wesley: "have the rule be the gate time always matches the earliest broadcast time for that day unless

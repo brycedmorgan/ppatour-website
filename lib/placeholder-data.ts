@@ -560,6 +560,12 @@ const COMMERCE_BY_SLUG: Record<string, { tickets?: string; register?: string }> 
     tickets: tixrEvent("ppa-palm-springs-204325"),
     register: registerEvent("ppa-tour-carvana-pickleball-masters-powered-by-invited"),
   },
+  // Tanner Thygerson, Slack 10/8: "Tickets are live." Both links are his. The
+  // Tixr id (210307) is in the price snapshot as on sale, from $25.
+  "carvana-mesa-cup": {
+    tickets: tixrEvent("ppa-mesa-210307"),
+    register: registerEvent("ppa-tour-carvana-mesa-cup-2"),
+  },
   "macon-ppa-challenger": {
     tickets: tixrEvent("ppa-challenger-series-macon-166226"),
     register: registerEvent("2026-macon-ppa-challenger"),
