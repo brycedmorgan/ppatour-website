@@ -356,7 +356,7 @@ export async function HomeContent({
                 kicker={
                   showLiveScores ? (
                     <LiveEventKicker
-                      days={playDays(next.slug, next.startDate, next.endDate)}
+                      days={playDays(next.slug, next.startDate, next.endDate, next.state)}
                       dark={false}
                     />
                   ) : undefined

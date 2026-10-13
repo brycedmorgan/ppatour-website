@@ -244,7 +244,7 @@ type Day = {
  * had it. The channel now comes from lib/broadcast.ts, matched by weekday, and
  * is simply absent when the sheet says nothing.
  */
-function buildSchedule(startIso: string, endIso: string, slug: string): Day[] {
+function buildSchedule(startIso: string, endIso: string, slug: string, state?: string): Day[] {
   const channels = channelsByDay(slug);
   const start = new Date(`${startIso}T00:00:00`);
   const end = new Date(`${endIso}T00:00:00`);
@@ -276,8 +276,8 @@ function buildSchedule(startIso: string, endIso: string, slug: string): Day[] {
       // The event team's own gate time and first serve where this stop has
       // them, otherwise the template's. The two move independently — see the
       // notes on GATES_BY_SLUG and FIRST_SERVE_BY_SLUG in lib/event-schedule.ts.
-      gates: gatesFor(slug, gates, firstServeFor(slug, iso, firstServe), iso),
-      firstServe: firstServeFor(slug, iso, firstServe),
+      gates: gatesFor(slug, gates, firstServeFor(slug, iso, firstServe, state), iso, state),
+      firstServe: firstServeFor(slug, iso, firstServe, state),
       live,
       // A companion event playing here today, or nothing. Everything with a
       // published day goes on that day (Bryce, 7/31) — the template has no
@@ -304,7 +304,7 @@ export default async function EventPage({ params }: Params) {
   const t = resolved.event;
 
   const countdown = daysUntil(t.startDate);
-  const days = buildSchedule(t.startDate, t.endDate, t.slug);
+  const days = buildSchedule(t.startDate, t.endDate, t.slug, t.state);
   // The companion tournament playing inside this stop, if any — see the
   // callout under the order of play. Empty at every event but Worlds.
   const showdownDays = showdownDaysFor(t.slug, t.startDate, t.endDate);
@@ -312,7 +312,7 @@ export default async function EventPage({ params }: Params) {
   // see the `roundByDay` prop on ScoresBoard.
   const roundByDay = orderOfPlayByDay(t.slug, t.startDate, t.endDate);
   // The same order of play with first-serve times, for the live status copy.
-  const liveDays = playDays(t.slug, t.startDate, t.endDate);
+  const liveDays = playDays(t.slug, t.startDate, t.endDate, t.state);
   const broadcast = getBroadcast(t.slug);
   // The channels THIS event is actually on — see lib/event-watch.ts.
   const watchCards = watchCardsFor(t.slug);
@@ -609,11 +609,13 @@ export default async function EventPage({ params }: Params) {
     gates: realSchedule?.proDays[0]?.gates ?? days[0]?.gates ?? "an hour before first serve",
     gatesFollowFirstServe: gatesFollowFirstServe(t.slug, t.startDate),
     gatesAtFirstServe: gatesAtFirstServe(t.slug),
-    gatesDaily: gatesDaily(t.slug, realSchedule?.proDays[0]?.gates ?? days[0]?.gates ?? ""),
+    gatesDaily: gatesDaily(t.slug, realSchedule ? realSchedule.proDays.map((d) => d.gates) : days.map((d) => d.gates)),
     // The days this stop's own first serve is known for, or null. Without it
     // the concierge answers a “what time does play start?” with the gate time
     // alone, while the order of play on the same page carries the real one.
-    firstServeNote: firstServeNote(t.slug, days),
+    // A transcribed schedule owns its own times (Worlds reads TBD); the
+    // broadcast-derived first serve on the templated days must not leak past it.
+    firstServeNote: realSchedule ? null : firstServeNote(t.slug, days, t.state),
     // Same gate as the rest of the page — no price and no Tixr link when
     // tickets aren't on sale.
     ticketFrom: onSale ? t.ticketPriceFrom : null,
@@ -1306,7 +1308,7 @@ export default async function EventPage({ params }: Params) {
             ) : gatesAtFirstServe(t.slug) ? (
               <>Gates open at first serve each day.</>
             ) : hasGatesOverride(t.slug) ? (
-              <>Gates open {gatesDaily(t.slug, days[0]?.gates ?? "")}.</>
+              <>Gates open {gatesDaily(t.slug, days.map((d) => d.gates))}.</>
             ) : (
               // A stop with supplied first-serve times and no supplied gate:
               // the per-day gate is still the template's, so say nothing about
@@ -1795,7 +1797,7 @@ export default async function EventPage({ params }: Params) {
               {[
                 {
                   k: "Gates & Sessions",
-                  v: `${gatesAtFirstServe(t.slug) ? "Gates open at first serve each day — see the Order of Play for times." : `Gates open ${days[0]?.gates ? gatesDaily(t.slug, days[0].gates) : "an hour before first serve daily"}.`} Morning and evening sessions are ticketed separately at Championship Court; a grounds pass covers the outer courts all day.`,
+                  v: `${gatesAtFirstServe(t.slug) ? "Gates open at first serve each day — see the Order of Play for times." : !gatesPublished(t.slug, t.startDate) ? "Gate and first-serve times will be posted closer to the event." : `Gates open ${gatesDaily(t.slug, (realSchedule ? realSchedule.proDays : days).map((d) => d.gates))}.`} Morning and evening sessions are ticketed separately at Championship Court; a grounds pass covers the outer courts all day.`,
                 },
                 {
                   k: "Parking & Shuttle",

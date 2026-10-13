@@ -156,7 +156,7 @@ export function HomeHero({
 
   // The stop's order of play, for the live status line. Plain data — which day
   // is today is decided on the device.
-  const days = playDays(next.slug, next.startDate, next.endDate);
+  const days = playDays(next.slug, next.startDate, next.endDate, next.state);
 
   return (
     <>

@@ -120,7 +120,7 @@ const DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
  *
  * Plain data, no clock: the caller decides which day is today, on the device.
  */
-export function playDays(slug: string, startIso: string, endIso: string): PlayDay[] {
+export function playDays(slug: string, startIso: string, endIso: string, state?: string): PlayDay[] {
   const days = proDayLabels(startIso, endIso);
   const real = getEventSchedule(slug, startIso);
   const useReal = real && real.proDays.length === days.length;
@@ -133,6 +133,6 @@ export function playDays(slug: string, startIso: string, endIso: string): PlayDa
     const dow = DOW[new Date(`${d.iso}T00:00:00Z`).getUTCDay()];
     return useReal
       ? { iso: d.iso, dow, label: real.proDays[i].label, firstServe: real.proDays[i].firstServe }
-      : { iso: d.iso, dow, label: d.label, firstServe: firstServeFor(slug, d.iso, templated) };
+      : { iso: d.iso, dow, label: d.label, firstServe: firstServeFor(slug, d.iso, templated, state) };
   });
 }

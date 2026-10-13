@@ -1271,8 +1271,13 @@ const TZ_BY_STATE: Record<string, string> = {
   VA: "America/New_York",
 };
 
+/** IANA timezone for a US stop's state, or undefined for one not on the calendar. */
+export function tzForState(state: string | undefined): string | undefined {
+  return state ? TZ_BY_STATE[state] : undefined;
+}
+
 /** How far `tz` is from UTC at a given instant, in ms (negative in the US). */
-function tzOffsetMs(utcMs: number, tz: string): number {
+export function tzOffsetMs(utcMs: number, tz: string): number {
   const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: tz,
     hour12: false,

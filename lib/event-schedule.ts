@@ -6,7 +6,9 @@
  * registration deadline; sync from Wesley's PT.com API when it lands.
  */
 
+import { getBroadcast } from "@/lib/broadcast";
 import { challengerShowdown } from "@/lib/challenger-showdown";
+import { tzForState, tzOffsetMs } from "@/lib/placeholder-data";
 
 export type AmateurSession = {
   label: string;
@@ -307,26 +309,80 @@ const GATES_FROM_BY_SLUG: Record<string, { from: string; through: string; time: 
   "virginia-beach-open": { from: "2026-10-13", through: "2026-10-17", time: "12:00 PM" },
 };
 
-/**
- * The gate time for a templated day at this stop: the event team's own if we
- * have it, otherwise whatever the template worked out. Both copies of
- * `buildSchedule` read this, so the event page, the `-live` route, the Know
- * Before You Go line and the concierge cannot disagree about it.
- */
-export function gatesFor(slug: string, templated: string, firstServe?: string, iso?: string): string {
-  if (firstServe && GATES_AT_FIRST_SERVE.has(slug)) return firstServe;
-  const from = GATES_FROM_BY_SLUG[slug];
-  if (from && iso && iso >= from.from && iso <= from.through) return from.time;
-  return GATES_BY_SLUG[slug] ?? templated;
+/** "12PM ET - 8PM ET" → the start, in minutes after midnight ET; null if unreadable. */
+function etStartMinutes(window: string): number | null {
+  const m = /^\s*(\d{1,2})(?::(\d{2}))?\s*(AM|PM)\s*ET\b/i.exec(window);
+  if (!m) return null;
+  const h = (Number(m[1]) % 12) + (m[3].toUpperCase() === "PM" ? 12 : 0);
+  return h * 60 + Number(m[2] ?? 0);
+}
+
+/** Minutes after midnight → "12:00 PM". */
+function clock(minutes: number): string {
+  const h24 = Math.floor(minutes / 60);
+  const h = h24 % 12 === 0 ? 12 : h24 % 12;
+  return `${h}:${String(minutes % 60).padStart(2, "0")} ${h24 < 12 ? "AM" : "PM"}`;
 }
 
 /**
- * "12:00 PM daily" — or "12:00 PM Tue 10/13 – Sat 10/17" for a gate that only
- * covers part of the event — for every sentence that states one gate for the
- * whole stop (the schedule intro, Know Before You Go, the concierge). Without it
- * those read the FIRST day's gate, which for a mid-event change is the old one.
+ * THE DEFAULT GATE AND FIRST-SERVE RULE (Wesley, 10/13): "the gate time always
+ * matches the earliest broadcast time for that day unless specified otherwise",
+ * and first serve follows the same rule (asked, same day) so the two agree.
+ *
+ * The earliest LIVE window in `lib/broadcast.ts` on this day's weekday, moved
+ * from ET to the venue's own zone. Null when the day has no live window (most
+ * qualifier Mondays) or the venue's zone is unknown — that day keeps the
+ * template. Tape windows don't count: a replay says nothing about the doors.
+ *
+ * ⚠ Broadcast windows are ET; gates are local. Malibu's 3PM ET start is a
+ * noon gate in California. The offset is taken on the day itself, so a stop
+ * that spans the November DST change converts each day correctly.
  */
-export function gatesDaily(slug: string, firstDayGates: string): string {
+export function broadcastStart(slug: string, iso: string, state?: string): string | null {
+  const tz = tzForState(state);
+  if (!tz) return null;
+  const noon = Date.parse(`${iso}T12:00:00Z`);
+  if (!Number.isFinite(noon)) return null;
+  const weekday = new Date(noon).toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" });
+  const starts = getBroadcast(slug)
+    .filter((s) => s.type !== "TAPE" && s.day.trim().toLowerCase() === weekday.toLowerCase())
+    .map((s) => etStartMinutes(s.window))
+    .filter((m): m is number => m !== null);
+  if (!starts.length) return null;
+  const shift = Math.round((tzOffsetMs(noon, tz) - tzOffsetMs(noon, "America/New_York")) / 60_000);
+  const local = Math.min(...starts) + shift;
+  return local >= 0 && local < 24 * 60 ? clock(local) : null;
+}
+
+/**
+ * The gate time for a templated day at this stop. In order: anything SPECIFIED
+ * for this stop (the first-serve stopgap, a dated run, a flat stop-wide gate),
+ * then the day's earliest broadcast start (`broadcastStart`), then the template.
+ * Both copies of `buildSchedule` read this, so the event page, the `-live`
+ * route, the Know Before You Go line and the concierge cannot disagree.
+ */
+export function gatesFor(
+  slug: string,
+  templated: string,
+  firstServe?: string,
+  iso?: string,
+  state?: string,
+): string {
+  if (firstServe && GATES_AT_FIRST_SERVE.has(slug)) return firstServe;
+  const from = GATES_FROM_BY_SLUG[slug];
+  if (from && iso && iso >= from.from && iso <= from.through) return from.time;
+  if (GATES_BY_SLUG[slug]) return GATES_BY_SLUG[slug];
+  return (iso && broadcastStart(slug, iso, state)) || templated;
+}
+
+/**
+ * What follows "Gates open" in every sentence that states one gate for the
+ * whole stop (the schedule intro, Know Before You Go, the concierge):
+ * "12:00 PM daily", "12:00 PM Tue 10/13 – Sat 10/17" for a dated run, or —
+ * when the days differ, as broadcast-derived gates usually do — a pointer to
+ * the Order of Play. Never the first day's gate standing in for the week.
+ */
+export function gatesDaily(slug: string, gates: string[]): string {
   const run = GATES_FROM_BY_SLUG[slug];
   if (run) {
     const short = (iso: string) => {
@@ -336,7 +392,11 @@ export function gatesDaily(slug: string, firstDayGates: string): string {
     };
     return `${run.time} ${short(run.from)} – ${short(run.through)}`;
   }
-  return `${GATES_BY_SLUG[slug] ?? firstDayGates} daily`;
+  if (GATES_BY_SLUG[slug]) return `${GATES_BY_SLUG[slug]} daily`;
+  const distinct = [...new Set(gates.filter(Boolean))];
+  return distinct.length === 1
+    ? `${distinct[0]} daily`
+    : "at a different time each day — see the Order of Play";
 }
 
 /**
@@ -361,7 +421,12 @@ export function gatesAtFirstServe(slug: string): boolean {
  * may describe it as "an hour before first serve".
  */
 export function hasGatesOverride(slug: string): boolean {
-  return slug in GATES_BY_SLUG || slug in GATES_FROM_BY_SLUG;
+  return slug in GATES_BY_SLUG || slug in GATES_FROM_BY_SLUG || hasBroadcastGates(slug);
+}
+
+/** Does this stop carry live broadcast windows, and so gates set by `broadcastStart`? */
+function hasBroadcastGates(slug: string): boolean {
+  return getBroadcast(slug).some((s) => s.type !== "TAPE");
 }
 
 /**
@@ -483,13 +548,13 @@ const FIRST_SERVE_BY_SLUG: Record<string, Record<string, string>> = {
  * Both copies of `buildSchedule` read this, so the order-of-play table, the
  * `-live` route and the concierge cannot disagree about it.
  */
-export function firstServeFor(slug: string, iso: string, templated: string): string {
-  return FIRST_SERVE_BY_SLUG[slug]?.[iso] ?? templated;
+export function firstServeFor(slug: string, iso: string, templated: string, state?: string): string {
+  return FIRST_SERVE_BY_SLUG[slug]?.[iso] ?? broadcastStart(slug, iso, state) ?? templated;
 }
 
 /** Did the event team set this specific day's first serve? */
-export function hasFirstServeOverride(slug: string, iso: string): boolean {
-  return FIRST_SERVE_BY_SLUG[slug]?.[iso] !== undefined;
+export function hasFirstServeOverride(slug: string, iso: string, state?: string): boolean {
+  return FIRST_SERVE_BY_SLUG[slug]?.[iso] !== undefined || broadcastStart(slug, iso, state) !== null;
 }
 
 /**
@@ -509,6 +574,7 @@ export function gatesFollowFirstServe(slug: string, startIso: string): boolean {
   return (
     !(slug in GATES_BY_SLUG) &&
     !(slug in GATES_FROM_BY_SLUG) &&
+    !hasBroadcastGates(slug) &&
     !(slug in FIRST_SERVE_BY_SLUG) &&
     !GATES_AT_FIRST_SERVE.has(slug)
   );
@@ -527,8 +593,9 @@ export function gatesFollowFirstServe(slug: string, startIso: string): boolean {
 export function firstServeNote(
   slug: string,
   days: { iso: string; date: string; firstServe: string }[],
+  state?: string,
 ): string | null {
-  const set = days.filter((d) => hasFirstServeOverride(slug, d.iso));
+  const set = days.filter((d) => hasFirstServeOverride(slug, d.iso, state));
   if (set.length === 0) return null;
   const dates = set.map((d) => d.date);
   const list =

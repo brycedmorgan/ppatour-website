@@ -67,6 +67,23 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-13 (pt. 2) — Standing rule: gates and first serve = the day's earliest broadcast start
+
+- **Wesley: "have the rule be the gate time always matches the earliest broadcast time for that day unless
+  specified otherwise."** First serve follows the same rule (asked; otherwise Daytona/Malibu read a noon gate
+  over a 10 AM first serve).
+- `broadcastStart(slug, iso, state)` in `lib/event-schedule.ts`: earliest non-TAPE window in `lib/broadcast.ts`
+  on that weekday, **converted ET → the venue's zone** (`tzForState`/`tzOffsetMs`, now exported from
+  `placeholder-data`). Malibu 3PM ET = 12:00 PM local. Precedence for gates: GATES_AT_FIRST_SERVE → dated run
+  (`GATES_FROM_BY_SLUG`) → GATES_BY_SLUG → broadcast → template; first serve: FIRST_SERVE_BY_SLUG → broadcast →
+  template. Days with no live window (qualifier Mondays) keep the template.
+- `state` now threads through both `buildSchedule`s, `playDays` (hero, home, live status) and `firstServeNote`.
+  `gatesDaily(slug, gates[])` says "X daily" only when every day agrees, else points to the Order of Play.
+  A broadcast stop no longer claims "an hour before first serve".
+- **⚠ Worlds stays TBD.** Its transcribed schedule wins over the rule; the concierge's first-serve note and KBYG
+  now follow it (they had read the templated days: "First serve is 11:00 AM", "Gates open 8:00 AM daily").
+- Verified: VB unchanged; Daytona Thu–Sun 12/12; Malibu Thu–Sat 12/12, Sun 10/10; Worlds TBD everywhere.
+
 ### 2026-10-13 — VB gates at noon Tue–Sat; first serve from the broadcast starts
 
 - Wesley, mid-event: gates noon "for today and onward". Then (asked): **Sunday stays on the template's 10:00 AM
