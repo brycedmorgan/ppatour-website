@@ -953,4 +953,128 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
 <p><strong>For the comprehensive stats of all these gold medal matches, please visit: </strong><a href="https://facebook.com/groups/propickleballstats" target="_blank" rel="noreferrer noopener"><strong>facebook.com/groups/propickleballstats</strong></a></p>
 `.trim(),
   },
+  {
+    // Jim Ramsey's Chicago stats wrap, supplied by Wesley on 10/13 (Google Doc
+    // "Championship Sunday Standout Stats from the Veolia Chicago Cup"). Same
+    // series and shape as the Las Vegas wrap above; every line is his, verbatim
+    // — including "(Career titles: Waters 68, Johns, 81)" and "This domestic
+    // season". His "." / "***.***" separators became rules.
+    slug: "championship-sunday-standout-stats-from-the-veolia-chicago-cup",
+    wpId: 900007,
+    status: "published",
+    source: "wordpress",
+    category: "Recap",
+    series: "stats-wrap",
+    categoryResolvedBy: "series",
+    title: "Championship Sunday Standout Stats from the Veolia Chicago Cup",
+    dek: "Northbrook, Illinois. October 11, 2026. Anna Leigh Waters sweeps for her 45th career Triple Crown and 200th title, and Roscoe Bellamy beats top seed Christopher Haworth.",
+    author: "Jim Ramsey",
+    publishedAt: "2026-10-13T12:00:00",
+    publishedAtGmt: "2026-10-13T17:00:00",
+    modifiedAt: "2026-10-13T17:00:00",
+    image: {
+      // Wesley's pick, 10/13. Encoded 2048px wide, mozjpeg q64 (house standard).
+      url: "/ppa/news/championship-sunday-standout-stats-chicago-2026.jpg",
+      // ⚠ NO NAMES — house style on this series.
+      alt: "A player wearing a Veolia Chicago Cup gold medal holds her paddle beside the event trophy, posing with two people in front of a crowd of smiling fans in the stands.",
+      width: 2048,
+      height: 1366,
+      // The three faces sit ~40% down; a centred ~3.6:1 hero crop would land
+      // on the medal and trophy base instead.
+      position: "50% 38%",
+    },
+    // Left empty deliberately: `detectAthleteMentions` reads the body.
+    players: [],
+    playerNames: [],
+    wpEvent: { slug: "2026-veolia-chicago-cup", name: "2026 Veolia Chicago Cup" },
+    tags: [],
+    tagsRaw: [],
+    wpCategories: ["2026-veolia-chicago-cup", "stats-wrap"],
+    embeds: [],
+    inlineImages: [],
+    legacyUrl: "https://www.ppatour.com/championship-sunday-standout-stats-from-the-veolia-chicago-cup/",
+    seo: {
+      title: "Veolia Chicago Cup: Championship Sunday Stats | PPA Tour",
+      description:
+        "Championship Sunday stats from the Veolia Chicago Cup: Anna Leigh Waters wins three golds for her 45th Triple Crown, and Roscoe Bellamy takes men's singles.",
+      canonical:
+        "https://www.ppatour.com/championship-sunday-standout-stats-from-the-veolia-chicago-cup/",
+    },
+    bodyHtml: `
+<p><strong>Northbrook, Illinois.</strong></p>
+
+<p><strong>October 11, 2026.</strong></p>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<h4 class="wp-block-heading"><strong>MIXED DOUBLES FINAL:&nbsp; (1) Anna Leigh Waters and Ben Johns def. (3) Jorja Johnson and J.W. Johnson, 11-4, 11-4.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Waters and Johns&#8217;s 66th title together. (Career titles: Waters 68, Johns, 81)</li>
+<li>Waters&#8217;s 200th overall career title, and part of her 45th career Triple Crown.</li>
+<li>The Johnsons beat Waters and Johns in the semis last month in Cary, NC.</li>
+<li>Waters and Johns had fewer errors on Serves, Returns and Third Shots, 5-1.</li>
+<li>Waters and Johns had fewer Volleys into the net, 7-0.</li>
+<li>Longest rally: 45 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>MEN&#8217;S DOUBLES FINAL:&nbsp; (1) Hayden Patriquin and Federico Staksrud def. (14) Nick Acevedo and Jaume Martinez Vich, 11-1, 11-6.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Fifth career title together for Patriquin and Staksrud.</li>
+<li>Patriquin&#8217;s tenth overall career title; Staksrud&#8217;s 27th.</li>
+<li>Acevedo&#8217;s second final this season.</li>
+<li>Patriquin and Staksrud had more Clean Winners, 15-1.</li>
+<li>All Serves and Returns were kept &#8220;in play.&#8221;</li>
+<li>Longest rally: 33 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>WOMEN&#8217;S DOUBLES FINAL:&nbsp; (1) Anna Bright and Anna Leigh Waters def. (2) Tyra Black and Catherine Parenteau, 2-11, 11-3, 11-4.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Bright and Waters&#8217;s 26th career title together and third this season.</li>
+<li>Bright has 35 Doubles titles; Waters has 68.</li>
+<li>Bright and Waters had more Clean Winners, 15-6.</li>
+<li>Part of Waters&#8217;s 45th career Triple Crown.</li>
+<li>Longest rally: 44 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>MEN&#8217;S SINGLES FINAL:&nbsp; (4) Roscoe Bellamy def. (1) Christopher Haworth, 11-4, 11-5.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Bellamy&#8217;s second career title (2025 Lakeland).</li>
+<li>Listed at six-foot-five, Bellamy is the tallest gold medalist in PPA Tour history.</li>
+<li>Haworth had won his four straight finals appearances before this loss.</li>
+<li>Bellamy had fewer Baseline Drive Errors, 17-9.</li>
+<li>Bellamy had fewer Serve and Return Errors, 8-5.</li>
+<li>Longest rally: 20 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>WOMEN&#8217;S SINGLES FINAL:&nbsp; (1) Anna Leigh Waters def. (2) Kate Fahey, 11-1, 11-7.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Waters has a 66-3 career record in Singles finals, including 14-0 vs. Fahey.</li>
+<li>Waters is 55-0 in Finals since losing in June 2022 (Parris Todd, Orange County)</li>
+<li>Part of Waters&#8217;s 45th career Triple Crown.</li>
+<li>Waters had more Clean Winners, 14-6.</li>
+<li>Waters had fewer Serve and Return Errors, 6-0.</li>
+<li>Longest rally: 14 shots.</li>
+</ul>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<h4 class="wp-block-heading"><strong>LEADING AT THE CHANGEOVER:</strong></h4>
+
+<p>Did the players or teams leading a game when they changed sides at six points go on to win that game?</p>
+
+<ul class="wp-block-list">
+<li>This tournament: Yes. eleven times in eleven games.</li>
+<li>This domestic season: Yes. 42 times in 51 games. (82%).</li>
+</ul>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<p><strong>For the comprehensive stats of all these gold medal matches, please visit: </strong><a href="https://facebook.com/groups/propickleballstats" target="_blank" rel="noreferrer noopener"><strong>facebook.com/groups/propickleballstats</strong></a></p>
+`.trim(),
+  },
 ];

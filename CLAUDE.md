@@ -67,6 +67,15 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-13 (pt. 4) — Ramsey's Chicago Cup stats wrap
+
+- Google Doc from Wesley (not link-shared; read via the Drive connector) →
+  `championship-sunday-standout-stats-from-the-veolia-chicago-cup` in `lib/news-posts-authored.ts` (wpId 900007),
+  verbatim, same shape as the Las Vegas wrap. Photo: Wesley's pick (Waters with the trophy and medal),
+  `public/ppa/news/championship-sunday-standout-stats-chicago-2026.jpg`, 2048 q64, `position: "50% 38%"`, no names.
+- ⚠ Copy flagged to Wesley, published as written: MD line "(Career titles: Waters 68, Johns, 81)" vs "200th
+  overall career title" (68 looks like one discipline's count), and the stray comma in "Johns, 81".
+
 ### 2026-10-13 (pt. 3) — Mesa tickets on; VB order of play corrected (Asana sweep)
 
 - **Carvana Mesa Cup** (Asana `1219412594134889`, Tanner Thygerson 10/8): `carvana-mesa-cup` mapped to Tixr
