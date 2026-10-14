@@ -165,8 +165,11 @@ export const eventSchedules: Record<string, EventSchedule> = {
    * Open + pro qualifying"; Worlds actually plays pro qualifiers Monday and the
    * round of 64 Tuesday.
    *
-   * ✅ FIRST SERVE 11:00 AM MON–SAT: Brian Clark, 10/14 (relayed by Bryce).
-   * Sunday's first serve and every gate time are still TBD.
+   * ✅ FIRST SERVE 11:00 AM MON–SAT, 10:00 AM SUNDAY: Brian Clark, 10/14
+   * (relayed by Bryce).
+   *
+   * ⚠ GATES STAY TBD — DON'T DERIVE ONE FROM FIRST SERVE. Brian: "won't know
+   * gate times until we know amateur play hours."
    *
    * ⚠ GATES AND FIRST SERVE WERE "TBD" ON PURPOSE. The Worlds schedule publishes
    * rounds, not times, and the template's 8/9/10 AM numbers are a house default,
@@ -192,11 +195,11 @@ export const eventSchedules: Record<string, EventSchedule> = {
       { date: "Nov 5", dow: "Thu", label: "Main Draw — Round of 16", firstServe: "11:00 AM", gates: "TBD", amateur: showdownOn("2026-11-05") },
       { date: "Nov 6", dow: "Fri", label: "Quarterfinals", firstServe: "11:00 AM", gates: "TBD", amateur: showdownOn("2026-11-06") },
       { date: "Nov 7", dow: "Sat", label: "Semifinals", firstServe: "11:00 AM", gates: "TBD", amateur: showdownOn("2026-11-07") },
-      { date: "Nov 8", dow: "Sun", label: "Championship Sunday — Finals", firstServe: "TBD", gates: "TBD" },
+      { date: "Nov 8", dow: "Sun", label: "Championship Sunday — Finals", firstServe: "10:00 AM", gates: "TBD" },
     ],
     amateur: [],
     amateurNote:
-      "Pro first serve is 11:00 AM Monday through Saturday; Sunday's first serve and all gate times are still to be announced. Amateur division days and times are on your bracket at pickleballtournaments.com.",
+      "Pro first serve is 11:00 AM Monday through Saturday and 10:00 AM on Championship Sunday. Gate times are still to be announced. Amateur division days and times are on your bracket at pickleballtournaments.com.",
   },
 };
 
