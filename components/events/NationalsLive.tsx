@@ -23,6 +23,7 @@ import {
   type AmateurSession,
   firstServeFor,
   firstServeNote,
+  timesPendingLine,
   gatesAtFirstServe,
   gatesFollowFirstServe,
   gatesDaily,
@@ -308,6 +309,7 @@ export function NationalsLive({
     gatesFollowFirstServe: gatesFollowFirstServe(t.slug, t.startDate),
     gatesAtFirstServe: gatesAtFirstServe(t.slug),
     gatesDaily: gatesDaily(t.slug, days.map((d) => d.gates)),
+    timesPending: timesPendingLine(t.slug, t.startDate),
     // The days this stop's own first serve is known for, or null. Without it
     // the concierge answers a “what time does play start?” with the gate time
     // alone, while the order of play on the same page carries the real one.

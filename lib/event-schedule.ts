@@ -165,7 +165,10 @@ export const eventSchedules: Record<string, EventSchedule> = {
    * Open + pro qualifying"; Worlds actually plays pro qualifiers Monday and the
    * round of 64 Tuesday.
    *
-   * ⚠ GATES AND FIRST SERVE ARE "TBD" ON PURPOSE. The Worlds schedule publishes
+   * ✅ FIRST SERVE 11:00 AM MON–SAT: Brian Clark, 10/14 (relayed by Bryce).
+   * Sunday's first serve and every gate time are still TBD.
+   *
+   * ⚠ GATES AND FIRST SERVE WERE "TBD" ON PURPOSE. The Worlds schedule publishes
    * rounds, not times, and the template's 8/9/10 AM numbers are a house default,
    * not this event's. A real entry holding invented times would be worse than
    * the template, because it reads as the event team's. Fill them in the moment
@@ -183,17 +186,17 @@ export const eventSchedules: Record<string, EventSchedule> = {
   "pickleball-world-championships": {
     start: "2026-11-02",
     proDays: [
-      { date: "Nov 2", dow: "Mon", label: "Pro Qualifying — all pro events", firstServe: "TBD", gates: "TBD" },
-      { date: "Nov 3", dow: "Tue", label: "Main Draw — Round of 64", firstServe: "TBD", gates: "TBD" },
-      { date: "Nov 4", dow: "Wed", label: "Main Draw — Round of 32", firstServe: "TBD", gates: "TBD" },
-      { date: "Nov 5", dow: "Thu", label: "Main Draw — Round of 16", firstServe: "TBD", gates: "TBD", amateur: showdownOn("2026-11-05") },
-      { date: "Nov 6", dow: "Fri", label: "Quarterfinals", firstServe: "TBD", gates: "TBD", amateur: showdownOn("2026-11-06") },
-      { date: "Nov 7", dow: "Sat", label: "Semifinals", firstServe: "TBD", gates: "TBD", amateur: showdownOn("2026-11-07") },
+      { date: "Nov 2", dow: "Mon", label: "Pro Qualifying — all pro events", firstServe: "11:00 AM", gates: "TBD" },
+      { date: "Nov 3", dow: "Tue", label: "Main Draw — Round of 64", firstServe: "11:00 AM", gates: "TBD" },
+      { date: "Nov 4", dow: "Wed", label: "Main Draw — Round of 32", firstServe: "11:00 AM", gates: "TBD" },
+      { date: "Nov 5", dow: "Thu", label: "Main Draw — Round of 16", firstServe: "11:00 AM", gates: "TBD", amateur: showdownOn("2026-11-05") },
+      { date: "Nov 6", dow: "Fri", label: "Quarterfinals", firstServe: "11:00 AM", gates: "TBD", amateur: showdownOn("2026-11-06") },
+      { date: "Nov 7", dow: "Sat", label: "Semifinals", firstServe: "11:00 AM", gates: "TBD", amateur: showdownOn("2026-11-07") },
       { date: "Nov 8", dow: "Sun", label: "Championship Sunday — Finals", firstServe: "TBD", gates: "TBD" },
     ],
     amateur: [],
     amateurNote:
-      "Pro first-serve and gate times are still to be announced. Amateur division days and times are on your bracket at pickleballtournaments.com.",
+      "Pro first serve is 11:00 AM Monday through Saturday; Sunday's first serve and all gate times are still to be announced. Amateur division days and times are on your bracket at pickleballtournaments.com.",
   },
 };
 
@@ -223,6 +226,18 @@ const CLOCK_TIME = /\d{1,2}:\d{2}\s*(AM|PM)/i;
 export function gatesPublished(slug: string, startIso: string): boolean {
   const real = getEventSchedule(slug, startIso);
   return !real || real.proDays.every((d) => CLOCK_TIME.test(d.gates));
+}
+
+/**
+ * The holding line for a stop whose gates are still TBD. Once ANY first-serve
+ * time is in (Worlds, 11 AM Mon–Sat per Brian Clark 10/14), it stops claiming
+ * first serve is still coming and points at the table instead.
+ */
+export function timesPendingLine(slug: string, startIso: string): string {
+  const real = getEventSchedule(slug, startIso);
+  return real?.proDays.some((d) => CLOCK_TIME.test(d.firstServe))
+    ? "Gate times will be posted closer to the event; first-serve times are in the Order of Play."
+    : "Gate and first-serve times will be posted closer to the event.";
 }
 
 /**

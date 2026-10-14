@@ -47,7 +47,9 @@ export type EuroPro = {
   country: string;
   /** ISO-3, for the flag chip and for sorting. */
   countryCode: string;
-  age: number;
+  /** Not rendered anywhere. Optional so a signing can go up before Catie's sheet
+   *  row reaches us (Traskin, 10/14). */
+  age?: number;
   divisions: string[];
   sponsors: string[];
   instagram?: string;
@@ -510,6 +512,24 @@ export const europeRoster: EuroPro[] = [
       "Giovanna Mandon is a competitive pickleball player with Argentine, Spanish and Italian nationality, and brings an international perspective to her career in the sport. She is focused on developing her game and competing at increasingly higher levels.",
       "Beyond competition she is building her presence in the pickleball community and connecting with fellow athletes and brands.",
     ],
+  },
+  {
+    // New signing, Catie in #ppa-tour-europe 10/14. Goes by Henrik; the board
+    // and his pickleball.com slug use Henrikas. ⚠ The board files him under
+    // AUSTRALIA — wrong, he plays for Lithuania (Catie, same thread), which is
+    // why /europe and his profile now take the flag from this roster first.
+    // Divisions: "He plays all three divisions" (Catie). Portrait: the white-
+    // background file in Smash's "FINAL PORTRAIT FOTOS JPG" folder, 900x1125.
+    // Age, sponsors, Instagram and bio are still to come from Catie's sheet.
+    slug: "henrikas-traskin",
+    name: "Henrik Traskin",
+    country: "Lithuania",
+    countryCode: "LTU",
+    divisions: [...MS, ...MD, ...XD],
+    sponsors: [],
+    portrait: P("henrikas-traskin"),
+    tagline: "Newly signed to PPA Tour Europe",
+    bio: [],
   },
 ];
 

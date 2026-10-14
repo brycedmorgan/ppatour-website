@@ -216,7 +216,11 @@ export default async function EuropePage() {
       // images to production once already. See lib/europe-roster.ts.
       headshot: p.portrait ?? wpr?.image ?? "",
       country: p.country,
-      countryCode: wpr?.countryCode || countryCodeFor(p.country),
+      // ⚠ OUR ROSTER FIRST, THE BOARD ONLY AS A FALLBACK. The board files Henrik
+      // Traskin under Australia; he plays for Lithuania (Catie, 10/14). It was the
+      // other way round, and unranked pros (Thaila, Adrian, Arwid, Molly) had no
+      // flag at all because their countries were missing from COUNTRY_ISO.
+      countryCode: countryCodeFor(p.country) || wpr?.countryCode || "",
       rank: wpr?.rank ?? 0,
       points: wpr?.points ?? 0,
       gender: wpr?.gender ?? genderFromDivisions(p.divisions),

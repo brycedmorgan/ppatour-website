@@ -8,6 +8,7 @@ import { resolveAthleteSlugs } from "@/lib/athlete-slugs";
 import { athletes, getAthlete } from "@/lib/athletes";
 import {
   ageFromDob,
+  countryCodeFor,
   getPublishedAthlete,
   publishedAthletes,
   turnedProYear,
@@ -118,6 +119,9 @@ async function loadAthlete(slug: string) {
   if (!curated && !published && !api) return null;
 
   const name = curated?.name ?? published?.name ?? api!.name;
+  /** A Europe signing's flag comes from Catie's roster, not the board — see
+   *  `countryCode` below. */
+  const euro = europeRoster.find((p) => p.slug === slug);
   const divisions = published?.divisions.length
     ? published.divisions
     : (curated?.divisions ?? []);
@@ -139,7 +143,11 @@ async function loadAthlete(slug: string) {
     // real value and render a broken image instead of falling through to the API.
     headshot: curated?.headshot || api?.headshot || "",
     country: published?.country || curated?.country || api?.country || "",
-    countryCode: api?.countryCode || published?.countryCode || "",
+    // ⚠ EUROPE ROSTER FIRST. The board files Henrik Traskin under Australia;
+    // he plays for Lithuania (Catie, 10/14). Board-first printed "Lithuania"
+    // beside an Australian flag.
+    countryCode:
+      (euro && countryCodeFor(euro.country)) || api?.countryCode || published?.countryCode || "",
     // NEVER fall back to curated.bestRank here. That field is a hand-maintained
     // career-best from May and is stale for 31 of our 40 curated pros (Andre
     // Mercado reads #10, he's live #108) — falling back to it renders a
