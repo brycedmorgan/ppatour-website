@@ -88,6 +88,10 @@ export type TvEvent = {
   endIso: string;
   /** Site event page, when one exists. */
   slug?: string;
+  /** Where the event NAME links when there is no `slug`: the live stream
+   *  itself, opened in a new tab. For stream-only stops with no event page of
+   *  ours (the Australia Cup). Ignored when `slug` is set. */
+  watchUrl?: string;
   days: TvDay[];
 };
 
@@ -413,11 +417,20 @@ export const tvSchedule: TvEvent[] = [
      *  Brisbane's final day, so the Sat-night ET final stays up. */
     startIso: "2026-10-13",
     endIso: "2026-10-18",
+    /** The PPA Tour channel's live page (same channel ID as the footer and the
+     *  JSON-LD `sameAs`), so the name opens whichever court is streaming. Keaton
+     *  asked for these windows ON the watch page (10/10); a name that linked
+     *  nowhere was the opposite of that (Bryce, 10/14). */
+    watchUrl: "https://www.youtube.com/channel/UCSP6HlrMmRqogym2aHBPHpw/live",
     days: [
+      // ⚠ TUESDAY STARTED AT 10PM ET, NOT 8PM. Keaton, #marketing-general 10/13
+      // 7:13 PM CT: "australia having issues getting feeds up. Moving to 10pm ET
+      // start for today". Today only — Wed–Sat stay at 8PM until he says the
+      // 10PM start holds (Bryce asked him 10/14; no answer yet).
       {
         date: "Oct 13",
         dow: "Tue",
-        windows: [{ channel: "YouTube", window: "8PM – 4AM", round: "Round of 64 + Round of 32" }],
+        windows: [{ channel: "YouTube", window: "10PM – 4AM", round: "Round of 64 + Round of 32" }],
       },
       {
         date: "Oct 14",

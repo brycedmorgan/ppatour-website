@@ -95,6 +95,15 @@ export function TvGuide({ limit }: { limit?: number }) {
                   >
                     {e.name} →
                   </Link>
+                ) : e.watchUrl ? (
+                  <a
+                    href={e.watchUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-display text-lg uppercase leading-tight hover:text-ppa-sky"
+                  >
+                    {e.name} ↗
+                  </a>
                 ) : (
                   <span className="font-display text-lg uppercase leading-tight">
                     {e.name}
