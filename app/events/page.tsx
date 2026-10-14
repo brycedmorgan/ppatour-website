@@ -20,6 +20,13 @@ export const metadata: Metadata = {
   title: "Events",
   description:
     "The full PPA Tour schedule — The Tour and every other event, U.S. and international, past and upcoming. Search or filter to find your event.",
+  // Feed autodiscovery for calendar aggregators (lib/event-feed.ts).
+  alternates: {
+    types: {
+      "application/rss+xml": [{ url: "/events.xml", title: "PPA Tour upcoming events" }],
+      "text/calendar": [{ url: "/events.ics", title: "PPA Tour event calendar" }],
+    },
+  },
 };
 
 /**
