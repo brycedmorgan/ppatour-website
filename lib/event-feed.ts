@@ -59,7 +59,8 @@ function describe(t: Tournament, onSale: boolean): string {
 }
 
 export function feedEvents(now = new Date()): FeedEvent[] {
-  const today = now.toISOString().slice(0, 10);
+  // Yesterday in UTC, so a stop stays listed through its final day in every US zone.
+  const today = new Date(now.getTime() - 86400000).toISOString().slice(0, 10);
   return tournaments
     .filter(
       (t) =>
