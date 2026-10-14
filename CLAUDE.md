@@ -67,6 +67,26 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-14 (pt. 2) — Worlds Championship Sunday: first serve 10:00 AM; every day now has a time
+
+- Brian Clark, DM 11:52, answering both asks from this morning: **"10am Sunday finals start"** and
+  **"Won't know gate times until we know amateur play hours."** Nov 8 `firstServe` "TBD" → **10:00 AM**
+  in `eventSchedules["pickleball-world-championships"]`. All seven days of Worlds now carry a first
+  serve (11:00 AM Mon–Sat from his 10/14 note, 10:00 AM Sunday).
+- The `amateurNote` read "Sunday's first serve … still to be announced" and would have contradicted its
+  own table; it now says 11:00 AM Mon–Sat and 10:00 AM Championship Sunday, gates still TBD.
+- **⚠ GATES STAY TBD FOR A STATED REASON, and the comment now records it.** They are blocked on the
+  amateur play hours, not on nobody having asked. Don't derive a gate from the 11 AM first serve, and
+  don't add a `GATES_BY_SLUG` line until Brian sends one. `gatesPublished` is still false, so the page,
+  Know Before You Go and the concierge keep pointing at the Order of Play instead of naming a gate.
+- Verified: the 7-day table, `gatesPublished` false, `timesPendingLine` reads "Gate times will be posted
+  closer to the event; first-serve times are in the Order of Play." The **2025 edition is still withheld
+  to the template** (the shared-slug guard), and Virginia Beach is unchanged (Sun 10 AM, Wed 12 PM).
+  tsc clean (0 errors, whole repo).
+- ⚠ `firstServeNote` is not used for Worlds (page.tsx passes null when a stop has a transcribed
+  schedule), so the concierge takes its answer from the table, not from that sentence.
+- Next: gate times from Brian once the amateur hours are set.
+
 ### 2026-10-13 (pt. 4) — Ramsey's Chicago Cup stats wrap
 
 - Google Doc from Wesley (not link-shared; read via the Drive connector) →
