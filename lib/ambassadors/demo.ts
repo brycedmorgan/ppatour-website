@@ -24,6 +24,7 @@ const program = {
   payoutSchedule: "Paid after each tournament's results are final.",
   prizes: "Top 5 on each leaderboard earn rewards (paddle, VIP tickets, free events).",
   contact: "Reply to Amie's weekly ambassador email, or reach out to your pod lead.",
+  signupContact: "a.feliza@pickleball.com",
 };
 
 const events = [
@@ -43,9 +44,10 @@ const graphics = [
 ];
 
 const upcoming = (code: string) => [
-  { event: "las-vegas-2026", code },
-  { event: "chicago-2026", code },
-  { event: "daytona-2026", code },
+  // Signed up for the first two; Daytona shows the "request to join" state.
+  { event: "las-vegas-2026", code, enrolled: true },
+  { event: "chicago-2026", code, enrolled: true },
+  { event: "daytona-2026", code: null, enrolled: false },
 ];
 
 const pod = (name: string, lead: string | null = null) => ({ id: name.toLowerCase().replace(/\s+/g, "-"), name, lead, leadEmail: null });
