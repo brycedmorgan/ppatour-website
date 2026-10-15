@@ -47,6 +47,8 @@ export type Program = {
   payoutSchedule: string;
   prizes: string;
   contact: string;
+  /** Where ambassadors email to be added to a tournament they're not signed up for. */
+  signupContact?: string;
 };
 
 export type Me = {
@@ -62,7 +64,7 @@ export type Me = {
   rewards: { compRegistrations: number; courtsideTickets: number; toNextComp: number; toNextCourtside: number; redeemed: unknown[] };
   seasonRank: { registrations: { rank: number } | null; tickets: { rank: number } | null };
   tournaments: Tournament[];
-  upcoming: { event: string; code: string }[];
+  upcoming: { event: string; code: string | null; enrolled?: boolean }[];
   year?: { tournaments: number; registrations: number; tickets: number; revenue: number; commission: number };
 };
 
