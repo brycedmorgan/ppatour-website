@@ -66,6 +66,7 @@ export function GraphicsTab({ me, shared, canUpload = false }: { me: Me; shared:
     let cancelled = false;
     (async () => {
       for (const u of me.upcoming) {
+        if (!u.code) continue; // not signed up for this event yet — no active code to stamp
         for (const g of shared.graphics.filter((x) => x.event === u.event)) {
           if (!g.stamp) continue; // no shared box — the ambassador adds their own with "Add my code"
           try {
