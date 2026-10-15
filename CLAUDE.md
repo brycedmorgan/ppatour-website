@@ -67,6 +67,12 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-15 — Junior PPA rankings refreshed (Daniela, Asana `1219559520094706`)
+
+- Jake's sheet (edited 10/15 20:17 UTC) → `lib/data/junior-rankings.json`, `updated: "Oct 15, 2026"`. 2,531 rows
+  (+60), no board shrank, 95–100% confirmed per division. Same fetch → import `--check` → import path as 10/12.
+- Verified against a fresh pull of all 24 tabs: rank, name, points and age match row for row, 0 mismatches.
+
 ### 2026-10-14 (pt. 2) — Worlds Championship Sunday: first serve 10:00 AM; every day now has a time
 
 - Brian Clark, DM 11:52, answering both asks from this morning: **"10am Sunday finals start"** and
