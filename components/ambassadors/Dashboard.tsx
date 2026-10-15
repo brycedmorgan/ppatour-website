@@ -71,7 +71,7 @@ export function Dashboard({ data, canUpload = false }: { data: MeData; canUpload
         {data.preview && (
           <div className="note">Preview — sample data, not live. Numbers and names here are fictional.</div>
         )}
-        {tab === "home" && <Home me={me} ev={ev} go={go} showComm={showComm} />}
+        {tab === "home" && <Home me={me} shared={shared} ev={ev} go={go} showComm={showComm} />}
         {tab === "results" && <Results me={me} go={go} showComm={showComm} payoutMin={shared.program.payoutMinimum} />}
         {tab === "boards" && <Boards shared={shared} ev={ev} pod={me.pod} />}
         {tab === "graphics" && <GraphicsTab me={me} shared={shared} canUpload={canUpload} />}
@@ -85,11 +85,13 @@ export function Dashboard({ data, canUpload = false }: { data: MeData; canUpload
 
 function Home({
   me,
+  shared,
   ev,
   go,
   showComm,
 }: {
   me: Me;
+  shared: Shared;
   ev: (id: string) => Ev | undefined;
   go: (t: string) => void;
   showComm: boolean;
@@ -197,35 +199,77 @@ function Home({
       <section className="grid2">
         <div className="card pad sec">
           <div className="sec-h">
-            <h2 style={{ fontSize: "1.45rem" }}>Tournaments you can promote</h2>
+            <h2 style={{ fontSize: "1.45rem" }}>Upcoming Tournaments</h2>
+            <span className="sub">Reach out to Amie to get signed up for more tournaments.</span>
           </div>
           <div className="up">
             {me.upcoming.length === 0 && <div className="empty">No tournaments on sale right now.</div>}
-            {me.upcoming.map((u) => {
-              const e = ev(u.event);
-              if (!e) return null;
-              const l = me.tournaments.find((x) => x.event === u.event);
-              return (
-                <div className="up-i" key={u.event}>
-                  {logoBox(e, 44)}
-                  <div>
-                    <div className="up-n">
-                      {e.name} {statusPill(e.status)}
+            {/* Signed-up tournaments first, then the ones to request. An ambassador can
+                only promote an event once Amie has added them (they have an active code
+                there); the rest show as "request to join" so no one assumes they're on it. */}
+            {[...me.upcoming]
+              .sort((a, b) => Number((b.enrolled ?? b.code != null)) - Number((a.enrolled ?? a.code != null)))
+              .map((u) => {
+                const e = ev(u.event);
+                if (!e) return null;
+                const l = me.tournaments.find((x) => x.event === u.event);
+                // Back-compat: data written before the `enrolled` flag existed always
+                // carried a code, so treat "has a code" as enrolled until the next
+                // data push supplies the explicit flag. Avoids every event briefly
+                // showing "not signed up" between the UI deploy and the data refresh.
+                const enrolled = u.enrolled ?? u.code != null;
+                if (enrolled) {
+                  return (
+                    <div className="up-i" key={u.event}>
+                      {logoBox(e, 44)}
+                      <div>
+                        <div className="up-n">
+                          {e.name} {statusPill(e.status)} <span className="pill p-good">You&apos;re in</span>
+                        </div>
+                        <div className="up-d">
+                          {fmtDate(e.start)} – {fmtDate(e.end)} · {e.city} · code <b className="num">{u.code}</b>
+                        </div>
+                        <div className="up-d">
+                          {l ? `${int(l.registrations)} registrations · ${int(l.tickets)} tickets so far` : "No sales yet"}
+                          {e.status === "on-sale" ? ` · reg closes ${fmtDate(e.regClose)}` : ""}
+                        </div>
+                      </div>
+                      <button className="btn ghost" style={{ padding: "6px 10px", fontSize: ".85rem" }} onClick={() => go("graphics")}>
+                        Graphics
+                      </button>
                     </div>
-                    <div className="up-d">
-                      {fmtDate(e.start)} – {fmtDate(e.end)} · {e.city} · code <b className="num">{u.code}</b>
+                  );
+                }
+                const contact = shared.program.signupContact;
+                const mailto = contact
+                  ? `mailto:${contact}?subject=${encodeURIComponent(`Ambassador request: ${e.name}`)}&body=${encodeURIComponent(
+                      `Hi Amie,\n\nI'd like to promote ${e.name} (${fmtDate(e.start)} – ${fmtDate(e.end)}). Please add me and activate my code for this event.\n\nThanks,\n${me.firstName} ${me.lastName}`,
+                    )}`
+                  : undefined;
+                return (
+                  <div className="up-i up-locked" key={u.event}>
+                    <div style={{ filter: "grayscale(1)", opacity: 0.55 }}>{logoBox(e, 44)}</div>
+                    <div>
+                      <div className="up-n">
+                        {e.name} {statusPill(e.status)} <span className="pill p-dim">Not signed up</span>
+                      </div>
+                      <div className="up-d">
+                        {fmtDate(e.start)} – {fmtDate(e.end)} · {e.city}
+                      </div>
+                      <div className="up-d">Ask Amie to add you before you promote this one.</div>
                     </div>
-                    <div className="up-d">
-                      {l ? `${int(l.registrations)} registrations · ${int(l.tickets)} tickets so far` : "No sales yet"}
-                      {e.status === "on-sale" ? ` · reg closes ${fmtDate(e.regClose)}` : ""}
-                    </div>
+                    {mailto && (
+                      <a
+                        className="btn ghost"
+                        href={mailto}
+                        style={{ padding: "6px 10px", fontSize: ".85rem", textDecoration: "none", whiteSpace: "nowrap" }}
+                      >
+                        Request
+                      </a>
+                    )}
                   </div>
-                  <button className="btn ghost" style={{ padding: "6px 10px", fontSize: ".85rem" }} onClick={() => go("graphics")}>
-                    Graphics
-                  </button>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         </div>
         <div className="card pad pod">
@@ -515,7 +559,11 @@ function How({ shared }: { shared: Shared }) {
         </details>
         <details>
           <summary>Can I promote tournaments outside my region?</summary>
-          <p>Yes. Your code works at every tournament, and your sales count toward your pod wherever the event is.</p>
+          <p>
+            Yes — once you&apos;re signed up for them. You need to be added to each event before your code is active there, so email Amie for any
+            tournament you&apos;d like to promote (use the &quot;Request&quot; button on your home page). Your sales then count toward your pod
+            wherever the event is.
+          </p>
         </details>
         <details>
           <summary>How do the leaderboards work?</summary>
