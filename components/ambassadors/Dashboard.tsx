@@ -199,8 +199,8 @@ function Home({
       <section className="grid2">
         <div className="card pad sec">
           <div className="sec-h">
-            <h2 style={{ fontSize: "1.45rem" }}>Your tournaments</h2>
-            <span className="sub">Promote the events you&apos;re signed up for. Want in on more? Request them from Amie.</span>
+            <h2 style={{ fontSize: "1.45rem" }}>Upcoming Tournaments</h2>
+            <span className="sub">Reach out to Amie to request to promote other tournaments.</span>
           </div>
           <div className="up">
             {me.upcoming.length === 0 && <div className="empty">No tournaments on sale right now.</div>}
