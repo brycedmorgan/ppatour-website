@@ -135,6 +135,11 @@ const CURATED_ALIASES: Record<string, string> = {
   // back to VENUE_IMAGES (Macao / Gold Coast) instead of Payton's event photos.
   "ppa-tour-europe-p250-barcelona-open": "ppa-spain-p250-barcelona",
   "ppa-italy-p125-portoroz": "ppa-italy-125-portoroz",
+  // Lille (10/15). The link the Europe team circulated read
+  // "ppa-tour-europe-p125-france", so the title was "… P125 FRANCE" before it went
+  // public as "… P125 LILLE"; both map to one record.
+  "ppa-tour-europe-p125-lille": "ppa-france-p125-lille",
+  "ppa-tour-europe-p125-france": "ppa-france-p125-lille",
   // ⚠ THIS ONE IS LOAD-BEARING AND WAS ADDED BEFORE IT COULD BITE. The feed
   // renamed the Malibu Cup to "Veolia Malibu Showcase" on 8/26 (Bryan Renahan);
   // production had not regenerated yet, so /events was still serving the old

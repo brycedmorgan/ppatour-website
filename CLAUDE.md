@@ -67,6 +67,16 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-15 (pt. 2) — Lille event card: curated row + alias + photo (for Bryce, no push access)
+
+- Feed (live, 10/15): **"PPA TOUR EUROPE - P125 LILLE"**, Nov 12–15, Villeneuve-d'Ascq, Registration Open. Bryce's
+  link read `…-p125-france` (the pre-public title); both slugs alias to `ppa-france-p125-lille` in `CURATED_ALIASES`.
+- New row in `lib/placeholder-data.ts` with `image: "/ppa/event-lille-p125.jpg"`: Catie's Barcelona women's doubles
+  shot (Drive original 6000×4000, 18 MB), cropped 4:5 at 1200×1500 q72 (156 KB), player centred, partner cropped
+  out. Without it the card fell back to VENUE_IMAGES. Swap the photo when Lille has its own.
+- `France: "FRA"` added to `COUNTRY_ISO3` in `lib/event-code.ts`.
+- ⚠ pickleballtournaments.com 403s from here; the feed (PB-API-TOKEN header) is how to read titles/dates.
+
 ### 2026-10-15 — Junior PPA rankings refreshed (Daniela, Asana `1219559520094706`)
 
 - Jake's sheet (edited 10/15 20:17 UTC) → `lib/data/junior-rankings.json`, `updated: "Oct 15, 2026"`. 2,531 rows
