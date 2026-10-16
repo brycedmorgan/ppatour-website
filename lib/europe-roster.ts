@@ -520,14 +520,15 @@ export const europeRoster: EuroPro[] = [
     // why /europe and his profile now take the flag from this roster first.
     // Divisions: "He plays all three divisions" (Catie). Portrait: the white-
     // background file in Smash's "FINAL PORTRAIT FOTOS JPG" folder, 900x1125.
-    // Age, sponsors, Instagram and bio came from her sheet row on 10/16.
+    // Age, sponsors, Instagram and bio came from her sheet row on 10/16 (sponsor
+    // confirmed as "Joola Europe" by Catie, same as the other seven).
     slug: "henrikas-traskin",
     name: "Henrik Traskin",
     country: "Lithuania",
     countryCode: "LTU",
     age: 27,
     divisions: [...MS, ...MD, ...XD],
-    sponsors: ["Joola"],
+    sponsors: ["Joola Europe"],
     instagram: "https://www.instagram.com/henrik_pickleball/",
     portrait: P("henrikas-traskin"),
     tagline: "Represented Lithuania at the 2026 Pickleball World Cup",

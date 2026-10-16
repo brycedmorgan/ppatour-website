@@ -74,7 +74,7 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
   (Customer.io); the comment in page.tsx says which to delete if Europe consolidates. No CSP on our side and no
   X-Frame-Options on theirs, so the frame embeds.
 - `lib/europe-roster.ts` Henrik Traskin: age 27, Joola, Instagram (200), tagline + one-line bio from Catie's
-  sheet. ⚠ His sponsor reads "Joola"; seven others read "Joola Europe". Left as her sheet has it.
+  sheet. Sponsor first went up as "Joola" (her sheet); Catie confirmed "Joola Europe", matching the other seven.
 
 ### 2026-10-15 (pt. 2) — Lille event card: curated row + alias + photo (for Bryce, no push access)
 
