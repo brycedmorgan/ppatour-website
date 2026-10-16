@@ -581,6 +581,44 @@ export default async function EuropePage() {
                 ))}
               </div>
             </div>
+            {/*
+              Europe tournament-updates list. Katherina Preis, #ppa-tour-europe
+              10/16: the email marketing team built this form and asked where it
+              could live on ppatoureurope.com.
+
+              ⚠ THIS IS NOT THE SAME LIST AS THE EMAIL CAPTURE AT THE FOOT OF
+              THIS PAGE. That one is `LeadMagnetCapture variant="fan"` — the free
+              "Your First PPA Event" guide — and it posts to /api/lead-capture,
+              which identifies the lead in Customer.io tagged
+              `website_lead_region: europe`. This one is a hosted DailyStory form
+              owned by the email marketing team, and it is the list the Europe
+              tournament-update emails actually go out from. Nothing crosses
+              between the two platforms. If Europe ever consolidates onto one,
+              this block is the thing to delete, not the capture below.
+
+              Double opt-in by design: DailyStory sends a confirmation email and
+              the address joins the Europe list only once it is clicked.
+
+              The iframe is theirs, src and title verbatim. Height is fixed at
+              900 because the hosted form carries its own consent copy; the form
+              scrolls inside the frame rather than being clipped on a phone, and
+              the 560px cap keeps it readable on a desktop.
+            */}
+            <div>
+              <SectionHead eyebrow="Email" title="Event News" />
+              <p className="mt-3 text-xs leading-relaxed text-ppa-navy/60">
+                Tournament updates, registration dates and event news from PPA Tour Europe.
+                Confirm the email we send and you are on the list.
+              </p>
+              <div className="mt-4 border border-ppa-line bg-white p-5">
+                <iframe
+                  src="https://forms.dailystory.com/webform/hosted/2slena3ms6ski7e9?embed=true"
+                  title="Sign up for PPA Tour Europe event news"
+                  loading="lazy"
+                  className="mx-auto block h-[900px] w-full max-w-[560px] border-0"
+                />
+              </div>
+            </div>
             <div>
               <SectionHead eyebrow="Questions" title="Contact Us" />
               <div className="mt-4">

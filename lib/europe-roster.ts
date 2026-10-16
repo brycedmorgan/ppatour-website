@@ -520,16 +520,23 @@ export const europeRoster: EuroPro[] = [
     // why /europe and his profile now take the flag from this roster first.
     // Divisions: "He plays all three divisions" (Catie). Portrait: the white-
     // background file in Smash's "FINAL PORTRAIT FOTOS JPG" folder, 900x1125.
-    // Age, sponsors, Instagram and bio are still to come from Catie's sheet.
+    // Age, sponsors, Instagram and bio came from her sheet row on 10/16.
     slug: "henrikas-traskin",
     name: "Henrik Traskin",
     country: "Lithuania",
     countryCode: "LTU",
+    age: 27,
     divisions: [...MS, ...MD, ...XD],
-    sponsors: [],
+    sponsors: ["Joola"],
+    instagram: "https://www.instagram.com/henrik_pickleball/",
     portrait: P("henrikas-traskin"),
-    tagline: "Newly signed to PPA Tour Europe",
-    bio: [],
+    tagline: "Represented Lithuania at the 2026 Pickleball World Cup",
+    /* Catie's sheet has "the 2026 Pickleball World Cup and competing on the
+       PPA Tour Europe". "competes" is the only edit, same facts, same treatment
+       as the two bios moved into the third person above. */
+    bio: [
+      "Henrik Traskin is a professional pickleball player from Lithuania. He represented Lithuania in the 2026 Pickleball World Cup and competes on the PPA Tour Europe.",
+    ],
   },
 ];
 

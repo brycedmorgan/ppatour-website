@@ -67,6 +67,15 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-16 — Europe: DailyStory event-news form + Traskin's profile (Bryce's patches, no push access)
+
+- /europe#contact: Juan's hosted DailyStory form (double opt-in, GDPR) as "Email / Event News" between the
+  Media and Referees links and Contact Us. ⚠ Separate list from the `LeadMagnetCapture` at the foot of the page
+  (Customer.io); the comment in page.tsx says which to delete if Europe consolidates. No CSP on our side and no
+  X-Frame-Options on theirs, so the frame embeds.
+- `lib/europe-roster.ts` Henrik Traskin: age 27, Joola, Instagram (200), tagline + one-line bio from Catie's
+  sheet. ⚠ His sponsor reads "Joola"; seven others read "Joola Europe". Left as her sheet has it.
+
 ### 2026-10-15 (pt. 2) — Lille event card: curated row + alias + photo (for Bryce, no push access)
 
 - Feed (live, 10/15): **"PPA TOUR EUROPE - P125 LILLE"**, Nov 12–15, Villeneuve-d'Ascq, Registration Open. Bryce's
