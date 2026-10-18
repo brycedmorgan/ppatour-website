@@ -185,10 +185,12 @@ and to win every SERP feature that *is* markup-driven in the meantime. That is w
   United States" (checked 10/18 via the API — so are "Professional Pickleball Association",
   "Major League Pickleball" and "United Pickleball Association"). Most of our pros redirect to
   "List of professional pickleball players". Google builds knowledge panels and sports entities on
-  Wikidata; without an item, "ppa tour" has no entity to hang a box on. Actions: (a) create a
-  Wikidata item for the PPA Tour (any editor can; ~10 statements: instance of sports league,
-  sport pickleball, inception 2018, country US, official website, parent org UPA, social
-  handles); (b) Nathan/PR: a standalone, neutrally sourced Wikipedia article for the tour (press
+  Wikidata; without an item, "ppa tour" has no entity to hang a box on. **(a) DONE 10/18:**
+  Wikidata items created from Bryce's browser — **PPA Tour = Q141769292** (14 statements, sourced:
+  instance of, sport, country, inception 2018, parent org, official website/name, every social
+  handle, LinkedIn), **United Pickleball Association = Q141769280** (has part: PPA Tour + MLP,
+  inception 2024-02-29); MLP (Q128285945, pre-existing) now carries UPA as parent. The org
+  JSON-LD `sameAs` points at Q141769292. Next: (b) Nathan/PR: a standalone, neutrally sourced Wikipedia article for the tour (press
   coverage exists — ESPN, SBJ, Forbes). Do **not** write it from inside the company without
   disclosing COI; commission or request via the Pickleball WikiProject. Same for Ben Johns-tier
   pros who still redirect to the list page.

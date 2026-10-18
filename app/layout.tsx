@@ -151,10 +151,10 @@ const SITE_JSON_LD = {
        * public record (ppatour.com/about, the Wikipedia section the `PPA Tour`
        * title redirects to): founded 2018, the tour of the Professional
        * Pickleball Association, part of the United Pickleball Association since
-       * the 2024 MLP merger. ⚠ There is NO Wikidata item for the tour yet —
-       * "PPA Tour" on Wikipedia is a redirect to "Pickleball in the United
-       * States" — so `sameAs` carries that redirect, the LinkedIn page, and
-       * nothing invented. docs/SEO.md §7 has the knowledge-graph to-do.
+       * the 2024 MLP merger. Wikidata items created 10/18 (Bryce's ask):
+       * PPA Tour = Q141769292, United Pickleball Association = Q141769280
+       * (MLP already had Q128285945). "PPA Tour" on Wikipedia is still a
+       * redirect to "Pickleball in the United States". docs/SEO.md §7.
        */
       alternateName: ["PPA Tour", "Professional Pickleball Association", "PPA"],
       legalName: "Professional Pickleball Association",
@@ -175,8 +175,10 @@ const SITE_JSON_LD = {
         "@type": "Organization",
         name: "United Pickleball Association",
         alternateName: "UPA",
+        sameAs: ["https://www.wikidata.org/wiki/Q141769280"],
       },
       sameAs: [
+        "https://www.wikidata.org/wiki/Q141769292",
         "https://www.instagram.com/ppatour",
         "https://x.com/ppatour",
         "https://www.youtube.com/channel/UCSP6HlrMmRqogym2aHBPHpw",
