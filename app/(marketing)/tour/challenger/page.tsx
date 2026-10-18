@@ -8,7 +8,7 @@ import { partners } from "@/lib/home-content";
 import { partnerLink } from "@/lib/partner-link";
 import { socialLinks } from "@/lib/social-links";
 import { challengerShowdown, showdownDaysFor } from "@/lib/challenger-showdown";
-import { type Tournament, eventHref, tierPoints } from "@/lib/placeholder-data";
+import { type Tournament, eventHref, pointsText } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
 
 /**
@@ -453,7 +453,7 @@ export default async function ChallengerPage() {
                         {t.state ? `, ${t.state}` : ""}
                       </td>
                       <td className="px-4 py-2.5 text-right text-ppa-navy/70 tabular-nums">
-                        {tierPoints(t).toLocaleString()}
+                        {pointsText(t) ?? "TBA"}
                       </td>
                       <td className="px-4 py-2.5 text-right">
                         {t.externalUrl ? (

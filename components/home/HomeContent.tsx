@@ -20,7 +20,7 @@ import {
   getRemainingTourEvents,
   isTournamentLive,
   nowMs,
-  tierPoints,
+  tierBadgeText,
   eventTierShort,
   tierBadgeClass,
   type Tournament,
@@ -871,7 +871,7 @@ export async function HomeContent({
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span className={`absolute right-3 top-3 ${tierBadgeClass(t)} px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] whitespace-nowrap`}>
-                    {eventTierShort(t)} · {tierPoints(t).toLocaleString()}
+                    {tierBadgeText(t, eventTierShort(t))}
                   </span>
                   <div className="relative p-4">
                     <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/55">

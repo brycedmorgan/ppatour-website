@@ -8,6 +8,7 @@ import { withUtm } from "@/lib/utm";
 import {
   formatDateRange,
   tierPoints,
+  tierBadgeText,
   isTourStop,
   eventTierShort,
   tierBadgeClass,
@@ -136,7 +137,8 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
       // Points — an independent dimension now that the under-1,000 stops live
       // in this grid instead of their own band.
       if (tier !== "all") {
-        const pts = tierPoints(t);
+        // An unconfirmed Challenger level is no level (see pointsText), never 500.
+        const pts = t.tierKey === "challenger" && t.points == null ? 0 : tierPoints(t);
         if (tier === "slam" && pts < 2000) return false;
         if (tier === "cup" && pts !== 1500) return false;
         // Opens are 1,000 or, since the 9/8 board decision, 500.
@@ -290,7 +292,7 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
                 )}
                 <div className="absolute right-3 top-3 flex flex-col items-end gap-1">
                   <span className={`${tierBadgeClass(t)} px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] whitespace-nowrap`}>
-                    {eventTierShort(t)} · {tierPoints(t).toLocaleString()}
+                    {tierBadgeText(t, eventTierShort(t))}
                   </span>
                   {t.region === "international" && (
                     <span className="bg-ppa-blue px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] text-white">

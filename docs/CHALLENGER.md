@@ -348,6 +348,7 @@ and `/rankings` as sub-routes. Shipped as ANCHORS on one page instead
 | Question | Owner | Why it blocks |
 |---|---|---|
 | Where do Challenger rankings live as data? WP is a hand-typed table, 7 weeks stale. Ask for a rankings endpoint or a scoped WPR call. | Kenan / Egon (pickleball.com API) | `/tour/challenger/rankings` has no source without it |
+| **2027 levels (10/18):** a Challenger with no curated `points` now shows no number ("TBA" on /tour/challenger) instead of the 500 tier default — Chris flagged 9 of 10 2027 stops reading 500. Set each stop's real 125/250 as curated `points`; long-term ask Jason/Kenan to put the PT sanction level in the feed | Bryce → Challenger ops | Cards must not invent a level |
 | Points per event: 125 vs 250 disagreements between WP and the feed (Newport Beach, Opelika, and the feed's 500s on Wilson, Boise, Portland, Wisconsin) | Jeff Watson | The points table and event cards must agree |
 | ~~Showdown 2026: dates, format, who qualifies~~ — **answered 9/21, Brooke Ansley.** Built as `/tour/challenger#showdown` + the Worlds order of play | — | — |
 | Showdown dates: confirm Nov 5–7, 2026. Derived from her weekdays + the Worlds window, never supplied | Brooke Ansley | The days printed on two pages |

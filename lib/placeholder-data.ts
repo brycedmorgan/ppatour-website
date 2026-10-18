@@ -1108,6 +1108,26 @@ export function tierPoints(t: Pick<Tournament, "tierKey"> & { points?: number })
   return t.points ?? TIER_META[t.tierKey].points;
 }
 
+/**
+ * Points as display text, or null when we don't know them.
+ *
+ * ⚠ A CHALLENGER HAS NO DEFAULT LEVEL. Every Challenger is 125 or 250, set per
+ * event as its sanction level in PT (Jason, 9/9) — which our feed doesn't carry.
+ * The tier default of 500 is not a Challenger level, and on 10/18 it printed
+ * "500" on nine of ten 2027 stops (Chris flagged it to Bryce). Unknown means
+ * no number; set the real one as `points` on the curated record.
+ */
+export function pointsText(t: Pick<Tournament, "tierKey"> & { points?: number }): string | null {
+  if (t.tierKey === "challenger" && t.points == null) return null;
+  return tierPoints(t).toLocaleString();
+}
+
+/** Card badge text: "Open · 1,000", or just "Challenger" when the level is unknown. */
+export function tierBadgeText(t: Pick<Tournament, "tierKey"> & { points?: number }, label: string): string {
+  const pts = pointsText(t);
+  return pts ? `${label} · ${pts}` : label;
+}
+
 /** Short tier label, e.g. "Championship". */
 export function tierShort(t: Pick<Tournament, "tierKey">): string {
   return TIER_META[t.tierKey].short;
