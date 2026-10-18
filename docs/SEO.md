@@ -145,6 +145,94 @@ not yet crawled": newer international athletes like arwid-dahlin, bartosz-karbow
 6. `/search/` in the sitemap; `/favicon.ico` 404.
 7. Duplicate article: `/championship-sunday-standout-stats-from-the-carvana-mesa-cup/` and its `-2`.
 
+## 7. Scorched-earth schema pass (2026-10-18) — and the honest answer on Google score boxes
+
+Bryce, 10/18: *"when you search NFL on Google, it shows the score boxes with game scores. Ours
+doesn't. How do we get to that point? Let's go scorched earth on schema markup."*
+
+### 7a. Why the NFL gets a score box and no markup will give us one
+
+**Google's sports score boxes are not driven by schema markup.** The scores, standings and
+schedule panels (the "sports OneBox") come from licensed data feeds Google ingests directly from
+leagues and from its sports-data partners — historically STATS LLC, today Sportradar / Stats
+Perform / Genius Sports class providers — under commercial agreements. Google does not crawl
+nfl.com for the box; nfl.com's own pages carry **no JSON-LD at all** (checked 10/18: `/games/`
+and `/schedules/` ship zero `application/ld+json` blocks). Same for ufc.com. The box exists
+because the NFL's data is in Google's sports knowledge graph, not because of anything on nfl.com.
+
+What *is* true: Google has widened the set of leagues with boxes well beyond the big four —
+its own blog says 380+ women's competitions were added through "media and league partnerships".
+Smaller leagues get in one of two ways:
+
+1. **A direct feed to Google's sports partnerships team** (league → Google). No public
+   application form; it is a partnership conversation.
+2. **Distribution through a provider Google already ingests** (league → Sportradar / Genius /
+   Stats Perform → Google). This is how most non-major leagues appear.
+
+**So the path is a data-rights conversation, not a code change.** The site's job is to make the
+tour and its players unambiguous *entities* so that when the feed lands, Google can attach it —
+and to win every SERP feature that *is* markup-driven in the meantime. That is what this pass does.
+
+**Owner asks (not code):**
+- **Google sports partnerships.** Ask our Google Ads rep / agency contact to route us to the
+  Sports Partnerships team; the pitch is PPA + MLP live scoring (we own the data via
+  pickleballtournaments.com, PB-API already serves per-match scores to this site).
+- **Sportradar / Genius / Stats Perform.** If a betting-data or distribution deal is in flight
+  anywhere in the company, Google sports results are a line item to put in that conversation.
+  Genius has the PGA Tour; Sportradar has NBL1 — individual-sport tours are in scope.
+- **Knowledge Graph entity — the real gap.** *The PPA Tour has no Wikidata item and no Wikipedia
+  article.* `en.wikipedia.org/wiki/PPA_Tour` is a **redirect** to a section of "Pickleball in the
+  United States" (checked 10/18 via the API — so are "Professional Pickleball Association",
+  "Major League Pickleball" and "United Pickleball Association"). Most of our pros redirect to
+  "List of professional pickleball players". Google builds knowledge panels and sports entities on
+  Wikidata; without an item, "ppa tour" has no entity to hang a box on. Actions: (a) create a
+  Wikidata item for the PPA Tour (any editor can; ~10 statements: instance of sports league,
+  sport pickleball, inception 2018, country US, official website, parent org UPA, social
+  handles); (b) Nathan/PR: a standalone, neutrally sourced Wikipedia article for the tour (press
+  coverage exists — ESPN, SBJ, Forbes). Do **not** write it from inside the company without
+  disclosing COI; commission or request via the Pickleball WikiProject. Same for Ben Johns-tier
+  pros who still redirect to the list page.
+
+### 7b. What shipped (code, all templates)
+
+| Template | Before | After (10/18) |
+|---|---|---|
+| **Event page** (`lib/event-schema.ts`) | `SportsEvent` with name/dates/place/offer/organizer; `performer` = top 8 seeds | Stable `@id`s (event, place, org); `competitor` + `performer`; **one `subEvent` per pro division** (5), each with its **podium as `competitor` Persons** linked by `@id` to athlete pages once the stop is over (from the committed tournament history, `lib/event-results.ts`); "Champions: …" sentence in `description`; **`BroadcastEvent` nodes per platform** (PBTV / Tennis Channel / FS1 / FS2 / CBS from `lib/broadcast.ts`) via `broadcastOfEvent`; second image (the 1200×630 OG card); `offers` dropped once completed; `isAccessibleForFree` on free stops. Builder is client-safe (NationalsLive still calls it); the 120 KB history JSON is only read server-side. |
+| **Events index** (`/events/`) | nothing | `ItemList` of every upcoming Tour stop with an internal page, each a `SportsEvent` summary pointing at its leaf page |
+| **Site-wide org** (`app/layout.tsx`) | name, logo, 5 socials | `alternateName` [PPA Tour, Professional Pickleball Association, PPA], `legalName`, `description`, `slogan`, `foundingDate` 2018, `parentOrganization` UPA, `knowsAbout`, `areaServed`, `logo` as ImageObject, `sameAs` + LinkedIn (`/company/ppatour`, verified 200) + the Wikipedia redirect; `WebSite.inLanguage` |
+| **Athlete** (`profile.tsx`) | `Person` with socials, paddle, FAQ | `@id` = `/athletes/<slug>/#person` (the same id event podiums and article `about` point at), `mainEntityOfPage`, `nationality` as `Country`, `affiliation` → org, **`sameAs` + Wikipedia/Wikidata** for the 10 pros that have their own item (`lib/athlete-sameas.ts`, verified against the Wikidata API — the rest redirect to a list page and are deliberately left out) |
+| **News / blog** (`lib/article-schema.ts`) | `NewsArticle`/`BlogPosting` | `about` (top 3 players in the story) + `mentions` (the rest) as Person `@id`s — the same list the "Players in This Story" rail renders; `publisher` carries the org `@id` |
+| Rankings / Leaderboards | `Dataset` + `ItemList` | unchanged (already valid) |
+
+**10/7 issue list, closed in the same pass:** (1) unknown athlete slug → real **404**, not a 307 to
+the index (aliases still 308); (2) `/tournament/<slug>/` → **the matching event page**, newest
+season (`app/tournament/[slug]`), schedule only when no match; (5) `/ppa-blog/` → `/blog/`;
+(6) `/search` out of the sitemap, `/favicon.ico` served (rewrite to the PNG icon). Open: (3)
+`sameAs` to pickleball.com profiles — needs their URL pattern (Jason); (4) `og:url` — Next sets
+no per-route OG url from the layout, left; (7) the two Mesa Cup stats wraps are both real posts
+(2025 and 2026 editions sharing a title) — editorial retitle, not a redirect.
+
+### 7c. What this gets us on Google (markup-driven features)
+
+- **Event rich results / event carousel** for "ppa tour [city]", "pickleball tournament [city]":
+  already eligible; the podium + division sub-events make the completed pages the best answer
+  for "who won [event]". Google wants a **street address** on `location` — only 7 venues have one
+  in `lib/venue-locations.ts`. Filling the rest (every 2026–27 stop) is the single highest-value
+  data task left; it is what puts the event in Maps/"near me". Owner: ops (Brian) can confirm
+  addresses in an hour.
+- **Knowledge panel** for the tour: the org node now carries enough to seed one, but Google
+  will not show a panel without a Wikidata/Wikipedia entity (7a).
+- **Top Stories**: `NewsArticle` + news sitemap were Phase 1; `about` Persons now connect stories
+  to players. Still owed: Publisher Center application (Phase 2).
+- **Sitelinks search box, breadcrumbs**: already live.
+
+### 7d. Verification
+
+Rich Results Test / `validator.schema.org` on one URL per template after deploy:
+`/events/2026/veolia-arizona-open/` (completed, podium), `/events/2026/pickleball-world-championships/`
+(upcoming, offer, broadcasts), `/athletes/ben-johns/` (sameAs), a native article, `/events/`.
+Then GSC → Enhancements → Events on 10/31 alongside the CTR read already scheduled.
+
 ## 4. Measures and checkpoints
 
 | Checkpoint | Date | Measure |

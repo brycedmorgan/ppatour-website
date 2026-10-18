@@ -145,16 +145,45 @@ const SITE_JSON_LD = {
       "@type": "SportsOrganization",
       "@id": `${SITE_URL}/#organization`,
       name: "Carvana PPA Tour",
-      alternateName: "Professional Pickleball Association",
+      /**
+       * 10/18: the org node is what Google builds a knowledge panel from, and
+       * it carried a name, a logo and five socials. Everything added below is
+       * public record (ppatour.com/about, the Wikipedia section the `PPA Tour`
+       * title redirects to): founded 2018, the tour of the Professional
+       * Pickleball Association, part of the United Pickleball Association since
+       * the 2024 MLP merger. ⚠ There is NO Wikidata item for the tour yet —
+       * "PPA Tour" on Wikipedia is a redirect to "Pickleball in the United
+       * States" — so `sameAs` carries that redirect, the LinkedIn page, and
+       * nothing invented. docs/SEO.md §7 has the knowledge-graph to-do.
+       */
+      alternateName: ["PPA Tour", "Professional Pickleball Association", "PPA"],
+      legalName: "Professional Pickleball Association",
       sport: "Pickleball",
       url: SITE_URL,
-      logo: `${SITE_URL}/ppa/logos/ppa-horizontal-blue.svg`,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/ppa/logos/ppa-horizontal-blue.svg`,
+      },
+      image: `${SITE_URL}/ppa/logos/ppa-horizontal-blue.svg`,
+      description:
+        "The Carvana PPA Tour is the professional pickleball tour: Majors, Cups and Opens across the United States and internationally, the World Pickleball Rankings, and live coverage on PickleballTV and broadcast television.",
+      slogan: "The Pro Tour of Pickleball",
+      foundingDate: "2018",
+      areaServed: "Worldwide",
+      knowsAbout: ["Pickleball", "Professional pickleball tournaments", "World Pickleball Rankings"],
+      parentOrganization: {
+        "@type": "Organization",
+        name: "United Pickleball Association",
+        alternateName: "UPA",
+      },
       sameAs: [
         "https://www.instagram.com/ppatour",
         "https://x.com/ppatour",
         "https://www.youtube.com/channel/UCSP6HlrMmRqogym2aHBPHpw",
         "https://www.tiktok.com/@officialppatour",
         "https://www.facebook.com/OfficialPPATour",
+        "https://www.linkedin.com/company/ppatour",
+        "https://en.wikipedia.org/wiki/PPA_Tour",
       ],
     },
     {
@@ -162,6 +191,8 @@ const SITE_JSON_LD = {
       "@id": `${SITE_URL}/#website`,
       url: SITE_URL,
       name: "Carvana PPA Tour",
+      alternateName: "PPA Tour",
+      inLanguage: "en",
       publisher: { "@id": `${SITE_URL}/#organization` },
       potentialAction: {
         "@type": "SearchAction",

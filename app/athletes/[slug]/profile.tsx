@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/site";
 import Image from "next/image";
 import Link from "next/link";
-import { permanentRedirect, redirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { resolveAthleteSlugs } from "@/lib/athlete-slugs";
+import { athleteSameAs } from "@/lib/athlete-sameas";
 import { athletes, getAthlete } from "@/lib/athletes";
 import {
   ageFromDob,
@@ -351,17 +352,18 @@ export async function AthleteProfile({
 
   const a = await loadAthlete(slug);
   /**
-   * Unknown slug → the roster index, not a 404. `loadAthlete` only returns null
-   * when the curated roster, the published profiles, AND the live WPR feed all
-   * have nothing, so this is a genuinely unpublished player.
+   * Unknown slug → 404. `loadAthlete` only returns null when the curated
+   * roster, the published profiles, AND the live WPR feed all have nothing, so
+   * this is a genuinely unpublished player.
    *
-   * Why redirect: the old WordPress site had 218 athlete entries against the 180
-   * published here, and the migrated blog archive links players we don't carry
-   * (Sam Querrey, Quang Duong…). Inbound traffic from Google's index of the old
-   * site and from old bookmarks lands on those URLs, and the roster is a more
-   * useful destination than a dead end.
+   * It used to 307 to the roster index (old WordPress had 218 athlete entries
+   * against the 180 published here, and migrated posts link players we don't
+   * carry). Google reads a redirect from a specific URL to an index as a soft
+   * 404 and keeps re-crawling it (docs/SEO.md §3b, issue 1); a real 404 lets it
+   * drop the URL. Aliases and duplicate slugs are still 308'd above — this is
+   * only the case where nobody has a page. The 404 page itself links the roster.
    */
-  if (!a) redirect(europe ? "/europe" : "/athletes");
+  if (!a) notFound();
 
   // Live stats from the player API (career podium finishes, bio facts) +
   // per-division World Pickleball rankings. Null/empty when the API is
@@ -701,9 +703,16 @@ export async function AthleteProfile({
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Person",
+            // Stable node id — the event pages' `competitor` lists point at
+            // this same `#person`, so a podium and a profile are one entity.
+            "@id": `${SITE_URL}/athletes/${a.slug}/#person`,
+            mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}/athletes/${a.slug}/` },
             name: a.name,
             jobTitle: "Professional Pickleball Player",
-            nationality: a.country,
+            // A Country node, not a bare string — "USA" as text is a label;
+            // as a Country it reconciles.
+            nationality: { "@type": "Country", name: a.country },
+            affiliation: { "@id": `${SITE_URL}/#organization` },
             ...(gender ? { gender } : {}),
             // Absolute URL — Google prefers a fully-qualified image in structured
             // data; a curated headshot is a /public path, a live one is already
@@ -752,7 +761,11 @@ export async function AthleteProfile({
              * overrides.ts` on read). Never construct one from a handle — `sameAs` is a
              * machine-readable assertion that this person owns that account.
              */
-            ...(override?.socials?.length ? { sameAs: override.socials } : {}),
+            // Plus the pro's Wikipedia article + Wikidata item where one exists
+            // (lib/athlete-sameas.ts — verified entries only, ten pros today).
+            ...(override?.socials?.length || athleteSameAs(a.slug).length
+              ? { sameAs: [...(override?.socials ?? []), ...athleteSameAs(a.slug)] }
+              : {}),
             // Reference the site-wide org node (app/layout.tsx) by @id instead of
             // redefining it, so the two never disagree.
             memberOf: { "@id": `${SITE_URL}/#organization` },

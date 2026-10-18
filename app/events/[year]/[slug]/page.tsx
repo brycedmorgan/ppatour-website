@@ -80,6 +80,7 @@ import { admissionTiersFor, ticketsOnSale } from "@/lib/tixr-prices";
 import { buildTicketGrid } from "@/lib/ticket-grid";
 import { TicketGrid } from "@/components/events/TicketGrid";
 import { buildEventJsonLd } from "@/lib/event-schema";
+import { eventResultsFor } from "@/lib/event-results";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 import { pageTitle, seoDescription } from "@/lib/seo-text";
 
@@ -661,6 +662,10 @@ export default async function EventPage({ params }: Params) {
             buildEventJsonLd(t, {
               onSale,
               description,
+              completed,
+              // The podium from the committed tournament history (sync, no
+              // upstream call); null until the generator has folded this stop in.
+              results: completed ? eventResultsFor(t) : null,
               // Top eight seeds once the pro draw is published; nothing before.
               performers: field.published
                 ? field.players

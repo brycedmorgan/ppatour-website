@@ -59,10 +59,35 @@ function modifiedDate(detail: NewsDetail): string {
   return modified && modified >= published ? modified : published;
 }
 
-export function buildArticleJsonLd(detail: NewsDetail) {
+/** A pro the article names, already resolved to a page that exists. */
+export type ArticlePerson = { name: string; slug: string };
+
+/** How many of the rail's players count as what the piece is ABOUT; the rest
+ *  are `mentions`. Same ordering the rail uses (most-named first). */
+const ABOUT_LIMIT = 3;
+
+function personRef(p: ArticlePerson) {
+  return {
+    "@type": "Person",
+    "@id": `${SITE_URL}/athletes/${p.slug}/#person`,
+    name: p.name,
+    url: `${SITE_URL}/athletes/${p.slug}/`,
+  };
+}
+
+export function buildArticleJsonLd(detail: NewsDetail, players: ArticlePerson[] = []) {
   const { card } = detail;
   const url = `${SITE_URL}${card.href}/`;
   const isBlog = card.postType === "ppa-blog";
+  /**
+   * 10/18: `about` / `mentions` tie the story to the athlete entities it
+   * names — the same list the "Players in This Story" rail renders, by @id to
+   * each profile's Person node. That is how "Ben Johns news" becomes a query
+   * our newsroom is a candidate for, rather than a page that happens to contain
+   * the string.
+   */
+  const about = players.slice(0, ABOUT_LIMIT).map(personRef);
+  const mentions = players.slice(ABOUT_LIMIT).map(personRef);
   return {
     "@context": "https://schema.org",
     "@type": isBlog ? "BlogPosting" : "NewsArticle",
@@ -72,11 +97,13 @@ export function buildArticleJsonLd(detail: NewsDetail) {
     datePublished: card.publishedAt,
     dateModified: modifiedDate(detail),
     author: author(card.author),
-    publisher: PUBLISHER,
+    publisher: { "@id": `${SITE_URL}/#organization`, ...PUBLISHER },
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     url,
     ...(card.category ? { articleSection: card.category } : {}),
     inLanguage: "en",
     isAccessibleForFree: true,
+    ...(about.length ? { about } : {}),
+    ...(mentions.length ? { mentions } : {}),
   };
 }

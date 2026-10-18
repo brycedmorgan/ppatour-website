@@ -86,7 +86,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/about/privacy",
     "/about/terms",
     "/about/transgender-policy",
-    "/search",
+    // `/search` deliberately not listed (10/18): a search page is not a landing
+    // page, and Google reads a sitemap entry as "please index this".
     /**
      * ⚠ /shop is listed only when the catalogue actually resolved. The page
      * renders a holding state either way, and submitting a "shop" URL with no

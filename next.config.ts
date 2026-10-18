@@ -265,7 +265,18 @@ const LEGACY_REDIRECTS = [
   // `/pro/:slug` was the other legacy profile prefix and had no rule; 6 of the
   // 9 links using it point at athletes who do have a page here.
   { source: "/pro/:slug", destination: "/athletes/:slug/" },
-  { source: "/tournament/:path*", destination: "/events/" },
+  // `/tournament/:slug` is an app route since 10/18 (app/tournament/[slug]) that
+  // 308s to the matching event page; the old blanket → /events/ rule is gone.
+  // Deeper legacy paths (`/tournament/x/results/`) still land on the schedule.
+  { source: "/tournament/:slug/:rest+", destination: "/events/" },
+  /**
+   * SEO 10/18 (docs/SEO.md §3b issues 5 and 7): `/ppa-blog/` had no index —
+   * 404 under a sitemap that lists its 37 posts — and the Mesa Cup stats wrap
+   * was migrated twice (`-2` is the 2026 edition, same title as the 2025 one;
+   * both are real posts, so neither redirects — the title fix is editorial).
+   * The blog index is /blog/.
+   */
+  { source: "/ppa-blog", destination: "/blog/" },
 
   /**
    * Old WordPress URL shapes from the GSC "Not found (404)" report, 10/7 (589
@@ -378,7 +389,8 @@ const APEX_LEGACY_REDIRECTS = [
   { source: "/schedule", destination: "https://www.ppatour.com/events/" },
   { source: "/player-rankings", destination: "https://www.ppatour.com/rankings/" },
   { source: "/player-rankings-table", destination: "https://www.ppatour.com/rankings/" },
-  { source: "/tournament/:path*", destination: "https://www.ppatour.com/events/" },
+  // `/tournament/:slug` on the apex falls through to the catch-all below and
+  // then to app/tournament/[slug] on www, which picks the event page (10/18).
   // Everything else on the apex: same path, same query, on www — in ONE hop.
   // ⚠ `/:path*` drops the trailing slash, so a bare catch-all sent
   // ppatour.com/events/x/ to www/events/x, which `trailingSlash: true` then
@@ -574,6 +586,10 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return {
       beforeFiles: [
+        // Browsers and crawlers request /favicon.ico unprompted; it 404'd on
+        // every page load (GSC noise, 10/7). Serve the PNG tab icon there —
+        // browsers sniff the bytes, not the extension.
+        { source: "/favicon.ico", destination: "/app-icons/icon-192.png" },
         // europe.ppatour.com serves the Europe region at its own root, so PPA Tour
         // Europe reads as a property of its own in a room — Chris Patrick, 9/9,
         // ahead of a sponsor meeting. ONLY the root is rewritten: every other path

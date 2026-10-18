@@ -240,7 +240,14 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
           page already renders. */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildArticleJsonLd(detail)) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            buildArticleJsonLd(
+              detail,
+              featured.map((p) => ({ name: p.name, slug: p.slug })),
+            ),
+          ),
+        }}
       />
       {/* Article hero — two layouts.
 
