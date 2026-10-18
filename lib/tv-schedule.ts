@@ -368,8 +368,14 @@ export const tvSchedule: TvEvent[] = [
       {
         date: "Oct 18",
         dow: "Sun",
+        // ⚠ PBTV OPENS 8AM, TWO HOURS EARLY, ON WEATHER. Keaton Maynard, 10/17
+        // 11:12PM ET: 8AM and 9AM ET are semifinals on Championship Court and
+        // Grandstand, first finals match 10AM ET on Championship Court. Tennis
+        // Channel is left at its 10AM open, which is that finals start, and the
+        // 8AM platform is inferred from who has carried CC+GS all week — see the
+        // longer note on this day in lib/broadcast.ts, which this must match.
         windows: [
-          { channel: "PBTV", window: "10AM – 3PM", round: "Championship Sunday" },
+          { channel: "PBTV", window: "8AM – 3PM", round: "Championship Sunday" },
           { channel: "Tennis Channel", window: "10AM – 2PM", round: "Championship Sunday" },
         ],
       },

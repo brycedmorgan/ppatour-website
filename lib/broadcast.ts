@@ -218,7 +218,20 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
     { round: "QF's", day: "Friday", window: "2PM ET - 5PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
     { round: "SF's", day: "Saturday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
     { round: "SF's", day: "Saturday", window: "12PM ET - 3PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
-    { round: "Championship", day: "Sunday", window: "10AM ET - 3PM ET", platform: "PBTV", type: "LIVE" },
+    // ⚠ SUNDAY OPENS AT 8AM ET, TWO HOURS EARLY, BECAUSE OF WEATHER. Keaton
+    // Maynard, #marketing-general + #social-media 10/17 11:12PM ET, "Sunday court
+    // coverage plan due to weather": 8AM ET and 9AM ET are semifinals on Humana
+    // Championship Court AND Grandstand, and the first finals match is 10AM ET on
+    // Championship Court only. So Saturday's semifinals did not all finish and the
+    // rest of them play Sunday morning ahead of the finals.
+    //
+    // ⚠ THE 8AM PLATFORM IS INFERRED, NOT PUBLISHED. He gave courts and times,
+    // not a network; PBTV has carried CC+GS all week and Tennis Channel only comes
+    // in for the finals, so the early sessions ride PBTV and TC is left on its own
+    // 10AM open, which is exactly when his first finals match starts. Asked him to
+    // confirm in the channel. The END time is unchanged for the same reason the
+    // Tue/Wed rows carry one: he published a start, not a finish.
+    { round: "Championship", day: "Sunday", window: "8AM ET - 3PM ET", platform: "PBTV", type: "LIVE" },
     { round: "Championship", day: "Sunday", window: "10AM ET - 2PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
   ],
   "proton-daytona-beach-open": [

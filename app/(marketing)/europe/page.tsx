@@ -470,15 +470,10 @@ export default async function EuropePage() {
                     competing tour.
                   </p>
                   <p>
-                    In Europe, ITP players may compete, but they cannot enter
-                    events worth more than 125 points. That makes them eligible
-                    for{" "}
-                    <strong className="font-semibold text-ppa-navy">
-                      125-point and 75-point events
-                    </strong>
-                    , and not for 250- and 500-point events — those are designed
-                    for touring pros and aspiring touring pros fighting for WPR
-                    points and hoping to earn a contract.
+                    In Europe, ITP players may still compete in 2026, but they
+                    cannot enter events worth more than 125 points. PPA Europe
+                    Events are designed for touring pros and aspiring touring
+                    pros fighting for WPR points and hoping to earn a contract.
                   </p>
                 </div>
               </div>

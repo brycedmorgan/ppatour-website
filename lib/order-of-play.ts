@@ -55,6 +55,12 @@ const LABELS_BY_SLUG: Record<string, Record<string, string>> = {
   "virginia-beach-open": {
     "2026-10-12": "Pro qualifying",
     "2026-10-13": "Pro round of 64",
+    // Weather pushed semifinals into championship day: Keaton Maynard, 10/17,
+    // has 8AM and 9AM ET semifinals on Championship Court and Grandstand before
+    // the first finals match at 10AM. Saturday's label is deliberately NOT
+    // touched — play ran there Saturday evening, so some semifinals were played
+    // and nobody has said which, and "no semifinals Saturday" would be a guess.
+    "2026-10-18": "Championship Sunday — semifinals, then finals",
   },
 };
 

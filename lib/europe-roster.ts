@@ -539,6 +539,25 @@ export const europeRoster: EuroPro[] = [
       "Henrik Traskin is a professional pickleball player from Lithuania. He represented Lithuania in the 2026 Pickleball World Cup and competes on the PPA Tour Europe.",
     ],
   },
+  {
+    // Row 28 of Catie's sheet, posted in #ppa-tour-europe 10/17. No portrait
+    // yet and the bio is her placeholder line, both still coming from her, so
+    // this card renders the silhouette until the file lands.
+    // ⚠ DIVISIONS ARE THE HOUSE DEFAULT (13 of 15 men on this roster), NOT HER
+    // SHEET — it has no divisions column. Asked her to confirm in the channel.
+    slug: "yuri-syromolotov",
+    name: "Yuri Syromolotov",
+    country: "Spain",
+    countryCode: "ESP",
+    age: 29,
+    divisions: [...MS, ...MD, ...XD],
+    sponsors: ["Arronax"],
+    instagram: "https://www.instagram.com/yurisyromolotov/",
+    tagline: "Turned professional in 2026",
+    bio: [
+      "Yuri Syromolotov is a professional pickleball player from Spain. He turned pro in 2026.",
+    ],
+  },
 ];
 
 export function getEuroPro(slug: string): EuroPro | undefined {

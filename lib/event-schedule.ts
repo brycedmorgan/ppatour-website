@@ -556,7 +556,16 @@ const FIRST_SERVE_BY_SLUG: Record<string, Record<string, string>> = {
     "2026-10-15": "12:00 PM", // Thu — RD16
     "2026-10-16": "12:00 PM", // Fri — QF
     "2026-10-17": "12:00 PM", // Sat — SF
-    "2026-10-18": "10:00 AM", // Sun — Finals
+    // Maynard, 10/17 11:12PM ET: Sunday runs 8AM ET semifinals on Championship
+    // Court and Grandstand, 9AM ET more semifinals, first finals match 10AM ET.
+    // Virginia is Eastern, so ET is local. The 10:00 AM that was here is now the
+    // FINALS start, not first serve, and leaving it would have sent anyone
+    // reading the page to the venue two hours after play began.
+    //
+    // Gates follow on their own: the dated noon run ends 10/17, so Sunday falls
+    // through to `broadcastStart`, which is the 8AM PBTV open above. That is
+    // Wesley's 10/13 standing rule, gate = the day's earliest broadcast start.
+    "2026-10-18": "8:00 AM", // Sun — remaining SFs, then finals
   },
 };
 

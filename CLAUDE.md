@@ -67,6 +67,20 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-18 — VB Sunday starts 8AM ET on weather; Europe ITP copy + Yuri Syromolotov (Bryce's patches)
+
+- **Keaton Maynard, 10/17 11:12PM ET:** Sunday 8AM + 9AM ET semifinals on Championship Court and Grandstand, first
+  finals match 10AM ET. VB Sun first serve 10:00 → **8:00 AM** (`FIRST_SERVE_BY_SLUG`); PBTV Sunday 10AM → **8AM ET**
+  in both `lib/broadcast.ts` and `lib/tv-schedule.ts` (TC stays 10AM–2PM); Sunday label "Championship Sunday —
+  semifinals, then finals" (`LABELS_BY_SLUG`). Gates follow via `broadcastStart` (the noon run ends 10/17).
+  ⚠ The 8AM platform is inferred (PBTV), asked of Keaton. Audit: broadcast ↔ tv-schedule agree (10 slots); the sheet
+  still says Sun PBTV 10AM, so it flags Sunday until it's updated (plus the old Tue/Wed rows).
+- /europe ITP card: Catie's new second paragraph (ITPs may still compete in 2026, ≤125-point events), verbatim.
+- New roster entry `yuri-syromolotov` (row 28 of Catie's sheet): no `portrait` on purpose (silhouette until the file
+  lands), divisions are the house default pending her confirmation, Instagram 200.
+- **⚠ NOT DONE: Kanichová's new portrait.** "VICTORIA KANICHOVA NEW.png" is in Slack and the connector was down;
+  flatten on white, 900×1125 q82 → `public/europe/pros/viktoria-kanichova.jpg` when the file is in hand.
+
 ### 2026-10-16 — Europe: DailyStory event-news form + Traskin's profile (Bryce's patches, no push access)
 
 - /europe#contact: Juan's hosted DailyStory form (double opt-in, GDPR) as "Email / Event News" between the
