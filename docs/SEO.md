@@ -216,10 +216,10 @@ no per-route OG url from the layout, left; (7) the two Mesa Cup stats wraps are 
 
 - **Event rich results / event carousel** for "ppa tour [city]", "pickleball tournament [city]":
   already eligible; the podium + division sub-events make the completed pages the best answer
-  for "who won [event]". Google wants a **street address** on `location` — only 7 venues have one
-  in `lib/venue-locations.ts`. Filling the rest (every 2026–27 stop) is the single highest-value
-  data task left; it is what puts the event in Maps/"near me". Owner: ops (Brian) can confirm
-  addresses in an hour.
+  for "who won [event]". Google wants a **street address** on `location` — **done 10/18**: every 2026–27 Tour venue
+  (and the curated past ones) is in `lib/venue-locations.ts`, each checked against the venue's own
+  site (35 keys incl. feed spellings). Left off as unconfirmed: "Cape Coral Racquet Club" (the 2026
+  curated record's string — the venue is The Courts; fix the record), Liberty Park's street.
 - **Knowledge panel** for the tour: the org node now carries enough to seed one, but Google
   will not show a panel without a Wikidata/Wikipedia entity (7a).
 - **Top Stories**: `NewsArticle` + news sitemap were Phase 1; `about` Persons now connect stories

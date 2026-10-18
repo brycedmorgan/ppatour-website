@@ -705,8 +705,10 @@ export async function AthleteProfile({
             "@type": "Person",
             // Stable node id — the event pages' `competitor` lists point at
             // this same `#person`, so a podium and a profile are one entity.
+            // The @id is the US profile on every surface, Europe included — one
+            // entity, one id; the page it is "main entity of" is the page itself.
             "@id": `${SITE_URL}/athletes/${a.slug}/#person`,
-            mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}/athletes/${a.slug}/` },
+            mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}${base}/${a.slug}/` },
             name: a.name,
             jobTitle: "Professional Pickleball Player",
             // A Country node, not a bare string — "USA" as text is a label;

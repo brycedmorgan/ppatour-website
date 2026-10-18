@@ -34,8 +34,12 @@ export default async function LegacyTournamentRedirect({ params }: Params) {
     ...tournaments.filter((t) => t.tierKey !== "challenger" && t.hasInternalPage !== false),
     ...events.filter((e) => e.hasInternalPage),
   ];
+  // Newest season first; an exact slug match beats a stem match within a year.
+  const score = (t: Tournament) => (t.slug === slug ? 1 : 0);
   const match = pool
     .filter((t) => norm(t.slug) === want || t.slug === slug)
-    .sort((a, b) => eventYear(b).localeCompare(eventYear(a)))[0];
+    .sort(
+      (a, b) => eventYear(b).localeCompare(eventYear(a)) || score(b) - score(a) || a.slug.localeCompare(b.slug),
+    )[0];
   permanentRedirect(match ? `${eventHref(match)}/` : "/events/");
 }
