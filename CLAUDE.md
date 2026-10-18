@@ -67,6 +67,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-18 — Challengers no longer show a fake 500
+- Chris texted Bryce: 2027 Challenger schedule shows 500 pts on all but one stop. Cause: uncurated Challengers fell back to TIER_META.challenger.points (500); real levels are 125/250 per event (PT sanction level, not in our feed).
+- Shipped 7c0d98c + 7b56dc3: `pointsText`/`tierBadgeText` in lib/placeholder-data.ts — unknown Challenger level = no number on cards, "—" in the past table, out of points filters + search.
+- Next: get the 2027 per-stop 125/250 from Challenger ops and set curated `points`; ask Jason/Kenan to expose sanction level in the feed.
+
 ### 2026-10-18 — VB Sunday starts 8AM ET on weather; Europe ITP copy + Yuri Syromolotov (Bryce's patches)
 
 - **Keaton Maynard, 10/17 11:12PM ET:** Sunday 8AM + 9AM ET semifinals on Championship Court and Grandstand, first
