@@ -16,6 +16,26 @@
  * Charlotte; Oklahoma City is unnamed) are listed so they light up when posted.
  */
 const LEVELS: Record<string, 125 | 250> = {
+  // 2026 — Tanner Groff, Slack DM 10/18: "Every PPA Challenger tournament is worth
+  // 125 points, EXCEPT Punta Gorda, Newport Beach, Seattle, and Grand Rapids - which
+  // are worth 250." Raleigh (Dec 2025) not covered.
+  "2026/punta-gorda-ppa-challenger": 250,
+  "2026/tucson-ppa-challenger": 125,
+  "2026/houston-ppa-challenger": 125,
+  "2026/adventhealth-tampa-bay-challenger": 125,
+  "2026/newport-beach-ppa-challenger": 250,
+  "2026/opelika-ppa-challenger": 125,
+  "2026/black-desert-ppa-challenger": 125,
+  "2026/wilson-ppa-challenger": 125,
+  "2026/fracas-in-fort-collins-ppa-challenger": 125,
+  "2026/boise-ppa-challenger": 125,
+  "2026/portland-ppa-challenger": 125,
+  "2026/macon-ppa-challenger": 125,
+  "2026/wisconsin-ppa-challenger": 125,
+  "2026/seattle-ppa-challenger": 250,
+  "2026/atlanta-ppa-challenger": 125,
+  "2026/grand-rapids-ppa-challenger": 250,
+  "2026/charlotte-ppa-challenger": 125,
   "2027/jacksonville-ppa-challenger": 125,
   "2027/gilbert-ppa-challenger": 125,
   "2027/peachtree-corners-ppa-challenger": 250,
