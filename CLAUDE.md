@@ -67,6 +67,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-18 (pt. 4) — Organic read: 28d clicks +44% YoY
+- Bryce: "How is our organic growth?" GSC via Jackalope (`/api/seo/gsc?brand=ppa&yoy=1`, the YoY endpoint deployed this afternoon). 28d to 10/15: 245,784 clicks, +43.9% YoY, CTR 13.2% vs 8.1%, position 5.1 vs 8.1. 90d: −8.5% YoY (the window straddles the 8/4 relaunch; Sept–Oct are ahead). Full table: docs/SEO.md §7e.
+- 93% of top-query clicks are brand. Non-brand is the growth lane (Phase 2 content, athlete pages).
+- MLP: the GSC service account lacks access to the MLP property. Grant needed (Settings → Users and permissions).
+
 ### 2026-10-18 (pt. 3) — Wikidata items for the PPA Tour and the UPA
 - Bryce: "Do the wikidata items." Created from his Chrome session (Wikidata auto-made a temp account, so no IP in the history): **PPA Tour Q141769292** (14 sourced statements), **United Pickleball Association Q141769280** (parts: PPA Tour + MLP; inception 2024-02-29), and MLP Q128285945 got `parent organization → UPA`. Org JSON-LD `sameAs` now leads with the Q-id.
 - Gotcha: the auto-mode classifier blocks the API token fetch and anonymous `wbeditentity` from curl, but the item form in the browser + `mw.Api().postWithToken('csrf', …)` by item id in page context works.

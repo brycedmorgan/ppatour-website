@@ -235,6 +235,26 @@ Rich Results Test / `validator.schema.org` on one URL per template after deploy:
 (upcoming, offer, broadcasts), `/athletes/ben-johns/` (sameAs), a native article, `/events/`.
 Then GSC → Enhancements → Events on 10/31 alongside the CTR read already scheduled.
 
+### 7e. Organic read, 2026-10-18 (GSC `sc-domain:ppatour.com`, via Jackalope `/api/seo/gsc?brand=ppa&yoy=1`)
+
+| Window (ends 10/15) | Clicks | vs last year | vs prior period | Impressions YoY | CTR | Avg position |
+|---|---|---|---|---|---|---|
+| 28 days (9/18–10/15) | 245,784 | **+43.9%** (170,840) | +29.5% (189,726) | −11% | 13.2% (LY 8.1%) | 5.1 (LY 8.1) |
+| 90 days (7/18–10/15) | 538,187 | −8.5% (588,497) | +25.9% (427,346) | −42% | 9.7% (LY 6.2%) | 5.8 (LY 12.6) |
+
+- The 90-day window straddles the 8/4 relaunch: July–August gave back clicks, September–October are
+  well ahead. The impression drop is the old site's long-tail of pages ranking in the 20s; clicks are
+  the measure. Mobile clicks +50% YoY in the 28-day window.
+- Brand dependence is the problem to work: of the top-25 queries (28d), 93% of clicks are brand
+  (`ppa tour`, `ppa pickleball`, `ppa`, event names with "ppa"). Non-brand leaders are
+  `pickleball rankings` (1,650), event names without "ppa", and player names (Kiora Kunimoto, Gabe
+  Tardio). This is what Phase 2 content + the athlete schema are for.
+- `ppa` (the 10/7 gap): now 16% CTR at position 3.8 on 169k impressions (was 2.4% at 6.5).
+- Old URLs still earn: `ppatour.com/player-rankings/` 12.9k clicks in 90d on the apex, redirected.
+  Nothing to do; it decays as Google re-canonicalises.
+- MLP: the GSC service account has no access to `https://www.majorleaguepickleball.co/` (needs a
+  Users-and-permissions grant on that property). PBC 28d: 35,252 clicks, −13% vs prior 28 (its own plan).
+
 ## 4. Measures and checkpoints
 
 | Checkpoint | Date | Measure |
