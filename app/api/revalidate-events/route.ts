@@ -4,8 +4,9 @@ import { EVENTS_CACHE_TAG } from "@/lib/events-api";
 import { purgeCacheTag } from "@/lib/pb-cache";
 
 /**
- * Daily cache refresh for the /events calendar. Invoked by the Vercel Cron
- * defined in vercel.json at midnight Central (see there for the DST note):
+ * Cache refresh for the /events calendar. Invoked every 2 hours by the Vercel
+ * Cron in vercel.json (daily until 10/18, so a newly public stop could sit a
+ * day before it showed):
  * invalidates the tournaments fetch tag so the next request re-pulls the API
  * and picks up new / changed / removed events.
  *

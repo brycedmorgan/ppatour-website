@@ -45,8 +45,8 @@ import { sisterTourTickets } from "@/lib/sister-tour-tickets";
 const PATH = "/v2/data/ppa_tournaments";
 /**
  * Cache tag for the tournaments fetch. A Vercel Cron hits
- * `/api/revalidate-events` at midnight Central and calls `revalidateTag` with
- * this, so the calendar refreshes once a day on a predictable schedule.
+ * `/api/revalidate-events` every 2 hours and calls `revalidateTag` with this,
+ * so a newly public stop reaches the calendar within 2 hours, no push needed.
  */
 export const EVENTS_CACHE_TAG = "events";
 /** Backstop TTL (24h) in case the daily cron ever fails to fire. */
