@@ -70,7 +70,7 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 ### 2026-10-18 — Challengers no longer show a fake 500
 - Chris texted Bryce: 2027 Challenger schedule shows 500 pts on all but one stop. Cause: uncurated Challengers fell back to TIER_META.challenger.points (500); real levels are 125/250 per event (PT sanction level, not in our feed).
 - Shipped 7c0d98c + 7b56dc3: `pointsText`/`tierBadgeText` in lib/placeholder-data.ts — unknown Challenger level = no number on cards, "—" in the past table, out of points filters + search.
-- Next: get the 2027 per-stop 125/250 from Challenger ops and set curated `points`; ask Jason/Kenan to expose sanction level in the feed.
+- Levels in: 2027 Challenger Master sheet (Bryce, 10/18) → lib/challenger-points.ts, keyed by year (curated match is year-free, so 2027 Seattle was inheriting 2026's 250). Next: Jason/Kenan expose PT sanction level in the feed; 2026 past stops still unconfirmed (show "—").
 
 ### 2026-10-18 — VB Sunday starts 8AM ET on weather; Europe ITP copy + Yuri Syromolotov (Bryce's patches)
 

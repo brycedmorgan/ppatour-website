@@ -41,6 +41,7 @@ import {
 import { venueGalleryFor, venueHeroFor } from "@/lib/venue-photos";
 import { ticketPriceFrom, ticketsOnSale } from "@/lib/tixr-price-index";
 import { sisterTourTickets } from "@/lib/sister-tour-tickets";
+import { challengerLevel } from "@/lib/challenger-points";
 
 const PATH = "/v2/data/ppa_tournaments";
 /**
@@ -513,8 +514,11 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     // same half-applied split as the 8/3 name pass.
     // A curated `points` also wins on a Tour stop: the three PPA 500 Opens
     // (board decision 9/8) are tier `open` with `points: 500`.
+    // The year-keyed Challenger table (lib/challenger-points.ts) wins first.
     points:
-      curated?.points ?? (tier === "challenger" ? (pointsFromName(name) ?? undefined) : undefined),
+      (tier === "challenger" ? challengerLevel(year, kebab(name)) : undefined) ??
+      curated?.points ??
+      (tier === "challenger" ? (pointsFromName(name) ?? undefined) : undefined),
     prizeMoney: curated?.prizeMoney ?? TIER_PRIZE[tier],
     // Curated-only: see PRESENTER_BY_SLUG. Never infer a presenter from the
     // title sponsor in the name — that fabricated 6 of 10 presenters (8/4).
