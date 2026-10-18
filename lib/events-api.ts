@@ -41,7 +41,7 @@ import {
 import { venueGalleryFor, venueHeroFor } from "@/lib/venue-photos";
 import { ticketPriceFrom, ticketsOnSale } from "@/lib/tixr-price-index";
 import { sisterTourTickets } from "@/lib/sister-tour-tickets";
-import { challengerLevel } from "@/lib/challenger-points";
+import { challengerLevel, feedLevel, fetchChallengerLevels, type LevelFeed } from "@/lib/challenger-points";
 
 const PATH = "/v2/data/ppa_tournaments";
 /**
@@ -405,7 +405,7 @@ function isJunk(t: ApiTournament): boolean {
   );
 }
 
-function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tournament {
+function mapTournament(t: ApiTournament, seen: Set<string>, index: number, levels: LevelFeed = []): Tournament {
   const name = cleanTitle(t.title);
   const isUsOrg = t.organization_name === US_ORG;
   const isChallenger = /challenger/i.test(name);
@@ -516,6 +516,8 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     // (board decision 9/8) are tier `open` with `points: 500`.
     // The year-keyed Challenger table (lib/challenger-points.ts) wins first.
     points:
+      // Schedule Builder (Tanner) first, then the year-keyed backup table.
+      (tier === "challenger" && !country ? feedLevel(levels, startDate, t.venue_city || "") : undefined) ??
       (tier === "challenger" ? challengerLevel(year, kebab(name)) : undefined) ??
       curated?.points ??
       (tier === "challenger" ? (pointsFromName(name) ?? undefined) : undefined),
@@ -691,10 +693,11 @@ export const getEvents = cache(async function getEvents(): Promise<{
   if (raw.length === 0) return fallback();
 
   const seen = new Set<string>();
+  const levels = await fetchChallengerLevels();
   const events = raw
     .filter((t) => !isJunk(t))
     .sort((a, b) => a.start_date.localeCompare(b.start_date))
-    .map((t, i) => mapTournament(t, seen, i));
+    .map((t, i) => mapTournament(t, seen, i, levels));
 
   if (events.length === 0) return fallback();
   return { events: withComingSoon(events), source: "live" };

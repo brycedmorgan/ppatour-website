@@ -39,3 +39,32 @@ const LEVELS: Record<string, 125 | 250> = {
 export function challengerLevel(year: string, nameSlug: string): number | undefined {
   return LEVELS[`${year}/${nameSlug}`];
 }
+
+/**
+ * Levels Tanner sets in Jackalope's Schedule Builder (Points class on a
+ * Challenger row, then Promote). THIS IS THE SOURCE OF TRUTH GOING FORWARD;
+ * the table above is the backup for stops not promoted yet.
+ * Matched on start date (plus city when two stops share a date).
+ */
+const FEED = "https://pickleball.usejackalope.com/api/public/challenger-levels";
+type FeedLevel = { start: string; end: string; name: string; loc: string; cls: number };
+export type LevelFeed = FeedLevel[];
+
+export async function fetchChallengerLevels(): Promise<LevelFeed> {
+  try {
+    const res = await fetch(FEED, { next: { revalidate: 300 } });
+    if (!res.ok) return [];
+    const json = (await res.json()) as { levels?: FeedLevel[] };
+    return (json.levels ?? []).filter((l) => l.cls === 125 || l.cls === 250);
+  } catch {
+    return [];
+  }
+}
+
+export function feedLevel(feed: LevelFeed, startDate: string, city: string): number | undefined {
+  const same = feed.filter((l) => l.start === startDate);
+  if (same.length === 1) return same[0].cls;
+  const c = city.trim().toLowerCase();
+  const hit = c ? same.filter((l) => `${l.loc} ${l.name}`.toLowerCase().includes(c)) : [];
+  return hit.length === 1 ? hit[0].cls : undefined;
+}
