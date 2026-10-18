@@ -218,8 +218,8 @@ no per-route OG url from the layout, left; (7) the two Mesa Cup stats wraps are 
   already eligible; the podium + division sub-events make the completed pages the best answer
   for "who won [event]". Google wants a **street address** on `location` — **done 10/18**: every 2026–27 Tour venue
   (and the curated past ones) is in `lib/venue-locations.ts`, each checked against the venue's own
-  site (35 keys incl. feed spellings). Left off as unconfirmed: "Cape Coral Racquet Club" (the 2026
-  curated record's string — the venue is The Courts; fix the record), Liberty Park's street.
+  site (35 keys incl. feed spellings). The 2027 Cape Coral record's venue was changed from "Cape Coral Racquet Club" (unconfirmed) to the
+  feed's "The Courts, Cape Coral". Left off as unconfirmed: Liberty Park's street.
 - **Knowledge panel** for the tour: the org node now carries enough to seed one, but Google
   will not show a panel without a Wikidata/Wikipedia entity (7a).
 - **Top Stories**: `NewsArticle` + news sitemap were Phase 1; `about` Persons now connect stories

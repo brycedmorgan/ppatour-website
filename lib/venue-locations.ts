@@ -159,8 +159,9 @@ export const VENUE_LOCATIONS: Record<string, VenueLocation> = {
   // my.lifetime.life/clubs/mn/lakeville
   "Life Time — Lakeville": LIFETIME_LAKEVILLE,
   "Lifetime Lakeville": LIFETIME_LAKEVILLE,
-  // playthecourtscapecoral.com. ⚠ "Cape Coral Racquet Club" (the curated 2026
-  // record) could not be confirmed as the same site and is deliberately absent.
+  // playthecourtscapecoral.com — the feed's name for the Cape Coral Open venue;
+  // the curated 2027 record said "Cape Coral Racquet Club" (unconfirmed as the
+  // same site) and was changed to this string 10/18.
   "The Courts, Cape Coral": {
     streetAddress: "420 SW 2nd Ave",
     addressLocality: "Cape Coral",

@@ -884,7 +884,7 @@ const SCHEDULE: RawEvent[] = [
   { name: "Minneapolis Indoor Open", start: "2027-01-18", end: "2027-01-24", city: "Lakeville", state: "MN", venue: "Life Time — Lakeville", type: "ppa", tier: "open", points: 500 },
 
   // February 2027
-  { name: "Cape Coral Open", start: "2027-02-01", end: "2027-02-07", city: "Cape Coral", state: "FL", venue: "Cape Coral Racquet Club", type: "ppa", tier: "open" },
+  { name: "Cape Coral Open", start: "2027-02-01", end: "2027-02-07", city: "Cape Coral", state: "FL", venue: "The Courts, Cape Coral", type: "ppa", tier: "open" },
   { name: "Carvana Mesa Cup", start: "2027-02-15", end: "2027-02-21", city: "Mesa", state: "AZ", venue: "Bell Bank Park", type: "ppa", tier: "cup" },
   { name: "PPA Australia 125 Melbourne", start: "2027-02-18", end: "2027-02-21", city: "Melbourne", state: "Australia", type: "international", country: "Australia" },
 
