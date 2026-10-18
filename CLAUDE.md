@@ -78,8 +78,9 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - /europe ITP card: Catie's new second paragraph (ITPs may still compete in 2026, ≤125-point events), verbatim.
 - New roster entry `yuri-syromolotov` (row 28 of Catie's sheet): no `portrait` on purpose (silhouette until the file
   lands), divisions are the house default pending her confirmation, Instagram 200.
-- **⚠ NOT DONE: Kanichová's new portrait.** "VICTORIA KANICHOVA NEW.png" is in Slack and the connector was down;
-  flatten on white, 900×1125 q82 → `public/europe/pros/viktoria-kanichova.jpg` when the file is in hand.
+- Kanichová's new portrait (Katherina, #ppa-tour-europe 10/17): "VICTORIA KANICHOVA NEW.png" (1080×1350, Drive file
+  `1KVkv7-DFru34Uipyd5QY3N4vKczUzVqs`, link-shared) → flattened on white, 900×1125 q82 (56 KB), same path
+  `public/europe/pros/viktoria-kanichova.jpg`, so no roster change.
 
 ### 2026-10-16 — Europe: DailyStory event-news form + Traskin's profile (Bryce's patches, no push access)
 
