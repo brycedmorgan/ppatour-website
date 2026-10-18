@@ -453,7 +453,7 @@ export default async function ChallengerPage() {
                         {t.state ? `, ${t.state}` : ""}
                       </td>
                       <td className="px-4 py-2.5 text-right text-ppa-navy/70 tabular-nums">
-                        {pointsText(t) ?? "TBA"}
+                        {pointsText(t) ?? "—"}
                       </td>
                       <td className="px-4 py-2.5 text-right">
                         {t.externalUrl ? (
