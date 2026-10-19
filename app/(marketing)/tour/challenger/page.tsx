@@ -47,7 +47,7 @@ const REGISTER = withUtm(
 export const metadata: Metadata = {
   title: "PPA Challenger Series",
   description:
-    "The PPA Challenger Series, powered by JOOLA — the pathway to the pro tour. A PPA-run tour with skill divisions from 3.0 to 5.0, a Pro Division with ranking points and prize money, the schedule, how points work, rankings and how to host a stop.",
+    "The PPA Challenger Series, powered by JOOLA — the pathway to the pro tour. A PPA-run tour with skill divisions from 3.0 to 5.0, a Pro Division with ranking points and prize money, the schedule, how points work, rankings and how to host an event.",
 };
 
 const SECTIONS = [
@@ -59,7 +59,7 @@ const SECTIONS = [
   { id: "showdown", label: "Showdown" },
   { id: "rankings", label: "Rankings" },
   { id: "sponsors", label: "Sponsors" },
-  { id: "host", label: "Host a Stop" },
+  { id: "host", label: "Host an Event" },
 ];
 
 /** ppachallenger.com/how-it-works, verbatim. Both ladders as published. */
@@ -73,17 +73,17 @@ const HOW = [
   {
     n: "01",
     title: "Who Can Play",
-    body: "Every stop runs skill divisions 3.0 through 5.0 and a Pro Division. PPA Tour pros ranked inside the top 20 of a division are not eligible to enter that division at a Challenger.",
+    body: "Each Challenger event features skill divisions from 3.0 through 5.0, along with a Pro Division. Players ranked in the top 20 of a PPA Tour division are not eligible to compete in that same division.",
   },
   {
     n: "02",
-    title: "What the Pros Play For",
-    body: "Each event carries a $10,000 prize pool, split among the Pro Division's podium finishers. Champions in men's and women's singles, men's and women's doubles and mixed doubles earn PPA ranking points.",
+    title: "Prize Money and Ranking Points",
+    body: "Each Challenger event features a $10,000 prize pool for Pro Division competitors. Champions in all five Pro Division events also earn PPA Tour ranking points.",
   },
   {
     n: "03",
-    title: "The Wild Card",
-    body: "Win a Challenger pro event and you earn a wild-card entry into the main draw of a PPA Tour Open of your choosing. Each Open takes at most two wild-card winners.",
+    title: "Earn a Wild Card",
+    body: "Win a Challenger Pro Division event to earn a wild-card entry into the main draw of a PPA Tour Open of your choice. Each Open accepts up to two Challenger wild-card winners.",
   },
 ];
 
@@ -112,10 +112,14 @@ const HOW = [
  * "PPA Challenger Series" page). Flagged to Wesley; if a dedicated Challenger
  * channel exists, swap the URL and this note goes with it.
  */
+// 10/19: YouTube swapped to the Series' own channel on Anders' "Website
+// Changes" row ("goes to main Tour website, not Challenger YouTube").
+// @ppachallengerseries = UCxMwmsqkVi9GW6yVIFDenCg, titled "PPA Challenger",
+// description is the Series boilerplate. The note above is now history.
 const SOCIALS = [
   "https://www.instagram.com/ppa.challenger/",
   "https://x.com/ppachallenger",
-  "https://www.youtube.com/channel/UCSP6HlrMmRqogym2aHBPHpw",
+  "https://www.youtube.com/@ppachallengerseries",
   "https://www.facebook.com/profile.php?id=61569510944398",
 ];
 
@@ -131,8 +135,9 @@ function handleFromUrl(raw: string): string | null {
   try {
     const u = new URL(raw);
     const host = u.hostname.toLowerCase().replace(/^www\./, "");
-    if (host !== "instagram.com" && host !== "x.com" && host !== "twitter.com") return null;
     const seg = u.pathname.split("/").filter(Boolean)[0];
+    if (host === "youtube.com") return seg?.startsWith("@") ? seg : null;
+    if (host !== "instagram.com" && host !== "x.com" && host !== "twitter.com") return null;
     return seg ? `@${seg}` : null;
   } catch {
     return null;
@@ -218,6 +223,7 @@ export default async function ChallengerPage() {
 
   const joola = partners.find((p) => p.name === "JOOLA");
   const joolaLink = joola ? partnerLink(joola).href : null;
+  const mojo = partners.find((p) => p.name === "MOJO Energy Pouches");
 
   return (
     <>
@@ -325,16 +331,16 @@ export default async function ChallengerPage() {
                 the PPA Tour, the pinnacle tour of global pickleball.
               </p>
               <p className="mt-3 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
-                The PPA Challenger Rankings award players points based on their
-                results at PPA Challenger tournaments, and top finishers will earn
-                their spot in the{" "}
+                Players earn ranking points based on their performance at PPA
+                Challenger tournaments throughout the season. The top-ranked
+                players will qualify for the{" "}
                 <Link
                   href="#showdown"
                   className="font-semibold text-challenger-red underline-offset-2 hover:underline"
                 >
-                  &ldquo;PPA Challenger Showdown in Dallas,&rdquo;
-                </Link>{" "}
-                where players will battle for a PPA Tour contract.
+                  PPA Challenger Showdown in Dallas
+                </Link>
+                , where they&rsquo;ll compete for a PPA Tour contract.
               </p>
               <p className="mt-3 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
                 With a deep commitment to fostering growth and development within
@@ -415,14 +421,14 @@ export default async function ChallengerPage() {
           <FeaturedEvents
             events={upcoming}
             kicker="Schedule"
-            title="Upcoming Challenger Stops"
+            title="Upcoming Challenger Events"
             subtitle="Every U.S. Challenger, from the same live feed that runs the tour calendar. The points level is on each card. Register on pickleballtournaments.com."
           />
         ) : (
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
-            <SectionHead eyebrow="Schedule" title="Upcoming Challenger Stops" />
+            <SectionHead eyebrow="Schedule" title="Upcoming Challenger Events" />
             <p className="mt-6 border border-ppa-line bg-ppa-paper px-4 py-10 text-center text-sm text-ppa-navy/55">
-              The next Challenger Series calendar is being confirmed. New stops
+              The next Challenger Series calendar is being confirmed. New events
               appear here as soon as registration opens.
             </p>
           </div>
@@ -486,7 +492,7 @@ export default async function ChallengerPage() {
       {/* -------------------------------------------------- How it works */}
       <section id="how-it-works" className="scroll-mt-24 bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <SectionHead eyebrow="How It Works" title="Divisions, Prize Money and the Wild Card" />
+          <SectionHead eyebrow="How It Works" title="Everything You Need To Know" />
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
             {HOW.map((s) => (
               <div key={s.n} className="flex flex-col border border-ppa-line bg-white p-5">
@@ -512,9 +518,10 @@ export default async function ChallengerPage() {
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <SectionHead eyebrow="Points" title="How Challenger Points Work" />
           <p className="mt-3 max-w-2xl text-sm text-ppa-navy/60">
-            Each Challenger awards 125 or 250 points to the champion, and points go
-            deeper into the draw at both levels. Every stop&apos;s level is on its
-            card in the schedule above.
+            Each Challenger event is designated as either a 125-point or 250-point
+            event. See the schedule above for each event&apos;s point level, and
+            the table below for the number of points awarded based on finishing
+            position.
           </p>
           <div className="mt-6 overflow-x-auto border border-ppa-line">
             <table className="w-full min-w-[760px] border-collapse text-left">
@@ -553,9 +560,10 @@ export default async function ChallengerPage() {
                 Rankings window
               </p>
               <p className="mt-2 text-sm leading-relaxed text-ppa-navy/70">
-                The Challenger rankings update after every event. They count
-                points from the past 52 weeks and from the current calendar year.
-                A player&apos;s best 16 finishes count toward the leaderboard.
+                Challenger rankings are updated after each tournament, with each
+                player&rsquo;s top 16 results counting toward their ranking.
+                Rankings are calculated on both a rolling 52-week and
+                calendar-year basis.
               </p>
             </div>
             <div className="min-w-0 border-l-2 border-challenger-red bg-ppa-paper p-6">
@@ -563,9 +571,10 @@ export default async function ChallengerPage() {
                 Five divisions
               </p>
               <p className="mt-2 text-sm leading-relaxed text-ppa-navy/70">
-                Points are awarded in men&apos;s singles, women&apos;s singles,
-                men&apos;s doubles, women&apos;s doubles and mixed doubles. Each
-                division keeps its own ranking.
+                Points are awarded separately in all 5 pro disciplines:
+                men&apos;s singles, women&apos;s singles, men&apos;s doubles,
+                women&apos;s doubles and mixed doubles. Each division keeps its
+                own ranking.
               </p>
             </div>
           </div>
@@ -585,13 +594,13 @@ export default async function ChallengerPage() {
             How a Challenger Result Becomes a Tour Career
           </h2>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/70 sm:text-base">
-            Challenger points do two things. They rank you against every other
+            Challenger points do two things: they rank you against every other
             player on the series, and they get you into the room.
           </p>
           <ol className="mt-6 grid gap-px border border-white/10 bg-white/10 lg:grid-cols-2">
             <li className="min-w-0 bg-ppa-navy p-5">
               <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-ppa-sky">01</p>
-              <h3 className="mt-1.5 font-display text-base uppercase leading-tight">Win a stop</h3>
+              <h3 className="mt-1.5 font-display text-base uppercase leading-tight">Win an Event</h3>
               <p className="mt-2 text-sm leading-relaxed text-white/65">
                 Every Challenger pro champion holds a wild card into the main draw
                 of a PPA Tour Open. That is a place in the same draw as the tour&apos;s
@@ -633,7 +642,7 @@ export default async function ChallengerPage() {
           <div className="mt-5 grid gap-4 lg:grid-cols-[1.5fr_1fr]">
             <div className="min-w-0 border-l-2 border-challenger-red bg-white p-6">
               <p className="text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
-                The Challenger Series season ends at the{" "}
+                The Challenger Series season concludes at the{" "}
                 {hostHref ? (
                   <Link href={hostHref} className="font-semibold text-challenger-red hover:underline">
                     {challengerShowdown.hostName}
@@ -643,14 +652,14 @@ export default async function ChallengerPage() {
                     {challengerShowdown.hostName}
                   </span>
                 )}
-                , the largest event in pickleball. The highest-ranked players
-                without a PPA Tour contract are invited to{" "}
-                {challengerShowdown.venue} to play for one.
+                , the largest event in pickleball. The highest-ranked unsigned
+                players will be invited to compete at {challengerShowdown.venue}{" "}
+                for a chance to earn a PPA Tour contract.
               </p>
               <p className="mt-3 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
-                {challengerShowdown.contracts} players leave signed: a{" "}
-                {challengerShowdown.contractSeason} PPA Tour contract and
-                professional status on the tour.
+                The Challenger Showdown will award eight winners{" "}
+                {challengerShowdown.contractSeason} PPA Tour contracts, officially
+                granting them professional status on the tour.
               </p>
             </div>
             <ul className="grid gap-px border border-ppa-line bg-ppa-line">
@@ -660,7 +669,7 @@ export default async function ChallengerPage() {
                   label: "Where",
                   value: `${challengerShowdown.venue} · ${challengerShowdown.city}`,
                 },
-                { label: "Field", value: "8 teams per event, in two pools" },
+                { label: "Field", value: "8 teams per doubles event; 8 players per singles event" },
                 {
                   label: "On the line",
                   value: `${challengerShowdown.contracts} PPA Tour contracts for ${challengerShowdown.contractSeason}`,
@@ -723,18 +732,16 @@ export default async function ChallengerPage() {
               </p>
               <p className="mt-3 text-sm leading-relaxed text-ppa-navy/65">
                 Eight teams — eight players in singles — are seeded into two
-                pools on Challenger ranking. Pool play is round robin, and the
-                top two from each pool reach the semifinals. Every match is best
-                of three.
+                pools based on Challenger rankings. Pool play is round robin and
+                the top two teams/players from each pool will progress into
+                bracket play. Every match is best of three to 11.
               </p>
+              {/* Brooke 10/19: the "both players agree, confirmed by Oct 26"
+                  line is removed on purpose — she doesn't want players holding
+                  a written rule if either part slips. */}
               <p className="mt-3 text-sm leading-relaxed text-ppa-navy/65">
-                In both doubles events the top seed picks a partner, and the
-                picks run down the rankings from there. Both players have to
-                agree, and every team is confirmed by{" "}
-                <span className="font-semibold text-ppa-navy">
-                  {challengerShowdown.partnerDeadline}
-                </span>
-                .
+                For doubles events, teams will be drafted. The top seed picks a
+                partner, and the picks run down the rankings from there.
               </p>
             </div>
           </div>
@@ -787,8 +794,33 @@ export default async function ChallengerPage() {
                   Powered by JOOLA
                 </p>
                 <p className="mt-1 text-sm leading-relaxed text-ppa-navy/65">
-                  The Challenger Series carries JOOLA&apos;s name at every stop.
+                  The Challenger Series carries JOOLA&apos;s name at every event.
                 </p>
+                {/* Mojo added 10/19 on the Challenger team's "Website Changes"
+                    sheet (Sponsors tab: "Add Mojo as a sponsor!"). Same roster
+                    entry as the tour, so the logo and link stay in one place. */}
+                {mojo && mojo.logo && (
+                  <div className="mt-6 border-t border-ppa-line pt-6">
+                    <a
+                      href={partnerLink(mojo).href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block"
+                    >
+                      <Image
+                        src={mojo.logo}
+                        alt={mojo.name}
+                        width={mojo.logoWidth ?? 1000}
+                        height={mojo.logoHeight ?? 188}
+                        sizes="(min-width: 1024px) 320px, 60vw"
+                        className="h-10 w-auto object-contain"
+                      />
+                    </a>
+                    <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
+                      Official Partner
+                    </p>
+                  </div>
+                )}
               </div>
             )}
             <div className="flex min-w-0 flex-col justify-between border border-ppa-line bg-white p-6">
@@ -797,7 +829,7 @@ export default async function ChallengerPage() {
                   Put Your Brand in Front of Players in 15 States
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-ppa-navy/65">
-                  Challenger stops reach the players, families and clubs that
+                  Challenger events reach the players, families and clubs that
                   make up the fastest-growing part of the sport. Tell us about
                   your company and we will come back with what a Challenger
                   Series partnership looks like.
@@ -817,7 +849,7 @@ export default async function ChallengerPage() {
       {/* ---------------------------------------------------------- Host */}
       <section id="host" className="scroll-mt-24 bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <SectionHead eyebrow="For Clubs and Cities" title="Host a Challenger Stop" />
+          <SectionHead eyebrow="For Clubs and Cities" title="Host a Challenger Event" />
           <div className="mt-5 grid gap-4 lg:grid-cols-[1.5fr_1fr]">
             <div className="min-w-0 border-l-2 border-challenger-red bg-ppa-paper p-6">
               <p className="text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
