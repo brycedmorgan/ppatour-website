@@ -182,8 +182,20 @@ const CURATED_ALIASES: Record<string, string> = {
 
 const curatedBySlug = new Map<string, Tournament>(getAllEvents().map((t) => [t.slug, t]));
 
-function findCurated(apiSlug: string): Tournament | null {
-  return curatedBySlug.get(CURATED_ALIASES[apiSlug] ?? apiSlug) ?? null;
+// buildSchedule date-suffixes a stop whose plain slug already belongs to a past
+// edition (`newport-beach-open-2027-03-02`). The feed lists it under the plain
+// name, so without this the 2027 feed row matched the 2025 record and took its
+// generic Tixr link: Newport's 211406 mapping never reached the page (10/19).
+const DATED_EDITION = /-(\d{4})-\d{2}-\d{2}$/;
+
+function findCurated(apiSlug: string, year: string): Tournament | null {
+  const key = CURATED_ALIASES[apiSlug] ?? apiSlug;
+  const hit = curatedBySlug.get(key) ?? null;
+  if (!hit || hit.startDate.startsWith(year)) return hit;
+  for (const [slug, t] of curatedBySlug) {
+    if (slug.startsWith(`${key}-`) && slug.match(DATED_EDITION)?.[1] === year) return t;
+  }
+  return hit;
 }
 
 /**
@@ -419,8 +431,9 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number, level
   // (/events/{year}/{slug}), so slugs stay year-free and only need to be unique
   // within a year — a numeric suffix breaks the rare same-year, same-name clash.
   const year = startDate.slice(0, 4);
-  const curated = findCurated(kebab(name));
-  const base = curated?.slug ?? kebab(name);
+  const curated = findCurated(kebab(name), year);
+  // A dated edition keeps the plain slug: the URL is /events/{year}/{slug}.
+  const base = curated?.slug.replace(DATED_EDITION, "") ?? kebab(name);
   let slug = base;
   let n = 1;
   while (seen.has(`${year}/${slug}`)) {
