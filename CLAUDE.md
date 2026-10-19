@@ -84,6 +84,23 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - Street addresses for every 2026–27 Tour venue + the curated past ones now in `lib/venue-locations.ts` (35 keys, each checked against the venue's own site; Liberty Park street left off as unconfirmed; the 2027 Cape Coral record's venue corrected to the feed's "The Courts, Cape Coral"). Pickleball Virginia Beach ≠ the Sports Center (928 S Birdneck Rd).
 - Next: Wikidata item for the tour (Bryce/Nathan); Google sports partnerships ask via the Ads rep; Rich Results Test per template after deploy; GSC Events report on 10/31.
 
+### 2026-10-18 (pt. 2) — Events feed refreshes every 2 hours, so an announcement isn't stuck behind a push
+
+- **Catie Preis, #ppa-tour-europe 7:51AM:** next Europe announcements are coming and a stop that goes
+  public on Pickleballtournaments has to show on ppatoureurope.com "almost immediately" to stay in sync
+  with the social posts — *"These updates can't be stuck behind a GitHub permission for hours/days"*.
+- **Nothing about a new stop ever needed a code push.** Stops come off the `ppa_tournaments` feed and
+  render themselves; the only lag was OUR cache. `vercel.json` `/api/revalidate-events` was two daily
+  slots, so a newly public stop could sit a day. Now `0 */2 * * *` — worst case 2h. Shipped by Wesley
+  as `dbf87be` (push access for Claude on this repo still 403s, 4th day); both it and the head `5b75619`
+  report Vercel success.
+- The route header and the `lib/events-api.ts` comments said "midnight Central / once a day" and are
+  corrected, so the next reader doesn't re-derive the old cadence.
+- **What DOES still need a human, and Catie was told both:** the stop's own photo, or the card falls back
+  to `VENUE_IMAGES` (Lille ran a Barcelona shot for this reason), and a heads up when a title changes
+  after it goes public — the pre-public title needs a `CURATED_ALIASES` row (Lille's `…-p125-france`).
+- ⚠ Rankings/athletes/content crons are untouched and still daily. Only the events calendar moved.
+
 ### 2026-10-18 — Challengers no longer show a fake 500
 - Chris texted Bryce: 2027 Challenger schedule shows 500 pts on all but one stop. Cause: uncurated Challengers fell back to TIER_META.challenger.points (500); real levels are 125/250 per event (PT sanction level, not in our feed).
 - Shipped 7c0d98c + 7b56dc3: `pointsText`/`tierBadgeText` in lib/placeholder-data.ts — unknown Challenger level = no number on cards, "—" in the past table, out of points filters + search.
