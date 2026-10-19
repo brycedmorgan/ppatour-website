@@ -65,3 +65,30 @@ export async function postBookingToJackalope(
     return { sent: false };
   }
 }
+
+/**
+ * Files a /vacations email sign-up onto Lainey's list in Jackalope
+ * (`/api/public/vac-subscribe`, same shared secret as bookings). Never throws:
+ * the visitor is already identified in Customer.io by the time this runs, and
+ * Jackalope's list can be rebuilt from that, so a failure here is logged only.
+ */
+export async function postVacSignupToJackalope(
+  email: string,
+  page: string
+): Promise<void> {
+  const secret = process.env.VAC_BOOKING_SECRET;
+  if (!secret) return;
+  try {
+    const res = await fetch(
+      "https://pickleball.usejackalope.com/api/public/vac-subscribe",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-vac-secret": secret },
+        body: JSON.stringify({ email, page }),
+      }
+    );
+    if (!res.ok) console.error("[jackalope] vac-subscribe responded", res.status);
+  } catch (err) {
+    console.error("[jackalope] vac-subscribe failed", err);
+  }
+}

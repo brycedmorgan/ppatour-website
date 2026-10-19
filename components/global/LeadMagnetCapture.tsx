@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-type Variant = "fan" | "amateur" | "streaming" | "junior";
+type Variant = "fan" | "amateur" | "streaming" | "junior" | "vacations";
 
 const COPY: Record<Variant, { eyebrow: string; heading: string; cta: string }> = {
   fan: {
@@ -32,6 +32,18 @@ const COPY: Record<Variant, { eyebrow: string; heading: string; cta: string }> =
     eyebrow: "Junior PPA Newsletter",
     heading: "Events, Announcements and Junior PPA News",
     cta: "Sign up",
+  },
+  /**
+   * Pickleball Vacations (Bryce 10/19). Lainey's own list, kept in Jackalope:
+   * /api/lead-capture forwards this variant to Jackalope's vac-subscribe, which
+   * adds the person to the Customer.io vacations segment. Its emails go out
+   * under their own subscription topic, so leaving this list never takes
+   * anyone off PPA Tour email. Mounted once, in app/vacations/layout.tsx.
+   */
+  vacations: {
+    eyebrow: "Pickleball Vacations",
+    heading: "First Word on New Trips",
+    cta: "Count me in",
   },
 };
 
@@ -106,8 +118,9 @@ export function LeadMagnetCapture({
       {/* Dave Rogers 7/27: "when the checkout lives off-site" meant nothing to
           a reader — it was internal language about our commerce partners. */}
       <p className="mt-2 max-w-md text-sm text-white/55">
-        No spam — just the matches, ticket drops, and dates that matter,
-        straight to your inbox.
+        {variant === "vacations"
+          ? "New destinations and open rooms, before they go public. Leaving this list never touches your PPA Tour emails."
+          : "No spam — just the matches, ticket drops, and dates that matter, straight to your inbox."}
       </p>
 
       {status === "done" ? (
