@@ -547,6 +547,22 @@ const nextConfig: NextConfig = {
     // the homepage hero uses 65 (perf/lcp-hero).
     qualities: [65, 75],
   },
+  /**
+   * Universal links for the native PPA Tour app (Gull-Stack/ppa-tour-app).
+   * Apple fetches /.well-known/apple-app-site-association and insists on a JSON
+   * content type; public/ serves an extensionless file as octet-stream otherwise.
+   */
+  async headers() {
+    return [
+      {
+        source: "/.well-known/apple-app-site-association",
+        headers: [
+          { key: "Content-Type", value: "application/json" },
+          { key: "Cache-Control", value: "public, max-age=3600" },
+        ],
+      },
+    ];
+  },
   async redirects() {
     return [
       // First, so the domain rule wins on that host before any path rule.
