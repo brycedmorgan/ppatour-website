@@ -177,6 +177,10 @@ and to win every SERP feature that *is* markup-driven in the meantime. That is w
 - **Google sports partnerships.** Ask our Google Ads rep / agency contact to route us to the
   Sports Partnerships team; the pitch is PPA + MLP live scoring (we own the data via
   pickleballtournaments.com, PB-API already serves per-match scores to this site).
+  **SENT 10/19** as a reply on the June "Pickleball and Google" thread from Trent Marco
+  (Teleperformance on behalf of Google, referred by Chris Patrick) asking for a route to that
+  team. The only other Google contacts in the inbox are the same growth-program reps; no named
+  Google employee yet. Chase 10/26 if silent.
 - **Sportradar / Genius / Stats Perform.** If a betting-data or distribution deal is in flight
   anywhere in the company, Google sports results are a line item to put in that conversation.
   Genius has the PGA Tour; Sportradar has NBL1 — individual-sport tours are in scope.
@@ -190,10 +194,13 @@ and to win every SERP feature that *is* markup-driven in the meantime. That is w
   instance of, sport, country, inception 2018, parent org, official website/name, every social
   handle, LinkedIn), **United Pickleball Association = Q141769280** (has part: PPA Tour + MLP,
   inception 2024-02-29); MLP (Q128285945, pre-existing) now carries UPA as parent. The org
-  JSON-LD `sameAs` points at Q141769292. Next: (b) Nathan/PR: a standalone, neutrally sourced Wikipedia article for the tour (press
-  coverage exists — ESPN, SBJ, Forbes). Do **not** write it from inside the company without
-  disclosing COI; commission or request via the Pickleball WikiProject. Same for Ben Johns-tier
-  pros who still redirect to the list page.
+  JSON-LD `sameAs` points at Q141769292. **(b) SENT 10/19:** Nathan Boschult emailed a sourced
+  draft article (founding, Carvana, UPA merger, Pickleball Inc raise, international, rankings;
+  broadcasting left for him to source) with the route: own account, COI on the user page,
+  Articles for Creation, then set the Wikipedia sitelink on Q141769292. Expect a few weeks of
+  review. Same later for Ben Johns-tier pros who still redirect to the list page.
+- **MLP Search Console access.** Asked Caitlin (Slack DM 10/19) to add the Jackalope read-only
+  service account to the MLP property so the organic read covers all three brands.
 
 ### 7b. What shipped (code, all templates)
 

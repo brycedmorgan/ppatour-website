@@ -67,6 +67,10 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-19 (pt. 2) — The three non-code SEO asks are out
+- Bryce: "Do it. And send it." Sent from his Gmail/Slack: (1) Google sports-partnerships ask as a reply to Trent Marco's June "Pickleball and Google" thread (the only Google contact in the inbox); (2) Nathan a sourced Wikipedia draft + the COI/Articles-for-Creation route; (3) Caitlin a Slack DM to add the Jackalope service account to the MLP Search Console property. All logged in docs/SEO.md §7a.
+- Next: chase Google 10/26 if silent; Nathan's submission; MLP numbers appear in the organic read once the grant lands.
+
 ### 2026-10-19 — Challenger page: red, logo, no Jack Sock, Tanner's copy fixes
 - Tanner Groff DM'd two sheets 10/19: "PPA Challenger Points Only" (1YKUWYQ7…, '25/'26/'27 tabs) and "Website Changes" (1OLO3oiM…; Nathan + Anders).
 - Points: every row agrees with lib/challenger-points.ts. Added Raleigh (Dec 2025) = 125. The level lookup now also tries the curated slug. Open: the '27 tab has no Newport Beach or Charlotte (our table has 250/125); Sarasota (Oct 2026) isn't on the '26 tab.
