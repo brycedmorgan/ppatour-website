@@ -500,6 +500,17 @@ const COMMERCE_BY_SLUG: Record<string, { tickets?: string; register?: string }> 
   // is Tixr-side — worth asking Cem to retire it.
   "cape-coral-open": { tickets: tixrEvent("ppa-cape-coral-206222") },
   "cincinnati-open": { tickets: tixrEvent("veolia-ppa-cincinnati-181370") },
+  // Cem Aslan, DM 10/19: "We published tickets for 2027 Newport Beach." The bare
+  // slug is the 2027 schedule row (Mar 2–7); the 2025 edition is a separate
+  // curated record with its own ticketsUrl, so this doesn't touch it.
+  // ⚠ The button only shows once 211406 is in lib/data/tixr-price-index.json
+  // (`ticketsOnSale`); `npm run tixr:sync` / the daily sync-tixr-prices action
+  // adds it. Tixr captcha-blocks the API from Wesley's machine.
+  // Registration: Cem, same DM 9:43AM, "player registration is also live".
+  "newport-beach-open": {
+    tickets: tixrEvent("ppa-newport-beach-211406"),
+    register: registerEvent("ppa-tour-newport-beach-open-1"),
+  },
   "rate-las-vegas-open": {
     // 178513 is no longer in the PPA group's 61 Tixr events; 195857 is the
     // current "PPA Las Vegas" listing and matches our stop on city and start
