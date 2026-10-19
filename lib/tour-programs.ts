@@ -69,8 +69,8 @@ export const tourPrograms: TourProgram[] = [
       { title: "Wild card", detail: "Win a pro event and earn a main-draw entry into a PPA Tour Open." },
     ],
     cta: { label: "Register to Play", href: REGISTER_CHALLENGER, external: true },
-    // Series logo on Challenger red — the old photo was Jack Sock at a pro event (10/19).
-    image: "/ppa/challenger/card.jpg",
+    // A real Challenger shot (Tanner's 10/19 Drive folder) — the old photo was Jack Sock at a pro event.
+    image: "/ppa/challenger/photos/pool-1.jpg",
   },
   /**
    * ⚠ THIS ENTRY NO LONGER RENDERS A PAGE — /tour/senior is its own route, same

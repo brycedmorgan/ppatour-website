@@ -77,7 +77,7 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - YouTube is now @ppachallengerseries (UCxMwmsqkVi9GW6yVIFDenCg, "PPA Challenger"). Mojo added to Sponsors from the tour roster entry.
 - Showdown: Brooke removed the "both players agree / confirmed by Oct 26" line on purpose. Don't put it back. Day label is now "Semifinals and Finals – All Events".
 - /about/host-tournament: "A DJ or MC" and "A podium, medals and trophies" removed from the host list (Brooke).
-- Brooke's pro cover-photo row was already fixed: all 14 cards use /ppa/challenger/card.jpg. Real Challenger photos (Drive folder, 22 files) still to load.
+- Real Challenger photos LIVE: Tanner's 22-shot Drive folder → public/ppa/challenger/photos (1600w). Hero = Saturday-49 crowd shot under a red wash. Cards: own photo for Atlanta, Charlotte, Fort Collins, Houston, Punta Gorda, Seattle, Black Desert, Wilson; the rest rotate a 10-photo pool (lib/challenger-photos.ts).
 
 ### 2026-10-19 — Challenger page: red, logo, no Jack Sock, Tanner's copy fixes
 - Tanner Groff DM'd two sheets 10/19: "PPA Challenger Points Only" (1YKUWYQ7…, '25/'26/'27 tabs) and "Website Changes" (1OLO3oiM…; Nathan + Anders).

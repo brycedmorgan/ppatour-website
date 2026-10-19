@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FeaturedEvents } from "@/components/events/FeaturedEvents";
 import { ChallengerRankings } from "@/components/tour/ChallengerRankings";
 import { getEvents } from "@/lib/events-api";
+import { CHALLENGER_HERO } from "@/lib/challenger-photos";
 import { partners } from "@/lib/home-content";
 import { partnerLink } from "@/lib/partner-link";
 import { socialLinks } from "@/lib/social-links";
@@ -230,11 +231,32 @@ export default async function ChallengerPage() {
       {/* ---------------------------------------------------------- Hero */}
       {/* Challenger red + the Series' own logo (Tanner Groff / Anders / Nathan,
           10/19 "Website Changes" sheet). The old hero photo was Jack Sock at a
-          pro event — he has never played a Challenger. Swap in a Challenger
-          event photo when ops sends one; never a tour-stop photo. */}
+          pro event — he has never played a Challenger. Now a real Challenger
+          photo from Tanner's folder (lib/challenger-photos.ts); never a tour-stop photo. */}
       <section className="relative isolate overflow-hidden bg-challenger-red text-white">
-        <div className="relative mx-auto grid w-full max-w-6xl gap-8 px-4 py-14 sm:py-16 md:grid-cols-[1fr_auto] md:items-center">
-         <div className="min-w-0">
+        {/* Challenger crowd + players (Tanner's 10/19 Drive folder, "Saturday-49"). */}
+        <Image
+          src={CHALLENGER_HERO}
+          alt="Players and a packed crowd at a PPA Challenger Series event"
+          fill
+          priority
+          sizes="100vw"
+          className="-z-20 object-cover object-center"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 bg-challenger-red/85 md:bg-transparent md:bg-gradient-to-r md:from-challenger-red md:from-40% md:via-challenger-red/80 md:to-challenger-red/10"
+        />
+        <div className="relative mx-auto w-full max-w-6xl px-4 py-14 sm:py-20">
+         <div className="min-w-0 max-w-2xl">
+          <Image
+            src="/ppa/challenger/logo-white.png"
+            alt="PPA Challenger Series, powered by JOOLA"
+            width={417}
+            height={335}
+            priority
+            className="mb-6 h-auto w-28 sm:w-36"
+          />
           <div className="flex items-center gap-2.5">
             <span className="h-2 w-2 bg-white" />
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/75">
@@ -269,14 +291,6 @@ export default async function ChallengerPage() {
             </a>
           </div>
          </div>
-          <Image
-            src="/ppa/challenger/logo-white.png"
-            alt="PPA Challenger Series, powered by JOOLA"
-            width={417}
-            height={335}
-            priority
-            className="h-auto w-44 sm:w-56 md:w-[260px]"
-          />
         </div>
       </section>
 

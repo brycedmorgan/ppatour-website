@@ -18,6 +18,7 @@
  * on any problem so the page always renders.
  */
 
+import { challengerPhotoFor } from "@/lib/challenger-photos";
 import { cache } from "react";
 import { pbCachedJson } from "@/lib/pb-cache";
 import { asiaTourUrlForDetailsUrl } from "@/lib/asia-tour-links";
@@ -543,14 +544,14 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number, level
     // The event's own venue photography (synced from Jackalope) leads, then
     // the curated override. VENUE_IMAGES are Melbourne/Macao/Gold Coast city
     // shots — they only ever illustrate international stops now (Bryce, 7/28).
-    // ⚠ U.S. Challengers get the Series card (logo on Challenger red), never a
+    // ⚠ U.S. Challengers get a real Challenger photo (lib/challenger-photos.ts), never a
     // GENERIC_IMAGES pro-tour action shot — Tanner/Anders/Nathan 10/19: the
     // Challenger pages showed Jack Sock, who has never played one. A Challenger
     // event photo from ops can go in HERO_OVERRIDE_BY_EVENT_SLUG and wins here.
     image:
       venueHeroFor(slug) ??
       curated?.image ??
-      (tier === "challenger" && isUsOrg ? "/ppa/challenger/card.jpg" : undefined) ??
+      (tier === "challenger" && isUsOrg ? challengerPhotoFor(slug) : undefined) ??
       (!isUsOrg
         ? VENUE_IMAGES[index % VENUE_IMAGES.length]
         : GENERIC_IMAGES[index % GENERIC_IMAGES.length]),
