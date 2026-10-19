@@ -67,6 +67,13 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-19 — Native app backend: /api/app/home, /api/push/native, APNs sender
+- Bryce: "rebuild it like a real app." New Expo app lives in `~/pickleball/ppa-tour-app` (Gull-Stack/ppa-tour-app); this site is its backend.
+- `GET /api/app/home` = `resolveScoresEvent()` + slim `getEvents()` list, edge-cached 5 min. One launch call for Scores + Events tabs.
+- `POST/DELETE /api/push/native` stores phone tokens in `push_subscriptions` as `apns:<token>` / `fcm:<token>` (p256dh="native", auth=platform) so `subscribersFollowing` / `allSubscribers` return phones unchanged.
+- `lib/apns.ts`: APNs over Node http2 + ES256 provider JWT, no Expo push service. Env `APNS_KEY_ID`, `APNS_TEAM_ID`, `APNS_KEY`, `APNS_TOPIC` (default com.ppatour.app), `APNS_SANDBOX=1` for debug builds. Unset = inert. `sendToAll` dispatches on the endpoint prefix; prunes on 410 / BadDeviceToken. FCM (Android) not wired yet.
+- Next: Bryce creates the APNs key in App Store Connect → Keys and sets the four env vars on Vercel; `pushSendConfigured()` is now VAPID **or** APNs.
+
 ### 2026-10-19 (pt. 2) — The three non-code SEO asks are out
 - Bryce: "Do it. And send it." Sent from his Gmail/Slack: (1) Google sports-partnerships ask as a reply to Trent Marco's June "Pickleball and Google" thread (the only Google contact in the inbox); (2) Nathan a sourced Wikipedia draft + the COI/Articles-for-Creation route; (3) Caitlin a Slack DM to add the Jackalope service account to the MLP Search Console property. All logged in docs/SEO.md §7a.
 - Next: chase Google 10/26 if silent; Nathan's submission; MLP numbers appear in the organic read once the grant lands.
