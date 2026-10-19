@@ -16,9 +16,14 @@
  * Charlotte; Oklahoma City is unnamed) are listed so they light up when posted.
  */
 const LEVELS: Record<string, 125 | 250> = {
+  // Tanner Groff, Slack DM 10/19 — "PPA Challenger Points Only" sheet
+  // (1YKUWYQ7F_uq0cRwl4d5cZMSL5XzvBsTp1b3IByrMpBM), one tab per season. Every
+  // 2025 stop was 125. Raleigh (Dec 2025) sits on the '26 tab at 125. The '26 and
+  // '27 tabs agree with every row below.
+  "2025/raleigh-ppa-challenger": 125,
   // 2026 — Tanner Groff, Slack DM 10/18: "Every PPA Challenger tournament is worth
   // 125 points, EXCEPT Punta Gorda, Newport Beach, Seattle, and Grand Rapids - which
-  // are worth 250." Raleigh (Dec 2025) not covered.
+  // are worth 250."
   "2026/punta-gorda-ppa-challenger": 250,
   "2026/tucson-ppa-challenger": 125,
   "2026/houston-ppa-challenger": 125,

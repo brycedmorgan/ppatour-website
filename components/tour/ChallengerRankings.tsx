@@ -40,7 +40,7 @@ const DIVISIONS = (DATA as unknown as { divisions: Division[] }).divisions;
 const UPDATED = (DATA as { updated: string }).updated;
 
 const selectClass =
-  "mt-1.5 w-full appearance-none border border-ppa-line bg-white py-2 pl-3 pr-9 text-sm text-ppa-navy outline-none focus:border-ppa-blue";
+  "mt-1.5 w-full appearance-none border border-ppa-line bg-white py-2 pl-3 pr-9 text-sm text-ppa-navy outline-none focus:border-challenger-red";
 
 export function ChallengerRankings() {
   const [label, setLabel] = useState<string>(DIVISIONS[0]?.label ?? "");
@@ -109,7 +109,7 @@ export function ChallengerRankings() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Player name"
-            className="mt-1.5 w-full border border-ppa-line bg-white px-3 py-2 text-sm text-ppa-navy outline-none placeholder:text-ppa-navy/35 focus:border-ppa-blue"
+            className="mt-1.5 w-full border border-ppa-line bg-white px-3 py-2 text-sm text-ppa-navy outline-none placeholder:text-ppa-navy/35 focus:border-challenger-red"
           />
         </label>
         <p aria-live="polite" className="text-xs text-ppa-navy/55">
@@ -164,7 +164,7 @@ export function ChallengerRankings() {
                             key={division.label}
                             type="button"
                             onClick={() => setLabel(division.label)}
-                            className="border border-ppa-line bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy transition-colors hover:border-ppa-blue hover:text-ppa-blue"
+                            className="border border-ppa-line bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy transition-colors hover:border-challenger-red hover:text-challenger-red"
                           >
                             {division.label} · {hits} →
                           </button>
@@ -183,7 +183,7 @@ export function ChallengerRankings() {
         <button
           type="button"
           onClick={() => setShowAll(true)}
-          className="mt-4 inline-flex h-10 items-center border border-ppa-line bg-white px-5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy transition-colors hover:border-ppa-blue hover:text-ppa-blue"
+          className="mt-4 inline-flex h-10 items-center border border-ppa-line bg-white px-5 text-xs font-bold uppercase tracking-[0.12em] text-ppa-navy transition-colors hover:border-challenger-red hover:text-challenger-red"
         >
           Show all {total.toLocaleString()} players
         </button>

@@ -12,7 +12,7 @@ import { type Tournament, eventHref, pointsText } from "@/lib/placeholder-data";
 import { withUtm } from "@/lib/utm";
 
 /**
- * PPA Tour Challenger Series.
+ * PPA Challenger Series.
  *
  * ⚠ THIS PAGE REPLACES ppachallenger.com (WordPress on Flywheel), folded in
  * 2026-09-18 on Bryce's call. Inventory, redirect map and the reasoning live in
@@ -45,9 +45,9 @@ const REGISTER = withUtm(
 );
 
 export const metadata: Metadata = {
-  title: "PPA Tour Challenger Series",
+  title: "PPA Challenger Series",
   description:
-    "The PPA Tour Challenger Series, powered by JOOLA — the pathway to the pro tour. Skill divisions 3.0 to 5.0, a Pro Division with ranking points and prize money, the schedule, how points work, rankings and how to host a stop.",
+    "The PPA Challenger Series, powered by JOOLA — the pathway to the pro tour. A PPA-run tour with skill divisions from 3.0 to 5.0, a Pro Division with ranking points and prize money, the schedule, how points work, rankings and how to host a stop.",
 };
 
 const SECTIONS = [
@@ -143,7 +143,7 @@ function SectionHead({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
     <>
       <div className="flex items-center gap-2.5">
-        <span className="h-2 w-2 bg-ppa-blue" />
+        <span className="h-2 w-2 bg-challenger-red" />
         <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/50">
           {eyebrow}
         </p>
@@ -222,31 +222,27 @@ export default async function ChallengerPage() {
   return (
     <>
       {/* ---------------------------------------------------------- Hero */}
-      <section className="relative isolate overflow-hidden bg-ppa-navy text-white">
-        <Image
-          src="/ppa/events/seattle-ppa-challenger.jpg"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover opacity-25 will-change-transform"
-        />
-        <div className="absolute inset-0 scrim-hero" />
-        <div className="relative mx-auto w-full max-w-6xl px-4 py-16">
+      {/* Challenger red + the Series' own logo (Tanner Groff / Anders / Nathan,
+          10/19 "Website Changes" sheet). The old hero photo was Jack Sock at a
+          pro event — he has never played a Challenger. Swap in a Challenger
+          event photo when ops sends one; never a tour-stop photo. */}
+      <section className="relative isolate overflow-hidden bg-challenger-red text-white">
+        <div className="relative mx-auto grid w-full max-w-6xl gap-8 px-4 py-14 sm:py-16 md:grid-cols-[1fr_auto] md:items-center">
+         <div className="min-w-0">
           <div className="flex items-center gap-2.5">
-            <span className="h-2 w-2 bg-ppa-blue" />
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
+            <span className="h-2 w-2 bg-white" />
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/75">
               Pathway to the Pro Tour
             </p>
           </div>
           <h1 className="mt-2 max-w-3xl font-display text-3xl uppercase leading-[1.02] sm:text-5xl">
-            PPA Tour Challenger Series
+            PPA Challenger Series
           </h1>
-          <p className="mt-2 text-sm font-bold uppercase tracking-[0.14em] text-white/70">
+          <p className="mt-2 text-sm font-bold uppercase tracking-[0.14em] text-white/80">
             Powered by JOOLA
           </p>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/75 sm:text-base">
-            A PPA-run tournament at clubs across the country. Skill divisions 3.0
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/90 sm:text-base">
+            A PPA-run tour at clubs across the country. Skill divisions from 3.0
             to 5.0 for amateurs, and a Pro Division that earns PPA ranking points,
             prize money and a wild card into a PPA Tour Open.
           </p>
@@ -255,7 +251,7 @@ export default async function ChallengerPage() {
               href={REGISTER}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-transform hover:bg-ppa-blue-deep active:scale-[0.98]"
+              className="inline-flex h-11 items-center bg-white px-6 text-xs font-bold uppercase tracking-[0.12em] text-challenger-red transition-transform hover:bg-white/90 active:scale-[0.98]"
             >
               Register to Play ↗
             </a>
@@ -266,6 +262,15 @@ export default async function ChallengerPage() {
               See the Schedule
             </a>
           </div>
+         </div>
+          <Image
+            src="/ppa/challenger/logo-white.png"
+            alt="PPA Challenger Series, powered by JOOLA"
+            width={417}
+            height={335}
+            priority
+            className="h-auto w-44 sm:w-56 md:w-[260px]"
+          />
         </div>
       </section>
 
@@ -277,7 +282,7 @@ export default async function ChallengerPage() {
               <a
                 key={s.id}
                 href={`#${s.id}`}
-                className="border border-ppa-line bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy transition-colors hover:border-ppa-blue hover:text-ppa-blue"
+                className="border border-ppa-line bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy transition-colors hover:border-challenger-red hover:text-challenger-red"
               >
                 {s.label}
               </a>
@@ -313,7 +318,7 @@ export default async function ChallengerPage() {
               Country Club, Farmers Branch TX, which is Dallas metro. That is
               corroboration from a second source, not a fact typed twice.
             */}
-            <div className="min-w-0 border-l-2 border-ppa-blue bg-white p-6">
+            <div className="min-w-0 border-l-2 border-challenger-red bg-white p-6">
               <p className="text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
                 Founded in 2025, the PPA Challenger Series is a grassroots tour
                 designed to provide aspiring pickleball professionals a pathway to
@@ -325,7 +330,7 @@ export default async function ChallengerPage() {
                 their spot in the{" "}
                 <Link
                   href="#showdown"
-                  className="font-semibold text-ppa-blue underline-offset-2 hover:underline"
+                  className="font-semibold text-challenger-red underline-offset-2 hover:underline"
                 >
                   &ldquo;PPA Challenger Showdown in Dallas,&rdquo;
                 </Link>{" "}
@@ -376,23 +381,23 @@ export default async function ChallengerPage() {
                       href={sm.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex min-w-0 items-baseline gap-2 text-sm hover:text-ppa-blue"
+                      className="group flex min-w-0 items-baseline gap-2 text-sm hover:text-challenger-red"
                     >
                       {handle ? (
                         <>
                           <span className="shrink-0 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
                             {sm.label}
                           </span>
-                          <span className="min-w-0 truncate font-semibold text-ppa-navy group-hover:text-ppa-blue">
+                          <span className="min-w-0 truncate font-semibold text-ppa-navy group-hover:text-challenger-red">
                             {handle}
                           </span>
                         </>
                       ) : (
-                        <span className="min-w-0 truncate font-semibold text-ppa-navy group-hover:text-ppa-blue">
+                        <span className="min-w-0 truncate font-semibold text-ppa-navy group-hover:text-challenger-red">
                           {sm.label}
                         </span>
                       )}
-                      <span aria-hidden className="shrink-0 text-ppa-blue">
+                      <span aria-hidden className="shrink-0 text-challenger-red">
                         ↗
                       </span>
                     </a>
@@ -461,7 +466,7 @@ export default async function ChallengerPage() {
                             href={withUtm(t.externalUrl, { campaign: "challenger", content: "past-results" })}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
+                            className="text-xs font-bold uppercase tracking-[0.12em] text-challenger-red hover:text-ppa-navy"
                           >
                             Results ↗
                           </a>
@@ -485,7 +490,7 @@ export default async function ChallengerPage() {
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
             {HOW.map((s) => (
               <div key={s.n} className="flex flex-col border border-ppa-line bg-white p-5">
-                <span className="font-display text-3xl leading-none text-ppa-blue">{s.n}</span>
+                <span className="font-display text-3xl leading-none text-challenger-red">{s.n}</span>
                 <h3 className="mt-3 font-display text-lg uppercase leading-[1.1] text-ppa-navy">{s.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-ppa-navy/60">{s.body}</p>
               </div>
@@ -495,7 +500,7 @@ export default async function ChallengerPage() {
             href={REGISTER}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-6 inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-transform hover:bg-ppa-blue-deep active:scale-[0.98]"
+            className="mt-6 inline-flex h-11 items-center bg-challenger-red px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-transform hover:bg-challenger-red-deep active:scale-[0.98]"
           >
             Register to Play ↗
           </a>
@@ -526,7 +531,7 @@ export default async function ChallengerPage() {
               <tbody>
                 {POINTS.map((row) => (
                   <tr key={row.level} className="bg-white text-sm">
-                    <td className="whitespace-nowrap border-b border-ppa-line bg-ppa-paper px-4 py-3 font-display text-sm uppercase text-ppa-blue">
+                    <td className="whitespace-nowrap border-b border-ppa-line bg-ppa-paper px-4 py-3 font-display text-sm uppercase text-challenger-red">
                       {row.level}
                     </td>
                     {row.points.map((p, i) => (
@@ -543,7 +548,7 @@ export default async function ChallengerPage() {
             </table>
           </div>
           <div className="mt-5 grid gap-4 lg:grid-cols-2">
-            <div className="min-w-0 border-l-2 border-ppa-blue bg-ppa-paper p-6">
+            <div className="min-w-0 border-l-2 border-challenger-red bg-ppa-paper p-6">
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
                 Rankings window
               </p>
@@ -553,7 +558,7 @@ export default async function ChallengerPage() {
                 A player&apos;s best 16 finishes count toward the leaderboard.
               </p>
             </div>
-            <div className="min-w-0 border-l-2 border-ppa-blue bg-ppa-paper p-6">
+            <div className="min-w-0 border-l-2 border-challenger-red bg-ppa-paper p-6">
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45">
                 Five divisions
               </p>
@@ -571,7 +576,7 @@ export default async function ChallengerPage() {
       <section id="path" className="scroll-mt-24 bg-ppa-navy text-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex items-center gap-2.5">
-            <span className="h-2 w-2 bg-ppa-blue" />
+            <span className="h-2 w-2 bg-challenger-red" />
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
               Path to the Tour
             </p>
@@ -626,11 +631,11 @@ export default async function ChallengerPage() {
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <SectionHead eyebrow="Showdown" title="The PPA Challenger Showdown" />
           <div className="mt-5 grid gap-4 lg:grid-cols-[1.5fr_1fr]">
-            <div className="min-w-0 border-l-2 border-ppa-blue bg-white p-6">
+            <div className="min-w-0 border-l-2 border-challenger-red bg-white p-6">
               <p className="text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
                 The Challenger Series season ends at the{" "}
                 {hostHref ? (
-                  <Link href={hostHref} className="font-semibold text-ppa-blue hover:underline">
+                  <Link href={hostHref} className="font-semibold text-challenger-red hover:underline">
                     {challengerShowdown.hostName}
                   </Link>
                 ) : (
@@ -683,7 +688,7 @@ export default async function ChallengerPage() {
                 key={d.iso}
                 className="grid grid-cols-[5.5rem_1fr] items-center gap-3 border-b border-ppa-line bg-white px-4 py-3 last:border-b-0"
               >
-                <span className="font-display text-base uppercase leading-tight text-ppa-blue">
+                <span className="font-display text-base uppercase leading-tight text-challenger-red">
                   <span className="block font-sans text-[10px] font-bold leading-none text-ppa-navy/40">
                     {d.dow}
                   </span>
@@ -800,7 +805,7 @@ export default async function ChallengerPage() {
               </div>
               <Link
                 href="/about/sponsors#inquire"
-                className="mt-5 inline-flex h-11 w-fit items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-transform hover:bg-ppa-blue-deep active:scale-[0.98]"
+                className="mt-5 inline-flex h-11 w-fit items-center bg-challenger-red px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-transform hover:bg-challenger-red-deep active:scale-[0.98]"
               >
                 Become a Sponsor →
               </Link>
@@ -814,7 +819,7 @@ export default async function ChallengerPage() {
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <SectionHead eyebrow="For Clubs and Cities" title="Host a Challenger Stop" />
           <div className="mt-5 grid gap-4 lg:grid-cols-[1.5fr_1fr]">
-            <div className="min-w-0 border-l-2 border-ppa-blue bg-ppa-paper p-6">
+            <div className="min-w-0 border-l-2 border-challenger-red bg-ppa-paper p-6">
               <p className="text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
                 The PPA brings the registration system, an experienced event
                 team, ticketing, professional play management, live streaming,
@@ -824,7 +829,7 @@ export default async function ChallengerPage() {
               </p>
               <Link
                 href="/about/host-tournament#challenger"
-                className="mt-5 inline-flex h-11 items-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-transform hover:bg-ppa-blue-deep active:scale-[0.98]"
+                className="mt-5 inline-flex h-11 items-center bg-challenger-red px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-transform hover:bg-challenger-red-deep active:scale-[0.98]"
               >
                 What It Takes to Host →
               </Link>

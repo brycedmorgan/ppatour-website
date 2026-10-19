@@ -67,6 +67,15 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-19 — Challenger page: red, logo, no Jack Sock, Tanner's copy fixes
+- Tanner Groff DM'd two sheets 10/19: "PPA Challenger Points Only" (1YKUWYQ7…, '25/'26/'27 tabs) and "Website Changes" (1OLO3oiM…; Nathan + Anders).
+- Points: every row agrees with lib/challenger-points.ts. Added Raleigh (Dec 2025) = 125. The level lookup now also tries the curated slug. Open: the '27 tab has no Newport Beach or Charlotte (our table has 250/125); Sarasota (Oct 2026) isn't on the '26 tab.
+- Hero: Jack Sock photo gone (he has never played a Challenger). Now Challenger red `#ba0c2f` (new `challenger-red` tokens in globals.css) with the Series logo (public/ppa/challenger/logo-white.png, from the old ppachallenger.com). Every accent on the page and in the rankings is red.
+- U.S. Challenger event cards now default to public/ppa/challenger/card.jpg (logo on red), not pro-tour action shots. Removed the Atlanta, Charlotte and Seattle pins (all pro photos).
+- Copy: "PPA Tour Challenger Series" → "PPA Challenger Series"; "PPA-run tournament" → "PPA-run tour"; Anders' description line is used verbatim.
+- Still open: real Challenger event photos. Asked Tanner; pin them in HERO_OVERRIDE_BY_EVENT_SLUG and the hero when they come. The rankings workbook (Jacob Guidry) is still not here.
+- Local gotcha: PB_API_TOKEN in .env.local returns 401, so local getEvents serves placeholder data. Verify points on prod only.
+
 ### 2026-10-18 (pt. 4) — Organic read: 28d clicks +44% YoY
 - Bryce: "How is our organic growth?" GSC via Jackalope (`/api/seo/gsc?brand=ppa&yoy=1`, the YoY endpoint deployed this afternoon). 28d to 10/15: 245,784 clicks, +43.9% YoY, CTR 13.2% vs 8.1%, position 5.1 vs 8.1. 90d: −8.5% YoY (the window straddles the 8/4 relaunch; Sept–Oct are ahead). Full table: docs/SEO.md §7e.
 - 93% of top-query clicks are brand. Non-brand is the growth lane (Phase 2 content, athlete pages).
