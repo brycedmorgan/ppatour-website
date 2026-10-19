@@ -57,9 +57,20 @@ export type ApnsResult = { ok: boolean; status: number; reason?: string };
 export function apnsSend(token: string, payload: PushPayload): Promise<ApnsResult> {
   const c = cfg();
   if (!c) return Promise.resolve({ ok: false, status: 0, reason: "unconfigured" });
+  // Sign before opening a session: a malformed APNS_KEY throws here, and this
+  // function promises never to throw or leak a connection.
+  let auth: string;
+  try {
+    auth = `bearer ${providerToken(c)}`;
+  } catch (e) {
+    return Promise.resolve({ ok: false, status: 0, reason: `bad key: ${String(e)}` });
+  }
   return new Promise((resolve) => {
+    let settled = false;
     const client = http2.connect(c.host);
     const done = (r: ApnsResult) => {
+      if (settled) return;
+      settled = true;
       client.close();
       resolve(r);
     };
@@ -71,7 +82,7 @@ export function apnsSend(token: string, payload: PushPayload): Promise<ApnsResul
     const req = client.request({
       ":method": "POST",
       ":path": `/3/device/${token}`,
-      authorization: `bearer ${providerToken(c)}`,
+      authorization: auth,
       "apns-topic": c.topic,
       "apns-push-type": "alert",
       "apns-priority": "10",
@@ -96,8 +107,10 @@ export function apnsSend(token: string, payload: PushPayload): Promise<ApnsResul
       }
       done({ ok: status === 200, status, reason });
     });
+    // A destroyed stream emits 'close' without 'end' or 'error'; settle on it too.
+    req.on("close", () => done({ ok: false, status, reason: status ? undefined : "closed" }));
     req.on("error", (e) => done({ ok: false, status: 0, reason: String(e) }));
-    req.setTimeout(8000, () => req.close());
+    req.setTimeout(8000, () => done({ ok: false, status: 0, reason: "timeout" }));
     req.end(body);
   });
 }
