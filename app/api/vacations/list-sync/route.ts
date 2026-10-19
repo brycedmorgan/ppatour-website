@@ -43,6 +43,10 @@ export async function POST(request: Request) {
     if (await cioIdentify(p.email!, attrs)) ok.push(p.email!.toLowerCase());
     else failed.push(p.email!.toLowerCase());
   }
+  // A profile the identify just created isn't visible to add_customers for a
+  // moment: 10/19's first sync put 32 of 55 on the segment and silently skipped
+  // the 23 brand-new people. Give Customer.io a beat before the segment add.
+  if (ok.length) await new Promise((r) => setTimeout(r, 4000));
   const added = ok.length ? await cioAddToSegment(VAC_SEGMENT_ID, ok) : true;
   return NextResponse.json({ ok: added ? ok : [], failed: added ? failed : [...failed, ...ok] });
 }
