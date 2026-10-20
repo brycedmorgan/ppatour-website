@@ -8,5 +8,5 @@
  */
 export const EUROPE_PARTNERS = [
   { name: "LT PRO48", role: "Official Ball", href: "https://pickleballcentral.com/life-time-lt-pro-48-pickleball/?utm_source=ppatour&utm_medium=website&utm_campaign=sponsor-directory&utm_content=partner-life-time", logo: "/ppa/europe/partners/lt-pro48.png", w: 900, h: 168 },
-  { name: "JOOLA", role: "Official Net", href: "https://joola.com/?utm_source=ppatour&utm_medium=website&utm_campaign=sponsor-directory&utm_content=partner-joola", logo: "/ppa/europe/partners/joola.png", w: 384, h: 121 },
+  { name: "JOOLA", role: "Official Net", href: "https://joola.de/?utm_source=ppatour&utm_medium=website&utm_campaign=sponsor-directory&utm_content=partner-joola", logo: "/ppa/europe/partners/joola.png", w: 384, h: 121 },
 ];

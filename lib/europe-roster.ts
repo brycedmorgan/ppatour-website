@@ -540,9 +540,8 @@ export const europeRoster: EuroPro[] = [
     ],
   },
   {
-    // Row 28 of Catie's sheet, posted in #ppa-tour-europe 10/17. No portrait
-    // yet and the bio is her placeholder line, both still coming from her, so
-    // this card renders the silhouette until the file lands.
+    // Row 28 of Catie's sheet, posted in #ppa-tour-europe 10/17. Portrait and
+    // full bio from Catie 10/20 (via Bryce).
     // ⚠ DIVISIONS ARE THE HOUSE DEFAULT (13 of 15 men on this roster), NOT HER
     // SHEET — it has no divisions column. Asked her to confirm in the channel.
     slug: "yuri-syromolotov",
@@ -553,9 +552,10 @@ export const europeRoster: EuroPro[] = [
     divisions: [...MS, ...MD, ...XD],
     sponsors: ["Arronax"],
     instagram: "https://www.instagram.com/yurisyromolotov/",
-    tagline: "Turned professional in 2026",
+    portrait: P("yuri-syromolotov"),
+    tagline: "Former ATP player with a 2026 Spanish national title",
     bio: [
-      "Yuri Syromolotov is a professional pickleball player from Spain. He turned pro in 2026.",
+      "Yuri Syromolotov is a professional pickleball player from Spain. He turned pro in 2026. As a former ATP player, Yuri also starred in college tennis in the US and won a national college title in Great Britain. He has quickly made his mark in pickleball, winning a Spanish national title and several singles titles in 2026. He brings big-match experience to every event he plays.",
     ],
   },
 ];
