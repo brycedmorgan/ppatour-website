@@ -158,6 +158,13 @@ export async function runContactPipeline(s: ContactSubmission): Promise<void> {
   const sheetOk = await appendToSheet(s.sheetTab, sheetRecord);
   if (!sheetOk) console.warn(`[${s.label}] sheet append failed`);
 
+  // Spam stops at the sheet (Bryce 10/21: "obviously spam. hide this"). No Slack
+  // post, no inbox email, no reply. The sheet row keeps it findable if triage was wrong.
+  if (t.status === "spam") {
+    console.log(`[${s.label}] spam — sheet only, Slack + inbox skipped`);
+    return;
+  }
+
   // 2) Slack — routed channel, plus a mirror to the marketing channel when routed elsewhere.
   const marketingChannel = channelFor(CHANNEL_ENV.MARKETING);
   const routedChannel = route ? channelFor(CHANNEL_ENV[route]) : undefined;
