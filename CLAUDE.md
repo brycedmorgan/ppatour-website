@@ -67,6 +67,10 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-21 — Junior PPA rankings refreshed (Daniela, Asana `1219751671856012`)
+- Jake's sheet (edited 10/21 18:41 UTC) → `lib/data/junior-rankings.json`, `updated: "Oct 21, 2026"`. 2,577 rows (+46), no board shrank, 94–100% confirmed per division. Fetch → import `--check` → import, as 10/15.
+- Verified against a second pull: rank, name, points and age match for all 2,577 rows (the sheet now writes some points as "1,500"; the importer handles it).
+
 ### 2026-10-19 — Native app backend: /api/app/home, /api/push/native, APNs sender
 - Bryce: "rebuild it like a real app." New Expo app lives in `~/pickleball/ppa-tour-app` (Gull-Stack/ppa-tour-app); this site is its backend.
 - `GET /api/app/home` = `resolveScoresEvent()` + slim `getEvents()` list, edge-cached 5 min. One launch call for Scores + Events tabs.
