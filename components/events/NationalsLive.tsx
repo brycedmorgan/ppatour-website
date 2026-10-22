@@ -234,7 +234,7 @@ export function NationalsLive({
   const guide = getEventGuide(t.slug);
   // Same single source as app/events/[year]/[slug]/page.tsx — finalized details
   // for this stop, or the approved holding line.
-  const parking = parkingFor(t.slug);
+  const parking = parkingFor(t.slug, t.startDate);
   /**
    * ⚠ THE ONLY `ticketsOnSale` GATE IN THIS FILE. Everything else here — the two
    * hero CTAs, the tickets section — prints "Buy Tickets" unconditionally, which
@@ -339,7 +339,7 @@ export function NationalsLive({
       content: "event-concierge-register",
     }),
     // Flattened from the same source the page renders — see the event page.
-    parking: parkingText(t.slug),
+    parking: parkingText(t.slug, t.startDate),
     parkingPassUrl,
     airport: guide ? `${guide.airport} (${guide.airportNote})` : undefined,
     hotels: guide?.hotels.map((h) => h.name) ?? [],

@@ -104,7 +104,7 @@ export default async function TodayPage({ params }: Params) {
   const liveRecord = (await getEvents()).events.find((e) => e.slug === slug);
   const eventUuid = t.tournamentUuid ?? liveRecord?.tournamentUuid;
   const schedule = getEventSchedule(slug, t.startDate);
-  const parking = parkingFor(slug);
+  const parking = parkingFor(slug, t.startDate);
   const onsite = onSiteFor(slug);
   const venueMap = venueMapFor(slug);
   const broadcast = getBroadcast(slug);

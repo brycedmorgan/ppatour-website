@@ -67,6 +67,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-22 (pt. 2) — Worlds parking lands (Dana, Asana `1219791843119153`)
+- Her five sections verbatim in `PARKING_BY_SLUG["pickleball-world-championships"]` (General, Hotel Shuttles, Rideshare, VIP, ADA) + her shuttle map (`public/ppa/parking/pickleball-world-championships.webp`). Sixth finalized stop.
+- **⚠ 2025 and 2026 share the slug.** New `PARKING_EDITION_START` pins it to 2026-11-02; `parkingFor`/`parkingText` take the start date (event page, /today, NationalsLive). Verified on the dev server: 2026 + /today carry it, 2025 keeps the holding line.
+- Gates still TBD: don't derive one from "shuttles start 30 min before gates".
+
 ### 2026-10-21 — Junior PPA rankings refreshed (Daniela, Asana `1219751671856012`)
 - Jake's sheet (edited 10/21 18:41 UTC) → `lib/data/junior-rankings.json`, `updated: "Oct 21, 2026"`. 2,577 rows (+46), no board shrank, 94–100% confirmed per division. Fetch → import `--check` → import, as 10/15.
 - Verified against a second pull: rank, name, points and age match for all 2,577 rows (the sheet now writes some points as "1,500"; the importer handles it).

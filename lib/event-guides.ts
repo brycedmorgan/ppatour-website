@@ -365,10 +365,81 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
       ],
     },
   ],
+  // Worlds 2026 — Dana Summers, 10/22 (Asana 1219791843119153), with the
+  // parking/shuttle map. All of it is her wording; her bullets became
+  // paragraphs, her bold was dropped, and "(Insert parking/shuttle map here)"
+  // became the map itself.
+  //
+  // ⚠ THE SLUG IS SHARED WITH THE 2025 EDITION — see PARKING_EDITION_START
+  // below, which keeps these Dallas lots off the 2025 page.
+  //
+  // ⚠ HOTEL SHUTTLES IS HER SECTION, NOT OURS: the MLP week (Oct 30 – Nov 1)
+  // runs one Sheraton route, the PPA week (Nov 2–8) two colour-coded routes.
+  "pickleball-world-championships": [
+    {
+      heading: "General Parking",
+      body: [
+        "All event parking is located at Dallas College Brookhaven Campus, Lot P3. Complimentary shuttles will transport guests between the parking lot and venue entrance.",
+        "Address: 3939 Valley View Lane, Farmers Branch, TX 75244\nDates: October 30 – November 8, 2026\nEstimated Shuttle Hours: 6:30 AM – 11:00 PM daily",
+        "Shuttles will begin approximately 30 minutes before gates open and end 30 minutes after gates close. Parking signage, police, and parking staff will be available to assist guests.",
+        "Important: Overnight parking and RV/camper parking are prohibited in all PPA public parking lots. Vehicles left overnight may be towed at the owner's expense.",
+      ],
+      images: [
+        {
+          src: "/ppa/parking/pickleball-world-championships.webp",
+          alt: "Aerial map of the event parking lot at Dallas College Brookhaven Campus, outlined in blue on the south side of the campus, with the dashed shuttle route running west along the road and north up the main street to the event entrance.",
+          width: 1600,
+          height: 854,
+        },
+      ],
+    },
+    {
+      heading: "Hotel Shuttles",
+      body: [
+        "Complimentary hotel shuttle service will be available on the following dates and routes.",
+        "MLP | October 30 – November 1\nShuttle service will operate between the Sheraton Dallas Hotel by the Galleria and the venue.",
+        "PPA | November 2–8\nTwo separate hotel shuttle routes will be available:",
+        "West Route (Orange)\nHotels Served: Renaissance Dallas North, Hampton Inn & Suites Farmers Branch Dallas, Candlewood Suites Dallas NW, Holiday Inn Express & Suites Dallas NW\nPickup/Drop-Off: 5 Mira Lago Blvd, at the designated shuttle tent centrally located between the four hotels.\nReturn Shuttle: Guests will receive an orange keychain to identify their shuttle.",
+        "East Route (Green)\nHotels Served: Sheraton Dallas Hotel by the Galleria, DoubleTree by Hilton Hotel Dallas near the Galleria\nPickup/Drop-Off: Each hotel will have its own designated stop.\nReturn Shuttle: Guests will receive a green keychain to identify their shuttle.",
+      ],
+    },
+    {
+      heading: "Rideshare & Drop-Offs",
+      body: [
+        "All rideshare pickups and drop-offs must take place at the designated rideshare zone on Brookhaven Drive, in the far-right lane just past Golfing Green Drive.",
+        "This location is available as an official pickup/drop-off point in Uber and Lyft.",
+      ],
+    },
+    {
+      heading: "VIP Parking",
+      body: [
+        "Box Suite ticket holders have access to the designated on-site Box Suite Parking Lot. All other ticket holders must use the general event parking lot at Dallas College Brookhaven Campus.",
+      ],
+    },
+    {
+      heading: "ADA Accessibility",
+      body: [
+        "At least one shuttle serving Dallas College Brookhaven Campus will be ADA accessible each day. Guests may also use the designated drop-off location.",
+        "Hotel shuttles are not ADA accessible. Guests requiring additional accommodations should contact d.summers@ppatour.com.",
+      ],
+    },
+  ],
+};
+
+/**
+ * Entries whose slug is shared by annual editions, pinned to the edition they
+ * describe (its start date). Same guard as `getEventSchedule`: the 2025 and 2026
+ * Worlds share `pickleball-world-championships`, and without this the 2025 page
+ * would print the 2026 Dallas lots.
+ */
+const PARKING_EDITION_START: Record<string, string> = {
+  "pickleball-world-championships": "2026-11-02",
 };
 
 /** Parking details for an event page — finalized sections, or the holding line. */
-export function parkingFor(slug: string): ParkingSection[] {
+export function parkingFor(slug: string, startIso?: string): ParkingSection[] {
+  const edition = PARKING_EDITION_START[slug];
+  if (edition && startIso !== edition) return [{ body: [PARKING_TBA] }];
   return PARKING_BY_SLUG[slug] ?? [{ body: [PARKING_TBA] }];
 }
 
@@ -377,8 +448,8 @@ export function parkingFor(slug: string): ParkingSection[] {
  * blocks — the concierge's chat answer and the search index. Derived from the
  * one source above so it can never disagree with the page.
  */
-export function parkingText(slug: string): string {
-  return parkingFor(slug)
+export function parkingText(slug: string, startIso?: string): string {
+  return parkingFor(slug, startIso)
     .map((s) => [s.heading, ...s.body].filter(Boolean).join("\n"))
     .join("\n\n");
 }

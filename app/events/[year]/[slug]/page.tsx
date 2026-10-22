@@ -322,7 +322,7 @@ export default async function EventPage({ params }: Params) {
   const guide = getEventGuide(t.slug);
   // Finalized details for this stop, or the approved holding line. Every parking
   // surface on the page (and the concierge) reads this one value.
-  const parking = parkingFor(t.slug);
+  const parking = parkingFor(t.slug, t.startDate);
   const realSchedule = getEventSchedule(t.slug, t.startDate);
   // Daily fan programming, rendered in its own section after the order of play.
   const programming = programmingFor(t.slug, t.startDate);
@@ -646,7 +646,7 @@ export default async function EventPage({ params }: Params) {
     }),
     // Flattened from the same source the page renders — the chat bubble can't
     // render blocks, but it must not answer with a shorter/different arrangement.
-    parking: parkingText(t.slug),
+    parking: parkingText(t.slug, t.startDate),
     parkingPassUrl,
     airport: guide ? `${guide.airport} (${guide.airportNote})` : undefined,
     hotels: guide?.hotels.map((h) => h.name) ?? [],
