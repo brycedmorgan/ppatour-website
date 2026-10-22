@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { tvSchedule } from "@/lib/tv-schedule";
 import {
-  channelLabel,
+  windowLabel,
   isFoxChannel,
   matchesFilter,
   type ChannelFilter,
@@ -16,6 +16,9 @@ const FILTERS: { key: ChannelFilter; label: string }[] = [
   // FS1 + FS2 under one pill — FOX splits its windows across both networks.
   { key: "FOX", label: "FOX Sports" },
   { key: "PBTV", label: "PickleballTV" },
+  // Sister-tour stops that never reach PBTV or a US network stream here — see
+  // the PPA Australia Cup block in lib/tv-schedule.ts.
+  { key: "YouTube", label: "YouTube" },
 ];
 
 export function TvScheduleList() {
@@ -80,6 +83,15 @@ export function TvScheduleList() {
                 >
                   {e.name} →
                 </Link>
+              ) : e.watchUrl ? (
+                <a
+                  href={e.watchUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-display text-lg uppercase leading-tight hover:text-ppa-sky"
+                >
+                  {e.name} ↗
+                </a>
               ) : (
                 <span className="font-display text-lg uppercase leading-tight">
                   {e.name}
@@ -141,7 +153,7 @@ export function TvScheduleList() {
                     }`}
                   >
                     {w.channel === "Tennis Channel" ? "📺 " : ""}
-                    {channelLabel(w.channel)}
+                    {windowLabel(w)}
                   </span>
                   <span className="text-left text-sm font-bold tabular-nums text-ppa-navy sm:text-right">
                     {w.window}

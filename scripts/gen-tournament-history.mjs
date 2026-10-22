@@ -94,10 +94,105 @@ const DIVISION_ORDER = [
   "Mixed Doubles",
 ];
 
-/** The orgs whose events are the PPA Tour proper. Sister tours (PPA Tour
- *  Australia / Asia / Italy / Spain / Canada) run their own calendars and are
- *  absent from the tour's published history — deliberately not included. */
+/** The orgs whose events are the PPA Tour proper. */
 const TOUR_ORGS = new Set(["Pro Pickleball Association", "United Pickleball Association"]);
+
+/**
+ * ── INTERNATIONAL STOPS, ADDED 9/24 ──────────────────────────────────────────
+ * Hannah Johns' ask: "continue to add tournaments to this page that are 1,000
+ * points and up (both domestic and international)". Sister tours used to be
+ * excluded outright; they are now admitted on three conditions, all of which
+ * the feed answers.
+ *
+ * ⚠ THE POINTS LEVEL IS IN THE TITLE, AND THAT IS THE ONLY PLACE IT IS. The
+ * feed carries no points/tier column — checked every field on the row — but
+ * sister-tour titles state it: "PPA Asia 1000 Leapmotor Kuala Lumpur Cup 2026",
+ * "PPA1500 - AUSTRALIA PICKLEBALL CUP", "PPA125 Sydney". Same read as
+ * `pointsFromName` in lib/placeholder-data.ts, which exists because the flat
+ * `challenger` tier badged every sub-1,000 stop as 500.
+ *
+ * ⚠ AND THE SEASON CUTOFF IS LOAD-BEARING, NOT TIDINESS. Two Asia stops state
+ * 1,000 today: the MB Hanoi Cup (Apr 1 2026) and the Leapmotor Kuala Lumpur Cup
+ * (Sep 9 2026). Hannah asked for Kuala Lumpur and recorded Hanoi as correctly
+ * ABSENT from career titles — "Hanoi titles are gone for ALW" is in her list of
+ * things already working, and Alix Truong's 15 Asian golds sit under overall
+ * titles precisely because they predate this season. So international results
+ * count from the 2026/27 season, which opened with Nationals on Aug 31 2026
+ * (the broadcast sheet's own "START OF PPA 2026/2027 SEASON" divider sits above
+ * that stop). Hanoi is the last stop of 2025/26 and stays out.
+ *
+ * ⚠ Both October 1,500s — the Australia Pickleball Cup and the Hang Seng Bank
+ * Hong Kong Slam — already satisfy every condition except `Completed`, so they
+ * join on their own the first time this runs after they finish. That is the
+ * "continue to add" half of the ask; nobody has to edit this file for them.
+ */
+const INTL_ORGS = new Set([
+  "PPA Tour Asia",
+  "PPA Tour Australia",
+  "PPA Tour Canada",
+  "PPA Tour Italy",
+  "PPA Tour Spain",
+]);
+
+/** First day of the 2026/27 season — Nationals. See the note above. */
+const INTL_FROM_ISO = "2026-08-31";
+
+/** Minimum points for the history page, domestic or international. */
+const MIN_POINTS = 1000;
+
+/**
+ * Feed rows that are NOT the event they appear to be.
+ *
+ * ⚠ THE AUSTRALIA PICKLEBALL OPEN 2025 IS REGISTERED TWICE AND ONE COPY IS
+ * FILED UNDER THE US ORG. That is the whole reason it reached this page, and it
+ * is checkable rather than a judgement call — the feed carries both:
+ *
+ *   b28de702…  org "PPA Tour Australia"          Jan 28 – Feb 2 2025
+ *   a26c60b0…  org "Pro Pickleball Association"  Jan 30 – Feb 2 2025   <- this one
+ *
+ * The second is a PPA Tour Australia stop wearing the domestic org, so it
+ * cleared `TOUR_ORGS` and published as a PPA Tour title. Hannah reported the
+ * same record inflating career titles on pickleball.com (Lacy Schneemann showing
+ * three, two of them from this event) — same root cause, and the permanent fix
+ * is upstream with Jason's team. Excluding the row here is the site-side half.
+ *
+ * ⚠ KEYED ON UUID, NOT ON THE TITLE. The Australia-org twin is a legitimate
+ * record and a title match would take both; and if the org is ever corrected
+ * upstream this entry simply stops matching nothing important. Remove it once
+ * the feed is fixed.
+ */
+const EXCLUDED_UUIDS = new Set(["a26c60b0-a00a-49cd-b93e-9fa2ac32f433"]);
+
+/** Points level stated in a sister-tour title, or null. */
+function pointsFromTitle(title) {
+  const m = title.match(/(?:\b|PPA)P?\s*(3000|2000|1500|1000|500|250|125)\b/i);
+  return m ? Number(m[1]) : null;
+}
+
+/**
+ * Sister-tour title -> the name the tour itself uses.
+ *
+ * "PPA Asia 1000 Leapmotor Kuala Lumpur Cup 2026" -> "Leapmotor Kuala Lumpur Cup"
+ * "PPA1500 - AUSTRALIA PICKLEBALL CUP"            -> "Australia Pickleball Cup"
+ *
+ * ⚠ CROSS-CHECKED, NOT INVENTED. lib/asia-tour-links.ts holds the names PPA Tour
+ * Asia publishes for its own stops (Wade Townsend's list, 8/6), keyed by the
+ * same feed slug. This derivation reproduces both of the Asia stops it covers —
+ * "Leapmotor Kuala Lumpur Cup" and "MB Hanoi Cup" — exactly. If a future stop's
+ * derived name disagrees with that file, that file is right.
+ */
+function intlName(title) {
+  const stripped = title
+    .replace(/^PPA\s*(?:Asia|Australia|Italy|Spain|Canada)?\s*\d{3,4}\s*[-–—:]?\s*/i, "")
+    .replace(/\s+20\d{2}$/, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+  // ALL-CAPS feed titles ("AUSTRALIA PICKLEBALL CUP") read as shouting in a
+  // table of mixed-case names; leave anything already mixed-case alone.
+  return stripped === stripped.toUpperCase()
+    ? stripped.toLowerCase().replace(/\b[a-z]/g, (c) => c.toUpperCase())
+    : stripped;
+}
 
 /** Real PPA properties that are not a tour stop. */
 const NOT_A_TOUR_STOP =
@@ -173,12 +268,26 @@ function pickChampionshipDraw(rows) {
   );
 }
 
-export function isTourStop(t) {
+/** Conditions every stop must clear, domestic or international. */
+function isPlayable(t) {
   if (t.is_canceled || t.is_stub || t.is_advertise_only) return false;
   if (t.tournament_status !== "Completed") return false;
+  if (EXCLUDED_UUIDS.has(t.tournament_uuid)) return false;
+  return !JUNK_TITLE.test(t.title) && !NOT_A_TOUR_STOP.test(t.title);
+}
+
+export function isTourStop(t) {
+  if (!isPlayable(t)) return false;
   if (!TOUR_ORGS.has(t.organization_name)) return false;
-  if (JUNK_TITLE.test(t.title) || NOT_A_TOUR_STOP.test(t.title)) return false;
   return inclusiveDays(t.start_date, t.end_date) >= 4;
+}
+
+/** A sister-tour stop worth {@link MIN_POINTS} or more, this season or later. */
+export function isIntlTourStop(t) {
+  if (!isPlayable(t)) return false;
+  if (!INTL_ORGS.has(t.organization_name)) return false;
+  if (t.start_date.slice(0, 10) < INTL_FROM_ISO) return false;
+  return (pointsFromTitle(t.title) ?? 0) >= MIN_POINTS;
 }
 
 async function podium(base, token, uuid) {
@@ -240,18 +349,28 @@ async function main() {
   if (rows.length === 0) throw new Error("tournaments feed returned nothing — refusing to write");
   console.log(`feed: ${rows.length} rows`);
 
-  const stops = rows
+  const domestic = rows
     .filter(isTourStop)
-    .filter((t) => Number(t.end_date.slice(0, 4)) >= FEED_FROM_YEAR)
-    .sort((a, b) => b.end_date.localeCompare(a.end_date));
-  console.log(`feed tour stops from ${FEED_FROM_YEAR}: ${stops.length}`);
+    .filter((t) => Number(t.end_date.slice(0, 4)) >= FEED_FROM_YEAR);
+  const international = rows.filter(isIntlTourStop);
+  const stops = [...domestic, ...international].sort((a, b) =>
+    b.end_date.localeCompare(a.end_date),
+  );
+  console.log(
+    `feed tour stops from ${FEED_FROM_YEAR}: ${domestic.length} domestic + ${international.length} international (>=${MIN_POINTS} pts, from ${INTL_FROM_ISO})`,
+  );
+  for (const t of international) console.log(`  intl  ${t.start_date.slice(0, 10)}  ${t.title}`);
 
   const fromFeed = [];
   let namedFromArchive = 0;
   for (const t of stops) {
     const endDate = t.end_date.slice(0, 10);
-    const name =
-      NAME_OVERRIDE_BY_END_DATE[endDate] ?? publishedNames[endDate] ?? cleanTitle(t.title);
+    // ⚠ publishedNames is keyed by END DATE and covers the domestic record only,
+    // so an international stop must not read it — a same-day domestic stop would
+    // hand it the wrong name outright.
+    const name = INTL_ORGS.has(t.organization_name)
+      ? intlName(t.title)
+      : NAME_OVERRIDE_BY_END_DATE[endDate] ?? publishedNames[endDate] ?? cleanTitle(t.title);
     if (publishedNames[endDate]) namedFromArchive += 1;
     try {
       const divisions = await podium(base, token, t.tournament_uuid);

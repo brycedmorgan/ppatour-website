@@ -142,6 +142,7 @@ export function LiveScoreTicker({
   transparent = false,
   initialData,
   matches,
+  hideWhenEmpty = false,
 }: {
   /** Month/day badge on the left (the /live broadcast header). */
   showDate?: boolean;
@@ -161,6 +162,13 @@ export function LiveScoreTicker({
    * the host's gate can never disagree with what the rail is showing.
    */
   matches?: TickerMatch[];
+  /**
+   * Render nothing until there are match cards to show — no skeletons, no
+   * "No matches on court" line. For the site header (Wesley, 10/1): while the
+   * pickleball.com feed returns nothing, an empty rail across the top of every
+   * page reads as broken. It keeps polling, so it appears once matches land.
+   */
+  hideWhenEmpty?: boolean;
 } = {}) {
   const self = useLiveTicker({ initialData, enabled: matches === undefined });
   const ordered = matches ?? self.ordered;
@@ -218,6 +226,9 @@ export function LiveScoreTicker({
       window.removeEventListener("resize", update);
     };
   }, [ordered, showCards]);
+
+  // After every hook, so the poll and the effect keep running while hidden.
+  if (hideWhenEmpty && !showCards) return null;
 
   return (
     <div className={`flex flex-col items-stretch sm:flex-row ${transparent ? "" : "bg-ppa-navy"}`}>

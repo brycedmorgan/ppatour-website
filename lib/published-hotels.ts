@@ -1,4 +1,4 @@
-import type { Place } from "@/lib/event-guides";
+import { hotelPhoto, type Place } from "@/lib/event-guides";
 
 /**
  * Published hotel blocks managed in Jackalope (Travel → Hotels, flagged "on
@@ -64,5 +64,6 @@ export async function publishedHotelsFor(city: string): Promise<Place[] | null> 
     brand: brandKey(h.brand),
     rate: h.rate || undefined,
     cutoff: h.cutoff || undefined,
+    photo: hotelPhoto(h.name),
   }));
 }

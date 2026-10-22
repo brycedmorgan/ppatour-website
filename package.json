@@ -22,7 +22,7 @@
     "lab:refresh": "node scripts/import-paddle-lab.mjs --fetch",
     "lab:report": "node scripts/import-paddle-lab.mjs --report",
     "lab:pbc": "node scripts/import-pbc-paddles.mjs",
-    "lab:pbc:crawl": "node scripts/import-pbc-paddles.mjs --fetch",
+    "lab:pbc:crawl": "node scripts/import-pbc-paddles.mjs --fetch && node scripts/mirror-pbc-images.mjs && node scripts/import-pbc-paddles.mjs",
     "europe:portraits": "node scripts/import-europe-portraits.mjs",
     "europe:audit": "node scripts/audit-europe-portraits.mjs",
     "rankings:snapshot": "node scripts/snapshot-rankings.mjs",

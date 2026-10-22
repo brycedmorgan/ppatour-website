@@ -18,6 +18,7 @@
  * on any problem so the page always renders.
  */
 
+import { challengerPhotoFor } from "@/lib/challenger-photos";
 import { cache } from "react";
 import { pbCachedJson } from "@/lib/pb-cache";
 import { asiaTourUrlForDetailsUrl } from "@/lib/asia-tour-links";
@@ -41,12 +42,13 @@ import {
 import { venueGalleryFor, venueHeroFor } from "@/lib/venue-photos";
 import { ticketPriceFrom, ticketsOnSale } from "@/lib/tixr-price-index";
 import { sisterTourTickets } from "@/lib/sister-tour-tickets";
+import { challengerLevel, feedLevel, fetchChallengerLevels, type LevelFeed } from "@/lib/challenger-points";
 
 const PATH = "/v2/data/ppa_tournaments";
 /**
  * Cache tag for the tournaments fetch. A Vercel Cron hits
- * `/api/revalidate-events` at midnight Central and calls `revalidateTag` with
- * this, so the calendar refreshes once a day on a predictable schedule.
+ * `/api/revalidate-events` every 2 hours and calls `revalidateTag` with this,
+ * so a newly public stop reaches the calendar within 2 hours, no push needed.
  */
 export const EVENTS_CACHE_TAG = "events";
 /** Backstop TTL (24h) in case the daily cron ever fails to fire. */
@@ -130,6 +132,16 @@ const CURATED_ALIASES: Record<string, string> = {
   // line above, and the same class of drift as the Asia stops (8/6), where the
   // feed and curated paths built two different slugs for one event.
   "ppa-tour-spain-p250-barcelona-open": "ppa-spain-p250-barcelona",
+  // The feed renamed both Europe stops again (seen 10/3): "PPA TOUR EUROPE - P250
+  // BARCELONA OPEN" and "PPA ITALY P125 PORTOROZ". Without these the cards fall
+  // back to VENUE_IMAGES (Macao / Gold Coast) instead of Payton's event photos.
+  "ppa-tour-europe-p250-barcelona-open": "ppa-spain-p250-barcelona",
+  "ppa-italy-p125-portoroz": "ppa-italy-125-portoroz",
+  // Lille (10/15). The link the Europe team circulated read
+  // "ppa-tour-europe-p125-france", so the title was "… P125 FRANCE" before it went
+  // public as "… P125 LILLE"; both map to one record.
+  "ppa-tour-europe-p125-lille": "ppa-france-p125-lille",
+  "ppa-tour-europe-p125-france": "ppa-france-p125-lille",
   // ⚠ THIS ONE IS LOAD-BEARING AND WAS ADDED BEFORE IT COULD BITE. The feed
   // renamed the Malibu Cup to "Veolia Malibu Showcase" on 8/26 (Bryan Renahan);
   // production had not regenerated yet, so /events was still serving the old
@@ -171,8 +183,20 @@ const CURATED_ALIASES: Record<string, string> = {
 
 const curatedBySlug = new Map<string, Tournament>(getAllEvents().map((t) => [t.slug, t]));
 
-function findCurated(apiSlug: string): Tournament | null {
-  return curatedBySlug.get(CURATED_ALIASES[apiSlug] ?? apiSlug) ?? null;
+// buildSchedule date-suffixes a stop whose plain slug already belongs to a past
+// edition (`newport-beach-open-2027-03-02`). The feed lists it under the plain
+// name, so without this the 2027 feed row matched the 2025 record and took its
+// generic Tixr link: Newport's 211406 mapping never reached the page (10/19).
+const DATED_EDITION = /-(\d{4})-\d{2}-\d{2}$/;
+
+function findCurated(apiSlug: string, year: string): Tournament | null {
+  const key = CURATED_ALIASES[apiSlug] ?? apiSlug;
+  const hit = curatedBySlug.get(key) ?? null;
+  if (!hit || hit.startDate.startsWith(year)) return hit;
+  for (const [slug, t] of curatedBySlug) {
+    if (slug.startsWith(`${key}-`) && slug.match(DATED_EDITION)?.[1] === year) return t;
+  }
+  return hit;
 }
 
 /**
@@ -394,7 +418,7 @@ function isJunk(t: ApiTournament): boolean {
   );
 }
 
-function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tournament {
+function mapTournament(t: ApiTournament, seen: Set<string>, index: number, levels: LevelFeed = []): Tournament {
   const name = cleanTitle(t.title);
   const isUsOrg = t.organization_name === US_ORG;
   const isChallenger = /challenger/i.test(name);
@@ -408,8 +432,9 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
   // (/events/{year}/{slug}), so slugs stay year-free and only need to be unique
   // within a year — a numeric suffix breaks the rare same-year, same-name clash.
   const year = startDate.slice(0, 4);
-  const curated = findCurated(kebab(name));
-  const base = curated?.slug ?? kebab(name);
+  const curated = findCurated(kebab(name), year);
+  // A dated edition keeps the plain slug: the URL is /events/{year}/{slug}.
+  const base = curated?.slug.replace(DATED_EDITION, "") ?? kebab(name);
   let slug = base;
   let n = 1;
   while (seen.has(`${year}/${slug}`)) {
@@ -503,8 +528,13 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     // same half-applied split as the 8/3 name pass.
     // A curated `points` also wins on a Tour stop: the three PPA 500 Opens
     // (board decision 9/8) are tier `open` with `points: 500`.
+    // The year-keyed Challenger table (lib/challenger-points.ts) wins first.
     points:
-      curated?.points ?? (tier === "challenger" ? (pointsFromName(name) ?? undefined) : undefined),
+      // Schedule Builder (Tanner) first, then the year-keyed backup table.
+      (tier === "challenger" && !country ? feedLevel(levels, startDate, t.venue_city || "") : undefined) ??
+      (tier === "challenger" ? (challengerLevel(year, kebab(name)) ?? challengerLevel(year, base)) : undefined) ??
+      curated?.points ??
+      (tier === "challenger" ? (pointsFromName(name) ?? undefined) : undefined),
     prizeMoney: curated?.prizeMoney ?? TIER_PRIZE[tier],
     // Curated-only: see PRESENTER_BY_SLUG. Never infer a presenter from the
     // title sponsor in the name — that fabricated 6 of 10 presenters (8/4).
@@ -514,9 +544,14 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     // The event's own venue photography (synced from Jackalope) leads, then
     // the curated override. VENUE_IMAGES are Melbourne/Macao/Gold Coast city
     // shots — they only ever illustrate international stops now (Bryce, 7/28).
+    // ⚠ U.S. Challengers get a real Challenger photo (lib/challenger-photos.ts), never a
+    // GENERIC_IMAGES pro-tour action shot — Tanner/Anders/Nathan 10/19: the
+    // Challenger pages showed Jack Sock, who has never played one. A Challenger
+    // event photo from ops can go in HERO_OVERRIDE_BY_EVENT_SLUG and wins here.
     image:
       venueHeroFor(slug) ??
       curated?.image ??
+      (tier === "challenger" && isUsOrg ? challengerPhotoFor(slug) : undefined) ??
       (!isUsOrg
         ? VENUE_IMAGES[index % VENUE_IMAGES.length]
         : GENERIC_IMAGES[index % GENERIC_IMAGES.length]),
@@ -554,7 +589,20 @@ function mapTournament(t: ApiTournament, seen: Set<string>, index: number): Tour
     // curated row already answers this question explicitly (`r.type === "ppa"`),
     // for exactly the reason the 8/6 gate note gives, so ask it rather than
     // inferring from its existence. `isUsOrg` is untouched, so no US stop moves.
-    hasInternalPage: !isChallenger && (isUsOrg || curated?.hasInternalPage === true),
+    //
+    // ⚠ THE CARD MUST ASK WHAT THE PAGE ASKS, OR ITS BUTTON 404s (9/30).
+    // resolveEvent serves no page for `tierKey === "challenger"` or a curated
+    // `detailsComingSoon`, and this flag is what the /events card links on:
+    //   - `tier`, not `isChallenger`: inferTier files one-day / college events
+    //     as challenger without the word in the name, so the "Utah Super
+    //     Regional - College Pickleball Tour" card said Event Guide → 404.
+    //   - the curated `detailsComingSoon` rides along once the feed publishes
+    //     the stop, so the 2027 Texas Open card keeps "Details Coming Soon"
+    //     rather than linking the page the flag deliberately withholds. Drop
+    //     the flag on the curated row to open the page.
+    hasInternalPage:
+      tier !== "challenger" && !curated?.detailsComingSoon && (isUsOrg || curated?.hasInternalPage === true),
+    detailsComingSoon: curated?.detailsComingSoon,
     logoUrl: t.logo_url || undefined,
     source: "api",
   };
@@ -664,10 +712,11 @@ export const getEvents = cache(async function getEvents(): Promise<{
   if (raw.length === 0) return fallback();
 
   const seen = new Set<string>();
+  const levels = await fetchChallengerLevels();
   const events = raw
     .filter((t) => !isJunk(t))
     .sort((a, b) => a.start_date.localeCompare(b.start_date))
-    .map((t, i) => mapTournament(t, seen, i));
+    .map((t, i) => mapTournament(t, seen, i, levels));
 
   if (events.length === 0) return fallback();
   return { events: withComingSoon(events), source: "live" };

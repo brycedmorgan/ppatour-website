@@ -135,11 +135,21 @@ export function StickyBuyBar() {
   }, [visible, suppressed]);
 
   const featured = rotation.length > 0 ? rotation[index % rotation.length] : undefined;
-  const live = Boolean(featured);
+  /**
+   * ⚠ "LIVE" MEANS A MATCH IS ON COURT, NOT THAT THE BAR HAS A MATCH TO SHOW.
+   * The rotation falls back to an up-next or final row when nothing is being
+   * played, and this used to read `Boolean(featured)` — so the bar said "Live
+   * Now · ▶ Watch Live" over a match that had not started, or had finished
+   * (Wesley, 9/28, "Verbiage Update for Live Events"). Those rows now show with
+   * their own badge and point at the scores instead.
+   */
+  const live = featured?.status === "live";
   // Unlisted on Tixr -> the bar points at the event page, not a ticket link.
-  const href = featured
+  const href = live
     ? liveWatchUrl(ordered)
-    : next.ticketsOnSale
+    : featured
+      ? "/watch/"
+      : next.ticketsOnSale
       ? withUtm(next.ticketsUrl, {
           campaign: next.eventCode ?? next.slug,
           content: "sticky-buy-bar",
@@ -182,7 +192,7 @@ export function StickyBuyBar() {
             </span>
           ) : (
             <span className="hidden shrink-0 bg-ppa-blue px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.15em] sm:inline">
-              Next Event
+              {featured ? (featured.status === "final" ? "Final" : "Up Next") : "Next Event"}
             </span>
           )}
           <span
@@ -195,7 +205,7 @@ export function StickyBuyBar() {
               ? `${teamLabel(featured.teams[0])} vs ${teamLabel(featured.teams[1])}`
               : next.name}
           </span>
-          {!live && (
+          {!featured && (
             <span className="hidden shrink-0 text-xs text-white/55 md:inline">
               {formatDate(next.startDate)} · {next.city}, {next.state}
             </span>
@@ -207,15 +217,16 @@ export function StickyBuyBar() {
             }`}
           >
             {featured
-              ? formatMatchScore(featured)
+              ? formatMatchScore(featured) || featured.time || ""
               : next.ticketsOnSale
                 ? `From $${next.ticketPriceFrom}`
                 : "Tickets soon"}
           </span>
           <a
             href={href}
-            target="_blank"
-            rel="noopener noreferrer"
+            // The scores link is ours; only off-site destinations open a tab.
+            target={featured && !live ? undefined : "_blank"}
+            rel={featured && !live ? undefined : "noopener noreferrer"}
             tabIndex={visible ? undefined : -1}
             className={`group ml-auto flex h-9 shrink-0 items-center gap-1.5 px-4 text-[11px] font-bold uppercase tracking-[0.12em] transition active:scale-[0.97] sm:ml-0 ${
               live
@@ -225,7 +236,9 @@ export function StickyBuyBar() {
           >
             {live
               ? "▶ Watch Live"
-              : next.ticketsOnSale
+              : featured
+                ? "Scores & Brackets"
+                : next.ticketsOnSale
                 ? `Buy Tickets — $${next.ticketPriceFrom}`
                 : "Event Details"}
             {!live && (

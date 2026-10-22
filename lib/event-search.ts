@@ -132,7 +132,7 @@ export function eventSearchText(t: Tournament): string {
   parts.push(TIER_WORDS[t.tierKey] ?? t.tierKey);
   // Bare digits only — query punctuation is stripped before matching, so a
   // "1,000" in the haystack would be unreachable by the "1000" a fan types.
-  const pts = t.points ?? TIER_POINTS[t.tierKey];
+  const pts = t.points ?? (t.tierKey === "challenger" ? undefined : TIER_POINTS[t.tierKey]);
   if (pts) parts.push(String(pts), "points");
 
   // Dates — month name, abbreviation falls out of the full name as a substring,

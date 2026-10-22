@@ -151,6 +151,21 @@ export async function POST(request: Request) {
 
   console.log(`[form-submit:${formType}]`, record);
 
+  // Ambassador applications also feed HQ's Applicants tab, stamped with today's
+  // date. Best-effort and off the response path (`after`): a failure here never
+  // affects the submission — the Google Sheet stays the system of record.
+  if (formType === "ambassador") {
+    after(async () => {
+      try {
+        const { appendApplicant } = await import("@/lib/ambassadors/applicants-store");
+        const { buildApplicant } = await import("@/lib/ambassadors/applicant-record");
+        await appendApplicant(buildApplicant(record));
+      } catch (err) {
+        console.error("[form-submit:ambassador] HQ applicant feed failed", err);
+      }
+    });
+  }
+
   const submitterEmail = typeof body.email === "string" ? body.email.trim() : "";
   const submitterName = `${record.firstName ?? ""} ${record.lastName ?? record.name ?? ""}`.trim();
   const notifyTo = typeof routing.notifyTo === "function" ? routing.notifyTo(record) : routing.notifyTo;

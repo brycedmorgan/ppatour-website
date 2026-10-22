@@ -73,7 +73,7 @@ export function AppScoreBar() {
       style={{ bottom: "calc(var(--app-tabbar-h) + env(safe-area-inset-bottom))" }}
     >
       <Link
-        href={match ? "/live/" : eventHref(next)}
+        href={match ? "/scores/" : eventHref(next)}
         className="mx-auto flex h-11 w-full max-w-md items-center gap-2.5 px-4 active:opacity-80"
       >
         {match ? (

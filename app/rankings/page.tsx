@@ -6,7 +6,9 @@ import { RankingsBoard } from "@/components/rankings/RankingsBoard";
 import { TitleRace } from "@/components/rankings/TitleRace";
 import { ExplainerVideos } from "@/components/video/ExplainerVideos";
 import { EXPLAINER_SERIES, RANKINGS_VIDEOS } from "@/lib/explainer-videos";
-import { FULL_PAGE_SIZE, getRankings } from "@/lib/rankings-api";
+import { FULL_PAGE_SIZE, getRankings, rankingsAsOf } from "@/lib/rankings-api";
+import { buildRankingsJsonLd } from "@/lib/rankings-schema";
+import { SITE_URL } from "@/lib/site";
 import { getTitleRace } from "@/lib/title-race";
 
 /**
@@ -141,6 +143,25 @@ export default async function RankingsPage() {
 
   return (
     <>
+      {/* Dataset + top-10 ItemList per board — lib/rankings-schema.ts. Only
+          from a real board: the demo/unavailable states publish no numbers. */}
+      {ranking.source === "live" && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(
+              buildRankingsJsonLd({
+                url: `${SITE_URL}/rankings/`,
+                name: "World Pickleball Rankings",
+                description:
+                  "The World Pickleball Rankings: the Carvana PPA Tour's composite standings for men and women, weighting doubles (50%), mixed doubles (35%) and singles (15%) points earned over the last 52 weeks.",
+                dateModified: rankingsAsOf(),
+                boards: ranking.divisions.map((d) => ({ label: d.label, entries: d.entries })),
+              }),
+            ),
+          }}
+        />
+      )}
       {/* Hero */}
       <section className="bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">

@@ -21,8 +21,15 @@ export default function robots(): MetadataRoute.Robots {
         "/hero-preview/",
         // Private partnership deck — noindex on the page too; nothing links here.
         "/partners/",
+        // Private ambassador dashboard — noindex + X-Robots-Tag (proxy.ts)
+        // and never in the sitemap or nav. Nothing links here.
+        "/ambassadors/",
+        // Private corporate hub (Ambassador HQ) — same treatment.
+        "/hq/",
       ],
     },
-    sitemap: `${SITE_URL}/sitemap.xml`,
+    // The Google News sitemap (last 48h of newsroom posts) alongside the
+    // full one — app/news-sitemap.xml/route.ts.
+    sitemap: [`${SITE_URL}/sitemap.xml`, `${SITE_URL}/news-sitemap.xml`],
   };
 }

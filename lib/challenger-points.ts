@@ -1,0 +1,95 @@
+/**
+ * Confirmed points level (125 or 250) for each U.S. PPA Challenger, by year.
+ *
+ * ⚠ SOURCE: the "2027 Challenger Master" sheet (Challenger ops — Brooke Ansley /
+ * Tanner Groff), column "POINT LEVEL", sent by Bryce 10/18:
+ * docs.google.com/spreadsheets/d/1ysaRaFiizHknfIZQoTxFVjd1z8HqbudoHhCK9Sak_J8
+ * Copy the sheet; never infer a level from courts, city or last year.
+ *
+ * ⚠ KEYED BY YEAR ON PURPOSE. Curated matching in lib/events-api.ts is by a
+ * year-free slug, so a 2027 stop silently inherits the 2026 record of the same
+ * name — 2027 Seattle would have read 2026 Seattle's 250 (the sheet says 125).
+ * This table wins over that and over the feed.
+ *
+ * Key: `${year}/${kebab(event name)}`. Stops still missing from the PT feed
+ * (Houston, Black Desert, Wilson, Macon, Seattle, Newport Beach, Punta Gorda,
+ * Charlotte; Oklahoma City is unnamed) are listed so they light up when posted.
+ */
+const LEVELS: Record<string, 125 | 250> = {
+  // Tanner Groff, Slack DM 10/19 — "PPA Challenger Points Only" sheet
+  // (1YKUWYQ7F_uq0cRwl4d5cZMSL5XzvBsTp1b3IByrMpBM), one tab per season. Every
+  // 2025 stop was 125. Raleigh (Dec 2025) sits on the '26 tab at 125. The '26 and
+  // '27 tabs agree with every row below.
+  "2025/raleigh-ppa-challenger": 125,
+  // 2026 — Tanner Groff, Slack DM 10/18: "Every PPA Challenger tournament is worth
+  // 125 points, EXCEPT Punta Gorda, Newport Beach, Seattle, and Grand Rapids - which
+  // are worth 250."
+  "2026/punta-gorda-ppa-challenger": 250,
+  "2026/tucson-ppa-challenger": 125,
+  "2026/houston-ppa-challenger": 125,
+  "2026/adventhealth-tampa-bay-challenger": 125,
+  "2026/newport-beach-ppa-challenger": 250,
+  "2026/opelika-ppa-challenger": 125,
+  "2026/black-desert-ppa-challenger": 125,
+  "2026/wilson-ppa-challenger": 125,
+  "2026/fracas-in-fort-collins-ppa-challenger": 125,
+  "2026/boise-ppa-challenger": 125,
+  "2026/portland-ppa-challenger": 125,
+  "2026/macon-ppa-challenger": 125,
+  "2026/wisconsin-ppa-challenger": 125,
+  "2026/seattle-ppa-challenger": 250,
+  "2026/atlanta-ppa-challenger": 125,
+  "2026/grand-rapids-ppa-challenger": 250,
+  "2026/charlotte-ppa-challenger": 125,
+  "2027/jacksonville-ppa-challenger": 125,
+  "2027/gilbert-ppa-challenger": 125,
+  "2027/peachtree-corners-ppa-challenger": 250,
+  "2027/houston-ppa-challenger": 125,
+  "2027/auburn-opelika-ppa-challenger": 250,
+  "2027/black-desert-ppa-challenger": 125,
+  "2027/wilson-ppa-challenger": 125,
+  "2027/fort-collins-ppa-challenger": 125,
+  "2027/chicago-ppa-challenger": 125,
+  "2027/sacramento-ppa-challenger": 125,
+  "2027/minneapolis-ppa-challenger": 125,
+  "2027/macon-ppa-challenger": 250,
+  "2027/seattle-ppa-challenger": 125,
+  "2027/newport-beach-ppa-challenger": 250,
+  "2027/richmond-ppa-challenger": 125,
+  "2027/punta-gorda-ppa-challenger": 250,
+  "2027/charlotte-ppa-challenger": 125,
+  "2027/harbour-island-ppa-challenger": 125,
+};
+
+export function challengerLevel(year: string, nameSlug: string): number | undefined {
+  return LEVELS[`${year}/${nameSlug}`];
+}
+
+/**
+ * Levels Tanner sets in Jackalope's Schedule Builder (Points class on a
+ * Challenger row, then Promote). THIS IS THE SOURCE OF TRUTH GOING FORWARD;
+ * the table above is the backup for stops not promoted yet.
+ * Matched on start date (plus city when two stops share a date).
+ */
+const FEED = "https://pickleball.usejackalope.com/api/public/challenger-levels";
+type FeedLevel = { start: string; end: string; name: string; loc: string; cls: number };
+export type LevelFeed = FeedLevel[];
+
+export async function fetchChallengerLevels(): Promise<LevelFeed> {
+  try {
+    const res = await fetch(FEED, { next: { revalidate: 300 } });
+    if (!res.ok) return [];
+    const json = (await res.json()) as { levels?: FeedLevel[] };
+    return (json.levels ?? []).filter((l) => l.cls === 125 || l.cls === 250);
+  } catch {
+    return [];
+  }
+}
+
+export function feedLevel(feed: LevelFeed, startDate: string, city: string): number | undefined {
+  const same = feed.filter((l) => l.start === startDate);
+  if (same.length === 1) return same[0].cls;
+  const c = city.trim().toLowerCase();
+  const hit = c ? same.filter((l) => `${l.loc} ${l.name}`.toLowerCase().includes(c)) : [];
+  return hit.length === 1 ? hit[0].cls : undefined;
+}

@@ -117,6 +117,7 @@ const COUNTRY_ISO: Record<string, string> = {
   "Hong Kong": "hk",
   Hungary: "hu",
   India: "in",
+  Ireland: "ie",
   Israel: "il",
   Italy: "it",
   Japan: "jp",
@@ -133,6 +134,8 @@ const COUNTRY_ISO: Record<string, string> = {
   "South Africa": "za",
   "South Korea": "kr",
   Spain: "es",
+  Sweden: "se",
+  "United Kingdom": "gb",
   Venezuela: "ve",
 };
 

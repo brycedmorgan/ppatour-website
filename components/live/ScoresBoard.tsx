@@ -522,7 +522,13 @@ export function ScoresBoard({
       {/* Matches for the selected round + division */}
       <div className="mt-6">
         {matches.length === 0 ? (
-          <p className={`text-sm ${muted}`}>No matches in this round for this division.</p>
+          <p className={`text-sm ${muted}`}>
+            There are currently no matches for this round in{" "}
+            {divisions.find((d) => d.id === division)?.name ?? "this division"}.{" "}
+            <strong className={`font-bold ${light ? "text-ppa-navy" : "text-white"}`}>
+              Select a different round or division.
+            </strong>
+          </p>
         ) : (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {matches.map((m) => (

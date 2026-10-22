@@ -24,7 +24,7 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: "PPA Tour",
     description:
       "Live pro pickleball scores, the points race, the tour schedule, and everything you need at the event.",
-    start_url: "/?source=pwa",
+    start_url: "/scores/?source=pwa",
     scope: "/",
     display: "standalone",
     orientation: "portrait",
@@ -42,7 +42,7 @@ export default function manifest(): MetadataRoute.Manifest {
       },
     ],
     shortcuts: [
-      { name: "Live scores", url: "/live/?source=pwa" },
+      { name: "Scores", url: "/scores/?source=pwa" },
       { name: "Rankings", url: "/rankings/?source=pwa" },
       { name: "Schedule", url: "/events/?source=pwa" },
     ],

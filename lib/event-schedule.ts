@@ -6,7 +6,9 @@
  * registration deadline; sync from Wesley's PT.com API when it lands.
  */
 
+import { getBroadcast } from "@/lib/broadcast";
 import { challengerShowdown } from "@/lib/challenger-showdown";
+import { tzForState, tzOffsetMs } from "@/lib/placeholder-data";
 
 export type AmateurSession = {
   label: string;
@@ -56,10 +58,28 @@ export type AmateurItem = {
 };
 
 export type EventSchedule = {
+  /**
+   * The edition this schedule belongs to, as the event's ISO start date.
+   *
+   * ⚠ REQUIRED WHERE A SLUG IS SHARED ACROSS YEARS. Annual editions share a slug
+   * here — the feed carries `pickleball-world-championships` for both the 2025
+   * and the 2026 Worlds, and `/events/[year]/[slug]` renders a page for each —
+   * so an entry keyed on the slug alone would publish this November's order of
+   * play on last year's page. Both editions run seven days, so the day-count
+   * check in lib/order-of-play would not catch it either. With `start` set,
+   * {@link getEventSchedule} returns the entry only to the edition it names.
+   */
+  start?: string;
   proDays: ProDay[];
   amateur: AmateurItem[];
   amateurNote: string;
 };
+
+/** The Challenger Showdown's session on this date, if it plays that day. */
+function showdownOn(iso: string): AmateurSession[] {
+  const day = challengerShowdown.days.find((d) => d.iso === iso);
+  return day ? [{ label: challengerShowdown.name, detail: day.label }] : [];
+}
 
 export const eventSchedules: Record<string, EventSchedule> = {
   // Source: pickleballtournaments.com/tournaments/
@@ -134,10 +154,93 @@ export const eventSchedules: Record<string, EventSchedule> = {
     amateurNote:
       "Per-division day and time assignments publish after registration closes (Aug 24) — check your bracket on pickleballtournaments.com.",
   },
+
+  /**
+   * Opendoor Pickleball World Championships — Nov 2–8, 2026, Brookhaven Country
+   * Club. Pro rounds from the event's own schedule,
+   * worlds.unitedpickleball.com/schedule, pulled 9/28/26.
+   *
+   * ⚠ THE PRO ROUNDS ARE THE WORLDS SITE'S, AND THEY CORRECT THE TEMPLATE. The
+   * template would have read Mon "Amateur & junior brackets" and Tue "Senior
+   * Open + pro qualifying"; Worlds actually plays pro qualifiers Monday and the
+   * round of 64 Tuesday.
+   *
+   * ✅ FIRST SERVE 11:00 AM MON–SAT, 10:00 AM SUNDAY: Brian Clark, 10/14
+   * (relayed by Bryce).
+   *
+   * ⚠ GATES STAY TBD — DON'T DERIVE ONE FROM FIRST SERVE. Brian: "won't know
+   * gate times until we know amateur play hours."
+   *
+   * ⚠ GATES AND FIRST SERVE WERE "TBD" ON PURPOSE. The Worlds schedule publishes
+   * rounds, not times, and the template's 8/9/10 AM numbers are a house default,
+   * not this event's. A real entry holding invented times would be worse than
+   * the template, because it reads as the event team's. Fill them in the moment
+   * the events team sends them, and the intro line + concierge follow on their
+   * own (see {@link gatesPublished}).
+   *
+   * ⚠ THE DAILY PROGRAMMING (King of the Court, clinics, round robins) IS NOT
+   * HERE ON PURPOSE — it has its own section on the page (Wesley, 9/28), read
+   * from lib/event-programming.ts. Don't fold it into the amateur column.
+   *
+   * ⚠ THE SHOWDOWN IS DERIVED from lib/challenger-showdown.ts, not typed here, so
+   * this table and /tour/challenger cannot disagree. It moved out of
+   * SIDE_EVENTS_BY_SLUG with this entry — that map only feeds the template.
+   */
+  "pickleball-world-championships": {
+    start: "2026-11-02",
+    proDays: [
+      { date: "Nov 2", dow: "Mon", label: "Pro Qualifying — all pro events", firstServe: "11:00 AM", gates: "TBD" },
+      { date: "Nov 3", dow: "Tue", label: "Main Draw — Round of 64", firstServe: "11:00 AM", gates: "TBD" },
+      { date: "Nov 4", dow: "Wed", label: "Main Draw — Round of 32", firstServe: "11:00 AM", gates: "TBD" },
+      { date: "Nov 5", dow: "Thu", label: "Main Draw — Round of 16", firstServe: "11:00 AM", gates: "TBD", amateur: showdownOn("2026-11-05") },
+      { date: "Nov 6", dow: "Fri", label: "Quarterfinals", firstServe: "11:00 AM", gates: "TBD", amateur: showdownOn("2026-11-06") },
+      { date: "Nov 7", dow: "Sat", label: "Semifinals", firstServe: "11:00 AM", gates: "TBD", amateur: showdownOn("2026-11-07") },
+      { date: "Nov 8", dow: "Sun", label: "Championship Sunday — Finals", firstServe: "10:00 AM", gates: "TBD" },
+    ],
+    amateur: [],
+    amateurNote:
+      "Pro first serve is 11:00 AM Monday through Saturday and 10:00 AM on Championship Sunday. Gate times are still to be announced. Amateur division days and times are on your bracket at pickleballtournaments.com.",
+  },
 };
 
-export function getEventSchedule(slug: string): EventSchedule | undefined {
-  return eventSchedules[slug];
+/**
+ * The transcribed order of play for this stop, or undefined for the template.
+ *
+ * Pass the event's start date wherever you have it: an entry that names its
+ * edition (`start`) is returned only to that edition, so a slug shared across
+ * years cannot hand one year's schedule to another. Called without it, a dated
+ * entry is withheld — failing to the template is the safe direction.
+ */
+export function getEventSchedule(slug: string, startIso?: string): EventSchedule | undefined {
+  const entry = eventSchedules[slug];
+  if (!entry) return undefined;
+  if (entry.start && entry.start !== startIso) return undefined;
+  return entry;
+}
+
+const CLOCK_TIME = /\d{1,2}:\d{2}\s*(AM|PM)/i;
+
+/**
+ * Has this stop published its gate times? False only for a transcribed schedule
+ * that still reads "TBD" — the template always has a (house-default) number.
+ * The order-of-play intro and the concierge read this so neither claims a gate
+ * time, or a relationship between gate and first serve, the table does not show.
+ */
+export function gatesPublished(slug: string, startIso: string): boolean {
+  const real = getEventSchedule(slug, startIso);
+  return !real || real.proDays.every((d) => CLOCK_TIME.test(d.gates));
+}
+
+/**
+ * The holding line for a stop whose gates are still TBD. Once ANY first-serve
+ * time is in (Worlds, 11 AM Mon–Sat per Brian Clark 10/14), it stops claiming
+ * first serve is still coming and points at the table instead.
+ */
+export function timesPendingLine(slug: string, startIso: string): string {
+  const real = getEventSchedule(slug, startIso);
+  return real?.proDays.some((d) => CLOCK_TIME.test(d.firstServe))
+    ? "Gate times will be posted closer to the event; first-serve times are in the Order of Play."
+    : "Gate and first-serve times will be posted closer to the event.";
 }
 
 /**
@@ -162,23 +265,10 @@ export function getEventSchedule(slug: string): EventSchedule | undefined {
  * day falls back to pro play alone. Re-check on any date change.
  */
 const SIDE_EVENTS_BY_SLUG: Record<string, Record<string, AmateurSession[]>> = {
-  /**
-   * Opendoor Pickleball World Championships — Nov 2–8, Brookhaven Country Club.
-   * The PPA Challenger Showdown is played here on the Thursday, Friday and
-   * Saturday: the Challenger season's closing event, with PPA Tour contracts on
-   * the line.
-   *
-   * ⚠ Built from lib/challenger-showdown.ts rather than typed out, so this table
-   * and the Showdown section on /tour/challenger cannot disagree about which day
-   * plays what. The dates there are DERIVED — read that file's header before
-   * touching them.
-   */
-  [challengerShowdown.hostSlug]: Object.fromEntries(
-    challengerShowdown.days.map((d) => [
-      d.iso,
-      [{ label: challengerShowdown.name, detail: d.label }],
-    ]),
-  ),
+  // ⚠ Worlds' Challenger Showdown lived here until 9/28, when Worlds gained a
+  // full `eventSchedules` entry; it is now on those days' `amateur` arrays
+  // (via showdownOn). Empty for now, kept for the next templated stop that
+  // hosts a companion event.
 };
 
 /**
@@ -223,13 +313,124 @@ const GATES_BY_SLUG: Record<string, string> = {
 };
 
 /**
- * The gate time for a templated day at this stop: the event team's own if we
- * have it, otherwise whatever the template worked out. Both copies of
- * `buildSchedule` read this, so the event page, the `-live` route, the Know
- * Before You Go line and the concierge cannot disagree about it.
+ * A gate time for a run of days mid-event: every day from `from` through
+ * `through` (inclusive) opens at `time`; days outside it keep the template.
+ *
+ * ⚠ Mojo Energy Pouches Virginia Beach Open, Oct 12–18 (Wesley, 10/13): "fix
+ * the gates open time … to be noon for today and onward." Monday's qualifier
+ * day had already been played on the template's 8:00 AM gate, so it is left as
+ * it was rather than rewritten after the fact. ⚠ SUNDAY IS OUT ON PURPOSE
+ * (Wesley, same day): its broadcast opens 10AM ET, so a noon gate would open
+ * after the finals start — it keeps the template's 10:00 AM gate.
  */
-export function gatesFor(slug: string, templated: string): string {
-  return GATES_BY_SLUG[slug] ?? templated;
+const GATES_FROM_BY_SLUG: Record<string, { from: string; through: string; time: string }> = {
+  "virginia-beach-open": { from: "2026-10-13", through: "2026-10-17", time: "12:00 PM" },
+};
+
+/** "12PM ET - 8PM ET" → the start, in minutes after midnight ET; null if unreadable. */
+function etStartMinutes(window: string): number | null {
+  const m = /^\s*(\d{1,2})(?::(\d{2}))?\s*(AM|PM)\s*ET\b/i.exec(window);
+  if (!m) return null;
+  const h = (Number(m[1]) % 12) + (m[3].toUpperCase() === "PM" ? 12 : 0);
+  return h * 60 + Number(m[2] ?? 0);
+}
+
+/** Minutes after midnight → "12:00 PM". */
+function clock(minutes: number): string {
+  const h24 = Math.floor(minutes / 60);
+  const h = h24 % 12 === 0 ? 12 : h24 % 12;
+  return `${h}:${String(minutes % 60).padStart(2, "0")} ${h24 < 12 ? "AM" : "PM"}`;
+}
+
+/**
+ * THE DEFAULT GATE AND FIRST-SERVE RULE (Wesley, 10/13): "the gate time always
+ * matches the earliest broadcast time for that day unless specified otherwise",
+ * and first serve follows the same rule (asked, same day) so the two agree.
+ *
+ * The earliest LIVE window in `lib/broadcast.ts` on this day's weekday, moved
+ * from ET to the venue's own zone. Null when the day has no live window (most
+ * qualifier Mondays) or the venue's zone is unknown — that day keeps the
+ * template. Tape windows don't count: a replay says nothing about the doors.
+ *
+ * ⚠ Broadcast windows are ET; gates are local. Malibu's 3PM ET start is a
+ * noon gate in California. The offset is taken on the day itself, so a stop
+ * that spans the November DST change converts each day correctly.
+ */
+export function broadcastStart(slug: string, iso: string, state?: string): string | null {
+  const tz = tzForState(state);
+  if (!tz) return null;
+  const noon = Date.parse(`${iso}T12:00:00Z`);
+  if (!Number.isFinite(noon)) return null;
+  const weekday = new Date(noon).toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" });
+  const starts = getBroadcast(slug)
+    .filter((s) => s.type !== "TAPE" && s.day.trim().toLowerCase() === weekday.toLowerCase())
+    .map((s) => etStartMinutes(s.window))
+    .filter((m): m is number => m !== null);
+  if (!starts.length) return null;
+  const shift = Math.round((tzOffsetMs(noon, tz) - tzOffsetMs(noon, "America/New_York")) / 60_000);
+  const local = Math.min(...starts) + shift;
+  return local >= 0 && local < 24 * 60 ? clock(local) : null;
+}
+
+/**
+ * The gate time for a templated day at this stop. In order: anything SPECIFIED
+ * for this stop (the first-serve stopgap, a dated run, a flat stop-wide gate),
+ * then the day's earliest broadcast start (`broadcastStart`), then the template.
+ * Both copies of `buildSchedule` read this, so the event page, the `-live`
+ * route, the Know Before You Go line and the concierge cannot disagree.
+ */
+export function gatesFor(
+  slug: string,
+  templated: string,
+  firstServe?: string,
+  iso?: string,
+  state?: string,
+): string {
+  if (firstServe && GATES_AT_FIRST_SERVE.has(slug)) return firstServe;
+  const from = GATES_FROM_BY_SLUG[slug];
+  if (from && iso && iso >= from.from && iso <= from.through) return from.time;
+  if (GATES_BY_SLUG[slug]) return GATES_BY_SLUG[slug];
+  return (iso && broadcastStart(slug, iso, state)) || templated;
+}
+
+/**
+ * What follows "Gates open" in every sentence that states one gate for the
+ * whole stop (the schedule intro, Know Before You Go, the concierge):
+ * "12:00 PM daily", "12:00 PM Tue 10/13 – Sat 10/17" for a dated run, or —
+ * when the days differ, as broadcast-derived gates usually do — a pointer to
+ * the Order of Play. Never the first day's gate standing in for the week.
+ */
+export function gatesDaily(slug: string, gates: string[]): string {
+  const run = GATES_FROM_BY_SLUG[slug];
+  if (run) {
+    const short = (iso: string) => {
+      const d = new Date(`${iso}T12:00:00Z`);
+      const dow = d.toLocaleDateString("en-US", { weekday: "short", timeZone: "UTC" });
+      return `${dow} ${d.getUTCMonth() + 1}/${d.getUTCDate()}`;
+    };
+    return `${run.time} ${short(run.from)} – ${short(run.through)}`;
+  }
+  if (GATES_BY_SLUG[slug]) return `${GATES_BY_SLUG[slug]} daily`;
+  const distinct = [...new Set(gates.filter(Boolean))];
+  return distinct.length === 1
+    ? `${distinct[0]} daily`
+    : "at a different time each day — see the Order of Play";
+}
+
+/**
+ * Stops whose gate time is set to equal each day's first serve, as a stopgap
+ * until the event team sends real gate times.
+ *
+ * ⚠ Chicago Cup, 10/5 (Wesley): "Have the gates opening match with the order
+ * of play for now." The template's 8/9/10 AM gates sat five hours ahead of a
+ * 2 PM first serve. Delete the line once real gate times arrive, and add them
+ * to GATES_BY_SLUG instead.
+ */
+const GATES_AT_FIRST_SERVE = new Set<string>(["veolia-chicago-cup"]);
+
+/** Does this stop's gate time follow each day's first serve (see above)? */
+export function gatesAtFirstServe(slug: string): boolean {
+  return GATES_AT_FIRST_SERVE.has(slug);
 }
 
 /**
@@ -238,7 +439,12 @@ export function gatesFor(slug: string, templated: string): string {
  * may describe it as "an hour before first serve".
  */
 export function hasGatesOverride(slug: string): boolean {
-  return slug in GATES_BY_SLUG;
+  return slug in GATES_BY_SLUG || slug in GATES_FROM_BY_SLUG || hasBroadcastGates(slug);
+}
+
+/** Does this stop carry live broadcast windows, and so gates set by `broadcastStart`? */
+function hasBroadcastGates(slug: string): boolean {
+  return getBroadcast(slug).some((s) => s.type !== "TAPE");
 }
 
 /**
@@ -310,8 +516,56 @@ const FIRST_SERVE_BY_SLUG: Record<string, Record<string, string>> = {
     "2026-09-30": "2:00 PM", // Wed
     "2026-10-01": "2:00 PM", // Thu
     "2026-10-02": "2:00 PM", // Fri
-    "2026-10-03": "1:00 PM", // Sat
+    "2026-10-03": "12:00 PM", // Sat — moved up from 1PM with the broadcast (9/28)
     "2026-10-04": "10:00 AM", // Sun — Championship Sunday
+  },
+
+  /**
+   * Veolia Chicago Cup — Oct 5–11, Life Time Northbrook.
+   * Wesley, 10/5: publish first serve from the PBTV broadcast start times
+   * (the 10/5 PBTV note), converted to Central (ET is local + 1). That is the
+   * pattern Las Vegas' official times followed exactly. Tue–Fri PBTV opens
+   * 3PM ET, Sat 1PM ET, Sun 11AM ET.
+   *
+   * ⚠ MONDAY 10/5 IS ABSENT. It is not broadcast, so nothing implies a time,
+   * and it keeps the template. Replace these with the event team's own times
+   * the moment they send them.
+   */
+  "veolia-chicago-cup": {
+    "2026-10-06": "2:00 PM", // Tue — RD64
+    "2026-10-07": "2:00 PM", // Wed — RD32
+    "2026-10-08": "2:00 PM", // Thu — RD16
+    "2026-10-09": "2:00 PM", // Fri — QF
+    "2026-10-10": "12:00 PM", // Sat — SF
+    "2026-10-11": "10:00 AM", // Sun — Finals
+  },
+
+  /**
+   * Mojo Energy Pouches Virginia Beach Open — Oct 12–18, Pickleball Virginia
+   * Beach. Wesley, 10/13: first serve matches the PBTV broadcast starts, the
+   * Chicago pattern (Virginia is Eastern, so ET is local): Tue–Sat 12PM ET
+   * (Matt's 10/10 note for Tue/Wed, Keaton's 10/9 revision for Thu/Fri, the
+   * sheet for Sat), Sun 10AM ET. Set alongside the noon gates, which otherwise
+   * read two hours after a templated 10:00 AM first serve.
+   *
+   * ⚠ MONDAY 10/12 IS ABSENT: qualifiers, already played, never broadcast.
+   */
+  "virginia-beach-open": {
+    "2026-10-13": "12:00 PM", // Tue — RD64
+    "2026-10-14": "12:00 PM", // Wed — RD32
+    "2026-10-15": "12:00 PM", // Thu — RD16
+    "2026-10-16": "12:00 PM", // Fri — QF
+    "2026-10-17": "12:00 PM", // Sat — SF
+    // Maynard, 10/17 11:12PM ET: Sunday runs 8AM ET semifinals on Championship
+    // Court and Grandstand, 9AM ET more semifinals, first finals match 10AM ET.
+    // Virginia is Eastern, so ET is local. The 10:00 AM that was here is now the
+    // FINALS start, not first serve, and leaving it would have sent anyone
+    // reading the page to the venue two hours after play began.
+    //
+    // Gates follow on their own: the dated noon run ends 10/17, so Sunday falls
+    // through to `broadcastStart`, which is the 8AM PBTV open above. That is
+    // Wesley's 10/13 standing rule, gate = the day's earliest broadcast start.
+    "2026-10-18": "8:00 AM", // Sun — remaining SFs, then finals
   },
 };
 
@@ -321,13 +575,13 @@ const FIRST_SERVE_BY_SLUG: Record<string, Record<string, string>> = {
  * Both copies of `buildSchedule` read this, so the order-of-play table, the
  * `-live` route and the concierge cannot disagree about it.
  */
-export function firstServeFor(slug: string, iso: string, templated: string): string {
-  return FIRST_SERVE_BY_SLUG[slug]?.[iso] ?? templated;
+export function firstServeFor(slug: string, iso: string, templated: string, state?: string): string {
+  return FIRST_SERVE_BY_SLUG[slug]?.[iso] ?? broadcastStart(slug, iso, state) ?? templated;
 }
 
 /** Did the event team set this specific day's first serve? */
-export function hasFirstServeOverride(slug: string, iso: string): boolean {
-  return FIRST_SERVE_BY_SLUG[slug]?.[iso] !== undefined;
+export function hasFirstServeOverride(slug: string, iso: string, state?: string): boolean {
+  return FIRST_SERVE_BY_SLUG[slug]?.[iso] !== undefined || broadcastStart(slug, iso, state) !== null;
 }
 
 /**
@@ -341,8 +595,16 @@ export function hasFirstServeOverride(slug: string, iso: string): boolean {
  * serve would leave the page claiming an hour where the table beside it shows
  * five.
  */
-export function gatesFollowFirstServe(slug: string): boolean {
-  return !(slug in GATES_BY_SLUG) && !(slug in FIRST_SERVE_BY_SLUG);
+export function gatesFollowFirstServe(slug: string, startIso: string): boolean {
+  // A transcribed schedule still reading "TBD" has no gate to relate to anything.
+  if (!gatesPublished(slug, startIso)) return false;
+  return (
+    !(slug in GATES_BY_SLUG) &&
+    !(slug in GATES_FROM_BY_SLUG) &&
+    !hasBroadcastGates(slug) &&
+    !(slug in FIRST_SERVE_BY_SLUG) &&
+    !GATES_AT_FIRST_SERVE.has(slug)
+  );
 }
 
 /**
@@ -358,8 +620,9 @@ export function gatesFollowFirstServe(slug: string): boolean {
 export function firstServeNote(
   slug: string,
   days: { iso: string; date: string; firstServe: string }[],
+  state?: string,
 ): string | null {
-  const set = days.filter((d) => hasFirstServeOverride(slug, d.iso));
+  const set = days.filter((d) => hasFirstServeOverride(slug, d.iso, state));
   if (set.length === 0) return null;
   const dates = set.map((d) => d.date);
   const list =

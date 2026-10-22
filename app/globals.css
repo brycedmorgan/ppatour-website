@@ -64,6 +64,12 @@
   --color-ppa-win: #d7eafb; /* winning side's score cells — a tint of ppa-blue, not green; brackets, scores, match cards */
   --color-ppa-bronze: #c98a3c; /* third place — the one medal with no brand colour */
 
+  /* PPA Challenger Series — sub-brand red, sampled from the Series' own logo
+     lockup (ppachallenger.com). Tanner Groff / Anders, 10/19: the page "has to be
+     Challenger red". Use ONLY on /tour/challenger — ppa-blue stays the tour's CTA. */
+  --color-challenger-red: #ba0c2f;
+  --color-challenger-red-deep: #8f0924; /* hover */
+
   /* Pickleball Vacations — sub-brand accent. Carried over from the standalone
      vacations.ppatour.com palette so the property keeps its own Caribbean
      signature inside PPA navy, the same way an event's `brand.accent` skins an

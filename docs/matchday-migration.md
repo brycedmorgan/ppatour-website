@@ -125,3 +125,72 @@ password hashes and cron tokens verbatim. Never commit it.)
 - 6 public buckets. Object bytes are NOT in the export; copy by hand.
 - Chris's HAND-CARRY-CHECKLIST.md in the export is the secrets list and the
   cutover order. It is good. Use it as the runbook skeleton.
+
+## Status check + new plan (2026-10-08)
+
+Nothing moved between 9/3 and 10/8. pblfg.com still on Lovable hosting
+(185.158.133.1); app still on Lovable Cloud (`grwhdhnlafqrcmiuqhhi`). Chris made
+~3,780 commits in Lovable since 9/3. Lovable spend per Jason: Aug $6,203, Sep
+$5,100 by 9/23 (build credits only). "Out of funds" mails 9/22, 9/27, 9/28.
+Jason's "hosting on AWS since June" (9/23) does not match the live DNS.
+
+Decision (Bryce, 10/8): full move, switch week **Nov 9–15**.
+
+New findings from the 10/8 code read:
+- Email also runs on Lovable: `notify.pblfg.com` NS is delegated to
+  ns3/ns4.lovable.cloud; `process-email-queue` uses `@lovable.dev/email-js`,
+  suppression webhooks use `@lovable.dev/webhooks-js`. Replace with Resend
+  (Jackalope already uses it) and re-point `notify.pblfg.com` at switch.
+- pblfg.com DNS is GoDaddy (ns29/30.domaincontrol.com). Owner of the GoDaddy
+  account unknown; asked Chris 10/8.
+- Native builds bake in the backend URL/key. Plan: the Oct store build reads
+  the backend from a remote JSON config (next launch only, falls back to the
+  bundled value), so the switch needs no second store release.
+- "Emergency web override" (app_settings `emergency_web_override`) can redirect
+  the native app to `pbpulse.lovable.app`. Retarget to the Vercel host.
+- APNs functions fall back to a Lovable bundle id if APNS_BUNDLE_ID is unset.
+- Lovable AI gateway used by `parse-bracket-pdf` and `generate-event-guide`
+  → Anthropic API.
+- GitHub org for the transfer: **Pickleball-Inc-Crew** (Bryce is admin).
+
+Prep in flight (10/8, local branches in `~/pickleball/pbpulse`, NOT pushed;
+the repo is still Chris's personal one):
+- `off-lovable`: runtime backend switch, Lovable code removed, AI → Anthropic,
+  email → Resend. Notes in that branch's `docs/OFF-LOVABLE.md`.
+- `migration-scripts`: preflight, schema, data dump/restore, auth import,
+  storage copy, cron rewrite, verify, cutover runbook in
+  `scripts/migration/README.md`.
+
+Bryce's order of steps:
+1. Send Chris the 10/8 draft (Gmail, cc Jason). Invite `chriscantino` to Pickleball-Inc-Crew.
+2. Create the company Supabase org + project (company card, same region as old).
+3. Guardrails for Chris's work with Taylor (scope, monthly cap, approver).
+4. Get Owner on the Lovable workspace; swap the card.
+5. Secrets from Chris via 1Password → straight into Supabase.
+6. Approve + submit the store build by **Oct 31**.
+7. Switch week Nov 9–15 (≈2 h freeze, on call). DNS for pblfg.com + notify.pblfg.com.
+8. Cancel Lovable ~Dec 15; only then bank savings row 16.
+
+### Prep results (2026-10-08, evening)
+
+- `off-lovable` (worktree `~/pickleball/pbpulse-offlovable`, 8 commits): typecheck +
+  build pass; deno check clean on changed functions. Details in its `docs/OFF-LOVABLE.md`.
+  Still open: verify `notify.pblfg.com` in Resend + swap its GoDaddy records;
+  point new project's Auth SMTP at Resend; 5 fonts load from old storage;
+  backend config file host (proposed `app.pblfg.com/backend.json`); delete `bun.lockb`.
+- `migration-scripts` (worktree `~/pickleball/pbpulse-migration`): schema replay,
+  data dump/restore, auth import (3,449 users, hashes kept), URL rewrite, cron
+  (45 jobs) and verify all tested on local Postgres 16. Storage copy untested.
+- Old project region: **eu-west-1 (Ireland)**. Users are US. Recommend new project
+  in US East unless Bryce says match.
+- Prod has columns/functions no migration creates; `15-schema-diff` patches them.
+- `notification_history` is the push de-dup log for 16 functions. Copy last 30 days.
+- Needs Chris (only he can run SQL/deploys on Lovable Cloud): deploy
+  `migration-dump` to the old project, and run `old-disable.sql` at switch time.
+- Supabase CLI not installed locally yet.
+
+## Chris reply (2026-10-09)
+- No company 1Password exists (checked Gmail + Slack). Chris shares secrets to bryce@pickleball.com as 1Password expiring share links; once the new Supabase project exists he's added as Developer and enters keys directly.
+- Told Chris: GitHub invite re-sent to chriscantino@gmail.com; Claude seat coming (Bryce to set up); staging Supabase + Vercel branch previews; rollback = backend switch flips back; final sync on switch week with old cron off.
+- Paddletek integration: hold until after the switch (Bryce + Taylor decide if Chris says it can't wait).
+- Still on Bryce: card + Create organization in Supabase (form is filled in), Claude seat for Chris.

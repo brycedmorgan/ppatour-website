@@ -3,7 +3,7 @@ import Link from "next/link";
 import {
   daysUntil,
   formatDateRange,
-  tierPoints,
+  tierBadgeText,
   eventTierShort,
   tierBadgeClass,
   type Tournament,
@@ -136,7 +136,7 @@ export function FeaturedEvents({
 
                 <div className="absolute right-3 top-3 flex flex-col items-end gap-1">
                   <span className={`${tierBadgeClass(t)} px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] whitespace-nowrap`}>
-                    {tierName ?? eventTierShort(t)} · {tierPoints(t).toLocaleString()}
+                    {tierBadgeText(t, tierName ?? eventTierShort(t))}
                   </span>
                   {days > 0 && (
                     <span

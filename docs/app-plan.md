@@ -32,6 +32,38 @@ What did **not** exist before 8/18: any manifest, icon set, or app-shell
 navigation. Phase 1 and 2 below closed that; there is still no service worker
 and no store presence.
 
+## 10/8 — scores-first, and what MATCHDAY's SSO can (and can't) give us
+
+**Bryce, 10/8:** "more like ESPN" — scores and brackets first, schedule and
+events deeper, so it stops feeling like a website wrapper. Built on branch
+`app-scores-first`: `/scores` is the app's first screen and first tab; tabs are
+Scores · Rankings · Events · Watch · You. The old Live tab opened `/live`, the
+homepage rehearsal harness, i.e. the homepage again.
+
+**Favorites + push via MATCHDAY — findings (pbpulse, read-only):**
+- MATCHDAY has no SSO of its own. It is an OIDC client of
+  `oidc.pickleball.com` (Jason), scope `openid offline_access email`, no PKCE,
+  and mints its own Supabase session after the exchange. ppatour.com can be a
+  sibling client and gets the same `sub`.
+- Favorites exist: `mlp_team_follows` (stable `team_uuid`, per-alert flags)
+  and `user_notification_preferences` (followed pros as **free-text
+  `player_name`**). Keyed by MATCHDAY's user id; only users who signed in with
+  Pickleball.com (~186 of ~3,450) have a `sub` link at all.
+- No partner API for favorites. Push tokens and APNs/FCM keys belong to
+  MATCHDAY's bundle (`com.cc.pbpulse.app`) and can't be reused by our app.
+- Supabase project moves at the Nov 9–15 cutover — don't integrate against the
+  Lovable project.
+- ⚠ Security, raise with the migration: `send-push-notification` accepts an
+  `x-service-role: true` header with no secret check (`verify_jwt=false`), and
+  `get_user_followed_players` / `get_user_followed_mlp_teams` are granted to
+  anon.
+
+**Recommendation:** own the follows ourselves on `sub` (Neon `ppatour-fanapp`
+already holds device follows), seed MLP team picks from MATCHDAY for the
+overlap after cutover via a server-to-server endpoint, and send our own push
+from the store app. Asking Jason for our OIDC client (emailed 10/1) is still
+the gate.
+
 ## Phases
 
 **Phase 1 — make it installable. ✅ SHIPPED 8/18** (`app/manifest.ts`,

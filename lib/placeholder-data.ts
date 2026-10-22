@@ -500,6 +500,17 @@ const COMMERCE_BY_SLUG: Record<string, { tickets?: string; register?: string }> 
   // is Tixr-side — worth asking Cem to retire it.
   "cape-coral-open": { tickets: tixrEvent("ppa-cape-coral-206222") },
   "cincinnati-open": { tickets: tixrEvent("veolia-ppa-cincinnati-181370") },
+  // Cem Aslan, DM 10/19: "We published tickets for 2027 Newport Beach." Keyed by
+  // the DATED slug: the plain `newport-beach-open` is the 2025 past record, so
+  // buildSchedule suffixes the 2027 row, and a plain key here was never read.
+  // ⚠ The button only shows once 211406 is in lib/data/tixr-price-index.json
+  // (`ticketsOnSale`); `npm run tixr:sync` / the daily sync-tixr-prices action
+  // adds it. Tixr captcha-blocks the API from Wesley's machine.
+  // Registration: Cem, same DM 9:43AM, "player registration is also live".
+  "newport-beach-open-2027-03-02": {
+    tickets: tixrEvent("ppa-newport-beach-211406"),
+    register: registerEvent("ppa-tour-newport-beach-open-1"),
+  },
   "rate-las-vegas-open": {
     // 178513 is no longer in the PPA group's 61 Tixr events; 195857 is the
     // current "PPA Las Vegas" listing and matches our stop on city and start
@@ -559,6 +570,12 @@ const COMMERCE_BY_SLUG: Record<string, { tickets?: string; register?: string }> 
     // TicketGrid already deep-links each day from the day cards.
     tickets: tixrEvent("ppa-palm-springs-204325"),
     register: registerEvent("ppa-tour-carvana-pickleball-masters-powered-by-invited"),
+  },
+  // Tanner Thygerson, Slack 10/8: "Tickets are live." Both links are his. The
+  // Tixr id (210307) is in the price snapshot as on sale, from $25.
+  "carvana-mesa-cup": {
+    tickets: tixrEvent("ppa-mesa-210307"),
+    register: registerEvent("ppa-tour-carvana-mesa-cup-2"),
   },
   "macon-ppa-challenger": {
     tickets: tixrEvent("ppa-challenger-series-macon-166226"),
@@ -733,7 +750,8 @@ const SCHEDULE: RawEvent[] = [
   // July 2026
   { name: "PPA Australia 250 Melbourne", start: "2026-07-15", end: "2026-07-19", city: "Melbourne", state: "Australia", type: "international", country: "Australia" },
   { name: "Macon PPA Challenger", start: "2026-07-17", end: "2026-07-19", city: "Macon", state: "GA", type: "challenger" },
-  { name: "PPA Italy 125 Portoroz", start: "2026-07-22", end: "2026-07-26", city: "Portoroz", state: "Italy", type: "international", country: "Europe" },
+  // Photo: Payton, #ppa-tour-europe 10/1 (PPA_DAY3_350.jpg) — the card was drawing the Gold Coast.
+  { name: "PPA Italy 125 Portoroz", start: "2026-07-22", end: "2026-07-26", city: "Portoroz", state: "Italy", type: "international", country: "Europe", image: "/ppa/event-portoroz.jpg" },
   { name: "PPA Asia 500 Singapore Open", start: "2026-07-23", end: "2026-07-26", city: "Singapore", state: "", type: "international", country: "Asia" },
   { name: "Wisconsin PPA Challenger", start: "2026-07-31", end: "2026-08-02", city: "Lake Hallie", state: "WI", type: "challenger" },
 
@@ -781,7 +799,9 @@ const SCHEDULE: RawEvent[] = [
   // illustrated with Macao and the P500 with the Gold Coast, and the FEED row (the
   // one /events actually serves) drew Melbourne. Same bug Bryce flagged on 7/28
   // when Las Vegas was showing the Brisbane skyline, one continent over.
-  { name: "PPA Spain P250 Barcelona", start: "2026-09-23", end: "2026-09-27", city: "Barcelona", state: "Spain", type: "international", country: "Europe", image: "/ppa/event-barcelona.jpg" },
+  // Tournament photo from the event itself (Payton 10/1, 238-PPA-250-BCN-MENS-DOUBLES.jpg); the
+  // waterfront shot stays the /europe hero.
+  { name: "PPA Spain P250 Barcelona", start: "2026-09-23", end: "2026-09-27", city: "Barcelona", state: "Spain", type: "international", country: "Europe", image: "/ppa/event-barcelona-p250.jpg" },
   { name: "Charlotte PPA Challenger", start: "2026-09-25", end: "2026-09-27", city: "Charlotte", state: "NC", type: "challenger", points: 125 },
   { name: "Rate Las Vegas Open", start: "2026-09-28", end: "2026-10-04", city: "Las Vegas", state: "NV", venue: "Darling Tennis Center", type: "ppa", tier: "open" },
 
@@ -830,6 +850,12 @@ const SCHEDULE: RawEvent[] = [
   // ⚠ A PPA Spain P125 sat here (11–15 Nov) on the strength of the 5/27 release
   // alone, with no city. Deleted 8/5 with the other four unconfirmed Spanish
   // stops — see the note on the Barcelona opener above before re-adding one.
+  // PPA Tour Europe's Lille stop went public in the feed 10/15 as "PPA TOUR EUROPE -
+  // P125 LILLE" (Villeneuve-d'Ascq), aliased in lib/events-api.ts. Without this row
+  // the card fell back to VENUE_IMAGES (Melbourne / Macao). The photo is Catie's
+  // Barcelona women's doubles shot (699-PPA-250-BCN-WOMENS-DOUBLES.jpg, Katherina
+  // 10/15), cropped 4:5 with the player centred; swap it when Lille has its own.
+  { name: "PPA France P125 Lille", start: "2026-11-12", end: "2026-11-15", city: "Lille", state: "France", type: "international", country: "Europe", image: "/ppa/event-lille-p125.jpg" },
   { name: "Proton Daytona Beach Open", start: "2026-11-16", end: "2026-11-22", city: "Holly Hill", state: "FL", venue: "Pictona at Holly Hill", type: "ppa", tier: "open" },
   // ⚠ `showWhenAbsentFromFeed` DROPPED 9/15 — same as the Ottawa row above, and
   // for the same reason. Aliased in lib/events-api.ts; fallback only now.
@@ -869,7 +895,7 @@ const SCHEDULE: RawEvent[] = [
   { name: "Minneapolis Indoor Open", start: "2027-01-18", end: "2027-01-24", city: "Lakeville", state: "MN", venue: "Life Time — Lakeville", type: "ppa", tier: "open", points: 500 },
 
   // February 2027
-  { name: "Cape Coral Open", start: "2027-02-01", end: "2027-02-07", city: "Cape Coral", state: "FL", venue: "Cape Coral Racquet Club", type: "ppa", tier: "open" },
+  { name: "Cape Coral Open", start: "2027-02-01", end: "2027-02-07", city: "Cape Coral", state: "FL", venue: "The Courts, Cape Coral", type: "ppa", tier: "open" },
   { name: "Carvana Mesa Cup", start: "2027-02-15", end: "2027-02-21", city: "Mesa", state: "AZ", venue: "Bell Bank Park", type: "ppa", tier: "cup" },
   { name: "PPA Australia 125 Melbourne", start: "2027-02-18", end: "2027-02-21", city: "Melbourne", state: "Australia", type: "international", country: "Australia" },
 
@@ -1093,6 +1119,26 @@ export function tierPoints(t: Pick<Tournament, "tierKey"> & { points?: number })
   return t.points ?? TIER_META[t.tierKey].points;
 }
 
+/**
+ * Points as display text, or null when we don't know them.
+ *
+ * ⚠ A CHALLENGER HAS NO DEFAULT LEVEL. Every Challenger is 125 or 250, set per
+ * event as its sanction level in PT (Jason, 9/9) — which our feed doesn't carry.
+ * The tier default of 500 is not a Challenger level, and on 10/18 it printed
+ * "500" on nine of ten 2027 stops (Chris flagged it to Bryce). Unknown means
+ * no number; set the real one as `points` on the curated record.
+ */
+export function pointsText(t: Pick<Tournament, "tierKey"> & { points?: number }): string | null {
+  if (t.tierKey === "challenger" && t.points == null) return null;
+  return tierPoints(t).toLocaleString();
+}
+
+/** Card badge text: "Open · 1,000", or just "Challenger" when the level is unknown. */
+export function tierBadgeText(t: Pick<Tournament, "tierKey"> & { points?: number }, label: string): string {
+  const pts = pointsText(t);
+  return pts ? `${label} · ${pts}` : label;
+}
+
 /** Short tier label, e.g. "Championship". */
 export function tierShort(t: Pick<Tournament, "tierKey">): string {
   return TIER_META[t.tierKey].short;
@@ -1268,8 +1314,13 @@ const TZ_BY_STATE: Record<string, string> = {
   VA: "America/New_York",
 };
 
+/** IANA timezone for a US stop's state, or undefined for one not on the calendar. */
+export function tzForState(state: string | undefined): string | undefined {
+  return state ? TZ_BY_STATE[state] : undefined;
+}
+
 /** How far `tz` is from UTC at a given instant, in ms (negative in the US). */
-function tzOffsetMs(utcMs: number, tz: string): number {
+export function tzOffsetMs(utcMs: number, tz: string): number {
   const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: tz,
     hour12: false,

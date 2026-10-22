@@ -148,7 +148,7 @@ apart. Values are channel **IDs** (`C…`) so a rename doesn't break routing.
 |---|---|
 | `FORM_SLACK_CHANNEL_SUPPORT` | Contact → *Pickleball Brackets/Tournaments* |
 | `FORM_SLACK_CHANNEL_REGISTRATIONS` | Contact → *Registrations* |
-| `FORM_SLACK_CHANNEL_TICKETING` | Contact → *Tickets* |
+| `FORM_SLACK_CHANNEL_TICKETING` | **Unused since 10/7** — Parker wants ticket questions by email only (ticketing@ppatour.com); Contact → *Tickets* and the triage TICKETING route post to the marketing channel instead |
 | `FORM_SLACK_CHANNEL_BROADCAST` | Contact → *PBTV/Broadcasting* |
 | `FORM_SLACK_CHANNEL_PR` | Contact → *Public Relations* |
 | `FORM_SLACK_CHANNEL_SPONSORSHIP` | Contact → *Sponsorship* **and** the sponsorship form |

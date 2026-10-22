@@ -41,6 +41,7 @@ const COUNTRY_ISO3: Record<string, string> = {
   Canada: "CAN",
   Italy: "ITA",
   Spain: "ESP",
+  France: "FRA",
   Singapore: "SGP",
   Malaysia: "MYS",
   China: "CHN",

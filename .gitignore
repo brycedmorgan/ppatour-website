@@ -47,3 +47,6 @@ next-env.d.ts
 
 # Throwaway build dir for BUILD_DIST_DIR (see next.config.ts)
 .next-buildcheck/
+
+# Ambassador dashboard: local dev data (real ambassador data — never commit)
+.ambassadors-dev/

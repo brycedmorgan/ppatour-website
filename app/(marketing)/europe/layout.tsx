@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { EuropeSocialLinks } from "@/components/europe/EuropeSocialLinks";
+import { EUROPE_PARTNERS } from "@/lib/europe-partners";
 
 /**
  * Europe-scoped chrome.
@@ -33,8 +35,9 @@ import Link from "next/link";
  */
 
 /**
- * ⚠ NO NAV LINKS, DELIBERATELY. Europe has no routes of its own — every section
- * lives on /europe itself. The global header's links (Events, Watch, Athletes,
+ * ⚠ EUROPE-ONLY NAV (Payton, 10/2: add the Gallery page "to the menu"). Every
+ * link points at a section of /europe or a /europe/* route, never a US page.
+ * Historical note, kept because the rule still holds: Europe has no US routes. The global header's links (Events, Watch, Athletes,
  * Rankings, the Tour submenu, How It Works, Player Handbook) all lead to US
  * pages, which is precisely what Chris reported: "the links go to the wrong
  * place and there are lots that should not be on there." Inventing section
@@ -44,14 +47,21 @@ import Link from "next/link";
  * The page renders its own RegionSwitcher, so a visitor can still reach the
  * other regional tours.
  */
+const EUROPE_NAV = [
+  { label: "Schedule", href: "/europe#schedule", mobile: false },
+  { label: "The Pros", href: "/europe#pros", mobile: false },
+  { label: "Gallery", href: "/europe/gallery", mobile: true },
+  { label: "Contact", href: "/europe#contact", mobile: false },
+];
+
 function EuropeHeader() {
   return (
     <header className="sticky top-0 z-50 bg-ppa-navy">
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center gap-3 px-4">
+      <div className="mx-auto flex h-16 w-full max-w-6xl items-center gap-2 px-4 sm:gap-3">
         <Link
           href="/europe"
           aria-label="PPA Tour Europe — home"
-          className="flex shrink-0 items-center gap-3"
+          className="flex shrink-0 items-center gap-2 sm:gap-3"
         >
           {/* The shipped lockup cropped to drop the Carvana badge and wordmark.
               ⚠ width is 670, NOT 1408 — the crop's real intrinsic width. The
@@ -64,34 +74,67 @@ function EuropeHeader() {
             width={670}
             height={149}
             priority
-            className="h-6 w-auto"
+            className="h-5 w-auto sm:h-6"
           />
-          <span className="border-l border-white/25 pl-3 text-[12px] font-bold uppercase tracking-[0.14em] text-white">
+          <span className="border-l border-white/25 pl-2 sm:pl-3 text-[12px] font-bold uppercase tracking-[0.14em] text-white">
             Europe
           </span>
         </Link>
+        <nav aria-label="PPA Tour Europe" className="ml-auto flex min-w-0 items-center sm:gap-1">
+          {EUROPE_NAV.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className={`px-1.5 py-2 text-[11px] sm:px-2.5 font-bold uppercase tracking-[0.12em] text-white/75 transition-colors hover:text-white ${l.mobile ? "" : "hidden md:block"}`}
+            >
+              {l.label}
+            </Link>
+          ))}
+        </nav>
+        {/* Top right of the main menu, white (Albert + Payton, 10/2). */}
+        <div className="border-l border-white/20 pl-1 sm:pl-2">
+          <EuropeSocialLinks size="xs" />
+        </div>
       </div>
     </header>
   );
 }
 
 /**
- * ⚠ NO PARTNER STRIP. The global footer renders ten US partner marks, Carvana
- * among them, each linking to the partner's own site. That strip is the single
- * worst item on this page for a sponsor meeting.
+ * ⚠ EUROPE'S PARTNERS ONLY. The global footer renders ten US partner marks,
+ * Carvana among them; none of those may appear here. The strip below is
+ * Europe's own two (lib/europe-partners.ts), same tile style as ppatour.com.
  *
  * ⚠ NO US TOUR LINKS either — the global footer's Pro Tour column carries
  * Tixr tickets, How It Works and the Player Handbook, all US. Only the legal
  * pages are genuinely site-wide, so only they survive.
  *
- * ⚠ NO SOCIAL ICONS. The global footer links five @ppatour accounts, which are
- * the US tour's. A @ppatoureurope Instagram exists but this file is not the
- * place to assert a handle nobody has confirmed.
+ * ⚠ EUROPE'S OWN SOCIALS ONLY. The global footer links five @ppatour accounts,
+ * which are the US tour's. These are the three @ppatoureurope accounts Payton
+ * confirmed (lib/europe-socials.ts), added 10/1 after two asks (9/22, 9/23).
  */
 function EuropeFooter() {
   return (
     <footer className="bg-ppa-navy text-white">
       <div className="mx-auto w-full max-w-6xl px-4 py-12">
+        <div className="mb-10 border-b border-white/10 pb-10">
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">Our Sponsors</p>
+          <ul className="mt-4 flex flex-wrap gap-3">
+            {EUROPE_PARTNERS.map((p) => (
+              <li key={p.name}>
+                <a
+                  href={p.href}
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  title={`${p.name} · ${p.role}`}
+                  className="flex h-16 w-40 items-center justify-center bg-white px-4 transition-opacity hover:opacity-85 sm:h-[72px] sm:w-48"
+                >
+                  <Image src={p.logo} alt={`${p.name}, ${p.role}`} width={p.w} height={p.h} className="max-h-8 w-auto" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <Image
             src="/ppa/logos/ppa-tour-horizontal-white.svg"
@@ -114,6 +157,12 @@ function EuropeFooter() {
               Terms
             </Link>
           </nav>
+        </div>
+        <div className="mt-8 flex flex-wrap items-center gap-4">
+          <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
+            Follow PPA Tour Europe
+          </span>
+          <EuropeSocialLinks />
         </div>
         <p className="mt-8 text-[12px] text-white/45">
           PPA Tour Europe. © {new Date().getFullYear()} Pickleball Inc.

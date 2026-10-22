@@ -125,6 +125,230 @@ export type NewsArticle = {
  */
 export const newsArticles: NewsArticle[] = [
   /**
+   * ⚠ HUMAN-AUTHORED PRESS RELEASE — the official MUNICIPAL Celebrity Pickleball
+   * Showdown / Mark Wahlberg announcement (comms doc dated "DALLAS, Oct. 6,
+   * 2026"), supplied by Tyler on 10/8 to post. Same exception path as the Jeff
+   * Watson rankings release: official comms copy with real attributed quotes,
+   * not AI-written coverage — ships `status: "published"`; Dylan can flip it to
+   * "draft" in one line. Hero is the event's own Showdown lockup (a designed
+   * graphic → `heroGraphic`). The ticket CTA points at the Showdown's OWN Tixr
+   * listing (210184), not the next tour stop. Press-wire footer (hi-res image
+   * link, YouTube-tag rule, Corient legal disclaimers) intentionally dropped
+   * for the web article; inline links are not supported in native body, so the
+   * ticket link lives on the CTA button.
+   */
+  {
+    slug: "municipal-celebrity-pickleball-showdown-wahlberg",
+    status: "published",
+    category: "Tour News",
+    title: "Mark Wahlberg to Headline MUNICIPAL Celebrity Pickleball Showdown",
+    subtitle:
+      "Powerball Championship Court · Brookhaven Country Club · Thursday, Nov. 5, 7 p.m. CT · Live on Tennis Channel",
+    date: "Oct 6",
+    image: "/ppa/news/municipal-celebrity-showdown-wahlberg.png",
+    heroGraphic: true,
+    eventSlug: "pickleball-world-championships",
+    ctaUrl:
+      "https://www.tixr.com/groups/ppa/events/municipal-celebrity-pickleball-showdown-210184",
+    ctaLabel: "Get Celebrity Showdown Tickets",
+    dek: "Actor and entrepreneur Mark Wahlberg leads a star-studded celebrity lineup for the MUNICIPAL Celebrity Pickleball Showdown at the 2026 Opendoor Pickleball World Championships — Nov. 5 on Championship Court at Brookhaven Country Club, live on Tennis Channel.",
+    whyItMatters:
+      "A marquee celebrity exhibition headlined by a global movie star and MUNICIPAL co-founder brings mainstream star power to Worlds week on Championship Court, broadcast live on Tennis Channel.",
+    body: [
+      "The MUNICIPAL Celebrity Pickleball Showdown returns to the 2026 Opendoor Pickleball World Championships, with actor and entrepreneur Mark Wahlberg leading a star-studded lineup of celebrities and sports personalities set to take the court alongside the Carvana PPA Tour's top pickleball pros. The marquee event will take place on Powerball Championship Court at Brookhaven Country Club on Thursday, November 5, at 7 p.m. CT and will be broadcast live on Tennis Channel.",
+      "Known for blockbuster films such as The Fighter, Boogie Nights and The Departed, hit television projects like Entourage and Boardwalk Empire, and a growing business empire where he holds a stake in prominent companies including Flecha Azul Tequila and title sponsor MUNICIPAL, Wahlberg will take the court in what promises to be one of the most entertaining nights of the week-long Opendoor Pickleball World Championships.",
+      "“The pickleball community aligns with the founding principles of MUNICIPAL: dream, plan, hustle, repeat. And with the support of people who strive to be the best versions of themselves, on and off the court,” said Wahlberg.",
+      "“As the title sponsor for the Celebrity Pickleball Showdown, we're excited to introduce the MUNICIPAL brand to America's fastest-growing sport,” said Michael Pratt, MUNICIPAL CEO. “Our brand is built on core values of being your best, putting in the work, betting on yourself, and building community — all of which the PPA and its athletes embody. We look forward to joining the pickleball community at the Opendoor Pickleball World Championships.”",
+      "The MUNICIPAL Celebrity Pickleball Showdown will bring together celebrities, professional athletes and some of the biggest names in pickleball for a one-night exhibition in front of a packed crowd on Powerball Championship Court. Additional participants will be announced in the coming weeks, and fans should expect plenty of competition, big personalities, and memorable moments under the lights.",
+      "The MUNICIPAL Celebrity Pickleball Showdown is supported by Corient, a key partner for the event.",
+      "The Opendoor Pickleball World Championships has become a staple event on the sports calendar, with last year's edition shattering numerous records and becoming the benchmark for fan attendance and amateur participation. The 2025 event saw over 60,000 fans attend and a record 4,400 total participants, including players representing 38 countries competing in more than 6,000 matches throughout the week.",
+      "Tickets for the MUNICIPAL Celebrity Pickleball Showdown are available now via Tixr. Tickets for the Opendoor Pickleball World Championships at large, along with week-long passes, pickleball clinics and other special programming, are also available now.",
+      "## About Carvana PPA Tour",
+      "The Carvana PPA Tour engages and amplifies fans, partners and pickleball communities worldwide by encouraging everyone to BE THE BEST.",
+      "Founded in 2019, the Carvana PPA Tour is the only place to see pickleball's biggest names compete for the sport's most important championships and titles. The Carvana PPA Tour cements professional pickleball in the global sports ecosystem by attracting numerous multi-national partners, while consistently elevating the profile of pickleball globally via the sport's largest international footprint. With a steadfast commitment to the greatest community in sports, Carvana PPA Tour amateur divisions attract thousands of players competing alongside the elite professional athletes at each tour stop.",
+      "## About MUNICIPAL",
+      "MUNICIPAL is a premium performance apparel and footwear brand co-founded by Mark Wahlberg. Since 2019, MUNICIPAL has built a culture around ambitious people who believe that being at their best — mentally and physically — is the most powerful path to achieving their wildest dreams. The brand brings that complete performance mindset to life through uncompromising apparel and footwear, inspiring storytelling, memorable in-person experiences, and a community built around putting in the work and betting on yourself.",
+      "## About Corient",
+      "Corient is the world's largest multi-family office and non-bank wealth manager focused on serving ultra-high- and high-net-worth clients. As the industry's only global professional services partnership, it combines the personal service and objectivity of a boutique with the scale and resources of a global institution. Corient delivers comprehensive solutions across investment management, wealth strategy and family office services to help clients simplify their lives, manage their wealth and establish lasting legacies. For more information, visit corient.com.",
+      "Media Contact: Nathan Boschult, Carvana PPA Tour.",
+    ],
+  },
+  /**
+   * ⚠ HUMAN-AUTHORED EDITORIAL — Dave Fleming's preview of the Chicago Cup,
+   * supplied by Wesley on 10/5 ("VEOLIA CHICAGO CUP STORYLINES (OCT 5 - OCT 11,
+   * 2026)"). Same exception path and transcription rules as the Las Vegas
+   * preview below: one paragraph per bullet, a heading per draw, his seeds and
+   * slash-separated doubles shorthand verbatim. Ships `status: "published"`;
+   * Dylan can flip it to "draft" in one line.
+   *
+   * ⚠ HIS TV LINE WAS CHECKED AND MATCHES: PBTV 2PM Central Tue–Fri, noon Sat,
+   * 10AM Sun = 3PM/3PM/1PM/11AM ET in lib/tv-schedule.ts; FS1 Thu + Sun; Tennis
+   * Channel Sat + Sun only (Thu/Fri TC was dropped 10/5).
+   *
+   * ⚠ THE IMAGE IS THE EVENT'S OWN HERO (`lt-northbrook/featured-aerial.jpg`),
+   * because it is the only Northbrook photo in the repo. That means the Coverage
+   * card on the Chicago event page shows the same picture as the page's hero.
+   * Swap it when photography from the week lands.
+   */
+  {
+    slug: "veolia-chicago-cup-storylines",
+    status: "published",
+    category: "Tour News",
+    title: "Storylines for the Veolia Chicago Cup",
+    subtitle: "Presented by STORM · Oct. 5–11, 2026 · Northbrook, IL",
+    date: "Oct 5",
+    image: "/ppa/venues/lt-northbrook/featured-aerial.jpg",
+    author: "Dave Fleming",
+    eventSlug: "veolia-chicago-cup",
+    ctaUrl: "/events/2026/veolia-chicago-cup/",
+    ctaLabel: "Veolia Chicago Cup Event Page",
+    dek: "The tour's first stop in Chicago is indoors at Life Time Northbrook, worth 1,500 points, and gives Anna Leigh Waters three chances at career title No. 200.",
+    whyItMatters:
+      "A debut event with no defending champions, 1,500 points to the winners and best-of-three finals in every draw — and Anna Leigh Waters, back in singles, is one title from 200.",
+    body: [
+      "## Overall Top 5",
+      "199: Anna Leigh Waters did not get win number 200 in Las Vegas — has 3 chances in Chicago.",
+      "Twinning: Jade and Jackie Kawamoto return to the draws… and might play each other early in mixed.",
+      "Here comes the bride: Rachel Rohrabacher battled a Nor'easter, got married, and returns to the court in Chicago.",
+      "Not so windy debut: First PPA Tour stop in Chicago will be played indoors, so climate controlled.",
+      "Cup of tea: 1,500 points to the winners (and remember all finals are best 2 out of 3).",
+      "## Venue, Tourney & TV",
+      "Life Time Northbrook will host this debut event — no defending champs.",
+      "A progressive draw on the pro side, one round per bracket per day and no bronze matches.",
+      "Coverage on PickleballTV begins at 2 p.m. Central (local Chicago time) on Tuesday–Friday, noon Saturday, and 10 a.m. Sunday. FS1 windows on Thursday and Sunday with Tennis Channel coverage Saturday and Sunday.",
+      "## Women's Singles",
+      "Top four seeds: 1) Anna Leigh Waters, 2) Kate Fahey, 3) Kaitlyn Christian, 4) Brooke Buckner.",
+      "Waters returns to singles — 858 days since her last loss in this discipline.",
+      "Potential round-of-32 showdown: Sofia Sewing (32) vs. Catherine Parenteau (7).",
+      "Potential battle in the round of 16: Vegas finalist Kiora Kunimoto (8) vs. Judit Castillo (9).",
+      "Watch out for Kaitlyn Christian (3) — won her 5th title last week in Las Vegas, so she arrives with confidence and momentum in Illinois.",
+      "## Men's Singles",
+      "Top four seeds: 1) Chris Haworth, 2) Federico Staksrud, 3) Hunter Johnson, 4) Roscoe Bellamy.",
+      "Roscoe Bellamy claims a top 4 seed but could face Vegas finalist Ben Johns (36) in the round of 32.",
+      "Round-of-64 thriller: Yates Johnson (22) vs. Nico Acevedo (48).",
+      "Watch out for Hunter Johnson (3) — impressive run to his 10th title in Las Vegas, beating Federico Staksrud in the semis and Ben Johns in the final.",
+      "## Mixed Doubles",
+      "Top four seeds: 1) Anna Leigh Waters / Ben Johns, 2) Anna Bright / Hayden Patriquin, 3) Jorja / JW Johnson, 4) Rachel Rohrabacher / Andrei Daescu.",
+      "After a 2 tournament hiatus, JW and Jorja Johnson return; they are in the Bright / Patriquin half.",
+      "Kawamoto Bowl watch: Jade plus Dylan Frazier (23) could face Jackie plus Tama Shimabukuro (15) in the round of 32.",
+      "Round-of-16 potential thriller: Eric Oncins / Hurricane Tyra Black (5) vs. Catherine Parenteau / Riley Newman (9).",
+      "Watch out for Bright and Patriquin (2) — 2 for 2 in the win column in the 26/27 season.",
+      "## Women's Doubles",
+      "Top four seeds: 1) Anna Bright / Anna Leigh Waters, 2) Hurricane Tyra Black / Catherine Parenteau, 3) Rachel Rohrabacher / Tina Pisnik, 4) Sofia Sewing / Jorja Johnson.",
+      "Will there be a Chicago rematch of the epic 3 game final between the same top 2 seeds from Vegas?",
+      "Sewing and Johnson (4) are a dangerous duo for a one time only pairing.",
+      "Potential quarterfinal matchup: Bright / Waters (1) vs. Kawamotos (5) — one of only 2 teams to beat the top seeds.",
+      "Watch out for Catherine Parenteau and Hurricane Tyra Black (2) — phenomenal play throughout the Vegas Open including rallying from 11-8, 9-0 down to force a game 3 in the final vs. Bright / Waters.",
+      "## Men's Doubles",
+      "Top four seeds: 1) Patriquin / Staksrud, 2) Johns / Sock, 3) Oncins / Klinger, 4) Shimabukuro / JW Johnson.",
+      "Gabe Tardio is playing overseas which opened up the spot next to Ben for Jack Sock.",
+      "No 3-peat: Christian Alshon is out of this tourney (heading overseas) so Andrei Daescu is paired with Will Howells (Alshon / Daescu won back to back in Arizona and Vegas).",
+      "Legend of the game Kyle Yates returns to the main draw of the PPA as the 37 seed with Eli Steiner (if they win their opening match, they will play Patriquin / Staksrud).",
+      "Watch out for Nico Acevedo and Jaume Martinez Vich (14): semifinal run at the Rate Las Vegas Open — what do they have for an encore?",
+    ],
+  },
+  /**
+   * ⚠ HUMAN-AUTHORED EDITORIAL, same provenance and exception path as the
+   * Arizona and Nationals storylines below — Dave Fleming's preview of the
+   * season's third stop, supplied by Wesley on 9/25. The source doc ("#3: RATE
+   * VEGAS OPEN PRESENTED BY JOOLA STORYLINES (SEP 28-OCT 4, 2026)") is owned by
+   * dave@pickleball.com, which is what names him. Ships `status: "published"`;
+   * Dylan can flip it to "draft" in one line.
+   *
+   * ⚠ FAITHFUL TRANSCRIPTION, NOT A REWRITE — same rules as Arizona: one
+   * paragraph per bullet, a label line per draw, his seeds and surname-only
+   * doubles shorthand verbatim, R16/R64 spelled out. His closing past-champions
+   * table becomes one line per year, because a native `body` renders no tables.
+   *
+   * ⚠ HIS TV LINE WAS CHECKED AGAINST `lib/tv-schedule.ts` AND MATCHES: PBTV at
+   * 2PM Thu/Fri, 1PM Sat, 10AM Sun LOCAL = 5PM/5PM/4PM/1PM ET (Nevada is ET − 3
+   * in October), Tennis Channel Sunday. He writes local times, so this one
+   * paragraph is maintained, not transcribed — re-check it if the sheet moves.
+   *
+   * The image is Wesley's (9/25): a sunset drone aerial of Darling Tennis
+   * Center, supplied for this post. Deliberately NOT the event's own featured
+   * shot (`featured-vegas-cup.jpg`, pinned in HERO_OVERRIDE_BY_EVENT_SLUG), so
+   * the article card and the event card never print the same picture twice.
+   * Encoded 2048px wide, mozjpeg q64 — the house hero standard.
+   */
+  {
+    slug: "rate-las-vegas-open-storylines",
+    status: "published",
+    category: "Tour News",
+    title: "Storylines for the Rate Las Vegas Open",
+    subtitle: "Presented by JOOLA · Sept. 28–Oct. 4, 2026 · Las Vegas, NV",
+    date: "Sep 25",
+    image: "/ppa/venues/lv-summerlin/darling-sunset-aerial.jpg",
+    /* The desktop hero crops to ~3.6:1, and a centred crop of this 4:3 frame
+       lands on the dark desert strip between the sunset and the stadium. Anchored
+       high so the band is sky, the Spring Mountains and the lit back courts.
+       Phone widths crop horizontally only, so this changes nothing there. */
+    imagePosition: "center 15%",
+    author: "Dave Fleming",
+    eventSlug: "rate-las-vegas-open",
+    /* Wesley, 9/25: the footer is one link to the event page — no ticket
+       button, no TV Schedule. An internal ctaUrl gives exactly that (plain
+       same-tab Link, TV button stands down); see the CTA note in ArticleView. */
+    ctaUrl: "/events/2026/rate-las-vegas-open/",
+    ctaLabel: "Rate Las Vegas Open Event Page",
+    dek: "Year seven at Darling Tennis Center brings 1,000 points, best-of-three finals in every draw, and Anna Leigh Waters two doubles titles away from career title No. 200.",
+    whyItMatters:
+      "The season's second open is worth 1,000 points, every final is best two out of three, and Anna Leigh Waters — skipping singles — can reach 200 career titles by winning both of her doubles draws.",
+    body: [
+      "## Overall Top 5",
+      "200: Anna Leigh Waters (who is not playing singles) can claim title #200 if she wins both of her doubles draws.",
+      "Blackjack: Hayden Patriquin just turned 21 and returns, as do Shock teammates Anna Bright and Gabe Tardio.",
+      "Royal flush: will Sofia Sewing and Tina Pisnik find the same magic in the PPA as they did in MLP with the Palm Beach Royals?",
+      "Pocket aces: which lower seed will have an ace up their sleeve and make a run like Jalina Ingram (singles), Elliott Schupp / Kiora Kunimoto (mixed) and Nico Acevedo / Yuta Funemizu (men's) did in AZ?",
+      "Open 24/7: 1,000 points to the winners (and remember all finals are best 2 out of 3).",
+      "## Venue, Tourney & TV",
+      "Year 7 of the PPA's annual return to Darling Tennis Center, expecting over 1,400 players. A list of past champions is at the bottom of this article.",
+      "A progressive draw on the pro side, one round per bracket per day and no bronze matches.",
+      "Coverage on PickleballTV begins at 2 p.m. Thursday and Friday, 1 p.m. Saturday, and 10 a.m. on Sunday (all Vegas local times), with coverage on Tennis Channel on Sunday.",
+      "## Women's Singles",
+      "Defending champion and finalist: Anna Leigh Waters and Genie Bouchard.",
+      "Top four seeds: 1) Kate Fahey, 2) Kaitlyn Christian, 3) Lea Jansen, 4) Zoey Wang.",
+      "With Waters out of this draw, it presents a big opportunity for the field.",
+      "Bouchard (7) returns to the court — she beat Fahey on her run to the final last year.",
+      "Potential battle in the round of 16: Kaitlyn Christian (2) vs. Sofia Sewing (23).",
+      "Watch out for Kate Fahey (1) — won her second career title here in 2024 and is poised to hoist the trophy again.",
+      "## Men's Singles",
+      "Defending champion and finalist: Federico Staksrud and Roscoe Bellamy.",
+      "Top four seeds: 1) Chris Haworth, 2) Federico Staksrud, 3) Hunter Johnson, 4) Christian Alshon.",
+      "Ben Johns is the 19 seed and is advanced into the round of 16 based on his World Pickleball Ranking, where he could face Dylan Frazier (11).",
+      "Round-of-64 thriller: Yates Johnson (23) vs. Cam Chaffin (29).",
+      "Watch out for Roscoe Bellamy (5) — made the final in 2025, can lady luck be on his side again in Sin City?",
+      "## Mixed Doubles",
+      "Defending champions and finalists: Anna Leigh Waters / Ben Johns and Jessie Irvine / Gabe Tardio.",
+      "Top four seeds: 1) Anna Leigh Waters / Ben Johns, 2) Anna Bright / Hayden Patriquin, 3) Tina Pisnik / Christian Alshon, 4) Hurricane Tyra Black / Gabe Tardio.",
+      "Fun partner alert: Tina Pisnik and Christian Alshon (3) are playing for only the second time together. They played together in Daytona in November of 2023, losing to Irvine / R. Newman.",
+      "Fun partner alert 2: Catherine Parenteau and Eric Oncins (6) lost in the quarters here last year to Bright / Patriquin.",
+      "First-time partners Andrei Daescu and Jessie Irvine are the 5 seed.",
+      "Round-of-64 barnburner: Jack Sock / Lea Jansen (15) vs. Sofia Sewing / Casey Diamond (44).",
+      "Watch out for Waters and Johns (1) — they have dominated at Darling Tennis Center, winning 4 years in a row.",
+      "## Women's Doubles",
+      "Defending champions and finalists: Anna Bright / Anna Leigh Waters and Hurricane Tyra Black / Parris Todd.",
+      "Top four seeds: 1) Anna Bright / Anna Leigh Waters, 2) Hurricane Tyra Black / Catherine Parenteau, 3) Lacy Schneemann / Kate Fahey, 4) Jamie Wei / Meghan Dizon.",
+      "Zero of the same top four seeds from AZ.",
+      "Not playing in this event: Jorja Johnson, Parris Todd, and the bride to be Rachel Rohrabacher (9/26 wedding day).",
+      "Potential quarterfinal matchup: Schneemann / Fahey (3) vs. Jansen / Irvine (6).",
+      "Watch out for Sofia Sewing and Tina Pisnik (9) — the Palm Beach Royals duo hoping for a royal flush of the draw in Vegas.",
+      "## Men's Doubles",
+      "Defending champions and finalists: Ben Johns / Gabe Tardio and Christian Alshon / Andrei Daescu.",
+      "Top four seeds: 1) Johns / Tardio, 2) Alshon / Daescu, 3) Patriquin / Staksrud, 4) Oncins / Klinger.",
+      "Gabe Tardio is back next to Ben as they hope to keep their perfect 2026 intact.",
+      "Not playing in this event: JW Johnson, Tama Shimabukuro, and Yuta Funemizu.",
+      "Watch out for Alshon and Daescu — they won in AZ, saving 7 match points, and lost a heartbreaker in this event in 2025 (12-10 in the 5th to Johns / Tardio). It was the second-longest match in PPA history at 2 hours and 28 minutes. The longest match ever was just one minute more: the 2025 men's doubles final in Daytona, which JW Johnson and Augie Ge won 11-8 in the 5th over Riley Newman and Noe Khlif.",
+      "## Past Champions at Darling Tennis Center",
+      "2025 — Men's singles: Federico Staksrud · Women's singles: Anna Leigh Waters · Men's doubles: Ben Johns & Gabe Tardio · Women's doubles: Anna Leigh Waters & Anna Bright · Mixed doubles: Anna Leigh Waters & Ben Johns.",
+      "2024 — Men's singles: Quang Duong · Women's singles: Kate Fahey · Men's doubles: Ben Johns & Collin Johns · Women's doubles: Anna Leigh Waters & Catherine Parenteau · Mixed doubles: Anna Leigh Waters & Ben Johns.",
+      "2023 — Men's singles: Ben Johns · Women's singles: Anna Leigh Waters · Men's doubles: Ben Johns & Collin Johns · Women's doubles: Anna Leigh Waters & Anna Bright · Mixed doubles: Anna Leigh Waters & Ben Johns.",
+      "2022 — Men's singles: Ben Johns · Women's singles: Anna Leigh Waters · Men's doubles: Riley Newman & Matt Wright · Women's doubles: Anna Leigh Waters & Leigh Waters · Mixed doubles: Anna Leigh Waters & Ben Johns.",
+      "2021 — Men's singles: Ben Johns · Women's singles: Catherine Parenteau · Men's doubles: Dekel Bar & Adam Stone · Women's doubles: Catherine Parenteau & Jessie Irvine · Mixed doubles: Jessie Irvine & Jay Devilliers.",
+      "2020 — Men's singles: Ben Johns · Women's singles: Simone Jardim · Men's doubles: Ben Johns & Matt Wright · Women's doubles: Simone Jardim & Lucy Kovalova · Mixed doubles: Ben Johns & Simone Jardim.",
+    ],
+  },
+  /**
    * ⚠ OFFICIAL PRESS RELEASE, not editorial — the same exception path as the
    * WPR "BE THE BEST" post below. Supplied by Wesley on 9/17 with the artwork,
    * it is comms copy carrying two real attributed quotes (Mike Burke, CEO of

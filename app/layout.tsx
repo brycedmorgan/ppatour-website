@@ -11,6 +11,7 @@ import { Analytics } from "@/components/global/Analytics";
 import { OutboundClickTracker } from "@/components/global/OutboundClickTracker";
 import { MetaPixel } from "@/components/global/MetaPixel";
 import { MarketingTags } from "@/components/global/MarketingTags";
+import { CustomerioTracker } from "@/components/global/CustomerioTracker";
 import { AccessibilityWidget } from "@/components/global/AccessibilityWidget";
 import { AppChrome } from "@/components/app/AppChrome";
 import { JackalopeAnalytics } from "@/components/global/JackalopeAnalytics";
@@ -144,16 +145,47 @@ const SITE_JSON_LD = {
       "@type": "SportsOrganization",
       "@id": `${SITE_URL}/#organization`,
       name: "Carvana PPA Tour",
-      alternateName: "Professional Pickleball Association",
+      /**
+       * 10/18: the org node is what Google builds a knowledge panel from, and
+       * it carried a name, a logo and five socials. Everything added below is
+       * public record (ppatour.com/about, the Wikipedia section the `PPA Tour`
+       * title redirects to): founded 2018, the tour of the Professional
+       * Pickleball Association, part of the United Pickleball Association since
+       * the 2024 MLP merger. Wikidata items created 10/18 (Bryce's ask):
+       * PPA Tour = Q141769292, United Pickleball Association = Q141769280
+       * (MLP already had Q128285945). "PPA Tour" on Wikipedia is still a
+       * redirect to "Pickleball in the United States". docs/SEO.md §7.
+       */
+      alternateName: ["PPA Tour", "Professional Pickleball Association", "PPA"],
+      legalName: "Professional Pickleball Association",
       sport: "Pickleball",
       url: SITE_URL,
-      logo: `${SITE_URL}/ppa/logos/ppa-horizontal-blue.svg`,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/ppa/logos/ppa-horizontal-blue.svg`,
+      },
+      image: `${SITE_URL}/ppa/logos/ppa-horizontal-blue.svg`,
+      description:
+        "The Carvana PPA Tour is the professional pickleball tour: Majors, Cups and Opens across the United States and internationally, the World Pickleball Rankings, and live coverage on PickleballTV and broadcast television.",
+      slogan: "The Pro Tour of Pickleball",
+      foundingDate: "2018",
+      areaServed: "Worldwide",
+      knowsAbout: ["Pickleball", "Professional pickleball tournaments", "World Pickleball Rankings"],
+      parentOrganization: {
+        "@type": "Organization",
+        name: "United Pickleball Association",
+        alternateName: "UPA",
+        sameAs: ["https://www.wikidata.org/wiki/Q141769280"],
+      },
       sameAs: [
+        "https://www.wikidata.org/wiki/Q141769292",
         "https://www.instagram.com/ppatour",
         "https://x.com/ppatour",
         "https://www.youtube.com/channel/UCSP6HlrMmRqogym2aHBPHpw",
         "https://www.tiktok.com/@officialppatour",
         "https://www.facebook.com/OfficialPPATour",
+        "https://www.linkedin.com/company/ppatour",
+        "https://en.wikipedia.org/wiki/PPA_Tour",
       ],
     },
     {
@@ -161,6 +193,8 @@ const SITE_JSON_LD = {
       "@id": `${SITE_URL}/#website`,
       url: SITE_URL,
       name: "Carvana PPA Tour",
+      alternateName: "PPA Tour",
+      inLanguage: "en",
       publisher: { "@id": `${SITE_URL}/#organization` },
       potentialAction: {
         "@type": "SearchAction",
@@ -209,6 +243,11 @@ export default function RootLayout({
         <Analytics />
         <MetaPixel />
         <MarketingTags />
+        {/* Site ID is public (ships in every Customer.io snippet); same
+            Pickleball Inc. workspace lib/customerio.ts writes to. */}
+        <CustomerioTracker
+          siteId={process.env.NEXT_PUBLIC_CUSTOMERIO_SITE_ID ?? process.env.CUSTOMERIO_SITE_ID}
+        />
         <OutboundClickTracker />
         {/**
          * Vercel Web Analytics + Speed Insights.

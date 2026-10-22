@@ -27,14 +27,23 @@
  * Server-only. Never throws — returns {} on any problem. Top 250 per board,
  * which covers the ranked pros we feature.
  */
-import { pbGetJson } from "@/lib/pb-fetch";
+import { pbCachedJson } from "@/lib/pb-cache";
 import { EUROPE_RANK_SLUGS } from "@/lib/europe-roster";
 import { RANKINGS_CACHE_TAG } from "@/lib/cache-tags";
-import wprSnapshot from "@/lib/data/wpr-snapshot.json";
+import { getWprSnapshot, type WprSnapshot } from "@/lib/wpr-snapshot";
 
-const TIMEOUT_MS = 8000;
+
 const TTL_MS = 6 * 60 * 60 * 1000;
-const REVALIDATE_S = 60 * 60 * 24; // Data Cache; the daily cron refreshes it
+/**
+ * ⚠ THE DURABLE CACHE, NOT NEXT'S, BECAUSE THIS IS THE FALLBACK PATH AND THE
+ * FALLBACK PATH IS THE DISASTER (9/23). The snapshot above normally answers
+ * every one of these, so this fetch only runs when the file is missing or past
+ * its expiry — which is precisely the 9/15 state where /athletes/[slug] made 27K
+ * partner_rankings calls in six hours. A Next cache entry dies with the
+ * deployment, so under a stale snapshot every deploy re-opened that hole; an
+ * entry in our own table does not.
+ */
+const REVALIDATE_S = 60 * 60 * 24; // durable cache; the daily cron refreshes it
 const PAGE_SIZE = 250;
 
 export type DivisionRank = { rank: number; points: number };
@@ -64,8 +73,12 @@ const SNAPSHOT_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 
 type SnapshotDivisionRow = { player_slug: string; ranking?: string; points?: number };
 
-function snapshotDivision(dt: number, gender: "M" | "F"): SnapshotDivisionRow[] | null {
-  const snap = wprSnapshot as {
+function snapshotDivision(
+  dt: number,
+  gender: "M" | "F",
+  source: WprSnapshot,
+): SnapshotDivisionRow[] | null {
+  const snap = source as {
     generatedAt?: string;
     divisions?: Record<string, SnapshotDivisionRow[]>;
   };
@@ -77,7 +90,9 @@ function snapshotDivision(dt: number, gender: "M" | "F"): SnapshotDivisionRow[] 
 }
 
 async function fetchBoard(dt: number, gender: "M" | "F"): Promise<Map<string, DivisionRank>> {
-  const key = `${dt}:${gender}`;
+  // Keyed on the snapshot version too, for the reason given in lib/rankings-api.ts.
+  const source = await getWprSnapshot();
+  const key = `${dt}:${gender}:${source.generatedAt ?? ""}:${new Date().toISOString().slice(0, 10)}`;
   const hit = boardCache.get(key);
   if (hit && hit.expires > Date.now()) return hit.value;
   const pending = boardInFlight.get(key);
@@ -94,7 +109,7 @@ async function fetchBoard(dt: number, gender: "M" | "F"): Promise<Map<string, Di
     // Reading them from the same snapshot takes a page render to zero ranking
     // requests. Falls through to the live call below when the snapshot is
     // absent or expired, exactly as lib/rankings-api.ts does.
-    const snapRows = snapshotDivision(dt, gender);
+    const snapRows = snapshotDivision(dt, gender, source);
     if (snapRows) {
       for (const row of snapRows) {
         const slug = row.player_slug;
@@ -118,11 +133,12 @@ async function fetchBoard(dt: number, gender: "M" | "F"): Promise<Map<string, Di
       current_page: "1",
       page_size: String(PAGE_SIZE),
     });
-    const json = (await pbGetJson(`${base}/v2/data/partner_rankings?${params}`, { "PB-API-TOKEN": token }, {
-      timeoutMs: TIMEOUT_MS,
-      revalidate: REVALIDATE_S,
-      tags: [RANKINGS_CACHE_TAG],
-    })) as { results?: { player_rankings?: ApiPlayer[] } } | null;
+    const json = (await pbCachedJson(
+      `${base}/v2/data/partner_rankings?${params}`,
+      REVALIDATE_S,
+      RANKINGS_CACHE_TAG,
+      token,
+    )) as { results?: { player_rankings?: ApiPlayer[] } } | null;
     for (const p of json?.results?.player_rankings ?? []) {
       const slug = p.player_slug;
       const rank = Number.parseInt(p.ranking ?? "", 10);

@@ -66,11 +66,20 @@ export function formPostsToSlack(formType: string): boolean {
  * breaking routing, and a name lookup is an extra API call per submission.
  */
 
-/** Contact form → channel, by Inquiry Topic. Keys match ./schema.ts verbatim. */
+/**
+ * Contact form → channel, by Inquiry Topic. Keys match ./schema.ts verbatim.
+ *
+ * ⚠ TICKETS POSTS TO THE MARKETING CHANNEL ONLY, ON PURPOSE (Parker, 10/7: "We
+ * would like these to all go through the ticketing@ppatour.com email not
+ * through slack"). The ticketing team works from the inbox (FORM_INBOX_TICKETING),
+ * so nothing goes to FORM_SLACK_CHANNEL_TICKETING; #ppa-marketing-form keeps its
+ * one copy for visibility. contact-pipeline.ts does the same for the TICKETING
+ * route. Pointing this back at the ticketing channel is Parker's call.
+ */
 const CONTACT_CHANNEL_ENV: Record<string, string> = {
   "Pickleball Brackets/Tournaments": "FORM_SLACK_CHANNEL_SUPPORT",
   Registrations: "FORM_SLACK_CHANNEL_REGISTRATIONS",
-  Tickets: "FORM_SLACK_CHANNEL_TICKETING",
+  Tickets: "FORM_SLACK_CHANNEL_MARKETING",
   "PBTV/Broadcasting": "FORM_SLACK_CHANNEL_BROADCAST",
   "Public Relations": "FORM_SLACK_CHANNEL_PR",
   Sponsorship: "FORM_SLACK_CHANNEL_SPONSORSHIP",

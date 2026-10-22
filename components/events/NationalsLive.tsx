@@ -25,13 +25,16 @@ import {
   type AmateurSession,
   firstServeFor,
   firstServeNote,
+  timesPendingLine,
+  gatesAtFirstServe,
   gatesFollowFirstServe,
+  gatesDaily,
   gatesFor,
   getEventSchedule,
   hasGatesOverride,
   sideEventsFor,
 } from "@/lib/event-schedule";
-import { proDayLabel } from "@/lib/order-of-play";
+import { proDayLabel, dayLabelFor } from "@/lib/order-of-play";
 import { playersToWatch } from "@/lib/home-content";
 import { getArticlesForEvent } from "@/lib/news-articles";
 import {
@@ -130,7 +133,7 @@ type Day = {
  * had it. The channel now comes from lib/broadcast.ts, matched by weekday, and
  * is simply absent when the sheet says nothing.
  */
-function buildSchedule(startIso: string, endIso: string, slug: string): Day[] {
+function buildSchedule(startIso: string, endIso: string, slug: string, state?: string): Day[] {
   const channels = channelsByDay(slug);
   const start = new Date(`${startIso}T00:00:00`);
   const end = new Date(`${endIso}T00:00:00`);
@@ -142,7 +145,7 @@ function buildSchedule(startIso: string, endIso: string, slug: string): Day[] {
     const fromEnd = last - i;
     // Round names come from lib/order-of-play; gates and first serve stay here,
     // because they are this function's own and both can be overridden per stop.
-    const label = proDayLabel(i, fromEnd);
+    const label = dayLabelFor(slug, cursor.toISOString().slice(0, 10), proDayLabel(i, fromEnd));
     let gates = "9:00 AM";
     let firstServe = "10:00 AM";
     if (i === 0 || i === 1) {
@@ -162,8 +165,8 @@ function buildSchedule(startIso: string, endIso: string, slug: string): Day[] {
       // The event team's own gate time and first serve where this stop has
       // them, otherwise the template's. The two move independently — see the
       // notes on GATES_BY_SLUG and FIRST_SERVE_BY_SLUG in lib/event-schedule.ts.
-      gates: gatesFor(slug, gates),
-      firstServe: firstServeFor(slug, iso, firstServe),
+      gates: gatesFor(slug, gates, firstServeFor(slug, iso, firstServe, state), iso, state),
+      firstServe: firstServeFor(slug, iso, firstServe, state),
       live,
       side: sideEventsFor(slug, iso),
     });
@@ -224,7 +227,7 @@ export function NationalsLive({
   // Live-scores area: scoreboard vs bracket.
   const [scoreView, setScoreView] = useState<"scores" | "bracket">("scores");
 
-  const days = buildSchedule(t.startDate, t.endDate, t.slug);
+  const days = buildSchedule(t.startDate, t.endDate, t.slug, t.state);
   const broadcast = getBroadcast(t.slug);
   // Keep in lockstep with the event page: same cards, same source.
   const watchCards = watchCardsFor(t.slug);
@@ -245,7 +248,7 @@ export function NationalsLive({
         content: "event-parking-premium",
       })
     : null;
-  const realSchedule = getEventSchedule(t.slug);
+  const realSchedule = getEventSchedule(t.slug, t.startDate);
   // Same source as the real event page — see the note there. The hand-authored
   // override credited Tennis Channel on Sunday only; the sheet has it Thu–Sun.
   const dayChannels = channelsByDay(t.slug);
@@ -318,11 +321,14 @@ export function NationalsLive({
     venue: t.venue,
     dates: formatDateRange(t.startDate, t.endDate, true),
     gates: days[0]?.gates ?? "an hour before first serve",
-    gatesFollowFirstServe: gatesFollowFirstServe(t.slug),
+    gatesFollowFirstServe: gatesFollowFirstServe(t.slug, t.startDate),
+    gatesAtFirstServe: gatesAtFirstServe(t.slug),
+    gatesDaily: gatesDaily(t.slug, days.map((d) => d.gates)),
+    timesPending: timesPendingLine(t.slug, t.startDate),
     // The days this stop's own first serve is known for, or null. Without it
     // the concierge answers a “what time does play start?” with the gate time
     // alone, while the order of play on the same page carries the real one.
-    firstServeNote: firstServeNote(t.slug, days),
+    firstServeNote: firstServeNote(t.slug, days, t.state),
     ticketFrom: t.ticketPriceFrom,
     ticketsUrl: withUtm(t.ticketsUrl, {
       campaign: t.eventCode ?? t.slug,
@@ -844,13 +850,13 @@ export function NationalsLive({
           </h2>
           <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
             All times local.{" "}
-            {gatesFollowFirstServe(t.slug) ? (
+            {gatesFollowFirstServe(t.slug, t.startDate) ? (
               <>
                 Gates open an hour before first serve; finals move to a
                 late-morning start for the broadcast window.
               </>
             ) : hasGatesOverride(t.slug) ? (
-              <>Gates open {days[0]?.gates} daily.</>
+              <>Gates open {gatesDaily(t.slug, days.map((d) => d.gates))}.</>
             ) : (
               // A stop with supplied first-serve times and no supplied gate:
               // the per-day gate is still the template's, so say nothing about
@@ -900,7 +906,7 @@ export function NationalsLive({
                       {d.amateur && d.amateur.length > 0 && (
                         <span className="mt-1.5 block border-l-2 border-ppa-line pl-2 lg:hidden">
                           {d.amateur.map((a) => (
-                            <span key={a.label} className="block text-[12px] text-ppa-navy/60">
+                            <span key={`${a.label}|${a.detail ?? ""}`} className="block text-[12px] text-ppa-navy/60">
                               {a.label}
                               {a.detail ? ` — ${a.detail}` : ""}
                             </span>
@@ -911,7 +917,7 @@ export function NationalsLive({
                     <span className="hidden lg:block">
                       {d.amateur && d.amateur.length > 0 ? (
                         d.amateur.map((a) => (
-                          <span key={a.label} className="mt-1 block first:mt-0">
+                          <span key={`${a.label}|${a.detail ?? ""}`} className="mt-1 block first:mt-0">
                             <span className={`block text-sm font-semibold ${dayDone ? "text-ppa-navy/50" : "text-ppa-navy"}`}>
                               {a.label}
                             </span>
@@ -929,7 +935,7 @@ export function NationalsLive({
                     <span className="hidden text-right text-sm font-bold tabular-nums text-ppa-navy lg:block">
                       {d.firstServe}
                     </span>
-                    <span className="text-right text-[10px] font-bold uppercase tracking-[0.1em]">
+                    <span className="max-w-[5.5rem] justify-self-end text-right text-[10px] lg:max-w-none lg:justify-self-auto font-bold uppercase tracking-[0.1em]">
                       {dayLive ? (
                         <span className="inline-flex items-center gap-1 text-ppa-live">
                           <span className="size-1.5 animate-pulse rounded-full bg-ppa-live" />
@@ -1211,7 +1217,7 @@ export function NationalsLive({
               {[
                 {
                   k: "Gates & Sessions",
-                  v: `Gates open ${days[0]?.gates ?? "an hour before first serve"} daily. Morning and evening sessions are ticketed separately at Championship Court; a grounds pass covers the outer courts all day.`,
+                  v: `Gates open ${days.length ? gatesDaily(t.slug, days.map((d) => d.gates)) : "an hour before first serve daily"}. Morning and evening sessions are ticketed separately at Championship Court; a grounds pass covers the outer courts all day.`,
                 },
                 {
                   k: "Parking & Shuttle",

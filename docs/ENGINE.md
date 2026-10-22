@@ -59,15 +59,12 @@ only thing in it that does anything; without one it is a logo and a sentence.
 | `sandbox` | `ppatour.booking-sandbox.engine.com` | `partner-api-sandbox.engine.com` |
 | `production` | `ppatour.booking.engine.com` | `partner-api.engine.com` |
 
-⚠ **THE PRODUCTION BOOKING HOST IS DERIVED, NOT CONFIRMED.** Engine's Omni Go
-guide specifies `[yourBrand].booking.engine.com`; their team sent us the sandbox
-host with a live example. Nobody has handed us the production URL or served a 200
-from it. **Confirm it, and open one property there, before flipping.** A wrong
-booking host is a dead link on every hotel on the site at once.
-
-⚠ **DEPLOYING WITH `ENGINE_ENV` STILL SET TO `"sandbox"` WOULD PUBLISH SANDBOX
-LINKS.** Keep this off main until Engine confirms the production host and issues a
-production credential.
+**LIVE ON PRODUCTION SINCE 10/22.** Engine shared the production cert through
+1Password and confirmed `https://ppatour.booking.engine.com/` as the booking host.
+Verified before the flip: a real property (Sheraton Chicago Northbrook) renders
+PPA-branded with rooms, rates and the prefilled dates. ⚠ The host answers 200 for
+ANY path, a made-up property ID included — it is a single-page app — so a curl
+status proves nothing. Open a property in a browser.
 
 ⚠ **THE SNAPSHOT IS IGNORED UNLESS ITS ENVIRONMENT MATCHES.** It records which
 environment produced it. Flip `ENGINE_ENV` without re-running the script and the
@@ -79,9 +76,11 @@ lists go quiet rather than publishing IDs that may name a different building.
 
 `.env.local` carries `ENGINE_CLIENT_CERT` / `ENGINE_CLIENT_KEY` (base64 PEMs,
 because env storage mangles multi-line values), plus `ENGINE_API_BASE_URL` and
-`ENGINE_API_ENV`. It is an **mTLS client certificate**, not an API key — issued to
-*O=United Pickleball Association, OU=Tech Evaluation, CN=Wesley Ahlfeld* by
-*Engine Partner API Sandbox*, valid 30 Jul 2026 → 9 Aug 2027.
+`ENGINE_API_ENV`. It is an **mTLS client certificate**, not an API key. The
+**production** pair (10/22, from Engine via 1Password) is what `.env.local` holds
+now, pointed at `partner-api.engine.com`; the sandbox pair (*Engine Partner API
+Sandbox*, valid to 9 Aug 2027) is commented out beside it. All four variables move
+together — a cert sent to the other environment's host gets a silent stream reset.
 
 ⚠ **IT IS IN NO VERCEL ENVIRONMENT, ON PURPOSE.** It is only ever used by a script
 on a dev machine. Resolving at render time would mean shipping the private key to
@@ -165,14 +164,13 @@ behaving identically next time.
 
 ## Open items
 
-1. **17 of 20 stops have neither coordinates nor a verified address**, so they
-   render no Engine column. This is the biggest gap and it is ours to close, not
-   Engine's. Cary Tennis Park, Darling Tennis Center and Life Time — Northbrook
-   are done.
-2. **Confirm the production booking host**, and get a **production credential**.
-3. **Are sandbox property IDs the same as production IDs?** Decides whether the
-   whole snapshot can be built in sandbox and flipped, or must be re-pulled at
-   go-live.
+1. **8 stops have neither coordinates nor a verified address** (10/22: Arizona,
+   Virginia Beach, Mesa, Sacramento, Cincinnati, PPA Finals, plus Texas and the PPA
+   Open with TBD venues), so they render no Engine column. Ours to close. 12 stops
+   carry hotels.
+2. ~~Production host and credential~~ — done 10/22.
+3. ~~Sandbox vs production property IDs~~ — moot: the snapshot was re-pulled
+   against production at go-live.
 4. **De-dupe is by hotel NAME.** It catches an exact match — verified: the JW
    Marriott and Best Western Plus Las Vegas West are both blocks on the Las Vegas
    page and both are correctly suppressed. It does **not** catch a hotel the two
@@ -182,10 +180,13 @@ behaving identically next time.
    property carries a **GIATA identifier**; storing one against each official block
    would make this exact.
 5. **The snapshot is imported by `lib/engine.ts`, and `NationalsLive` is a client
-   component**, so the file lands in that route's browser bundle. 25 KB at three
-   stops; at full coverage it would be worth passing properties in as props from
-   the server instead.
+   component**, so the file lands in that route's browser bundle. 159 KB at 12
+   stops (10/22). Only the Nationals demo route loads NationalsLive, so no real
+   event page pays it — but passing properties in as props would end it.
 6. **Is there a fan-facing PPA landing page?** `engine.com/partner/ppa` is real and
    co-branded, but its own title reads *"Business Travel Done Better"* — a B2B
    programme signup. It was removed from the event pages on 9/23 for that reason.
    If the PPA rate needs an account, we have nowhere honest to send a fan.
+7. **Results are sorted by distance only.** Some top rows are motels or vacation
+   rentals (Daytona: "Pilot Motel"; Cape Coral: a vacation rental). A star-rating
+   floor or a rental filter in `scripts/engine-nearby.ts` would fix it.

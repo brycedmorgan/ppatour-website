@@ -7,6 +7,7 @@ import { formatUSD, type Occupancy } from "@/lib/vacations/pricing";
 import { getTripConfig } from "@/lib/vacations/trip-config";
 import { getAvailabilityFor } from "@/lib/vacations/capacity";
 import { puntaCana as pc } from "@/lib/vacations/trips/punta-cana";
+import { tripsCalendar, tripStatusLabel } from "@/lib/vacations/trips";
 
 /**
  * Club Med Punta Cana (Sept 8–12, 2026), the inaugural trip. Normally sold out
@@ -57,6 +58,10 @@ export default async function PuntaCanaArchivePage() {
     (id) => !availability.options[id].soldOut
   );
   const bookingOpen = availability.bookingOpen && bookable.length > 0;
+  // Once the trip has run, the hero says so: "Completed · Sold Out" (Bryce,
+  // 9/22), from the same date-aware registry the calendar cards use.
+  const calendarEntry = tripsCalendar.find((t) => t.slug === cfg.slug);
+  const closedLabel = calendarEntry ? tripStatusLabel(calendarEntry) : "Sold Out";
 
   return (
     <>
@@ -93,7 +98,7 @@ export default async function PuntaCanaArchivePage() {
                   : "bg-white text-ppa-navy"
               }`}
             >
-              {bookingOpen ? "Booking Open" : "Sold Out"}
+              {bookingOpen ? "Booking Open" : closedLabel}
             </span>
             <span className="border border-white/25 px-3 py-1.5 text-white/85">
               {pc.trip.datesLabel}

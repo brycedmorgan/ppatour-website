@@ -63,9 +63,15 @@ const INBOX_ENV: Record<Route, string> = {
   REGISTRATIONS: "FORM_INBOX_REGISTRATIONS",
   CAREERS: "FORM_INBOX_CAREERS",
 };
+/**
+ * ⚠ TICKETING HAS NO SLACK CHANNEL (Parker, 10/7): ticket questions go to the
+ * ticketing inbox only. Naming the marketing channel here makes the routed post
+ * and the mirror the same post, so #ppa-marketing-form gets exactly one copy
+ * and the ticketing channel gets none. Same rule as Tickets in ./slack.ts.
+ */
 const CHANNEL_ENV: Record<Route, string> = {
   MARKETING: "FORM_SLACK_CHANNEL_MARKETING",
-  TICKETING: "FORM_SLACK_CHANNEL_TICKETING",
+  TICKETING: "FORM_SLACK_CHANNEL_MARKETING",
   VOLUNTEER: "FORM_SLACK_CHANNEL_VOLUNTEER",
   PR: "FORM_SLACK_CHANNEL_PR",
   REGISTRATIONS: "FORM_SLACK_CHANNEL_REGISTRATIONS",
@@ -80,6 +86,7 @@ function statusLine(t: TriageResult): string | undefined {
     case "partial":
       return `🟡 *Partly answered* · ${cat} · reply emailed, answer in thread · still owed: ${t.openQuestions.join("; ")}`;
     case "routed":
+      if (t.route === "TICKETING") return `📧 *Emailed to ticketing@ppatour.com* · ${cat} · no reply sent yet`;
       return `➡️ *Sent to ${ROUTE_LABEL[t.route ?? "MARKETING"]}* · ${cat} · no reply sent yet`;
     case "needs_human":
       return `🙋 *Needs a person* · ${cat}`;
@@ -150,6 +157,13 @@ export async function runContactPipeline(s: ContactSubmission): Promise<void> {
   };
   const sheetOk = await appendToSheet(s.sheetTab, sheetRecord);
   if (!sheetOk) console.warn(`[${s.label}] sheet append failed`);
+
+  // Spam stops at the sheet (Bryce 10/21: "obviously spam. hide this"). No Slack
+  // post, no inbox email, no reply. The sheet row keeps it findable if triage was wrong.
+  if (t.status === "spam") {
+    console.log(`[${s.label}] spam — sheet only, Slack + inbox skipped`);
+    return;
+  }
 
   // 2) Slack — routed channel, plus a mirror to the marketing channel when routed elsewhere.
   const marketingChannel = channelFor(CHANNEL_ENV.MARKETING);

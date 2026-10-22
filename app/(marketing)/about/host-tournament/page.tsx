@@ -38,11 +38,9 @@ const CHALLENGER_HOST_PROVIDES = [
   "A minimum of 16 courts",
   "A championship court that seats at least 250",
   "WiFi that supports livestreaming",
-  "A DJ or MC",
   "Parking for players and spectators",
   "Volunteers and venue staff",
   "Ticketing, check-in and player-hospitality staff",
-  "A podium, medals and trophies",
   "Player swag bags",
   "Local awareness and marketing support",
 ];

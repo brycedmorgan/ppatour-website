@@ -22,9 +22,14 @@ commerce surface needs the same conversation those two had.
 
 | Item | State | Blocker |
 |---|---|---|
+| **SSO with sso.pickleball.com — NEXT PRIORITY** (Bryce, 10/1) | Ask emailed to Jason Santerre 10/1 (Gmail thread `1a0f8ccd8a4087ec`): OIDC client + secret, redirect URIs (prod + one fixed staging host), PKCE public client for the app, claims (sub/email/name + PT.com player ID), logout/refresh, account deletion, staging SSO + test accounts, consent/opt-in owner. Our side ~1 wk once creds land: Auth.js generic OIDC, `/account`, follows move device → Neon keyed by `sub`, personal data via client-side `/api/me` so pages stay ISR | Jason's reply + client credentials |
+| **Mobile app (store) — after SSO** | Capacitor shell around the installable site (app-plan Phase 5): login via system browser + PKCE, APNs/FCM push, offline, universal links. ~3–4 wks after SSO + store review. Likely no Sign in with Apple needed (own account system, guideline 4.8 — unconfirmed) | SSO live; Apple $99 / Google $25 accounts |
+| **Follow-a-player filter on event pages** (Stephen Venegas, 10/1) | Scoped, not started: `?player=` on the event page — played / upcoming / how to watch across every division, from `brackets-api` + `athlete-aliases` + `broadcast`. ~2–3 days | Watch info is per day/round only (no streamed-court list); feed has team names, not player IDs — SSO player-ID claim or a feed field fixes matching |
+| **SEO plan** | **10/18 schema pass shipped** — event pages carry per-division podiums, competitors, broadcasts; org/athlete/article entities linked by `@id`; 10/7 fix list closed ([`SEO.md`](SEO.md) §7). **Google score boxes are a data-feed partnership, not markup** (§7a) — needs a Google Sports / Sportradar conversation + a Wikidata item (the tour has none). **Phase 1 SHIPPED to main 9/24** (Article/BlogPosting schema, 60-char titles, one-hop redirects, dup athletes folded, Dataset on rankings, thin-athlete bios, autolinking, news sitemap). GSC + SEMrush baselines in `seo-baseline/`. Phase 2 content starts 10/20: [`SEO.md`](SEO.md) | Push to deploy · Vercel apex-domain redirect flip (outside event weekends) · GA4 hostname split |
+| **Team page + Bryce Morgan page** | **PLANNED 9/22** — every employee on `/team` grouped by what they do, "travels the tour" from Jackalope travel data, a page per person; `/team/bryce-morgan` as the entity page to rank for his name. Hidden (Basic auth → unlisted → public). Plan + dated roadmap: [`TEAM.md`](TEAM.md) | Bryce: agency name/years, the Pardoe story in his words (BU decision made 9/22: UPA only, MLP-only staff on the MLP site) · Kate: staff "check your card" note · a headshot slot at a Fall stop |
 | **Challenger Series → `/tour/challenger`** | **BUILT 9/18** — page, live schedule, snapshot rankings (July 27), host block, host-scoped redirects in `next.config.ts` (inert until DNS). Retires ppachallenger.com (WordPress on Flywheel). [`CHALLENGER.md`](CHALLENGER.md) | Bryce: Search Console + WP form-lead export, renew domain, add ppachallenger.com + www to the Vercel project, DNS after Sept 28 · a live rankings source (Kenan/Egon) · internal Challenger event pages for the 1:1 post redirects |
 | **Contact-form triage** | LIVE 9/17. Claude classifies every contact submission, routes tickets/volunteer/media/registration/careers to their inbox + channel, answers event-info / volunteer / rankings questions from the site's own facts, threads the answer in #ppa-marketing-form. **9/18 replay of 38 real questions:** 4 answered, 9 partial, 4 → ticketing, 8 → volunteers, 20 → a person, 1 spam, every draft grounded. `FORM_TRIAGE_REPLY=answered` since 9/18: fans get email only for full answers. [`FORMS.md`](FORMS.md) § Contact-form triage | `reactions:write` on the Slack app (Wesley) or no ✅ · **the "still owed" list is website content:** shade per venue, coolers/umbrellas/chairs, food + alcohol, RV parking, Grandstand location, senior rankings, singles-only board — put them on the event pages (`lib/onsite.ts`) and the answers turn on · extend to the sponsorship form after a clean week |
-| **Paddle Lab** `/paddle-lab` | Built 9/3 from Hannah's V1 brief: landing, browse+filters, 468 paddle pages, compare (4), How We Test. Data = John Kew's public sheet via parser. **⚠ PASSWORD-GATED AND UNLINKED since 9/10** after JOOLA's partner complaint — [`PADDLE-LAB.md`](PADDLE-LAB.md) | Move to pickleball.com (Taylor's call 9/10); a partner-brand position Gordon Kaye can live with; the UPA-A 2100 RPM vs Kew 2200+ conflict; Kew terms unsigned; editorial JSON empty (Hannah); PBC photo/price feed (Traver) |
+| **Paddle Lab** `/paddle-lab` | Built 9/3 from Hannah's V1 brief: landing, browse+filters, 468 paddle pages, compare (4), How We Test. Data = John Kew's public sheet via parser. **⚠ PASSWORD-GATED AND UNLINKED since 9/10** after JOOLA's partner complaint — [`PADDLE-LAB.md`](PADDLE-LAB.md) | **10/6: PBC matches 87 → 153** from Joseph's reconciliations; 8 rows + 2 questions back with Hannah/Joseph (email 10/6). **10/7: Jason (CTO) will rebuild it in pickleball.com components at `pickleball.com/paddles`** (SEO/AEO); he's reviewing the gated build for brand/UI (URL by email, password by Slack DM). Today it's static JSON, not an API — we expose an API or hand over the files, his pick. Move to pickleball.com (Taylor's call 9/10); a partner-brand position Gordon Kaye can live with; the UPA-A 2100 RPM vs Kew 2200+ conflict; Kew terms unsigned; editorial JSON empty (Hannah); PBC photo/price feed (Traver) |
 | MATCHDAY off Lovable | Emailed Chris Cantino 9/2; Bryce asked him for a fresh GitHub invite; proposed cutover **Nov 9–15** | Repo access (`gh api user/repository_invitations` shows nothing yet), then the Cloud inventory. Plan: [`matchday-migration.md`](matchday-migration.md) |
 | Athlete hero images | Slot shipped 8/15; **1 of 179 filled** (Anna Leigh Waters) | Named per-player photography — see Wishlist |
 | **Career title counts are low** | Anna Leigh reads **172** here; her true count is **196** (Hannah's records + our own `tournament-history.json` agree). The feed only counts events rated PPA 1000+, and 24 of her golds came at 11 stops PT.com tiers **PPA 500** (2021–22). Asked Kenan 9/15 in the API group DM to count them; it fixes every pro, not just her. **Kenan is on PTO — handed to Egon Savic, earliest check over the weekend.** Bryce emailed Chris Patrick / Hannah / Jeff 9/15 | pickleball.com re-rating those 11 events, then confirm the site reads 196 |
@@ -39,7 +44,8 @@ commerce surface needs the same conversation those two had.
 
 ppatour.com is installable as of 8/18 — manifest, app shell, always-on score
 bar. The full plan, the decisions behind it and what is still blocked live in
-[`app-plan.md`](app-plan.md). Next up there: a service worker for offline, an
+[`app-plan.md`](app-plan.md). **Order set 10/1 (Bryce): SSO with
+sso.pickleball.com first, then the store app (Phase 5).** Next up there: a service worker for offline, an
 install prompt, a follow list, then the on-site event mode (blocked on an
 owner per event, not on code).
 
@@ -169,3 +175,22 @@ source). Today's projection is labelled as a projection everywhere it appears.
 **Want:** the "Coverage" section repopulated.
 **Blocked on:** mapping the 322 migrated WP posts carrying an event category onto
 this site's event slugs. Data work, not access.
+
+## Europe: move forms off Typeform (Bryce, 2026-10-01)
+
+Media credentials (`ppatour.typeform.com/europe`) and referee interest (`/referee`) are linked from /europe and
+/eventlinks as a stopgap (`EUROPE_FORM_LINKS`). Bryce: "we should get away from Typeform eventually." Plan: rebuild
+both as site forms (InquiryForm pattern → `/api/form-submit` → europe@ppatour.com), once the Turnstile hostname for
+ppatoureurope.com is fixed. Keep the Europe team able to change questions without a deploy, which was their reason for
+Typeform (Payton, 9/15). Pro-player survey link still to come.
+
+## Europe (ppatoureurope.com), status 2026-10-04
+
+- **Audit page** (every request since 7/31, status checked live): https://claude.ai/artifact/Ssog1Z6FE9cqP1bW85iBr3. Nothing open on
+  our side; 116 changes shipped across 84 commits. Bryce shares it with Chris/Connor from its Share menu.
+- **How requests flow:** #ppa-tour-europe → Slack sweep routine (trig_01CWLtiK2x5JjovkzvVB5via), 6x daily incl. 10:30 and 15:30
+  CEST. It ships, confirms the deploy, and replies done or asks for exactly what's missing. Never "on it".
+- **Waiting on the Europe team:** more menu links, photographers' finals (header/card photos), official sponsor tracking links
+  (Payton ↔ Johnny), media credential form, licensee email seats (Kate), Spain/Italy domain redirects (Wesley / their team).
+- **Next on us:** move the media and referee forms off Typeform onto site forms (see "Europe: move forms off Typeform" above);
+  add Preview Turnstile keys in Vercel (Bryce); keep CLAUDE.md small (archive old Session Log entries) or the routine fails.

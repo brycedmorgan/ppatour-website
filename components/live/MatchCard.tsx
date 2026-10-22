@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
+import Link from "next/link";
 import type { TickerMatch, TickerPlayer } from "@/lib/ticker-api";
 import { matchWatchUrl, watchPlatform } from "@/components/live/use-live-ticker";
 
@@ -86,7 +87,20 @@ function columns(m: TickerMatch) {
   });
 }
 
-export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: string }) {
+/**
+ * `playerHref` makes every name a link (the app's player screen, Bryce 10/9:
+ * "click one player, see all their scores"). Opt-in, so the website's ticker
+ * rail and grid keep plain names.
+ */
+export function MatchCard({
+  m,
+  className = "",
+  playerHref,
+}: {
+  m: TickerMatch;
+  className?: string;
+  playerHref?: (name: string) => string;
+}) {
   const [pbtvSrc, setPbtvSrc] = useState("/ppa/networks/pickleballtv-white.svg");
   // Resolved once: matchWatchUrl falls back to PickleballTV, so the platform is
   // read off the link that will actually open, not off m.watchUrl.
@@ -161,7 +175,16 @@ export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: s
                     isDoubles ? "text-[11px]" : "text-[13px]"
                   }`}
                 >
-                  {team.players.map((p) => p.name).join(" / ")}
+                  {playerHref
+                    ? team.players.map((p, pi) => (
+                        <Fragment key={pi}>
+                          {pi > 0 && " / "}
+                          <Link href={playerHref(p.fullName ?? p.name)} className="underline-offset-2 active:underline">
+                            {p.name}
+                          </Link>
+                        </Fragment>
+                      ))
+                    : team.players.map((p) => p.name).join(" / ")}
                 </span>
               </div>
               {/* ⚠ A walkover has no scores, so without this the winning row is
@@ -233,14 +256,24 @@ export function MatchCard({ m, className = "" }: { m: TickerMatch; className?: s
             {m.time}
           </span>
         ) : m.status === "live" ? (
-          // Live — the mark of whichever service the link actually opens.
+          // Live — the mark of whichever service the link actually opens, with
+          // "Watch" beside it so the logo reads as a link to THIS match (Wesley,
+          // 9/28: the mark alone didn't say you could click it).
           <a
             href={watchHref}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Watch live on ${platformLabel}`}
-            className="flex items-center transition hover:opacity-70"
+            className="flex items-center gap-1.5 transition hover:opacity-70"
           >
+            {platform !== "other" && (
+              <span
+                aria-hidden
+                className="text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-blue"
+              >
+                Watch
+              </span>
+            )}
             {platform === "youtube" ? (
               <YouTubeMark />
             ) : platform === "pbtv" ? (

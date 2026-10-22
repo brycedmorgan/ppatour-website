@@ -5,12 +5,10 @@
  *   node scripts/import-junior-rankings.mjs <export.md> --updated "Sep 14, 2026"
  *   node scripts/import-junior-rankings.mjs <export.md> --updated "..." --check
  *
- * ⚠ THE SHEET IS NOT PUBLICLY READABLE, so unlike scripts/audit-tv-schedule.mjs
- * this cannot pull it live — `export?format=csv` returns 401. The refresh path
- * is: read the sheet through the Google Drive connector, save the markdown it
- * returns, and point this script at that file. If Daniela or Jake ever set the
- * sheet to "anyone with the link can view", this becomes a live fetch and the
- * manual step disappears.
+ * The sheet has been link-shared since 10/12, so the input file now comes from
+ * `node scripts/fetch-junior-rankings.mjs <out.md>`. Before that it was private
+ * (401) and the refresh path was the Google Drive connector's markdown export,
+ * which by 10/12 returned the tabs' structure but no cell values.
  *
  * ⚠ THE EXPORT CARRIES NO TAB NAMES — every non-blank line is a table row, so
  * there is nothing in the file that says which board is which. Twenty-four

@@ -152,6 +152,12 @@ export async function captureMetrics({ start, end }) {
   }
 
   const eventDays = dateSpan(start, end);
+  // ⚠ Every event day refused is an auth or API failure, not a tournament
+  // nobody visited. Returning zeros here once wrote "0 page views" for Las
+  // Vegas into metrics.json, where it would have been the next comparison.
+  if (eventDays.every((d) => perDay[d]?.unavailable)) {
+    return { error: "Vercel observability refused every event day (token lacks access, or the event is past the ~9-day window)" };
+  }
   const views = eventDays.reduce((s, d) => s + (perDay[d]?.views ?? 0), 0);
   const requestsInEvent = eventDays.reduce((s, d) => s + (perDay[d]?.requests ?? 0), 0);
   const peakDay = eventDays.reduce((a, d) => ((perDay[d]?.views ?? 0) > (perDay[a]?.views ?? 0) ? d : a), eventDays[0]);

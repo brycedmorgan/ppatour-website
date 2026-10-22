@@ -101,15 +101,20 @@ function build(
   sold: Record<Occupancy, number>,
   known: boolean,
   contracted: Record<Occupancy, number>,
-  status: PlanStatus | null
+  status: PlanStatus | null,
+  pooled = false
 ): Availability {
   // A "Sold out" status in Jackalope closes the trip regardless of the room
   // math — it's Lainey's manual override for "stop taking bookings".
   const closedByStatus = status === "sold_out";
+  const ids = Object.keys(PRICING) as Occupancy[];
+  // Pooled trips (TripConfig.roomPool): one block, any mix of occupancies.
+  const poolTotal = ids.reduce((n, id) => n + (contracted[id] ?? 0), 0);
+  const poolSold = ids.reduce((n, id) => n + (sold[id] ?? 0), 0);
   const options = {} as Record<Occupancy, OptionAvailability>;
-  for (const id of Object.keys(PRICING) as Occupancy[]) {
-    const total = contracted[id] ?? 0;
-    const n = sold[id] ?? 0;
+  for (const id of ids) {
+    const total = pooled ? poolTotal : (contracted[id] ?? 0);
+    const n = pooled ? poolSold : (sold[id] ?? 0);
     const left = Math.max(0, total - n);
     options[id] = {
       total,
@@ -179,14 +184,15 @@ export async function getAvailabilityFor(
   if (hit && Date.now() - hit.at < CACHE_MS) return hit.value;
 
   const { rooms, status } = await contractedPlan(cfg);
-  if (!stripeReady()) return build(emptyCounts(), false, rooms, status);
+  const pooled = !!cfg.roomPool;
+  if (!stripeReady()) return build(emptyCounts(), false, rooms, status, pooled);
 
   let value: Availability;
   try {
-    value = build(await countSoldRooms(cfg.destination), true, rooms, status);
+    value = build(await countSoldRooms(cfg.destination), true, rooms, status, pooled);
   } catch (err) {
     console.error("[capacity] Stripe availability lookup failed", err);
-    return build(emptyCounts(), false, rooms, status);
+    return build(emptyCounts(), false, rooms, status, pooled);
   }
   cache.set(cfg.destination, { at: Date.now(), value });
   return value;

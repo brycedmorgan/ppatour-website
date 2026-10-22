@@ -146,6 +146,30 @@ const JOBS = [
    * the half that would disappear, and it carries the brand's first word.
    */
   ["", "Organics_Ocean_Logo.png", "organics-ocean", "Organics Ocean (ORGANICS arched over ocean)"],
+
+  /**
+   * Las Vegas, added 9/24 from the event team's "logos activating at Las Vegas"
+   * pack (Wesley). Nine of the eleven marks in that pack are partners already
+   * on the tour roster, so they need no import and no second copy — the Las
+   * Vegas list in lib/event-sponsors.ts names them as strings and reuses the
+   * roster mark. Only these two needed a file:
+   *
+   *  • SHARP is on no roster and we held no mark for it at all, so it ships as
+   *    a Las Vegas-only sponsor in lib/event-sponsors.ts.
+   *    ⚠ The supplied art is 7053x1943 with the wordmark filling 89% of the
+   *    WIDTH but only 48% of the HEIGHT — close to half the canvas is dead
+   *    space above and below. The trim below is what makes that safe: shipped
+   *    untrimmed it would draw at roughly half the optical size of every
+   *    neighbour in the same card box.
+   *
+   *  • Picklebalm we already had, but at 418x94 — the media-library PNG that
+   *    used to sit in REMOTE_JOBS, the smallest mark on disk and under 3x for
+   *    its card. The pack supplies the same lockup at 1500x450, so that job is
+   *    retired in favour of this one. Re-encoding is contained: Picklebalm came
+   *    off the tour roster on 8/4, so nothing but the Las Vegas list reads it.
+   */
+  ["", "sharp-logo-red-horizontal.png", "sharp", "SHARP"],
+  ["", "picklebalm-logo-color.png", "picklebalm", "Picklebalm (off tour roster 8/4; Las Vegas)"],
 ];
 
 /**
@@ -161,7 +185,10 @@ const REMOTE_JOBS = [
   // importer just writes three files nothing currently references.
   ["https://ppatour.com/wp-content/uploads/2025/01/pt-logo-primary.png", "pickleball-tournaments", "Pickleball Tournaments (off roster 8/4)"],
   ["https://ppatour.com/wp-content/uploads/2024/06/Hertz_logo.png", "hertz", "Hertz (off roster 8/4)"],
-  ["https://ppatour.com/wp-content/uploads/2025/06/Picklebalm_Logo_Color_SPOT_PMS2129_PMS375.png", "picklebalm", "Picklebalm (off roster 8/4)"],
+  // ⚠ PICKLEBALM MOVED TO A LOCAL JOB ABOVE ON 9/24 and must not come back
+  // here: the media-library PNG is 418x94, where the event team's Las Vegas
+  // pack supplies the same lockup at 1500x450. Two jobs on one slug would also
+  // race — JOBS runs before REMOTE_JOBS, so the smaller file would win.
 ];
 
 /**

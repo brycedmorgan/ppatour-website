@@ -14,7 +14,7 @@
  * Gates, first serve and channels stay in `buildSchedule` — only the round
  * naming is shared.
  */
-import { getEventSchedule } from "@/lib/event-schedule";
+import { firstServeFor, getEventSchedule } from "@/lib/event-schedule";
 
 /** The pro ladder, counted back from the final. Index = days from the end. */
 export const PRO_ROUNDS = [
@@ -41,6 +41,35 @@ export function proDayLabel(i: number, fromEnd: number): string {
 }
 
 /**
+ * Per-day label overrides for TEMPLATED stops, keyed by slug then ISO date —
+ * for when the event team corrects the template's ladder without sending a
+ * full order of play. A day with no line keeps the template.
+ *
+ * ⚠ The template calls a 7-day stop's Monday "Amateur & junior brackets" and
+ * its Tuesday "Senior Open + pro qualifying", which drops the round of 64.
+ */
+const LABELS_BY_SLUG: Record<string, Record<string, string>> = {
+  // Matt Mayfield, Slack 10/12–13: "Oct 12 is pro qualifying, Oct 13 is pro
+  // round of 64", and no amateurs or juniors on the 12th. Andrew DeHennis owns
+  // this schedule (Ben Smyth the other half of the calendar).
+  "virginia-beach-open": {
+    "2026-10-12": "Pro qualifying",
+    "2026-10-13": "Pro round of 64",
+    // Weather pushed semifinals into championship day: Keaton Maynard, 10/17,
+    // has 8AM and 9AM ET semifinals on Championship Court and Grandstand before
+    // the first finals match at 10AM. Saturday's label is deliberately NOT
+    // touched — play ran there Saturday evening, so some semifinals were played
+    // and nobody has said which, and "no semifinals Saturday" would be a guess.
+    "2026-10-18": "Championship Sunday — semifinals, then finals",
+  },
+};
+
+/** This day's label: the stop's own override, else the template's. */
+export function dayLabelFor(slug: string | undefined, iso: string, templated: string): string {
+  return (slug && LABELS_BY_SLUG[slug]?.[iso]) || templated;
+}
+
+/**
  * Every day of a stop as `{ iso, label }`, oldest first.
  *
  * ⚠ THE DATE MATH IS buildSchedule's, CHARACTER FOR CHARACTER, because the
@@ -48,7 +77,7 @@ export function proDayLabel(i: number, fromEnd: number): string {
  * cursor that stepped differently here would miss by a day and the board would
  * quietly open on yesterday's round.
  */
-export function proDayLabels(startIso: string, endIso: string): { iso: string; label: string }[] {
+export function proDayLabels(startIso: string, endIso: string, slug?: string): { iso: string; label: string }[] {
   const start = new Date(`${startIso}T00:00:00`);
   const end = new Date(`${endIso}T00:00:00`);
   const out: { iso: string; label: string }[] = [];
@@ -56,7 +85,8 @@ export function proDayLabels(startIso: string, endIso: string): { iso: string; l
   const last = Math.round((end.getTime() - start.getTime()) / 86_400_000);
   let i = 0;
   while (cursor <= end) {
-    out.push({ iso: cursor.toISOString().slice(0, 10), label: proDayLabel(i, last - i) });
+    const iso = cursor.toISOString().slice(0, 10);
+    out.push({ iso, label: dayLabelFor(slug, iso, proDayLabel(i, last - i)) });
     cursor.setUTCDate(cursor.getUTCDate() + 1);
     i++;
   }
@@ -82,12 +112,57 @@ export function orderOfPlayByDay(
   startIso: string,
   endIso: string,
 ): Record<string, string> {
-  const days = proDayLabels(startIso, endIso);
-  const real = getEventSchedule(slug);
+  const days = proDayLabels(startIso, endIso, slug);
+  const real = getEventSchedule(slug, startIso);
   const useReal = real && real.proDays.length === days.length;
   const out: Record<string, string> = {};
   days.forEach((d, i) => {
     out[d.iso] = useReal ? real.proDays[i].label : d.label;
   });
   return out;
+}
+
+/** One day of a stop as the live-status copy needs it. */
+export type PlayDay = {
+  /** "2026-09-29" — the venue's calendar date. */
+  iso: string;
+  /** "Tue" */
+  dow: string;
+  /** The order-of-play label, e.g. "Pro quarterfinals". */
+  label: string;
+  /** "2:00 PM", or "TBD" where the event team has not published one. */
+  firstServe: string;
+};
+
+const DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+/**
+ * Every day of a stop with its round and first serve, for the live-status copy
+ * (components/live/LiveEventStatus).
+ *
+ * ⚠ THE TIMES ARE buildSchedule's, NOT A THIRD COPY OF THEM. Same template
+ * (9:00 AM on the two lead-in days, 11:00 AM on the final, 10:00 AM between),
+ * same per-stop override (`firstServeFor`), and the event team's transcribed
+ * schedule where one exists and its day count matches — the same pairing rule
+ * `orderOfPlayByDay` uses. If the template in buildSchedule changes, change it
+ * here too; the hero saying "First serve 10:00 AM" over a table reading 2:00 PM
+ * is exactly the disagreement this module exists to stop.
+ *
+ * Plain data, no clock: the caller decides which day is today, on the device.
+ */
+export function playDays(slug: string, startIso: string, endIso: string, state?: string): PlayDay[] {
+  const days = proDayLabels(startIso, endIso, slug);
+  const real = getEventSchedule(slug, startIso);
+  const useReal = real && real.proDays.length === days.length;
+  const last = days.length - 1;
+  return days.map((d, i) => {
+    const fromEnd = last - i;
+    let templated = "10:00 AM";
+    if (i === 0 || i === 1) templated = "9:00 AM";
+    else if (fromEnd === 0) templated = "11:00 AM";
+    const dow = DOW[new Date(`${d.iso}T00:00:00Z`).getUTCDay()];
+    return useReal
+      ? { iso: d.iso, dow, label: real.proDays[i].label, firstServe: real.proDays[i].firstServe }
+      : { iso: d.iso, dow, label: d.label, firstServe: firstServeFor(slug, d.iso, templated, state) };
+  });
 }

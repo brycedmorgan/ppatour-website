@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Image from "next/image";
 
 import type { ParkingSection } from "@/lib/event-guides";
@@ -16,9 +17,9 @@ import type { ParkingSection } from "@/lib/event-guides";
  * entry with newlines, so that the submitted text stays verbatim rather than
  * being re-punctuated into a sentence for the layout.
  *
- * A section may also carry the event team's own parking map (`image`), rendered
- * under that section's paragraphs — Cary's copy says "refer to the attached
- * map", so the map has to sit with the words that point at it.
+ * A section may also carry the event team's own parking maps (`images`), each
+ * rendered under the paragraph it is anchored to — Cary's copy says "refer to
+ * the attached map", so the map has to sit with the words that point at it.
  */
 export function ParkingDetails({
   sections,
@@ -67,34 +68,39 @@ export function ParkingDetails({
             </p>
           )}
           {s.body.map((p, j) => (
-            <p
-              key={j}
-              className={`whitespace-pre-line ${
-                bare && j === 0 ? "" : s.heading && j === 0 ? "mt-1.5" : "mt-2"
-              }`}
-            >
-              {renderBody(p, ticketsUrl ? s.ticketLinkText : undefined, ticketsUrl)}
-            </p>
+            <Fragment key={j}>
+              <p
+                className={`whitespace-pre-line ${
+                  bare && j === 0 ? "" : s.heading && j === 0 ? "mt-1.5" : "mt-2"
+                }`}
+              >
+                {renderBody(p, ticketsUrl ? s.ticketLinkText : undefined, ticketsUrl)}
+              </p>
+              {/* The event team's parking maps, each under the paragraph it
+                  belongs to (`after`, default the last one).
+                  ⚠ `sizes` is measured, not guessed: this renders in the
+                  Know-Before-You-Go accordion (543px at 1440) and the narrower
+                  Plan-Your-Trip card (510px), both inside a max-w-6xl page — a
+                  100vw hint would have the browser pick a candidate 4× wider than
+                  any surface draws.
+                  ⚠ NO BORDER, matching the venue grounds map on the same page: this
+                  component also renders on the dark on-site "Today" screen, and a
+                  frame tinted for one of those two reads as a mistake on the other. */}
+              {s.images
+                ?.filter((m) => (m.after ?? s.body.length - 1) === j)
+                .map((m) => (
+                  <Image
+                    key={m.src}
+                    src={m.src}
+                    alt={m.alt}
+                    width={m.width}
+                    height={m.height}
+                    sizes="(min-width: 1024px) 640px, 100vw"
+                    className="mt-3 h-auto w-full"
+                  />
+                ))}
+            </Fragment>
           ))}
-          {/* The event team's parking map.
-              ⚠ `sizes` is measured, not guessed: this renders in the
-              Know-Before-You-Go accordion (543px at 1440) and the narrower
-              Plan-Your-Trip card (510px), both inside a max-w-6xl page — a
-              100vw hint would have the browser pick a candidate 4× wider than
-              any surface draws.
-              ⚠ NO BORDER, matching the venue grounds map on the same page: this
-              component also renders on the dark on-site "Today" screen, and a
-              frame tinted for one of those two reads as a mistake on the other. */}
-          {s.image && (
-            <Image
-              src={s.image.src}
-              alt={s.image.alt}
-              width={s.image.width}
-              height={s.image.height}
-              sizes="(min-width: 1024px) 640px, 100vw"
-              className="mt-3 h-auto w-full"
-            />
-          )}
         </div>
       ))}
     </div>

@@ -126,6 +126,15 @@ const ON_SITE_BY_SLUG: Record<string, OnSiteInfo> = {
     venueMapWidth: 2000,
     venueMapHeight: 2666,
   },
+  // Chicago's site map, from the event team via Asana (10/2). Same kiosk
+  // template and source size as Las Vegas (2593×3457), same encode: 2000px
+  // webp q78, no crop. Courts 1–17, Pro Showcase SC1–SC4, Humana Championship
+  // Court, Carvana Grandstand, ticketing, ops, F&B, vendor village, VIP.
+  "veolia-chicago-cup": {
+    venueMapUrl: "/ppa/venue-maps/life-time-north-shore.webp",
+    venueMapWidth: 2000,
+    venueMapHeight: 2666,
+  },
 };
 
 

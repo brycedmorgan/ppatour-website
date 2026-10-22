@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { cioIdentifyAndTrack } from "@/lib/customerio";
+import { postVacSignupToJackalope } from "@/lib/vacations/jackalope";
 
 /**
  * Lead capture endpoint (§9.8). Identifies the person in Customer.io and
@@ -41,6 +42,7 @@ export async function POST(request: Request) {
       website_lead_variant: variant,
       website_lead_page: page,
       ...(region ? { website_lead_region: region } : {}),
+      ...(variant === "vacations" ? { vacations_list: true } : {}),
     },
     "website_lead_capture",
     { variant, page, source: "ppatour-website", ...(region ? { region } : {}) },
@@ -48,6 +50,9 @@ export async function POST(request: Request) {
   if (!ok) {
     return NextResponse.json({ error: "Could not subscribe" }, { status: 502 });
   }
+  // Vacations sign-ups are Lainey's list, kept in Jackalope (lib/vaclist.js
+  // there), which adds them to the Customer.io vacations segment.
+  if (variant === "vacations") await postVacSignupToJackalope(email, page);
 
   return NextResponse.json({ ok: true });
 }

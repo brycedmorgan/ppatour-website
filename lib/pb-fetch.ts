@@ -1,4 +1,25 @@
 /**
+ * ⚠ NOTHING CALLS THIS ANY MORE (9/23). Every pickleball.com read now goes
+ * through `pbCachedJson` in lib/pb-cache.ts, which caches in a Postgres table we
+ * own instead of Next's Data Cache — the one difference that matters being that
+ * a Next entry does not survive a deployment, so on a day with two dozen deploys
+ * every window here effectively reset to minutes. See that file's header.
+ *
+ * It is kept rather than deleted because a dozen docblocks across the repo point
+ * at it for the two things it documents better than anywhere else: the 429
+ * backoff contract, and the `revalidate`-survives-`force-dynamic` finding below.
+ * ⚠ THE CONCURRENCY GATE BELOW IS NOW DUPLICATED IN lib/pb-cache.ts, and that
+ * copy is the one doing the work. It was not deleted from here, because a future
+ * caller of `pbGetJson` would then be ungated — but the two are independent
+ * counters, so if both files ever had live callers again they would permit
+ * {@link MAX_IN_FLIGHT} each. Keep them in step, or better, delete this file.
+ *
+ * ⚠ IF YOU ARE ABOUT TO USE `pbGetJson` FOR A NEW PARTNER CALL, USE
+ * `pbCachedJson` INSTEAD. A new caller here would be uncached across deploys and
+ * ungated for concurrency, which is both of the problems this repo has already
+ * had an incident about.
+ *
+ * ── ORIGINAL NOTE ────────────────────────────────────────────────────────────
  * Pickleball.com API JSON fetch with retry + backoff and optional Next Data
  * Cache. The partner endpoints rate-limit (HTTP 429) under load — e.g. building
  * many athlete pages at once — so a bare fetch randomly returns empty.

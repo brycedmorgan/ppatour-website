@@ -113,6 +113,14 @@ export function useLiveTicker({
     initialData?.tournament ?? null,
   );
   const [loaded, setLoaded] = useState(Boolean(initialData));
+  /**
+   * Has the feed actually ANSWERED at least once? `loaded` also turns true after
+   * the retry budget is spent with nothing to show, which is "we could not ask",
+   * not "nothing is on". The live-status copy needs to tell those apart: an
+   * empty board on a working feed is a real answer, an empty board on a dead one
+   * is not (see lib/live-status).
+   */
+  const [feedOk, setFeedOk] = useState(Boolean(initialData?.ok));
 
   useEffect(() => {
     if (!enabled) return;
@@ -165,6 +173,7 @@ export function useLiveTicker({
           if (data.ok) {
             setMatches(data.matches);
             setTournament(data.tournament);
+            setFeedOk(true);
             ok = true;
             /**
              * Slow down only when the feed is empty AND the calendar agrees
@@ -227,7 +236,7 @@ export function useLiveTicker({
     return [...matches].sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
   }, [enabled, matches]);
 
-  return { ordered, loaded, tournament: enabled ? tournament : null };
+  return { ordered, loaded, feedOk: enabled && feedOk, tournament: enabled ? tournament : null };
 }
 
 /** The single match to feature in a compact surface: the first live one, else

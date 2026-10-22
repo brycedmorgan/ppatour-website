@@ -16,7 +16,12 @@
 import { LIVE_SCORES_CACHE_TAG } from "@/lib/cache-tags";
 import { pbCachedJson } from "@/lib/pb-cache";
 
-export type TickerPlayer = { name: string; headshot: string | null };
+/**
+ * `name` is the card's short form ("B. Johns"); `fullName` ("Ben Johns") is
+ * what the boards, the draw and a follow are keyed by. Anything that LOOKS A
+ * PLAYER UP must use `fullName` — the short form matches nobody.
+ */
+export type TickerPlayer = { name: string; fullName?: string; headshot: string | null };
 export type TickerTeam = { players: TickerPlayer[]; games: (number | null)[] };
 export type TickerMatch = {
   id: string;
@@ -153,6 +158,11 @@ function config() {
   return { token, base };
 }
 
+function longName(first?: string, last?: string, full?: string): string {
+  if (first && last) return `${first.trim()} ${last.trim()}`;
+  return (full || last || first || "").trim();
+}
+
 function shortName(first?: string, last?: string, full?: string): string {
   if (first && last) return `${first.charAt(0)}. ${last}`;
   return (full || last || first || "").trim();
@@ -234,11 +244,13 @@ function mapMatch(m: ApiMatch): TickerMatch {
   if (m.teamOnePlayerOneLastName || m.teamOnePlayerOneName)
     p1.push({
       name: shortName(m.teamOnePlayerOneFirstName, m.teamOnePlayerOneLastName, m.teamOnePlayerOneName),
+      fullName: longName(m.teamOnePlayerOneFirstName, m.teamOnePlayerOneLastName, m.teamOnePlayerOneName),
       headshot: m.teamOnePlayerOnePicture || null,
     });
   if (m.teamOnePlayerTwoLastName || m.teamOnePlayerTwoName)
     p1.push({
       name: shortName(m.teamOnePlayerTwoFirstName, m.teamOnePlayerTwoLastName, m.teamOnePlayerTwoName),
+      fullName: longName(m.teamOnePlayerTwoFirstName, m.teamOnePlayerTwoLastName, m.teamOnePlayerTwoName),
       headshot: m.teamOnePlayerTwoPicture || null,
     });
 
@@ -246,11 +258,13 @@ function mapMatch(m: ApiMatch): TickerMatch {
   if (m.teamTwoPlayerOneLastName || m.teamTwoPlayerOneName)
     p2.push({
       name: shortName(m.teamTwoPlayerOneFirstName, m.teamTwoPlayerOneLastName, m.teamTwoPlayerOneName),
+      fullName: longName(m.teamTwoPlayerOneFirstName, m.teamTwoPlayerOneLastName, m.teamTwoPlayerOneName),
       headshot: m.teamTwoPlayerOnePicture || null,
     });
   if (m.teamTwoPlayerTwoLastName || m.teamTwoPlayerTwoName)
     p2.push({
       name: shortName(m.teamTwoPlayerTwoFirstName, m.teamTwoPlayerTwoLastName, m.teamTwoPlayerTwoName),
+      fullName: longName(m.teamTwoPlayerTwoFirstName, m.teamTwoPlayerTwoLastName, m.teamTwoPlayerTwoName),
       headshot: m.teamTwoPlayerTwoPicture || null,
     });
 

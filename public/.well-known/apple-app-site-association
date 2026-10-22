@@ -1,0 +1,16 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["A7FZ282VS8.com.ppatour.app"],
+        "components": [
+          { "/": "/scores", "comment": "Scores home" },
+          { "/": "/scores/*", "comment": "Scores and player screens" },
+          { "/": "/rankings/*", "comment": "Rankings" },
+          { "/": "/events/*", "comment": "Event pages" }
+        ]
+      }
+    ]
+  },
+  "webcredentials": { "apps": ["A7FZ282VS8.com.ppatour.app"] }
+}

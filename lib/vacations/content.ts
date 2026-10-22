@@ -10,6 +10,8 @@
  * up advertising a resort it no longer books — that page now redirects here.
  */
 
+import type { TripContent } from "./trip-content";
+
 export const trip = {
   brand: "Pickleball Vacations",
   poweredBy: "Powered by the PPA, MLP & Pickleball Central",
@@ -29,7 +31,7 @@ export const trip = {
   intro:
     "Combining luxury travel with world-class pickleball, Pickleball Vacations delivers unforgettable escapes to premium destinations alongside PPA & MLP professionals, top coaches, and fellow pickleball enthusiasts. From beachfront resorts and all-inclusive amenities to daily clinics, organized play, social events, and exclusive experiences, every trip is built to create the perfect balance of competition, connection, and relaxation.",
   inauguralNote:
-    "This December, Pickleball Vacations heads to the adults-only Club Med Turkoise — set along world-famous Grace Bay in Providenciales, Turks & Caicos. Four nights of sun, sand, and pickleball, led by PPA professional Hayden Patriquin. More pros to be announced soon.",
+    "This December, Pickleball Vacations heads to the adults-only Club Med Turkoise — set along world-famous Grace Bay in Providenciales, Turks & Caicos. Four nights of sun, sand, and pickleball, led by PPA professional Hayden Patriquin alongside Aanik Lohani, Chris Crouch, and Giovanna Morelli.",
   lineup: "Led by Hayden Patriquin · Adults-only (18+)",
 };
 
@@ -152,7 +154,7 @@ export const excursions = [
  */
 export const prosAnnounced = true;
 
-export const prosMoreComing = true;
+export const prosMoreComing = false;
 
 export const pros: {
   name: string;
@@ -174,6 +176,17 @@ export const pros: {
     role: "PPA Professional",
     image: "/vacations/pros/aanik-lohani-ppa.jpg",
     slug: "aanik-lohani",
+  },
+  {
+    name: "Chris Crouch",
+    role: "PPA Professional",
+    image: "/vacations/pros/chris-crouch.jpg",
+    slug: "christopher-crouch",
+  },
+  {
+    name: "Giovanna Morelli",
+    role: "PPA Professional",
+    image: "/vacations/pros/giovanna-morelli.jpg",
   },
 ];
 
@@ -231,13 +244,9 @@ export const transportation = {
     "Flight details will be collected in advance to coordinate your arrival. Round-trip ground transportation between the PLS airport and the resort will be arranged for you, ensuring a smooth and stress-free start to your vacation. Please follow up with your trip coordinator with final flight details to ensure your round-trip ground arrangements are set.",
 };
 
-export type ItineraryDay = {
-  day: string;
-  title: string;
-  events: { time?: string; text: string }[];
-};
+export type { ItineraryDay } from "./trip-content";
 
-export const itinerary: ItineraryDay[] = [
+export const itinerary: TripContent["itinerary"] = [
   {
     day: "Day 1",
     title: "Arrival",
@@ -293,3 +302,38 @@ export const itinerary: ItineraryDay[] = [
     ],
   },
 ];
+
+/**
+ * Turks & Caicos as one TripContent, for the shared trip page template. The
+ * named exports above stay because the register/success pages and the email
+ * still read `trip` / `logo` from here; this is a re-shape, not a copy.
+ */
+export const turkoise: TripContent = {
+  trip: { ...trip, who: trip.adultsOnly },
+  soldOut,
+  copy: {
+    heroHeadline: "Play the islands\nwith the pros",
+    heroAlt: "Aerial view of Grace Bay and Club Med Turkoise, Turks & Caicos",
+    bandAlt: "Pickleball courts at Club Med Turkoise",
+    bandCopy:
+      "Ten permanent courts. Mornings with the pros. Afternoons are yours.",
+    stayHeadline: "Superior rooms on Grace Bay",
+    closingHeadline: "Four nights. Ten courts. One island.",
+    metaTitle: "Pickleball Vacations — Play the Islands With the Pros",
+    metaDescription: `${trip.destination}, ${trip.location} · ${trip.datesLabel}. An adults-only, all-inclusive week of clinics with PPA pros, ten permanent courts, and Grace Bay. ${trip.adultsOnly}.`,
+  },
+  heroImage,
+  bandImage,
+  roomImages,
+  excursions,
+  prosAnnounced,
+  prosMoreComing,
+  pros,
+  included,
+  notIncluded,
+  highlights,
+  about,
+  accommodations,
+  transportation,
+  itinerary,
+};

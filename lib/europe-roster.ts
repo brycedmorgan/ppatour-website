@@ -21,10 +21,10 @@
  * NOT build a parallel /europe/players/[slug] route; that is exactly the
  * duplicate-profile problem `lib/athlete-slugs.ts` exists to clean up.
  *
- * ⚠ ONE MISSING RECORD IS DELIBERATE. Alexia Alvarez has a pickleball.com
- * profile but no portrait and no bio in the sheet. She ships as a card with a
- * silhouette so the gap is visible to Catie rather than hidden by omission.
- * Fill `portrait` and `bio` when they arrive; nothing else needs to change.
+ * ✅ 2026-10-01: ALL 26 PORTRAITS REPLACED with the matching Barcelona studio set
+ * (white background, 4:5) from Smash's "profile pics" Drive folder, shared by
+ * Catie in #ppa-tour-europe. Tom Protzek has one for the first time; Alexia has
+ * a bio. Files are 900x1125 in public/europe/pros/<slug>.jpg.
  *
  * Bios are Catie's text. Two arrived in the first person (Biedermann,
  * Tomkinson) and were put into the third person to match the other 23 and every
@@ -47,7 +47,9 @@ export type EuroPro = {
   country: string;
   /** ISO-3, for the flag chip and for sorting. */
   countryCode: string;
-  age: number;
+  /** Not rendered anywhere. Optional so a signing can go up before Catie's sheet
+   *  row reaches us (Traskin, 10/14). */
+  age?: number;
   divisions: string[];
   sponsors: string[];
   instagram?: string;
@@ -449,8 +451,7 @@ export const europeRoster: EuroPro[] = [
     ],
   },
   {
-    // ⚠ NO PORTRAIT AND NO BIO — the gap is real, not an oversight. See the
-    // header note. Catie owns both.
+    // Bio: Catie, #ppa-tour-europe 10/1, verbatim.
     slug: "alexia-alvarez",
     name: "Alexia Alvarez",
     country: "Spain",
@@ -458,8 +459,12 @@ export const europeRoster: EuroPro[] = [
     age: 25,
     divisions: [...WS, ...WD, ...XD],
     sponsors: [],
-    tagline: "Professional pickleball player on PPA Tour Europe",
-    bio: [],
+    portrait: P("alexia-alvarez"),
+    tagline: "Former Division I tennis player, pro since 2023",
+    bio: [
+      "Alexia Alvarez is a former Division I tennis player who transitioned to professional pickleball in 2023. She quickly established herself on the competitive scene, earning podium finishes and competing in PPA Tour and international events across the U.S. and Europe.",
+      "Originally from Spain, Alexia is now based in Madrid and continues to compete internationally while growing her career in pickleball.",
+    ],
   },
   {
     slug: "jesus-campos",
@@ -485,15 +490,8 @@ export const europeRoster: EuroPro[] = [
     age: 25,
     divisions: [...MS, ...MD, ...XD],
     sponsors: [],
-    /**
-     * ⚠ NO PORTRAIT ON PURPOSE, AND NOT FOR THE SAME REASON AS ALEXIA'S. Catie's
-     * file for him is a PHONE SCREENSHOT OF A FILE VIEWER — close button, Share
-     * button, an Edit/Comment/Resize toolbar, and a small studio photo in the
-     * middle. Cropping the photo out of it would publish an upscaled screenshot.
-     * He is on the WPR board, so the roster falls through to his real
-     * pickleball.com headshot, which is better than anything that file can give.
-     * Add `portrait: P("tom-protzek")` the day Catie sends the actual image.
-     */
+    // Barcelona studio portrait, Catie/Smash 10/1 (the earlier file was a screenshot).
+    portrait: P("tom-protzek"),
     tagline: "Took world No. 1 Federico Staksrud to three sets in his second tournament",
     bio: [
       "Tom Protzek moved from a Division I soccer career at the University of Tulsa to professional pickleball, making his PPA debut in November 2024. In only his second tournament he reached the round of 16 in singles and pushed world No. 1 Federico Staksrud to three sets.",
@@ -513,6 +511,51 @@ export const europeRoster: EuroPro[] = [
     bio: [
       "Giovanna Mandon is a competitive pickleball player with Argentine, Spanish and Italian nationality, and brings an international perspective to her career in the sport. She is focused on developing her game and competing at increasingly higher levels.",
       "Beyond competition she is building her presence in the pickleball community and connecting with fellow athletes and brands.",
+    ],
+  },
+  {
+    // New signing, Catie in #ppa-tour-europe 10/14. Goes by Henrik; the board
+    // and his pickleball.com slug use Henrikas. ⚠ The board files him under
+    // AUSTRALIA — wrong, he plays for Lithuania (Catie, same thread), which is
+    // why /europe and his profile now take the flag from this roster first.
+    // Divisions: "He plays all three divisions" (Catie). Portrait: the white-
+    // background file in Smash's "FINAL PORTRAIT FOTOS JPG" folder, 900x1125.
+    // Age, sponsors, Instagram and bio came from her sheet row on 10/16 (sponsor
+    // confirmed as "Joola Europe" by Catie, same as the other seven).
+    slug: "henrikas-traskin",
+    name: "Henrik Traskin",
+    country: "Lithuania",
+    countryCode: "LTU",
+    age: 27,
+    divisions: [...MS, ...MD, ...XD],
+    sponsors: ["Joola Europe"],
+    instagram: "https://www.instagram.com/henrik_pickleball/",
+    portrait: P("henrikas-traskin"),
+    tagline: "Represented Lithuania at the 2026 Pickleball World Cup",
+    /* Catie's sheet has "the 2026 Pickleball World Cup and competing on the
+       PPA Tour Europe". "competes" is the only edit, same facts, same treatment
+       as the two bios moved into the third person above. */
+    bio: [
+      "Henrik Traskin is a professional pickleball player from Lithuania. He represented Lithuania in the 2026 Pickleball World Cup and competes on the PPA Tour Europe.",
+    ],
+  },
+  {
+    // Row 28 of Catie's sheet, posted in #ppa-tour-europe 10/17. Portrait and
+    // full bio from Catie 10/20 (via Bryce).
+    // ⚠ DIVISIONS ARE THE HOUSE DEFAULT (13 of 15 men on this roster), NOT HER
+    // SHEET — it has no divisions column. Asked her to confirm in the channel.
+    slug: "yuri-syromolotov",
+    name: "Yuri Syromolotov",
+    country: "Spain",
+    countryCode: "ESP",
+    age: 29,
+    divisions: [...MS, ...MD, ...XD],
+    sponsors: ["Arronax"],
+    instagram: "https://www.instagram.com/yurisyromolotov/",
+    portrait: P("yuri-syromolotov"),
+    tagline: "Former ATP player with a 2026 Spanish national title",
+    bio: [
+      "Yuri Syromolotov is a professional pickleball player from Spain. He turned pro in 2026. As a former ATP player, Yuri also starred in college tennis in the US and won a national college title in Great Britain. He has quickly made his mark in pickleball, winning a Spanish national title and several singles titles in 2026. He brings big-match experience to every event he plays.",
     ],
   },
 ];

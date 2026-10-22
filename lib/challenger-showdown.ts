@@ -80,7 +80,7 @@ export const challengerShowdown = {
   days: [
     { iso: "2026-11-05", dow: "Thu", label: "Men's & Women's Singles pool play" },
     { iso: "2026-11-06", dow: "Fri", label: "Men's, Women's & Mixed Doubles pool play" },
-    { iso: "2026-11-07", dow: "Sat", label: "Semifinals & finals, all events" },
+    { iso: "2026-11-07", dow: "Sat", label: "Semifinals and Finals – All Events" },
   ] satisfies ShowdownDay[],
 
   qualifying: [

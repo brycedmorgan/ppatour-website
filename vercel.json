@@ -3,11 +3,7 @@
   "crons": [
     {
       "path": "/api/revalidate-events",
-      "schedule": "0 5 * * *"
-    },
-    {
-      "path": "/api/revalidate-events",
-      "schedule": "0 6 * * *"
+      "schedule": "0 */2 * * *"
     },
     {
       "path": "/api/revalidate-athletes",
@@ -22,7 +18,7 @@
       "schedule": "*/15 * * * *"
     },
     {
-      "path": "/api/cron/rebuild",
+      "path": "/api/cron/rankings",
       "schedule": "0 9 * * *"
     },
     {

@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/site";
 import Image from "next/image";
 import Link from "next/link";
-import { permanentRedirect, redirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { resolveAthleteSlugs } from "@/lib/athlete-slugs";
+import { athleteSameAs } from "@/lib/athlete-sameas";
 import { athletes, getAthlete } from "@/lib/athletes";
 import {
   ageFromDob,
+  countryCodeFor,
   getPublishedAthlete,
   publishedAthletes,
   turnedProYear,
@@ -25,6 +27,8 @@ import { getAthleteVideoData } from "@/lib/athlete-videos";
 import { AthleteVideos } from "@/components/athletes/AthleteVideos";
 import { FollowButton } from "@/components/app/FollowButton";
 import { FollowChip } from "@/components/app/FollowChip";
+import { LatestResult } from "@/components/athletes/LatestResult";
+import { RecentResults } from "@/components/athletes/RecentResults";
 import { resolveGear } from "@/lib/athlete-gear";
 import { paddleImageFor } from "@/lib/paddle-images";
 import { athleteHeroFor } from "@/lib/athlete-heroes";
@@ -39,6 +43,8 @@ import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 import { isUnlistedEuropeAthlete } from "@/lib/europe-visibility";
 import { europeRobots } from "@/lib/europe-launch";
 import { europeRoster } from "@/lib/europe-roster";
+import { BRAND_SUFFIX, fitTitle, seoDescription, SHORT_SUFFIX } from "@/lib/seo-text";
+import { generatedBio, genericBio, THIN_BIO_CHARS } from "@/lib/athlete-bio";
 
 /**
  * Equipment is back ON, now that it has a source worth publishing (Wesley,
@@ -114,15 +120,21 @@ async function loadAthlete(slug: string) {
   if (!curated && !published && !api) return null;
 
   const name = curated?.name ?? published?.name ?? api!.name;
+  /** A Europe signing's flag comes from Catie's roster, not the board — see
+   *  `countryCode` below. */
+  const euro = europeRoster.find((p) => p.slug === slug);
   const divisions = published?.divisions.length
     ? published.divisions
     : (curated?.divisions ?? []);
+  /**
+   * ⚠ SPLIT ON BLANK LINES. `Athlete.bio` is one string, and the Europe roster
+   * joins Catie's paragraphs with "\n\n" (lib/athletes.ts) so all of them reach
+   * the page — until 9/24 only `p.bio[0]` did, which is how James Ling's page
+   * showed one of his three paragraphs and read as thin.
+   */
   const bio: string[] = published?.bio.length
     ? published.bio
-    : [
-        curated?.bio ??
-          `${name} is a professional pickleball player ranked among the world's best in the Carvana PPA Tour's World Pickleball Rankings.`,
-      ];
+    : (curated?.bio || genericBio(name)).split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
 
   return {
     slug,
@@ -132,7 +144,11 @@ async function loadAthlete(slug: string) {
     // real value and render a broken image instead of falling through to the API.
     headshot: curated?.headshot || api?.headshot || "",
     country: published?.country || curated?.country || api?.country || "",
-    countryCode: api?.countryCode || published?.countryCode || "",
+    // ⚠ EUROPE ROSTER FIRST. The board files Henrik Traskin under Australia;
+    // he plays for Lithuania (Catie, 10/14). Board-first printed "Lithuania"
+    // beside an Australian flag.
+    countryCode:
+      (euro && countryCodeFor(euro.country)) || api?.countryCode || published?.countryCode || "",
     // NEVER fall back to curated.bestRank here. That field is a hand-maintained
     // career-best from May and is stale for 31 of our 40 curated pros (Andre
     // Mercado reads #10, he's live #108) — falling back to it renders a
@@ -225,7 +241,18 @@ function athleteTitle(a: {
         : a.rank > 10
           ? "Pro Pickleball Player, Ranking & Stats"
           : "Pro Pickleball Player Profile";
-  return `${a.name} — ${descriptor} · Carvana PPA Tour`;
+  return `${a.name} — ${descriptor}`;
+}
+
+/**
+ * The suffix a profile title carries, sized to fit. 216 of 217 athlete titles
+ * were over 60 chars in the 9/23 crawl, every one because of the 19-char brand
+ * suffix — so the suffix gives way first (" · PPA Tour"), then drops, and the
+ * name + descriptor always survive intact. See lib/seo-text.ts.
+ */
+const EUROPE_SUFFIX = " · PPA Tour Europe";
+function fitAthleteTitle(base: string, europe: boolean): string {
+  return europe ? fitTitle(base, [EUROPE_SUFFIX]) : fitTitle(base, [BRAND_SUFFIX, SHORT_SUFFIX]);
 }
 
 function initials(name: string): string {
@@ -276,12 +303,12 @@ export async function athleteMetadata(
    * `absolute` — this title carries its own brand suffix, so it must NOT also
    * get the root layout's `%s · Carvana PPA Tour` template appended.
    */
-  const title = europe
-    ? athleteTitle(a).replace(/ · Carvana PPA Tour$/, " · PPA Tour Europe")
-    : athleteTitle(a);
+  const title = fitAthleteTitle(athleteTitle(a), europe);
   return {
     title: { absolute: title },
-    description,
+    // 155 on a word boundary — 63 profiles were over 160 (9/23 crawl). The
+    // OG description below keeps the full sentence; social cards show more.
+    description: seoDescription(description),
     // The Europe mount points search engines at the one real profile.
     ...(europe && { alternates: { canonical: `/athletes/${a.slug}` } }),
     /**
@@ -325,17 +352,18 @@ export async function AthleteProfile({
 
   const a = await loadAthlete(slug);
   /**
-   * Unknown slug → the roster index, not a 404. `loadAthlete` only returns null
-   * when the curated roster, the published profiles, AND the live WPR feed all
-   * have nothing, so this is a genuinely unpublished player.
+   * Unknown slug → 404. `loadAthlete` only returns null when the curated
+   * roster, the published profiles, AND the live WPR feed all have nothing, so
+   * this is a genuinely unpublished player.
    *
-   * Why redirect: the old WordPress site had 218 athlete entries against the 180
-   * published here, and the migrated blog archive links players we don't carry
-   * (Sam Querrey, Quang Duong…). Inbound traffic from Google's index of the old
-   * site and from old bookmarks lands on those URLs, and the roster is a more
-   * useful destination than a dead end.
+   * It used to 307 to the roster index (old WordPress had 218 athlete entries
+   * against the 180 published here, and migrated posts link players we don't
+   * carry). Google reads a redirect from a specific URL to an index as a soft
+   * 404 and keeps re-crawling it (docs/SEO.md §3b, issue 1); a real 404 lets it
+   * drop the URL. Aliases and duplicate slugs are still 308'd above — this is
+   * only the case where nobody has a page. The 404 page itself links the roster.
    */
-  if (!a) redirect(europe ? "/europe" : "/athletes");
+  if (!a) notFound();
 
   // Live stats from the player API (career podium finishes, bio facts) +
   // per-division World Pickleball rankings. Null/empty when the API is
@@ -626,6 +654,47 @@ export async function AthleteProfile({
 
   const gender = genderFromDivisions(a.divisions ?? []);
 
+  /**
+   * Thin-bio backfill (docs/SEO.md item 11). When the sourced bio is missing
+   * or under {@link THIN_BIO_CHARS} — 15 profiles at the 9/23 crawl, mostly
+   * Europe signings whose sheet row is empty — a paragraph is generated from
+   * the facts this page ALREADY renders (rank chip, Quick Info, medal strip,
+   * In the Bag). Every clause is conditional on its field; see lib/athlete-bio.
+   * The generic "ranked among the world's best" placeholder is dropped once a
+   * fact-based opening exists, so an unranked pro's page no longer claims it.
+   */
+  const sourcedBio = bioParagraphs.filter((p) => p.trim());
+  const sourcedText = sourcedBio.join(" ");
+  const isPlaceholder = sourcedBio.length === 1 && sourcedBio[0] === genericBio(a.name);
+  const backfill =
+    isPlaceholder || sourcedText.length < THIN_BIO_CHARS
+      ? generatedBio(
+          {
+          name: a.name,
+          country: a.country,
+          divisions: a.divisions,
+          turnedPro: stats?.turnedPro ?? a.turnedPro,
+          resides: stats?.hometown ?? qi?.resides,
+          plays: stats?.handed ?? qi?.plays,
+          age: ageVal,
+          rank: a.rank,
+          board: boardLabel,
+          points: a.points,
+          medals: stats?.medals
+            ? {
+                gold: stats.medals.total.gold,
+                silver: stats.medals.total.silver,
+                semifinals: stats.medals.total.semifinals,
+              }
+            : null,
+          paddle: SHOW_EQUIPMENT ? effPaddle : null,
+          },
+          // A real (if short) bio already introduces the pro — add facts under it.
+          { skipIdentity: !isPlaceholder },
+        )
+      : [];
+  const profileParagraphs = [...(isPlaceholder ? [] : sourcedBio), ...backfill];
+
   return (
     <>
       <script
@@ -634,9 +703,18 @@ export async function AthleteProfile({
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Person",
+            // Stable node id — the event pages' `competitor` lists point at
+            // this same `#person`, so a podium and a profile are one entity.
+            // The @id is the US profile on every surface, Europe included — one
+            // entity, one id; the page it is "main entity of" is the page itself.
+            "@id": `${SITE_URL}/athletes/${a.slug}/#person`,
+            mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}${base}/${a.slug}/` },
             name: a.name,
             jobTitle: "Professional Pickleball Player",
-            nationality: a.country,
+            // A Country node, not a bare string — "USA" as text is a label;
+            // as a Country it reconciles.
+            nationality: { "@type": "Country", name: a.country },
+            affiliation: { "@id": `${SITE_URL}/#organization` },
             ...(gender ? { gender } : {}),
             // Absolute URL — Google prefers a fully-qualified image in structured
             // data; a curated headshot is a /public path, a live one is already
@@ -647,7 +725,7 @@ export async function AthleteProfile({
             url: `${SITE_URL}/athletes/${a.slug}`,
             // Reconciled, not raw — this is structured data Google reads, so it
             // must not publish a title count the page itself contradicts.
-            description: bioParagraphs.join(" "),
+            description: profileParagraphs.join(" "),
             /**
              * Entity attributes (8/20). Google reconciles a person across the web
              * on facts like these, and we were publishing a Person node with a
@@ -685,7 +763,11 @@ export async function AthleteProfile({
              * overrides.ts` on read). Never construct one from a handle — `sameAs` is a
              * machine-readable assertion that this person owns that account.
              */
-            ...(override?.socials?.length ? { sameAs: override.socials } : {}),
+            // Plus the pro's Wikipedia article + Wikidata item where one exists
+            // (lib/athlete-sameas.ts — verified entries only, ten pros today).
+            ...(override?.socials?.length || athleteSameAs(a.slug).length
+              ? { sameAs: [...(override?.socials ?? []), ...athleteSameAs(a.slug)] }
+              : {}),
             // Reference the site-wide org node (app/layout.tsx) by @id instead of
             // redefining it, so the two never disagree.
             memberOf: { "@id": `${SITE_URL}/#organization` },
@@ -709,6 +791,13 @@ export async function AthleteProfile({
        * this repo has already shipped one fabricated `InStock` offer off a
        * fallback number (7/31). Name, brand, image and the page we send buyers
        * to are all facts we hold; that is what goes in.
+       *
+       * 9/24: typed as `Thing` with `additionalType` Product, not `@type: Product`.
+       * Google's Rich Results Test marks a Product without offers/review/rating
+       * as INVALID ("Product snippets: 1 invalid item") and that lands in the
+       * Search Console error report for every athlete page. `Thing` keeps the
+       * athlete → paddle → brand graph for engines that read schema directly and
+       * keeps Google's merchant validator out of a page that sells nothing.
        */}
       {gear && (
         <script
@@ -716,7 +805,8 @@ export async function AthleteProfile({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "Product",
+              "@type": "Thing",
+              additionalType: "https://schema.org/Product",
               "@id": paddleNodeId,
               name: gear.paddle,
               category: "Pickleball Paddle",
@@ -922,7 +1012,7 @@ export async function AthleteProfile({
                 About {a.name}
               </h2>
               <div className="mt-4 space-y-4 text-sm leading-relaxed text-ppa-navy/70 sm:text-base">
-                {bioParagraphs.map((para, i) => (
+                {profileParagraphs.map((para, i) => (
                   <p key={i}>{para}</p>
                 ))}
               </div>
@@ -989,7 +1079,10 @@ export async function AthleteProfile({
               )}
             </div>
 
-            <aside>
+            {/* min-w-0: the Latest Result box score truncates long team names, and a
+                grid item's default min-width would let them widen the column
+                past a phone screen instead. */}
+            <aside className="min-w-0">
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
                 Quick Info
               </p>
@@ -1017,6 +1110,12 @@ export async function AthleteProfile({
               >
                 Full World Rankings →
               </Link>
+
+              {/* Latest Result — last match as a box score + their finish at that
+                  stop (Bryce, 10/11). Loads after the page, with the Recent
+                  Results band below (one shared request); renders nothing for a
+                  pro with no recent main-draw match. */}
+              <LatestResult name={a.name} />
 
               {/**
                * In the Bag — the athlete's paddle + the buy link.
@@ -1233,6 +1332,13 @@ export async function AthleteProfile({
           </div>
         </section>
       )}
+
+      {/* Recent Results — tournaments rail + box scores, a navy band of its own
+          (components/athletes/RecentResults). Loads after the page: this page
+          is force-static and builds ~1,100 at once. Renders nothing for a pro
+          with no recent main-draw results. The Latest Result card's "See all
+          results" jumps here (#recent-results). */}
+      <RecentResults name={a.name} variant="profile" />
 
       {/* Highlights — player video clips from the API */}
       {highlights && (

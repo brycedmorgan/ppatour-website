@@ -353,4 +353,728 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
 <p>The Junior PPA Tour has experienced significant growth since its inception, with over 1,200 junior pickleball players registered in the program. The introduction of the Junior PPA Select Team represents a strategic expansion of the tour&#8217;s commitment to fostering young talent and elevating the sport&#8217;s profile nationally and internationally.</p>
 `.trim(),
   },
+  {
+    // Jim Ramsey's Championship Sunday stats wrap for the Veolia Arizona Open,
+    // supplied 9/23. Third post in this series written after the migration, and
+    // the 38th "Championship Sunday Standout Stats" in the archive.
+    //
+    // ⚠ EVERY RESULT WAS CHECKED AGAINST THE LIVE FEED BEFORE PUBLISHING AND
+    // ALL FIVE MATCH EXACTLY — winners, losers, seeds and every game score,
+    // including the (15) seed on Acevedo/Funemizu and the 15-13 third game. The
+    // changeover line checks out too: the five finals ran 2+3+3+3+2 = 13 games,
+    // which is the denominator it quotes.
+    //
+    // ⚠ THE DATELINE WAS CORRECTED FROM "September 22" TO "September 20", AND
+    // IT IS THE ONE SUBSTANTIVE EDIT TO THE SUPPLIED COPY. Championship Sunday
+    // at this stop was Sunday, Sep 20: the curated record ends the event
+    // 2026-09-20, Dave Fleming's own preview says "Sept. 14-20", and the feed
+    // has the men's doubles final on Sun Sep 20 — the other four roll to "Mon,
+    // Sep 21" only because a 2 PM Mesa first serve pushes them past UTC
+    // midnight, the same rollover `endOfEvent` was fixed for on 9/20. Sep 22 is
+    // a Tuesday, i.e. the day the document was written. Across all 37 archived
+    // posts in this series the dateline is the SUNDAY and never the writing
+    // date (May 10, May 3, Apr 19, Mar 29, Mar 15, Mar 8 — every one a Sunday),
+    // and the headline says "Championship Sunday". One edit to revert.
+    //
+    // ⚠ ONE NAME FIXED: "Funemuzu" -> "Funemizu", in the bullet about his first
+    // domestic medal. The supplied document spells it Funemizu twice and
+    // Funemuzu once, and the feed and published-athletes.json both say **Yuta
+    // Funemizu**, so it is an internal typo rather than a claim. Name spellings
+    // are checked against the roster; punctuation and house style are left as
+    // filed (the stray comma in "Waters 67, Johns, 80" is theirs and stays).
+    //
+    // ⚠ "Chris Haworth" and "Nico Acevedo" are deliberately left as written.
+    // Haworth is published as Christopher Haworth and resolves through
+    // ATHLETE_NAME_ALIASES, so the rail entry and the inline link both work.
+    // Acevedo is `nicolas-acevedo` on the WPR board with no profile on this
+    // site, so there is nothing to link and nothing to alias — deriving one is
+    // the "Zoey Wang" failure.
+    slug: "championship-sunday-standout-stats-from-the-veolia-arizona-open",
+    wpId: 900003,
+    status: "published",
+    source: "wordpress",
+    category: "Recap",
+    series: "stats-wrap",
+    categoryResolvedBy: "series",
+    title: "Championship Sunday Standout Stats from the Veolia Arizona Open",
+    dek: "Mesa, Arizona. September 20, 2026. Anna Leigh Waters doubles up in singles and mixed, Chris Haworth lands his first title of the season, and Rachel Rohrabacher plays two finals on Championship Sunday.",
+    author: "Jim Ramsey",
+    publishedAt: "2026-09-23T10:00:00",
+    publishedAtGmt: "2026-09-23T15:00:00",
+    modifiedAt: "2026-09-23T15:00:00",
+    image: {
+      // ⚠ NOT THE EVENT'S OWN FEATURED SHOT AND NOT THE STORYLINES FRAME.
+      // `featured-mesa-cup.jpg` is pinned as this event's hero, card and OG
+      // image in HERO_OVERRIDE_BY_EVENT_SLUG and `crowd-04.jpg` carries Dave
+      // Fleming's 9/9 preview, so either would print the same picture twice
+      // wherever two of those cards share a page.
+      //
+      // ⚠ AND THE CROWD FRAMES WERE RULED OUT BY LOOKING AT THEM, NOT BY
+      // FILENAME. crowd-01..05 were all shot at the CARVANA MESA CUP in
+      // February and carry "MESA ARIZONA CUP" readable on the court-side
+      // banner — a different event, four months earlier, at the same venue. On
+      // an article about the Arizona Open that is a caption a reader can catch.
+      // This aerial is the grounds themselves at dusk with no event-specific
+      // signage, which is true of this stop and of every other played here.
+      url: "/ppa/venues/aag-mesa/aerial-02.jpg",
+      // ⚠ NO NAMES. House style on this series is a generic description, and
+      // nobody in this frame is identifiable or identified.
+      alt: "Aerial view of the tournament courts at Arizona Athletic Grounds in Mesa at sunset.",
+      width: 1800,
+      height: 1200,
+    },
+    // Left empty deliberately: `detectAthleteMentions` reads the body and
+    // resolves the roster itself, which is how every post in this series works.
+    players: [],
+    playerNames: [],
+    wpEvent: { slug: "2026-veolia-arizona-open", name: "2026 Veolia Arizona Open" },
+    tags: [],
+    tagsRaw: [],
+    wpCategories: ["2026-veolia-arizona-open", "stats-wrap"],
+    embeds: [],
+    inlineImages: [],
+    // Never existed on WordPress, so its canonical home is this site and the
+    // URL is the one it will be served at here.
+    legacyUrl: "https://www.ppatour.com/championship-sunday-standout-stats-from-the-veolia-arizona-open/",
+    seo: {
+      title: "Veolia Arizona Open: Championship Sunday Stats | PPA Tour",
+      description:
+        "Championship Sunday stats from the Veolia Arizona Open in Mesa: Anna Leigh Waters wins singles and mixed, Chris Haworth takes men's singles, and Rohrabacher and Todd win women's doubles.",
+      canonical:
+        "https://www.ppatour.com/championship-sunday-standout-stats-from-the-veolia-arizona-open/",
+    },
+    bodyHtml: `
+<p><strong>Mesa, Arizona.</strong></p>
+
+
+
+<p><strong>September 20, 2026.</strong></p>
+
+
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+
+
+<h4 class="wp-block-heading"><strong>MIXED DOUBLES FINAL:&nbsp; (1) Anna Leigh Waters and Ben Johns def. (2) Rachel Rohrabacher and Christian Alshon, 11-3, 11-6.</strong>&nbsp;</h4>
+
+
+
+<ul class="wp-block-list">
+<li>Waters and Johns are 65-3 in finals together. (Career titles: Waters 67, Johns, 80)</li>
+
+
+
+<li>Waters and Johns won a silver here in February, losing to Bright and Patriquin.</li>
+
+
+
+<li>Waters and Johns won the last eight points of Game Two to finish the match.</li>
+
+
+
+<li>Waters kept every Serve, Return, Third Shot and Dink &#8220;in play.&#8221;</li>
+
+
+
+<li>Alshon had a match-high nine Clean Winners.</li>
+
+
+
+<li>Longest rally: 36 shots.</li>
+</ul>
+
+
+
+<h4 class="wp-block-heading"><strong>MEN&#8217;S DOUBLES FINAL:&nbsp; (2) Christian Alshon and Andrei Daescu def. (15) Nico Acevedo and Yuta Funemizu, 11-7, 7-11, 15-13.</strong>&nbsp;</h4>
+
+
+
+<ul class="wp-block-list">
+<li>Fourth career title together for Alshon and Daescu.</li>
+
+
+
+<li>First domestic PPA Tour medals for both Acevedo and Funemizu.</li>
+
+
+
+<li>Acevedo and Funemizu had seven Match Points in Game Three.</li>
+
+
+
+<li>Acevedo had a match-high 17 Clean Winners.</li>
+
+
+
+<li>Longest rally: 44 shots.</li>
+</ul>
+
+
+
+<h4 class="wp-block-heading"><strong>WOMEN&#8217;S DOUBLES FINAL:&nbsp; (1) Rachel Rohrabacher and Parris Todd def. (2) Tyra Black and Meghan Dizon, 11-4, 10-12, 11-6.</strong>&nbsp;</h4>
+
+
+
+<ul class="wp-block-list">
+<li>Rohrabacher&#8217;s tenth career Women&#8217;s Doubles title (eight with Anna Bright).</li>
+
+
+
+<li>Todd&#8217;s fourth career Women&#8217;s Doubles title, and second with Rohrabacher.</li>
+
+
+
+<li>Rohrabacher and Todd kept every Serve, Return and Third Shot &#8220;in play.&#8221;</li>
+
+
+
+<li>Rohrabacher and Todd had three Match Points in Game Two.</li>
+
+
+
+<li>Black had a match-high ten Clean Winners.</li>
+
+
+
+<li>Longest rally: 54 shots.</li>
+</ul>
+
+
+
+<h4 class="wp-block-heading"><strong>MEN&#8217;S SINGLES FINAL:&nbsp; (1) Chris Haworth def. (2) Federico Staksrud, 10-12, 11-9, 11-6.</strong>&nbsp;</h4>
+
+
+
+<ul class="wp-block-list">
+<li>Haworth&#8217;s ninth title, all since 2024, and first this season.</li>
+
+
+
+<li>Staksrud has 20 Men&#8217;s Singles titles, and his 20 silver medals are the most all-time.</li>
+
+
+
+<li>Haworth won the last eight points of Game Three.</li>
+
+
+
+<li>Haworth had more Clean Winners, 18-11.</li>
+
+
+
+<li>Longest rally: 16 shots.</li>
+</ul>
+
+
+
+<h4 class="wp-block-heading"><strong>WOMEN&#8217;S SINGLES FINAL:&nbsp; (1) Anna Leigh Waters def. (2) Kate Fahey, 11-9, 11-4.</strong>&nbsp;</h4>
+
+
+
+<ul class="wp-block-list">
+<li>Waters has a 65-3 career record in Singles finals.</li>
+
+
+
+<li>Waters is 54-0 in Finals since losing in June 2022.</li>
+
+
+
+<li>Waters has won the last 27 tournaments that she has entered, including eight finals vs Fahey this year.</li>
+
+
+
+<li>Waters had fewer baseline Drive Errors, 12-4.</li>
+
+
+
+<li>Longest rally: 12 shots.</li>
+</ul>
+
+
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+
+
+<h4 class="wp-block-heading"><strong>LEADING AT THE CHANGEOVER:</strong></h4>
+
+
+
+<p>Did the players or teams leading a game when they changed sides at six points go on to win that game?</p>
+
+
+
+<ul class="wp-block-list">
+<li>This tournament: Yes. 8 times in 13 games.</li>
+
+
+
+<li>This season: Yes. 21 times in 28 games (75%).</li>
+</ul>
+
+
+
+<p><em>All career records are &#8220;Domestic PPA Tour only.&#8221;</em></p>
+
+
+
+<p><strong>For the comprehensive stats of all these gold medal matches, please visit: </strong><a href="https://facebook.com/groups/propickleballstats" target="_blank" rel="noreferrer noopener"><strong>facebook.com/groups/propickleballstats</strong></a></p>
+`.trim(),
+  },
+  {
+    // Partner story, supplied by Wesley 9/24 with the featured photograph.
+    // Proton is an Official Platinum Partner (lib/home-content.ts), so this is
+    // filed copy about a partner's product, not editorial about a paddle we
+    // picked — the same footing the sponsor pages sit on.
+    //
+    // ⚠ BOTH RESULTS CLAIMS WERE VERIFIED AGAINST THE LIVE FEED, NOT TAKEN ON
+    // TRUST, because a wrong finish attributed to a named pro is the one thing
+    // a gear post cannot get away with. Arizona women's singles: Jalina Ingram
+    // (13 seed) reached the SEMI-FINALS, beating Catherine Parenteau (7) in the
+    // quarters before losing to Anna Leigh Waters. Grand Rapids PPA Challenger
+    // men's singles podium: gold Matthew Finnerty, silver Eli Steiner, BRONZE
+    // MILES HOOVER. Both read straight off `getScores`.
+    slug: "project-coyote-brings-the-heat-as-proton-players-celebrate-14-medals-in-mesa",
+    wpId: 900004,
+    status: "published",
+    source: "wordpress",
+    // "Tour News" is what the archive's other 343 announcements carry, and this
+    // is an announcement about a partner's product rather than match coverage.
+    category: "Tour News",
+    series: null,
+    categoryResolvedBy: "fallback",
+    title: "Project Coyote Brings the Heat as Proton Players Celebrate 14 Medals in Mesa",
+    dek: "Jalina Ingram reached the women's singles semifinals at the Veolia Arizona Open, part of 14 medals won on Project Coyote across the professional and amateur draws.",
+    // No byline supplied. "PPA Tour" is the archive's house byline for unsigned
+    // tour copy (154 posts) — inventing a writer would attribute a real
+    // person's name to copy they did not write.
+    author: "PPA Tour",
+    publishedAt: "2026-09-24T10:00:00",
+    publishedAtGmt: "2026-09-24T15:00:00",
+    modifiedAt: "2026-09-24T15:00:00",
+    image: {
+      // Supplied by Wesley with the copy. Encoded to the house news standard:
+      // 2048x1365, mozjpeg q64, 4:4:4, from a 5345x3563 original.
+      //
+      // ⚠ NO NAMES, AND NO PADDLE MODEL EITHER. House style on this archive is
+      // a generic description, and naming a player from a frame is how the
+      // wrong athlete gets captioned. The paddle in shot carries a legible
+      // Proton wordmark but nothing identifies WHICH Proton paddle it is, so
+      // calling it a Project Coyote under a post about the Coyote would be a
+      // guess doing the work of a caption.
+      url: "/ppa/news/proton-project-coyote-mesa-medals.jpg",
+      alt: "Pro reaching for a forehand volley at the net during a PPA Tour match.",
+      width: 2048,
+      height: 1365,
+    },
+    // Empty on purpose: detectAthleteMentions reads the body and resolves the
+    // roster itself. Jalina Ingram and Catherine Parenteau both have published
+    // profiles and link automatically; Miles Hoover has none, so he correctly
+    // stays plain text rather than pointing at a page that does not exist.
+    players: [],
+    playerNames: [],
+    // WP-category form, matching the other three posts in this file. Inert —
+    // nothing resolves it to an internal event slug (see lib/news.ts).
+    wpEvent: { slug: "2026-veolia-arizona-open", name: "2026 Veolia Arizona Open" },
+    tags: [],
+    tagsRaw: [],
+    wpCategories: [],
+    embeds: [],
+    inlineImages: [],
+    // ⚠ CTA LEFT ON THE DEFAULT (next stop's tickets + TV Schedule) ON PURPOSE.
+    // The override exists for posts where a ticket link is the wrong action —
+    // a junior announcement, say. This post is about pros at a PPA stop, so
+    // selling the next one is a fair ask, and the copy's own call to action
+    // (Proton's shop and the PPA discount code) is the closing line of the
+    // body, where the supplied copy puts it. One `ctaUrl` field flips it.
+    //
+    // Never existed on WordPress, so its canonical home is this site.
+    legacyUrl: "https://www.ppatour.com/project-coyote-brings-the-heat-as-proton-players-celebrate-14-medals-in-mesa/",
+    seo: {
+      title: "Project Coyote: 14 Medals in Mesa for Proton Players | PPA Tour",
+      description:
+        "Jalina Ingram reached the women's singles semifinals at the Veolia Arizona Open as players on Proton's Project Coyote earned 14 medals in Mesa, with a men's singles bronze for Miles Hoover in Grand Rapids.",
+      canonical:
+        "https://www.ppatour.com/project-coyote-brings-the-heat-as-proton-players-celebrate-14-medals-in-mesa/",
+    },
+    bodyHtml: `
+<p>Rising star Jalina Ingram delivered a standout performance at the Carvana PPA Tour&#8217;s <a href="/events/2026/veolia-arizona-open/">Veolia Arizona Open</a> in Mesa, battling her way to the women&#8217;s singles semifinals.</p>
+
+
+
+<p>Unsigned top female pro Catherine Parenteau was also seen competing with Project Coyote, adding another notable name to the paddle&#8217;s presence on court.</p>
+
+
+
+<h4 class="wp-block-heading"><strong>Beyond the Pros</strong></h4>
+
+
+
+<p>Ingram&#8217;s run was only part of the story. Players using the Project Coyote earned 14 total medals across professional and amateur divisions in Mesa.</p>
+
+
+
+<p>And the momentum stretched beyond Arizona. Across the country, Miles Hoover earned bronze in men&#8217;s singles at the Grand Rapids PPA Challenger.</p>
+
+
+
+<p>These results drove us to take a closer look at what the Coyote brings to the court.</p>
+
+
+
+<h4 class="wp-block-heading"><strong>Power That Fits the Whole Game</strong></h4>
+
+
+
+<p>The Coyote is a 15mm elongated paddle and Proton&#8217;s most powerful paddle yet. Built around a polypropylene honeycomb core with a reinforced-foam perimeter, its approximately 7.7-ounce average weight emphasizes maneuverability, while a 5.5-inch handle and refined throat taper provide room for comfortable two-handed play. Proton designed that combination to deliver power without sacrificing stability and responsiveness.</p>
+
+
+
+<p>The Kitchen&#8217;s August 26 review offered a strong endorsement of that balance, calling Project Coyote &#8220;the company&#8217;s best paddle to date&#8221; and highlighting its combination of high power and a stable, connected feel.</p>
+
+
+
+<h4 class="wp-block-heading"><strong>Accessible Performance</strong></h4>
+
+
+
+<p>At $195, Project Coyote brings Proton&#8217;s power-focused design below the $200 mark, with construction intended to support everything from controlled dinks and soft resets to powerful drives and fast kitchen exchanges.</p>
+
+
+
+<p>But specifications tell only part of the story. The real question is whether a paddle fits the way a player wants to compete. Fourteen medals in Mesa, along with another professional podium across the country, give players a compelling reason to take a closer look at the Coyote.</p>
+
+
+
+<p>You can visit <a href="https://protonsports.com/?utm_source=ppatour&#038;utm_medium=website&#038;utm_campaign=news&#038;utm_content=article-project-coyote-brings-the-heat-as-proton-players-celebrate-14-medals-in-mesa">Protonsports.com</a> and use the code &#8220;PPA&#8221; for 10% off of your order.</p>
+`.trim(),
+  },
+  {
+    // Jim Ramsey's stats study, supplied by Wesley 9/30. Filed like his May
+    // study ("The Defense Does NOT Rest…"): Recap, stats-wrap series. Copy is
+    // verbatim; only "Of the 30,15" gained its missing space, and the sign-off
+    // block (name, date, ###) became the byline and publish date.
+    slug: "offensive-lobs-lets-look-at-the-numbers",
+    wpId: 900005,
+    status: "published",
+    source: "wordpress",
+    category: "Recap",
+    series: "stats-wrap",
+    categoryResolvedBy: "series",
+    title: "Offensive Lobs: Let's Look at the Numbers!",
+    dek: "A Pro Pickleball Stats Study: 453 Offensive Lobs across 90 doubles finals, from the Masters in January 2025 through the Veolia Arizona Open in September.",
+    author: "Jim Ramsey",
+    publishedAt: "2026-09-30T10:00:00",
+    publishedAtGmt: "2026-09-30T15:00:00",
+    modifiedAt: "2026-09-30T15:00:00",
+    image: {
+      // Supplied by Wesley with the post, 9/30: a Carvana Masters frame.
+      // ⚠ NO NAMES — house style on this series, and the scoreboard in frame
+      // is not an identification. Encoded 2048x1365, mozjpeg q64, 4:4:4.
+      url: "/ppa/news/offensive-lobs-by-the-numbers.jpg",
+      alt: "Pickleball pro stretching wide for a backhand in front of a packed crowd at the Carvana Masters.",
+      width: 2048,
+      height: 1365,
+    },
+    // Left empty deliberately: `detectAthleteMentions` reads the body.
+    players: [],
+    playerNames: [],
+    wpEvent: null,
+    tags: [],
+    tagsRaw: [],
+    wpCategories: ["stats-wrap"],
+    embeds: [],
+    inlineImages: [],
+    legacyUrl: "https://www.ppatour.com/offensive-lobs-lets-look-at-the-numbers/",
+    seo: {
+      title: "Offensive Lobs: Let's Look at the Numbers | PPA Tour",
+      description:
+        "How often does an Offensive Lob win the rally? PPA Tour statistician Jim Ramsey tracked 453 of them across 90 doubles finals: 42% won, 44% lost, 14% out.",
+      canonical: "https://www.ppatour.com/offensive-lobs-lets-look-at-the-numbers/",
+    },
+    bodyHtml: `
+<p><em>(A Pro Pickleball Stats Study)</em></p>
+
+<p>An Offensive Lob is a rare shot in pickleball. It can be an effective surprise, instantly disastrous, or somewhere in between. Rather than simply relying on conventional wisdom and speculation, let&#8217;s look at the numbers.</p>
+
+<p>Offensive Lobs are among the several stats I track as the PPA Tour&#8217;s Statistician and Broadcast Researcher. The results fall into three categories:</p>
+
+<ul class="wp-block-list">
+<li>The lob was in and that team won the rally.</li>
+<li>The lob was in and that team lost the rally.</li>
+<li>The lob was out.</li>
+</ul>
+
+<p><em>(Yes, a team could win or lose the rally on the next shot, or several shots later)</em></p>
+
+<p>I took the stats from thirty PPA Tour tournaments from the Masters in January 2025 through the Veolia Arizona Open in September. Those tournaments had 90 doubles finals (Men&#8217;s, Women&#8217;s and Mixed), and 453 Offensive Lobs.</p>
+
+<ul class="wp-block-list">
+<li>The lob was in and that team won the rally 42% of the time, 191 of 453.</li>
+<li>The lob was in and that team lost the rally 44% of the time, 199 of 453.</li>
+<li>The lob was out 14% of the time, 63/453.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>Observations and Notes:</strong></h4>
+
+<ul class="wp-block-list">
+<li>The pros kept 86 percent of Offensive Lobs &#8220;in play.&#8221;</li>
+<li>Teams lost 58 percent of the rallies in which they hit an Offensive Lob. (44% + 14%).</li>
+<li>There were no Offensive Lobs in eight of those 30 finals.</li>
+<li>The Mixed Doubles final at the 2026 Masters had 30 Offensive Lobs, 24 by Anna Bright and Hayden Patriquin and six by Anna Leigh Waters and Ben Johns. Of the 30, 15 were in with rallies won, 12 were in with rallies lost, and three were out.</li>
+</ul>
+`.trim(),
+  },
+  {
+    // Jim Ramsey's Las Vegas stats wrap, supplied by Wesley on 10/5 (Google Doc
+    // "Championship Sunday Standout Stats from the Rate Las Vegas Open"). Same
+    // series and shape as the Arizona wrap above; every line is his, verbatim.
+    //
+    // ⚠ "Tyra Black" and "Gabe Tardio" are left as he wrote them. Both resolve
+    // through ATHLETE_NAME_ALIASES (Hurricane Tyra Black, Gabriel Tardio).
+    slug: "championship-sunday-standout-stats-from-the-rate-las-vegas-open",
+    wpId: 900006,
+    status: "published",
+    source: "wordpress",
+    category: "Recap",
+    series: "stats-wrap",
+    categoryResolvedBy: "series",
+    title: "Championship Sunday Standout Stats from the Rate Las Vegas Open",
+    dek: "Las Vegas, Nevada. October 4, 2026. Hunter Johnson beats Ben Johns for the first time, Bright and Patriquin top Waters and Johns again, and Johns and Tardio's 17-final streak ends.",
+    author: "Jim Ramsey",
+    publishedAt: "2026-10-05T10:00:00",
+    publishedAtGmt: "2026-10-05T15:00:00",
+    modifiedAt: "2026-10-05T15:00:00",
+    image: {
+      // Wesley's pick, 10/5. Encoded 2048px wide, mozjpeg q64 (house standard).
+      url: "/ppa/news/championship-sunday-standout-stats-las-vegas-2026.jpg",
+      // ⚠ NO NAMES — house style on this series, and nobody is identified.
+      alt: "A pro player in a white cap moves to his right with his paddle back, spectators seated in the stands behind him.",
+      width: 2048,
+      height: 1365,
+      // His face sits in the top third, so a centred ~3.6:1 desktop crop would
+      // cut it off; 15% keeps cap to waist. 70% across keeps him and the paddle
+      // in a phone's horizontal crop.
+      position: "70% 15%",
+    },
+    // Left empty deliberately: `detectAthleteMentions` reads the body.
+    players: [],
+    playerNames: [],
+    wpEvent: { slug: "2026-rate-las-vegas-open", name: "2026 Rate Las Vegas Open" },
+    tags: [],
+    tagsRaw: [],
+    wpCategories: ["2026-rate-las-vegas-open", "stats-wrap"],
+    embeds: [],
+    inlineImages: [],
+    legacyUrl: "https://www.ppatour.com/championship-sunday-standout-stats-from-the-rate-las-vegas-open/",
+    seo: {
+      title: "Rate Las Vegas Open: Championship Sunday Stats | PPA Tour",
+      description:
+        "Championship Sunday stats from the Rate Las Vegas Open: Hunter Johnson takes men's singles, Kaitlyn Christian women's singles, and Bright and Patriquin win mixed.",
+      canonical:
+        "https://www.ppatour.com/championship-sunday-standout-stats-from-the-rate-las-vegas-open/",
+    },
+    bodyHtml: `
+<p><strong>Las Vegas, Nevada.</strong></p>
+
+<p><strong>October 4, 2026.</strong></p>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<h4 class="wp-block-heading"><strong>MIXED DOUBLES FINAL:&nbsp; (2) Anna Bright and Hayden Patriquin def. (1) Anna Leigh Waters and Ben Johns, 11-9, 11-7.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Bright and Patriquin&#8217;s third career title together. (Bright has seven total; Patriquin has four.)</li>
+<li>Bright is part of five teams to beat Waters and Johns.</li>
+<li>Waters and Johns&#8217;s first loss in a final since&#8230;losing to Bright and Patriquin in Mesa in February.</li>
+<li>Patriquin had a match-high eight Clean Winners.</li>
+<li>96 degrees at first serve.</li>
+<li>Longest rally: 52 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>MEN&#8217;S DOUBLES FINAL:&nbsp; (2) Christian Alshon and Andrei Daescu def. (1) Ben Johns and Gabe Tardio, 11-6, 12-10.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Alshon and Daescu&#8217;s fifth title together and second this season.</li>
+<li>First loss of 2026 for Johns and Tardio.</li>
+<li>Johns and Tardio had won 17 straight finals since losing in Atlanta in May 2025.</li>
+<li>Alshon&#8217;s ten Clean Winners were more than Johns and Tardio combined (9).</li>
+<li>Alshon and Daescu had fewer Volleys into the Net, 13-4.</li>
+<li>Longest rally: 44 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>WOMEN&#8217;S DOUBLES FINAL:&nbsp; (1) Anna Bright and Anna Leigh Waters def. (2) Tyra Black and Catherine Parenteau, 11-8, 10-12, 11-5.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Bright and Waters&#8217;s 25th title together, and second this season.</li>
+<li>Waters&#8217;s 12 Clean Winners were more than Black and Parenteau combined (11).</li>
+<li>Black and Parenteau kept every Serve, Return and Third Shot &#8220;in play.&#8221;</li>
+<li>Black and Parenteau lost Game Two 12-10 after trailing 9-0.</li>
+<li>Longest rally: 54 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>MEN&#8217;S SINGLES FINAL:&nbsp; (1) Hunter Johnson def. (19) Ben Johns, 11-1, 11-3.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Johnson&#8217;s tenth career title and second this season.</li>
+<li>Johnson entered this match 0-6 lifetime against Johns.</li>
+<li>Johns&#8217; fourth career loss in a final, and second this year.</li>
+<li>Johnson had more Clean Winners, 11-2.</li>
+<li>Longest rally: 29 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>WOMEN&#8217;S SINGLES FINAL:&nbsp; (2) Kaitlyn Christian def. (5) Kiora Kunimoto, 11-8, 2-11, 11-4.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Christian&#8217;s fifth PPA Tour title and second this season.</li>
+<li>Kunimoto&#8217;s first career PPA Tour medal and final.</li>
+<li>Christian had fewer Baseline Drive Errors, 11-3.</li>
+<li>Kunimoto had more Clean Winners, 18-9.</li>
+<li>Longest rally: 13 shots.</li>
+</ul>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<h4 class="wp-block-heading"><strong>LEADING AT THE CHANGEOVER:</strong></h4>
+
+<p>Did the players or teams leading a game when they changed sides at six points go on to win that game?</p>
+
+<ul class="wp-block-list">
+<li>This tournament: Yes. 10 times in 12 games.</li>
+<li>This season: Yes. 31 times in 40 games. (77.5%)</li>
+</ul>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<p><em>All stats are from PPA Tour events only.</em></p>
+
+<p><strong>For the comprehensive stats of all these gold medal matches, please visit: </strong><a href="https://facebook.com/groups/propickleballstats" target="_blank" rel="noreferrer noopener"><strong>facebook.com/groups/propickleballstats</strong></a></p>
+`.trim(),
+  },
+  {
+    // Jim Ramsey's Chicago stats wrap, supplied by Wesley on 10/13 (Google Doc
+    // "Championship Sunday Standout Stats from the Veolia Chicago Cup"). Same
+    // series and shape as the Las Vegas wrap above; every line is his, verbatim
+    // — including "(Career titles: Waters 68, Johns, 81)" and "This domestic
+    // season". His "." / "***.***" separators became rules.
+    slug: "championship-sunday-standout-stats-from-the-veolia-chicago-cup",
+    wpId: 900007,
+    status: "published",
+    source: "wordpress",
+    category: "Recap",
+    series: "stats-wrap",
+    categoryResolvedBy: "series",
+    title: "Championship Sunday Standout Stats from the Veolia Chicago Cup",
+    dek: "Northbrook, Illinois. October 11, 2026. Anna Leigh Waters sweeps for her 45th career Triple Crown and 200th title, and Roscoe Bellamy beats top seed Christopher Haworth.",
+    author: "Jim Ramsey",
+    publishedAt: "2026-10-13T12:00:00",
+    publishedAtGmt: "2026-10-13T17:00:00",
+    modifiedAt: "2026-10-13T17:00:00",
+    image: {
+      // Wesley's pick, 10/13. Encoded 2048px wide, mozjpeg q64 (house standard).
+      url: "/ppa/news/championship-sunday-standout-stats-chicago-2026.jpg",
+      // ⚠ NO NAMES — house style on this series.
+      alt: "A player wearing a Veolia Chicago Cup gold medal holds her paddle beside the event trophy, posing with two people in front of a crowd of smiling fans in the stands.",
+      width: 2048,
+      height: 1366,
+      // The three faces sit ~40% down; a centred ~3.6:1 hero crop would land
+      // on the medal and trophy base instead.
+      position: "50% 38%",
+    },
+    // Left empty deliberately: `detectAthleteMentions` reads the body.
+    players: [],
+    playerNames: [],
+    wpEvent: { slug: "2026-veolia-chicago-cup", name: "2026 Veolia Chicago Cup" },
+    tags: [],
+    tagsRaw: [],
+    wpCategories: ["2026-veolia-chicago-cup", "stats-wrap"],
+    embeds: [],
+    inlineImages: [],
+    legacyUrl: "https://www.ppatour.com/championship-sunday-standout-stats-from-the-veolia-chicago-cup/",
+    seo: {
+      title: "Veolia Chicago Cup: Championship Sunday Stats | PPA Tour",
+      description:
+        "Championship Sunday stats from the Veolia Chicago Cup: Anna Leigh Waters wins three golds for her 45th Triple Crown, and Roscoe Bellamy takes men's singles.",
+      canonical:
+        "https://www.ppatour.com/championship-sunday-standout-stats-from-the-veolia-chicago-cup/",
+    },
+    bodyHtml: `
+<p><strong>Northbrook, Illinois.</strong></p>
+
+<p><strong>October 11, 2026.</strong></p>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<h4 class="wp-block-heading"><strong>MIXED DOUBLES FINAL:&nbsp; (1) Anna Leigh Waters and Ben Johns def. (3) Jorja Johnson and J.W. Johnson, 11-4, 11-4.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Waters and Johns&#8217;s 66th title together. (Career titles: Waters 68, Johns, 81)</li>
+<li>Waters&#8217;s 200th overall career title, and part of her 45th career Triple Crown.</li>
+<li>The Johnsons beat Waters and Johns in the semis last month in Cary, NC.</li>
+<li>Waters and Johns had fewer errors on Serves, Returns and Third Shots, 5-1.</li>
+<li>Waters and Johns had fewer Volleys into the net, 7-0.</li>
+<li>Longest rally: 45 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>MEN&#8217;S DOUBLES FINAL:&nbsp; (1) Hayden Patriquin and Federico Staksrud def. (14) Nick Acevedo and Jaume Martinez Vich, 11-1, 11-6.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Fifth career title together for Patriquin and Staksrud.</li>
+<li>Patriquin&#8217;s tenth overall career title; Staksrud&#8217;s 27th.</li>
+<li>Acevedo&#8217;s second final this season.</li>
+<li>Patriquin and Staksrud had more Clean Winners, 15-1.</li>
+<li>All Serves and Returns were kept &#8220;in play.&#8221;</li>
+<li>Longest rally: 33 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>WOMEN&#8217;S DOUBLES FINAL:&nbsp; (1) Anna Bright and Anna Leigh Waters def. (2) Tyra Black and Catherine Parenteau, 2-11, 11-3, 11-4.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Bright and Waters&#8217;s 26th career title together and third this season.</li>
+<li>Bright has 35 Doubles titles; Waters has 68.</li>
+<li>Bright and Waters had more Clean Winners, 15-6.</li>
+<li>Part of Waters&#8217;s 45th career Triple Crown.</li>
+<li>Longest rally: 44 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>MEN&#8217;S SINGLES FINAL:&nbsp; (4) Roscoe Bellamy def. (1) Christopher Haworth, 11-4, 11-5.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Bellamy&#8217;s second career title (2025 Lakeland).</li>
+<li>Listed at six-foot-five, Bellamy is the tallest gold medalist in PPA Tour history.</li>
+<li>Haworth had won his four straight finals appearances before this loss.</li>
+<li>Bellamy had fewer Baseline Drive Errors, 17-9.</li>
+<li>Bellamy had fewer Serve and Return Errors, 8-5.</li>
+<li>Longest rally: 20 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>WOMEN&#8217;S SINGLES FINAL:&nbsp; (1) Anna Leigh Waters def. (2) Kate Fahey, 11-1, 11-7.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Waters has a 66-3 career record in Singles finals, including 14-0 vs. Fahey.</li>
+<li>Waters is 55-0 in Finals since losing in June 2022 (Parris Todd, Orange County)</li>
+<li>Part of Waters&#8217;s 45th career Triple Crown.</li>
+<li>Waters had more Clean Winners, 14-6.</li>
+<li>Waters had fewer Serve and Return Errors, 6-0.</li>
+<li>Longest rally: 14 shots.</li>
+</ul>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<h4 class="wp-block-heading"><strong>LEADING AT THE CHANGEOVER:</strong></h4>
+
+<p>Did the players or teams leading a game when they changed sides at six points go on to win that game?</p>
+
+<ul class="wp-block-list">
+<li>This tournament: Yes. eleven times in eleven games.</li>
+<li>This domestic season: Yes. 42 times in 51 games. (82%).</li>
+</ul>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<p><strong>For the comprehensive stats of all these gold medal matches, please visit: </strong><a href="https://facebook.com/groups/propickleballstats" target="_blank" rel="noreferrer noopener"><strong>facebook.com/groups/propickleballstats</strong></a></p>
+`.trim(),
+  },
 ];

@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { FeaturedEvents } from "@/components/events/FeaturedEvents";
 import { ScheduleGrid } from "@/components/events/ScheduleGrid";
 import { getEvents } from "@/lib/events-api";
-import { isTourStop } from "@/lib/placeholder-data";
+import { eventHref, isTourStop } from "@/lib/placeholder-data";
+import { SITE_URL } from "@/lib/site";
 
 /**
  * ISR. Schedule + Tixr prices. Prices sync once a day; 5 minutes is far tighter
@@ -20,6 +21,13 @@ export const metadata: Metadata = {
   title: "Events",
   description:
     "The full PPA Tour schedule — The Tour and every other event, U.S. and international, past and upcoming. Search or filter to find your event.",
+  // Feed autodiscovery for calendar aggregators (lib/event-feed.ts).
+  alternates: {
+    types: {
+      "application/rss+xml": [{ url: "/events.xml", title: "PPA Tour upcoming events" }],
+      "text/calendar": [{ url: "/events.ics", title: "PPA Tour event calendar" }],
+    },
+  },
 };
 
 /**
@@ -44,8 +52,48 @@ export default async function EventsPage() {
   // Everything else stays one scroll down in the searchable grid.
   const nextSix = theTour.slice(0, 6);
 
+  /**
+   * 10/18: the schedule as an ItemList of SportsEvents — every upcoming Tour
+   * stop with an internal page, in date order, pointing at the leaf page that
+   * carries the full event markup. Google reads event rich results off the
+   * leaf pages; this tells it the list exists and which pages are the events.
+   * `url` is the page's canonical (trailing slash), matching the sitemap.
+   */
+  const scheduleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "@id": `${SITE_URL}/events/#schedule`,
+    name: "Carvana PPA Tour schedule",
+    itemListOrder: "https://schema.org/ItemListOrderAscending",
+    numberOfItems: theTour.filter((e) => e.hasInternalPage !== false).length,
+    itemListElement: theTour
+      .filter((e) => e.hasInternalPage !== false)
+      .map((e, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        item: {
+          "@type": "SportsEvent",
+          "@id": `${SITE_URL}${eventHref(e)}/#event`,
+          name: e.name,
+          sport: "Pickleball",
+          startDate: e.startDate,
+          endDate: e.endDate,
+          url: `${SITE_URL}${eventHref(e)}/`,
+          location: {
+            "@type": "Place",
+            ...(e.venue ? { name: e.venue } : {}),
+            address: e.state ? `${e.city}, ${e.state}` : e.city,
+          },
+        },
+      })),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(scheduleJsonLd) }}
+      />
       <FeaturedEvents
         events={nextSix}
         kicker="Majors, Cups, and Opens"

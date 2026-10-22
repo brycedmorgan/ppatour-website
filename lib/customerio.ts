@@ -50,3 +50,29 @@ export async function cioIdentifyAndTrack(
   }
   return true;
 }
+
+/** Identify a person by email with attributes only (no event). */
+export async function cioIdentify(
+  email: string,
+  attributes: Record<string, unknown>,
+): Promise<boolean> {
+  if (!cioConfigured()) return false;
+  const res = await fetch(`${BASE}/customers/${encodeURIComponent(email.toLowerCase())}`, {
+    method: "PUT",
+    headers: { Authorization: authHeader(), "Content-Type": "application/json" },
+    body: JSON.stringify({ email: email.toLowerCase(), ...attributes }),
+  });
+  return res.ok;
+}
+
+/** Add people (by email) to a MANUAL segment. id_type=email: many people in
+ *  this workspace are keyed by PT uuid, so the email has to be named as such. */
+export async function cioAddToSegment(segmentId: number, emails: string[]): Promise<boolean> {
+  if (!cioConfigured() || !emails.length) return false;
+  const res = await fetch(`${BASE}/segments/${segmentId}/add_customers?id_type=email`, {
+    method: "POST",
+    headers: { Authorization: authHeader(), "Content-Type": "application/json" },
+    body: JSON.stringify({ ids: emails.map((e) => e.toLowerCase()) }),
+  });
+  return res.ok;
+}

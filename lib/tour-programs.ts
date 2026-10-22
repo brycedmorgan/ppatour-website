@@ -57,19 +57,20 @@ export const tourPrograms: TourProgram[] = [
     slug: "challenger",
     label: "Challenger Series",
     eyebrow: "Pathway to the Pro Tour",
-    headline: "PPA Tour Challenger Series",
+    headline: "PPA Challenger Series",
     body: [
-      "The PPA Tour Challenger Series, powered by JOOLA, brings a PPA-run tournament to clubs across the country. Every stop runs skill divisions 3.0 through 5.0 and a Pro Division that earns PPA ranking points, prize money and a wild card into a PPA Tour Open.",
+      "The PPA Challenger Series, powered by JOOLA, is a PPA-run tour at clubs across the country. Skill divisions from 3.0 to 5.0 for amateurs, and a Pro Division that earns PPA ranking points, prize money and a wild card into a PPA Tour Open.",
       "It is the pathway from amateur play to the Carvana PPA Tour.",
     ],
     bullets: [
-      { title: "Who plays", detail: "Skill divisions 3.0 to 5.0, plus a Pro Division." },
+      { title: "Who plays", detail: "Skill divisions from 3.0 to 5.0 for amateurs, plus a Pro Division." },
       { title: "Points", detail: "125 or 250 ranking points to the champion of each pro event." },
       { title: "Prize money", detail: "A $10,000 pro prize pool at every stop." },
       { title: "Wild card", detail: "Win a pro event and earn a main-draw entry into a PPA Tour Open." },
     ],
     cta: { label: "Register to Play", href: REGISTER_CHALLENGER, external: true },
-    image: "/ppa/events/seattle-ppa-challenger.jpg",
+    // A real Challenger shot (Tanner's 10/19 Drive folder) — the old photo was Jack Sock at a pro event.
+    image: "/ppa/challenger/photos/pool-1.jpg",
   },
   /**
    * ⚠ THIS ENTRY NO LONGER RENDERS A PAGE — /tour/senior is its own route, same

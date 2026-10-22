@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 import { AthleteRoster, type RosterAthlete } from "@/components/athletes/AthleteRoster";
 import { FeaturedEvents } from "@/components/events/FeaturedEvents";
+import { EuropeGallery } from "@/components/europe/EuropeGallery";
+import { getEuropeGallery, sortAlbumsByEvent } from "@/lib/europe-gallery";
+import { EUROPE_FORM_LINKS, isUnconfirmedEuropeStop } from "@/lib/europe-eventlinks";
 import { InquiryForm } from "@/components/forms/InquiryForm";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { RegionSwitcher } from "@/components/global/RegionSwitcher";
@@ -123,21 +126,22 @@ const EVENT_TIERS = [
   { points: "500", note: "Touring pros and aspiring touring pros only." },
 ];
 
+/** Payton's copy, #ppa-tour-europe 9/30 — verbatim. */
 const ENTRY_PRIORITY = [
   {
     n: "01",
-    title: "Signed Touring Pros",
-    body: "Only players on a PPA contract are guaranteed a spot in the main draw. Any signed player who does not make the main draw is guaranteed a place in qualifying.",
+    title: "Signed Players & Pairs",
+    body: "Players on a PPA contract, and pairs where both players are contracted, enter the main draw first. Entry priority within this group is based on PPA Points in that category. Any signed player who does not make the main draw is guaranteed a place in qualifying.",
   },
   {
     n: "02",
-    title: "Pairs with one contracted player",
-    body: "In doubles and mixed doubles, a pair with one PPA-contracted player has a stronger chance of direct main-draw entry than a pair where neither player is contracted.",
+    title: "Pairs with One Contracted Player",
+    body: "In doubles and mixed doubles, a pair with one PPA-contracted player has a stronger chance of direct main-draw entry than a pair where neither player is contracted. Entry priority for these pairs is based on the contracted player's PPA Points in that category.",
   },
   {
     n: "03",
-    title: "PPA Points, then DUPR",
-    body: "Remaining spots are ordered by PPA Points (World Pickleball Ranking), then by DUPR rating. Once the main draw is full, remaining teams fill qualifying in the same order.",
+    title: "Unsigned Players & Pairs",
+    body: "Unsigned players and pairs are usually required to play a qualifying round to enter the main draw. Qualifying is typically seeded by PPA Points (World Pickleball Ranking), then DUPR. If an event has no qualifying round, unsigned teams are seeded by DUPR after the signed players, so the draw reflects playing strength as accurately as possible.",
   },
 ];
 
@@ -171,9 +175,23 @@ function genderFromDivisions(divisions: string[]): "male" | "female" {
 
 export default async function EuropePage() {
   const { events } = await getEvents();
-  const europeEvents = events
-    .filter((e) => e.country === "Europe" && e.status !== "completed")
+  /**
+   * ⚠ SPLIT ON THE END DATE, NOT `status`. The feed still marks Portorož (Jul)
+   * and Barcelona (Sep) "upcoming" after they finished, so status alone would
+   * list them as next. Past stops are SHOWN (Payton/Albert, 10/1: "should show
+   * past events, at least for now") — with one stop confirmed ahead, an
+   * upcoming-only calendar read as an empty tour.
+   */
+  const today = new Date().toISOString().slice(0, 10);
+  const europeAll = events.filter(
+    (e) => e.country === "Europe" && !isUnconfirmedEuropeStop(e),
+  );
+  const europeEvents = europeAll
+    .filter((e) => e.endDate >= today && e.status !== "completed")
     .sort((a, b) => a.startDate.localeCompare(b.startDate));
+  const pastEvents = europeAll
+    .filter((e) => e.endDate < today || e.status === "completed")
+    .sort((a, b) => b.startDate.localeCompare(a.startDate));
 
   /**
    * Live world rank for any Europe pro who is on the board. This is the payoff
@@ -182,6 +200,8 @@ export default async function EuropePage() {
    * request. Degrades to rank 0 (the roster's own "unranked" state) with no
    * token or on a 429 — never a fabricated number.
    */
+  const gallery = sortAlbumsByEvent(await getEuropeGallery(), events);
+
   const wprIndex = await getWprIndex().catch(
     () => ({}) as Awaited<ReturnType<typeof getWprIndex>>,
   );
@@ -196,7 +216,11 @@ export default async function EuropePage() {
       // images to production once already. See lib/europe-roster.ts.
       headshot: p.portrait ?? wpr?.image ?? "",
       country: p.country,
-      countryCode: wpr?.countryCode || countryCodeFor(p.country),
+      // ⚠ OUR ROSTER FIRST, THE BOARD ONLY AS A FALLBACK. The board files Henrik
+      // Traskin under Australia; he plays for Lithuania (Catie, 10/14). It was the
+      // other way round, and unranked pros (Thaila, Adrian, Arwid, Molly) had no
+      // flag at all because their countries were missing from COUNTRY_ISO.
+      countryCode: countryCodeFor(p.country) || wpr?.countryCode || "",
       rank: wpr?.rank ?? 0,
       points: wpr?.points ?? 0,
       gender: wpr?.gender ?? genderFromDivisions(p.divisions),
@@ -225,10 +249,13 @@ export default async function EuropePage() {
 
       {/* ------------------------------------------------------------ Hero */}
       {/* Same hero as /tour/[slug] and the event pages: full-bleed photograph,
-          the house `.scrim-hero`, eyebrow, display headline, CTA row. */}
+          the house `.scrim-hero`, eyebrow, display headline, CTA row.
+          Photo: PPA Tour Europe P250 Barcelona venue, Catie Preis (DSC04289), swapped in
+          10/1 for the stock waterfront at Payton's ask for a tournament image. The
+          link-preview card (opengraph-image.tsx) still uses the waterfront. */}
       <section className="relative isolate overflow-hidden bg-ppa-navy text-white">
         <Image
-          src="/ppa/event-barcelona.jpg"
+          src="/ppa/europe-hero-barcelona.jpg"
           alt=""
           fill
           priority
@@ -271,6 +298,7 @@ export default async function EuropePage() {
               Entry &amp; Rules
             </a>
           </div>
+
         </div>
       </section>
 
@@ -287,7 +315,7 @@ export default async function EuropePage() {
                the table further down this page says so; the house badge would
                print the US sub-1,000 word and contradict it. */
             tierName="PPA Tour Europe"
-            subtitle="Every PPA Tour Europe stop, from the same live feed that runs the global calendar. Filter the full tour by region on Find an Event."
+            subtitle="Every upcoming PPA Tour Europe stop. Past stops are below."
           />
         ) : (
           /* ⚠ NOT AN ERROR STATE. The feed is authoritative; with no Europe stop
@@ -303,13 +331,18 @@ export default async function EuropePage() {
             </div>
           </div>
         )}
-        <div className="border-b border-ppa-line bg-white">
-          <div className="mx-auto w-full max-w-6xl px-4 pb-10 text-sm">
-            <Link href="/events" className="text-ppa-blue hover:text-ppa-navy">
-              See the full tour schedule →
-            </Link>
-          </div>
-        </div>
+        {/* ⚠ NO LINK TO /events. That is the US site's all-tour calendar,
+            Carvana-branded — Payton/Albert, 10/1: "We'd prefer to not link to
+            Carvana at all." The Europe schedule lives on this page, whole. */}
+        {pastEvents.length > 0 && (
+          <FeaturedEvents
+            events={pastEvents}
+            kicker="Results"
+            title="Past Europe Events"
+            tierName="PPA Tour Europe"
+            subtitle="Stops already played on PPA Tour Europe, most recent first."
+          />
+        )}
       </section>
 
       {/* ----------------------------------------------------------- Pros */}
@@ -341,6 +374,26 @@ export default async function EuropePage() {
           </div>
         </div>
       </section>
+
+      {/* --------------------------------------------------------- Gallery */}
+      {/* ⚠ Runs itself. Catie/Payton add photos to the Drive folder and they
+          show here within the hour, no deploy. See lib/europe-gallery.ts.
+          Renders nothing if the folder is empty or made private. */}
+      {gallery.length > 0 && (
+        <section id="gallery" className="scroll-mt-24 border-t border-ppa-line bg-white">
+          <div className="mx-auto w-full max-w-6xl px-4 py-12">
+            <SectionHead eyebrow="Gallery" title="On Court in Europe" />
+            <div className="mt-6">
+              <EuropeGallery albums={gallery} perAlbum={2} />
+            </div>
+            <p className="mt-6 text-sm">
+              <Link href="/europe/gallery" className="font-bold text-ppa-blue hover:text-ppa-navy">
+                See the full gallery →
+              </Link>
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* --------------------------------------------------- Event types */}
       <section id="events" className="scroll-mt-24 border-t border-ppa-line bg-white">
@@ -397,11 +450,11 @@ export default async function EuropePage() {
                 ))}
               </ol>
               <p className="mt-4 text-xs leading-relaxed text-ppa-navy/55">
-                There is no fixed entry threshold. Whether a pair needs to play
-                the qualifying round depends on how many PPA-contracted players
-                register in that category and how big the draw is. Pairs where
-                neither player holds a PPA contract are likely to compete in the
-                qualifying round.
+                There is no fixed entry threshold. How many main-draw spots
+                remain for unsigned pairs depends on how many PPA-contracted
+                players register in that category and how big the draw is. Pairs
+                where neither player holds a PPA contract should expect to compete
+                in the qualifying round.
               </p>
             </div>
 
@@ -417,15 +470,10 @@ export default async function EuropePage() {
                     competing tour.
                   </p>
                   <p>
-                    In Europe, ITP players may compete, but they cannot enter
-                    events worth more than 125 points. That makes them eligible
-                    for{" "}
-                    <strong className="font-semibold text-ppa-navy">
-                      125-point and 75-point events
-                    </strong>
-                    , and not for 250- and 500-point events — those are designed
-                    for touring pros and aspiring touring pros fighting for WPR
-                    points and hoping to earn a contract.
+                    In Europe, ITP players may still compete in 2026, but they
+                    cannot enter events worth more than 125 points. PPA Europe
+                    Events are designed for touring pros and aspiring touring
+                    pros fighting for WPR points and hoping to earn a contract.
                   </p>
                 </div>
               </div>
@@ -475,12 +523,16 @@ export default async function EuropePage() {
                 >
                   Read the UPA-A Rulebook ↗
                 </a>
-                <Link
-                  href="/about/how-it-works"
+                {/* Absolute on purpose: ppatoureurope.com sends /about/* (except
+                    privacy/terms) home, so a relative link would just reload this page. */}
+                <a
+                  href="https://www.ppatour.com/about/how-it-works/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center border border-ppa-line px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.12em] text-ppa-navy transition-colors hover:border-ppa-blue hover:text-ppa-blue"
                 >
-                  How the US Tour Works
-                </Link>
+                  How the US Tour Works ↗
+                </a>
               </div>
             </div>
             <div className="min-w-0 border border-ppa-line bg-ppa-paper p-5">
@@ -503,8 +555,71 @@ export default async function EuropePage() {
       {/* ------------------------------------------------------- Contact */}
       <section id="contact" className="scroll-mt-24 border-t border-ppa-line bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <div className="mx-auto w-full max-w-3xl">
-            <InquiryForm formType="europe" />
+          <div className="mx-auto grid w-full max-w-3xl gap-8">
+            <div>
+              <SectionHead eyebrow="Get Involved" title="Media and Referees" />
+              <div className="mt-4 grid gap-3">
+                {EUROPE_FORM_LINKS.map((l) => (
+                  <a
+                    key={l.href}
+                    href={l.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center justify-between gap-4 border border-ppa-line bg-white p-5 transition-colors hover:border-ppa-blue"
+                  >
+                    <span className="min-w-0">
+                      <span className="block font-display text-sm uppercase text-ppa-navy">{l.label}</span>
+                      <span className="mt-1 block text-xs leading-relaxed text-ppa-navy/60">{l.note}</span>
+                    </span>
+                    <span aria-hidden className="text-ppa-blue transition-transform group-hover:translate-x-0.5">↗</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+            {/*
+              Europe tournament-updates list. Katherina Preis, #ppa-tour-europe
+              10/16: the email marketing team built this form and asked where it
+              could live on ppatoureurope.com.
+
+              ⚠ THIS IS NOT THE SAME LIST AS THE EMAIL CAPTURE AT THE FOOT OF
+              THIS PAGE. That one is `LeadMagnetCapture variant="fan"` — the free
+              "Your First PPA Event" guide — and it posts to /api/lead-capture,
+              which identifies the lead in Customer.io tagged
+              `website_lead_region: europe`. This one is a hosted DailyStory form
+              owned by the email marketing team, and it is the list the Europe
+              tournament-update emails actually go out from. Nothing crosses
+              between the two platforms. If Europe ever consolidates onto one,
+              this block is the thing to delete, not the capture below.
+
+              Double opt-in by design: DailyStory sends a confirmation email and
+              the address joins the Europe list only once it is clicked.
+
+              The iframe is theirs, src and title verbatim. Height is fixed at
+              900 because the hosted form carries its own consent copy; the form
+              scrolls inside the frame rather than being clipped on a phone, and
+              the 560px cap keeps it readable on a desktop.
+            */}
+            <div>
+              <SectionHead eyebrow="Email" title="Event News" />
+              <p className="mt-3 text-xs leading-relaxed text-ppa-navy/60">
+                Tournament updates, registration dates and event news from PPA Tour Europe.
+                Confirm the email we send and you are on the list.
+              </p>
+              <div className="mt-4 border border-ppa-line bg-white p-5">
+                <iframe
+                  src="https://forms.dailystory.com/webform/hosted/2slena3ms6ski7e9?embed=true"
+                  title="Sign up for PPA Tour Europe event news"
+                  loading="lazy"
+                  className="mx-auto block h-[900px] w-full max-w-[560px] border-0"
+                />
+              </div>
+            </div>
+            <div>
+              <SectionHead eyebrow="Questions" title="Contact Us" />
+              <div className="mt-4">
+                <InquiryForm formType="europe" />
+              </div>
+            </div>
           </div>
         </div>
       </section>

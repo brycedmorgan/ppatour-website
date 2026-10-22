@@ -100,20 +100,14 @@ const HERO_OVERRIDE_BY_EVENT_SLUG: Record<string, string> = {
   // A second key here was carrying it in the meantime and has been removed.
   // If the alias is ever dropped, this pin goes silently dead again.
   "virginia-beach-open": "/ppa/events/virginia-beach-open.jpg",
-  "atlanta-ppa-challenger": "/ppa/events/atlanta-ppa-challenger.jpg",
-  "charlotte-ppa-challenger": "/ppa/events/charlotte-ppa-challenger.jpg",
+  // atlanta/charlotte/seattle Challenger pins REMOVED 10/19: all three were pro-tour
+  // shots (Seattle's was Jack Sock). Challengers now fall to the Series card in
+  // lib/events-api.ts. Pin a real Challenger photo here when ops sends one.
   "cape-coral-open": "/ppa/events/cape-coral-open.jpg",
   // ⚠ Two editions share this slug (the completed Mar 2026 stop and the Mar 2027
   // one), so both carry this photo. Correct — same event, and the override is
   // keyed by slug, not by year.
   "greater-zion-cup-at-black-desert-resort": "/ppa/events/greater-zion-cup.jpg",
-  // Wesley, 8/5. ⚠ This is an ACTION shot, not Seattle venue photography — a
-  // Jack Sock singles point (Sacramento Open quarterfinals). Correct treatment
-  // for a Challenger: they have no Jackalope venue library, so the alternative
-  // is GENERIC_IMAGES, which is the same class of photo picked by calendar
-  // index instead of on purpose. Do NOT read this as a venue/aerial and do NOT
-  // reuse it as one; if Seattle's own venue art ever lands, replace it here.
-  "seattle-ppa-challenger": "/ppa/events/seattle-ppa-challenger.jpg",
   // Wesley, 8/14 — the tour's own photography for these two stops, replacing
   // index-cycled GENERIC_IMAGES action shots that had nothing to do with either
   // event. Both are packed-stadium crowd shots at the event itself:

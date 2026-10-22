@@ -3,6 +3,7 @@
 import { WatchLiveButton } from "@/components/live/WatchLiveButton";
 import { pickFeaturedMatch, useLiveTicker } from "@/components/live/use-live-ticker";
 import type { TickerMatch } from "@/lib/ticker-api";
+import { eventHref, getNextTournament } from "@/lib/placeholder-data";
 
 /**
  * What the marquee says, built from what is actually on.
@@ -75,14 +76,18 @@ const SOCIAL = [
   },
 ];
 
-export function LiveBar() {
+/**
+ * `hideWhenEmpty`: render nothing while the feed has no matches, the same
+ * gate as the score rail under it (Wesley, 10/1) — a marquee over an empty
+ * header is the half of the broken state that is left. It reappears with the
+ * first match, since useLiveTicker keeps polling.
+ */
+export function LiveBar({ hideWhenEmpty = false }: { hideWhenEmpty?: boolean } = {}) {
   const { ordered, tournament } = useLiveTicker();
+  if (hideWhenEmpty && ordered.length === 0) return null;
   const featured = pickFeaturedMatch(ordered);
-  const phrase = marqueePhrase(
-    roundLabel(featured),
-    tournament?.title,
-    featured?.status === "live",
-  );
+  const isLive = featured?.status === "live";
+  const phrase = marqueePhrase(roundLabel(featured), tournament?.title, isLive);
 
   // Repeat + duplicate so the marquee loops seamlessly (animate-marquee → -50%).
   const items = Array.from({ length: 6 }, () => phrase);
@@ -92,7 +97,17 @@ export function LiveBar() {
       <div className="mx-auto flex w-full max-w-6xl items-center gap-4 px-4 py-2">
       {/* Left — Watch Live */}
       <div className="flex shrink-0 items-center gap-4">
-        <WatchLiveButton className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-yellow transition-colors hover:text-white">
+        {/* Watch Live only while a match is on court; otherwise the event's
+            own scores & brackets section. */}
+        <WatchLiveButton
+          className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-yellow transition-colors hover:text-white"
+          idle={{
+            href: `${eventHref(getNextTournament())}#results`,
+            className:
+              "flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.1em] text-ppa-yellow transition-colors hover:text-white",
+            children: "Scores & Brackets",
+          }}
+        >
           ▶ Watch Live
         </WatchLiveButton>
       </div>
@@ -116,7 +131,10 @@ export function LiveBar() {
               key={i}
               className="flex items-center gap-2.5 px-6 text-[11px] font-bold uppercase tracking-[0.16em] text-white/80"
             >
-              <span className="size-1.5 animate-pulse rounded-full bg-ppa-live" />
+              {/* A pulsing red dot reads as "on air"; still and yellow otherwise. */}
+              <span
+                className={`size-1.5 rounded-full ${isLive ? "animate-pulse bg-ppa-live" : "bg-ppa-yellow"}`}
+              />
               {t}
             </span>
           ))}

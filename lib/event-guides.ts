@@ -16,7 +16,18 @@ export type Place = {
   brand?: "marriott" | "hilton" | "ihg" | "bestwestern" | "wyndhamhotels";
   rate?: string;
   cutoff?: string;
+  /** Hotel photo (from the hotel's own site) → /public/ppa/hotels/photos. */
+  photo?: string;
 };
+
+/** Hotel photos by name, so Jackalope-published hotels get them too. */
+const HOTEL_PHOTOS: [RegExp, string][] = [
+  [/sheraton dallas.*galleria/i, "/ppa/hotels/photos/sheraton-dallas-galleria.jpg"],
+  [/renaissance dallas north/i, "/ppa/hotels/photos/renaissance-dallas-north.jpg"],
+];
+export function hotelPhoto(name: string): string | undefined {
+  return HOTEL_PHOTOS.find(([re]) => re.test(name))?.[1];
+}
 
 export type EventGuide = {
   /**
@@ -65,15 +76,31 @@ export type ParkingSection = {
    */
   ticketLinkText?: string;
   /**
-   * The event team's own parking map, rendered under this section's paragraphs.
+   * The event team's own parking maps, rendered with this section's paragraphs.
    *
-   * ⚠ THE FILE IS SUPPLIED ART, NEVER A MAP WE DRAW OR DERIVE. It is the same
-   * class of claim as the copy above it — a lot outlined on a satellite photo
-   * tells a driver where to leave their car, and a guessed outline sends them to
-   * the wrong field. One entry per event, or nothing. `parkingText()` omits it,
-   * so the concierge and the search index never describe an image they can't show.
+   * ⚠ THE FILES ARE SUPPLIED ART, NEVER A MAP WE DRAW OR DERIVE. They are the
+   * same class of claim as the copy around them — a lot outlined on a satellite
+   * photo tells a driver where to leave their car, and a guessed outline sends
+   * them to the wrong field. `parkingText()` omits them, so the concierge and the
+   * search index never describe an image they can't show.
+   *
+   * An array because Chicago's General Parking names two lots on different days,
+   * each with its own map placed under the paragraph about it.
    */
-  image?: { src: string; alt: string; width: number; height: number };
+  images?: ParkingMap[];
+};
+
+export type ParkingMap = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  /**
+   * Index into `body` to render this map directly after. Omitted = after the
+   * last paragraph. Exists so a map lands under the paragraph that describes its
+   * lot rather than under a later one about a different lot.
+   */
+  after?: number;
 };
 
 /**
@@ -115,12 +142,14 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
       ],
       // The event team's map of the Phillips Farms lot, with the shuttle pickup
       // marked. Sits under the copy that says "refer to the attached map".
-      image: {
-        src: "/ppa/parking/veolia-pickleball-national-championships.jpg",
-        alt: "Aerial map of the Phillips Farms parking lot in Cary, NC, with the free grass parking area outlined in blue and the shuttle pickup point marked at its northeast corner.",
-        width: 1600,
-        height: 1107,
-      },
+      images: [
+        {
+          src: "/ppa/parking/veolia-pickleball-national-championships.jpg",
+          alt: "Aerial map of the Phillips Farms parking lot in Cary, NC, with the free grass parking area outlined in blue and the shuttle pickup point marked at its northeast corner.",
+          width: 1600,
+          height: 1107,
+        },
+      ],
     },
     {
       heading: "Premium Parking",
@@ -168,12 +197,14 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
       ],
       // Her copy says "See map below", so the words and the thing they point at
       // have to ship together. Supplied art — the venue's own lot map.
-      image: {
-        src: "/ppa/parking/veolia-arizona-open.webp",
-        alt: "Map of the Arizona Athletic Grounds in Mesa, AZ, with the eight parking lots numbered. Lots 1, 2 and 3 sit along the west and north side of the fieldhouses, closest to the pickleball center.",
-        width: 1470,
-        height: 1070,
-      },
+      images: [
+        {
+          src: "/ppa/parking/veolia-arizona-open.webp",
+          alt: "Map of the Arizona Athletic Grounds in Mesa, AZ, with the eight parking lots numbered. Lots 1, 2 and 3 sit along the west and north side of the fieldhouses, closest to the pickleball center.",
+          width: 1470,
+          height: 1070,
+        },
+      ],
     },
     {
       heading: "ADA Parking",
@@ -205,17 +236,132 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
       ],
       // Their copy says "shown in red on the map below", so the map ships in
       // this section, under the paragraph that points at it. Supplied art.
-      image: {
-        src: "/ppa/parking/rate-las-vegas-open.webp",
-        alt: "Aerial map of Darling Tennis Center and Kellogg Zaher Park in Las Vegas, NV. The three public parking lots are highlighted in yellow, running west to east on the south side of W Washington Avenue, and the drop-off and pickup loop at the tennis center entrance is outlined in red.",
-        width: 2000,
-        height: 636,
-      },
+      images: [
+        {
+          src: "/ppa/parking/rate-las-vegas-open.webp",
+          alt: "Aerial map of Darling Tennis Center and Kellogg Zaher Park in Las Vegas, NV. The three public parking lots are highlighted in yellow, running west to east on the south side of W Washington Avenue, and the drop-off and pickup loop at the tennis center entrance is outlined in red.",
+          width: 2000,
+          height: 636,
+        },
+      ],
     },
     {
       heading: "ADA Parking",
       body: [
         "Accessible parking is available in all three parking lots. ADA drop-off is also available in the drop-off/pickup loop.",
+      ],
+    },
+  ],
+  // Chicago Cup — Dana Summers, 10/3 (Asana 1219139745966275), with both maps.
+  // All of it is her wording; her bullets became paragraphs and her
+  // "(Insert … parking map)" notes became the maps themselves.
+  //
+  // ⚠ PARKING MOVES TWICE. Mon–Tue is the east on-site lot; Wed–Fri is
+  // off-site at Techny Prairie with a shuttle; Sat–Sun is Crate & Barrel HQ
+  // across the street, with Techny as overflow (Dana, 10/9). Each map is
+  // anchored (`after`) under the paragraph about its lot, so neither is read as
+  // the weekend answer.
+  //
+  // ⚠ THE ON-SITE MAP APPEARS TWICE ON PURPOSE: she asked for it under General
+  // (Mon–Tue) and again under Premium (Wed–Sun), which is the same lot sold as a
+  // pass. Same file, so the second render costs no download.
+  "veolia-chicago-cup": [
+    {
+      heading: "General Parking",
+      body: [
+        "Mon 10/5 & Tues 10/6: Complimentary event parking is available in the east on-site lot.",
+        "Wed 10/7 – Fri 10/9: Complimentary off-site parking is available with continuous shuttle service to and from the venue.",
+        "Location: Techny Prairie Park & Fields South Lot (closest to Techny Rd)\nAddress: 1750 Techny Rd, Northbrook, IL 60062",
+        "Shuttle Service: Shuttles will operate approximately one hour before the first match and continue until approximately one hour after the final match each day.",
+        // Dana, 10/9 (same Asana task, updated): the weekend moves to Crate &
+        // Barrel HQ across the street, with Techny Prairie kept as overflow. She
+        // sent no map for it, so the Techny map above stays the last image.
+        "Sat 10/10 & Sun 10/11: Complimentary event parking is available at Crate & Barrel HQ across the street from the venue",
+        "Address: 1250 Techny Rd, Northbrook, IL 60062",
+        "Overflow parking and shuttle service will still be available at Techny Prairie Park baseball fields",
+      ],
+      images: [
+        {
+          src: "/ppa/parking/veolia-chicago-cup-onsite.webp",
+          alt: "Aerial map of Life Time Northbrook with the east on-site parking lot, beside the building and next to the outdoor tennis courts, outlined in green.",
+          width: 1600,
+          height: 878,
+          after: 0,
+        },
+        {
+          src: "/ppa/parking/veolia-chicago-cup-offsite.webp",
+          alt: "Aerial map of Techny Prairie Park and Fields in Northbrook, IL, with the south parking lot along Techny Road, east of Anets Drive, outlined in green.",
+          width: 1600,
+          height: 867,
+          // Under the shuttle line, ahead of the weekend's Crate & Barrel lot.
+          after: 3,
+        },
+      ],
+    },
+    {
+      heading: "Premium Parking",
+      body: [
+        "On-site premium parking for Wed 10/7 – Sun 10/11 will be available for purchase through Tixr. No on-site purchases will be available.",
+      ],
+      ticketLinkText: "Tixr",
+      images: [
+        {
+          src: "/ppa/parking/veolia-chicago-cup-onsite.webp",
+          alt: "Aerial map of Life Time Northbrook with the on-site premium parking lot, east of the building, outlined in green.",
+          width: 1600,
+          height: 878,
+        },
+      ],
+    },
+    {
+      heading: "ADA Parking",
+      body: [
+        "Accessible parking spaces are available in the on-site lot. Guests may also be dropped off at the venue entrance.",
+      ],
+    },
+    {
+      heading: "Rideshare",
+      body: [
+        "Uber, Lyft, and other rideshare services may pick up and drop off at the tournament venue.",
+      ],
+    },
+  ],
+  // Virginia Beach — Dana Summers, 10/8 (Asana 1219328269479333), with the
+  // Ocean Breeze map. All of it is her wording; her bullets became paragraphs
+  // and her "(Ocean Breeze Parking map)" note became the map itself.
+  //
+  // ⚠ PARKING MOVES AFTER MONDAY. Qualifiers (Mon) park on-site; Tue–Sun there
+  // is NO on-site public parking, only Ocean Breeze at $10/day with a golf-cart
+  // shuttle. The map is the Tue–Sun lots, so it sits at the end, under the
+  // shuttle line, never under the Monday paragraph.
+  //
+  // ⚠ NO "Premium Parking" OR "ADA Parking" SECTION. Her submission has neither;
+  // don't carry Chicago's or Cary's over.
+  "virginia-beach-open": [
+    {
+      heading: "General Parking",
+      body: [
+        "Monday, 10/12 – Qualifiers\nParking is available on-site and in nearby public lots.",
+        "Tuesday, 10/13 – Sunday, 10/18\nThere is no general public parking available on-site. All event parking will be located at Ocean Breeze Waterpark.",
+        "Address: 849 General Booth Blvd, Virginia Beach, VA 23451",
+        "Parking Location: Continue past the main waterpark entrance. Event parking lots are located approximately halfway down Ocean Breeze Parkway.",
+        "Parking Fee: $10 per day, collected by Ocean Breeze Waterpark.",
+        "Payment Methods: Cash, credit/debit cards, and mobile payments accepted.",
+        "Shuttle Service: Complimentary golf cart shuttles will run between the event parking lots and the venue's North Ticketing Entrance.",
+      ],
+      images: [
+        {
+          src: "/ppa/parking/virginia-beach-open.webp",
+          alt: "Map of Ocean Breeze Waterpark in Virginia Beach, VA, showing two event parking lots at $10 per day on the north side of the park, the shuttle pickup at the eastern lot, and the shuttle route along the park road to the event entrance on General Booth Boulevard.",
+          width: 1536,
+          height: 1024,
+        },
+      ],
+    },
+    {
+      heading: "Rideshare",
+      body: [
+        "Uber, Lyft, and other rideshare services may drop off guests directly at the venue's North Entrance parking lot.",
       ],
     },
   ],
@@ -340,11 +486,13 @@ export const eventGuides: Record<string, EventGuide> = {
       { name: "Red Rock Canyon", tag: "Outdoors", note: "20 min · hikes + scenic drive" },
     ],
   },
-  // ⚠ No mapQuery — it derives from the feed's venue, which registers this stop
-  // as "Life Time North Shore Sport & Racquetball". Still in Northbrook, so the
-  // getting-there line below stands. The pin used to be typed here and so could
-  // not follow a rename.
+  // ⚠ mapQuery IS THE STREET ADDRESS, ON PURPOSE (event team, 9/29). The feed
+  // registers this stop as "Life Time North Shore Sport & Racquetball", and
+  // Google resolves that name to the wrong building as its first result. The
+  // address is the event team's own, so it can't drift the way a hand-typed
+  // venue name did at Virginia Beach. If the stop moves, change it here.
   "veolia-chicago-cup": {
+    mapQuery: "1300 Techny Rd, Northbrook, IL 60062",
     airport: "ORD",
     airportNote: "O'Hare · ~20 min to venue",
     gettingThere:
@@ -683,8 +831,8 @@ export const eventGuides: Record<string, EventGuide> = {
       {
         name: "Sheraton Dallas by the Galleria",
         tag: "Official",
-        note: "2026 World Pickleball fans block",
-        href: "https://app.marriott.com/reslink?id=73858550544&key=GRP&app=resvlink",
+        note: "Fans, spectators, amateur players + sponsors block",
+        href: "https://app.marriott.com/resview2?id=1791395166995&key=GRP&app=resvlink",
         brand: "marriott",
         rate: "$139/night",
         cutoff: "Book by Oct 16",
@@ -693,7 +841,7 @@ export const eventGuides: Record<string, EventGuide> = {
         name: "Renaissance Dallas North",
         tag: "Official",
         note: "1590 LBJ Fwy — breakfast for 2, free parking + wi-fi",
-        href: "https://app.marriott.com/resview2?id=80516175834&key=GRP&app=resvlink",
+        href: "https://app.marriott.com/resview2?id=1780516175834&key=GRP&app=resvlink",
         brand: "marriott",
         rate: "$125/night",
         cutoff: "Book by Oct 26",
@@ -702,7 +850,7 @@ export const eventGuides: Record<string, EventGuide> = {
         name: "DoubleTree Dallas Near the Galleria",
         tag: "Official",
         note: "4099 Valley View Ln — breakfast for 2, free parking + wi-fi",
-        href: "https://www.hilton.com/en/book/reservation/deeplink/?ctyhocn=DALVVDT&groupCode=DTPKL&arrivaldate=2026-11-02&departuredate=2026-11-08&cid=OM,WW,HILTONLINK,EN,DirectLink&fromId=HILTONLINKDIRECT",
+        href: "https://www.hilton.com/en/book/reservation/deeplink/?ctyhocn=DALVVDT&groupCode=CDTPKL&arrivaldate=2026-11-02&departuredate=2026-11-08&cid=OM,WW,HILTONLINK,EN,DirectLink&fromId=HILTONLINKDIRECT",
         brand: "hilton",
         rate: "$135/night",
         cutoff: "Book by Sep 30",

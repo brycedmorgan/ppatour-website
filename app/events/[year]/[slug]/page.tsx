@@ -38,14 +38,24 @@ import {
   type AmateurSession,
   firstServeFor,
   firstServeNote,
+  gatesAtFirstServe,
   gatesFollowFirstServe,
+  gatesPublished,
+  timesPendingLine,
+  gatesDaily,
   gatesFor,
   getEventSchedule,
   hasGatesOverride,
   sideEventsFor,
 } from "@/lib/event-schedule";
+import { programmingFor } from "@/lib/event-programming";
 import { challengerShowdown, showdownDaysFor } from "@/lib/challenger-showdown";
-import { orderOfPlayByDay, proDayLabel } from "@/lib/order-of-play";
+import { orderOfPlayByDay, playDays, proDayLabel, dayLabelFor } from "@/lib/order-of-play";
+import {
+  LiveEventBadge,
+  LiveEventKicker,
+  LiveEventStatusText,
+} from "@/components/live/LiveEventStatus";
 import { stageScheduleFor } from "@/lib/event-stage";
 import { StageSchedule } from "@/components/events/StageSchedule";
 import { getEvents } from "@/lib/events-api";
@@ -71,7 +81,9 @@ import { admissionTiersFor, ticketsOnSale } from "@/lib/tixr-prices";
 import { buildTicketGrid } from "@/lib/ticket-grid";
 import { TicketGrid } from "@/components/events/TicketGrid";
 import { buildEventJsonLd } from "@/lib/event-schema";
+import { eventResultsFor } from "@/lib/event-results";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
+import { pageTitle, seoDescription } from "@/lib/seo-text";
 
 type Params = { params: Promise<{ year: string; slug: string }> };
 
@@ -173,11 +185,18 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   // metadata. Setting a raw off-ratio photo here emitted a SECOND og:image that
   // competed with (and on most scrapers preceded) the designed card. Let the
   // file convention be the single source of the share card.
+  /**
+   * The year is in the title because the same stop has a page per season —
+   * Newport Beach 2025 and 2027 both rendered "Newport Beach Open · Carvana PPA
+   * Tour" (9/23 crawl), two URLs with one title competing for the same query.
+   * `pageTitle` then sizes the brand suffix to fit 60 chars.
+   */
+  const title = `${t.name} ${eventYear(t)}`;
   return {
-    title: t.name,
-    description,
+    title: pageTitle(title),
+    description: seoDescription(description),
     openGraph: {
-      title: `${t.name} — Carvana PPA Tour`,
+      title: `${title} — Carvana PPA Tour`,
       description,
     },
     twitter: { card: "summary_large_image" },
@@ -228,7 +247,7 @@ type Day = {
  * had it. The channel now comes from lib/broadcast.ts, matched by weekday, and
  * is simply absent when the sheet says nothing.
  */
-function buildSchedule(startIso: string, endIso: string, slug: string): Day[] {
+function buildSchedule(startIso: string, endIso: string, slug: string, state?: string): Day[] {
   const channels = channelsByDay(slug);
   const start = new Date(`${startIso}T00:00:00`);
   const end = new Date(`${endIso}T00:00:00`);
@@ -240,7 +259,7 @@ function buildSchedule(startIso: string, endIso: string, slug: string): Day[] {
     const fromEnd = last - i;
     // Round names come from lib/order-of-play; gates and first serve stay here,
     // because they are this function's own and both can be overridden per stop.
-    const label = proDayLabel(i, fromEnd);
+    const label = dayLabelFor(slug, cursor.toISOString().slice(0, 10), proDayLabel(i, fromEnd));
     let gates = "9:00 AM";
     let firstServe = "10:00 AM";
     if (i === 0 || i === 1) {
@@ -260,8 +279,8 @@ function buildSchedule(startIso: string, endIso: string, slug: string): Day[] {
       // The event team's own gate time and first serve where this stop has
       // them, otherwise the template's. The two move independently — see the
       // notes on GATES_BY_SLUG and FIRST_SERVE_BY_SLUG in lib/event-schedule.ts.
-      gates: gatesFor(slug, gates),
-      firstServe: firstServeFor(slug, iso, firstServe),
+      gates: gatesFor(slug, gates, firstServeFor(slug, iso, firstServe, state), iso, state),
+      firstServe: firstServeFor(slug, iso, firstServe, state),
       live,
       // A companion event playing here today, or nothing. Everything with a
       // published day goes on that day (Bryce, 7/31) — the template has no
@@ -288,13 +307,15 @@ export default async function EventPage({ params }: Params) {
   const t = resolved.event;
 
   const countdown = daysUntil(t.startDate);
-  const days = buildSchedule(t.startDate, t.endDate, t.slug);
+  const days = buildSchedule(t.startDate, t.endDate, t.slug, t.state);
   // The companion tournament playing inside this stop, if any — see the
   // callout under the order of play. Empty at every event but Worlds.
   const showdownDays = showdownDaysFor(t.slug, t.startDate, t.endDate);
   // The same order of play, keyed by date, for the scores board to open on —
   // see the `roundByDay` prop on ScoresBoard.
   const roundByDay = orderOfPlayByDay(t.slug, t.startDate, t.endDate);
+  // The same order of play with first-serve times, for the live status copy.
+  const liveDays = playDays(t.slug, t.startDate, t.endDate, t.state);
   const broadcast = getBroadcast(t.slug);
   // The channels THIS event is actually on — see lib/event-watch.ts.
   const watchCards = watchCardsFor(t.slug);
@@ -302,7 +323,9 @@ export default async function EventPage({ params }: Params) {
   // Finalized details for this stop, or the approved holding line. Every parking
   // surface on the page (and the concierge) reads this one value.
   const parking = parkingFor(t.slug);
-  const realSchedule = getEventSchedule(t.slug);
+  const realSchedule = getEventSchedule(t.slug, t.startDate);
+  // Daily fan programming, rendered in its own section after the order of play.
+  const programming = programmingFor(t.slug, t.startDate);
   /**
    * ⚠ THE OVERRIDE'S OWN `live` VALUES ARE NOT USED, and the reason is that
    * they were wrong. lib/event-schedule.ts is hand-authored, and Nationals'
@@ -572,6 +595,7 @@ export default async function EventPage({ params }: Params) {
           // scroll past the thing you clicked.
           { id: "tickets", label: "Tickets" },
           { id: "schedule", label: "Order of Play" },
+          ...(programming ? [{ id: "programming", label: "Programming" }] : []),
           /* No separate stage tab — the programme lives inside the venue
              section now, and two tabs scrolling into one section reads as a
              bug. "Venue Guide" covers it. */
@@ -596,12 +620,20 @@ export default async function EventPage({ params }: Params) {
     state: t.state,
     venue: t.venue,
     dates: formatDateRange(t.startDate, t.endDate, true),
-    gates: days[0]?.gates ?? "an hour before first serve",
-    gatesFollowFirstServe: gatesFollowFirstServe(t.slug),
+    // The transcribed schedule's gate where there is one (it wins over the
+    // template on this page), so the bubble can't name a templated time over a
+    // table that reads TBD.
+    gates: realSchedule?.proDays[0]?.gates ?? days[0]?.gates ?? "an hour before first serve",
+    gatesFollowFirstServe: gatesFollowFirstServe(t.slug, t.startDate),
+    gatesAtFirstServe: gatesAtFirstServe(t.slug),
+    gatesDaily: gatesDaily(t.slug, realSchedule ? realSchedule.proDays.map((d) => d.gates) : days.map((d) => d.gates)),
+    timesPending: timesPendingLine(t.slug, t.startDate),
     // The days this stop's own first serve is known for, or null. Without it
     // the concierge answers a “what time does play start?” with the gate time
     // alone, while the order of play on the same page carries the real one.
-    firstServeNote: firstServeNote(t.slug, days),
+    // A transcribed schedule owns its own times (Worlds reads TBD); the
+    // broadcast-derived first serve on the templated days must not leak past it.
+    firstServeNote: realSchedule ? null : firstServeNote(t.slug, days, t.state),
     // Same gate as the rest of the page — no price and no Tixr link when
     // tickets aren't on sale.
     ticketFrom: onSale ? t.ticketPriceFrom : null,
@@ -641,7 +673,24 @@ export default async function EventPage({ params }: Params) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildEventJsonLd(t, { onSale, description })),
+          __html: JSON.stringify(
+            buildEventJsonLd(t, {
+              onSale,
+              description,
+              completed,
+              // The podium from the committed tournament history (sync, no
+              // upstream call); null until the generator has folded this stop in.
+              results: completed ? eventResultsFor(t) : null,
+              // Top eight seeds once the pro draw is published; nothing before.
+              performers: field.published
+                ? field.players
+                    .filter((p) => p.seed != null)
+                    .sort((a, b) => (a.seed ?? 99) - (b.seed ?? 99))
+                    .slice(0, 8)
+                    .map((p) => ({ name: p.name, url: playerProfileHref(p.name) }))
+                : [],
+            }),
+          ),
         }}
       />
       <script
@@ -684,6 +733,19 @@ export default async function EventPage({ params }: Params) {
               <>
                 <span className="text-white/25">/</span>
                 <span className="text-ppa-yellow">Final</span>
+              </>
+            ) : isTournamentLive(t) ? (
+              <>
+                {/* ⚠ During the event the countdown below would clamp at
+                    "0D : 0H : 0M : 0S". This says what is actually happening —
+                    "Live Now · Matches in progress" only while a match is on
+                    court, first serve / up next / play resumes otherwise
+                    (Wesley, 9/28). Mirrored in NationalsLive. */}
+                <LiveEventBadge days={liveDays} />
+                <span className="text-white/25">/</span>
+                <span className="text-ppa-yellow">
+                  <LiveEventStatusText days={liveDays} />
+                </span>
               </>
             ) : (
               <>
@@ -873,12 +935,8 @@ export default async function EventPage({ params }: Params) {
       {showLiveScores && uuid && (
         <section id="results" className="scroll-mt-[120px] bg-ppa-navy">
           <div className="mx-auto w-full max-w-6xl px-4 py-12">
-            <div className="flex items-center gap-2.5">
-              <span className="h-2 w-2 animate-pulse rounded-full bg-ppa-live" />
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
-                Live Now
-              </p>
-            </div>
+            {/* "Live Now" only while a match is on court. */}
+            <LiveEventKicker days={liveDays} />
             <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
               {t.name} Live Scores
             </h2>
@@ -1260,13 +1318,19 @@ export default async function EventPage({ params }: Params) {
           </h2>
           <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
             All times local.{" "}
-            {gatesFollowFirstServe(t.slug) ? (
+            {gatesFollowFirstServe(t.slug, t.startDate) ? (
               <>
                 Gates open an hour before first serve; finals move to a
                 late-morning start for the broadcast window.
               </>
+            ) : !gatesPublished(t.slug, t.startDate) ? (
+              // A transcribed schedule whose times haven't been sent yet — the
+              // table reads TBD, so the intro says so rather than a number.
+              <>{timesPendingLine(t.slug, t.startDate)}</>
+            ) : gatesAtFirstServe(t.slug) ? (
+              <>Gates open at first serve each day.</>
             ) : hasGatesOverride(t.slug) ? (
-              <>Gates open {days[0]?.gates} daily.</>
+              <>Gates open {gatesDaily(t.slug, days.map((d) => d.gates))}.</>
             ) : (
               // A stop with supplied first-serve times and no supplied gate:
               // the per-day gate is still the template's, so say nothing about
@@ -1312,7 +1376,7 @@ export default async function EventPage({ params }: Params) {
                       {d.amateur && d.amateur.length > 0 && (
                         <span className="mt-1.5 block border-l-2 border-ppa-line pl-2 lg:hidden">
                           {d.amateur.map((a) => (
-                            <span key={a.label} className="block text-[12px] text-ppa-navy/60">
+                            <span key={`${a.label}|${a.detail ?? ""}`} className="block text-[12px] text-ppa-navy/60">
                               {a.label}
                               {a.detail ? ` — ${a.detail}` : ""}
                             </span>
@@ -1323,7 +1387,7 @@ export default async function EventPage({ params }: Params) {
                     <span className="hidden lg:block">
                       {d.amateur && d.amateur.length > 0 ? (
                         d.amateur.map((a) => (
-                          <span key={a.label} className="mt-1 block first:mt-0">
+                          <span key={`${a.label}|${a.detail ?? ""}`} className="mt-1 block first:mt-0">
                             <span className="block text-sm font-semibold text-ppa-navy">
                               {a.label}
                             </span>
@@ -1341,7 +1405,7 @@ export default async function EventPage({ params }: Params) {
                     <span className="hidden text-right text-sm font-bold tabular-nums text-ppa-navy lg:block">
                       {d.firstServe}
                     </span>
-                    <span className="text-right text-[10px] font-bold uppercase tracking-[0.1em]">
+                    <span className="max-w-[5.5rem] justify-self-end text-right text-[10px] lg:max-w-none lg:justify-self-auto font-bold uppercase tracking-[0.1em]">
                       {dayChannels.get(d.dow) ?? d.live ? (
                         <span className="text-[var(--event-accent)]">
                           {dayChannels.get(d.dow) ?? d.live}
@@ -1489,6 +1553,60 @@ export default async function EventPage({ params }: Params) {
           )}
         </div>
       </section>
+
+      {/* Daily programming — clinics, King of the Court, round robins. Its own
+          section, NOT a column in the Order of Play (Wesley, 9/28): the order
+          of play is the tournament, this is what fans can join around it.
+          Worlds only today; lib/event-programming.ts. */}
+      {programming && !completed && (
+        <section id="programming" className="scroll-mt-[120px] bg-white">
+          <div className="mx-auto w-full max-w-6xl px-4 py-12">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
+              Programming
+            </p>
+            <h2 className="mt-2 event-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-3xl">
+              Play, Learn &amp; Meet the Pros
+            </h2>
+            <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
+              Clinics, King of the Court, round robins and meet-the-pro sessions
+              every day of the week. All times local and subject to change.
+            </p>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {programming.days.map((d) => (
+                <div key={d.iso} className="border border-ppa-line bg-ppa-paper px-4 py-4">
+                  <p className="font-display text-base uppercase leading-tight text-[var(--event-accent)]">
+                    <span className="mr-1.5 text-[10px] font-sans font-bold text-ppa-navy/40">
+                      {weekdayOf(d.iso).slice(0, 3)}
+                    </span>
+                    {formatDate(d.iso)}
+                  </p>
+                  <ul className="mt-3 space-y-2.5">
+                    {d.sessions.map((s) => (
+                      <li key={`${s.title}|${s.time}`}>
+                        <span className="block text-sm font-semibold text-ppa-navy">
+                          {s.title}
+                        </span>
+                        <span className="block text-[11px] uppercase tracking-wide text-ppa-navy/45">
+                          {s.time}
+                          {s.level ? ` · Level ${s.level}` : ""}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <a
+              href={programming.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex text-xs font-bold uppercase tracking-[0.12em] text-[var(--event-accent)] hover:underline"
+            >
+              Full Worlds schedule ↗
+            </a>
+          </div>
+        </section>
+      )}
 
       {/* Watch at home — PGA-style */}
       <section id="watch" className="scroll-mt-[120px] bg-ppa-navy text-white">
@@ -1701,7 +1819,7 @@ export default async function EventPage({ params }: Params) {
               {[
                 {
                   k: "Gates & Sessions",
-                  v: `Gates open ${days[0]?.gates ?? "an hour before first serve"} daily. Morning and evening sessions are ticketed separately at Championship Court; a grounds pass covers the outer courts all day.`,
+                  v: `${gatesAtFirstServe(t.slug) ? "Gates open at first serve each day — see the Order of Play for times." : !gatesPublished(t.slug, t.startDate) ? timesPendingLine(t.slug, t.startDate) : `Gates open ${gatesDaily(t.slug, (realSchedule ? realSchedule.proDays : days).map((d) => d.gates))}.`} Morning and evening sessions are ticketed separately at Championship Court; a grounds pass covers the outer courts all day.`,
                 },
                 {
                   k: "Parking & Shuttle",
