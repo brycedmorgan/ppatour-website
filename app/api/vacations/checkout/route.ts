@@ -59,6 +59,8 @@ export async function POST(req: NextRequest) {
     // Explicit marker so the webhook can tell a Vacations session apart from
     // every other checkout on this Stripe account. See isVacationsBooking().
     source: "vacations",
+    // Finance pulls Stripe reports and needs the trip on every payment.
+    event_code: cfg.eventCode,
     occupancy: option.label,
     nights: String(cfg.nights),
     destination: cfg.destination,
@@ -114,7 +116,14 @@ export async function POST(req: NextRequest) {
       // discounted booking stays on the same booking.
       allow_promotion_codes: true,
       metadata,
-      payment_intent_data: { metadata },
+      payment_intent_data: {
+        metadata,
+        // Stripe emails the receipt itself the moment the booking pays, so
+        // Lainey no longer sends them by hand.
+        receipt_email: lead.email,
+        // Shows in the Payments list and in exports, no metadata column needed.
+        description: `${cfg.eventCode} · Pickleball Vacations — ${cfg.destination} · ${option.label}`,
+      },
       // Trailing slashes are deliberate: next.config sets `trailingSlash: true`,
       // so the bare path would cost every paying guest a 308 on the way back
       // from Stripe.

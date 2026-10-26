@@ -41,6 +41,8 @@ export type TripWaitlist = {
 
 export type TripConfig = {
   slug: string;
+  /** Jackalope spine code (ziff schedule.js SCHED_VACATIONS). Finance reads it off the Stripe payment. */
+  eventCode: string;
   /** The trip's own page on this site — where "back to the trip" goes. */
   href: string;
   /** The exact string Jackalope's vac_trips row and Stripe metadata key on. */
@@ -74,6 +76,7 @@ export type TripConfig = {
  */
 const TURKOISE: TripConfig = {
   slug: "turkoise",
+  eventCode: "1226-VAC-PROVIDENCIALES-TCA",
   href: "/vacations/",
   destination: turkoiseTrip.destination,
   location: turkoiseTrip.location,
@@ -101,6 +104,7 @@ const PUNTA_CANA_CONTACT = "vacations@pickleball.com";
  */
 const PUNTA_CANA: TripConfig = {
   slug: "punta-cana",
+  eventCode: "0926-VAC-PUNTACANA-DOM",
   href: "/vacations/trips/punta-cana/",
   destination: "Club Med Punta Cana",
   location: "Punta Cana, Dominican Republic",
@@ -151,6 +155,7 @@ const CANCUN_CONTACT = "vacations@pickleball.com";
  */
 const CANCUN: TripConfig = {
   slug: "cancun",
+  eventCode: "0127-VAC-CANCUN-MEX",
   href: "/vacations/trips/cancun/",
   destination: "Club Med Cancun",
   location: "Cancún, Mexico",
@@ -202,6 +207,7 @@ const BLACK_DESERT_CONTACT = "vacations@pickleball.com";
  */
 const BLACK_DESERT: TripConfig = {
   slug: "black-desert",
+  eventCode: "0327-VAC-IVINS-USA",
   href: "/vacations/trips/black-desert/",
   destination: "Black Desert Resort",
   location: "St. George, Utah",

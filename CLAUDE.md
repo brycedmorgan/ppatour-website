@@ -73,6 +73,7 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - ⚠ Line items are inline `product_data`, so a coupon can't be scoped to one trip by product. Scope a code with max redemptions + expiry instead. Real per-trip scoping needs a Stripe product id per trip in `trip-config.ts`.
 - Jackalope records what Stripe collected, so a discounted booking stays on the same `vac_bookings` row.
 - Coupon "Black Desert $1,000 off" + promo code `BLACKDESERT1000` (max 1 use) created in the **Pro Pickleball Association** Stripe account (`acct_1FYvnnLVDkSJQVHq`), which holds Vacations. Not "Pickleball Solutions". Lainey told 10/26.
+- **Receipts + event codes (Lainey 10/26):** checkout now sets `payment_intent_data.receipt_email` (Stripe sends the receipt on payment) and stamps `event_code` (new required `TripConfig.eventCode`, from ziff `schedule.js` SCHED_VACATIONS) into metadata and into the payment description, so finance sees the trip in the Payments list and exports. Payments made before today have no code.
 - ⚠ The push did NOT trigger a Vercel deploy. Shipped by `vercel deploy --prod --archive=tgz` (plain deploy fails: >15,000 files). Production is aliased to ppatour.com.
 ### 2026-10-22 (pt. 2) — Worlds parking lands (Dana, Asana `1219791843119153`)
 - Her five sections verbatim in `PARKING_BY_SLUG["pickleball-world-championships"]` (General, Hotel Shuttles, Rideshare, VIP, ADA) + her shuttle map (`public/ppa/parking/pickleball-world-championships.webp`). Sixth finalized stop.
