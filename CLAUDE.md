@@ -67,6 +67,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-26 — Vacations checkout takes promo codes (Lainey)
+- Lainey asked for a $1,000-off code for Black Desert without a separate Stripe link. `allow_promotion_codes: true` in `app/api/vacations/checkout/route.ts`, so every Vacations checkout shows Stripe's promo box (Lainey OK'd it on all trips).
+- Codes live in Stripe → Product catalogue → Coupons. Bryce/Claude make them; Lainey does not need a Stripe login.
+- ⚠ Line items are inline `product_data`, so a coupon can't be scoped to one trip by product. Scope a code with max redemptions + expiry instead. Real per-trip scoping needs a Stripe product id per trip in `trip-config.ts`.
+- Jackalope records what Stripe collected, so a discounted booking stays on the same `vac_bookings` row.
 ### 2026-10-22 (pt. 2) — Worlds parking lands (Dana, Asana `1219791843119153`)
 - Her five sections verbatim in `PARKING_BY_SLUG["pickleball-world-championships"]` (General, Hotel Shuttles, Rideshare, VIP, ADA) + her shuttle map (`public/ppa/parking/pickleball-world-championships.webp`). Sixth finalized stop.
 - **⚠ 2025 and 2026 share the slug.** New `PARKING_EDITION_START` pins it to 2026-11-02; `parkingFor`/`parkingText` take the start date (event page, /today, NationalsLive). Verified on the dev server: 2026 + /today carry it, 2025 keeps the holding line.

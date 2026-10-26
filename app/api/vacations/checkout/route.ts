@@ -109,6 +109,10 @@ export async function POST(req: NextRequest) {
           },
         },
       ],
+      // Promo box on every Vacations checkout (Lainey, 10/26). Codes are made
+      // in Stripe → Coupons; Jackalope records what Stripe collected, so a
+      // discounted booking stays on the same booking.
+      allow_promotion_codes: true,
       metadata,
       payment_intent_data: { metadata },
       // Trailing slashes are deliberate: next.config sets `trailingSlash: true`,
