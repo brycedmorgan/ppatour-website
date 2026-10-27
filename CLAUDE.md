@@ -75,6 +75,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - Coupon "Black Desert $1,000 off" + promo code `BLACKDESERT1000` (max 1 use) created in the **Pro Pickleball Association** Stripe account (`acct_1FYvnnLVDkSJQVHq`), which holds Vacations. Not "Pickleball Solutions". Lainey told 10/26.
 - **Receipts + event codes (Lainey 10/26):** checkout now sets `payment_intent_data.receipt_email` (Stripe sends the receipt on payment) and stamps `event_code` (new required `TripConfig.eventCode`, from ziff `schedule.js` SCHED_VACATIONS) into metadata and into the payment description, so finance sees the trip in the Payments list and exports. Payments made before today have no code.
 - Pushes to main DO auto-deploy (GitHub deployments for 20c43d3/90cd721/50f7e65 all point at Vercel production builds). I misread `vercel ls` ages and also ran CLI deploys; harmless duplicates. If a CLI deploy is ever needed: `vercel deploy --prod --archive=tgz` (a plain deploy fails at >15,000 files).
+### 2026-10-27 — Worlds Programming re-pulled (Bryce; the 9/28 copy was wrong on five of six days)
+- `lib/event-programming.ts` replaced from Bryce's read of the events sheet, venue time, Mon–Sat. **Times are each cell's own label, not the merged row span** (the merges run wider). Sunday has nothing on the sheet.
+- Off the sheet, so gone: Drink Dink & Disco, Battle of the Badges/Branches, Wooden Paddle Tourney, Rowdy Round Robin. Celebrity Pro-Am stays off until Keaton says Wed (sheet) or Thu 8–10 PM ET (broadcast).
+- Verified on the dev server: 2026 page shows all new sessions and none of the dropped; 2025 unchanged.
+
 ### 2026-10-22 (pt. 2) — Worlds parking lands (Dana, Asana `1219791843119153`)
 - Her five sections verbatim in `PARKING_BY_SLUG["pickleball-world-championships"]` (General, Hotel Shuttles, Rideshare, VIP, ADA) + her shuttle map (`public/ppa/parking/pickleball-world-championships.webp`). Sixth finalized stop.
 - **⚠ 2025 and 2026 share the slug.** New `PARKING_EDITION_START` pins it to 2026-11-02; `parkingFor`/`parkingText` take the start date (event page, /today, NationalsLive). Verified on the dev server: 2026 + /today carry it, 2025 keeps the holding line.

@@ -39,15 +39,22 @@ const s = (title: string, time: string, level?: string): ProgrammingSession =>
 
 const PROGRAMMING_BY_SLUG: Record<string, EventProgramming> = {
   /**
-   * Opendoor Pickleball World Championships, Nov 2–8, 2026. Source:
-   * worlds.unitedpickleball.com/schedule, pulled 9/28/26. That page reads it
-   * live from the events team's "Worlds Programming 2026" Google Sheet (see
-   * lib/week-schedule.ts in the pickleball-world-championship-new repo).
+   * Opendoor Pickleball World Championships, Nov 2–8, 2026. Source: the events
+   * team's "Worlds Programming 2026" Google Sheet, re-read by Bryce 10/27 (the
+   * 9/28 pull was wrong on five of six days). worlds.unitedpickleball.com/schedule
+   * reads the same sheet live (lib/week-schedule.ts in the
+   * pickleball-world-championship-new repo).
    *
-   * ⚠ THIS COPY IS A SNAPSHOT. The events team edits the sheet and the Worlds
-   * site follows within five minutes; nothing refreshes this. Re-pull it before
-   * the week. Live-music slots are left out, because they aren't programming
-   * anyone can join.
+   * ⚠ TIMES COME FROM EACH CELL'S OWN LABEL, NOT THE ROWS IT IS MERGED ACROSS.
+   * The merges run wider than the stated time, so a re-pull that reads the row
+   * span gets the times wrong.
+   *
+   * ⚠ THIS COPY IS A SNAPSHOT; nothing refreshes it. Off the sheet since 9/28,
+   * so gone: Drink Dink & Disco, Battle of the Badges, Battle of the Branches,
+   * Wooden Paddle Tourney, Rowdy Round Robin. The Celebrity Pro-Am stays off on
+   * purpose: the sheet holds it Wednesday, broadcast has it Thursday 8–10 PM ET,
+   * and Keaton has been asked which. Sunday has nothing on the sheet, so it has
+   * no day here. Live-music slots are left out (nothing anyone can join).
    */
   "pickleball-world-championships": {
     start: "2026-11-02",
@@ -58,44 +65,46 @@ const PROGRAMMING_BY_SLUG: Record<string, EventProgramming> = {
         sessions: [
           s("King of the Court", "10:00 AM–12:00 PM", "3.0–3.5"),
           s("King of the Court / Challenge Court", "12:00–2:00 PM", "4.0–4.5"),
-          s("Oldies but Goodies 60+", "2:30–4:30 PM"),
-          s("Drink, Dink & Disco", "6:00–8:30 PM", "3.5+"),
+          s("Game Maker Oldies but Goodies 50+", "2:30–4:30 PM"),
+          s("Catherine Parenteau Clinic", "5:00–7:00 PM"),
         ],
       },
       {
         iso: "2026-11-03",
         sessions: [
-          s("PPA Camp", "8:30–11:00 AM"),
-          s("Special Olympics", "12:30–1:30 PM"),
-          s("Battle of the Badges (Police vs Fire)", "2:30–4:30 PM"),
-          s("Battle of the Branches (Military Round Robin)", "5:00–7:00 PM"),
+          s("PPA Camp", "9:00 AM–12:00 PM"),
+          s("Veterans Play with the Pro", "2:30–3:30 PM"),
+          s("Challenge the Pro", "5:30–7:00 PM"),
         ],
       },
       {
         iso: "2026-11-04",
         sessions: [
-          s("PPA Camp", "8:30–11:00 AM"),
+          s("PPA Camp", "9:00 AM–12:00 PM"),
           s("Play with the Pro", "12:00–1:00 PM", "3.0–3.5"),
           s("Meet the Pro", "2:30–3:30 PM"),
           s("Play with the Pro", "4:00–5:00 PM", "4.0–4.5+"),
+          // Start only: the sheet gives no end time.
+          s("Junior PPA Youth Clinic", "5:00 PM"),
         ],
       },
       {
         iso: "2026-11-05",
         sessions: [
           s("Pickle Cup Pong", "10:00–11:30 AM"),
-          s("King of the Court", "2:00–3:30 PM", "3.0–3.5"),
-          s("King of the Court", "3:30–5:00 PM", "4.0–4.5"),
-          s("Queen's Court / DJ", "6:00–8:00 PM", "4.0–4.5"),
+          s("King of the Court PICKL", "12:00–1:30 PM", "3.0–3.5"),
+          s("King of the Court PICKL", "2:00–3:30 PM", "4.0–4.5"),
+          s("JOOLA Queen's Court / DJ", "4:00–6:00 PM", "4.0–4.5"),
+          s("Connor Garnett Skills Lab", "6:00–8:00 PM"),
         ],
       },
       {
         iso: "2026-11-06",
         sessions: [
-          s("King of the Court", "11:00 AM–12:00 PM", "3.0–3.5"),
-          s("King of the Court", "12:00–2:30 PM", "4.0–4.5"),
-          s("Wooden Paddle Tourney", "2:30–4:30 PM"),
-          s("Rowdy Round Robin (Cowboy Themed)", "6:00–8:00 PM", "3.5"),
+          s("King of the Court", "11:00 AM–12:30 PM", "3.0–3.5"),
+          s("King of the Court", "12:30–2:30 PM", "4.0–4.5"),
+          s("Special Olympics", "2:30–4:30 PM"),
+          s("Holbrook After Party", "6:00–8:00 PM"),
         ],
       },
       {
@@ -105,7 +114,7 @@ const PROGRAMMING_BY_SLUG: Record<string, EventProgramming> = {
           s("Meet the Pro", "12:00–12:30 PM"),
           s("Play with the Pro", "1:30–2:30 PM", "3.0"),
           s("King of the Court", "4:00–5:30 PM", "4.0+"),
-          s("Parent and Child Round Robin", "6:00–8:00 PM"),
+          s("Parent and Child Mini Tourney", "6:00–8:00 PM"),
         ],
       },
     ],
