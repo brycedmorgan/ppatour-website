@@ -35,6 +35,8 @@ run (Bryce, 8/18). These notes cover moving MATCHDAY off Lovable.
 
 ## Status
 
+- **10/27: target is now OUR AWS, not Supabase cloud.** Jason (#matchday-collab) says the AWS hosting is ready and cheaper. Bryce: "Jason's team can easily do it, go for it." Cutover week **Nov 9-15** (Chris agreed). Still on Lovable as of 10/27 (pblfg.com → 185.158.133.1; app calls grwhdhnlafqrcmiuqhhi.supabase.co). Open: does Jason's team self-host Supabase on AWS? Plain AWS = rebuild of auth/realtime/RPC. Android 16 (API 36) target due Nov 1, unconfirmed.
+
 - 9/2: Bryce emailed Chris (chris@color.capital) asking for a fresh GitHub
   invite or a transfer into the Pickleball-Inc-Crew org, the current Lovable
   bill, and the edge-function/cron/secret/bucket inventory. Proposed Nov 9–15.
