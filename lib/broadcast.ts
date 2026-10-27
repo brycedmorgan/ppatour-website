@@ -263,6 +263,8 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
     // 1219361358300308; the 10/10 sheet). The sheet also moved Sat/Sun, which his
     // note said were unchanged — the sheet is newer and wins. ⚠ THE CELEBRITY
     // PRO-AM MOVED FROM WEDNESDAY TO THURSDAY 8–10PM ET, on PBTV and Tennis Channel.
+    // ⚠ Championship Sunday moved 12–6 → 11AM–5PM ET (Keaton, 10/27); 11 ET is
+    // the 10:00 AM Farmers Branch first serve Brian gave on 10/14.
     { round: "RD 64", day: "Tuesday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
     { round: "RD 32", day: "Wednesday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
     { round: "RD 16", day: "Thursday", window: "12PM ET - 7PM ET", platform: "PBTV", type: "LIVE" },
@@ -270,7 +272,7 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
     { round: "Celebrity Pro-Am", day: "Thursday", window: "8PM ET - 10PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
     { round: "QF's", day: "Friday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
     { round: "SF's", day: "Saturday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "Championship", day: "Sunday", window: "12PM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
+    { round: "Championship", day: "Sunday", window: "11AM ET - 5PM ET", platform: "PBTV", type: "LIVE" },
   ],
 };
 

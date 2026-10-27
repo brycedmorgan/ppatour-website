@@ -515,7 +515,8 @@ export const tvSchedule: TvEvent[] = [
       },
       { date: "Nov 6", dow: "Fri", windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Quarterfinals" }] },
       { date: "Nov 7", dow: "Sat", windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Semifinals" }] },
-      { date: "Nov 8", dow: "Sun", windows: [{ channel: "PBTV", window: "12PM – 6PM", round: "Championship Sunday" }] },
+      // Sunday moved 12–6 → 11AM–5PM ET (Keaton, 10/27).
+      { date: "Nov 8", dow: "Sun", windows: [{ channel: "PBTV", window: "11AM – 5PM", round: "Championship Sunday" }] },
     ],
   },
   {

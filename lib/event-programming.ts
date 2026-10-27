@@ -51,9 +51,9 @@ const PROGRAMMING_BY_SLUG: Record<string, EventProgramming> = {
    *
    * ⚠ THIS COPY IS A SNAPSHOT; nothing refreshes it. Off the sheet since 9/28,
    * so gone: Drink Dink & Disco, Battle of the Badges, Battle of the Branches,
-   * Wooden Paddle Tourney, Rowdy Round Robin. The Celebrity Pro-Am stays off on
-   * purpose: the sheet holds it Wednesday, broadcast has it Thursday 8–10 PM ET,
-   * and Keaton has been asked which. Sunday has nothing on the sheet, so it has
+   * Wooden Paddle Tourney, Rowdy Round Robin. The Celebrity Pro-Am is Thursday
+   * (Keaton, 10/27 8:36; the sheet's Wednesday hold is stale): 7–9 PM venue
+   * time is the 8–10 PM ET broadcast. Sunday has nothing on the sheet, so it has
    * no day here. Live-music slots are left out (nothing anyone can join).
    */
   "pickleball-world-championships": {
@@ -96,6 +96,7 @@ const PROGRAMMING_BY_SLUG: Record<string, EventProgramming> = {
           s("King of the Court PICKL", "2:00–3:30 PM", "4.0–4.5"),
           s("JOOLA Queen's Court / DJ", "4:00–6:00 PM", "4.0–4.5"),
           s("Connor Garnett Skills Lab", "6:00–8:00 PM"),
+          s("Celebrity Pro-Am", "7:00–9:00 PM"),
         ],
       },
       {

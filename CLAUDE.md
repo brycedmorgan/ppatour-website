@@ -77,8 +77,9 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - Pushes to main DO auto-deploy (GitHub deployments for 20c43d3/90cd721/50f7e65 all point at Vercel production builds). I misread `vercel ls` ages and also ran CLI deploys; harmless duplicates. If a CLI deploy is ever needed: `vercel deploy --prod --archive=tgz` (a plain deploy fails at >15,000 files).
 ### 2026-10-27 — Worlds Programming re-pulled (Bryce; the 9/28 copy was wrong on five of six days)
 - `lib/event-programming.ts` replaced from Bryce's read of the events sheet, venue time, Mon–Sat. **Times are each cell's own label, not the merged row span** (the merges run wider). Sunday has nothing on the sheet.
-- Off the sheet, so gone: Drink Dink & Disco, Battle of the Badges/Branches, Wooden Paddle Tourney, Rowdy Round Robin. Celebrity Pro-Am stays off until Keaton says Wed (sheet) or Thu 8–10 PM ET (broadcast).
+- Off the sheet, so gone: Drink Dink & Disco, Battle of the Badges/Branches, Wooden Paddle Tourney, Rowdy Round Robin.
 - Verified on the dev server: 2026 page shows all new sessions and none of the dropped; 2025 unchanged.
+- Keaton 10/27 (via Bryce): **Celebrity Pro-Am is Thursday**, back in programming Thu 11/5 7–9 PM venue (= the 8–10 PM ET broadcast). **Championship Sunday PBTV 12–6 → 11AM–5PM ET** in `lib/broadcast.ts` + `lib/tv-schedule.ts` (11 ET = Brian's 10 AM Farmers Branch first serve). Audit: Worlds matches the sheet, broadcast ↔ tv-schedule agree.
 
 ### 2026-10-22 (pt. 2) — Worlds parking lands (Dana, Asana `1219791843119153`)
 - Her five sections verbatim in `PARKING_BY_SLUG["pickleball-world-championships"]` (General, Hotel Shuttles, Rideshare, VIP, ADA) + her shuttle map (`public/ppa/parking/pickleball-world-championships.webp`). Sixth finalized stop.
