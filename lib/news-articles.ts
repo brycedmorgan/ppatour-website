@@ -125,6 +125,85 @@ export type NewsArticle = {
  */
 export const newsArticles: NewsArticle[] = [
   /**
+   * ⚠ HUMAN-AUTHORED EDITORIAL — Dave Fleming's Worlds preview, supplied by
+   * Wesley on 10/27 ("OPENDOOR PICKLEBALL WORLD CHAMPIONSHIPS STORYLINES (NOV
+   * 2-8, 2026)"). Same exception path and transcription rules as Chicago below.
+   * Ships `status: "published"`; Dylan can flip it to "draft" in one line.
+   *
+   * ⚠ HIS TV LINE WAS CHECKED AND MATCHES: PBTV 11AM Central Tue–Sat = 12PM ET,
+   * Sunday 10AM Central = 11AM ET (moved 10/27), Tennis Channel pro-am Thu 7PM
+   * Central = 8PM ET, all in lib/tv-schedule.ts.
+   *
+   * ⚠ THE IMAGE IS THE 2025 CHAMPIONSHIP COURT AT NIGHT (`aerial-03`), not the
+   * event hero (`aerial-01`). Its top banner carries 2025 court-naming signage;
+   * the hero crop is anchored low so the band is the court and the crowd.
+   */
+  {
+    slug: "opendoor-pickleball-world-championships-storylines",
+    status: "published",
+    category: "Tour News",
+    title: "Storylines for the Opendoor Pickleball World Championships",
+    subtitle: "Nov. 2–8, 2026 · Brookhaven Country Club · Farmers Branch, TX",
+    date: "Oct 27",
+    image: "/ppa/venues/brookhaven/aerial-03.jpg",
+    imagePosition: "center 70%",
+    author: "Dave Fleming",
+    eventSlug: "pickleball-world-championships",
+    ctaUrl: "/events/2026/pickleball-world-championships/",
+    ctaLabel: "World Championships Event Page",
+    dek: "The biggest event of the year: 3,000 points to the winners, every top-ranked pro in the draws, and Anna Leigh Waters still unbeaten in singles and women's doubles in 2026.",
+    whyItMatters:
+      "Worlds carries the most points on the calendar, the whole top of the rankings is in the draws, and all three doubles finals are best of five on Championship Sunday.",
+    body: [
+      "## Overall Top 5",
+      "Three grand: The biggest tourney with the most points — 3,000 to the winner.",
+      "Full house: Star studded event with every top ranked player in the draws.",
+      "Undefeated: Anna Leigh Waters has not lost a singles or women's doubles match in 2026.",
+      "Dub in men's dubs?: The last 3 events with full draws have been won by 3 different teams.",
+      "Mark it down: Thursday night pro-am is headlined by actor Mark Wahlberg.",
+      "## Venue, Tourney & TV",
+      "Brookhaven Country Club, complete with Pickleball Blvd., food, and entertainment returns as the host.",
+      "Over 3,200 players are participating.",
+      "A progressive draw on the pro side, one round per bracket per day and no bronze matches. The round of 64 starts on Tuesday with all players in action (no byes) in both singles and mixed doubles. Men's doubles has 2 byes and women's doubles has 16 byes into the round of 32.",
+      "Note: all 3 doubles finals are best of 5 on Championship Sunday.",
+      "Coverage on PickleballTV begins at 11 a.m. Central Tuesday–Saturday. Championship Sunday will start at 10 a.m. Central. Tennis Channel will broadcast the celebrity pro-am on Thursday night at 7 p.m. Central.",
+      "## Women's Singles",
+      "Defending champion and finalist: Anna Leigh Waters and Kate Fahey.",
+      "Top four seeds: 1) Anna Leigh Waters, 2) Kate Fahey, 3) Kaitlyn Christian, 4) Brooke Buckner.",
+      "Anna Leigh Waters hasn't lost a singles match in 888 days when she takes the court at Worlds.",
+      "Potential battle in the round of 32: Judit Castillo (8) vs. Sofia Sewing (25).",
+      "Potential battle in the round of 32: Sahra Dennehy (9) vs. Helena Jansen Fink (23).",
+      "Watch out for Kate Fahey (2) — won singles AND mixed in Virginia Beach and will be well rested versus her world traveling competitors.",
+      "## Men's Singles",
+      "Defending champion and finalist: Federico Staksrud and Chris Haworth.",
+      "Top four seeds: 1) Chris Haworth, 2) Federico Staksrud, 3) Hunter Johnson, 4) Christian Alshon.",
+      "John Lucian Goins (7) won in Virginia Beach so watch out for him — he won back to back in 2025.",
+      "Ben Johns is the 19 seed and will face the local favorite Brandon French in the round of 64.",
+      "Round-of-64 battle with CJ Klinger jumping into singles as the 64 seed vs. (10) Zane Ford.",
+      "Watch out for Hunter Johnson (3) — he ran the table in Hong Kong so he comes back to Dallas loaded with confidence.",
+      "## Mixed Doubles",
+      "Defending champions and finalists: Anna Leigh Waters / Ben Johns and Jorja / JW Johnson.",
+      "Top four seeds: 1) Anna Leigh Waters / Ben Johns, 2) Anna Bright / Hayden Patriquin, 3) Jorja / JW Johnson, 4) Rachel Rohrabacher / Christian Alshon.",
+      "Fun partner alert: Sofia Sewing / Nico Acevedo are the 43 seed in their first event together.",
+      "Brotherly shove? Possible round-of-32 matchup: Waters / Johns (1) vs. Callie Smith / Collin Johns (29) — Collin has never beaten Ben on the Carvana PPA Tour.",
+      "Round-of-64 showtime: (31) Etta Tuionetoa / Jaume Martinez Vich vs. (37) Elliott Schupp / Kiora Kunimoto.",
+      "Watch out for the Johnsons (3) — have a recent win over Waters / Johns and lost in the finals in 2025.",
+      "## Women's Doubles",
+      "Defending champions and finalists: Anna Bright / Anna Leigh Waters and Catherine Parenteau / Parris Todd.",
+      "Top four seeds: 1) Anna Bright / Anna Leigh Waters, 2) Hurricane Tyra Black / Jorja Johnson, 3) Rachel Rohrabacher / Parris Todd, 4) Kate Fahey / Tina Pisnik.",
+      "Potential round-of-16 matchup: (5) Catherine Parenteau / Sofia Sewing vs. (10) Sahra Dennehy / Danni-Elle Townsend.",
+      "Potential round-of-16 matchup #2: (6) Lacy Schneemann / Jamie Wei vs. (9) Mari Humberg / Millie Rane.",
+      "Watch out for the top seeds Anna Leigh Waters and Anna Bright — undefeated in 2026 and the heaviest favorite of the 1 seeds in the 3 doubles events.",
+      "## Men's Doubles",
+      "Defending champions and finalists: Federico Staksrud / Hayden Patriquin and JW Johnson / CJ Klinger.",
+      "Top four seeds: 1) Johns / Tardio, 2) Patriquin / Staksrud, 3) Alshon / Daescu, 4) JW Johnson / Tama Shimabukuro.",
+      "Ben Johns has not won the last 4 men's doubles tourneys he has entered (lost with Staksrud in Arizona, Sock in Chicago, Tardio in Las Vegas and Hong Kong).",
+      "Danger, flammable: Jaume Martinez Vich and Nico Acevedo (8) are red hot and would face Alshon / Daescu in the quarters if both teams advance that far.",
+      "Fun team alert: Matt Wright and John Lucian Goins pair up as the 24 seed.",
+      "Watch out for Staksrud and Patriquin (2) — they are the defending champions and won the Hong Kong 1500 last week so are riding high into Dallas.",
+    ],
+  },
+  /**
    * ⚠ HUMAN-AUTHORED PRESS RELEASE — the official MUNICIPAL Celebrity Pickleball
    * Showdown / Mark Wahlberg announcement (comms doc dated "DALLAS, Oct. 6,
    * 2026"), supplied by Tyler on 10/8 to post. Same exception path as the Jeff
