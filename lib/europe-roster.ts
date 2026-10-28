@@ -558,6 +558,41 @@ export const europeRoster: EuroPro[] = [
       "Yuri Syromolotov is a professional pickleball player from Spain. He turned pro in 2026. As a former ATP player, Yuri also starred in college tennis in the US and won a national college title in Great Britain. He has quickly made his mark in pickleball, winning a Spanish national title and several singles titles in 2026. He brings big-match experience to every event he plays.",
     ],
   },
+  {
+    // Row 29 of Catie's sheet, posted in #ppa-tour-europe 10/27. No portrait:
+    // her sheet names "DAVIDE VENDRAME.png" but it isn't in the Drive folder
+    // yet. Silhouette until it lands, same as Yuri's first pass.
+    slug: "davide-vendrame",
+    name: "Davide Vendrame",
+    country: "Italy",
+    countryCode: "ITA",
+    age: 25,
+    divisions: [...MS, ...MD, ...XD],
+    sponsors: ["Joola Europe"],
+    instagram: "https://www.instagram.com/davidevendrame_pb/",
+    tagline: "Represented Italy at the World Championship",
+    bio: [
+      "Davide is a professional pickleball player from Genoa, Italy. Prior to joining PPA, he has represented Italy at the World Championship and in international team competition. He is also a certified pickleball and tennis instructor.",
+    ],
+  },
+  {
+    // Row 30. No portrait yet either.
+    // ⚠ HIS pickleball.com SLUG CARRIES A "-1", off her PBCOM column, like
+    // hector-sanchez-vidal-1 and katie-morris-3. Not derived from the name.
+    slug: "martin-thomas-1",
+    name: "Martin Thomas",
+    country: "United Kingdom",
+    countryCode: "GBR",
+    age: 25,
+    divisions: [...MS, ...MD, ...XD],
+    sponsors: ["Selkirk"],
+    instagram: "https://www.instagram.com/martin_thomaspb/",
+    tagline: "Began his pickleball career in the US college game",
+    /* Catie's sheet reads "from UK"; "from the UK" is the only edit. */
+    bio: [
+      "Martin is a professional pickleball player from the UK with roots in England and Portugal. He went to college in the US where he started his pickleball career.",
+    ],
+  },
 ];
 
 export function getEuroPro(slug: string): EuroPro | undefined {
