@@ -103,12 +103,17 @@ export async function POST(request: Request) {
     label: "sponsor-inquiry",
   });
 
-  // 3) Notification email. Non-fatal on its own: the row is already written and
-  //    the Jackalope forward below is still the primary destination, so a mail
-  //    outage must not fail a lead that reached the pipeline.
-  const notifyTo =
-    typeof ROUTING.notifyTo === "function" ? ROUTING.notifyTo(record) : ROUTING.notifyTo;
-  if (notifyTo) {
+  // 3) Notification email — NOW A FALLBACK ONLY (Bryce, 10/27): "I don't want
+  //    him [Jacob] receiving an email about it anymore." Jackalope emails Connor
+  //    a "New inbound lead" with a link to the record (ziff lib/leadnotify.js),
+  //    and Jacob assigns from Sales -> Inbound. So the FORM_INBOX_SPONSORSHIP
+  //    email only goes when the lead did NOT reach Jackalope (hook not configured
+  //    or the forward failed). The sheet row + Slack mirror above still run first,
+  //    so Wesley's 8/5 durability rule holds: a Jackalope outage still emails.
+  const emailInbox = async (why: string) => {
+    const notifyTo =
+      typeof ROUTING.notifyTo === "function" ? ROUTING.notifyTo(record) : ROUTING.notifyTo;
+    if (!notifyTo) return;
     const result = await sendFormNotification({
       to: notifyTo,
       subject: ROUTING.subject(record),
@@ -120,10 +125,10 @@ export async function POST(request: Request) {
     });
     if (result !== "sent") {
       console.warn(
-        `[sponsor-inquiry] notification ${result} (sheet ${sheetOk ? "ok" : "failed"})`,
+        `[sponsor-inquiry] fallback notification ${result} (${why}; sheet ${sheetOk ? "ok" : "failed"})`,
       );
     }
-  }
+  };
 
   // 4) Jackalope sales pipeline — unchanged, including the 502 on failure.
   const secret = process.env.LEAD_HOOK_SECRET;
@@ -135,6 +140,7 @@ export async function POST(request: Request) {
       email,
       sheetOk,
     });
+    await emailInbox("hook not configured");
     return NextResponse.json({ ok: true });
   }
 
@@ -159,6 +165,7 @@ export async function POST(request: Request) {
     if (!res.ok) throw new Error(`hook ${res.status}`);
   } catch (err) {
     console.error("[sponsor-inquiry] forward failed", err, { company, email });
+    await emailInbox("Jackalope forward failed");
     return NextResponse.json({ error: "Upstream error" }, { status: 502 });
   }
 
