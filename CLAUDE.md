@@ -74,6 +74,14 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - Pushes to this repo work again (the 12-day 403 is gone). The unpushed Europe-pros / MATCHDAY commits went out with 820f437.
 - ⚠ Untested live: the first sponsor-form and Contact→Sponsorship submissions after deploy are the test. Look for `forward failed` in Vercel logs; a deal with source `website` should appear in Jackalope → Sales → Inbound.
 
+### 2026-10-28 — Local event listings + GBP (Bryce: "Jeff never got this done")
+- New `docs/LOCAL-LISTINGS.md`: every 2026–27 Tour stop × CVB / state tourism calendar, with submit URLs, rules, lead times, contacts and paste-ready copy (no player names).
+- Logo on event pages was already done (`brand.icon` badges on all 18 stops). Event JSON-LD already full.
+- 9 forms filled in Bryce's Chrome 10/28, contact marketing@ppatour.com: Visit Dallas, Daytona CVB, Visit Mesa, Visit Phoenix, Explore Gwinnett, Discover Atlanta, Explore Minnesota, Dana Point Chamber. Each waits on a reCAPTCHA or photo only Bryce can do.
+- Gmail drafts (gmail-send) to events@visitdallas.com (outside-city-limits exception) and discover@farmersbranchtx.gov.
+- GBP: "Professional Pickleball Association (PPA)", 2100 Ross Ave Dallas, is claimed by someone else; Bryce's account manages 0 profiles. Find the owner (Jeff/Tyler accounts?) before any event posts.
+- Next: partner accounts (Visit Florida, Explore Georgia, Lee County, Palm Springs, Meet Minneapolis, Ohio.org, Sacramento365, Now Playing Utah, CitySpark, Patch); Cincinnati needs a venue first.
+
 ### 2026-10-26 — Vacations checkout takes promo codes (Lainey)
 - Lainey asked for a $1,000-off code for Black Desert without a separate Stripe link. `allow_promotion_codes: true` in `app/api/vacations/checkout/route.ts`, so every Vacations checkout shows Stripe's promo box (Lainey OK'd it on all trips).
 - Codes live in Stripe → Product catalogue → Coupons. Bryce/Claude make them; Lainey does not need a Stripe login.
