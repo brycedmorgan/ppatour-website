@@ -7,6 +7,7 @@ import { appendToSheet } from "@/lib/google-sheet";
 import { cioIdentifyAndTrack } from "@/lib/customerio";
 import { localTimestamp, sendFormNotification } from "@/lib/forms/notify";
 import { postFormToSlack } from "@/lib/forms/slack";
+import { forwardToJackalope, leadCompany } from "@/lib/forms/jackalope-lead";
 
 /**
  * Generic form submission endpoint. One route serves every inquiry/application
@@ -213,8 +214,26 @@ export async function POST(request: Request) {
     label: `form-submit:${formType}`,
   });
 
+  // 2b) Contact → Sponsorship goes to the Jackalope CRM (Bryce 10/27). The
+  //     email below is the fallback when the forward did not land.
+  let inCrm = false;
+  if (formType === "contact" && record.topic === "Sponsorship" && submitterEmail) {
+    inCrm =
+      (await forwardToJackalope(
+        {
+          company: leadCompany(record.company, submitterEmail, submitterName),
+          name: submitterName,
+          email: submitterEmail,
+          phone: record.phone,
+          message: record.message,
+          source: "ppatour.com contact form",
+        },
+        `form-submit:${formType}`,
+      )) === "sent";
+  }
+
   // 3) Notification email (if the form routes to an inbox).
-  if (notifyTo) {
+  if (notifyTo && !inCrm) {
     const result = await sendFormNotification({
       to: notifyTo,
       subject: routing.subject(record),

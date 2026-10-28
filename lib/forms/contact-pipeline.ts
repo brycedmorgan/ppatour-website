@@ -32,6 +32,7 @@ import { inboxFor } from "@/lib/forms/routing";
 import { sendFormNotification } from "@/lib/forms/notify";
 import { addReaction, channelFor, postFormToSlack, postThreadReply } from "@/lib/forms/slack";
 import { sendAutoReply } from "@/lib/forms/reply";
+import { forwardToJackalope, leadCompany } from "@/lib/forms/jackalope-lead";
 import {
   CATEGORY_LABEL,
   ROUTE_LABEL,
@@ -213,7 +214,28 @@ export async function runContactPipeline(s: ContactSubmission): Promise<void> {
 
   // 3) Inbox email — to the routed inbox (or the topic's own inbox when triage skipped).
   const inbox = route ? inboxFor(INBOX_ENV[route]) : s.topicInbox;
-  const emailResult = await sendFormNotification({
+
+  // 3a) Sponsorship → the Jackalope CRM (Bryce 10/27: "absolutely"). Jacob
+  //     assigns it there and Jackalope emails Connor, so the inbox email only
+  //     goes when the forward did not land.
+  let inCrm = false;
+  if (s.topic === "Sponsorship") {
+    const fwd = await forwardToJackalope(
+      {
+        company: leadCompany(s.record.company, s.submitterEmail, s.submitterName),
+        name: s.submitterName,
+        email: s.submitterEmail,
+        phone: s.record.phone,
+        message: s.record.message,
+        source: "ppatour.com contact form",
+      },
+      s.label,
+    );
+    inCrm = fwd === "sent";
+    if (inCrm) console.log(`[${s.label}] sponsorship lead sent to Jackalope; inbox email skipped`);
+  }
+
+  const emailResult = inCrm ? "skipped" : await sendFormNotification({
     to: inbox,
     subject: `${subjectPrefix(t)}New Submission from PPATour.com — Contact (${s.topic || "General"})${
       t.rerouted && route ? ` → ${ROUTE_LABEL[route]}` : ""

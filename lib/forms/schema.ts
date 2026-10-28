@@ -90,6 +90,8 @@ export const FORM_SCHEMAS: Record<string, FormSchema> = {
         required: true,
         options: ["Pickleball Brackets/Tournaments", "Registrations", "Tickets", "PBTV/Broadcasting", "Public Relations", "Sponsorship", "Marketing", "PPA Challenger", "Other"],
       },
+      // Bryce 10/27: Sponsorship leads go to the Jackalope CRM, which needs a company.
+      { name: "company", label: "Company", type: "text", required: true, maxLength: 120, placeholder: "Company", showIf: { field: "topic", value: "Sponsorship" } },
       { name: "message", label: "Questions/Comments", type: "textarea", maxLength: 2000, placeholder: "Questions/Comments" },
     ],
   },
