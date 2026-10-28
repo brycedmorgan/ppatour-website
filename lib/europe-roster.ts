@@ -576,12 +576,12 @@ export const europeRoster: EuroPro[] = [
     ],
   },
   {
-    // Row 30. ⚠ NO PORTRAIT ON PURPOSE: the one Katherina sent (10/28) has him
-    // in a Carvana PPA Tour tee, the US title sponsor, and the logo can't be
-    // cropped out. Silhouette until she sends one in his own kit.
+    // Row 30. ⚠ Portrait is the 10/28 replacement in a plain PPA tee: the first
+    // one had a Carvana (US title sponsor) logo that couldn't be cropped out.
     // ⚠ HIS pickleball.com SLUG CARRIES A "-1", off her PBCOM column, like
     // hector-sanchez-vidal-1 and katie-morris-3. Not derived from the name.
     slug: "martin-thomas-1",
+    portrait: P("martin-thomas-1"),
     name: "Martin Thomas",
     // Her sheet moved him UK → Portugal on 10/28; bio below is that update, verbatim.
     country: "Portugal",
