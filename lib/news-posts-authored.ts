@@ -1077,4 +1077,84 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
 <p><strong>For the comprehensive stats of all these gold medal matches, please visit: </strong><a href="https://facebook.com/groups/propickleballstats" target="_blank" rel="noreferrer noopener"><strong>facebook.com/groups/propickleballstats</strong></a></p>
 `.trim(),
   },
+  {
+    // Worlds × North Texas Food Bank food drive release, supplied by Wesley on
+    // 10/27 (Google Doc 1jXiUqmm5WWV6cD93xCznX215HACkAq9aSjy3bujf7u0), byline
+    // Nathan Boschult at his request. Body is the release verbatim; title and
+    // dek are its own headline and sub-heading.
+    //
+    // ⚠ TO GO LIVE 10/28 8:00 AM CT. As with the Select Team release, nothing
+    // filters on publishedAt, so the timing is held by when this is deployed.
+    slug: "opendoor-pickleball-world-championships-partners-with-north-texas-food-bank",
+    wpId: 900008,
+    status: "published",
+    source: "wordpress",
+    category: "Tour News",
+    series: null,
+    categoryResolvedBy: "fallback",
+    title: "Opendoor Pickleball World Championships Partners with North Texas Food Bank for Community Food Drive, Nov. 2-5",
+    dek: "Biggest Event in Pickleball to Help Local North Texas Community; Donors Earn Pickleball Central Discounts and Chance to Win Championship Prizes",
+    author: "Nathan Boschult",
+    publishedAt: "2026-10-28T08:00:00",
+    publishedAtGmt: "2026-10-28T13:00:00",
+    modifiedAt: "2026-10-28T13:00:00",
+    image: {
+      // The photo embedded in the release doc (2025 Worlds aerial). Encoded
+      // 2048px wide, mozjpeg q64 (house standard).
+      url: "/ppa/news/worlds-north-texas-food-bank-food-drive.jpg",
+      alt: "Aerial view of Brookhaven Country Club during the Pickleball World Championships, with a packed championship court, outdoor courts and the fan village.",
+      width: 2048,
+      height: 1534,
+    },
+    // Left empty deliberately: `detectAthleteMentions` reads the body.
+    players: [],
+    playerNames: [],
+    wpEvent: null,
+    tags: [],
+    tagsRaw: [],
+    wpCategories: [],
+    embeds: [],
+    inlineImages: [],
+    ctaUrl: "/events/2026/pickleball-world-championships/",
+    ctaLabel: "World Championships Event Page",
+    legacyUrl: "https://www.ppatour.com/opendoor-pickleball-world-championships-partners-with-north-texas-food-bank/",
+    seo: {
+      title: "Worlds Partners with North Texas Food Bank for Food Drive | PPA Tour",
+      description:
+        "The Opendoor Pickleball World Championships and North Texas Food Bank host a community food drive Nov. 2-5 at Brookhaven Country Club. Donors earn Pickleball Central discounts.",
+      canonical:
+        "https://www.ppatour.com/opendoor-pickleball-world-championships-partners-with-north-texas-food-bank/",
+    },
+    bodyHtml: `
+<p>The Opendoor Pickleball World Championships and the North Texas Food Bank are joining forces for a community food drive at the biggest event on the global pickleball calendar. The drive will run Monday, Nov. 2, through Thursday, Nov. 5.</p>
+
+<p>Hosted by the Carvana PPA Tour, the <a href="/events/2026/pickleball-world-championships/">Opendoor Pickleball World Championships</a> will take place at Brookhaven Country Club from Nov. 2-8, and the event is a natural opportunity to give back to the North Texas community.</p>
+
+<p>Fans, players, and neighbors are invited to take part via these options located at the entrance to Pickleball Boulevard near the ticketing booth:</p>
+
+<ul class="wp-block-list">
+<li><strong>Online:</strong> Scan the QR code provided on-site to give directly to North Texas Food Bank.</li>
+<li><strong>In person:</strong> Food donations will be accepted at the designated drop-off location.</li>
+</ul>
+
+<p>Organizers are asking for non-perishable and canned items only. Items that are expired or have damaged packaging cannot be accepted.</p>
+
+<h4 class="wp-block-heading"><strong>Thank-You Perks for Donors</strong></h4>
+
+<ul class="wp-block-list">
+<li><strong>$5 or more:</strong> Receive a 10% Pickleball Central discount, redeemable on-site at the championships.</li>
+<li><strong>More than $50:</strong> Receive the Pickleball Central discount and be entered into a raffle to win Opendoor Pickleball World Championships prize pack valued at up to $75.</li>
+</ul>
+
+<p>Online donors should show a screenshot or receipt of their donation to claim their discount.</p>
+
+<p>Those who donate food in person will receive their discount on-site. The raffle winner will be contacted on Saturday, Nov. 7.</p>
+
+<p>&#8220;Pickleball has always been about bringing people together, and this food drive is a natural extension of that,&#8221; said Jacob Cohen, Chief Revenue Officer for the PPA Tour. &#8220;We&#8217;re proud to see the Opendoor Pickleball World Championships use the week&#8217;s energy to help North Texas families put food on the table.&#8221;</p>
+
+<p>&#8220;We could not do what we do in the fight against hunger without the strong support of our community and events like the Opendoor Pickleball World Championships,&#8221; said Trisha Cunningham, President &amp; CEO of the North Texas Food Bank. &#8220;In North Texas, nearly 800,000 people now face hunger, including 1 in 4 children. We&#8217;re grateful for this partnership that will help provide critical support to children and families across our community.&#8221;</p>
+
+<p>Fans are encouraged to attend the championships, with tickets starting at $25. World No. 1 players Anna Leigh Waters and Ben Johns are among those scheduled to compete in the iconic tournament.</p>
+`.trim(),
+  },
 ];
