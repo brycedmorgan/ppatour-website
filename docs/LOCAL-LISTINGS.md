@@ -4,6 +4,10 @@ Bryce, 2026-10-27: every Tour stop gets (1) a Google Business Profile event post
 (2) a listing on each host city's tourism / CVB calendar and the state tourism site
 (e.g. visitarizona.com/events). Jeff Watson owned this and it never happened; he left 10/16.
 
+**In the marketing plan (2026-10-28):** every stop's Jackalope board now carries two tasks,
+"Local Event Listings" at 166 days out and "Listings Check and Social Ask" at 40 days out
+(ziff `marketing-plan.js`, commit 1912c1a8). This file is the how-to those tasks point at.
+
 **Why:** these listings feed Google's event results, AI search answers, and the bureaus'
 social accounts (Visit Arizona IG ~350k). They are also third-party sources that back the
 Wikipedia article (Wikidata item Q141769292 already exists; Nathan holds the article draft,
