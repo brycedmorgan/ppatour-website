@@ -67,6 +67,13 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-27 — Sponsorship leads: CRM first, Jacob's email off
+- Bryce: website sponsorship leads go to the Jackalope CRM; Jacob assigns them there, Jackalope emails Connor a link (ziff lib/leadnotify.js, env `INBOUND_LEAD_NOTIFY`).
+- `820f437` sponsor-inquiry: the `FORM_INBOX_SPONSORSHIP` email is now a FALLBACK, sent only when the Jackalope forward fails or `LEAD_HOOK_SECRET` is unset. Sheet + Slack still run first (Wesley's 8/5 rule holds).
+- `6a9cc6c` Contact form: topic "Sponsorship" shows a required Company field and forwards to Jackalope via new `lib/forms/jackalope-lead.ts` (both triage and non-triage paths). Inbox email only on a failed forward. No company typed → email domain ("drinkolipop.com" → "Drinkolipop"), then the person's name.
+- Pushes to this repo work again (the 12-day 403 is gone). The unpushed Europe-pros / MATCHDAY commits went out with 820f437.
+- ⚠ Untested live: the first sponsor-form and Contact→Sponsorship submissions after deploy are the test. Look for `forward failed` in Vercel logs; a deal with source `website` should appear in Jackalope → Sales → Inbound.
+
 ### 2026-10-26 — Vacations checkout takes promo codes (Lainey)
 - Lainey asked for a $1,000-off code for Black Desert without a separate Stripe link. `allow_promotion_codes: true` in `app/api/vacations/checkout/route.ts`, so every Vacations checkout shows Stripe's promo box (Lainey OK'd it on all trips).
 - Codes live in Stripe → Product catalogue → Coupons. Bryce/Claude make them; Lainey does not need a Stripe login.
