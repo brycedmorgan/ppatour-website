@@ -127,6 +127,7 @@ const COUNTRY_ISO: Record<string, string> = {
   Mexico: "mx",
   Peru: "pe",
   Poland: "pl",
+  Portugal: "pt",
   Romania: "ro",
   Serbia: "rs",
   Slovakia: "sk",

@@ -559,10 +559,10 @@ export const europeRoster: EuroPro[] = [
     ],
   },
   {
-    // Row 29 of Catie's sheet, posted in #ppa-tour-europe 10/27. No portrait:
-    // her sheet names "DAVIDE VENDRAME.png" but it isn't in the Drive folder
-    // yet. Silhouette until it lands, same as Yuri's first pass.
+    // Row 29 of Catie's sheet, posted in #ppa-tour-europe 10/27. Portrait is
+    // "DAVIDE VENDRAME.png" (Katherina, 10/28), 900×1125 q82 like the rest.
     slug: "davide-vendrame",
+    portrait: P("davide-vendrame"),
     name: "Davide Vendrame",
     country: "Italy",
     countryCode: "ITA",
@@ -576,21 +576,23 @@ export const europeRoster: EuroPro[] = [
     ],
   },
   {
-    // Row 30. No portrait yet either.
+    // Row 30. ⚠ NO PORTRAIT ON PURPOSE: the one Katherina sent (10/28) has him
+    // in a Carvana PPA Tour tee, the US title sponsor, and the logo can't be
+    // cropped out. Silhouette until she sends one in his own kit.
     // ⚠ HIS pickleball.com SLUG CARRIES A "-1", off her PBCOM column, like
     // hector-sanchez-vidal-1 and katie-morris-3. Not derived from the name.
     slug: "martin-thomas-1",
     name: "Martin Thomas",
-    country: "United Kingdom",
-    countryCode: "GBR",
+    // Her sheet moved him UK → Portugal on 10/28; bio below is that update, verbatim.
+    country: "Portugal",
+    countryCode: "PRT",
     age: 25,
     divisions: [...MS, ...MD, ...XD],
     sponsors: ["Selkirk"],
     instagram: "https://www.instagram.com/martin_thomaspb/",
-    tagline: "Began his pickleball career in the US college game",
-    /* Catie's sheet reads "from UK"; "from the UK" is the only edit. */
+    tagline: "Portugal's national champion",
     bio: [
-      "Martin is a professional pickleball player from the UK with roots in England and Portugal. He went to college in the US where he started his pickleball career.",
+      "Martin is a professional pickleball player with roots in England and Portugal. He represents Portugal as its national champion, including at the 2026 Pickleball World Cup. On the PPA Tour he has reached the semifinals in men's doubles at PPA Barcelona, and has made multiple Challenger and main-draw appearances in the US.",
     ],
   },
 ];
