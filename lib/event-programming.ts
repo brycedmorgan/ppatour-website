@@ -53,8 +53,10 @@ const PROGRAMMING_BY_SLUG: Record<string, EventProgramming> = {
    * so gone: Drink Dink & Disco, Battle of the Badges, Battle of the Branches,
    * Wooden Paddle Tourney, Rowdy Round Robin. The Celebrity Pro-Am is Thursday
    * (Keaton, 10/27 8:36; the sheet's Wednesday hold is stale): 7–9 PM venue
-   * time is the 8–10 PM ET broadcast. Sunday has nothing on the sheet, so it has
-   * no day here. Live-music slots are left out (nothing anyone can join).
+   * time is the 8–10 PM ET broadcast. Live-music slots are left out (nothing
+   * anyone can join). Also left out on purpose, per Ashlyn: the Vita Pop Clinic
+   * (Wed 6–7:30, "SPONSORSHIP CLINIC DO NOT POST PUBLICLY") and Amateur Warm Up
+   * (Fri–Sun 8–11).
    */
   "pickleball-world-championships": {
     start: "2026-11-02",
@@ -84,8 +86,7 @@ const PROGRAMMING_BY_SLUG: Record<string, EventProgramming> = {
           s("Play with the Pro", "12:00–1:00 PM", "3.0–3.5"),
           s("Meet the Pro", "2:30–3:30 PM"),
           s("Play with the Pro", "4:00–5:00 PM", "4.0–4.5+"),
-          // Start only: the sheet gives no end time.
-          s("Junior PPA Youth Clinic", "5:00 PM"),
+          s("Junior PPA Youth Clinic", "5:00–6:00 PM"),
         ],
       },
       {
@@ -116,6 +117,14 @@ const PROGRAMMING_BY_SLUG: Record<string, EventProgramming> = {
           s("Play with the Pro", "1:30–2:30 PM", "3.0"),
           s("King of the Court", "4:00–5:30 PM", "4.0+"),
           s("Parent and Child Mini Tourney", "6:00–8:00 PM"),
+        ],
+      },
+      {
+        iso: "2026-11-08",
+        sessions: [
+          // Start only, on purpose (Ashlyn): it starts with Center at 10 AM and
+          // the end is TBD. The cell is merged from 10:30, so don't read the span.
+          s("Championship Sunday Watch Party", "10:00 AM"),
         ],
       },
     ],
