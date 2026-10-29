@@ -375,6 +375,13 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
   //
   // ⚠ HOTEL SHUTTLES IS HER SECTION, NOT OURS: the MLP week (Oct 30 – Nov 1)
   // runs one Sheraton route, the PPA week (Nov 2–8) two colour-coded routes.
+  //
+  // ⚠ NO "VIP Parking" SECTION, ON PURPOSE (event team, 10/29). VIP ticket
+  // holders read it as VIP getting parking, and no on-site lot is advertised
+  // to the public. Box Suite holders get their parking details directly.
+  // Don't add it back. Same follow-up: the rideshare zone is not yet an
+  // official Uber/Lyft point, so the copy no longer says it is, and their
+  // drop-off map went in under that section.
   "pickleball-world-championships": [
     {
       heading: "General Parking",
@@ -407,13 +414,15 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
       heading: "Rideshare & Drop-Offs",
       body: [
         "All rideshare pickups and drop-offs must take place at the designated rideshare zone on Brookhaven Drive, in the far-right lane just past Golfing Green Drive.",
-        "This location is available as an official pickup/drop-off point in Uber and Lyft.",
       ],
-    },
-    {
-      heading: "VIP Parking",
-      body: [
-        "Box Suite ticket holders have access to the designated on-site Box Suite Parking Lot. All other ticket holders must use the general event parking lot at Dallas College Brookhaven Campus.",
+      // Supplied art, from the event team's 10/29 follow-up.
+      images: [
+        {
+          src: "/ppa/parking/pickleball-world-championships-rideshare.webp",
+          alt: "Illustrated map of Brookhaven Country Club showing the rideshare drop-off zone, marked in blue on Brookhaven Club Drive at the corner of Golfing Green Drive, beside the venue's front parking lot.",
+          width: 1721,
+          height: 914,
+        },
       ],
     },
     {
