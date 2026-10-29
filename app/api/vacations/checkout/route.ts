@@ -104,10 +104,15 @@ export async function POST(req: NextRequest) {
           price_data: {
             currency: "usd",
             unit_amount: option.amountCents,
-            product_data: {
-              name: `Pickleball Vacations — ${cfg.destination}`,
-              description: `${option.label} · ${cfg.datesLabel} · ${cfg.nights} nights`,
-            },
+            // A saved product lets a trip-only promo code apply (CANCUN20).
+            ...(option.stripeProductId
+              ? { product: option.stripeProductId }
+              : {
+                  product_data: {
+                    name: `Pickleball Vacations — ${cfg.destination}`,
+                    description: `${option.label} · ${cfg.datesLabel} · ${cfg.nights} nights`,
+                  },
+                }),
           },
         },
       ],

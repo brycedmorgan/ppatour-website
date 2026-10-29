@@ -29,6 +29,12 @@ export type TripPricingOption = {
   perPersonNote?: string;
   blurb: string;
   soldOut?: boolean;
+  /**
+   * A saved Stripe product for this option. Set it when a promo code must be
+   * limited to one trip: Stripe coupons restrict by product, and an inline
+   * product is new on every checkout. Unset = inline product, as before.
+   */
+  stripeProductId?: string;
 };
 
 export type TripWaitlist = {
@@ -170,6 +176,8 @@ const CANCUN: TripConfig = {
       amountCents: 360000,
       travelers: 1,
       blurb: "A Superior room to yourself.",
+      // CANCUN20 (Lainey, 10/29) is limited to these two products in Stripe.
+      stripeProductId: "prod_VX6hCirH2DuLX6",
     },
     double: {
       id: "double",
@@ -179,6 +187,7 @@ const CANCUN: TripConfig = {
       travelers: 2,
       perPersonNote: "$3,200 per person",
       blurb: "Share a Superior room — choose King or Twin beds.",
+      stripeProductId: "prod_VX6itvlFlZvuoR",
     },
   },
   fallbackCapacity: { single: 10, double: 10 },

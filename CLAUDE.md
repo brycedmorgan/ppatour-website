@@ -67,6 +67,13 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-10-29 — CANCUN20 promo code (Lainey)
+- Stripe (PPA account): coupon "Cancun 20% off" + promo code `CANCUN20`. 20% off, no use limit, expires Nov 13, 2026 11:59 PM (Central, set from Bryce's browser).
+- Limited to two new saved products: `prod_VX6hCirH2DuLX6` (Cancun Single, $3,600) and `prod_VX6itvlFlZvuoR` (Cancun Double, $6,400).
+- Code: `TripPricingOption.stripeProductId`; checkout uses `price_data.product` when set, else the old inline product. Only Cancun sets it. Coupons restrict by product, and inline products are new every session, so this is the only way to make a trip-only code.
+- Other trips are unchanged. The Black Desert $1,000 coupon is NOT product-limited (works on any trip). Add `stripeProductId` to a trip before making its next trip-only code.
+- Cancun checkout now shows the Stripe product name/description; a price change in `trip-config.ts` still wins (`unit_amount` is inline).
+
 ### 2026-10-27 — Sponsorship leads: CRM first, Jacob's email off
 - Bryce: website sponsorship leads go to the Jackalope CRM; Jacob assigns them there, Jackalope emails Connor a link (ziff lib/leadnotify.js, env `INBOUND_LEAD_NOTIFY`).
 - `820f437` sponsor-inquiry: the `FORM_INBOX_SPONSORSHIP` email is now a FALLBACK, sent only when the Jackalope forward fails or `LEAD_HOOK_SECRET` is unset. Sheet + Slack still run first (Wesley's 8/5 rule holds).
