@@ -1,6 +1,6 @@
 import { TripNav } from "@/components/vacations/TripNav";
 import { VacationsTrack } from "@/components/vacations/VacationsTrack";
-import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
+import { VacationsLeadCapture } from "@/components/vacations/VacationsLeadCapture";
 
 /**
  * Vacations sits inside the tour site but keeps its own funnel telemetry —
@@ -20,9 +20,9 @@ export default function VacationsLayout({
       <TripNav />
       {children}
       {/* Lainey's list (Bryce 10/19). Navy ground: the capture only reads on dark. */}
-      <section className="bg-ppa-navy">
+      <section id="vacations-list" className="scroll-mt-32 bg-ppa-navy">
         <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:py-16">
-          <LeadMagnetCapture variant="vacations" />
+          <VacationsLeadCapture />
         </div>
       </section>
     </>

@@ -796,13 +796,27 @@ export function TripPage({ content, cfg, availability }: TripPageProps) {
                   style={{ "--reveal-delay": `${i * 80}ms` } as React.CSSProperties}
                 >
                   <div className="relative aspect-[16/9] overflow-hidden bg-ppa-navy">
-                    <Image
-                      src={t.image}
-                      alt={t.resort}
-                      fill
-                      sizes="(min-width: 640px) 50vw, 100vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                    />
+                    {t.image ? (
+                      <Image
+                        src={t.image}
+                        alt={t.resort}
+                        fill
+                        sizes="(min-width: 640px) 50vw, 100vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      />
+                    ) : (
+                      // No resort photos yet (coming-soon): branded tile, not a
+                      // borrowed photo of another resort.
+                      <div className="absolute inset-0 flex items-center justify-center bg-ppa-navy-deep">
+                        <Image
+                          src={logo.white}
+                          alt={t.resort}
+                          width={240}
+                          height={69}
+                          className="h-12 w-auto opacity-90 transition-transform duration-500 group-hover:scale-[1.03]"
+                        />
+                      </div>
+                    )}
                     <span
                       className={`absolute left-0 top-4 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] ${meta.classes}`}
                     >

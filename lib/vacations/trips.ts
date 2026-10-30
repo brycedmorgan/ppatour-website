@@ -19,7 +19,12 @@ export type TripEntry = {
   /** ISO start/end — drives automatic past/upcoming grouping. */
   startIso: string;
   endIso: string;
-  image: string;
+  /**
+   * Card photo. Optional for a coming-soon trip with no resort photos yet —
+   * the calendar draws the Vacations mark on navy instead, rather than another
+   * resort's beach under this resort's name.
+   */
+  image?: string;
   lineup?: string;
   /** Manual flag; "completed" is derived from endIso at render time. */
   status: Exclude<TripStatus, "completed">;
@@ -79,6 +84,21 @@ export const tripsCalendar: TripEntry[] = [
     lineup: "Greater Zion Cup VIP weekend · led by Dave Fleming",
     status: "open",
     href: "/vacations/trips/black-desert",
+  },
+  {
+    // Placeholder (Lainey, 10/30): contract unsigned, so no price, room block,
+    // pros, TripConfig or /register route. "coming-soon" keeps it out of
+    // openTrips(), so nothing offers to book it.
+    slug: "st-lucia",
+    name: "St. Lucia",
+    resort: "Stolen Time St. Lucia",
+    location: "St. Lucia",
+    datesLabel: "April 20–24, 2027",
+    startIso: "2027-04-20",
+    endIso: "2027-04-24",
+    lineup: "All-inclusive · pros and pricing announced soon",
+    status: "coming-soon",
+    href: "/vacations/trips/st-lucia",
   },
 ];
 

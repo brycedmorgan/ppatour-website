@@ -290,5 +290,8 @@ export function tripDestinationForPath(path: string): string {
   if (path.includes("/vacations/trips/punta-cana")) return PUNTA_CANA.destination;
   if (path.includes("/vacations/trips/cancun")) return CANCUN.destination;
   if (path.includes("/vacations/trips/black-desert")) return BLACK_DESERT.destination;
+  // Coming-soon placeholder with no TripConfig yet — named here directly so its
+  // page views don't fall through to Turks.
+  if (path.includes("/vacations/trips/st-lucia")) return "Stolen Time St. Lucia";
   return DEFAULT_TRIP.destination;
 }
