@@ -46,6 +46,9 @@ const GROUP: Record<string, string> = {
   PBTV: "PBTV",
   // App-only streams (VB Tue/Wed, 10/12) are still PickleballTV — one card.
   "PBTV App": "PBTV",
+  // Worlds Monday's FireFight Zone is triple streamed, so YouTube is its own
+  // destination beside PBTV, not a duplicate of it (Matt Mayfield, 11/1).
+  YouTube: "YouTube",
   "Tennis Channel": "Tennis Channel",
   FS1: "FOX Sports",
   FS2: "FOX Sports",
@@ -71,6 +74,14 @@ const PRESENTATION: Record<string, { name: string; logo?: string; detail: string
     name: "FOX Sports",
     logo: "/ppa/networks/fox.png",
     detail: "Check local listings",
+  },
+  // ⚠ NO LOGO ON PURPOSE: there is no YouTube mark in public/ppa/networks/, and
+  // the card must not say "Check local listings" for a free stream — hence its
+  // own detail + href rather than falling through to the default.
+  YouTube: {
+    name: "YouTube",
+    detail: "Free on PPA Streamed Courts",
+    href: "https://www.youtube.com/ppastreamedcourts",
   },
   CBS: { name: "CBS", logo: "/ppa/networks/cbs.svg", detail: "Check local listings" },
   FOX: { name: "FOX", logo: "/ppa/networks/fox.png", detail: "Check local listings" },

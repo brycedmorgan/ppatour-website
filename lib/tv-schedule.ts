@@ -496,10 +496,23 @@ export const tvSchedule: TvEvent[] = [
     // Worlds is a Major — the biggest one (Bryce, 7/29) — not its own tier.
     tier: "Major · 3,000",
     league: "PPA",
-    startIso: "2026-11-03",
+    startIso: "2026-11-02",
     endIso: "2026-11-08",
     slug: "pickleball-world-championships",
     days: [
+      // ⚠ MONDAY IS NOT ON THE CHAMPIONSHIP COURT SHEET. It is qualifying day,
+      // added 11/1 from Matt Mayfield's #marketing-general post, and it is why
+      // `startIso` is the 2nd and not the 3rd. `scripts/audit-tv-schedule.mjs`
+      // reports it as "not on this sheet" — expected, as with the Australia
+      // Cup's YouTube rows. Do not add an EVENT_MAP row to quiet it.
+      {
+        date: "Nov 2",
+        dow: "Mon",
+        windows: [
+          { channel: "YouTube", window: "9AM – 8PM", round: "Pro Qualifiers" },
+          { channel: "PBTV", window: "11AM – 8PM", round: "FireFight Zone", appOnly: true },
+        ],
+      },
       // ⚠ 12PM ET STARTS ALL WEEK and the Celebrity Pro-Am moved Wed → Thu
       // (Keaton's 10/9 revision, the 10/10 sheet). See lib/broadcast.ts.
       { date: "Nov 3", dow: "Tue", windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Round of 64" }] },

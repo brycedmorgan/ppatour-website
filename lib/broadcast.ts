@@ -265,6 +265,21 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
     // PRO-AM MOVED FROM WEDNESDAY TO THURSDAY 8–10PM ET, on PBTV and Tennis Channel.
     // ⚠ Championship Sunday moved 12–6 → 11AM–5PM ET (Keaton, 10/27); 11 ET is
     // the 10:00 AM Farmers Branch first serve Brian gave on 10/14.
+    // ⚠ MONDAY IS QUALIFYING DAY AND IS NOT ON THE CHAMPIONSHIP COURT SHEET, so
+    // until 11/1 this stop started on Tuesday and /watch told fans nothing was
+    // on. Matt Mayfield, #marketing-general 11/1: the FireFight Zone whiparound
+    // (8+ pro courts incl. Championship Court, live commentary) runs 11AM–8PM ET,
+    // triple streamed on the PBTV app, PBTV YouTube and PPA Streamed Courts
+    // YouTube. He stated BOTH ends in EST when asked which zone the 8PM was, so
+    // this is ET as written — do not shift it to CT.
+    // ⚠ TWO WINDOWS, NOT A DUPLICATE. The per-court qualifier feeds run 9AM–8PM
+    // ET on PPA Streamed Courts YouTube (Matt, 14:51 — his 11:51 post said "8AM
+    // – end of pro play", which was venue time with no end; 9AM ET is that 8AM
+    // CT). The FireFight Zone whiparound starts two hours later and is the one
+    // that also reaches the PBTV app. So YouTube carries Monday from 9 and the
+    // app from 11, which is why the YouTube row is the wider of the two.
+    { round: "Pro Qualifiers", day: "Monday", window: "9AM ET - 8PM ET", platform: "YouTube", type: "LIVE" },
+    { round: "FireFight Zone", day: "Monday", window: "11AM ET - 8PM ET", platform: "PBTV App", type: "LIVE" },
     { round: "RD 64", day: "Tuesday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
     { round: "RD 32", day: "Wednesday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
     { round: "RD 16", day: "Thursday", window: "12PM ET - 7PM ET", platform: "PBTV", type: "LIVE" },
