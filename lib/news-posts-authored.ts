@@ -1157,4 +1157,94 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
 <p>Fans are encouraged to attend the championships, with tickets starting at $25. World No. 1 players Anna Leigh Waters and Ben Johns are among those scheduled to compete in the iconic tournament.</p>
 `.trim(),
   },
+  {
+    // MUNICIPAL Celebrity Pickleball Showdown, second release (the full
+    // celebrity + pro lineup), supplied by Nathan Boschult on 11/2 (Google Doc
+    // 1o1T_gIgkzItfNy4lOlpcP-_CROKXxLjH5zOie-OyZSg), byline his. Body is the
+    // release verbatim; the first release (10/6) is the native article
+    // `municipal-celebrity-pickleball-showdown-wahlberg` in lib/news-articles.
+    //
+    // ⚠ TO GO LIVE 11/2 1:00 PM CT. Nothing filters on publishedAt, so the
+    // timing is held by when this is deployed. Nathan expects to swap the photo
+    // for a horizontal graphic once it is approved.
+    slug: "mark-wahlberg-jeremy-piven-john-isner-municipal-celebrity-pickleball-showdown",
+    wpId: 900009,
+    status: "published",
+    source: "wordpress",
+    category: "Tour News",
+    series: null,
+    categoryResolvedBy: "fallback",
+    title: "Headliner Mark Wahlberg To Be Joined By Jeremy Piven, John Isner, Sean “Suga” O’Malley, Isabelle Harrison, Richard Rawlings, and World’s Top Pickleball Pros for MUNICIPAL Celebrity Pickleball Showdown",
+    dek: "Thursday, Nov. 5, at 7 p.m. local time on Powerball Championship Court at the Opendoor Pickleball World Championships, live on Tennis Channel.",
+    author: "Nathan Boschult",
+    publishedAt: "2026-11-02T13:00:00",
+    publishedAtGmt: "2026-11-02T19:00:00",
+    modifiedAt: "2026-11-02T19:00:00",
+    image: {
+      // The photo embedded in the release doc (Championship Court at night,
+      // 2025 Worlds). Native 1999px, mozjpeg q64 (house standard).
+      url: "/ppa/news/municipal-celebrity-showdown-second-release.jpg",
+      alt: "Aerial view of a packed championship court at night during the Pickleball World Championships at Brookhaven Country Club.",
+      width: 1999,
+      height: 1498,
+    },
+    // Left empty deliberately: `detectAthleteMentions` reads the body.
+    players: [],
+    playerNames: [],
+    wpEvent: null,
+    tags: [],
+    tagsRaw: [],
+    wpCategories: [],
+    embeds: [],
+    inlineImages: [],
+    ctaUrl: "https://www.tixr.com/groups/ppa/events/municipal-celebrity-pickleball-showdown-210184",
+    ctaLabel: "Showdown Tickets",
+    legacyUrl: "https://www.ppatour.com/mark-wahlberg-jeremy-piven-john-isner-municipal-celebrity-pickleball-showdown/",
+    seo: {
+      title: "Wahlberg, Piven, Isner Headline MUNICIPAL Celebrity Showdown | PPA Tour",
+      description:
+        "Mark Wahlberg, Jeremy Piven, John Isner, Sean O’Malley, Isabelle Harrison and Richard Rawlings join top pros for the MUNICIPAL Celebrity Pickleball Showdown, Nov. 5, live on Tennis Channel.",
+      canonical:
+        "https://www.ppatour.com/mark-wahlberg-jeremy-piven-john-isner-municipal-celebrity-pickleball-showdown/",
+    },
+    bodyHtml: `
+<p>The biggest annual event in pickleball, the <strong><em>Opendoor Pickleball World Championships</em></strong>, returns to <strong>Brookhaven Country Club</strong> with a host of entertainment programming and fan activities scheduled, highlighted by Academy Award-nominated actor and entrepreneur <strong>Mark Wahlberg</strong> headlining the <strong>MUNICIPAL Celebrity Pickleball Showdown presented by Corient, this Thursday, November 5</strong>, on Powerball Championship Court at <strong>7 p.m.</strong> local time. Tickets are available via <a href="https://www.tixr.com/groups/ppa/events/municipal-celebrity-pickleball-showdown-210184" target="_blank" rel="noreferrer noopener"><strong>TIXR</strong></a> and the match will air <strong>LIVE on the Tennis Channel</strong>.</p>
+
+<p>Joining Wahlberg are Emmy Award-winning actor <strong>Jeremy Piven</strong>, former tennis pro <strong>John Isner</strong>, mixed martial artist <strong>Sean “Suga” O’Malley</strong>, professional basketball player <strong>Isabelle Harrison</strong>, and media personality and entrepreneur <strong>Richard Rawlings</strong>, who will play alongside some of the world’s top professional pickleball players, including <strong>Ben Johns</strong>, <strong>Anna Bright</strong>, <strong>Roscoe Bellamy</strong>, <strong>Kate Fahey</strong>, <strong>Tyson McGuffin</strong>, <strong>Brooke Buckner</strong>, <strong>Jack Sock</strong>, and <strong>Lacy Schneemann</strong>. From the most exciting personalities to championship-winning athletes, these elite individuals will bring world-class talent, competitive energy, and plenty of entertainment to a one-night-only showdown on center court.</p>
+
+<p>Co-founded in 2019 by Wahlberg and his longtime producing partner, Stephen Levinson, <strong>MUNICIPAL</strong> is a performance-lifestyle and athleisure brand that has two retail stores in California, a robust online merchandise catalog and sights set on growing to 20 flagship clothing stores, gyms and coffee shops over the next several years.</p>
+
+<p>“We’re excited to introduce MUNICIPAL to America’s fastest-growing sport,” said <strong>Wahlberg</strong>. “The pickleball community embodies the principles our brand was built on: dream, plan, hustle, repeat. It’s a community of people who push themselves to be their best, both on and off the court, and that’s the driving ethos of MUNICIPAL.”</p>
+
+<p>MUNICIPAL is previewing an exciting new product at the Pickleball World Championships. Wahlberg will debut <strong>MUNICIPAL’s first-ever court shoe, the CRT-01</strong>, giving fans an exclusive opportunity to try it on and be among the first to pre-order the shoe ahead of its early 2027 release. <strong>MUNICIPAL has also teamed up with JOOLA</strong>, one of pickleball’s leading brands, bringing together two companies united by a shared philosophy of grit, determination and the pursuit of excellence. Wahlberg and select players will wear <strong>MUNICIPAL x JOOLA apparel</strong> created specifically for participants of the exhibition match, while the new court shoe will be available for on-site try-ons and pre-orders at Pickleball Central.</p>
+
+<p>The World Championships activation builds on MUNICIPAL's growing presence in professional pickleball. In August, the brand announced <strong>a multi-year partnership with Major League Pickleball's Dallas Flash</strong>, becoming the team's official apparel partner beginning with the 2027 season. The partnership will see MUNICIPAL outfit players and team personnel in competition uniforms, performance gear and lifestyle apparel, further underscoring the brand's commitment to the sport.</p>
+
+<h4 class="wp-block-heading"><strong>About the Players</strong></h4>
+
+<p><strong>Mark Wahlberg</strong> is known for films such as <em>The Fighter</em>, <em>Boogie Nights</em> and <em>The Departed</em>, where he was nominated for an Academy Award, and hit television projects Entourage and Boardwalk Empire. Wahlberg also leads a business empire where he holds a stake in prominent companies including Flecha Azul Tequila and the event’s title sponsor, MUNICIPAL.</p>
+
+<p><strong>Jeremy Piven</strong> is an actor, comedian, and podcast host. His four-decade career across film and television has been recognized with three Emmy Awards and two Golden Globes for his role as super-agent ‘Ari Gold’ on HBO’s <em>Entourage</em>. Piven is also touring the country with his successful standup comedy show, and releasing this winter, he can be seen in his film <em>The Performance</em>, based on the short story by Arthur Miller.</p>
+
+<p><strong>John Isner</strong> is a retired American tennis star, former world No. 8 and 16-time ATP Tour singles champion who made history playing the longest match ever at Wimbledon in 2010. He currently co-hosts the popular tennis podcast <em>Nothing Major</em> alongside fellow former ATP professionals.</p>
+
+<p><strong>Sean “Suga” O’Malley</strong> is a former UFC Bantamweight World Champion and one of the most recognizable personalities in combat sports. Known for his explosive striking, colorful personality, and competitive spirit, Sean will bring that same energy from the Octagon to the pickleball court.</p>
+
+<p><strong>Isabelle Harrison</strong> is a professional WNBA player and former University of Tennessee standout who has built an impressive basketball career since being selected in the first round of the 2015 WNBA Draft. Beyond the court, she is a fashion, beauty and lifestyle influencer who uses her platform to inspire audiences through sports, wellness and personal style.</p>
+
+<p><strong>Richard Rawlings</strong> is an entrepreneur and media personality best known for starring in Discovery Channel’s <em>Fast N’ Loud</em>. He’s the founder of Gas Monkey Garage, a Dallas-based global automotive and lifestyle brand. As a transcontinental road rally veteran, he’s a former Cannonball Run Record holder and a two-time winner of Gumball 3000.</p>
+
+<p>Interested news media outlets are invited to attend a <strong>media availability</strong> with the <em>Showdown</em> participants at the event venue on <strong>Thursday</strong> at <strong>6 p.m.</strong> Please RSVP to <a href="mailto:nathan.boschult@pickleball.com"><strong>Nathan Boschult</strong></a> if you plan to attend.</p>
+
+<h4 class="wp-block-heading"><strong>About PPA Opendoor Pickleball World Championships</strong></h4>
+
+<p>The <strong>Opendoor Pickleball World Championships</strong> has become a staple event on the North Texas sports calendar, with last year’s edition shattering numerous records and becoming the benchmark for fan attendance and amateur participation. The 2025 edition generated an estimated <strong>$16 million in economic activity</strong>, benefiting hotels, restaurants and local businesses. The week saw <strong>over 60,000</strong> fans attend and a record <strong>4,400 total participants</strong>, including players representing <strong>38 countries</strong> competing in more than 6,000 matches throughout the week.</p>
+
+<p><strong>Pickleball Boulevard</strong>, the World Championships' vibrant festival and entertainment hub, will see numerous festive and unique sponsor activations to entertain fans and patrons throughout the week. From Go RVing’s promotion of active lifestyle recreation and the Dallas Hoops Basketball trailer to marquee activations from premier brands such as Nike and Gatorade, Pickleball Boulevard promises to offer something for everyone throughout the week.</p>
+
+<p>Additionally, rising Nashville-based country music star <strong>Clayton Mullen</strong> will headline the Bota Box Stage on Pickleball Boulevard on <strong>Friday, Nov. 6</strong>. Mullen began his music career while attending Texas Christian University in Fort Worth and upon graduation moved to Nashville where he has found success providing support for many of country music’s biggest acts. With his sophomore album <em>Start at the End</em> amassing over 25 million streams to date, Mullen is considered one of the industry’s fastest-rising stars.</p>
+
+<p>Tickets for the Opendoor Pickleball World Championships at large, along with week-long passes, pickleball clinics, and other special programming events, are available now. Please click through for <a href="https://www.tixr.com/groups/ppa/events/2026-world-pickleball-championships-166345?utm_source=ppatour&amp;utm_medium=website&amp;utm_campaign=1126-PPA-FARMERSBRANCH-TX-USA&amp;utm_content=event-hero-buy-tickets" target="_blank" rel="noreferrer noopener">tickets</a>, <a href="https://unitedpickleball.typeform.com/PPATour" target="_blank" rel="noreferrer noopener">media credentials</a>, and <a href="/events/2026/pickleball-world-championships/">tournament details</a>.</p>
+`.trim(),
+  },
 ];
