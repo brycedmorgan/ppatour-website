@@ -5,7 +5,8 @@ import { Suspense } from "react";
 import { RegistrationForm } from "@/components/vacations/RegistrationForm";
 import { getAvailabilityFor } from "@/lib/vacations/capacity";
 import type { Occupancy } from "@/lib/vacations/pricing";
-import { getTripConfig } from "@/lib/vacations/trip-config";
+import { notFound } from "next/navigation";
+import { resolveTripConfig } from "@/lib/vacations/remote-trips";
 import { logo } from "@/lib/vacations/content";
 
 export const metadata: Metadata = {
@@ -31,7 +32,8 @@ export default async function VacationsRegisterPage({
   // `?trip=` selects the trip; absent means the active one, so every existing
   // /vacations/register link keeps working unchanged.
   const { trip: tripSlug } = await searchParams;
-  const cfg = getTripConfig(tripSlug);
+  const cfg = await resolveTripConfig(tripSlug);
+  if (!cfg) notFound();
   const availability = await getAvailabilityFor(cfg);
   const soldOutOptions = (Object.keys(availability.options) as Occupancy[]).filter(
     (id) => availability.options[id].soldOut

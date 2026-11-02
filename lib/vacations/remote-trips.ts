@@ -1,4 +1,7 @@
 import { tripsCalendar, type TripEntry } from "./trips";
+import { TRIPS, DEFAULT_TRIP, type TripConfig } from "./trip-config";
+import type { Occupancy } from "./pricing";
+import type { BedType } from "./registration";
 import { athletes } from "@/lib/athletes";
 import { getPublishedByName, publishedProfileSlug } from "@/lib/published-athletes";
 
@@ -17,8 +20,10 @@ import { getPublishedByName, publishedProfileSlug } from "@/lib/published-athlet
  *   in trips.ts that Jackalope does not list is hidden: Lainey took it down.
  * - When the fetch fails, the static entry + FALLBACK below stand in, so a
  *   Jackalope outage never 404s a page the resort is handing out.
- * - Nothing here can be booked. Going on sale is a code change (TripConfig +
- *   Stripe), made by Bryce.
+ * - Price and approve (Bryce 11/2): a trip Bryce APPROVED in Jackalope comes
+ *   with a `sale` block, the frozen approved copy. Only then can it be booked,
+ *   and checkout charges exactly that price (remoteTripConfig below). A draft
+ *   price Lainey is still editing never leaves Jackalope.
  */
 
 export type RemotePhoto = { url: string; alt: string };
@@ -31,6 +36,21 @@ export type ComingSoonPro = {
   lead: boolean;
   /** ppatour.com profile, when the pro has one. */
   slug: string | null;
+};
+
+/** The approved offer. Prices are TOTAL per room, in dollars and cents. */
+export type RemoteSale = {
+  eventCode: string;
+  destination: string;
+  nights: number;
+  pooled: boolean;
+  beds: "King or Twin" | "King" | "Twin";
+  domestic: boolean;
+  roomBlurb: string;
+  single: { total: number; amountCents: number } | null;
+  double: { total: number; amountCents: number } | null;
+  rooms: { single: number; double: number };
+  contactEmail: string;
 };
 
 export type ComingSoonTrip = {
@@ -50,6 +70,9 @@ export type ComingSoonTrip = {
   photos: RemotePhoto[];
   tba: string[];
   pros: ComingSoonPro[];
+  status: "coming-soon" | "on-sale" | "sold-out";
+  /** Set only when Bryce approved the sale in Jackalope. */
+  sale: RemoteSale | null;
 };
 
 const URL_ =
@@ -79,6 +102,8 @@ const FALLBACK: Record<string, ComingSoonTrip> = {
     ],
     tba: ["Pricing", "Room types", "Pro lineup", "Itinerary", "Booking date"],
     pros: [],
+    status: "coming-soon",
+    sale: null,
   },
 };
 
@@ -114,6 +139,53 @@ const okPhoto = (u: unknown): u is string =>
   (/^\/vacations\/[a-z0-9/_.-]+\.(jpe?g|png|webp)$/i.test(u) ||
     u.startsWith("https://pickleball.usejackalope.com/api/public/vac-photo?p=vacations%2F"));
 
+// Same bounds Jackalope enforces (lib/vacpage.js cleanOffer). Checked again
+// here because this is the number a card is charged.
+const PRICE_MIN = 500;
+const PRICE_MAX = 50000;
+function priceOf(v: unknown): { total: number; amountCents: number } | null {
+  const o = v as Record<string, unknown> | null;
+  const total = Number(o?.total);
+  const cents = Number(o?.amountCents);
+  if (!Number.isInteger(cents) || !Number.isFinite(total)) return null;
+  if (total < PRICE_MIN || total > PRICE_MAX || Math.round(total * 100) !== cents) return null;
+  return { total, amountCents: cents };
+}
+
+function cleanSale(raw: unknown): RemoteSale | null {
+  const o = raw as Record<string, unknown> | null;
+  if (!o || typeof o !== "object") return null;
+  const eventCode = typeof o.eventCode === "string" ? o.eventCode : "";
+  if (!/^\d{4}-VAC-[A-Z0-9]+(-[A-Z0-9]+){0,3}$/.test(eventCode)) return null;
+  const destination = typeof o.destination === "string" ? o.destination.slice(0, 120).trim() : "";
+  const nights = Number(o.nights);
+  if (!destination || !Number.isInteger(nights) || nights < 1 || nights > 21) return null;
+  const single = priceOf(o.single);
+  const double = priceOf(o.double);
+  // A price that's present but fails the checks means something is wrong
+  // upstream. Sell nothing rather than sell half the trip.
+  if ((o.single != null && !single) || (o.double != null && !double)) return null;
+  if (!single && !double) return null;
+  const pooled = o.pooled === true;
+  if (pooled && !(single && double)) return null;
+  const beds = o.beds === "King" || o.beds === "Twin" ? o.beds : "King or Twin";
+  const r = (o.rooms ?? {}) as Record<string, unknown>;
+  const n = (v: unknown) => (Number.isInteger(Number(v)) && Number(v) >= 0 ? Number(v) : 0);
+  return {
+    eventCode,
+    destination,
+    nights,
+    pooled,
+    beds,
+    domestic: o.domestic === true,
+    roomBlurb: typeof o.roomBlurb === "string" ? o.roomBlurb.slice(0, 80) : "",
+    single,
+    double,
+    rooms: { single: n(r.single), double: n(r.double) },
+    contactEmail: "vacations@pickleball.com",
+  };
+}
+
 function clean(raw: Record<string, unknown>): ComingSoonTrip | null {
   const s = (v: unknown, n = 600) => (typeof v === "string" ? v.slice(0, n) : "");
   const slug = s(raw.slug, 40);
@@ -145,7 +217,16 @@ function clean(raw: Record<string, unknown>): ComingSoonTrip | null {
       .map((p) => toPro(p as Record<string, unknown>))
       .filter((p): p is ComingSoonPro => !!p)
       .slice(0, 8),
+    ...saleOf(raw),
   };
+}
+
+function saleOf(raw: Record<string, unknown>): Pick<ComingSoonTrip, "status" | "sale"> {
+  if (raw.status !== "on-sale" && raw.status !== "sold-out") return { status: "coming-soon", sale: null };
+  const sale = cleanSale(raw.sale);
+  // A sale block that fails the checks shows as Coming Soon, never as bookable.
+  if (!sale) return { status: "coming-soon", sale: null };
+  return { status: raw.status, sale };
 }
 
 /** Published trips from Jackalope, or null when Jackalope can't be reached. */
@@ -175,7 +256,7 @@ export function toEntry(t: ComingSoonTrip): TripEntry {
     endIso: t.endIso,
     image: t.hero ?? undefined,
     lineup: t.lineup || undefined,
-    status: "coming-soon",
+    status: t.status === "on-sale" ? "open" : t.status,
     href: `/vacations/trips/${t.slug}`,
   };
 }
@@ -202,6 +283,75 @@ export async function getComingSoonTrip(slug: string): Promise<ComingSoonTrip | 
   const remote = await fetchComingSoon();
   if (remote === null) return FALLBACK[slug] ?? null;
   return remote.find((t) => t.slug === slug) ?? null;
+}
+
+/* ----------------------------------------------------------- booking */
+
+const contact = "vacations@pickleball.com";
+
+/** A Jackalope trip with an approved sale, as the booking path's TripConfig. */
+export function remoteTripConfig(t: ComingSoonTrip): TripConfig | null {
+  const sale = t.sale;
+  if (!sale) return null;
+  const room = sale.roomBlurb || "A room";
+  const opt = (id: Occupancy, p: RemoteSale["single"]) => {
+    const travelers = id === "single" ? 1 : 2;
+    const total = p?.total ?? 0;
+    return {
+      id,
+      label: id === "single" ? "Single Occupancy" : "Double Occupancy",
+      total,
+      amountCents: p?.amountCents ?? 0,
+      travelers,
+      ...(id === "double" && p ? { perPersonNote: `$${Math.round(total / 2).toLocaleString("en-US")} per person` } : {}),
+      blurb:
+        id === "single"
+          ? `${room} to yourself.`
+          : sale.pooled
+            ? `${room} for two, same price.`
+            : `Share ${room.charAt(0).toLowerCase()}${room.slice(1)}.`,
+      // No price for this occupancy, or the trip is marked sold out = it can't be booked.
+      ...(p && t.status !== "sold-out" ? {} : { soldOut: true }),
+    };
+  };
+  const bedOptions: BedType[] | undefined =
+    sale.beds === "King" ? ["King"] : sale.beds === "Twin" ? ["Twin"] : undefined;
+  return {
+    slug: t.slug,
+    eventCode: sale.eventCode,
+    href: `/vacations/trips/${t.slug}/`,
+    destination: sale.destination,
+    location: t.location,
+    datesLabel: t.datesLabel,
+    nights: sale.nights,
+    contactEmail: contact,
+    pricing: { single: opt("single", sale.single), double: opt("double", sale.double) },
+    fallbackCapacity: sale.rooms,
+    roomPool: sale.pooled || undefined,
+    bedOptions,
+    domestic: sale.domestic || undefined,
+    waitlist: {
+      badge: "Sold Out",
+      headline: "This trip is sold out",
+      message: `Every room for ${t.resort || t.name} is booked. Email us to join the waiting list.`,
+      cta: "Join the Waiting List",
+      mailto: `mailto:${contact}?subject=${encodeURIComponent(`Waiting List — ${t.name}`)}`,
+    },
+  };
+}
+
+/**
+ * The trip a booking is for. Code trips (TRIPS) first, then a Jackalope trip
+ * Bryce approved. Null = not bookable. No `slug` = the default trip, so old
+ * /vacations/register links keep working.
+ */
+export async function resolveTripConfig(slug?: string | null): Promise<TripConfig | null> {
+  if (!slug) return DEFAULT_TRIP;
+  if (TRIPS[slug]) return TRIPS[slug];
+  if (CODE_PAGES.has(slug)) return null;
+  const remote = await fetchComingSoon();
+  const t = remote?.find((x) => x.slug === slug);
+  return t ? remoteTripConfig(t) : null;
 }
 
 /** Path → funnel destination and path → waitlist tag, for the layout's client pieces. */

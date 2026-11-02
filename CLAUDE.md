@@ -65,6 +65,15 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-02 — Vacations: Jackalope trips can sell once Bryce approves
+
+- Bryce: Lainey sets price, he approves. Jackalope's `vac-trips` feed now carries a `sale` block for approved trips only (ziff `lib/vacpage.js` `publicSale`).
+- `lib/vacations/remote-trips.ts`: `cleanSale` re-checks the money ($500–$50,000, cents = dollars × 100, valid `MMYY-VAC-…` code). Any bad price → the trip stays Coming Soon. `remoteTripConfig` builds a TripConfig; `resolveTripConfig(slug)` = code trips first, then approved Jackalope trips, else null.
+- Checkout + `/vacations/register` use `resolveTripConfig`. ⚠ Behavior change: an unknown `?trip=` now 404s (register) / 404 JSON (checkout) instead of silently booking Turks. Checkout also refuses an option with no price or marked sold out.
+- `/vacations/trips/[slug]` shows room cards + live rooms (`getAvailabilityFor`) once approved; badge "Now Booking", CTA to `#rooms`; Pricing/Room/Booking TBA rows drop. Nav shows "Booking Open".
+- Verified on a dev server against a mock feed: approved trip sells at $3,600/$6,400; bad price → Coming Soon + 404 on register/checkout; sold-out trip refused at checkout; Cancún code page unchanged. No Stripe key locally, so no session was created.
+- Next: first real approval in Jackalope is the live test. Header "Tour" panel + sitemap still list code trips only.
+
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
 ### 2026-11-02 — St. Lucia photos live; Coming Soon trips now come from Jackalope (Lainey edits them)

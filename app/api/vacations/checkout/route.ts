@@ -4,7 +4,7 @@ import {
   validateRegistration,
   type RegistrationPayload,
 } from "@/lib/vacations/registration";
-import { getTripConfig } from "@/lib/vacations/trip-config";
+import { resolveTripConfig } from "@/lib/vacations/remote-trips";
 import { getAvailabilityFor } from "@/lib/vacations/capacity";
 
 // Stripe's Node SDK — not the edge runtime.
@@ -26,8 +26,19 @@ export async function POST(req: NextRequest) {
   // Which trip is being booked. Absent `trip` = the active trip, so every
   // existing link keeps working; Punta Cana links carry `trip=punta-cana` and
   // resolve to its own destination, price and dates.
-  const cfg = getTripConfig(payload.trip);
+  // Jackalope trips resolve only once Bryce approved the sale, and carry that
+  // approved price. Unknown trips are refused, never charged as another trip.
+  const cfg = await resolveTripConfig(payload.trip);
+  if (!cfg) {
+    return NextResponse.json({ error: "This trip isn't open for booking." }, { status: 404 });
+  }
   const option = cfg.pricing[payload.occupancy];
+  if (option.soldOut || !(option.amountCents > 0)) {
+    return NextResponse.json(
+      { error: `${option.label} isn't available for ${cfg.destination}.`, soldOut: true },
+      { status: 409 }
+    );
+  }
   // King-only trips (Black Desert) can't be booked as Twin by a crafted POST.
   if (payload.bedType && cfg.bedOptions && !cfg.bedOptions.includes(payload.bedType)) {
     return NextResponse.json(
