@@ -12,6 +12,8 @@ import { LAB_PATH, paddles } from "@/lib/paddle-lab";
 import { PADDLE_LAB_PUBLIC } from "@/lib/paddle-lab-access";
 
 import { SITE_URL } from "@/lib/site";
+import { allTripsByDate } from "@/lib/vacations/remote-trips";
+import { tripStatus } from "@/lib/vacations/trips";
 
 const BASE = SITE_URL;
 
@@ -33,6 +35,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
    * cannot render is worse than one that omits them for a build.
    */
   const shopHandles = await getShopProductHandles();
+
+  /**
+   * Trips Lainey publishes in Jackalope (lib/vacations/remote-trips.ts), plus
+   * any built-in coming-soon trip. Cancún and Black Desert have their own
+   * entries below. Past trips drop out the day they end.
+   */
+  const CODE_TRIP_PAGES = new Set(["cancun", "black-desert", "punta-cana"]);
+  const jackalopeTrips = (await allTripsByDate()).filter(
+    (t) => !CODE_TRIP_PAGES.has(t.slug) && t.href.startsWith("/vacations/trips/") && tripStatus(t) !== "completed"
+  );
 
   /**
    * Every athlete page (curated shorthand slug when we have one, else canonical).
@@ -184,12 +196,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly" as const,
       priority: 0.8,
     },
-    // St. Lucia (Apr 20–24, 2027) — coming-soon placeholder, waitlist only.
-    {
-      url: url("/vacations/trips/st-lucia"),
+    // Jackalope trips (St. Lucia and whatever Lainey adds). Bookable ones rank with the code trips.
+    ...jackalopeTrips.map((t) => ({
+      url: url(t.href),
       changeFrequency: "weekly" as const,
-      priority: 0.6,
-    },
+      priority: t.status === "open" ? 0.8 : 0.6,
+    })),
     /**
      * Native articles, the 811 migrated WordPress posts, and the 39 PPA Blog
      * posts. `lastModified` matters here: these carry real publication dates

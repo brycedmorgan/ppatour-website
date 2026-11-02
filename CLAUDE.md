@@ -65,6 +65,12 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-02 — Header "Tour" menu + sitemap now list Jackalope trips
+
+- `components/global/Header.tsx` (client) reads `/api/vacations/nav/` (new, `allTripsByDate()`, revalidate 60) once per page load via `useTrips()`. Built-in calendar shows until it answers and on any failure. Vacations submenu + Tour mega-panel both use it.
+- `app/sitemap.ts`: the hard-coded St. Lucia entry is replaced by every Jackalope/coming-soon trip that hasn't ended (priority 0.8 when booking is open, else 0.6). Cancún/Black Desert keep their own entries.
+- Checked on a dev server against the live feed: nav returns 5 trips incl. St. Lucia; sitemap lists black-desert, cancun, st-lucia. tsc + eslint clean.
+
 ### 2026-11-02 — Homepage scores showed 2025 Worlds; feed lookups now match slug + year
 - Wesley: home and event page scores/brackets didn't match. Home read `f02fa839…` (2025 Worlds, finished); event page `ad262b1f…` (2026). Both editions share the slug and the feed lists 2025 first; the home page found its UUID by slug alone.
 - New `feedEditionOf(t, events)` in `lib/events-api.ts` (slug AND year, same as `resolve-event`). Used by HomeContent `liveEventId`, `lib/app-scores` (app Scores + `/api/app/home`), `/today` live courts, event-page `drawUuid`.

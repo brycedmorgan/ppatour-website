@@ -13,7 +13,7 @@ import {
   eventHref,
 } from "@/lib/placeholder-data";
 import { tourPrograms } from "@/lib/tour-programs";
-import { openTrips, tripsByDate, tripStatus, tripStatusLabel } from "@/lib/vacations/trips";
+import { tripsByDate, tripStatus, tripStatusLabel, type TripEntry } from "@/lib/vacations/trips";
 
 type SubLink = { label: string; href: string };
 type NavItem = {
@@ -84,14 +84,38 @@ const NAV_ITEMS: NavItem[] = [
  * calendar (lib/vacations/trips.ts) — add a trip there and it appears here.
  * Evaluated at render, not module load, so a trip drops out the day it ends.
  */
-function vacationSubLinks(): SubLink[] {
-  const open = openTrips();
+function vacationSubLinks(trips: TripEntry[]): SubLink[] {
+  const open = trips.filter((t) => tripStatus(t) === "open");
   if (open.length === 0) return [{ label: "Vacations", href: "/vacations" }];
   return open.map((t) => ({ label: `Vacations · ${t.name}`, href: t.href }));
 }
 
-function expandSubmenu(submenu: SubLink[]): SubLink[] {
-  return submenu.flatMap((s) => (s.href === "/vacations" ? vacationSubLinks() : [s]));
+function expandSubmenu(submenu: SubLink[], trips: TripEntry[]): SubLink[] {
+  return submenu.flatMap((s) => (s.href === "/vacations" ? vacationSubLinks(trips) : [s]));
+}
+
+/**
+ * Trips for the menus: the built-in calendar first, then the full list from
+ * /api/vacations/nav (adds the trips Lainey publishes in Jackalope). One fetch
+ * per page load, shared by every menu. Any failure keeps the built-in list.
+ */
+let tripsPromise: Promise<TripEntry[] | null> | null = null;
+function useTrips(): TripEntry[] {
+  const [trips, setTrips] = useState<TripEntry[]>(tripsByDate);
+  useEffect(() => {
+    let live = true;
+    tripsPromise ??= fetch("/api/vacations/nav/")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => (j && Array.isArray(j.trips) ? (j.trips as TripEntry[]) : null))
+      .catch(() => null);
+    tripsPromise.then((t) => {
+      if (live && t && t.length) setTrips(t);
+    });
+    return () => {
+      live = false;
+    };
+  }, []);
+  return trips;
 }
 
 /* ── Mega-panel building blocks ─────────────────────────────── */
@@ -214,9 +238,11 @@ function FeatureCard({
 function MegaPanelContent({
   menu,
   onNavigate,
+  trips,
 }: {
   menu: string;
   onNavigate: () => void;
+  trips: TripEntry[];
 }) {
   const delay = (i: number) => ({ animationDelay: `${i * 70}ms` });
   const col = "motion-safe:animate-rise";
@@ -304,7 +330,6 @@ function MegaPanelContent({
   }
 
   if (menu === "Tour") {
-    const trips = tripsByDate();
     return (
       <div className="grid grid-cols-[1.4fr_1fr_20rem] gap-10">
         <div className={col} style={delay(0)}>
@@ -412,6 +437,7 @@ function MegaPanelContent({
  * keeps the drawer with inline submenus.
  */
 export function Header() {
+  const trips = useTrips();
   const [open, setOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
   const [megaOpen, setMegaOpen] = useState<string | null>(null);
@@ -661,7 +687,7 @@ export function Header() {
         <div className="h-0.5 bg-ppa-blue" />
         {megaOpen && (
           <div key={megaOpen} className="mx-auto w-full max-w-6xl px-4 py-8">
-            <MegaPanelContent menu={megaOpen} onNavigate={closeMega} />
+            <MegaPanelContent menu={megaOpen} onNavigate={closeMega} trips={trips} />
           </div>
         )}
       </div>
@@ -694,7 +720,7 @@ export function Header() {
                   </button>
                   {expanded && (
                     <ul className="bg-white/5 pb-2">
-                      {expandSubmenu(item.submenu).map((s) => (
+                      {expandSubmenu(item.submenu, trips).map((s) => (
                         <li key={s.href}>
                           <Link
                             href={s.href}
