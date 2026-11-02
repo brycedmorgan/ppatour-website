@@ -58,7 +58,7 @@ import {
 } from "@/components/live/LiveEventStatus";
 import { stageScheduleFor } from "@/lib/event-stage";
 import { StageSchedule } from "@/components/events/StageSchedule";
-import { getEvents } from "@/lib/events-api";
+import { feedEditionOf, getEvents } from "@/lib/events-api";
 import { resolveEvent } from "@/lib/resolve-event";
 import { getArticlesForEvent } from "@/lib/news-articles";
 import {
@@ -507,7 +507,7 @@ export default async function EventPage({ params }: Params) {
    * promise. It was NOT free before 9/17: this line was roughly half of the
    * 16,807 `ppa_tournaments` calls this route made in twelve hours.
    */
-  const drawUuid = t.tournamentUuid ?? (await getEvents()).events.find((e) => e.slug === t.slug)?.tournamentUuid;
+  const drawUuid = t.tournamentUuid ?? feedEditionOf(t, (await getEvents()).events)?.tournamentUuid;
 
   // Players to Watch is driven by the published draw: no draw, no column.
   const field = await getEventField(drawUuid);

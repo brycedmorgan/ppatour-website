@@ -1,4 +1,4 @@
-import { getEvents } from "@/lib/events-api";
+import { feedEditionOf, getEvents } from "@/lib/events-api";
 import {
   eventHref,
   getMainTourEvents,
@@ -35,9 +35,9 @@ export type ScoresEvent = {
 export async function resolveScoresEvent(now?: number): Promise<ScoresEvent | null> {
   const { events } = await getEvents();
   const uuidFor = (t: Tournament) =>
-    t.tournamentUuid ?? events.find((e) => e.slug === t.slug)?.tournamentUuid;
+    t.tournamentUuid ?? feedEditionOf(t, events)?.tournamentUuid;
   const logoFor = (t: Tournament) =>
-    t.logoUrl ?? events.find((e) => e.slug === t.slug)?.logoUrl;
+    t.logoUrl ?? feedEditionOf(t, events)?.logoUrl;
 
   const main = getMainTourEvents();
   const live = main.find((t) => isTournamentLive(t, now) && uuidFor(t));

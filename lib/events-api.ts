@@ -723,6 +723,23 @@ export const getEvents = cache(async function getEvents(): Promise<{
 });
 
 /**
+ * The feed's record for THIS edition of a stop: slug AND year, never slug alone.
+ *
+ * ⚠ Annual editions share a slug (`pickleball-world-championships` is both 2025
+ * and 2026), and the feed lists the older one first. A slug-only `find` handed
+ * the homepage, the app's Scores screen and /today the FINISHED 2025 Worlds
+ * bracket during 2026 Worlds week (11/2), while the event page, which reads its
+ * own record's UUID, showed 2026. Same match as `lib/resolve-event.ts`.
+ */
+export function feedEditionOf(
+  t: Pick<Tournament, "slug" | "startDate">,
+  events: Tournament[],
+): Tournament | undefined {
+  const year = t.startDate.slice(0, 4);
+  return events.find((e) => e.slug === t.slug && e.startDate.slice(0, 4) === year);
+}
+
+/**
  * Resolve a single event that should have an internal page, by slug. Returns
  * null for unknown slugs or events that link out (international sister tours),
  * so the detail route can `notFound()`.

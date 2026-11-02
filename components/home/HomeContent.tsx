@@ -9,7 +9,7 @@ import { orderOfPlayByDay, playDays } from "@/lib/order-of-play";
 import { LiveEventKicker } from "@/components/live/LiveEventStatus";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
 import { getRankings } from "@/lib/rankings-api";
-import { getEvents } from "@/lib/events-api";
+import { feedEditionOf, getEvents } from "@/lib/events-api";
 import { getScores, type Champion } from "@/lib/scores-api";
 import { playerInitials, playerPhoto, playerProfileHref } from "@/lib/player-photos";
 import {
@@ -286,7 +286,7 @@ export async function HomeContent({
    */
   const liveEventId = isLive
     ? (liveEventOverride?.tournamentUuid ??
-      (await getEvents()).events.find((e) => e.slug === next.slug)?.tournamentUuid)
+      feedEditionOf(next, (await getEvents()).events)?.tournamentUuid)
     : undefined;
   const showLiveScores = isLive && Boolean(liveEventId);
   /**

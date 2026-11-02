@@ -65,6 +65,12 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-02 — Homepage scores showed 2025 Worlds; feed lookups now match slug + year
+- Wesley: home and event page scores/brackets didn't match. Home read `f02fa839…` (2025 Worlds, finished); event page `ad262b1f…` (2026). Both editions share the slug and the feed lists 2025 first; the home page found its UUID by slug alone.
+- New `feedEditionOf(t, events)` in `lib/events-api.ts` (slug AND year, same as `resolve-event`). Used by HomeContent `liveEventId`, `lib/app-scores` (app Scores + `/api/app/home`), `/today` live courts, event-page `drawUuid`.
+- 15 other slugs in the feed repeat across years. Never look up a feed record by slug alone.
+- Verified against the live feed (2026 → ad262b1f, 2025 → f02fa839); tsc clean. Not checked on a dev server (local PB_API_TOKEN 401s).
+
 ### 2026-11-02 — Vacations: Jackalope trips can sell once Bryce approves
 
 - Bryce: Lainey sets price, he approves. Jackalope's `vac-trips` feed now carries a `sale` block for approved trips only (ziff `lib/vacpage.js` `publicSale`).

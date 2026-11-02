@@ -6,7 +6,7 @@ import { ParkingDetails } from "@/components/events/ParkingDetails";
 import { TodayPanel } from "@/components/events/TodayPanel";
 import { getBroadcast } from "@/lib/broadcast";
 import { getEventSchedule } from "@/lib/event-schedule";
-import { getEvents } from "@/lib/events-api";
+import { feedEditionOf, getEvents } from "@/lib/events-api";
 import { parkingFor } from "@/lib/event-guides";
 import { onSiteFor, venueMapFor } from "@/lib/onsite";
 import { eventHref, formatDateRange, type Tournament } from "@/lib/placeholder-data";
@@ -101,7 +101,7 @@ export default async function TodayPage({ params }: Params) {
    * page, and handing those a UUID they have never had is a behaviour change to
    * a live page, not a fix for this one.
    */
-  const liveRecord = (await getEvents()).events.find((e) => e.slug === slug);
+  const liveRecord = feedEditionOf(t, (await getEvents()).events);
   const eventUuid = t.tournamentUuid ?? liveRecord?.tournamentUuid;
   const schedule = getEventSchedule(slug, t.startDate);
   const parking = parkingFor(slug, t.startDate);
