@@ -265,13 +265,17 @@ function previewPicks(
   }
 
   // 3. Silver but no gold last season.
+  // ⚠ LAST SEASON ONLY — `silverNoGold` knows nothing about career titles. The
+  // hook used to add "still chasing a first title", which told Worlds fans that
+  // Rachel Rohrabacher (9 career golds) had never won one (Dillon, 11/2); 7 of
+  // the 10 pros on the list have golds. Don't claim more than one season.
   const silver = DATA.silverNoGold ?? [];
   for (let i = 0; i < silver.length && picks.length < limit; i++) {
     const s = silver[(off + i) % silver.length];
     push(
       s.name,
-      `${s.silvers} silver medals last season without a gold — still chasing a first title.`,
-      `${s.silvers} silvers, no gold`,
+      `${s.silvers} silver medals last season without a gold.`,
+      `${s.silvers} silvers last season`,
     );
   }
 
@@ -366,15 +370,16 @@ export function getPlayersToWatch(
     }
   }
 
-  // 2. Silver but no gold last season — chasing a first title.
+  // 2. Silver but no gold last season (see the ⚠ in previewPicks: one season,
+  //    not a career).
   for (const s of DATA.silverNoGold) {
     const p = findInField(byKey, s.name);
     if (p) {
       add(
         "silver-no-gold",
         p,
-        `${s.silvers} silver medals last season without a gold — still chasing a first title.`,
-        `${s.silvers} silvers, no gold`,
+        `${s.silvers} silver medals last season without a gold.`,
+        `${s.silvers} silvers last season`,
       );
     }
   }
