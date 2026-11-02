@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { logo } from "@/lib/vacations/content";
 import type { ComingSoonTrip as Trip } from "@/lib/vacations/remote-trips";
 
@@ -19,6 +20,9 @@ export function ComingSoonTrip({ trip }: { trip: Trip }) {
     ["When", trip.datesLabel],
     ["Stay", trip.stay],
   ].filter(([, v]) => v);
+  // Once pros are announced, a "Pro lineup" TBA row would contradict the section below it.
+  const tba = trip.pros.length ? trip.tba.filter((t) => !/\bpro/i.test(t)) : trip.tba;
+  const pros = [...trip.pros].sort((a, b) => Number(b.lead) - Number(a.lead));
 
   return (
     <>
@@ -102,7 +106,7 @@ export function ComingSoonTrip({ trip }: { trip: Trip }) {
             </dl>
           </div>
 
-          {trip.tba.length > 0 && (
+          {tba.length > 0 && (
             <div>
               <div className="flex items-center gap-2.5">
                 <span className="h-2 w-2 bg-vac-teal" />
@@ -111,7 +115,7 @@ export function ComingSoonTrip({ trip }: { trip: Trip }) {
                 </p>
               </div>
               <ul className="mt-5 space-y-3">
-                {trip.tba.map((item) => (
+                {tba.map((item) => (
                   <li
                     key={item}
                     className="flex items-center justify-between border-b border-ppa-line pb-3 text-sm text-ppa-navy"
@@ -127,6 +131,64 @@ export function ComingSoonTrip({ trip }: { trip: Trip }) {
           )}
         </div>
       </section>
+
+      {/* ── The pros (only once Lainey marks them signed in Jackalope) ── */}
+      {pros.length > 0 && (
+        <section className="bg-ppa-paper">
+          <div className="mx-auto w-full max-w-6xl px-4 pb-14 sm:pb-20">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-ppa-navy/60">The Lineup</p>
+            <h2 className="mt-3 font-display text-2xl uppercase leading-[1.02] text-ppa-navy sm:text-4xl">
+              Who you&apos;re playing with
+            </h2>
+            <div
+              className={`mt-9 grid gap-6 ${
+                pros.length === 1 ? "max-w-xs" : pros.length === 2 ? "max-w-3xl sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-4"
+              }`}
+            >
+              {pros.map((pro) => {
+                const card = (
+                  <>
+                    <div className="relative aspect-square overflow-hidden bg-ppa-navy">
+                      {pro.image ? (
+                        <Image
+                          src={pro.image}
+                          alt={pro.name}
+                          fill
+                          sizes="(min-width: 640px) 320px, 100vw"
+                          className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                        />
+                      ) : (
+                        <span className="absolute inset-0 grid place-items-center font-display text-5xl text-white/80">
+                          {pro.name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase()}
+                        </span>
+                      )}
+                      {pro.lead && (
+                        <span className="absolute left-0 top-4 bg-vac-teal px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
+                          Leading the Trip
+                        </span>
+                      )}
+                    </div>
+                    <div className="bg-white p-5">
+                      <p className="font-display text-base uppercase leading-tight text-ppa-navy transition-colors group-hover:text-vac-teal-deep">
+                        {pro.name}
+                      </p>
+                    </div>
+                  </>
+                );
+                return pro.slug ? (
+                  <Link key={pro.name} href={`/athletes/${pro.slug}/`} className="group block border border-ppa-line">
+                    {card}
+                  </Link>
+                ) : (
+                  <div key={pro.name} className="group block border border-ppa-line">
+                    {card}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── Photos ───────────────────────────────────────────────────── */}
       {trip.photos.length > 0 && (

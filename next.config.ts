@@ -515,6 +515,9 @@ const nextConfig: NextConfig = {
       // Coming Soon trip photos Lainey uploads in Jackalope (lib/vacations/remote-trips.ts).
       // Exact path; the proxy itself only serves its vacations/ prefix.
       { protocol: "https", hostname: "pickleball.usejackalope.com", pathname: "/api/public/vac-photo" },
+      // Pro headshots from Jackalope's player records, on Coming Soon trip lineups.
+      { protocol: "https", hostname: "pickleball.usejackalope.com", pathname: "/api/public/player-photo" },
+      { protocol: "https", hostname: "jackalopehq.vercel.app", pathname: "/api/public/player-photo" },
       // Europe gallery (lib/europe-gallery.ts). Proxied, not hot-linked: in a
       // browser signed into Google, lh3 answers with an error for /d/ links,
       // while the server-side optimizer fetches them without cookies.

@@ -1,4 +1,6 @@
 import { tripsCalendar, type TripEntry } from "./trips";
+import { athletes } from "@/lib/athletes";
+import { getPublishedByName, publishedProfileSlug } from "@/lib/published-athletes";
 
 /**
  * Coming Soon trips Lainey runs in Jackalope (Bryce 11/2: "she can add new
@@ -21,6 +23,16 @@ import { tripsCalendar, type TripEntry } from "./trips";
 
 export type RemotePhoto = { url: string; alt: string };
 
+/** A pro on a coming-soon trip. Jackalope only sends these once Lainey marks them signed. */
+export type ComingSoonPro = {
+  name: string;
+  /** Jackalope headshot, else the ppatour.com studio headshot, else null (initials). */
+  image: string | null;
+  lead: boolean;
+  /** ppatour.com profile, when the pro has one. */
+  slug: string | null;
+};
+
 export type ComingSoonTrip = {
   slug: string;
   name: string;
@@ -37,6 +49,7 @@ export type ComingSoonTrip = {
   hero: string | null;
   photos: RemotePhoto[];
   tba: string[];
+  pros: ComingSoonPro[];
 };
 
 const URL_ =
@@ -65,12 +78,36 @@ const FALLBACK: Record<string, ComingSoonTrip> = {
       { url: "/vacations/st-lucia/pool.jpg", alt: "The pool in the water garden at Stolen Time St. Lucia" },
     ],
     tba: ["Pricing", "Room types", "Pro lineup", "Itinerary", "Booking date"],
+    pros: [],
   },
 };
 
 const CODE_PAGES = new Set(
   tripsCalendar.filter((t) => t.status !== "coming-soon").map((t) => t.slug)
 );
+
+const okProPhoto = (u: unknown): u is string =>
+  typeof u === "string" &&
+  /^https:\/\/(jackalopehq\.vercel\.app|pickleball\.usejackalope\.com)\/api\/public\/player-photo\?p=players%2F[\w%.-]+$/.test(u);
+
+const fold = (n: string) =>
+  n.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+const CURATED_BY_NAME = new Map(athletes.map((a) => [fold(a.name), a]));
+
+/** Match a Jackalope pro to our athlete pages for the photo fallback and the profile link. */
+function toPro(raw: Record<string, unknown>): ComingSoonPro | null {
+  const name = typeof raw?.name === "string" ? raw.name.slice(0, 60).trim() : "";
+  if (!name) return null;
+  const curated = CURATED_BY_NAME.get(fold(name));
+  const published = getPublishedByName(name);
+  const slug = curated?.slug ?? (published ? publishedProfileSlug(published.slug) : null);
+  return {
+    name,
+    image: okProPhoto(raw.headshot) ? raw.headshot : curated?.headshot ?? null,
+    lead: raw.lead === true,
+    slug,
+  };
+}
 
 const okPhoto = (u: unknown): u is string =>
   typeof u === "string" &&
@@ -104,6 +141,10 @@ function clean(raw: Record<string, unknown>): ComingSoonTrip | null {
     hero: okPhoto(raw.hero) ? raw.hero : null,
     photos,
     tba: (Array.isArray(raw.tba) ? raw.tba : []).map((x) => s(x, 40)).filter(Boolean).slice(0, 8),
+    pros: (Array.isArray(raw.pros) ? raw.pros : [])
+      .map((p) => toPro(p as Record<string, unknown>))
+      .filter((p): p is ComingSoonPro => !!p)
+      .slice(0, 8),
   };
 }
 

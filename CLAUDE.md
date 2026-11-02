@@ -76,6 +76,7 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - `next.config.ts` allows `pickleball.usejackalope.com/api/public/vac-photo` for next/image.
 - ⚠ Still static: the global Header "Tour" panel (client component) lists `tripsCalendar` only, and `app/sitemap.ts` lists st-lucia only. New Jackalope trips are not in either yet.
 - Going on sale is still code here: TripConfig + Stripe + a real trip page.
+- Pros (same day, Bryce: "can she select from the pros in Jackalope"): the feed carries `pros` only once Lainey ticks "Show pros on the site". `ComingSoonTrip` shows a lineup (lead first). Photo = Jackalope headshot → `lib/athletes` studio headshot → initials; profile link via curated/published name match. A "Pro…" TBA row hides once pros show. `next.config.ts` allows `/api/public/player-photo` on both Jackalope hosts.
 
 ### 2026-10-29 — CANCUN20 promo code (Lainey)
 - Stripe (PPA account): coupon "Cancun 20% off" + promo code `CANCUN20`. 20% off, no use limit, expires Nov 13, 2026 11:59 PM (Central, set from Bryce's browser).
