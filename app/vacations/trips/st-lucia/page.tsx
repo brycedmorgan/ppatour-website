@@ -14,12 +14,18 @@ import { tripsCalendar, tripStatusLabel } from "@/lib/vacations/trips";
  * is how Lainey pulls the waitlist. When the trip goes on sale it moves to
  * TripPage like Cancún and Black Desert.
  *
- * No resort photos exist yet, so the hero is the Vacations mark on navy rather
- * than another resort's beach under this resort's name.
+ * Photos are Stolen Time's own, sent by Lainey 11/2. The pool is the hero
+ * (5616px original); the beach is only 1200px, so it stays in the strip.
  */
 export const revalidate = 60;
 
 const entry = tripsCalendar.find((t) => t.slug === "st-lucia")!;
+
+const PHOTOS = [
+  { src: "/vacations/st-lucia/beach.jpg", alt: "White-sand beach and palms at Stolen Time St. Lucia" },
+  { src: "/vacations/st-lucia/beachfront.jpg", alt: "Beachfront rooms under the palms at Stolen Time St. Lucia" },
+  { src: "/vacations/st-lucia/pool.jpg", alt: "The pool in the water garden at Stolen Time St. Lucia" },
+];
 
 const TBA = ["Pricing", "Room types", "Pro lineup", "Itinerary", "Booking date"];
 
@@ -38,6 +44,17 @@ export default function StLuciaPage() {
     <>
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <section className="relative isolate flex min-h-[64svh] items-end overflow-hidden bg-ppa-navy-deep text-white">
+        <Image
+          src="/vacations/st-lucia/pool.jpg"
+          alt="The pool in the water garden at Stolen Time St. Lucia"
+          fill
+          priority
+          quality={75}
+          sizes="100vw"
+          className="animate-kenburns object-cover will-change-transform"
+        />
+        <div className="absolute inset-0 scrim-hero" />
+
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-14 pt-28">
           <Image
             src={logo.white}
@@ -131,6 +148,17 @@ export default function StLuciaPage() {
               ))}
             </ul>
           </div>
+        </div>
+      </section>
+
+      {/* ── Photos ───────────────────────────────────────────────────── */}
+      <section className="bg-white">
+        <div className="mx-auto grid w-full max-w-6xl gap-3 px-4 py-14 sm:grid-cols-3 sm:py-20">
+          {PHOTOS.map((p) => (
+            <div key={p.src} className="relative aspect-[4/3] overflow-hidden bg-ppa-paper">
+              <Image src={p.src} alt={p.alt} fill sizes="(min-width: 640px) 33vw, 100vw" className="object-cover" />
+            </div>
+          ))}
         </div>
       </section>
     </>
