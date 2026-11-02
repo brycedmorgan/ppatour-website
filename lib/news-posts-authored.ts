@@ -1314,7 +1314,7 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
 
 <hr class="wp-block-separator has-alpha-channel-opacity"/>
 
-<h4 class="wp-block-heading"><strong>=== NOTES ===</strong></h4>
+<h4 class="wp-block-heading"><strong>NOTES</strong></h4>
 
 <p><strong>Record Doubles Streak:</strong> Anna Leigh Waters and Anna Bright are trying to win the 18th consecutive tournament that they have entered together. (Va Beach &#8217;25 &#8211; Hong Kong &#8217;26). That would be a new record for all Doubles, Men&#8217;s, Women&#8217;s and Mixed, breaking a tie at 17 with a Waters/Johns streak in &#8217;23-24. (ALW is part of the four longest same-partner streaks.)</p>
 
@@ -1340,7 +1340,7 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
 
 <hr class="wp-block-separator has-alpha-channel-opacity"/>
 
-<h4 class="wp-block-heading"><strong>=== ANNA LEIGH WATERS ===</strong></h4>
+<h4 class="wp-block-heading"><strong>ANNA LEIGH WATERS</strong></h4>
 
 <ul class="wp-block-list">
 <li><strong>Career Titles:</strong> 204 total. 66 Singles, 69 Doubles (31 w/Parenteau, 27 w/Bright, 11 w/others), 69 Mixed (67 w/Ben).</li>
@@ -1349,7 +1349,7 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
 <li><strong>Dormant Streak:</strong> 38 tournaments played earning at least one gold medal (Masters 2021 &#8211; Mesa &#8217;24), then a record, since surpassed by Ben Johns.</li>
 </ul>
 
-<h4 class="wp-block-heading"><strong>=== BEN JOHNS ===</strong></h4>
+<h4 class="wp-block-heading"><strong>BEN JOHNS</strong></h4>
 
 <ul class="wp-block-list">
 <li><strong>Career Titles:</strong> 189 total. 42 Singles, 65 Doubles (35 w/Collin, 19 w/Tardio), 82 Mixed (67 w/ALW).</li>
@@ -1360,7 +1360,7 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
 
 <hr class="wp-block-separator has-alpha-channel-opacity"/>
 
-<h4 class="wp-block-heading"><strong>=== DEFENDING MEDALISTS, WORLDS, NOV. 9, 2025 ===</strong></h4>
+<h4 class="wp-block-heading"><strong>DEFENDING MEDALISTS, WORLDS, NOV. 9, 2025</strong></h4>
 
 <p>(Waters, Triple Crown #38)</p>
 
@@ -1401,7 +1401,7 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
 
 <hr class="wp-block-separator has-alpha-channel-opacity"/>
 
-<h4 class="wp-block-heading"><strong>=== LAST TOURNAMENT, HONG KONG, OCTOBER 25 ===</strong></h4>
+<h4 class="wp-block-heading"><strong>LAST TOURNAMENT, HONG KONG, OCTOBER 25</strong></h4>
 
 <p><strong>Men&#8217;s Singles:</strong></p>
 <ul class="wp-block-list">
