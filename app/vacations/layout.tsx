@@ -1,6 +1,7 @@
 import { TripNav } from "@/components/vacations/TripNav";
 import { VacationsTrack } from "@/components/vacations/VacationsTrack";
 import { VacationsLeadCapture } from "@/components/vacations/VacationsLeadCapture";
+import { allTripsByDate, comingSoonMaps } from "@/lib/vacations/remote-trips";
 
 /**
  * Vacations sits inside the tour site but keeps its own funnel telemetry —
@@ -9,20 +10,23 @@ import { VacationsLeadCapture } from "@/components/vacations/VacationsLeadCaptur
  *
  * TripNav is the sticky "which trips exist" bar under the header (Bryce, 9/22).
  */
-export default function VacationsLayout({
+export default async function VacationsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Coming Soon trips live in Jackalope (lib/vacations/remote-trips.ts), so the
+  // trip bar, the funnel beacon and the waitlist tag all read them from here.
+  const [trips, maps] = await Promise.all([allTripsByDate(), comingSoonMaps()]);
   return (
     <>
-      <VacationsTrack />
-      <TripNav />
+      <VacationsTrack destinations={maps.destinations} />
+      <TripNav trips={trips} />
       {children}
       {/* Lainey's list (Bryce 10/19). Navy ground: the capture only reads on dark. */}
       <section id="vacations-list" className="scroll-mt-32 bg-ppa-navy">
         <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:py-16">
-          <VacationsLeadCapture />
+          <VacationsLeadCapture waitlists={maps.waitlists} />
         </div>
       </section>
     </>

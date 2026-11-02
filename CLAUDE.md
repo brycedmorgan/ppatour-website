@@ -67,6 +67,16 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-11-02 — St. Lucia photos live; Coming Soon trips now come from Jackalope (Lainey edits them)
+- `2ebbdd2`: Lainey's Stolen Time photos. Pool is the hero (5616px original, saved 2800px); beach + beachfront in a 3-photo strip. `public/vacations/st-lucia/`. Push works again (the 21-day 403 is gone).
+- Bryce: Lainey should add and edit trips herself, with guardrails. Coming Soon trips now come from Jackalope `/api/public/vac-trips` (ziff `lib/vacpage.js`), via new `lib/vacations/remote-trips.ts`.
+- `app/vacations/trips/[slug]` renders any published coming-soon trip with `components/vacations/ComingSoonTrip.tsx` (the old St. Lucia page, generalized). File routes (cancun, black-desert, punta-cana) always win; a feed entry using their slug is dropped.
+- Vacations layout fetches once and passes trips to TripNav, funnel names to VacationsTrack, and waitlist tags (slug) to VacationsLeadCapture. TripPage calendar reads `allTripsByDate()`.
+- Jackalope down → static St. Lucia (FALLBACK) still renders. Jackalope up but trip unpublished → 404 and gone from nav. Verified all four cases on a dev server against a mock feed.
+- `next.config.ts` allows `pickleball.usejackalope.com/api/public/vac-photo` for next/image.
+- ⚠ Still static: the global Header "Tour" panel (client component) lists `tripsCalendar` only, and `app/sitemap.ts` lists st-lucia only. New Jackalope trips are not in either yet.
+- Going on sale is still code here: TripConfig + Stripe + a real trip page.
+
 ### 2026-10-29 — CANCUN20 promo code (Lainey)
 - Stripe (PPA account): coupon "Cancun 20% off" + promo code `CANCUN20`. 20% off, no use limit, expires Nov 13, 2026 11:59 PM (Central, set from Bryce's browser).
 - Limited to two new saved products: `prod_VX6hCirH2DuLX6` (Cancun Single, $3,600) and `prod_VX6itvlFlZvuoR` (Cancun Double, $6,400).

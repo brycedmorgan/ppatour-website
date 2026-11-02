@@ -512,6 +512,9 @@ const nextConfig: NextConfig = {
     // Player headshots served by the Pickleball.com partner API (rankings feed).
     remotePatterns: [
       { protocol: "https", hostname: "images.pickleball.com" },
+      // Coming Soon trip photos Lainey uploads in Jackalope (lib/vacations/remote-trips.ts).
+      // Exact path; the proxy itself only serves its vacations/ prefix.
+      { protocol: "https", hostname: "pickleball.usejackalope.com", pathname: "/api/public/vac-photo" },
       // Europe gallery (lib/europe-gallery.ts). Proxied, not hot-linked: in a
       // browser signed into Google, lh3 answers with an error for /d/ links,
       // while the server-side optimizer fetches them without cookies.

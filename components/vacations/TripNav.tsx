@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { tripsByDate, tripStatus, tripStatusLabel } from "@/lib/vacations/trips";
+import { tripsByDate, tripStatus, tripStatusLabel, type TripEntry } from "@/lib/vacations/trips";
 
 /**
  * Sticky trip sub-nav under the site header on every Vacations page.
@@ -20,12 +20,13 @@ import { tripsByDate, tripStatus, tripStatusLabel } from "@/lib/vacations/trips"
  * Hidden on /register and /success: those are the checkout funnel, and a menu
  * of other trips there is a distraction from finishing the one in hand.
  */
-export function TripNav() {
+export function TripNav({ trips: given }: { trips?: TripEntry[] } = {}) {
   const pathname = usePathname() ?? "";
   if (pathname.includes("/vacations/register") || pathname.includes("/vacations/success")) {
     return null;
   }
-  const trips = tripsByDate();
+  // The layout passes code trips + Jackalope's Coming Soon trips.
+  const trips = given ?? tripsByDate();
   const norm = (p: string) => p.replace(/\/+$/, "");
   const current = norm(pathname);
 

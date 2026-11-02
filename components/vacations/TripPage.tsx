@@ -6,7 +6,8 @@ import { logo, scarcityThreshold } from "@/lib/vacations/content";
 import { formatUSD, type Occupancy } from "@/lib/vacations/pricing";
 import type { TripConfig } from "@/lib/vacations/trip-config";
 import type { TripContent } from "@/lib/vacations/trip-content";
-import { tripsCalendar, tripStatus, tripStatusLabel, STATUS_META } from "@/lib/vacations/trips";
+import { tripStatus, tripStatusLabel, STATUS_META } from "@/lib/vacations/trips";
+import { allTripsByDate } from "@/lib/vacations/remote-trips";
 
 /**
  * The trip page — hero, stat band, welcome, court band, experience, inclusions,
@@ -60,7 +61,9 @@ function itineraryDate(startIso: string, offset: number): string {
   });
 }
 
-export function TripPage({ content, cfg, availability }: TripPageProps) {
+export async function TripPage({ content, cfg, availability }: TripPageProps) {
+  // Code trips + Jackalope's Coming Soon trips, soonest first.
+  const tripsCalendar = await allTripsByDate();
   const {
     trip,
     soldOut,

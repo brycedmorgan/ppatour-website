@@ -16,7 +16,8 @@ const WAITLIST_REGIONS: Record<string, string> = {
 };
 
 /** Lainey's list, mounted once in app/vacations/layout.tsx. */
-export function VacationsLeadCapture() {
+export function VacationsLeadCapture({ waitlists = {} }: { waitlists?: Record<string, string> }) {
   const path = (usePathname() ?? "").replace(/\/+$/, "");
-  return <LeadMagnetCapture variant="vacations" region={WAITLIST_REGIONS[path]} />;
+  // `waitlists` = every Coming Soon trip Jackalope publishes, tagged by slug.
+  return <LeadMagnetCapture variant="vacations" region={waitlists[path] ?? WAITLIST_REGIONS[path]} />;
 }

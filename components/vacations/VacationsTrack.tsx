@@ -11,12 +11,15 @@ import { track } from "@/lib/vacations/track";
  * numbers. Also fires on client-side navigations (/vacations → /register),
  * which is where the interesting drop-off is.
  */
-export function VacationsTrack() {
+export function VacationsTrack({ destinations = {} }: { destinations?: Record<string, string> }) {
   const pathname = usePathname();
+  // Coming Soon trips from Jackalope have no TripConfig, so the layout passes
+  // their funnel names; without this their views would count as Turks.
+  const trip = destinations[(pathname ?? "").replace(/\/+$/, "")];
 
   useEffect(() => {
-    track("view");
-  }, [pathname]);
+    track("view", trip ? { trip } : {});
+  }, [pathname, trip]);
 
   return null;
 }
