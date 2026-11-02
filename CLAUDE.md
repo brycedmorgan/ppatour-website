@@ -76,6 +76,12 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 > Entries before 2026-09-26 live in [`docs/session-log-archive.md`](docs/session-log-archive.md) (moved 2026-10-03: this file had grown past what a cloud routine can load). Same format, newest first.
 
+### 2026-11-02 — Jim Ramsey's Worlds Preview, from the Stats Desk
+- From his 10/27 email (resent 11/2), posted at Wesley's request: `worlds-preview-from-the-stats-desk` in `lib/news-posts-authored.ts` (wpId 900010, stats-wrap series, CTA to the Worlds event page).
+- Three fixes to his copy: Patriqion → Patriquin, Shimibukuro → Shimabukuro, ALW "69 Mixed (69 w/Ben)" → "(67 w/Ben)" (his Chicago wrap plus Hong Kong gives 67/69/82, matching his Ben line).
+- Ben's gold streak ending at Las Vegas is correct (he lost all three finals there). "Doubles Silver (Bright/Rohrabacher)" is left as written; it's ambiguous.
+- Hero is `venues/brookhaven/featured-01.jpg` (2025 trophy lift) because no photo came with it. Swap it if Jim or Wesley sends one.
+
 ### 2026-11-02 — St. Lucia photos live; Coming Soon trips now come from Jackalope (Lainey edits them)
 - `2ebbdd2`: Lainey's Stolen Time photos. Pool is the hero (5616px original, saved 2800px); beach + beachfront in a 3-photo strip. `public/vacations/st-lucia/`. Push works again (the 21-day 403 is gone).
 - Bryce: Lainey should add and edit trips herself, with guardrails. Coming Soon trips now come from Jackalope `/api/public/vac-trips` (ziff `lib/vacpage.js`), via new `lib/vacations/remote-trips.ts`.

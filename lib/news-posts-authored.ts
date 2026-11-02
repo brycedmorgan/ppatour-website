@@ -1247,4 +1247,200 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
 <p>Tickets for the Opendoor Pickleball World Championships at large, along with week-long passes, pickleball clinics, and other special programming events, are available now. Please click through for <a href="https://www.tixr.com/groups/ppa/events/2026-world-pickleball-championships-166345?utm_source=ppatour&amp;utm_medium=website&amp;utm_campaign=1126-PPA-FARMERSBRANCH-TX-USA&amp;utm_content=event-hero-buy-tickets" target="_blank" rel="noreferrer noopener">tickets</a>, <a href="https://unitedpickleball.typeform.com/PPATour" target="_blank" rel="noreferrer noopener">media credentials</a>, and <a href="/events/2026/pickleball-world-championships/">tournament details</a>.</p>
 `.trim(),
   },
+  {
+    // Jim Ramsey's Worlds Preview, from his "*** REVISED *** Worlds Preview,
+    // from the Stats Desk" email (10/27, resent 11/2), posted at Wesley's
+    // request 11/2. Every line is his except the three fixes below. Dropped:
+    // "Broadcast prep material from the Stats Desk" and "In case you missed
+    // it" (internal to the email list). His "." separators became rules.
+    //
+    // ⚠ THREE FIXES TO HIS COPY:
+    //  - "Patriqion" -> "Patriquin" (Men's Doubles, defending gold).
+    //  - "Shimibukuro" -> "Shimabukuro" (Hong Kong men's singles silver).
+    //  - ALW "69 Mixed (69 w/Ben)" -> "(67 w/Ben)". His own numbers settle it:
+    //    the Chicago wrap above has Waters/Johns' 66th title with Waters on 68
+    //    and Johns on 81; Hong Kong makes 67 / 69 / 82, which is what his Ben
+    //    line says ("82 mixed (67 w/ ALW)").
+    //
+    // ⚠ BEN'S "DORMANT" GOLD STREAK ENDING AT LAS VEGAS IS RIGHT, not a slip:
+    // the Las Vegas wrap above has him losing all three finals there. His
+    // Chicago and Hong Kong golds come after it.
+    //
+    // ⚠ "Doubles Silver (Bright/Rohrabacher)" is left as he wrote it; it does
+    // not say whether that is her partner or the team that beat her.
+    slug: "worlds-preview-from-the-stats-desk",
+    wpId: 900010,
+    status: "published",
+    source: "wordpress",
+    category: "Recap",
+    series: "stats-wrap",
+    categoryResolvedBy: "series",
+    title: "Opendoor Pickleball World Championships Preview, from the Stats Desk",
+    dek: "Anna Leigh Waters and Anna Bright chase a record 18th straight tournament together, plus Ben and ALW at Worlds, their career numbers, the defending medalists and Hong Kong results.",
+    author: "Jim Ramsey",
+    publishedAt: "2026-11-02T16:00:00",
+    publishedAtGmt: "2026-11-02T22:00:00",
+    modifiedAt: "2026-11-02T22:00:00",
+    image: {
+      // 2025 Worlds, already in the repo for the venue page. Portrait, so the
+      // ~3.6:1 hero crop is anchored at the top to keep the trophy and face.
+      url: "/ppa/venues/brookhaven/featured-01.jpg",
+      // ⚠ NO NAMES — house style on this series.
+      alt: "A player lifts the championship trophy on court as fans in the foreground raise their phones to take pictures.",
+      width: 1285,
+      height: 1800,
+      position: "50% 8%",
+    },
+    // Left empty deliberately: `detectAthleteMentions` reads the body.
+    players: [],
+    playerNames: [],
+    wpEvent: null,
+    tags: [],
+    tagsRaw: [],
+    wpCategories: ["stats-wrap"],
+    embeds: [],
+    inlineImages: [],
+    ctaUrl: "/events/2026/pickleball-world-championships/",
+    ctaLabel: "World Championships Event Page",
+    legacyUrl: "https://www.ppatour.com/worlds-preview-from-the-stats-desk/",
+    seo: {
+      title: "Worlds Preview, from the Stats Desk | PPA Tour",
+      description:
+        "Stats Desk preview of the Opendoor Pickleball World Championships: the Waters/Bright record streak, Ben Johns and Anna Leigh Waters at Worlds, defending medalists and Hong Kong results.",
+      canonical: "https://www.ppatour.com/worlds-preview-from-the-stats-desk/",
+    },
+    bodyHtml: `
+<p><em>(Domestic PPA Tour events, including International PPA Tour events after Aug. 31, 2026 worth 1,000 points+.)</em></p>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<h4 class="wp-block-heading"><strong>=== NOTES ===</strong></h4>
+
+<p><strong>Record Doubles Streak:</strong> Anna Leigh Waters and Anna Bright are trying to win the 18th consecutive tournament that they have entered together. (Va Beach &#8217;25 &#8211; Hong Kong &#8217;26). That would be a new record for all Doubles, Men&#8217;s, Women&#8217;s and Mixed, breaking a tie at 17 with a Waters/Johns streak in &#8217;23-24. (ALW is part of the four longest same-partner streaks.)</p>
+
+<p><strong>Offensive Lobs:</strong> Teams that hit an Offensive Lob in a final win only 42% of those rallies. (Gender and Mixed Finals, 90 Matches, Jan 2026-Sept 2026). <a href="/offensive-lobs-lets-look-at-the-numbers/">Offensive Lobs: Let&#8217;s Look at the Numbers</a></p>
+
+<p><strong>Winning at the Switch:</strong> Players or teams leading a game when they changed sides at six points went on to win that game 82% of the time in domestic Tour finals this season. (52/63)</p>
+
+<p><strong>Ben at Worlds:</strong></p>
+
+<ul class="wp-block-list">
+<li>2025: Singles loss in R32 to A. Crum, Doubles Semifinals, Mixed Gold.</li>
+<li>2024: Singles loss in R16 to M. Loyd, Doubles loss in R16 to Duong/Klinger, Mixed Gold.</li>
+<li>2023: Singles loss to Haworth, Doubles Gold, Mixed Gold.</li>
+</ul>
+
+<p><strong>ALW at Worlds:</strong></p>
+
+<ul class="wp-block-list">
+<li>2025: Triple Crown.</li>
+<li>2024: Singles Gold, Doubles Silver (Bright/Rohrabacher), Mixed Gold.</li>
+<li>2023: Triple Crown.</li>
+</ul>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<h4 class="wp-block-heading"><strong>=== ANNA LEIGH WATERS ===</strong></h4>
+
+<ul class="wp-block-list">
+<li><strong>Career Titles:</strong> 204 total. 66 Singles, 69 Doubles (31 w/Parenteau, 27 w/Bright, 11 w/others), 69 Mixed (67 w/Ben).</li>
+<li><strong>Triple Crowns:</strong> 45 Triple Crowns (six in 2026), 11 &#8220;Double Triples&#8221; with Ben.</li>
+<li><strong>Active Streak:</strong> 91 tournaments played earning at least one medal of any kind.</li>
+<li><strong>Dormant Streak:</strong> 38 tournaments played earning at least one gold medal (Masters 2021 &#8211; Mesa &#8217;24), then a record, since surpassed by Ben Johns.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>=== BEN JOHNS ===</strong></h4>
+
+<ul class="wp-block-list">
+<li><strong>Career Titles:</strong> 189 total. 42 Singles, 65 Doubles (35 w/Collin, 19 w/Tardio), 82 Mixed (67 w/ALW).</li>
+<li><strong>Triple Crowns:</strong> 21 Triple Crowns (last one: April 2024, NC), 11 &#8220;Double Triples&#8221; with ALW.</li>
+<li><strong>Active Streak:</strong> PPA-record 101 tournaments played earning at least one medal of any kind.</li>
+<li><strong>Dormant Streak:</strong> PPA-record 58 tournaments played earning at least one gold medal (Newport Beach, April 2023 to Las Vegas, October 2026).</li>
+</ul>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<h4 class="wp-block-heading"><strong>=== DEFENDING MEDALISTS, WORLDS, NOV. 9, 2025 ===</strong></h4>
+
+<p>(Waters, Triple Crown #38)</p>
+
+<p><strong>Men&#8217;s Singles:</strong></p>
+<ul class="wp-block-list">
+<li>Gold: Staksrud</li>
+<li>Silver: Haworth</li>
+<li>Bronze: H. Johnson def. Garnett</li>
+</ul>
+
+<p><strong>Women&#8217;s Singles:</strong></p>
+<ul class="wp-block-list">
+<li>Gold: Waters</li>
+<li>Silver: Fahey</li>
+<li>Bronze: Buckner def. Christian</li>
+</ul>
+
+<p><strong>Men&#8217;s Doubles:</strong></p>
+<ul class="wp-block-list">
+<li>Gold: Patriquin/Staksrud</li>
+<li>Silver: JW Johnson/Klinger</li>
+<li>Bronze: Alshon/Daescu def. Johns/Tardio</li>
+</ul>
+
+<p><strong>Women&#8217;s Doubles:</strong></p>
+<ul class="wp-block-list">
+<li>Gold: Bright/Waters</li>
+<li>Silver: Parenteau/Todd</li>
+<li>Bronze: Black/Johnson def. Jade K./Rohrabacher (withdrew, injury)</li>
+</ul>
+
+<p><strong>Mixed Doubles:</strong></p>
+<ul class="wp-block-list">
+<li>Gold: Waters/Johns</li>
+<li>Silver: Johnsons</li>
+<li>Bronze: Bright/Patriquin def. Black/Alshon</li>
+</ul>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<h4 class="wp-block-heading"><strong>=== LAST TOURNAMENT, HONG KONG, OCTOBER 25 ===</strong></h4>
+
+<p><strong>Men&#8217;s Singles:</strong></p>
+<ul class="wp-block-list">
+<li>Gold: H. Johnson</li>
+<li>Silver: Shimabukuro</li>
+<li>Semis: Khlif, Staksrud</li>
+</ul>
+
+<p><strong>Women&#8217;s Singles:</strong></p>
+<ul class="wp-block-list">
+<li>Gold: Dikosavljevic</li>
+<li>Silver: Castillo</li>
+<li>Semis: Dennehy, Kunimoto</li>
+</ul>
+
+<p><strong>Men&#8217;s Doubles:</strong></p>
+<ul class="wp-block-list">
+<li>Gold: Patriquin/Staksrud</li>
+<li>Silver: Johns/Tardio</li>
+<li>Semis: JW Johnson/Shimabukuro, Frazier/Garnett</li>
+</ul>
+
+<p><strong>Women&#8217;s Doubles:</strong></p>
+<ul class="wp-block-list">
+<li>Gold: Bright/Waters</li>
+<li>Silver: Black/Johnson</li>
+<li>Semis: Rohrabacher/Toss, Parenteau/Sewing</li>
+</ul>
+
+<p><strong>Mixed Doubles:</strong></p>
+<ul class="wp-block-list">
+<li>Gold: Waters/Johns</li>
+<li>Silver: Bright/Patriquin</li>
+<li>Semis: Wei/Hunter Johnson, Jorja &amp; JW Johnson</li>
+</ul>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<p><strong>For more from the Stats Desk, please visit: </strong><a href="https://facebook.com/groups/propickleballstats" target="_blank" rel="noreferrer noopener"><strong>facebook.com/groups/propickleballstats</strong></a></p>
+`.trim(),
+  },
 ];
