@@ -58,6 +58,8 @@ export type ScoreMatch = {
   status: "live" | "final" | "scheduled";
   /** Decided without being played — one side withdrew. See MatchOutcome. */
   outcome?: "walkover";
+  /** "Pool A" — round-robin pool play only (the Challenger Showdown). */
+  pool?: string;
   teams: [ScoreTeam, ScoreTeam];
 };
 export type Champion = { divisionId: string; division: string; players: string[] };
@@ -112,6 +114,20 @@ export type ScoresResult = {
    * qualifier result reads as a main-draw result.
    */
   qualifier: ScoresBracket | null;
+  /**
+   * The PPA Challenger Showdown, when the tournament carries one (Worlds 2026:
+   * five round-robin events titled "PPA CHALLENGER SHOWDOWN: …" inside the
+   * Worlds feed). Null everywhere else.
+   *
+   * ⚠ ITS OWN BRACKET, NEVER MIXED INTO `divisions`. Its division names match
+   * the pro ones once the prefix is stripped, so the UI says which one it is
+   * showing (the Pro / Challenger Showdown toggle). Its winners are never in
+   * `champions` or `standings`: a Showdown title is not a Worlds title.
+   *
+   * Rounds are relabelled so "Matches by round" reads in playing order — see
+   * `showdownRounds`.
+   */
+  showdown: ScoresBracket | null;
   /**
    * Division winners (gold-medal match), once decided.
    *
@@ -499,7 +515,100 @@ const inFlight = new Map<string, Promise<ScoresResult>>();
  * "PRO MEN'S SINGLES - QUALIFIER").
  */
 export function isQualifierEvent(e: ApiEvent): boolean {
-  return e.eventType === "UNDEFINED_PPA_EVENT_TYPE" && /qualif/i.test(e.eventTitle ?? "");
+  // ⚠ Worlds 2026 files its qualifiers as QUALIFIER_EVENT_TYPE, not the
+  // UNDEFINED bucket. Missing that put the Women's Doubles and Men's Singles
+  // QUALIFIER draws in place of their main draws (listed first, and
+  // oncePerDivision keeps the first). Found 11/5 on the live Worlds bracket.
+  return (
+    (e.eventType === "UNDEFINED_PPA_EVENT_TYPE" || e.eventType === "QUALIFIER_EVENT_TYPE") &&
+    /qualif/i.test(e.eventTitle ?? "")
+  );
+}
+
+/**
+ * The PPA Challenger Showdown's events ("PPA CHALLENGER SHOWDOWN: Men's
+ * Singles"). They ride in the host tournament's Pro feed as MAIN_EVENT_TYPE,
+ * so only the title tells them apart from the pro main draw.
+ */
+export function isShowdownEvent(e: ApiEvent): boolean {
+  return /challenger\s+showdown/i.test(e.eventTitle ?? "");
+}
+
+/** The tour's own pro main draws: not qualifying, not the Showdown. */
+export function isProMainEvent(e: ApiEvent): boolean {
+  return e.eventType !== "UNDEFINED_PPA_EVENT_TYPE" && !isQualifierEvent(e) && !isShowdownEvent(e);
+}
+
+/** "PPA CHALLENGER SHOWDOWN: Men's Singles" → "Men's Singles". */
+export function showdownDivision(title: string): string {
+  return cleanDivision(title.replace(/^.*challenger\s+showdown\s*[:\-–—]?\s*/i, ""));
+}
+
+/**
+ * Put a round-robin + knockout draw's rounds in playing order.
+ *
+ * ⚠ THE FEED NUMBERS POOL PLAY AND THE KNOCKOUT FROM 1 EACH. In the Showdown
+ * `roundNumber` 1 is both the first pool round AND the semifinals, and 2 is the
+ * second pool round AND the final, and pool rounds carry no `roundText`. As fed,
+ * the board's picker read "Round 1, Round 2, Round 3, Semi-Finals, Finals" in
+ * an order decided by accident. Here pool rounds become "Pool Play · Round N"
+ * and the knockout is numbered after the last pool round, so the picker reads
+ * in playing order: pool rounds, Semifinals, Final.
+ *
+ * Pools are not in the feed either. A pool is a set of entries that only play
+ * each other, so pools are the connected groups of the RR matches, lettered by
+ * best seed ("Pool A" holds the 1 seed).
+ */
+function showdownRounds(raws: ApiMatch[], matches: ScoreMatch[]): void {
+  const idOf = (m: ApiMatch) => str(m, "matchUuid", "matchUUID", "uuid", "match_uuid");
+  const byId = new Map(raws.map((m) => [idOf(m), m]));
+  const isRR = (m: ApiMatch | undefined) =>
+    !!m && str(m, "inBracketType", "in_bracket_type").toUpperCase() === "RR";
+
+  // Pools: union-find over the teams that meet in pool play.
+  const parent = new Map<string, string>();
+  const find = (x: string): string => {
+    const p = parent.get(x) ?? x;
+    if (p === x) return x;
+    const r = find(p);
+    parent.set(x, r);
+    return r;
+  };
+  const seedOf = new Map<string, number>();
+  let lastPoolRound = 0;
+  for (const m of raws) {
+    if (!isRR(m)) continue;
+    lastPoolRound = Math.max(lastPoolRound, num(m, "roundNumber") ?? 0);
+    const a = str(m, "teamOneUuid");
+    const b = str(m, "teamTwoUuid");
+    if (a) seedOf.set(a, Math.min(seedOf.get(a) ?? 999, num(m, "teamOneSeed") || 999));
+    if (b) seedOf.set(b, Math.min(seedOf.get(b) ?? 999, num(m, "teamTwoSeed") || 999));
+    if (a && b && find(a) !== find(b)) parent.set(find(a), find(b));
+  }
+  const best = new Map<string, number>();
+  for (const [team, seed] of seedOf) {
+    const r = find(team);
+    best.set(r, Math.min(best.get(r) ?? 999, seed));
+  }
+  const order = [...best.entries()].sort((x, y) => x[1] - y[1]).map(([r]) => r);
+  const poolOf = (team: string) => {
+    const i = team ? order.indexOf(find(team)) : -1;
+    return order.length > 1 && i >= 0 ? `Pool ${String.fromCharCode(65 + i)}` : undefined;
+  };
+
+  for (const s of matches) {
+    const m = byId.get(s.id);
+    if (isRR(m)) {
+      s.roundLabel = `Pool Play · Round ${s.roundNumber}`;
+      s.pool = poolOf(str(m as ApiMatch, "teamOneUuid"));
+      continue;
+    }
+    s.roundNumber += lastPoolRound;
+    const t = s.roundLabel.toLowerCase();
+    if (/semi/.test(t)) s.roundLabel = "Semifinals";
+    else if (/bronze/.test(t)) s.roundLabel = "Bronze";
+    else if (/final/.test(t)) s.roundLabel = "Final";
+  }
 }
 
 /**
@@ -551,6 +660,7 @@ async function loadBracket(
   events: ApiEvent[],
   name: (title: string) => string,
   revalidateS: number,
+  relabel?: (raws: ApiMatch[], matches: ScoreMatch[]) => void,
 ): Promise<Bracket> {
   const perEvent = await Promise.all(
     events.map(async (e) => {
@@ -560,8 +670,10 @@ async function loadBracket(
       const raws = mj?.results ?? [];
       const division = name(e.eventTitle as string);
       const eid = e.eventId as string;
+      const matches = raws.map((m) => normalize(m, division, eid)).filter((x): x is ScoreMatch => x !== null);
+      relabel?.(raws, matches);
       return {
-        matches: raws.map((m) => normalize(m, division, eid)).filter((x): x is ScoreMatch => x !== null),
+        matches,
         standings: standingsOf(raws, division, eid),
       };
     }),
@@ -597,7 +709,7 @@ function hasDatedFixture(b: Bracket): boolean {
 
 async function build(tournamentId: string): Promise<ScoresResult> {
   const { token, base } = config();
-  const empty: ScoresResult = { tournamentId, divisions: [], matches: [], qualifier: null, champions: [], standings: [], headshots: {} };
+  const empty: ScoresResult = { tournamentId, divisions: [], matches: [], qualifier: null, showdown: null, champions: [], standings: [], headshots: {} };
   if (!token) return empty;
   try {
     /**
@@ -632,10 +744,8 @@ async function build(tournamentId: string): Promise<ScoresResult> {
     // the six-hour window. Fails short on any uncertainty.
     const revalidateS = windowFromProEvents(all, LIVE_WINDOW_S);
     noteWindow(tournamentId, revalidateS);
-    const mainEvents = oncePerDivision(
-      all.filter((e) => e.eventType !== "UNDEFINED_PPA_EVENT_TYPE"),
-      cleanDivision,
-    );
+    const mainEvents = oncePerDivision(all.filter(isProMainEvent), cleanDivision);
+    const showdownEvents = oncePerDivision(all.filter(isShowdownEvent), showdownDivision);
     const qualifierEvents = oncePerDivision(all.filter(isQualifierEvent), qualifierDivision);
 
     /**
@@ -664,6 +774,11 @@ async function build(tournamentId: string): Promise<ScoresResult> {
      * adapter is the reason for the rate-limit work of 7/31.
      */
     const main = await loadBracket(base, token, tournamentId, mainEvents, cleanDivision, revalidateS);
+    // The Showdown has no qualifier and no stage switch: fetched whenever the
+    // tournament carries one (Worlds only), five more calls on the same window.
+    const showdownBracket = showdownEvents.length
+      ? await loadBracket(base, token, tournamentId, showdownEvents, showdownDivision, revalidateS, showdownRounds)
+      : null;
     const qualifierBracket =
       !hasPlay(main) && qualifierEvents.length
         ? await loadBracket(base, token, tournamentId, qualifierEvents, qualifierDivision, revalidateS)
@@ -687,7 +802,11 @@ async function build(tournamentId: string): Promise<ScoresResult> {
      * Both brackets get it — the client may be about to render either, and the
      * decision below reads these dates.
      */
-    const scheduled = [...main.matches, ...(qualifierBracket?.matches ?? [])].filter(
+    const scheduled = [
+      ...main.matches,
+      ...(qualifierBracket?.matches ?? []),
+      ...(showdownBracket?.matches ?? []),
+    ].filter(
       (m) => m.status === "scheduled",
     );
     if (scheduled.length) {
@@ -742,6 +861,9 @@ async function build(tournamentId: string): Promise<ScoresResult> {
       divisions,
       matches,
       qualifier,
+      showdown: showdownBracket?.divisions.length
+        ? { divisions: showdownBracket.divisions, matches: showdownBracket.matches }
+        : null,
       /* Awaited last and behind its own try/catch inside `scoreHeadshots`, so a
          slow or failed ranking board costs the board its photos and never its
          scores. */

@@ -148,6 +148,12 @@ function ScoreCard({ m, headshots }: { m: ScoreMatch; headshots: Record<string, 
           {m.dateLabel}
         </span>
         <div className="flex shrink-0 items-center gap-1.5">
+          {/* Round-robin pool (Challenger Showdown): which group this match counts in. */}
+          {m.pool && (
+            <span className="rounded-full bg-ppa-yellow/40 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.1em] text-ppa-navy">
+              {m.pool}
+            </span>
+          )}
           {m.status === "live" && (
             <span className="flex items-center gap-1 rounded-full bg-ppa-live px-2 py-0.5">
               <span className="size-1.5 animate-pulse rounded-full bg-white" />
@@ -192,9 +198,16 @@ export function ScoresBoard({
   eventId,
   light = false,
   roundByDay,
+  draw = "pro",
 }: {
   eventId: string;
   light?: boolean;
+  /**
+   * Which field: the pro draw (with its qualifier switch), or the PPA Challenger
+   * Showdown played inside the same tournament (Worlds). One /api/scores
+   * response carries both, so the toggle costs no extra request.
+   */
+  draw?: "pro" | "showdown";
   /**
    * ISO date -> the round this stop's ORDER OF PLAY has it playing that day,
    * from `orderOfPlayByDay` in lib/order-of-play. What the board opens on.
@@ -265,8 +278,13 @@ export function ScoresBoard({
    * directly, so the day picker, the division pills and the match cards can
    * never end up describing different brackets.
    */
-  const isQualifier = showQualifierBoard(data, todayKey);
-  const shown = isQualifier && data?.qualifier ? data.qualifier : data;
+  const isQualifier = draw === "pro" && showQualifierBoard(data, todayKey);
+  const shown =
+    draw === "showdown"
+      ? (data?.showdown ?? null)
+      : isQualifier && data?.qualifier
+        ? data.qualifier
+        : data;
 
   /**
    * The rounds in this bracket, earliest first.
@@ -368,7 +386,7 @@ export function ScoresBoard({
 
     // What the order of play says is on court today. Undefined on any date
     // outside the event, so a completed stop always takes the fallbacks.
-    const today = todayKey ? roundByDay?.[todayKey] : undefined;
+    const today = todayKey && draw === "pro" ? roundByDay?.[todayKey] : undefined;
     const fromSchedule = today ? roundForDayLabel(today, rounds) : null;
 
     const open =
@@ -377,7 +395,7 @@ export function ScoresBoard({
       deepest((m) => m.status !== "scheduled")?.label ??
       rounds[0].label;
     setRound(open);
-  }, [rounds, round, shown, roundByDay, todayKey]);
+  }, [rounds, round, shown, roundByDay, todayKey, draw]);
 
   const liveAny = useMemo(
     () => (shown?.matches ?? []).some((m) => m.status === "live"),
@@ -404,9 +422,17 @@ export function ScoresBoard({
     // matches it, so this fell straight through to divisions[0] and then never
     // re-ran, which is how the board kept opening on an empty grid.
     if (division || !divisions[0] || !round) return;
-    const populated = divisions.find((d) =>
-      (shown?.matches ?? []).some((m) => m.divisionId === d.id && m.roundLabel === round),
-    );
+    // Prefer the division on court now, then one whose matches in this round
+    // carry a real date, then any with matches. In the Challenger Showdown the
+    // singles pools play Thursday and the doubles pools Friday, so "first
+    // populated" opened on Friday's undated doubles while singles was live.
+    const inRound = (shown?.matches ?? []).filter((m) => m.roundLabel === round);
+    const first = (want: (m: ScoreMatch) => boolean) =>
+      divisions.find((d) => inRound.some((m) => m.divisionId === d.id && want(m)));
+    const populated =
+      first((m) => m.status === "live") ??
+      first((m) => m.dateKey !== "9999-12-31") ??
+      first(() => true);
     setDivision((populated ?? divisions[0]).id);
   }, [divisions, division, shown, round]);
 

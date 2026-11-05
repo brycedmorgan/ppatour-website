@@ -4,6 +4,7 @@ import { useState } from "react";
 import { BracketPanel } from "@/components/live/BracketPanel";
 import { FinalStandings } from "@/components/live/FinalStandings";
 import { ScoresBoard } from "@/components/live/ScoresBoard";
+import { DrawToggle, type DrawField } from "@/components/live/DrawToggle";
 
 /**
  * Completed-event results with a Final Standings / Scores / Bracket toggle
@@ -16,14 +17,19 @@ export function ResultsPanel({
   showBracket = false,
   expandHref,
   roundByDay,
+  showdown = false,
 }: {
   eventId: string;
   showBracket?: boolean;
   expandHref?: string;
   /** Passed straight to ScoresBoard — see the prop there. */
   roundByDay?: Record<string, string>;
+  /** The tournament hosted the PPA Challenger Showdown: offer Pro / Showdown. */
+  showdown?: boolean;
 }) {
   const [view, setView] = useState<View>("standings");
+  const [field, setField] = useState<DrawField>("pro");
+  const draw: DrawField = showdown ? field : "pro";
 
   const tabs: { id: View; label: string }[] = [
     { id: "standings", label: "Final Standings" },
@@ -33,6 +39,13 @@ export function ResultsPanel({
 
   return (
     <div>
+      {/* Final Standings are the pro podium only, so the toggle shows with the
+          Scores and Bracket views, which carry both fields. */}
+      {showdown && view !== "standings" && (
+        <div className="mb-4">
+          <DrawToggle value={draw} onChange={setField} />
+        </div>
+      )}
       <div className="flex flex-wrap gap-2">
         {tabs.map((tab) => {
           const active = tab.id === view;
@@ -55,9 +68,9 @@ export function ResultsPanel({
 
       <div className="mt-6">
         {view === "standings" && <FinalStandings eventId={eventId} />}
-        {view === "scores" && <ScoresBoard eventId={eventId} roundByDay={roundByDay} />}
+        {view === "scores" && <ScoresBoard eventId={eventId} roundByDay={roundByDay} draw={draw} />}
         {view === "bracket" && showBracket && (
-          <BracketPanel eventId={eventId} expandHref={expandHref} />
+          <BracketPanel key={draw} eventId={eventId} expandHref={expandHref} draw={draw} />
         )}
       </div>
     </div>

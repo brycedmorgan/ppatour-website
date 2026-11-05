@@ -99,5 +99,10 @@ export type BracketDivision = {
   bronze?: string;
 };
 
-export type BracketDivisionsResponse = { eventId: string; divisions: BracketDivision[] };
+export type BracketDivisionsResponse = {
+  eventId: string;
+  divisions: BracketDivision[];
+  /** PPA Challenger Showdown divisions, when the tournament hosts one (Worlds). */
+  showdown?: BracketDivision[];
+};
 export type BracketResponse = { division: BracketDivision; bracket: Bracket };

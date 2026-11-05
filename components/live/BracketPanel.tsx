@@ -32,6 +32,7 @@ export function BracketPanel({
   expandHref,
   initialDivision,
   light = false,
+  draw = "pro",
 }: {
   eventId: string;
   /** Fill the viewport (dedicated /brackets page). */
@@ -42,6 +43,11 @@ export function BracketPanel({
   initialDivision?: string;
   /** Style the controls for a light/white background. */
   light?: boolean;
+  /**
+   * Which field's draw: the pro divisions, or the PPA Challenger Showdown played
+   * inside the same tournament (Worlds). Same endpoint; the index carries both.
+   */
+  draw?: "pro" | "showdown";
 }) {
   const [divisions, setDivisions] = useState<BracketDivision[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
@@ -69,9 +75,15 @@ export function BracketPanel({
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
         if (!active || !d) return;
-        const divs: BracketDivision[] = d.divisions ?? [];
+        // A deep link to a Showdown division (the full-page bracket opened from
+        // the Challenger Showdown toggle) shows the Showdown's pills.
+        const showdown =
+          draw === "showdown" ||
+          (!!initialDivision && (d.showdown ?? []).some((x: BracketDivision) => x.id === initialDivision));
+        const divs: BracketDivision[] = (showdown ? d.showdown : d.divisions) ?? [];
         setDivisions(divs);
-        setIsQualifier(d.stage === "qualifier");
+        // The Showdown has no qualifier; the stage describes the pro draw only.
+        setIsQualifier(!showdown && d.stage === "qualifier");
         const next = initialDivision ?? divs[0]?.id ?? null;
         /**
          * ⚠ THE HELD SELECTION IS VALIDATED, NOT KEPT BLINDLY. This used to be
@@ -90,7 +102,7 @@ export function BracketPanel({
     return () => {
       active = false;
     };
-  }, [eventId, initialDivision, resync]);
+  }, [eventId, initialDivision, resync, draw]);
 
   // Selected bracket — fetch + poll. Reset to the winners view on switch.
   useEffect(() => {

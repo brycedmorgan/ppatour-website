@@ -6,6 +6,7 @@ import { PartnerWall } from "@/components/global/PartnerWall";
 import { HomeHero, type HeroVariant } from "@/components/home/HomeHero";
 import { ScoresBracketToggle } from "@/components/live/ScoresBracketToggle";
 import { orderOfPlayByDay, playDays } from "@/lib/order-of-play";
+import { showdownDaysFor } from "@/lib/challenger-showdown";
 import { LiveEventKicker } from "@/components/live/LiveEventStatus";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
 import { getRankings } from "@/lib/rankings-api";
@@ -302,6 +303,15 @@ export async function HomeContent({
         (liveEventOverride ?? next).endDate,
       )
     : undefined;
+  // The running stop hosts the PPA Challenger Showdown (Worlds 2026): the band
+  // offers a Pro / Challenger Showdown toggle. Same record as liveEventId.
+  const liveShowdown = showLiveScores
+    ? showdownDaysFor(
+        (liveEventOverride ?? next).slug,
+        (liveEventOverride ?? next).startDate,
+        (liveEventOverride ?? next).endDate,
+      ).length > 0
+    : false;
   // Live pickleball.com coverage. Empty until the API grant lands, in which case
   // the rail is omitted rather than showing the invented headlines it replaced.
   const ecosystem = (await getPickleballNews(4)).articles;
@@ -418,7 +428,12 @@ export async function HomeContent({
               <div className="mt-4">
                 {/* The section's "View Full Bracket" link opens the full-page
                     bracket, so the in-panel link is omitted (no expandHref). */}
-                <ScoresBracketToggle eventId={liveEventId!} light roundByDay={liveRoundByDay} />
+                <ScoresBracketToggle
+                  eventId={liveEventId!}
+                  light
+                  roundByDay={liveRoundByDay}
+                  showdown={liveShowdown}
+                />
               </div>
             ) : latestChampions ? (
               <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

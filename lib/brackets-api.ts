@@ -37,8 +37,11 @@ import {
 } from "@/lib/live-cache-window";
 import {
   cleanDivision,
+  isProMainEvent,
   isQualifierEvent,
+  isShowdownEvent,
   qualifierDivision,
+  showdownDivision,
   type ScoresStage,
 } from "@/lib/scores-api";
 
@@ -620,7 +623,7 @@ async function proEvents(
   base: string,
   token: string,
   uuid: string,
-): Promise<{ main: ApiEvent[]; qualifier: ApiEvent[]; window: number }> {
+): Promise<{ main: ApiEvent[]; qualifier: ApiEvent[]; showdown: ApiEvent[]; window: number }> {
   // ⚠ THE LIST CALL CHOOSES THE WINDOW FOR THE FIVE THAT FOLLOW IT, so it
   // cannot be on that window itself the first time. It runs on the live
   // cadence until this instance has once seen the tournament finished — one
@@ -645,8 +648,11 @@ async function proEvents(
   const window = windowFromProEvents(all, BRACKET_LIVE_WINDOW_S);
   noteWindow(uuid, window);
   return {
-    main: oncePerDivision(all.filter((e) => e.eventType !== "UNDEFINED_PPA_EVENT_TYPE"), cleanDivision),
+    main: oncePerDivision(all.filter(isProMainEvent), cleanDivision),
     qualifier: oncePerDivision(all.filter(isQualifierEvent), qualifierDivision),
+    // The PPA Challenger Showdown (Worlds): its own picker behind the
+    // Pro / Challenger Showdown toggle, never mixed into the pro divisions.
+    showdown: oncePerDivision(all.filter(isShowdownEvent), showdownDivision),
     window,
   };
 }
@@ -776,11 +782,17 @@ export type BracketDraw = {
   pools: Bracket | null;
 };
 
-type BuiltAll = { divisions: BracketDivision[]; draws: Map<string, BracketDraw>; stage: ScoresStage };
+type BuiltAll = {
+  divisions: BracketDivision[];
+  /** The Challenger Showdown's divisions (Worlds), else empty. Draws share `draws`. */
+  showdown: BracketDivision[];
+  draws: Map<string, BracketDraw>;
+  stage: ScoresStage;
+};
 
 async function buildAll(uuid: string): Promise<BuiltAll> {
   const { token, base } = config();
-  if (!token) return { divisions: [], draws: new Map(), stage: "main" };
+  if (!token) return { divisions: [], showdown: [], draws: new Map(), stage: "main" };
   /**
    * One calendar lookup per build, then threaded into every call below, so a
    * finished tournament's ten requests all land on the long window together.
@@ -860,15 +872,18 @@ async function buildAll(uuid: string): Promise<BuiltAll> {
   // Reuse the match lists already fetched above rather than asking twice.
   const cached = showQualifier ? qualifierRaws : mainRaws;
 
-  const results = await Promise.all(
-    chosen.map(async (e, i) => {
+  const buildDraw = (
+    e: ApiEvent,
+    matches: ApiMatch[],
+    nameOf: (t: string) => string,
+    includeHidden: boolean,
+  ) => {
       const eid = e.eventId as string;
-      const name = chosenName(e.eventTitle as string);
+      const name = nameOf(e.eventTitle as string);
       const format = bracketTypeFromFormatId(e.bracketFormatId);
-      const matches = cached?.[i] ?? (await fetchDivision(e));
 
       // Qualifier draws hide their closing rounds behind `HIDE` — see `inStage`.
-      const meta = { eventId: uuid, divisionId: eid, divisionName: name, format, includeHidden: showQualifier };
+      const meta = { eventId: uuid, divisionId: eid, divisionName: name, format, includeHidden };
       const bracket = buildBracket(matches, { ...meta, stage: "winners" });
       const hasLosers = matches.some((m) => /^L/.test(bracketType(m)));
       const losers = hasLosers ? buildBracket(matches, { ...meta, stage: "losers" }) : null;
@@ -893,12 +908,23 @@ async function buildAll(uuid: string): Promise<BuiltAll> {
         bronze: bronze && bW ? teamName(bronze, bW) : undefined,
       };
       return { division, draw: { division, bracket, losers, pools } as BracketDraw };
-    }),
+  };
+
+  const results = await Promise.all(
+    chosen.map(async (e, i) =>
+      buildDraw(e, cached?.[i] ?? (await fetchDivision(e)), chosenName, showQualifier),
+    ),
+  );
+  // The Showdown: one division at a time, like the main draw (see inSequence).
+  const showdownRaws = await inSequence(events.showdown, fetchDivision);
+  const showdownResults = events.showdown.map((e, i) =>
+    buildDraw(e, showdownRaws[i], showdownDivision, false),
   );
 
   const divisions = results.map((r) => r.division);
-  const draws = new Map(results.map((r) => [r.division.id, r.draw]));
-  return { divisions, draws, stage };
+  const showdown = showdownResults.map((r) => r.division);
+  const draws = new Map([...results, ...showdownResults].map((r) => [r.division.id, r.draw]));
+  return { divisions, showdown, draws, stage };
 }
 
 type Loaded = BuiltAll;
@@ -965,7 +991,7 @@ async function load(uuid: string) {
       cache.set(uuid, { value, expires: Date.now() + (isEmpty(value) ? EMPTY_TTL_MS : ttl) });
       return value;
     })
-    .catch(() => ({ divisions: [], draws: new Map<string, BracketDraw>(), stage: "main" as ScoresStage }));
+    .catch(() => ({ divisions: [], showdown: [], draws: new Map<string, BracketDraw>(), stage: "main" as ScoresStage }));
   inFlight.set(uuid, p);
   try {
     return await p;
@@ -981,9 +1007,9 @@ async function load(uuid: string) {
  */
 export async function getBracketIndex(
   uuid: string,
-): Promise<{ divisions: BracketDivision[]; stage: ScoresStage }> {
-  const { divisions, stage } = await load(uuid);
-  return { divisions, stage };
+): Promise<{ divisions: BracketDivision[]; showdown: BracketDivision[]; stage: ScoresStage }> {
+  const { divisions, showdown, stage } = await load(uuid);
+  return { divisions, showdown, stage };
 }
 
 export async function getBracketDraw(uuid: string, divisionId: string): Promise<BracketDraw | null> {

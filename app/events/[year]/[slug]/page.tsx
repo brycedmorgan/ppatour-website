@@ -945,6 +945,7 @@ export default async function EventPage({ params }: Params) {
                 eventId={uuid}
                 expandHref={`/brackets?event=${uuid}`}
                 roundByDay={roundByDay}
+                showdown={showdownDays.length > 0}
               />
             </div>
           </div>
@@ -999,6 +1000,7 @@ export default async function EventPage({ params }: Params) {
                   showBracket={showBracket}
                   expandHref={showBracket ? `/brackets?event=${uuid}` : undefined}
                   roundByDay={roundByDay}
+                  showdown={showdownDays.length > 0}
                 />
               </div>
             </div>

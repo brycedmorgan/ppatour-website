@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { BracketPanel } from "@/components/live/BracketPanel";
 import { ScoresBoard } from "@/components/live/ScoresBoard";
+import { DrawToggle, type DrawField } from "@/components/live/DrawToggle";
 
 /**
  * Scores ↔ Bracket toggle (the live tournament page's scores section). Reused
@@ -14,17 +15,27 @@ export function ScoresBracketToggle({
   expandHref,
   light = false,
   roundByDay,
+  showdown = false,
 }: {
   eventId: string;
   expandHref?: string;
   light?: boolean;
   /** Passed straight to ScoresBoard — see the prop there. */
   roundByDay?: Record<string, string>;
+  /** The tournament hosts the PPA Challenger Showdown: offer Pro / Showdown. */
+  showdown?: boolean;
 }) {
   const [view, setView] = useState<"scores" | "bracket">("scores");
+  const [field, setField] = useState<DrawField>("pro");
+  const draw: DrawField = showdown ? field : "pro";
 
   return (
     <div>
+      {showdown && (
+        <div className="mb-4">
+          <DrawToggle value={draw} onChange={setField} light={light} />
+        </div>
+      )}
       <div
         className={`inline-flex rounded-full border p-0.5 ${
           light ? "border-ppa-line" : "border-white/15"
@@ -52,9 +63,9 @@ export function ScoresBracketToggle({
 
       <div className="mt-6">
         {view === "scores" ? (
-          <ScoresBoard eventId={eventId} light={light} roundByDay={roundByDay} />
+          <ScoresBoard eventId={eventId} light={light} roundByDay={roundByDay} draw={draw} />
         ) : (
-          <BracketPanel eventId={eventId} expandHref={expandHref} light={light} />
+          <BracketPanel key={draw} eventId={eventId} expandHref={expandHref} light={light} draw={draw} />
         )}
       </div>
     </div>

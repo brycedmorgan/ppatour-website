@@ -69,10 +69,10 @@ export async function GET(request: Request) {
   }
 
   if (!division) {
-    const { divisions, stage } = await getBracketIndex(event);
+    const { divisions, showdown, stage } = await getBracketIndex(event);
     // An empty list is a failed upstream call far more often than a real
     // event with no pro divisions — don't pin it at the edge.
-    return NextResponse.json({ eventId: event, divisions, stage }, {
+    return NextResponse.json({ eventId: event, divisions, showdown, stage }, {
       headers: divisions.length ? headers : EMPTY_CACHE,
     });
   }

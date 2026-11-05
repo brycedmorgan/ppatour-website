@@ -65,6 +65,13 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-05 — Worlds scores/brackets: Pro | Challenger Showdown toggle
+- Wesley: toggle on the home "Live & Latest" band and the Worlds event page. `DrawToggle` in ScoresBracketToggle + ResultsPanel, shown only when `showdownDaysFor` matches (2026 Worlds). ScoresBoard/BracketPanel take `draw: "pro" | "showdown"`; one /api/scores and /api/brackets response carries both (`showdown` field).
+- The Showdown is 5 MAIN_EVENT_TYPE events titled "PPA CHALLENGER SHOWDOWN: …" in the Worlds feed (`isShowdownEvent`). Round robin then a knockout, and the feed numbers both from 1 (round 1 = pool round 1 AND semis). `showdownRounds` relabels: "Pool Play · Round N", then Semifinals, Final; pools (Pool A/B) derived from who plays whom.
+- ⚠ Fixed live bug: Worlds qualifiers are QUALIFIER_EVENT_TYPE (not UNDEFINED), so the Pro bracket showed the WD and MS QUALIFIER draws plus the 5 Showdown events. `isQualifierEvent` now covers both types; `isProMainEvent` excludes qualifiers + Showdown.
+- Board now opens on a division that is live, else has a dated match, else any.
+- Verified on localhost against the live feed (tournament ad262b1f, 2026): Pro = 5 main draws, Showdown pools render, rounds in order. Semis/Final appear once both sides are known (untested live).
+
 ### 2026-11-02 — Header "Tour" menu + sitemap now list Jackalope trips
 
 - `components/global/Header.tsx` (client) reads `/api/vacations/nav/` (new, `allTripsByDate()`, revalidate 60) once per page load via `useTrips()`. Built-in calendar shows until it answers and on any failure. Vacations submenu + Tour mega-panel both use it.
