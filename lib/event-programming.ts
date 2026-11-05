@@ -97,7 +97,7 @@ const PROGRAMMING_BY_SLUG: Record<string, EventProgramming> = {
           s("King of the Court PICKL", "2:00–3:30 PM", "4.0–4.5"),
           s("JOOLA Queen's Court / DJ", "4:00–6:00 PM", "4.0–4.5"),
           s("Connor Garnett Skills Lab", "6:00–8:00 PM"),
-          s("Celebrity Pro-Am", "7:00–9:00 PM"),
+          s("MUNICIPAL Celebrity Showdown", "7:00–9:00 PM"),
         ],
       },
       {

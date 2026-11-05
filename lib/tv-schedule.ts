@@ -522,8 +522,8 @@ export const tvSchedule: TvEvent[] = [
         dow: "Thu",
         windows: [
           { channel: "PBTV", window: "12PM – 7PM", round: "Round of 16" },
-          { channel: "PBTV", window: "8PM – 10PM", round: "Celebrity Pro-Am" },
-          { channel: "Tennis Channel", window: "8PM – 10PM", round: "Celebrity Pro-Am" },
+          { channel: "PBTV", window: "8PM – 10PM", round: "MUNICIPAL Celebrity Showdown" },
+          { channel: "Tennis Channel", window: "8PM – 10PM", round: "MUNICIPAL Celebrity Showdown" },
         ],
       },
       { date: "Nov 6", dow: "Fri", windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Quarterfinals" }] },
