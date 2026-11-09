@@ -28,7 +28,7 @@ import { AthleteVideos } from "@/components/athletes/AthleteVideos";
 import { FollowButton } from "@/components/app/FollowButton";
 import { FollowChip } from "@/components/app/FollowChip";
 import { LatestResult } from "@/components/athletes/LatestResult";
-import { RecentResults } from "@/components/athletes/RecentResults";
+import { PlayerCareer } from "@/components/athletes/PlayerCareer";
 import { resolveGear } from "@/lib/athlete-gear";
 import { paddleImageFor } from "@/lib/paddle-images";
 import { athleteHeroFor } from "@/lib/athlete-heroes";
@@ -1338,7 +1338,11 @@ export async function AthleteProfile({
           is force-static and builds ~1,100 at once. Renders nothing for a pro
           with no recent main-draw results. The Latest Result card's "See all
           results" jumps here (#recent-results). */}
-      <RecentResults name={a.name} variant="profile" />
+      {/* Stats + Tournament Results (components/athletes/PlayerCareer, Wesley
+          11/9): every PPA main-draw match since May 2023 from the career ledger,
+          with division/season filters and a dropdown of every stop played.
+          Falls back to the Recent Results band until the ledger has this pro. */}
+      <PlayerCareer name={a.name} />
 
       {/* Highlights — player video clips from the API */}
       {highlights && (

@@ -193,13 +193,13 @@ function keyFor(url: string): string {
 }
 
 /** Wrap any DB work so a slow or broken database can never hold a request. */
-async function timeboxed<T>(work: Promise<T>): Promise<T | null> {
+async function timeboxed<T>(work: Promise<T>, ms: number = DB_TIMEOUT_MS): Promise<T | null> {
   let timer: ReturnType<typeof setTimeout> | undefined;
   try {
     return await Promise.race([
       work,
       new Promise<null>((resolve) => {
-        timer = setTimeout(() => resolve(null), DB_TIMEOUT_MS);
+        timer = setTimeout(() => resolve(null), ms);
       }),
     ]);
   } catch {
@@ -575,20 +575,32 @@ export async function sweepCache(): Promise<number> {
  * the table can tell what it is. Returns null on any failure, like everything
  * else here.
  */
-export async function readStored(name: string): Promise<{ value: unknown; updatedAt: string } | null> {
+export async function readStored(
+  name: string,
+  opts: { timeoutMs?: number; strict?: boolean } = {},
+): Promise<{ value: unknown; updatedAt: string } | null> {
   const sql = db();
-  if (!sql) return null;
+  if (!sql) {
+    if (opts.strict) throw new Error("database not configured");
+    return null;
+  }
   const rows = await timeboxed(
     (async () => {
       await init(sql);
       return sql`SELECT value, updated_at FROM api_cache WHERE key = ${name} AND expires_at > now()`;
     })(),
+    opts.timeoutMs,
   );
+  // `strict`: a timeout or DB error throws instead of reading as "no row" — for
+  // a writer that would otherwise start over and overwrite the row
+  // (lib/career-ledger). An absent row is still null.
+  if (rows === null && opts.strict) throw new Error(`could not read ${name}`);
   const row = (rows as { value: string; updated_at: string | Date }[] | null)?.[0];
   if (!row) return null;
   try {
     return { value: JSON.parse(row.value), updatedAt: new Date(row.updated_at).toISOString() };
   } catch {
+    if (opts.strict) throw new Error(`could not parse ${name}`);
     return null;
   }
 }

@@ -28,6 +28,7 @@ import { getBracketDraw, getBracketIndex, isEmptyDraw } from "@/lib/brackets-api
 import { playerRuns, type PlayerStep } from "@/lib/player-event";
 import { scoreHeadshots } from "@/lib/score-headshots";
 import { normalizeScoreName } from "@/lib/score-names";
+import { roundDepth } from "@/lib/career-stats";
 
 /** Tour stops THIS PLAYER played — not stops on the calendar (see recentStops). */
 const EVENT_COUNT = 10;
@@ -105,29 +106,7 @@ async function recentStops(now?: number): Promise<Tournament[]> {
     .slice(0, MAX_STOPS);
 }
 
-/**
- * How deep in a draw a round is, for ordering one event's matches newest
- * first across divisions. The draws carry no per-match date we can sort on,
- * so depth stands in: a semifinal was played after a quarterfinal in any
- * division. Pools are earliest; an unrecognised name sits mid-pack.
- */
-function roundDepth(round: string): number {
-  // Names as lib/brackets-api writes them: "Final", "SF", "QF", "R16"… for a
-  // knockout; "Losers Round N" / "Losers Final"; "Round N" for pools and
-  // round-robin.
-  const losers = /^losers round (\d+)/i.exec(round);
-  if (losers) return 40 + Number(losers[1]);
-  if (/^losers final/i.test(round)) return 85;
-  const rr = /^round (\d+)/i.exec(round);
-  if (rr) return 10 + Number(rr[1]);
-  if (/semi|^sf\b/i.test(round)) return 90;
-  if (/bronze/i.test(round)) return 95;
-  if (/final|gold/i.test(round) && !/quarter/i.test(round)) return 100;
-  if (/quarter|^qf\b/i.test(round)) return 80;
-  const r = /^r(?:ound of )?\s*(\d+)/i.exec(round);
-  if (r) return 70 - Math.log2(Number(r[1]) || 2);
-  return 50;
-}
+// roundDepth: lib/career-stats (shared with the profile Stats section).
 
 /**
  * Their runs at each stop, newest first, {@link CONCURRENCY} stops at a time,

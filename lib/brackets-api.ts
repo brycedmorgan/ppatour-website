@@ -790,7 +790,7 @@ type BuiltAll = {
   stage: ScoresStage;
 };
 
-async function buildAll(uuid: string): Promise<BuiltAll> {
+async function buildAll(uuid: string, fresh = false): Promise<BuiltAll> {
   const { token, base } = config();
   if (!token) return { divisions: [], showdown: [], draws: new Map(), stage: "main" };
   /**
@@ -842,7 +842,9 @@ async function buildAll(uuid: string): Promise<BuiltAll> {
    */
   const fetchDivision = (e: ApiEvent) => {
     const eid = e.eventId as string;
-    return eventMatches(base, token, uuid, eid, divisionWindow(e, revalidateS)).then((raws) => {
+    // `fresh` (getFreshBracketDraws): a 0s window sends every match call
+    // upstream instead of reading the year-long cached row.
+    return eventMatches(base, token, uuid, eid, fresh ? 0 : divisionWindow(e, revalidateS)).then((raws) => {
       noteOnCourt(eid, raws);
       return raws;
     });
@@ -1014,4 +1016,19 @@ export async function getBracketIndex(
 
 export async function getBracketDraw(uuid: string, divisionId: string): Promise<BracketDraw | null> {
   return (await load(uuid)).draws.get(divisionId) ?? null;
+}
+
+/**
+ * A finished stop's draws read from the partner API itself, past the durable
+ * cache, which holds a finished draw for a year. For lib/career-ledger's one
+ * re-check a week after a stop ends, so a late result or a score correction
+ * gets in. Never on a request path: it costs one call per division. The
+ * fresh build also replaces this instance's memo, so pages here see it too.
+ */
+export async function getFreshBracketDraws(uuid: string): Promise<BuiltAll> {
+  const value = await buildAll(uuid, true);
+  if (!isEmpty(value) && ![...value.draws.values()].some(isEmptyDraw)) {
+    cache.set(uuid, { value, expires: Date.now() + FINISHED_MEMO_MS });
+  }
+  return value;
 }

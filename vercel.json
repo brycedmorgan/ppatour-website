@@ -22,6 +22,10 @@
       "schedule": "0 9 * * *"
     },
     {
+      "path": "/api/cron/career-ledger",
+      "schedule": "20,50 * * * *"
+    },
+    {
       "path": "/api/cron/api-health",
       "schedule": "5 * * * *"
     }
