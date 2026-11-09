@@ -203,7 +203,9 @@ export function HomeHero({
             priority={priority}
             quality={65}
             sizes="100vw"
-            className="animate-kenburns will-change-transform object-cover object-[center_60%] motion-reduce:animate-none"
+            // Wesley 11/9: anchored toward the top (was 60%) — the Daytona
+            // shot lost the player's head at 60%.
+            className="animate-kenburns will-change-transform object-cover object-[center_25%] motion-reduce:animate-none"
           />
         )}
         {showVideo && (
