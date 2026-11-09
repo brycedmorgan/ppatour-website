@@ -592,6 +592,9 @@ const nextConfig: NextConfig = {
       // ppatour.com (apex) → https://www in one hop; the /europe rules above
       // are also host-scoped to the apex and must keep winning, hence the order.
       ...APEX_LEGACY_REDIRECTS,
+      // Retired photo (11/9/26). CVB listings for Daytona, Newport Beach and
+      // Sacramento were given this URL; send any hotlink to a clean shot.
+      { source: "/ppa/action-singles.jpg", destination: "/ppa/action-champ-sunday.jpg", permanent: true },
       ...LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true })),
       ...RETIRED_ATHLETE_REDIRECTS.map((r) => ({ ...r, permanent: false })),
     ];
