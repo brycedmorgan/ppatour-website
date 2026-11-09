@@ -68,7 +68,7 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 ### 2026-11-09 — Ramsey's Worlds stats wrap
 - Google Doc from Jim (11/9, shared to Wesley, not link-shared; read via the Drive connector) → `championship-sunday-standout-stats-from-the-opendoor-pickleball-world-championships` in `lib/news-posts-authored.ts` (wpId 900011).
 - Seeds + scores checked against the 2026 Worlds draw feed; career counts against his own Worlds preview. Three fixes: Mixed G1 "4-11" → "9-11" (feed), "Goins fourth" → "Goins's", "67th career title" → "67th career Singles title" (her overall is 207).
-- Hero is a stand-in, `brookhaven/aerial-05.jpg` (2025, Jenius Bank signage small). Swap for a 2026 Championship Sunday photo when one comes.
+- Hero (Wesley, same day): ScorePlay `PB WORLDS 26_ALW X AB_FINALS-32.jpg` (Bright/Waters trophy lift) → `public/ppa/news/championship-sunday-standout-stats-worlds-2026.jpg`. **ScorePlay workspace is ppatour.scoreplay.io** (app.scoreplay.io says "Invalid URL"); Worlds 2026 media = project 81382. `cdn.scoreplay.io/.../media_<id>_<id2>_compressed.jpg` is a 1680px rendition fetchable with curl.
 
 ### 2026-11-09 — Profile Stats + Tournament Results (career ledger), shipped
 - Wesley: stats like pickleball.com/players/<slug>/stats, plus a results section with a dropdown of every tournament played. `components/athletes/PlayerCareer.tsx` replaces the profile's Recent Results band (kept as fallback + in the app).

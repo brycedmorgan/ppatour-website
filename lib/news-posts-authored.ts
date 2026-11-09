@@ -1473,16 +1473,18 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
     publishedAtGmt: "2026-11-09T22:00:00",
     modifiedAt: "2026-11-09T22:00:00",
     image: {
-      // Stand-in: 2025 Worlds, already in the repo for the venue page. No photo
-      // came with the doc. Swap in a 2026 Championship Sunday shot when one lands.
-      url: "/ppa/venues/brookhaven/aerial-05.jpg",
+      // Wesley's ScorePlay pick, 11/9: project "2026 Opendoor Pickleball World
+      // Championships - For External Media" (81382), "PB WORLDS 26_ALW X
+      // AB_FINALS-32.jpg" (media 133594875). Saved as ScorePlay's 1680px
+      // "compressed" rendition; the original needs the app's download.
+      url: "/ppa/news/championship-sunday-standout-stats-worlds-2026.jpg",
       // ⚠ NO NAMES — house style on this series.
-      alt: "Aerial view of a packed Championship Court at the Pickleball World Championships, with fans filling the stands around a doubles match on a sunny day.",
-      width: 1800,
-      height: 1348,
-      // The court sits in the lower half; a centred ~3.6:1 crop would land on
-      // the stands.
-      position: "50% 68%",
+      alt: "Two players in matching teal tops raise a silver championship trophy on court in front of a packed, cheering grandstand under a blue sky.",
+      width: 1680,
+      height: 1120,
+      // Faces sit ~42% down and the cup's rim ~16%; a ~3.6:1 band at 25% keeps
+      // both (rows ~163–630 of 1120). Centred, it would cut the cup.
+      position: "50% 25%",
     },
     // Left empty deliberately: `detectAthleteMentions` reads the body.
     players: [],
