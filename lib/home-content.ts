@@ -139,23 +139,27 @@ export const playersToWatch: PlayerWatch[] = [
     name: "Anna Leigh Waters",
     division: "Women's · No. 1",
     rank: 1,
-    hook: "The world No. 1 arrives chasing another triple crown — singles, doubles, and mixed in one weekend.",
+    hook: "Swept Worlds: singles, doubles with Anna Bright, and mixed with Ben Johns. Three golds at the biggest Major of the year.",
+  },
+  // Wesley 11/9: picks refreshed from the 2026 Worlds results. Ranks are the
+  // overall men's/women's WPR board on 11/9.
+  {
+    slug: "jack-sock",
+    image: "/ppa/pros/jack-sock.jpg",
+    name: "Jack Sock",
+    division: "Men's · No. 25",
+    rank: 25,
+    hook: "Reached the Worlds singles final as the 13 seed, beating third seed Hunter Johnson in three games in the semifinal.",
   },
   {
-    slug: "ben-johns",
-    image: "/ppa/pros/ben-johns.jpg",
-    name: "Ben Johns",
-    division: "Men's Singles · No. 1",
-    rank: 1,
-    hook: "The most dominant player in the sport's history, still the one to beat in every discipline.",
-  },
-  {
-    slug: "gabe-tardio",
-    image: "/ppa/pros/gabe-tardio.jpg",
-    name: "Gabriel Tardio",
-    division: "Men's Doubles · No. 2",
-    rank: 2,
-    hook: "The young star already winning majors alongside the game's best — and climbing fast in singles.",
+    slug: "tama-shimabukuro",
+    // His pickleball.com studio headshot, the one his profile page uses; there
+    // is no local file in public/ppa/pros.
+    image: "https://images.pickleball.com/profile-images/1782771961624/TamaShimabukuro-2-Edited.png",
+    name: "Tama Shimabukuro",
+    division: "Men's · No. 8",
+    rank: 8,
+    hook: "Won Worlds men's doubles gold with JW Johnson as the 4 seed, coming back from two games down against Daescu and Alshon in the final.",
   },
 ];
 
