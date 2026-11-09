@@ -1443,4 +1443,140 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
 <p><strong>For more from the Stats Desk, please visit: </strong><a href="https://facebook.com/groups/propickleballstats" target="_blank" rel="noreferrer noopener"><strong>facebook.com/groups/propickleballstats</strong></a></p>
 `.trim(),
   },
+  {
+    // Jim Ramsey's Worlds stats wrap, shared with Wesley as a Google Doc on
+    // 11/9 (1SsAlBTZPdvJasbJzKpui9PGl5uxDXlnFGW6i5Ei-FAY, not link-shared; read
+    // via the Drive connector). Same series and shape as the Chicago wrap. His
+    // "." / "***.***" separators became rules; his closing "###" is dropped.
+    //
+    // Every seed and score was checked against the 2026 Worlds draw feed
+    // (ad262b1f…). Career counts were checked against his own preview above
+    // (ALW 66 Singles, 67 w/Ben, 27 w/Bright, 45 Triple Crowns; no Hong Kong
+    // singles) and all follow from it.
+    //
+    // ⚠ THREE FIXES TO HIS COPY:
+    //  - Mixed game 1 "4-11" -> "9-11". The feed has Jorja/JW winning it 11-9.
+    //  - "Goins fourth career title" -> "Goins's".
+    //  - "Waters's 67th career title" -> "67th career Singles title". 67 is her
+    //    Singles count (66 in the preview + this one); her overall total is 207.
+    slug: "championship-sunday-standout-stats-from-the-opendoor-pickleball-world-championships",
+    wpId: 900011,
+    status: "published",
+    source: "wordpress",
+    category: "Recap",
+    series: "stats-wrap",
+    categoryResolvedBy: "series",
+    title: "Championship Sunday Standout Stats from the Opendoor Pickleball World Championships",
+    dek: "Farmers Branch, Texas. November 8, 2026. Anna Leigh Waters wins her 46th career Triple Crown, Bright and Waters make it a record 18 straight, and 15-year-old Tama Shimabukuro wins Men's Doubles.",
+    author: "Jim Ramsey",
+    publishedAt: "2026-11-09T16:00:00",
+    publishedAtGmt: "2026-11-09T22:00:00",
+    modifiedAt: "2026-11-09T22:00:00",
+    image: {
+      // Stand-in: 2025 Worlds, already in the repo for the venue page. No photo
+      // came with the doc. Swap in a 2026 Championship Sunday shot when one lands.
+      url: "/ppa/venues/brookhaven/aerial-05.jpg",
+      // ⚠ NO NAMES — house style on this series.
+      alt: "Aerial view of a packed Championship Court at the Pickleball World Championships, with fans filling the stands around a doubles match on a sunny day.",
+      width: 1800,
+      height: 1348,
+      // The court sits in the lower half; a centred ~3.6:1 crop would land on
+      // the stands.
+      position: "50% 68%",
+    },
+    // Left empty deliberately: `detectAthleteMentions` reads the body.
+    players: [],
+    playerNames: [],
+    wpEvent: {
+      slug: "2026-opendoor-pickleball-world-championships",
+      name: "2026 Opendoor Pickleball World Championships",
+    },
+    tags: [],
+    tagsRaw: [],
+    wpCategories: ["2026-opendoor-pickleball-world-championships", "stats-wrap"],
+    embeds: [],
+    inlineImages: [],
+    legacyUrl:
+      "https://www.ppatour.com/championship-sunday-standout-stats-from-the-opendoor-pickleball-world-championships/",
+    seo: {
+      title: "Worlds 2026: Championship Sunday Stats | PPA Tour",
+      description:
+        "Championship Sunday stats from the Opendoor Pickleball World Championships: Anna Leigh Waters' 46th Triple Crown, a record 18th straight for Bright and Waters, and more.",
+      canonical:
+        "https://www.ppatour.com/championship-sunday-standout-stats-from-the-opendoor-pickleball-world-championships/",
+    },
+    bodyHtml: `
+<p><strong>Farmers Branch, Texas.</strong></p>
+
+<p><strong>November 8, 2026.</strong></p>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<h4 class="wp-block-heading"><strong>MIXED DOUBLES FINAL:&nbsp; (1) Anna Leigh Waters and Ben Johns def. (3) Jorja Johnson and JW Johnson, 9-11, 11-6, 11-9, 3-11, 11-4.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Waters and Johns&#8217;s 68th career title together (68-4 record in Finals).</li>
+<li>Waters and Johns&#8217;s fourth title this season.</li>
+<li>Waters and Johns had fewer Dinks into the Net or Wide, 16-10.</li>
+<li>Waters and Johns had fewer Volleys into the Net, 26-18.</li>
+<li>Waters had no Errors on Serves, Returns, and Third Shots.</li>
+<li>Longest rally: 52 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>MEN&#8217;S DOUBLES FINAL:&nbsp; (4) JW Johnson and Tama Shimabukuro def. (3) Christian Alshon and Andrei Daescu, 5-11, 5-11, 11-4, 11-8, 11-4.</strong></h4>
+
+<ul class="wp-block-list">
+<li>The first comeback of &#8220;lose the first two games, win the next three&#8221; in a Men&#8217;s Doubles Final since October 2023 in Las Vegas, when Ben and Collin Johns turned the trick against Dylan Frazier and, coincidentally, JW Johnson.</li>
+<li>Shimabukuro at age 15 is the youngest Men&#8217;s Doubles Champion in PPA Tour history.</li>
+<li>Johnson&#8217;s 14th career Doubles title.</li>
+<li>Johnson and Shimabukuro had more Clean Winners, 24-15.</li>
+<li>Johnson and Shimabukuro had no Serve and Return Errors.</li>
+<li>Longest rally: 91 shots, the longest in a Men&#8217;s Doubles Final since the 122-shot rally in Sacramento in April (Johns/Tardio vs Johnson/Klinger).</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>WOMEN&#8217;S DOUBLES FINAL:&nbsp; (1) Anna Bright and Anna Leigh Waters def. (5) Catherine Parenteau and Sofia Sewing, 11-4, 11-9, 11-5.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Bright and Waters have won 18 consecutive tournaments that they have entered together, the longest streak in <em>all</em> PPA Tour Doubles history (Women&#8217;s, Men&#8217;s and Mixed).</li>
+<li>Bright and Waters&#8217;s 28th career title together, and fifth this season.</li>
+<li>Bright and Waters had more Clean Winners, 13-6.</li>
+<li>Bright and Waters had fewer Dinks into the Net or Wide, 7-3.</li>
+<li>Longest rally: 51 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>MEN&#8217;S SINGLES FINAL:&nbsp; (7) John Lucian Goins def. (13) Jack Sock, 11-5, 12-10.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Goins&#8217;s fourth career title, and second this season.</li>
+<li>Sock&#8217;s third career Silver medal, and first this season.</li>
+<li>Serve and Return Errors: Sock 5, Goins 0.</li>
+<li>Longest rally: 22 shots.</li>
+</ul>
+
+<h4 class="wp-block-heading"><strong>WOMEN&#8217;S SINGLES FINAL:&nbsp; (1) Anna Leigh Waters def. (2) Kate Fahey, 11-3, 11-2.</strong></h4>
+
+<ul class="wp-block-list">
+<li>Waters&#8217;s 300th career match victory and 46th career Triple Crown.</li>
+<li>Waters&#8217;s 67th career Singles title and fourth this season.</li>
+<li>Waters has won 56 consecutive finals since June 2022.</li>
+<li>Waters had more Clean Winners, 11-2.</li>
+<li>Longest rally: 11 shots.</li>
+</ul>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<h4 class="wp-block-heading"><strong>LEADING AT THE CHANGEOVER:</strong></h4>
+
+<p>Did the players or teams leading a game when they changed sides at six points go on to win that game?</p>
+
+<ul class="wp-block-list">
+<li>This tournament: Yes. 15 times in 17 games.</li>
+<li>This domestic season: Yes. 67 times in 80 games. (<strong>83%</strong>).</li>
+</ul>
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+<p><strong>For the comprehensive stats of all these gold medal matches, please visit: </strong><a href="https://facebook.com/groups/propickleballstats" target="_blank" rel="noreferrer noopener"><strong>facebook.com/groups/propickleballstats</strong></a></p>
+`.trim(),
+  },
 ];

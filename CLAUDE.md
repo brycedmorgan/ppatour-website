@@ -65,6 +65,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-09 — Ramsey's Worlds stats wrap
+- Google Doc from Jim (11/9, shared to Wesley, not link-shared; read via the Drive connector) → `championship-sunday-standout-stats-from-the-opendoor-pickleball-world-championships` in `lib/news-posts-authored.ts` (wpId 900011).
+- Seeds + scores checked against the 2026 Worlds draw feed; career counts against his own Worlds preview. Three fixes: Mixed G1 "4-11" → "9-11" (feed), "Goins fourth" → "Goins's", "67th career title" → "67th career Singles title" (her overall is 207).
+- Hero is a stand-in, `brookhaven/aerial-05.jpg` (2025, Jenius Bank signage small). Swap for a 2026 Championship Sunday photo when one comes.
+
 ### 2026-11-09 — Profile Stats + Tournament Results (career ledger), shipped
 - Wesley: stats like pickleball.com/players/<slug>/stats, plus a results section with a dropdown of every tournament played. `components/athletes/PlayerCareer.tsx` replaces the profile's Recent Results band (kept as fallback + in the app).
 - Stats: All/Doubles/Mixed/Singles × Career/Last 12 months/each year. Win–loss, titles/finals/semis, longest + current streak, vs higher seed, deciding games, after winning/losing game one, finals record, games/points, best win, by-season table. Counted client-side in `lib/career-stats.ts`.
