@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "prebuild": "node scripts/snapshot-rankings.mjs && node scripts/sync-wp-media.mjs --verify",
+    "prebuild": "node scripts/snapshot-rankings.mjs && node scripts/sync-wp-media.mjs --verify && node scripts/audit-image-focus.mjs",
     "verify:media": "node scripts/sync-wp-media.mjs --verify",
     "tixr:sync": "node scripts/sync-tixr-prices.mjs",
     "tixr:audit": "node scripts/audit-tixr-mapping.mjs",
@@ -28,7 +28,8 @@
     "rankings:snapshot": "node scripts/snapshot-rankings.mjs",
     "rankings:snapshot:check": "node scripts/snapshot-rankings.mjs --check",
     "recap": "node scripts/tournament-recap.mjs",
-    "engine:properties": "node scripts/engine-properties.mjs"
+    "engine:properties": "node scripts/engine-properties.mjs",
+    "images:audit": "node scripts/audit-image-focus.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.126.0",

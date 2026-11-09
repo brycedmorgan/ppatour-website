@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { focusFor } from "@/lib/image-focus";
 import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -325,6 +326,7 @@ export default function WatchPage() {
           alt=""
           fill
           sizes="100vw"
+          style={{ objectPosition: focusFor(next.image) }}
           className="object-cover opacity-30"
         />
         <div className="absolute inset-0 scrim-hero" />

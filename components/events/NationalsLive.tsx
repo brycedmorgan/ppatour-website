@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { focusFor } from "@/lib/image-focus";
 import { buildEventJsonLd } from "@/lib/event-schema";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -390,7 +391,8 @@ export function NationalsLive({
           fill
           priority
           sizes="100vw"
-          className="animate-kenburns will-change-transform object-cover object-center motion-reduce:animate-none"
+          style={{ objectPosition: focusFor(t.image) }}
+          className="animate-kenburns will-change-transform object-cover motion-reduce:animate-none"
         />
         {/* Kept in step with app/events/[year]/[slug]/page.tsx — see the note on
             `.scrim-hero-event` in globals.css. These two heroes render the same

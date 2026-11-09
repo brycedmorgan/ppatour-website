@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { focusFor } from "@/lib/image-focus";
 import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
@@ -713,7 +714,9 @@ export default async function EventPage({ params }: Params) {
           fill
           priority
           sizes="100vw"
-          className="animate-kenburns will-change-transform object-cover object-center motion-reduce:animate-none"
+          // Focal point per photo (lib/image-focus.ts): centre crops showed legs.
+          style={{ objectPosition: focusFor(t.image) }}
+          className="animate-kenburns will-change-transform object-cover motion-reduce:animate-none"
         />
         {/* Event-hero scrim: .scrim-hero plus an even veil below lg, where the
             badge and a wrapped four-line event name sit in the thin part of the

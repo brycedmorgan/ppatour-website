@@ -65,6 +65,13 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-09 — Event photos crop at their own focal point (the "legs" hero)
+- Wesley: a hero showed only a player's legs. Each surface cropped at its own fixed spot (event hero center, homepage 60% then 25%). A 3:2 action photo in a ~2.5:1 hero loses 40% of its height, so a centre crop cuts off heads.
+- New `lib/image-focus.ts`: `focusFor(src)` returns a per-photo `object-position`, set by eye for 57 photos (faces for player shots, the court for crowd/aerial). Used by the event hero, NationalsLive hero, homepage hero, Featured/Schedule/home cards, the header Next Event card, /watch and the event OG image.
+- ⚠ `scripts/audit-image-focus.mjs` (`npm run images:audit`, in **prebuild**) FAILS THE BUILD when a photo that can become an event hero has no focal point: HERO_OVERRIDE pins, curated/GENERIC/VENUE images in placeholder-data, `public/ppa/events/`, Challenger photos. Synced Jackalope venue photos are exempt (centre suits aerials). Adding a pin = add one FOCUS line.
+- Verified on the dev server: Daytona (`action-singles.jpg`, a calendar-index fallback) shows the player's face at 1600×800 and 800 wide; homepage cards carry their positions. tsc clean.
+- Daytona still has no photo of its own (Pictona isn't synced). A real Daytona pin is the proper fix for that page.
+
 ### 2026-11-05 — Worlds scores/brackets: Pro | Challenger Showdown toggle
 - Wesley: toggle on the home "Live & Latest" band and the Worlds event page. `DrawToggle` in ScoresBracketToggle + ResultsPanel, shown only when `showdownDaysFor` matches (2026 Worlds). ScoresBoard/BracketPanel take `draw: "pro" | "showdown"`; one /api/scores and /api/brackets response carries both (`showdown` field).
 - The Showdown is 5 MAIN_EVENT_TYPE events titled "PPA CHALLENGER SHOWDOWN: …" in the Worlds feed (`isShowdownEvent`). Round robin then a knockout, and the feed numbers both from 1 (round 1 = pool round 1 AND semis). `showdownRounds` relabels: "Pool Play · Round N", then Semifinals, Final; pools (Pool A/B) derived from who plays whom.

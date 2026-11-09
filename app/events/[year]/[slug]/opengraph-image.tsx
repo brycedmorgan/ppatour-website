@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { focusFor } from "@/lib/image-focus";
 import { OG_SIZE, ogFonts, ogImageData } from "@/lib/og";
 import { ticketsOnSale } from "@/lib/tixr-prices";
 import {
@@ -53,6 +54,7 @@ export default async function Image({
               width: "100%",
               height: "100%",
               objectFit: "cover",
+              objectPosition: focusFor(t.image),
             }}
           />
         )}

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { focusFor } from "@/lib/image-focus";
 import { EUROPE_PUBLIC, EUROPE_SITE_URL } from "@/lib/europe-launch";
 import { PADDLE_LAB_PUBLIC } from "@/lib/paddle-lab-access";
 import Link from "next/link";
@@ -211,6 +212,7 @@ function FeatureCard({
         alt=""
         fill
         sizes="320px"
+        style={{ objectPosition: focusFor(image) }}
         className="will-change-transform object-cover transition-transform duration-700 group-hover/card:scale-105"
       />
       <div className="absolute inset-0 scrim-card" />

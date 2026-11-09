@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { focusFor } from "@/lib/image-focus";
 import Link from "next/link";
 import { useDeferredValue, useMemo, useState } from "react";
 import { eventMatcher } from "@/lib/event-search";
@@ -272,6 +273,7 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
                   alt={t.name}
                   fill
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  style={{ objectPosition: focusFor(t.image) }}
                   className="object-cover grayscale-[30%] transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
                 />
                 <div className="absolute inset-0 scrim-card" />

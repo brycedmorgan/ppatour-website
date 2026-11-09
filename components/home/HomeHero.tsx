@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { focusFor } from "@/lib/image-focus";
 import Link from "next/link";
 import { HeroBackgroundToggle } from "@/components/home/HeroBackgroundToggle";
 import { Countdown } from "@/components/motion/Countdown";
@@ -203,9 +204,10 @@ export function HomeHero({
             priority={priority}
             quality={65}
             sizes="100vw"
-            // Wesley 11/9: anchored toward the top (was 60%) — the Daytona
-            // shot lost the player's head at 60%.
-            className="animate-kenburns will-change-transform object-cover object-[center_25%] motion-reduce:animate-none"
+            // Wesley 11/9: the crop comes from the photo's own focal point
+            // (lib/image-focus.ts). A fixed 60% cut the Daytona player's head.
+            style={{ objectPosition: focusFor(next.image) }}
+            className="animate-kenburns will-change-transform object-cover motion-reduce:animate-none"
           />
         )}
         {showVideo && (

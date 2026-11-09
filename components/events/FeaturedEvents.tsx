@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { focusFor } from "@/lib/image-focus";
 import Link from "next/link";
 import {
   daysUntil,
@@ -113,6 +114,7 @@ export function FeaturedEvents({
                   alt={t.name}
                   fill
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  style={{ objectPosition: focusFor(t.image) }}
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 scrim-hero" />
