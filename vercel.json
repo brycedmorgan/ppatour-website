@@ -2,23 +2,23 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "crons": [
     {
-      "path": "/api/revalidate-events",
+      "path": "/api/revalidate-events/",
       "schedule": "0 */2 * * *"
     },
     {
-      "path": "/api/revalidate-athletes",
+      "path": "/api/revalidate-athletes/",
       "schedule": "0 7 * * *"
     },
     {
-      "path": "/api/revalidate-content",
+      "path": "/api/revalidate-content/",
       "schedule": "0 8 * * *"
     },
     {
-      "path": "/api/push/notify",
+      "path": "/api/push/notify/",
       "schedule": "*/15 * * * *"
     },
     {
-      "path": "/api/cron/rankings",
+      "path": "/api/cron/rankings/",
       "schedule": "0 9 * * *"
     },
     {
@@ -26,7 +26,7 @@
       "schedule": "20,50 * * * *"
     },
     {
-      "path": "/api/cron/api-health",
+      "path": "/api/cron/api-health/",
       "schedule": "5 * * * *"
     }
   ]
