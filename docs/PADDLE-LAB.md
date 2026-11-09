@@ -274,9 +274,8 @@ a pro at the moment of contact — behind `.scrim-hero-lab`.
    of the crowd, and is masked at lg so the right edge reads as photography.
 
 To swap the photo, change the `src` in `app/paddle-lab/page.tsx`. Anything wide,
-sunlit and paddle-forward works; `action-singles.jpg` is the strongest
-alternative (full-stretch lunge, ball on the paddle face, dark backdrop) but its
-paddle sits at the far LEFT of the frame, directly under the headline.
+sunlit and paddle-forward works. (`action-singles.jpg` was retired 11/9/26 for its
+camera angle; don't bring it back.)
 
 ## The two catalogues, and how compare has to behave (2026-09-04)
 

@@ -27,7 +27,6 @@ const FOCUS: Record<string, string> = {
   // These are the photos that cause the legs problem; all are player shots.
   "/ppa/action-md-final.jpg": "55% 22%",
   "/ppa/action-mxd-ppa-finals.jpg": "50% 15%",
-  "/ppa/action-singles.jpg": "50% 18%",
   "/ppa/action-champ-sunday.jpg": "60% 20%",
   "/ppa/action-waters-bright.jpg": "55% 25%",
 

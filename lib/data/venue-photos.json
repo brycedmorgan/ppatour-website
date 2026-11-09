@@ -888,5 +888,19 @@
       "caption": "Carvana Pickleball Masters",
       "credit": "PPA Tour"
     }
+  ],
+  "pictona": [
+    {
+      "src": "/ppa/venues/pictona/venue-05.jpg",
+      "type": "venue",
+      "caption": "Pictona at Holly Hill · Championship Court",
+      "credit": "PPA Tour"
+    },
+    {
+      "src": "/ppa/venues/pictona/venue-06.jpg",
+      "type": "venue",
+      "caption": "Pictona at Holly Hill · Championship Court",
+      "credit": "PPA Tour"
+    }
   ]
 }

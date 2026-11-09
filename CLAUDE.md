@@ -67,10 +67,18 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ### 2026-11-09 — Event photos crop at their own focal point (the "legs" hero)
 - Wesley: a hero showed only a player's legs. Each surface cropped at its own fixed spot (event hero center, homepage 60% then 25%). A 3:2 action photo in a ~2.5:1 hero loses 40% of its height, so a centre crop cuts off heads.
-- New `lib/image-focus.ts`: `focusFor(src)` returns a per-photo `object-position`, set by eye for 57 photos (faces for player shots, the court for crowd/aerial). Used by the event hero, NationalsLive hero, homepage hero, Featured/Schedule/home cards, the header Next Event card, /watch and the event OG image.
+- New `lib/image-focus.ts`: `focusFor(src)` returns a per-photo `object-position`, set by eye for 56 photos (faces for player shots, the court for crowd/aerial). Used by the event hero, NationalsLive hero, homepage hero, Featured/Schedule/home cards, the header Next Event card, /watch and the event OG image.
 - ⚠ `scripts/audit-image-focus.mjs` (`npm run images:audit`, in **prebuild**) FAILS THE BUILD when a photo that can become an event hero has no focal point: HERO_OVERRIDE pins, curated/GENERIC/VENUE images in placeholder-data, `public/ppa/events/`, Challenger photos. Synced Jackalope venue photos are exempt (centre suits aerials). Adding a pin = add one FOCUS line.
-- Verified on the dev server: Daytona (`action-singles.jpg`, a calendar-index fallback) shows the player's face at 1600×800 and 800 wide; homepage cards carry their positions. tsc clean.
-- Daytona still has no photo of its own (Pictona isn't synced). A real Daytona pin is the proper fix for that page.
+- Verified on the dev server before merging Bryce's Daytona fix (main 1c3ea67): heroes and homepage cards carry their positions at 1600×800 and 800 wide. tsc clean.
+- This is the guard Bryce's entry below asks for ("so a photo can't reach a page unchosen"), for the crop: the photo itself still has to be a good one.
+
+### 2026-11-09 — Daytona photo replaced; `action-singles.jpg` retired site-wide
+- Bryce: the Daytona event photo was a low-angle shot of a woman's legs and skirt. Cause: Pictona had no synced venue photos, so the event fell back to `GENERIC_IMAGES`, and `action-singles.jpg` was in that pool.
+- Daytona now leads with its own venue: Pictona Championship Court (2025, "Welcome to Holly Hill"), `public/ppa/venues/pictona/venue-05/06.jpg`, manifest key `pictona`.
+- Pulled via Jackalope: approved both photos on event `1126-PPA-DAYTONABEACH-FL-USA` (Photos tab, `addLibrary`), then curled `api/public/event-photo`. ⚠ The Blob token still pulls blank, so `sync-venue-photos.mjs` can't run here; this is the workaround.
+- `action-singles.jpg` deleted. Swapped out of the header Play card, /play, the Junior program card and two past event records. Guard comment on `GENERIC_IMAGES`.
+- ⚠ Daytona, Newport Beach and Sacramento CVB listings (docs/LOCAL-LISTINGS.md) were given that image URL. Doc now points at clean photos; any CVB that copied the file still holds it.
+- Next: Wesley + Maxwell on a review step so a photo can't reach a page unchosen.
 
 ### 2026-11-05 — Worlds scores/brackets: Pro | Challenger Showdown toggle
 - Wesley: toggle on the home "Live & Latest" band and the Worlds event page. `DrawToggle` in ScoresBracketToggle + ResultsPanel, shown only when `showdownDaysFor` matches (2026 Worlds). ScoresBoard/BracketPanel take `draw: "pro" | "showdown"`; one /api/scores and /api/brackets response carries both (`showdown` field).
