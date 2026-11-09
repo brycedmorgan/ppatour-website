@@ -1498,6 +1498,10 @@ export const authoredPosts: Omit<WpPost, "postType">[] = [
     wpCategories: ["2026-opendoor-pickleball-world-championships", "stats-wrap"],
     embeds: [],
     inlineImages: [],
+    // Wesley, 11/9: one button, to the 2026 Worlds event page. Internal, so
+    // the TV Schedule button stands down beside it.
+    ctaUrl: "/events/2026/pickleball-world-championships/",
+    ctaLabel: "World Championships Event Page",
     legacyUrl:
       "https://www.ppatour.com/championship-sunday-standout-stats-from-the-opendoor-pickleball-world-championships/",
     seo: {
