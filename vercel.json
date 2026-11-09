@@ -22,7 +22,7 @@
       "schedule": "0 9 * * *"
     },
     {
-      "path": "/api/cron/career-ledger",
+      "path": "/api/cron/career-ledger/",
       "schedule": "20,50 * * * *"
     },
     {
