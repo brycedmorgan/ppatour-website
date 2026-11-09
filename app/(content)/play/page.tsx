@@ -142,7 +142,7 @@ export default function PlayPage() {
           <div className="grid gap-6 lg:grid-cols-[1fr_1.4fr]">
             <div className="relative isolate aspect-[4/5] overflow-hidden bg-ppa-navy">
               <Image
-                src="/ppa/action-singles.jpg"
+                src="/ppa/play-amateur-court.jpg"
                 alt=""
                 fill
                 sizes="(min-width: 1024px) 40vw, 100vw"

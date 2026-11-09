@@ -254,10 +254,14 @@ const REGISTER = "https://www.pickleballtournaments.com/"; // fallback — regis
  * printed on a court-side board, and this pool is the one place a photo can
  * appear on a page nobody chose it for.
  */
+// ⚠ `action-singles.jpg` was REMOVED 11/9/26 and the file deleted (Bryce: "We
+// never want that to be the default"). It is a low-angle shot of a woman's legs
+// and skirt, and it landed on Daytona because Pictona had no synced venue art.
+// Any photo added to this pool can appear on an event nobody chose it for:
+// no low angles, no shot framed on a player's body over the play.
 export const GENERIC_IMAGES = [
   "/ppa/action-md-final.jpg",
   "/ppa/action-mxd-ppa-finals.jpg",
-  "/ppa/action-singles.jpg",
   "/ppa/action-champ-sunday.jpg",
   "/ppa/action-waters-bright.jpg",
 ];
@@ -959,7 +963,7 @@ const PAST_EVENTS: Tournament[] = ([
     status: "completed",
     tierKey: "open",
     prizeMoney: "$150,000",
-    image: "/ppa/action-singles.jpg",
+    image: "/ppa/action-md-final.jpg",
     season: "2025-2026",
   },
   {
@@ -1101,7 +1105,7 @@ const PAST_EVENTS: Tournament[] = ([
     status: "completed",
     tierKey: "open",
     prizeMoney: "$125,000",
-    image: "/ppa/action-singles.jpg",
+    image: "/ppa/action-md-final.jpg",
     season: "2022",
   },
 ] as Omit<Tournament, "eventCode">[]).map((e) => ({

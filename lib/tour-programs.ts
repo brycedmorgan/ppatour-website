@@ -44,7 +44,7 @@ export const tourPrograms: TourProgram[] = [
       { title: "Coach + parent resources", detail: "Tournament prep, travel, and on-site player support." },
     ],
     cta: { label: "Register a Junior Player", href: REGISTER_PPA, external: true },
-    image: "/ppa/action-singles.jpg",
+    image: "/ppa/play-amateur-court.jpg",
   },
   /**
    * ⚠ THIS ENTRY DOES NOT RENDER A PAGE — /tour/challenger is its own route

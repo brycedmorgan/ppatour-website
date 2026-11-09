@@ -370,7 +370,7 @@ function MegaPanelContent({
           <div className="mt-4">
             <FeatureCard
               href="/play"
-              image="/ppa/action-singles.jpg"
+              image="/ppa/play-amateur-court.jpg"
               eyebrow="For Players"
               title="Play a PPA Event"
               meta="Amateur brackets at every stop"
@@ -498,7 +498,7 @@ export function Header() {
     const warm = () => {
       const paths = [
         getNextTournament().image,
-        "/ppa/action-singles.jpg",
+        "/ppa/play-amateur-court.jpg",
         "/ppa/play-amateur-court.jpg",
       ];
       for (const path of paths) {

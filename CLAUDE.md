@@ -65,6 +65,14 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-09 — Daytona photo replaced; `action-singles.jpg` retired site-wide
+- Bryce: the Daytona event photo was a low-angle shot of a woman's legs and skirt. Cause: Pictona had no synced venue photos, so the event fell back to `GENERIC_IMAGES`, and `action-singles.jpg` was in that pool.
+- Daytona now leads with its own venue: Pictona Championship Court (2025, "Welcome to Holly Hill"), `public/ppa/venues/pictona/venue-05/06.jpg`, manifest key `pictona`.
+- Pulled via Jackalope: approved both photos on event `1126-PPA-DAYTONABEACH-FL-USA` (Photos tab, `addLibrary`), then curled `api/public/event-photo`. ⚠ The Blob token still pulls blank, so `sync-venue-photos.mjs` can't run here; this is the workaround.
+- `action-singles.jpg` deleted. Swapped out of the header Play card, /play, the Junior program card and two past event records. Guard comment on `GENERIC_IMAGES`.
+- ⚠ Daytona, Newport Beach and Sacramento CVB listings (docs/LOCAL-LISTINGS.md) were given that image URL. Doc now points at clean photos; any CVB that copied the file still holds it.
+- Next: Wesley + Maxwell on a review step so a photo can't reach a page unchosen.
+
 ### 2026-11-05 — Worlds scores/brackets: Pro | Challenger Showdown toggle
 - Wesley: toggle on the home "Live & Latest" band and the Worlds event page. `DrawToggle` in ScoresBracketToggle + ResultsPanel, shown only when `showdownDaysFor` matches (2026 Worlds). ScoresBoard/BracketPanel take `draw: "pro" | "showdown"`; one /api/scores and /api/brackets response carries both (`showdown` field).
 - The Showdown is 5 MAIN_EVENT_TYPE events titled "PPA CHALLENGER SHOWDOWN: …" in the Worlds feed (`isShowdownEvent`). Round robin then a knockout, and the feed numbers both from 1 (round 1 = pool round 1 AND semis). `showdownRounds` relabels: "Pool Play · Round N", then Semifinals, Final; pools (Pool A/B) derived from who plays whom.

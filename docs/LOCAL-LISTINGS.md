@@ -146,7 +146,7 @@ before submitting.
 - Venue: Pictona at Holly Hill, 1060 Ridgewood Ave, Holly Hill, FL 32117
 - Page: https://www.ppatour.com/events/2026/proton-daytona-beach-open/
 - Tickets: https://www.tixr.com/groups/ppa/events/ppa-daytona-beach-203020
-- Image: https://www.ppatour.com/ppa/action-singles.jpg
+- Image: https://www.ppatour.com/ppa/venues/pictona/venue-05.jpg
 - Short (≤250): The world's best pro pickleball players come to Holly Hill for the Proton Daytona Beach Open, a stop on the Carvana PPA Tour.
 - Long: The Carvana PPA Tour brings the Proton Daytona Beach Open to Pictona at Holly Hill in Holly Hill, FL, Nov 16–22, 2026. Watch the top-ranked pros in the world battle for titles in singles, doubles and mixed doubles. The week also has amateur and junior brackets, so fans can play the same courts as the pros. Tickets start at $25. Schedule, tickets, parking and how to watch: https://www.ppatour.com/events/2026/proton-daytona-beach-open/
 
@@ -194,7 +194,7 @@ before submitting.
 - Venue: The Tennis and Pickleball Club at Newport Beach, 11 Clubhouse Dr, Newport Beach, CA 92660
 - Page: https://www.ppatour.com/events/2027/newport-beach-open/
 - Tickets: not on sale yet
-- Image: https://www.ppatour.com/ppa/action-singles.jpg
+- Image: https://www.ppatour.com/ppa/action-champ-sunday.jpg
 - Short (≤250): The world's best pro pickleball players come to Newport Beach for the Newport Beach Open, a stop on the Carvana PPA Tour.
 - Long: The Carvana PPA Tour brings the Newport Beach Open to The Tennis and Pickleball Club at Newport Beach in Newport Beach, CA, Mar 1–7, 2027. Watch the top-ranked pros in the world battle for titles in singles, doubles and mixed doubles. The week also has amateur and junior brackets, so fans can play the same courts as the pros. Tickets on sale soon. Schedule, tickets, parking and how to watch: https://www.ppatour.com/events/2027/newport-beach-open/
 
@@ -210,7 +210,7 @@ before submitting.
 - Venue: Life Time Arden, 1220 Arden Hills Ln, Sacramento, CA 95864
 - Page: https://www.ppatour.com/events/2027/sacramento-open/
 - Tickets: not on sale yet
-- Image: https://www.ppatour.com/ppa/action-singles.jpg
+- Image: https://www.ppatour.com/ppa/action-champ-sunday.jpg
 - Short (≤250): The world's best pro pickleball players come to Sacramento for the Sacramento Open, a stop on the Carvana PPA Tour.
 - Long: The Carvana PPA Tour brings the Sacramento Open to Life Time Arden in Sacramento, CA, Apr 5–11, 2027. Watch the top-ranked pros in the world battle for titles in singles, doubles and mixed doubles. The week also has amateur and junior brackets, so fans can play the same courts as the pros. Tickets on sale soon. Schedule, tickets, parking and how to watch: https://www.ppatour.com/events/2027/sacramento-open/
 
