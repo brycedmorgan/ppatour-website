@@ -65,6 +65,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-10 — Junior PPA rankings refreshed (Daniela, Asana `1220401694655784`)
+- Jake's sheet (edited 11/10 20:35 UTC) → `lib/data/junior-rankings.json`, `updated: "Nov 10, 2026"`. 2,699 rows (+122), no board shrank, 89–100% confirmed per division. Fetch → import `--check` → import.
+- ⚠ The importer refused a correct sheet: Boys Mixed 12U (68 players) sat 91% inside Boys Singles 12U (150) vs 90% inside its own board. Guard 2 now ranks by Jaccard (0.90 own vs 0.40 Singles); the printed "confirmed %" is still containment.
+- Verified against a second pull: rank, name, points and age match for all 2,699 rows.
+
 ### 2026-11-09 — Tickets links now come from pickleballtournaments.com's TicketsURL
 - Wesley: TicketsURL is "the main URL we want to use throughout the website for that tournament". Only `API_v2_Tourney_GetDetails` carries it (ppa_tournaments has no ticket field). New `lib/event-tickets.ts`: the 2-hour `/api/revalidate-events` cron reads it for every upcoming US stop into `api_cache` `event-tickets:v1`; `getEvents()` applies it, so /events, event pages, header, home and app all follow. Local dev (no DATABASE_URL) calls GetDetails directly.
 - `COMMERCE_BY_SLUG` is now the FALLBACK: used when the field is blank, the generic tixr.com/groups/ppa (12 of 13 upcoming stops on 11/9), not a Tixr event URL, or a listing no longer in the PPA group.

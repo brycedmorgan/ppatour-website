@@ -124,20 +124,25 @@ boards.forEach((b, i) => {
   if (!rows.length) throw new Error(`Table ${i} (${label}) parsed to zero rows.`);
 
   // GUARD 2 — the position's proposal must be confirmed by the names themselves.
+  // ⚠ RANKED BY JACCARD, NOT CONTAINMENT. "Share of this board found in an old
+  // board" favours big boards: on 11/10 the 68-player Boys Mixed 12U board sat
+  // 91% inside Boys Singles 12U (150 players) against 90% inside its own board,
+  // and the import refused a correctly mapped sheet. Jaccard (overlap / union)
+  // read it 0.90 own vs 0.40 Singles. `pct` (containment) is still what prints.
   const names = new Set(rows.map((r) => norm(r[1])));
   const scored = [...prevByLabel.entries()]
     .map(([l, set]) => {
       let hit = 0;
       for (const n of names) if (set.has(n)) hit += 1;
-      return { label: l, pct: hit / names.size };
+      return { label: l, pct: hit / names.size, jac: hit / (names.size + set.size - hit) };
     })
-    .sort((a, b2) => b2.pct - a.pct);
+    .sort((a, b2) => b2.jac - a.jac);
   if (scored[0].label !== label) {
     const assigned = scored.find((s) => s.label === label);
     throw new Error(
       `Table ${i} was assigned "${label}" by position, but its players best match ` +
-        `"${scored[0].label}" (${(scored[0].pct * 100).toFixed(0)}% against ` +
-        `${((assigned?.pct ?? 0) * 100).toFixed(0)}% for the assigned division). ` +
+        `"${scored[0].label}" (Jaccard ${scored[0].jac.toFixed(2)} against ` +
+        `${(assigned?.jac ?? 0).toFixed(2)} for the assigned division). ` +
         `The sheet's tab order has changed — fix DIVISION_ORDER, do not override this check.`,
     );
   }
