@@ -551,9 +551,11 @@ const COMMERCE_BY_SLUG: Record<string, { tickets?: string; register?: string }> 
     register: registerEvent("ppa-tour-florida-open"), // Holly Hill venue — same event
   },
   "veolia-malibu-cup": {
-    // Tixr lists this as "Veolia PPA Malibu" — no Cup/Showcase in the name, so
-    // the rename left it alone. Verified 8/26.
-    tickets: tixrEvent("ppa-malibu-176502"),
+    // ⚠ WAS 176502, WHICH IS NO LONGER IN THE PPA TIXR GROUP (11/9). Tixr
+    // relisted the stop as 212667, still "Veolia PPA Malibu", same dates; the
+    // per-day sessions are 212715/212712/212709/212671. Maxwell Hill flagged
+    // the dead link 11/9. Same failure as Daytona's 178517 → 203020 above.
+    tickets: tixrEvent("veolia-ppa-malibu-212667"),
     // ⚠ Follows the feed's `details_url`, which moved with the rename. The old
     // …-malibu-cup path still 200s today, but it is no longer the registration
     // page the tour publishes, and a platform slug that outlives its event is

@@ -41,10 +41,6 @@
       "from": 25,
       "onSale": true
     },
-    "176502": {
-      "from": 25,
-      "onSale": true
-    },
     "176687": {
       "from": 25,
       "onSale": true
@@ -167,6 +163,10 @@
     },
     "211406": {
       "from": null,
+      "onSale": true
+    },
+    "212667": {
+      "from": 25,
       "onSale": true
     }
   }

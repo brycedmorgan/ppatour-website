@@ -3,7 +3,7 @@
   "group": "Professional Pickleball Association",
   "generated_at": "2026-10-11T17:50:40Z",
   "event_count": 41,
-  "ticket_type_count": 765,
+  "ticket_type_count": 758,
   "series_breakdown": {
     "PPA Tour": 40,
     "Major League Pickleball": 1
@@ -3081,47 +3081,33 @@
       "parent_event_id": "203020"
     },
     {
-      "event_id": "176502",
+      "event_id": "212667",
       "name": "Veolia PPA Malibu",
       "series": "PPA Tour",
       "status": "PUBLISHED",
       "start_date": "2026-12-14",
-      "end_date": "2026-12-20",
+      "end_date": "2026-12-21",
       "venue": {
         "name": "Pepperdine University",
         "city": "Malibu",
         "state": "CA"
       },
-      "url": "https://www.tixr.com/groups/ppa/events/veolia-ppa-malibu-176502",
+      "url": "https://www.tixr.com/groups/ppa/events/veolia-ppa-malibu-212667",
       "currency": "USD",
       "tickets": [
+        {
+          "name": "Championships",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
+        },
         {
           "name": "Connor Garnett Skills Lab Powered by the PPA",
           "category": "GA",
           "sale_state": "OPEN",
           "base_price": 135,
-          "all_in_price": 152.81
-        },
-        {
-          "name": "Friday Courtside",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 48.1
-        },
-        {
-          "name": "Friday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 25,
-          "all_in_price": 31.9
-        },
-        {
-          "name": "Friday VIP",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 300,
-          "all_in_price": 331.08
+          "all_in_price": 151.27
         },
         {
           "name": "GovX Discount",
@@ -3135,35 +3121,21 @@
           "category": "GA",
           "sale_state": "OPEN",
           "base_price": 370,
-          "all_in_price": 406.72
-        },
-        {
-          "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp + Weeklong Courtside",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 500,
-          "all_in_price": 547.18
-        },
-        {
-          "name": "JOOLA 2-Day PPA 3.0/4.0 Level Camp + Weeklong VIP",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 1000,
-          "all_in_price": 1087.41
+          "all_in_price": 405.17
         },
         {
           "name": "King of the Court (3.0-3.5)",
           "category": "GA",
           "sale_state": "OPEN",
           "base_price": 15,
-          "all_in_price": 21.09
+          "all_in_price": 19.55
         },
         {
           "name": "King of the Court (4.0-4.5)",
           "category": "GA",
           "sale_state": "OPEN",
           "base_price": 15,
-          "all_in_price": 21.09
+          "all_in_price": 19.55
         },
         {
           "name": "Pickleball Vacations",
@@ -3173,18 +3145,25 @@
           "all_in_price": 0
         },
         {
-          "name": "Play with the Pro’s (3.0-3.5)",
+          "name": "Play with the Pro's (3.0-3.5)",
           "category": "GA",
           "sale_state": "SOLD_OUT",
           "base_price": null,
-          "all_in_price": 58.91
+          "all_in_price": 57.36
         },
         {
-          "name": "Play with the Pro’s (4.0-4.5)",
+          "name": "Play with the Pro's (4.0-4.5)",
           "category": "GA",
           "sale_state": "SOLD_OUT",
           "base_price": null,
-          "all_in_price": 58.91
+          "all_in_price": 57.36
+        },
+        {
+          "name": "Quarterfinals",
+          "category": "GA",
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
         },
         {
           "name": "Register Here",
@@ -3194,109 +3173,81 @@
           "all_in_price": 0
         },
         {
-          "name": "Saturday Courtside",
+          "name": "Round of 16",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 60,
-          "all_in_price": 71.77
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
         },
         {
-          "name": "Saturday Grounds Pass",
+          "name": "Semifinals",
           "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 25,
-          "all_in_price": 31.9
-        },
-        {
-          "name": "Saturday VIP",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 350,
-          "all_in_price": 385.11
-        },
-        {
-          "name": "Sunday Courtside",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 80,
-          "all_in_price": 93.38
-        },
-        {
-          "name": "Sunday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 25,
-          "all_in_price": 31.9
-        },
-        {
-          "name": "Sunday VIP",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 350,
-          "all_in_price": 385.11
-        },
-        {
-          "name": "Thursday Courtside",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 40,
-          "all_in_price": 48.1
-        },
-        {
-          "name": "Thursday Grounds Pass",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 25,
-          "all_in_price": 31.9
-        },
-        {
-          "name": "Thursday VIP",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 300,
-          "all_in_price": 331.08
+          "sale_state": "SOLD_OUT",
+          "base_price": null,
+          "all_in_price": 0
         },
         {
           "name": "Tuesday Grounds Pass",
           "category": "GA",
           "sale_state": "OPEN",
           "base_price": 25,
-          "all_in_price": 31.9
+          "all_in_price": 30.35
         },
         {
           "name": "Wednesday Grounds Pass",
           "category": "GA",
           "sale_state": "OPEN",
           "base_price": 25,
-          "all_in_price": 31.9
+          "all_in_price": 30.35
         },
         {
           "name": "Wednesday VIP",
           "category": "GA",
           "sale_state": "OPEN",
           "base_price": 300,
-          "all_in_price": 331.08
-        },
-        {
-          "name": "Weeklong Courtside",
-          "category": "GA",
-          "sale_state": "OPEN",
-          "base_price": 170,
-          "all_in_price": 190.62
+          "all_in_price": 329.54
         },
         {
           "name": "Weeklong Grounds Pass",
           "category": "GA",
           "sale_state": "OPEN",
           "base_price": 100,
-          "all_in_price": 114.99
+          "all_in_price": 113.44
         },
         {
           "name": "Weeklong VIP",
           "category": "GA",
           "sale_state": "OPEN",
-          "base_price": 800,
-          "all_in_price": 871.32
+          "base_price": 900,
+          "all_in_price": 977.82
+        },
+        {
+          "name": "Thursday-Sunday Courtside Bleacher Row F-H",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 300,
+          "all_in_price": 329.54
+        },
+        {
+          "name": "Thursday-Sunday Courtside Bleacher Row I-M",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 200,
+          "all_in_price": 221.49
+        },
+        {
+          "name": "Thursday-Sunday Courtside Bleacher Row N-R",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 150,
+          "all_in_price": 167.47
+        },
+        {
+          "name": "Thursday-Sunday Courtside Chair",
+          "category": "STANDARD",
+          "sale_state": "OPEN",
+          "base_price": 450,
+          "all_in_price": 491.61
         }
       ]
     },

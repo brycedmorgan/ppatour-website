@@ -153,7 +153,7 @@ before submitting.
 ### Veolia Malibu Showcase · Dec 14–20, 2026
 - Venue: Pepperdine University - Ralphs-Straus Tennis Center, 24255 Pacific Coast Hwy, Malibu, CA 90263
 - Page: https://www.ppatour.com/events/2026/veolia-malibu-cup/
-- Tickets: https://www.tixr.com/groups/ppa/events/ppa-malibu-176502
+- Tickets: https://www.tixr.com/groups/ppa/events/veolia-ppa-malibu-212667
 - Image: https://www.ppatour.com/ppa/action-waters-bright.jpg
 - Short (≤250): The world's best pro pickleball players come to Malibu for the Veolia Malibu Showcase, a stop on the Carvana PPA Tour.
 - Long: The Carvana PPA Tour brings the Veolia Malibu Showcase to Pepperdine University - Ralphs-Straus Tennis Center in Malibu, CA, Dec 14–20, 2026. Watch the top-ranked pros in the world battle for titles in singles, doubles and mixed doubles. The week also has amateur and junior brackets, so fans can play the same courts as the pros. Tickets start at $25. Schedule, tickets, parking and how to watch: https://www.ppatour.com/events/2026/veolia-malibu-cup/

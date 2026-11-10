@@ -65,6 +65,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-09 — Malibu tickets: Tixr relisted the stop (Maxwell)
+- Maxwell Hill, DM 11/9: Malibu buttons went to a dead Tixr page. 176502 is gone from the PPA group; the stop is now `veolia-ppa-malibu-212667` (sessions 212715/212712/212709/212671). Mapping in `lib/placeholder-data.ts` + docs/LOCAL-LISTINGS.md updated.
+- Price snapshot + index: only Malibu's record swapped (22 tiers, from $25), read from Tixr's group API in Chrome. ⚠ The rest of the snapshot is still 10/11: the daily sync is captcha-blocked, which is why a dead id goes unnoticed.
+- Every other mapped id missing from the live group is a finished stop, except Cincinnati Open 2027 (181370, not listed yet; page already says Coming Soon).
+
 ### 2026-11-09 — Ramsey's Worlds stats wrap
 - Google Doc from Jim (11/9, shared to Wesley, not link-shared; read via the Drive connector) → `championship-sunday-standout-stats-from-the-opendoor-pickleball-world-championships` in `lib/news-posts-authored.ts` (wpId 900011).
 - Seeds + scores checked against the 2026 Worlds draw feed; career counts against his own Worlds preview. Three fixes: Mixed G1 "4-11" → "9-11" (feed), "Goins fourth" → "Goins's", "67th career title" → "67th career Singles title" (her overall is 207).
