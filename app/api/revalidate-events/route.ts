@@ -1,6 +1,7 @@
 import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
-import { EVENTS_CACHE_TAG } from "@/lib/events-api";
+import { EVENTS_CACHE_TAG, getEvents, ticketFeedUuids } from "@/lib/events-api";
+import { refreshEventTicketUrls } from "@/lib/event-tickets";
 import { purgeCacheTag } from "@/lib/pb-cache";
 
 /**
@@ -15,6 +16,8 @@ import { purgeCacheTag } from "@/lib/pb-cache";
  * can't be triggered anonymously.
  */
 export const dynamic = "force-dynamic";
+/** ~15 GetDetails calls, one at a time (lib/event-tickets). */
+export const maxDuration = 120;
 
 export async function GET(request: Request) {
   const secret = process.env.CRON_SECRET;
@@ -37,10 +40,20 @@ export async function GET(request: Request) {
    */
   const purged = await purgeCacheTag(EVENTS_CACHE_TAG);
 
+  /**
+   * Each upcoming US stop's TicketsURL (lib/event-tickets), the site's primary
+   * tickets link since 11/9. Read after the purge so a stop that just went
+   * public is included. A failure here leaves the previous links in place.
+   */
+  const { events, source } = await getEvents();
+  const tickets =
+    source === "live" ? await refreshEventTicketUrls(ticketFeedUuids(events)) : { ok: false, skipped: "fallback" };
+
   return NextResponse.json({
     ok: true,
     revalidated: EVENTS_CACHE_TAG,
     purged,
+    tickets,
     at: new Date().toISOString(),
   });
 }

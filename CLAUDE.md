@@ -65,6 +65,13 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-09 — Tickets links now come from pickleballtournaments.com's TicketsURL
+- Wesley: TicketsURL is "the main URL we want to use throughout the website for that tournament". Only `API_v2_Tourney_GetDetails` carries it (ppa_tournaments has no ticket field). New `lib/event-tickets.ts`: the 2-hour `/api/revalidate-events` cron reads it for every upcoming US stop into `api_cache` `event-tickets:v1`; `getEvents()` applies it, so /events, event pages, header, home and app all follow. Local dev (no DATABASE_URL) calls GetDetails directly.
+- `COMMERCE_BY_SLUG` is now the FALLBACK: used when the field is blank, the generic tixr.com/groups/ppa (12 of 13 upcoming stops on 11/9), not a Tixr event URL, or a listing no longer in the PPA group.
+- "No longer in the group" = an id the Tixr snapshot lacks that is OLDER than its newest id (2027 Texas Open's field holds old Virginia Beach 134492). An id NEWER than the snapshot counts as listed and on sale (`ticketsOnSale` in both tixr-price-index and tixr-prices), so a relisting isn't "Coming Soon" while the captcha-blocked sync is stale.
+- ⚠ Production: the stored row starts empty until the first cron run after deploy (≤2h); curated links show until then. No stop has a specific TicketsURL yet, so nothing visibly changes until the events team fills the field.
+- Sister-tour stops too (Wesley, same day): their TicketsURL wins over lib/sister-tour-tickets. Looser rule (`usableSisterTourTicketsUrl`): any real http(s) storefront, never the US group page, a gone PPA listing, or a malformed `https://https://…` URL. Filled → on sale, "no-price" (card reads "Tickets"). All 9 upcoming were blank on 11/9; each sister tour's org fills its own.
+
 ### 2026-11-09 — Malibu tickets: Tixr relisted the stop (Maxwell)
 - Maxwell Hill, DM 11/9: Malibu buttons went to a dead Tixr page. 176502 is gone from the PPA group; the stop is now `veolia-ppa-malibu-212667` (sessions 212715/212712/212709/212671). Mapping in `lib/placeholder-data.ts` + docs/LOCAL-LISTINGS.md updated.
 - Price snapshot + index: only Malibu's record swapped (22 tiers, from $25), read from Tixr's group API in Chrome. ⚠ The rest of the snapshot is still 10/11: the daily sync is captcha-blocked, which is why a dead id goes unnoticed.

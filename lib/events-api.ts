@@ -21,6 +21,7 @@
 import { challengerPhotoFor } from "@/lib/challenger-photos";
 import { cache } from "react";
 import { pbCachedJson } from "@/lib/pb-cache";
+import { eventTicketUrls, usableSisterTourTicketsUrl, usableTicketsUrl } from "@/lib/event-tickets";
 import { asiaTourUrlForDetailsUrl } from "@/lib/asia-tour-links";
 import { australiaTourUrlForEvent } from "@/lib/australia-tour-links";
 import { canadaTourUrlForEvent } from "@/lib/canada-tour-links";
@@ -719,8 +720,65 @@ export const getEvents = cache(async function getEvents(): Promise<{
     .map((t, i) => mapTournament(t, seen, i, levels));
 
   if (events.length === 0) return fallback();
-  return { events: withComingSoon(events), source: "live" };
+  return { events: withComingSoon(await withFeedTickets(events)), source: "live" };
 });
+
+/**
+ * Upcoming feed stops, US and sister tours: the ones whose tickets link comes
+ * from the tournament's own TicketsURL (lib/event-tickets). A finished stop has
+ * nothing left to sell. Exported for the events cron, which refreshes exactly
+ * this set.
+ */
+export function ticketFeedUuids(events: Tournament[]): string[] {
+  return events
+    .filter((e) => e.source === "api" && e.status !== "completed" && e.tournamentUuid)
+    .map((e) => e.tournamentUuid as string);
+}
+
+/**
+ * ⚠ THE TOURNAMENT'S OWN TicketsURL WINS (Wesley, 11/9), over COMMERCE_BY_SLUG
+ * for a US stop and over lib/sister-tour-tickets for a sister-tour stop. Those
+ * are now the fallbacks for a blank or unusable field.
+ *
+ * US: only a PPA Tixr event page counts (`usableTicketsUrl`), and price and
+ * on-sale follow the link, so a stop never shows one listing's price over
+ * another listing's button.
+ *
+ * Sister tours: any real storefront counts (`usableSisterTourTicketsUrl`). A
+ * link someone entered says tickets are on sale there; we hold no price for it,
+ * so "no-price" (the card reads "Tickets", never a tier-table guess), unless
+ * it's a PPA-group listing the snapshot prices.
+ */
+async function withFeedTickets(events: Tournament[]): Promise<Tournament[]> {
+  const uuids = ticketFeedUuids(events);
+  if (uuids.length === 0) return events;
+  const urls = await eventTicketUrls(uuids);
+  const wanted = new Set(uuids);
+  return events.map((e) => {
+    const raw = e.tournamentUuid && wanted.has(e.tournamentUuid) ? urls[e.tournamentUuid] : undefined;
+    if (!raw) return e;
+    if (e.country) {
+      const url = usableSisterTourTicketsUrl(raw);
+      if (!url) return e;
+      const price = ticketPriceFrom(url);
+      return {
+        ...e,
+        ticketsUrl: url,
+        ticketsOnSale: true,
+        ticketPriceFrom: price ?? e.ticketPriceFrom,
+        ticketNote: price == null ? "no-price" : undefined,
+      };
+    }
+    const url = usableTicketsUrl(raw);
+    if (!url || url === e.ticketsUrl) return e;
+    return {
+      ...e,
+      ticketsUrl: url,
+      ticketsOnSale: ticketsOnSale(url),
+      ticketPriceFrom: ticketPriceFrom(url) ?? e.ticketPriceFrom,
+    };
+  });
+}
 
 /**
  * The feed's record for THIS edition of a stop: slug AND year, never slug alone.

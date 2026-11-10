@@ -29,7 +29,7 @@
  * in the other direction. Grounds Pass is $25 across every 2026 PPA stop.
  */
 import snapshot from "@/lib/data/tixr-ticket-prices.json";
-import { ticketsHidden, tixrEventIdFrom } from "@/lib/tixr-price-index";
+import { ticketsHidden, tixrEventIdFrom, tixrListedAfterSnapshot } from "@/lib/tixr-price-index";
 
 export { ticketsHidden, tixrEventIdFrom };
 
@@ -135,5 +135,8 @@ export function tixrPricesGeneratedAt(): string | null {
 export function ticketsOnSale(ticketsUrl: string | undefined): boolean {
   const id = tixrEventIdFrom(ticketsUrl);
   if (!id) return false; // generic group URL, or no URL at all
+  // A listing newer than the snapshot (created since the last sync) is on sale
+  // with no tier detail yet; same rule as lib/tixr-price-index.
+  if (tixrListedAfterSnapshot(ticketsUrl)) return true;
   return BY_ID.has(id) && ticketPriceFrom(ticketsUrl) != null;
 }

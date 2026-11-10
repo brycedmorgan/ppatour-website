@@ -72,11 +72,47 @@ export function ticketPriceFrom(ticketsUrl: string | undefined): number | null {
 }
 
 /**
+ * The newest Tixr event id in the snapshot. Tixr ids only ever go up, so this
+ * splits ids the snapshot does not hold into two kinds (see the two helpers
+ * below).
+ */
+const NEWEST_SNAPSHOT_ID = Math.max(0, ...Object.keys(PRICES).map(Number).filter(Number.isFinite));
+
+/**
+ * An id the snapshot does not hold but that is NEWER than everything in it: a
+ * listing Tixr created after the last sync. Malibu was relisted as 212667 on
+ * 11/9 while the snapshot was a month old (the daily sync is captcha-blocked),
+ * and reading "not in the snapshot" as "not on sale" put "Tickets Coming Soon"
+ * on a stop that was selling.
+ */
+function listedAfterSnapshot(id: string): boolean {
+  return !(id in PRICES) && Number(id) > NEWEST_SNAPSHOT_ID;
+}
+
+/** {@link listedAfterSnapshot} for a tickets URL, for lib/tixr-prices. Hidden ids stay false. */
+export function tixrListedAfterSnapshot(ticketsUrl: string | undefined): boolean {
+  const id = tixrEventIdFrom(ticketsUrl);
+  return id ? !(id in TICKETS_HIDDEN) && listedAfterSnapshot(id) : false;
+}
+
+/**
+ * An id OLDER than the newest snapshot listing that the snapshot does not hold:
+ * it existed when we last read the PPA group and was not in it, so the listing
+ * is gone or belongs to a past event. pickleballtournaments.com's TicketsURL for
+ * the 2027 Texas Open (11/9) is one: an old Virginia Beach listing, 134492.
+ */
+export function tixrListingGone(ticketsUrl: string | undefined): boolean {
+  const id = tixrEventIdFrom(ticketsUrl);
+  return id ? !(id in PRICES) && !listedAfterSnapshot(id) : false;
+}
+
+/**
  * Whether the event is listed on Tixr. When false the site shows no price and no
  * ticket link — "Tickets Coming Soon" instead.
  */
 export function ticketsOnSale(ticketsUrl: string | undefined): boolean {
   const id = tixrEventIdFrom(ticketsUrl);
   if (!id || id in TICKETS_HIDDEN) return false;
+  if (listedAfterSnapshot(id)) return true;
   return Boolean(PRICES[id]?.onSale);
 }
