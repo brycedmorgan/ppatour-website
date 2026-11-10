@@ -394,7 +394,7 @@ export function HomeHero({
                     to go deeper on the tournament being played sent people to a
                     list of every other stop instead. */}
                 <Link
-                  href={eventHref(next)}
+                  href={`${eventHref(next)}#overview`}
                   className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98]"
                 >
                   Explore the Event
@@ -444,8 +444,13 @@ export function HomeHero({
                     ↗
                   </span>
                 </a>
+                {/* #overview, not the top of the page (Maxwell, 11/10): the
+                    event hero looks so much like this one that landing on it
+                    read as "the button did nothing". #overview is the facts
+                    strip under the hero, on every event page, with the sticky
+                    event tab bar above it. The live branch's button uses it too. */}
                 <Link
-                  href={eventHref(next)}
+                  href={`${eventHref(next)}#overview`}
                   className="group flex h-11 items-center justify-center gap-1.5 border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:border-white hover:bg-white hover:text-ppa-navy active:scale-[0.98]"
                 >
                   Explore the Event
