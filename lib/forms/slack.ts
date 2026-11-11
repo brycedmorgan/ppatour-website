@@ -311,7 +311,16 @@ export async function postFormToSlack(opts: {
 
   // `text` is the notification/fallback line (push notifications, screen
   // readers, and any client that can't render blocks).
-  const message = { text: `New submission — ${opts.heading}`, blocks };
+  // ⚠ No unfurls. Without these, Slack drags the full ppatour.com homepage card
+  // under every submission (postThreadReply above has always passed
+  // unfurl_links: false). unfurl_media matters too: careers rows carry a
+  // form-uploads/*.pdf résumé link.
+  const message = {
+    text: `New submission — ${opts.heading}`,
+    blocks,
+    unfurl_links: false,
+    unfurl_media: false,
+  };
   const viaApi = Boolean(token && channel);
 
   try {

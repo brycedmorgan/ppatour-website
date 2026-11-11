@@ -47,7 +47,7 @@
  * Hour totals, computed from the windows below: Cary 20.5h TC (Thu–Sun) ·
  * Arizona +1 FS2 +2 FS1 (no TC) · Las Vegas 4h TC (Sun only) · Chicago 12.5h TC
  * (Thu–Sun) +2 FS1 +2 FS2 · VA Beach 13h TC · MLP Nations Cup PBTV-ONLY ·
- * Worlds 2h TC (Wed Pro-Am only) · Malibu 19h TC (Thu–Sun).
+ * Worlds 2h TC (Thu Celebrity Showdown only) · Malibu 19h TC (Thu–Sun).
  */
 
 export type TvWindow = {

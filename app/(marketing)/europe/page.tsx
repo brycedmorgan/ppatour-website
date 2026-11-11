@@ -114,13 +114,15 @@ export const metadata: Metadata = {
  * ------------------------------------------------------------------ */
 
 /**
- * ⚠ FOUR TIERS, AND THEY ARE NOT THE US TIERS. The US tour runs Worlds /
+ * ⚠ THREE TIERS, AND THEY ARE NOT THE US TIERS. The US tour runs Worlds /
  * Majors / Cups / Opens (see /about/how-it-works); Europe is sized purely by
  * ranking points. Do not map one onto the other — a Europe 500 is not a US
  * Open, and printing them in the same table would say it is.
+ * 75-point events removed per Payton, #ppa-tour-europe 11/11. 125 is now the
+ * lowest tier; its note stays "Open to ITP players." until Payton says
+ * whether to call it "Entry level".
  */
 const EVENT_TIERS = [
-  { points: "75", note: "Entry level. Open to ITP players." },
   { points: "125", note: "Open to ITP players." },
   { points: "250", note: "Touring pros and aspiring touring pros only." },
   { points: "500", note: "Touring pros and aspiring touring pros only." },
@@ -147,7 +149,7 @@ const ENTRY_PRIORITY = [
 
 const DIFFERENCES = [
   "Its own calendar, events and player operations across the region.",
-  "Four event tiers — 75, 125, 250 and 500 points — rather than the US Worlds / Majors / Cups / Opens structure.",
+  "Three event tiers — 125, 250 and 500 points — rather than the US Worlds / Majors / Cups / Opens structure.",
   "ITP players may compete, capped at 125-point events.",
   "Draw sizes of 32 to 64, set per event by the tournament director.",
 ];
@@ -311,7 +313,7 @@ export default async function EuropePage() {
             events={europeEvents}
             kicker="Calendar"
             title="Next Up in Europe"
-            /* ⚠ NOT "Challenger". Europe's tiers are 75 / 125 / 250 / 500 and
+            /* ⚠ NOT "Challenger". Europe's tiers are 125 / 250 / 500 and
                the table further down this page says so; the house badge would
                print the US sub-1,000 word and contradict it. */
             tierName="PPA Tour Europe"
@@ -398,13 +400,13 @@ export default async function EuropePage() {
       {/* --------------------------------------------------- Event types */}
       <section id="events" className="scroll-mt-24 border-t border-ppa-line bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <SectionHead eyebrow="Event Types" title="Four Tiers, Sized by Points" />
+          <SectionHead eyebrow="Event Types" title="Three Tiers, Sized by Points" />
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ppa-navy/60">
-            PPA Tour Europe currently runs four event tiers, sized by how many
+            PPA Tour Europe currently runs three event tiers, sized by how many
             ranking points are on the line.
           </p>
 
-          <div className="mt-6 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-6 grid gap-px border border-ppa-line bg-ppa-line sm:grid-cols-3">
             {EVENT_TIERS.map((t) => (
               <div key={t.points} className="min-w-0 bg-white p-5">
                 <p className="font-display text-3xl leading-none text-ppa-blue">{t.points}</p>
