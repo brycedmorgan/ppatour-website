@@ -18,6 +18,7 @@ import {
 import type { PbPlayerStats, PbStatBlock } from "@/lib/pb-player-stats";
 import { BoxScore, finishChipClass } from "@/components/athletes/BoxScore";
 import { EventLogo, RecentResults, dateRange } from "@/components/athletes/RecentResults";
+import { HeadToHead } from "@/components/athletes/HeadToHead";
 
 /**
  * The athlete profile's Stats and Tournament Results sections (Wesley, 11/9:
@@ -71,8 +72,19 @@ const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 const monthYear = (iso: string) => `${MONTHS[Number(iso.slice(5, 7)) - 1]} ${iso.slice(0, 4)}`;
 const n = (v: number) => v.toLocaleString("en-US");
 
-/** `uuid` is the pickleball.com player uuid (lib/athlete-stats); null skips the stats engine. */
-export function PlayerCareer({ name, uuid }: { name: string; uuid?: string | null }) {
+/**
+ * `uuid` is the pickleball.com player uuid (lib/athlete-stats); null skips the stats engine.
+ * `base` is where profiles live on this mount ("/athletes", or "/europe/athletes").
+ */
+export function PlayerCareer({
+  name,
+  uuid,
+  base = "/athletes",
+}: {
+  name: string;
+  uuid?: string | null;
+  base?: string;
+}) {
   const [state, setState] = useState<{
     key: string;
     career: Career | null;
@@ -97,6 +109,8 @@ export function PlayerCareer({ name, uuid }: { name: string; uuid?: string | nul
   return (
     <>
       {source && <StatsBand name={name} source={source} />}
+      {/* Head-to-Head rides on the same stats call; absent from copies cached before it shipped. */}
+      {state.pb?.h2h?.length ? <HeadToHead name={name} rows={state.pb.h2h} base={base} /> : null}
       {state.career ? (
         <TournamentResults name={name} career={state.career} />
       ) : (

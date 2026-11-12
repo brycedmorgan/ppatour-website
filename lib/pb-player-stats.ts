@@ -12,8 +12,8 @@
  * The ledger still feeds Tournament Results, which needs every match, and is
  * the Stats fallback when this call fails (components/athletes/PlayerCareer).
  *
- * ⚠ ~890 KB PER CALL (ALW, 11/12), almost all of it head-to-head maps we don't
- * show. So it is NOT stored in pb-cache's table (two calls × ~1,100 pros would
+ * ⚠ ~890 KB PER CALL (ALW, 11/12), almost all of it head-to-head maps. We keep
+ * one of them, per-opponent totals (`h2h`, for the Head-to-Head section). So it is NOT stored in pb-cache's table (two calls × ~1,100 pros would
  * be ~2 GB) and NOT in Next's data cache (2 MB entry limit). It is fetched,
  * cut down to the ~5 KB below, and the CDN holds /api/player-stats for hours.
  *
@@ -28,6 +28,7 @@
  * match objects carry ratings; they are dropped here, never passed on.
  */
 import type { CareerMatch, DivisionKind, Split } from "@/lib/career-stats";
+import { slugForName } from "@/lib/player-match";
 
 export type PbStatBlock = {
   matches: Split;
@@ -65,6 +66,20 @@ export type PbPlayerStats = {
    * from these rows instead.
    */
   tournaments: { date: string; kinds: DivisionKind[]; medals: Partial<Record<DivisionKind, [number, number, number]>> }[];
+  /**
+   * Head-to-head: their record against every opponent, most matches first
+   * (Wesley, 11/12). Optional because CDN copies cached before it shipped lack it.
+   */
+  h2h?: H2hRow[];
+};
+
+/** [matches won, matches lost, games won, games lost, finals won, finals lost]. */
+export type H2hRecord = [number, number, number, number, number, number];
+export type H2hRow = {
+  name: string;
+  /** Our profile, when the name maps to exactly one published pro. */
+  slug: string | null;
+  rec: Partial<Record<"all" | DivisionKind, H2hRecord>>;
 };
 
 type Obj = Record<string, unknown>;
@@ -181,7 +196,47 @@ async function getJson(url: string, token: string): Promise<Obj | null> {
   }
 }
 
-export const isUuid = (v: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
+/**
+ * `CumulativeOpponentStats`: one row per opponent PLAYER (a doubles team
+ * counts once for each of its two players), with Singles/Doubles/Mixed/All
+ * blocks. ALW, 11/12: 336 opponents; Parenteau All 105 = 32 + 37 + 36.
+ *
+ * ⚠ Some blocks have matches but GamesPlayed 0 (early results loaded without
+ * scores, like Tyson's 2020), so games are [0, 0] there and the UI shows "—".
+ * "Gold" matches are finals. Ratings are not in these rows.
+ */
+function headToHead(raw: unknown): H2hRow[] {
+  const blocks: ["all" | DivisionKind, string][] = [
+    ["all", "AllStats"],
+    ["doubles", "DoublesStats"],
+    ["mixed", "MixedStats"],
+    ["singles", "SinglesStats"],
+  ];
+  const rows: { row: H2hRow; played: number }[] = [];
+  for (const v of Object.values((raw as Obj | undefined) ?? {})) {
+    const o = v as Obj;
+    const name = str(o.OpponentFullName).trim();
+    if (!name) continue;
+    const rec: H2hRow["rec"] = {};
+    for (const [kind, key] of blocks) {
+      const b = o[key] as Obj | null | undefined;
+      const mp = num(b?.MatchesPlayed);
+      if (!b || !mp) continue;
+      const mw = Math.min(num(b.MatchesWon), mp);
+      const gp = num(b.GamesPlayed);
+      const gw = Math.min(num(b.GamesWon), gp);
+      const fp = num(b.GoldMatchesPlayed);
+      const fw = Math.min(num(b.GoldMatchesWon), fp);
+      rec[kind] = [mw, mp - mw, gw, gp - gw, fw, fp - fw];
+    }
+    const played = (rec.all?.[0] ?? 0) + (rec.all?.[1] ?? 0);
+    if (played) rows.push({ row: { name, slug: slugForName(name), rec }, played });
+  }
+  rows.sort((a, b) => b.played - a.played || a.row.name.localeCompare(b.row.name));
+  return rows.map((r) => r.row);
+}
+
+export const isUuid =(v: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
 
 /** Null when the token is missing, the call fails, or the player has no PPA matches. */
 export async function pbPlayerStats(uuid: string): Promise<PbPlayerStats | null> {
@@ -217,6 +272,7 @@ export async function pbPlayerStats(uuid: string): Promise<PbPlayerStats | null>
   tournaments.sort((a, b) => b.date.localeCompare(a.date));
 
   const out: PbPlayerStats = {
+    h2h: headToHead(career.CumulativeOpponentStats),
     career: scope(career.PlayerStats, uuid),
     // A failed 12-month call leaves this empty; the section then says so.
     last12: scope(last?.PlayerStats, uuid),

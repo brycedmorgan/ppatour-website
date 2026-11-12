@@ -1343,7 +1343,7 @@ export async function AthleteProfile({
           (falls back to counting the career ledger); Tournament Results is every
           PPA main-draw match since May 2023 from the ledger, with a dropdown of
           every stop played. Recent Results shows until the ledger has this pro. */}
-      <PlayerCareer name={a.name} uuid={stats?.uuid ?? null} />
+      <PlayerCareer name={a.name} uuid={stats?.uuid ?? null} base={base} />
 
       {/* Highlights — player video clips from the API */}
       {highlights && (
