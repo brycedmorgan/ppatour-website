@@ -123,9 +123,12 @@ function block(s: Obj, kind: DivisionKind, uuid: string): PbStatBlock | null {
   const p = PREFIX[kind];
   const won = num(s[`${p}Won`]);
   const lost = num(s[`${p}Lost`]);
-  if (!won && !lost) return null;
   const titles = num(s[`${p}Gold`]);
   const runnerUp = num(s[`${p}Silver`]);
+  // ⚠ A season can have results but no matches: Tyson McGuffin's 2020 is 2
+  // doubles titles and a final with 0–0 (results imported without match data).
+  // Keep it, or the by-season table stops adding up to the career total.
+  if (!won && !lost && !titles && !runnerUp && !num(s[`${p}Semifinalist`])) return null;
   const curW = num(s[`${p}CurrentWinStreak`]);
   const curL = num(s[`${p}CurrentLoseStreak`]);
   return {

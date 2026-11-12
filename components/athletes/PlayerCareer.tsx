@@ -257,19 +257,22 @@ function pbSource(pb: PbPlayerStats): StatsSource {
           : "Their strongest win, as pickleball.com ranks it",
     };
   };
-  const years = Object.keys(pb.years).sort().reverse();
+  const allYears = Object.keys(pb.years).sort().reverse();
+  // The season picker only offers seasons with matches; a results-only season
+  // (no match data, e.g. Tyson McGuffin 2020) still shows in the by-season table.
+  const years = allYears.filter((y) => Object.values(pb.years[y]).some((b) => b && b.matches.w + b.matches.l > 0));
   const first = years[years.length - 1];
   return {
     kinds: KIND_ORDER.filter((k) => k === "all" || pb.career[k]),
     years,
     view,
     byYear: (kind) =>
-      years
+      allYears
         .map((year) => {
           const v = view(kind, year);
           return { year, events: v.events, titles: v.titles, runnerUp: v.runnerUp, semis: v.semis, matches: v.matches };
         })
-        .filter((r) => r.matches.w + r.matches.l > 0),
+        .filter((r) => r.matches.w + r.matches.l + r.titles + r.runnerUp + r.semis > 0),
     note: `From pickleball.com's results for PPA Tour events${first ? ` since ${first}` : ""}, the same numbers as a player's Stats tab there. Season and 12-month figures follow their counting.`,
   };
 }
@@ -432,8 +435,11 @@ function StatsBand({ name, source }: { name: string; source: StatsSource }) {
                   {byYear.map((r) => (
                     <tr key={r.year} className="border-t border-ppa-line">
                       <td className="px-2 py-2 sm:px-4 font-semibold text-ppa-navy">{r.year}</td>
-                      <td className="px-2 py-2 sm:px-4 text-right tabular-nums text-ppa-navy/70">{r.events}</td>
-                      <td className="px-2 py-2 sm:px-4 text-right tabular-nums text-ppa-navy/70">{wl(r.matches)}</td>
+                      {/* "—" for a results-only season: no match data, not zero matches. */}
+                      <td className="px-2 py-2 sm:px-4 text-right tabular-nums text-ppa-navy/70">{r.events || "—"}</td>
+                      <td className="px-2 py-2 sm:px-4 text-right tabular-nums text-ppa-navy/70">
+                        {r.matches.w + r.matches.l ? wl(r.matches) : "—"}
+                      </td>
                       <td className="px-2 py-2 sm:px-4 text-right tabular-nums font-semibold text-ppa-navy">{r.titles}</td>
                       <td className="px-2 py-2 sm:px-4 text-right tabular-nums text-ppa-navy/70">{r.runnerUp}</td>
                       <td className="px-2 py-2 sm:px-4 text-right tabular-nums text-ppa-navy/70">{r.semis}</td>
