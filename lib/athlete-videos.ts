@@ -39,7 +39,8 @@ const TIMEOUT_MS = 8000;
  */
 const REVALIDATE_S = 60 * 60 * 24; // durable cache; the daily cron refreshes it
 
-export type VideoTournament = { uuid: string; title: string };
+/** `year` is the year of its latest highlight ("" when the feed gives no date). */
+export type VideoTournament = { uuid: string; title: string; year: string };
 export type AthleteVideo = {
   id: string; // YouTube video id
   start: number; // start second
@@ -232,7 +233,11 @@ async function fetchTournaments(slug: string): Promise<VideoTournament[]> {
   // Most recent tournament first (the API returns this order, but pin it so the
   // dropdown default is always the athlete's latest event).
   rows.sort((a, b) => b.completed.localeCompare(a.completed));
-  return rows.map(({ uuid, title }) => ({ uuid, title }));
+  return rows.map(({ uuid, title, completed }) => ({
+    uuid,
+    title,
+    year: /^\d{4}/.test(completed) ? completed.slice(0, 4) : "",
+  }));
 }
 
 async function fetchHighlights(slug: string, uuid: string): Promise<AthleteVideo[]> {

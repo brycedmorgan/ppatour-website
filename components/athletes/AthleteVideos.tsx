@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { AthleteVideo, VideoTournament } from "@/lib/athlete-videos";
 
 /** "1.2M views" / "34K views" — compact, only when a count is known. */
@@ -12,8 +12,13 @@ function formatViews(n?: number): string | null {
   return `${n} views`;
 }
 
+/** Lower-case, accents off, so "cancún" finds "Cancun". */
+const fold = (v: string) => v.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
 /**
- * Athlete highlight gallery: a tournament dropdown + a grid of highlight clips
+ * Athlete highlight gallery: season + search filters and a tournament dropdown
+ * with ‹ › arrows (the same controls as Tournament Results in PlayerCareer,
+ * Wesley 11/12) + a grid of highlight clips
  * (matchup + thumbnail) that open in a lightbox at their broadcast timestamp.
  * The first tournament is server-rendered; switching fetches /api/athlete-videos.
  */
@@ -28,12 +33,42 @@ export function AthleteVideos({
   initialUuid: string;
   initialVideos: AthleteVideo[];
 }) {
-  const [uuid, setUuid] = useState(initialUuid);
+  const [picked, setPicked] = useState(initialUuid);
+  const [year, setYear] = useState("all");
+  const [query, setQuery] = useState("");
   const [videos, setVideos] = useState<AthleteVideo[]>(initialVideos);
+
+  const years = useMemo(
+    () => [...new Set(tournaments.map((t) => t.year).filter(Boolean))].sort((a, b) => b.localeCompare(a)),
+    [tournaments],
+  );
+  // The season and the search narrow the list the dropdown and the arrows walk.
+  // Every word typed must appear in the tournament's name ("vegas open").
+  const list = useMemo(() => {
+    const words = fold(query).split(/\s+/).filter(Boolean);
+    return tournaments.filter(
+      (t) => (year === "all" || t.year === year) && words.every((w) => fold(t.title).includes(w)),
+    );
+  }, [tournaments, year, query]);
+  // The pick survives a filter change when it still matches; else the newest match.
+  const found = list.findIndex((t) => t.uuid === picked);
+  const i = found < 0 ? 0 : found;
+  const current = list[i];
+  const uuid = current?.uuid ?? "";
+  const groups = useMemo(() => {
+    const out: { year: string; items: VideoTournament[] }[] = [];
+    for (const t of list) {
+      const g = out[out.length - 1];
+      if (g?.year === t.year) g.items.push(t);
+      else out.push({ year: t.year, items: [t] });
+    }
+    return out;
+  }, [list]);
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState<AthleteVideo | null>(null);
 
   useEffect(() => {
+    if (!uuid) return;
     if (uuid === initialUuid) {
       setVideos(initialVideos);
       return;
@@ -66,30 +101,119 @@ export function AthleteVideos({
     };
   }, [active, close]);
 
+  const arrow =
+    "flex size-10 shrink-0 items-center justify-center border border-ppa-line bg-white text-ppa-navy/80 transition-colors hover:bg-ppa-paper disabled:opacity-30 disabled:hover:bg-white";
+  const field =
+    "h-10 w-full min-w-0 border border-ppa-line bg-white px-3 text-[13px] font-semibold text-ppa-navy focus:border-ppa-navy/50 focus:outline-none";
+  const q = query.trim();
+  const scope = `${year !== "all" ? ` in ${year}` : ""}${q ? ` matching “${q}”` : ""}`;
+  const option = (t: VideoTournament) => (
+    <option key={t.uuid} value={t.uuid}>
+      {t.title}
+    </option>
+  );
+
   return (
     <div>
       {tournaments.length > 1 && (
-        <div className="flex flex-wrap items-center gap-3">
-          <label htmlFor="video-tourney" className="text-[11px] font-bold uppercase tracking-[0.16em] text-ppa-navy/50">
-            Tournament
-          </label>
-          <select
-            id="video-tourney"
-            value={uuid}
-            onChange={(e) => setUuid(e.target.value)}
-            className="rounded-md border border-ppa-line bg-white px-3 py-2 text-sm font-semibold text-ppa-navy focus:border-ppa-navy/50 focus:outline-none"
-          >
-            {tournaments.map((t) => (
-              <option key={t.uuid} value={t.uuid}>
-                {t.title}
-              </option>
-            ))}
-          </select>
-        </div>
+        <>
+          {/* Filters: season + search. */}
+          <div className="flex flex-col gap-2 sm:flex-row">
+            {years.length > 1 && (
+              <label className="sm:w-40">
+                <span className="sr-only">Season</span>
+                <select value={year} onChange={(e) => setYear(e.target.value)} className={field}>
+                  <option value="all">All years</option>
+                  {years.map((y) => (
+                    <option key={y} value={y}>
+                      {y}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+            <label className="relative min-w-0 flex-1">
+              <span className="sr-only">Search tournaments</span>
+              <svg
+                aria-hidden
+                viewBox="0 0 20 20"
+                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-ppa-navy/40"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="8.5" cy="8.5" r="5.5" />
+                <path d="m13 13 4 4" strokeLinecap="round" />
+              </svg>
+              <input
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search tournaments"
+                className={`${field} pl-9 font-normal placeholder:text-ppa-navy/40`}
+              />
+            </label>
+          </div>
+
+          {current && (
+            <>
+              <div className="mt-2 flex items-center gap-2">
+                <button
+                  type="button"
+                  className={arrow}
+                  aria-label="Newer tournament"
+                  disabled={i === 0}
+                  onClick={() => setPicked(list[i - 1].uuid)}
+                >
+                  ‹
+                </button>
+                <label className="min-w-0 flex-1">
+                  <span className="sr-only">Tournament</span>
+                  <select value={uuid} onChange={(e) => setPicked(e.target.value)} className={field}>
+                    {year === "all" && groups.length > 1
+                      ? groups.map((g) => (
+                          <optgroup key={g.year || "undated"} label={g.year || "Other"}>
+                            {g.items.map(option)}
+                          </optgroup>
+                        ))
+                      : list.map(option)}
+                  </select>
+                </label>
+                <button
+                  type="button"
+                  className={arrow}
+                  aria-label="Older tournament"
+                  disabled={i === list.length - 1}
+                  onClick={() => setPicked(list[i + 1].uuid)}
+                >
+                  ›
+                </button>
+              </div>
+              <p className="mt-2 text-[11px] font-semibold text-ppa-navy/45">
+                {i + 1} of {list.length} {list.length === 1 ? "tournament" : "tournaments"}
+                {scope}
+              </p>
+            </>
+          )}
+        </>
       )}
 
       <div className="mt-6">
-        {loading ? (
+        {!current && tournaments.length > 0 ? (
+          <p className="text-sm text-ppa-navy/60">
+            No tournaments{scope}.{" "}
+            <button
+              type="button"
+              className="font-semibold text-ppa-navy underline underline-offset-2"
+              onClick={() => {
+                setYear("all");
+                setQuery("");
+              }}
+            >
+              Clear filters
+            </button>
+          </p>
+        ) : loading ? (
           <div className="flex h-[160px] items-center justify-center rounded-lg border border-ppa-line bg-ppa-paper">
             <span aria-hidden className="size-6 animate-spin rounded-full border-2 border-ppa-line border-t-ppa-blue" />
           </div>
