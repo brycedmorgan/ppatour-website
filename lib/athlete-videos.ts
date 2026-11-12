@@ -102,35 +102,6 @@ function parseYouTube(link: string): { id: string; start: number } | null {
   }
 }
 
-/**
- * Tier score for picking a player's marquee event as the dropdown default.
- * Worlds is the biggest broadcast, then majors/nationals, cups/finals, opens.
- */
-function tournamentRank(title: string): number {
-  const t = title.toLowerCase();
-  if (/\bworld/.test(t)) return 5;
-  if (/\bnational|\bmasters|\bmajor|\bchampionship/.test(t)) return 4;
-  if (/\bcup\b|\bfinals\b/.test(t)) return 3;
-  if (/\bopen\b/.test(t)) return 2;
-  return 1;
-}
-
-/**
- * The default tournament is the player's highest-tier event; ties break to the
- * most recent (the list arrives most-recent-first). Falls back to the first row.
- */
-function pickDefaultTournament(tournaments: VideoTournament[]): string {
-  let best = tournaments[0];
-  let bestRank = tournamentRank(best.title);
-  for (const t of tournaments) {
-    const r = tournamentRank(t.title);
-    if (r > bestRank) {
-      best = t;
-      bestRank = r;
-    }
-  }
-  return best.uuid;
-}
 
 type YtStat = { views: number; channelId: string };
 
@@ -311,7 +282,10 @@ export async function getAthleteVideoData(slug: string, name?: string): Promise<
     // No highlight feed for this player — a pinned featured match is the only clip to show.
     return featured ? { tournaments: [], tournamentUuid: "", videos: [featured] } : null;
   }
-  const tournamentUuid = pickDefaultTournament(tournaments);
+  // The default is the most recent tournament (Wesley, 11/12). It used to be
+  // the "biggest" event (Worlds > majors > cups > opens), which opened ALW on
+  // 2024 Worlds. fetchTournaments sorts newest first, so it is the first row.
+  const tournamentUuid = tournaments[0].uuid;
   const ranked = await getAthleteVideosFor(slug, tournamentUuid);
   // A pinned match leads and de-dupes itself out of the ranked list.
   const videos = featured ? [featured, ...ranked.filter((v) => v.id !== featured.id)] : ranked;
