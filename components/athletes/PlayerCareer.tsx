@@ -9,10 +9,13 @@ import {
   titlesByYear,
   wl,
   type CareerEvent,
+  type CareerMatch,
   type KindFilter,
   type PlayerCareer as Career,
   type Split,
+  type YearRow,
 } from "@/lib/career-stats";
+import type { PbPlayerStats, PbStatBlock } from "@/lib/pb-player-stats";
 import { BoxScore, finishChipClass } from "@/components/athletes/BoxScore";
 import { EventLogo, RecentResults, dateRange } from "@/components/athletes/RecentResults";
 
@@ -22,80 +25,263 @@ import { EventLogo, RecentResults, dateRange } from "@/components/athletes/Recen
  * "a tournament results section with a dropdown of all the tournaments a
  * player has played in").
  *
- * One request to /api/player-career (lib/player-career, from the stored
- * career ledger); every filter is counted here (lib/career-stats), so
- * switching division or season costs nothing.
+ * Stats come from pickleball.com's own stats engine (/api/player-stats →
+ * lib/pb-player-stats, Wesley 11/12): 2020 on, the same numbers as their
+ * Stats tab. If that call fails, Stats is counted from our career ledger
+ * instead (/api/player-career → lib/career-stats), as it was before.
  *
- * Until the ledger has this pro (it backfills by cron), the old Recent
- * Results band renders instead, so the page never loses its results.
+ * Tournament Results always reads the career ledger: it needs every match,
+ * which the stats engine does not return. Until the ledger has this pro, the
+ * old Recent Results band renders in its place.
  *
  * ⚠ NO MEDAL WORDS OR COLOURS (Hannah, 7/28): Titles / Finals / Semifinals,
- * tour yellow for a title. ⚠ No ratings either (Connor, 7/29: no DUPR) —
- * "higher seed" stands in for pickleball.com's "higher rated team".
+ * tour yellow for a title. ⚠ No ratings shown either (Connor, 7/29: no DUPR).
+ * "Versus higher-rated team" is a win–loss record, not a rating.
  */
-const memo = new Map<string, Promise<Career | null>>();
-function load(name: string): Promise<Career | null> {
-  let p = memo.get(name);
+function memoLoad<T>(memo: Map<string, Promise<T | null>>, key: string, url: string, ok: (d: T) => boolean) {
+  let p = memo.get(key);
   if (!p) {
-    p = fetch(`/api/player-career/?name=${encodeURIComponent(name)}`)
+    p = fetch(url)
       .then((r) => (r.ok ? r.json() : null))
-      .then((d: Career | null) => (d && Array.isArray(d.events) ? d : null))
+      .then((d: T | null) => (d && ok(d) ? d : null))
       .catch(() => null);
-    memo.set(name, p);
+    memo.set(key, p);
     p.then((d) => {
-      if (!d?.events.length) memo.delete(name);
+      if (!d) memo.delete(key);
     });
   }
   return p;
 }
+const careerMemo = new Map<string, Promise<Career | null>>();
+const loadCareer = (name: string) =>
+  memoLoad<Career>(careerMemo, name, `/api/player-career/?name=${encodeURIComponent(name)}`, (d) =>
+    Array.isArray(d.events) && d.events.length > 0,
+  );
+const pbMemo = new Map<string, Promise<PbPlayerStats | null>>();
+const loadPb = (uuid: string | null | undefined) =>
+  uuid
+    ? memoLoad<PbPlayerStats>(pbMemo, uuid, `/api/player-stats/?uuid=${encodeURIComponent(uuid)}`, (d) =>
+        Boolean(d.career),
+      )
+    : Promise.resolve(null);
 
 const KIND_LABEL: Record<KindFilter, string> = { all: "All", doubles: "Doubles", mixed: "Mixed", singles: "Singles" };
+const KIND_ORDER: KindFilter[] = ["all", "doubles", "mixed", "singles"];
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const monthYear = (iso: string) => `${MONTHS[Number(iso.slice(5, 7)) - 1]} ${iso.slice(0, 4)}`;
 const n = (v: number) => v.toLocaleString("en-US");
 
-export function PlayerCareer({ name }: { name: string }) {
-  const [state, setState] = useState<{ name: string; data: Career | null } | null>(null);
+/** `uuid` is the pickleball.com player uuid (lib/athlete-stats); null skips the stats engine. */
+export function PlayerCareer({ name, uuid }: { name: string; uuid?: string | null }) {
+  const [state, setState] = useState<{
+    key: string;
+    career: Career | null;
+    pb: PbPlayerStats | null;
+  } | null>(null);
+  const key = `${name}|${uuid ?? ""}`;
   useEffect(() => {
     let alive = true;
-    load(name).then((data) => alive && setState({ name, data }));
+    Promise.all([loadCareer(name), loadPb(uuid)]).then(
+      ([career, pb]) => alive && setState({ key, career, pb }),
+    );
     return () => {
       alive = false;
     };
-  }, [name]);
+  }, [name, uuid, key]);
 
-  if (!state || state.name !== name) return null;
-  if (!state.data?.events.length) return <RecentResults name={name} variant="profile" />;
+  const source = useMemo(
+    () => (state?.pb ? pbSource(state.pb) : state?.career ? ledgerSource(state.career) : null),
+    [state],
+  );
+  if (!state || state.key !== key) return null;
   return (
     <>
-      <StatsBand name={name} career={state.data} />
-      <TournamentResults name={name} career={state.data} />
+      {source && <StatsBand name={name} source={source} />}
+      {state.career ? (
+        <TournamentResults name={name} career={state.career} />
+      ) : (
+        <RecentResults name={name} variant="profile" />
+      )}
     </>
   );
 }
 
 /* ───────────────────────────── Stats ───────────────────────────── */
 
-function StatsBand({ name, career }: { name: string; career: Career }) {
-  const kinds = useMemo(() => {
-    const have = new Set(career.events.flatMap((e) => e.divisions.map((d) => d.kind)));
-    return (["all", "doubles", "mixed", "singles"] as KindFilter[]).filter((k) => k === "all" || have.has(k));
-  }, [career]);
-  const years = useMemo(() => careerYears(career), [career]);
+/** What the Stats band shows for one division + season, from either source. */
+type StatsView = {
+  events: number;
+  matches: Split;
+  titles: number;
+  runnerUp: number;
+  semis: number;
+  longestStreak: number;
+  current: { won: boolean; n: number } | null;
+  splits: { label: string; help: string; v: Split }[];
+  /** The four cells of the Games & Points card: label, value, help. */
+  cells: [string, string, string][];
+  bestWin: CareerMatch | null;
+  bestWinNote: string;
+};
+type StatsSource = {
+  kinds: KindFilter[];
+  /** Seasons, newest first. */
+  years: string[];
+  view: (kind: KindFilter, period: string) => StatsView;
+  byYear: (kind: KindFilter) => YearRow[];
+  note: string;
+};
+
+const pointsCell = (p: Split): [string, string, string] => {
+  const pp = p.w + p.l ? `${((100 * p.w) / (p.w + p.l)).toFixed(1)}%` : "—";
+  return ["Points won–lost", `${n(p.w)}–${n(p.l)}`, `${pp} of points`];
+};
+const diffCell = (p: Split): [string, string, string] => [
+  "Point differential",
+  `${p.w - p.l >= 0 ? "+" : ""}${n(p.w - p.l)}`,
+  "Points won minus lost",
+];
+const seedOf = (m: CareerMatch | null) => m?.oppSeed ?? Infinity;
+
+/** Our own count from the career ledger (May 2023 on) — the fallback. */
+function ledgerSource(career: Career): StatsSource {
+  const have = new Set(career.events.flatMap((e) => e.divisions.map((d) => d.kind)));
+  const view = (kind: KindFilter, period: string): StatsView => {
+    const s = careerStats(career, kind, period);
+    return {
+      events: s.events,
+      matches: s.matches,
+      titles: s.titles,
+      runnerUp: s.runnerUp,
+      semis: s.semis,
+      longestStreak: s.longestStreak,
+      current: s.current,
+      splits: [
+        { label: "Versus higher seed", help: "Matches against a better-seeded team", v: s.vsHigherSeed },
+        { label: "Deciding games", help: "Matches that went to a third (or fifth) game", v: s.deciding },
+        { label: "After winning the first game", help: "Match record after taking game one", v: s.afterWonFirst },
+        { label: "After losing the first game", help: "Match record after dropping game one", v: s.afterLostFirst },
+        { label: "Finals", help: "Record in championship matches", v: s.finals },
+      ],
+      cells: [
+        ["Games won–lost", wl(s.games), `${pct(s.games)} of games`],
+        pointsCell(s.points),
+        ["Straight-game wins", String(s.straightGames), "Won without dropping a game"],
+        diffCell(s.points),
+      ],
+      bestWin: s.bestWin,
+      bestWinNote: `Over the best-seeded team they beat${s.bestWin?.oppSeed ? ` (No. ${s.bestWin.oppSeed} seed)` : ""}`,
+    };
+  };
+  return {
+    kinds: KIND_ORDER.filter((k) => k === "all" || have.has(k)),
+    years: careerYears(career),
+    view,
+    byYear: (kind) => titlesByYear(career, kind),
+    note: `Counted from PPA Tour main draws${career.since ? ` since ${monthYear(career.since)}` : ""}, including PPA Tour Asia and Australia 1000+ events. Walkovers count in win–loss but not in games or points. Seeds stand in for ratings.`,
+  };
+}
+
+/** pickleball.com's stats engine (2020 on). "All" sums the three divisions. */
+function pbSource(pb: PbPlayerStats): StatsSource {
+  const sum = (blocks: PbStatBlock[], f: (b: PbStatBlock) => Split): Split =>
+    blocks.reduce((a, b) => ({ w: a.w + f(b).w, l: a.l + f(b).l }), { w: 0, l: 0 });
+  const total = (blocks: PbStatBlock[], f: (b: PbStatBlock) => number) => blocks.reduce((a, b) => a + f(b), 0);
+  const cutoff = new Date(Date.now() - 365 * 864e5).toISOString().slice(0, 10);
+
+  const view = (kind: KindFilter, period: string): StatsView => {
+    const scope = period === "career" ? pb.career : period === "12m" ? pb.last12 : (pb.years[period] ?? {});
+    const blocks = (kind === "all" ? Object.values(scope) : [scope[kind]]).filter((b): b is PbStatBlock => !!b);
+    const stops = pb.tournaments.filter(
+      (t) =>
+        (kind === "all" || t.kinds.includes(kind)) &&
+        (period === "career" || (period === "12m" ? t.date >= cutoff : t.date.startsWith(period))),
+    );
+    const events = stops.length;
+    // The 12-month call's title counts are career totals (lib/pb-player-stats),
+    // so the rolling window counts them from the stops instead.
+    const medal = (i: 0 | 1 | 2) =>
+      stops.reduce(
+        (a, t) =>
+          a +
+          (kind === "all" ? Object.values(t.medals ?? {}) : [t.medals?.[kind]]).reduce((x, m) => x + (m?.[i] ?? 0), 0),
+        0,
+      );
+    const podium =
+      period === "12m"
+        ? { titles: medal(0), runnerUp: medal(1), semis: medal(2) }
+        : {
+            titles: total(blocks, (b) => b.titles),
+            runnerUp: total(blocks, (b) => b.runnerUp),
+            semis: total(blocks, (b) => b.semis),
+          };
+    const points = sum(blocks, (b) => b.points);
+    const games = sum(blocks, (b) => b.games);
+    const vsLefty = sum(blocks, (b) => b.vsLefty);
+    const bestWin = blocks.map((b) => b.bestWin).reduce<CareerMatch | null>(
+      (best, m) => (m && seedOf(m) < seedOf(best) ? m : best ?? m),
+      null,
+    );
+    return {
+      // No matches in this filter means nothing to show, whatever the stop count says.
+      events: blocks.length ? events : 0,
+      matches: sum(blocks, (b) => b.matches),
+      ...podium,
+      // Streaks don't add across divisions; "All" shows the longest and no current
+      // run. A past season has no "current" run either, and the 12-month call's is
+      // cut off at the window (ALW doubles 81 vs 97), so it's always career's.
+      longestStreak: Math.max(0, ...blocks.map((b) => b.longestStreak)),
+      current:
+        kind !== "all" && blocks.length === 1 && (period === "career" || period === "12m")
+          ? (pb.career[kind]?.current ?? null)
+          : null,
+      splits: [
+        { label: "Versus higher-rated team", help: "Matches against a higher-rated team", v: sum(blocks, (b) => b.upsets) },
+        { label: "Deciding games", help: "Matches that went to a deciding game", v: sum(blocks, (b) => b.deciding) },
+        { label: "After winning the first game", help: "Match record after taking game one", v: sum(blocks, (b) => b.afterWonFirst) },
+        { label: "After losing the first game", help: "Match record after dropping game one", v: sum(blocks, (b) => b.afterLostFirst) },
+        { label: "Finals", help: "Record in championship matches", v: { w: podium.titles, l: podium.runnerUp } },
+      ],
+      cells: [
+        ["Games won–lost", wl(games), `${pct(games)} of games`],
+        pointsCell(points),
+        ["Versus left-handers", wl(vsLefty), `${pct(vsLefty)} won`],
+        diffCell(points),
+      ],
+      bestWin,
+      // pickleball.com picks it (by rating, which we don't show); name the seed only
+      // when it was a better-seeded team, or "Over the No. 17 seed" reads oddly.
+      bestWinNote:
+        bestWin?.oppSeed && bestWin.oppSeed < (bestWin.seed ?? Infinity)
+          ? `Over the No. ${bestWin.oppSeed} seed`
+          : "Their strongest win, as pickleball.com ranks it",
+    };
+  };
+  const years = Object.keys(pb.years).sort().reverse();
+  const first = years[years.length - 1];
+  return {
+    kinds: KIND_ORDER.filter((k) => k === "all" || pb.career[k]),
+    years,
+    view,
+    byYear: (kind) =>
+      years
+        .map((year) => {
+          const v = view(kind, year);
+          return { year, events: v.events, titles: v.titles, runnerUp: v.runnerUp, semis: v.semis, matches: v.matches };
+        })
+        .filter((r) => r.matches.w + r.matches.l > 0),
+    note: `From pickleball.com's results for PPA Tour events${first ? ` since ${first}` : ""}, the same numbers as a player's Stats tab there. Season and 12-month figures follow their counting.`,
+  };
+}
+
+function StatsBand({ name, source }: { name: string; source: StatsSource }) {
+  const { kinds, years } = source;
   const [kind, setKind] = useState<KindFilter>("all");
   const [period, setPeriod] = useState("career");
 
-  const s = useMemo(() => careerStats(career, kind, period), [career, kind, period]);
-  const byYear = useMemo(() => titlesByYear(career, kind), [career, kind]);
-  const pointPct = s.points.w + s.points.l ? `${((100 * s.points.w) / (s.points.w + s.points.l)).toFixed(1)}%` : "—";
-
-  const splits: { label: string; help: string; v: Split }[] = [
-    { label: "Versus higher seed", help: "Matches against a better-seeded team", v: s.vsHigherSeed },
-    { label: "Deciding games", help: "Matches that went to a third (or fifth) game", v: s.deciding },
-    { label: "After winning the first game", help: "Match record after taking game one", v: s.afterWonFirst },
-    { label: "After losing the first game", help: "Match record after dropping game one", v: s.afterLostFirst },
-    { label: "Finals", help: "Record in championship matches", v: s.finals },
-  ];
+  const s = useMemo(() => source.view(kind, period), [source, kind, period]);
+  const byYear = useMemo(() => source.byYear(kind), [source, kind]);
+  const splits = s.splits;
 
   return (
     <section id="stats" className="scroll-mt-24 bg-ppa-paper">
@@ -198,18 +384,7 @@ function StatsBand({ name, career }: { name: string; career: Career }) {
                     Games &amp; Points
                   </p>
                   <dl className="grid grid-cols-2">
-                    {(
-                      [
-                        ["Games won–lost", wl(s.games), `${pct(s.games)} of games`],
-                        ["Points won–lost", `${n(s.points.w)}–${n(s.points.l)}`, `${pointPct} of points`],
-                        ["Straight-game wins", String(s.straightGames), "Won without dropping a game"],
-                        [
-                          "Point differential",
-                          `${s.points.w - s.points.l >= 0 ? "+" : ""}${n(s.points.w - s.points.l)}`,
-                          "Points won minus lost",
-                        ],
-                      ] as const
-                    ).map(([label, value, help], i) => (
+                    {s.cells.map(([label, value, help], i) => (
                       <div key={label} className={`px-4 py-3 ${i > 1 ? "border-t border-ppa-line" : ""} ${i % 2 ? "border-l border-ppa-line" : ""}`}>
                         <dt className="text-[10px] font-bold uppercase tracking-[0.12em] text-ppa-navy/45">{label}</dt>
                         <dd className="mt-1 font-display text-xl leading-none tabular-nums text-ppa-navy">{value}</dd>
@@ -222,9 +397,7 @@ function StatsBand({ name, career }: { name: string; career: Career }) {
                 {s.bestWin && (
                   <div>
                     <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">Best Win</p>
-                    <p className="mt-1 text-[11px] text-ppa-navy/50">
-                      Over the best-seeded team they beat{s.bestWin.oppSeed ? ` (No. ${s.bestWin.oppSeed} seed)` : ""}
-                    </p>
+                    <p className="mt-1 text-[11px] text-ppa-navy/50">{s.bestWinNote}</p>
                     <div className="mt-2">
                       <BoxScore m={s.bestWin} subject={name} showEvent />
                     </div>
@@ -272,11 +445,7 @@ function StatsBand({ name, career }: { name: string; career: Career }) {
           </div>
         )}
 
-        <p className="mt-3 max-w-2xl text-[11px] leading-relaxed text-ppa-navy/45">
-          Counted from PPA Tour main draws{career.since ? ` since ${monthYear(career.since)}` : ""}, including PPA Tour
-          Asia and Australia 1000+ events. Walkovers count in win–loss but not in games or points. Seeds stand in for
-          ratings.
-        </p>
+        <p className="mt-3 max-w-2xl text-[11px] leading-relaxed text-ppa-navy/45">{source.note}</p>
       </div>
     </section>
   );

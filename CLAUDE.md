@@ -65,6 +65,13 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-12 — Profile Stats now come from pickleball.com's stats engine (Kenan)
+- Kenan's doc (Slack file `F0CH8PP460L`): `/v1/users/{uuid}/matches_stats` was always allowed for platform 9 (our 11/9 403s were wrong route names); he also granted `/v1/users/{uuid}/ppa_ranking`. New `lib/pb-player-stats.ts` + `/api/player-stats?uuid=` (CDN 6h + 1d SWR); profile passes `stats.uuid` (lib/athlete-stats) to `PlayerCareer`.
+- Stats band reads it (2021 on for ALW, not May 2023): win–loss, titles/finals/semis, streaks, versus higher-rated team (their "upsets"; record only, no ratings shown), deciding games, after winning/losing game one, finals, games/points, versus left-handers, best win (their pick), by season. Fallback when the call fails: counted from the career ledger as before. **Tournament Results still reads the ledger** (needs every match).
+- ⚠ ~890 KB per upstream call (head-to-head maps): NOT stored in pb-cache's table (~2 GB for the roster) or Next's data cache; cut to ~16 KB and cached at the CDN only. 5 req/s platform limit, 2 calls per CDN miss, sequential.
+- ⚠ `{D}Apperances` in PlayerStats = MATCHES (ALW doubles 404 = 377+27), not tournaments as the doc says; events come from `PlayerTournamentStats` rows. ⚠ The `last_year=true` call's Gold/Silver/Semifinalist are CAREER totals and its current streak stops at the window, so 12-month titles are counted from the stop rows and "current" always uses career's.
+- Verified on the dev server for ALW: career 1106–67, 207 titles; 12 months 219–3, 39 titles in 18 stops; singles 12m 55–0, 11 titles; doubles current 97 W. Checked in the lib for Ben Johns, Tyson McGuffin, Zapletalova (Europe P250 Barcelona counts).
+
 ### 2026-11-12 — Europe roster: Alexandra Zapletalova (Catie via Bryce)
 - New `alexandra-zapletalova` row in `lib/europe-roster.ts` from Bryce's 11/12 DM (Slovakia, 20, WS/WD/XD, "Joola Europe" to match the other eight). No Instagram: her column is blank, Bryce asked Catie.
 - Portrait: "ALEXANDRA ZAPLETALOVA.png" (Drive `1TrMV1pad5gvTaLq9Rqu32nnTEpQEYqYF`, Katherina's folder, 1086×1448 transparent) → flattened on white, cropped to 4:5 from the bottom (trims empty headroom), 900×1125 q82, `public/europe/pros/alexandra-zapletalova.jpg`.

@@ -1339,10 +1339,11 @@ export async function AthleteProfile({
           with no recent main-draw results. The Latest Result card's "See all
           results" jumps here (#recent-results). */}
       {/* Stats + Tournament Results (components/athletes/PlayerCareer, Wesley
-          11/9): every PPA main-draw match since May 2023 from the career ledger,
-          with division/season filters and a dropdown of every stop played.
-          Falls back to the Recent Results band until the ledger has this pro. */}
-      <PlayerCareer name={a.name} />
+          11/9 + 11/12): Stats from pickleball.com's stats engine by player uuid
+          (falls back to counting the career ledger); Tournament Results is every
+          PPA main-draw match since May 2023 from the ledger, with a dropdown of
+          every stop played. Recent Results shows until the ledger has this pro. */}
+      <PlayerCareer name={a.name} uuid={stats?.uuid ?? null} />
 
       {/* Highlights — player video clips from the API */}
       {highlights && (
