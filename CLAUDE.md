@@ -65,6 +65,10 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-12 — Europe roster: Alexandra Zapletalova (Catie via Bryce)
+- New `alexandra-zapletalova` row in `lib/europe-roster.ts` from Bryce's 11/12 DM (Slovakia, 20, WS/WD/XD, "Joola Europe" to match the other eight). No Instagram: her column is blank, Bryce asked Catie.
+- Portrait: "ALEXANDRA ZAPLETALOVA.png" (Drive `1TrMV1pad5gvTaLq9Rqu32nnTEpQEYqYF`, Katherina's folder, 1086×1448 transparent) → flattened on white, cropped to 4:5 from the bottom (trims empty headroom), 900×1125 q82, `public/europe/pros/alexandra-zapletalova.jpg`.
+
 ### 2026-11-10 — Junior PPA rankings refreshed (Daniela, Asana `1220401694655784`)
 - Jake's sheet (edited 11/10 20:35 UTC) → `lib/data/junior-rankings.json`, `updated: "Nov 10, 2026"`. 2,699 rows (+122), no board shrank, 89–100% confirmed per division. Fetch → import `--check` → import.
 - ⚠ The importer refused a correct sheet: Boys Mixed 12U (68 players) sat 91% inside Boys Singles 12U (150) vs 90% inside its own board. Guard 2 now ranks by Jaccard (0.90 own vs 0.40 Singles); the printed "confirmed %" is still containment.

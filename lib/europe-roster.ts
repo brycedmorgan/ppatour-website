@@ -595,6 +595,26 @@ export const europeRoster: EuroPro[] = [
       "Martin is a professional pickleball player with roots in England and Portugal. He represents Portugal as its national champion, including at the 2026 Pickleball World Cup. On the PPA Tour he has reached the semifinals in men's doubles at PPA Barcelona, and has made multiple Challenger and main-draw appearances in the US.",
     ],
   },
+  {
+    // Added by Catie 11/11 (via Bryce, 11/12). Portrait is "ALEXANDRA
+    // ZAPLETALOVA.png" from her portrait folder, 900×1125 q82 flattened on
+    // white like the rest. No Instagram: her column is blank (Bryce asked
+    // Catie). Sponsor reads "Joola Europe", not her sheet's "JOOLA Europe",
+    // to match the other eight.
+    slug: "alexandra-zapletalova",
+    portrait: P("alexandra-zapletalova"),
+    name: "Alexandra Zapletalova",
+    country: "Slovakia",
+    countryCode: "SVK",
+    age: 20,
+    divisions: [...WS, ...WD, ...XD],
+    sponsors: ["Joola Europe"],
+    tagline: "Swedish Open finalist four months after picking up the sport",
+    bio: [
+      "Alexandra Zapletalova is a professional pickleball player representing Slovakia on the international stage. After 15 years of playing competitive tennis, a shoulder injury led her to transition to pickleball at the age of 19. She brought with her a strong athletic foundation, technical expertise, and a disciplined, competitive mindset.",
+      "In her first year of competing in pickleball, Alexandra has already achieved significant results on the European circuit. Just four months after taking up the sport, she reached the final of the Swedish Open and earned a place among the Top 5 in the women's singles rankings. Despite her relatively short experience in the sport, she is already competing at a high level and holding her own against some of Europe's top players.",
+    ],
+  },
 ];
 
 export function getEuroPro(slug: string): EuroPro | undefined {
