@@ -249,12 +249,14 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
     // ⚠ THU/FRI MOVED UP (Keaton's 10/9 revision, the 10/10 sheet): PBTV 3–11PM ET
     // (was 5PM–1AM), Tennis Channel 4–11PM ET (was 5–10). Saturday's TC window
     // is now 4–7PM ET on the sheet (was 4–8), a change his note did not mention.
+    // ⚠ SAT TC MOVED AGAIN to 5–8PM ET (Keaton Maynard, Asana 1220484768429161,
+    // 11/12: "now 5pm ET to 8pm ET (prev 4pm to 7pm ET)").
     { round: "RD 16", day: "Thursday", window: "3PM ET - 11PM ET", platform: "PBTV", type: "LIVE" },
     { round: "RD 16", day: "Thursday", window: "4PM ET - 11PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
     { round: "QF's", day: "Friday", window: "3PM ET - 11PM ET", platform: "PBTV", type: "LIVE" },
     { round: "QF's", day: "Friday", window: "4PM ET - 11PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
     { round: "SF's", day: "Saturday", window: "3PM ET - 11PM ET", platform: "PBTV", type: "LIVE" },
-    { round: "SF's", day: "Saturday", window: "4PM ET - 7PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
+    { round: "SF's", day: "Saturday", window: "5PM ET - 8PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
     { round: "Championship", day: "Sunday", window: "1PM ET - 6PM ET", platform: "PBTV", type: "LIVE" },
     { round: "Championship", day: "Sunday", window: "1PM ET - 6PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
   ],

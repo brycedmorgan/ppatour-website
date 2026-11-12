@@ -611,9 +611,10 @@ export const tvSchedule: TvEvent[] = [
       {
         date: "Dec 19",
         dow: "Sat",
+        // Sat TC moved again to 5–8 (Keaton, Asana 1220484768429161, 11/12).
         windows: [
           { channel: "PBTV", window: "3PM – 11PM", round: "Semifinals" },
-          { channel: "Tennis Channel", window: "4PM – 7PM", round: "Semifinals" },
+          { channel: "Tennis Channel", window: "5PM – 8PM", round: "Semifinals" },
         ],
       },
       {
