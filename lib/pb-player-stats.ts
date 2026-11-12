@@ -65,12 +65,25 @@ export type PbPlayerStats = {
    * win–loss, streaks and best win from it. So 12-month titles are counted
    * from these rows instead.
    */
-  tournaments: { date: string; kinds: DivisionKind[]; medals: Partial<Record<DivisionKind, [number, number, number]>> }[];
+  tournaments: PbTournament[];
   /**
    * Head-to-head: their record against every opponent, most matches first
    * (Wesley, 11/12). Optional because CDN copies cached before it shipped lack it.
    */
   h2h?: H2hRow[];
+};
+
+export type PbTournament = {
+  date: string;
+  kinds: DivisionKind[];
+  medals: Partial<Record<DivisionKind, [number, number, number]>>;
+  /**
+   * For Tournament Results' pre-ledger stops (Wesley, 11/12): the stop's name,
+   * payout and "closed to the public" tags removed, and each division's own
+   * title ("Women's Pro Doubles"). Optional: CDN copies cached before lack them.
+   */
+  name?: string;
+  titles?: Partial<Record<DivisionKind, string>>;
 };
 
 /** [matches won, matches lost, games won, games lost, finals won, finals lost]. */
@@ -236,7 +249,23 @@ function headToHead(raw: unknown): H2hRow[] {
   return rows.map((r) => r.row);
 }
 
-export const isUuid =(v: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
+/**
+ * "(Closed to the Public) Simone Jardim PPA Florida Grand Slam" → "Simone
+ * Jardim PPA Florida Grand Slam"; "PPA Mesa Grand Slam Qualifier - $55,000" →
+ * "PPA Mesa Grand Slam Qualifier"; "PPA Championship - 150,000" → "PPA Championship";
+ * "PPA Tour: Atlanta Open" → "Atlanta Open".
+ */
+function stopName(raw: string): string {
+  return raw
+    .replace(/\s*\((?:closed|private)[^)]*\)\s*/gi, " ")
+    .replace(/^PPA Tour:\s*/i, "")
+    // "- $55,000", "- 150,000", "- $50,000 Payout", "- $90K Payout"
+    .replace(/\s+-\s*\$?[\d,.]+k?(?:\s*payout)?\s*$/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+export const isUuid = (v: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
 
 /** Null when the token is missing, the call fails, or the player has no PPA matches. */
 export async function pbPlayerStats(uuid: string): Promise<PbPlayerStats | null> {
@@ -266,7 +295,14 @@ export async function pbPlayerStats(uuid: string): Promise<PbPlayerStats | null>
         const p = PREFIX[k];
         medals[k] = [num(r[`${p}Gold`]), num(r[`${p}Silver`]), num(r[`${p}Semifinalist`])];
       }
-      if (kinds.length && date) tournaments.push({ date, kinds, medals });
+      const titles: PbTournament["titles"] = {};
+      const medalEvents = (r.MedalEvents as Obj | undefined) ?? {};
+      for (const k of kinds) {
+        const ev = (medalEvents[PREFIX[k]] as Obj[] | undefined)?.[0];
+        const t = str(ev?.EventTitle).replace(/^womens\b/i, "Women's").replace(/^mens\b/i, "Men's");
+        if (t) titles[k] = t;
+      }
+      if (kinds.length && date) tournaments.push({ date, kinds, medals, name: stopName(str(r.TournamentName)), titles });
     }
   }
   tournaments.sort((a, b) => b.date.localeCompare(a.date));

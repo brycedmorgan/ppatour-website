@@ -10,6 +10,7 @@ import {
   wl,
   type CareerEvent,
   type CareerMatch,
+  type DivisionKind,
   type KindFilter,
   type PlayerCareer as Career,
   type Split,
@@ -105,14 +106,20 @@ export function PlayerCareer({
     () => (state?.pb ? pbSource(state.pb) : state?.career ? ledgerSource(state.career) : null),
     [state],
   );
+  // Tournament Results = the ledger's stops (every match) + the stats engine's
+  // older stops (finish only), so the dropdown reaches back to 2020.
+  const results = useMemo(
+    () => (state?.career ? withOlderStops(state.career, state.pb) : null),
+    [state],
+  );
   if (!state || state.key !== key) return null;
   return (
     <>
       {source && <StatsBand name={name} source={source} />}
       {/* Head-to-Head rides on the same stats call; absent from copies cached before it shipped. */}
       {state.pb?.h2h?.length ? <HeadToHead name={name} rows={state.pb.h2h} base={base} /> : null}
-      {state.career ? (
-        <TournamentResults name={name} career={state.career} />
+      {results ? (
+        <TournamentResults name={name} career={results} />
       ) : (
         <RecentResults name={name} variant="profile" />
       )}
@@ -473,6 +480,61 @@ function StatsBand({ name, source }: { name: string; source: StatsSource }) {
 
 /* ───────────────────────── Tournament Results ───────────────────────── */
 
+/** eventId prefix for a stop from the stats engine (finish only, no matches). */
+const OLDER = "pb:";
+const DAY = 864e5;
+const OLDER_TITLE: Record<DivisionKind, string> = {
+  doubles: "Pro Doubles",
+  mixed: "Mixed Pro Doubles",
+  singles: "Pro Singles",
+};
+
+/**
+ * Adds the stats engine's stops from before the ledger begins (2020 → mid-2023;
+ * Wesley, 11/12, "option 1"). Those have a name, date and finish per division,
+ * never matches: the draw feed the ledger reads starts at the June 2023 Texas
+ * Open, and our token can't read older draws.
+ *
+ * Only stops dated before the ledger's oldest one (less 3 days, since the two
+ * sources date a stop differently), so nothing shows twice. Golden Ticket
+ * qualifiers stay out, as they do in the ledger (Wesley, 11/9).
+ */
+function withOlderStops(career: Career, pb: PbPlayerStats | null): Career {
+  const starts = career.events.map((e) => e.startDate).filter(Boolean).sort();
+  if (!pb?.tournaments.length || !starts.length) return career;
+  const cutoff = new Date(Date.parse(starts[0]) - 3 * DAY).toISOString().slice(0, 10);
+  const older: CareerEvent[] = [];
+  for (const t of pb.tournaments) {
+    if (!t.name || t.date >= cutoff || /golden ticket/i.test(t.name)) continue;
+    const divisions = t.kinds.map((k) => {
+      const [gold, silver, semis] = t.medals[k] ?? [0, 0, 0];
+      const place: 1 | 2 | 3 | null = gold ? 1 : silver ? 2 : semis ? 3 : null;
+      return {
+        // Titles come with finishes only; a stop with none gets a generic name.
+        division: t.titles?.[k] ?? OLDER_TITLE[k],
+        kind: k,
+        partners: [],
+        finish: place === 1 ? "Champion" : place === 2 ? "Finalist" : place === 3 ? "Semifinalist" : "",
+        place,
+        matches: [],
+      };
+    });
+    older.push({
+      eventId: `${OLDER}${t.date}:${t.name}`,
+      name: t.name,
+      href: null,
+      startDate: t.date,
+      endDate: t.date,
+      logoUrl: null,
+      international: false,
+      divisions,
+    });
+  }
+  if (!older.length) return career;
+  // Both lists are newest first, and every older stop predates the ledger.
+  return { ...career, events: [...career.events, ...older] };
+}
+
 /** Lower-case, accents off, so "cancún" finds "Cancun". */
 const fold = (v: string) => v.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
@@ -623,6 +685,7 @@ function TournamentResults({ name, career }: { name: string; career: Career }) {
 
 /** One stop: its header, then every division they played there with every match. */
 function TournamentDetail({ name, e }: { name: string; e: CareerEvent }) {
+  const older = e.eventId.startsWith(OLDER);
   return (
     <>
     {/* The stop. */}
@@ -637,13 +700,20 @@ function TournamentDetail({ name, e }: { name: string; e: CareerEvent }) {
           <p className="text-[15px] font-bold leading-snug">{e.name}</p>
         )}
         <p className="mt-0.5 text-[12px] font-semibold text-white/50">
-          {dateRange(e.startDate, e.endDate)}, {e.endDate.slice(0, 4)}
+          {/* Older stops carry only a start date. */}
+          {older ? monthYear(e.startDate) : `${dateRange(e.startDate, e.endDate)}, ${e.endDate.slice(0, 4)}`}
         </p>
       </div>
     </div>
 
+    {older && (
+      <p className="mt-3 text-[12px] leading-relaxed text-white/55">
+        Match-by-match results aren&rsquo;t available before mid-2023. Finishes are from pickleball.com.
+      </p>
+    )}
+
     {/* Every division they played there, with every match. */}
-    <div className="mt-6 space-y-8">
+    <div className={older ? "mt-5 space-y-4" : "mt-6 space-y-8"}>
       {e.divisions.map((d) => {
         const won = d.matches.filter((m) => m.won === true).length;
         return (
@@ -655,16 +725,21 @@ function TournamentDetail({ name, e }: { name: string; e: CareerEvent }) {
                   {d.finish}
                 </span>
               )}
-              <p className="text-[12px] text-white/55">
-                {d.partners.length > 0 && <>w/ {d.partners.join(" / ")} · </>}
-                {won}–{d.matches.length - won}
-              </p>
+              {/* Older stops: no matches, so no win–loss (a finish, or nothing). */}
+              {!older && (
+                <p className="text-[12px] text-white/55">
+                  {d.partners.length > 0 && <>w/ {d.partners.join(" / ")} · </>}
+                  {won}–{d.matches.length - won}
+                </p>
+              )}
             </div>
-            <div className="mt-3 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
-              {d.matches.map((m) => (
-                <BoxScore key={m.id} m={m} subject={name} tone="dark" />
-              ))}
-            </div>
+            {d.matches.length > 0 && (
+              <div className="mt-3 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+                {d.matches.map((m) => (
+                  <BoxScore key={m.id} m={m} subject={name} tone="dark" />
+                ))}
+              </div>
+            )}
           </div>
         );
       })}
