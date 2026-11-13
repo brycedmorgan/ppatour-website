@@ -65,6 +65,15 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-13 — Daytona Mon–Wed streams added to /watch and the event page
+- Source: #marketing-general 11/13, Keaton Maynard (PBTV) and Matt Mayfield (YouTube). Bryce pasted both and asked for the site to show where to watch.
+- Daytona (`lib/broadcast.ts` + `lib/tv-schedule.ts`): Mon 11/16 Pro Qualifiers 8AM–4PM ET on YouTube (PPA Streamed Courts). Tue 11/17 (RD 64) and Wed 11/18 (RD 32), 12–8PM ET: Humana Championship Court on the PBTV app only; Carvana Grandstand plus other pro courts on YouTube. `startIso` is now 11/16. Thu–Sun unchanged.
+- Malibu Sat 12/19 Tennis Channel 5–8PM ET was already live (Wesley, `788c570`, 11/12). No change.
+- `lib/event-watch.ts`: the YouTube card note read "National TV coverage"; it now reads "Free live court streams".
+- Verified on a dev server: /watch, /watch/tv, both event pages. tsc + eslint clean. The audit lists the Daytona Mon–Wed rows as "sheet dropped"; expected, they are not on the Championship Court sheet.
+- ⚠ Open: Matt's Wednesday line said "(R64)"; written as RD 32. He did not say if YouTube carries Thu–Sun. Monday's court list and the Tue/Wed "other pro courts" are TBD.
+- ⚠ Open: Daytona's Order of Play labels Mon "Amateur & junior brackets" and Tue "Senior Open + pro qualifying". Matt has pro qualifiers Monday and RD 64 Tuesday. Not changed; needs the real order of play.
+
 ### 2026-11-13 — Daytona parking lands (Dana, Asana `1220529130911320`)
 - Her copy verbatim in `PARKING_BY_SLUG["proton-daytona-beach-open"]` (General + ADA) plus her Pictona lot map (`public/ppa/parking/proton-daytona-beach-open.webp`, 1402×1122 q70, 197 KB). Seventh finalized stop.
 - Monday (qualifiers) free; Tue–Sun $10/vehicle/day "(before 2 PM)", cash + card, managed by Pictona. No Premium or Rideshare section: she sent neither. Slug is 2026-only (2025 was "Florida Dairy Farmers"), so no edition guard.

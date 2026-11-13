@@ -537,10 +537,37 @@ export const tvSchedule: TvEvent[] = [
     location: "Pictona at Holly Hill · Daytona Beach, FL",
     tier: "Open · 1,000",
     league: "PPA",
-    startIso: "2026-11-19",
+    // Starts Mon 11/16: qualifiers and the early rounds now stream (11/13 posts).
+    startIso: "2026-11-16",
     endIso: "2026-11-22",
     slug: "proton-daytona-beach-open",
     days: [
+      // ⚠ MON–WED ARE NOT ON THE CHAMPIONSHIP COURT SHEET (Keaton Maynard + Matt
+      // Mayfield, #marketing-general 11/13); the audit reports them as "not on
+      // this sheet", as it does Worlds Monday. Tue/Wed are two different courts:
+      // Championship Court on the PBTV app only, Grandstand + others on
+      // youtube.com/PPAStreamedCourts. Full note in lib/broadcast.ts.
+      {
+        date: "Nov 16",
+        dow: "Mon",
+        windows: [{ channel: "YouTube", window: "8AM – 4PM", round: "Pro Qualifiers · 20+ courts" }],
+      },
+      {
+        date: "Nov 17",
+        dow: "Tue",
+        windows: [
+          { channel: "PBTV", window: "12PM – 8PM", round: "Round of 64 · Humana Championship Court", appOnly: true },
+          { channel: "YouTube", window: "12PM – 8PM", round: "Round of 64 · Carvana Grandstand + more pro courts" },
+        ],
+      },
+      {
+        date: "Nov 18",
+        dow: "Wed",
+        windows: [
+          { channel: "PBTV", window: "12PM – 8PM", round: "Round of 32 · Humana Championship Court", appOnly: true },
+          { channel: "YouTube", window: "12PM – 8PM", round: "Round of 32 · Carvana Grandstand + more pro courts" },
+        ],
+      },
       // Thu/Fri/Sun moved to 12PM ET starts (Keaton's 10/9 revision, the 10/10 sheet).
       { date: "Nov 19", dow: "Thu", windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Round of 16" }] },
       { date: "Nov 20", dow: "Fri", windows: [{ channel: "PBTV", window: "12PM – 8PM", round: "Quarterfinals" }] },
@@ -594,7 +621,7 @@ export const tvSchedule: TvEvent[] = [
       {
         date: "Dec 17",
         dow: "Thu",
-        // Thu/Fri moved up and Sat TC is now 4–7 (Keaton's 10/9 revision, the 10/10 sheet).
+        // Thu/Fri moved up (Keaton's 10/9 revision, the 10/10 sheet).
         windows: [
           { channel: "PBTV", window: "3PM – 11PM", round: "Round of 16" },
           { channel: "Tennis Channel", window: "4PM – 11PM", round: "Round of 16" },

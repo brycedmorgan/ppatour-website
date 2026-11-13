@@ -136,6 +136,8 @@ function noteFor(group: string, slots: BroadcastSlot[]): string {
       : "Every court, every match — the home of live PPA streaming.";
   }
   if (group === "FOX Sports") return `National TV coverage — ${foxNote(slots)}.`;
+  // A free stream is not "national TV"; that line sat on Worlds' YouTube card.
+  if (group === "YouTube") return `Free live court streams — ${days.join(", ")}.`;
   const tape = slots.some((s) => s.type === "TAPE");
   return `National TV coverage — ${days.join(", ")}${tape ? " (includes a replay window)" : ""}.`;
 }

@@ -235,6 +235,23 @@ export const eventBroadcasts: Record<string, BroadcastSlot[]> = {
     { round: "Championship", day: "Sunday", window: "10AM ET - 2PM ET", platform: "Tennis Channel", secondary: "PBTV", type: "LIVE" },
   ],
   "proton-daytona-beach-open": [
+    // ⚠ MON–WED ARE NEW AND NOT ON THE CHAMPIONSHIP COURT SHEET. Source is
+    // #marketing-general 11/13: Keaton Maynard (PBTV start times) and Matt
+    // Mayfield (YouTube start times). Mon 11/16 is Pro Qualifiers, 8AM–4PM ET on
+    // youtube.com/PPAStreamedCourts (20–25 courts, list TBD). Tue 11/17 (RD 64)
+    // and Wed 11/18 (RD 32), 12–8PM ET: Humana Championship Court is the
+    // PickleballTV APP ONLY; Carvana Grandstand Court plus other pro courts are
+    // on YouTube ("per unreleased schedule"). So the two Tue/Wed rows are
+    // different courts, not a simulcast.
+    // ⚠ Matt's Wednesday line reads "Grandstand Court (R64)"; Wednesday is RD 32
+    // (his own heading and Keaton's post both say so). Written as RD 32 here.
+    // ⚠ Keaton gave 12PM STARTS ONLY for Thu–Sun, which match the rows below.
+    // He did not say whether YouTube carries anything from Thursday on.
+    { round: "Pro Qualifiers", day: "Monday", window: "8AM ET - 4PM ET", platform: "YouTube", type: "LIVE" },
+    { round: "RD 64", day: "Tuesday", window: "12PM ET - 8PM ET", platform: "PBTV App", type: "LIVE" },
+    { round: "RD 64", day: "Tuesday", window: "12PM ET - 8PM ET", platform: "YouTube", type: "LIVE" },
+    { round: "RD 32", day: "Wednesday", window: "12PM ET - 8PM ET", platform: "PBTV App", type: "LIVE" },
+    { round: "RD 32", day: "Wednesday", window: "12PM ET - 8PM ET", platform: "YouTube", type: "LIVE" },
     // ⚠ THU/FRI MOVED TO 12–8PM ET (was 2–10) AND SUNDAY TO 12–5PM ET (was
     // 10AM–3PM): Keaton's 10/9 revision, as the 10/10 sheet carries it. Sat unchanged.
     { round: "RD 16", day: "Thursday", window: "12PM ET - 8PM ET", platform: "PBTV", type: "LIVE" },
