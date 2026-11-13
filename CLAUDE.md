@@ -65,6 +65,21 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-13 — Daytona parking lands (Dana, Asana `1220529130911320`)
+- Her copy verbatim in `PARKING_BY_SLUG["proton-daytona-beach-open"]` (General + ADA) plus her Pictona lot map (`public/ppa/parking/proton-daytona-beach-open.webp`, 1402×1122 q70, 197 KB). Seventh finalized stop.
+- Monday (qualifiers) free; Tue–Sun $10/vehicle/day "(before 2 PM)", cash + card, managed by Pictona. No Premium or Rideshare section: she sent neither. Slug is 2026-only (2025 was "Florida Dairy Farmers"), so no edition guard.
+- Verified on the dev server: event page carries the copy and the map, holding line gone. eslint clean.
+
+### 2026-11-12 (pt. 2) — Profile Head-to-Head + Highlights filters (Wesley), pushed to main
+- `e6ee090` Head-to-Head section (`components/athletes/HeadToHead.tsx`), between Stats and Tournament Results: All/Doubles/Mixed/Singles tabs, opponent search, top 10 + Show all; match W-L, win %, games, finals. From `CumulativeOpponentStats` in the SAME matches_stats call (`h2h` in lib/pb-player-stats): no new upstream request. /api/player-stats grew ~16 KB → ~60 KB raw (~10 KB gzipped).
+- ⚠ Names repeat (ALW has two "Lauren Stratman" records), so rows are keyed by position, never name. Doubles/mixed: a match counts against both opposing players. Opponent links via `slugForName` (ambiguous → no link), on the mount's base (`PlayerCareer` now takes `base`, so Europe stays on /europe/athletes).
+- ⚠ CDN copies cached before the push lack `h2h`; the section stays hidden until they refresh (≤6h). Not a bug.
+- `1997cc9` Highlights (Watch) gets Tournament Results' controls: season, search, ‹ › arrows, year-grouped picker, "N of M", Clear filters. `VideoTournament.year` from the latest highlight's date.
+- `4e8e269` Highlights defaults to the MOST RECENT tournament (was the "biggest" event; ALW opened on 2024 Worlds). ⚠ The highlights feed itself stops at spring 2026 for ALW (Texas Open), so that's her default until pickleball.com tags fall clips.
+- `00a096c` Tournament Results reaches back to 2020: stats-engine stops dated before the ledger's oldest (less 3 days) are added with name, month/year and finish per division, no W-L or box scores, plus a "not available before mid-2023" note (eventId prefix `pb:`). Rows now carry a cleaned `name` + division `titles`. Golden Tickets stay out. ALW 51 → 91 tournaments, back to Feb 2021 (her 2020 Mesa row lists no division). Needs a fresh stats copy, so ≤6h after deploy per profile.
+- Stats engine's earliest stop is **PPA Mesa Grand Slam Qualifier, Feb 17, 2020** (Ben Johns, Tyson, ALW, Simone Jardim, Matt Wright, Kovalova, Parenteau); JW Johnson starts Feb 2021.
+- Verified on the dev server (ALW desktop + 390px, Europe Zapletalova); tsc + eslint clean.
+
 ### 2026-11-12 — Profile Stats now come from pickleball.com's stats engine (Kenan)
 - Kenan's doc (Slack file `F0CH8PP460L`): `/v1/users/{uuid}/matches_stats` was always allowed for platform 9 (our 11/9 403s were wrong route names); he also granted `/v1/users/{uuid}/ppa_ranking`. New `lib/pb-player-stats.ts` + `/api/player-stats?uuid=` (CDN 6h + 1d SWR); profile passes `stats.uuid` (lib/athlete-stats) to `PlayerCareer`.
 - Stats band reads it (2021 on for ALW, not May 2023): win–loss, titles/finals/semis, streaks, versus higher-rated team (their "upsets"; record only, no ratings shown), deciding games, after winning/losing game one, finals, games/points, versus left-handers, best win (their pick), by season. Fallback when the call fails: counted from the career ledger as before. **Tournament Results still reads the ledger** (needs every match).

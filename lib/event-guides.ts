@@ -433,6 +433,34 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
       ],
     },
   ],
+  // Daytona Beach Open — Dana Summers, 11/13 (Asana 1220529130911320), with the
+  // Pictona lot map. All of it is her wording; her fee bullets became lines and
+  // "(Insert parking map)" became the map itself.
+  //
+  // ⚠ MONDAY IS FREE, TUE–SUN $10/DAY. "(before 2 PM)" is hers; don't explain it.
+  // NO "Premium Parking" OR "Rideshare" SECTION: her submission has neither.
+  "proton-daytona-beach-open": [
+    {
+      heading: "General Parking",
+      body: [
+        "All event parking is located in the north and west on-site lots (see map below). Parking is managed by Pictona.",
+        "Location: Pictona at Holly Hill\nAddress: 1060 Ridgewood Ave, Holly Hill, FL 32117",
+        "Parking Fees:\nMonday (Qualifying Rounds): Free\nTuesday–Sunday: $10 per vehicle, per day (before 2 PM). Cash and credit cards accepted.",
+      ],
+      images: [
+        {
+          src: "/ppa/parking/proton-daytona-beach-open.webp",
+          alt: "Aerial map of Pictona at Holly Hill, FL, with the public parking lot at $10 per day outlined in blue, running along the north and west sides of the courts, and the ticketing entrance marked at the north building off the lot.",
+          width: 1402,
+          height: 1122,
+        },
+      ],
+    },
+    {
+      heading: "ADA Parking",
+      body: ["ADA parking is available in the on-site parking lots."],
+    },
+  ],
 };
 
 /**
