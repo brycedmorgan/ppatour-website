@@ -62,6 +62,15 @@ const LABELS_BY_SLUG: Record<string, Record<string, string>> = {
     // and nobody has said which, and "no semifinals Saturday" would be a guess.
     "2026-10-18": "Championship Sunday — semifinals, then finals",
   },
+  // Bryce, Slack DM 11/14: pro qualifying is MONDAY, not the template's Tuesday.
+  // Dana's parking copy ("Monday (Qualifying Rounds): Free") and the watch table
+  // (Pro Qualifiers Mon 11/16, RD 64 Tue 11/17; #marketing-general 11/13) agree.
+  // Monday keeps the amateurs on purpose: nobody has said their brackets moved.
+  // Tuesday now names the round, so the scores board opens on the R64 that day.
+  "proton-daytona-beach-open": {
+    "2026-11-16": "Amateur & junior brackets + pro qualifying",
+    "2026-11-17": "Senior Open + pro round of 64",
+  },
 };
 
 /** This day's label: the stop's own override, else the template's. */

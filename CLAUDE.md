@@ -65,6 +65,10 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-14 — Daytona Order of Play: pro qualifying Monday (Bryce)
+- Bryce, DM 11/14: Order of Play had qualifying Tuesday (template); parking copy and the watch table say Monday. `LABELS_BY_SLUG["proton-daytona-beach-open"]`: Mon 11/16 "Amateur & junior brackets + pro qualifying", Tue 11/17 "Senior Open + pro round of 64". Amateurs kept on Monday (nobody said they moved). Tuesday now names a round, so the scores board opens on R64.
+- Verified on the dev server; tsc + eslint clean. Monday's gate/first serve reads 8:00 AM from the broadcast rule (YouTube qualifiers start 8AM ET).
+
 ### 2026-11-13 — Daytona Mon–Wed streams added to /watch and the event page
 - Source: #marketing-general 11/13, Keaton Maynard (PBTV) and Matt Mayfield (YouTube). Bryce pasted both and asked for the site to show where to watch.
 - Daytona (`lib/broadcast.ts` + `lib/tv-schedule.ts`): Mon 11/16 Pro Qualifiers 8AM–4PM ET on YouTube (PPA Streamed Courts). Tue 11/17 (RD 64) and Wed 11/18 (RD 32), 12–8PM ET: Humana Championship Court on the PBTV app only; Carvana Grandstand plus other pro courts on YouTube. `startIso` is now 11/16. Thu–Sun unchanged.
