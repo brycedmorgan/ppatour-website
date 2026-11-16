@@ -80,9 +80,7 @@ function Table({ table }: { table: PrizeTable }) {
 function GridBody({ grid }: { grid: PrizeGrid }) {
   return (
     <div className="mt-6 grid gap-8">
-      <p className="text-xs text-ppa-navy/60">
-        Doubles and mixed doubles prize money is listed per team.
-      </p>
+      <p className="text-xs text-ppa-navy/60">{grid.unit}</p>
       {grid.tables.map((t) => (
         <Table key={t.title} table={t} />
       ))}

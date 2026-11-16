@@ -16,9 +16,7 @@
  * player agreements pay "whatever prize money is publicly posted", and only
  * Gold was posted. How It Works keeps its Gold-only rule.
  *
- * LEGACY is the original pre-summer-2025 grid. It is NOT in any doc we can
- * reach. `LEGACY_GRID` stays null until Chris sends it; the page then renders
- * it with no other change.
+ * LEGACY is the original pre-summer-2025 grid, from Chris Patrick's PDF (11/16).
  */
 
 export type PrizeTable = {
@@ -32,8 +30,12 @@ export type PrizeTable = {
 export type PrizeGrid = {
   id: "gold" | "standard" | "futures" | "legacy";
   name: string;
+  /** Unit line shown above the grid's tables. */
+  unit: string;
   tables: PrizeTable[];
 };
+
+const PER_TEAM = "Doubles and mixed doubles prize money is listed per team.";
 
 const DIV = [
   "Men's Doubles",
@@ -83,6 +85,7 @@ function ppa125(qfWomensSingles: string): PrizeTable {
 export const GOLD_GRID: PrizeGrid = {
   id: "gold",
   name: "Gold Contract",
+  unit: PER_TEAM,
   tables: [
     t("PPA 2,000+ (Majors and Worlds) (USA Only)", [
       ["Winner", "$90,000", "$90,000", "$76,000", "$23,000", "$23,000"],
@@ -147,6 +150,7 @@ export const GOLD_GRID: PrizeGrid = {
 export const STANDARD_GRID: PrizeGrid = {
   id: "standard",
   name: "Standard Contract",
+  unit: PER_TEAM,
   tables: [
     t("PPA 2,000+ (USA Only)", [
       ["Winner", "$24,000", "$24,000", "$20,000", "$6,000", "$6,000"],
@@ -211,6 +215,7 @@ export const STANDARD_GRID: PrizeGrid = {
 export const FUTURES_GRID: PrizeGrid = {
   id: "futures",
   name: "Futures Contract",
+  unit: PER_TEAM,
   tables: [
     t("PPA 2,000+ (USA Only)", [
       ["Winner", "$12,000", "$12,000", "$10,000", "$3,000", "$3,000"],
@@ -272,5 +277,53 @@ export const FUTURES_GRID: PrizeGrid = {
   ],
 };
 
-/** The original grid. Null until Chris Patrick sends the figures. */
-export const LEGACY_GRID: PrizeGrid | null = null;
+/**
+ * The original grid. SOURCE: "Legacy Prize Grid.pdf", Chris Patrick, email
+ * "Re: Website - Prize Grids" 11/16/2026 (Gmail msg 1a1e540954144716).
+ * ⚠ PER PLAYER, unlike the other three (per team). Copied as written, including
+ * Cups singles winner $3,320 vs Finals $3,330.
+ */
+export const LEGACY_GRID: PrizeGrid | null = {
+  id: "legacy",
+  name: "Legacy",
+  unit: "All earnings shown are per player.",
+  tables: [
+    t("PPA Slams", [
+      ["Winner", "$5,000", "$5,000", "$5,000", "$3,700", "$3,700"],
+      ["Second Place", "$2,750", "$2,750", "$2,750", "$2,035", "$2,035"],
+      ["Third Place", "$1,625", "$1,625", "$1,625", "$1,183", "$1,183"],
+      ["Fourth Place", "$1,375", "$1,375", "$1,375", "$1,018", "$1,018"],
+      ["Quarter Finals", "$688", "$688", "$688", "$509", "$509"],
+      ["Round of 16", "$344", "$344", "$344", "$254", "$254"],
+    ]),
+    t("PPA Finals", [
+      ["Winner", "$4,500", "$4,500", "$4,500", "$3,330", "$3,330"],
+      ["Second Place", "$2,475", "$2,475", "$2,475", "$1,832", "$1,832"],
+      ["Third Place", "$1,488", "$1,488", "$1,488", "$1,081", "$1,081"],
+      ["Fourth Place", "$1,238", "$1,238", "$1,238", "$916", "$916"],
+      ["Quarter Finals", "$619", "$619", "$619", "$458", "$458"],
+      ["Round of 16", "$310", "$310", "$310", "$229", "$229"],
+    ]),
+    t("PPA Cups", [
+      ["Winner", "$4,500", "$4,500", "$4,500", "$3,320", "$3,320"],
+      ["Second Place", "$2,475", "$2,475", "$2,475", "$1,832", "$1,832"],
+      ["Third Place", "$1,488", "$1,488", "$1,488", "$1,081", "$1,081"],
+      ["Fourth Place", "$1,238", "$1,238", "$1,238", "$916", "$916"],
+      ["Quarter Finals", "$619", "$619", "$619", "$458", "$458"],
+      ["Round of 16", "$310", "$310", "$310", "$229", "$229"],
+    ]),
+    t("PPA Opens", [
+      ["Winner", "$4,000", "$4,000", "$4,000", "$2,960", "$2,960"],
+      ["Second Place", "$2,200", "$2,200", "$2,200", "$1,628", "$1,628"],
+      ["Third Place", "$1,350", "$1,350", "$1,350", "$979", "$979"],
+      ["Fourth Place", "$1,100", "$1,100", "$1,100", "$814", "$814"],
+      ["Quarter Finals", "$550", "$550", "$550", "$407", "$407"],
+      ["Round of 16", "$225", "$225", "$225", "$204", "$204"],
+    ]),
+    t("Challenger", [
+      ["Winner", "$550", "$550", "$550", "$1,100", "$1,100"],
+      ["Second Place", "$300", "$300", "$300", "$600", "$600"],
+      ["Third Place", "$150", "$150", "$150", "$300", "$300"],
+    ]),
+  ],
+};
