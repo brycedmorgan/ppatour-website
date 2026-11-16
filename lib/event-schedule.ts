@@ -426,7 +426,9 @@ export function gatesDaily(slug: string, gates: string[]): string {
  * 2 PM first serve. Delete the line once real gate times arrive, and add them
  * to GATES_BY_SLUG instead.
  */
-const GATES_AT_FIRST_SERVE = new Set<string>(["veolia-chicago-cup"]);
+// Daytona, 11/15: broadcast-derived gates would read 12:00 PM against Matt's
+// 10:00 AM first serve, so gates match first serve until he sends gate times.
+const GATES_AT_FIRST_SERVE = new Set<string>(["veolia-chicago-cup", "proton-daytona-beach-open"]);
 
 /** Does this stop's gate time follow each day's first serve (see above)? */
 export function gatesAtFirstServe(slug: string): boolean {
@@ -566,6 +568,23 @@ const FIRST_SERVE_BY_SLUG: Record<string, Record<string, string>> = {
     // through to `broadcastStart`, which is the 8AM PBTV open above. That is
     // Wesley's 10/13 standing rule, gate = the day's earliest broadcast start.
     "2026-10-18": "8:00 AM", // Sun — remaining SFs, then finals
+  },
+
+  /**
+   * Proton Daytona Beach Open — Nov 16–22, Pictona. Matt Mayfield, Slack DM
+   * 11/15: "first serve is at 8am on Monday and at 10am every other day."
+   * Overrides the broadcast-derived 12:00 PM Tue–Sun (play starts before PBTV
+   * opens). Gates follow first serve via GATES_AT_FIRST_SERVE until real gate
+   * times arrive.
+   */
+  "proton-daytona-beach-open": {
+    "2026-11-16": "8:00 AM", // Mon — pro qualifying
+    "2026-11-17": "10:00 AM", // Tue — RD64
+    "2026-11-18": "10:00 AM", // Wed — RD32
+    "2026-11-19": "10:00 AM", // Thu — RD16
+    "2026-11-20": "10:00 AM", // Fri — QF
+    "2026-11-21": "10:00 AM", // Sat — SF
+    "2026-11-22": "10:00 AM", // Sun — Finals
   },
 };
 

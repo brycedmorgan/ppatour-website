@@ -67,9 +67,11 @@ const LABELS_BY_SLUG: Record<string, Record<string, string>> = {
   // (Pro Qualifiers Mon 11/16, RD 64 Tue 11/17; #marketing-general 11/13) agree.
   // Monday keeps the amateurs on purpose: nobody has said their brackets moved.
   // Tuesday now names the round, so the scores board opens on the R64 that day.
+  // Matt Mayfield, Slack DM 11/15: delete the amateur & junior brackets from
+  // Monday and the Senior Open from Tuesday — those days are pro play only.
   "proton-daytona-beach-open": {
-    "2026-11-16": "Amateur & junior brackets + pro qualifying",
-    "2026-11-17": "Senior Open + pro round of 64",
+    "2026-11-16": "Pro qualifying",
+    "2026-11-17": "Pro round of 64",
   },
 };
 

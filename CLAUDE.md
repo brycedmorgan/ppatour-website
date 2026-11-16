@@ -65,6 +65,12 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-15 — Daytona: no amateurs Mon, no Senior Open Tue; first serve 8 AM Mon / 10 AM rest (Matt)
+- Matt Mayfield, Slack DM 11/15: delete amateur & junior brackets from Mon 11/16 and Senior Open from Tue 11/17; first serve 8am Monday, 10am every other day. Labels now "Pro qualifying" / "Pro round of 64".
+- `FIRST_SERVE_BY_SLUG["proton-daytona-beach-open"]` Mon 8:00 AM, Tue–Sun 10:00 AM (beats the broadcast-derived 12 PM).
+- ⚠ No gate times sent. Daytona added to `GATES_AT_FIRST_SERVE` (Chicago stopgap) so gates don't read 12 PM after a 10 AM first serve. Replace with `GATES_BY_SLUG` when Matt sends real gates.
+- Verified on the dev server: Order of Play reads the new labels/times, "Gates open at first serve each day". tsc clean.
+
 ### 2026-11-14 — Daytona Order of Play: pro qualifying Monday (Bryce)
 - Bryce, DM 11/14: Order of Play had qualifying Tuesday (template); parking copy and the watch table say Monday. `LABELS_BY_SLUG["proton-daytona-beach-open"]`: Mon 11/16 "Amateur & junior brackets + pro qualifying", Tue 11/17 "Senior Open + pro round of 64". Amateurs kept on Monday (nobody said they moved). Tuesday now names a round, so the scores board opens on R64.
 - Verified on the dev server; tsc + eslint clean. Monday's gate/first serve reads 8:00 AM from the broadcast rule (YouTube qualifiers start 8AM ET).
