@@ -65,6 +65,12 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-16 — Watch Live fallback follows the day's broadcast, not always PBTV (Bryce)
+- Bryce, DM 11/16 (Daytona day one): every Watch Live button fell back to stream.pickleballtv.com when the first ticker match had no stream link, but Monday quals are YouTube only. Live check that morning: the button opened Court 5's own YouTube live, so the fallback wasn't being used yet.
+- `liveWatchUrl` (components/live/use-live-ticker.ts) now falls back to new `broadcastWatchUrl(now)`: the live stop's earliest LIVE streamable `lib/broadcast.ts` window that weekday (ET). YouTube → youtube.com/ppastreamedcourts (same as lib/event-watch.ts, NOT the PPA Tour main channel); PBTV / PBTV App → stream.pickleballtv.com; TV-only days or no stop → PBTV as before. Signature unchanged, so ScoreTicker, StickyBuyBar, WatchLiveButton and DayWatchButton all follow.
+- Unchanged: the "done for the day" Watch PickleballTV button and the pre-hydration Suspense fallbacks still use PBTV_STREAM_URL.
+- Checked with a Node harness: Daytona Mon → Streamed Courts; Tue/Thu/Sun → PBTV; no stop → PBTV; a match's own link still wins. tsc + eslint clean; dev server homepage still opens the match's own link.
+
 ### 2026-11-15 — Daytona: no amateurs Mon, no Senior Open Tue; first serve 8 AM Mon / 10 AM rest (Matt)
 - Matt Mayfield, Slack DM 11/15: delete amateur & junior brackets from Mon 11/16 and Senior Open from Tue 11/17; first serve 8am Monday, 10am every other day. Labels now "Pro qualifying" / "Pro round of 64".
 - `FIRST_SERVE_BY_SLUG["proton-daytona-beach-open"]` Mon 8:00 AM, Tue–Sun 10:00 AM (beats the broadcast-derived 12 PM).
