@@ -7,10 +7,11 @@ import {
   type PrizeGrid,
   type PrizeTable,
 } from "@/lib/prize-grids";
-import { OpenOnHash } from "./OpenOnHash";
+import { GridSwitcher } from "./GridSwitcher";
 
 /**
- * Prize Money Grids — all contract grids on one page.
+ * Prize Money Grids. One grid on screen (Gold first); a selector after it
+ * switches Standard / Futures / Legacy (Connor, 11/16).
  *
  * ⚠ DELIBERATELY UNLINKED (Connor, 11/16: "bury a place that shows all 4
  * grids", Gold most visible). Nothing in the nav, footer, sitemap or search
@@ -80,7 +81,6 @@ function Table({ table }: { table: PrizeTable }) {
 function GridBody({ grid }: { grid: PrizeGrid }) {
   return (
     <div className="mt-6 grid gap-8">
-      <p className="text-xs text-ppa-navy/60">{grid.unit}</p>
       {grid.tables.map((t) => (
         <Table key={t.title} table={t} />
       ))}
@@ -89,10 +89,8 @@ function GridBody({ grid }: { grid: PrizeGrid }) {
 }
 
 export default function PrizeMoneyPage() {
-  const [gold, ...others] = GRIDS;
   return (
     <>
-      <OpenOnHash />
       <section className="bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex items-center gap-2.5">
@@ -107,57 +105,22 @@ export default function PrizeMoneyPage() {
           <p className="mt-4 max-w-3xl text-sm leading-relaxed text-ppa-navy/70">
             Prize money at PPA Tour and Major League Pickleball events, by player contract.
           </p>
-          <nav aria-label="Grids" className="mt-6 flex flex-wrap gap-2">
-            {GRIDS.map((g) => (
-              <a
-                key={g.id}
-                href={`#${g.id}`}
-                className={
-                  g.id === "gold"
-                    ? "bg-ppa-navy px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white"
-                    : "border border-ppa-line bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-ppa-navy/70"
-                }
-              >
-                {g.name}
-              </a>
-            ))}
-            <a
-              href="#eligibility"
-              className="border border-ppa-line bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-ppa-navy/70"
-            >
-              Eligibility
-            </a>
-          </nav>
         </div>
       </section>
 
-      {/* Gold: open, first, full width. */}
-      <section id="gold" className="scroll-mt-24 bg-white">
+      {/* Gold on screen; the selector comes after the grid (Connor, 11/16). */}
+      <section className="bg-white">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-blue">Grid 1</p>
-          <h2 className="mt-2 font-display text-3xl uppercase leading-[1.02] text-ppa-navy">
-            {gold.name} Prize Money Grid
-          </h2>
-          <GridBody grid={gold} />
-        </div>
-      </section>
-
-      {/* The rest: present in full, collapsed by default. */}
-      <section className="bg-ppa-paper">
-        <div className="mx-auto grid w-full max-w-6xl gap-4 px-4 py-12">
-          {others.map((g, i) => (
-            <details key={g.id} id={g.id} className="scroll-mt-24 border border-ppa-line bg-white p-5">
-              <summary className="cursor-pointer list-none">
-                <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-navy/50">
-                  Grid {i + 2}
-                </span>
-                <span className="mt-1 block font-display text-xl uppercase text-ppa-navy">
-                  {g.name} Prize Money Grid <span className="text-ppa-blue">+</span>
-                </span>
-              </summary>
-              <GridBody grid={g} />
-            </details>
-          ))}
+          <GridSwitcher tabs={GRIDS.map((g) => ({ id: g.id, name: g.name }))}>
+            {GRIDS.map((g) => (
+              <div key={g.id}>
+                <h2 className="font-display text-3xl uppercase leading-[1.02] text-ppa-navy">
+                  {g.name} Prize Money Grid
+                </h2>
+                <GridBody grid={g} />
+              </div>
+            ))}
+          </GridSwitcher>
         </div>
       </section>
 
@@ -199,6 +162,14 @@ export default function PrizeMoneyPage() {
               player agreement.
             </p>
           </div>
+          {/* Units as a footnote, not at the top (Connor, 11/16). */}
+          <ul className="mt-10 space-y-1 text-[10px] leading-relaxed text-ppa-navy/40">
+            {GRIDS.map((g) => (
+              <li key={g.id}>
+                {g.name}: {g.unit}
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
     </>
