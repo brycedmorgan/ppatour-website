@@ -7,6 +7,7 @@ import {
   type PrizeGrid,
   type PrizeTable,
 } from "@/lib/prize-grids";
+import { OpenOnHash } from "./OpenOnHash";
 
 /**
  * Prize Money Grids — all contract grids on one page.
@@ -93,6 +94,7 @@ export default function PrizeMoneyPage() {
   const [gold, ...others] = GRIDS;
   return (
     <>
+      <OpenOnHash />
       <section className="bg-ppa-paper">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
           <div className="flex items-center gap-2.5">

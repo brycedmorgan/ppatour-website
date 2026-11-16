@@ -65,6 +65,13 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-16 — Unlinked /about/prize-money: all contract grids (Connor → Bryce → Chris)
+- Connor: "bury a place that shows all 4 grids, Gold (most viable), Standard, Futures, Legacy, and send Chris the link." Why: Chris Patrick's 10/30 email "Website - Prize Grids". Gabe Tardio's contract pays "whatever prize money is publicly posted"; only Gold was posted; his agent says Gold is owed (~$50k).
+- `app/(marketing)/about/prize-money/` + `lib/prize-grids.ts`. noindex/nofollow, absent from nav, footer, sitemap and search. Gold first and open; Standard + Futures collapsed (`OpenOnHash` opens one from the nav hash). Chris's eligibility note verbatim below the grids. **Don't link it from How It Works** (Connor's 8/3 Gold-only rule stands there).
+- Figures: John Enger's "2026-2027 Updated: Prize Money Grids Per Contract" (Doc `10S1HVSE…`, 9/15), PPA + MLP tables. ⚠ Standard PPA 125 QF Women's Singles reads **$28** in the doc (every other grid $38). Published as written; needs John/Chris to confirm.
+- ⚠ **LEGACY GRID NOT ON THE PAGE.** No copy in Drive, Gmail or the repo. `LEGACY_GRID` is null; set it and the page renders it, nav button included. Chris owns the figures.
+- Verified on a dev server at 1440 (screens in session); tsc + eslint clean.
+
 ### 2026-11-15 — Daytona: no amateurs Mon, no Senior Open Tue; first serve 8 AM Mon / 10 AM rest (Matt)
 - Matt Mayfield, Slack DM 11/15: delete amateur & junior brackets from Mon 11/16 and Senior Open from Tue 11/17; first serve 8am Monday, 10am every other day. Labels now "Pro qualifying" / "Pro round of 64".
 - `FIRST_SERVE_BY_SLUG["proton-daytona-beach-open"]` Mon 8:00 AM, Tue–Sun 10:00 AM (beats the broadcast-derived 12 PM).
