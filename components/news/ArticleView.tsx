@@ -146,6 +146,8 @@ function PlayerRow({ p, rank }: { p: NewsPlayer; rank: { rank: number } | undefi
 
 export async function ArticleView({ detail }: { detail: NewsDetail }) {
   // A ctaUrl beginning with "/" is a path on this site, not an outbound link.
+  /* The hero may use its own image (native `cardImage` puts a different one on cards). */
+  const heroSrc = detail.card.heroImage ?? detail.card.image;
   const ctaIsInternal = !!detail.card.ctaUrl?.startsWith("/");
   const { card } = detail;
   const related = relatedNews(card.slug, card.category, 3);
@@ -258,12 +260,12 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
           top of the artwork's own text. So a graphic is shown WHOLE
           (`object-contain`, never cropped) with the headline on a plain band
           beneath it — the two never collide. */}
-      {card.heroGraphic && card.image ? (
+      {card.heroGraphic && heroSrc ? (
         <section className="bg-ppa-navy text-white">
           <div className="w-full bg-ppa-navy-deep">
             <div className="relative mx-auto aspect-[16/9] w-full max-w-4xl">
               <Image
-                src={card.image}
+                src={heroSrc}
                 alt=""
                 fill
                 priority
@@ -279,9 +281,9 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
         </section>
       ) : (
         <section className="relative isolate flex min-h-[44svh] flex-col justify-end overflow-hidden bg-ppa-navy text-white">
-          {card.image && (
+          {heroSrc && (
             <Image
-              src={card.image}
+              src={heroSrc}
               alt=""
               fill
               priority
@@ -293,7 +295,7 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
               style={card.imagePosition ? { objectPosition: card.imagePosition } : undefined}
             />
           )}
-          <div className={`absolute inset-0 ${card.image ? "scrim-hero" : "bg-ppa-navy-deep"}`} />
+          <div className={`absolute inset-0 ${heroSrc ? "scrim-hero" : "bg-ppa-navy-deep"}`} />
           <div className="relative mx-auto w-full max-w-3xl px-4 pb-9 pt-24">
             {heroText}
           </div>

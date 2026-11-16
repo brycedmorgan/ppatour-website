@@ -55,6 +55,12 @@ export type NewsArticle = {
    */
   imagePosition?: string;
   /**
+   * Image for cards (home page, /news, related rails) when the hero image
+   * crops badly there — e.g. a wide 2.5:1 banner in the home page's square lead
+   * card. Unset = cards use `image`. The article hero always uses `image`.
+   */
+  cardImage?: string;
+  /**
    * Set when `image` is a designed GRAPHIC — its own lockup, logos and type,
    * like the Canes/Stanley Cup key art — rather than a photograph. The hero
    * then shows it WHOLE (object-contain, uncropped) with the headline on a band
@@ -153,6 +159,9 @@ export const newsArticles: NewsArticle[] = [
     subtitle: "For the first time in Six Zero history, the Coral Pro is on sale.",
     date: "Nov 16",
     image: "/ppa/news/six-zero-black-friday-banner-2026.webp",
+    /* Wesley: the banner crops to "AY 65" in the home page's square lead card;
+       Hannah's 4×5 photo grid fills it. */
+    cardImage: "/ppa/news/six-zero-black-friday-grid-2026.webp",
     heroGraphic: true,
     author: "Six Zero",
     ctaUrl:

@@ -66,6 +66,11 @@ export type NewsCard = {
   /** Hero-only `object-position` override; unset = `object-center`. */
   imagePosition?: string;
   /**
+   * Article-hero image when it differs from the card's `image` (native
+   * `cardImage`). Unset = the hero uses `image`, as on every other post.
+   */
+  heroImage?: string;
+  /**
    * Hero image is a designed GRAPHIC (its own lockup/logos/type), not a photo.
    * ArticleView then shows it whole (uncropped) with the headline on a band
    * below instead of overlaid on top. Native only; unset = the photo hero.
@@ -157,7 +162,8 @@ function nativeToCard(a: NewsArticle): NewsCard {
     category: a.category,
     title: cleanTitle(a.title),
     dek: cleanDek(a.dek),
-    image: a.image,
+    image: a.cardImage ?? a.image,
+    heroImage: a.cardImage ? a.image : undefined,
     imageAlt: "",
     imagePosition: a.imagePosition,
     author: a.author || HOUSE_BYLINE,
