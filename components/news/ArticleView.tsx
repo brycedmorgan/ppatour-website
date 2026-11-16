@@ -410,12 +410,20 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
                 </Link>
               ) : (
                 <a
-                  href={withUtm(card.ctaUrl ?? next.ticketsUrl, {
-                    campaign: next.eventCode ?? next.slug,
-                    content: `article-${card.slug}`,
-                  })}
+                  /* A partner link that already carries its own UTMs (a sponsor's
+                     campaign tags) goes out untouched: withUtm would overwrite
+                     them and the sponsor could no longer count its clicks.
+                     Partner News links are marked rel="sponsored" for search. */
+                  href={
+                    card.ctaUrl && /[?&]utm_source=/.test(card.ctaUrl)
+                      ? card.ctaUrl
+                      : withUtm(card.ctaUrl ?? next.ticketsUrl, {
+                          campaign: next.eventCode ?? next.slug,
+                          content: `article-${card.slug}`,
+                        })
+                  }
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel={card.category === "Partner News" && card.ctaUrl ? "sponsored noopener noreferrer" : "noopener noreferrer"}
                   className="flex h-10 items-center bg-ppa-blue px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-ppa-blue-deep active:scale-[0.98]"
                 >
                   {card.ctaLabel ?? `See It Live — ${next.name} Tickets`}

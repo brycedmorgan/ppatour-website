@@ -125,6 +125,51 @@ export type NewsArticle = {
  */
 export const newsArticles: NewsArticle[] = [
   /**
+   * ⚠ SPONSORED PARTNER POST — Six Zero's Black Friday sale copy, supplied by
+   * Hannah Johns (Slack DM 11/16, Word doc "Six_Zero_Black_Friday_PPA_Article")
+   * with a request to publish the same day. Same class and same three labels
+   * as the Cailyn Campbell signing below: "Partner News", the "Six Zero"
+   * byline, and the closing disclosure line. Don't strip any of them.
+   *
+   * Copy is verbatim from the doc, Dale Young's quote included. The doc's
+   * first line ("For the first time in Six Zero history, the Coral Pro is on
+   * sale.") is the subtitle. Fine print ("Offers may vary…") kept as written.
+   *
+   * ⚠ THE CTA KEEPS SIX ZERO'S OWN UTMs. The doc links bit.ly/3URUG7c, which
+   * resolves to the URL below (utm_source=PPA, Website Article, Black Friday).
+   * ArticleView leaves a ctaUrl that already carries utm_source untouched, so
+   * their attribution survives. Sale ends Nov 30.
+   *
+   * Hero is their "BF GRID 1" 4×5 graphic (text baked in) → `heroGraphic`, so
+   * it shows whole. The other asset ("Black Friday stack") isn't used.
+   */
+  {
+    slug: "six-zero-black-friday-sale-2026",
+    status: "published",
+    category: "Partner News",
+    title: "Six Zero’s Biggest Black Friday Ever Is Live With Up to 65% Off",
+    subtitle: "For the first time in Six Zero history, the Coral Pro is on sale.",
+    date: "Nov 16",
+    image: "/ppa/news/six-zero-black-friday-2026.webp",
+    heroGraphic: true,
+    author: "Six Zero",
+    ctaUrl:
+      "https://us.sixzeropickleball.com/?utm_source=PPA&utm_medium=Website+Article&utm_campaign=Black+Friday",
+    ctaLabel: "Shop Six Zero's Black Friday Sale",
+    dek: "Six Zero is offering up to 65% off select paddles plus savings on bags, backpacks, apparel and accessories, with the Coral Pro on sale for the first time. Runs through November 30.",
+    whyItMatters:
+      "The Coral Pro, Six Zero’s most popular paddle, is discounted for the first time, and the brand is debuting a lighter Coral Pro Lightweight. Six Zero is an official PPA Tour partner.",
+    body: [
+      "Six Zero is kicking off the holidays in a big way, giving back to the pickleball community with its biggest Black Friday sale ever. The Australian paddle maker is offering up to 65% off select paddles, plus savings on bags, backpacks, apparel and accessories.",
+      "Players can save up to 20% on the Coral Pro, Six Zero’s most popular paddle and a favorite among pickleball players. It’s rare for Six Zero to discount a paddle this new, and the brand is making an exception for Black Friday.",
+      "“This is the biggest Black Friday we’ve ever done. We wanted players to be able to pick up a paddle they’ve had their eye on all year, at a price that makes it an easy decision,” said Dale Young, founder of Six Zero.",
+      "Six Zero is also introducing a lighter version of the Coral Pro, debuting the Coral Pro Lightweight in a vibrant new Peach colorway. It features the same Tectonic Core and ProPulsion Foam in a lighter build for quick exchanges at the kitchen. The Lightweight Hybrid weighs 7.6 to 7.9 ounces, compared with 8.0 to 8.3 ounces for the standard Coral Pro Hybrid.",
+      "The sale runs through November 30 while supplies last. Savings like these come around rarely, and some favorites could sell out before the sale ends. If you’ve had your eye on something, now’s the time to grab it.",
+      "Offers may vary by country. Discounts cannot be combined. Some exclusions may apply.",
+      "This post is sponsored content supplied by Six Zero, an official partner of the PPA Tour.",
+    ],
+  },
+  /**
    * ⚠ HUMAN-AUTHORED EDITORIAL — Dave Fleming's Worlds preview, supplied by
    * Wesley on 10/27 ("OPENDOOR PICKLEBALL WORLD CHAMPIONSHIPS STORYLINES (NOV
    * 2-8, 2026)"). Same exception path and transcription rules as Chicago below.
