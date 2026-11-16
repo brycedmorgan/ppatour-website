@@ -65,6 +65,12 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-16 — Watch Live fallback follows the day's broadcast, not always PBTV (Bryce)
+- Bryce, DM 11/16 (Daytona day one): every Watch Live button fell back to stream.pickleballtv.com when the first ticker match had no stream link, but Monday quals are YouTube only. Live check that morning: the button opened Court 5's own YouTube live, so the fallback wasn't being used yet.
+- `liveWatchUrl` (components/live/use-live-ticker.ts) now falls back to new `broadcastWatchUrl(now)`: the live stop's earliest LIVE streamable `lib/broadcast.ts` window that weekday (ET). YouTube → youtube.com/ppastreamedcourts (same as lib/event-watch.ts, NOT the PPA Tour main channel); PBTV / PBTV App → stream.pickleballtv.com; TV-only days or no stop → PBTV as before. Signature unchanged, so ScoreTicker, StickyBuyBar, WatchLiveButton and DayWatchButton all follow.
+- Unchanged: the "done for the day" Watch PickleballTV button and the pre-hydration Suspense fallbacks still use PBTV_STREAM_URL.
+- Checked with a Node harness: Daytona Mon → Streamed Courts; Tue/Thu/Sun → PBTV; no stop → PBTV; a match's own link still wins. tsc + eslint clean; dev server homepage still opens the match's own link.
+
 ### 2026-11-16 — Unlinked /about/prize-money: all contract grids (Connor → Bryce → Chris)
 - **Legacy added same day** from Chris's "Legacy Prize Grid.pdf" (thread reply 11/16). PER PLAYER (the other three are per team); each grid now carries its own `unit` line.
 - Connor: "bury a place that shows all 4 grids, Gold (most viable), Standard, Futures, Legacy, and send Chris the link." Why: Chris Patrick's 10/30 email "Website - Prize Grids". Gabe Tardio's contract pays "whatever prize money is publicly posted"; only Gold was posted; his agent says Gold is owed (~$50k).

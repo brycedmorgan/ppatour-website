@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { getBroadcast } from "@/lib/broadcast";
 import { getNextTournament, isTournamentLive, nowMs } from "@/lib/placeholder-data";
 import { isTabHidden, onTabVisible } from "@/components/live/poll-visibility";
 import type {
@@ -299,7 +300,7 @@ export const PBTV_STREAM_URL = "https://stream.pickleballtv.com/";
  * Where a "Watch Live" button sends viewers (Wesley, 9/1):
  *
  *   1. the FIRST match on the score-ticker rail, if it carries a stream link
- *   2. stream.pickleballtv.com
+ *   2. the day's earliest streamable broadcast window (`broadcastWatchUrl`)
  *
  * ⚠ THE BUTTON AND THE RAIL HAVE TO NAME THE SAME MATCH, so pass the rail's own
  * `ordered` list — the array LiveScoreTicker maps over, sorted live → up next →
@@ -313,11 +314,56 @@ export const PBTV_STREAM_URL = "https://stream.pickleballtv.com/";
  * was missing or its court string was spelled differently upstream. The rail
  * already decides which match is featured; this follows it.
  *
- * The PickleballTV stream carries whatever the broadcast is showing, which is
- * the honest answer when the first match has no link of its own.
+ * ⚠ THE FALLBACK IS THE DAY'S BROADCAST, NOT ALWAYS PICKLEBALLTV (Bryce,
+ * 11/16, Daytona day one). Pro qualifier Mondays are YouTube only, so a fixed
+ * PBTV fallback sent fans to an empty stream whenever the first match had no
+ * link. `broadcastWatchUrl` reads the live stop's `lib/broadcast.ts` rows.
  */
-export function liveWatchUrl(matches: TickerMatch[]): string {
-  return matches[0]?.watchUrl || PBTV_STREAM_URL;
+export function liveWatchUrl(matches: TickerMatch[], now = Date.now()): string {
+  return matches[0]?.watchUrl || broadcastWatchUrl(now);
+}
+
+/**
+ * Where each streamable platform in `lib/broadcast.ts` lives. TV networks
+ * (Tennis Channel, FOX, CBS) are not here: there is no link to send anyone to.
+ * YouTube is PPA Streamed Courts (Matt's call for the qualifiers, 11/16), the
+ * same href as the event page's watch card in `lib/event-watch.ts` — not the
+ * PPA Tour main channel.
+ */
+const PLATFORM_STREAM_URL: Record<string, string> = {
+  PBTV: PBTV_STREAM_URL,
+  "PBTV App": PBTV_STREAM_URL,
+  YouTube: "https://www.youtube.com/ppastreamedcourts",
+};
+
+/** "8AM ET - 4PM ET" → minutes after midnight ET of the start. */
+function etStart(window: string): number {
+  const m = /^\s*(\d{1,2})(?::(\d{2}))?\s*(AM|PM)/i.exec(window);
+  if (!m) return Number.POSITIVE_INFINITY;
+  return ((Number(m[1]) % 12) + (m[3].toUpperCase() === "PM" ? 12 : 0)) * 60 + Number(m[2] ?? 0);
+}
+
+/**
+ * The stream to open when the featured match has no link of its own: the
+ * earliest LIVE streamable window today (ET) at the stop being played, else
+ * the PickleballTV stream. Windows are listed by day name in ET, so the day is
+ * read in ET too.
+ */
+export function broadcastWatchUrl(now = Date.now()): string {
+  const t = getNextTournament(now);
+  if (!isTournamentLive(t, now)) return PBTV_STREAM_URL;
+  const weekday = new Date(now)
+    .toLocaleDateString("en-US", { weekday: "long", timeZone: "America/New_York" })
+    .toLowerCase();
+  const today = getBroadcast(t.slug)
+    .filter(
+      (s) =>
+        s.type !== "TAPE" &&
+        s.day.trim().toLowerCase() === weekday &&
+        PLATFORM_STREAM_URL[s.platform],
+    )
+    .sort((a, b) => etStart(a.window) - etStart(b.window));
+  return today.length ? PLATFORM_STREAM_URL[today[0].platform] : PBTV_STREAM_URL;
 }
 
 /** "11–9, 9–11, 8–6" — the games that have a score, in order. */
