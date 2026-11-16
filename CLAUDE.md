@@ -65,6 +65,13 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-16 — Six Zero Black Friday sponsored post (Hannah)
+- Hannah, Slack DM 11/16: Six Zero sponsored post, live same day. Copy from her Word doc, verbatim → `six-zero-black-friday-sale-2026` in `lib/news-articles.ts`. Labelled like the Aug Cailyn Campbell post: Partner News, "Six Zero" byline, closing disclosure.
+- Hero: Six Zero's own 2400×960 homepage sale banner (Wesley's pick; Hannah's Dropbox had only 4×5 graphics). New optional `NewsArticle.cardImage` puts her 4×5 photo grid on cards (home lead, /news, rails); the hero keeps `image` via `NewsCard.heroImage`.
+- `ArticleView` CTA: a `ctaUrl` that already has `utm_source` goes out untouched (Six Zero's bit.ly → `utm_source=PPA…Black+Friday`); before, `withUtm` overwrote partner tags. Partner News CTAs get `rel="sponsored"`.
+- ⚠ A sale promo sits close to Bryce's 7/29 "no ad inventory" ruling; Wesley approved it. Sale ends Nov 30.
+- Verified on the dev server (home lead card, article desktop + 375px) and Vercel preview; tsc + eslint clean.
+
 ### 2026-11-16 — Watch Live fallback follows the day's broadcast, not always PBTV (Bryce)
 - Bryce, DM 11/16 (Daytona day one): every Watch Live button fell back to stream.pickleballtv.com when the first ticker match had no stream link, but Monday quals are YouTube only. Live check that morning: the button opened Court 5's own YouTube live, so the fallback wasn't being used yet.
 - `liveWatchUrl` (components/live/use-live-ticker.ts) now falls back to new `broadcastWatchUrl(now)`: the live stop's earliest LIVE streamable `lib/broadcast.ts` window that weekday (ET). YouTube → youtube.com/ppastreamedcourts (same as lib/event-watch.ts, NOT the PPA Tour main channel); PBTV / PBTV App → stream.pickleballtv.com; TV-only days or no stop → PBTV as before. Signature unchanged, so ScoreTicker, StickyBuyBar, WatchLiveButton and DayWatchButton all follow.
