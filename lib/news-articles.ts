@@ -140,8 +140,10 @@ export const newsArticles: NewsArticle[] = [
    * ArticleView leaves a ctaUrl that already carries utm_source untouched, so
    * their attribution survives. Sale ends Nov 30.
    *
-   * Hero is their "BF GRID 1" 4×5 graphic (text baked in) → `heroGraphic`, so
-   * it shows whole. The other asset ("Black Friday stack") isn't used.
+   * Hero is Six Zero's own 2400×960 homepage sale banner ("LIVE - Ceylon Blue
+   * gradient - Web 2400x960 - No logo", us.sixzeropickleball.com, 11/16),
+   * Wesley's pick: Hannah's Dropbox had only 4×5 graphics, which left the hero
+   * mostly empty. Text is baked in → `heroGraphic`, so it shows whole.
    */
   {
     slug: "six-zero-black-friday-sale-2026",
@@ -150,7 +152,7 @@ export const newsArticles: NewsArticle[] = [
     title: "Six Zero’s Biggest Black Friday Ever Is Live With Up to 65% Off",
     subtitle: "For the first time in Six Zero history, the Coral Pro is on sale.",
     date: "Nov 16",
-    image: "/ppa/news/six-zero-black-friday-2026.webp",
+    image: "/ppa/news/six-zero-black-friday-banner-2026.webp",
     heroGraphic: true,
     author: "Six Zero",
     ctaUrl:
