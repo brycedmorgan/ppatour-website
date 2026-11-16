@@ -22,7 +22,10 @@ export function GridSwitcher({
   useEffect(() => {
     const fromHash = () => {
       const id = window.location.hash.slice(1);
-      if (tabs.some((t) => t.id === id)) setActive(id);
+      if (!tabs.some((t) => t.id === id)) return;
+      setActive(id);
+      // The panel was hidden, so the browser skipped its own hash scroll.
+      requestAnimationFrame(() => top.current?.scrollIntoView({ block: "start" }));
     };
     fromHash();
     window.addEventListener("hashchange", fromHash);
