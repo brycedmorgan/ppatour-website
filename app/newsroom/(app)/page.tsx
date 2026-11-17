@@ -3,7 +3,7 @@ import { House } from "lucide-react";
 import { listPosts, getSetting, SETTINGS } from "@/lib/newsroom/store";
 import { codePosts } from "@/lib/newsroom/posts";
 import type { HomePbPicks } from "@/lib/newsroom/published";
-import { NEWSROOM_PATH } from "@/lib/newsroom/session";
+import { newsroomBase } from "@/lib/newsroom/session";
 import { PostCard, fmtDate } from "../_components/PostCard";
 import { NewPostButton } from "../_components/NewPostButton";
 import { ImportButton } from "../_components/ImportButton";
@@ -23,9 +23,9 @@ export default async function NewsroomOverview() {
   const pins = picks?.pins ?? [];
 
   const stats = [
-    { label: "Live posts", value: published, href: `${NEWSROOM_PATH}/posts/?status=published` },
-    { label: "Drafts", value: drafts, href: `${NEWSROOM_PATH}/posts/?status=draft` },
-    { label: "Pinned on home page", value: `${pins.length} of 4`, href: `${NEWSROOM_PATH}/home-picks/` },
+    { label: "Live posts", value: published, href: `${newsroomBase()}/posts/?status=published` },
+    { label: "Drafts", value: drafts, href: `${newsroomBase()}/posts/?status=draft` },
+    { label: "Pinned on home page", value: `${pins.length} of 4`, href: `${newsroomBase()}/home-picks/` },
   ];
 
   return (
@@ -66,7 +66,7 @@ export default async function NewsroomOverview() {
         <section>
           <div className="mb-3 flex items-baseline justify-between">
             <h2 className="font-display text-lg uppercase">Recently edited</h2>
-            <Link href={`${NEWSROOM_PATH}/posts/`} className="text-sm text-ppa-blue hover:underline">
+            <Link href={`${newsroomBase()}/posts/`} className="text-sm text-ppa-blue hover:underline">
               All posts
             </Link>
           </div>
@@ -87,7 +87,7 @@ export default async function NewsroomOverview() {
           <div className="mb-3 flex items-center justify-between">
             <h2 className="font-display text-lg uppercase">Home page</h2>
             <Link
-              href={`${NEWSROOM_PATH}/home-picks/`}
+              href={`${newsroomBase()}/home-picks/`}
               aria-label="Edit home page picks"
               className="text-ppa-blue hover:text-ppa-blue-deep"
             >

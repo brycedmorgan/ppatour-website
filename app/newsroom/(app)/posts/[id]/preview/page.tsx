@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ArticleView } from "@/components/news/ArticleView";
 import { dashboardToCard } from "@/lib/news";
 import { getPost } from "@/lib/newsroom/store";
-import { NEWSROOM_PATH } from "@/lib/newsroom/session";
+import { newsroomBase } from "@/lib/newsroom/session";
 
 export const metadata = { title: "Preview" };
 
@@ -21,7 +21,7 @@ export default async function PreviewPostPage({ params }: Params) {
           Preview{post.status === "draft" ? " · draft, not on the site" : " · live"}. Shows the last
           saved version.
         </span>
-        <Link href={`${NEWSROOM_PATH}/posts/${post.id}/`} className="ml-auto underline">
+        <Link href={`${newsroomBase()}/posts/${post.id}/`} className="ml-auto underline">
           Back to editing
         </Link>
       </div>

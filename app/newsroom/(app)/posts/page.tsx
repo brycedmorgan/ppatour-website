@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { listPosts } from "@/lib/newsroom/store";
-import { NEWSROOM_PATH } from "@/lib/newsroom/session";
+import { newsroomBase } from "@/lib/newsroom/session";
 import { PostCard } from "../../_components/PostCard";
 import { NewPostButton } from "../../_components/NewPostButton";
 
@@ -30,7 +30,7 @@ export default async function NewsroomPosts({ searchParams }: Search) {
     if (s) u.set("status", s);
     if (q) u.set("q", q);
     const qs = u.toString();
-    return `${NEWSROOM_PATH}/posts/${qs ? `?${qs}` : ""}`;
+    return `${newsroomBase()}/posts/${qs ? `?${qs}` : ""}`;
   };
 
   return (
@@ -57,7 +57,7 @@ export default async function NewsroomPosts({ searchParams }: Search) {
             </Link>
           ))}
         </div>
-        <form className="ml-auto flex" action={`${NEWSROOM_PATH}/posts/`}>
+        <form className="ml-auto flex" action={`${newsroomBase()}/posts/`}>
           {status && <input type="hidden" name="status" value={status} />}
           <label className="sr-only" htmlFor="nr-q">
             Search posts

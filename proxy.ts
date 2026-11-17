@@ -1,7 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { PADDLE_LAB_PUBLIC } from "@/lib/paddle-lab-access";
-import { NEWSROOM_COOKIE, NEWSROOM_PATH, verifySessionToken } from "@/lib/newsroom/session";
+import {
+  NEWSROOM_COOKIE,
+  NEWSROOM_PATH,
+  newsroomUrlKey,
+  verifySessionToken,
+} from "@/lib/newsroom/session";
 
 /**
  * The site's request proxy (Next 16's replacement for `middleware.ts`).
@@ -51,30 +56,61 @@ function challenge(): NextResponse {
 }
 
 /**
- * The Newsroom dashboard (/newsroom). Signed-out visitors go to the sign-in
- * page; the API answers 401. Every page and action also calls requireEditor()
- * itself (lib/newsroom/auth.ts), so this is the first gate, not the only one.
+ * The Newsroom dashboard. It is served ONLY at its secret address,
+ * `/<NEWSROOM_URL_KEY>/…`, rewritten onto the internal `/newsroom/…` route.
+ *
+ * - The internal route itself, a wrong key, or no key configured: the site's
+ *   ordinary 404, indistinguishable from any other missing page, so probing
+ *   reveals nothing.
+ * - Right key, signed out: sign-in (and the second-step screens, which check
+ *   their own short-lived cookie) are reachable; everything else redirects to
+ *   sign-in.
+ * - The upload API answers 401 without a full session.
+ *
+ * Every page and action also checks the session itself (lib/newsroom/auth.ts),
+ * so this is the first gate, not the only one.
  */
-async function newsroomGate(request: NextRequest): Promise<NextResponse> {
-  const { pathname } = request.nextUrl;
-  const isLogin = pathname === `${NEWSROOM_PATH}/login` || pathname === `${NEWSROOM_PATH}/login/`;
-  const session = isLogin
-    ? null
-    : await verifySessionToken(request.cookies.get(NEWSROOM_COOKIE)?.value);
+const NOT_FOUND_PATH = "/__not-found__/";
+const KEYED = /^\/(nr-[a-z0-9]{24})(\/.*)?$/;
+const OPEN_STEPS = new Set(["/login/", "/setup/", "/verify/"]);
 
-  let res: NextResponse;
-  if (isLogin || session) {
-    res = NextResponse.next();
-  } else if (pathname.startsWith("/api/")) {
-    res = NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  } else {
-    const url = request.nextUrl.clone();
-    url.pathname = `${NEWSROOM_PATH}/login/`;
-    url.search = "";
-    res = NextResponse.redirect(url);
-  }
+function privateHeaders(res: NextResponse): NextResponse {
   res.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
+  // Links out of the dashboard must not carry its address in a Referer.
+  res.headers.set("Referrer-Policy", "no-referrer");
+  res.headers.set("Cache-Control", "private, no-store");
   return res;
+}
+
+function notFound(request: NextRequest): NextResponse {
+  // Through the app's own catch-all, so it's the normal site 404 page.
+  return NextResponse.rewrite(new URL(NOT_FOUND_PATH, request.url));
+}
+
+async function newsroomGate(request: NextRequest): Promise<NextResponse> {
+  const { pathname, search } = request.nextUrl;
+
+  if (pathname.startsWith("/api/newsroom/")) {
+    const session = await verifySessionToken(request.cookies.get(NEWSROOM_COOKIE)?.value);
+    return privateHeaders(
+      session ? NextResponse.next() : NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+    );
+  }
+
+  const m = KEYED.exec(pathname);
+  const key = newsroomUrlKey();
+  if (!m || !key || !safeEqual(m[1], key)) return notFound(request);
+
+  const rest = m[2] && m[2] !== "/" ? (m[2].endsWith("/") ? m[2] : `${m[2]}/`) : "/";
+  const target = new URL(`${NEWSROOM_PATH}${rest}${search}`, request.url);
+
+  if (OPEN_STEPS.has(rest)) return privateHeaders(NextResponse.rewrite(target));
+
+  const session = await verifySessionToken(request.cookies.get(NEWSROOM_COOKIE)?.value);
+  if (!session) {
+    return privateHeaders(NextResponse.redirect(new URL(`/${key}/login/`, request.url)));
+  }
+  return privateHeaders(NextResponse.rewrite(target));
 }
 
 export default async function proxy(request: NextRequest) {
@@ -83,7 +119,8 @@ export default async function proxy(request: NextRequest) {
   if (
     pathname === NEWSROOM_PATH ||
     pathname.startsWith(`${NEWSROOM_PATH}/`) ||
-    pathname.startsWith("/api/newsroom/")
+    pathname.startsWith("/api/newsroom/") ||
+    KEYED.test(pathname)
   ) {
     return newsroomGate(request);
   }
@@ -151,5 +188,9 @@ export const config = {
     "/newsroom",
     "/newsroom/:path*",
     "/api/newsroom/:path*",
+    // The dashboard's secret address. Only the SHAPE is here (matchers must be
+    // literals, and this repo is public); the key is NEWSROOM_URL_KEY.
+    "/:key(nr-[a-z0-9]{24})",
+    "/:key(nr-[a-z0-9]{24})/:path*",
   ],
 };

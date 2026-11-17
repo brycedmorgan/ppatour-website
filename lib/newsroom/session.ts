@@ -1,22 +1,55 @@
 /**
- * Signed session tokens for the Newsroom dashboard (/newsroom).
+ * Signed tokens and the secret address for the Newsroom dashboard.
  *
  * Web Crypto only, so the same code runs in proxy.ts (edge) and in server
  * components / actions. Ported from the everyday-zing dashboard.
  *
  * Token: base64url(JSON payload) + "." + base64url(HMAC-SHA256 signature)
  *
+ * Two kinds of token, two cookies:
+ *   - "pending": the password was right; the second step (passkey or
+ *     authenticator code) is still owed. 10 minutes, opens ONLY the setup and
+ *     verify screens.
+ *   - "session": both steps done. 7 days, opens the dashboard.
+ *
  * ⚠ EMAIL + PASSWORD IS A STOPGAP. Wesley wants pickleball.com SSO (Jason's
- * OIDC client, still pending since 10/1). When it lands, the SSO callback just
- * calls `startSession(email)` (lib/newsroom/auth.ts) for an allowed email; the
- * token, cookie and every guard below stay as they are.
+ * OIDC client, still pending since 10/1). When it lands, the SSO callback
+ * replaces the password step and hands over to the same second step.
  */
 
 export const NEWSROOM_COOKIE = "ppa_newsroom";
+export const NEWSROOM_PENDING_COOKIE = "ppa_newsroom_pending";
 export const NEWSROOM_TTL_SECONDS = 60 * 60 * 24 * 7; // 7 days
+export const PENDING_TTL_SECONDS = 60 * 10; // 10 minutes
 
-/** The dashboard's URL. Kept in step with the matcher in proxy.ts. */
+/**
+ * The INTERNAL route (the app/newsroom folder). Nobody visits it directly:
+ * proxy.ts answers it with the site's normal 404 and serves the dashboard only
+ * at the secret address below, rewritten onto this route.
+ */
 export const NEWSROOM_PATH = "/newsroom";
+
+/**
+ * ⚠ THE PUBLIC ADDRESS IS SECRET AND LIVES ONLY IN AN ENV VAR. This repo is
+ * public on GitHub, so a path written in code is a path anyone can read.
+ * NEWSROOM_URL_KEY = "nr-" + 24 lowercase letters/digits (~124 bits), made by
+ * `node scripts/newsroom-hash-password.mjs --url-key`. The SHAPE is public (the
+ * proxy matcher has to be a literal); the key is not. Unset or malformed = the
+ * dashboard is unreachable, which is the safe failure.
+ */
+export const URL_KEY_RE = /^nr-[a-z0-9]{24}$/;
+
+export function newsroomUrlKey(): string | null {
+  const key = process.env.NEWSROOM_URL_KEY?.trim() ?? "";
+  return URL_KEY_RE.test(key) ? key : null;
+}
+
+/** The dashboard's public base path, e.g. "/nr-…". Server-only (reads env). */
+export function newsroomBase(): string {
+  const key = newsroomUrlKey();
+  // No key: point at a path that 404s rather than at the internal route.
+  return key ? `/${key}` : "/404";
+}
 
 const encoder = new TextEncoder();
 
@@ -52,7 +85,7 @@ function fromB64url(str: string): Uint8Array<ArrayBuffer> {
 }
 
 async function hmacKey(): Promise<CryptoKey> {
-  const secret = process.env.NEWSROOM_SESSION_SECRET;
+  const secret = process.env.NEWSROOM_SESSION_SECRET?.trim();
   if (!secret || secret.length < 32) {
     throw new Error("NEWSROOM_SESSION_SECRET must be set to at least 32 characters.");
   }
@@ -65,34 +98,27 @@ async function hmacKey(): Promise<CryptoKey> {
   );
 }
 
-export type NewsroomSession = { sub: string; exp: number };
+type Kind = "session" | "pending";
+export type NewsroomSession = { sub: string; exp: number; kind: Kind };
 
-export async function createSessionToken(email: string): Promise<string> {
+async function createToken(email: string, kind: Kind, ttl: number): Promise<string> {
   const payload = b64url(
-    encoder.encode(
-      JSON.stringify({ sub: email, exp: Math.floor(Date.now() / 1000) + NEWSROOM_TTL_SECONDS }),
-    ),
+    encoder.encode(JSON.stringify({ sub: email, kind, exp: Math.floor(Date.now() / 1000) + ttl })),
   );
   const sig = await crypto.subtle.sign("HMAC", await hmacKey(), encoder.encode(payload));
   return `${payload}.${b64url(sig)}`;
 }
 
-/** The session payload, or null if the token is missing, forged, expired or revoked. */
-export async function verifySessionToken(
-  token: string | undefined | null,
-): Promise<NewsroomSession | null> {
+async function verifyToken(token: string | undefined | null, kind: Kind): Promise<NewsroomSession | null> {
   if (!token || typeof token !== "string") return null;
   const [payload, sig] = token.split(".");
   if (!payload || !sig) return null;
   try {
-    const valid = await crypto.subtle.verify(
-      "HMAC",
-      await hmacKey(),
-      fromB64url(sig),
-      encoder.encode(payload),
-    );
+    const valid = await crypto.subtle.verify("HMAC", await hmacKey(), fromB64url(sig), encoder.encode(payload));
     if (!valid) return null;
     const data = JSON.parse(new TextDecoder().decode(fromB64url(payload))) as NewsroomSession;
+    // A pending token must never pass as a session, and the reverse.
+    if (data.kind !== kind) return null;
     if (!data.exp || data.exp < Date.now() / 1000) return null;
     if (!getEditors().has(String(data.sub).toLowerCase())) return null;
     return data;
@@ -101,3 +127,11 @@ export async function verifySessionToken(
     return null;
   }
 }
+
+/** Full session: password AND second step. */
+export const createSessionToken = (email: string) => createToken(email, "session", NEWSROOM_TTL_SECONDS);
+export const verifySessionToken = (t: string | undefined | null) => verifyToken(t, "session");
+
+/** Password only; second step still owed. */
+export const createPendingToken = (email: string) => createToken(email, "pending", PENDING_TTL_SECONDS);
+export const verifyPendingToken = (t: string | undefined | null) => verifyToken(t, "pending");

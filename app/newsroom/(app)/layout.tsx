@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { requireEditor } from "@/lib/newsroom/auth";
-import { NEWSROOM_PATH } from "@/lib/newsroom/session";
+import { newsroomBase } from "@/lib/newsroom/session";
 import { Rail } from "../_components/Rail";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +14,7 @@ export default async function NewsroomAppLayout({ children }: { children: React.
         {/* Brand bar: the site header's wordmark, so every screen reads as PPA Tour. */}
         <header className="border-b border-ppa-line bg-white">
           <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 md:px-8">
-            <Link href={`${NEWSROOM_PATH}/`} className="flex items-center gap-3">
+            <Link href={`${newsroomBase()}/`} className="flex items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/ppa/logos/ppa-horizontal-blue.svg"

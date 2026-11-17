@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Newspaper } from "lucide-react";
 import type { DashboardPost } from "@/lib/newsroom/store";
-import { NEWSROOM_PATH } from "@/lib/newsroom/session";
+import { newsroomBase } from "@/lib/newsroom/session";
 
 export function fmtDate(iso: string, withTime = false): string {
   const d = new Date(iso);
@@ -52,7 +52,7 @@ export function PostCard({ post }: { post: DashboardPost }) {
         </p>
         <h3 className="mt-1 line-clamp-2 font-semibold leading-snug">
           <Link
-            href={`${NEWSROOM_PATH}/posts/${post.id}/`}
+            href={`${newsroomBase()}/posts/${post.id}/`}
             className="after:absolute after:inset-0 group-hover:text-ppa-blue"
           >
             {post.title || "Untitled post"}

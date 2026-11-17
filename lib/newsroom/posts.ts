@@ -55,6 +55,8 @@ export function slugProblem(slug: string, post: DashboardPost, others: Dashboard
     return "The URL may only use lowercase letters, numbers and single hyphens.";
   }
   if (RESERVED.has(slug)) return `"/${slug}/" is already a page on the site. Pick another URL.`;
+  // That shape is reserved for the dashboard's own address (proxy.ts).
+  if (/^nr-[a-z0-9]{24}$/.test(slug)) return "Pick another URL.";
   if (athletes.some((a) => a.slug === slug)) {
     return `"/${slug}/" redirects to an athlete profile. Pick another URL.`;
   }

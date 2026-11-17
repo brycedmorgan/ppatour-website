@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ExternalLink, House, LayoutDashboard, LogOut, Newspaper } from "lucide-react";
-import { NEWSROOM_PATH } from "@/lib/newsroom/session";
+import { useBase } from "./BaseContext";
 import { logout } from "../actions";
 
-const LINKS = [
-  { href: `${NEWSROOM_PATH}/`, label: "Overview", icon: LayoutDashboard, exact: true },
-  { href: `${NEWSROOM_PATH}/posts/`, label: "Posts", icon: Newspaper },
-  { href: `${NEWSROOM_PATH}/home-picks/`, label: "Home page", icon: House },
+const linksFor = (base: string) => [
+  { href: `${base}/`, label: "Overview", icon: LayoutDashboard, exact: true },
+  { href: `${base}/posts/`, label: "Posts", icon: Newspaper },
+  { href: `${base}/home-picks/`, label: "Home page", icon: House },
 ];
 
 const item =
@@ -29,10 +29,12 @@ function Tip({ children }: { children: React.ReactNode }) {
 /** The icon rail: left on desktop, bottom bar on phones. Labels as tooltips. */
 export function Rail({ editor }: { editor: string }) {
   const pathname = usePathname() || "";
+  const base = useBase();
+  const LINKS = linksFor(base);
   return (
     <aside className="fixed inset-x-0 bottom-0 z-20 flex items-center justify-around bg-ppa-navy px-2 py-1 md:inset-y-0 md:left-0 md:right-auto md:w-16 md:flex-col md:justify-start md:gap-1 md:py-4">
       <Link
-        href={`${NEWSROOM_PATH}/`}
+        href={`${base}/`}
         aria-label="Newsroom home"
         className="mb-4 hidden size-11 items-center justify-center overflow-hidden md:flex"
       >

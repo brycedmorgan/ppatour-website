@@ -103,6 +103,11 @@ function init(sql: Sql): Promise<void> {
       updated_by text NOT NULL DEFAULT '',
       updated_at timestamptz NOT NULL DEFAULT now()
     )`;
+    await sql`CREATE TABLE IF NOT EXISTS newsroom_mfa (
+      email text PRIMARY KEY,
+      data jsonb NOT NULL,
+      updated_at timestamptz NOT NULL DEFAULT now()
+    )`;
   })().catch((err) => {
     ready = null;
     throw err;
@@ -112,7 +117,12 @@ function init(sql: Sql): Promise<void> {
 
 /* ───────────────────────────── file backend ───────────────────────────── */
 
-type FileDb = { posts: DashboardPost[]; settings: Record<string, unknown>; version: string };
+type FileDb = {
+  posts: DashboardPost[];
+  settings: Record<string, unknown>;
+  mfa?: Record<string, MfaRecord>;
+  version: string;
+};
 
 const FILE = path.join(process.cwd(), ".data", "newsroom.json");
 
@@ -132,6 +142,65 @@ async function writeFile(data: FileDb): Promise<void> {
 
 function noStore(): never {
   throw new Error("The newsroom database isn't configured (DATABASE_URL).");
+}
+
+/* ───────────────────────── second sign-in step ───────────────────────── */
+
+export type StoredPasskey = {
+  /** Credential id, base64url. */
+  id: string;
+  /** COSE public key, base64url. */
+  publicKey: string;
+  counter: number;
+  transports?: string[];
+  /** The site the passkey belongs to (WebAuthn RP ID). */
+  rpID: string;
+  createdAt: string;
+};
+
+/** One row per editor. Created on the first sign-in. */
+export type MfaRecord = {
+  passkeys: StoredPasskey[];
+  /** Authenticator app (TOTP). `lastStep` blocks replaying a used code. */
+  totp?: { secret: string; lastStep: number; createdAt: string };
+  /** Generated when the setup screen is shown; confirmed by the first code. */
+  pendingTotp?: string;
+  /** The current WebAuthn challenge, single use, short-lived. */
+  challenge?: { value: string; exp: number };
+  /** Wrong codes in a row; 5 locks the second step for 15 minutes. */
+  failures: number;
+  lockedUntil?: number;
+};
+
+export const emptyMfa = (): MfaRecord => ({ passkeys: [], failures: 0 });
+
+export async function getMfa(email: string): Promise<MfaRecord> {
+  const sql = db();
+  if (sql) {
+    await init(sql);
+    const rows = (await sql`SELECT data FROM newsroom_mfa WHERE email = ${email}`) as {
+      data: MfaRecord;
+    }[];
+    return rows[0]?.data ?? emptyMfa();
+  }
+  if (process.env.NODE_ENV === "production") noStore();
+  return (await readFile()).mfa?.[email] ?? emptyMfa();
+}
+
+export async function putMfa(email: string, data: MfaRecord): Promise<void> {
+  const sql = db();
+  if (sql) {
+    await init(sql);
+    await sql`
+      INSERT INTO newsroom_mfa (email, data, updated_at)
+      VALUES (${email}, ${JSON.stringify(data)}::jsonb, now())
+      ON CONFLICT (email) DO UPDATE SET data = EXCLUDED.data, updated_at = now()`;
+    return;
+  }
+  if (process.env.NODE_ENV === "production") noStore();
+  const file = await readFile();
+  file.mfa = { ...(file.mfa ?? {}), [email]: data };
+  await writeFile(file);
 }
 
 /* ─────────────────────────────── API ─────────────────────────────── */

@@ -4,7 +4,7 @@ import { useEffect, useId, useState, useTransition } from "react";
 import Link from "next/link";
 import { ArrowLeft, Eye, ExternalLink, Trash2 } from "lucide-react";
 import type { DashboardPost } from "@/lib/newsroom/store";
-import { NEWSROOM_PATH } from "@/lib/newsroom/session";
+import { useBase } from "./BaseContext";
 import { deletePost, savePost, type PostInput } from "../actions";
 import { ImageField } from "./ImageField";
 import { RichText } from "./RichText";
@@ -96,6 +96,7 @@ export function PostEditor({
   categories: string[];
   events: { slug: string; name: string }[];
 }) {
+  const base = useBase();
   const [post, setPost] = useState(initial);
   const [draft, setDraft] = useState<Draft>(() => toDraft(initial));
   const [saved, setSaved] = useState(() => JSON.stringify(toDraft(initial)));
@@ -165,7 +166,7 @@ export function PostEditor({
     <>
       <div className="flex flex-wrap items-center gap-3">
         <Link
-          href={`${NEWSROOM_PATH}/posts/`}
+          href={`${base}/posts/`}
           className="inline-flex items-center gap-1 text-sm text-ppa-navy/65 hover:text-ppa-navy"
         >
           <ArrowLeft className="size-4" aria-hidden /> Posts
@@ -260,7 +261,7 @@ export function PostEditor({
             </div>
             <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
               <a
-                href={`${NEWSROOM_PATH}/posts/${post.id}/preview/`}
+                href={`${base}/posts/${post.id}/preview/`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 text-ppa-blue hover:underline"

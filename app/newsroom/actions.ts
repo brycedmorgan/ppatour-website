@@ -7,10 +7,12 @@
 import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { checkCredentials, endSession, requireEditor, startSession } from "@/lib/newsroom/auth";
-import { NEWSROOM_PATH } from "@/lib/newsroom/session";
+import { checkCredentials, endSession, requireEditor, startPending } from "@/lib/newsroom/auth";
+import { hasFactor } from "@/lib/newsroom/mfa";
+import { newsroomBase } from "@/lib/newsroom/session";
 import {
   SETTINGS,
+  getMfa,
   getPost,
   listPosts,
   putPost,
@@ -55,13 +57,16 @@ export async function login(
     await new Promise((r) => setTimeout(r, 1000)); // slow down guessing
     return { error: "Incorrect email or password." };
   }
-  await startSession(editor);
-  redirect(`${NEWSROOM_PATH}/`);
+  // The password is only step one. First sign-in sets up a passkey or an
+  // authenticator app; every sign-in after that asks for it.
+  await startPending(editor);
+  const m = await getMfa(editor);
+  redirect(`${newsroomBase()}/${hasFactor(m) ? "verify" : "setup"}/`);
 }
 
 export async function logout() {
   await endSession();
-  redirect(`${NEWSROOM_PATH}/login/`);
+  redirect(`${newsroomBase()}/login/`);
 }
 
 /* ─────────────────────────────── posts ─────────────────────────────── */
@@ -70,7 +75,7 @@ export async function createPost() {
   const { sub } = await requireEditor();
   const post = blankPost(randomUUID(), sub);
   await putPost(post);
-  redirect(`${NEWSROOM_PATH}/posts/${post.id}/`);
+  redirect(`${newsroomBase()}/posts/${post.id}/`);
 }
 
 /** The fields the editor sends. Everything else is server-owned. */
@@ -155,7 +160,7 @@ export async function deletePost(id: string) {
   await requireEditor();
   await removePost(id);
   refreshSite();
-  redirect(`${NEWSROOM_PATH}/posts/`);
+  redirect(`${newsroomBase()}/posts/`);
 }
 
 /**
@@ -173,7 +178,6 @@ export async function importCodePosts(): Promise<{ imported: number; error?: str
     return { imported: 0, error: (err as Error).message };
   }
   refreshSite();
-  revalidatePath(NEWSROOM_PATH, "layout");
   return { imported: toImport.length };
 }
 
