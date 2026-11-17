@@ -76,6 +76,22 @@ export function storeConfigured(): boolean {
   return Boolean(process.env.DATABASE_URL) || process.env.NODE_ENV !== "production";
 }
 
+/**
+ * Optional table-name prefix, so one database can hold separate newsroom data
+ * per environment. dev.ppatour.com sets NEWSROOM_TABLE_PREFIX=dev_ (Wesley,
+ * 11/17): its test posts, pins and sign-ins live in dev_newsroom_* and never
+ * reach the live site, which reads the unprefixed tables. Validated so the
+ * name is safe to splice into SQL (sql.unsafe below).
+ */
+const PREFIX = (() => {
+  const p = process.env.NEWSROOM_TABLE_PREFIX?.trim() ?? "";
+  return /^[a-z]{1,12}_$/.test(p) ? p : "";
+})();
+const T = {
+  posts: `${PREFIX}newsroom_posts`,
+  settings: `${PREFIX}newsroom_settings`,
+  mfa: `${PREFIX}newsroom_mfa`,
+};
 /* ───────────────────────────── Neon backend ───────────────────────────── */
 
 type Sql = ReturnType<typeof neon>;
@@ -89,7 +105,7 @@ let ready: Promise<void> | null = null;
 
 function init(sql: Sql): Promise<void> {
   ready ??= (async () => {
-    await sql`CREATE TABLE IF NOT EXISTS newsroom_posts (
+    await sql`CREATE TABLE IF NOT EXISTS ${sql.unsafe(T.posts)} (
       id text PRIMARY KEY,
       slug text NOT NULL UNIQUE,
       status text NOT NULL,
@@ -97,13 +113,13 @@ function init(sql: Sql): Promise<void> {
       data jsonb NOT NULL,
       updated_at timestamptz NOT NULL DEFAULT now()
     )`;
-    await sql`CREATE TABLE IF NOT EXISTS newsroom_settings (
+    await sql`CREATE TABLE IF NOT EXISTS ${sql.unsafe(T.settings)} (
       key text PRIMARY KEY,
       value jsonb NOT NULL,
       updated_by text NOT NULL DEFAULT '',
       updated_at timestamptz NOT NULL DEFAULT now()
     )`;
-    await sql`CREATE TABLE IF NOT EXISTS newsroom_mfa (
+    await sql`CREATE TABLE IF NOT EXISTS ${sql.unsafe(T.mfa)} (
       email text PRIMARY KEY,
       data jsonb NOT NULL,
       updated_at timestamptz NOT NULL DEFAULT now()
@@ -178,7 +194,7 @@ export async function getMfa(email: string): Promise<MfaRecord> {
   const sql = db();
   if (sql) {
     await init(sql);
-    const rows = (await sql`SELECT data FROM newsroom_mfa WHERE email = ${email}`) as {
+    const rows = (await sql`SELECT data FROM ${sql.unsafe(T.mfa)} WHERE email = ${email}`) as {
       data: MfaRecord;
     }[];
     return rows[0]?.data ?? emptyMfa();
@@ -192,7 +208,7 @@ export async function putMfa(email: string, data: MfaRecord): Promise<void> {
   if (sql) {
     await init(sql);
     await sql`
-      INSERT INTO newsroom_mfa (email, data, updated_at)
+      INSERT INTO ${sql.unsafe(T.mfa)} (email, data, updated_at)
       VALUES (${email}, ${JSON.stringify(data)}::jsonb, now())
       ON CONFLICT (email) DO UPDATE SET data = EXCLUDED.data, updated_at = now()`;
     return;
@@ -211,7 +227,7 @@ export async function listPosts(): Promise<DashboardPost[]> {
   let posts: DashboardPost[];
   if (sql) {
     await init(sql);
-    const rows = (await sql`SELECT data FROM newsroom_posts`) as { data: DashboardPost }[];
+    const rows = (await sql`SELECT data FROM ${sql.unsafe(T.posts)}`) as { data: DashboardPost }[];
     posts = rows.map((r) => r.data);
   } else if (process.env.NODE_ENV !== "production") {
     posts = (await readFile()).posts;
@@ -231,7 +247,7 @@ export async function putPost(post: DashboardPost): Promise<void> {
   if (sql) {
     await init(sql);
     await sql`
-      INSERT INTO newsroom_posts (id, slug, status, published_at, data, updated_at)
+      INSERT INTO ${sql.unsafe(T.posts)} (id, slug, status, published_at, data, updated_at)
       VALUES (${post.id}, ${post.slug}, ${post.status}, ${post.publishedAt || null},
               ${JSON.stringify(post)}::jsonb, now())
       ON CONFLICT (id) DO UPDATE SET
@@ -250,7 +266,7 @@ export async function removePost(id: string): Promise<void> {
   const sql = db();
   if (sql) {
     await init(sql);
-    await sql`DELETE FROM newsroom_posts WHERE id = ${id}`;
+    await sql`DELETE FROM ${sql.unsafe(T.posts)} WHERE id = ${id}`;
     await bumpVersion(sql);
     return;
   }
@@ -264,7 +280,7 @@ export async function getSetting<T>(key: string): Promise<T | null> {
   const sql = db();
   if (sql) {
     await init(sql);
-    const rows = (await sql`SELECT value FROM newsroom_settings WHERE key = ${key}`) as {
+    const rows = (await sql`SELECT value FROM ${sql.unsafe(T.settings)} WHERE key = ${key}`) as {
       value: T;
     }[];
     return rows[0]?.value ?? null;
@@ -278,7 +294,7 @@ export async function putSetting(key: string, value: unknown, by: string): Promi
   if (sql) {
     await init(sql);
     await sql`
-      INSERT INTO newsroom_settings (key, value, updated_by, updated_at)
+      INSERT INTO ${sql.unsafe(T.settings)} (key, value, updated_by, updated_at)
       VALUES (${key}, ${JSON.stringify(value)}::jsonb, ${by}, now())
       ON CONFLICT (key) DO UPDATE SET
         value = EXCLUDED.value, updated_by = EXCLUDED.updated_by, updated_at = now()`;
@@ -299,7 +315,7 @@ export async function storeVersion(): Promise<string> {
   const sql = db();
   if (sql) {
     await init(sql);
-    const rows = (await sql`SELECT value FROM newsroom_settings WHERE key = '__version'`) as {
+    const rows = (await sql`SELECT value FROM ${sql.unsafe(T.settings)} WHERE key = '__version'`) as {
       value: string;
     }[];
     return rows[0]?.value ?? "";
@@ -311,6 +327,6 @@ export async function storeVersion(): Promise<string> {
 async function bumpVersion(sql: Sql): Promise<void> {
   const v = JSON.stringify(new Date().toISOString());
   await sql`
-    INSERT INTO newsroom_settings (key, value, updated_at) VALUES ('__version', ${v}::jsonb, now())
+    INSERT INTO ${sql.unsafe(T.settings)} (key, value, updated_at) VALUES ('__version', ${v}::jsonb, now())
     ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = now()`;
 }
