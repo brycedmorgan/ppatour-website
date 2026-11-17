@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
+import { devGate, isDevHost } from "@/lib/dev-gate";
 import { PADDLE_LAB_PUBLIC } from "@/lib/paddle-lab-access";
 
 /**
@@ -49,6 +50,9 @@ function challenge(): NextResponse {
 }
 
 export default function proxy(request: NextRequest) {
+  // The dev site (dev.ppatour.com): basic auth on every page. lib/dev-gate.ts.
+  if (isDevHost(request)) return devGate(request);
+
   const { pathname } = request.nextUrl;
 
   // Private ambassador + HQ areas: stamp every response noindex at the HTTP
@@ -104,5 +108,18 @@ export default function proxy(request: NextRequest) {
  * stays so the gate survives someone turning `trailingSlash` off.
  */
 export const config = {
-  matcher: ["/paddle-lab", "/paddle-lab/:path*", "/ambassadors", "/ambassadors/:path*", "/hq", "/hq/:path*"],
+  matcher: [
+    // Dev site only: every path except build assets and images, and ONLY when
+    // the Host is a dev host, so production never enters the proxy for it.
+    // Keep the host regex in step with DEV_HOST in lib/dev-gate.ts.
+    {
+      source: "/((?!_next/static|_next/image|.*\\.(?:png|jpg|jpeg|gif|webp|avif|svg|ico|woff2?)$).*)",
+      has: [
+        {
+          type: "host",
+          value: "(?:dev\\.ppatour\\.com|ppatour-website-git-dev-bryce-pickleballs-projects\\.vercel\\.app)",
+        },
+      ],
+    },
+    "/paddle-lab", "/paddle-lab/:path*", "/ambassadors", "/ambassadors/:path*", "/hq", "/hq/:path*"],
 };
