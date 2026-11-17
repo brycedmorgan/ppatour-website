@@ -34,9 +34,11 @@ export function Rail({ editor }: { editor: string }) {
       <Link
         href={`${NEWSROOM_PATH}/`}
         aria-label="Newsroom home"
-        className="mb-4 hidden size-11 items-center justify-center bg-ppa-blue font-display text-xs text-white md:flex"
+        className="mb-4 hidden size-11 items-center justify-center overflow-hidden md:flex"
       >
-        PPA
+        {/* The PPA striped mark (also the site favicon). */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/icon.svg" alt="PPA Tour" width={44} height={44} className="size-11 object-contain" />
       </Link>
       <nav aria-label="Newsroom" className="flex gap-1 md:flex-col">
         {LINKS.map(({ href, label, icon: Icon, exact }) => {

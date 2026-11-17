@@ -37,7 +37,6 @@ export default async function NewsroomPosts({ searchParams }: Search) {
     <>
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-blue">Newsroom</p>
           <h1 className="font-display text-3xl uppercase leading-none">Posts</h1>
         </div>
         <NewPostButton />

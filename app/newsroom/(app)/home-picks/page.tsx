@@ -14,7 +14,6 @@ export default async function HomePicksPage() {
   return (
     <>
       <header>
-        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-blue">Newsroom</p>
         <h1 className="font-display text-3xl uppercase leading-none">Home page</h1>
         <p className="mt-2 max-w-2xl text-sm text-ppa-navy/70">
           Choose which pickleball.com articles appear in the home page&apos;s pickleball.com

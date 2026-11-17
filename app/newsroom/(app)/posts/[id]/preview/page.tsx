@@ -15,7 +15,7 @@ export default async function PreviewPostPage({ params }: Params) {
   const post = await getPost(id);
   if (!post) notFound();
   return (
-    <div className="-mx-4 -mt-8 md:-ml-24 md:-mr-8">
+    <div className="-mx-4 -mt-8 md:-mx-8">
       <div className="sticky top-0 z-30 flex flex-wrap items-center gap-3 bg-ppa-yellow px-4 py-2 text-sm font-semibold text-ppa-navy">
         <span>
           Preview{post.status === "draft" ? " · draft, not on the site" : " · live"}. Shows the last
