@@ -65,6 +65,12 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-17 — Fleming's Daytona storylines (Wesley)
+- His .docx ("#7_ STORYLINES FOR THE PROTON DAYTONA BEACH OPEN") → `proton-daytona-beach-open-storylines` in `lib/news-articles.ts`, Worlds/Chicago transcription rules. Two typo fixes: "1))Alshon", and the MD 4 seed's missing "4)". TV line (PBTV noon ET Thu–Sun) matches tv-schedule.
+- Hero from ScorePlay: 2025 Daytona MD final, JW Johnson + Augie Ge (media 110626823, 1679px `_compressed` rendition), `imagePosition: "50% 32%"`. This week's ScorePlay collection ("07 Daytona Beach Open") held logos only on 11/17; the "Daytona Beach Open" tag holds the 2025 shoot.
+- ⚠ Avoid 2025 Daytona shots with "Florida Dairy Farmers" signage (the old title sponsor; Proton now).
+- Verified on the dev server: article (7 sections), /news, Daytona event-page Coverage. eslint + tsc clean.
+
 ### 2026-11-17 — Event pages take registration + ticket links from the feed (Slack audit, Parker)
 - Reported: Minneapolis + Cape Coral had tickets but no registration link; Newport Beach had registration but no tickets. Upstream (feed `details_url` + GetDetails `TicketsURL`) was right for all three.
 - Cause 1: `resolveEvent` let the curated record win for everything but name/venue/UUID, so hand-entered stops used `COMMERCE_BY_SLUG`; no `register` there = bare pickleballtournaments.com homepage. Hit 7 open stops (Minneapolis, Cape Coral, Greater Zion, Sacramento, Cincinnati, Players Championships, PPA Finals). Now the live record's `registerUrl` (when it names an event) and Tixr event `ticketsUrl` win on the event page; curated is the fallback.
