@@ -16,6 +16,19 @@
 export const EUROPE_GALLERY_FOLDER = "1sfQ_OILfDr1o563PY6pVzhWB7OEOm7Id";
 export const EUROPE_GALLERY_URL = `https://drive.google.com/drive/folders/${EUROPE_GALLERY_FOLDER}`;
 
+/**
+ * Catie (11/17) keeps event cover photos in an "Event Cover Pictures" folder inside
+ * the gallery, including covers for stops not announced yet. It is a staging area,
+ * not an album, so it must never be published.
+ */
+const STAGING_FOLDER_IDS = new Set(["18nQ6StWsNJYb7kN1ZGmkwhhroMjB_jnA"]); // "Event Cover Pictures"
+const STAGING_NAME = /\bcovers?\b/i;
+
+/** A root sub-folder that is a real album, not the team's cover staging area. */
+export function isAlbumFolder(e: { id: string; title: string }): boolean {
+  return !STAGING_FOLDER_IDS.has(e.id) && !STAGING_NAME.test(e.title);
+}
+
 export type GalleryPhoto = { id: string; title: string; credit?: string };
 export type GalleryAlbum = { id: string; title: string; photos: GalleryPhoto[] };
 
@@ -57,7 +70,7 @@ export async function getEuropeGallery(): Promise<GalleryAlbum[]> {
     const root = await listFolder(EUROPE_GALLERY_FOLDER);
     const albums: GalleryAlbum[] = [];
     const loose = root.filter((e) => !e.folder && IMAGE.test(e.title)).map(toPhoto);
-    for (const f of root.filter((e) => e.folder)) {
+    for (const f of root.filter((e) => e.folder && isAlbumFolder(e))) {
       const photos = (await listFolder(f.id)).filter((e) => !e.folder && IMAGE.test(e.title)).map(toPhoto);
       if (photos.length) albums.push({ id: f.id, title: f.title, photos });
     }
