@@ -11,6 +11,6 @@ export default async function Image({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const card = getNewsDetail(slug)?.card ?? rootNews()[0];
+  const card = (await getNewsDetail(slug))?.card ?? (await rootNews())[0];
   return articleOgImage(card, "PPA TOUR NEWS");
 }

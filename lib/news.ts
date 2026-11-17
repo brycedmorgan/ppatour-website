@@ -12,9 +12,22 @@
  * keeps its approval gate — WP posts arrive already `status: "published"`
  * because they were published by a human in WordPress; the draft gate exists
  * for AI-written copy (docs/CONTENT-APPROVAL.md).
+ *
+ * ⚠ THIRD SOURCE, AND IT WINS: posts from the Newsroom dashboard (/newsroom,
+ * lib/newsroom/). A published dashboard post SHADOWS a code post with the same
+ * slug, which is how the hand-written posts moved into the dashboard: "Import
+ * hand-written posts" copies them in, and from then on the dashboard copy is
+ * the one served. The code copies stay as the fallback when the database is
+ * unreachable (lib/newsroom/published.ts fails open).
+ *
+ * That source is a database, so every feed accessor here is ASYNC. The memos
+ * below are keyed on the dashboard's version, so a save is visible on the next
+ * request without a deploy.
  */
 
 import { publishedArticles, type NewsArticle } from "@/lib/news-articles";
+import { publishedDashboardPosts } from "@/lib/newsroom/published";
+import type { DashboardPost } from "@/lib/newsroom/store";
 import {
   getWpPost,
   wpBlogSummaries,
@@ -28,7 +41,7 @@ import { getAthlete } from "@/lib/athletes";
 import { detectAthleteMentions } from "@/lib/article-players";
 import { getPublishedAthlete, publishedProfileSlug } from "@/lib/published-athletes";
 
-export type NewsSource = "native" | "wordpress";
+export type NewsSource = "native" | "wordpress" | "dashboard";
 
 /** List/card projection — no post body. */
 export type NewsCard = {
@@ -213,26 +226,99 @@ function wpToCard(p: {
   };
 }
 
-let cardCache: NewsCard[] | null = null;
-
-/** Every published post, newest first. Built once per server process. */
-export function allNews(): NewsCard[] {
-  if (cardCache) return cardCache;
-  cardCache = [
-    ...publishedArticles.map(nativeToCard),
-    ...wpPostSummaries().map(wpToCard),
-  ].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
-  return cardCache;
+/**
+ * A dashboard timestamp as a zone-less Eastern wall-clock stamp, the same shape
+ * the WP archive and native articles sort on ("2026-11-16T12:00:00"). Eastern
+ * because that is the tour's publishing clock; a UTC stamp would read as the
+ * next day for anything posted after 7 PM ET.
+ */
+export function etStamp(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return `${NATIVE_YEAR}-01-01T12:00:00`;
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: "America/New_York",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hourCycle: "h23",
+    })
+      .formatToParts(d)
+      .map((p) => [p.type, p.value]),
+  );
+  return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}:${parts.second}`;
 }
 
-export function newsCount(): number {
-  return allNews().length;
+export function dashboardToCard(p: DashboardPost): NewsCard {
+  const publishedAt = etStamp(p.publishedAt);
+  return {
+    slug: p.slug,
+    href: newsHref(p.slug, "post"),
+    category: p.category,
+    title: cleanTitle(p.title),
+    dek: cleanDek(p.dek),
+    image: p.cardImage || p.image || null,
+    heroImage: p.cardImage && p.image ? p.image : undefined,
+    imageAlt: p.imageAlt,
+    imagePosition: p.imagePosition || undefined,
+    author: p.author || HOUSE_BYLINE,
+    publishedAt,
+    displayDate: displayDateFromIso(publishedAt),
+    source: "dashboard",
+    series: null,
+    postType: "post",
+    eventSlug: p.eventSlug || undefined,
+    subtitle: p.subtitle || undefined,
+    ctaUrl: p.ctaUrl || undefined,
+    ctaLabel: p.ctaLabel || undefined,
+    heroGraphic: p.heroGraphic || undefined,
+  };
+}
+
+type Feed = {
+  version: string;
+  cards: NewsCard[];
+  dashboard: Map<string, DashboardPost>;
+  shadowed: Set<string>;
+};
+let feedCache: Feed | null = null;
+
+/**
+ * The merged feed. Rebuilt only when the dashboard's version changes; the code
+ * and WP archive halves never change inside a process.
+ */
+async function feed(): Promise<Feed> {
+  const { version, posts, shadowed } = await publishedDashboardPosts();
+  if (feedCache && feedCache.version === version) return feedCache;
+  const dashboard = new Map(posts.map((p) => [p.slug, p]));
+  const cards = [
+    ...posts.map(dashboardToCard),
+    ...publishedArticles.filter((a) => !shadowed.has(a.slug)).map(nativeToCard),
+    ...wpPostSummaries()
+      .filter((p) => !shadowed.has(p.slug))
+      .map(wpToCard),
+  ].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  feedCache = { version, cards, dashboard, shadowed };
+  searchIndex = null;
+  return feedCache;
+}
+
+/** Every published post, newest first. */
+export async function allNews(): Promise<NewsCard[]> {
+  return (await feed()).cards;
+}
+
+export async function newsCount(): Promise<number> {
+  return (await allNews()).length;
 }
 
 /** Categories present in the feed with their counts, largest first. */
-export function newsCategories(): { category: string; count: number }[] {
+export async function newsCategories(): Promise<{ category: string; count: number }[]> {
   const counts = new Map<string, number>();
-  for (const n of allNews()) counts.set(n.category, (counts.get(n.category) ?? 0) + 1);
+  for (const n of await allNews()) counts.set(n.category, (counts.get(n.category) ?? 0) + 1);
   return [...counts.entries()]
     .map(([category, count]) => ({ category, count }))
     .sort((a, b) => b.count - a.count);
@@ -251,12 +337,15 @@ export type NewsPage = {
  * One page of the feed. Pagination is over the filtered length, so counts and
  * page numbers stay consistent when a category filter is applied.
  */
-export function newsPage(opts: { page?: number; pageSize?: number; category?: string | null } = {}): NewsPage {
+export async function newsPage(
+  opts: { page?: number; pageSize?: number; category?: string | null } = {},
+): Promise<NewsPage> {
   const pageSize = Math.max(1, opts.pageSize ?? 24);
   const category = opts.category ?? null;
+  const all = await allNews();
   const pool = category
-    ? allNews().filter((n) => n.category.toLowerCase() === category.toLowerCase())
-    : allNews();
+    ? all.filter((n) => n.category.toLowerCase() === category.toLowerCase())
+    : all;
   const totalPages = Math.max(1, Math.ceil(pool.length / pageSize));
   const page = Math.min(Math.max(1, Math.floor(opts.page ?? 1)), totalPages);
   return {
@@ -272,9 +361,11 @@ export function newsPage(opts: { page?: number; pageSize?: number; category?: st
 /** Full detail for one post — a union so the page renders the right body. */
 export type NewsDetail =
   | { source: "native"; card: NewsCard; article: NewsArticle }
-  | { source: "wordpress"; card: NewsCard; post: WpPost };
+  | { source: "wordpress"; card: NewsCard; post: WpPost }
+  | { source: "dashboard"; card: NewsCard; post: DashboardPost };
 
-export function getNewsDetail(slug: string): NewsDetail | undefined {
+/** Detail for a code/archive post only — the fallback under the dashboard. */
+function codeDetail(slug: string): NewsDetail | undefined {
   const article = publishedArticles.find((a) => a.slug === slug);
   if (article) return { source: "native", card: nativeToCard(article), article };
   const post = getWpPost(slug);
@@ -282,9 +373,16 @@ export function getNewsDetail(slug: string): NewsDetail | undefined {
   return undefined;
 }
 
+export async function getNewsDetail(slug: string): Promise<NewsDetail | undefined> {
+  const { dashboard, shadowed } = await feed();
+  const dash = dashboard.get(slug);
+  if (dash) return { source: "dashboard", card: dashboardToCard(dash), post: dash };
+  return shadowed.has(slug) ? undefined : codeDetail(slug);
+}
+
 /** Every renderable slug — generateStaticParams and the sitemap. */
-export function allNewsSlugs(): string[] {
-  return allNews().map((n) => n.slug);
+export async function allNewsSlugs(): Promise<string[]> {
+  return (await allNews()).map((n) => n.slug);
 }
 
 /* ─────────────────────────── the PPA Blog ─────────────────────────── */
@@ -307,8 +405,8 @@ export function allBlog(): NewsCard[] {
  * catch-all for unknown root paths, so handing it a blog slug would publish
  * the same article at two URLs and split its own ranking.
  */
-export function rootNews(): NewsCard[] {
-  return allNews().filter((n) => n.postType !== "ppa-blog");
+export async function rootNews(): Promise<NewsCard[]> {
+  return (await allNews()).filter((n) => n.postType !== "ppa-blog");
 }
 
 export type BlogSection = { slug: string; label: string; count: number };
@@ -354,8 +452,8 @@ export function blogPage(section: string | null): NewsCard[] {
 /**
  * Related posts: same category first, then most recent, excluding `slug`.
  */
-export function relatedNews(slug: string, category: string, limit = 3): NewsCard[] {
-  const pool = allNews().filter((n) => n.slug !== slug);
+export async function relatedNews(slug: string, category: string, limit = 3): Promise<NewsCard[]> {
+  const pool = (await allNews()).filter((n) => n.slug !== slug);
   const sameCategory = pool.filter((n) => n.category === category);
   return [...sameCategory, ...pool.filter((n) => n.category !== category)].slice(0, limit);
 }
@@ -416,11 +514,11 @@ function toNewsPlayer(canonicalSlug: string): NewsPlayer | null {
  */
 export function newsPlayersFor(detail: NewsDetail): NewsPlayer[] {
   const tagged =
-    detail.source === "wordpress" ? detail.post.players : (detail.article.players ?? []);
+    detail.source === "native" ? (detail.article.players ?? []) : detail.post.players;
   const text =
-    detail.source === "wordpress"
-      ? `${detail.post.title} ${detail.post.dek} ${postPlainText(detail.post.bodyHtml)}`
-      : [detail.card.title, detail.article.dek, ...detail.article.body].join(" ");
+    detail.source === "native"
+      ? [detail.card.title, detail.article.dek, ...detail.article.body].join(" ")
+      : `${detail.post.title} ${detail.post.dek} ${postPlainText(detail.post.bodyHtml)}`;
 
   // `toNewsPlayer` resolves both to the slug the profile route prerenders, so
   // a tag and a mention of the same person collapse to one entry.
@@ -443,8 +541,8 @@ export function newsPlayersFor(detail: NewsDetail): NewsPlayer[] {
  * event slugs — most of them are 2023–24 stops with no page here. Resolving
  * that mapping lights those up with no change to callers.
  */
-export function newsForEvent(eventSlug: string): NewsCard[] {
-  return allNews().filter((n) => n.eventSlug === eventSlug);
+export async function newsForEvent(eventSlug: string): Promise<NewsCard[]> {
+  return (await allNews()).filter((n) => n.eventSlug === eventSlug);
 }
 
 /* ─────────────────────────── keyword search ─────────────────────────── */
@@ -471,15 +569,20 @@ type SearchEntry = {
 
 let searchIndex: SearchEntry[] | null = null;
 
-function buildSearchIndex(): SearchEntry[] {
+async function buildSearchIndex(): Promise<SearchEntry[]> {
+  const { cards, dashboard } = await feed();
   if (searchIndex) return searchIndex;
-  searchIndex = allNews().map((card) => {
-    const detail = getNewsDetail(card.slug);
-    const tags = detail?.source === "wordpress" ? detail.post.tags : [];
-    const body =
-      detail?.source === "wordpress"
-        ? postPlainText(detail.post.bodyHtml)
-        : (detail?.article.body.join(" ") ?? "");
+  searchIndex = cards.map((card) => {
+    const dash = dashboard.get(card.slug);
+    const detail: NewsDetail | undefined = dash
+      ? { source: "dashboard", card, post: dash }
+      : codeDetail(card.slug);
+    const tags = detail && detail.source !== "native" ? detail.post.tags : [];
+    const body = !detail
+      ? ""
+      : detail.source === "native"
+        ? detail.article.body.join(" ")
+        : postPlainText(detail.post.bodyHtml);
     return {
       card,
       title: card.title.toLowerCase(),
@@ -523,19 +626,19 @@ export type NewsSearchResult = NewsPage & { query: string };
  * Ranked matches, paginated. Falls back to the plain feed for a blank query so
  * callers can treat search as just another filter.
  */
-export function searchNews(
+export async function searchNews(
   opts: { query?: string; page?: number; pageSize?: number; category?: string | null } = {},
-): NewsSearchResult {
+): Promise<NewsSearchResult> {
   const query = (opts.query ?? "").trim().replace(/\s+/g, " ");
-  if (!query) return { ...newsPage(opts), query: "" };
+  if (!query) return { ...(await newsPage(opts)), query: "" };
 
   const phrase = query.toLowerCase();
   const terms = [...new Set(phrase.split(" ").filter((t) => t.length > 1))];
-  if (terms.length === 0) return { ...newsPage(opts), query };
+  if (terms.length === 0) return { ...(await newsPage(opts)), query };
 
   const category = opts.category ?? null;
   const scored: { card: NewsCard; score: number }[] = [];
-  for (const e of buildSearchIndex()) {
+  for (const e of await buildSearchIndex()) {
     if (category && e.card.category.toLowerCase() !== category.toLowerCase()) continue;
     const score = scoreEntry(e, terms, phrase);
     if (score > 0) scored.push({ card: e.card, score });

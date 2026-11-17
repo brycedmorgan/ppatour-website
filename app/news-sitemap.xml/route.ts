@@ -42,7 +42,7 @@ function w3cDate(iso: string): string {
 
 export async function GET() {
   const cutoff = Date.now() - WINDOW_MS;
-  const recent = rootNews().filter((n) => {
+  const recent = (await rootNews()).filter((n) => {
     const t = Date.parse(w3cDate(n.publishedAt));
     return Number.isFinite(t) && t >= cutoff && t <= Date.now() + 60_000;
   });

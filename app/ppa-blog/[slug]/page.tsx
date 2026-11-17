@@ -27,8 +27,8 @@ export function generateStaticParams() {
 }
 
 /** Guards against a root-post slug being requested under this prefix. */
-function blogDetail(slug: string) {
-  const detail = getNewsDetail(slug);
+async function blogDetail(slug: string) {
+  const detail = await getNewsDetail(slug);
   return detail && detail.card.postType === "ppa-blog" ? detail : undefined;
 }
 
@@ -46,7 +46,7 @@ export const fetchCache = "default-cache";
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
-  const detail = blogDetail(slug);
+  const detail = await blogDetail(slug);
   if (!detail) return { title: "PPA Blog" };
   const { card } = detail;
   // Yoast title/description carried over, so the search snippet these pages
@@ -74,7 +74,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 export default async function BlogArticlePage({ params }: Params) {
   const { slug } = await params;
-  const detail = blogDetail(slug);
+  const detail = await blogDetail(slug);
   if (!detail) notFound();
   return <ArticleView detail={detail} />;
 }

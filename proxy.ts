@@ -1,12 +1,19 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { devGate, isDevHost } from "@/lib/dev-gate";
+import { devGate, devGateBlock, isDevHost } from "@/lib/dev-gate";
 import { PADDLE_LAB_PUBLIC } from "@/lib/paddle-lab-access";
+import {
+  NEWSROOM_COOKIE,
+  NEWSROOM_PATH,
+  newsroomUrlKey,
+  verifySessionToken,
+} from "@/lib/newsroom/session";
 
 /**
  * The site's request proxy (Next 16's replacement for `middleware.ts`).
  *
- * Today it does exactly one job: it puts HTTP Basic auth in front of every
+ * The Newsroom dashboard sign-in gate is at the top (newsroomGate). Otherwise
+ * it does one job: it puts HTTP Basic auth in front of every
  * /paddle-lab route while `PADDLE_LAB_PUBLIC` is false. See
  * lib/paddle-lab-access.ts for who asked and why.
  *
@@ -49,11 +56,88 @@ function challenge(): NextResponse {
   });
 }
 
-export default function proxy(request: NextRequest) {
-  // The dev site (dev.ppatour.com): basic auth on every page. lib/dev-gate.ts.
-  if (isDevHost(request)) return devGate(request);
+/**
+ * The Newsroom dashboard. It is served ONLY at its secret address,
+ * `/<NEWSROOM_URL_KEY>/…`, rewritten onto the internal `/newsroom/…` route.
+ *
+ * - The internal route itself, a wrong key, or no key configured: the site's
+ *   ordinary 404, indistinguishable from any other missing page, so probing
+ *   reveals nothing.
+ * - Right key, signed out: sign-in (and the second-step screens, which check
+ *   their own short-lived cookie) are reachable; everything else redirects to
+ *   sign-in.
+ * - The upload API answers 401 without a full session.
+ *
+ * Every page and action also checks the session itself (lib/newsroom/auth.ts),
+ * so this is the first gate, not the only one.
+ */
+const NOT_FOUND_PATH = "/__not-found__/";
+const KEYED = /^\/(nr-[a-z0-9]{24})(\/.*)?$/;
+const OPEN_STEPS = new Set(["/login/", "/setup/", "/verify/"]);
 
+function privateHeaders(res: NextResponse): NextResponse {
+  res.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
+  // Links out of the dashboard must not carry its address in a Referer.
+  res.headers.set("Referrer-Policy", "no-referrer");
+  res.headers.set("Cache-Control", "private, no-store");
+  return res;
+}
+
+function notFound(request: NextRequest): NextResponse {
+  // Through the app's own catch-all, so it's the normal site 404 page.
+  return NextResponse.rewrite(new URL(NOT_FOUND_PATH, request.url));
+}
+
+async function newsroomGate(request: NextRequest): Promise<NextResponse> {
+  const { pathname, search } = request.nextUrl;
+
+  if (pathname.startsWith("/api/newsroom/")) {
+    const session = await verifySessionToken(request.cookies.get(NEWSROOM_COOKIE)?.value);
+    return privateHeaders(
+      session ? NextResponse.next() : NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+    );
+  }
+
+  const m = KEYED.exec(pathname);
+  const key = newsroomUrlKey();
+  if (!m || !key || !safeEqual(m[1], key)) return notFound(request);
+
+  const rest = m[2] && m[2] !== "/" ? (m[2].endsWith("/") ? m[2] : `${m[2]}/`) : "/";
+  const target = new URL(`${NEWSROOM_PATH}${rest}${search}`, request.url);
+
+  if (OPEN_STEPS.has(rest)) return privateHeaders(NextResponse.rewrite(target));
+
+  const session = await verifySessionToken(request.cookies.get(NEWSROOM_COOKIE)?.value);
+  if (!session) {
+    return privateHeaders(NextResponse.redirect(new URL(`/${key}/login/`, request.url)));
+  }
+  return privateHeaders(NextResponse.rewrite(target));
+}
+
+export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // The dev site (dev.ppatour.com): basic auth on every page, FIRST.
+  // lib/dev-gate.ts. A signed-in dev request carries on, so the Newsroom's own
+  // gate below still applies to its secret address there.
+  const dev = isDevHost(request);
+  if (dev) {
+    const blocked = devGateBlock(request);
+    if (blocked) return blocked;
+  }
+
+  if (
+    pathname === NEWSROOM_PATH ||
+    pathname.startsWith(`${NEWSROOM_PATH}/`) ||
+    pathname.startsWith("/api/newsroom/") ||
+    KEYED.test(pathname)
+  ) {
+    return newsroomGate(request);
+  }
+
+  // Every other dev request: the dev pass-through (noindex, private). Never
+  // the Paddle Lab password check below, which the dev login would collide with.
+  if (dev) return devGate(request);
 
   // Private ambassador + HQ areas: stamp every response noindex at the HTTP
   // layer (belt-and-suspenders with the per-page robots meta and robots.ts
@@ -121,5 +205,18 @@ export const config = {
         },
       ],
     },
-    "/paddle-lab", "/paddle-lab/:path*", "/ambassadors", "/ambassadors/:path*", "/hq", "/hq/:path*"],
+    "/paddle-lab",
+    "/paddle-lab/:path*",
+    "/ambassadors",
+    "/ambassadors/:path*",
+    "/hq",
+    "/hq/:path*",
+    "/newsroom",
+    "/newsroom/:path*",
+    "/api/newsroom/:path*",
+    // The dashboard's secret address. Only the SHAPE is here (matchers must be
+    // literals, and this repo is public); the key is NEWSROOM_URL_KEY.
+    "/:key(nr-[a-z0-9]{24})",
+    "/:key(nr-[a-z0-9]{24})/:path*",
+  ],
 };

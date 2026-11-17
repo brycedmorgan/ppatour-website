@@ -37,6 +37,7 @@ import {
 // components. Do not import this from a "use client" file.
 import { allNews } from "@/lib/news";
 import { getPickleballNews, pbArticleDate } from "@/lib/pb-news";
+import { homePickleballNews } from "@/lib/newsroom/published";
 
 // Kickers ("For Fans" / "For Players" / "For Brands") dropped 7/28 — Jeff +
 // Nathan: unnecessary and cluttered. Blurbs are their copy from the audit doc.
@@ -314,11 +315,12 @@ export async function HomeContent({
     : false;
   // Live pickleball.com coverage. Empty until the API grant lands, in which case
   // the rail is omitted rather than showing the invented headlines it replaced.
-  const ecosystem = (await getPickleballNews(4)).articles;
+  // Editors pin articles in the Newsroom dashboard; the newest fill the rest.
+  const ecosystem = await homePickleballNews((await getPickleballNews(8)).articles, 4);
   // The newsroom grid: one lead + four secondaries. Real posts, newest first —
   // the hand-written `storylines` placeholders this replaced all pointed at
   // /watch, so the homepage carried no link into an actual article.
-  const [leadPost, ...secondaryPosts] = allNews().slice(0, 5);
+  const [leadPost, ...secondaryPosts] = (await allNews()).slice(0, 5);
   // Next six tour stops for the "Next on Tour" strip above the callouts.
   const upNext = getRemainingTourEvents(now).slice(0, 6);
 

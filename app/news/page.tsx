@@ -103,7 +103,7 @@ function Eyebrow({ card, tone = "sky" }: { card: NewsCard; tone?: "sky" | "blue"
 
 export default async function NewsPage({ searchParams }: Search) {
   const sp = await searchParams;
-  const categories = newsCategories();
+  const categories = await newsCategories();
   /**
    * The Race / Junior / Highlights each hold a single hand-written article, and
    * as chips they wrapped the filter row onto a second line for no browsing
@@ -127,7 +127,7 @@ export default async function NewsPage({ searchParams }: Search) {
   const pbFeed = pbMode ? await getPickleballNewsPage(Number(sp.page) || 1, PAGE_SIZE) : null;
 
   const query = (sp.q ?? "").trim();
-  const feed = searchNews({
+  const feed = await searchNews({
     query,
     page: Number(sp.page) || 1,
     pageSize: PAGE_SIZE,
@@ -149,7 +149,7 @@ export default async function NewsPage({ searchParams }: Search) {
 
   const from = (feed.page - 1) * feed.pageSize + 1;
   const to = Math.min(feed.page * feed.pageSize, feed.total);
-  const total = newsPage({ pageSize: 1 }).total;
+  const total = (await newsPage({ pageSize: 1 })).total;
 
   /**
    * Live pickleball.com coverage. Interleaved into the feed AND given its own

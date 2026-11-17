@@ -14,6 +14,7 @@ import { MarketingTags } from "@/components/global/MarketingTags";
 import { CustomerioTracker } from "@/components/global/CustomerioTracker";
 import { AccessibilityWidget } from "@/components/global/AccessibilityWidget";
 import { AppChrome } from "@/components/app/AppChrome";
+import { TrackingGate } from "@/components/global/TrackingGate";
 import { JackalopeAnalytics } from "@/components/global/JackalopeAnalytics";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -240,6 +241,9 @@ export default function RootLayout({
         <AppChrome />
         <CookieBanner />
         <ScrollReveal />
+        {/* Every tracker below is skipped on private pages (the Newsroom
+            dashboard's secret address must never reach an analytics report). */}
+        <TrackingGate>
         <Analytics />
         <MetaPixel />
         <MarketingTags />
@@ -277,6 +281,7 @@ export default function RootLayout({
             component for why gating an accessibility widget behind cookie
             consent would defeat it. */}
         <AccessibilityWidget />
+        </TrackingGate>
       </body>
     </html>
   );

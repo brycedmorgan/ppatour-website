@@ -245,7 +245,7 @@ export async function searchSite(query: string): Promise<SiteSearchResult> {
   const terms = [...new Set(norm(q).split(" ").filter(Boolean))];
 
   /* News — delegated so /search and /news rank identically. */
-  const newsResult = searchNews({ query: q, pageSize: PER_GROUP });
+  const newsResult = await searchNews({ query: q, pageSize: PER_GROUP });
   const newsHits: SearchHit[] = newsResult.items.map((n: NewsCard) => ({
     group: "News",
     title: n.title,

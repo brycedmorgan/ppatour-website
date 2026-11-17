@@ -26,6 +26,9 @@ export default function robots(): MetadataRoute.Robots {
         "/ambassadors/",
         // Private corporate hub (Ambassador HQ) — same treatment.
         "/hq/",
+        // ⚠ The Newsroom dashboard is deliberately NOT listed. robots.txt is
+        // public, so listing it would advertise it. It is noindex at every
+        // layer instead and lives at a secret address (lib/newsroom/session.ts).
       ],
     },
     // The Google News sitemap (last 48h of newsroom posts) alongside the

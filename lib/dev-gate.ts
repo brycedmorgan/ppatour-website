@@ -75,6 +75,23 @@ function authorized(request: NextRequest): boolean {
  * pass-through stamped noindex + no-store.
  */
 export function devGate(request: NextRequest): NextResponse {
+  const blocked = devGateBlock(request);
+  if (blocked) return blocked;
+  const response = NextResponse.next();
+  response.headers.set("X-Robots-Tag", NOINDEX);
+  // Keep the authed HTML out of shared caches; the CDN must not hand it to a
+  // visitor who hasn't logged in.
+  response.headers.set("Cache-Control", "private, no-store");
+  return response;
+}
+
+/**
+ * The gate's verdict alone: a response to send instead (the dev robots.txt or
+ * a 401), or null when the visitor is signed in and the request may carry on.
+ * proxy.ts uses this so a signed-in dev request can still reach routing that
+ * has its own gate (the Newsroom dashboard's secret address).
+ */
+export function devGateBlock(request: NextRequest): NextResponse | null {
   if (request.nextUrl.pathname === "/robots.txt") {
     return new NextResponse("User-agent: *\nDisallow: /\n", {
       headers: {
@@ -85,10 +102,5 @@ export function devGate(request: NextRequest): NextResponse {
     });
   }
   if (!authorized(request)) return challenge();
-  const response = NextResponse.next();
-  response.headers.set("X-Robots-Tag", NOINDEX);
-  // Keep the authed HTML out of shared caches; the CDN must not hand it to a
-  // visitor who hasn't logged in.
-  response.headers.set("Cache-Control", "private, no-store");
-  return response;
+  return null;
 }

@@ -60,7 +60,7 @@ import { stageScheduleFor } from "@/lib/event-stage";
 import { StageSchedule } from "@/components/events/StageSchedule";
 import { feedEditionOf, getEvents } from "@/lib/events-api";
 import { resolveEvent } from "@/lib/resolve-event";
-import { getArticlesForEvent } from "@/lib/news-articles";
+import { newsForEvent } from "@/lib/news";
 import {
   daysUntil,
   isTournamentLive,
@@ -440,7 +440,8 @@ export default async function EventPage({ params }: Params) {
     ...mainTour.filter((x) => x.startDate <= t.startDate),
   ].slice(0, 3);
 
-  const coverage = getArticlesForEvent(t.slug);
+  // Native + Newsroom dashboard posts tagged to this stop (lib/news.ts).
+  const coverage = await newsForEvent(t.slug);
   // Completed once the tour marks it so, OR once the current date is past the
   // event's end date (recomputed on the page's daily revalidate).
   const now = new Date();
@@ -2342,22 +2343,24 @@ export default async function EventPage({ params }: Params) {
               {coverage.map((c, i) => (
                 <Link
                   key={c.slug}
-                  href={`/${c.slug}`}
+                  href={c.href}
                   data-reveal
                   style={{ "--reveal-delay": `${(i % 3) * 80}ms` } as React.CSSProperties}
                   className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden bg-ppa-navy"
                 >
-                  <Image
-                    src={c.image}
-                    alt=""
-                    fill
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
+                  {c.image && (
+                    <Image
+                      src={c.image}
+                      alt=""
+                      fill
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  )}
                   <div className="absolute inset-0 scrim-card" />
                   <div className="relative p-4 text-white">
                     <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-sky">
-                      {c.category} · {c.date}
+                      {c.category} · {c.displayDate}
                     </p>
                     <p className="mt-1 font-display text-base uppercase leading-[1.1]">
                       {c.title}
