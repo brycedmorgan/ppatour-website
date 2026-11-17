@@ -65,6 +65,15 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-17 — dev.ppatour.com: a password-gated dev site on the `dev` branch (Wesley)
+- New long-lived `dev` branch (off main 08bb997). `dev.ppatour.com` is on the Vercel project, assigned to Git branch `dev`. DNS is Cloudflare (mary/ram.ns): needs CNAME `dev` → `92c7d0fad773651c.vercel-dns-016.com`, DNS only (grey cloud), same target as www.
+- `lib/dev-gate.ts` + `proxy.ts`: basic auth on every page, keyed on Host (`dev.ppatour.com` and the `ppatour-website-git-dev-…vercel.app` branch alias). The matcher entry uses `has: [{ type: "host" }]`, so production requests never enter it. Fails closed. `/robots.txt` on a dev host = `Disallow: /` (served before auth); every response `X-Robots-Tag: noindex`, authed pages `private, no-store`. Static assets and images aren't gated.
+- Credentials: `DEV_SITE_USER` / `DEV_SITE_PASSWORD`, Vercel Preview, branch `dev` only. Never in code (public repo). Wesley's copy is a comment in `.env.local`. ⚠ They're Encrypted, so `vercel env pull` returns them blank; check on a deploy instead.
+- ⚠ Per-commit preview URLs of `dev` (`ppatour-website-<hash>-…`) aren't gated by host; Vercel's own deployment protection covers those.
+- ⚠ `feature/newsroom-dashboard` also rewrites the proxy matcher array; merging it into `dev` conflicts there. Keep both sets of entries.
+- ⚠ Preview and Production share one `DATABASE_URL`: the dev site reads and writes production data.
+- Verified on a local dev server (Host header): dev host 401 without/with wrong creds, 200 with them, robots disallow; www.ppatour.com paths unchanged (no noindex, paddle-lab/hq as before). tsc + eslint clean.
+
 ### 2026-11-17 — Event pages take registration + ticket links from the feed (Slack audit, Parker)
 - Reported: Minneapolis + Cape Coral had tickets but no registration link; Newport Beach had registration but no tickets. Upstream (feed `details_url` + GetDetails `TicketsURL`) was right for all three.
 - Cause 1: `resolveEvent` let the curated record win for everything but name/venue/UUID, so hand-entered stops used `COMMERCE_BY_SLUG`; no `register` there = bare pickleballtournaments.com homepage. Hit 7 open stops (Minneapolis, Cape Coral, Greater Zion, Sacramento, Cincinnati, Players Championships, PPA Finals). Now the live record's `registerUrl` (when it names an event) and Tixr event `ticketsUrl` win on the event page; curated is the fallback.
