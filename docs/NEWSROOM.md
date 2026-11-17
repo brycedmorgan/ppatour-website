@@ -69,6 +69,23 @@ opens it; nothing publishes on its own. `lib/newsroom/doc-import.ts`.
   as of 11/17). Without it a simple fill runs: first heading → headline, first
   image → hero, the rest → body.
 
+## Reformat
+
+**Reformat** (next to the Body label) suggests a cleaner structure: section
+headings in longer posts, over-long paragraphs split, obvious lists turned into
+bullets, images placed and captioned, and clutter removed (editor notes,
+placeholders, a repeated headline/byline, a line that repeats the end button).
+`lib/newsroom/reformat.ts`.
+
+- **The writer's wording can't change.** Code checks that every word outside a
+  heading appears in the original, in order; a result that rewords, adds or
+  reorders text is refused. Image sources must already be in the post.
+- The editor sees New / Current, the list of changes and every removed passage,
+  then **Apply** (editor only, unsaved) or **Discard**. **Undo reformat** puts the
+  old body back until the post is saved.
+- Needs `ANTHROPIC_API_KEY` (Production + Preview as of 11/17). Each run costs a
+  few cents.
+
 ## Setup (once per environment)
 
 Vercel (Production; Preview scoped to the branch) and `.env.local`:

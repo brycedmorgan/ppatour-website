@@ -5,6 +5,9 @@ import { PostEditor } from "../../../_components/PostEditor";
 
 export const metadata = { title: "Edit post" };
 
+// "Reformat" asks the AI to restructure the body: allow a minute or two.
+export const maxDuration = 300;
+
 type Params = { params: Promise<{ id: string }> };
 
 export default async function EditPostPage({ params }: Params) {

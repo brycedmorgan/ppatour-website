@@ -8,6 +8,7 @@ import { useBase } from "./BaseContext";
 import { deletePost, savePost, type PostInput } from "../actions";
 import { ImageField } from "./ImageField";
 import { RichText } from "./RichText";
+import { Reformat } from "./Reformat";
 
 type Draft = PostInput;
 
@@ -101,6 +102,8 @@ export function PostEditor({
   const [draft, setDraft] = useState<Draft>(() => toDraft(initial));
   const [saved, setSaved] = useState(() => JSON.stringify(toDraft(initial)));
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
+  // Bumped when the body is replaced from outside the editor (Reformat apply/undo).
+  const [bodyVersion, setBodyVersion] = useState(0);
   const [pending, start] = useTransition();
   const id = useId();
   const f = (name: string) => `${id}-${name}`;
@@ -251,8 +254,25 @@ export function PostEditor({
             <textarea id={f("why")} rows={2} className={`${input} field-sizing-content`} value={draft.whyItMatters} onChange={(e) => set({ whyItMatters: e.target.value })} />
           </Field>
           <div>
-            <p className="mb-1 text-sm font-semibold">Body</p>
-            <RichText value={draft.bodyHtml} onChange={(bodyHtml) => set({ bodyHtml })} />
+            <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+              <p className="text-sm font-semibold">Body</p>
+              <Reformat
+                body={draft.bodyHtml}
+                title={draft.title}
+                dek={draft.dek}
+                author={draft.author}
+                ctaLabel={draft.ctaLabel}
+                onApply={(bodyHtml) => {
+                  set({ bodyHtml });
+                  setBodyVersion((v) => v + 1);
+                }}
+              />
+            </div>
+            <RichText
+              value={draft.bodyHtml}
+              version={bodyVersion}
+              onChange={(bodyHtml) => set({ bodyHtml })}
+            />
             <p className="mt-1 text-xs text-ppa-navy/55">
               Player names link to their profiles automatically on the site.
             </p>

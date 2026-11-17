@@ -31,6 +31,7 @@ import {
   slugProblem,
   slugify,
 } from "@/lib/newsroom/posts";
+import { ReformatError, reformatBody } from "@/lib/newsroom/reformat";
 import {
   DocImportError,
   docxToBlocks,
@@ -86,6 +87,35 @@ export async function createPost() {
   const post = blankPost(randomUUID(), sub);
   await putPost(post);
   redirect(`${newsroomBase()}/posts/${post.id}/`);
+}
+
+/**
+ * "Reformat": a suggested restructure of the body (headings, lists, clutter
+ * removed) that never changes the writer's wording (lib/newsroom/reformat.ts).
+ * Returns the suggestion; nothing is saved until the editor applies and saves.
+ */
+export async function reformatPostBody(input: {
+  bodyHtml: string;
+  title: string;
+  dek: string;
+  author: string;
+  ctaLabel: string;
+}): Promise<{ ok: true; html: string; changes: string[]; removed: string[] } | { ok: false; error: string }> {
+  await requireEditor();
+  try {
+    const res = await reformatBody({
+      bodyHtml: String(input.bodyHtml ?? "").slice(0, 400_000),
+      title: String(input.title ?? "").slice(0, 300),
+      dek: String(input.dek ?? "").slice(0, 600),
+      author: String(input.author ?? "").slice(0, 120),
+      ctaLabel: String(input.ctaLabel ?? "").slice(0, 80),
+    });
+    return { ok: true, ...res };
+  } catch (err) {
+    if (err instanceof ReformatError) return { ok: false, error: err.message };
+    console.error("[newsroom] reformat failed:", err);
+    return { ok: false, error: "Couldn't reformat this post. Try again in a minute." };
+  }
 }
 
 /** A Word file the editor uploaded for import: only our own Blob store, only that folder. */
