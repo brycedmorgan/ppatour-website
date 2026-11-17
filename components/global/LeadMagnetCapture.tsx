@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 
-type Variant = "fan" | "amateur" | "streaming" | "junior" | "vacations";
+type Variant = "fan" | "amateur" | "streaming" | "junior" | "vacations" | "event";
+
+/**
+ * The tour stop a signup came from (Maxwell Hill, 11/17: segment by event).
+ * Sent with every event-page signup; Customer.io stores it as the
+ * `website_lead_event*` attributes and on the `website_lead_capture` event, so a
+ * list can be pulled per tournament without parsing `website_lead_page`.
+ */
+export type LeadEvent = { slug: string; year: string; name: string; code?: string; uuid?: string };
 
 const COPY: Record<Variant, { eyebrow: string; heading: string; cta: string }> = {
   fan: {
@@ -45,6 +53,18 @@ const COPY: Record<Variant, { eyebrow: string; heading: string; cta: string }> =
     heading: "First Word on New Trips",
     cta: "Count me in",
   },
+  /**
+   * A tour stop whose tickets and/or registration aren't open yet (Maxwell
+   * Hill, 11/17: the primary CTA for events with no Tixr or
+   * PickleballTournaments.com link). The event page passes a heading naming
+   * what is missing. Email only for now: his fuller form (name, watch / play /
+   * both, phone, zip, SMS consent) waits on John Enger's opt-in copy.
+   */
+  event: {
+    eyebrow: "Get Notified",
+    heading: "Tickets and Registration Alerts",
+    cta: "Notify me",
+  },
 };
 
 /**
@@ -65,8 +85,17 @@ const COPY: Record<Variant, { eyebrow: string; heading: string; cta: string }> =
 export function LeadMagnetCapture({
   variant = "fan",
   region,
+  event,
+  heading,
+  body,
 }: {
   variant?: Variant;
+  /** The tour stop this signup belongs to; see {@link LeadEvent}. */
+  event?: LeadEvent;
+  /** Overrides the variant's heading (the event page names what's missing). */
+  heading?: string;
+  /** Overrides the line under the heading. */
+  body?: string;
   /**
    * Marks the signup as belonging to a region so email can be targeted at it.
    * Payton Pemberton, 9/8: PPA Tour Europe wants its signups "designated as
@@ -94,6 +123,7 @@ export function LeadMagnetCapture({
           email,
           variant,
           region,
+          event,
           page: window.location.pathname,
         }),
       });
@@ -113,14 +143,15 @@ export function LeadMagnetCapture({
         {copy.eyebrow}
       </p>
       <h3 className="mt-2 font-display text-2xl uppercase leading-[1.02] text-white sm:text-3xl">
-        {copy.heading}
+        {heading ?? copy.heading}
       </h3>
       {/* Dave Rogers 7/27: "when the checkout lives off-site" meant nothing to
           a reader — it was internal language about our commerce partners. */}
       <p className="mt-2 max-w-md text-sm text-white/55">
-        {variant === "vacations"
-          ? "New destinations and open rooms, before they go public. Leaving this list never touches your PPA Tour emails."
-          : "No spam — just the matches, ticket drops, and dates that matter, straight to your inbox."}
+        {body ??
+          (variant === "vacations"
+            ? "New destinations and open rooms, before they go public. Leaving this list never touches your PPA Tour emails."
+            : "No spam — just the matches, ticket drops, and dates that matter, straight to your inbox.")}
       </p>
 
       {status === "done" ? (

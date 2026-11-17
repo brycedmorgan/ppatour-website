@@ -376,6 +376,12 @@ export default async function EventPage({ params }: Params) {
    * price and no ticket link anywhere on the page — see lib/tixr-prices.ts.
    */
   const onSale = ticketsOnSale(t.ticketsUrl);
+  /**
+   * Whether amateur registration has a page to send people to. The fallback
+   * `registerUrl` is the bare pickleballtournaments.com homepage, which is not
+   * one: a fan lands on a search box.
+   */
+  const registerOpen = /pickleballtournaments\.com\/tournaments\/[^/?#]+/.test(t.registerUrl ?? "");
   const description = eventMetaDescription(t);
   /**
    * Where a premium parking pass is bought — the event's own Tixr page, since
@@ -470,6 +476,29 @@ export default async function EventPage({ params }: Params) {
    * still plannable.
    */
   const started = completed || isTournamentLive(t);
+  /**
+   * What a fan can't buy or enter yet, when the email form stands in for it
+   * (Maxwell Hill, 11/17: the primary CTA for events with no Tixr or
+   * PickleballTournaments.com link). Null once both are open, or once the
+   * event is over. Every signup is tagged with this event either way.
+   */
+  const notifyFor: "both" | "tickets" | "registration" | null = completed
+    ? null
+    : !onSale && !registerOpen
+      ? "both"
+      : !onSale
+        ? "tickets"
+        : !registerOpen
+          ? "registration"
+          : null;
+  const notifyHeading =
+    notifyFor === "both"
+      ? `Get notified when ${t.name} tickets and registration open`
+      : notifyFor === "tickets"
+        ? `Get notified when ${t.name} tickets go on sale`
+        : notifyFor === "registration"
+          ? `Get notified when ${t.name} registration opens`
+          : undefined;
   // Brackets are built live from the match feed for any completed event.
   const showBracket = showResults;
 
@@ -842,20 +871,42 @@ export default async function EventPage({ params }: Params) {
                   >
                     Buy Tickets — from ${t.ticketPriceFrom}
                   </a>
+                ) : notifyFor === "both" ? (
+                  // Nothing to buy or enter yet: the email form is the CTA
+                  // (Maxwell Hill, 11/17), styled as the primary button.
+                  <a
+                    href="#notify"
+                    className="flex h-11 items-center justify-center bg-[var(--event-accent)] px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:brightness-90 active:scale-[0.98]"
+                  >
+                    Notify Me When It Opens ↓
+                  </a>
                 ) : (
-                  // Not listed on Tixr yet: no price, no link, no guess.
-                  <span className="flex h-11 cursor-default items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] text-white/70">
-                    Tickets Coming Soon
-                  </span>
+                  // Not listed on Tixr yet: no price, no Tixr link, no guess —
+                  // but somewhere to go instead of a dead label.
+                  <a
+                    href="#notify"
+                    className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
+                  >
+                    Get Ticket Alerts ↓
+                  </a>
                 )}
-                <a
-                  href={withUtm(t.registerUrl, { campaign: t.eventCode ?? t.slug, content: "event-hero-register" })}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
-                >
-                  Register to Play ↗
-                </a>
+                {registerOpen ? (
+                  <a
+                    href={withUtm(t.registerUrl, { campaign: t.eventCode ?? t.slug, content: "event-hero-register" })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
+                  >
+                    Register to Play ↗
+                  </a>
+                ) : notifyFor === "registration" ? (
+                  <a
+                    href="#notify"
+                    className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
+                  >
+                    Registration Alerts ↓
+                  </a>
+                ) : null}
                 {/* Same gate as the section it scrolls to — a hero button
                     pointing at an anchor that isn't on the page scrolls
                     nowhere. */}
@@ -1192,17 +1243,26 @@ export default async function EventPage({ params }: Params) {
                 Be There in {t.city}
               </h2>
             </div>
-            <a
-              href={withUtm(t.registerUrl, {
-                campaign: t.eventCode ?? t.slug,
-                content: "event-tickets-register",
-              })}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
-            >
-              Or register to play ↗
-            </a>
+            {registerOpen ? (
+              <a
+                href={withUtm(t.registerUrl, {
+                  campaign: t.eventCode ?? t.slug,
+                  content: "event-tickets-register",
+                })}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
+              >
+                Or register to play ↗
+              </a>
+            ) : (
+              <a
+                href="#notify"
+                className="text-xs font-bold uppercase tracking-[0.12em] text-ppa-blue hover:text-ppa-navy"
+              >
+                Registration alerts ↓
+              </a>
+            )}
           </div>
 
           {!onSale && (
@@ -1217,8 +1277,14 @@ export default async function EventPage({ params }: Params) {
                   JSX, which rendered "Pickleball Masterstickets" — the source
                   looked correct, so this is worth keeping as one string. */}
               <p className="mt-2 max-w-xl text-sm leading-relaxed text-ppa-navy/60">
-                {`${t.name} tickets aren’t on sale yet. Prices and seating go live here the moment they open — or join the list below and we’ll tell you.`}
+                {`${t.name} tickets aren’t on sale yet. Prices and seating go live here the moment they open.`}
               </p>
+              <a
+                href="#notify"
+                className="mt-4 inline-flex h-10 items-center bg-ppa-navy px-5 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue"
+              >
+                Get notified when they open ↓
+              </a>
             </div>
           )}
 
@@ -2400,12 +2466,14 @@ export default async function EventPage({ params }: Params) {
               {
                 title: "Play the Amateur Draw",
                 note: "Brackets by skill + age · from $89 per division · medals on Championship Court",
-                cta: "Register to Play",
-                href: withUtm(t.registerUrl, {
-                  campaign: t.eventCode ?? t.slug,
-                  content: "event-involved-register",
-                }),
-                external: true,
+                cta: registerOpen ? "Register to Play" : "Get Notified",
+                href: registerOpen
+                  ? withUtm(t.registerUrl, {
+                      campaign: t.eventCode ?? t.slug,
+                      content: "event-involved-register",
+                    })
+                  : "#notify",
+                external: registerOpen,
                 featured: true,
               },
               {
@@ -2539,10 +2607,26 @@ export default async function EventPage({ params }: Params) {
         </div>
       </section>
 
-      {/* Email */}
-      <section className="bg-ppa-navy-deep">
+      {/* Email. `#notify` is where every "Get Alerts" button above lands
+          while tickets or registration aren't open (Maxwell Hill, 11/17). */}
+      <section id="notify" className="scroll-mt-[120px] bg-ppa-navy-deep">
         <div className="mx-auto w-full max-w-6xl px-4 py-12">
-          <LeadMagnetCapture variant="streaming" />
+          <LeadMagnetCapture
+            variant={notifyFor ? "event" : "streaming"}
+            heading={notifyHeading}
+            body={
+              notifyFor
+                ? "We’ll email you the moment it opens, plus the dates that matter. No spam."
+                : undefined
+            }
+            event={{
+              slug: t.slug,
+              year,
+              name: t.name,
+              code: t.eventCode ?? undefined,
+              uuid: drawUuid ?? undefined,
+            }}
+          />
         </div>
       </section>
       <EventConcierge facts={conciergeFacts} />
