@@ -219,7 +219,7 @@ Rules:
 - why_it_matters: only if the document has a section or callout labelled like "Why it matters"; copy it. Otherwise null.
 - event_slug: if the post is about one specific tour stop in the event list, its slug. Otherwise null. Never invent a slug.
 - tags: 0 to 6 short topic tags taken from the document (players, event, division, sponsor).
-- cta_url / cta_label: only if the document explicitly gives a call-to-action link (e.g. "Shop now: https://…", "Buy tickets at …"). Otherwise null.
+- cta_url / cta_label: only if the document explicitly gives a call-to-action link (e.g. "Shop now: https://…", "Buy tickets at …"). Otherwise null. The post shows it as a button at the end, so when the call to action is a block on its own (just the link line), put that block in non_body_blocks so it is not shown twice.
 - non_body_blocks: the numbers of every block that is NOT part of the article body: the headline, the subtitle, the dek, the byline, labels such as "Headline:" or "Dek:", "Why it matters" callouts you extracted, photo credits or instructions meant for the editor, and notes like "Image attached" or "[insert photo]". Everything else is body and stays.
 - hero_image_block: the number of the image block best used as the post's main image (usually the first one). Null if there are no image blocks.
 - notes: short, specific things the editor must check before publishing: missing photo, a date or score that looks inconsistent, placeholders like [TBD], instructions the writer left, a link that is mentioned but missing. Empty if nothing.
@@ -315,7 +315,10 @@ export async function fillFromBlocks(
   const eventSlug = ctx.events.some((e) => e.slug === out.event_slug) ? (out.event_slug ?? "") : "";
 
   const notes = [...out.notes];
-  if (!hero) notes.push("The doc has no image. Add a hero image before publishing.");
+  // The model often says this itself; only add it when it hasn't.
+  if (!hero && !notes.some((n) => /\bimage|photo\b/i.test(n))) {
+    notes.push("The doc has no image. Add a hero image before publishing.");
+  }
   if (out.dek_written_by_ai) notes.push("The doc had no summary, so the summary (dek) was written by AI. Read it before publishing.");
 
   return {
