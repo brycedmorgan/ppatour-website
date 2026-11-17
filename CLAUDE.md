@@ -65,6 +65,14 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-17 — Event pages take registration + ticket links from the feed (Slack audit, Parker)
+- Reported: Minneapolis + Cape Coral had tickets but no registration link; Newport Beach had registration but no tickets. Upstream (feed `details_url` + GetDetails `TicketsURL`) was right for all three.
+- Cause 1: `resolveEvent` let the curated record win for everything but name/venue/UUID, so hand-entered stops used `COMMERCE_BY_SLUG`; no `register` there = bare pickleballtournaments.com homepage. Hit 7 open stops (Minneapolis, Cape Coral, Greater Zion, Sacramento, Cincinnati, Players Championships, PPA Finals). Now the live record's `registerUrl` (when it names an event) and Tixr event `ticketsUrl` win on the event page; curated is the fallback.
+- **Wesley: a hand-entered stop must still find its feed row.** `resolveEvent` pairs slug + year, else (upcoming stops only) same city + start within 3 days, Tour never with Challenger. Finished stops are excluded so no past page gains a UUID (results/champions).
+- Cause 2: `lib/tixr-prices` `ticketsOnSale` ignored the price index's hand `onSale` (211406, 10/19); Newport read "Tickets Coming Soon". Now honored.
+- Side effects: Daytona register → feed's `ppa-tour-proton-daytona-beach-open` (was `ppa-tour-florida-open`); Masters → `ppa-tour-carvana-pickleball-masters` (was `…-powered-by-invited`). ⚠ Newport shows "from $39", the tier-table guess: Tixr price unknown until the sync runs.
+- Verified on the dev server (12 upcoming stops, 2025 Newport/Worlds unchanged); tsc + eslint clean.
+
 ### 2026-11-17 — Watch Live fallback: app-only windows lose a start-time tie (Bryce)
 - Bryce, DM 11/17: Daytona Tue/Wed fell back to stream.pickleballtv.com because the `PBTV App` row (Championship Court, app only) ties the `YouTube` row at 12–8 ET and came first in the file. Grandstand + other pro courts are free on YouTube.
 - His patch, applied: `APP_ONLY_PLATFORMS` in `components/live/use-live-ticker.ts`; `broadcastWatchUrl` sorts by start time, then app-only last. Earlier app-only windows still win; app-only-only days (VB Tue/Wed) still open PBTV.

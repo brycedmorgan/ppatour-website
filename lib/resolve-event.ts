@@ -10,6 +10,7 @@
  */
 import { getEvents } from "@/lib/events-api";
 import { eventYear, tournaments, type Tournament } from "@/lib/placeholder-data";
+import { tixrEventIdFrom } from "@/lib/tixr-price-index";
 
 /**
  * Resolve an event for its detail page by year + slug: a curated record wins
@@ -28,7 +29,27 @@ export type Resolved =
 export async function resolveEvent(year: string, slug: string): Promise<Resolved> {
   const match = (x: Tournament) => x.slug === slug && eventYear(x) === year;
   const curated = tournaments.find(match) ?? null;
-  const live = (await getEvents()).events.find(match) ?? null;
+  const events = (await getEvents()).events;
+  const t0 = curated ?? events.find(match) ?? null;
+  /**
+   * ⚠ A HAND-ENTERED STOP STILL FINDS ITS FEED ROW (Wesley, 11/17: "If an event
+   * is hand-entered, it should still look for the event gets added into the
+   * API"). Slug + year first; when the slugs differ (Newport Beach 2027's
+   * curated `newport-beach-open-2027-03-02` vs the feed's `newport-beach-open`)
+   * or the stop was typed in before the events team created it, pair on the
+   * same city with a start date within 3 days. Challengers never pair with a
+   * Tour stop in the same city. Once paired, the feed's name, venue, UUID,
+   * registration and ticket links win (below), so a stop added to
+   * pickleballtournaments.com reaches this page on the next 2-hour events cron.
+   */
+  const live =
+    events.find(match) ??
+    // Upcoming/live stops only: pairing a FINISHED curated stop would hand it a
+    // UUID it never had, and that drives results + the champions banner (8/19).
+    (t0 && t0.endDate >= new Date().toISOString().slice(0, 10)
+      ? events.find((e) => sameStop(e, t0))
+      : undefined) ??
+    null;
   const t = curated ?? live;
   if (!t || t.tierKey === "challenger") return null;
 
@@ -86,9 +107,41 @@ export async function resolveEvent(year: string, slug: string): Promise<Resolved
    */
   const tournamentUuid = t.tournamentUuid || live?.tournamentUuid;
 
+  /**
+   * ⚠ REGISTRATION AND TICKET LINKS COME FROM THE FEED TOO (11/17). The curated
+   * record's links are the hand-typed COMMERCE_BY_SLUG table, so a stop with no
+   * `register` there linked the bare pickleballtournaments.com homepage while
+   * the feed had the real page: Minneapolis, Cape Coral, Greater Zion,
+   * Sacramento, Cincinnati, Players Championships and PPA Finals, all open for
+   * registration. The live record already carries the tournament's own
+   * `details_url` and, via lib/event-tickets, its TicketsURL — the 2-hour cron
+   * keeps both current. Curated links stay the fallback: no feed row, a
+   * homepage-only register link, or a tickets link that isn't a Tixr event.
+   */
+  const registerUrl = deepLink(live?.registerUrl) ?? t.registerUrl;
+  const liveTickets = !t.country && tixrEventIdFrom(live?.ticketsUrl) ? live : null;
+  const ticketsUrl = liveTickets?.ticketsUrl ?? t.ticketsUrl;
+
   const event =
-    name !== t.name || venue !== t.venue || tournamentUuid !== t.tournamentUuid
-      ? { ...t, name, venue, tournamentUuid }
+    name !== t.name ||
+    venue !== t.venue ||
+    tournamentUuid !== t.tournamentUuid ||
+    registerUrl !== t.registerUrl ||
+    ticketsUrl !== t.ticketsUrl
+      ? {
+          ...t,
+          name,
+          venue,
+          tournamentUuid,
+          registerUrl,
+          ...(liveTickets && ticketsUrl !== t.ticketsUrl
+            ? {
+                ticketsUrl,
+                ticketsOnSale: liveTickets.ticketsOnSale,
+                ticketPriceFrom: liveTickets.ticketPriceFrom,
+              }
+            : {}),
+        }
       : t;
 
   /**
@@ -137,4 +190,13 @@ function deepLink(url: string | undefined): string | undefined {
   } catch {
     return undefined;
   }
+}
+
+/** The same stop under a different slug: same city, start within 3 days, both Tour or both Challenger. */
+function sameStop(a: Tournament, b: Tournament): boolean {
+  if (a.slug === b.slug && eventYear(a) === eventYear(b)) return true;
+  if ((a.tierKey === "challenger") !== (b.tierKey === "challenger")) return false;
+  if (!a.city || a.city.toLowerCase() !== b.city.toLowerCase()) return false;
+  const days = Math.abs(Date.parse(a.startDate) - Date.parse(b.startDate)) / 86_400_000;
+  return days <= 3;
 }

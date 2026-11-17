@@ -29,7 +29,12 @@
  * in the other direction. Grounds Pass is $25 across every 2026 PPA stop.
  */
 import snapshot from "@/lib/data/tixr-ticket-prices.json";
-import { ticketsHidden, tixrEventIdFrom, tixrListedAfterSnapshot } from "@/lib/tixr-price-index";
+import {
+  ticketsHidden,
+  ticketsOnSale as indexSaysOnSale,
+  tixrEventIdFrom,
+  tixrListedAfterSnapshot,
+} from "@/lib/tixr-price-index";
 
 export { ticketsHidden, tixrEventIdFrom };
 
@@ -138,5 +143,11 @@ export function ticketsOnSale(ticketsUrl: string | undefined): boolean {
   // A listing newer than the snapshot (created since the last sync) is on sale
   // with no tier detail yet; same rule as lib/tixr-price-index.
   if (tixrListedAfterSnapshot(ticketsUrl)) return true;
-  return BY_ID.has(id) && ticketPriceFrom(ticketsUrl) != null;
+  if (BY_ID.has(id) && ticketPriceFrom(ticketsUrl) != null) return true;
+  // ⚠ A listing marked on sale BY HAND in the price index counts too (Newport
+  // Beach 2027, 211406, 10/19). The full tier snapshot above only changes when
+  // the captcha-blocked sync runs, and the hand mark keeps the id out of
+  // "listed after snapshot", so without this the stop read "Tickets Coming
+  // Soon" on its event page while /events cards said on sale (found 11/17).
+  return indexSaysOnSale(ticketsUrl);
 }
