@@ -49,6 +49,26 @@ Rules (lib/newsroom/mfa.ts, app/newsroom/mfa-actions.ts):
   Vercel preview deployment has its own address, so on previews use the
   authenticator app (or always review on the same preview URL).
 
+## Start from a Google Doc
+
+New post → **Start from a Google Doc**: paste a Google Docs link (the doc must be
+shared "Anyone with the link can view"), or upload the doc as Word (Google Docs:
+File → Download → Microsoft Word) for private docs. It creates a **draft** and
+opens it; nothing publishes on its own. `lib/newsroom/doc-import.ts`.
+
+- A link is fetched as Google's Word export, so links and uploads share one
+  path: Word → HTML (mammoth) → numbered blocks. Images in the doc are copied to
+  Blob (`newsroom/doc-images/`); an uploaded .docx is deleted after reading.
+- Claude (`claude-opus-5-5`, override with `NEWSROOM_DOC_MODEL`) maps the blocks
+  to headline, standfirst, dek, byline, category, tour stop, tags, end button,
+  hero image, and which blocks are NOT body. **The body is the writer's own
+  blocks, never rewritten.** The only text it may write is the dek, when the doc
+  has none, and the draft says so. Notes for the editor (missing photo,
+  placeholders, instructions left in the doc) show in a banner on the draft.
+- Needs `ANTHROPIC_API_KEY` in that environment (it is set for Production only
+  as of 11/17). Without it a simple fill runs: first heading → headline, first
+  image → hero, the rest → body.
+
 ## Setup (once per environment)
 
 Vercel (Production; Preview scoped to the branch) and `.env.local`:

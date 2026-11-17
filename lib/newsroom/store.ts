@@ -62,6 +62,15 @@ export type DashboardPost = {
   seoDescription: string;
   /** Set on posts copied in from code by "Import hand-written posts". */
   importedFrom: { kind: "native" | "authored"; slug: string; wpId?: number } | null;
+  /** Set when the draft was started from a Google Doc (lib/newsroom/doc-import.ts). */
+  docImport?: {
+    name: string;
+    method: "ai" | "simple";
+    notes: string[];
+    /** Fields the AI wrote rather than copied from the doc (e.g. "dek"). */
+    aiWritten: string[];
+    at: string;
+  };
   createdAt: string;
   updatedAt: string;
   updatedBy: string;

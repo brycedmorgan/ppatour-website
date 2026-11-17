@@ -20,13 +20,23 @@ import {
   removePost,
   type DashboardPost,
 } from "@/lib/newsroom/store";
+import { del } from "@vercel/blob";
 import {
   HOME_PB_SLOTS,
   blankPost,
+  categoryOptions,
+  eventOptions,
   importablePosts,
   publishProblems,
   slugProblem,
+  slugify,
 } from "@/lib/newsroom/posts";
+import {
+  DocImportError,
+  docxToBlocks,
+  fetchGoogleDocAsDocx,
+  fillFromBlocks,
+} from "@/lib/newsroom/doc-import";
 import type { HomePbPicks } from "@/lib/newsroom/published";
 import { getPickleballNewsPage, type PbArticle } from "@/lib/pb-news";
 
@@ -76,6 +86,94 @@ export async function createPost() {
   const post = blankPost(randomUUID(), sub);
   await putPost(post);
   redirect(`${newsroomBase()}/posts/${post.id}/`);
+}
+
+/** A Word file the editor uploaded for import: only our own Blob store, only that folder. */
+function isOwnDocUpload(url: string): boolean {
+  try {
+    const u = new URL(url);
+    return (
+      u.protocol === "https:" &&
+      u.hostname.endsWith(".public.blob.vercel-storage.com") &&
+      u.pathname.startsWith("/newsroom/doc-uploads/")
+    );
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * "Start from a Google Doc": a Google Docs link, or a .docx the browser has
+ * already uploaded to Blob. Reads it, fills a DRAFT (lib/newsroom/doc-import.ts)
+ * and opens it in the editor. Never publishes.
+ */
+export async function createPostFromDoc(input: {
+  url?: string;
+  upload?: { blobUrl: string; name: string };
+}): Promise<{ error: string } | undefined> {
+  const { sub } = await requireEditor();
+  let docx: { buffer: Buffer; name: string };
+  try {
+    if (input.upload) {
+      if (!isOwnDocUpload(input.upload.blobUrl)) return { error: "Unexpected upload address." };
+      const res = await fetch(input.upload.blobUrl, { cache: "no-store" });
+      if (!res.ok) return { error: "Couldn't read the uploaded file. Try uploading it again." };
+      docx = {
+        buffer: Buffer.from(await res.arrayBuffer()),
+        name: String(input.upload.name || "Word document").replace(/\.docx$/i, "").slice(0, 200),
+      };
+      // The doc was only needed to read it; images inside are kept separately.
+      await del(input.upload.blobUrl).catch(() => {});
+    } else if (input.url) {
+      docx = await fetchGoogleDocAsDocx(String(input.url));
+    } else {
+      return { error: "Paste a Google Docs link or choose a Word file." };
+    }
+
+    const blocks = await docxToBlocks(docx.buffer);
+    const fill = await fillFromBlocks(blocks, {
+      categories: await categoryOptions(),
+      events: eventOptions(),
+    });
+
+    const id = randomUUID();
+    const base = blankPost(id, sub);
+    const others = await listPosts();
+    // The headline makes the URL; if it's taken, keep the safe "untitled" one.
+    const wanted = slugify(fill.title);
+    const slug = wanted && !slugProblem(wanted, { ...base, slug: wanted }, others) ? wanted : base.slug;
+
+    await putPost({
+      ...base,
+      slug,
+      title: fill.title,
+      subtitle: fill.subtitle,
+      dek: fill.dek,
+      author: fill.author,
+      category: fill.category,
+      whyItMatters: fill.whyItMatters,
+      eventSlug: fill.eventSlug,
+      tags: fill.tags,
+      ctaUrl: fill.ctaUrl,
+      ctaLabel: fill.ctaLabel,
+      image: fill.image,
+      imageAlt: fill.imageAlt,
+      bodyHtml: fill.bodyHtml,
+      docImport: {
+        name: docx.name,
+        method: fill.method,
+        notes: fill.notes,
+        aiWritten: fill.aiWritten,
+        at: new Date().toISOString(),
+      },
+    });
+    redirect(`${newsroomBase()}/posts/${id}/`);
+  } catch (err) {
+    if ((err as { digest?: string })?.digest?.startsWith("NEXT_REDIRECT")) throw err;
+    if (err instanceof DocImportError) return { error: err.message };
+    console.error("[newsroom] doc import failed:", err);
+    return { error: "Couldn't read that document. If it's a Word file, try saving it again as .docx." };
+  }
 }
 
 /** The fields the editor sends. Everything else is server-owned. */

@@ -6,7 +6,8 @@ import { athletes } from "@/lib/athletes";
 import { newsArticles, type NewsArticle } from "@/lib/news-articles";
 import { authoredPosts } from "@/lib/news-posts-authored";
 import { getWpPost } from "@/lib/wp-news";
-import type { DashboardPost } from "@/lib/newsroom/store";
+import { isTourStop, tournaments } from "@/lib/placeholder-data";
+import { listPosts, type DashboardPost } from "@/lib/newsroom/store";
 
 /** How many pickleball.com articles the home page shows (HomeContent). */
 export const HOME_PB_SLOTS = 4;
@@ -21,6 +22,22 @@ export const CATEGORY_SUGGESTIONS = [
   "Feature",
   "Stats",
 ];
+
+/** Categories already in use first, then the house suggestions. */
+export async function categoryOptions(): Promise<string[]> {
+  const used = (await listPosts()).map((p) => p.category).filter(Boolean);
+  return [...new Set([...used, ...CATEGORY_SUGGESTIONS])];
+}
+
+/** Tour stops for the "Tour stop" picker, newest first, one row per slug. */
+export function eventOptions(): { slug: string; name: string }[] {
+  const seen = new Set<string>();
+  return [...tournaments]
+    .filter((t) => isTourStop(t))
+    .sort((a, b) => b.startDate.localeCompare(a.startDate))
+    .filter((t) => (seen.has(t.slug) ? false : (seen.add(t.slug), true)))
+    .map((t) => ({ slug: t.slug, name: `${t.name} (${t.startDate.slice(0, 4)})` }));
+}
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 

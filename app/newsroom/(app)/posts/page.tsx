@@ -6,6 +6,9 @@ import { NewPostButton } from "../../_components/NewPostButton";
 
 export const metadata = { title: "Posts" };
 
+// "Start from a Google Doc" reads the doc and asks the AI to fill the post: allow a minute or two.
+export const maxDuration = 300;
+
 type Search = { searchParams: Promise<{ status?: string; q?: string }> };
 
 const FILTERS = [

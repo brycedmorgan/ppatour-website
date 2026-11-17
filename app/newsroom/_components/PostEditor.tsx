@@ -184,6 +184,27 @@ export function PostEditor({
         </span>
       </div>
 
+      {post.docImport && !isLive && (
+        <section className="mt-4 border-l-4 border-ppa-yellow bg-white px-4 py-3 text-sm">
+          <p className="font-semibold">
+            Filled from “{post.docImport.name}”. Check every field against the doc before publishing.
+          </p>
+          {post.docImport.aiWritten.length > 0 && (
+            <p className="mt-1">
+              Written by AI, not copied from the doc:{" "}
+              <strong>{post.docImport.aiWritten.map((f) => (f === "dek" ? "Summary (dek)" : f)).join(", ")}</strong>.
+            </p>
+          )}
+          {post.docImport.notes.length > 0 && (
+            <ul className="mt-2 list-disc space-y-0.5 pl-5 text-ppa-navy/80">
+              {post.docImport.notes.map((n, i) => (
+                <li key={i}>{n}</li>
+              ))}
+            </ul>
+          )}
+        </section>
+      )}
+
       {message && (
         <p
           role={message.ok ? "status" : "alert"}

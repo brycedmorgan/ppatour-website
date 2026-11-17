@@ -10,6 +10,9 @@ import { ImportButton } from "../_components/ImportButton";
 
 export const metadata = { title: "Overview" };
 
+// "Start from a Google Doc" reads the doc and asks the AI to fill the post: allow a minute or two.
+export const maxDuration = 300;
+
 export default async function NewsroomOverview() {
   const [posts, picks] = await Promise.all([
     listPosts(),

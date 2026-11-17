@@ -15,6 +15,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/avif", "image/gif"];
+const DOCX_TYPES = ["application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
 
 export async function POST(request: Request) {
   const body = (await request.json()) as HandleUploadBody;
@@ -26,8 +27,10 @@ export async function POST(request: Request) {
         const session = await getSession();
         if (!session) throw new Error("Not signed in.");
         if (!pathname.startsWith("newsroom/")) throw new Error("Bad upload path.");
+        // A Word file for "Start from a Google Doc": read once, then deleted.
+        const isDoc = pathname.startsWith("newsroom/doc-uploads/");
         return {
-          allowedContentTypes: IMAGE_TYPES,
+          allowedContentTypes: isDoc ? DOCX_TYPES : IMAGE_TYPES,
           maximumSizeInBytes: 25 * 1024 * 1024,
           addRandomSuffix: true,
           tokenPayload: JSON.stringify({ by: session.sub }),
