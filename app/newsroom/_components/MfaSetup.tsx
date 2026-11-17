@@ -39,8 +39,8 @@ export function MfaSetup({ email, qr, secret }: { email: string; qr: string; sec
     return (
       <div className="space-y-4">
         <p className="text-sm text-ppa-navy/75">
-          Scan this with an authenticator app (Google Authenticator, Microsoft Authenticator,
-          1Password, Authy), then enter the 6-digit code it shows.
+          <strong>Step 1.</strong>{" "}Scan this with an authenticator app (Google Authenticator,
+          Microsoft Authenticator, 1Password, Authy).
         </p>
         <div className="flex justify-center border border-ppa-line bg-white p-4">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -52,6 +52,10 @@ export function MfaSetup({ email, qr, secret }: { email: string; qr: string; sec
             {secret.match(/.{1,4}/g)?.join(" ")}
           </code>
         </details>
+        <p className="text-sm text-ppa-navy/75">
+          <strong>Step 2.</strong>{" "}Enter the 6-digit code the app shows now. This confirms the app
+          is working; it isn&apos;t added to your account until the code matches.
+        </p>
         <CodeForm submitLabel="Confirm and sign in" action={totpSetupFinish} />
         <button type="button" onClick={() => setMode("choose")} className="text-sm text-ppa-blue hover:underline">
           ← Use a passkey instead
