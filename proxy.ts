@@ -1,11 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { PADDLE_LAB_PUBLIC } from "@/lib/paddle-lab-access";
+import { NEWSROOM_COOKIE, NEWSROOM_PATH, verifySessionToken } from "@/lib/newsroom/session";
 
 /**
  * The site's request proxy (Next 16's replacement for `middleware.ts`).
  *
- * Today it does exactly one job: it puts HTTP Basic auth in front of every
+ * The Newsroom dashboard sign-in gate is at the top (newsroomGate). Otherwise
+ * it does one job: it puts HTTP Basic auth in front of every
  * /paddle-lab route while `PADDLE_LAB_PUBLIC` is false. See
  * lib/paddle-lab-access.ts for who asked and why.
  *
@@ -48,8 +50,43 @@ function challenge(): NextResponse {
   });
 }
 
-export default function proxy(request: NextRequest) {
+/**
+ * The Newsroom dashboard (/newsroom). Signed-out visitors go to the sign-in
+ * page; the API answers 401. Every page and action also calls requireEditor()
+ * itself (lib/newsroom/auth.ts), so this is the first gate, not the only one.
+ */
+async function newsroomGate(request: NextRequest): Promise<NextResponse> {
   const { pathname } = request.nextUrl;
+  const isLogin = pathname === `${NEWSROOM_PATH}/login` || pathname === `${NEWSROOM_PATH}/login/`;
+  const session = isLogin
+    ? null
+    : await verifySessionToken(request.cookies.get(NEWSROOM_COOKIE)?.value);
+
+  let res: NextResponse;
+  if (isLogin || session) {
+    res = NextResponse.next();
+  } else if (pathname.startsWith("/api/")) {
+    res = NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  } else {
+    const url = request.nextUrl.clone();
+    url.pathname = `${NEWSROOM_PATH}/login/`;
+    url.search = "";
+    res = NextResponse.redirect(url);
+  }
+  res.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
+  return res;
+}
+
+export default async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  if (
+    pathname === NEWSROOM_PATH ||
+    pathname.startsWith(`${NEWSROOM_PATH}/`) ||
+    pathname.startsWith("/api/newsroom/")
+  ) {
+    return newsroomGate(request);
+  }
 
   // Private ambassador + HQ areas: stamp every response noindex at the HTTP
   // layer (belt-and-suspenders with the per-page robots meta and robots.ts
@@ -104,5 +141,15 @@ export default function proxy(request: NextRequest) {
  * stays so the gate survives someone turning `trailingSlash` off.
  */
 export const config = {
-  matcher: ["/paddle-lab", "/paddle-lab/:path*", "/ambassadors", "/ambassadors/:path*", "/hq", "/hq/:path*"],
+  matcher: [
+    "/paddle-lab",
+    "/paddle-lab/:path*",
+    "/ambassadors",
+    "/ambassadors/:path*",
+    "/hq",
+    "/hq/:path*",
+    "/newsroom",
+    "/newsroom/:path*",
+    "/api/newsroom/:path*",
+  ],
 };

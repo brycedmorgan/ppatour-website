@@ -213,7 +213,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
      *
      * (Pickleball Vacations is deliberately held out above until Stripe lands.)
      */
-    ...allNews().map((n) => ({
+    ...(await allNews()).map((n) => ({
       url: url(n.href),
       lastModified: new Date(n.publishedAt),
       changeFrequency: "monthly" as const,

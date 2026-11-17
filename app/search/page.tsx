@@ -37,7 +37,7 @@ export default async function SearchPage({ searchParams }: Search) {
         </h1>
         <p className="mt-3 max-w-xl text-sm text-ppa-navy/55">
           Every story, athlete, event, program, and page — matched on keywords,
-          not just headlines. All {newsCount().toLocaleString()} articles are
+          not just headlines. All {(await newsCount()).toLocaleString()} articles are
           searched right down to the words inside them.
         </p>
       </div>

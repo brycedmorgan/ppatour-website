@@ -50,3 +50,6 @@ next-env.d.ts
 
 # Ambassador dashboard: local dev data (real ambassador data — never commit)
 .ambassadors-dev/
+
+# Newsroom dashboard: local dev posts (lib/newsroom/store.ts file backend)
+/.data/

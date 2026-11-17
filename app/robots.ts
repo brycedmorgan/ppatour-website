@@ -26,6 +26,8 @@ export default function robots(): MetadataRoute.Robots {
         "/ambassadors/",
         // Private corporate hub (Ambassador HQ) — same treatment.
         "/hq/",
+        // Newsroom dashboard (editors only).
+        "/newsroom/",
       ],
     },
     // The Google News sitemap (last 48h of newsroom posts) alongside the

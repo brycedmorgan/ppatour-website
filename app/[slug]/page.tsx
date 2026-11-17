@@ -24,13 +24,13 @@ type Params = { params: Promise<{ slug: string }> };
  * `app/ppa-blog/[slug]` now serves. Prerendering them here as well would
  * publish every one of them at two URLs competing for the same rankings.
  */
-export function generateStaticParams() {
-  return rootNews().map((n) => ({ slug: n.slug }));
+export async function generateStaticParams() {
+  return (await rootNews()).map((n) => ({ slug: n.slug }));
 }
 
 /** The blog is served by its own route; a blog slug here is the wrong URL. */
-function rootDetail(slug: string) {
-  const detail = getNewsDetail(slug);
+async function rootDetail(slug: string) {
+  const detail = await getNewsDetail(slug);
   return detail && detail.card.postType !== "ppa-blog" ? detail : undefined;
 }
 
@@ -48,12 +48,18 @@ export const fetchCache = "default-cache";
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
-  const detail = rootDetail(slug);
+  const detail = await rootDetail(slug);
   if (!detail) return { title: "News" };
   const { card } = detail;
   // Migrated posts carry their Yoast title/description, so search snippets
-  // survive the move instead of being regenerated.
-  const seo = detail.source === "wordpress" ? detail.post.seo : null;
+  // survive the move instead of being regenerated. Dashboard posts carry the
+  // editor's own SEO fields.
+  const seo =
+    detail.source === "wordpress"
+      ? detail.post.seo
+      : detail.source === "dashboard"
+        ? { title: detail.post.seoTitle, description: detail.post.seoDescription }
+        : null;
   const title = seo?.title?.trim() || card.title;
   const description = seo?.description?.trim() || card.dek;
   return {
@@ -92,7 +98,7 @@ function athletePathFor(slug: string): string | undefined {
 
 export default async function ArticlePage({ params }: Params) {
   const { slug } = await params;
-  const detail = rootDetail(slug);
+  const detail = await rootDetail(slug);
   if (!detail) {
     const athletePath = athletePathFor(slug);
     if (athletePath) permanentRedirect(athletePath);

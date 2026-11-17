@@ -150,7 +150,7 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
   const heroSrc = detail.card.heroImage ?? detail.card.image;
   const ctaIsInternal = !!detail.card.ctaUrl?.startsWith("/");
   const { card } = detail;
-  const related = relatedNews(card.slug, card.category, 3);
+  const related = await relatedNews(card.slug, card.category, 3);
   const next = getNextTournament();
   const featured: NewsPlayer[] = newsPlayersFor(detail);
   // Live WPR rank for the "Players in This Story" rail. Was `bestRank`, a
@@ -178,15 +178,23 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
     detail.source === "native"
       ? withAliasNames(featured.map((p) => ({ name: p.name, slug: p.slug })))
       : [];
+  // Migrated WP posts and Newsroom dashboard posts are both HTML bodies.
   const bodyHtml =
-    detail.source === "wordpress"
+    detail.source !== "native"
       ? renderPostHtml(
           detail.post.bodyHtml,
           withAliasNames(featured.map((p) => ({ name: p.name, slug: p.slug }))),
         )
       : "";
-  const minutes = detail.source === "wordpress" ? readingMinutes(detail.post.bodyHtml) : null;
-  const tags = detail.source === "wordpress" ? detail.post.tags : [];
+  const minutes = detail.source !== "native" ? readingMinutes(detail.post.bodyHtml) : null;
+  const tags = detail.source !== "native" ? detail.post.tags : [];
+  // The callout is required on native articles and optional on dashboard posts.
+  const whyItMatters =
+    detail.source === "native"
+      ? detail.article.whyItMatters
+      : detail.source === "dashboard"
+        ? detail.post.whyItMatters.trim()
+        : "";
   const isBlog = card.postType === "ppa-blog";
   // One budget for the whole native article (dek + body), see linkifyPlayers.
   const linkBudget = newLinkBudget();
@@ -321,13 +329,13 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
               </p>
             )}
 
-            {detail.source === "native" && (
+            {whyItMatters && (
               <div className="mt-4 border-l-4 border-ppa-blue bg-ppa-paper p-4">
                 <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-ppa-blue">
                   Why It Matters
                 </p>
                 <p className="mt-1 text-sm font-semibold leading-relaxed text-ppa-navy">
-                  {detail.article.whyItMatters}
+                  {whyItMatters}
                 </p>
               </div>
             )}
