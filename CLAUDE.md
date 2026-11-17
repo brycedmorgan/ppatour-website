@@ -65,6 +65,12 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-17 — Newsroom picks up new code posts on its own (Wesley)
+- Wesley: "auto-add new posts into the newsroom if they don't get added in via the newsroom." New `lib/newsroom/sync.ts` `syncCodePosts()`: the Overview and Posts screens call it first; it copies in any post in lib/news-articles.ts / lib/news-posts-authored.ts the dashboard lacks (same copy as the Import button). Once per server instance per set of code slugs; failures are logged, never break the page.
+- Never re-copies or overwrites an existing import, so dashboard edits stick. A renamed import counts under its original slug too (`importablePosts` used to miss that and would have copied Chicago in twice).
+- **Deleting an imported post records its code slug in `SETTINGS.importSkipped`** (`import_skipped`), so the sync doesn't bring it straight back; the code copy serves the URL as before. The Import button honors the same list.
+- Verified with a Node harness on the local file store: 23 code posts, a renamed Chicago import → sync added 22 (one Chicago copy), re-sync added 0, deleted Daytona stayed out. tsc + eslint clean. Not run on a dev server (needs a dashboard sign-in).
+
 ### 2026-11-17 — Fleming's Daytona storylines (Wesley)
 - His .docx ("#7_ STORYLINES FOR THE PROTON DAYTONA BEACH OPEN") → `proton-daytona-beach-open-storylines` in `lib/news-articles.ts`, Worlds/Chicago transcription rules. Two typo fixes: "1))Alshon", and the MD 4 seed's missing "4)". TV line (PBTV noon ET Thu–Sun) matches tv-schedule.
 - Hero from ScorePlay: 2025 Daytona MD final, JW Johnson + Augie Ge (media 110626823, 1679px `_compressed` rendition), `imagePosition: "50% 32%"`. This week's ScorePlay collection ("07 Daytona Beach Open") held logos only on 11/17; the "Daytona Beach Open" tag holds the 2025 shoot.

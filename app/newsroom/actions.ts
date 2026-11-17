@@ -32,6 +32,7 @@ import {
   slugify,
 } from "@/lib/newsroom/posts";
 import { ReformatError, reformatBody } from "@/lib/newsroom/reformat";
+import { importSkipped } from "@/lib/newsroom/sync";
 import {
   DocImportError,
   docxToBlocks,
@@ -285,7 +286,16 @@ export async function savePost(
 }
 
 export async function deletePost(id: string) {
-  await requireEditor();
+  const { sub } = await requireEditor();
+  const post = await getPost(id);
+  // A deleted IMPORT hands its URL back to the code copy; keep the auto-sync
+  // (lib/newsroom/sync.ts) from copying it straight back in.
+  if (post?.importedFrom) {
+    const skip = await importSkipped();
+    if (!skip.has(post.importedFrom.slug)) {
+      await putSetting(SETTINGS.importSkipped, { slugs: [...skip, post.importedFrom.slug] }, sub);
+    }
+  }
   await removePost(id);
   refreshSite();
   redirect(`${newsroomBase()}/posts/`);
@@ -299,7 +309,7 @@ export async function deletePost(id: string) {
  */
 export async function importCodePosts(): Promise<{ imported: number; error?: string }> {
   const { sub } = await requireEditor();
-  const toImport = importablePosts(await listPosts(), sub, randomUUID);
+  const toImport = importablePosts(await listPosts(), sub, randomUUID, await importSkipped());
   try {
     for (const p of toImport) await putPost(p);
   } catch (err) {

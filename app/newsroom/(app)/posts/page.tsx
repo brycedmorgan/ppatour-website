@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { listPosts } from "@/lib/newsroom/store";
+import { requireEditor } from "@/lib/newsroom/auth";
+import { syncCodePosts } from "@/lib/newsroom/sync";
 import { newsroomBase } from "@/lib/newsroom/session";
 import { PostCard } from "../../_components/PostCard";
 import { NewPostButton } from "../../_components/NewPostButton";
@@ -21,6 +23,8 @@ export default async function NewsroomPosts({ searchParams }: Search) {
   const sp = await searchParams;
   const status = sp.status === "published" || sp.status === "draft" ? sp.status : "";
   const q = (sp.q ?? "").trim().toLowerCase();
+  // New hand-written code posts join the dashboard on their own (lib/newsroom/sync.ts).
+  await syncCodePosts((await requireEditor()).sub);
   const all = await listPosts();
   const posts = all.filter(
     (p) =>
