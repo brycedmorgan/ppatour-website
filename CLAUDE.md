@@ -65,6 +65,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-17 — Watch Live fallback: app-only windows lose a start-time tie (Bryce)
+- Bryce, DM 11/17: Daytona Tue/Wed fell back to stream.pickleballtv.com because the `PBTV App` row (Championship Court, app only) ties the `YouTube` row at 12–8 ET and came first in the file. Grandstand + other pro courts are free on YouTube.
+- His patch, applied: `APP_ONLY_PLATFORMS` in `components/live/use-live-ticker.ts`; `broadcastWatchUrl` sorts by start time, then app-only last. Earlier app-only windows still win; app-only-only days (VB Tue/Wed) still open PBTV.
+- Node harness against the real function: Daytona Mon/Tue/Wed → Streamed Courts, Thu → PBTV; VB Tue → PBTV; Worlds Mon → YouTube. tsc + eslint clean. Not checked on a dev server.
+
 ### 2026-11-16 — Six Zero Black Friday sponsored post (Hannah)
 - Hannah, Slack DM 11/16: Six Zero sponsored post, live same day. Copy from her Word doc, verbatim → `six-zero-black-friday-sale-2026` in `lib/news-articles.ts`. Labelled like the Aug Cailyn Campbell post: Partner News, "Six Zero" byline, closing disclosure.
 - Hero: Six Zero's own 2400×960 homepage sale banner (Wesley's pick; Hannah's Dropbox had only 4×5 graphics). New optional `NewsArticle.cardImage` puts her 4×5 photo grid on cards (home lead, /news, rails); the hero keeps `image` via `NewsCard.heroImage`.

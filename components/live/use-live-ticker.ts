@@ -336,6 +336,15 @@ const PLATFORM_STREAM_URL: Record<string, string> = {
   YouTube: "https://www.youtube.com/ppastreamedcourts",
 };
 
+/**
+ * Platforms a web link can't actually play (the PickleballTV app only). On a
+ * tie in start time they sort last (Bryce, 11/17): Daytona Tue/Wed put
+ * Championship Court on the app only while Grandstand and the other pro courts
+ * are free on YouTube in the same 12–8 ET slot. An earlier app-only window
+ * still wins on start time, and a day with only app coverage still opens PBTV.
+ */
+const APP_ONLY_PLATFORMS = new Set(["PBTV App"]);
+
 /** "8AM ET - 4PM ET" → minutes after midnight ET of the start. */
 function etStart(window: string): number {
   const m = /^\s*(\d{1,2})(?::(\d{2}))?\s*(AM|PM)/i.exec(window);
@@ -362,7 +371,12 @@ export function broadcastWatchUrl(now = Date.now()): string {
         s.day.trim().toLowerCase() === weekday &&
         PLATFORM_STREAM_URL[s.platform],
     )
-    .sort((a, b) => etStart(a.window) - etStart(b.window));
+    .sort(
+      (a, b) =>
+        etStart(a.window) - etStart(b.window) ||
+        Number(APP_ONLY_PLATFORMS.has(a.platform)) -
+          Number(APP_ONLY_PLATFORMS.has(b.platform)),
+    );
   return today.length ? PLATFORM_STREAM_URL[today[0].platform] : PBTV_STREAM_URL;
 }
 
