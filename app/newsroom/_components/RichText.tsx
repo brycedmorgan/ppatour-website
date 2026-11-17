@@ -95,20 +95,29 @@ const TOOLS: { id: ToolId; label: string; icon: typeof Bold }[] = [
   { id: "clear", label: "Clear formatting", icon: RemoveFormatting },
 ];
 
-export function RichText({ value, onChange }: { value: string; onChange: (html: string) => void }) {
+export function RichText({
+  value,
+  onChange,
+  version = 0,
+}: {
+  value: string;
+  onChange: (html: string) => void;
+  /** Bump to push a new `value` in from outside (e.g. an applied Reformat). */
+  version?: number;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const file = useRef<HTMLInputElement>(null);
   const [mode, setMode] = useState<"visual" | "html">("visual");
   const [uploading, setUploading] = useState(false);
 
-  // Uncontrolled surface: write the value in when entering visual mode only,
-  // so typing never resets the caret.
+  // Uncontrolled surface: write the value in when entering visual mode or when
+  // the parent bumps `version`, never on each keystroke (keeps the caret).
   useEffect(() => {
     if (mode === "visual" && ref.current && ref.current.innerHTML !== value) {
       ref.current.innerHTML = value;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode]);
+  }, [mode, version]);
 
   const emit = () => onChange(ref.current?.innerHTML ?? "");
   const exec = (cmd: string, arg?: string) => {

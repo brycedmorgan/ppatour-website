@@ -859,9 +859,9 @@ const SCHEDULE: RawEvent[] = [
   // stops — see the note on the Barcelona opener above before re-adding one.
   // PPA Tour Europe's Lille stop went public in the feed 10/15 as "PPA TOUR EUROPE -
   // P125 LILLE" (Villeneuve-d'Ascq), aliased in lib/events-api.ts. Without this row
-  // the card fell back to VENUE_IMAGES (Melbourne / Macao). The photo is Catie's
-  // Barcelona women's doubles shot (699-PPA-250-BCN-WOMENS-DOUBLES.jpg, Katherina
-  // 10/15), cropped 4:5 with the player centred; swap it when Lille has its own.
+  // the card fell back to VENUE_IMAGES (Melbourne / Macao). The photo is Catie's own
+  // Lille cover (@catieworks PPA_Lille_Saturday-9304385.jpg, 11/17; it replaced a
+  // Barcelona stand-in), cropped 4:5 at 1200×1500 with the player centred.
   { name: "PPA France P125 Lille", start: "2026-11-12", end: "2026-11-15", city: "Lille", state: "France", type: "international", country: "Europe", image: "/ppa/event-lille-p125.jpg" },
   { name: "Proton Daytona Beach Open", start: "2026-11-16", end: "2026-11-22", city: "Holly Hill", state: "FL", venue: "Pictona at Holly Hill", type: "ppa", tier: "open" },
   // ⚠ `showWhenAbsentFromFeed` DROPPED 9/15 — same as the Ottawa row above, and
