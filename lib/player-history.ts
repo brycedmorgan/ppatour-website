@@ -23,7 +23,7 @@
  * plays the same events (the second Ben Johns is No. 682).
  */
 import { getEvents } from "@/lib/events-api";
-import { eventHref, hasTournamentEnded, isTourStop, type Tournament } from "@/lib/placeholder-data";
+import { eventHref, hasTournamentEnded, isTourStop, isTournamentLive, type Tournament } from "@/lib/placeholder-data";
 import { getBracketDraw, getBracketIndex, isEmptyDraw } from "@/lib/brackets-api";
 import { playerRuns, type PlayerStep } from "@/lib/player-event";
 import { scoreHeadshots } from "@/lib/score-headshots";
@@ -71,6 +71,8 @@ export type PlayerHistory = {
   faces: Record<string, string>;
   /** A stop's draws failed to load, so a result may be missing — cache briefly. */
   partial?: boolean;
+  /** They're in a stop being played now — results change every match, cache briefly. */
+  live?: boolean;
 };
 
 /**
@@ -97,7 +99,9 @@ async function recentStops(now?: number): Promise<Tournament[]> {
       (t) =>
         isTourStop(t) &&
         t.tournamentUuid &&
-        hasTournamentEnded(t, now) &&
+        // The stop in progress too (Wesley, 11/18: Daytona on the profiles
+        // while it's on). Its draws use the live cache windows, not a year.
+        (hasTournamentEnded(t, now) || isTournamentLive(t, now)) &&
         t.endDate >= cutoff &&
         // College-tour events carry a pro tier in the feed; no pro plays them.
         !/college/i.test(t.name),
@@ -169,11 +173,15 @@ export async function playerHistory(name: string, now?: number): Promise<PlayerH
 
     const events: HistoryEvent[] = [];
     const matches: HistoryMatch[] = [];
+    // Any stop in progress, played there or not yet (a bye; draws that
+    // didn't load this time): the profile keeps asking each minute.
+    const live = stops.some((t) => !hasTournamentEnded(t, now));
     stops.slice(0, runsByStop.length).forEach((t, i) => {
       const runs = runsByStop[i];
       // The last batch can overshoot by up to CONCURRENCY - 1 events.
       if (!runs.length || events.length >= EVENT_COUNT) return;
       const eventId = t.tournamentUuid as string;
+      const inProgress = !hasTournamentEnded(t, now);
       events.push({
         eventId,
         name: t.name,
@@ -187,7 +195,8 @@ export async function playerHistory(name: string, now?: number): Promise<PlayerH
           const partners = [...steps].reverse().find((s) => s.partners.length)?.partners ?? [];
           // A finished event can still read "Next: …" when the feed never
           // placed a result; no finish beats a stale one.
-          const finish = /^(Next|On court)/.test(r.summary) ? "" : r.summary;
+          // At a stop still being played, "Next: QF" / "On court now" is the news.
+          const finish = !inProgress && /^(Next|On court)/.test(r.summary) ? "" : r.summary;
           return { division: r.division, partners, finish, place: r.place };
         }),
       });
@@ -213,7 +222,7 @@ export async function playerHistory(name: string, now?: number): Promise<PlayerH
         if (shots[k]) faces[k] = shots[k];
       }
     }
-    return { events, matches: recent, faces, ...(partial ? { partial } : {}) };
+    return { events, matches: recent, faces, ...(partial ? { partial } : {}), ...(live ? { live } : {}) };
   } catch {
     return { events: [], matches: [], faces: {} };
   }

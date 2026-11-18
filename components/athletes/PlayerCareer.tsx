@@ -94,11 +94,30 @@ export function PlayerCareer({
   const key = `${name}|${uuid ?? ""}`;
   useEffect(() => {
     let alive = true;
-    Promise.all([loadCareer(name), loadPb(uuid)]).then(
-      ([career, pb]) => alive && setState({ key, career, pb }),
-    );
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    // While they're in this week's stop (`live` events, lib/player-career),
+    // re-read the career every minute so Tournament Results picks up each
+    // finished match on an open page (Wesley, 11/18). The stats engine call
+    // is not repeated.
+    const poll = (career: Career | null) => {
+      if (!career?.live) return;
+      timer = setTimeout(() => {
+        careerMemo.delete(name);
+        loadCareer(name).then((next) => {
+          if (!alive || !next) return;
+          setState((s) => (s && s.key === key ? { ...s, career: next } : s));
+          poll(next);
+        });
+      }, 60_000);
+    };
+    Promise.all([loadCareer(name), loadPb(uuid)]).then(([career, pb]) => {
+      if (!alive) return;
+      setState({ key, career, pb });
+      poll(career);
+    });
     return () => {
       alive = false;
+      clearTimeout(timer);
     };
   }, [name, uuid, key]);
 
@@ -702,6 +721,7 @@ function TournamentDetail({ name, e }: { name: string; e: CareerEvent }) {
         <p className="mt-0.5 text-[12px] font-semibold text-white/50">
           {/* Older stops carry only a start date. */}
           {older ? monthYear(e.startDate) : `${dateRange(e.startDate, e.endDate)}, ${e.endDate.slice(0, 4)}`}
+          {e.live && <span className="text-ppa-yellow"> · In progress</span>}
         </p>
       </div>
     </div>

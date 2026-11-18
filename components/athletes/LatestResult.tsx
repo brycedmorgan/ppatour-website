@@ -31,7 +31,10 @@ export function LatestResult({ name }: { name: string }) {
 
   const e = data.events.find((x) => x.eventId === m.eventId) ?? data.events[0];
   const best = e
-    ? [...e.divisions].filter((d) => d.finish).sort((a, b) => finishRank(a.finish) - finishRank(b.finish))[0]
+    ? [...e.divisions]
+        .filter((d) => d.finish)
+        // On a tie (mid-stop, every division reads "Next: …"), the box score's own division.
+        .sort((a, b) => finishRank(a.finish) - finishRank(b.finish) || Number(b.division === m.division) - Number(a.division === m.division))[0]
     : undefined;
 
   return (

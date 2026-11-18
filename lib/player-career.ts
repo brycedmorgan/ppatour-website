@@ -13,7 +13,7 @@
  * who also played a main draw would be merged in; the profile resolves names
  * the same way everywhere else, so it is no worse than what it replaces.
  */
-import { getLedger, type Ledger, type LedgerMatch } from "@/lib/career-ledger";
+import { getLedger, liveLedger, type Ledger, type LedgerMatch } from "@/lib/career-ledger";
 import type { CareerDivision, CareerEvent, CareerMatch, PlayerCareer } from "@/lib/career-stats";
 import { finishLabel } from "@/lib/player-event";
 import { normalizeScoreName } from "@/lib/score-names";
@@ -95,12 +95,30 @@ function careerFrom(ledger: Ledger, name: string): PlayerCareer {
   return { events, since, builtAt: ledger.builtAt || null };
 }
 
-/** Never throws — no ledger or no matches is an empty career. */
+/**
+ * Never throws — no ledger or no matches is an empty career.
+ *
+ * The stored ledger plus lib/career-ledger `liveLedger`: the stop being played
+ * now (and one just finished that the cron hasn't stored yet) goes on top, so
+ * a match finished at this week's stop reaches Tournament Results within a
+ * minute or two, not after the stop ends. `live` tells the route to cache briefly.
+ */
 export async function playerCareer(name: string): Promise<PlayerCareer> {
   if (!name.trim()) return { events: [], since: null, builtAt: null };
   try {
-    const ledger = await getLedger();
-    return ledger ? careerFrom(ledger, name) : { events: [], since: null, builtAt: null };
+    const [ledger, live] = await Promise.all([getLedger(), liveLedger().catch(() => null)]);
+    const base: PlayerCareer = ledger ? careerFrom(ledger, name) : { events: [], since: null, builtAt: null };
+    const now = live?.stops.length ? careerFrom(live, name).events : [];
+    // Any stop on, even one they haven't finished a match at yet (a bye, or
+    // draws that didn't load this time): the page keeps asking each minute.
+    if (!now.length) return live?.pending ? { ...base, live: true } : base;
+    const ids = new Set(now.map((e) => e.eventId));
+    return {
+      ...base,
+      events: [...now.map((e) => ({ ...e, live: true as const })), ...base.events.filter((e) => !ids.has(e.eventId))],
+      since: base.since ?? now[now.length - 1].startDate,
+      live: true,
+    };
   } catch {
     return { events: [], since: null, builtAt: null };
   }

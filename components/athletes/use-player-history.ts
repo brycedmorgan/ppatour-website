@@ -15,11 +15,17 @@ import type { PlayerHistory } from "@/lib/player-history";
  * context alive for hours.
  */
 const TTL_MS = 10 * 60 * 1000;
-const inflight = new Map<string, { p: Promise<PlayerHistory | null>; at: number }>();
+/**
+ * A pro in this week's stop (`live`) is re-asked this often, so an open
+ * profile picks up each finished match (Wesley, 11/18). The route's CDN copy
+ * is a minute old at most, so polling faster would only re-read it.
+ */
+const LIVE_MS = 60 * 1000;
+const inflight = new Map<string, { p: Promise<PlayerHistory | null>; at: number; ttl: number }>();
 
 function load(name: string): Promise<PlayerHistory | null> {
   const hit = inflight.get(name);
-  let p = hit && Date.now() - hit.at < TTL_MS ? hit.p : undefined;
+  let p = hit && Date.now() - hit.at < hit.ttl ? hit.p : undefined;
   if (!p) {
     p = fetch(`/api/player-history/?name=${encodeURIComponent(name)}`)
       .then((r) => (r.ok ? r.json() : null))
@@ -27,10 +33,12 @@ function load(name: string): Promise<PlayerHistory | null> {
         d && Array.isArray(d.events) && Array.isArray(d.matches) ? { ...d, faces: d.faces ?? {} } : null,
       )
       .catch(() => null);
+    const entry = { p, at: Date.now(), ttl: TTL_MS };
     p.then((d) => {
       if (!d || (d.events.length === 0 && d.matches.length === 0)) inflight.delete(name);
+      else if (d.live) entry.ttl = LIVE_MS - 1000;
     });
-    inflight.set(name, { p, at: Date.now() });
+    inflight.set(name, entry);
   }
   return p;
 }
@@ -45,19 +53,26 @@ export function usePlayerHistory(name: string, excludeEventId?: string): PlayerH
 
   useEffect(() => {
     let alive = true;
-    load(name).then((d) => {
-      if (!alive || !d) return;
-      setState({
-        key: reqKey,
-        data: {
-          events: d.events.filter((e) => e.eventId !== excludeEventId),
-          matches: d.matches.filter((m) => m.eventId !== excludeEventId),
-          faces: d.faces,
-        },
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const run = () =>
+      load(name).then((d) => {
+        if (!alive || !d) return;
+        setState({
+          key: reqKey,
+          data: {
+            events: d.events.filter((e) => e.eventId !== excludeEventId),
+            matches: d.matches.filter((m) => m.eventId !== excludeEventId),
+            faces: d.faces,
+          },
+        });
+        // Mid-stop: ask again in a minute (the memo turns two components'
+        // polls into one request).
+        if (d.live) timer = setTimeout(run, LIVE_MS);
       });
-    });
+    run();
     return () => {
       alive = false;
+      clearTimeout(timer);
     };
   }, [name, excludeEventId, reqKey]);
 

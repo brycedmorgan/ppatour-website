@@ -46,6 +46,8 @@ export type CareerEvent = {
   logoUrl: string | null;
   international: boolean;
   divisions: CareerDivision[];
+  /** Still being played (lib/career-ledger liveLedger): finishes can still change. */
+  live?: true;
 };
 
 export type PlayerCareer = {
@@ -54,6 +56,8 @@ export type PlayerCareer = {
   /** Start date of the oldest stop the ledger holds — what "Career" covers. */
   since: string | null;
   builtAt: string | null;
+  /** A tour stop is in progress: the profile re-reads every minute. */
+  live?: true;
 };
 
 /**

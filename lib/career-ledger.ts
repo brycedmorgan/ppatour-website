@@ -33,7 +33,7 @@
  * the draws name players, they do not identify them.
  */
 import { getEvents } from "@/lib/events-api";
-import { eventHref, hasTournamentEnded, isTourStop, type Tournament } from "@/lib/placeholder-data";
+import { eventHref, hasTournamentEnded, isTourStop, isTournamentLive, type Tournament } from "@/lib/placeholder-data";
 import { getBracketDraw, getBracketIndex, getFreshBracketDraws, isEmptyDraw, type BracketDraw } from "@/lib/brackets-api";
 import type { Bracket, BracketDivision } from "@/lib/bracket-types";
 import { pbCacheConfigured, readStored, storedVersion, writeStored } from "@/lib/pb-cache";
@@ -142,6 +142,8 @@ export type Ledger = {
    * with the divisions that do load (Boise 2023: every draw comes back empty).
    */
   failTries?: Record<string, number>;
+  /** liveLedger only: a stop is in progress (or ended, not stored yet). Never stored. */
+  pending?: true;
 };
 
 /**
@@ -518,4 +520,63 @@ export async function getLedger(): Promise<Ledger | null> {
     }
   })();
   return inflight;
+}
+
+/**
+ * Tour stops whose results the stored ledger does not hold YET: the stop being
+ * played now, and one that ended but the cron hasn't added (it runs at :20/:50
+ * and reads ≤10 stops a run). Wesley, 11/18: the profile's Tournament Results
+ * should show Daytona while it is on, not a week later.
+ *
+ * Built the cron's way (buildStop: pro main draws, finished matches only) but
+ * never stored, and with `partial` — mid-event a division whose draw isn't
+ * published yet must not hide the ones that are. Reads go through
+ * getBracketIndex/getBracketDraw, whose live cache windows (lib/brackets-api)
+ * keep this to the same upstream calls the scores board already makes.
+ * Memoized per instance for {@link LIVE_MEMO_MS}.
+ */
+const LIVE_MEMO_MS = 60 * 1000;
+let liveMemo: { value: Ledger; at: number } | null = null;
+let liveInflight: Promise<Ledger> | null = null;
+
+export async function liveLedger(): Promise<Ledger> {
+  if (liveMemo && Date.now() - liveMemo.at < LIVE_MEMO_MS) return liveMemo.value;
+  if (liveInflight) return liveInflight;
+  liveInflight = (async () => {
+    const empty = EMPTY_LEDGER();
+    try {
+      const [{ events }, stored] = await Promise.all([getEvents(), getLedger()]);
+      const held = new Set((stored?.stops ?? []).map((s) => s.eventId));
+      const recent = new Date(Date.now() - (SETTLE_DAYS + 1) * 864e5).toISOString().slice(0, 10);
+      const stops = events.filter(
+        (t) =>
+          isTourStop(t) &&
+          t.tournamentUuid &&
+          !held.has(t.tournamentUuid) &&
+          !/colleg(e|iate)/i.test(t.name) &&
+          (isTournamentLive(t) || (hasTournamentEnded(t) && t.endDate >= recent)),
+      );
+      // A stop is on (or just ended, unstored), whether or not its draws loaded.
+      if (stops.length) empty.pending = true;
+      const names = new Names([]);
+      let missed = false;
+      for (const t of stops) {
+        const built = await buildStop(t, names, false, true).catch(() => null);
+        if (built && built !== "empty") empty.stops.push(built);
+        else missed = true;
+      }
+      empty.stops.sort((a, b) => b.endDate.localeCompare(a.endDate));
+      empty.players = names.list;
+      empty.builtAt = new Date().toISOString();
+      // A stop whose draws didn't load (a cold start's 429s, 11/18) is retried
+      // after 10s, not held out for the full minute.
+      liveMemo = { value: empty, at: Date.now() - (missed ? LIVE_MEMO_MS - 10_000 : 0) };
+      return empty;
+    } catch {
+      return liveMemo?.value ?? empty;
+    } finally {
+      liveInflight = null;
+    }
+  })();
+  return liveInflight;
 }

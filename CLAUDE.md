@@ -65,6 +65,15 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-18 — Profiles show the stop in progress (Latest Result + Tournament Results) (Wesley)
+- Wesley: Daytona results should show on profiles while it's on. Both sections only read FINISHED stops (player-history `recentStops`; the ledger cron adds a stop after it ends).
+- `lib/player-history` now includes `isTournamentLive` stops; at a live stop "Next: R32" / "On court now" is kept as the finish. New `lib/career-ledger` `liveLedger()`: live stops + ended-but-not-yet-stored ones (≤8 days), built with `buildStop(…, partial)`, never stored, memo 60s; `playerCareer` puts them on top (`live: true` per event, "In progress" in the detail line).
+- Both routes say `live` (cache 60s, not 1h / 6h) whenever ANY tour stop is in progress, even one the pro hasn't finished a match at; the profile then re-fetches every minute, so an open page picks up a bye's first match. ⚠ After a dev-server restart the first Daytona draw reads came back empty for minutes; `liveLedger` retries a stop that didn't load after 10s.
+- Latest Result: on a tie (every division "Next: …") the header names the box score's own division.
+- A pro appears in Tournament Results after their first FINISHED main-draw match (ALW/JW had byes on 11/18, so not yet); Latest Result's box score likewise.
+- Verified via the APIs on the dev server 11/18: Wil Shaffer (3 R64 losses) and Isabella Dunlap (2 R64 wins) carry Daytona in both, 60s cache; ALW history shows Daytona "Next: Round of 16". tsc + eslint clean. UI not checked in a browser.
+
+
 ### 2026-11-17 — Newsroom picks up new code posts on its own (Wesley)
 - Wesley: "auto-add new posts into the newsroom if they don't get added in via the newsroom." New `lib/newsroom/sync.ts` `syncCodePosts()`: the Overview and Posts screens call it first; it copies in any post in lib/news-articles.ts / lib/news-posts-authored.ts the dashboard lacks (same copy as the Import button). Once per server instance per set of code slugs; failures are logged, never break the page.
 - Never re-copies or overwrites an existing import, so dashboard edits stick. A renamed import counts under its original slug too (`importablePosts` used to miss that and would have copied Chicago in twice).

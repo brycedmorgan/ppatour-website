@@ -26,7 +26,8 @@ export async function GET(request: Request) {
   // look the same from here, so an empty answer is only held for a minute.
   // `partial`: a stop's draws failed to load, so a result they played may be
   // missing. Same minute, so the next request can fill it in.
-  const empty = result.events.length === 0 || Boolean(result.partial);
+  // `live`: they're in this week's stop, so every finished match changes it.
+  const empty = result.events.length === 0 || Boolean(result.partial) || Boolean(result.live);
   return NextResponse.json(result, {
     headers: { "Cache-Control": empty ? "public, s-maxage=60" : CACHE_CONTROL },
   });

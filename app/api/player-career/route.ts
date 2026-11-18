@@ -15,12 +15,14 @@ import { playerCareer } from "@/lib/player-career";
 export const dynamic = "force-dynamic";
 
 const CACHE_CONTROL = "public, s-maxage=21600, stale-while-revalidate=86400";
+const LIVE_CACHE_CONTROL = "public, s-maxage=60, stale-while-revalidate=60";
 
 export async function GET(request: Request) {
   const name = (new URL(request.url).searchParams.get("name") ?? "").trim().slice(0, 80);
   if (!name) return NextResponse.json({ events: [], since: null, builtAt: null }, { status: 400 });
   const result = await playerCareer(name);
-  return NextResponse.json(result, {
-    headers: { "Cache-Control": result.events.length ? CACHE_CONTROL : "public, s-maxage=300" },
-  });
+  // A pro playing this week's stop (lib/career-ledger liveLedger) gains a
+  // result every match, so their answer is held for a minute, not six hours.
+  const cache = result.live ? LIVE_CACHE_CONTROL : result.events.length ? CACHE_CONTROL : "public, s-maxage=300";
+  return NextResponse.json(result, { headers: { "Cache-Control": cache } });
 }
