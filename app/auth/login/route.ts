@@ -7,7 +7,9 @@ import { LOGIN_COOKIE, ssoConfigured, startLogin } from "@/lib/sso/oidc";
  * Sends the browser to the Pickleball SSO sign-in page. lib/sso/oidc.ts.
  */
 export async function GET(request: NextRequest) {
-  if (!ssoConfigured()) return new NextResponse("Sign-in is not available.", { status: 503 });
+  if (!ssoConfigured()) {
+    return NextResponse.redirect(new URL("/auth/?error=not_configured", request.nextUrl.origin));
+  }
 
   const { url, cookie, maxAge } = await startLogin(
     request.nextUrl.origin,
