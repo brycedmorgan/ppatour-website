@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 /**
@@ -13,7 +14,7 @@ import { useEffect, useState } from "react";
  * ⚠ /api/me/ calls the Pickleball user API for a signed-in user on every load;
  * cache the first name in the session before this goes to production.
  */
-type Me = { signedIn: boolean; email?: string; profile?: { firstName?: string; nickname?: string } | null };
+type Me = { signedIn: boolean; email?: string; profile?: { firstName?: string; nickname?: string; image?: string } | null };
 
 let mePromise: Promise<Me> | null = null;
 function loadMe(): Promise<Me> {
@@ -59,6 +60,14 @@ export function AccountButton({ variant, onNavigate }: { variant: "desktop" | "m
   // off-site, and a <Link> prefetch would start a sign-in.
   const href = name ? "/account/" : `/auth/login/?returnTo=${encodeURIComponent(returnTo)}`;
   const label = name ?? "Sign in";
+  // Their pickleball.com photo (images.pickleball.com only, lib/sso/user) in place of the icon.
+  const photo = name ? me?.profile?.image : undefined;
+  const avatar = (size: string, px: number) =>
+    photo ? (
+      <Image src={photo} alt="" width={px} height={px} className={`${size} rounded-full bg-white/10 object-cover object-top`} />
+    ) : (
+      <PersonIcon className={size === "size-8" ? "size-5" : "size-4"} />
+    );
 
   if (variant === "mobile") {
     return (
@@ -68,7 +77,7 @@ export function AccountButton({ variant, onNavigate }: { variant: "desktop" | "m
         aria-label={name ? `Account: ${name}` : "Sign in"}
         className="flex size-10 items-center justify-center text-white/85 transition-colors hover:text-white lg:hidden"
       >
-        <PersonIcon className="size-5" />
+        {avatar("size-8", 64)}
       </a>
     );
   }
@@ -80,7 +89,7 @@ export function AccountButton({ variant, onNavigate }: { variant: "desktop" | "m
       aria-label={name ? `Account: ${name}` : "Sign in"}
       className="ml-1 flex size-9 shrink-0 items-center justify-center gap-2 rounded-full border border-white/25 text-[12px] font-bold uppercase tracking-[0.12em] text-white transition-colors hover:border-white/60 hover:bg-white/10 xl:w-auto xl:px-3.5"
     >
-      <PersonIcon className="size-4" />
+      {avatar("size-7", 56)}
       <span className="hidden max-w-[10rem] truncate xl:inline">{label}</span>
     </a>
   );
