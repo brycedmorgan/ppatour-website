@@ -100,3 +100,35 @@ export async function getSignedInProfile(): Promise<PublicProfile | null> {
     ppaRanking: ppaBoards(u.ppaRanking),
   };
 }
+
+/**
+ * PREVIEW ONLY (/account/?demo=<player-slug>, never on production): a real pro's
+ * PUBLIC data in the same shape, so the account page can be seen with more
+ * than a bare test account (Wesley, 11/18). Uses our platform token, not a
+ * sign-in. The raw /v1/data/users response holds private fields; only the
+ * names and ids are picked out here.
+ */
+export async function demoProfile(slug: string): Promise<PublicProfile | null> {
+  const key = process.env.PB_API_TOKEN?.trim();
+  const base = (process.env.PB_API_BASE_URL || "https://api.pickleball.com").replace(/\/$/, "");
+  if (!key || !/^[a-z0-9-]{2,80}$/.test(slug)) return null;
+  const get = async (path: string) => {
+    const r = await fetch(`${base}${path}`, { cache: "no-store", headers: { "PB-API-TOKEN": key } }).catch(() => null);
+    if (!r?.ok || r.status === 204) return null;
+    const j = (await r.json().catch(() => null)) as Record<string, unknown> | null;
+    return (j?.result ?? j?.results ?? j) as Record<string, unknown> | null;
+  };
+  const u = await get(`/v1/data/users/${slug}?use_camel_case=true`);
+  const uuid = typeof u?.uuid === "string" ? u.uuid : "";
+  if (!u || !uuid) return null;
+  const ranking = await get(`/v1/users/${uuid}/ppa_ranking`);
+  const s = (v: unknown) => (typeof v === "string" ? v : "");
+  return {
+    pbUuid: uuid.toUpperCase(),
+    slug: s(u.slug) || slug,
+    firstName: s(u.firstName),
+    lastName: s(u.lastName),
+    nickname: s(u.nickname),
+    ppaRanking: ppaBoards(ranking),
+  };
+}

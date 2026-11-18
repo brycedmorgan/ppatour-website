@@ -4,7 +4,7 @@ import Link from "next/link";
 import { curatedSlugFor, getRankingBySlug } from "@/lib/rankings-api";
 import { ssoConfigured } from "@/lib/sso/oidc";
 import { getSessionUser } from "@/lib/sso/session";
-import { getSignedInProfile, type PublicProfile } from "@/lib/sso/user";
+import { demoProfile, getSignedInProfile, type PublicProfile } from "@/lib/sso/user";
 
 /**
  * /account/ — the signed-in fan's profile (Sign in with Pickleball, lib/sso).
@@ -50,14 +50,25 @@ function initials(name: string, email: string) {
   return (email[0] ?? "?").toUpperCase();
 }
 
-export default async function AccountPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
-  const { error } = await searchParams;
+export default async function AccountPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string; demo?: string }>;
+}) {
+  const { error, demo } = await searchParams;
   const configured = ssoConfigured();
-  const user = configured ? await getSessionUser() : null;
 
-  let profile: PublicProfile | null = null;
+  // ?demo=<player-slug>: a pro's public data in place of a sign-in. Never on production.
+  const demoData = demo && process.env.VERCEL_ENV !== "production" ? await demoProfile(demo) : null;
+  const user = demoData
+    ? { sub: demoData.pbUuid, email: "preview@example.com" }
+    : configured
+      ? await getSessionUser()
+      : null;
+
+  let profile: PublicProfile | null = demoData;
   let profileFailed = false;
-  if (user) {
+  if (user && !demoData) {
     try {
       profile = await getSignedInProfile();
     } catch (e) {
@@ -109,6 +120,17 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
       </section>
 
       <div className="mx-auto max-w-5xl space-y-8 px-4 py-10 sm:px-6">
+        {demoData && (
+          <p className="border border-ppa-blue/30 bg-ppa-blue/10 p-4 text-sm text-ppa-navy">
+            Preview: this page is showing {demoData.firstName} {demoData.lastName}&apos;s public Pickleball.com data,
+            not a signed-in account. Only available off production.
+          </p>
+        )}
+        {demo && !demoData && process.env.VERCEL_ENV !== "production" && (
+          <p className="border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+            No public player found for &ldquo;{demo}&rdquo;.
+          </p>
+        )}
         {error && configured && (
           <p role="alert" className="border border-red-300 bg-red-50 p-4 text-sm text-red-900">
             {ERRORS[error] ?? `Sign-in didn't finish (${error}). Try again.`}
