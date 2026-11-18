@@ -57,3 +57,11 @@ Facts that outlive a session: decisions, gotchas, who asked for what. The Sessio
 - ⚠ **Preview env has no Turnstile keys** (removed during the swap; re-adding was blocked). Previews skip
   the check. Bryce: Vercel → Settings → Environment Variables → add both for Preview.
 - New domain for any form? Add its hostname to that widget first.
+
+## 2026-11-18 — Vacations: who can take a trip off the site
+
+- Lainey O'Connor asked to pull Cancún Jan 26-30 (being rescheduled, zero sign-ups). Bryce promised she could remove trips herself and required a typed confirm.
+- The site matches Jackalope trips by **destination string** (`TripConfig.destination` = `vac_trips.destination`). Two trips sharing one destination would both hide.
+- `/api/public/vac-trips` is cached about 60 seconds, so a removal lands within a few minutes.
+- If Jackalope is down, a removed code trip returns to the lists and its page. This is on purpose, so an outage cannot hide every trip on sale.
+- Runbook: "Removing a trip from the website" in `docs/VACATIONS.md`.

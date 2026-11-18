@@ -70,6 +70,7 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 - `/api/public/vac-trips` now sends `removed` (destinations). `lib/vacations/remote-trips.ts` drops those trips from every list, `resolveTripConfig` returns null so /register 404s and checkout refuses, and `leaveIfRemoved(cfg)` redirects the page to `/vacations/`.
 - The default trip (Turks) can never be removed, here or in Jackalope. A Jackalope outage empties the list on purpose.
 - Runbook: "Removing a trip from the website" in `docs/VACATIONS.md`. New code trip pages need `leaveIfRemoved`.
+- Lainey was told in Slack on 11/18. Open: the Remove click has not run on production data. Cancún comes back when she sends new dates (list on the `cancun` row in `lib/vacations/trips.ts`).
 
 ### 2026-11-18 — Cancún Jan 26-30 off the website, to be rescheduled (Lainey)
 
