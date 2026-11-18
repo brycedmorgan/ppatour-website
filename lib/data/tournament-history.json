@@ -1,5 +1,239 @@
 [
  {
+  "endDate": "2026-11-08",
+  "startDate": "2026-11-02",
+  "name": "Opendoor Pickleball World Championships",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "John Lucian Goins",
+    "runnerUp": "Jack Sock",
+    "third": ""
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Eileen Wang",
+    "runnerUp": "Jessica Ho",
+    "third": ""
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Tama Shimabukuro / JW Johnson",
+    "runnerUp": "Andrei Daescu / Christian Alshon",
+    "third": ""
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Madalina Grigoriu / Allie Reichert",
+    "runnerUp": "Kelsey Laurente / Marisa Ruiz",
+    "third": ""
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Jorja Johnson / JW Johnson",
+    "third": ""
+   }
+  ],
+  "uuid": "ad262b1f-ea62-4dcc-af59-69732a97107c",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/2026-opendoor-pickleball-world-championships"
+ },
+ {
+  "endDate": "2026-10-25",
+  "startDate": "2026-10-19",
+  "name": "Hang Seng Bank Hong Kong Slam",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Hunter Johnson",
+    "runnerUp": "Tama Shimabukuro",
+    "third": ""
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Andie Dikosavljevic",
+    "runnerUp": "Judit Castillo",
+    "third": ""
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Federico Staksrud / Hayden Patriquin",
+    "runnerUp": "Ben Johns / Gabriel Tardio",
+    "third": ""
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Jorja Johnson / Tyra Hurricane Black",
+    "third": ""
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Anna Bright / Hayden Patriquin",
+    "third": ""
+   }
+  ],
+  "uuid": "c7e4fd72-d159-4211-82a2-21adbb21defe",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-asia-1500-hang-seng-bank-hong-kong-slam-2026"
+ },
+ {
+  "endDate": "2026-10-18",
+  "startDate": "2026-10-12",
+  "name": "Mojo Energy Pouches Virginia Beach Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "John Lucian Goins",
+    "runnerUp": "Jaume Martinez Vich",
+    "third": ""
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Kate Fahey",
+    "runnerUp": "Helena Jansen",
+    "third": ""
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Elliott Schupp / Jaume Martinez Vich",
+    "runnerUp": "Noe Khlif / Riley Newman",
+    "third": ""
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Sofia Sewing / Catherine Parenteau",
+    "runnerUp": "Layne Sleeth / Alix Truong",
+    "third": ""
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Kate Fahey / Eric Oncins",
+    "runnerUp": "Catherine Parenteau / Riley Newman",
+    "third": ""
+   }
+  ],
+  "uuid": "429c7980-e1b9-4800-805f-dfb160781cd9",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-mojo-energy-pouches-virginia-beach-open"
+ },
+ {
+  "endDate": "2026-10-18",
+  "startDate": "2026-10-14",
+  "name": "WALKER Australia Pickleball Cup",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Hunter Johnson",
+    "runnerUp": "Christian Alshon",
+    "third": ""
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Andie Dikosavljevic",
+    "runnerUp": "Judit Castillo",
+    "third": ""
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Gabriel Tardio / Hayden Patriquin",
+    "runnerUp": "Tama Shimabukuro / JW Johnson",
+    "third": ""
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Jorja Johnson / Tyra Hurricane Black",
+    "runnerUp": "Danni-Elle Townsend / Parris Todd",
+    "third": ""
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Tyra Hurricane Black / Gabriel Tardio",
+    "runnerUp": "Parris Todd / Christian Alshon",
+    "third": ""
+   }
+  ],
+  "uuid": "7d0583f0-2e25-4042-b369-07f8e21e8508",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/2026-walker-australia-pickleball-cup-ppa1500"
+ },
+ {
+  "endDate": "2026-10-11",
+  "startDate": "2026-10-05",
+  "name": "Veolia Chicago Cup",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Roscoe Bellamy",
+    "runnerUp": "Christopher Haworth",
+    "third": ""
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Kate Fahey",
+    "third": ""
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Federico Staksrud / Hayden Patriquin",
+    "runnerUp": "Jaume Martinez Vich / Nicolas Acevedo",
+    "third": ""
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Leigh Waters / Anna Bright",
+    "runnerUp": "Tyra Hurricane Black / Catherine Parenteau",
+    "third": ""
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Leigh Waters / Ben Johns",
+    "runnerUp": "Jorja Johnson / JW Johnson",
+    "third": ""
+   }
+  ],
+  "uuid": "203e1164-b4f9-47e9-bacf-ff81f8748025",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-veolia-chicago-cup"
+ },
+ {
+  "endDate": "2026-10-04",
+  "startDate": "2026-09-28",
+  "name": "Rate Las Vegas Open",
+  "divisions": [
+   {
+    "division": "Men's Singles",
+    "champion": "Hunter Johnson",
+    "runnerUp": "Ben Johns",
+    "third": ""
+   },
+   {
+    "division": "Women's Singles",
+    "champion": "Kaitlyn Christian",
+    "runnerUp": "Kiora Kunimoto",
+    "third": ""
+   },
+   {
+    "division": "Men's Doubles",
+    "champion": "Christian Alshon / Andrei Daescu",
+    "runnerUp": "Gabriel Tardio / Ben Johns",
+    "third": ""
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Anna Bright / Anna Leigh Waters",
+    "runnerUp": "Catherine Parenteau / Tyra Hurricane Black",
+    "third": ""
+   },
+   {
+    "division": "Mixed Doubles",
+    "champion": "Anna Bright / Hayden Patriquin",
+    "runnerUp": "Anna Leigh Waters / Ben Johns",
+    "third": ""
+   }
+  ],
+  "uuid": "86926aef-0566-4fbb-87cf-a48068a9f1c6",
+  "resultsUrl": "https://pickleballtournaments.com/tournaments/ppa-tour-rate-las-vegas-open"
+ },
+ {
   "endDate": "2026-09-20",
   "startDate": "2026-09-14",
   "name": "Veolia Arizona Open",
@@ -1337,10 +1571,22 @@
     "third": "Hunter Johnson"
    },
    {
+    "division": "Women's Singles",
+    "champion": "Anna Leigh Waters",
+    "runnerUp": "Kate Fahey",
+    "third": "Salome Devidze"
+   },
+   {
     "division": "Men's Doubles",
     "champion": "Riley Newman / Hayden Patriquin",
     "runnerUp": "Pablo Tellez / Dekel Bar",
     "third": "Matt Wright / Federico Staksrud"
+   },
+   {
+    "division": "Women's Doubles",
+    "champion": "Rachel Rohrabacher / Anna Bright",
+    "runnerUp": "Anna Leigh Waters / Catherine Parenteau",
+    "third": "Allyce Jones / Tyra Hurricane Black"
    },
    {
     "division": "Mixed Doubles",

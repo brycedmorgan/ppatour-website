@@ -185,6 +185,9 @@ function intlName(title) {
   const stripped = title
     .replace(/^PPA\s*(?:Asia|Australia|Italy|Spain|Canada)?\s*\d{3,4}\s*[-–—:]?\s*/i, "")
     .replace(/\s+20\d{2}$/, "")
+    // "2026 WALKER Australia Pickleball Cup (PPA1500)" (Oct 2026 feed title)
+    .replace(/^20\d{2}\s+/, "")
+    .replace(/\s*\(\s*PPA\s*\d{3,4}\s*\)\s*$/i, "")
     .replace(/\s{2,}/g, " ")
     .trim();
   // ALL-CAPS feed titles ("AUSTRALIA PICKLEBALL CUP") read as shouting in a
