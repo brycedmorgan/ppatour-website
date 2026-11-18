@@ -6,6 +6,7 @@ import { logo } from "@/lib/vacations/content";
 import { formatUSD, type Occupancy } from "@/lib/vacations/pricing";
 import { getTripConfig } from "@/lib/vacations/trip-config";
 import { getAvailabilityFor } from "@/lib/vacations/capacity";
+import { leaveIfRemoved } from "@/lib/vacations/remote-trips";
 import { puntaCana as pc } from "@/lib/vacations/trips/punta-cana";
 import { tripsCalendar, tripStatusLabel } from "@/lib/vacations/trips";
 
@@ -53,6 +54,7 @@ const SectionLabel = ({
 );
 
 export default async function PuntaCanaArchivePage() {
+  await leaveIfRemoved(cfg);
   const availability = await getAvailabilityFor(cfg);
   const bookable = (Object.keys(cfg.pricing) as Occupancy[]).filter(
     (id) => !availability.options[id].soldOut
