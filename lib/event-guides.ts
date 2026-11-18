@@ -439,7 +439,38 @@ const PARKING_BY_SLUG: Record<string, ParkingSection[]> = {
   //
   // ⚠ MONDAY IS FREE, TUE–SUN $10/DAY. "(before 2 PM)" is hers; don't explain it.
   // NO "Premium Parking" OR "Rideshare" SECTION: her submission has neither.
+  //
+  // ⚠ FLOOD OVERFLOW LOT, THU 11/19 – SAT 11/21: Dana, 11/18, comment on the same
+  // Asana task, "from Pictona". Her wording; her bullets became lines, and the
+  // pasted Google Maps links became the addresses they point at. It goes FIRST
+  // because it changes where people park this week. Delete these four sections
+  // after the event (or if Pictona calls it off); the General Parking copy below
+  // is untouched and still describes the on-site lots.
   "proton-daytona-beach-open": [
+    {
+      heading: "Overflow Parking Update",
+      body: [
+        "Because of the current weather and flooding in the area, parking at Pictona will be limited this week. To get everyone to the tournament safely, we are opening an overflow parking lot with a shuttle service.",
+      ],
+    },
+    {
+      heading: "Overflow Parking at a Glance",
+      body: [
+        "Dates: Thursday, November 19 – Saturday, November 21\nOpens: 10:00 AM each day\nLot address: 331 Ridgewood Ave, Holly Hill, FL (across 3rd St from Ace Hardware)\nParking fee: $10\nShuttle: runs every 15-20 minutes",
+      ],
+    },
+    {
+      heading: "How It Works",
+      body: [
+        "Drive to 331 Ridgewood Ave.\nLook for Ace Hardware. The lot is directly across 3rd St from it.\nTurn onto 3rd St and enter the lot from the 3rd St side. There is no parking entrance on Ridgewood.\nPay the $10 parking fee and park.\nWalk to the shuttle stop on the sidewalk right next to the lot. Look for the shuttle signs.\nRide the shuttle to Pictona, 1060 Ridgewood Ave.\nWhen you're ready to leave, catch the shuttle where you were dropped off. It loops back to the lot.",
+      ],
+    },
+    {
+      heading: "Tips for a Smooth Arrival",
+      body: [
+        "Give yourself extra time, as some roads may be wet or partly flooded.\nNever drive through standing water. If a road looks flooded, turn around and find another route.\nBring what you need for the day so you don't have to go back to your car.",
+      ],
+    },
     {
       heading: "General Parking",
       body: [

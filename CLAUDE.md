@@ -65,6 +65,11 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-18 — Daytona flood overflow parking, Thu–Sat (Dana)
+- Dana, comment 11/18 on Asana `1220529130911320` ("from Pictona"): flooding limits parking at Pictona; overflow lot at 331 Ridgewood Ave (enter from 3rd St, across from Ace Hardware), Thu 11/19 – Sat 11/21, opens 10 AM, $10, shuttle every 15–20 min.
+- Four sections ahead of General Parking in `PARKING_BY_SLUG["proton-daytona-beach-open"]`, her wording; pasted Google Maps links became the addresses. Her old on-site copy left as is. ⚠ Delete the four sections after the event.
+- Verified on the dev server: event page Parking & Shuttle renders all four, then General + ADA. tsc clean on the file.
+
 ### 2026-11-18 — Lainey can remove on-sale trips from the site in Jackalope (Bryce)
 - Bryce told Lainey she could remove trips herself, and asked that she must confirm it. The confirm and the rules live in ziff (`lib/vacpage.js`, `vacations.js`).
 - `/api/public/vac-trips` now sends `removed` (destinations). `lib/vacations/remote-trips.ts` drops those trips from every list, `resolveTripConfig` returns null so /register 404s and checkout refuses, and `leaveIfRemoved(cfg)` redirects the page to `/vacations/`.
