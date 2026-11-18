@@ -131,6 +131,85 @@ export type NewsArticle = {
  */
 export const newsArticles: NewsArticle[] = [
   /**
+   * ⚠ HUMAN-AUTHORED EDITORIAL — Dave Fleming's Daytona preview, supplied by
+   * Wesley on 11/17 ("#7_ STORYLINES FOR THE PROTON DAYTONA BEACH OPEN
+   * (NOVEMBER 16-22, 2026)", .docx). Same transcription rules as Worlds/Chicago:
+   * one paragraph per bullet, a heading per draw, seeds and slash shorthand
+   * verbatim. Two typo fixes only: "1))Alshon" → "1) Alshon", and the men's
+   * doubles 4 seed (Tellez/Staksrud) had lost its "4)".
+   *
+   * ⚠ HIS TV LINE WAS CHECKED AND MATCHES lib/tv-schedule.ts: PBTV noon ET
+   * Thu–Sun from the round of 16. It leaves out the Mon–Wed YouTube / PBTV app
+   * streams; written as he sent it.
+   *
+   * Photo: ScorePlay, 2025 Daytona MD final ("DAYTONA OPEN_JW X AUGIE_FINALS",
+   * media 110626823), JW Johnson + Augie Ge, the defending champs the post
+   * leads with. This week's ScorePlay collection held logos only on 11/17.
+   */
+  {
+    slug: "proton-daytona-beach-open-storylines",
+    status: "published",
+    category: "Tour News",
+    title: "Storylines for the Proton Daytona Beach Open",
+    subtitle: "Nov. 16–22, 2026 · Pictona at Holly Hill · Daytona Beach, FL",
+    date: "Nov 17",
+    image: "/ppa/news/proton-daytona-beach-open-storylines-2026.jpg",
+    imagePosition: "50% 32%",
+    author: "Dave Fleming",
+    eventSlug: "proton-daytona-beach-open",
+    ctaUrl: "/events/2026/proton-daytona-beach-open/",
+    ctaLabel: "Daytona Beach Open Event Page",
+    dek: "John Lucian Goins goes for three straight, women's singles is wide open without Anna Leigh Waters, Kate Fahey and Kaitlyn Christian, and 1,000 points are on the line at Pictona.",
+    whyItMatters:
+      "Several big names are sitting out, so Daytona is a rare opening: a first singles title is in reach for the women's field, and the men's doubles defending champions hold the longest match in PPA history.",
+    body: [
+      "## Overall Top 5",
+      "Goins for 3: John Lucian Goins seeks his 3rd straight title.",
+      "Not going to play: Many big names sitting out: Tama Shimabukuro, Hayden Patriquin, Gabe Tardio, Jack Sock, Kate Fahey, and Kaitlyn Christian among those not in the draw. Ben Johns just in mixed.",
+      "A lot going on in men's doubles: JW Johnson and the Gladiator Augie Ge are the defending champs.",
+      "Going for it: Huge opportunity to grab a title in women's singles without Anna Leigh Waters (just playing the 2 doubles events), Kate Fahey, and Kaitlyn Christian.",
+      "Going to be open: 1,000 points to the winners (and remember all finals are best 2 out of 3).",
+      "## Venue, Tourney & TV",
+      "PPA returns to Pictona in Holly Hill, where over 950 players will be competing.",
+      "The defending champions are from the December 2025 event in Daytona.",
+      "A progressive draw on the pro side, one round per bracket per day and no bronze matches.",
+      "Coverage on PickleballTV begins with the round of 16 on Thursday through Championship Sunday. Each day coverage begins at noon Eastern.",
+      "## Women's Singles",
+      "Defending champion and finalist: Catherine Parenteau and Katerina Stewart.",
+      "Top four seeds: 1) Brooke Buckner, 2) Kiora Kunimoto, 3) Judit Castillo, 4) Catherine Parenteau.",
+      "With Waters, Fahey, and Christian out of this draw, it presents a big opportunity for the field.",
+      "Good round-of-32 matchup: Keilly Ulery (13) vs. Helena Jansen Fink (15).",
+      "Potential battle in the round of 16: Judit Castillo (3) vs. Jorja Johnson (14).",
+      "Watch out for Kiora Kunimoto (2) — has a real shot at her first PPA singles title.",
+      "## Men's Singles",
+      "Defending champion and finalist: Chris Haworth and Gabe Joseph.",
+      "Top four seeds: 1) Chris Haworth, 2) Hunter Johnson, 3) Federico Staksrud, 4) John Lucian Goins.",
+      "Top seed Haworth has just one win during the ’26-’27 season (AZ).",
+      "Round-of-16 potential thriller: Noe Khlif (7) vs. JW Johnson (12).",
+      "Watch out for Goins (4) — with back to back wins, he seeks a 3-peat.",
+      "## Mixed Doubles",
+      "Defending champions and finalists: Jorja and JW Johnson and Kaitlyn Christian / Andrei Daescu.",
+      "Top four seeds: 1) Anna Leigh Waters / Ben Johns, 2) Anna Bright / Christian Alshon, 3) Jorja & JW Johnson, 4) Hurricane Tyra Black / Eric Oncins.",
+      "This is the only event Ben Johns is playing in Daytona.",
+      "Fun partner alert: Anna Bright and Christian Alshon back together for the first time since 2024.",
+      "Fun partner alert 2: Elliott Schupp and Mari Humberg are the 16 seed.",
+      "Watch out for Waters and Johns (1) — they will be well rested with Ben just playing mixed and no singles for Waters.",
+      "## Women's Doubles",
+      "Defending champions and finalists: Jorja Johnson / Anna Leigh Waters and Hurricane Tyra Black / Catherine Parenteau.",
+      "Top four seeds: 1) Anna Bright / Anna Leigh Waters, 2) Hurricane Tyra Black / Jorja Johnson, 3) Rachel Rohrabacher / Parris Todd, 4) Sofia Sewing / Catherine Parenteau.",
+      "Bright and Waters look to run their record consecutive tournaments won streak to 19 and maintain their undefeated 2026.",
+      "New Jersey 5s teammates Waters and Johnson are the defending champs, now could play in the final if seeds hold.",
+      "Watch out for Sofia Sewing and Catherine Parenteau (4) — made a big run to Championship Sunday at Worlds.",
+      "## Men's Doubles",
+      "Defending champions and finalists: Augie Ge / JW Johnson and Riley Newman / Noe Khlif.",
+      "Top four seeds: 1) Alshon / Daescu, 2) JW Johnson / Augie Ge, 3) Oncins / Klinger, 4) Pablo Tellez / Federico Staksrud.",
+      "Reunited! Longtime partners Federico Staksrud and Pablo Tellez play together for the 1st time since ’24.",
+      "Not playing in this event: Patriquin, Tardio, Johns, Shimabukuro.",
+      "Can Team Power Forward (Daescu / Alshon) shake off the disappointment of the 2 game lead lost in the Dallas final and hold up the #1 seed in Florida?",
+      "Watch out for Johnson and Ge — they are the defending champs, Dallas Flash teammates, and won the longest PPA match ever in the 2025 men's doubles final here over Riley Newman and Noe Khlif 11-8 in the 5th. Note: that record will stand because the doubles finals in Daytona are now best of 3, not best of 5.",
+    ],
+  },
+  /**
    * ⚠ SPONSORED PARTNER POST — Six Zero's Black Friday sale copy, supplied by
    * Hannah Johns (Slack DM 11/16, Word doc "Six_Zero_Black_Friday_PPA_Article")
    * with a request to publish the same day. Same class and same three labels

@@ -243,13 +243,22 @@ export function codePosts(): CodePost[] {
   ];
 }
 
-/** Dashboard copies of every code post whose slug isn't in the dashboard yet. */
+/**
+ * Dashboard copies of every code post that isn't in the dashboard yet. A post
+ * counts as "in" under its current slug AND, for an import, its original code
+ * slug, so a renamed import isn't copied in a second time. `skip` = code slugs
+ * the editors removed on purpose (SETTINGS.importSkipped).
+ */
 export function importablePosts(
   existing: DashboardPost[],
   by: string,
   newId: () => string,
+  skip: ReadonlySet<string> = new Set(),
 ): DashboardPost[] {
-  const taken = new Set(existing.map((p) => p.slug));
+  const taken = new Set([
+    ...skip,
+    ...existing.flatMap((p) => [p.slug, p.importedFrom?.slug ?? ""]).filter(Boolean),
+  ]);
   return [
     ...newsArticles.filter((a) => !taken.has(a.slug)).map((a) => fromNative(a, newId(), by)),
     ...authoredPosts.filter((p) => !taken.has(p.slug)).map((p) => fromAuthored(p, newId(), by)),

@@ -79,6 +79,12 @@ export type DashboardPost = {
 export const SETTINGS = {
   /** Pinned pickleball.com articles for the home page. */
   homePbPicks: "home_pb_picks",
+  /**
+   * Code-post slugs the auto-sync must NOT copy in again: an imported post the
+   * editors deleted (deleting it is how the code copy comes back). Shape:
+   * { slugs: string[] }. Written by deletePost (app/newsroom/actions.ts).
+   */
+  importSkipped: "import_skipped",
 } as const;
 
 export function storeConfigured(): boolean {

@@ -2,6 +2,8 @@ import Link from "next/link";
 import { House } from "lucide-react";
 import { listPosts, getSetting, SETTINGS } from "@/lib/newsroom/store";
 import { codePosts } from "@/lib/newsroom/posts";
+import { requireEditor } from "@/lib/newsroom/auth";
+import { importSkipped, syncCodePosts } from "@/lib/newsroom/sync";
 import type { HomePbPicks } from "@/lib/newsroom/published";
 import { newsroomBase } from "@/lib/newsroom/session";
 import { PostCard, fmtDate } from "../_components/PostCard";
@@ -14,12 +16,15 @@ export const metadata = { title: "Overview" };
 export const maxDuration = 300;
 
 export default async function NewsroomOverview() {
-  const [posts, picks] = await Promise.all([
+  // New hand-written code posts join the dashboard on their own (lib/newsroom/sync.ts).
+  await syncCodePosts((await requireEditor()).sub);
+  const [posts, picks, skipped] = await Promise.all([
     listPosts(),
     getSetting<HomePbPicks>(SETTINGS.homePbPicks),
+    importSkipped(),
   ]);
   const inDashboard = new Set(posts.map((p) => p.importedFrom?.slug ?? p.slug));
-  const notImported = codePosts().filter((c) => !inDashboard.has(c.slug));
+  const notImported = codePosts().filter((c) => !inDashboard.has(c.slug) && !skipped.has(c.slug));
   const published = posts.filter((p) => p.status === "published").length;
   const drafts = posts.length - published;
   const recent = [...posts].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).slice(0, 6);
