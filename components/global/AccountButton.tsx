@@ -54,10 +54,10 @@ export function AccountButton({ variant, onNavigate }: { variant: "desktop" | "m
   }, []);
 
   const name = me?.signedIn ? me.profile?.nickname || me.profile?.firstName || "Account" : null;
-  const returnTo = pathname.startsWith("/auth") ? "/" : pathname;
+  const returnTo = pathname.startsWith("/auth") || pathname.startsWith("/account") ? "/account/" : pathname;
   // Plain <a>, not <Link>: /auth/login/ is a route handler that redirects
   // off-site, and a <Link> prefetch would start a sign-in.
-  const href = name ? "/auth/" : `/auth/login/?returnTo=${encodeURIComponent(returnTo)}`;
+  const href = name ? "/account/" : `/auth/login/?returnTo=${encodeURIComponent(returnTo)}`;
   const label = name ?? "Sign in";
 
   if (variant === "mobile") {

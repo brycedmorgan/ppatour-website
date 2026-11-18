@@ -8,7 +8,7 @@ import { LOGIN_COOKIE, ssoConfigured, startLogin } from "@/lib/sso/oidc";
  */
 export async function GET(request: NextRequest) {
   if (!ssoConfigured()) {
-    return NextResponse.redirect(new URL("/auth/?error=not_configured", request.nextUrl.origin));
+    return NextResponse.redirect(new URL("/account/?error=not_configured", request.nextUrl.origin));
   }
 
   const { url, cookie, maxAge } = await startLogin(
