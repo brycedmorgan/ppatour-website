@@ -65,6 +65,21 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-18 — Sign in with Pickleball (SSO) plumbing, on dev only (Wesley)
+- Bernad Delic (pickleball.com) sent the OIDC client "PPA Tour (dev)" + his "PPA Tour OIDC Integration" guide in the SSO group DM (Slack `C0CJ31PAR45`, guide file `F0CJZ8DDKV2`). Issuer `https://oidc.pickleballdev.net`; client id/secret live only in env + Wesley's API reference doc. **Pickleball holds the accounts: no user table here, key anything PPA-only by `sub`.**
+- `lib/sso/` (oidc.ts: PKCE S256, discovery, RS256 ID/access token checks via `jose`, now a direct dep; seal.ts: JWE A256GCM with `SSO_SESSION_SECRET`; session.ts: server-side `sso_sessions` table, created on first use, stores sha256(cookie) + sealed tokens; user.ts: `/v2/data/users/{pbUuid}` with Bearer + `PB-USER-TOKEN` (access token `ext.pb_user_token`) + `PB-API-TOKEN`, public fields only). Routes `/auth/login/`, `/auth/callback/`, `/auth/logout/` (POST, same-origin), `/api/me/`; hidden noindex test page `/auth/`.
+- ⚠ **Refresh tokens are single-use**; reuse revokes the user's chain. `getAccessToken` takes a 15s row lease before refreshing; losers wait for the winner's token.
+- ⚠ Redirect URIs must match EXACTLY incl. the trailing slash (`trailingSlash: true`). Asked Bernad for `https://dev.ppatour.com/auth/callback/` + `http://localhost:3000/auth/callback/`; the client was created with only `https://www.ppatour.com/auth/callback` (placeholder).
+- Env: `SSO_ISSUER`, `SSO_CLIENT_ID`, `SSO_CLIENT_SECRET`, `SSO_SESSION_SECRET` (≥32), optional `SSO_REDIRECT_URI`. Unset = sign-in off (503, test page says so). User API host derives from the issuer (`oidc.` → `api.`); dev uses `PB_API_DEV_TOKEN`.
+- Verified locally with SSO unset: routes answer as designed, cross-origin logout 403, tsc + eslint clean. ⚠ No real login run yet (needs the env vars + Bernad's callback URLs). Merged to `dev` for dev.ppatour.com; NOT on main. Where Sign in goes in the real UI and what it unlocks is open (Wesley + Maxwell).
+
+### 2026-11-18 — Profiles show the stop in progress (Latest Result + Tournament Results) (Wesley)
+- Wesley: Daytona results should show on profiles while it's on. Both sections only read FINISHED stops (player-history `recentStops`; the ledger cron adds a stop after it ends).
+- `lib/player-history` now includes `isTournamentLive` stops; at a live stop "Next: R32" / "On court now" is kept as the finish. New `lib/career-ledger` `liveLedger()`: live stops + ended-but-not-yet-stored ones (≤8 days), built with `buildStop(…, partial)`, never stored, memo 60s; `playerCareer` puts them on top (`live: true` per event, "In progress" in the detail line).
+- Both routes cache 60s (not 1h / 6h) when the pro has a live stop; the profile re-fetches every minute while live, so an open page updates.
+- A pro appears in Tournament Results after their first FINISHED main-draw match (ALW/JW had byes on 11/18, so not yet); Latest Result's box score likewise.
+- Verified via the APIs on the dev server 11/18: Wil Shaffer (3 R64 losses) and Isabella Dunlap (2 R64 wins) carry Daytona in both, 60s cache; ALW history shows Daytona "Next: Round of 16". tsc + eslint clean. UI not checked in a browser.
+
 ### 2026-11-17 — Newsroom picks up new code posts on its own (Wesley)
 - Wesley: "auto-add new posts into the newsroom if they don't get added in via the newsroom." New `lib/newsroom/sync.ts` `syncCodePosts()`: the Overview and Posts screens call it first; it copies in any post in lib/news-articles.ts / lib/news-posts-authored.ts the dashboard lacks (same copy as the Import button). Once per server instance per set of code slugs; failures are logged, never break the page.
 - Never re-copies or overwrites an existing import, so dashboard edits stick. A renamed import counts under its original slug too (`importablePosts` used to miss that and would have copied Chicago in twice).
