@@ -61,13 +61,20 @@ const cookieBase = {
   path: "/",
 };
 
-/** Password accepted: owe the second step. */
-export async function startPending(email: string): Promise<void> {
+/**
+ * Step one done (password, or Sign in with Pickleball with `pb` = the account
+ * id): owe the second step.
+ */
+export async function startPending(email: string, pb?: string): Promise<void> {
   const store = await cookies();
-  store.set(NEWSROOM_PENDING_COOKIE, await createPendingToken(email), {
+  store.set(NEWSROOM_PENDING_COOKIE, await createPendingToken(email, pb), {
     ...cookieBase,
-    // Strict: the second step is never reached by following a link from elsewhere.
-    sameSite: "strict",
+    // Strict after a password: the second step is never reached by following a
+    // link from elsewhere. Lax after SSO, because that sign-in ends in a
+    // redirect chain that started on Pickleball's site, and a Strict cookie
+    // set inside it would not come back on the next screen. The second step is
+    // still required either way.
+    sameSite: pb ? "lax" : "strict",
     maxAge: PENDING_TTL_SECONDS,
   });
 }
@@ -75,7 +82,10 @@ export async function startPending(email: string): Promise<void> {
 /** Both steps done: the real session, and the pending cookie goes away. */
 export async function startSession(email: string): Promise<void> {
   const store = await cookies();
-  store.set(NEWSROOM_COOKIE, await createSessionToken(email), {
+  // A Pickleball sign-in carries its account id through to the session.
+  const pending = await verifyPendingToken(store.get(NEWSROOM_PENDING_COOKIE)?.value);
+  const pb = pending?.sub === email ? pending.pb : undefined;
+  store.set(NEWSROOM_COOKIE, await createSessionToken(email, pb), {
     ...cookieBase,
     maxAge: NEWSROOM_TTL_SECONDS,
   });

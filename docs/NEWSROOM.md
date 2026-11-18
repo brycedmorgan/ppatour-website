@@ -49,6 +49,27 @@ Rules (lib/newsroom/mfa.ts, app/newsroom/mfa-actions.ts):
   Vercel preview deployment has its own address, so on previews use the
   authenticator app (or always review on the same preview URL).
 
+### Sign in with Pickleball.com (11/18, dev only for now)
+
+Step one can also be the Pickleball SSO (lib/sso) instead of a password. The
+second step above is still required.
+
+- **Who:** `NEWSROOM_PICKLEBALL_EDITORS` = Pickleball account ids (the SSO
+  `sub`, a UUID), comma or newline separated. Removing an id signs that person
+  out on their next request. Each SSO environment has its own account ids.
+- **Flow:** the login page's "Sign in with Pickleball.com" button →
+  `/auth/login/?returnTo=/auth/newsroom/` → Pickleball → `/auth/newsroom/`
+  (app/auth/newsroom/route.ts) → the setup or verify screen. The button shows
+  only when SSO is configured and the list isn't empty.
+- **Not listed:** `/account/?error=newsroom_denied`, which shows the person
+  their account id to send to Wesley. The Newsroom address is never revealed.
+- **Identity:** the editor's verified Pickleball email (the MFA record and
+  "Last saved by" use it); the token also carries `pb` = the account id,
+  checked against the list on every request.
+- The SSO-issued pending cookie is SameSite=Lax (the password one stays
+  Strict): the sign-in ends in a redirect chain that began on Pickleball's
+  site, and a Strict cookie wouldn't come back on the next screen.
+
 ## Start from a Google Doc
 
 New post → **Start from a Google Doc**: paste a Google Docs link (the doc must be
