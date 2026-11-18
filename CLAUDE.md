@@ -65,6 +65,12 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-18 — Inbox sweep: roster adds, history through Worlds, hotel order (Wesley)
+- Isabella Dunlap + Ting Chieh (Jamie) Wei added to `published-athletes.json` (Bryce 11/17-18, agent Sam Flaxman). Profiles already rendered on demand; they were missing from /athletes. Fields from the live profile/API; Wei resides `Taipei` (API says "Taipei, CYI"), height null.
+- `gen-tournament-history.mjs` re-run: +Las Vegas, Chicago, Australia (10/18), Virginia Beach, Hong Kong (10/25), Worlds (Jim Ramsey 11/9, Hannah 11/12: all 1,000+ stops since 8/31, intl included). `intlName` now drops a leading year and trailing "(PPA1500)". 2020 Texas Open MD (Johns/Wright) was already in.
+- Engine hotels sort by distance minus 1.5 mi per star above 3 (`hotelRankScore` in lib/engine.ts), after Alex Youngman (Engine, 10/26) flagged 2-star hotels leading.
+- Checked, no change: Virginia Beach podium matches the finals on all five divisions (fan report 10/30 via Nathan).
+
 ### 2026-11-18 — Profiles show the stop in progress (Latest Result + Tournament Results) (Wesley)
 - Wesley: Daytona results should show on profiles while it's on. Both sections only read FINISHED stops (player-history `recentStops`; the ledger cron adds a stop after it ends).
 - `lib/player-history` now includes `isTournamentLive` stops; at a live stop "Next: R32" / "On court now" is kept as the finish. New `lib/career-ledger` `liveLedger()`: live stops + ended-but-not-yet-stored ones (≤8 days), built with `buildStop(…, partial)`, never stored, memo 60s; `playerCareer` puts them on top (`live: true` per event, "In progress" in the detail line).
