@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { TripPage } from "@/components/vacations/TripPage";
 import { getAvailabilityFor } from "@/lib/vacations/capacity";
+import { leaveIfRemoved } from "@/lib/vacations/remote-trips";
 import { getTripConfig } from "@/lib/vacations/trip-config";
 import { blackDesert } from "@/lib/vacations/trips/black-desert";
 
@@ -25,6 +26,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BlackDesertPage() {
+  await leaveIfRemoved(cfg);
   const availability = await getAvailabilityFor(cfg);
   return <TripPage content={blackDesert} cfg={cfg} availability={availability} />;
 }

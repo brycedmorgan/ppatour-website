@@ -263,6 +263,26 @@ anything on Punta Cana." Same `trips.ts` source. `top-16` matches the 64px
 Header the sticky chrome collapses to on scroll — if `Header.tsx` changes
 height, change that. Hidden on `/register` and `/success` (checkout funnel).
 
+## Removing a trip from the website (since 2026-11-18)
+
+Lainey does this in Jackalope → Vacations → the trip → **Remove from website**.
+She must type the trip name. The trip must have no paid rooms, and the default
+trip at `/vacations` can't be removed. `/api/public/vac-trips` then lists the
+trip's `destination` under `removed`, and within a few minutes the site:
+
+- drops it from the menu, the trip bar, every calendar and the sitemap;
+- redirects its page to `/vacations/`;
+- refuses it at `/vacations/register` and `/api/vacations/checkout`.
+
+⚠ **A new code trip page must start with `await leaveIfRemoved(cfg)`**, and its
+sitemap entry must check `isTripRemoved(cfg)`. Black Desert shows both.
+⚠ If Jackalope is down, the `removed` list is empty and a removed code trip comes
+back until the feed answers. That is deliberate: an outage must not hide every
+trip that is on sale.
+⚠ Cancún is off through code, not through this switch. To bring it back, follow
+the list on its row in `lib/vacations/trips.ts`, then delete `cancun-2027` from
+`REMOVED_IN_CODE` in ziff `lib/vacpage.js`.
+
 ## Pooled room blocks (Black Desert, 10/8)
 
 Black Desert sells ONE room type: a King room, $6,500, 1 or 2 guests, 15 rooms

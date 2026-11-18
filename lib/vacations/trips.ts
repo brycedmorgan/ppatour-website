@@ -77,7 +77,8 @@ export const tripsCalendar: TripEntry[] = [
     // set the new datesLabel/startIso/endIso here and in lib/vacations/trips/
     // cancun.ts, put CANCUN back in TRIPS (lib/vacations/trip-config.ts), restore
     // app/vacations/trips/cancun/page.tsx, re-add the sitemap entry, and remove
-    // the /vacations/trips/cancun redirect from next.config.ts.
+    // the /vacations/trips/cancun redirect from next.config.ts. Then delete
+    // cancun-2027 from REMOVED_IN_CODE in ziff lib/vacpage.js.
     slug: "cancun",
     name: "Cancún",
     resort: "Club Med Cancun",

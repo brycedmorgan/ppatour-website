@@ -12,7 +12,8 @@ import { LAB_PATH, paddles } from "@/lib/paddle-lab";
 import { PADDLE_LAB_PUBLIC } from "@/lib/paddle-lab-access";
 
 import { SITE_URL } from "@/lib/site";
-import { allTripsByDate } from "@/lib/vacations/remote-trips";
+import { allTripsByDate, isTripRemoved } from "@/lib/vacations/remote-trips";
+import { getTripConfig } from "@/lib/vacations/trip-config";
 import { tripStatus } from "@/lib/vacations/trips";
 
 const BASE = SITE_URL;
@@ -42,6 +43,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
    * entries below. Past trips drop out the day they end.
    */
   const CODE_TRIP_PAGES = new Set(["cancun", "black-desert", "punta-cana"]);
+  const blackDesertRemoved = await isTripRemoved(getTripConfig("black-desert"));
   const jackalopeTrips = (await allTripsByDate()).filter(
     (t) => !CODE_TRIP_PAGES.has(t.slug) && t.href.startsWith("/vacations/trips/") && tripStatus(t) !== "completed"
   );
@@ -187,11 +189,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Cancún came off the site 11/18/2026 (Lainey, rescheduling), so it is out
     // of the sitemap and /vacations/trips/cancun redirects to /vacations.
     // Black Desert (Mar 26–31, 2027) — on sale 10/8.
-    {
-      url: url("/vacations/trips/black-desert"),
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    },
+    ...(blackDesertRemoved
+      ? []
+      : [
+          {
+            url: url("/vacations/trips/black-desert"),
+            changeFrequency: "weekly" as const,
+            priority: 0.8,
+          },
+        ]),
     // Jackalope trips (St. Lucia and whatever Lainey adds). Bookable ones rank with the code trips.
     ...jackalopeTrips.map((t) => ({
       url: url(t.href),

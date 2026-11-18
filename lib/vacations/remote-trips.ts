@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { tripsCalendar, type TripEntry } from "./trips";
 import { TRIPS, DEFAULT_TRIP, type TripConfig } from "./trip-config";
 import type { Occupancy } from "./pricing";
@@ -24,6 +25,11 @@ import { getPublishedByName, publishedProfileSlug } from "@/lib/published-athlet
  *   with a `sale` block, the frozen approved copy. Only then can it be booked,
  *   and checkout charges exactly that price (remoteTripConfig below). A draft
  *   price Lainey is still editing never leaves Jackalope.
+ * - Removed from the website (Bryce 11/18): Lainey can take an on-sale trip off
+ *   ppatour.com in Jackalope, after typing its name. The feed lists it under
+ *   `removed` by destination. It then leaves every list, its page redirects to
+ *   /vacations, and /register and checkout refuse it. If Jackalope can't be
+ *   reached the list is empty, so an outage never hides a trip that is on sale.
  */
 
 export type RemotePhoto = { url: string; alt: string };
@@ -235,20 +241,49 @@ function saleOf(raw: Record<string, unknown>): Pick<ComingSoonTrip, "status" | "
   return { status: raw.status, sale };
 }
 
-/** Published trips from Jackalope, or null when Jackalope can't be reached. */
-export async function fetchComingSoon(): Promise<ComingSoonTrip[] | null> {
+type Feed = { trips: ComingSoonTrip[]; removed: Set<string> };
+
+/** Jackalope's trip feed, or null when Jackalope can't be reached. */
+async function fetchFeed(): Promise<Feed | null> {
   try {
     const r = await fetch(URL_, {
       next: { revalidate: 60 },
       signal: AbortSignal.timeout(4000),
     });
     if (!r.ok) return null;
-    const j = (await r.json()) as { trips?: Record<string, unknown>[] };
+    const j = (await r.json()) as { trips?: Record<string, unknown>[]; removed?: unknown };
     if (!Array.isArray(j.trips)) return null;
-    return j.trips.map(clean).filter((t): t is ComingSoonTrip => !!t);
+    return {
+      trips: j.trips.map(clean).filter((t): t is ComingSoonTrip => !!t),
+      removed: new Set(
+        (Array.isArray(j.removed) ? j.removed : []).filter((d): d is string => typeof d === "string")
+      ),
+    };
   } catch {
     return null;
   }
+}
+
+/** Published trips from Jackalope, or null when Jackalope can't be reached. */
+export async function fetchComingSoon(): Promise<ComingSoonTrip[] | null> {
+  return (await fetchFeed())?.trips ?? null;
+}
+
+/** The default trip IS the /vacations page, so it can never be removed. */
+const removedFrom = (feed: Feed | null, cfg: TripConfig | undefined) =>
+  !!feed && !!cfg && cfg !== DEFAULT_TRIP && feed.removed.has(cfg.destination);
+
+/** True when Lainey removed this code trip from the website in Jackalope. */
+export async function isTripRemoved(cfg: TripConfig): Promise<boolean> {
+  return removedFrom(await fetchFeed(), cfg);
+}
+
+/**
+ * First line of every code trip page. A removed trip's page must not render:
+ * it would show a booking button that /register now refuses.
+ */
+export async function leaveIfRemoved(cfg: TripConfig): Promise<void> {
+  if (await isTripRemoved(cfg)) redirect("/vacations/");
 }
 
 export function toEntry(t: ComingSoonTrip): TripEntry {
@@ -269,9 +304,10 @@ export function toEntry(t: ComingSoonTrip): TripEntry {
 
 /** Every trip, soonest first: code trips + Jackalope's coming-soon trips. */
 export async function allTripsByDate(): Promise<TripEntry[]> {
-  const remote = await fetchComingSoon();
+  const feed = await fetchFeed();
+  const remote = feed?.trips ?? null;
   let list: TripEntry[];
-  const onSite = tripsCalendar.filter((t) => !t.offSite);
+  const onSite = tripsCalendar.filter((t) => !t.offSite && !removedFrom(feed, TRIPS[t.slug]));
   if (remote === null) {
     list = [...onSite];
   } else {
@@ -354,10 +390,10 @@ export function remoteTripConfig(t: ComingSoonTrip): TripConfig | null {
  */
 export async function resolveTripConfig(slug?: string | null): Promise<TripConfig | null> {
   if (!slug) return DEFAULT_TRIP;
-  if (TRIPS[slug]) return TRIPS[slug];
+  const feed = await fetchFeed();
+  if (TRIPS[slug]) return removedFrom(feed, TRIPS[slug]) ? null : TRIPS[slug];
   if (CODE_PAGES.has(slug)) return null;
-  const remote = await fetchComingSoon();
-  const t = remote?.find((x) => x.slug === slug);
+  const t = feed?.trips.find((x) => x.slug === slug);
   return t ? remoteTripConfig(t) : null;
 }
 

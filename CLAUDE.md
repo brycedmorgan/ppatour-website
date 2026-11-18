@@ -65,6 +65,12 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-18 — Lainey can remove on-sale trips from the site in Jackalope (Bryce)
+- Bryce told Lainey she could remove trips herself, and asked that she must confirm it. The confirm and the rules live in ziff (`lib/vacpage.js`, `vacations.js`).
+- `/api/public/vac-trips` now sends `removed` (destinations). `lib/vacations/remote-trips.ts` drops those trips from every list, `resolveTripConfig` returns null so /register 404s and checkout refuses, and `leaveIfRemoved(cfg)` redirects the page to `/vacations/`.
+- The default trip (Turks) can never be removed, here or in Jackalope. A Jackalope outage empties the list on purpose.
+- Runbook: "Removing a trip from the website" in `docs/VACATIONS.md`. New code trip pages need `leaveIfRemoved`.
+
 ### 2026-11-18 — Cancún Jan 26-30 off the website, to be rescheduled (Lainey)
 
 - Lainey O'Connor, Slack DM 08:16 MST: "Can we please remove Jan 26-30 Cancun from the website? We
