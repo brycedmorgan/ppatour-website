@@ -28,6 +28,18 @@ export type TripEntry = {
   lineup?: string;
   /** Manual flag; "completed" is derived from endIso at render time. */
   status: Exclude<TripStatus, "completed">;
+  /**
+   * Off the website: real trip, shown nowhere and bookable nowhere. Lainey
+   * (11/18/2026) on Cancún Jan 26-30: "remove it from the website, we are
+   * going to reschedule this trip for a later date", zero sign ups.
+   *
+   * The row STAYS in this array rather than being deleted, for two reasons:
+   * CODE_PAGES in remote-trips.ts is derived from it, so an off-site slug keeps
+   * 404ing instead of falling through to a Jackalope copy of the same trip; and
+   * bringing it back is this flag plus the new dates. Its TripConfig is also
+   * out of TRIPS and its route folder is gone, so nothing can price or book it.
+   */
+  offSite?: boolean;
   /** Where the card links: archive page, or the live booking page. */
   href: string;
 };
@@ -60,6 +72,12 @@ export const tripsCalendar: TripEntry[] = [
     href: "/vacations",
   },
   {
+    // OFF THE WEBSITE 11/18/2026 (Lainey): being rescheduled for a later date,
+    // zero sign ups at the time it came down. To put it back: drop `offSite`,
+    // set the new datesLabel/startIso/endIso here and in lib/vacations/trips/
+    // cancun.ts, put CANCUN back in TRIPS (lib/vacations/trip-config.ts), restore
+    // app/vacations/trips/cancun/page.tsx, re-add the sitemap entry, and remove
+    // the /vacations/trips/cancun redirect from next.config.ts.
     slug: "cancun",
     name: "Cancún",
     resort: "Club Med Cancun",
@@ -70,6 +88,7 @@ export const tripsCalendar: TripEntry[] = [
     image: "/vacations/clubmed/cancun/cancun-aerial.jpg",
     lineup: "Led by Connor Garnett · more pros announced soon",
     status: "open",
+    offSite: true,
     href: "/vacations/trips/cancun",
   },
   {
@@ -118,14 +137,19 @@ export function tripStatusLabel(t: TripEntry, now = new Date()): string {
   return STATUS_META[status].label;
 }
 
+/** The calendar as the site shows it — off-site trips dropped. */
+export function onSiteTrips(): TripEntry[] {
+  return tripsCalendar.filter((t) => !t.offSite);
+}
+
 /** Trips guests can still book — what the header menu lists first. */
 export function openTrips(now = new Date()): TripEntry[] {
-  return tripsCalendar.filter((t) => tripStatus(t, now) === "open");
+  return onSiteTrips().filter((t) => tripStatus(t, now) === "open");
 }
 
 /** Every trip, soonest first, for menus that also show past trips. */
 export function tripsByDate(): TripEntry[] {
-  return [...tripsCalendar].sort((a, b) => a.startIso.localeCompare(b.startIso));
+  return onSiteTrips().sort((a, b) => a.startIso.localeCompare(b.startIso));
 }
 
 export const STATUS_META: Record<

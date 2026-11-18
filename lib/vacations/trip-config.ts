@@ -158,6 +158,13 @@ const CANCUN_CONTACT = "vacations@pickleball.com";
  * Turks is still selling: the first time two trips have been bookable at once.
  * Pay in full at checkout (Lainey's listing doc). $3,600 single / $6,400 double
  * ($3,200 pp), block of 10 + 10 (30 guests). Content: lib/vacations/trips/cancun.ts.
+ *
+ * ⚠ OUT OF `TRIPS` SINCE 11/18/2026 — Lainey took the trip off the website to
+ * reschedule it (zero sign ups). Kept here, not deleted, because the prices and
+ * room block are the reviewed set and the new dates are the only thing that
+ * changes. Out of the registry means `?trip=cancun` resolves to null, so
+ * /vacations/register 404s and the checkout route refuses it. Put the registry
+ * line back when the new dates land; see lib/vacations/trips.ts for the rest.
  */
 const CANCUN: TripConfig = {
   slug: "cancun",
@@ -263,7 +270,7 @@ const BLACK_DESERT: TripConfig = {
 export const TRIPS: Record<string, TripConfig> = {
   [TURKOISE.slug]: TURKOISE,
   [PUNTA_CANA.slug]: PUNTA_CANA,
-  [CANCUN.slug]: CANCUN,
+  // [CANCUN.slug]: CANCUN,  ← off the website 11/18/2026, see CANCUN above.
   [BLACK_DESERT.slug]: BLACK_DESERT,
 };
 

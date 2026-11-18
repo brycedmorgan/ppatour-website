@@ -184,12 +184,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly" as const,
       priority: 0.8,
     },
-    // Cancún (Jan 26–30, 2027) — on sale 9/22, indexed like the featured trip.
-    {
-      url: url("/vacations/trips/cancun"),
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    },
+    // Cancún came off the site 11/18/2026 (Lainey, rescheduling), so it is out
+    // of the sitemap and /vacations/trips/cancun redirects to /vacations.
     // Black Desert (Mar 26–31, 2027) — on sale 10/8.
     {
       url: url("/vacations/trips/black-desert"),

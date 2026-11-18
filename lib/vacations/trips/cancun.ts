@@ -11,6 +11,11 @@
  *
  * Images are the Club Med approved set from the shared Drive folder, resized
  * to 1600px and stored under /vacations/clubmed/cancun/.
+ *
+ * ⚠ NOT RENDERED ANYWHERE SINCE 11/18/2026. Lainey took the trip off the site
+ * to reschedule it, so app/vacations/trips/cancun/page.tsx is gone and nothing
+ * imports this file. It is kept because the copy is hers and only the dates
+ * change; the datesLabel/startIso below need the new dates before it goes back.
  */
 import type { TripContent } from "../trip-content";
 

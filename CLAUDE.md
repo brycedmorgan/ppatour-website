@@ -65,6 +65,45 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-18 — Cancún Jan 26-30 off the website, to be rescheduled (Lainey)
+
+- Lainey O'Connor, Slack DM 08:16 MST: "Can we please remove Jan 26-30 Cancun from the website? We
+  are going to reschedule this trip for a later date", then "We have had zero sign ups, so no
+  concern there." So nobody holds a Cancún confirmation, unlike Punta Cana.
+- **Taken off, not deleted.** New `offSite?: boolean` on `TripEntry`; the `cancun` row stays in
+  `tripsCalendar` and is filtered out by new `onSiteTrips()`, which `openTrips()`, `tripsByDate()`
+  (header Tour menu + TripNav) and `allTripsByDate()` (every trip page's calendar, /vacations) all
+  read. `CANCUN` is commented out of `TRIPS`, the route folder is deleted, and the sitemap entry is
+  gone. Putting it back is the flag, the new dates, the registry line, the route and the sitemap
+  row — listed on the `cancun` entry in `lib/vacations/trips.ts`.
+- ⚠ **The row has to stay in `tripsCalendar`, because `CODE_PAGES` in `remote-trips.ts` is derived
+  from it.** Deleting it would drop `cancun` out of that set, and `/vacations/trips/[slug]` would
+  then serve a Jackalope trip of the same slug. `CODE_PAGES` is deliberately NOT filtered by
+  `offSite`.
+- ⚠ **The route HAD to go, it could not just be left unlinked.** `getTripConfig("cancun")` falls
+  back to `DEFAULT_TRIP` for anything unknown, so with `CANCUN` out of `TRIPS` the page would have
+  rendered Cancún's copy over **Turks pricing and a Turks booking button**. Pinned in the harness.
+- **307 to `/vacations/`, not a 404**: the page was in the sitemap at priority 0.8 since 9/22, so
+  Google holds the URL. `permanent: false` on purpose — the slug is coming back with new dates and a
+  301 would be the wrong thing cached when it does.
+- Content (`lib/vacations/trips/cancun.ts`) and the `CANCUN` config are kept: the copy is Lainey's
+  and the prices and room block are the reviewed set, so only the dates change. Both carry a dated
+  note saying nothing renders or books them today.
+- Verified against the real functions (Node type-stripping + a resolve hook, scratchpad harness,
+  **18/0**): cancun out of all three selectors, the other four trips still in and still sorted,
+  `TRIPS` down to three, `resolveTripConfig("cancun")` null so /register 404s and checkout refuses,
+  Turks/Black Desert/no-slug still resolve, `getComingSoonTrip("cancun")` null, and the Turks-pricing
+  fallback above. Then a real `npx next build`: **exit 0**, `/vacations/trips/cancun` gone from the
+  route list, **0** Cancún in the built sitemap, in `/vacations`, or in the Black Desert and Punta
+  Cana pages' calendars. Redirect list checked for order and duplicates. tsc clean, eslint clean.
+- ⚠ Not checked: the Jackalope `vac-trips` feed (`pickleball.usejackalope.com` is outside this
+  sandbox's egress), so whether Lainey also has a Cancún row in Jackalope Vacations is unread. It
+  cannot reach the site either way, because `CODE_PAGES` blocks that slug.
+- **Next:** Lainey's new dates → `datesLabel`/`startIso`/`endIso` in `lib/vacations/trips.ts` and
+  `lib/vacations/trips/cancun.ts`, the `CANCUN` block's dates and `eventCode`, then restore the four
+  things listed on the trip row. The `CANCUN20` Stripe promo code is still live and still scoped to
+  the two Cancún products.
+
 ### 2026-11-18 — Inbox sweep: roster adds, history through Worlds, hotel order (Wesley)
 - Isabella Dunlap + Ting Chieh (Jamie) Wei added to `published-athletes.json` (Bryce 11/17-18, agent Sam Flaxman). Profiles already rendered on demand; they were missing from /athletes. Fields from the live profile/API; Wei resides `Taipei` (API says "Taipei, CYI"), height null.
 - `gen-tournament-history.mjs` re-run: +Las Vegas, Chicago, Australia (10/18), Virginia Beach, Hong Kong (10/25), Worlds (Jim Ramsey 11/9, Hannah 11/12: all 1,000+ stops since 8/31, intl included). `intlName` now drops a leading year and trailing "(PPA1500)". 2020 Texas Open MD (Johns/Wright) was already in.

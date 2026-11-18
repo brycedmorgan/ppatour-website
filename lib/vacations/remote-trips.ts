@@ -107,6 +107,12 @@ const FALLBACK: Record<string, ComingSoonTrip> = {
   },
 };
 
+/**
+ * Slugs with their own folder route here, so /vacations/trips/[slug] must not
+ * serve a Jackalope trip of the same name. ⚠ Deliberately NOT filtered by
+ * `offSite`: a trip taken off the site (Cancún, 11/18/2026) has to keep 404ing
+ * on its own slug rather than quietly reappearing as a Jackalope copy.
+ */
 const CODE_PAGES = new Set(
   tripsCalendar.filter((t) => t.status !== "coming-soon").map((t) => t.slug)
 );
@@ -265,12 +271,13 @@ export function toEntry(t: ComingSoonTrip): TripEntry {
 export async function allTripsByDate(): Promise<TripEntry[]> {
   const remote = await fetchComingSoon();
   let list: TripEntry[];
+  const onSite = tripsCalendar.filter((t) => !t.offSite);
   if (remote === null) {
-    list = [...tripsCalendar];
+    list = [...onSite];
   } else {
     const remoteSlugs = new Set(remote.map((t) => t.slug));
     list = [
-      ...tripsCalendar.filter((t) => t.status !== "coming-soon" && !remoteSlugs.has(t.slug)),
+      ...onSite.filter((t) => t.status !== "coming-soon" && !remoteSlugs.has(t.slug)),
       ...remote.map(toEntry),
     ];
   }

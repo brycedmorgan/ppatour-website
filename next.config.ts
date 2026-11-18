@@ -595,6 +595,14 @@ const nextConfig: NextConfig = {
       // Retired photo (11/9/26). CVB listings for Daytona, Newport Beach and
       // Sacramento were given this URL; send any hotlink to a clean shot.
       { source: "/ppa/action-singles.jpg", destination: "/ppa/action-champ-sunday.jpg", permanent: true },
+      /**
+       * Cancún Jan 26-30 came off the site 11/18/2026 — Lainey is rescheduling
+       * it for a later date, zero sign ups. The page was in the sitemap at 0.8
+       * since 9/22, so Google holds the URL; send it to the live trips instead
+       * of 404ing. 307, not 301: the slug is coming back with new dates, and a
+       * permanent redirect would be the wrong thing to have cached when it does.
+       */
+      { source: "/vacations/trips/cancun", destination: "/vacations/", permanent: false },
       ...LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true })),
       ...RETIRED_ATHLETE_REDIRECTS.map((r) => ({ ...r, permanent: false })),
     ];

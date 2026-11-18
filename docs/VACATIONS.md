@@ -17,7 +17,7 @@ stop working if someone changes it without reading.
 | `/vacations/` | The trip — hero, itinerary, stay, pros, pricing, calendar | Static, ISR |
 | `/vacations/register/` | Traveler form → Stripe Checkout | `force-dynamic`, noindex |
 | `/vacations/success/` | Post-payment confirmation | `force-dynamic`, noindex |
-| `/vacations/trips/cancun/` | Cancún, Jan 26–30 2027 — ON SALE (same template as `/vacations`) | Static, ISR |
+| `/vacations/trips/cancun/` | **OFF THE SITE 11/18/2026** — Lainey is rescheduling Cancún, zero sign ups. 307 to `/vacations/`; out of the sitemap; `cancun` out of `TRIPS`, so `?trip=cancun` is not bookable. Content and config kept, see `lib/vacations/trips.ts` for how to put it back | Redirect |
 | `/vacations/trips/black-desert/` | Black Desert, Mar 26–31 2027 — ON SALE 10/8. Pooled block (see below) | Static, ISR |
 | `/vacations/trips/punta-cana/` | Sept 2026 guest archive | Static, noindex |
 | `/api/vacations/checkout` | Creates the Stripe Checkout Session | Node runtime |
@@ -226,8 +226,10 @@ levels, and that is the part the resort needs.
 
 ## Two trips on sale at once (since 2026-09-22)
 
-`/vacations` and `/vacations/trips/cancun/` both render
-`components/vacations/TripPage.tsx`. A trip is three files:
+`/vacations` and `/vacations/trips/black-desert/` both render
+`components/vacations/TripPage.tsx`. (Cancún was the first second trip, from
+2026-09-22; it came off the site 11/18/2026 to be rescheduled.) A trip is three
+files:
 
 1. **Content** — `lib/vacations/trips/<slug>.ts` exporting a `TripContent`
    (`lib/vacations/trip-content.ts`). Turks is the `turkoise` export of
