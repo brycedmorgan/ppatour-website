@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { AccountButton } from "@/components/global/AccountButton";
 import { EUROPE_PUBLIC, EUROPE_SITE_URL } from "@/lib/europe-launch";
 import { PADDLE_LAB_PUBLIC } from "@/lib/paddle-lab-access";
 import Link from "next/link";
@@ -558,13 +559,14 @@ export function Header() {
         <nav className="hidden items-center lg:flex">
           {NAV_ITEMS.map((item) => {
             const active = megaOpen === item.label;
-            const base = `relative flex items-center gap-1 px-3 py-2 text-[12px] font-bold uppercase tracking-[0.12em] transition-colors ${
+            // px-2 below xl: at 1024px the nav plus Search + account needs the room.
+            const base = `relative flex items-center gap-1 px-2 py-2 xl:px-3 text-[12px] font-bold uppercase tracking-[0.12em] transition-colors ${
               active ? "text-white" : "text-white/75 hover:text-white"
             }`;
             const indicator = (
               <span
                 aria-hidden
-                className={`absolute inset-x-3 -bottom-[13px] h-0.5 bg-ppa-blue transition-all duration-300 ${
+                className={`absolute inset-x-2 xl:inset-x-3 -bottom-[13px] h-0.5 bg-ppa-blue transition-all duration-300 ${
                   active ? "scale-x-100 opacity-100" : "scale-x-50 opacity-0"
                 }`}
               />
@@ -646,7 +648,12 @@ export function Header() {
               <path d="m20 20-3.5-3.5" />
             </svg>
           </Link>
+          <AccountButton variant="desktop" />
         </nav>
+
+        <div className="ml-auto flex items-center lg:hidden">
+          <AccountButton variant="mobile" onNavigate={() => setOpen(false)} />
+        </div>
 
         <button
           type="button"
