@@ -12,9 +12,12 @@
  *     verify screens.
  *   - "session": both steps done. 7 days, opens the dashboard.
  *
- * ⚠ EMAIL + PASSWORD IS A STOPGAP. Wesley wants pickleball.com SSO (Jason's
- * OIDC client, still pending since 10/1). When it lands, the SSO callback
- * replaces the password step and hands over to the same second step.
+ * Step one is EITHER email + password (NEWSROOM_ADMINS) OR Sign in with
+ * Pickleball (lib/sso) for an account listed in NEWSROOM_PICKLEBALL_EDITORS
+ * (Wesley, 11/18). Both hand over to the same second step. A Pickleball editor
+ * is identified by their verified email (so MFA records and "by …" read the
+ * same), and the token also carries their account id (`pb`), which is checked
+ * against the list on every request.
  */
 
 export const NEWSROOM_COOKIE = "ppa_newsroom";
@@ -72,6 +75,21 @@ export function getEditors(): Map<string, string> {
   return editors;
 }
 
+/**
+ * Pickleball accounts allowed into the Newsroom: NEWSROOM_PICKLEBALL_EDITORS,
+ * Pickleball account ids (the SSO `sub`, a UUID) separated by commas or new
+ * lines. Removing an id signs that person out on their next request. Each SSO
+ * environment (dev / prod) has its own account ids.
+ */
+export function pickleballEditorIds(): Set<string> {
+  const ids = new Set<string>();
+  for (const raw of (process.env.NEWSROOM_PICKLEBALL_EDITORS || "").split(/[,\n]/)) {
+    const id = raw.trim().toLowerCase();
+    if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(id)) ids.add(id);
+  }
+  return ids;
+}
+
 function b64url(bytes: ArrayBuffer | Uint8Array): string {
   return btoa(String.fromCharCode(...new Uint8Array(bytes)))
     .replace(/\+/g, "-")
@@ -99,11 +117,14 @@ async function hmacKey(): Promise<CryptoKey> {
 }
 
 type Kind = "session" | "pending";
-export type NewsroomSession = { sub: string; exp: number; kind: Kind };
+/** sub = the editor's email; pb = their Pickleball account id when they came in through SSO. */
+export type NewsroomSession = { sub: string; exp: number; kind: Kind; pb?: string };
 
-async function createToken(email: string, kind: Kind, ttl: number): Promise<string> {
+async function createToken(email: string, kind: Kind, ttl: number, pb?: string): Promise<string> {
   const payload = b64url(
-    encoder.encode(JSON.stringify({ sub: email, kind, exp: Math.floor(Date.now() / 1000) + ttl })),
+    encoder.encode(
+      JSON.stringify({ sub: email, kind, exp: Math.floor(Date.now() / 1000) + ttl, ...(pb ? { pb } : {}) }),
+    ),
   );
   const sig = await crypto.subtle.sign("HMAC", await hmacKey(), encoder.encode(payload));
   return `${payload}.${b64url(sig)}`;
@@ -120,7 +141,10 @@ async function verifyToken(token: string | undefined | null, kind: Kind): Promis
     // A pending token must never pass as a session, and the reverse.
     if (data.kind !== kind) return null;
     if (!data.exp || data.exp < Date.now() / 1000) return null;
-    if (!getEditors().has(String(data.sub).toLowerCase())) return null;
+    const allowed = data.pb
+      ? pickleballEditorIds().has(String(data.pb).toLowerCase())
+      : getEditors().has(String(data.sub).toLowerCase());
+    if (!allowed) return null;
     return data;
   } catch {
     // Includes a missing secret: fail closed.
@@ -129,9 +153,11 @@ async function verifyToken(token: string | undefined | null, kind: Kind): Promis
 }
 
 /** Full session: password AND second step. */
-export const createSessionToken = (email: string) => createToken(email, "session", NEWSROOM_TTL_SECONDS);
+export const createSessionToken = (email: string, pb?: string) =>
+  createToken(email, "session", NEWSROOM_TTL_SECONDS, pb);
 export const verifySessionToken = (t: string | undefined | null) => verifyToken(t, "session");
 
 /** Password only; second step still owed. */
-export const createPendingToken = (email: string) => createToken(email, "pending", PENDING_TTL_SECONDS);
+export const createPendingToken = (email: string, pb?: string) =>
+  createToken(email, "pending", PENDING_TTL_SECONDS, pb);
 export const verifyPendingToken = (t: string | undefined | null) => verifyToken(t, "pending");

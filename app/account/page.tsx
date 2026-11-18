@@ -31,6 +31,7 @@ const ERRORS: Record<string, string> = {
   login_expired: "That sign-in took too long or was started in another browser. Try again.",
   state_mismatch: "That sign-in link wasn't valid. Try again.",
   not_configured: "Sign-in isn't available here yet.",
+  newsroom_denied: "This Pickleball.com account doesn't have Newsroom access.",
 };
 
 /** SSO account settings (password, passkeys, MFA): oidc.<host> → sso.<host>/settings. */
@@ -139,6 +140,12 @@ export default async function AccountPage({
         {error && configured && (
           <p role="alert" className="border border-red-300 bg-red-50 p-4 text-sm text-red-900">
             {ERRORS[error] ?? `Sign-in didn't finish (${error}). Try again.`}
+            {error === "newsroom_denied" && user && (
+              <span className="mt-1 block">
+                To get access, send your account ID to the Newsroom admin:{" "}
+                <code className="break-all font-mono">{user.sub}</code>
+              </span>
+            )}
           </p>
         )}
 

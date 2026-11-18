@@ -199,7 +199,8 @@ export async function finishLogin(query: URLSearchParams, sealedLogin: string | 
 
   return {
     sub: payload.sub,
-    email: typeof payload.email === "string" ? payload.email : "",
+    // Only a verified email is kept: the Newsroom matches editors on it.
+    email: payload.email_verified === true && typeof payload.email === "string" ? payload.email : "",
     returnTo: login.returnTo,
     tokens,
   };
