@@ -26,6 +26,7 @@ type RawUser = {
   firstName?: string;
   lastName?: string;
   nickname?: string;
+  profileImage?: string;
   ppaRanking?: Record<string, unknown> | null;
 };
 
@@ -38,8 +39,21 @@ export type PublicProfile = {
   firstName: string;
   lastName: string;
   nickname: string;
+  /** Approved pickleball.com profile photo, or "" (none, or not on images.pickleball.com). */
+  image: string;
   ppaRanking: PpaBoardRank[];
 };
+
+/** Only https photos on images.pickleball.com (also the next/image allowlist). */
+function profileImage(v: unknown): string {
+  if (typeof v !== "string") return "";
+  try {
+    const u = new URL(v);
+    return u.protocol === "https:" && u.hostname === "images.pickleball.com" ? u.toString() : "";
+  } catch {
+    return "";
+  }
+}
 
 const BOARDS: [key: string, label: string][] = [
   ["mensSingles", "Men's Singles"],
@@ -97,6 +111,7 @@ export async function getSignedInProfile(): Promise<PublicProfile | null> {
     firstName: u.firstName ?? "",
     lastName: u.lastName ?? "",
     nickname: u.nickname ?? "",
+    image: profileImage(u.profileImage),
     ppaRanking: ppaBoards(u.ppaRanking),
   };
 }
@@ -129,6 +144,7 @@ export async function demoProfile(slug: string): Promise<PublicProfile | null> {
     firstName: s(u.firstName),
     lastName: s(u.lastName),
     nickname: s(u.nickname),
+    image: profileImage(u.profileImage),
     ppaRanking: ppaBoards(ranking),
   };
 }

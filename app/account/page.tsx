@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 import { curatedSlugFor, getRankingBySlug } from "@/lib/rankings-api";
@@ -93,9 +94,13 @@ export default async function AccountPage({
             <div className="mt-5 flex items-center gap-5">
               <div
                 aria-hidden
-                className="flex size-16 shrink-0 items-center justify-center rounded-full bg-ppa-blue font-display text-2xl sm:size-20 sm:text-3xl"
+                className="relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-ppa-blue font-display text-2xl sm:size-20 sm:text-3xl"
               >
-                {initials(fullName, user.email)}
+                {profile?.image ? (
+                  <Image src={profile.image} alt="" fill sizes="80px" className="object-cover object-top" />
+                ) : (
+                  initials(fullName, user.email)
+                )}
               </div>
               <div className="min-w-0">
                 <h1 className="font-display text-3xl uppercase leading-none tracking-wide sm:text-5xl">
