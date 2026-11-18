@@ -11,7 +11,7 @@ import { createSession, SESSION_COOKIE, sessionCookieOptions } from "@/lib/sso/s
 export async function GET(request: NextRequest) {
   const origin = request.nextUrl.origin;
   const fail = (code: string) => {
-    const res = NextResponse.redirect(new URL(`/auth/?error=${encodeURIComponent(code)}`, origin));
+    const res = NextResponse.redirect(new URL(`/account/?error=${encodeURIComponent(code)}`, origin));
     res.cookies.delete({ name: LOGIN_COOKIE, path: "/auth/" });
     return headers(res);
   };

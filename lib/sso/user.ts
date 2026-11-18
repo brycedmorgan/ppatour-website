@@ -26,7 +26,11 @@ type RawUser = {
   firstName?: string;
   lastName?: string;
   nickname?: string;
+  ppaRanking?: Record<string, unknown> | null;
 };
+
+/** One PPA board the user is ranked on (rolling 365 days). */
+export type PpaBoardRank = { board: string; rank: number; points: number; played: number };
 
 export type PublicProfile = {
   pbUuid: string;
@@ -34,7 +38,36 @@ export type PublicProfile = {
   firstName: string;
   lastName: string;
   nickname: string;
+  ppaRanking: PpaBoardRank[];
 };
+
+const BOARDS: [key: string, label: string][] = [
+  ["mensSingles", "Men's Singles"],
+  ["womensSingles", "Women's Singles"],
+  ["mensDoubles", "Men's Doubles"],
+  ["womensDoubles", "Women's Doubles"],
+  ["mixedDoubles", "Mixed Doubles"],
+];
+
+/**
+ * `ppaRanking` from the user API. Assumed to match /v1/users/{uuid}/ppa_ranking
+ * (`mensSingles365Rank`, `…Points`, `…TournamentsPlayed`, values as strings);
+ * NOT yet seen in a real response. Keys are matched case-insensitively and
+ * anything unreadable is dropped, so an unexpected shape shows no section
+ * rather than wrong numbers.
+ */
+function ppaBoards(raw: RawUser["ppaRanking"]): PpaBoardRank[] {
+  if (!raw || typeof raw !== "object") return [];
+  const lower = new Map(Object.entries(raw).map(([k, v]) => [k.toLowerCase(), v]));
+  const n = (k: string) => {
+    const v = Number(lower.get(k.toLowerCase()));
+    return Number.isFinite(v) ? v : 0;
+  };
+  return BOARDS.flatMap(([key, board]) => {
+    const rank = n(`${key}365Rank`);
+    return rank > 0 ? [{ board, rank, points: n(`${key}365Points`), played: n(`${key}365TournamentsPlayed`) }] : [];
+  });
+}
 
 export async function getSignedInProfile(): Promise<PublicProfile | null> {
   const access = await getAccessToken();
@@ -64,5 +97,6 @@ export async function getSignedInProfile(): Promise<PublicProfile | null> {
     firstName: u.firstName ?? "",
     lastName: u.lastName ?? "",
     nickname: u.nickname ?? "",
+    ppaRanking: ppaBoards(u.ppaRanking),
   };
 }
