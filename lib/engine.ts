@@ -201,7 +201,24 @@ export function enginePropertiesNear(
   { exclude = [] }: { exclude?: string[] } = {},
 ): EngineProperty[] {
   const blocked = new Set(exclude.map(normalizeHotel));
-  return enginePropertiesFor(slug).filter((p) => !blocked.has(normalizeHotel(p.name)));
+  return enginePropertiesFor(slug)
+    .filter((p) => !blocked.has(normalizeHotel(p.name)))
+    .map((p, i) => ({ p, i, score: hotelRankScore(p) }))
+    .sort((a, b) => a.score - b.score || a.i - b.i)
+    .map(({ p }) => p);
+}
+
+/**
+ * Lower is better. Distance still leads, but each star above 3 buys 1.5 miles
+ * (and each star below costs 1.5), so a 2-star hotel no longer tops the list
+ * just because it is closest. Engine (Alex Youngman, 10/26) flagged that pure
+ * proximity put two-star hotels first. Unknown rating or distance counts as
+ * 3 stars / 5 miles, so a sparse record lands mid-pack rather than first.
+ */
+function hotelRankScore(p: EngineProperty): number {
+  const stars = Number.parseFloat(p.starRating ?? "");
+  const miles = typeof p.distanceMiles === "number" ? p.distanceMiles : 5;
+  return miles - 1.5 * ((Number.isFinite(stars) ? stars : 3) - 3);
 }
 
 /**
