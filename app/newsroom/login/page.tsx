@@ -8,10 +8,18 @@ import { LoginForm } from "../_components/LoginForm";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Sign in" };
 
-export default async function NewsroomLoginPage() {
+export default async function NewsroomLoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ password?: string }>;
+}) {
   if (await getSession()) redirect(`${newsroomBase()}/`);
-  // Shown where Sign in with Pickleball is set up and at least one account is listed.
+  // Where Sign in with Pickleball is set up and at least one account is listed.
   const sso = ssoConfigured() && pickleballEditorIds().size > 0;
+  // Wesley, 11/18: the Newsroom link goes straight to Pickleball sign-in (via
+  // /auth/newsroom/, which skips it when already signed in). `?password` keeps
+  // the password form reachable as a fallback.
+  if (sso && (await searchParams).password === undefined) redirect("/auth/newsroom/");
   return (
     <AuthShell title="Sign in">
       {sso && (

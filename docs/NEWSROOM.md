@@ -61,6 +61,11 @@ second step above is still required.
   `/auth/login/?returnTo=/auth/newsroom/` → Pickleball → `/auth/newsroom/`
   (app/auth/newsroom/route.ts) → the setup or verify screen. The button shows
   only when SSO is configured and the list isn't empty.
+- **The Newsroom link** (its login page) goes straight to `/auth/newsroom/`
+  wherever the button would show (Wesley, 11/18); `…/login/?password` still
+  opens the password form. Signed-in editors also get **Go to Newsroom** on
+  `/account/` (to `/auth/newsroom/`, so the address isn't in that page), and
+  an editor who already has a Newsroom session skips the second step.
 - **Not listed:** `/account/?error=newsroom_denied`, which shows the person
   their account id to send to Wesley. The Newsroom address is never revealed.
 - **Identity:** the editor's verified Pickleball email (the MFA record and

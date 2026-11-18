@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { getMfa } from "@/lib/newsroom/store";
 import { hasFactor } from "@/lib/newsroom/mfa";
-import { startPending } from "@/lib/newsroom/auth";
+import { getSession, startPending } from "@/lib/newsroom/auth";
 import { newsroomBase, newsroomUrlKey, pickleballEditorIds } from "@/lib/newsroom/session";
 import { ssoConfigured } from "@/lib/sso/oidc";
 import { getSessionUser } from "@/lib/sso/session";
@@ -28,6 +28,9 @@ export async function GET(request: NextRequest) {
   };
 
   if (!ssoConfigured() || !newsroomUrlKey()) return to("/account/?error=not_configured");
+
+  // Already signed in to the Newsroom (e.g. "Go to Newsroom" on /account/): straight in.
+  if (await getSession()) return to(`${newsroomBase()}/`);
 
   const user = await getSessionUser();
   if (!user) return to("/auth/login/?returnTo=/auth/newsroom/");

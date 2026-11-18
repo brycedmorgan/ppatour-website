@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { curatedSlugFor, getRankingBySlug } from "@/lib/rankings-api";
+import { newsroomUrlKey, pickleballEditorIds } from "@/lib/newsroom/session";
 import { ssoConfigured } from "@/lib/sso/oidc";
 import { getSessionUser } from "@/lib/sso/session";
 import { demoProfile, getSignedInProfile, type PublicProfile } from "@/lib/sso/user";
@@ -84,6 +85,8 @@ export default async function AccountPage({
   const fullName = profile ? `${profile.firstName} ${profile.lastName}`.trim() : "";
   const display = profile?.nickname || profile?.firstName || "";
   const security = securityUrl();
+  // Newsroom editors only (NEWSROOM_PICKLEBALL_EDITORS), never in a ?demo preview.
+  const newsroom = !demoData && !!user && newsroomUrlKey() !== null && pickleballEditorIds().has(user.sub.toLowerCase());
 
   return (
     <main className="min-h-screen bg-ppa-paper">
@@ -169,6 +172,26 @@ export default async function AccountPage({
                 You&apos;re signed in, but we couldn&apos;t load your Pickleball.com profile just now. Refresh to try
                 again.
               </p>
+            )}
+
+            {newsroom && (
+              <section className="flex flex-col gap-4 border-t-4 border-ppa-blue bg-white p-6 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ppa-blue">Editor access</p>
+                  <p className="mt-1 font-display text-2xl uppercase tracking-wide text-ppa-navy">Newsroom</p>
+                  <p className="mt-1 text-sm text-ppa-navy/65">Write and publish PPA Tour news.</p>
+                </div>
+                {/* Plain <a> to the route that redirects to the (secret) Newsroom
+                    address, so the address never appears in this page. No
+                    <Link>: a prefetch would start a Newsroom sign-in. */}
+                {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+                <a
+                  href="/auth/newsroom/"
+                  className="self-start bg-ppa-blue px-5 py-3 text-sm font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep sm:self-auto"
+                >
+                  Go to Newsroom →
+                </a>
+              </section>
             )}
 
             {wpr && proSlug && (
