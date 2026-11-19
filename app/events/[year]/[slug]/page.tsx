@@ -76,7 +76,7 @@ import {
   type Tournament,
   tournaments,
 } from "@/lib/placeholder-data";
-import { TICKET_LINK_REL, withCampaign, withUtm } from "@/lib/utm";
+import { outboundRel, TICKET_LINK_REL, withCampaign, withUtm } from "@/lib/utm";
 import { admissionTiersFor, ticketsOnSale } from "@/lib/tixr-prices";
 import { buildTicketGrid } from "@/lib/ticket-grid";
 import { TicketGrid } from "@/components/events/TicketGrid";
@@ -1937,7 +1937,7 @@ export default async function EventPage({ params }: Params) {
                         content: "event-venue-spotlight",
                       })}
                       target="_blank"
-                      rel={TICKET_LINK_REL}
+                      rel={outboundRel(spotlight.ticketUrl)}
                       className="flex h-10 items-center bg-[var(--event-accent)] px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:brightness-90 active:scale-[0.98]"
                     >
                       {spotlight.ticketLabel}

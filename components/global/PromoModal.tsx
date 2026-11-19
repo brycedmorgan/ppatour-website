@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ResolvedPromo } from "@/lib/site-promo";
-import { TICKET_LINK_REL } from "@/lib/utm";
+import { outboundRel } from "@/lib/utm";
 
 /**
  * The one-per-visitor promo modal. Content and placement live in
@@ -209,7 +209,7 @@ export function PromoModal({ promo }: { promo: ResolvedPromo }) {
               <a
                 href={promo.ticketUrl}
                 target="_blank"
-                rel={TICKET_LINK_REL}
+                rel={outboundRel(promo.ticketUrl)}
                 onClick={remember}
                 className="flex h-11 flex-1 items-center justify-center gap-1.5 bg-ppa-blue px-5 text-xs font-bold uppercase tracking-[0.12em] text-white transition hover:bg-ppa-blue-deep active:scale-[0.98]"
               >
