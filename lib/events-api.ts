@@ -184,6 +184,26 @@ const CURATED_ALIASES: Record<string, string> = {
 
 const curatedBySlug = new Map<string, Tournament>(getAllEvents().map((t) => [t.slug, t]));
 
+// Stops whose feed title keeps drifting (Barcelona: "…P250 BARCELONA OPEN",
+// "PPA TOUR EUROPE - P250 BARCELONA OPEN", then "…P250 BARCELONA" on 11/19, each
+// one dropping the card to VENUE_IMAGES). Tried only after an exact lookup
+// misses, and only for a curated row in the SAME year, so a future edition of
+// the stop can't take this one's slug and photo. Needs both words: the 2027
+// Barcelona P500 is a different stop.
+const CURATED_SLUG_PATTERNS: ReadonlyArray<readonly [RegExp, string]> = [
+  [/(?=.*\bbarcelona\b)(?=.*\bp250\b)/, "ppa-spain-p250-barcelona"],
+];
+
+function curatedKeyFor(apiSlug: string, year: string): string {
+  const alias = CURATED_ALIASES[apiSlug];
+  if (alias) return alias;
+  if (curatedBySlug.has(apiSlug)) return apiSlug;
+  for (const [re, slug] of CURATED_SLUG_PATTERNS) {
+    if (re.test(apiSlug) && curatedBySlug.get(slug)?.startDate.startsWith(year)) return slug;
+  }
+  return apiSlug;
+}
+
 // buildSchedule date-suffixes a stop whose plain slug already belongs to a past
 // edition (`newport-beach-open-2027-03-02`). The feed lists it under the plain
 // name, so without this the 2027 feed row matched the 2025 record and took its
@@ -191,7 +211,7 @@ const curatedBySlug = new Map<string, Tournament>(getAllEvents().map((t) => [t.s
 const DATED_EDITION = /-(\d{4})-\d{2}-\d{2}$/;
 
 function findCurated(apiSlug: string, year: string): Tournament | null {
-  const key = CURATED_ALIASES[apiSlug] ?? apiSlug;
+  const key = curatedKeyFor(apiSlug, year);
   const hit = curatedBySlug.get(key) ?? null;
   if (!hit || hit.startDate.startsWith(year)) return hit;
   for (const [slug, t] of curatedBySlug) {
