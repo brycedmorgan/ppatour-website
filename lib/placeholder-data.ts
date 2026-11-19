@@ -810,7 +810,7 @@ const SCHEDULE: RawEvent[] = [
   // Cover: Katherina, #ppa-tour-europe 11/17 ("PPA Barcelona Cover.JPG", Event Cover Pictures
   // folder), 4:5 at 1200×1500; replaced Payton's 10/1 doubles shot. The
   // waterfront shot stays the /europe hero.
-  { name: "PPA Spain P250 Barcelona", start: "2026-09-23", end: "2026-09-27", city: "Barcelona", state: "Spain", type: "international", country: "Europe", image: "/ppa/event-barcelona-p250.jpg" },
+  { name: "PPA Spain P250 Barcelona", start: "2026-09-23", end: "2026-09-27", city: "Barcelona", state: "Spain", type: "international", country: "Europe", image: "/ppa/event-barcelona-cover.jpg" },
   { name: "Charlotte PPA Challenger", start: "2026-09-25", end: "2026-09-27", city: "Charlotte", state: "NC", type: "challenger", points: 125 },
   { name: "Rate Las Vegas Open", start: "2026-09-28", end: "2026-10-04", city: "Las Vegas", state: "NV", venue: "Darling Tennis Center", type: "ppa", tier: "open" },
 
@@ -943,7 +943,7 @@ const SCHEDULE: RawEvent[] = [
 
   // May 2027
   // Photo pinned for the same reason as the September opener — see that note.
-  { name: "PPA Spain P500 Barcelona", start: "2027-05-05", end: "2027-05-09", city: "Barcelona", state: "Spain", type: "international", country: "Europe", image: "/ppa/event-barcelona.jpg" },
+  { name: "PPA Spain P500 Barcelona", start: "2027-05-05", end: "2027-05-09", city: "Barcelona", state: "Spain", type: "international", country: "Europe", image: "/ppa/event-barcelona-cover.jpg" },
   { name: "PPA Finals", start: "2027-05-10", end: "2027-05-16", city: "San Clemente", state: "CA", venue: "Life Time — Rancho San Clemente", type: "ppa", tier: "slam" },
 ];
 

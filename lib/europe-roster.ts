@@ -615,6 +615,27 @@ export const europeRoster: EuroPro[] = [
       "In her first year of competing in pickleball, Alexandra has already achieved significant results on the European circuit. Just four months after taking up the sport, she reached the final of the Swedish Open and earned a place among the Top 5 in the women's singles rankings. Despite her relatively short experience in the sport, she is already competing at a high level and holding her own against some of Europe's top players.",
     ],
   },
+  {
+    // Row 32 of Catie's sheet, posted in #ppa-tour-europe 11/19.
+    // ⚠ SLUG IS OFF HER PBCOM COLUMN AND IS NOT HIS NAME — pickleball.com keys him
+    // `javier-gallego-ruiz-mateos` (both surnames), like hector-sanchez-vidal-1 and
+    // martin-thomas-1. Guessing `javier-gallego` would mint a page with no world rank.
+    // ⚠ NO PORTRAIT ON PURPOSE: her sheet names "JAVIER GALLEGO 1.png" but that file is
+    // not in the Euro Player Portrait Pictures folder yet, so the card shows the
+    // silhouette until it lands. Same as Syromolotov on 10/18. Asked her in the channel.
+    slug: "javier-gallego-ruiz-mateos",
+    name: "Javier Gallego",
+    country: "Spain",
+    countryCode: "ESP",
+    age: 31,
+    divisions: [...MS, ...MD, ...XD],
+    sponsors: [],
+    instagram: "https://www.instagram.com/javiiviigrm/",
+    tagline: "Multiple national and international titles, and a coach in Rota",
+    bio: [
+      "Javi Gallego is a professional pickleball player based in Rota, Cádiz, Spain. One of Spain's top pickleball players, he has won multiple national and international titles. He is an experienced coach in the Pickleball Rota community.",
+    ],
+  },
 ];
 
 export function getEuroPro(slug: string): EuroPro | undefined {
