@@ -65,6 +65,25 @@ Sanity (CMS, pending confirm) · Vercel (staging) → AWS (prod, Phase 3).
 
 ## Session Log
 
+### 2026-11-18 — SEO fixes shipped: ticket block, Tixr referrer, events canonical, athlete snippets
+- Bryce approved the §7h list ("go go go"). `components/events/NextStopCta.tsx` + `lib/next-stop.ts`: a next-stop ticket block inside athlete and rankings pages. US only, hidden in the installed app, and it never implies the player is in the field. Clicks carry `utm_content=athlete-next-stop` or `rankings-next-stop`.
+- ⚠ The block recomputes the stop in the browser because athlete pages can be cached for 24h. The sticky buy bar already shows on these pages after 480px of scroll, so measure the block by its own `utm_content`.
+- `TICKET_LINK_REL` and `outboundRel()` in `lib/utm.ts`: Tixr links keep the referrer and `noopener`. Everything else keeps `noreferrer`. The Tixr logo on the partner wall and three legacy links in `lib/data/news-posts.json` were left alone.
+- `/events/` has its canonical back: a page-level `alternates` replaces the layout's whole object.
+- Athlete snippets: `withFittingSentence()` adds the paddle or "Ranking and results" only when the sentence fits 155 characters. No more "Plays the Franklin…".
+- Checked: tsc, `scripts/seo-text.test.ts`, `next build`, dev render at 1440 and 390 wide, no hydration messages. ESLint has only the two `set-state-in-effect` errors that main already had. Local dev has no rankings token, so ranked snippet text needs a production check.
+- Next: compare Tixr orders with a ppatour.com referrer and `ticket_click` by `utm_content` after two weeks. Rerun PageSpeed.
+
+### 2026-11-18 — Organic search tied to ticket revenue (read-only, no site change)
+- Bryce asked for SEO results and revenue, last 3 months vs previous 3, on the new site. Full table and method: `docs/SEO.md` §7f.
+- Google clicks 611,326 vs 261,204 (+134%), mostly season. Same 90 days last year: 633,167 (−3.4%). CTR 11.4% vs 8.0% last year, position 5.3 vs 10.2, impressions −32.5%.
+- Estimated organic ticket revenue: ~$169K vs ~$62K previous, ~$175K last year. This is a model, not a measured number.
+- ⚠ Tixr orders credited to ppatour.com fell 1,642 → 5 because ticket links use `noreferrer`. Fix not made.
+- ⚠ GA4 not read: analytics.google.com refused connections from this Mac on 11/18.
+- AI results (`docs/SEO.md` §7g): Google AI feature impressions 1.46M vs 1.18M (+23.3%). AI assistants are 0.77% of sessions since 11/13, nearly all ChatGPT. Estimated ticket revenue about $2K–$3K in the last 90 days. ⚠ Jackalope files ChatGPT under `campaign`.
+- Improvement list (`docs/SEO.md` §7h, nothing built): ticket path on athlete and rankings pages, drop `noreferrer` on Tixr links, `/events/` canonical is missing, star player snippets. Page speed not measured (PageSpeed API quota).
+- Next: read GA4 `ticket_click` by channel with the hostname filter, then replace the estimate.
+
 ### 2026-11-18 — Daytona flood overflow parking, Thu–Sat (Dana)
 - Dana, comment 11/18 on Asana `1220529130911320` ("from Pictona"): flooding limits parking at Pictona; overflow lot at 331 Ridgewood Ave (enter from 3rd St, across from Ace Hardware), Thu 11/19 – Sat 11/21, opens 10 AM, $10, shuttle every 15–20 min.
 - Four sections ahead of General Parking in `PARKING_BY_SLUG["proton-daytona-beach-open"]`, her wording; pasted Google Maps links became the addresses. Her old on-site copy left as is. ⚠ Delete the four sections after the event.

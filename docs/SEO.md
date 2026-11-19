@@ -262,6 +262,54 @@ Then GSC → Enhancements → Events on 10/31 alongside the CTR read already sch
 - MLP: the GSC service account has no access to `https://www.majorleaguepickleball.co/` (needs a
   Users-and-permissions grant on that property). PBC 28d: 35,252 clicks, −13% vs prior 28 (its own plan).
 
+### 7f. Organic to revenue, 2026-11-18 (Bryce: last 3 months vs previous 3, new site)
+
+Web search, `sc-domain:ppatour.com`, daily table. Revenue = Tixr `rev_orders`, league PPA, status COMPLETE,
+buyer-paid gross. "Online" leaves out `ref_type` BACKSTAGE and DOOR.
+
+| | Last 90 days (8/18–11/15/26) | Previous 90 (5/20–8/17/26) | Same 90 last year (8/19–11/16/25) |
+|---|---:|---:|---:|
+| Google clicks | 611,326 | 261,204 | 633,167 |
+| Impressions | 5,371,481 | 5,021,984 | 7,954,847 |
+| CTR | 11.38% | 5.20% | 7.96% |
+| Average position | 5.3 | 6.2 | 10.2 |
+| Online Tixr revenue | $2,202,886 | $818,931 | $1,494,309 |
+| **Organic ticket revenue, ESTIMATE** | **~$169K** | **~$62K** | **~$175K** |
+
+- **The estimate:** Tixr revenue with a ppatour.com referrer ÷ Google clicks, on the old site, × organic share of site sessions. Fall 2025: $346,630 ÷ 633,167 = $0.547. Summer 2026 (5/20–8/4): $102,679 ÷ 219,302 = $0.468. Organic share: 50.6% (Jackalope `wa_daily`, 8/30–10/5); 47.3% since 11/13. Low case for the last 90 days: ~$135K (summer rate, 47.3%). About 78% of gross is net.
+- ⚠ The method holds revenue per click at the old site's rate, so it cannot show a conversion gain. The last-year figure assumes the same 50.6% share.
+- **The +134% vs the previous 90 is mostly season.** May to August has few Tour stops. Year over year the last 90 days are −3.4%. Since launch (8/5–11/15): −10.9% clicks. The 18 days before launch (7/18–8/4): −31.7%. Search Console history starts 7/17/25, so no longer pre-launch YoY exists. Event weeks do not line up year to year, so single weeks and months swing (Sep +31.3%, Oct +8.5%, 11/1–11/15 −18.0%).
+- Query split, last 90 days YoY: brand clicks +6.5%, non-brand −13.5%.
+- ⚠ **Tixr can no longer see ppatour.com.** Orders with a ppatour.com referrer: 1,642 in fall 2025, 5 in the last 90 days. The ticket links carry `rel="noopener noreferrer"`. Tixr's order data has no UTM field. Dropping `noreferrer` on Tixr links restores the site-level count.
+- ⚠ GA4 was not read. analytics.google.com refused connections from Bryce's Mac on 11/18 (Chrome and curl), and `GA4_SA_KEY` is blank in the local env. `ticket_click` by channel is the missing check.
+- Not counted: amateur registration, Vacations, sponsorship value.
+
+### 7g. AI results, 2026-11-18
+
+- **Google AI features** (Search Console → Generative AI, beta, impressions only, history starts 5/18/26): 1,460,294 impressions in 8/18–11/15 vs 1,183,913 in 5/20–8/17 (+23.3%). Regular web impressions rose 7.0% in the same windows. Daily average: 13,372 on the old site (5/20–8/4), 15,675 on the new site (8/5–11/15). Google gives no AI click figure and no last-year comparison.
+- Top pages, 3 months: `/` 325,279 · `/rankings/` 172,869 · `/events/` 90,319 · Anna Leigh Waters 79,012 · Ben Johns 58,889.
+- **AI assistant visits** (Jackalope `wa_events`, 11/13 on): 413 of 53,683 sessions (0.77%). ChatGPT is 406. One Daytona-week sample.
+- ⚠ ChatGPT arrives with `utm_source=chatgpt.com` and no referrer, so Jackalope files it under channel `campaign`. Referrer-only counts miss it (565 sessions for 8/30–10/5). That window's `campaign` channel held 2,748 sessions, so AI was at most about 0.4% of sessions.
+- **Tixr orders with an AI referrer:** 3 orders, $455 in the last 90 days; 2 orders, $242 in the previous 90; none in the same 90 last year.
+- **Revenue estimate, last 90 days:** about $2K–$3K. About 4,800–9,300 AI visits × $0.277 per session (§7f rate) + the $455 above. At five times that conversion rate, about $13K.
+- Crawler access: `robots.txt` allows all, `/llms.txt` is live, and test requests using GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot and PerplexityBot names got 200. Those were not real crawler IPs.
+
+### 7h. What to improve next, 2026-11-18
+
+**Status: items 1 to 4 shipped 11/18. Correction to item 1:** the sticky buy bar is a real ticket path on these pages once a visitor scrolls 480px. The new block adds one inside the content, so its lift may be small. Judge it by `utm_content=athlete-next-stop` and `rankings-next-stop`.
+
+
+Search Console, last 28 days via Jackalope: 142,727 clicks. Live HTML and `origin/main` read the same day. Page speed not measured: the PageSpeed API returned 429 (daily quota).
+
+1. **Ticket path on athlete and rankings pages.** The top-25 list alone gives athlete pages 18,059 clicks and `/rankings/` 14,914, at least 23% of clicks. Inside `<main>` these pages have no Tixr link. The only ones sit outside it: footer "Tickets" and a site-wide "Buy Tickets — $25". HTML read only, not checked rendered. Use a generic "next on tour" block: no player-to-event feed exists (`DATA-ASKS.md` §5), so never imply the player is in the field.
+2. **Drop `noreferrer` from Tixr links, keep `noopener`.** See §7f (1,642 → 5 referred orders).
+3. **`/events/` has no canonical tag** (163,516 impressions, 11,808 clicks). `app/events/page.tsx` sets `alternates.types`, which replaces the layout's `alternates.canonical`. Add `canonical` there.
+4. **Star player snippets.** "anna leigh waters": 38,728 impressions, 551 clicks, 1.4%, position 2.9. "ben johns": 14,964, 257, 1.7%, position 2.1. "tama shimabukuro": 7,096, 1,700, 24.0%, position 1.7.
+5. **Give AI its own channel in Jackalope** (§7g).
+6. **Set `NEXT_PUBLIC_CLARITY_ID`.** No Clarity tag appears in the live HTML.
+
+Not problems: `/watch/` (1.0% CTR) and `/athletes/` (1.2%) mostly collect sitelink impressions on "ppa" and "ppa tour". The query `ppa` is now 54,617 impressions, 8.2% CTR, position 3.8 (was 2.4%, 6.5 in August). `/tickets/` is a 404, but ticket searches are small (under 200 impressions per query on any one page).
+
 ## 4. Measures and checkpoints
 
 | Checkpoint | Date | Measure |
