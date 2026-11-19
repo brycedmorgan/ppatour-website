@@ -21,6 +21,29 @@ type UtmParams = {
   term?: string;
 };
 
+/**
+ * `rel` for a link that sells tickets on Tixr.
+ *
+ * ⚠ NO `noreferrer`, ON PURPOSE. Tixr records the referring site on each order,
+ * and it is the only first-party link between a ppatour.com visit and a sale:
+ * Tixr orders expose no UTM field. `noreferrer` on the ticket links took orders
+ * credited to ppatour.com from 1,642 to 5 after the new site launched
+ * (docs/SEO.md §7f). `noopener` stays. The browser's default policy sends the
+ * origin only, never the page path or query.
+ */
+export const TICKET_LINK_REL = "noopener";
+
+/** `rel` for an outbound link whose destination varies: Tixr keeps the referrer. */
+export function outboundRel(href: string): string {
+  try {
+    const host = new URL(href).hostname.toLowerCase();
+    if (host === "tixr.com" || host.endsWith(".tixr.com")) return TICKET_LINK_REL;
+  } catch {
+    // A relative or malformed href: keep the strict default.
+  }
+  return "noopener noreferrer";
+}
+
 /** Append PPA attribution UTMs to an outbound commerce URL. */
 export function withUtm(baseUrl: string, { campaign, content, term }: UtmParams): string {
   const url = new URL(baseUrl);

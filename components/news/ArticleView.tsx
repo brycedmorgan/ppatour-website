@@ -10,7 +10,7 @@ import { renderPostHtml, readingMinutes } from "@/lib/news-html";
 import { playerInitials } from "@/lib/player-photos";
 import { getNextTournament } from "@/lib/placeholder-data";
 import { getRankingBySlug } from "@/lib/rankings-api";
-import { withUtm } from "@/lib/utm";
+import { outboundRel, withUtm } from "@/lib/utm";
 
 /**
  * The article page itself, shared by the two routes that serve one archive:
@@ -433,7 +433,7 @@ export async function ArticleView({ detail }: { detail: NewsDetail }) {
                         })
                   }
                   target="_blank"
-                  rel={card.category === "Partner News" && card.ctaUrl ? "sponsored noopener noreferrer" : "noopener noreferrer"}
+                  rel={card.category === "Partner News" && card.ctaUrl ? "sponsored noopener noreferrer" : outboundRel(card.ctaUrl ?? next.ticketsUrl)}
                   className="flex h-10 items-center bg-ppa-blue px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-ppa-blue-deep active:scale-[0.98]"
                 >
                   {card.ctaLabel ?? `See It Live — ${next.name} Tickets`}

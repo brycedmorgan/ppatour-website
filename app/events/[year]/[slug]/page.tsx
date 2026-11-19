@@ -76,7 +76,7 @@ import {
   type Tournament,
   tournaments,
 } from "@/lib/placeholder-data";
-import { withUtm, withCampaign } from "@/lib/utm";
+import { TICKET_LINK_REL, withCampaign, withUtm } from "@/lib/utm";
 import { admissionTiersFor, ticketsOnSale } from "@/lib/tixr-prices";
 import { buildTicketGrid } from "@/lib/ticket-grid";
 import { TicketGrid } from "@/components/events/TicketGrid";
@@ -838,7 +838,7 @@ export default async function EventPage({ params }: Params) {
                   <a
                     href={withUtm(t.ticketsUrl, { campaign: t.eventCode ?? t.slug, content: "event-hero-buy-tickets" })}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel={TICKET_LINK_REL}
                     className="flex h-11 items-center justify-center bg-[var(--event-accent)] px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:brightness-90 active:scale-[0.98]"
                   >
                     Buy Tickets — from ${t.ticketPriceFrom}
@@ -1263,7 +1263,7 @@ export default async function EventPage({ params }: Params) {
                     content: `event-tickets-${tier.name.toLowerCase().replace(/\s+/g, "-")}`,
                   })}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel={TICKET_LINK_REL}
                   className="mt-4 inline-flex h-9 items-center justify-center bg-ppa-blue px-4 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors hover:bg-ppa-blue-deep"
                 >
                   Buy
@@ -1937,7 +1937,7 @@ export default async function EventPage({ params }: Params) {
                         content: "event-venue-spotlight",
                       })}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel={TICKET_LINK_REL}
                       className="flex h-10 items-center bg-[var(--event-accent)] px-5 text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:brightness-90 active:scale-[0.98]"
                     >
                       {spotlight.ticketLabel}

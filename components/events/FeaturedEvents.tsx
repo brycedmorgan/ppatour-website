@@ -9,6 +9,7 @@ import {
   type Tournament,
   eventHref,
 } from "@/lib/placeholder-data";
+import { outboundRel } from "@/lib/utm";
 
 /**
  * Big-card band on /events — upcoming PPA Tour (1,000+ point)
@@ -167,7 +168,7 @@ export function FeaturedEvents({
                     <a
                       href={href}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel={outboundRel(href)}
                       className="mt-1 block font-display text-2xl uppercase leading-[1.02] text-white after:absolute after:inset-0"
                     >
                       {t.name}

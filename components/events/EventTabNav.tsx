@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { TICKET_LINK_REL } from "@/lib/utm";
 
 type Tab = { id: string; label: string };
 
@@ -292,7 +293,7 @@ export function EventTabNav({
           <a
             href={ticketsUrl}
             target="_blank"
-            rel="noopener noreferrer"
+            rel={TICKET_LINK_REL}
             className="hidden h-8 shrink-0 items-center bg-[var(--event-accent,#228be6)] px-3.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white transition hover:brightness-90 active:scale-[0.98] sm:inline-flex"
           >
             Buy Tickets{typeof ticketPriceFrom === "number" ? ` — From $${ticketPriceFrom}` : ""}

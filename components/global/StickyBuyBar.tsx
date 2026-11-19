@@ -11,7 +11,7 @@ import {
   teamLabel,
   useLiveTicker,
 } from "@/components/live/use-live-ticker";
-import { withUtm } from "@/lib/utm";
+import { outboundRel, withUtm } from "@/lib/utm";
 import { useAppMode } from "@/components/app/use-app-mode";
 
 // Cross-fade timing: hold each match this long, then fade over FADE_MS.
@@ -226,7 +226,7 @@ export function StickyBuyBar() {
             href={href}
             // The scores link is ours; only off-site destinations open a tab.
             target={featured && !live ? undefined : "_blank"}
-            rel={featured && !live ? undefined : "noopener noreferrer"}
+            rel={featured && !live ? undefined : outboundRel(href)}
             tabIndex={visible ? undefined : -1}
             className={`group ml-auto flex h-9 shrink-0 items-center gap-1.5 px-4 text-[11px] font-bold uppercase tracking-[0.12em] transition active:scale-[0.97] sm:ml-0 ${
               live

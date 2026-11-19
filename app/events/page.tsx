@@ -22,7 +22,10 @@ export const metadata: Metadata = {
   description:
     "The full PPA Tour schedule — The Tour and every other event, U.S. and international, past and upcoming. Search or filter to find your event.",
   // Feed autodiscovery for calendar aggregators (lib/event-feed.ts).
+  // ⚠ `canonical` must stay here. A page's `alternates` replaces the root
+  // layout's whole object, so setting only `types` removed this page's canonical.
   alternates: {
+    canonical: "/events/",
     types: {
       "application/rss+xml": [{ url: "/events.xml", title: "PPA Tour upcoming events" }],
       "text/calendar": [{ url: "/events.ics", title: "PPA Tour event calendar" }],

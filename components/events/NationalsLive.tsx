@@ -47,7 +47,7 @@ import {
   whyItMattersHeading,
   tournaments,
 } from "@/lib/placeholder-data";
-import { withUtm, withCampaign } from "@/lib/utm";
+import { TICKET_LINK_REL, withCampaign, withUtm } from "@/lib/utm";
 import { TicketGrid } from "@/components/events/TicketGrid";
 import type { TicketGrid as TicketGridData } from "@/lib/ticket-grid-view";
 
@@ -508,7 +508,7 @@ export function NationalsLive({
                 <a
                   href={withUtm(t.ticketsUrl, { campaign: t.eventCode ?? t.slug, content: "event-hero-buy-tickets" })}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel={TICKET_LINK_REL}
                   className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
                 >
                   Buy Tickets — from ${t.ticketPriceFrom}
@@ -521,7 +521,7 @@ export function NationalsLive({
                 <a
                   href={withUtm(t.ticketsUrl, { campaign: t.eventCode ?? t.slug, content: "event-hero-buy-tickets" })}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel={TICKET_LINK_REL}
                   className="flex h-11 items-center justify-center bg-[var(--event-accent)] px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:brightness-90 active:scale-[0.98]"
                 >
                   Buy Tickets — from ${t.ticketPriceFrom}
@@ -1693,7 +1693,7 @@ export function NationalsLive({
                     content: `event-tickets-${tier.name.toLowerCase().replace(/\s+/g, "-")}`,
                   })}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel={TICKET_LINK_REL}
                   className="mt-4 inline-flex h-9 items-center justify-center bg-ppa-blue px-4 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition-colors hover:bg-ppa-blue-deep"
                 >
                   Buy

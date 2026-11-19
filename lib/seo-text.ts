@@ -74,3 +74,24 @@ export function seoDescription(text: string, max: number = DESCRIPTION_MAX): str
   cut = cut.replace(/[\s,;:—–-]+$/u, "");
   return `${cut}…`;
 }
+
+/**
+ * A description plus the first optional sentence that fits whole.
+ *
+ * Appending before {@link seoDescription} cuts the addition mid-phrase
+ * ("Plays the Franklin…"). This keeps every added sentence complete, and adds
+ * nothing when none fits.
+ */
+export function withFittingSentence(
+  text: string,
+  sentences: readonly string[],
+  max: number = DESCRIPTION_MAX,
+): string {
+  const base = seoDescription(text, max);
+  if (base.endsWith("…")) return base;
+  for (const sentence of sentences) {
+    const candidate = `${base} ${sentence.trim()}`;
+    if (candidate.length <= max) return candidate;
+  }
+  return base;
+}

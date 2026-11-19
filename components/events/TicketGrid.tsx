@@ -3,7 +3,7 @@ import {
   type GridDay,
   type TicketGrid as TicketGridData,
 } from "@/lib/ticket-grid-view";
-import { withUtm } from "@/lib/utm";
+import { TICKET_LINK_REL, withUtm } from "@/lib/utm";
 
 /**
  * The event page's ticket block — the days this stop sells, each one a door
@@ -120,7 +120,7 @@ export function TicketGrid({
               key={day.date}
               href={href}
               target="_blank"
-              rel="noopener noreferrer"
+              rel={TICKET_LINK_REL}
               className="flex flex-col justify-between border border-ppa-line bg-white p-4 transition-colors hover:border-ppa-navy/30 hover:bg-ppa-paper"
             >
               {inner}
@@ -141,7 +141,7 @@ export function TicketGrid({
         <a
           href={withUtm(eventTicketsUrl, { campaign, content: "event-tickets-all" })}
           target="_blank"
-          rel="noopener noreferrer"
+          rel={TICKET_LINK_REL}
           className="mt-4 inline-flex h-11 items-center justify-center bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-ppa-blue-deep"
         >
           See All Tickets on Tixr ↗
@@ -163,7 +163,7 @@ export function TicketGrid({
                   content: `ticket-grid-multiday-${pass.level}`,
                 })}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel={TICKET_LINK_REL}
                 className="group flex items-baseline justify-between border border-ppa-line bg-ppa-paper p-4 transition-colors hover:border-ppa-navy/30"
               >
                 <span className="pr-3 text-sm text-ppa-navy">{pass.name}</span>

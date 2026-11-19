@@ -12,6 +12,7 @@ import {
   pageTitle,
   seoDescription,
   SHORT_SUFFIX,
+  withFittingSentence,
 } from "../lib/seo-text.ts";
 
 // ── titles ──────────────────────────────────────────────────────────────
@@ -80,5 +81,18 @@ assert.ok(seoDescription(run, 20).endsWith("…"));
 
 // Exactly at the limit is left alone.
 assert.equal(seoDescription("a".repeat(155)), "a".repeat(155));
+
+// ── optional sentences ──────────────────────────────────────────────────
+
+const shortBio = "A".repeat(120) + ".";
+// The first sentence that fits whole wins; a long one is skipped, never cut.
+assert.equal(
+  withFittingSentence(shortBio, ["Plays the ".padEnd(60, "x") + ".", "Ranking and results."]),
+  `${shortBio} Ranking and results.`,
+);
+// Nothing fits: the description is unchanged.
+assert.equal(withFittingSentence(shortBio, ["y".repeat(60)]), shortBio);
+// An already-cut description gains nothing after its ellipsis.
+assert.ok(withFittingSentence(long, ["Ranking."]).endsWith("…"));
 
 console.log("seo-text: all checks passed");

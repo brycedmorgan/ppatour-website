@@ -43,7 +43,14 @@ import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 import { isUnlistedEuropeAthlete } from "@/lib/europe-visibility";
 import { europeRobots } from "@/lib/europe-launch";
 import { europeRoster } from "@/lib/europe-roster";
-import { BRAND_SUFFIX, fitTitle, seoDescription, SHORT_SUFFIX } from "@/lib/seo-text";
+import {
+  BRAND_SUFFIX,
+  fitTitle,
+  SHORT_SUFFIX,
+  withFittingSentence,
+} from "@/lib/seo-text";
+import { NextStopCta } from "@/components/events/NextStopCta";
+import { nextStopSnapshot } from "@/lib/next-stop";
 import { generatedBio, genericBio, THIN_BIO_CHARS } from "@/lib/athlete-bio";
 
 /**
@@ -288,7 +295,15 @@ export async function athleteMetadata(
    * only in the page body. Same source as the In the Bag callout, so the two
    * cannot disagree. Skipped when the bio sentence is already long, rather than
    * truncating a sourced sentence to make room for it.
+   *
+   * ⚠ The search snippet and the social description differ on purpose. Social
+   * cards show more, so `description` keeps the paddle up to 300 characters. The
+   * snippet stops at 155, and adding the paddle before that cut printed "Plays
+   * the Franklin…" on the most-searched profiles. `snippetLines` only adds a
+   * sentence that fits whole.
    */
+  const snippetBase = description;
+  const snippetLines: string[] = [];
   if (SHOW_EQUIPMENT) {
     const override = await playerOverrideFor(a.name);
     const known = override?.paddle ?? paddleFor(slug)?.paddle ?? null;
@@ -296,8 +311,10 @@ export async function athleteMetadata(
     // the old paddle under a page that names the new one.
     const paddle = paddleUpdateFor(slug, known)?.paddle ?? known;
     const line = paddle ? ` Plays the ${paddle}.` : "";
+    if (line) snippetLines.push(line);
     if (line && description.length + line.length <= 300) description += line;
   }
+  if (a.rank > 0) snippetLines.push("Ranking, results and stats.", "Ranking and results.");
   const images = a.headshot ? [a.headshot] : [];
   /**
    * `absolute` — this title carries its own brand suffix, so it must NOT also
@@ -308,7 +325,7 @@ export async function athleteMetadata(
     title: { absolute: title },
     // 155 on a word boundary — 63 profiles were over 160 (9/23 crawl). The
     // OG description below keeps the full sentence; social cards show more.
-    description: seoDescription(description),
+    description: withFittingSentence(snippetBase, snippetLines),
     // The Europe mount points search engines at the one real profile.
     ...(europe && { alternates: { canonical: `/athletes/${a.slug}` } }),
     /**
@@ -1218,6 +1235,9 @@ export async function AthleteProfile({
           </div>
         </div>
       </section>
+
+      {/* US site only: the bar sells US stops, which never belong on the Europe mount. */}
+      {!europe && <NextStopCta initial={nextStopSnapshot()} placement="athlete-next-stop" />}
 
       {/* By the Numbers — podium finishes at PPA-tagged events (live player API).
           ⚠ THE EYEBROW SAYS "PPA TOUR", NOT "CAREER", AND THAT IS DELIBERATE.

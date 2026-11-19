@@ -14,7 +14,7 @@ import {
   tierPoints,
   type Tournament,
 } from "@/lib/placeholder-data";
-import { withUtm } from "@/lib/utm";
+import { TICKET_LINK_REL, withUtm } from "@/lib/utm";
 
 /**
  * The homepage hero, extracted so it has exactly one definition.
@@ -414,7 +414,7 @@ export function HomeHero({
                       : eventHref(next)
                   }
                   target={next.ticketsOnSale ? "_blank" : undefined}
-                  rel={next.ticketsOnSale ? "noopener noreferrer" : undefined}
+                  rel={next.ticketsOnSale ? TICKET_LINK_REL : undefined}
                   className="group flex h-11 items-center justify-center gap-1.5 bg-ppa-blue px-6 text-xs font-bold uppercase tracking-[0.12em] transition hover:bg-ppa-blue-deep active:scale-[0.98]"
                 >
                   {next.ticketsOnSale

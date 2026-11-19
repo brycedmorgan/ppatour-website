@@ -11,7 +11,7 @@ import {
   formatDateRange,
   getNextTournament,
 } from "@/lib/placeholder-data";
-import { withUtm } from "@/lib/utm";
+import { TICKET_LINK_REL, withUtm } from "@/lib/utm";
 import { matchdayLinks } from "@/lib/matchday";
 
 /**
@@ -372,7 +372,7 @@ export default function WatchPage() {
                 content: "watch-page-tickets",
               })}
               target="_blank"
-              rel="noopener noreferrer"
+              rel={TICKET_LINK_REL}
               className="flex h-11 items-center justify-center border border-white/25 px-6 text-xs font-bold uppercase tracking-[0.12em] transition-colors hover:border-white hover:bg-white hover:text-ppa-navy"
             >
               Buy Tickets ↗

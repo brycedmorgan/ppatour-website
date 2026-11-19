@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useDeferredValue, useMemo, useState } from "react";
 import { eventMatcher } from "@/lib/event-search";
-import { withUtm } from "@/lib/utm";
+import { outboundRel, TICKET_LINK_REL, withUtm } from "@/lib/utm";
 import {
   formatDateRange,
   tierPoints,
@@ -321,7 +321,7 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
                     <a
                       href={href}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel={outboundRel(href)}
                       className="mt-0.5 block font-display text-lg uppercase leading-[1.05] text-white after:absolute after:inset-0"
                     >
                       {t.name}
@@ -402,7 +402,7 @@ export function ScheduleGrid({ events }: { events: Tournament[] }) {
                             content: "events-grid-tickets",
                           })}
                           target="_blank"
-                          rel="noopener noreferrer"
+                          rel={TICKET_LINK_REL}
                           className={`${CHIP} relative z-10 underline-offset-2 hover:underline`}
                         >
                           {/* No price is printed unless somebody gave us one —

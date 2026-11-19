@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { NextStopCta } from "@/components/events/NextStopCta";
 import { LeadMagnetCapture } from "@/components/global/LeadMagnetCapture";
 import { RankingsBoard } from "@/components/rankings/RankingsBoard";
 import { TitleRace } from "@/components/rankings/TitleRace";
 import { ExplainerVideos } from "@/components/video/ExplainerVideos";
 import { EXPLAINER_SERIES, RANKINGS_VIDEOS } from "@/lib/explainer-videos";
 import { FULL_PAGE_SIZE, getRankings, rankingsAsOf } from "@/lib/rankings-api";
+import { nextStopSnapshot } from "@/lib/next-stop";
 import { buildRankingsJsonLd } from "@/lib/rankings-schema";
 import { SITE_URL } from "@/lib/site";
 import { getTitleRace } from "@/lib/title-race";
@@ -439,6 +441,8 @@ export default async function RankingsPage() {
           </div>
         </div>
       </section>
+
+      <NextStopCta initial={nextStopSnapshot()} placement="rankings-next-stop" />
 
       {/* Email */}
       <section className="bg-ppa-navy-deep">

@@ -4,7 +4,7 @@ import { PADDLE_LAB_PUBLIC } from "@/lib/paddle-lab-access";
 import Link from "next/link";
 import { footerPartners, showsDesignation } from "@/lib/home-content";
 import { partnerLink } from "@/lib/partner-link";
-import { withUtm } from "@/lib/utm";
+import { outboundRel, withUtm } from "@/lib/utm";
 import { InquiryForm } from "@/components/forms/InquiryForm";
 import { matchdayPrimary } from "@/lib/matchday";
 
@@ -135,7 +135,7 @@ function LinkGroup({
             <Link
               href={l.href}
               target={l.external ? "_blank" : undefined}
-              rel={l.external ? "noopener noreferrer" : undefined}
+              rel={l.external ? outboundRel(l.href) : undefined}
               className="inline-flex items-center gap-1 text-[13px] text-white/70 transition-colors hover:text-white"
             >
               {l.label}
