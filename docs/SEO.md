@@ -281,7 +281,11 @@ buyer-paid gross. "Online" leaves out `ref_type` BACKSTAGE and DOOR.
 - **The +134% vs the previous 90 is mostly season.** May to August has few Tour stops. Year over year the last 90 days are −3.4%. Since launch (8/5–11/15): −10.9% clicks. The 18 days before launch (7/18–8/4): −31.7%. Search Console history starts 7/17/25, so no longer pre-launch YoY exists. Event weeks do not line up year to year, so single weeks and months swing (Sep +31.3%, Oct +8.5%, 11/1–11/15 −18.0%).
 - Query split, last 90 days YoY: brand clicks +6.5%, non-brand −13.5%.
 - ⚠ **Tixr can no longer see ppatour.com.** Orders with a ppatour.com referrer: 1,642 in fall 2025, 5 in the last 90 days. The ticket links carry `rel="noopener noreferrer"`. Tixr's order data has no UTM field. Dropping `noreferrer` on Tixr links restores the site-level count.
-- ⚠ GA4 was not read. analytics.google.com refused connections from Bryce's Mac on 11/18 (Chrome and curl), and `GA4_SA_KEY` is blank in the local env. `ticket_click` by channel is the missing check.
+- GA4 read 11/19 (Explore, property 358407319, Event name = `ticket_click`, Hostname contains www.ppatour.com, Oct 22 – Nov 18 2026). The block on 11/18 had cleared; cause unknown.
+  - 13,921 ticket clicks from 6,707 users.
+  - By session channel: Organic Search 8,018 (58%), Unassigned 3,364, Direct 1,593, Referral 377, Organic Social 314, Email 151, AI Assistant 55 (0.4%), Organic Video 37, Organic Shopping 12.
+  - Top pages: Worlds 4,439 · Daytona 2,752 · Malibu Cup 1,527 · Masters 2027 1,262 · Mesa Cup 962 · Cape Coral 692 · home 880. Athlete and rankings pages are not in the top 10. The new block shipped 11/18, so re-read around 12/2.
+  - Organic Search is the main source of ticket clicks. AI is real but small. Unassigned (24%) is GA4 losing the source, not a channel.
 - Not counted: amateur registration, Vacations, sponsorship value.
 
 ### 7g. AI results, 2026-11-18
