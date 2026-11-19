@@ -326,16 +326,6 @@ export default async function EventPage({ params }: Params) {
   const realSchedule = getEventSchedule(t.slug, t.startDate);
   // Daily fan programming, rendered in its own section after the order of play.
   const programming = programmingFor(t.slug, t.startDate);
-  /**
-   * ⚠ THE OVERRIDE'S OWN `live` VALUES ARE NOT USED, and the reason is that
-   * they were wrong. lib/event-schedule.ts is hand-authored, and Nationals'
-   * entry credited Tennis Channel on Championship Sunday alone — while the
-   * 8/13 broadcast sheet has TC carrying Thursday, Friday, Saturday AND Sunday.
-   * So the tour's biggest event told people three days of national TV coverage
-   * did not exist. Deriving from lib/broadcast.ts here means the Order of Play,
-   * the Watch table and the channel cards all answer from one transcription.
-   */
-  const dayChannels = channelsByDay(t.slug);
   const mapQuery = guide?.mapQuery ?? `${t.venue}, ${t.city}, ${t.state}`;
   // Hotels published from Jackalope (Kristen's live blocks) override the static
   // guide list when present, matched by city; otherwise the guide's own hotels.
@@ -1346,17 +1336,16 @@ export default async function EventPage({ params }: Params) {
               {/* One calendar block — Pro Play and Amateur & Junior Play side
                   by side on the day each actually happens (Bryce, 7/31). */}
               <div className="mt-6 overflow-hidden border border-ppa-line">
-                <div className="grid grid-cols-[4.5rem_1fr_auto] gap-3 border-b border-ppa-line bg-white px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45 lg:grid-cols-[5.5rem_1fr_1fr_6rem_9rem]">
+                <div className="grid grid-cols-[4.5rem_1fr] gap-3 border-b border-ppa-line bg-white px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45 lg:grid-cols-[5.5rem_1fr_1fr_6rem]">
                   <span>Date</span>
                   <span>Pro Play</span>
                   <span className="hidden lg:block">Amateur &amp; Junior Play</span>
                   <span className="hidden text-right lg:block">First Serve</span>
-                  <span className="text-right">Live</span>
                 </div>
                 {realSchedule.proDays.map((d) => (
                   <div
                     key={d.date}
-                    className="grid grid-cols-[4.5rem_1fr_auto] items-start gap-3 border-b border-ppa-line bg-white px-4 py-3 last:border-b-0 lg:grid-cols-[5.5rem_1fr_1fr_6rem_9rem] lg:items-center"
+                    className="grid grid-cols-[4.5rem_1fr] items-start gap-3 border-b border-ppa-line bg-white px-4 py-3 last:border-b-0 lg:grid-cols-[5.5rem_1fr_1fr_6rem] lg:items-center"
                   >
                     <span className="font-display text-base uppercase leading-tight text-[var(--event-accent)]">
                       <span className="block text-[10px] font-sans font-bold leading-none text-ppa-navy/40">
@@ -1408,15 +1397,6 @@ export default async function EventPage({ params }: Params) {
                     <span className="hidden text-right text-sm font-bold tabular-nums text-ppa-navy lg:block">
                       {d.firstServe}
                     </span>
-                    <span className="max-w-[5.5rem] justify-self-end text-right text-[10px] lg:max-w-none lg:justify-self-auto font-bold uppercase tracking-[0.1em]">
-                      {dayChannels.get(d.dow) ?? d.live ? (
-                        <span className="text-[var(--event-accent)]">
-                          {dayChannels.get(d.dow) ?? d.live}
-                        </span>
-                      ) : (
-                        <span className="text-ppa-navy/30">—</span>
-                      )}
-                    </span>
                   </div>
                 ))}
               </div>
@@ -1461,16 +1441,15 @@ export default async function EventPage({ params }: Params) {
             </>
           ) : (
           <div className="mt-6 overflow-hidden border border-ppa-line">
-            <div className="grid grid-cols-[3.5rem_1fr_auto] gap-3 border-b border-ppa-line bg-white px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45 sm:grid-cols-[5rem_1fr_7rem_6rem]">
+            <div className="grid grid-cols-[3.5rem_1fr] gap-3 border-b border-ppa-line bg-white px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.14em] text-ppa-navy/45 sm:grid-cols-[5rem_1fr_7rem]">
               <span>Date</span>
               <span>Session</span>
               <span className="hidden text-right sm:block">First Serve</span>
-              <span className="text-right">Live</span>
             </div>
             {days.map((d) => (
               <div
                 key={d.iso}
-                className="grid grid-cols-[3.5rem_1fr_auto] items-center gap-3 border-b border-ppa-line bg-white px-4 py-3 last:border-b-0 sm:grid-cols-[5rem_1fr_7rem_6rem]"
+                className="grid grid-cols-[3.5rem_1fr] items-center gap-3 border-b border-ppa-line bg-white px-4 py-3 last:border-b-0 sm:grid-cols-[5rem_1fr_7rem]"
               >
                 <span className="font-display text-base uppercase text-ppa-blue">
                   {d.date}
@@ -1504,17 +1483,25 @@ export default async function EventPage({ params }: Params) {
                 <span className="hidden text-right text-sm font-bold tabular-nums text-ppa-navy sm:block">
                   {d.firstServe}
                 </span>
-                <span className="text-right text-[10px] font-bold uppercase tracking-[0.1em]">
-                  {d.live ? (
-                    <span className="text-ppa-blue">{d.live}</span>
-                  ) : (
-                    <span className="text-ppa-navy/30">—</span>
-                  )}
-                </span>
               </div>
             ))}
           </div>
           )}
+
+          {/* Broadcast times live ONLY in the Watch section (Keaton, Asana
+              1220587289446932, 11/16): a "Live" column next to first serve
+              read as "the stream starts at first serve", but production often
+              starts later (Daytona: 10 AM first serve, noon PBTV). */}
+          <p className="mt-3 text-[12px] text-ppa-navy/50">
+            First serve is when play begins on court; live coverage can start
+            later.{" "}
+            <a
+              href="#watch"
+              className="font-bold uppercase tracking-[0.08em] text-[var(--event-accent)] hover:underline"
+            >
+              Broadcast times ↓
+            </a>
+          </p>
 
           {/* The Challenger Showdown at Worlds — a separate tournament with its
               own field, played inside this event. It sits OUTSIDE the branch
