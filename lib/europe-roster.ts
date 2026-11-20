@@ -620,10 +620,10 @@ export const europeRoster: EuroPro[] = [
     // ⚠ SLUG IS OFF HER PBCOM COLUMN AND IS NOT HIS NAME — pickleball.com keys him
     // `javier-gallego-ruiz-mateos` (both surnames), like hector-sanchez-vidal-1 and
     // martin-thomas-1. Guessing `javier-gallego` would mint a page with no world rank.
-    // ⚠ NO PORTRAIT ON PURPOSE: her sheet names "JAVIER GALLEGO 1.png" but that file is
-    // not in the Euro Player Portrait Pictures folder yet, so the card shows the
-    // silhouette until it lands. Same as Syromolotov on 10/18. Asked her in the channel.
+    // Portrait: "JAVIER GALLEGO 1.png" (Drive 11v1Fo_FZ6e3NLXIQL-xEx6fhRUNv0Oto, linked
+    // in her sheet 11/19, 1080×1350 transparent) → flattened on white, 900×1125 q82.
     slug: "javier-gallego-ruiz-mateos",
+    portrait: P("javier-gallego-ruiz-mateos"),
     name: "Javier Gallego",
     country: "Spain",
     countryCode: "ESP",
